@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8556C3764
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECB26C3766
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCUQvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S230257AbjCUQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCUQvN (ORCPT
+        with ESMTP id S229964AbjCUQvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:51:13 -0400
+        Tue, 21 Mar 2023 12:51:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9A2A98D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:51:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF6D279AE;
+        Tue, 21 Mar 2023 09:51:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A497BB818E3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 16:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2C5C433EF;
-        Tue, 21 Mar 2023 16:51:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAB6FB818E7;
+        Tue, 21 Mar 2023 16:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D963DC4339B;
+        Tue, 21 Mar 2023 16:51:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679417463;
-        bh=AbKt52iNEb6SnYQa9HSck3GX1mTBCsjvzSB4fCNRt1Y=;
+        s=k20201202; t=1679417466;
+        bh=JtUlGAZMXgUNcqufA6J7cwV2ToEYYL5jW3Tbh1xClAc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=k0mQmIrmb6hJNlW1BXbDJDN7Ph0HeBy0tiqlqX6qDCCQtH6KVk6J6IKqtDHGSQilg
-         QBLViDfFi/eUhPcXADNnChTBSXvK53oWdCD3qlYEFUgbNEh08EJ10bCdkxmHp6M2zL
-         szBpfxVMIdELmIQCZqk9Tqd/af+RKWOWevsLbqk+Gab/azeXqchV/lswthRpodkFZg
-         7vU2DY1uj1LNUdFYlZF1NSVMbojBPbntC8ADPKTsX7xSF75smXJOnoCv4bOWK7TQrC
-         i9atCvW/z1Q0MRAPi7MVNw7FOL5weyf2U9qkGye8IVJkukCXKnBgUIcnJ60GLA1kPk
-         /Iz8HXSMXUqsg==
+        b=tOzkW1uNUz1v7Go4gsYwSzpYycomUajHGJIl3lGZelBbAe8TZo6TQTxapIiWJfLO8
+         SutzO7dH/M/pPQhsQovO4TeBJSUSqZj5m53q2/INCFKcOAPUtIkTyU9SLDd+stfnti
+         TSYiK/Ql8hrWS8LrE4Hq+HQNy8OFA0Vuiv+3ShLxVW6qHrqNv9puJxc4Sz7db9jyLM
+         pAQHFjhA+xHJgKAUF/Tuudq+cjPnCQERU1AKRVlB5EJWbIv4LVODb6NdH0lPZie8cD
+         h6OV6+nSDFsRX6sCl47QgBzCpFiEreaqQ4bg/H+qSIgz3M6wgHGggcLLOVPzibwK8U
+         FhinZRHsORQGQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     pierre-louis.bossart@linux.intel.com,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-In-Reply-To: <20230320112245.115720-1-rf@opensource.cirrus.com>
-References: <20230320112245.115720-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH v3 0/8] ASoC: Initial support for Cirrus Logic CS35L56
-Message-Id: <167941746163.67241.16095967873543822189.b4-ty@kernel.org>
-Date:   Tue, 21 Mar 2023 16:51:01 +0000
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vlad Karpovich <vkarpovi@opensource.cirrus.com>
+Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20230315154722.3911463-1-vkarpovi@opensource.cirrus.com>
+References: <20230315154722.3911463-1-vkarpovi@opensource.cirrus.com>
+Subject: Re: [PATCH v3 1/5] ASoC: cs35l45: Support for GPIO pins
+ configuration.
+Message-Id: <167941746356.67241.8098477595420536001.b4-ty@kernel.org>
+Date:   Tue, 21 Mar 2023 16:51:03 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,18 +62,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 11:22:37 +0000, Richard Fitzgerald wrote:
-> The CS35L56 is a high-performance boosted mono audio amplifier.
-> Supported control interfaces are I2C, SPI or SoundWire.
-> Supported audio interfaces are I2S/TDM or SoundWire.
+On Wed, 15 Mar 2023 10:47:18 -0500, Vlad Karpovich wrote:
+> Adds device tree configuration for cs35l45 GPIOs
 > 
-> The CS35L56 has a self-booting firmware in ROM, with the ability
-> to patch the firmware and/or apply tunings.
-> Patches #1 to #7 add support to cs_dsp and wm_adsp for self-booting
-> firmware and the ability to apply a .bin file without having to
-> apply a .wmfw.
 > 
-> [...]
 
 Applied to
 
@@ -75,22 +73,16 @@ Applied to
 
 Thanks!
 
-[1/8] firmware: cs_dsp: Introduce no_core_startstop for self-booting DSPs
-      commit: 7062e1c727ec99a9c5b40586964304d60a43f240
-[2/8] ASoC: wm_adsp: Use no_core_startstop to prevent creating preload control
-      commit: 0cd1fd571719e19bd6824a98855382a70e47d932
-[3/8] firmware: cs_dsp: Support DSPs that don't require firmware download
-      commit: 107c167419e75213e078e4f2468c0f2f55fdd11a
-[4/8] ASoC: wm_adsp: Support DSPs that don't require firmware download
-      commit: 65a314b7ddc09f6b1bad8decc6670e68d45ef07d
-[5/8] ASoC: wm_adsp: Expose the DSP boot work actions as wm_adsp_power_up()
-      commit: 11520b87e2232c6e3defed69ec94f0e28fb80f84
-[6/8] ASoC: wm_adsp: Add support for loading bin files without wmfw
-      commit: 0e7d82cbea8bc0db8ced613aea04da17ac0f0249
-[7/8] ASoC: wm_adsp: Simplify the logging of requested firmware files
-      commit: 991b1de830f61076b7dc29bec081a4d2e50724cf
-[8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
-      commit: e496112529006ce0c2cfe67d1136186e2786d2e8
+[1/5] ASoC: cs35l45: Support for GPIO pins configuration.
+      commit: fa8c052b4c614aa1d2d60e5c9f40e9d885bf9511
+[2/5] ASoC: dt-bindings: cs35l45: GPIOs configuration
+      commit: c6cec088ab037b57e08e0694e2b150b1b034826c
+[3/5] ASoC: cs35l45: IRQ support
+      commit: 6085f9e6dc1973cf98ee7f5dcf629939e50f1b84
+[4/5] ASoC: cs35l45: DSP Support
+      commit: 74b14e2850a34740c121cf2758d4181063d4c77c
+[5/5] ASoC: cs35l45: Hibernation support
+      commit: 6c07be8fe92c6b0c24ee1c599601dce3506b83c7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
