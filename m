@@ -2,121 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091146C305F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C750B6C3063
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCUL1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        id S230172AbjCUL1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjCUL1R (ORCPT
+        with ESMTP id S230014AbjCUL1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:27:17 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D79DBD315;
-        Tue, 21 Mar 2023 04:27:09 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 4B2BC20FB424; Tue, 21 Mar 2023 04:27:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4B2BC20FB424
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679398029;
-        bh=XbUvI3yATYdm3rEMcF3ylQDMEFRUhn9SDHqozXsVN7g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lg8UFhH/e1x0AgS11J6fNd81E9bFf4vY1Iz0FPpM5PbvkiXY3VlkWZzQHIoKBiyNO
-         eBIN1aZq4K/uY14+Q3z3sTgAipnTwj5XPfwTRwnh29e1ku/juD7i8EpktnoExZI1Bl
-         pxZXccqc04UHkHdjZdL3r0EM5akfF3Psr1LcC3v0=
-Date:   Tue, 21 Mar 2023 04:27:09 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] x86/hyperv: VTL support for Hyper-V
-Message-ID: <20230321112709.GA26985@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1679306618-31484-1-git-send-email-ssengar@linux.microsoft.com>
- <1679306618-31484-5-git-send-email-ssengar@linux.microsoft.com>
- <BYAPR21MB1688093876677DEE259C9914D7809@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Tue, 21 Mar 2023 07:27:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9DA48E1E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:27:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id i5so11368028eda.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679398063;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghw9ZOYCO8p5X8MZw35JfRmw8QR/Co7FvKY0kNpiVmg=;
+        b=Y0HZjSxpyalb6EJExgDJdAmTI+KnEyQM/8q//l2QvvYM+JP1/ReYVbQh3hNy/Uq9ds
+         rl2YLQGpRMLxM8tRXIIdW3gy1rNPFCAF+J8haTxxc+PWpfcGZ8fssvS2z4tIf/VbZgUM
+         8GHcby76RecYrnz3f3Lof//qIpqYJbVdP4vaSBUAb4D6+zCb/UdEMesPWj9VEEE00dhb
+         gCHPv0q3ZrR/Wd8EIpgfbKD55226zj5ef4Rx8Ahx7ZFoE+WpLJfrBiGJQwLyKTIGAnYK
+         JLSfhGFxEK+KFvbXJXxbsrUSAhciovj+tbi3w/KKBwbc60A9VL+UWuknrQKdKkzoWLG6
+         Qdng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679398063;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghw9ZOYCO8p5X8MZw35JfRmw8QR/Co7FvKY0kNpiVmg=;
+        b=beNY8n4DpAOVyDVOYNLXM4JsyCPW4yA/lzoWtlrT5m6jKmZesA00tO0Zka0Ktm6MfZ
+         m2FtheDpowLcjzItVFZ5DLjvnk3mXCpneWludGInOoYbOLRJCdZisWhk+nn7E6AsVk88
+         5v/SU6Z4gL+juA4ZtdZESFoXwzedYpy2XClEQ51yhSud8G0KgkO50nR6QykzW0vc9vd4
+         4R6yQa25PX/GiJDxz5aLNqrW+ELG6nF1WiefsQ4mbMKaUTg5LdHqZ9DmggesNCLChru4
+         LckjXm/vRF/2byVZOTqQE4PyszOj+35Jhns2WtyAgVY82DDdbJ1nnr7RQ52k/YEDk2SH
+         JbUQ==
+X-Gm-Message-State: AO0yUKXyInkFw8Zgu7DWCcaHUEWp/mCRVdhH8kc63ARNTa7WojnNIaew
+        7PUZoMcAC8TgPPJuzlgZsyxBbw==
+X-Google-Smtp-Source: AK7set90T2W503PVRuXveaJoEM/exHdqXIVgfTzqo0hhs8/pVFAPVwJ8LkBECNAen5qiKGG/4QsE/A==
+X-Received: by 2002:a17:906:60c9:b0:931:b2ae:116e with SMTP id f9-20020a17090660c900b00931b2ae116emr2083370ejk.64.1679398063687;
+        Tue, 21 Mar 2023 04:27:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:2142:d8da:5ae4:d817? ([2a02:810d:15c0:828:2142:d8da:5ae4:d817])
+        by smtp.gmail.com with ESMTPSA id kj2-20020a170907764200b009324717b9f3sm5128403ejc.71.2023.03.21.04.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 04:27:43 -0700 (PDT)
+Message-ID: <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+Date:   Tue, 21 Mar 2023 12:27:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688093876677DEE259C9914D7809@BYAPR21MB1688.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230321100456.0_DhhkZJ@linutronix.de>
+ <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+ <20230321105734.Z7F3Uvf1@linutronix.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230321105734.Z7F3Uvf1@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:16:37PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, March 20, 2023 3:04 AM
-> > 
->  
-> [snip]
+On 21/03/2023 11:57, Sebastian Andrzej Siewior wrote:
+> On 2023-03-21 11:24:46 [+0100], Krzysztof Kozlowski wrote:
+>>>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>>>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>>>> @@ -390,7 +390,16 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
+>>>>  
+>>>>  	/* Disable interrupt and enable polling */
+>>>>  	disable_irq_nosync(c_data->throttle_irq);
+>>>> -	schedule_delayed_work(&c_data->throttle_work, 0);
+>>>> +
+>>>> +	/*
+>>>> +	 * Workqueue prefers local CPUs and since interrupts have set affinity,
+>>>> +	 * the work might execute on a CPU dedicated to realtime tasks.
+>>>> +	 */
+>>>> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>>>> +		queue_delayed_work_on(WORK_CPU_UNBOUND, system_unbound_wq,
+>>>> +				      &c_data->throttle_work, 0);
+>>>> +	else
+>>>> +		schedule_delayed_work(&c_data->throttle_work, 0);
+>>>
+>>> You isolated CPUs and use this on PREEMPT_RT. And this special use-case
+>>> is your reasoning to make this change and let it depend on PREEMPT_RT?
+>>>
+>>> If you do PREEMPT_RT and you care about latency I would argue that you
+>>> either disable cpufreq and set it to PERFORMANCE so that the highest
+>>> available frequency is set once and not changed afterwards.
+>>
+>> The cpufreq is set to performance. It will be changed anyway because
+>> underlying FW notifies through such interrupts about thermal mitigation
+>> happening.
 > 
-> > diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> > index 35b16b177035..4af218e70395 100644
-> > --- a/arch/x86/include/asm/mshyperv.h
-> > +++ b/arch/x86/include/asm/mshyperv.h
-> > @@ -11,6 +11,10 @@
-> >  #include <asm/paravirt.h>
-> >  #include <asm/mshyperv.h>
-> > 
-> > +#define HV_VTL_NORMAL 0x0
-> > +#define HV_VTL_SECURE 0x1
-> > +#define HV_VTL_MGMT   0x2
-> > +
-> >  union hv_ghcb;
-> > 
-> >  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-> > @@ -272,6 +276,12 @@ static inline int hv_set_mem_host_visibility(unsigned long
-> > addr, int numpages,
-> >  #endif /* CONFIG_HYPERV */
-> > 
-> > 
-> > +#ifdef CONFIG_HYPERV_VTL_MODE
-> 
-> Hmmm.  CONFIG_HYPERV_VTL_MODE isn't defined until Patch 5 of this series.
-> I guess this works because of #ifdef behavior with non-existent values, but
-> it is a little bit weird to be referencing a CONFIG_ option that hasn't been
-> defined yet.
+> I still fail to understand why this is PREEMPT_RT specific and not a
+> problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
 
-I am fine to pull Kconfig changes before this patch.
+Hm, good point, I actually don't know what is the workqueue
+recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
+preferred?
+
+And how such code would look like?
+if (tick_nohz_tick_stopped())?
+
+> However the thermal notifications have nothing to do with cpufreq.
+
+They have. The FW notifies that thermal mitigation is happening and
+maximum allowed frequency is now XYZ. The cpufreq receives this and sets
+maximum allowed scaling frequency for governor.
 
 > 
-> > +void __init hv_vtl_init_platform(void);
-> > +#else
-> > +static inline void __init hv_vtl_init_platform(void) {}
-> > +#endif
-> > +
-> >  #include <asm-generic/mshyperv.h>
-> > 
-> >  #endif
-> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> > index 61363ce0b335..0dd385cdc332 100644
-> > --- a/arch/x86/kernel/cpu/mshyperv.c
-> > +++ b/arch/x86/kernel/cpu/mshyperv.c
-> > @@ -520,6 +520,7 @@ static void __init ms_hyperv_init_platform(void)
-> > 
-> >  	/* Register Hyper-V specific clocksource */
-> >  	hv_init_clocksource();
-> > +	hv_vtl_init_platform();
-> >  #endif
-> >  	/*
-> >  	 * TSC should be marked as unstable only after Hyper-V
-> > --
-> > 2.34.1
+>> The only other solution is to disable the cpufreq device, e.g. by not
+>> compiling it.
+> 
+> People often disable cpufreq because _usually_ the system boots at
+> maximum performance. There are however exceptions and even x86 system
+> are configured sometimes to a lower clock speed by the firmware/ BIOS.
+> In this case it is nice to have a cpufreq so it is possible to set the
+> system during boot to a higher clock speed. And then remain idle unless
+> the cpufreq governor changed.
+
+Which we do not want here, thus disabling cpufreq is not the interesting
+solution...
+
+Best regards,
+Krzysztof
+
