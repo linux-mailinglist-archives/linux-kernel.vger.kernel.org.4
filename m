@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE09E6C31AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017A56C31AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCUM1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S229964AbjCUM1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCUM1M (ORCPT
+        with ESMTP id S229738AbjCUM1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:27:12 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18604B830
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679401600; x=1710937600;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=banmeMceB3wE8C5bGQsV4m8qcliwS6rTyERk7EGyTTo=;
-  b=AjZkwf+EstSEnWWI5XZFFu7DWY3xkBPkJMmJwppgItrZvJ8ShBPZ2PLL
-   aoWZNwNfo8fy2ETVcIL7R1lFwMRMBjwd9FfZFWScEbsvRpFN6tl9hItAh
-   EPbUaeLzON10PvQcyJvOy3bmStRmhl98F3ifGRpXiqdv/HhzRU/84zx6L
-   I5kmDjxlLXsBeA+QqgXWb155hD8BlkiqLJu3BrznzjkBu0zr21HcVl6Aw
-   XsbABMRoiKr5YHJSPezGehDchLevcH7PHO4VI4mh1As7Njb7CjeQag077
-   067itTb7Uk6NeK4pnG0YfxzKIB6bP1xgx13puZMSBnuyzB63/bsFg+kJA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="401494209"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="401494209"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 05:26:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="750539944"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="750539944"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Mar 2023 05:26:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peb4N-000Bty-0H;
-        Tue, 21 Mar 2023 12:26:27 +0000
-Date:   Tue, 21 Mar 2023 20:25:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 86efad5f54363f5320c38fd3d524d117656c8dec
-Message-ID: <6419a255.jJCgWhGSBkd05bwP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 21 Mar 2023 08:27:00 -0400
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FA248E3E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:26:20 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id ek18so58933861edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 05:26:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679401575; x=1681993575;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=26c/PJlmYgWkbBmERwUyqF2dpBsoOH9Y3u2+yXmk3wc=;
+        b=NWi/rbNWlOWRm0KvJqKWK3AqEXqoEzpEAKHKS2mZqG+lP7vyUk6sS63hv7z131gFsd
+         OzBowG7iyefaEmekLam2JlQ7BmQJiqOiTE8hBZWw70Sijf0O/yFrFh7FSB6nZWtswnej
+         aTqezqVdQhaJO3gR477irgxyXMtqCW/a8/0zgDtSDZEZkhuMaxW5dxUEH7hvxjTuBmoi
+         6SSocg0KqDR+pVTRjtoQFQ4+QMrBjDOY+t1L07u9UrdqKXjafTrVsjcWs4USl+QlMdZP
+         doks5U3bSOad7Qe0PmlIUmmEXylVUP0WENI4zAVxBkevtPYbybeETTubdBxg/61VuwY5
+         lEGg==
+X-Gm-Message-State: AO0yUKVO8Tcv7joTYUYCWd/7Z/Q24HHhecB4kqoYi7KWVRSDq/HkT7ZN
+        K/MMriCcml9Wo4T+IewiVF8=
+X-Google-Smtp-Source: AK7set9BR+aUaX9jSI1+8SuxIhEkOn8iOy7MhwLuv4P3XYOXwQIiS4APbSbxzBudsHD9WeybjYQJMw==
+X-Received: by 2002:a17:906:10d0:b0:931:4285:ea16 with SMTP id v16-20020a17090610d000b009314285ea16mr2362836ejv.7.1679401574832;
+        Tue, 21 Mar 2023 05:26:14 -0700 (PDT)
+Received: from [10.100.102.14] (85.65.253.165.dynamic.barak-online.net. [85.65.253.165])
+        by smtp.gmail.com with ESMTPSA id bv1-20020a170906b1c100b00939e76a0cabsm795854ejb.111.2023.03.21.05.26.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 05:26:14 -0700 (PDT)
+Message-ID: <56620baf-6195-b987-6067-ae81d23e39c5@grimberg.me>
+Date:   Tue, 21 Mar 2023 14:26:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [External] Re: [PATCH] nvme: fix heap-use-after-free and oops in
+ bio_endio for nvme multipath
+Content-Language: en-US
+To:     Lei Lei2 Yin <yinlei2@lenovo.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cybeyond@foxmail.com" <cybeyond@foxmail.com>
+References: <PS1PR03MB493948DD1ECFAF150EE7B2F688819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+ <042385ef-285e-5179-941b-ab37f490c1d8@grimberg.me>
+ <PS1PR03MB49395AC5BC73DDDA6A79E87488819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <PS1PR03MB49395AC5BC73DDDA6A79E87488819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 86efad5f54363f5320c38fd3d524d117656c8dec  Revert "rcu/kvfree: Eliminate k[v]free_rcu() single argument macro"
 
-elapsed time: 749m
+> 	Thank you for your reply
+> 
+> 	This problem occurs in nvme over rdma and nvme over tcp with nvme generate multipath. Delete the ns gendisk is caused by nvmf target subsystem is faulty, then host detect all path keep alive overtime and io timeout. After ctrl-loss-tmo seconds, host will remove fail ctrl and ns gendisk.
 
-configs tested: 43
-configs skipped: 3
+That is fine, but it is a problem if it does not correctly drain
+inflight I/O, weather it was split or not. And this looks like the wrong
+place to address this.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> 	We have reappear this proble in Linux-5.10.136, Linux-5.10.167 and the latest commit in linux-5.10.y, and this patch is only applicable to Linux-5.10.y
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
+So my understanding that this does not reproduce upstream?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> 	Yes , this is absolutely the wrong place to do this . Can i move this modification after nvme_trace_bio_complete?
+> 
+> 	Do I need to resubmit a patch, if modifications are needed?
+
+Yes, but a backport fix needs to be sent to stable mailing list
+(stable@vger.kernel.org) and cc'd to linux-nvme mailing list.
+
+But I don't think that this fix is the correct one. What is needed is
+to identify where this was fixed upstream and backport that fix instead.
+If that is too involving because of code dependencies, it may be
+possible to send an alternative surgical fix, but it needs to be
+justified.
