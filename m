@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF1B6C3A77
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51156C3A78
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjCUTaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S230250AbjCUTaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjCUTaE (ORCPT
+        with ESMTP id S230184AbjCUTaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 15:30:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B133A23A56;
-        Tue, 21 Mar 2023 12:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57FA4B818CC;
-        Tue, 21 Mar 2023 19:29:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461AAC433D2;
-        Tue, 21 Mar 2023 19:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679426992;
-        bh=OKN8kbSWPpvrhUxtqKypraEhkhHF4MVPJBKr6a5Rd8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nZsG76/AKO+1mjoywTNx+ON7pPgx4fKOyDHJ1IHyP09vljcFCuVPkqr0mB5SKRAj4
-         GggNjVDUkd/BY5WV9ynO5fRx6d1/F9iGU9A3gjEX5dzLOvGUItc5d+mFQnp3E8U7S7
-         f11PN0v5bvMQuhY/rBLjpbuxwKaH9cXPU2lVmODR/60cVVeNR1tyXtsTWFK/eD/bAk
-         BbscdXNkpzbb7ZN+j5miO+0EfQEdRst+tOybJU1/qo8mw/YBaEq2hnApnku+891vPJ
-         tVccg84ybCoWmF20YG5Vp3GBqN3txAH/U4rkBTaICc0j8vKAfuHDIm8eUnhLr6qdoR
-         b8dnOVavu9e1g==
-Date:   Tue, 21 Mar 2023 20:29:49 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-        wim@linux-watchdog.org, linux@roeck-us.net, nathan@kernel.org,
-        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] watchdog: s3c2410: remove unused freq_to_wdt and
- s3c2410wdt_is_running functions
-Message-ID: <20230321192949.rlegmetszb7rnury@intel.intel>
-References: <20230321183439.1826823-1-trix@redhat.com>
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0613F3E0A7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:29:56 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t11so20529507lfr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679426994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8lk8zT/+3BzUVR+gfvIgIE2jusGWe/WjOjzrPgO4TWw=;
+        b=YlcL/i1qKYCwne3jIt1vb6Dh5CMuBvuxgQ2GL8Kfhldf89iun3bJI19H8MvUlmEJHx
+         GozijcXBBgAjD3xgkVoXv2eIIvNlYOw6brWNoWuhuuJuUPuG/y/XGLO4o/05rsDL8nAb
+         J3WZOS/CnV6fBjtzFvadE0deLRmbcngDM1yZaSelHYyqgM+a5InUSy/ZvWE8TLy8rz3l
+         m2HbYUpyhm6bU7JYGqplvQyM5M4MAXJmcpJIWfgSW8lR0jbzQllObJR4sBqK3g6y0R9t
+         SBnPoYSWEKVxxdprTgVboJQdXOstBCtz8ae/tzhwZoe20VEPiOQmfpHECrR//XJQP2mq
+         jk5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679426994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8lk8zT/+3BzUVR+gfvIgIE2jusGWe/WjOjzrPgO4TWw=;
+        b=vf6w4nQMog1+pZ3K97gA/t8hBi2agQfuiN5tpatTOrB/zVUhGxM66wGkltCF8+mx05
+         KOzRyaRGNN067e8JdcMk+d6SvvdgnPEJAl0B1wBUY3D4qMsJsgyYzW9SILQKjuJslPo2
+         QqREU+Vuwwf+tGA3VD6+l89V8tgG0vnCPeRdn+NHO0oggVatFEUfE+EU/+XUj5csTSMI
+         pJdAHF1KKtnM5as5ISyNgHuK7yoh2VasV7yyVaUqQ+32aXLTDqQzfNd+iiYD0rKAhlqD
+         PPOpCy57e6EAuS0NDBB0QAADte3jlNHC2TEyEDnFfEADDKpIFrPFesLWi+Q6IPXYSwpM
+         R6/Q==
+X-Gm-Message-State: AO0yUKVEu+F6ky9l16ObBMCI4Ojd4S9qQvw/iZy9+8d8q4Ph9wKhvbKP
+        /Iu8DcSXvHs5I8ULafUqlFFGXA==
+X-Google-Smtp-Source: AK7set914GApnZBasLoDAtBk/khYQ+ImBVYJkLlrQPpK+rQkRa4SYZOMqeN96ZHMaAXCVZOA0aU7hA==
+X-Received: by 2002:ac2:4f8c:0:b0:4cb:449a:31f8 with SMTP id z12-20020ac24f8c000000b004cb449a31f8mr1349687lfs.35.1679426994225;
+        Tue, 21 Mar 2023 12:29:54 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id y1-20020a197501000000b004dcf20843efsm2271183lfe.239.2023.03.21.12.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 12:29:53 -0700 (PDT)
+Message-ID: <3b04e155-c5eb-9767-bd65-d044b8dfb878@linaro.org>
+Date:   Tue, 21 Mar 2023 20:29:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321183439.1826823-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sdm845: Fix the BAM DMA engine
+ compatible string
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org, rfoss@kernel.org
+References: <20230321190118.3327360-1-bhupesh.sharma@linaro.org>
+ <20230321190118.3327360-2-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230321190118.3327360-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
 
-On Tue, Mar 21, 2023 at 02:34:39PM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/watchdog/s3c2410_wdt.c:311:35: error: unused function
->   'freq_to_wdt' [-Werror,-Wunused-function]
-> static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
->                                   ^
-> drivers/watchdog/s3c2410_wdt.c:446:19: error: unused function
->   's3c2410wdt_is_running' [-Werror,-Wunused-function]
-> static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
->                   ^
-> These functions are not used, so remove them.
+
+On 21.03.2023 20:01, Bhupesh Sharma wrote:
+> As per documentation, Qualcomm SDM845 SoC supports BAM DMA
+> engine v1.7.4, so use the correct compatible strings.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  drivers/watchdog/s3c2410_wdt.c | 10 ----------
->  1 file changed, 10 deletions(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 200ba236a72e..6394dda7a5dc 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -308,11 +308,6 @@ static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
->  				       / S3C2410_WTCON_MAXDIV);
->  }
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 0fdd59a9feed..e8e9aa4da914 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -2628,7 +2628,7 @@ ufs_mem_phy_lanes: phy@1d87400 {
+>  		};
 >  
-> -static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
-> -{
-> -	return container_of(nb, struct s3c2410_wdt, freq_transition);
-> -}
-> -
->  static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
->  {
->  	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
-> @@ -443,11 +438,6 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
->  	return 0;
->  }
->  
-> -static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
-> -{
-> -	return readl(wdt->reg_base + S3C2410_WTCON) & S3C2410_WTCON_ENABLE;
-> -}
-> -
-
-there is only one instance where this can be actually used in the
-driver, but it's inside a dev_info, so no point having it around.
-
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-
-Andi
-
->  static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
->  				    unsigned int timeout)
->  {
-> -- 
-> 2.27.0
-> 
+>  		cryptobam: dma-controller@1dc4000 {
+> -			compatible = "qcom,bam-v1.7.0";
+> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
+>  			reg = <0 0x01dc4000 0 0x24000>;
+>  			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks = <&rpmhcc RPMH_CE_CLK>;
