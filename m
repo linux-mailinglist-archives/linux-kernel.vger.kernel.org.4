@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8866C375E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D724F6C3760
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCUQuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S230176AbjCUQvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCUQuu (ORCPT
+        with ESMTP id S229683AbjCUQvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:50:50 -0400
-Received: from pv50p00im-zteg10011501.me.com (pv50p00im-zteg10011501.me.com [17.58.6.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0E1265A8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1679417449;
-        bh=5ukV6PY3ucC9hJDuXZfIVXvf88RafbDWPyWPmbI4b+M=;
-        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
-        b=sgnlOBOdnJ4Md1bXyy0cTRU3QCOeruwaZC8HiYR65vzbQQ2ge3aX+tWCMisb4D/uf
-         I1wWmYnpJcFCcUh7ofpd7CoOCJyuzL1O1HLrBVaMu8L7aOQZ/gbdERcEitcLR4ujBR
-         FooPqSKK6iCNUA5uwLrF0m5JmtVzcgbyJw0OMdX3PjkZTGUo0ljQEsGUkcimcFquL9
-         DzzOFblcqbngGjpqVtiOwQnjHkUEOGOvd/DpN1EtHz03q85d8SKaoa0y8sMoi5/9UP
-         9mdLtyyboIOUOzqLQX8qA/cnU6IQCZfFe1Js3i1LM6Qk5rhB/JSk8njepVxy9Pi70b
-         NV8THQNzkH8OQ==
-Received: from localhost (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-zteg10011501.me.com (Postfix) with ESMTPSA id BA8B54A00DE;
-        Tue, 21 Mar 2023 16:50:45 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 21 Mar 2023 17:50:43 +0100
-Message-Id: <CRC7SQGZJDK0.3FEG3RZR6IR5U@iMac.local>
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-From:   "Roman Beranek" <romanberanek@icloud.com>
-To:     "Maxime Ripard" <maxime@cerno.tech>
-Cc:     "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <20230321145646.w6kr7ddurfxpg5rt@houat>
-In-Reply-To: <20230321145646.w6kr7ddurfxpg5rt@houat>
-X-Proofpoint-GUID: nW3p3X6tTkVEQXdicLpHvySaM0EbhDEp
-X-Proofpoint-ORIG-GUID: nW3p3X6tTkVEQXdicLpHvySaM0EbhDEp
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.517,18.0.883,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-06-21=5F08:2022-06-21=5F01,2022-06-21=5F08,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 malwarescore=0
- mlxscore=0 phishscore=0 clxscore=1011 bulkscore=0 suspectscore=0
- mlxlogscore=771 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2303210132
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        Tue, 21 Mar 2023 12:51:00 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7F28E64
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:50:56 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id o40-20020a05600c512800b003eddedc47aeso4389199wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679417455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OfZP5WUwQ2zes6TJwapZ83j4T5feELIfk8vczVnLdPI=;
+        b=E0+aVcsylyia6nwcDEPzALqwWBMGJDgGwUYNgRB3rF3ityRUjdO+sK2wUNsTrhiNiQ
+         Tu455Dp1ctS7qVOIAmPAfFT4uzhkmjjqhYrL+Ez30y0vyTjuZD1jTcaax/QI9kfSC6Bi
+         v90AwVGmHV1r3dBl01ib0cQ67/9cDEre4QigEPz2G1GOcWIolO6VLJ2BoDsuG7MEjlgx
+         pFXPRMw1XzaSxRuhtl1EOp6VoTwtsqGhKip4iO7CAbUpH5fB8jfDIDjPDcFwXNuwd4+U
+         fPog1MWrWwyIj/1PJzynAkgsrmW8r7j+s7eAbpgyJxWkkJgGLG5h8qtakcFdnzYykMVl
+         87oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679417455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OfZP5WUwQ2zes6TJwapZ83j4T5feELIfk8vczVnLdPI=;
+        b=bWL03XofhljJ1uu1l2zN16C4KTrIZL1PT3kukafQv2wIDUyozXhCfh5kjglxQcRcXn
+         yQ0i5bOcywOZxDvarqEuH/uS9CNBFNEfjq/PWW014421bX8RuzX7z2mMvA1Iw7V0DEuG
+         f38p4kWtkDVJ9rNc/lnHRNv24D3U8gTkXKMrBmYLM9SlIwftRnNGL2ueuuUVk7QTqCfJ
+         2RLVJVfumhH6ZnMXTUj+kiMVoj9bhfY/uCRtgVhfxfWNjGKQ8SiTKaokVHRNsd3nDJNn
+         Iw1xIVHGwPGAQYnDxDXKafJxnUquYZO6HrVa1IRoEjlrxs9rMH2VqjLtWO9sYNX8aEfM
+         fVxg==
+X-Gm-Message-State: AO0yUKU2i+pGQN2KS7VDeGg0CwnpkzFqEht4/huBUm3VZTKfHS8xLOn8
+        dq4PD+yF2+LnVwmk+6b5E6zUxokDpM/zgjbusx5ktg==
+X-Google-Smtp-Source: AK7set/5CTKHv7W42iSkRDz6r+Fv5GwBJzTkDXZQnUC7keFECRTnXqtOMDiGp/Vor20x/ruRFYAKEw==
+X-Received: by 2002:a7b:cd09:0:b0:3ee:4dc0:d4f2 with SMTP id f9-20020a7bcd09000000b003ee4dc0d4f2mr463024wmj.41.1679417455116;
+        Tue, 21 Mar 2023 09:50:55 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id v26-20020a05600c215a00b003eafc47eb09sm13904832wml.43.2023.03.21.09.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 09:50:54 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 16:50:49 +0000
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZBngaarixYOgBCOA@google.com>
+References: <20230317143310.1604700-1-vdonnefort@google.com>
+ <20230317143310.1604700-2-vdonnefort@google.com>
+ <20230320214516.01c18367@gandalf.local.home>
+ <ZBnKe55cvTZybZLF@google.com>
+ <20230321114047.3432afbe@gandalf.local.home>
+ <20230321124425.6ca93621@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321124425.6ca93621@gandalf.local.home>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Maxime,
-
-On Tue Mar 21, 2023 at 3:56 PM CET, Maxime Ripard wrote:
+On Tue, Mar 21, 2023 at 12:44:25PM -0400, Steven Rostedt wrote:
+> On Tue, 21 Mar 2023 11:40:47 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > > 
+> > > Thanks a lot for having a look. Do you mind if I fold this in my patch for a V2?  
+> > 
+> > Hold off, I found some bugs that I'm fixing ;-)
+> 
+> OK, you can fold this in. I also fixed an issue with your patch where it
+> was missing setting a page->mapping and also clearing it.
+> 
+> I haven't updated to replace "__u32 *data_pages[]" with an "__u32 data_start"
+> But I think that should still be done.
+> 
+> -- Steve
 >
-> This is similar to
-> https://lore.kernel.org/all/20230319160704.9858-2-frank@oltmanns.dev/
->
-> What's the story there?
 
-Yes, Frank Oltmanns wrote me recently in relation to a patch I wrote
-~ 3 years ago that addressed the framerate issue, proposing to
-collaborate on pushing it upstream, however as I've been keeping up
-with my inbox rather sporadically these days, by the time I read his
-message, Frank had already taken the initiative and sent the patch.
-So that's how we've got to this slightly awkward situation with two
-patches on the same subject arriving 1 day apart of each other.
+[...] 
 
-The problem with the original patch was that it went around
-sun4i_dotclock by feeding it a rate adjusted such that the pll-mipi rate
-was set correctly. I couldn't quite figure out at the time of how big
-a portion of the tcon logic does the sun4i_dotclock code need to be made
-aware of.
-
->Also, how was it tested/confirmed?
-
-By counting Vblank interrupts (GIC 118).
-
-Roman
+Thanks! I'll prepare a v2 with all that!
