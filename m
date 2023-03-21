@@ -2,93 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9BA6C3417
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436436C341D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjCUOYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S230444AbjCUOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjCUOYY (ORCPT
+        with ESMTP id S229744AbjCUOYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:24:24 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6901A95E
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:55 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id o12so60364232edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679408632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k5Pm0MMnSmbEDdIbPohmhFMPMqFxou4bY0YB1uIPQY0=;
-        b=CiFesSqyc13A+IFfOv3ojCvEOcPvBzioHBpEmQUbJolYCb39/LHhu1nTGXmAJ8hHlI
-         3f5Ms/mO/LBTDcThExjMYF8H7g68sIF6XgnJV4EOb3hdtiiKSnZmAPS/fPAaIOJdPyg2
-         t/JXEr/2AXjMG+pWoQfVQYMBtGRgLuph3qvsjxRYcHnpaRIf+xubvcAw6naCbLYbNcSg
-         Sg4BiUkA9CBp4sIPKnzRFJ68+mh9IggECCepHrFjx8sAPUNFn5V22ZWqrMkaCxOpsuOt
-         fcQcqM+J3HANR3J2Db65YSPhxWPzf9hJ4U+z7iTSK+9e0ESzpn8H3FvfVfl2NwKxNfR7
-         EJqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679408632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k5Pm0MMnSmbEDdIbPohmhFMPMqFxou4bY0YB1uIPQY0=;
-        b=ND5uQfO8/3nocT+IwB0OSURPnFCaNRertiViLLlvLf3zyC9hNDMEK+KtyaABPyhWH4
-         nneZO/CcqZ16UBb9+Zn1BfRB3Z3Un/XekxeC6Px1VmoCOyuOG2ce6loQ3q9Bwyq8dSPF
-         JTvny39JYpE0zdsiIJZMCiGq+Cx8CCTiNmGPrDEth78TEbSrygqeM/9VmnfjQfzvuScP
-         amVVQgkENNkB+g5Nxju5soTm+5b+FVk1IJNMx95ftA0JDvxZbq99Y5IcT00Uf6m93/Ku
-         +2c8LXH2xZ/pM9JEAOWaFTOR+Cqxx7oHRM3N8Rq8Guh8oiIfIXQqIwTk6KfiVM1cOY54
-         4epg==
-X-Gm-Message-State: AO0yUKVKeLltdi4KNF3IJB8v67Px20uWnFtipZ0dhKRml4aHen5NHtEg
-        iGOeE0ofFDrUkX0xlm3nlPqNqw==
-X-Google-Smtp-Source: AK7set/9ZXj1Czg1/cVBqeEkMOtdy8gYkoiYB258Ji3dmMs0uLNd1k0etia3Rbw6N4w6XiQ+H/BcZQ==
-X-Received: by 2002:a17:906:c341:b0:934:d467:5492 with SMTP id ci1-20020a170906c34100b00934d4675492mr3133481ejb.54.1679408632143;
-        Tue, 21 Mar 2023 07:23:52 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id l16-20020a1709061c5000b00939ad35d521sm1099737ejg.77.2023.03.21.07.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 07:23:51 -0700 (PDT)
-Message-ID: <5e9b3ec6-5d47-cd73-c7c0-0aa891bdfc23@linaro.org>
-Date:   Tue, 21 Mar 2023 14:23:49 +0000
+        Tue, 21 Mar 2023 10:24:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BC6457E2;
+        Tue, 21 Mar 2023 07:24:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46C3961C4A;
+        Tue, 21 Mar 2023 14:24:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39451C433D2;
+        Tue, 21 Mar 2023 14:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679408658;
+        bh=qsraTqGwu6+J0SRLHT96USugJal80D3atzvcCU45Q3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A0vlqTUzRpd20j+5HGfKFcSgC/h0nYVe/ANfS1k0Hg5dxOo04aINd0z60Sl1ERrEp
+         0QHIK+VHv3XFEFTxQYsByULdp3zTVj8Aw2a3JRHDgKORnLYyED1yHGhXLkiO524lVV
+         D9zh7hZWUahLQDXqN3BCfS6RyBS/Fre/p/V3tGk+jUMoVeIUnjEUxSC60oHMHf1Fpn
+         meWKoxuWHOiy69N3gbL1KpjF5qhDQwUZpwibGouvU2xagdX9+MWSEyLeKogMH9jgMD
+         /lKB8fJeKcjXeQvns6IOvVSeHhA+gIN7tNlyhxdIBOT+RFQxTS8cFdfgEuN+k7s4Bn
+         sgau/zBK3J/PQ==
+Date:   Tue, 21 Mar 2023 15:24:13 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] do_open(): Fix O_DIRECTORY | O_CREAT behavior
+Message-ID: <20230321142413.6mlowi5u6ewecodx@wittgenstein>
+References: <20230320071442.172228-1-pedro.falcato@gmail.com>
+ <20230320115153.7n5cq4wl2hmcbndf@wittgenstein>
+ <CAHk-=wjifBVf3ub0WWBXYg7JAao6V8coCdouseaButR0gi5xmg@mail.gmail.com>
+ <CAKbZUD2Y2F=3+jf+0dRvenNKk=SsYPxKwLuPty_5-ppBPsoUeQ@mail.gmail.com>
+ <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v11 15/26] gunyah: rsc_mgr: Add platform ops on
- mem_lend/mem_reclaim
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
- <20230304010632.2127470-16-quic_eberman@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230304010632.2127470-16-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wgc9qYOtuyW_Tik0AqMrQJK00n-LKWvcBifLyNFUdohDw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,WEIRD_QUOTING autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,232 +60,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/03/2023 01:06, Elliot Berman wrote:
-> On Qualcomm platforms, there is a firmware entity which controls access
-> to physical pages. In order to share memory with another VM, this entity
-> needs to be informed that the guest VM should have access to the memory.
+On Mon, Mar 20, 2023 at 01:24:52PM -0700, Linus Torvalds wrote:
+> On Mon, Mar 20, 2023 at 12:27 PM Pedro Falcato <pedro.falcato@gmail.com> wrote:
+> >
+> > 1) Pre v5.7 Linux did the open-dir-if-exists-else-create-regular-file
+> > we all know and """love""".
 > 
-> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   drivers/virt/gunyah/Kconfig                 |  4 ++
->   drivers/virt/gunyah/Makefile                |  1 +
->   drivers/virt/gunyah/gunyah_platform_hooks.c | 80 +++++++++++++++++++++
->   drivers/virt/gunyah/rsc_mgr.h               |  3 +
->   drivers/virt/gunyah/rsc_mgr_rpc.c           | 18 ++++-
->   include/linux/gunyah_rsc_mgr.h              | 17 +++++
->   6 files changed, 121 insertions(+), 2 deletions(-)
->   create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
+> So I think we should fall back to this as a last resort, as a "well,
+> it's our historical behavior".
 > 
-> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-> index 1a737694c333..de815189dab6 100644
-> --- a/drivers/virt/gunyah/Kconfig
-> +++ b/drivers/virt/gunyah/Kconfig
-> @@ -4,6 +4,7 @@ config GUNYAH
->   	tristate "Gunyah Virtualization drivers"
->   	depends on ARM64
->   	depends on MAILBOX
-> +	select GUNYAH_PLATFORM_HOOKS
->   	help
->   	  The Gunyah drivers are the helper interfaces that run in a guest VM
->   	  such as basic inter-VM IPC and signaling mechanisms, and higher level
-> @@ -11,3 +12,6 @@ config GUNYAH
->   
->   	  Say Y/M here to enable the drivers needed to interact in a Gunyah
->   	  virtual environment.
-> +
-> +config GUNYAH_PLATFORM_HOOKS
-> +	tristate
-> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-> index ff8bc4925392..6b8f84dbfe0d 100644
-> --- a/drivers/virt/gunyah/Makefile
-> +++ b/drivers/virt/gunyah/Makefile
-> @@ -1,6 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
->   obj-$(CONFIG_GUNYAH) += gunyah.o
-> +obj-$(CONFIG_GUNYAH_PLATFORM_HOOKS) += gunyah_platform_hooks.o
->   
->   gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
->   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
-> diff --git a/drivers/virt/gunyah/gunyah_platform_hooks.c b/drivers/virt/gunyah/gunyah_platform_hooks.c
-> new file mode 100644
-> index 000000000000..60da0e154e98
-> --- /dev/null
-> +++ b/drivers/virt/gunyah/gunyah_platform_hooks.c
-> @@ -0,0 +1,80 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/rwsem.h>
-> +#include <linux/gunyah_rsc_mgr.h>
-> +
-> +#include "rsc_mgr.h"
-> +
-> +static struct gh_rm_platform_ops *rm_platform_ops;
-> +static DECLARE_RWSEM(rm_platform_ops_lock);
-> +
-> +int gh_rm_platform_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
+> > 2) Post 5.7, we started returning this buggy -ENOTDIR error, even when
+> > successfully creating a file.
+> 
+> Yeah, I think this is the worst of the bunch and has no excuse (unless
+> some crazy program has started depending on it, which sounds really
+> *really* unlikely).
+> 
+> > 3) NetBSD just straight up returns EINVAL on open(O_DIRECTORY | O_CREAT)
+> > 4) FreeBSD's open(O_CREAT | O_DIRECTORY) succeeds if the file exists
+> > and is a directory. Fails with -ENOENT if it falls onto the "O_CREAT"
+> > path (i.e it doesn't try to create the file at all, just ENOENT's;
+> > this changed relatively recently, in 2015)
+> 
+> Either of these sound sensible to me.
+> 
+> I suspect (3) is the clearest case.
 
-I think I have asked this question but I can not find the answer to this 
-from old replies.
-Why is this platform hooks not part of core gunyah? Do we need a 
-dedicated module for this.
-By the looks of APIs I see this is very much close to rm and i think 
-this functionality should live with rm.
+Yeah, we should try that.
 
---srini
-+{
-> +	int ret = 0;
-> +
-> +	down_read(&rm_platform_ops_lock);
-> +	if (rm_platform_ops && rm_platform_ops->pre_mem_share)
-> +		ret = rm_platform_ops->pre_mem_share(rm, mem_parcel);
-> +	up_read(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_platform_pre_mem_share);
-> +
-> +int gh_rm_platform_post_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel)
-> +{
-> +	int ret = 0;
-> +
-> +	down_read(&rm_platform_ops_lock);
-> +	if (rm_platform_ops && rm_platform_ops->post_mem_reclaim)
-> +		ret = rm_platform_ops->post_mem_reclaim(rm, mem_parcel);
-> +	up_read(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_platform_post_mem_reclaim);
-> +
-> +int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +{
-> +	int ret = 0;
-> +
-> +	down_write(&rm_platform_ops_lock);
-> +	if (!rm_platform_ops)
-> +		rm_platform_ops = platform_ops;
-> +	else
-> +		ret = -EEXIST;
-> +	up_write(&rm_platform_ops_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_register_platform_ops);
-> +
-> +void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +{
-> +	down_write(&rm_platform_ops_lock);
-> +	if (rm_platform_ops == platform_ops)
-> +		rm_platform_ops = NULL;
-> +	up_write(&rm_platform_ops_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(gh_rm_unregister_platform_ops);
-> +
-> +static void _devm_gh_rm_unregister_platform_ops(void *data)
-> +{
-> +	gh_rm_unregister_platform_ops(data);
-> +}
-> +
-> +int devm_gh_rm_register_platform_ops(struct device *dev, struct gh_rm_platform_ops *ops)
-> +{
-> +	int ret;
-> +
-> +	ret = gh_rm_register_platform_ops(ops);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_add_action(dev, _devm_gh_rm_unregister_platform_ops, ops);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_gh_rm_register_platform_ops);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Gunyah Platform Hooks");
-> diff --git a/drivers/virt/gunyah/rsc_mgr.h b/drivers/virt/gunyah/rsc_mgr.h
-> index 3665ebc7b020..6838e736f361 100644
-> --- a/drivers/virt/gunyah/rsc_mgr.h
-> +++ b/drivers/virt/gunyah/rsc_mgr.h
-> @@ -13,4 +13,7 @@ struct gh_rm;
->   int gh_rm_call(struct gh_rm *rsc_mgr, u32 message_id, void *req_buff, size_t req_buf_size,
->   		void **resp_buf, size_t *resp_buf_size);
->   
-> +int gh_rm_platform_pre_mem_share(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +int gh_rm_platform_post_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +
->   #endif
-> diff --git a/drivers/virt/gunyah/rsc_mgr_rpc.c b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> index 3df15ad5b97d..733be4dc8dd2 100644
-> --- a/drivers/virt/gunyah/rsc_mgr_rpc.c
-> +++ b/drivers/virt/gunyah/rsc_mgr_rpc.c
-> @@ -204,6 +204,12 @@ static int gh_rm_mem_lend_common(struct gh_rm *rm, u32 message_id, struct gh_rm_
->   	if (!msg)
->   		return -ENOMEM;
->   
-> +	ret = gh_rm_platform_pre_mem_share(rm, p);
-> +	if (ret) {
-> +		kfree(msg);
-> +		return ret;
-> +	}
-> +
->   	req_header = msg;
->   	acl_section = (void *)req_header + sizeof(*req_header);
->   	mem_section = (void *)acl_section + struct_size(acl_section, entries, p->n_acl_entries);
-> @@ -227,8 +233,10 @@ static int gh_rm_mem_lend_common(struct gh_rm *rm, u32 message_id, struct gh_rm_
->   	ret = gh_rm_call(rm, message_id, msg, msg_size, (void **)&resp, &resp_size);
->   	kfree(msg);
->   
-> -	if (ret)
-> +	if (ret) {
-> +		gh_rm_platform_post_mem_reclaim(rm, p);
->   		return ret;
-> +	}
->   
->   	p->mem_handle = le32_to_cpu(*resp);
->   
-> @@ -283,8 +291,14 @@ int gh_rm_mem_reclaim(struct gh_rm *rm, struct gh_rm_mem_parcel *parcel)
->   	struct gh_rm_mem_release_req req = {
->   		.mem_handle = cpu_to_le32(parcel->mem_handle),
->   	};
-> +	int ret;
-> +
-> +	ret = gh_rm_call(rm, GH_RM_RPC_MEM_RECLAIM, &req, sizeof(req), NULL, NULL);
-> +	/* Do not call platform mem reclaim hooks: the reclaim didn't happen*/
-> +	if (ret)
-> +		return ret;
->   
-> -	return gh_rm_call(rm, GH_RM_RPC_MEM_RECLAIM, &req, sizeof(req), NULL, NULL);
-> +	return gh_rm_platform_post_mem_reclaim(rm, parcel);
->   }
->   
->   /**
-> diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-> index 8b0b46f28e39..515087931a2b 100644
-> --- a/include/linux/gunyah_rsc_mgr.h
-> +++ b/include/linux/gunyah_rsc_mgr.h
-> @@ -145,4 +145,21 @@ int gh_rm_get_hyp_resources(struct gh_rm *rm, u16 vmid,
->   				struct gh_rm_hyp_resources **resources);
->   int gh_rm_get_vmid(struct gh_rm *rm, u16 *vmid);
->   
-> +struct gunyah_rm_platform_ops {
-> +	int (*pre_mem_share)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +	int (*post_mem_reclaim)(struct gh_rm *rm, struct gh_rm_mem_parcel *mem_parcel);
-> +};
-> +
-> +#if IS_ENABLED(CONFIG_GUNYAH_PLATFORM_HOOKS)
-> +int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops);
-> +void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops);
-> +int devm_gh_rm_register_platform_ops(struct device *dev, struct gh_rm_platform_ops *ops);
-> +#else
-> +static inline int gh_rm_register_platform_ops(struct gh_rm_platform_ops *platform_ops)
-> +	{ return 0; }
-> +static inline void gh_rm_unregister_platform_ops(struct gh_rm_platform_ops *platform_ops) { }
-> +static inline int devm_gh_rm_register_platform_ops(struct device *dev,
-> +	struct gh_rm_platform_ops *ops) { return 0; }
-> +#endif
-> +
->   #endif
+> 
+> And (4) might be warranted just because it's closer to what we used to
+> do, and it's *possible* that somebody happens to use O_DIRECTORY |
+> O_CREAT on directories that exist, and never noticed how broken that
+> was.
+
+I really really hope that isn't the case because (4) is pretty nasty.
+Having to put this on a manpage seems nightmarish.
+
+> 
+> And (4) has another special case: O_EXCL. Because I'm really hoping
+> that O_DIRECTORY | O_EXCL will always fail.
+
+I've detailed the semantics for that in the commit message below...
+
+> 
+> Is the proper patch something along the lines of this?
+
+Yeah, I think that would do it and I think that's what we should try to
+get away with. I just spent time and took a look who passes O_DIRECTORY
+and O_CREAT and interestingly there are a number of comments roughly
+along the lines of the following example:
+
+/* Ideally we could use openat(O_DIRECTORY | O_CREAT | O_EXCL) here
+ * to create and open the directory atomically
+
+suggests that people who specify O_DIRECTORY | O_CREAT are interested in
+creating a directory. But since this never did work they don't tend to
+use that flag combination (I've collected a few samples in [1] to [4].).
+
+(As a sidenote, posix made an interpretation change a long time ago to
+at least allow for O_DIRECTORY | O_CREAT to create a directory (see [3]).
+
+But that's a whole different can of worms and I haven't spent any
+thoughts even on feasibility. And even if we should probably get through
+a couple of kernels with O_DIRECTORY | O_CREAT failing with EINVAL first.)
+
+> 
+>    --- a/fs/open.c
+>    +++ b/fs/open.c
+>    @@ -1186,6 +1186,8 @@ inline int build_open_flags(const struct
+> open_how *how, struct open_flags *op)
+> 
+>         /* Deal with the mode. */
+>         if (WILL_CREATE(flags)) {
+>    +            if (flags & O_DIRECTORY)
+>    +                    return -EINVAL;
+
+This will be problematic because for weird historical reasons O_TMPFILE
+includes O_DIRECTORY so this would unfortunately break O_TMPFILE. :/
+I'll try to have a patch ready in a bit.
+
+I spent a long time digging through potential users of this nonsense.
+
+Link: https://lore.kernel.org/lkml/20230320071442.172228-1-pedro.falcato@gmail.com
+Link: https://sources.debian.org/src/flatpak/1.14.4-1/subprojects/libglnx/glnx-dirfd.c/?hl=324#L324 [1]
+Link: https://sources.debian.org/src/flatpak-builder/1.2.3-1/subprojects/libglnx/glnx-shutil.c/?hl=251#L251 [2]
+Link: https://sources.debian.org/src/ostree/2022.7-2/libglnx/glnx-dirfd.c/?hl=324#L324 [3]
+Link: https://www.openwall.com/lists/oss-security/2014/11/26/14 [4]
