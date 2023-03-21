@@ -2,241 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498366C2B61
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C8C6C2B64
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCUHbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S229944AbjCUHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCUHbj (ORCPT
+        with ESMTP id S229541AbjCUHdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:31:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A10CD51F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:31:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eh3so55971225edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:31:37 -0700 (PDT)
+        Tue, 21 Mar 2023 03:33:11 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF7726A9;
+        Tue, 21 Mar 2023 00:33:10 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id n2so16913327qtp.0;
+        Tue, 21 Mar 2023 00:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679383896;
+        d=gmail.com; s=20210112; t=1679383989;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B9GDFvoC7kbAq3Pu2flhUcwFA+dtH+7aeYZEHEaRwfY=;
-        b=uZ0CsOYdoiOmKMOL1gvq+80fFFTRiIXimjjEqFJgIzVckBSyGtx5GXuoc+pa22P/je
-         y1sif9eWhrIq4bfEl8TEkzIAUVla+y0rK57YnC1yD6KlpkkAQ2iaGHULwtunesv7haD/
-         jLbG0UJtXXkp0aPWRTymIUOKZWfWvtYkBI0d8tkHlohPdvRVpRQlo0L42GOQBYydRJEV
-         TeaY2JKev7WC1Guf7igpJDhnUlaNYQeAmVKPW8zsKXQMutGeLipQ2a7UbYCO3mSzxBK3
-         g2cYnXh72jazdkiQIDDstc28X1k/HvXkI8mnzihzUdH0ozEwki/0NuQID23KNMsqpOix
-         SvIA==
+        bh=hbvwfX4HdFVcFa9ONSDF5jyL9MuoCdO7UcrZvzzJA0s=;
+        b=qe5G4aUH9rC1OF6SnnmwoVmoWoruFcMTUFvk0cF5ismoqM5Bspv4C22Aua25ZEkJrj
+         /WQRa+QYBdikD/JxuAsDOXMs2IIfmQw+TZXjt8vZRVqr2bP/BWZOMwbiQ5MFtzS6eAuS
+         869utLwajNBfvFYC/lx0lsNb8VntgeU7d5KzQ9R/a/0ybJwbssHE6OsycroBXvARWwZY
+         YuaXC0oYZqbTKUvf56OCapHxJ2DTr1mVAkghx+RDSKZFCvg4en0JkYkSgF2142pb8Y6h
+         EuIfLl4qIFVJxQdu/s4V252Cv2bHbH6G5UHZUpwPnOVappRXupoMEPI/nEtmzOxZdRzj
+         ysFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679383896;
+        d=1e100.net; s=20210112; t=1679383989;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B9GDFvoC7kbAq3Pu2flhUcwFA+dtH+7aeYZEHEaRwfY=;
-        b=cC1vMSPIwhoIJTTb0i9C7erEMkCzjVDtwCIHTGD8X/33qcjuXCNmPebaAv8qeYngdH
-         bBWV60mxPxqCIXHVNNKNZzMrOIv5IYcXvuxNHsKqgtckSo4xjjQllbwNL82EGQoGkSXJ
-         304g/MdhpBmPGp2p+b5eYyDbXGzoEJtbnazMl70/t72n1EdXZyKlbvGYLtIDrwzezTD8
-         Rv/gSOmitGk1VlgxMVdkNoaXpbFl/1TuVGhRnjbt6Uw6397LEnAErH6MlIud/ZWb9Lp1
-         xcRyMQBJyFpG3ram5Q1QRS6lMF9dPF+X2EohXwQ0qC8VIEaXkyNAWlMxHHbB0VNcyBKc
-         yy6w==
-X-Gm-Message-State: AO0yUKUmeYo5VcqHD/BO/UYlAutlHJ0J9g7LormRCdro5HJBGWId3z3x
-        0WstOHoewRTAvqxUGMkIsEQUMt+b61dTbbVryFMMmw==
-X-Google-Smtp-Source: AK7set/2wtIwIn8el1k9vUQPkQi1zybgqo+D2WWq3T+IJBqpDr10UFwGBXAMtTQFSirx2zN6voDpWpdONvTXAy7/ltM=
-X-Received: by 2002:a17:906:dd2:b0:926:5020:1421 with SMTP id
- p18-20020a1709060dd200b0092650201421mr895428eji.9.1679383895712; Tue, 21 Mar
- 2023 00:31:35 -0700 (PDT)
+        bh=hbvwfX4HdFVcFa9ONSDF5jyL9MuoCdO7UcrZvzzJA0s=;
+        b=V0LxrVUhLG9N/Kn3hyTBFezUpyFI32DqFVgNFYUfAX47C24WVXzT7xcm8I5mpcnA2n
+         mibte34QOagdT6pb+tL0A9Ycz9yu9IwT2pMdAUG2s+T2pkjboOmBFDlDwZ/9K/MuIcSG
+         zP/3xhkPS56FUpGdFg6oUc3yzOLBb/rKY5p+RSYBx5HTwVvph+BQ/ZSonO4aubsewRky
+         OWVezlbXfAvZXUW8a8Rky1azqkf7On3q62DR5yzBTm2oWmkrjj65VaZ25g+21+7J+vtt
+         7yhz6ytT9ahx94yjEJO+iZOhPvBIXEdtH9UOL/3AlsRxWCLpqdu2Zj+rhK9DiEZSzYLz
+         4sCA==
+X-Gm-Message-State: AO0yUKX51+YTDWhwBYDYr6NyUyRZmS2L2qP7OP9Y1Vhp3+sAVJhIYHzp
+        4cMYZXldqkw8YE2fXrO1TC/AnQOxz36iWVY1t/c=
+X-Google-Smtp-Source: AK7set9ynhqpq7o/wR7ADvwgTLq4BtW5iz8QTCgPqR8XntZv7eGLlKQABZEHV8QtvJkztSq6+4QvEccNDw/Y8LtNdng=
+X-Received: by 2002:a05:622a:1996:b0:3e2:efb6:9d9e with SMTP id
+ u22-20020a05622a199600b003e2efb69d9emr714164qtc.0.1679383989015; Tue, 21 Mar
+ 2023 00:33:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230320145424.191578432@linuxfoundation.org>
-In-Reply-To: <20230320145424.191578432@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 21 Mar 2023 13:01:23 +0530
-Message-ID: <CA+G9fYuP=XioTQemURBMBwOfp-1pKf=VQizVG8zq3+amLd=6Fw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/36] 4.19.279-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230320163823.886-1-clin@suse.com> <20230320163823.886-2-clin@suse.com>
+ <CAHp75VeVbV8iC6J63PgnE=i7EajvrDhFnEUcq0H_fRGfMMh+7g@mail.gmail.com> <ZBk2IksVZ7N6wKeP@linux-8mug>
+In-Reply-To: <ZBk2IksVZ7N6wKeP@linux-8mug>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 21 Mar 2023 09:32:32 +0200
+Message-ID: <CAHp75VcJ08JL_2X8T6OXEhL0cb2iqYhhVr_jQ4N=4NC_tTU_Tw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] pinctrl: s32: use of_device_get_match_data() to
+ get device data
+To:     Chester Lin <clin@suse.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        NXP S32 Linux Team <s32@nxp.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Mar 21, 2023 at 6:44=E2=80=AFAM Chester Lin <clin@suse.com> wrote:
+> On Mon, Mar 20, 2023 at 06:59:41PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 20, 2023 at 6:39=E2=80=AFPM Chester Lin <clin@suse.com> wro=
+te:
+
+...
+
+> > > +       soc_info =3D (struct s32_pinctrl_soc_info *)
+> > > +                       of_device_get_match_data(&pdev->dev);
+> >
+> > Drop the ugly casting, it's not needed.
 >
-> This is the start of the stable review cycle for the 4.19.279 release.
-> There are 36 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Mar 2023 14:54:13 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.279-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Actually it's used for suppressing the compiler warning since some member=
+s in
+> this soc_info need to be filled by pinctrl-s32cc.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Yes, that's one way to solve this.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+...
 
-## Build
-* kernel: 4.19.279-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: c1beffa09ae6c6e2099ae4ffe4f30d5c2ee69f09
-* git describe: v4.19.278-37-gc1beffa09ae6
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.278-37-gc1beffa09ae6
+> +       info =3D devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+> +       if (!info)
+> +               return -ENOMEM;
+> +
+> +       memcpy(info, soc_data, sizeof(*info));
 
-## Test Regressions (compared to v4.19.278)
+Right, but use devm_kmemdup() instead.
 
-## Metric Regressions (compared to v4.19.278)
-
-## Test Fixes (compared to v4.19.278)
-
-## Metric Fixes (compared to v4.19.278)
-
-## Test result summary
-total: 91992, pass: 69255, fail: 3591, skip: 19028, xfail: 118
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 201 total, 200 passed, 1 failed
-* arm64: 42 total, 41 passed, 1 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 42 total, 42 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 37 total, 36 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+With Best Regards,
+Andy Shevchenko
