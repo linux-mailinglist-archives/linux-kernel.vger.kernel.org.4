@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134B96C266E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D00F6C2685
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjCUAlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S229849AbjCUAtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCUAlW (ORCPT
+        with ESMTP id S229750AbjCUAsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:41:22 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73650279B0
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:41:21 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id z16-20020a170902d55000b001a06f9b5e31so8169781plf.21
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679359281;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wTEJZYqVcEI158soxBsu1HEyyaSjObXbyKvoS5ne1Do=;
-        b=qjQrzEd+MBrCThMrna7wKHMVTZdK0O5nPeQIBdN0L47pVMMOEQguqcX1CC/Cj3itFL
-         naWKtf45A7FoAmiY/TDvlDQYay60v/RLgHOKvw+nHpOMzF5OPInPCkmsXao2ul23bkje
-         zB3+S/k6jSBjITZKdqxT8GKZxTyQfbt0R/IlbX/+eR3VzW/Uxppck0NDsXgAEXqupiOd
-         EUcQDb/pAnY+QpT6Qy8DY1gzIEBm1u5jLnR8DmgexAbHeJ2XLeny9WZfsu9oVz0yUKvW
-         JARrzyx7hQ9aEV1sxgi0Gzen5khelbW1zLcS+O+mAIv1d36hYxel9JiN6pUC1Fd10oKv
-         bBVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679359281;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wTEJZYqVcEI158soxBsu1HEyyaSjObXbyKvoS5ne1Do=;
-        b=H48uAf0xs8zEK3shBzB9mGcmC+x9TxV+r8Px3B2HunB9ufuq0e/zlfsYV0Tq/Omqp9
-         h7e2AfBdvjc5mVqHFL0Ot8p/SwA+lK2l0iBYNFWYzLulm1jPSLAq0ES7vim6WbcZiPuC
-         Drm8UP51uW4FLMOzV+FgZrPpazIQB2OCH+dN5DEn/eXA/PruljC2SQTcEvnVPysHdcfa
-         ChmSd9o+FRlUnQSPGGLZyU7OUy7KP1waSdh3ngj9MEDcsalxyY9/tq/tBbWM2g5qPDYi
-         kwap0OcoVW5bqkt4n9EYdFKl2I5fLy/08br1qBFYT9Jn85uEqJE6kklowGYMCdnFLZPX
-         +png==
-X-Gm-Message-State: AO0yUKWRw9Kfio2seBpbDPYfZJJe8Mxz07eEsucxNCOHvMkt9b8h2U9p
-        LXQzeul6kCSq9zlC+tP8dM6wAnNLSXc=
-X-Google-Smtp-Source: AK7set/qvfW/maVa7x7G6D/ZiSU+cDNSgl/APwOLYbHLQAW+sG3U8TwQgGA4gFDbDs9QEZO0OtzCsyXjRZU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:5242:0:b0:503:a269:33b7 with SMTP id
- q2-20020a655242000000b00503a26933b7mr143442pgp.8.1679359280978; Mon, 20 Mar
- 2023 17:41:20 -0700 (PDT)
-Date:   Mon, 20 Mar 2023 17:41:19 -0700
-In-Reply-To: <ZBTwX5790zwl5721@google.com>
-Mime-Version: 1.0
-References: <20230211014626.3659152-1-vipinsh@google.com> <ZBTwX5790zwl5721@google.com>
-Message-ID: <ZBj9L2VUjEbWbgcS@google.com>
-Subject: Re: [Patch v3 0/7] Optimize clear dirty log
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 20 Mar 2023 20:48:54 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF772113FB;
+        Mon, 20 Mar 2023 17:48:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DAE775C019B;
+        Mon, 20 Mar 2023 20:48:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 20 Mar 2023 20:48:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679359729; x=1679446129; bh=oG
+        kjK2TbqrODiZ27bwpufFy80dPhzmLH1tKePfQCcsg=; b=v2FnbI7Rk9K6GPSwoV
+        xTFz47m9B3DRkVgQxdK6L5tpwV54Pkk7nXPDW8hO9SqjDMl1ZpssfT6uEk2Yrbnj
+        95keebwa6R3FM4Pf/+d9dgLdWAhDmVitG2jRZLxpi4Fj9X2ICuP9iusyKQv0yjdV
+        vy6xo2bGVmW2P9VxdwPsscbPDhoLYU4CrDQS9TRgNrj1bs+YmyjAYIfVFNyHwbdN
+        PTjHUe5eyOqJdy5/nDUl2mESU2Nj5bSt8b7fGgACtHwaf+DfXEeltmX7FpBE23oS
+        GF6nRFzvAOu0tobGk2qS0ijszzwi7x63ONxjyyVMfRQUr1ZGxwmrJfkEaoum/gBk
+        EJgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1679359729; x=1679446129; bh=o
+        GkjK2TbqrODiZ27bwpufFy80dPhzmLH1tKePfQCcsg=; b=DzX6tcpSYSk9j7QHV
+        +EMwBA/10OxE8TVWLr6K+huXm9MJ53Bi6IxUgPIubvFX74ivmSImfisv3iXPZAIs
+        uVJo45bg4cO2YTOSRzkZXiBSFQkiuPYjDsuJORjml0Bs/fO+u16RAic6UHbGuIK8
+        BkW333wARlfN/fCdjK1KeJS4UPSDYszqbsUqyVNcOBm47PQqJt5HQ5R5oQ0k9DYJ
+        PQi1X64ymp6bOKP4HS60cIr/T/k1jeklixqZaPsRpz3ERurcT93fmsn/uPNkRrp6
+        g1aKzOcYnI9aUdBrHnAqfYGDjCz8DWeeaAA3vEqEzL0U1fyFK9/gNbyplQlRoCOl
+        HIjEA==
+X-ME-Sender: <xms:8f4YZHEziw9O6xYv0zVNgw6T5KNDv0jZBP24KUVax6_f9c5kAOVfeg>
+    <xme:8f4YZEWJnmADW3GVHsM-lq3Vo3ymhF2A5ylT2oDxdljkzUTMifyYFQgJSHIvbEiyu
+    80JzBBlGIQ-yF2kTA>
+X-ME-Received: <xmr:8f4YZJLI0Osvud0r1x7HmlmDU62gVviQcZlTvhZYd3HoWJtkmTk9c3XWmof7ouDsB8OVe8VMGG6kInjngkkp5PnWUPnpyYQ3mjJjFNNc7tryYJpBTpcDMbztK2E8_Gw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggr
+    nhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpedvieeutd
+    ehtddthfegveekueevfedvueehjeeltdevgfejteekudfgvdelveekffenucffohhmrghi
+    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:8f4YZFH-k8MiCb1AZT43rTC3Iusm4DYChWfdn1O7rbkLHccCwp98ew>
+    <xmx:8f4YZNXSbymnOShVpJgEw9q3xgk_qPF3ltqHwPv9n39b64mXlJys6A>
+    <xmx:8f4YZAO_Sq9MbNIpY2wSkutSGsqo8wyNv-YovTm2jWWDtazPhbQ6rQ>
+    <xmx:8f4YZJr5alsmT1CNYtBtsUXuZPnPu-aGkmIpZ0HUUWBoQeT4MVhU6g>
+Feedback-ID: iccd040f4:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Mar 2023 20:48:49 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org
+Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] Split a folio to any lower order folios
+Date:   Mon, 20 Mar 2023 20:48:24 -0400
+Message-Id: <20230321004829.2012847-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.39.2
+Reply-To: Zi Yan <ziy@nvidia.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023, Sean Christopherson wrote:
-> On Fri, Feb 10, 2023, Vipin Sharma wrote:
-> > This patch series has optimized control flow of clearing dirty log and
-> > improved its performance by ~40% (2% more than v2).
-> > 
-> > It also got rid of many variants of the handle_changed_spte family of
-> > functions and converged logic to one handle_changed_spte() function. It
-> > also remove tdp_mmu_set_spte_no_[acc_track|dirty_log] and various
-> > booleans for controlling them.
-> >
-> > v3:
-> > - Tried to do better job at writing commit messages.
-> 
-> LOL, that's the spirit!
-> 
-> Did a cursory glance, looks good.  I'll do a more thorough pass next week and get
-> it queued up if all goes well.  No need for a v4 at this point, I'll fixup David's
-> various nits when applying.
+From: Zi Yan <ziy@nvidia.com>
 
-Ooof, that ended up being painful.  In hindsight, I should have asked for a v4,
-but damage done, and it's my fault for throwing you a big blob of code in the
-first place.
+Hi all,
 
-I ended up splitting the "interesting" patches into three each:
+File folio supports any order and people would like to support flexible ord=
+ers
+for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
+page to order-0 pages, but splitting to orders higher than 0 is also useful.
+This patchset adds support for splitting a huge page to any lower order pag=
+es
+and uses it during folio truncate operations.
 
-  1. Switch to the atomic-AND
-  2. Drop the access-tracking / dirty-logging (as appropriate)
-  3. Drop the call to __handle_changed_spte()
+The patchset is on top of mm-everything-2023-03-19-21-50.
 
-because logically they are three different things (although obviously related).
+* Patch 1 and 2 add new_order parameter split_page_memcg() and
+  split_page_owner() and prepare for upcoming changes.
+* Patch 3 adds split_huge_page_to_list_to_order() to split a huge page
+  to any lower order. The original split_huge_page_to_list() calls
+  split_huge_page_to_list_to_order() with new_order =3D 0.
+* Patch 4 uses split_huge_page_to_list_to_order() in large pagecache folio
+  truncation instead of split the large folio all the way down to order-0.
+* Patch 5 adds a test API to debugfs and test cases in
+  split_huge_page_test selftests.
 
-I have pushed the result to kvm-x86/mmu, but haven't merged to kvm-x86/next or
-sent thanks because it's not yet tested.  I'll do testing tomorrow, but if you
-can take a look in the meantime to make sure I didn't do something completely
-boneheaded, it'd be much appreciated.
+Comments and/or suggestions are welcome.
+
+[1] https://lore.kernel.org/linux-mm/Y%2FblF0GIunm+pRIC@casper.infradead.or=
+g/
+
+Zi Yan (5):
+  mm: memcg: make memcg huge page split support any order split.
+  mm: page_owner: add support for splitting to any order in split
+    page_owner.
+  mm: thp: split huge page to any lower order pages.
+  mm: truncate: split huge page cache page to a non-zero order if
+    possible.
+  mm: huge_memory: enable debugfs to split huge pages to any order.
+
+ include/linux/huge_mm.h                       |  10 +-
+ include/linux/memcontrol.h                    |   5 +-
+ include/linux/page_owner.h                    |  12 +-
+ mm/huge_memory.c                              | 138 ++++++++---
+ mm/memcontrol.c                               |   8 +-
+ mm/page_alloc.c                               |   8 +-
+ mm/page_owner.c                               |  11 +-
+ mm/truncate.c                                 |  21 +-
+ .../selftests/mm/split_huge_page_test.c       | 225 +++++++++++++++++-
+ 9 files changed, 368 insertions(+), 70 deletions(-)
+
+--=20
+2.39.2
+
