@@ -2,254 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0C56C27FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E0D6C27EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCUCUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S229792AbjCUCRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCUCUQ (ORCPT
+        with ESMTP id S229683AbjCUCRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:20:16 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C423D49C7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:20:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VeL2P0w_1679365210;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VeL2P0w_1679365210)
-          by smtp.aliyun-inc.com;
-          Tue, 21 Mar 2023 10:20:11 +0800
-Message-ID: <1679364946.2946873-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Date:   Tue, 21 Mar 2023 10:15:46 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Viktor Prutyanov <viktor@daynix.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com,
-        mst@redhat.com, jasowang@redhat.com
-References: <20230320115451.1232171-1-viktor@daynix.com>
-In-Reply-To: <20230320115451.1232171-1-viktor@daynix.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 20 Mar 2023 22:17:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE937577;
+        Mon, 20 Mar 2023 19:17:12 -0700 (PDT)
+Received: from [192.168.2.81] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 70CA46602179;
+        Tue, 21 Mar 2023 02:17:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679365031;
+        bh=zxU40q7aeTrR2WyKsl0SUCgDymJF0R2V65fkpq6Hwg0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hY7OmhIBvf2Q4/f8296j41aH92E/N2qsgcHWBM8gUOsX6krJG9I/n3RxivOmdR0MB
+         m5einW4TFdESel0/z33+DsUPDipfVZ4KMVmEE1q9nj+qW3pCuasglaNHbLCSWMdhL2
+         o3NoI0jjyx85CxlPbTlgm9q7tK/PZ44nYo3m4lMNTCN+NpAfTEUNgTcxTuEVZE8H9H
+         2jIruL/3MFa+rU2f6TqFKr3BT17fHKXrto6KOhPR1mFRmCCqFvChyQ5iANkdZTLC+r
+         JkpSXgmy2XERHK2qMJmHjXQEwZAU2iQjOFOWCPSULlSi3RvKuCSSoHHXcRYlco442v
+         ttqAvQiV+Z9NA==
+Message-ID: <53675327-d708-d441-4cef-d493d0766911@collabora.com>
+Date:   Tue, 21 Mar 2023 05:17:08 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/2] mfd: tps6586x: use devm-based power off handler
+Content-Language: en-US
+To:     Benjamin Bara <bbara93@gmail.com>, lee@kernel.org
+Cc:     jonathanh@nvidia.com, treding@nvidia.com,
+        richard.leitner@linux.dev, benjamin.bara@skidata.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230320220345.1463687-1-bbara93@gmail.com>
+ <20230320220345.1463687-2-bbara93@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230320220345.1463687-2-bbara93@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 14:54:51 +0300, Viktor Prutyanov <viktor@daynix.com> wrote:
-> According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
-> indicates that the driver passes extra data along with the queue
-> notifications.
->
-> In a split queue case, the extra data is 16-bit available index. In a
-> packed queue case, the extra data is 1-bit wrap counter and 15-bit
-> available index.
->
-> Add support for this feature for both MMIO and PCI.
->
-> Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
-> ---
->  drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
->  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
->  drivers/virtio/virtio_pci_common.h |  4 ++++
->  drivers/virtio/virtio_pci_legacy.c |  2 +-
->  drivers/virtio/virtio_pci_modern.c |  2 +-
->  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
->  include/linux/virtio_ring.h        |  2 ++
->  include/uapi/linux/virtio_config.h |  6 ++++++
->  8 files changed, 55 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-> index 3ff746e3f24a..05da5ad7fc93 100644
-> --- a/drivers/virtio/virtio_mmio.c
-> +++ b/drivers/virtio/virtio_mmio.c
-> @@ -285,6 +285,19 @@ static bool vm_notify(struct virtqueue *vq)
->  	return true;
->  }
->
-> +static bool vm_notify_with_data(struct virtqueue *vq)
-> +{
-> +	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
-> +	__le32 data = vring_fill_notification_data(vq);
-> +
-> +	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
-> +
-> +	return true;
-> +}
-> +
-> +#define VM_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> +	? vm_notify_with_data : vm_notify)
-
-
-Is this macro necessary, it is only used once. And I don't recognize that this
-logic is necessary to use macro.
-
-> +
->  /* Notify all virtqueues on an interrupt. */
->  static irqreturn_t vm_interrupt(int irq, void *opaque)
+On 3/21/23 01:03, Benjamin Bara wrote:
+> +static int tps6586x_power_off_handler(struct sys_off_data *data)
 >  {
-> @@ -397,7 +410,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
->
->  	/* Create the vring */
->  	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
-> -				 true, true, ctx, vm_notify, callback, name);
-> +			true, true, ctx, VM_NOTIFY(vdev), callback, name);
->  	if (!vq) {
->  		err = -ENOMEM;
->  		goto error_new_virtqueue;
-> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-> index a6c86f916dbd..bf7daad9ce65 100644
-> --- a/drivers/virtio/virtio_pci_common.c
-> +++ b/drivers/virtio/virtio_pci_common.c
-> @@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
->  	/* we write the queue's selector into the notification register to
->  	 * signal the other end */
->  	iowrite16(vq->index, (void __iomem *)vq->priv);
-> +
-> +	return true;
-> +}
-> +
-> +bool vp_notify_with_data(struct virtqueue *vq)
-> +{
-> +	__le32 data = vring_fill_notification_data(vq);
-> +
-> +	iowrite32(data, (void __iomem *)vq->priv);
-> +
->  	return true;
->  }
->
-> diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-> index 23112d84218f..9a7212dcbb32 100644
-> --- a/drivers/virtio/virtio_pci_common.h
-> +++ b/drivers/virtio/virtio_pci_common.h
-> @@ -105,6 +105,7 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
->  void vp_synchronize_vectors(struct virtio_device *vdev);
->  /* the notify function used when creating a virt queue */
->  bool vp_notify(struct virtqueue *vq);
-> +bool vp_notify_with_data(struct virtqueue *vq);
->  /* the config->del_vqs() implementation */
->  void vp_del_vqs(struct virtio_device *vdev);
->  /* the config->find_vqs() implementation */
-> @@ -114,6 +115,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
->  		struct irq_affinity *desc);
->  const char *vp_bus_name(struct virtio_device *vdev);
->
-> +#define VP_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> +	? vp_notify : vp_notify_with_data)
-> +
+> -	if (tps6586x_clr_bits(tps6586x_dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT))
+> -		return;
+> +	int ret;
 
-I also think that this is not necessary, although it has been used twice.
+Nit: "int ret" should be put after "struct tps6586x_dev" to adhere
+canonical kernel coding style
 
+> +	struct device *tps6586x_dev = (struct device *)data->cb_data;
 
->  /* Setup the affinity for a virtqueue:
->   * - force the affinity for per vq vector
->   * - OR over all affinities for shared MSI
-> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> index 2257f1b3d8ae..b98e994cae48 100644
-> --- a/drivers/virtio/virtio_pci_legacy.c
-> +++ b/drivers/virtio/virtio_pci_legacy.c
-> @@ -131,7 +131,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->  	vq = vring_create_virtqueue(index, num,
->  				    VIRTIO_PCI_VRING_ALIGN, &vp_dev->vdev,
->  				    true, false, ctx,
-> -				    vp_notify, callback, name);
-> +				    VP_NOTIFY(&vp_dev->vdev), callback, name);
->  	if (!vq)
->  		return ERR_PTR(-ENOMEM);
->
-> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> index 9e496e288cfa..7fcd8af5af7e 100644
-> --- a/drivers/virtio/virtio_pci_modern.c
-> +++ b/drivers/virtio/virtio_pci_modern.c
-> @@ -321,7 +321,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->  	vq = vring_create_virtqueue(index, num,
->  				    SMP_CACHE_BYTES, &vp_dev->vdev,
->  				    true, true, ctx,
-> -				    vp_notify, callback, name);
-> +				    VP_NOTIFY(&vp_dev->vdev), callback, name);
->  	if (!vq)
->  		return ERR_PTR(-ENOMEM);
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 41144b5246a8..8de0800efee7 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -2752,6 +2752,21 @@ void vring_del_virtqueue(struct virtqueue *_vq)
->  }
->  EXPORT_SYMBOL_GPL(vring_del_virtqueue);
->
-> +__le32 vring_fill_notification_data(struct virtqueue *_vq)
-> +{
-> +	struct vring_virtqueue *vq = to_vvq(_vq);
-> +	u16 next;
-> +
-> +	if (vq->packed_ring)
-> +		next = (vq->packed.next_avail_idx & ~(1 << 15)) |
-> +			((u16)vq->packed.avail_wrap_counter << 15);
-> +	else
-> +		next = virtio16_to_cpu(_vq->vdev, vq->split.vring.avail->idx);
-> +
-> +	return cpu_to_le32(((u32)next << 16) | _vq->index);
-> +}
-> +EXPORT_SYMBOL_GPL(vring_fill_notification_data);
-> +
->  /* Manipulates transport-specific feature bits. */
->  void vring_transport_features(struct virtio_device *vdev)
->  {
-> @@ -2771,6 +2786,8 @@ void vring_transport_features(struct virtio_device *vdev)
->  			break;
->  		case VIRTIO_F_ORDER_PLATFORM:
->  			break;
-> +		case VIRTIO_F_NOTIFICATION_DATA:
-> +			break;
->  		default:
->  			/* We don't understand this bit. */
->  			__virtio_clear_bit(vdev, i);
-> diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
-> index 8b95b69ef694..3222324fb244 100644
-> --- a/include/linux/virtio_ring.h
-> +++ b/include/linux/virtio_ring.h
-> @@ -117,4 +117,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
->  void vring_transport_features(struct virtio_device *vdev);
->
->  irqreturn_t vring_interrupt(int irq, void *_vq);
-> +
-> +__le32 vring_fill_notification_data(struct virtqueue *_vq);
->  #endif /* _LINUX_VIRTIO_RING_H */
-> diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-> index 3c05162bc988..2c712c654165 100644
-> --- a/include/uapi/linux/virtio_config.h
-> +++ b/include/uapi/linux/virtio_config.h
-> @@ -99,6 +99,12 @@
->   */
->  #define VIRTIO_F_SR_IOV			37
->
-> +/*
-> + * This feature indicates that the driver passes extra data (besides
-> + * identifying the virtqueue) in its device notifications.
-> + */
-> +#define VIRTIO_F_NOTIFICATION_DATA	38
-> +
+No need for casting of the void* type
 
+-- 
+Best regards,
+Dmitry
 
-Although this patch is not large, I think it can be split:
-
-* add VIRTIO_F_NOTIFICATION_DATA
-* pci support
-* mmio support
-
-
-This is beneficial to backport.
-
-Thanks.
-
->  /*
->   * This feature indicates that the driver can reset a queue individually.
->   */
-> --
-> 2.35.1
->
->
