@@ -2,159 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068406C2FE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254DF6C2FBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 12:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCULMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 07:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S230337AbjCULEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 07:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCULMS (ORCPT
+        with ESMTP id S230114AbjCULED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 07:12:18 -0400
-Received: from harvie.cz (harvie.cz [77.87.242.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E62603E1C9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:12:16 -0700 (PDT)
-Received: from anemophobia.amit.cz (unknown [31.30.84.130])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by harvie.cz (Postfix) with ESMTPSA id D37151801B5;
-        Tue, 21 Mar 2023 11:35:04 +0100 (CET)
-From:   Tomas Mudrunka <tomas.mudrunka@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, rppt@kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, tomas.mudrunka@gmail.com
-Subject: [PATCH v2] Add results of early memtest to /proc/meminfo
-Date:   Tue, 21 Mar 2023 11:34:30 +0100
-Message-Id: <20230321103430.7130-1-tomas.mudrunka@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
-References: <20230317165637.6be5414a3eb05d751da7d19f@linux-foundation.org>
+        Tue, 21 Mar 2023 07:04:03 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC03B85A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:04:00 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id n125so16517768ybg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 04:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679396640;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+xGaWFqZk+SjQHPaJZ22gZZSAzmIpjEZSvJQ2u7q7hU=;
+        b=Esmc5EfF3KMPYOrGWpN+3uKTDp47YY+1KX3RRmSmmAovWOaUuDAcTvSeqZ6aa+IeMW
+         b5K+4JqGLGmVm5oMAQYJJg/E1sIoySEQPczVHNLimG5jbDccF4Ze3VEmdZGSRm0pjbxC
+         juX5JCX5YE15q/YHSfsS3zL50OgeDBCM1XJcuTGodXYp4+yNnj8E/KEFB9on1tt6qBPB
+         AWqNTxMSp01qiJN2EVLNHrPgIRXVdTmIpXbvPhj5fnEXB1BBy5myUKH28C3wt5ukiPHd
+         gUfe7CDu3AeWULSqAJme5NPzMFiaUhl3/pEW8wSZk0e1isHnzA2sO/xbCvhrmXon9NFG
+         ayDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679396640;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+xGaWFqZk+SjQHPaJZ22gZZSAzmIpjEZSvJQ2u7q7hU=;
+        b=CL0BjXFf4G6iibd7MwIgP/V04k8qDVPUVsUQ6U9os+/Ae4Wlybaba3t2DkVKJHON2m
+         QsuuxYCvkc6LGk3RdtAg/0uFGGm98o3Zr1B60PMmCNK177nuBards2vIkgjRVAwPKBcM
+         FAqxfnl5HlWw2jeloij8FKnhMC4cM7YNpycibOqtnvnY4+0PKRQxfztKwPf1znZcJC5U
+         HavQ2tXF3VbismoBElamyn8xH1tSJNsQpGkJIrPaWuth2pz7uRRItVh298knq6oL8L0u
+         eLTANAc83MhW5hR92GftAKOt4F1p/24Uw/HSCNqD4etk9KkaYngeGBZJ7yY33TOw/dsK
+         GQKQ==
+X-Gm-Message-State: AAQBX9dW25xZeahB291MZlUh+N25t9nBh16mLLAz8C17PRsmqPVnizIQ
+        eO/xLs/FWk3GCQt+zCoscw4Plq5fCupUD5Qbq24OgQ==
+X-Google-Smtp-Source: AKy350anWjiUgJzmZq/Q0GSExiC0OXO7/b8ibvhwpC6ppwIWDbuvnqDTTEE2zKvhqXnHLmmpwFf5pd2YH8Ge21uSmHU=
+X-Received: by 2002:a05:6902:1107:b0:b3c:cbdb:ed5e with SMTP id
+ o7-20020a056902110700b00b3ccbdbed5emr1201464ybu.3.1679396639937; Tue, 21 Mar
+ 2023 04:03:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+References: <20230316164514.1615169-1-ulf.hansson@linaro.org> <8d6d12b5-39d4-ac07-f725-18ae9df9765b@intel.com>
+In-Reply-To: <8d6d12b5-39d4-ac07-f725-18ae9df9765b@intel.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 21 Mar 2023 12:03:23 +0100
+Message-ID: <CAPDyKFrvWA-SxM6d=eVHFyPTYygsXmWQGVmnHJxsRFwGOhVjYw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: Allow to avoid REQ_FUA if the eMMC supports an
+ internal cache
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     linux-mmc@vger.kernel.org,
+        Wenchao Chen <wenchao.chen666@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Christian Lohle <cloehle@hyperstone.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <beanhuo@micron.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the memtest results were only presented in dmesg.
-This adds /proc/meminfo entry which can be easily used by scripts.
+On Tue, 21 Mar 2023 at 11:36, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 16/03/23 18:45, Ulf Hansson wrote:
+> > REQ_FUA translates into so called "reliable writes" (atomic writes) for
+> > eMMC cards, which is generally supported as it was introduced as a
+> > mandatory feature already in the v4.3 (2007) of the eMMC spec. To fully
+> > support the reliable writes (thus REQ_FUA), the mmc host driver needs to
+> > support the CMD23 (MMC_CAP_CMD23) too, which is rather common nowadays.
+> >
+> > File systems typically uses REQ_FUA for writing their meta-data and other
+> > important information. Ideally it should provide an increased protection
+> > against data-corruption, during sudden power-failures. This said, file
+> > systems have other ways to handle sudden power-failures too, like using
+> > checksums to detect partly-written data, for example.
+> >
+> > It has been reported that the reliable writes are costly for some eMMCs,
+> > leading to performance degradations. Exactly why, is in the implementation
+> > details of the internals of the eMMC.
+> >
+> > Moreover, in the v4.5 (2011) of the eMMC spec, the cache-control was
+> > introduced as an optional feature. It allows the host to trigger a flush of
+> > the eMMC's internal write-cache. In the past, before the cache-control
+> > feature was added, the reliable write acted as trigger for the eMMC, to
+> > also flush its internal write-cache, even if that too remains as an
+> > implementation detail of the eMMC.
+> >
+> > In a way to try to improve the situation with costly reliable writes and
+> > REQ_FUA, let's add a new card quirk MMC_QUIRK_AVOID_REL_WRITE, which may be
+> > set to avoid announcing the support for it. However, as mentioned above,
+> > due to the specific relationship with the cache-control feature, we must
+> > keep REQ_FUA unless that is supported too.
+> >
+> > Reported-by: Wenchao Chen <wenchao.chen666@gmail.com>
+> > Acked-by: Bean Huo <beanhuo@micron.com>
+> > Acked-by: Avri Altman <avri.altman@wdc.com>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Minor cosmetic suggestion below, but nevertheless:
+>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
----
- Documentation/filesystems/proc.rst |  8 ++++++++
- fs/proc/meminfo.c                  | 13 +++++++++++++
- include/linux/memblock.h           |  2 ++
- mm/memtest.c                       |  6 ++++++
- 4 files changed, 29 insertions(+)
+Thanks!
 
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 9d5fd9424..8740362f3 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -996,6 +996,7 @@ Example output. You may not have all of these fields.
-     VmallocUsed:       40444 kB
-     VmallocChunk:          0 kB
-     Percpu:            29312 kB
-+    EarlyMemtestBad:       0 kB
-     HardwareCorrupted:     0 kB
-     AnonHugePages:   4149248 kB
-     ShmemHugePages:        0 kB
-@@ -1146,6 +1147,13 @@ VmallocChunk
- Percpu
-               Memory allocated to the percpu allocator used to back percpu
-               allocations. This stat excludes the cost of metadata.
-+EarlyMemtestBad
-+              The amount of RAM/memory in kB, that was identified as corrupted
-+              by early memtest. If memtest was not run, this field will not
-+              be displayed at all. Size is never rounded down to 0 kB.
-+              That means if 0 kB is reported, you can safely assume
-+              there was at least one pass of memtest and none of the passes
-+              found a single faulty byte of RAM.
- HardwareCorrupted
-               The amount of RAM/memory in KB, the kernel identifies as
-               corrupted.
-diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-index 440960110..b43d0bd42 100644
---- a/fs/proc/meminfo.c
-+++ b/fs/proc/meminfo.c
-@@ -6,6 +6,7 @@
- #include <linux/hugetlb.h>
- #include <linux/mman.h>
- #include <linux/mmzone.h>
-+#include <linux/memblock.h>
- #include <linux/proc_fs.h>
- #include <linux/percpu.h>
- #include <linux/seq_file.h>
-@@ -131,6 +132,18 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
- 	show_val_kb(m, "VmallocChunk:   ", 0ul);
- 	show_val_kb(m, "Percpu:         ", pcpu_nr_pages());
- 
-+#ifdef CONFIG_MEMTEST
-+	if (early_memtest_done) {
-+		unsigned long early_memtest_bad_size_kb;
-+
-+		early_memtest_bad_size_kb = early_memtest_bad_size>>10;
-+		if (early_memtest_bad_size && !early_memtest_bad_size_kb)
-+			early_memtest_bad_size_kb = 1;
-+		/* When 0 is reported, it means there actually was a successful test */
-+		seq_printf(m, "EarlyMemtestBad:   %5lu kB\n", early_memtest_bad_size_kb);
-+	}
-+#endif
-+
- #ifdef CONFIG_MEMORY_FAILURE
- 	seq_printf(m, "HardwareCorrupted: %5lu kB\n",
- 		   atomic_long_read(&num_poisoned_pages) << (PAGE_SHIFT - 10));
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index 50ad19662..f82ee3fac 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -597,6 +597,8 @@ extern int hashdist;		/* Distribute hashes across NUMA nodes? */
- #endif
- 
- #ifdef CONFIG_MEMTEST
-+extern phys_addr_t early_memtest_bad_size;	/* Size of faulty ram found by memtest */
-+extern bool early_memtest_done;			/* Was early memtest done? */
- extern void early_memtest(phys_addr_t start, phys_addr_t end);
- #else
- static inline void early_memtest(phys_addr_t start, phys_addr_t end)
-diff --git a/mm/memtest.c b/mm/memtest.c
-index f53ace709..57149dfee 100644
---- a/mm/memtest.c
-+++ b/mm/memtest.c
-@@ -4,6 +4,9 @@
- #include <linux/init.h>
- #include <linux/memblock.h>
- 
-+bool early_memtest_done;
-+phys_addr_t early_memtest_bad_size;
-+
- static u64 patterns[] __initdata = {
- 	/* The first entry has to be 0 to leave memtest with zeroed memory */
- 	0,
-@@ -30,6 +33,7 @@ static void __init reserve_bad_mem(u64 pattern, phys_addr_t start_bad, phys_addr
- 	pr_info("  %016llx bad mem addr %pa - %pa reserved\n",
- 		cpu_to_be64(pattern), &start_bad, &end_bad);
- 	memblock_reserve(start_bad, end_bad - start_bad);
-+	early_memtest_bad_size += (end_bad - start_bad);
- }
- 
- static void __init memtest(u64 pattern, phys_addr_t start_phys, phys_addr_t size)
-@@ -61,6 +65,8 @@ static void __init memtest(u64 pattern, phys_addr_t start_phys, phys_addr_t size
- 	}
- 	if (start_bad)
- 		reserve_bad_mem(pattern, start_bad, last_bad + incr);
-+
-+	early_memtest_done = true;
- }
- 
- static void __init do_one_pass(u64 pattern, phys_addr_t start, phys_addr_t end)
--- 
-2.40.0
+>
+> > ---
+> >
+> > Updated since the RFC:
+> >       Added a card quirk to maintain the current behaviour. The quirk isn't
+> >       set for any cards yet, which is needed (a patch on top) to move forward
+> >       with this.
+> >
+> > ---
+> >  drivers/mmc/core/block.c | 16 ++++++++++++----
+> >  drivers/mmc/core/card.h  |  5 +++++
+> >  include/linux/mmc/card.h |  1 +
+> >  3 files changed, 18 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> > index 672ab90c4b2d..35292e36a1fb 100644
+> > --- a/drivers/mmc/core/block.c
+> > +++ b/drivers/mmc/core/block.c
+> > @@ -2409,8 +2409,7 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
+> >       struct mmc_blk_data *md;
+> >       int devidx, ret;
+> >       char cap_str[10];
+> > -     bool cache_enabled = false;
+> > -     bool fua_enabled = false;
+> > +     bool cache_enabled, avoid_fua, fua_enabled = false;
+> >
+> >       devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
+> >       if (devidx < 0) {
+> > @@ -2494,11 +2493,20 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
+> >           ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
+> >            card->ext_csd.rel_sectors)) {
+> >               md->flags |= MMC_BLK_REL_WR;
+> > +     }
+> > +
+> > +     /*
+> > +      * REQ_FUA is supported through eMMC reliable writes, which has been
+> > +      * reported to be a bit costly for some eMMCs. In these cases, let's
+> > +      * rely on the flush requests (REQ_OP_FLUSH) instead, if we can use the
+> > +      * cache-control feature too.
+> > +      */
+> > +     cache_enabled = mmc_cache_enabled(card->host);
+> > +     avoid_fua = cache_enabled && mmc_card_avoid_rel_write(card);
+> > +     if (md->flags & MMC_BLK_REL_WR && !avoid_fua) {
+> >               fua_enabled = true;
+> >               cache_enabled = true;
+> >       }
+>
+> looks like this could be just:
+>
+>         fua_enabled = (md->flags & MMC_BLK_REL_WR) && !avoid_fua;
+>
+> with fua_enabled no longer needing initialization
 
+Unless I misunderstand your point, that would work for fua_enabled,
+but would not be sufficient for cache_enabled.
+
+cache_enabled should be set if fua_enabled is set - and no matter
+whether mmc_cache_enabled() returns true or not.
+
+Did that make sense?
+
+[...]
+
+Kind regards
+Uffe
