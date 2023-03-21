@@ -2,121 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7399C6C2ACD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085626C2AD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjCUGwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
+        id S230030AbjCUGyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjCUGv5 (ORCPT
+        with ESMTP id S229550AbjCUGy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:51:57 -0400
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901813A851
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:51:41 -0700 (PDT)
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id BBAA38032E37
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:51:40 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 22F2210040637
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 06:51:40 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id eVqOpBmcQNAy0eVqOpTZJV; Tue, 21 Mar 2023 06:51:40 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=UI0YoATy c=1 sm=1 tr=0 ts=641953fc
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=I8hW6eSUrCUbfrCqjmkA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SYUIH/3IJB1Nxy5Y738hfIPsmu6Kz6e2Iu1ElIHnBTg=; b=xjaru+vYZ0Lh+iFrzNAtzxL/Sc
-        MbJZ857FSZTJBlun/lSMJXoWrBnY3EKCw0IhZXdvf8L+dJJ7OCQoocfZGg+mVDnJlassD8zMwf5yo
-        KBODit5IhFXlX8ttx+b0g+8U3CwRlUXYWEeZbOhWhidBWSzyRvvQ3WxKVujz2CtyD5xyiyvzqpQ1z
-        COLl+eOvormcR4ymgGd4JKoJ6E3zbQWRu1tCm5PPKQAEgm1EcsbvfJLsoWcXy/vOUjOZcYa3UvA6o
-        HOSkAL5t5kl8tXcBhRjQV1rXegDAW7VpNI/VS9Jdi++4zrRGerh2NPV0/Hb55OnmRGsKwB2opU8Uy
-        lzmJwZFg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60912 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1peVqM-002NWu-Jj;
-        Tue, 21 Mar 2023 00:51:38 -0600
-Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230320145513.305686421@linuxfoundation.org>
-In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <9cf01d55-480e-fac7-4a5f-e01a1f9640b6@w6rz.net>
-Date:   Mon, 20 Mar 2023 23:51:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 21 Mar 2023 02:54:29 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984D324BED;
+        Mon, 20 Mar 2023 23:54:27 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pgj4r57s6z9vSk;
+        Tue, 21 Mar 2023 14:54:04 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 21 Mar 2023 14:54:25 +0800
+Message-ID: <31dca81f-9ed9-e82e-b304-15e23a412dc7@huawei.com>
+Date:   Tue, 21 Mar 2023 14:54:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3] mm: memory-failure: Move memory failure sysctls to its
+ own file
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1peVqM-002NWu-Jj
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:60912
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20230320074010.50875-1-wangkefeng.wang@huawei.com>
+ <ZBie370lvwNbKZLH@bombadil.infradead.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <ZBie370lvwNbKZLH@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 7:52 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.8 release.
-> There are 211 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 22 Mar 2023 14:54:32 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Tested-by: Ron Economos <re@w6rz.net>
+On 2023/3/21 1:58, Luis Chamberlain wrote:
+> On Mon, Mar 20, 2023 at 03:40:10PM +0800, Kefeng Wang wrote:
+>> The sysctl_memory_failure_early_kill and memory_failure_recovery
+>> are only used in memory-failure.c, move them to its own file.
+>>
+>> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> 
+> Thanks, queued up onto sysctl-next.
+> 
+Thanks.
+
+> If you have time, feel free to help move each of the rest of kernel/sysctl.c
+> vm_table to be split into their own respective files as you did with the last
+> one.
+
+I could let some freshman to do this jobs :)
+
+> 
+>    Luis
 
