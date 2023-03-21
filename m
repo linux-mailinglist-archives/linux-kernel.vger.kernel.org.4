@@ -2,471 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430FA6C383C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D135E6C3846
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjCURdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S230184AbjCUReO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCURdP (ORCPT
+        with ESMTP id S230247AbjCUReK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:33:15 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB1166E7;
-        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id f5-20020a4ad805000000b005399cfd276bso1876773oov.6;
-        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
+        Tue, 21 Mar 2023 13:34:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1374617A
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679419990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LgfGTuq3iZNHpPTQKBE8qmgZ4CuvjtSnRz/xWCxlQVQ=;
+        b=hldOgpagb7CvFSWydp1FMPKl+2QDS+ZhV2bOPDiFfSs6F2hKdGUmhODIfg18yIm3h+skdG
+        WJLLJf7NxdveA+4+YaqdFBruw+FrueugxLJdsEYDruvkABqAJCyfHZA9lvSZaywXAZUxIL
+        Wp0XdZRnwsR5xvh6n/LmJQT44tstkI0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-494-T8W4e-SuPamCBK1tzvnlwQ-1; Tue, 21 Mar 2023 13:33:09 -0400
+X-MC-Unique: T8W4e-SuPamCBK1tzvnlwQ-1
+Received: by mail-qt1-f200.google.com with SMTP id c14-20020ac87d8e000000b003e38726ec8bso810364qtd.23
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:33:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679419984;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2CnL7hgvPnni7trOuk9467gN9OsVhQvyHsDFM8C85TE=;
-        b=erKzFFARO+2sBeW5xA3ifXL+hbLFsauWD0I612nh3ZqpFHQUn5hcazqIm2ZVoC8rpd
-         HUPwe4tllkl7H5QiTeuAalMF2g7HGCrjN5H8KSwOh9QaHH4lpsdnvQRSB7MLiGVCmpiQ
-         zDRhtAtmtr0prA07NurpdNtx49i8Zw0vU1btnd7UnoVUMSmkIXsL8eRu5UpH9jWzLOtZ
-         Fp0e6YxxGygI4B4pIAWC/vErJwGVsQZFgP53grEsUFnlrSsKiyGRlawN3tk5UFLxmOcx
-         rxlKPPDwaIEqlf87HBAkFvdgRtC/vPGEGKcSs452u4JrEkxHhXSwjtQvgHv+zOGBNX2H
-         NIYQ==
-X-Gm-Message-State: AO0yUKVAc8qcTsk/aU9HY9GidmD8da4UIg/gaohpGG3SltfY4DMY0X6E
-        +kKHxafOGrP75IlOyMdypw==
-X-Google-Smtp-Source: AK7set94YgcKGUBqS/jmcEyCGuFJ245hmQff358C8dqQKs6OobLo4j5MwstfAkhefwZM+zU1beaMRw==
-X-Received: by 2002:a4a:3307:0:b0:53b:68bf:ada3 with SMTP id q7-20020a4a3307000000b0053b68bfada3mr704104ooq.3.1679419984314;
-        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y13-20020a4ad64d000000b0053b5271f030sm1204741oos.39.2023.03.21.10.33.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
-Received: (nullmailer pid 990808 invoked by uid 1000);
-        Tue, 21 Mar 2023 17:33:03 -0000
-Date:   Tue, 21 Mar 2023 12:33:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v2 01/11] of: Load KUnit DTB from of_core_init()
-Message-ID: <20230321173303.GA950598-robh@kernel.org>
-References: <20230315183729.2376178-1-sboyd@kernel.org>
- <20230315183729.2376178-2-sboyd@kernel.org>
+        d=1e100.net; s=20210112; t=1679419989;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgfGTuq3iZNHpPTQKBE8qmgZ4CuvjtSnRz/xWCxlQVQ=;
+        b=3K1vmqwqeAVp4kO25G18gkwfZOCB6L2oGXUcGPURJod36RNFJgQtZN4sAPQgAQaYa0
+         ak4yAldOUSWUTAxigPU3LtDkNtZg+gTbMO03d389PJlOFZvDtUf5IKpcpyjG1+mPOBhp
+         1VUAJ2wXBbRoxes83g6O4IcsaIZnxms6AOiquxBfYQmczlhfuThw9GUwyibe/b0fHJSS
+         ZYQEepJZ08ev57GcbUUdttcIzd39dk32RtI9y13tKehhfPw/8VqtVZpGXhg0MgVY+d5b
+         ym4y/vozU2FWsLIswMz/lDVWfLfaeZTlIxE13/24JmTA57/b7aTmgn7h8TfT4p8mD5jl
+         fOOg==
+X-Gm-Message-State: AO0yUKVuOipUwW/qsbkIAbM44s/uFYuPejBgfnVNhfkeY4+jmGvehTRu
+        evUFV3vK3Qm1qG6kG20JtNRrLUCfX2Z162or7JIQg7Lbp79NnbXRsFpoiD2x6QkBP+kwLiwXOoP
+        BKIjyt8XSWYcjOhnkG58wyYUNWfjs14Q=
+X-Received: by 2002:ac8:7c55:0:b0:3bf:c3f9:70a3 with SMTP id o21-20020ac87c55000000b003bfc3f970a3mr1208461qtv.26.1679419988946;
+        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
+X-Google-Smtp-Source: AK7set83+iaYCeYsz2V7w4NmnWFvf/0dfadMALWX0NW0OMPWEvU7qlhCb9nr2yBqkTGlddy+inC6CQ==
+X-Received: by 2002:ac8:7c55:0:b0:3bf:c3f9:70a3 with SMTP id o21-20020ac87c55000000b003bfc3f970a3mr1208426qtv.26.1679419988621;
+        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-29-20.cust.vodafonedsl.it. [2.34.29.20])
+        by smtp.gmail.com with ESMTPSA id 196-20020a370acd000000b0074690b42617sm3125514qkk.15.2023.03.21.10.33.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 10:33:08 -0700 (PDT)
+Message-ID: <988e8e8e-d514-4c69-a384-7d0a70c514c4@redhat.com>
+Date:   Tue, 21 Mar 2023 18:33:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315183729.2376178-2-sboyd@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH v2 2/4] fpga: add fake FPGA bridge
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230310170412.708363-1-marpagan@redhat.com>
+ <20230310170412.708363-3-marpagan@redhat.com>
+ <ZBQlnUQWZHJ+ZBu5@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZBQlnUQWZHJ+ZBu5@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 11:37:18AM -0700, Stephen Boyd wrote:
-> Load a small DTB for KUnit from of_core_init() as long as CONFIG_OF=y
-> and CONFIG_KUNIT=y/m. This allows KUnit tests to load overlays into the
-> running system. It also allows KUnit tests to run on any architecture
-> that supports it so that devicetree can be used while unit testing
-> architecture specific code.
+
+
+On 2023-03-17 09:32, Xu Yilun wrote:
+> On 2023-03-10 at 18:04:10 +0100, Marco Pagani wrote:
+>> Add fake FPGA bridge driver with support functions. The driver includes
+>> a counter for the number of switching cycles. This module is part of
+>> the KUnit tests for the FPGA subsystem.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/tests/fake-fpga-bridge.c | 228 ++++++++++++++++++++++++++
+>>  drivers/fpga/tests/fake-fpga-bridge.h |  36 ++++
+>>  2 files changed, 264 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-bridge.h
+>>
+>> diff --git a/drivers/fpga/tests/fake-fpga-bridge.c b/drivers/fpga/tests/fake-fpga-bridge.c
+>> new file mode 100644
+>> index 000000000000..8a2f64fc1bbb
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fake-fpga-bridge.c
+>> @@ -0,0 +1,228 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Driver for the fake FPGA bridge
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/fpga/fpga-bridge.h>
+>> +#include <kunit/test.h>
+>> +
+>> +#include "fake-fpga-bridge.h"
+>> +
+>> +#define FAKE_FPGA_BRIDGE_DEV_NAME	"fake_fpga_bridge"
+>> +
+>> +struct fake_bridge_priv {
+>> +	int id;
+>> +	bool enable;
+>> +	int cycles_count;
+>> +	struct kunit *test;
+>> +};
+>> +
+>> +struct fake_bridge_data {
+>> +	struct kunit *test;
+>> +};
+>> +
+>> +static int op_enable_show(struct fpga_bridge *bridge)
+>> +{
+>> +	struct fake_bridge_priv *priv;
+>> +
+>> +	priv = bridge->priv;
+>> +
+>> +	if (priv->test)
+>> +		kunit_info(priv->test, "Fake FPGA bridge %d: enable_show\n",
+>> +			   priv->id);
 > 
-> Overlays need a target node to apply their overlays to, so make a fake
-> bus called 'kunit-bus' in the root node to allow this. Make the node a
-> simple-bus so that platform devices are automatically created for nodes
-> added as children of this node. Unit test overlays can target this node
-> via the label 'kunit_bus'.
+> Why check the kunit pointer every time? I remember you mentioned that
+> the fake fpga modules are expected to be used out of Kunit test, so the
+> priv->test may be NULL? I suggest you work on these usecases in separate
+> patchsets. For now just check priv->test on probe is fine.
 > 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  drivers/of/.kunitconfig |   3 +
->  drivers/of/Kconfig      |  13 +++
->  drivers/of/Makefile     |   4 +
->  drivers/of/base.c       | 182 ++++++++++++++++++++++++++++++++++++++++
->  drivers/of/kunit.dtso   |  10 +++
->  drivers/of/of_private.h |   6 ++
->  drivers/of/of_test.c    |  43 ++++++++++
->  drivers/of/unittest.c   | 101 +---------------------
->  8 files changed, 262 insertions(+), 100 deletions(-)
->  create mode 100644 drivers/of/.kunitconfig
->  create mode 100644 drivers/of/kunit.dtso
->  create mode 100644 drivers/of/of_test.c
+
+The idea was to provide additional info messages, tied with the test, if the
+fake bridge is registered with a test instance. If you believe these prints
+are unnecessary, I can remove them or replace them with generic dev_info().
+
+>> +
+>> +	return priv->enable;
+>> +}
+>> +
+>> +static int op_enable_set(struct fpga_bridge *bridge, bool enable)
+>> +{
+>> +	struct fake_bridge_priv *priv;
+>> +
+>> +	priv = bridge->priv;
+>> +
+>> +	if (enable && !priv->enable)
+>> +		priv->cycles_count++;
+>> +
+>> +	priv->enable = enable;
+>> +
+>> +	if (priv->test)
+>> +		kunit_info(priv->test, "Fake FPGA bridge %d: enable_set: %d\n",
+>> +			   priv->id, enable);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void op_remove(struct fpga_bridge *bridge)
+>> +{
+>> +	struct fake_bridge_priv *priv;
+>> +
+>> +	priv = bridge->priv;
+>> +
+>> +	if (priv->test)
+>> +		kunit_info(priv->test, "Fake FPGA bridge: remove\n");
+>> +}
+>> +
+>> +static const struct fpga_bridge_ops fake_fpga_bridge_ops = {
+>> +	.enable_show = op_enable_show,
+>> +	.enable_set = op_enable_set,
+>> +	.fpga_bridge_remove = op_remove,
+>> +};
+>> +
+>> +/**
+>> + * fake_fpga_bridge_register() - register a fake FPGA bridge.
+>> + * @bridge_ctx: fake FPGA bridge context data structure.
+>> + * @parent: parent device.
+>> + * @test: KUnit test context object.
+>> + *
+>> + * Return: 0 if registration succeeded, an error code otherwise.
+>> + */
+>> +int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
+>> +			      struct device *parent, struct kunit *test)
 > 
-> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
-> new file mode 100644
-> index 000000000000..5a8fee11978c
-> --- /dev/null
-> +++ b/drivers/of/.kunitconfig
-> @@ -0,0 +1,3 @@
-> +CONFIG_KUNIT=y
-> +CONFIG_OF=y
-> +CONFIG_OF_KUNIT_TEST=y
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 644386833a7b..f6739b9560c5 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -37,6 +37,19 @@ config OF_UNITTEST
->  
->  	  If unsure, say N here. This option is not safe to enable.
->  
-> +config OF_KUNIT
-> +	def_bool KUNIT
-> +	select OF_RESOLVE
-> +
-> +config OF_KUNIT_TEST
-> +	tristate "Devicetree KUnit DTB Test" if !KUNIT_ALL_TESTS
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  This option builds KUnit unit tests for device tree infrastructure.
-> +
-> +	  If unsure, say N here, but this option is safe to enable.
-> +
->  config OF_ALL_DTBS
->  	bool "Build all Device Tree Blobs"
->  	depends on COMPILE_TEST
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index e0360a44306e..cf6ee7ba6350 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -19,4 +19,8 @@ obj-y	+= kexec.o
->  endif
->  endif
->  
-> +DTC_FLAGS_kunit += -@
-> +obj-$(CONFIG_OF_KUNIT) += kunit.dtbo.o
-> +obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
-> +
->  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-> diff --git a/drivers/of/base.c b/drivers/of/base.c
-> index ac6fde53342f..090c5d7925e4 100644
-> --- a/drivers/of/base.c
-> +++ b/drivers/of/base.c
-> @@ -16,13 +16,16 @@
->  
->  #define pr_fmt(fmt)	"OF: " fmt
->  
-> +#include <linux/align.h>
->  #include <linux/console.h>
->  #include <linux/ctype.h>
->  #include <linux/cpu.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_fdt.h>
+> struct fake_fpga_bridge *fake_fpga_bridge_register(struct device *parent, ...)
+> 
+> Is it better?
+> 
+> Thanks,
+> Yilun
 
-base.c deals with unflattened trees. There shouldn't be anything FDT 
-related in it.
+Agreed, it is better. I'll change the registration functions for the fake
+bridge, manager, and region in the next version.
 
->  #include <linux/of_graph.h>
-> +#include <linux/printk.h>
->  #include <linux/spinlock.h>
->  #include <linux/slab.h>
->  #include <linux/string.h>
-> @@ -163,10 +166,90 @@ void __of_phandle_cache_inv_entry(phandle handle)
->  		phandle_cache[handle_hash] = NULL;
->  }
->  
-> +#ifdef CONFIG_OF_KUNIT
+> 
+>> +{
+>> +	struct fake_bridge_data pdata;
+>> +	struct fake_bridge_priv *priv;
+>> +	int ret;
+>> +
+>> +	pdata.test = test;
+>> +
+>> +	bridge_ctx->pdev = platform_device_alloc(FAKE_FPGA_BRIDGE_DEV_NAME,
+>> +						 PLATFORM_DEVID_AUTO);
+>> +	if (IS_ERR(bridge_ctx->pdev)) {
+>> +		pr_err("Fake FPGA bridge device allocation failed\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	bridge_ctx->pdev->dev.parent = parent;
+>> +	platform_device_add_data(bridge_ctx->pdev, &pdata, sizeof(pdata));
+>> +
+>> +	ret = platform_device_add(bridge_ctx->pdev);
+>> +	if (ret) {
+>> +		pr_err("Fake FPGA bridge device add failed\n");
+>> +		platform_device_put(bridge_ctx->pdev);
+>> +		return ret;
+>> +	}
+>> +
+>> +	bridge_ctx->bridge = platform_get_drvdata(bridge_ctx->pdev);
+>> +
+>> +	if (test) {
+>> +		priv = bridge_ctx->bridge->priv;
+>> +		kunit_info(test, "Fake FPGA bridge %d registered\n", priv->id);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_register);
+>> +
+>> +/**
+>> + * fake_fpga_bridge_unregister() - unregister a fake FPGA bridge.
+>> + * @bridge_ctx: fake FPGA bridge context data structure.
+>> + */
+>> +void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx)
+>> +{
+>> +	struct fake_bridge_priv *priv;
+>> +	struct kunit *test;
+>> +	int id;
+>> +
+>> +	if (!bridge_ctx)
+>> +		return;
+>> +
+>> +	priv = bridge_ctx->bridge->priv;
+>> +	test = priv->test;
+>> +	id = priv->id;
+>> +
+>> +	if (bridge_ctx->pdev) {
+>> +		platform_device_unregister(bridge_ctx->pdev);
+>> +		if (test)
+>> +			kunit_info(test, "Fake FPGA bridge %d unregistered\n", id);
+>> +	}
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_unregister);
+>> +
+>> +/**
+>> + * fake_fpga_bridge_get_state() - get state of a fake FPGA bridge.
+>> + * @bridge_ctx: fake FPGA bridge context data structure.
+>> + *
+>> + * Return: 1 if the bridge is enabled, 0 if disabled.
+>> + */
+>> +int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx)
+>> +{
+>> +	return bridge_ctx->bridge->br_ops->enable_show(bridge_ctx->bridge);
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_state);
+>> +
+>> +/**
+>> + * fake_fpga_bridge_get_cycles_count() - get the number of switching cycles.
+>> + * @bridge_ctx: fake FPGA bridge context data structure.
+>> + *
+>> + * Return: number of switching cycles.
+>> + */
+>> +int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx)
+>> +{
+>> +	struct fake_bridge_priv *priv;
+>> +
+>> +	priv = bridge_ctx->bridge->priv;
+>> +
+>> +	return priv->cycles_count;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_bridge_get_cycles_count);
+>> +
+>> +static int fake_fpga_bridge_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev;
+>> +	struct fpga_bridge *bridge;
+>> +	struct fake_bridge_data *pdata;
+>> +	struct fake_bridge_priv *priv;
+>> +	static int id_count;
+>> +
+>> +	dev = &pdev->dev;
+>> +	pdata = dev_get_platdata(dev);
+>> +
+>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +
+>> +	priv->id = id_count++;
+>> +	priv->enable = true;
+>> +
+>> +	if (pdata)
+>> +		priv->test = pdata->test;
+>> +
+>> +	bridge = fpga_bridge_register(dev, "Fake FPGA Bridge",
+>> +				      &fake_fpga_bridge_ops, priv);
+>> +	if (IS_ERR(bridge))
+>> +		return PTR_ERR(bridge);
+>> +
+>> +	platform_set_drvdata(pdev, bridge);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int fake_fpga_bridge_remove(struct platform_device *pdev)
+>> +{
+>> +	struct fpga_bridge *bridge = platform_get_drvdata(pdev);
+>> +
+>> +	fpga_bridge_unregister(bridge);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver fake_fpga_bridge_drv = {
+>> +	.driver = {
+>> +		.name = FAKE_FPGA_BRIDGE_DEV_NAME
+>> +	},
+>> +	.probe = fake_fpga_bridge_probe,
+>> +	.remove = fake_fpga_bridge_remove,
+>> +};
+>> +
+>> +module_platform_driver(fake_fpga_bridge_drv);
+>> +
+>> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
+>> +MODULE_DESCRIPTION("Fake FPGA Bridge");
+>> +MODULE_LICENSE("GPL v2");
+>> diff --git a/drivers/fpga/tests/fake-fpga-bridge.h b/drivers/fpga/tests/fake-fpga-bridge.h
+>> new file mode 100644
+>> index 000000000000..ae224b13f284
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fake-fpga-bridge.h
+>> @@ -0,0 +1,36 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Header file for the fake FPGA bridge
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#ifndef __FPGA_FAKE_BRIDGE_H
+>> +#define __FPGA_FAKE_BRIDGE_H
+>> +
+>> +#include <linux/platform_device.h>
+>> +#include <kunit/test.h>
+>> +
+>> +/**
+>> + * struct fake_fpga_bridge - fake FPGA bridge context data structure
+>> + *
+>> + * @bridge: FPGA bridge.
+>> + * @pdev: platform device of the FPGA bridge.
+>> + */
+>> +struct fake_fpga_bridge {
+>> +	struct fpga_bridge *bridge;
+>> +	struct platform_device *pdev;
+>> +};
+>> +
+>> +int fake_fpga_bridge_register(struct fake_fpga_bridge *bridge_ctx,
+>> +			      struct device *parent, struct kunit *test);
+>> +
+>> +void fake_fpga_bridge_unregister(struct fake_fpga_bridge *bridge_ctx);
+>> +
+>> +int fake_fpga_bridge_get_state(const struct fake_fpga_bridge *bridge_ctx);
+>> +
+>> +int fake_fpga_bridge_get_cycles_count(const struct fake_fpga_bridge *bridge_ctx);
+>> +
+>> +#endif /* __FPGA_FAKE_BRIDGE_H */
+>> -- 
+>> 2.39.2
+>>
 
-base.c is already quite big. This should probably be its own file. 
-Perhaps in kunit code because that's what we do for everything else 
-(e.g. DT clock code goes in drivers/clk/). (My goal is to eliminate 
-drivers/of/. That's easier than finding maintainers. ;) )
+Thanks,
+Marco
 
-> +static int __init of_kunit_add_data(void)
-> +{
-> +	void *kunit_fdt;
-> +	void *kunit_fdt_align;
-> +	struct device_node *kunit_node = NULL, *np;
-> +	/*
-> +	 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
-> +	 * created by cmd_dt_S_dtbo in scripts/Makefile.lib
-> +	 */
-> +	extern uint8_t __dtbo_kunit_begin[];
-> +	extern uint8_t __dtbo_kunit_end[];
-> +	const int size = __dtbo_kunit_end - __dtbo_kunit_begin;
-> +	int rc;
-> +	void *ret;
-> +
-> +	if (!size) {
-> +		pr_warn("kunit.dtbo is empty\n");
-> +		return -ENODATA;
-> +	}
-> +
-> +	kunit_fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
-> +	if (!kunit_fdt)
-> +		return -ENOMEM;
-> +
-> +	kunit_fdt_align = PTR_ALIGN(kunit_fdt, FDT_ALIGN_SIZE);
-> +	memcpy(kunit_fdt_align, __dtbo_kunit_begin, size);
-> +
-> +	ret = of_fdt_unflatten_tree(kunit_fdt_align, NULL, &kunit_node);
-
-I don't understand why this doesn't use of_overlay_fdt_apply(). Your 
-test(s) shouldn't be any different than any other overlay user (granted, 
-there aren't many). You apply the overlay, run your test, then remove 
-the overlay.
-
-> +	if (!ret) {
-> +		pr_warn("unflatten KUnit tree failed\n");
-> +		kfree(kunit_fdt);
-> +		return -ENODATA;
-> +	}
-> +	if (!kunit_node) {
-> +		pr_warn("KUnit tree is empty\n");
-> +		kfree(kunit_fdt);
-> +		return -ENODATA;
-> +	}
-> +
-> +	of_overlay_mutex_lock();
-> +	rc = of_resolve_phandles(kunit_node);
-> +	if (rc) {
-> +		pr_err("Failed to resolve KUnit phandles (rc=%i)\n", rc);
-> +		of_overlay_mutex_unlock();
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!of_root) {
-
-There's patches from Frank and others under review which will always 
-create and empty DT if the bootloader/arch didn't provide one. This 
-series should rely on that. (Or just assume that when that happens, your 
-tests will run in more environments)
-
-> +		of_root = kunit_node;
-> +		of_chosen = of_find_node_by_path("/chosen");
-> +	} else {
-> +		/* attach the sub-tree to live tree */
-> +		np = kunit_node->child;
-> +		while (np) {
-> +			struct device_node *next = np->sibling;
-> +
-> +			np->parent = of_root;
-> +			of_test_attach_node_and_children(np);
-> +			np = next;
-> +		}
-> +	}
-> +
-> +	if (!of_aliases)
-> +		of_aliases = of_find_node_by_path("/aliases");
-> +
-> +	of_overlay_mutex_unlock();
-> +
-> +	return 0;
-> +}
-> +#else
-> +static inline int __init of_kunit_add_data(void) { return 0; }
-> +#endif
-> +
->  void __init of_core_init(void)
->  {
->  	struct device_node *np;
-> +	int ret;
->  
-> +	ret = of_kunit_add_data();
-> +	if (ret) {
-> +		pr_err("failed to add kunit test data\n");
-> +		return;
-> +	}
->  
->  	/* Create the kset, and register existing nodes */
->  	mutex_lock(&of_mutex);
-> @@ -1879,6 +1962,105 @@ int of_update_property(struct device_node *np, struct property *newprop)
->  	return rc;
->  }
->  
-> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
-> +/**
-> + * update_node_properties - adds the properties of np into dup node (present in
-> + * live tree) and updates parent of children of np to dup.
-> + *
-> + * @np: node whose properties are being added to the live tree
-> + * @dup: node present in live tree to be updated
-> + */
-> +static void __init update_node_properties(struct device_node *np,
-> +					struct device_node *dup)
-
-Please split any moving of code to separate patches.
-
-I'm not remembering why we need these test functions vs. just applying 
-overlays. Frank? Perhaps because it's trying to test the overlay code 
-itself. But you should just be a user of the overlay API and not need to 
-do anything special.
-
-> +{
-> +	struct property *prop;
-> +	struct property *save_next;
-> +	struct device_node *child;
-> +	int ret;
-> +
-> +	for_each_child_of_node(np, child)
-> +		child->parent = dup;
-> +
-> +	/*
-> +	 * "unittest internal error: unable to add testdata property"
-> +	 *
-> +	 *    If this message reports a property in node '/__symbols__' then
-> +	 *    the respective unittest overlay contains a label that has the
-> +	 *    same name as a label in the live devicetree.  The label will
-> +	 *    be in the live devicetree only if the devicetree source was
-> +	 *    compiled with the '-@' option.  If you encounter this error,
-> +	 *    please consider renaming __all__ of the labels in the unittest
-> +	 *    overlay dts files with an odd prefix that is unlikely to be
-> +	 *    used in a real devicetree.
-> +	 */
-> +
-> +	/*
-> +	 * open code for_each_property_of_node() because of_add_property()
-> +	 * sets prop->next to NULL
-> +	 */
-> +	for (prop = np->properties; prop != NULL; prop = save_next) {
-> +		save_next = prop->next;
-> +		ret = of_add_property(dup, prop);
-> +		if (ret) {
-> +			if (ret == -EEXIST && !strcmp(prop->name, "name"))
-> +				continue;
-> +			pr_err("unittest internal error: unable to add testdata property %pOF/%s",
-> +			       np, prop->name);
-> +		}
-> +	}
-> +}
-> +
-> +/**
-> + * of_test_attach_node_and_children - attaches nodes and its children to live tree.
-> + * @np:	Node to attach to live tree
-> + *
-> + * CAUTION: misleading function name - if node @np already exists in
-> + * the live tree then children of @np are *not* attached to the live
-> + * tree.  This works for the current test devicetree nodes because such
-> + * nodes do not have child nodes.
-> + */
-> +void __init of_test_attach_node_and_children(struct device_node *np)
-> +{
-> +	struct device_node *next, *dup, *child;
-> +	unsigned long flags;
-> +	const char *full_name;
-> +
-> +	full_name = kasprintf(GFP_KERNEL, "%pOF", np);
-> +
-> +	if (!strcmp(full_name, "/__local_fixups__") ||
-> +	    !strcmp(full_name, "/__fixups__")) {
-> +		kfree(full_name);
-> +		return;
-> +	}
-> +
-> +	dup = of_find_node_by_path(full_name);
-> +	kfree(full_name);
-> +	if (dup) {
-> +		update_node_properties(np, dup);
-> +		return;
-> +	}
-> +
-> +	child = np->child;
-> +	np->child = NULL;
-> +
-> +	mutex_lock(&of_mutex);
-> +	raw_spin_lock_irqsave(&devtree_lock, flags);
-> +	np->sibling = np->parent->child;
-> +	np->parent->child = np;
-> +	of_node_clear_flag(np, OF_DETACHED);
-> +	raw_spin_unlock_irqrestore(&devtree_lock, flags);
-> +
-> +	__of_attach_node_sysfs(np);
-> +	mutex_unlock(&of_mutex);
-> +
-> +	while (child) {
-> +		next = child->sibling;
-> +		of_test_attach_node_and_children(child);
-> +		child = next;
-> +	}
-> +}
-> +#endif
-> +
->  static void of_alias_add(struct alias_prop *ap, struct device_node *np,
->  			 int id, const char *stem, int stem_len)
->  {
-> diff --git a/drivers/of/kunit.dtso b/drivers/of/kunit.dtso
-> new file mode 100644
-> index 000000000000..d512057df98d
-> --- /dev/null
-> +++ b/drivers/of/kunit.dtso
-> @@ -0,0 +1,10 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +	/* Container node where KUnit tests can load overlays */
-> +	kunit_bus: kunit-bus {
-> +		compatible = "simple-bus";
-> +	};
-> +};
-
-Why do we need an overlay to apply overlays to? 
-
-
-> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-> index fb6792d381a6..2151a28ca234 100644
-> --- a/drivers/of/of_private.h
-> +++ b/drivers/of/of_private.h
-> @@ -96,6 +96,12 @@ static inline void of_overlay_mutex_lock(void) {};
->  static inline void of_overlay_mutex_unlock(void) {};
->  #endif
->  
-> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
-> +void __init of_test_attach_node_and_children(struct device_node *np);
-> +#else
-> +static inline void __init of_test_attach_node_and_children(struct device_node *np) {}
-> +#endif
-> +
->  #if defined(CONFIG_OF_UNITTEST) && defined(CONFIG_OF_OVERLAY)
->  extern void __init unittest_unflatten_overlay_base(void);
->  #else
-> diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
-> new file mode 100644
-> index 000000000000..a4d70ac344ad
-> --- /dev/null
-> +++ b/drivers/of/of_test.c
-> @@ -0,0 +1,43 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit tests for OF APIs
-> + */
-> +#include <linux/kconfig.h>
-> +#include <linux/of.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +/*
-> + * Test that the root node / exists.
-> + */
-> +static void dtb_root_node_exists(struct kunit *test)
-> +{
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/"));
-> +}
-> +
-> +/*
-> + * Test that the /__symbols__ node exists.
-> + */
-> +static void dtb_symbols_node_exists(struct kunit *test)
-> +{
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/__symbols__"));
-> +}
-
-Many base DTs will not have this. And the kunit tests themselves 
-shouldn't need it because they should be independent of the base tree.
-
-Rob
