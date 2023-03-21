@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DF46C2BA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EFA6C2BAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjCUHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S230384AbjCUHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjCUHsp (ORCPT
+        with ESMTP id S230342AbjCUHss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:48:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D56513D6D;
-        Tue, 21 Mar 2023 00:48:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Mar 2023 03:48:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3617118;
+        Tue, 21 Mar 2023 00:48:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF778B80EC5;
-        Tue, 21 Mar 2023 07:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03E2C433EF;
-        Tue, 21 Mar 2023 07:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679384900;
-        bh=YsRomgHu98oQV4g6Q5/iQRj/o0GYfbUtrYkz2JQb4YA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j6w5nQhXo7VqIUJMh/CF5qRzifcULCHyFl6FcfeKr1cZ3VjClvy5PE9qTKifi/PmO
-         iecXm/5seIJDxO+HBaIU3vKzbebvjenUfD9Usj9Gxw2IVz7iOr5DSHPmg4YoU4kFaj
-         25wJBh3ls2SCY2ZXb9Xwj63/teWrPI5FXLsXCg6s=
-Date:   Tue, 21 Mar 2023 08:48:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
-Message-ID: <ZBlhQjcEfoISYutj@kroah.com>
-References: <20230320145513.305686421@linuxfoundation.org>
- <CA+G9fYvNEThYX-c204_knup5G_1vA27j+HouS-n=HMUsdJpC_g@mail.gmail.com>
- <CAKwvOdnmwkoeToovShcmfpSAmBmKDTzZNv4R2jFA37hi=+ynaQ@mail.gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 02A051FD6A;
+        Tue, 21 Mar 2023 07:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679384911; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0T22BvyLsxTGKRp8ptWSENdQ9AmQVE5GpVIAlDWlTA=;
+        b=hs4Xd6jbhFnM66NWCm2SPklmq1+37dljFeBscauEi982ADeYjhibIiWXW8keHZOvQaP7DD
+        qttn2UaybcB+7d9rPZGox3kNcQdQ8JNvsUGFvbPSZK8jb5G4WQqhLEPYP7XIzzumL8HU+c
+        KdBf/xwk4cjZ6NaspVKB6WBCLzytAqA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679384911;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0T22BvyLsxTGKRp8ptWSENdQ9AmQVE5GpVIAlDWlTA=;
+        b=4I+JAgROtJSR6tNw7RBJK0pVCf0hOuyUJTV1w2guIaO2+hrG3UQUYhbjpWn3MiYha8fQeP
+        6hhbjYcM3xSu42Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D2BDC13440;
+        Tue, 21 Mar 2023 07:48:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p+bHMk5hGWSfKwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 07:48:30 +0000
+Message-ID: <498307e2-3952-801b-4847-1255214f5c76@suse.cz>
+Date:   Tue, 21 Mar 2023 08:48:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnmwkoeToovShcmfpSAmBmKDTzZNv4R2jFA37hi=+ynaQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/10] sparc/mm: Fix MAX_ORDER usage in tsb_grow()
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+        David Miller <davem@davemloft.net>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-2-kirill.shutemov@linux.intel.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230315113133.11326-2-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 11:49:49AM -0700, Nick Desaulniers wrote:
-> On Mon, Mar 20, 2023 at 11:40 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
+On 3/15/23 12:31, Kirill A. Shutemov wrote:
+> MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
+> can deliver is MAX_ORDER-1.
 > 
-> Thanks for the report!
+> Fix MAX_ORDER usage in tsb_grow().
 > 
-> > The bisection pointed to this commit,
-> >   45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
-> >
-> >
-> > Follow up fix patch is here as per Christophe Leroy comments,
-> >  powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
-> 
-> Greg, Sasha,
-> Can you please also pick up
-> commit 4b10306e9845 ("powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG")
-> 
-> 4b10306e9845 is missing a fixes tag.  I've filed
-> https://github.com/ClangBuiltLinux/linux/issues/1820 to track getting
-> these -mcpu= values for ppc added to clang.
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Now queued up, thanks.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-greg k-h
+> Cc: sparclinux@vger.kernel.org
+> Cc: David Miller <davem@davemloft.net>
+> ---
+>  arch/sparc/mm/tsb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/sparc/mm/tsb.c b/arch/sparc/mm/tsb.c
+> index 912205787161..dba8dffe2113 100644
+> --- a/arch/sparc/mm/tsb.c
+> +++ b/arch/sparc/mm/tsb.c
+> @@ -402,8 +402,8 @@ void tsb_grow(struct mm_struct *mm, unsigned long tsb_index, unsigned long rss)
+>  	unsigned long new_rss_limit;
+>  	gfp_t gfp_flags;
+>  
+> -	if (max_tsb_size > (PAGE_SIZE << MAX_ORDER))
+> -		max_tsb_size = (PAGE_SIZE << MAX_ORDER);
+> +	if (max_tsb_size > (PAGE_SIZE << (MAX_ORDER - 1)))
+> +		max_tsb_size = (PAGE_SIZE << (MAX_ORDER - 1));
+>  
+>  	new_cache_index = 0;
+>  	for (new_size = 8192; new_size < max_tsb_size; new_size <<= 1UL) {
+
