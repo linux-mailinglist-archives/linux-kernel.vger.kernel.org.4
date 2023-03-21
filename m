@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085626C2AD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EA16C2ADA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCUGyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S230435AbjCUGzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUGy3 (ORCPT
+        with ESMTP id S229923AbjCUGzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:54:29 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984D324BED;
-        Mon, 20 Mar 2023 23:54:27 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pgj4r57s6z9vSk;
-        Tue, 21 Mar 2023 14:54:04 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 14:54:25 +0800
-Message-ID: <31dca81f-9ed9-e82e-b304-15e23a412dc7@huawei.com>
-Date:   Tue, 21 Mar 2023 14:54:24 +0800
+        Tue, 21 Mar 2023 02:55:03 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2242597C;
+        Mon, 20 Mar 2023 23:55:01 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L6sn9J047778;
+        Tue, 21 Mar 2023 01:54:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679381689;
+        bh=5CNu2kNv4UF99KFN6mTph9taqDlCm7JW6S2CyHg/1o8=;
+        h=From:To:CC:Subject:Date;
+        b=OCiUKZt+6Q+jcvGZSkcEXZvfybUdTFuw93eRC7TDYjQFQp9UIC+/sGVdvdi/40oVs
+         Lh36VecRqfsglX/Uh1W9GX5gpTuHX2eaB/8/hl5xKz6vJTqath6BzDWI+ustebM/Rc
+         JKJ5JbNqN0Cc3LnFpXl+8bLIM5fa1PSQkS6RzqvE=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L6snXm119528
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 01:54:49 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 01:54:48 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 01:54:48 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L6slvN112205;
+        Tue, 21 Mar 2023 01:54:48 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <j-keerthy@ti.com>, <u-kumar1@ti.com>, <j-luthra@ti.com>,
+        <vaishnav.a@ti.com>
+Subject: [PATCH v2 0/4] arm64: dts: ti: j7: Add device-tree nodes for MCSPI
+Date:   Tue, 21 Mar 2023 12:24:43 +0530
+Message-ID: <20230321065447.6997-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3] mm: memory-failure: Move memory failure sysctls to its
- own file
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20230320074010.50875-1-wangkefeng.wang@huawei.com>
- <ZBie370lvwNbKZLH@bombadil.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <ZBie370lvwNbKZLH@bombadil.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds device tree nodes for Multi Channel Serial Peripheral
+Interface (MCSPI) on J721E, J7200, J721S2 and J784S4 platforms. All the
+MCSPI instances are disabled by default and can be enabled through overlays
+as required, the changes were tested using spidev loopback test for all
+instances and the data verified only for main_spi4 which is connected
+internally as slave to mcu_spi2 for all existing J7 devices.
 
+V1->V2: 
+  * Address Nishanth's feedback, combine main, mcu domain
+  MCSPI node addition changes to single commit per SoC.
 
-On 2023/3/21 1:58, Luis Chamberlain wrote:
-> On Mon, Mar 20, 2023 at 03:40:10PM +0800, Kefeng Wang wrote:
->> The sysctl_memory_failure_early_kill and memory_failure_recovery
->> are only used in memory-failure.c, move them to its own file.
->>
->> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> 
-> Thanks, queued up onto sysctl-next.
-> 
-Thanks.
+Vaishnav Achath (4):
+  arm64: dts: ti: k3-j721e: Add MCSPI nodes
+  arm64: dts: ti: k3-j7200: Add MCSPI nodes
+  arm64: dts: ti: k3-j721s2: Add MCSPI nodes
+  arm64: dts: ti: k3-j784s4: Add MCSPI nodes
 
-> If you have time, feel free to help move each of the rest of kernel/sysctl.c
-> vm_table to be split into their own respective files as you did with the last
-> one.
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     | 88 +++++++++++++++++++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 33 +++++++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 88 +++++++++++++++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      | 33 +++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 88 +++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 33 +++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 88 +++++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 33 +++++++
+ 8 files changed, 484 insertions(+)
 
-I could let some freshman to do this jobs :)
-
-> 
->    Luis
+-- 
+2.17.1
 
