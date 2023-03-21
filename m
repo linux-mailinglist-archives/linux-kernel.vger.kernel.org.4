@@ -2,217 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5F56C29FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F0D6C29FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCUFo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S229662AbjCUFp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCUFoy (ORCPT
+        with ESMTP id S229494AbjCUFp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:44:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A1D15C89
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:44:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679377492; x=1710913492;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=wl03io2d0k+evhco+yEGlMgMTYRsc0nwIfZbAUjHAuM=;
-  b=bkAJ4pGWuwb5uAO//GqsUnezlL72H7jtxctH/kWPCDFncDT0RzW65PKB
-   r4C6DhV+GbvK9KI0s8UJNcY8dNqNspBObBg/3IhloCC6u+0Q+OEVwhy7L
-   R/xoiBljFfvDAIyBZE1Xi/1q4T2NTgE879ZLSetEdGvZLWKUM1Sh32Wve
-   gw0AyQxKfti0wrYlXNLH55Z/kTUA0O39aOqnqXcMFvZHWDpOOiAoi2HM4
-   +V3ZoQsLQlUXrSPy1jAvO3E6/kctELBanV117/UG6yhCIqoWW3G/BQcJI
-   IAXQj2PM46QLralZkSMoFyEc82yF7Om2up/8kRhAikX/pcjGgvAnJep06
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="336358814"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="336358814"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:44:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="750405917"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="750405917"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:44:47 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Liu, Yujie" <yujie.liu@intel.com>
-Cc:     lkp <lkp@intel.com>, "bharata@amd.com" <bharata@amd.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
-        "ziy@nvidia.com" <ziy@nvidia.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
-        "apopple@nvidia.com" <apopple@nvidia.com>
-Subject: Re: [linus:master] [migrate_pages] 7e12beb8ca:
- vm-scalability.throughput -3.4% regression
-References: <202303192325.ecbaf968-yujie.liu@intel.com>
-        <87o7onua4t.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com>
-Date:   Tue, 21 Mar 2023 13:43:37 +0800
-In-Reply-To: <ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com> (Yujie
-        Liu's message of "Tue, 21 Mar 2023 11:24:32 +0800")
-Message-ID: <87h6ueu0ae.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 21 Mar 2023 01:45:57 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD55E1589F
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:45:55 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id z42so14358039ljq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 22:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679377554;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/HBDOzpKH5imfC4osZ7C5dgTOV9Q7fw2SPiikWGL4lc=;
+        b=Y+Qc6kHfnFZVD/Btd+XH2aI5kVriqVu91X2973a9xpyltMZaZvQXr0HxHKeUmC+n/Y
+         acM6Jm8QTjOblpusfM4S5F5EhZuvyB0Q91EU43GgucInnSGRiDn8APjYVYNseLp/J7AL
+         yjYy9DfjwUzSDgxlWjLZG9vNtIldcAfE+yJgWCVvV1InvOH62f78OenMIFA1k84ejC1Q
+         iW30yIA10QNgHWVxsug2HyhJnjuI/oBpPMmoM1mP2HFQDx2Mt0eWij4b4edC2YNeHql2
+         EnrYjadoKye+6UMU/mSouMECLFfJVJKVNwnNh5hxrCjZqErsMUadk3bx6Nr0PdFtnT43
+         UXyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679377554;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HBDOzpKH5imfC4osZ7C5dgTOV9Q7fw2SPiikWGL4lc=;
+        b=2EqyajClJGXybQQn+NiFBW+8fxgCgSjA7Y+M/NTV2mfqmkiujWnFFmfqpAAeeF1jmT
+         6CrY7ih57qPC/ev20PJeZXzB2Eo0u/irxlhwfDVewUVfVsmu4shg/9zKy604Q0lK9ofe
+         NZcHvLIcs1/X5W5vUg86zJ17fORWoWqn6U40HLP1P5RLlGdlHhAKYznv+79S7WNCltLm
+         xXxM523dufSpae6D4uCBGqFMhm++7zwV694icQ5tq9ERklQq9oADxy2H5N2uuLuaYolg
+         OFxVgz8ekHsWLW+idl+G1xAqzBU9lnHH+aVKSHkOOG9WbmNOvOxUk6MYeP2RHneiBcjM
+         93Uw==
+X-Gm-Message-State: AO0yUKX3NxmBsIlc6R91NqMAm7zuFUlCZtb49qZ29mZ9ZxRtkZ7g+vsV
+        jNxj7PG0h4NSLXF71qjgyh4=
+X-Google-Smtp-Source: AK7set8dSP5W4abkNf6oYLDISmKZHVAMC46issOrfH5biXxz6mfFYkUxhEOz9loABb8Mc2QaBVCEmw==
+X-Received: by 2002:a2e:3c05:0:b0:29b:d530:b175 with SMTP id j5-20020a2e3c05000000b0029bd530b175mr419576lja.17.1679377553772;
+        Mon, 20 Mar 2023 22:45:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id p5-20020a2e8045000000b0029f7d27b78bsm56751ljg.110.2023.03.20.22.45.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 22:45:53 -0700 (PDT)
+Message-ID: <d13cd7bf-0b1e-e9e1-266a-00db40e51de7@gmail.com>
+Date:   Tue, 21 Mar 2023 07:45:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <maxime@cerno.tech>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <cover.1679062529.git.mazziesaccount@gmail.com>
+ <1abd47784b08939ff08ff03d3d4f60449e87625f.1679062529.git.mazziesaccount@gmail.com>
+ <20230317150916.a3xrh25ywe5k77yp@houat>
+ <e8f50fe8-bad3-e59e-4d80-e2f7db9c9933@gmail.com>
+ <5ace543cae7a54db399750a1b330c3ae.sboyd@kernel.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v4 2/8] kunit: drm/tests: move generic helpers
+In-Reply-To: <5ace543cae7a54db399750a1b330c3ae.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Liu, Yujie" <yujie.liu@intel.com> writes:
+Morning Stephen,
 
-> Hi Ying,
->
-> On Mon, 2023-03-20 at 15:58 +0800, Huang, Ying wrote:
->> Hi, Yujie,
+On 3/20/23 21:23, Stephen Boyd wrote:
+> Quoting Matti Vaittinen (2023-03-18 23:36:20)
+>>>
+>>> I think you would have an easier time if you just copied and renamed
+>>> them into the kunit folder as an preparation series.
 >>
->> kernel test robot <yujie.liu@intel.com> writes:
+>> Yes. That would simplify the syncing between the trees. It slightly bugs
+>> me to add dublicate code in kernel-but the clean-up series for DRM users
+>> could be prepared at the same time. It would be even possible to just
+>> change the drm-helper to be a wrapper for the generic one - and leave
+>> the callers intact - although it leaves some seemingly unnecessary
+>> "onion code" there.
 >>
->> > Hello,
->> >
->> > FYI, we noticed a -3.4% regression of vm-scalability.throughput due to=
- commit:
->> >
->> > commit: 7e12beb8ca2ac98b2ec42e0ea4b76cdc93b58654 ("migrate_pages: batc=
-h flushing TLB")
->> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->> >
->> > in testcase: vm-scalability
->> > on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Platinum 8260L =
-CPU @ 2.40GHz (Cascade Lake) with 128G memory
->> > with following parameters:
->> >
->> >         runtime: 300s
->> >         size: 512G
->> >         test: anon-cow-rand-mt
->> >         cpufreq_governor: performance
->> >
->> > test-description: The motivation behind this suite is to exercise func=
-tions and regions of the mm/ of the Linux kernel which are of interest to u=
-s.
->> > test-url: https://git.kernel.org/cgit/linux/kernel/git/wfg/vm-scalabil=
-ity.git/
->> >
->> >
->> > If you fix the issue, kindly add following tag
->> > > Reported-by: kernel test robot <yujie.liu@intel.com>
->> > > Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie.liu=
-@intel.com
->> >
+>>> That way, you wouldn't have to coordinate DRM, CCF and IIO, you'd just
+>>> create new helpers that can be reused/converted to by everyone eventually
 >>
->> Thanks a lot for report!  Can you try whether the debug patch as
->> below can restore the regression?
->
-> We've tested the patch and found the throughput score was partially
-> restored from -3.6% to -1.4%, still with a slight performance drop.
-> Please check the detailed data as follows:
+>> Yes. Thanks - I think I may go with this approach for the v5 :)
+> 
+> Which kunit directory?
 
-Good!  Thanks for your detailed data!
+I was thinking of adding the platform_device.h (I liked your suggestion) 
+in the include/kunit/
 
->       0.09 =C2=B1 17%      +1.2        1.32 =C2=B1  7%      +0.4        0=
-.45 =C2=B1 21%  perf-profile.children.cycles-pp.flush_tlb_func
+> I imagine if there are conflicts they will be
+> trivial so it probably doesn't matter.
 
-It appears that we can reduce the unnecessary TLB flushing effectively
-with the previous debug patch.  But the batched flush (full flush) is
-still slower than the non-batched flush (flush one page).
+Probably so. Still, I am not the one who needs to deal with the 
+conflicts. Hence I like at least asking if people see good way to avoid 
+them in the first place.
 
-Can you try the debug patch as below to check whether it can restore the
-regression completely?  The new debug patch can be applied on top of the
-previous debug patch.
+Besides, I was not sure if you were planning to add similar helper or 
+just wrappers to individual functions. Wanted to ping you just in case 
+this has some impact to what you do.
 
-Best Regards,
-Huang, Ying
+> Have you Cced kunit folks and the
+> list on the kunit patches? They may have some opinion.
 
----------------------------8<-----------------------------------------
-From b36b662c80652447d7374faff1142a941dc9d617 Mon Sep 17 00:00:00 2001
-From: Huang Ying <ying.huang@intel.com>
-Date: Mon, 20 Mar 2023 15:38:12 +0800
-Subject: [PATCH] dbg, migrate_pages: don't batch flushing for single page
- migration
+This patch was should have contained the 
+include/kunit/platform_device.h. That file was pulling the Kunit people 
+in recipients but I messed up things with last minute changes so both 
+the header and people were dropped. I'll fix this for v5.
 
----
- mm/migrate.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Yours,
+	-- Matti
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 98f1c11197a8..7271209c1a03 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1113,8 +1113,8 @@ static void migrate_folio_done(struct folio *src,
- static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_ne=
-w_page,
- 			       unsigned long private, struct folio *src,
- 			       struct folio **dstp, int force, bool avoid_force_lock,
--			       enum migrate_mode mode, enum migrate_reason reason,
--			       struct list_head *ret)
-+			       bool batch_flush, enum migrate_mode mode,
-+			       enum migrate_reason reason, struct list_head *ret)
- {
- 	struct folio *dst;
- 	int rc =3D -EAGAIN;
-@@ -1253,7 +1253,7 @@ static int migrate_folio_unmap(new_page_t get_new_pag=
-e, free_page_t put_new_page
- 		/* Establish migration ptes */
- 		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
- 			       !folio_test_ksm(src) && !anon_vma, src);
--		try_to_migrate(src, TTU_BATCH_FLUSH);
-+		try_to_migrate(src, batch_flush ? TTU_BATCH_FLUSH : 0);
- 		page_was_mapped =3D 1;
- 	}
-=20
-@@ -1641,6 +1641,7 @@ static int migrate_pages_batch(struct list_head *from=
-, new_page_t get_new_page,
- 	bool nosplit =3D (reason =3D=3D MR_NUMA_MISPLACED);
- 	bool no_split_folio_counting =3D false;
- 	bool avoid_force_lock;
-+	bool batch_flush =3D !list_is_singular(from);
-=20
- retry:
- 	rc_saved =3D 0;
-@@ -1690,7 +1691,7 @@ static int migrate_pages_batch(struct list_head *from=
-, new_page_t get_new_page,
-=20
- 			rc =3D migrate_folio_unmap(get_new_page, put_new_page, private,
- 						 folio, &dst, pass > 2, avoid_force_lock,
--						 mode, reason, ret_folios);
-+						 batch_flush, mode, reason, ret_folios);
- 			/*
- 			 * The rules are:
- 			 *	Success: folio will be freed
-@@ -1804,7 +1805,8 @@ static int migrate_pages_batch(struct list_head *from=
-, new_page_t get_new_page,
- 	stats->nr_failed_pages +=3D nr_retry_pages;
- move:
- 	/* Flush TLBs for all unmapped folios */
--	try_to_unmap_flush();
-+	if (batch_flush)
-+		try_to_unmap_flush();
-=20
- 	retry =3D 1;
- 	for (pass =3D 0;
---=20
-2.30.2
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
