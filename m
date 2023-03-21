@@ -2,178 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A824E6C3D67
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAF96C3D6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCUWIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S229872AbjCUWJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjCUWI3 (ORCPT
+        with ESMTP id S229611AbjCUWJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:08:29 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D696ACC20;
-        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id p20-20020a056830319400b0069f914e5c74so1117048ots.3;
-        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679436507;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZpDMWU1r+Zt8jZrtXFc2D2tco7/VMKbA4jzzKhsFGCA=;
-        b=WBya72RTjhbb7R5dPkjv+WPWNTE2xUJDKvVoZmX78LOaNMI9eMb4mN7u0N7W+5sRVA
-         T4kRpnpV/FGv+U6Y5tmGvJe3lVKzp87DqRXi29e3EteLXTrODt8+BPeI4CbuzXcwQkJ0
-         GuWW5o/iHmGQFsKjZhOrYq/9yJqIYz3btl7kWFdHTWOhMQ0khvxwJ6jg1uNNotjIjp6w
-         168UcYdRoXlvizhFjmKMz4OgQF1zMB35/jjX7smzL7ZTRT8Nhj2SscNv2stx9gjVoZzH
-         a9AMFM2hojnV3FsxgZrfuOsflgsQhatXXi+y2Chi3KhNS3jPQt8FBXu9Q/Qu0cY1zOPy
-         iisg==
-X-Gm-Message-State: AO0yUKVy+rS1nFvAP4sNrAlAu2KwKbW2Z+HTLG7dNmfuOeZ5zXnrsN8i
-        /zPAIWFi0OgCyB85FM2lyWAXyyOSZw==
-X-Google-Smtp-Source: AK7set+96sV7YUNKjhPVEomctIU42GJayDjjb8XCwvoVE0twKuMLd+lcSJ8FKJwNdgf4/oaqvJA4uQ==
-X-Received: by 2002:a05:6830:2009:b0:69f:2774:b60 with SMTP id e9-20020a056830200900b0069f27740b60mr408963otp.8.1679436507024;
-        Tue, 21 Mar 2023 15:08:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683014da00b0068d752f1870sm5626034otq.5.2023.03.21.15.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 15:08:26 -0700 (PDT)
-Received: (nullmailer pid 1740280 invoked by uid 1000);
-        Tue, 21 Mar 2023 22:08:25 -0000
-Date:   Tue, 21 Mar 2023 17:08:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
+        Tue, 21 Mar 2023 18:09:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A9DE05C;
+        Tue, 21 Mar 2023 15:09:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98F76B81A45;
+        Tue, 21 Mar 2023 22:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E3FC433D2;
+        Tue, 21 Mar 2023 22:09:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679436556;
+        bh=jywNbEZP25XOTZg0s8YbV2eIX3RE5vkLLBPIK+u/ySE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MrkUUZGKD1eXCrJftt1lQn8XiF7fLosApLIr0bnxzYnVCQzSaA5xwod/LCwwbW8Z/
+         HfOnGOfFvlQ4hAIQQGLiXy0kdtfEoHQVz8qMn0AnvhH9YNTdwNe9m58oVCxpJuvoQM
+         hUVoCDNzo6aPaf8cYlH7QN8rKKxmVO6EYOUW71f9imbQ3RfChI790fIW5r+LzB8g47
+         59uW5gGnYIAJQ4csIoP1a4dF9qKKf036CjK6UU5TQG7RRpVsQ7Q+Id0lxJ3RPxQdc3
+         8RiLwzTmqfRvDCbgPKUD1xxBh0KIkKoCvq4RAAbhPM2QgMvWu5rZx+fmQo6i+g5Xrf
+         lp5RpbvNlPGwg==
+Date:   Tue, 21 Mar 2023 22:09:09 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 1/2] dt-bindings: leds: aw2013: Document vddio-supply
-Message-ID: <20230321220825.GA1685482-robh@kernel.org>
-References: <20230320174949.174600-1-linmengbo0689@protonmail.com>
- <20230320175131.174657-1-linmengbo0689@protonmail.com>
- <922eab51-6931-8533-db51-51cd911a36b3@linaro.org>
- <ZBitAGOmF/hyxDYP@gerhold.net>
- <94cdb512-b168-6ffe-73c1-caf23bb79d6f@linaro.org>
- <ZBoR0DPQ+AufzKHk@gerhold.net>
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 01/10] dt-bindings: serial: snps-dw-apb-uart: Switch
+ dma-names order
+Message-ID: <5287504e-c0f7-4964-8a61-fd49b7ee9547@spud>
+References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
+ <20230321215624.78383-2-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yyWiahmxEjVuYmMu"
 Content-Disposition: inline
-In-Reply-To: <ZBoR0DPQ+AufzKHk@gerhold.net>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230321215624.78383-2-cristian.ciocaltea@collabora.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:21:36PM +0100, Stephan Gerhold wrote:
-> On Tue, Mar 21, 2023 at 07:42:37AM +0100, Krzysztof Kozlowski wrote:
-> > On 20/03/2023 19:59, Stephan Gerhold wrote:
-> > > On Mon, Mar 20, 2023 at 07:04:22PM +0100, Krzysztof Kozlowski wrote:
-> > >> On 20/03/2023 18:55, Lin, Meng-Bo wrote:
-> > >>> Some LEDs controllers are used with external pull-up for the interrupt
-> > >>> line and the I2C lines, so we might need to enable a regulator to bring
-> > >>> the lines into usable state.
-> > >>
-> > >> Not a property of this device.
-> > >>
-> > >>> Otherwise, this might cause spurious
-> > >>> interrupts and reading from I2C will fail.
-> > >>>
-> > >>> Document support for "vddio-supply" that is enabled by the aw2013 driver
-> > >>> so that the regulator gets enabled when needed.
-> > >>>
-> > >>> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> > >>> ---
-> > >>>  Documentation/devicetree/bindings/leds/leds-aw2013.yaml | 5 +++++
-> > >>>  1 file changed, 5 insertions(+)
-> > >>>
-> > >>> diff --git a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> > >>> index 08f3e1cfc1b1..79b69cf1d1fe 100644
-> > >>> --- a/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> > >>> +++ b/Documentation/devicetree/bindings/leds/leds-aw2013.yaml
-> > >>> @@ -23,6 +23,11 @@ properties:
-> > >>>    vcc-supply:
-> > >>>      description: Regulator providing power to the "VCC" pin.
-> > >>>  
-> > >>> +  vddio-supply:
-> > >>> +    description: |
-> > >>> +      Optional regulator that provides digital I/O voltage,
-> > >>
-> > >> NAK. I responded to your patch and you just send a v2 without explanation.
-> > >>
-> > >> The device does not have VDDIO pin, either.
-> > >>
-> > > 
-> > > The power supply Lin is trying to add here is basically the "VIO1"
-> > > example in "Figure 1 AW2013 Typical Application Circuit" on page 1 of
-> > > the AW2013 datasheet [1]. The I2C pins and the interrupt output are both
-> > > open-drain and therefore require external pull-up resistors, connected
-> > > to a power supply that might not be always on.
-> > > 
-> > > Because of the open-drain pins AW2013 does indeed not have a dedicated
-> > > input pin for the I/O supply voltage. However, it is still necessary to
-> > > describe the power supply _somewhere_, to ensure that it is enabled when
-> > > needed.
-> > > 
-> > > It is hard to model this properly but it's generally easiest to handle
-> > > this inside the peripheral driver since it knows exactly when I2C and/or
-> > > interrupt lines are currently needed or not. This situation is fairly
-> > > common for I2C devices so there are several precedents, e.g.:
-> > > 
-> > >   1. cypress,tm2-touchkey.yaml: "vddio-supply"
-> > >      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e730ec11d51283ad62a98436967c01b718132ab
-> > >   2. goodix,gt7375p.yaml: "mainboard-vddio-supply"
-> > >      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1d18c1f3b7d938bdefc44289d137b4e6c7a3d502
-> > 
-> > Both are mistaken. How can you enumerate or autodetect a device if its
-> > regulator pulling up I2C are not on?
-> 
-> You don't. By design I2C does not support enumeration or autodetection.
-> Nothing we implement in software can change that.
-> 
-> I2C devices have all sorts of requirements before they show up on the
-> bus at all (power supplies, enable GPIOs, clocks, ...). All these are
-> currently modelled as part of the consumer IC.
-> 
-> > What's more, on I2C lines you could have more devices, so you expect
-> > each of them having the supply?
-> 
-> Yes, I don't think this is a problem since it's typical for regulators
-> to be shared. If at least one of the I2C devices is active, the bus will
-> be active as well.
-> 
-> > These are properties of I2C controller, not the consumer. I2C controller
-> > should enable any regulators necessary for the IO pins.
-> 
-> In general I agree with you here. But as I mentioned already there is
-> usually more than just the I2C I/O lines. For AW2013 there is at least
-> also the open-drain interrupt line. On other ICs there could also be
-> arbitrary GPIO lines that are used in open-drain mode. Those are
-> completely unrelated to the I2C controller.
-> 
-> Do you have any suggestions how to handle the power supply for those?
-> 
-> IMO for interrupts lines the pull-up I/O supply is hardly a property of
-> the interrupt controller. It just cares that a line switches from high
-> to low. It's not exactly a property of the consumer IC either. However,
-> since operating the interrupt line in open-drain mode is part of the
-> consumer IC specification I would say that the I/O supply for interrupt
-> lines is better described on the consumer side.
-> 
-> For sake of completeness we could additionally describe the supply for
-> the I2C lines on the I2C controller, but then we still need this patch
-> or something else for the interrupt lines.
 
-I think a supply on the device side is fine here. Just be clear in the 
-description about its purpose. We have much worse abuses than this 
-(random bus clocks added to SoC devices).
+--yyWiahmxEjVuYmMu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Tue, Mar 21, 2023 at 11:56:15PM +0200, Cristian Ciocaltea wrote:
+> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
+> dma-names properties") documented dma-names property to handle Allwinner
+> D1 dtbs_check warnings, but relies on the rx->tx ordering, which is the
+> reverse of what a different board expects:
+>=20
+>   rk3326-odroid-go2.dtb: serial@ff030000: dma-names:0: 'rx' was expected
+>=20
+> A quick and incomplete check shows the inconsistency is present in many
+> other DTS files:
 
+> The initial proposed solution was to allow a flexible dma-names order in
+> the binding, due to potential ABI breakage concerns after fixing the DTS
+> files. But luckily the Allwinner boards are not really affected, since
+> all of them are using a shared DMA channel for rx and tx:
+
+> Switch dma-names order to tx->rx as the first step in fixing the
+> inconsistency. The remaining DTS fixes will be handled by separate
+> patches.
+>=20
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks for doing all of the switch overs too. I should've probably
+broadened my searching beyond the allwinner platforms when I initially
+added this, so yeah, thanks.
+
+> ---
+>  Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.ya=
+ml b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+> index 2becdfab4f15..d28cc96fa8e9 100644
+> --- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+> @@ -72,8 +72,8 @@ properties:
+> =20
+>    dma-names:
+>      items:
+> -      - const: rx
+>        - const: tx
+> +      - const: rx
+> =20
+>    snps,uart-16550-compatible:
+>      description: reflects the value of UART_16550_COMPATIBLE configurati=
+on
+> --=20
+> 2.40.0
+>=20
+
+--yyWiahmxEjVuYmMu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBorBQAKCRB4tDGHoIJi
+0vyGAQDrKXra/8V/UIFrQD3UAgVFLRIkAIlnoCWPSGwe9HVDMAEAwe3VgGkUrGcQ
+QDMvCe69akSjd+Fl/v/4b8852K/B+AI=
+=VkVV
+-----END PGP SIGNATURE-----
+
+--yyWiahmxEjVuYmMu--
