@@ -2,178 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD4B6C3D6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B1B6C3D75
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 23:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCUWKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 18:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S229983AbjCUWMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 18:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCUWKs (ORCPT
+        with ESMTP id S229584AbjCUWMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 18:10:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920715616C;
-        Tue, 21 Mar 2023 15:10:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44318B81A45;
-        Tue, 21 Mar 2023 22:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3110FC4339C;
-        Tue, 21 Mar 2023 22:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679436644;
-        bh=mfr9fG06tR438k4STzbE8QTvsfW2C1ylBqMRXPVQzNI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ckVoLi4r7wAJZqyh6+001a2rlhgVmtYyuKMX1L1Zw/rsSRwF9WyUZ+hOYHFc4TiyM
-         Gl8zXAfAl8J9fCaDilvo5NaQ3KQUGIX9fMLRaP5CArQ7DoJzZn6Q07nNLLHeQTEGev
-         2Ii+nyioMjsu+EYmfCnHTog7S2gsNOjwNfA723KcR/LyDb/RQODoSZr16XihsciINx
-         V27lR/XlZjSzxPvFI7wCMd83S4TAwAEjKxw86HALJbAGa3mYOAjQhDgzehIPdCMxAG
-         H/cKxaJ/9GeI5nVQ1YW+3tHU56X+yM/6I9r53Zp4v1St/fv7Rw2/cBoeYikge8/IXc
-         //RnfHLeJzaZg==
-Date:   Tue, 21 Mar 2023 22:10:37 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 21 Mar 2023 18:12:49 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731A857099
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:12:47 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j11so20960479lfg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 15:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679436765;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RvgpZDeCmRQsyPKurV6WYYQqLIwO3CdVYVB5sBeSl5c=;
+        b=QcSQaMbNhDT1mLrpJm9bxHS/7BXEBP++byZH2NKc7axMSMmLsLwszqZlQ+a3Yp3uU3
+         r/8rIbhvGlq5j6uhsaKKisQTTJON9wPWoQYv8CokKwlLkaFL2gLjzx/znmMRdurkv2vi
+         Cld+RTTLK8jTVQhww44pZnRt/7KrNZbOg4OijUqsa3eFKibSHazQrAQ/xc7nfqHMjg0g
+         L80RMzJa5TSx+9ZiF0JXuj+7V5PRPTilzK6JaQZJq+elZAxAYxPwTMAn/zJQA4annyhH
+         Zflr3LFnFQyHGxvbOi7ZBx1jS+SiDQ27/5YZ0GIsmDIfFMdMPq8yopxNU/3pe5Np4KtM
+         Ia9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679436765;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RvgpZDeCmRQsyPKurV6WYYQqLIwO3CdVYVB5sBeSl5c=;
+        b=mA+6gp7IvFNKo/W+smxsuouFxcO+Y2c4BKe19Qwje70mDkuA8hIs+gOvj6Eqo/pCHG
+         t3+BY4WVi6XhifIeyzM4K5UNcHbjhQ3fN8gCrY7nQ/GEqD7p7GrcarXoJJvsoZ3TYFZf
+         A5hzrUzWHwmmH6SHSo3tcS862rBxGNnzbxm1uDGtcBiyi7Xv1nKHbFe0JQeJd7h5D4MB
+         IT+M3Zt6lV3jOewupMDTMzV0NMWAnoKquP8RJOzjBggZm8E2mLLGrLOaRJwXmemWitdY
+         AWd0mza9EIPydShKzVmYI3Ln2UrSeNZZFu7D4FYa/9kanyTk6z9B/tAzZZaL1axe/fWL
+         qkPw==
+X-Gm-Message-State: AO0yUKVCVrutmcoDuPcTgUfdwPg+eE7n8AAN2pSi395Fq4t3BxOw8uwa
+        Rbt234SOLxKQzfEDxNgAp86CucTCF3l3UV85M6Q=
+X-Google-Smtp-Source: AK7set9DuFZ0/GVvujdTGrcvMkSVyDribzWT5knHKK3YffMpYfAaJ1vw/21+RelTRo89PykUk+7qMQ==
+X-Received: by 2002:a19:a419:0:b0:4cb:d3:3b99 with SMTP id q25-20020a19a419000000b004cb00d33b99mr1205432lfc.36.1679436765642;
+        Tue, 21 Mar 2023 15:12:45 -0700 (PDT)
+Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id o15-20020a056512050f00b004e9c983a007sm1220344lfb.289.2023.03.21.15.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 15:12:45 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/4] Enable DisplayPort over USB-C on SONY Sagami
+Date:   Tue, 21 Mar 2023 23:12:27 +0100
+Message-Id: <20230321-topic-sagami_dp-v1-0-340c8bce4276@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMsrGmQC/x2NywrCQAwAf6XkbGAfHlp/RUTS3bQN1O2yqSKU/
+ rvB4wwMc4ByE1a4dQc0/ojKVgz8pYO0UJkZJRtDcCG6GDzuW5WESjO95Jkrej8NjmOfrzGBVSM
+ p49iopMW68l5Xk7XxJN//5v44zx9ieccPdgAAAA==
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 06/10] riscv: dts: allwinner: d1: Switch dma-names
- order for snps,dw-apb-uart nodes
-Message-ID: <f8a9f9e8-d0b0-4336-8d99-8dbe4792b0ff@spud>
-References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
- <20230321215624.78383-7-cristian.ciocaltea@collabora.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KzlbqE6ZgU3zkHvJ"
-Content-Disposition: inline
-In-Reply-To: <20230321215624.78383-7-cristian.ciocaltea@collabora.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679436764; l=1008;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=Rts1LWN2BTe8l0VWILmKq9hnsPnZkTBxaeWIjKysvz8=;
+ b=A67WQifCRYY1DBo13nrFzRAvZuuZQdhqFm4FNwvWeRzSyP/QQLlO356GImT1XYri8s37N05Bmgxn
+ pJz/ouM6A/1BvM6JBAzNcAIcM0t4xCahvZ+zaz12PEZIjgytqu2t
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+DisplayPort is there before DSI panel, kinda funny!
 
---KzlbqE6ZgU3zkHvJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Depends on:
 
-On Tue, Mar 21, 2023 at 11:56:20PM +0200, Cristian Ciocaltea wrote:
-> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
-> dma-names properties") documented dma-names property to handle Allwinner
-> D1 dtbs_check warnings, but relies on the rx->tx ordering, which is the
-> reverse of what a bunch of different boards expect.
->=20
-> The initial proposed solution was to allow a flexible dma-names order in
-> the binding, due to potential ABI breakage concerns after fixing the DTS
-> files. But luckily the Allwinner boards are not affected, since they are
-> using a shared DMA channel for rx and tx.
->=20
-> Hence, the first step in fixing the inconsistency was to change
-> dma-names order in the binding to tx->rx.
->=20
-> Do the same for the snps,dw-apb-uart nodes in the DTS file.
->=20
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+https://lore.kernel.org/linux-arm-msm/20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org
+https://lore.kernel.org/linux-arm-msm/20230206-topic-sm8450-upstream-dp-controller-v6-3-d78313cbc41d@linaro.org
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (4):
+      dt-bindings: usb: gpio-sbu-mux: Add OnSemi NB7VPQ904M mux
+      arm64: dts: qcom: sm8350-sagami: Add PMIC GLINK
+      arm64: dts: qcom: sm8350-sagami: Hook up USB-C Display Port
+      arm64: dts: qcom: sm8350-nagara: Unify status property placement
 
-Thanks,
-Conor.
+ .../devicetree/bindings/usb/gpio-sbu-mux.yaml      |   1 +
+ .../boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 162 ++++++++++++++++++---
+ 2 files changed, 146 insertions(+), 17 deletions(-)
+---
+base-commit: 52581937d6423c3bd15eb3894580ab87fe7308a1
+change-id: 20230321-topic-sagami_dp-11f90e38d43c
 
-> ---
->  arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/ris=
-cv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> index 951810d46307..922e8e0e2c09 100644
-> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-> @@ -211,7 +211,7 @@ uart0: serial@2500000 {
->  			clocks =3D <&ccu CLK_BUS_UART0>;
->  			resets =3D <&ccu RST_BUS_UART0>;
->  			dmas =3D <&dma 14>, <&dma 14>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> @@ -224,7 +224,7 @@ uart1: serial@2500400 {
->  			clocks =3D <&ccu CLK_BUS_UART1>;
->  			resets =3D <&ccu RST_BUS_UART1>;
->  			dmas =3D <&dma 15>, <&dma 15>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> @@ -237,7 +237,7 @@ uart2: serial@2500800 {
->  			clocks =3D <&ccu CLK_BUS_UART2>;
->  			resets =3D <&ccu RST_BUS_UART2>;
->  			dmas =3D <&dma 16>, <&dma 16>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> @@ -250,7 +250,7 @@ uart3: serial@2500c00 {
->  			clocks =3D <&ccu CLK_BUS_UART3>;
->  			resets =3D <&ccu RST_BUS_UART3>;
->  			dmas =3D <&dma 17>, <&dma 17>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> @@ -263,7 +263,7 @@ uart4: serial@2501000 {
->  			clocks =3D <&ccu CLK_BUS_UART4>;
->  			resets =3D <&ccu RST_BUS_UART4>;
->  			dmas =3D <&dma 18>, <&dma 18>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> @@ -276,7 +276,7 @@ uart5: serial@2501400 {
->  			clocks =3D <&ccu CLK_BUS_UART5>;
->  			resets =3D <&ccu RST_BUS_UART5>;
->  			dmas =3D <&dma 19>, <&dma 19>;
-> -			dma-names =3D "rx", "tx";
-> +			dma-names =3D "tx", "rx";
->  			status =3D "disabled";
->  		};
-> =20
-> --=20
-> 2.40.0
->=20
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
---KzlbqE6ZgU3zkHvJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBorXQAKCRB4tDGHoIJi
-0p8hAPwNZN4px8bHQL5f0TgePXjswSwIfbsgjkqeQp9hZoyhkAEArAl9T2v+Z7D2
-rsSBPirCRfx6Kq67c+Sbdcvr38dz4wc=
-=mraI
------END PGP SIGNATURE-----
-
---KzlbqE6ZgU3zkHvJ--
