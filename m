@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7546C3621
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B0F6C36C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjCUPrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S229675AbjCUQR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCUPrv (ORCPT
+        with ESMTP id S229579AbjCUQRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:47:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5D7CDC5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:47:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeCx-0004fu-Rx; Tue, 21 Mar 2023 16:47:31 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeCw-005is5-0N; Tue, 21 Mar 2023 16:47:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeCv-006nh6-05; Tue, 21 Mar 2023 16:47:29 +0100
-Date:   Tue, 21 Mar 2023 16:47:28 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
-        thierry.reding@gmail.com, greybus-dev@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, Julia Lawall <julia.lawall@inria.fr>
-Subject: Re: [PATCH 2/3] staging: greybus: use inline function for macros
-Message-ID: <20230321154728.3r7ut3rl2pccmo2e@pengutronix.de>
-References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <1274302b52ae905dab6f75377d625598facbbdf1.1679352669.git.eng.mennamahmoud.mm@gmail.com>
+        Tue, 21 Mar 2023 12:17:50 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEDF4E5C6;
+        Tue, 21 Mar 2023 09:17:43 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id E90AF8C1F62;
+        Tue, 21 Mar 2023 16:17:42 +0000 (UTC)
+Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 0719C8C14C8;
+        Tue, 21 Mar 2023 16:17:42 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1679415462; a=rsa-sha256;
+        cv=none;
+        b=im42/b4NYaftWDMjUnXfbXkqNbrGgHbSzWBALlJPWvfPdkDD0j2pP+69TWFd7/DhxUxoyl
+        kOudhEoe6TvaOwUj4cXYveCi65wBosuFZqrwyRGGuVLb+oEdAgyZHuaPVS4CBj1on32Gi4
+        KkcISqH25xVmvvTFTOrJqlg6Us591ARNg8ujBpHcFv0FGsE7RXM03vPTuRb7/jTXGl0Etg
+        n9ysQDyExGuq/PVi8tB7/wAEQKmkQ/2wRIWM6hDhhTUhKLGx3G16z7AmUqun0IwLR4D+uN
+        HbR97/AI5C8kSAADhhnhmBmNsLaythyMBzVBsBUmtHJJXoQfUD0kluQH5Ir8yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1679415462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=LgIeV/RnLzoKhs4fAEGJ0HEnUigwpT/zK67qVE0bNRY=;
+        b=12pVllTqsKY/BVBtcGcfzi5YezQaSJ1xqQLeYWTaGr7YGuKZoat6Nus2aCsdHLhbU40d8L
+        PE8APdkMq5LkmcfartKr2KVq9+HEsoE3AMYrsiL2DB+SmVvMbCjJIT7YAG3jWA3N9VYW5N
+        QUBS9peDONGcQXV1JMRFmDExpzEOQot5dQcSU8ggD3xkRDq/1vltOxqFEORnsVi6YKlQOn
+        +e1nRJUtcOE8aICOMzYlHj1ugtsuV9PEIFTN+Zy0lO0U9lftD00Qypbl0+yuhISzIeGKBv
+        +AMXOgH/uHWdZSKx0XkAb8T2ea2XcQxbm8iFf2f0ymLWlTbkXkUG2g3eKCIfLQ==
+ARC-Authentication-Results: i=1;
+        rspamd-766d96cb5b-6ttww;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Left-Cure: 1227dd7b7cb2b2b9_1679415462375_470824012
+X-MC-Loop-Signature: 1679415462375:2153808582
+X-MC-Ingress-Time: 1679415462375
+Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.97.48.90 (trex/6.7.2);
+        Tue, 21 Mar 2023 16:17:42 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4Pgxb86T4zz3D;
+        Tue, 21 Mar 2023 09:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1679415461;
+        bh=LgIeV/RnLzoKhs4fAEGJ0HEnUigwpT/zK67qVE0bNRY=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=FIeethWS3g+RCru4lodaRibeOjXSHZ7yemXj6ustnCiDTsHEZrU30hULhGv6VcBNe
+         wMnd+PaFlyTRZnnvSEXgdunCZwBCEMYWcTp2jhmNq5+WfLkLDCS95VqsQKH/BHLzig
+         2MM//kFtl4WOF3UVE/B+CWHTsUrM3XWyfrkjWBLCjrmNroISu1WfRdaCLbNkRZ04rk
+         4qO5SCG/zG7mzG1uq2Gl0S/WTJMb+eo5XMaVq9XIaVWuPEK9BSHCeAJAo1H5XzHFxJ
+         5mt13qGaKodlwDEb4LFiNn/rEg7er1fiWqsTU7Zu52sTi2AddhHClOiIpowio5q+Xw
+         uPC+MznS7szgQ==
+Date:   Tue, 21 Mar 2023 08:47:51 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v3 2/2] rcu/rcuscale: Stop kfree_scale_thread thread(s)
+ after unloading rcuscale
+Message-ID: <20230321154751.hgeppd5v327juc36@offworld>
+References: <72ba8619-88cb-4bf4-8232-18d8a1b6b5bf@paulmck-laptop>
+ <20230321052337.26553-1-qiuxu.zhuo@intel.com>
+ <20230321052337.26553-2-qiuxu.zhuo@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="spy665gboibxpu7h"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1274302b52ae905dab6f75377d625598facbbdf1.1679352669.git.eng.mennamahmoud.mm@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321052337.26553-2-qiuxu.zhuo@intel.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 21 Mar 2023, Qiuxu Zhuo wrote:
 
---spy665gboibxpu7h
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>When running the 'kfree_rcu_test' test case with commands [1] the call
+>trace [2] was thrown. This was because the kfree_scale_thread thread(s)
+>still run after unloading rcuscale and torture modules. Fix the call
+>trace by invoking kfree_scale_cleanup() from rcu_scale_cleanup() when
+>removing the rcuscale module.
+>
+>[1] modprobe rcuscale kfree_rcu_test=1
+>    // After some time
+>    rmmod rcuscale
+>    rmmod torture
+>
+>[2] BUG: unable to handle page fault for address: ffffffffc0601a87
+>    #PF: supervisor instruction fetch in kernel mode
+>    #PF: error_code(0x0010) - not-present page
+>    PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
+>    Oops: 0010 [#1] PREEMPT SMP NOPTI
+>    CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
+>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+>    RIP: 0010:0xffffffffc0601a87
+>    Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
+>    RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
+>    RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
+>    RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
+>    RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
+>    R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
+>    R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
+>    FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
+>    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>    Call Trace:
+>     <TASK>
+>     ? kvfree_call_rcu+0xf0/0x3a0
+>     ? kthread+0xf3/0x120
+>     ? kthread_complete_and_exit+0x20/0x20
+>     ? ret_from_fork+0x1f/0x30
+>     </TASK>
+>    Modules linked in: rfkill sunrpc ... [last unloaded: torture]
+>    CR2: ffffffffc0601a87
+>    ---[ end trace 0000000000000000 ]---
+>
+>Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
+>Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-Hello,
-
-just some nitpicks:
-
-On Tue, Mar 21, 2023 at 01:04:33AM +0200, Menna Mahmoud wrote:
-> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> static inline function.
->=20
-> it is not great to have macro that use `container_of` macro,
-
-s/it/It/; s/macro/macros/; s/use/use the/;
-
-> because from looking at the definition one cannot tell what type
-> it applies to.
-> [...]
-> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> +static inline struct gbphy_device *to_gbphy_dev(const struct device *d)
-
-drivers/staging/greybus/gbphy.c always passes a variable named
-"dev" to this macro. So I'd call the parameter "dev", too, instead of
-"d". This is also a more typical name for variables of that type.
-
-> +{
-> +	return container_of(d, struct gbphy_device, dev);
-> +}
-> [...]
->  };
-> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
-> +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver =
-*d)
-> +{
-> +	return container_of(d, struct gbphy_driver, driver);
-> +}
-
-With a similar reasoning (and also to not have "d"s that are either
-device or device_driver) I'd recommend "drv" here.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---spy665gboibxpu7h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQZ0Y8ACgkQj4D7WH0S
-/k4qLAf+OTmsDZSmp40zMixg9DyMOELi6eqVdtJNU0qCtkilPtrhsOc1vhA3SamR
-4rtAve/7j2BN+tb4WuiZ7YwaMXs5KJ3RItbk5imECAeAvRY0BDfHHJUZY2DrBSEY
-LyRButIl87Gx7CVaylbyORucxyTsU1h/Pj94t5kxAp9Xa5zkSaFwBxh3rP2L5bjd
-nxyRUG7tt+LYeR8+53BlcQqRARzpeiunRsIp3HhiPIi819GZEJh6eDEGNbTUYRED
-uzyBRgvEL47X2nJZG6d8TgcGWlUicJyqBMDeQavLQxMlb8URXu2qUCfph/gscRi3
-1xxyP135o/YY4eUmw3946Nxbj2t0oA==
-=eLyP
------END PGP SIGNATURE-----
-
---spy665gboibxpu7h--
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
