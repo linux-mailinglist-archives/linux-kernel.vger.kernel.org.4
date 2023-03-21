@@ -2,191 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DEB6C3793
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8428F6C3795
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCURC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S230270AbjCURCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjCURCX (ORCPT
+        with ESMTP id S229456AbjCURCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:02:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C869298FF;
-        Tue, 21 Mar 2023 10:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679418141; x=1710954141;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d+hlpp3Zd9LOfPprBhu8Y574GqlBNBa7l4yvc+7zCA4=;
-  b=hD3Ex+xYorAllQOAgJ9bbT4hj5zXH1GtpGdG9AIBqoygx85HT0BvcgjQ
-   v391fXzc7e0iKKrF0U/QE8uJvJ7wJRiXC+efXb2/jtwqTQA8LS+6e8mVJ
-   IVQPs3MW0/nZuGSyl7DPediWkb00bJpJzmF5hxxaRzfqF781T7iSdkrAp
-   x2/DKFQuLeN0I9jNoa7ikdHl4wOEN05r2cJBQSk8aWMs0CNHK53bUUEdF
-   udOmjk91K2mg9ayN11fuxUCiLWMi0vyp9URlWh67uVaLgTwu+xUXdYm2Y
-   1FiCde0ni4jZBLO7kYExCKlxdiRAkkcOhNkZVWdoCzxs+4ebgaxHPucjV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="322846091"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="322846091"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 10:01:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="631664574"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="631664574"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Mar 2023 10:01:41 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pefMi-000CBa-0v;
-        Tue, 21 Mar 2023 17:01:40 +0000
-Date:   Wed, 22 Mar 2023 01:01:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, jernel@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
- queue buffer storage
-Message-ID: <202303220057.J83sWVI1-lkp@intel.com>
-References: <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+        Tue, 21 Mar 2023 13:02:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989E12822B
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679418106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lcFH3Gw2MS2hxoUbFfkXJb2/O9gx/UdG3VWmXz/ijFE=;
+        b=TBwUhcJu0rrBTa+OLtpnMSDXATL1J4DkryY+7orMN0oM8kPTnYhH5OmlnlyslS/S3FFsg4
+        uFOtnJYdmodk1YNSpQ1qTsA1lUDtru573htb5ZhcewCcinAekrDDP3SRx9vB3+bAgK6ASI
+        +GSN1D/7+WTeXZt743seufEW5J5F7Jw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-527--W2BBs1aPmO-xHkcmQRwNA-1; Tue, 21 Mar 2023 13:01:43 -0400
+X-MC-Unique: -W2BBs1aPmO-xHkcmQRwNA-1
+Received: by mail-wm1-f70.google.com with SMTP id iv10-20020a05600c548a00b003ee112e6df1so2340043wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:01:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679418102;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lcFH3Gw2MS2hxoUbFfkXJb2/O9gx/UdG3VWmXz/ijFE=;
+        b=YMyG7q25RlJzoPZ1WRTOITS8Kfi/Bh9zjXXzcA4alO9KY5pWalrJN/6xd5mjALis8U
+         uhc7PTnkAeaaR0f3Pv09UYCHto0VS8osKw8Dppz+4fmeGebJ64bnGw9Pk/Qz6Hu+zWA+
+         +MVlInA/PjyrVmkP3nm5q52yL533S0llL1fVPDWSdeZU5ezWDds/k/egKZp/bqZitcXJ
+         1fb45NNk0CKBI1NsM/LLRrlf4jxin3ghg68EMio5+uIgBTL6qjrvHoL3Ws02/tIWeOv6
+         7fH+Q4c2N3GgS4j9UHng717CK12Y+nO10C2lU6ipFfMBXXyCt2cT//QFFJGj4T+R+Tc3
+         pStg==
+X-Gm-Message-State: AO0yUKVzTfqxAhAuwfdyGvuB6wJPUvrLDQ7UXzzhqr7HK+J2nOIf+9Ah
+        olV4qa5Z791lmJMyV2zpzBAestngdATdXk66hGhZafHVugXLTJlFW2d0LA67PG8eDPmRu7Aa+HD
+        5p2lSjT6y/os64f8SxMqc6t1R
+X-Received: by 2002:a05:6000:10d0:b0:2ce:a7f6:2fe5 with SMTP id b16-20020a05600010d000b002cea7f62fe5mr3069228wrx.60.1679418102729;
+        Tue, 21 Mar 2023 10:01:42 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8H4j1IS2DP9wgMOOzB3lkgc0urxBfNv94zaRLD/dw6IB/eqVFyZlA2Ttlu6q9hf9hZ1CwfOA==
+X-Received: by 2002:a05:6000:10d0:b0:2ce:a7f6:2fe5 with SMTP id b16-20020a05600010d000b002cea7f62fe5mr3069210wrx.60.1679418102393;
+        Tue, 21 Mar 2023 10:01:42 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
+        by smtp.gmail.com with ESMTPSA id a7-20020adff7c7000000b002c70ce264bfsm11856785wrq.76.2023.03.21.10.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 10:01:41 -0700 (PDT)
+Message-ID: <d8318657-f119-b0f3-cfb8-ed314a8144e6@redhat.com>
+Date:   Tue, 21 Mar 2023 18:01:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Adam Manzanares <a.manzanares@samsung.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org,
+        torvalds@linux-foundation.org
+References: <f18ec4d3-be63-7e86-1951-f3d460acd7a7@redhat.com>
+ <ZBOsc8dc0Mhvh/vv@bombadil.infradead.org>
+ <ZBOsyBu68d4vh6yU@bombadil.infradead.org>
+ <ZBUBsUx9++Ksl91w@bombadil.infradead.org>
+ <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com>
+ <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <eaa75ce0-7064-7919-0e72-6bb4ccc5d0d6@redhat.com>
+ <ZBng0qnm/ADtSTBQ@bombadil.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZBng0qnm/ADtSTBQ@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On 21.03.23 17:52, Luis Chamberlain wrote:
+> On Tue, Mar 21, 2023 at 04:11:27PM +0100, David Hildenbrand wrote:
+>> On 20.03.23 22:23, Luis Chamberlain wrote:
+>>> On Mon, Mar 20, 2023 at 10:15:23PM +0100, David Hildenbrand wrote:
+>>>> On 20.03.23 22:09, Luis Chamberlain wrote:
+>>>>> On Mon, Mar 20, 2023 at 08:40:07PM +0100, David Hildenbrand wrote:
+>>>>>> On 20.03.23 10:38, David Hildenbrand wrote:
+>>>>>>> On 18.03.23 01:11, Luis Chamberlain wrote:
+>>>>>>>> On Thu, Mar 16, 2023 at 04:56:56PM -0700, Luis Chamberlain wrote:
+>>>>>>>>> On Thu, Mar 16, 2023 at 04:55:31PM -0700, Luis Chamberlain wrote:
+>>>>>>>>>> On Wed, Mar 15, 2023 at 05:41:53PM +0100, David Hildenbrand wrote:
+>>>>>>>>>>> I expect to have a machine (with a crazy number of CPUs/devices) available
+>>>>>>>>>>> in a couple of days (1-2), so no need to rush.
+>>>>>>>>>>>
+>>>>>>>>>>> The original machine I was able to reproduce with is blocked for a little
+>>>>>>>>>>> bit longer; so I hope the alternative I looked up will similarly trigger the
+>>>>>>>>>>> issue easily.
+>>>>>>>>>>
+>>>>>>>>>> OK give this a spin:
+>>>>>>>>>>
+>>>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230316-module-alloc-opts
+>>>>>>>>
+>>>>>>>> Today I am up to here:
+>>>>>>>>
+>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230317-module-alloc-opts
+>>>>>>>>
+>>>>>>>> The last patch really would have no justification yet at all unless it
+>>>>>>>> does help your case.
+>>>>>>>
+>>>>>>> Still waiting on the system (the replacement system I was able to grab
+>>>>>>> broke ...).
+>>>>>>>
+>>>>>>> I'll let you know once I succeeded in reproducing + testing your fixes.
+>>>>>>
+>>>>>> Okay, I have a system where I can reproduce.
+>>>>>>
+>>>>>> Should I give
+>>>>>>
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230319-module-alloc-opts
+>>>>>>
+>>>>>> from yesterday a churn?
+>>>>>
+>>>>> Yes please give that a run.
+>>>>
+>>>> Reproduced with v6.3.0-rc1 (on 1st try)
+>>>
+>>> By reproduced, you mean it fails to boot?
+>>
+>> It boots but we get vmap allocation warnings, because the ~440 CPUs manage
+>> to completely exhaust the module vmap area due to KASAN.
+> 
+> Thanks, can you post a trace?
 
-I love your patch! Yet something to improve:
+See
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master v6.3-rc3 next-20230321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230321102855.346732-4-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2 queue buffer storage
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20230322/202303220057.J83sWVI1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/aab64e29070dfec3a043b5020399f79554d6cae4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-        git checkout aab64e29070dfec3a043b5020399f79554d6cae4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+where I also describe the issue in more detail.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303220057.J83sWVI1-lkp@intel.com/
+> 
+>>>> Not able to reproduce with 20230319-module-alloc-opts so far (2 tries).
+>>>
+>>> Oh wow, so to clarify, it boots OK?
+>>
+>> It boots and I don't get the vmap allocation warnings.
+> 
+> Wonderful!
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/module.h:22,
-                    from drivers/media/common/videobuf2/videobuf2-core.c:21:
-   drivers/media/common/videobuf2/videobuf2-core.c: In function '__check_max_vb_buffer_per_queue':
->> include/linux/moduleparam.h:150:34: error: returning 'size_t *' {aka 'unsigned int *'} from a function with incompatible return type 'long unsigned int *' [-Werror=incompatible-pointer-types]
-     150 |         param_check_##type(name, &(value));                                \
-         |                                  ^
-   include/linux/moduleparam.h:409:75: note: in definition of macro '__param_check'
-     409 |         static inline type __always_unused *__check_##name(void) { return(p); }
-         |                                                                           ^
-   include/linux/moduleparam.h:150:9: note: in expansion of macro 'param_check_ulong'
-     150 |         param_check_##type(name, &(value));                                \
-         |         ^~~~~~~~~~~~
-   include/linux/moduleparam.h:127:9: note: in expansion of macro 'module_param_named'
-     127 |         module_param_named(name, name, type, perm)
-         |         ^~~~~~~~~~~~~~~~~~
-   drivers/media/common/videobuf2/videobuf2-core.c:37:1: note: in expansion of macro 'module_param'
-      37 | module_param(max_vb_buffer_per_queue, ulong, 0644);
-         | ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +150 include/linux/moduleparam.h
-
-^1da177e4c3f415 Linus Torvalds  2005-04-16  100  
-546970bc6afc7fb Rusty Russell   2010-08-11  101  /**
-546970bc6afc7fb Rusty Russell   2010-08-11  102   * module_param - typesafe helper for a module/cmdline parameter
-e2854a1054ab171 Zhenzhong Duan  2019-11-04  103   * @name: the variable to alter, and exposed parameter name.
-546970bc6afc7fb Rusty Russell   2010-08-11  104   * @type: the type of the parameter
-546970bc6afc7fb Rusty Russell   2010-08-11  105   * @perm: visibility in sysfs.
-546970bc6afc7fb Rusty Russell   2010-08-11  106   *
-e2854a1054ab171 Zhenzhong Duan  2019-11-04  107   * @name becomes the module parameter, or (prefixed by KBUILD_MODNAME and a
-546970bc6afc7fb Rusty Russell   2010-08-11  108   * ".") the kernel commandline parameter.  Note that - is changed to _, so
-546970bc6afc7fb Rusty Russell   2010-08-11  109   * the user can use "foo-bar=1" even for variable "foo_bar".
-546970bc6afc7fb Rusty Russell   2010-08-11  110   *
-c6a8b84da4c28bd Randy Dunlap    2020-07-17  111   * @perm is 0 if the variable is not to appear in sysfs, or 0444
-546970bc6afc7fb Rusty Russell   2010-08-11  112   * for world-readable, 0644 for root-writable, etc.  Note that if it
-b51d23e4e9fea6f Dan Streetman   2015-06-17  113   * is writable, you may need to use kernel_param_lock() around
-546970bc6afc7fb Rusty Russell   2010-08-11  114   * accesses (esp. charp, which can be kfreed when it changes).
-546970bc6afc7fb Rusty Russell   2010-08-11  115   *
-546970bc6afc7fb Rusty Russell   2010-08-11  116   * The @type is simply pasted to refer to a param_ops_##type and a
-546970bc6afc7fb Rusty Russell   2010-08-11  117   * param_check_##type: for convenience many standard types are provided but
-546970bc6afc7fb Rusty Russell   2010-08-11  118   * you can create your own by defining those variables.
-546970bc6afc7fb Rusty Russell   2010-08-11  119   *
-546970bc6afc7fb Rusty Russell   2010-08-11  120   * Standard types are:
-7d8365771ffb0ed Paul Menzel     2020-07-03  121   *	byte, hexint, short, ushort, int, uint, long, ulong
-546970bc6afc7fb Rusty Russell   2010-08-11  122   *	charp: a character pointer
-546970bc6afc7fb Rusty Russell   2010-08-11  123   *	bool: a bool, values 0/1, y/n, Y/N.
-546970bc6afc7fb Rusty Russell   2010-08-11  124   *	invbool: the above, only sense-reversed (N = true).
-546970bc6afc7fb Rusty Russell   2010-08-11  125   */
-546970bc6afc7fb Rusty Russell   2010-08-11  126  #define module_param(name, type, perm)				\
-546970bc6afc7fb Rusty Russell   2010-08-11  127  	module_param_named(name, name, type, perm)
-546970bc6afc7fb Rusty Russell   2010-08-11  128  
-3baee201b06cfaf Jani Nikula     2014-08-27  129  /**
-3baee201b06cfaf Jani Nikula     2014-08-27  130   * module_param_unsafe - same as module_param but taints kernel
-b6d0531ec7e2ae9 Fabien Dessenne 2019-12-02  131   * @name: the variable to alter, and exposed parameter name.
-b6d0531ec7e2ae9 Fabien Dessenne 2019-12-02  132   * @type: the type of the parameter
-b6d0531ec7e2ae9 Fabien Dessenne 2019-12-02  133   * @perm: visibility in sysfs.
-3baee201b06cfaf Jani Nikula     2014-08-27  134   */
-3baee201b06cfaf Jani Nikula     2014-08-27  135  #define module_param_unsafe(name, type, perm)			\
-3baee201b06cfaf Jani Nikula     2014-08-27  136  	module_param_named_unsafe(name, name, type, perm)
-3baee201b06cfaf Jani Nikula     2014-08-27  137  
-546970bc6afc7fb Rusty Russell   2010-08-11  138  /**
-546970bc6afc7fb Rusty Russell   2010-08-11  139   * module_param_named - typesafe helper for a renamed module/cmdline parameter
-546970bc6afc7fb Rusty Russell   2010-08-11  140   * @name: a valid C identifier which is the parameter name.
-546970bc6afc7fb Rusty Russell   2010-08-11  141   * @value: the actual lvalue to alter.
-546970bc6afc7fb Rusty Russell   2010-08-11  142   * @type: the type of the parameter
-546970bc6afc7fb Rusty Russell   2010-08-11  143   * @perm: visibility in sysfs.
-546970bc6afc7fb Rusty Russell   2010-08-11  144   *
-546970bc6afc7fb Rusty Russell   2010-08-11  145   * Usually it's a good idea to have variable names and user-exposed names the
-546970bc6afc7fb Rusty Russell   2010-08-11  146   * same, but that's harder if the variable must be non-static or is inside a
-546970bc6afc7fb Rusty Russell   2010-08-11  147   * structure.  This allows exposure under a different name.
-546970bc6afc7fb Rusty Russell   2010-08-11  148   */
-546970bc6afc7fb Rusty Russell   2010-08-11  149  #define module_param_named(name, value, type, perm)			   \
-546970bc6afc7fb Rusty Russell   2010-08-11 @150  	param_check_##type(name, &(value));				   \
-546970bc6afc7fb Rusty Russell   2010-08-11  151  	module_param_cb(name, &param_ops_##type, &value, perm);		   \
-546970bc6afc7fb Rusty Russell   2010-08-11  152  	__MODULE_PARM_TYPE(name, #type)
-546970bc6afc7fb Rusty Russell   2010-08-11  153  
+I'm still compiling/testing the debug kernels 
+(20230319-module-alloc-opts-adjust +  single revert of the rcu patch). I 
+should have some systemd-analyze results for !debug kernels later.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
