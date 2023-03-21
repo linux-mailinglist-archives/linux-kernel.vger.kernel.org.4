@@ -2,83 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE8F6C3CBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771566C3CC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCUVco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S229861AbjCUVc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCUVcn (ORCPT
+        with ESMTP id S229826AbjCUVc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:32:43 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A32BF979;
-        Tue, 21 Mar 2023 14:32:42 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17997ccf711so17689772fac.0;
-        Tue, 21 Mar 2023 14:32:42 -0700 (PDT)
+        Tue, 21 Mar 2023 17:32:56 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FDA58485
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id w4so9394998plg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679434373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZzHxTn/xBhnpdgy8S5E8M4unosxnUcsaF4INeWuGSNM=;
+        b=kxyTO4v7cC+7AJfDMMODMO/Ytb5E95ibpucDviLwkUuXDhCSN5gCydR3ahhruangOc
+         DViOKaJQUNBhP5v1Um9hVcsrbGIMno2OjwUCKR3JEYx4LGJJ8eT1OoeVbibpgjS4zsnR
+         vMPaHiyBlZ3YEAx4buv3XVKaY6lYABPmnMxxt/x2ZB9D2hAxPjs8ZkPInbfN6ShFXmlO
+         Q2d56ojjw2xhKUcppHYjGNUrOu1ehGvSv9rll3kccRJG1XY5PNZD3/xG7W7o8UPF8Xs2
+         UxiyQ+9As6JD7CUVqEMWGViPRwjg4geklBa0yu2evkg8aKC9nIvlYxDN8TJUDPN1iyFL
+         YTOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679434361;
+        d=1e100.net; s=20210112; t=1679434373;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a/SrNI7Im7OQzPMwgFxuqdWvT+8hAcxHPUJhevfOoDk=;
-        b=ea1W35IywqqLc9uNP5X7MlLeAmIh0MLu1Ax4b1RPs1MQyJReLNg27NrLgZGqZVB+dj
-         33xtDtcqTsbti9d4pXptbDG22+0tlYI6uWFCff9kHh1u/9JHvAhhqAHK5qU0ehRPEhrC
-         f4xB1RTTzMSyVsSOjRwgObOkUA9zfj3+IdLVvfC9XR7ZLhS4RZQnQxYGwEEp9iXL5hgj
-         fz2sCCoe/mGsWEdW/x5AGmz34rN7ZbpAFq86ckJSMW0Xi4/RFI4rLKQ6twEM1Ab3+uuT
-         PB9AfMyZtvvqKfqB8KL19gNv1kqt8A95d71GKShKnYd/TCYEMAJ2YR+4fP6F/OJ28OzD
-         ELUQ==
-X-Gm-Message-State: AO0yUKVmccYPjuQ0V8gT2nhXzEveVYG2zbZojKg4rTyUdQ6acjuER8Vl
-        puTRUeL27qgzBA6Z36kOCuSw4w04MA==
-X-Google-Smtp-Source: AK7set+sV/jKtfFsliyuVdroKJyTtvegHA63GNPGyroahiRTLam+vd+reVQMt4XQK0cSjZ/4FRQ6ow==
-X-Received: by 2002:a05:6870:8888:b0:172:4748:32d9 with SMTP id m8-20020a056870888800b00172474832d9mr300895oam.3.1679434361552;
-        Tue, 21 Mar 2023 14:32:41 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id tk6-20020a05687189c600b0017703cd8ff6sm4604096oab.7.2023.03.21.14.32.40
+        bh=ZzHxTn/xBhnpdgy8S5E8M4unosxnUcsaF4INeWuGSNM=;
+        b=4CFFj63S8osn4l9oFZfpJyAWD36+G9kuf6GvkKeqmFQmmHRiGo6HI6RjZHNhFRgk6z
+         eQNuYTTjlvLWLnW8J/aLcGSo9IzYt3TdoyHDn12Hpv3YKQjC7iEOiWLcQW0esG3NOpJA
+         n+/+TCioftntGnSBzxBZ261GDMYC5e26pOosLlJqM/fNT2w6OuBfyO+SbC6VD8mYVoxv
+         rbPofgPOsuIZ/yRG0rvGMcC3Ni6o+M74SV29iywPJ4om/LTmBBcUQLIYRslvO5QFzbdN
+         7w1EQQtS6NMYf5ZbxTENvb2SzfiZqEKM5bHRyVN5anfUMA1e0wYXBmq7ZzQR5vUrt7LQ
+         lStw==
+X-Gm-Message-State: AO0yUKWA/LdtESFih+IT+ljN1qHm9DX1cKP4eyCMBq7jsS/E41W7IJz+
+        xopInK23BJADSP/KLzZFQiItYw==
+X-Google-Smtp-Source: AK7set+bYfttSbCp8Gd0XqK/tsJh4Hz36v//vxiF2sH/A3Ougn4M9ogwYRnxlnTuwek7ZhDq9iXwXw==
+X-Received: by 2002:a05:6a20:dc9d:b0:da:f525:e629 with SMTP id ky29-20020a056a20dc9d00b000daf525e629mr1939980pzb.53.1679434373294;
+        Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:8a45:c131:e8ed:3f53])
+        by smtp.gmail.com with ESMTPSA id n1-20020aa78a41000000b0062604b7552fsm8728060pfa.63.2023.03.21.14.32.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 14:32:41 -0700 (PDT)
-Received: (nullmailer pid 1648942 invoked by uid 1000);
-        Tue, 21 Mar 2023 21:32:40 -0000
-Date:   Tue, 21 Mar 2023 16:32:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-Cc:     joel@jms.id.au, pmenzel@molgen.mpg.de, dmaengine@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        andrew@aj.id.au, vkoul@kernel.org, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v3 2/5] dt-bindings: dmaengine: Add AST2600 UDMA bindings
-Message-ID: <167943435989.1648881.16454367602496486662.robh@kernel.org>
-References: <20230320081133.23655-1-chiawei_wang@aspeedtech.com>
- <20230320081133.23655-3-chiawei_wang@aspeedtech.com>
+        Tue, 21 Mar 2023 14:32:52 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 15:32:50 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        patrice.chotard@foss.st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, arnaud.pouliquen@st.com,
+        hongxing.zhu@nxp.com, peng.fan@nxp.com, shengjiu.wang@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] remoteproc: stm32: Call of_node_put() on iteration
+ error
+Message-ID: <20230321213250.GB2782856@p14s>
+References: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
+ <20230320221826.2728078-2-mathieu.poirier@linaro.org>
+ <e3644e19-7453-440b-00dc-781104ca83cf@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320081133.23655-3-chiawei_wang@aspeedtech.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <e3644e19-7453-440b-00dc-781104ca83cf@foss.st.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 20 Mar 2023 16:11:30 +0800, Chia-Wei Wang wrote:
-> Add the dmaengine bindings for the UART DMA engine of Aspeed AST2600 SoC.
+On Tue, Mar 21, 2023 at 10:00:03AM +0100, Arnaud POULIQUEN wrote:
+> Hi Mathieu,
 > 
-> Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> ---
->  .../bindings/dma/aspeed,ast2600-udma.yaml     | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dma/aspeed,ast2600-udma.yaml
+> On 3/20/23 23:18, Mathieu Poirier wrote:
+> > Function of_phandle_iterator_next() calls of_node_put() on the last
+> > device_node it iterated over, but when the loop exits prematurely it has
+> > to be called explicitly> 
+> > Fixes: 13140de09cc2 ("remoteproc: stm32: add an ST stm32_rproc driver")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > ---
+> >  drivers/remoteproc/stm32_rproc.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+> > index 7d782ed9e589..23c1690b8d73 100644
+> > --- a/drivers/remoteproc/stm32_rproc.c
+> > +++ b/drivers/remoteproc/stm32_rproc.c
+> > @@ -223,11 +223,13 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+> >  	while (of_phandle_iterator_next(&it) == 0) {
+> >  		rmem = of_reserved_mem_lookup(it.node);
+> >  		if (!rmem) {
+> > +			of_node_put(it.node);
+> >  			dev_err(dev, "unable to acquire memory-region\n");
+> >  			return -EINVAL;
+> >  		}
+> >  
+> >  		if (stm32_rproc_pa_to_da(rproc, rmem->base, &da) < 0) {
+> > +			of_node_put(it.node);
+> >  			dev_err(dev, "memory region not valid %pa\n",
+> >  				&rmem->base);
+> >  			return -EINVAL;
+> > @@ -254,8 +256,10 @@ static int stm32_rproc_prepare(struct rproc *rproc)
+> >  							   it.node->name);
+> >  		}
+> >  
+> > -		if (!mem)
+> > +		if (!mem) {
+> > +			of_node_put(it.node);
+> >  			return -ENOMEM;
+> > +		}
+> 
+> Good catch!
+> 
+> Looking in code I don't see that we call of_node_put() when we release the
+> carveouts. 
+> Please tell me if I'm wrong but look to me that we should also call of_node_put()
+> in mem->release() op, in drivers. 
+>
+
+Are you referring to entry->release(), which for stm32 is
+stm32_rproc_mem_release(), in rproc_resource_cleanup()?
+
+If so then no, it is not needed since of_phandle_iterator_next() calls
+of_node_put() on the previous device_node with each iteration.
+
+Otherwise I fail to understand the question and will ask you to clarify.
+
+> This one remains valid.
+> reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Ok
 
+> Thanks,
+> Arnaud
+> 
+> 
+> >  
+> >  		rproc_add_carveout(rproc, mem);
+> >  		index++;
