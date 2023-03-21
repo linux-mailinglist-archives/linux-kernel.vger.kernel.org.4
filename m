@@ -2,287 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C6A6C362E
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4DD6C3630
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjCUPtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S231867AbjCUPtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCUPtC (ORCPT
+        with ESMTP id S231808AbjCUPtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:49:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BB750991
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679413696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQNTryMkijjvv0zrmCG/46urX2+Q+d1Ofd7Juu04IrA=;
-        b=iiawttliNbbLhv0B9+RWRYgZEkCM2VcgVKrzeraJ2vS75gt6k6Cu4NlVwOrzgmK60d7kjE
-        TMizqUMD+epfCYDOWNr/KRSq6IfJu1bs7Wbx98WYUWjPQ977fCtCrNU+Qoocx1LNApV9b7
-        z9ushf4nDjP9vpkk8z4ozEnkhBjdcLs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107-Oszp1K14OlygqdI9_Z6gSQ-1; Tue, 21 Mar 2023 11:48:14 -0400
-X-MC-Unique: Oszp1K14OlygqdI9_Z6gSQ-1
-Received: by mail-wm1-f71.google.com with SMTP id bi7-20020a05600c3d8700b003edecc610abso3512271wmb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:48:14 -0700 (PDT)
+        Tue, 21 Mar 2023 11:49:03 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2921D4DE20
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:49:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id eh3so61436408edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679413739;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SzDFIymbRjbLhmlcc42BiXxJve1ZLr1cxA94sUeeuDQ=;
+        b=xOT3dQErkNbyGneftJFjSnjdfjvRXh/wgUVE5YAfSTsdLMTa+oockgRQBPsMclLUqB
+         U4IIkytzklFq3jHOSyH/KRiUUMWFL904rv+e2yYFdLIGSSxwYfEn66IwA+O/FKnkH9iK
+         OJK3kwJMjNqVkvLoIjBC6FS9mNN4Ll7JAfWxkUWqChVcMIXFTR5NbWlFd0yD13vIyBxI
+         uAKdjSajzGq8sZ6BxflLceYT/1OTdUELaqxWhf+6s70Re59N2OD/PhlyfVbBfXF4GO6g
+         nH4567gpkoZS/JXECrwQYFmnNnPF7Aat07MoTwnRh/gCm8hQ+LrxqJqlp9XGSbdaAFlx
+         NpRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679413693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qQNTryMkijjvv0zrmCG/46urX2+Q+d1Ofd7Juu04IrA=;
-        b=a7c0qagvAojj7A9ne9rFBZrEu6Vj+f//SH6+1JxaMn42KX73GQ4CaWabbRJ9WCip9d
-         wYz+kqkbbK1gRBEMr+g7bdKoGBNOHI3UKG0gmD5v+fFrwNo38RkoOKy7fSgHgGeskD4/
-         jcSEuZCUGjtAf5rcPBzIQDQj+fT05AOm2hHrkwjphC9hhsTZ4uWyq0Rc2Qu4Ouc3J/8j
-         rjJMnv13g8Y/JlqUL8N2KdIx69XizJj1ugMuy8vIIrxEbSUvKKasjPWFaljfOsfaPmm/
-         BIRRZpDzli5BcFWDutnRRNc1uFddwsVfedKrMg0q20cgEfEg8yZlqM2bXE75hDMKapN8
-         EH0g==
-X-Gm-Message-State: AO0yUKUMd9sSk901zB9JAYNfYqR7lwM7TUGUz+ufs/yYrhwqn6N07qmm
-        PhCGGIVq9iBpFPP4wPo5d/mTD67lxZ94tz4cF7OPtY0qYtRcsFwp/FJQVuvnb8Zxpz62wTym521
-        3M4kEhLYUcYRUZ3Q4uIFEuccV
-X-Received: by 2002:adf:dd0e:0:b0:2d8:a55e:1fd7 with SMTP id a14-20020adfdd0e000000b002d8a55e1fd7mr2462136wrm.21.1679413693505;
-        Tue, 21 Mar 2023 08:48:13 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/xI0H0dOoLdAbl2l/hpTPg6jU0iUTNn4I4nwVi9pUuko/W56u8IgfhRZaIVSLS5/ma3hJA/Q==
-X-Received: by 2002:adf:dd0e:0:b0:2d8:a55e:1fd7 with SMTP id a14-20020adfdd0e000000b002d8a55e1fd7mr2462125wrm.21.1679413693229;
-        Tue, 21 Mar 2023 08:48:13 -0700 (PDT)
-Received: from step1.redhat.com (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id z15-20020a5d44cf000000b002ce9f0e4a8fsm11692694wrr.84.2023.03.21.08.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 08:48:12 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        stefanha@redhat.com, linux-kernel@vger.kernel.org,
-        eperezma@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        netdev@vger.kernel.org, Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v3 8/8] vdpa_sim: add support for user VA
-Date:   Tue, 21 Mar 2023 16:48:04 +0100
-Message-Id: <20230321154804.184577-4-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230321154804.184577-1-sgarzare@redhat.com>
-References: <20230321154228.182769-1-sgarzare@redhat.com>
- <20230321154804.184577-1-sgarzare@redhat.com>
+        d=1e100.net; s=20210112; t=1679413739;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SzDFIymbRjbLhmlcc42BiXxJve1ZLr1cxA94sUeeuDQ=;
+        b=HCXMcyQv0HDmz77kYH04srtlLatS/Wwlqb38AuJXwFsukLrqEGRnCiZpPJM6sIEWSN
+         jBdyK/KMSjSVhgE3CX62M9NAQXWNvejjc//uCdb5WCsnXIeN4rJShSQFW7fvVZ3CHEMs
+         yMQVBOrhkanteTF5j1zRYeZrlFY7uWhg4Ao1IO7JJplGitGAjiwXYrXd0Bcz23EzwGrd
+         Sdi6GKNkjWzUnI5QfSvXSYOx9XChR9lpaNfDTOl+OtBerts+7PJWXuOy1Qpk6qW1ArZL
+         518nn0AFPuydq0m/QTiK7IejSjkew3zic03cOUnERx0RKclU5TbBu4VDVrXjRE+StdHM
+         7ErA==
+X-Gm-Message-State: AO0yUKXOGCv7QOxWuUWLE+/39STbE4uB76Qd5YuBkJcs+e2BTaYGEXRv
+        o0WNdh2kjp3IG71tjqrsSQkZgg==
+X-Google-Smtp-Source: AK7set9vvgE0/AZT5nETWstzcgB/WJjjvy5BXgYV3f+XN39lD7CIun132siBk0Fq/T5DQE94TJZWlQ==
+X-Received: by 2002:a17:906:6d13:b0:925:f542:1a3d with SMTP id m19-20020a1709066d1300b00925f5421a3dmr3383284ejr.25.1679413739616;
+        Tue, 21 Mar 2023 08:48:59 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id s9-20020a170906454900b008f89953b761sm5958260ejq.3.2023.03.21.08.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 08:48:58 -0700 (PDT)
+Message-ID: <fcffc785-42b0-0312-daa3-f927f18cd43e@linaro.org>
+Date:   Tue, 21 Mar 2023 15:48:54 +0000
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v11 05/26] virt: gunyah: Identify hypervisor version
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+ <20230304010632.2127470-6-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230304010632.2127470-6-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new "use_va" module parameter (default: true) is used in
-vdpa_alloc_device() to inform the vDPA framework that the device
-supports VA.
 
-vringh is initialized to use VA only when "use_va" is true and the
-user's mm has been bound. So, only when the bus supports user VA
-(e.g. vhost-vdpa).
 
-vdpasim_mm_work_fn work is used to serialize the binding to a new
-address space when the .bind_mm callback is invoked, and unbinding
-when the .unbind_mm callback is invoked.
+On 04/03/2023 01:06, Elliot Berman wrote:
+> Export the version of Gunyah which is reported via the hyp_identify
+> hypercall. Increments of the major API version indicate possibly
+> backwards incompatible changes.
+> 
+> Export the hypervisor identity so that Gunyah drivers can act according
+> to the major API version.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 
-Call mmget_not_zero()/kthread_use_mm() inside the worker function
-to pin the address space only as long as needed, following the
-documentation of mmget() in include/linux/sched/mm.h:
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-  * Never use this function to pin this address space for an
-  * unbounded/indefinite amount of time.
-
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
-
-Notes:
-    v3:
-    - called mmget_not_zero() before kthread_use_mm() [Jason]
-      As the documentation of mmget() in include/linux/sched/mm.h says:
-    
-      * Never use this function to pin this address space for an
-      * unbounded/indefinite amount of time.
-    
-      I moved mmget_not_zero/kthread_use_mm inside the worker function,
-      this way we pin the address space only as long as needed.
-      This is similar to what vfio_iommu_type1_dma_rw_chunk() does in
-      drivers/vfio/vfio_iommu_type1.c
-    - simplified the mm bind/unbind [Jason]
-    - renamed vdpasim_worker_change_mm_sync() [Jason]
-    - fix commit message (s/default: false/default: true)
-    v2:
-    - `use_va` set to true by default [Eugenio]
-    - supported the new unbind_mm callback [Jason]
-    - removed the unbind_mm call in vdpasim_do_reset() [Jason]
-    - avoided to release the lock while call kthread_flush_work() since we
-      are now using a mutex to protect the device state
-
- drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 80 +++++++++++++++++++++++++++++++-
- 2 files changed, 79 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 4774292fba8c..3a42887d05d9 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -59,6 +59,7 @@ struct vdpasim {
- 	struct vdpasim_virtqueue *vqs;
- 	struct kthread_worker *worker;
- 	struct kthread_work work;
-+	struct mm_struct *mm_bound;
- 	struct vdpasim_dev_attr dev_attr;
- 	/* mutex to synchronize virtqueue state */
- 	struct mutex mutex;
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index ab4cfb82c237..23c891cdcd54 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -35,10 +35,44 @@ module_param(max_iotlb_entries, int, 0444);
- MODULE_PARM_DESC(max_iotlb_entries,
- 		 "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
- 
-+static bool use_va = true;
-+module_param(use_va, bool, 0444);
-+MODULE_PARM_DESC(use_va, "Enable/disable the device's ability to use VA");
-+
- #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
- #define VDPASIM_QUEUE_MAX 256
- #define VDPASIM_VENDOR_ID 0
- 
-+struct vdpasim_mm_work {
-+	struct kthread_work work;
-+	struct vdpasim *vdpasim;
-+	struct mm_struct *mm_to_bind;
-+	int ret;
-+};
-+
-+static void vdpasim_mm_work_fn(struct kthread_work *work)
-+{
-+	struct vdpasim_mm_work *mm_work =
-+		container_of(work, struct vdpasim_mm_work, work);
-+	struct vdpasim *vdpasim = mm_work->vdpasim;
-+
-+	mm_work->ret = 0;
-+
-+	//TODO: should we attach the cgroup of the mm owner?
-+	vdpasim->mm_bound = mm_work->mm_to_bind;
-+}
-+
-+static void vdpasim_worker_change_mm_sync(struct vdpasim *vdpasim,
-+					  struct vdpasim_mm_work *mm_work)
-+{
-+	struct kthread_work *work = &mm_work->work;
-+
-+	kthread_init_work(work, vdpasim_mm_work_fn);
-+	kthread_queue_work(vdpasim->worker, work);
-+
-+	kthread_flush_work(work);
-+}
-+
- static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
- {
- 	return container_of(vdpa, struct vdpasim, vdpa);
-@@ -59,8 +93,10 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
- {
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
- 	uint16_t last_avail_idx = vq->vring.last_avail_idx;
-+	bool va_enabled = use_va && vdpasim->mm_bound;
- 
--	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, false,
-+	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
-+			  va_enabled,
- 			  (struct vring_desc *)(uintptr_t)vq->desc_addr,
- 			  (struct vring_avail *)
- 			  (uintptr_t)vq->driver_addr,
-@@ -130,8 +166,20 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops;
- static void vdpasim_work_fn(struct kthread_work *work)
- {
- 	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
-+	struct mm_struct *mm = vdpasim->mm_bound;
-+
-+	if (mm) {
-+		if (!mmget_not_zero(mm))
-+			return;
-+		kthread_use_mm(mm);
-+	}
- 
- 	vdpasim->dev_attr.work_fn(vdpasim);
-+
-+	if (mm) {
-+		kthread_unuse_mm(mm);
-+		mmput(mm);
-+	}
- }
- 
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
-@@ -162,7 +210,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	vdpa = __vdpa_alloc_device(NULL, ops,
- 				   dev_attr->ngroups, dev_attr->nas,
- 				   dev_attr->alloc_size,
--				   dev_attr->name, false);
-+				   dev_attr->name, use_va);
- 	if (IS_ERR(vdpa)) {
- 		ret = PTR_ERR(vdpa);
- 		goto err_alloc;
-@@ -582,6 +630,30 @@ static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
- 	return ret;
- }
- 
-+static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *mm)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	struct vdpasim_mm_work mm_work;
-+
-+	mm_work.vdpasim = vdpasim;
-+	mm_work.mm_to_bind = mm;
-+
-+	vdpasim_worker_change_mm_sync(vdpasim, &mm_work);
-+
-+	return mm_work.ret;
-+}
-+
-+static void vdpasim_unbind_mm(struct vdpa_device *vdpa)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	struct vdpasim_mm_work mm_work;
-+
-+	mm_work.vdpasim = vdpasim;
-+	mm_work.mm_to_bind = NULL;
-+
-+	vdpasim_worker_change_mm_sync(vdpasim, &mm_work);
-+}
-+
- static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
- 			   u64 iova, u64 size,
- 			   u64 pa, u32 perm, void *opaque)
-@@ -678,6 +750,8 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.set_group_asid         = vdpasim_set_group_asid,
- 	.dma_map                = vdpasim_dma_map,
- 	.dma_unmap              = vdpasim_dma_unmap,
-+	.bind_mm		= vdpasim_bind_mm,
-+	.unbind_mm		= vdpasim_unbind_mm,
- 	.free                   = vdpasim_free,
- };
- 
-@@ -712,6 +786,8 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_iova_range         = vdpasim_get_iova_range,
- 	.set_group_asid         = vdpasim_set_group_asid,
- 	.set_map                = vdpasim_set_map,
-+	.bind_mm		= vdpasim_bind_mm,
-+	.unbind_mm		= vdpasim_unbind_mm,
- 	.free                   = vdpasim_free,
- };
- 
--- 
-2.39.2
-
+--srini
+> ---
+>   drivers/virt/Makefile        |  1 +
+>   drivers/virt/gunyah/Makefile |  3 ++
+>   drivers/virt/gunyah/gunyah.c | 57 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 61 insertions(+)
+>   create mode 100644 drivers/virt/gunyah/Makefile
+>   create mode 100644 drivers/virt/gunyah/gunyah.c
+> 
+> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
+> index e9aa6fc96fab..a5817e2d7d71 100644
+> --- a/drivers/virt/Makefile
+> +++ b/drivers/virt/Makefile
+> @@ -12,3 +12,4 @@ obj-$(CONFIG_ACRN_HSM)		+= acrn/
+>   obj-$(CONFIG_EFI_SECRET)	+= coco/efi_secret/
+>   obj-$(CONFIG_SEV_GUEST)		+= coco/sev-guest/
+>   obj-$(CONFIG_INTEL_TDX_GUEST)	+= coco/tdx-guest/
+> +obj-y				+= gunyah/
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> new file mode 100644
+> index 000000000000..34f32110faf9
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_GUNYAH) += gunyah.o
+> diff --git a/drivers/virt/gunyah/gunyah.c b/drivers/virt/gunyah/gunyah.c
+> new file mode 100644
+> index 000000000000..4b7e6f3edaff
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/gunyah.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt) "gunyah: " fmt
+> +
+> +#include <linux/gunyah.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +
+> +static struct gh_hypercall_hyp_identify_resp gh_api;
+> +
+> +u16 gh_api_version(void)
+> +{
+> +	return FIELD_GET(GH_API_INFO_API_VERSION_MASK, gh_api.api_info);
+> +}
+> +EXPORT_SYMBOL_GPL(gh_api_version);
+> +
+> +bool gh_api_has_feature(enum gh_api_feature feature)
+> +{
+> +	switch (feature) {
+> +	case GH_FEATURE_DOORBELL:
+> +	case GH_FEATURE_MSGQUEUE:
+> +	case GH_FEATURE_VCPU:
+> +	case GH_FEATURE_MEMEXTENT:
+> +		return !!(gh_api.flags[0] & BIT_ULL(feature));
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(gh_api_has_feature);
+> +
+> +static int __init gh_init(void)
+> +{
+> +	if (!arch_is_gh_guest())
+> +		return -ENODEV;
+> +
+> +	gh_hypercall_hyp_identify(&gh_api);
+> +
+> +	pr_info("Running under Gunyah hypervisor %llx/v%u\n",
+> +		FIELD_GET(GH_API_INFO_VARIANT_MASK, gh_api.api_info),
+> +		gh_api_version());
+> +
+> +	/* We might move this out to individual drivers if there's ever an API version bump */
+> +	if (gh_api_version() != GH_API_V1) {
+> +		pr_info("Unsupported Gunyah version: %u\n", gh_api_version());
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+> +arch_initcall(gh_init);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Gunyah Hypervisor Driver");
