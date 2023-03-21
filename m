@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88216C2D6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B536C2D66
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCUJC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S230428AbjCUJCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCUJCi (ORCPT
+        with ESMTP id S230129AbjCUJCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:02:38 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A935ECF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:00:54 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so4504930pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679389209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7WQ13znr3CN4XKk2kspE4hbceE3ioQVtB8Zu2USju8=;
-        b=KmxEM5dn2jCC/nTRsrAfzPq82YzxBSOhtYw2Nl30BeA4kCmQ/z3QVVVjAN9LgjsqNy
-         71HnsWGOIgYv+Y4wMLKI3VJvw/yydPfyYzEFkikTdy/Y7kVPkYMgZiVJhc1T+LsSGzli
-         2LXawa0Y+MnBmMmtKLyO+62eYYktHMeBLcTW+Ka1hw5joUlHaW5psnZgywRtbS4Qs4DK
-         f/xwH+H7SOPW8WIw7yLTPaFH8g7SNVxJ5RSq4QjNRKF/4Odrk4WYdMEGTKAtw4JlVrUZ
-         vsS3uBcP13Ux3nK0DhJSLUXefAYpxJiKwpFPWyivHN6cJ11LZAuNq5MVPt5AbV73mFJC
-         85rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679389209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b7WQ13znr3CN4XKk2kspE4hbceE3ioQVtB8Zu2USju8=;
-        b=FVxt7FYFTB/Br1g4IyHSvvN3GPrBP5iEp3SqMjUGyxX2k1djuPyNsKgrntOOHP23b8
-         GK8600XXigiExU8C8Wi8c1A4jSpE060wxioSexUOq1d41pDVC0v0+qMIHLqzmZwvOe4t
-         DxfrBB+zXKswOOPv3xBOPupiW7dis5plqzaC9KmasRNlTyRm3gxj46cDYVDjb0wkJdn3
-         sO4q68UOkSxMdCsqYm3W7o/6Kt5jEiVhu0mcqbFChM2xhWf+bOJGeOu3OmIajiswbu6T
-         AcqVlkShd4A5d5Q2AzIBN/kH1/XpX2RkL10Nz2tZaLZIErzCKovUjWSD6Q9nJuUebE0b
-         VuRA==
-X-Gm-Message-State: AO0yUKXf26VXowXeg0ZQ9jVFtV+iuSEYSRflaWlXjKMrXefUHitM0hJC
-        DyHc5PgiKFlRd310zTIQa1Pre0G+hYPTzpUbzz4=
-X-Google-Smtp-Source: AK7set/sZeqcabFkGQKy9nUl08cmT93CpV6W+gT5eaz8VVrZJqEgBsnsDyCKuWlFggRBDbjFAQkGVg==
-X-Received: by 2002:a05:6a20:1a24:b0:da:b92c:a949 with SMTP id cj36-20020a056a201a2400b000dab92ca949mr1060077pzb.36.1679389208860;
-        Tue, 21 Mar 2023 02:00:08 -0700 (PDT)
-Received: from C02FG34NMD6R.bytedance.net ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id e15-20020a62ee0f000000b0058bacd6c4e8sm7586443pfi.207.2023.03.21.02.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 02:00:08 -0700 (PDT)
-From:   Albert Huang <huangjie.albert@bytedance.com>
-To:     "Michael S . Tsirkin " <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
-        NET DRIVERS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] virtio_ring: Suppress tx interrupt when napi_tx disable
-Date:   Tue, 21 Mar 2023 16:59:53 +0800
-Message-Id: <20230321085953.24949-1-huangjie.albert@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+        Tue, 21 Mar 2023 05:02:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52938392BA;
+        Tue, 21 Mar 2023 02:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KH5F80yINO5u+Qvwf3LF3BCo0e24JRTEVrTz/LTZRGo=; b=QGqDX+L1MgXmk/OGgeESIDl2wU
+        t7zOTahpKY55fj8oVrKsY4pNI/kFOe0lk5kaufyqp7zPbG9axv0R+KOlpIrnwy6t9l1htAw1SLlKP
+        uzX1t0OuCxeweOCUGiBAo628MzMnKf8mWw5cQDsxGSDI/Cqy/VQUVaYhMVlzT6m3ALVyQ3dpFEN16
+        eNmuImAg0+r0gsNi1nXOmF4lzBJXzm25dG1hudq85LBM3eJ275LDtJUtWoWFXHVWSZa6Fn41BXYWI
+        mHqUY4VIT6fx42I3Wy2InWgGAYqoVqFOcPfTGnGsJ2KrOgWwFHgwhmpGezGdSMPmDEpLn7yYSueV/
+        fjx75nTQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1peXqW-004DSz-0U;
+        Tue, 21 Mar 2023 08:59:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 641803002C0;
+        Tue, 21 Mar 2023 09:59:53 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3B63E205414ED; Tue, 21 Mar 2023 09:59:53 +0100 (CET)
+Date:   Tue, 21 Mar 2023 09:59:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v5 20/34] x86/fred: add a machine check entry stub for
+ FRED
+Message-ID: <20230321085953.GA2234901@hirez.programming.kicks-ass.net>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-21-xin3.li@intel.com>
+ <20230320160021.GP2194297@hirez.programming.kicks-ass.net>
+ <SA1PR11MB67349805EA11F4BAD07D62F9A8819@SA1PR11MB6734.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR11MB67349805EA11F4BAD07D62F9A8819@SA1PR11MB6734.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "huangjie.albert" <huangjie.albert@bytedance.com>
+On Tue, Mar 21, 2023 at 12:04:47AM +0000, Li, Xin3 wrote:
+> > > Unlike IDT, no need to save/restore dr7 in FRED machine check handler.
+> > 
+> > Given how fragile MCE is, the question should be, do we ever want hw
+> > breakpoints to happen while it is running?
+> 
+> HW breakpoints still work if they are properly configured.
+> 
+> > If the hw-breakpoint handler trips on the same memory fail that got us into the
+> > mce the first time, we're dead.
+> 
+> Right.
+> 
+> Unless the MCIP bit is turned off any subsequent #MC goes to shutdown
+> ("machine is screwed").
+> 
+> It's the kernel debugger's responsibility to decide how to proceed in such
+> cases. But if the kernel debugger itself is in a screwed memory region, we
+> are soooooo dead.
 
-fix commit 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-
-if we disable the napi_tx. when we triger a tx interrupt, the
-vq->event_triggered will be set to true. It will no longer be
-set to false. Unless we explicitly call virtqueue_enable_cb_delayed
-or virtqueue_enable_cb_prepare
-
-if we disable the napi_tx, It will only be called when the tx ring
-buffer is relatively small:
-virtio_net->start_xmit:
-	if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
-		netif_stop_subqueue(dev, qnum);
-		if (!use_napi &&
-		    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-			/* More just got used, free them then recheck. */
-			free_old_xmit_skbs(sq, false);
-			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-				netif_start_subqueue(dev, qnum);
-				virtqueue_disable_cb(sq->vq);
-			}
-		}
-	}
-Because event_triggered is true.Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-VRING_PACKED_EVENT_FLAG_DISABLE will not be set.So we update
-vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-every time we call virtqueue_get_buf_ctx.This will bring more interruptions.
-
-if event_triggered is set to true, do not update vring_used_event(&vq->split.vring)
-or vq->packed.vring.driver->off_wrap
-
-Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
----
- drivers/virtio/virtio_ring.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 307e139cb11d..f486cccadbeb 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -795,7 +795,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
- 	/* If we expect an interrupt for the next entry, tell host
- 	 * by writing event index and flush out the write before
- 	 * the read in the next get_buf call. */
--	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
-+	if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)
-+			&& (vq->event_triggered == false))
- 		virtio_store_mb(vq->weak_barriers,
- 				&vring_used_event(&vq->split.vring),
- 				cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
-@@ -1529,7 +1530,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
- 	 * by writing event index and flush out the write before
- 	 * the read in the next get_buf call.
- 	 */
--	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
-+	if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC
-+			&& (vq->event_triggered == false))
- 		virtio_store_mb(vq->weak_barriers,
- 				&vq->packed.vring.driver->off_wrap,
- 				cpu_to_le16(vq->last_used_idx));
--- 
-2.31.1
-
+Yeah, so I would much prefer, for robustness sake, to start out with not
+allowing #DB in MCE -- much like today.
