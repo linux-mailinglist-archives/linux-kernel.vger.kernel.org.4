@@ -2,75 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535F16C27A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9B06C27AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCUB6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 21:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
+        id S229896AbjCUB7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 21:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCUB6K (ORCPT
+        with ESMTP id S229653AbjCUB7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 21:58:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A93326C05;
-        Mon, 20 Mar 2023 18:58:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2CC6618E3;
-        Tue, 21 Mar 2023 01:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACDA1C433EF;
-        Tue, 21 Mar 2023 01:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679363888;
-        bh=uly1b7i/sKEvRzXRdF6lkwk4JmtjRD6wxFf1R53P244=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NIfyFZ62Gp4IgyXUajbRVdgi75FEA7P004gNGrMhrF2iJKOwnk6NXx9q5A7xyj5w1
-         vGpTiwvSbJNZ+6lF4xi5HhDVIZhJ3jrhJopEUbb2wlJ0oXyXFONqO7DjtNsc0YuRRQ
-         T/jSkXi6LFQ00/2NjjAZhLq8CqmtIY/br7evU64choz7hRl7W9AZUdGkMXNOy4cs0D
-         qzjfuHoe6H+2+oNNI9RAk9oi1UtTAh/1Vu9qp3FNRpqO0lBokVJQqUk3gHfM6pz0pT
-         g/dkxe6bpKmmjS9bme3yoXVl8xiAOMqUJueyAM648vRZIElbeA8ZMO0H9tTzhBA0Pm
-         gbCXqsQ9eCynw==
-Date:   Mon, 20 Mar 2023 18:58:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     f.fainelli@gmail.com
-Cc:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>,
-        andrew@lunn.ch, jonas.gorski@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Subject: Re: [PATCH v2] net: dsa: tag_brcm: legacy: fix daisy-chained
- switches
-Message-ID: <20230320185806.5dd71c90@kernel.org>
-In-Reply-To: <20230319095540.239064-1-noltari@gmail.com>
-References: <20230317120815.321871-1-noltari@gmail.com>
-        <20230319095540.239064-1-noltari@gmail.com>
+        Mon, 20 Mar 2023 21:59:42 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCB91B5;
+        Mon, 20 Mar 2023 18:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679363981; x=1710899981;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KTbPBv8cSI/I5BaaVSZcD11akgCvhZFv+LILOFk3dKo=;
+  b=S6k1RXua5ai9cYOyEoig9RJrlPq9po1ZzXJciQCgButV8DxFv8QdMMok
+   sCQkgyiYMpwtK3PFLl+iT+GckBe0ZI+GsS+HRG57R8sxhKtGPG9X07ycl
+   xmRAbgWTZZ3ska9a4kVFhpYch64i56QUUA+w7TzlcMmJcNpesNPVLUPjD
+   WAVP5aerSMOQ5qUJlnVr3+Tem4iewhLlp8V70HqiVL53gXuvow3r7Lry7
+   v1fgMMK707qkj4ByIrV5HtRoO2DQoB0uOeakXlIs9PpoDLakHApWhsbcL
+   GEV8LGbWwNiUTaeHaAwd/3XJbToVN9y0wVm+zt9OV3xqmYc6tc46ibezA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319222911"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="319222911"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 18:59:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674646881"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="674646881"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 18:59:35 -0700
+Message-ID: <0a91496c-d70a-6a52-ab9d-7e3615250d99@linux.intel.com>
+Date:   Tue, 21 Mar 2023 09:58:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, joro@8bytes.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] iommu/vt-d: Extend dmar_domain to support nested
+ domain
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+References: <20230309082207.612346-1-yi.l.liu@intel.com>
+ <20230309082207.612346-4-yi.l.liu@intel.com> <ZBhliHzXcbUxuyX1@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZBhliHzXcbUxuyX1@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 19 Mar 2023 10:55:40 +0100 =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> When BCM63xx internal switches are connected to switches with a 4-byte
-> Broadcom tag, it does not identify the packet as VLAN tagged, so it adds =
-one
-> based on its PVID (which is likely 0).
-> Right now, the packet is received by the BCM63xx internal switch and the =
-6-byte
-> tag is properly processed. The next step would to decode the corresponding
-> 4-byte tag. However, the internal switch adds an invalid VLAN tag after t=
-he
-> 6-byte tag and the 4-byte tag handling fails.
-> In order to fix this we need to remove the invalid VLAN tag after the 6-b=
-yte
-> tag before passing it to the 4-byte tag decoding.
+On 3/20/23 9:54 PM, Jason Gunthorpe wrote:
+> On Thu, Mar 09, 2023 at 12:22:05AM -0800, Yi Liu wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>
+>> The nested domain fields are exclusive to those that used for a DMA
+>> remapping domain. Use union to avoid memory waste.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+>> ---
+>>   drivers/iommu/intel/iommu.h | 35 +++++++++++++++++++++++++++++------
+>>   1 file changed, 29 insertions(+), 6 deletions(-)
+> 
+> Using unions like this often devolves into a mess.
+> 
+> You'd be better to have more structures
+> 
+> struct intel_iommu_domain {
+>     struct iommu_domain domain;
+>     [general fields about attachment]
+> };
+> 
+> struct intel_iopte_domain {
+>      struct intel_iommu_domain domain;
+>      [stuff describing the io page table data, pgd, format, etc]
+> };
+> 
+> strut intel_s1_domain {
+>       struct intel_iommu_domain domain;
+>       struct dmar_domain *s2_domain;
+>       /* user page table pointer (in GPA) */
+>       unsigned long s1_pgtbl;
+>       /* page table attributes */
+>       struct iommu_hwpt_intel_vtd s1_cfg;
+> };
+> static_assert(offset_of(struct intel_s1_domain, domain.domain) ==
+>                offset_of(struct intel_iommu_domain, domain));
+> 
+> The per-domain ops allow to make this work sensibly
 
-Is it good to go in, Florian?
+Yes. This will make the data structures clearer.
+
+However, this will lead to significant code changes. I think it would be
+more appropriate to put it in a separate refactoring series later.
+
+Best regards,
+baolu
