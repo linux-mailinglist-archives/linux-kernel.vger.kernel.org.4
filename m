@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636D86C2DC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763D46C2DC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 10:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjCUJYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 05:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S229665AbjCUJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 05:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCUJYL (ORCPT
+        with ESMTP id S229449AbjCUJYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:24:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DE3158BF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679390607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pn5brbGgNvIiwAbTr396tg4MWSNJ8Oc96gtsZGXUcYM=;
-        b=RKRLqMSuajkRqFX0I6kRJGREVuD7eXz7eFofrpi7BH5IyfG91bH3XuR2ZCunlF/EzjFp1P
-        n41LBO2tehKJz5tPqepydvs8imtaHsD7i95WD/q/IjcjOIa8PsinNWP3kgReJu22j4hwDM
-        YaXLZaQ5NPtG0KSPDJ6YfOjJ3yV8V1s=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-450-JbMjy6SePU2PN-e1MOaI2w-1; Tue, 21 Mar 2023 05:23:26 -0400
-X-MC-Unique: JbMjy6SePU2PN-e1MOaI2w-1
-Received: by mail-wm1-f71.google.com with SMTP id j27-20020a05600c1c1b00b003edd2023418so3792568wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 02:23:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679390604;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pn5brbGgNvIiwAbTr396tg4MWSNJ8Oc96gtsZGXUcYM=;
-        b=xn8UUy3AFjEipzn4YBz8z1wmTKdGTuPDcVxPONqIwokCVm/APxhy/Th1FMR8hGnOvd
-         ad5N5qbvm0ngNlpXgf+Xlm7Bndeyk/6J2EipaZWkzpPyFQ5cN6+gwOgw+PgGTBydWM9t
-         4W7KbLfgi8Gm3Rbc2btROa5V/ZKlaKeza1LnyF044OldlnOP1Qd/HSN13aEdPn6Dtf2h
-         z0UrTBmcyV75n8gxsjVfJrziKUhjNvlIZzuIO2zt3/AodXkG9VptTpj881AXFJ+d5RbC
-         Oe/D8eb4q6HglRNHh/CjN4D0lriiFNID/waEhKLexRXg/5ClAFpXbPvw3bnnOwrmKfd6
-         iu6A==
-X-Gm-Message-State: AO0yUKVwmvmSM384Zwyyd//UDCz/bhgvJFkDt1JFcWlwogKermP65Bmn
-        OTO8HQo5SfYzo2MOXJxAAbbK4sA/19H4zbei1iZf+ufKWqaZXXXytuhpnqLPXjKN5XAibOlQ+Jn
-        mO0T+ejkFaoPCO36+8wwYWO2DsxsdIUbd
-X-Received: by 2002:a1c:6a08:0:b0:3ea:ed4d:38eb with SMTP id f8-20020a1c6a08000000b003eaed4d38ebmr1871989wmc.24.1679390604693;
-        Tue, 21 Mar 2023 02:23:24 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/5Sl5sP+nX8YGttWKA3yT06XBaU7ihGH43O5M3uoUtpcc9jFKpSMids9Me1PPqfY0eMN3yJA==
-X-Received: by 2002:a1c:6a08:0:b0:3ea:ed4d:38eb with SMTP id f8-20020a1c6a08000000b003eaed4d38ebmr1871973wmc.24.1679390604390;
-        Tue, 21 Mar 2023 02:23:24 -0700 (PDT)
-Received: from redhat.com ([2.52.1.105])
-        by smtp.gmail.com with ESMTPSA id n1-20020a7bc5c1000000b003db03725e86sm13222630wmk.8.2023.03.21.02.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 02:23:24 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 05:23:20 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Viktor Prutyanov <viktor@daynix.com>
-Cc:     jasowang@redhat.com, cohuck@redhat.com, pasic@linux.ibm.com,
-        farman@linux.ibm.com, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Subject: Re: [PATCH v2] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-Message-ID: <20230321050747-mutt-send-email-mst@kernel.org>
-References: <20230320232115.1940587-1-viktor@daynix.com>
+        Tue, 21 Mar 2023 05:24:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F58F16338;
+        Tue, 21 Mar 2023 02:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE8361AAD;
+        Tue, 21 Mar 2023 09:24:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1B4C433D2;
+        Tue, 21 Mar 2023 09:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679390688;
+        bh=CpzFHzfIMqVb1E4paSIQ5K4vWNYo3LEISEw5nGxfMJw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VVXxXV5ieendwlxoCh9JlFXckvOet2he4ioTS834+2Ucg9tIvdG8N1FYV61eOkbfC
+         BGBOY4L7l17yYZ7oZDorWXjyUDuT2+1eZ8Zb0PQaOM6dTKg5sP7lR7f8GO8qPE8fWD
+         j3IwMP6M6cIFAkUcnL4TDg5ZhSh1OayRoaBK733MOa4BjhG7AChpFvYwjTfEm96dcj
+         //Yu1ldBZzTlgPHXTov3bB+WhckOmzwSPA5+bCwZxWcLjmWTpvZui7OA6JG2qLVEsQ
+         DMYC6YmT15EMW4j1JvSvOM+GxPpbuv2lHOw2O0IlXVlIfJvCTs3g+ANFFuxP9tts0R
+         1ocjldNqyimVA==
+Message-ID: <67dd1d04-147d-0e40-c06b-6e1e0dd05f13@kernel.org>
+Date:   Tue, 21 Mar 2023 11:24:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320232115.1940587-1-viktor@daynix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH v4 2/5] soc: ti: pruss: Add
+ pruss_{request,release}_mem_region() API
+To:     Md Danish Anwar <a0501179@ti.com>, Andrew Davis <afd@ti.com>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-3-danishanwar@ti.com>
+ <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
+ <52aeb13f-1fe4-825f-9d28-ba64860ae76d@ti.com>
+ <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
+ <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,231 +72,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 02:21:15AM +0300, Viktor Prutyanov wrote:
-> According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
-> indicates that the driver passes extra data along with the queue
-> notifications.
+Hi,
+
+On 21/03/2023 07:23, Md Danish Anwar wrote:
+> Hi Andrew, Roger,
 > 
-> In a split queue case, the extra data is 16-bit available index. In a
-> packed queue case, the extra data is 1-bit wrap counter and 15-bit
-> available index.
+> On 20/03/23 21:48, Andrew Davis wrote:
+>> On 3/20/23 12:11 AM, Md Danish Anwar wrote:
+>>> Hi Roger,
+>>>
+>>> On 17/03/23 14:26, Roger Quadros wrote:
+>>>> Hi Andrew & Danish,
+>>>>
+>>>>
+>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>>>>> From: "Andrew F. Davis" <afd@ti.com>
+>>>>>
+>>>>> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
+>>>>> to the PRUSS platform driver to allow client drivers to acquire and release
+>>>>> the common memory resources present within a PRU-ICSS subsystem. This
+>>>>> allows the client drivers to directly manipulate the respective memories,
+>>>>> as per their design contract with the associated firmware.
+>>>>>
+>>>>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>>> Signed-off-by: Andrew F. Davis <afd@ti.com>
+>>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>>>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+>>>>> ---
+>>>>>   drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
+>>>>>   include/linux/pruss_driver.h     | 27 +++--------
+>>>>>   include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
+>>>>
+>>>>
+>>>> We have these 2 header files and I think anything that deals with
+>>>> 'struct pruss' should go in include/linux/pruss_driver.h
+>>>>
+>>>> Anything that deals with pru_rproc (i.e. struct rproc) should go in
+>>>> include/linux/remoteproc/pruss.h
+>>>>
+>>>> Do you agree?
+>>>>
+>>>
+>>> I agree with you Roger but Andrew is the right person to comment here as he is
+>>> the author of this and several other patches.
+>>>
+>>> Hi Andrew, Can you please comment on this?
+>>>
+>>
+>> Original idea was a consumer driver (like "ICSSG Ethernet Driver" in your other
+>> series) could just
+>>
+>> #include <linux/remoteproc/pruss.h>
+>>
+>> and get everything they need, and nothing they do not.
+>>
 > 
-> Add support for this feature for MMIO and PCI transports. Channel I/O
-> transport will not accept this feature.
+> If we plan on continuing the original idea, then I think keeping the header
+> files as it is will be the best. Because if we move anything that deals with
+> 'struct pruss' to include/linux/pruss_driver.h and anything that deals with
+> pru_rproc (i.e. struct rproc) to include/linux/remoteproc/pruss.h, then the
+> consumer drivers will need to do,
 > 
-> Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
-> ---
+> #include <linux/remoteproc/pruss.h>
+> #include <linux/pruss_driver.h>
 > 
->  v2: reject the feature in virtio_ccw, replace __le32 with u32
+> Roger, should I keep the header files arrangement as it is?
 > 
->  drivers/s390/virtio/virtio_ccw.c   |  4 +---
->  drivers/virtio/virtio_mmio.c       | 15 ++++++++++++++-
->  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
->  drivers/virtio/virtio_pci_common.h |  4 ++++
->  drivers/virtio/virtio_pci_legacy.c |  2 +-
->  drivers/virtio/virtio_pci_modern.c |  2 +-
->  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
->  include/linux/virtio_ring.h        |  2 ++
->  include/uapi/linux/virtio_config.h |  6 ++++++
->  9 files changed, 56 insertions(+), 6 deletions(-)
+
+OK but can we please rename one of them to something else so they don't
+sound very similar. Maybe you could use Andrew's suggestion below.
+
+>> pruss_driver.h (which could be renamed pruss_internal.h) exists to allow
+>> comunication between the pruss core and the pru rproc driver which live
+>> in different subsystems.
+>>
+>> Andrew
+>>
+>>>>>   3 files changed, 121 insertions(+), 22 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>>> index a169aa1ed044..c8053c0d735f 100644
+>>>>> --- a/drivers/soc/ti/pruss.c
+>>>>> +++ b/drivers/soc/ti/pruss.c
+>>>>> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
+>>>>>   }
+>>>>>   EXPORT_SYMBOL_GPL(pruss_put);
+>>>>>   +/**
+>>>>> + * pruss_request_mem_region() - request a memory resource
+>>>>> + * @pruss: the pruss instance
+>>>>> + * @mem_id: the memory resource id
+>>>>> + * @region: pointer to memory region structure to be filled in
+>>>>> + *
+>>>>> + * This function allows a client driver to request a memory resource,
+>>>>> + * and if successful, will let the client driver own the particular
+>>>>> + * memory region until released using the pruss_release_mem_region()
+>>>>> + * API.
+>>>>> + *
+>>>>> + * Return: 0 if requested memory region is available (in such case pointer to
+>>>>> + * memory region is returned via @region), an error otherwise
+>>>>> + */
+>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>>>>> +                 struct pruss_mem_region *region)
+>>>>> +{
+>>>>> +    if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
+>>>>> +        return -EINVAL;
+>>>>> +
+>>>>> +    mutex_lock(&pruss->lock);
+>>>>> +
+>>>>> +    if (pruss->mem_in_use[mem_id]) {
+>>>>> +        mutex_unlock(&pruss->lock);
+>>>>> +        return -EBUSY;
+>>>>> +    }
+>>>>> +
+>>>>> +    *region = pruss->mem_regions[mem_id];
+>>>>> +    pruss->mem_in_use[mem_id] = region;
+>>>>> +
+>>>>> +    mutex_unlock(&pruss->lock);
+>>>>> +
+>>>>> +    return 0;
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
+>>>>> +
+>>>>> +/**
+>>>>> + * pruss_release_mem_region() - release a memory resource
+>>>>> + * @pruss: the pruss instance
+>>>>> + * @region: the memory region to release
+>>>>> + *
+>>>>> + * This function is the complimentary function to
+>>>>> + * pruss_request_mem_region(), and allows the client drivers to
+>>>>> + * release back a memory resource.
+>>>>> + *
+>>>>> + * Return: 0 on success, an error code otherwise
+>>>>> + */
+>>>>> +int pruss_release_mem_region(struct pruss *pruss,
+>>>>> +                 struct pruss_mem_region *region)
+>>>>> +{
+>>>>> +    int id;
+>>>>> +
+>>>>> +    if (!pruss || !region)
+>>>>> +        return -EINVAL;
+>>>>> +
+>>>>> +    mutex_lock(&pruss->lock);
+>>>>> +
+>>>>> +    /* find out the memory region being released */
+>>>>> +    for (id = 0; id < PRUSS_MEM_MAX; id++) {
+>>>>> +        if (pruss->mem_in_use[id] == region)
+>>>>> +            break;
+>>>>> +    }
+>>>>> +
+>>>>> +    if (id == PRUSS_MEM_MAX) {
+>>>>> +        mutex_unlock(&pruss->lock);
+>>>>> +        return -EINVAL;
+>>>>> +    }
+>>>>> +
+>>>>> +    pruss->mem_in_use[id] = NULL;
+>>>>> +
+>>>>> +    mutex_unlock(&pruss->lock);
+>>>>> +
+>>>>> +    return 0;
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
+>>>>> +
+>>>>>   static void pruss_of_free_clk_provider(void *data)
+>>>>>   {
+>>>>>       struct device_node *clk_mux_np = data;
+>>>>> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
+>>>>>           return -ENOMEM;
+>>>>>         pruss->dev = dev;
+>>>>> +    mutex_init(&pruss->lock);
+>>>>>         child = of_get_child_by_name(np, "memories");
+>>>>>       if (!child) {
+>>>>> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
+>>>>> index 86242fb5a64a..22b4b37d2536 100644
+>>>>> --- a/include/linux/pruss_driver.h
+>>>>> +++ b/include/linux/pruss_driver.h
+>>>>> @@ -9,37 +9,18 @@
+>>>>>   #ifndef _PRUSS_DRIVER_H_
+>>>>>   #define _PRUSS_DRIVER_H_
+>>>>>   +#include <linux/mutex.h>
+>>>>>   #include <linux/remoteproc/pruss.h>
+>>>>>   #include <linux/types.h>
+>>>>>   -/*
+>>>>> - * enum pruss_mem - PRUSS memory range identifiers
+>>>>> - */
+>>>>> -enum pruss_mem {
+>>>>> -    PRUSS_MEM_DRAM0 = 0,
+>>>>> -    PRUSS_MEM_DRAM1,
+>>>>> -    PRUSS_MEM_SHRD_RAM2,
+>>>>> -    PRUSS_MEM_MAX,
+>>>>> -};
+>>>>> -
+>>>>> -/**
+>>>>> - * struct pruss_mem_region - PRUSS memory region structure
+>>>>> - * @va: kernel virtual address of the PRUSS memory region
+>>>>> - * @pa: physical (bus) address of the PRUSS memory region
+>>>>> - * @size: size of the PRUSS memory region
+>>>>> - */
+>>>>> -struct pruss_mem_region {
+>>>>> -    void __iomem *va;
+>>>>> -    phys_addr_t pa;
+>>>>> -    size_t size;
+>>>>> -};
+>>>>> -
+>>>>>   /**
+>>>>>    * struct pruss - PRUSS parent structure
+>>>>>    * @dev: pruss device pointer
+>>>>>    * @cfg_base: base iomap for CFG region
+>>>>>    * @cfg_regmap: regmap for config region
+>>>>>    * @mem_regions: data for each of the PRUSS memory regions
+>>>>> + * @mem_in_use: to indicate if memory resource is in use
+>>>>> + * @lock: mutex to serialize access to resources
+>>>>>    * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
+>>>>>    * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
+>>>>>    */
+>>>>> @@ -48,6 +29,8 @@ struct pruss {
+>>>>>       void __iomem *cfg_base;
+>>>>>       struct regmap *cfg_regmap;
+>>>>>       struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
+>>>>> +    struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
+>>>>> +    struct mutex lock; /* PRU resource lock */
+>>>>>       struct clk *core_clk_mux;
+>>>>>       struct clk *iep_clk_mux;
+>>>>>   };
+>>>>> diff --git a/include/linux/remoteproc/pruss.h
+>>>>> b/include/linux/remoteproc/pruss.h
+>>>>> index 93a98cac7829..33f930e0a0ce 100644
+>>>>> --- a/include/linux/remoteproc/pruss.h
+>>>>> +++ b/include/linux/remoteproc/pruss.h
+>>>>> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
+>>>>>       PRU_C31,
+>>>>>   };
+>>>>>   +/*
+>>>>> + * enum pruss_mem - PRUSS memory range identifiers
+>>>>> + */
+>>>>> +enum pruss_mem {
+>>>>> +    PRUSS_MEM_DRAM0 = 0,
+>>>>> +    PRUSS_MEM_DRAM1,
+>>>>> +    PRUSS_MEM_SHRD_RAM2,
+>>>>> +    PRUSS_MEM_MAX,
+>>>>> +};
+>>>>> +
+>>>>> +/**
+>>>>> + * struct pruss_mem_region - PRUSS memory region structure
+>>>>> + * @va: kernel virtual address of the PRUSS memory region
+>>>>> + * @pa: physical (bus) address of the PRUSS memory region
+>>>>> + * @size: size of the PRUSS memory region
+>>>>> + */
+>>>>> +struct pruss_mem_region {
+>>>>> +    void __iomem *va;
+>>>>> +    phys_addr_t pa;
+>>>>> +    size_t size;
+>>>>> +};
+>>>>> +
+>>>>>   struct device_node;
+>>>>>   struct rproc;
+>>>>>   struct pruss;
+>>>>> @@ -52,6 +74,10 @@ struct pruss;
+>>>>>     struct pruss *pruss_get(struct rproc *rproc);
+>>>>>   void pruss_put(struct pruss *pruss);
+>>>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>>>>> +                 struct pruss_mem_region *region);
+>>>>> +int pruss_release_mem_region(struct pruss *pruss,
+>>>>> +                 struct pruss_mem_region *region);
+>>>>>     #else
+>>>>>   @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc
+>>>>> *rproc)
+>>>>>     static inline void pruss_put(struct pruss *pruss) { }
+>>>>>   +static inline int pruss_request_mem_region(struct pruss *pruss,
+>>>>> +                       enum pruss_mem mem_id,
+>>>>> +                       struct pruss_mem_region *region)
+>>>>> +{
+>>>>> +    return -EOPNOTSUPP;
+>>>>> +}
+>>>>> +
+>>>>> +static inline int pruss_release_mem_region(struct pruss *pruss,
+>>>>> +                       struct pruss_mem_region *region)
+>>>>> +{
+>>>>> +    return -EOPNOTSUPP;
+>>>>> +}
+>>>>> +
+>>>>>   #endif /* CONFIG_TI_PRUSS */
+>>>>>     #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>>>
+>>>> cheers,
+>>>> -roger
+>>>
 > 
-> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> index a10dbe632ef9..d72a59415527 100644
-> --- a/drivers/s390/virtio/virtio_ccw.c
-> +++ b/drivers/s390/virtio/virtio_ccw.c
-> @@ -789,9 +789,7 @@ static u64 virtio_ccw_get_features(struct virtio_device *vdev)
->  
->  static void ccw_transport_features(struct virtio_device *vdev)
->  {
-> -	/*
-> -	 * Currently nothing to do here.
-> -	 */
-> +	__virtio_clear_bit(vdev, VIRTIO_F_NOTIFICATION_DATA);
->  }
->  
->  static int virtio_ccw_finalize_features(struct virtio_device *vdev)
-> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-> index 3ff746e3f24a..0e13da17fe0a 100644
-> --- a/drivers/virtio/virtio_mmio.c
-> +++ b/drivers/virtio/virtio_mmio.c
-> @@ -285,6 +285,19 @@ static bool vm_notify(struct virtqueue *vq)
->  	return true;
->  }
->  
-> +static bool vm_notify_with_data(struct virtqueue *vq)
-> +{
-> +	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
-> +	u32 data = vring_fill_notification_data(vq);
-> +
-> +	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
-> +
-> +	return true;
-> +}
-> +
-> +#define VM_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> +	? vm_notify_with_data : vm_notify)
-> +
->  /* Notify all virtqueues on an interrupt. */
->  static irqreturn_t vm_interrupt(int irq, void *opaque)
->  {
-> @@ -397,7 +410,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
->  
->  	/* Create the vring */
->  	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
-> -				 true, true, ctx, vm_notify, callback, name);
-> +			true, true, ctx, VM_NOTIFY(vdev), callback, name);
 
-I don't see why is this macro useful.
-
-
-
->  	if (!vq) {
->  		err = -ENOMEM;
->  		goto error_new_virtqueue;
-> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-> index a6c86f916dbd..535263abc2bd 100644
-> --- a/drivers/virtio/virtio_pci_common.c
-> +++ b/drivers/virtio/virtio_pci_common.c
-> @@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
->  	/* we write the queue's selector into the notification register to
->  	 * signal the other end */
->  	iowrite16(vq->index, (void __iomem *)vq->priv);
-> +
-> +	return true;
-> +}
-> +
-> +bool vp_notify_with_data(struct virtqueue *vq)
-> +{
-> +	u32 data = vring_fill_notification_data(vq);
-> +
-> +	iowrite32(data, (void __iomem *)vq->priv);
-> +
->  	return true;
->  }
->  
-> diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-> index 23112d84218f..9a7212dcbb32 100644
-> --- a/drivers/virtio/virtio_pci_common.h
-> +++ b/drivers/virtio/virtio_pci_common.h
-> @@ -105,6 +105,7 @@ static struct virtio_pci_device *to_vp_device(struct virtio_device *vdev)
->  void vp_synchronize_vectors(struct virtio_device *vdev);
->  /* the notify function used when creating a virt queue */
->  bool vp_notify(struct virtqueue *vq);
-> +bool vp_notify_with_data(struct virtqueue *vq);
->  /* the config->del_vqs() implementation */
->  void vp_del_vqs(struct virtio_device *vdev);
->  /* the config->find_vqs() implementation */
-> @@ -114,6 +115,9 @@ int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
->  		struct irq_affinity *desc);
->  const char *vp_bus_name(struct virtio_device *vdev);
->  
-> +#define VP_NOTIFY(vdev) (__virtio_test_bit((vdev), VIRTIO_F_NOTIFICATION_DATA) \
-> +	? vp_notify : vp_notify_with_data)
-> +
->  /* Setup the affinity for a virtqueue:
->   * - force the affinity for per vq vector
->   * - OR over all affinities for shared MSI
-> diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
-> index 2257f1b3d8ae..b98e994cae48 100644
-> --- a/drivers/virtio/virtio_pci_legacy.c
-> +++ b/drivers/virtio/virtio_pci_legacy.c
-> @@ -131,7 +131,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->  	vq = vring_create_virtqueue(index, num,
->  				    VIRTIO_PCI_VRING_ALIGN, &vp_dev->vdev,
->  				    true, false, ctx,
-> -				    vp_notify, callback, name);
-> +				    VP_NOTIFY(&vp_dev->vdev), callback, name);
->  	if (!vq)
->  		return ERR_PTR(-ENOMEM);
->  
-> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> index 9e496e288cfa..7fcd8af5af7e 100644
-> --- a/drivers/virtio/virtio_pci_modern.c
-> +++ b/drivers/virtio/virtio_pci_modern.c
-> @@ -321,7 +321,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->  	vq = vring_create_virtqueue(index, num,
->  				    SMP_CACHE_BYTES, &vp_dev->vdev,
->  				    true, true, ctx,
-> -				    vp_notify, callback, name);
-> +				    VP_NOTIFY(&vp_dev->vdev), callback, name);
->  	if (!vq)
->  		return ERR_PTR(-ENOMEM);
->  
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 723c4e29e1d3..5e9e1800bb6e 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -2699,6 +2699,21 @@ void vring_del_virtqueue(struct virtqueue *_vq)
->  }
->  EXPORT_SYMBOL_GPL(vring_del_virtqueue);
->  
-> +u32 vring_fill_notification_data(struct virtqueue *_vq)
-> +{
-> +	struct vring_virtqueue *vq = to_vvq(_vq);
-> +	u16 next;
-> +
-> +	if (vq->packed_ring)
-> +		next = (vq->packed.next_avail_idx & ~(1 << 15)) |
-> +			((u16)vq->packed.avail_wrap_counter << 15);
-
-I don't think the cast is needed. Neither is () around << the second <<
-here (first is needed because gcc chooses to complain: apparently it
-considers bitwise and a math operation for some obscure reason).
-
-> +	else
-> +		next = virtio16_to_cpu(_vq->vdev, vq->split.vring.avail->idx);
-> +
-> +	return ((u32)next << 16) | _vq->index;
-
-I don't think the cast is needed. Neither is () around << needed.
-
-> +}
-> +EXPORT_SYMBOL_GPL(vring_fill_notification_data);
-> +
-
-I'd inline this - it's on data path ...
-
->  /* Manipulates transport-specific feature bits. */
->  void vring_transport_features(struct virtio_device *vdev)
->  {
-
-> @@ -2718,6 +2733,8 @@ void vring_transport_features(struct virtio_device *vdev)
->  			break;
->  		case VIRTIO_F_ORDER_PLATFORM:
->  			break;
-> +		case VIRTIO_F_NOTIFICATION_DATA:
-> +			break;
->  		default:
->  			/* We don't understand this bit. */
->  			__virtio_clear_bit(vdev, i);
-> diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
-> index 8b8af1a38991..1f65d2f77012 100644
-> --- a/include/linux/virtio_ring.h
-> +++ b/include/linux/virtio_ring.h
-> @@ -101,4 +101,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
->  void vring_transport_features(struct virtio_device *vdev);
->  
->  irqreturn_t vring_interrupt(int irq, void *_vq);
-> +
-> +u32 vring_fill_notification_data(struct virtqueue *_vq);
->  #endif /* _LINUX_VIRTIO_RING_H */
-> diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-> index 3c05162bc988..2c712c654165 100644
-> --- a/include/uapi/linux/virtio_config.h
-> +++ b/include/uapi/linux/virtio_config.h
-> @@ -99,6 +99,12 @@
->   */
->  #define VIRTIO_F_SR_IOV			37
->  
-> +/*
-> + * This feature indicates that the driver passes extra data (besides
-> + * identifying the virtqueue) in its device notifications.
-> + */
-> +#define VIRTIO_F_NOTIFICATION_DATA	38
-> +
->  /*
->   * This feature indicates that the driver can reset a queue individually.
->   */
-> -- 
-> 2.35.1
-
+cheers,
+-roger
