@@ -2,212 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0D46C358F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8007E6C3599
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjCUPXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S231493AbjCUPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjCUPXB (ORCPT
+        with ESMTP id S231415AbjCUPZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:23:01 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0BB515F8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:22:44 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id s20so8690451ljp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1679412162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r4fhcs89c2i1SaCaKQE+ZquDyMtoplogwGVHOlrqnDo=;
-        b=RvPcpPqJhBpBGEmvgCug6eQ1kMSP7zi/8kv9taohu4ygJN80LSTLTRpuIpdDY1TjAL
-         igRcrXOOFhrW2LjO0cvpohQgVHphr99fU5pjvG7Oqur1maKTrIjpj9b7sAsu4Two6tqp
-         XF28TSnJrLcp/bV/S/INuZ27Wx37xbfXvsQhdnaFS0EdETIKeXRsZe8h8LlTARTIG/Wv
-         PipnAwUEPn8AI/UInlYhOD3/uO8Gf1uIN1kIfCPvvIFByv8hdmoYUzFR18ocZrigPuwB
-         eEavjKq+yQj2NZDgnL6CQSuM7Zed1LNX5T/Bv8GsfJEotYtndf880UGzRZzxzye+m8rU
-         dJWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679412162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r4fhcs89c2i1SaCaKQE+ZquDyMtoplogwGVHOlrqnDo=;
-        b=sNLjY/HEh2gIvA/CXQ73gET3EjJdAFk9rXzg1roKjMPMREabZYK+40YT+YKUdbVh3m
-         F6RrZxV93r54+HHGgUkmuJ1Vdhtv0wKEsMAquTZXFxOLjdBcPJNJD3+pfc9roCXlgDPo
-         372LPlNy6FGp85zy/Nc1Yg7T1ofyZQ/3JdleKse5AdUx2r8UGnbYo7Mz+n8lNKieKVSV
-         r2GUZPY64SwRtWhCfXBXr03GlaKrVgmm9XmokgkrbLVgXEBUo4qdVrcgN5UXw2ZcspXU
-         kwAhzCWZv5zUUB/zrZqyYcCbzVl+3foLdE+enDtsN4JHdJ3rLiyF7gJ4/Z3ZymOSpyw3
-         +kyg==
-X-Gm-Message-State: AO0yUKWmsUUpA/oweG6983wWeKRS8K0xOsNPvt6avuCQyYLYp9VOiAQw
-        pVDUmJARD+G6Hsjl5E/detJy+ReqSl/arR5YC+qPpA==
-X-Google-Smtp-Source: AK7set/pB3EswDTWrcfNX8zIafnSwam2eDPPjtzIwc33i0qCcLfPhDJhKEUQBtsB8Av+cLTDT9UQoeDdLo2eHTx3Res=
-X-Received: by 2002:a2e:8482:0:b0:298:7c9e:505 with SMTP id
- b2-20020a2e8482000000b002987c9e0505mr977894ljh.8.1679412161781; Tue, 21 Mar
- 2023 08:22:41 -0700 (PDT)
+        Tue, 21 Mar 2023 11:25:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A464FCC0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679412341; x=1710948341;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=wUl8q50fX83Pxt0FLNlLN7yvA7n1d6/42RULa+53jro=;
+  b=VZ/IsVjkmCSrZmFSiBgEBeRYEpDPoLlSMO0Dn2ua38j2ziMIQzkzV8uH
+   ojSdjXuiC3WI4HQD66xKtjFPofahwYICQ6vigbOdbKK1b70T5+SJPRCW2
+   P36LCEA00H9NclygYO0GJSh156eYsNPAXUWeHvihdfjmGoVh6vt1Dem/u
+   Q5eVlQhuGByat6XXhjiQrUuJJLjCSt9klLtXafEnbzTZ5WdLYatlSCD13
+   2XyJgGFSHwKtTlf0U0lKTHwrSUXSRHkX53lZBmw14xaeU/zlBrywMrt1l
+   9vz1iz1OE7FzWYas8dk7NYGcQnFvbthAsHGbhbE+YkX3Z6wy9wSd0P9hK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="322813316"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="322813316"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:25:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="683905778"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="683905778"
+Received: from jluqueti-mobl.ger.corp.intel.com ([10.252.63.147])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:25:36 -0700
+Date:   Tue, 21 Mar 2023 17:25:33 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     James Morse <james.morse@arm.com>
+cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
+Subject: Re: [PATCH v3 17/19] x86/resctrl: Allow overflow/limbo handlers to
+ be scheduled on any-but cpu
+In-Reply-To: <118d53a6-e292-50a0-dc8f-32c573379ed7@linux.intel.com>
+Message-ID: <54165c70-795b-6e6e-aad-4089ddd6dbe5@linux.intel.com>
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-18-james.morse@arm.com> <118d53a6-e292-50a0-dc8f-32c573379ed7@linux.intel.com>
 MIME-Version: 1.0
-References: <20230321134410.2097163-1-viktor@daynix.com> <87h6uem9qc.fsf@redhat.com>
-In-Reply-To: <87h6uem9qc.fsf@redhat.com>
-From:   Viktor Prutyanov <viktor@daynix.com>
-Date:   Tue, 21 Mar 2023 18:22:31 +0300
-Message-ID: <CAPv0NP6Ep4-B7cMc285E3d3vYjgwO7O1pq5sG3OYYAoZd3EAYQ@mail.gmail.com>
-Subject: Re: [PATCH v3] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, pasic@linux.ibm.com,
-        farman@linux.ibm.com, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1557823100-1679412340=:1997"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 5:59=E2=80=AFPM Cornelia Huck <cohuck@redhat.com> w=
-rote:
->
-> On Tue, Mar 21 2023, Viktor Prutyanov <viktor@daynix.com> wrote:
->
-> > According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
-> > indicates that the driver passes extra data along with the queue
-> > notifications.
-> >
-> > In a split queue case, the extra data is 16-bit available index. In a
-> > packed queue case, the extra data is 1-bit wrap counter and 15-bit
-> > available index.
-> >
-> > Add support for this feature for MMIO, PCI and channel I/O transports.
-> >
-> > Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1557823100-1679412340=:1997
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 21 Mar 2023, Ilpo Järvinen wrote:
+
+> On Mon, 20 Mar 2023, James Morse wrote:
+> 
+> > When a CPU is taken offline resctrl may need to move the overflow or
+> > limbo handlers to run on a different CPU.
+> > 
+> > Once the offline callbacks have been split, cqm_setup_limbo_handler()
+> > will be called while the CPU that is going offline is still present
+> > in the cpu_mask.
+> > 
+> > Pass the CPU to exclude to cqm_setup_limbo_handler() and
+> > mbm_setup_overflow_handler(). These functions can use a variant of
+> > cpumask_any_but() when selecting the CPU. -1 is used to indicate no CPUs
+> > need excluding.
+> > 
+> > Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
+> > Signed-off-by: James Morse <james.morse@arm.com>
 > > ---
-> >  v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_sha=
-dow,
-> >     remove byte swap, rename to vring_notification_data
-> >  v2: reject the feature in virtio_ccw, replace __le32 with u32
-> >
-> >  drivers/s390/virtio/virtio_ccw.c   |  4 +++-
-> >  drivers/virtio/virtio_mmio.c       | 14 +++++++++++++-
-> >  drivers/virtio/virtio_pci_common.c | 10 ++++++++++
-> >  drivers/virtio/virtio_pci_common.h |  4 ++++
-> >  drivers/virtio/virtio_pci_legacy.c |  2 +-
-> >  drivers/virtio/virtio_pci_modern.c |  2 +-
-> >  drivers/virtio/virtio_ring.c       | 17 +++++++++++++++++
-> >  include/linux/virtio_ring.h        |  2 ++
-> >  include/uapi/linux/virtio_config.h |  6 ++++++
-> >  9 files changed, 57 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/vir=
-tio_ccw.c
-> > index 954fc31b4bc7..c33172c5b8d5 100644
-> > --- a/drivers/s390/virtio/virtio_ccw.c
-> > +++ b/drivers/s390/virtio/virtio_ccw.c
-> > @@ -396,13 +396,15 @@ static bool virtio_ccw_kvm_notify(struct virtqueu=
-e *vq)
-> >       struct virtio_ccw_vq_info *info =3D vq->priv;
-> >       struct virtio_ccw_device *vcdev;
-> >       struct subchannel_id schid;
-> > +     u32 data =3D __virtio_test_bit(vq->vdev, VIRTIO_F_NOTIFICATION_DA=
-TA) ?
-> > +                     vring_notification_data(vq) : vq->index;
-> >
-> >       vcdev =3D to_vc_device(info->vq->vdev);
-> >       ccw_device_get_schid(vcdev->cdev, &schid);
-> >       BUILD_BUG_ON(sizeof(struct subchannel_id) !=3D sizeof(unsigned in=
-t));
-> >       info->cookie =3D kvm_hypercall3(KVM_S390_VIRTIO_CCW_NOTIFY,
-> >                                     *((unsigned int *)&schid),
-> > -                                   vq->index, info->cookie);
-> > +                                   data, info->cookie);
-> >       if (info->cookie < 0)
-> >               return false;
-> >       return true;
-> > diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.=
-c
-> > index 3ff746e3f24a..7c16e622c33d 100644
-> > --- a/drivers/virtio/virtio_mmio.c
-> > +++ b/drivers/virtio/virtio_mmio.c
-> > @@ -285,6 +285,16 @@ static bool vm_notify(struct virtqueue *vq)
-> >       return true;
+> > Changes since v2:
+> >  * Rephrased a comment to avoid a two letter bad-word. (we)
+> >  * Avoid assigning mbm_work_cpu if the domain is going to be free()d
+> >  * Added cpumask_any_housekeeping_but(), I dislike the name
+> > ---
+> >  arch/x86/kernel/cpu/resctrl/core.c     |  8 +++--
+> >  arch/x86/kernel/cpu/resctrl/internal.h | 37 ++++++++++++++++++++--
+> >  arch/x86/kernel/cpu/resctrl/monitor.c  | 43 +++++++++++++++++++++-----
+> >  arch/x86/kernel/cpu/resctrl/rdtgroup.c |  6 ++--
+> >  include/linux/resctrl.h                |  3 ++
+> >  5 files changed, 83 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> > index 8e25ea49372e..aafe4b74587c 100644
+> > --- a/arch/x86/kernel/cpu/resctrl/core.c
+> > +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> > @@ -582,12 +582,16 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+> >  	if (r == &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl) {
+> >  		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
+> >  			cancel_delayed_work(&d->mbm_over);
+> > -			mbm_setup_overflow_handler(d, 0);
+> > +			/*
+> > +			 * exclude_cpu=-1 as this CPU has already been removed
+> > +			 * by cpumask_clear_cpu()d
+> > +			 */
+> > +			mbm_setup_overflow_handler(d, 0, RESCTRL_PICK_ANY_CPU);
+> >  		}
+> >  		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
+> >  		    has_busy_rmid(r, d)) {
+> >  			cancel_delayed_work(&d->cqm_limbo);
+> > -			cqm_setup_limbo_handler(d, 0);
+> > +			cqm_setup_limbo_handler(d, 0, RESCTRL_PICK_ANY_CPU);
+> >  		}
+> >  	}
 > >  }
-> >
-> > +static bool vm_notify_with_data(struct virtqueue *vq)
-> > +{
-> > +     struct virtio_mmio_device *vm_dev =3D to_virtio_mmio_device(vq->v=
-dev);
-> > +     u32 data =3D vring_notification_data(vq);
-> > +
-> > +     writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
->
-> Can't you simply use the same method as for ccw, i.e. use one callback
-> function that simply writes one value or the other?
-
-The idea is to eliminate the conditional branch induced by feature bit
-testing from the notification function. Probably, this can be done in
-the same way in ccw.
-
->
-> > +
-> > +     return true;
-> > +}
-> > +
-> >  /* Notify all virtqueues on an interrupt. */
-> >  static irqreturn_t vm_interrupt(int irq, void *opaque)
-> >  {
-> > @@ -368,6 +378,8 @@ static struct virtqueue *vm_setup_vq(struct virtio_=
-device *vdev, unsigned int in
-> >       unsigned long flags;
-> >       unsigned int num;
-> >       int err;
-> > +     bool (*notify)(struct virtqueue *vq) =3D __virtio_test_bit(vdev,
-> > +             VIRTIO_F_NOTIFICATION_DATA) ? vm_notify_with_data : vm_no=
-tify;
-> >
-> >       if (!name)
-> >               return NULL;
-> > @@ -397,7 +409,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_=
-device *vdev, unsigned int in
-> >
-> >       /* Create the vring */
-> >       vq =3D vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN=
-, vdev,
-> > -                              true, true, ctx, vm_notify, callback, na=
-me);
-> > +                              true, true, ctx, notify, callback, name)=
-;
-> >       if (!vq) {
-> >               err =3D -ENOMEM;
-> >               goto error_new_virtqueue;
-> > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio=
-_pci_common.c
-> > index a6c86f916dbd..e915c22f2384 100644
-> > --- a/drivers/virtio/virtio_pci_common.c
-> > +++ b/drivers/virtio/virtio_pci_common.c
-> > @@ -43,6 +43,16 @@ bool vp_notify(struct virtqueue *vq)
-> >       /* we write the queue's selector into the notification register t=
-o
-> >        * signal the other end */
-> >       iowrite16(vq->index, (void __iomem *)vq->priv);
-> > +
-> > +     return true;
-> > +}
-> > +
-> > +bool vp_notify_with_data(struct virtqueue *vq)
-> > +{
-> > +     u32 data =3D vring_notification_data(vq);
-> > +
-> > +     iowrite32(data, (void __iomem *)vq->priv);
->
-> Same for pci.
->
-> > +
-> >       return true;
+> > diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+> > index 3eb5b307b809..47838ba6876e 100644
+> > --- a/arch/x86/kernel/cpu/resctrl/internal.h
+> > +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+> > @@ -78,6 +78,37 @@ static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
+> >  	return cpu;
 > >  }
-> >
->
+> >  
+> > +/**
+> > + * cpumask_any_housekeeping_but() - Chose any cpu in @mask, preferring those
+> > + *			            that aren't marked nohz_full, excluding
+> > + *				    the provided CPU
+> > + * @mask:	The mask to pick a CPU from.
+> > + * @exclude_cpu:The CPU to avoid picking.
+> > + *
+> > + * Returns a CPU from @mask, but not @but. If there are houskeeping CPUs that
+> > + * don't use nohz_full, these are preferred.
+> > + * Returns >= nr_cpu_ids if no CPUs are available.
+> > + */
+> > +static inline unsigned int
+> > +cpumask_any_housekeeping_but(const struct cpumask *mask, int exclude_cpu)
+> > +{
+> > +	int cpu, hk_cpu;
+> > +
+> > +	cpu = cpumask_any_but(mask, exclude_cpu);
+> > +	if (tick_nohz_full_cpu(cpu)) {
+> > +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
+> > +		if  (hk_cpu == exclude_cpu) {
+> > +			hk_cpu = cpumask_nth_andnot(1, mask,
+> > +						    tick_nohz_full_mask);
+> 
+> I'm left to wonder if it's okay to alter tick_nohz_full_mask in resctrl 
+> code??
+
+I suppose it should do instead:
+		hk_cpu = cpumask_nth_and(0, mask, tick_nohz_full_mask);
+		if (hk_cpu == exclude_cpu)
+			hk_cpu = cpumask_next_and(hk_cpu, mask, tick_nohz_full_mask);
+
+-- 
+ i.
+
+--8323329-1557823100-1679412340=:1997--
