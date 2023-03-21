@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCC36C37FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E24676C380C
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCURPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
+        id S230447AbjCURTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjCURPo (ORCPT
+        with ESMTP id S230413AbjCURT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:15:44 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7551B51CA0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:15:14 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-17e140619fdso8431492fac.11
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679418911;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=XUznw+96Gvbv6IKQqs+2rZZtbVe39fwnOoVFI2nPG5ph1XDSrOoFlgGtZZOMMNZqkS
-         5B22oCsEn2E9e67YiO5ZvIC6YezoTJ4h3cRaMoMIARAqtiEWe8IoSDOQTq4CmWCgmLAa
-         XsGjrDyMWIzy4AjrVkVgdCjWzw76xWzk/za7tbsyvLeCrBlgPyRcYIU8zIcChwLXDi0N
-         gJ/WALNVVE7G+nKgVe9tUOA3/QSOo6xu+Di0NT+qquq8Qd3pxj7t0H/mPp2+OYdel34/
-         XHbsEkHn8poLqQhXWAehp8Wp0l/MLeMLPzGG8TQWwdtzQZD1Gh4fpjALjWylsW2Fj0pe
-         HFtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679418911;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=01krKy/BfZhNO3ku5uE8IJymXs1TFD4T9wdU5boIpEFgIENowR/m44WBErci9jzirr
-         3elzQdB951u6lSkZ7Va0TKDQg2AY1tHkV2I35i3/QhNQJBr/UPVUbhixQlPT8hBVzsju
-         MDop+LD3RxeCSviRmh+5wLtDSMacrHqDN3ghePk65E4ScKWtNIhkSJKZ4dDXeQOwf8oi
-         kEWV6KbNobUbgsvpCxT7YgeF/dA8gdYGl7tfg1O1m1bgEIWSUD5hnIOPLslc5lUq4RlQ
-         6U5H58/HbwISp3Y47pXqMYxzVJIMMUZ4PK+ghz58hpGZN6gXVBN63lT53A1/y31BrBOh
-         icCg==
-X-Gm-Message-State: AO0yUKVerdRAqzC94VPy4DypXRC8khy9UXsS/wjxvJtBCKi/lya6/2Bn
-        VIOV0gRyTFEt6Ff6ihRLK/d43wEgyyYs7ifGw8U=
-X-Google-Smtp-Source: AK7set8CiXlyx7hzzxpseyVlUmDHp99JlIkN/AFr3W+rMb0nuvbJsyP126GBZER25zBOPku4GiBIyob849AHOpLkZII=
-X-Received: by 2002:a05:6870:13d9:b0:17b:f094:5478 with SMTP id
- 25-20020a05687013d900b0017bf0945478mr966678oat.2.1679418911232; Tue, 21 Mar
- 2023 10:15:11 -0700 (PDT)
+        Tue, 21 Mar 2023 13:19:29 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394B420A20;
+        Tue, 21 Mar 2023 10:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PnM8qWjlChOypXMUKbb5rR1MAgOZHr38zSDi4wQUtEs=; b=itI+aaF5dGBBOFEsy3YiNOMlAl
+        ZE6zedAsVcLZYFAXapSlq9yxYkdr5wnMV51b5hKQmGkc5YklHyH3sK1ZHMa4Rl006Ei/U+4z7jHt3
+        Sam887otMU7ecUXQHbpOvg3xvZ9AGY09iUCXhxZnGAhAqrM4jG/PdSNmN/UaejAIFidYARFYs9koz
+        D8UV0ZtBTnMoQI9DOoNYWEHfqb16FHxdarIBqDZCwwOhsiJ/0LYi+l9EivFjkhTjOvt+zlOKsezlU
+        9mPYo8NWAKTaARBja5v7+ulcdCPLeVbfod0YpppcI0oeZSOgujuat80KSr+pkG/ZKhAbAJIspO45H
+        MrAP5B2w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pefdm-002E2a-1j; Tue, 21 Mar 2023 17:19:18 +0000
+Date:   Tue, 21 Mar 2023 17:19:18 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] fs/drop_caches: move drop_caches sysctls into its own
+ file
+Message-ID: <ZBnnFtKVgAFQ4yeo@casper.infradead.org>
+References: <20230321130908.6972-1-frank.li@vivo.com>
+ <ZBneeOYHKBZl8SGe@casper.infradead.org>
+ <ZBnho5yPbXIQs752@bombadil.infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:71c2:b0:eb:2713:ca32 with HTTP; Tue, 21 Mar 2023
- 10:15:10 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <gte263531@gmail.com>
-Date:   Tue, 21 Mar 2023 10:15:10 -0700
-Message-ID: <CAOJy87n+mvr54vRqwuwc2AWpVjZjEr0zPyrbSZTAgvhifprpbg@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:29 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5011]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [gte263531[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gte263531[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBnho5yPbXIQs752@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Tue, Mar 21, 2023 at 09:56:03AM -0700, Luis Chamberlain wrote:
+> On Tue, Mar 21, 2023 at 04:42:32PM +0000, Matthew Wilcox wrote:
+> > On Tue, Mar 21, 2023 at 09:09:07PM +0800, Yangtao Li wrote:
+> > > +static struct ctl_table drop_caches_table[] = {
+> > > +	{
+> > > +		.procname	= "drop_caches",
+> > > +		.data		= &sysctl_drop_caches,
+> > > +		.maxlen		= sizeof(int),
+> > > +		.mode		= 0200,
+> > > +		.proc_handler	= drop_caches_sysctl_handler,
+> > > +		.extra1		= SYSCTL_ONE,
+> > > +		.extra2		= SYSCTL_FOUR,
+> > > +	},
+> > > +	{}
+> > > +};
+> > 
+> > Could we avoid doing this until we no longer need an entire zero entry
+> > after the last one? 
+> 
+> That may be 2-3 kernel release from now. The way to use ARRAY_SIZE()
+> really is to deprecate the crap APIs that allow messy directory sysctl
+> structures.
+
+I'm OK with waiting another year to commence this cleanup.  We've lived
+with the giant tables for decades already.  Better to get the new API
+right than split the tables now, then have to touch all the places
+again.
