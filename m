@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B366C270D
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14CE6C270E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 02:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCUBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 21:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S230371AbjCUBLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 21:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjCUBLQ (ORCPT
+        with ESMTP id S230357AbjCUBLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 21:11:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F48536455;
-        Mon, 20 Mar 2023 18:10:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFE06618FA;
-        Tue, 21 Mar 2023 01:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E99C433A0;
-        Tue, 21 Mar 2023 01:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679360903;
-        bh=3UMDmzecbQnMS3HKOBjegoopX/Bv/UkwzjwMIKGA+oA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pED5iexpHrvAw9Q+86ZMBeDuE8SYy7/aLrqJW0P+Fy7cC46E81znWiiO2nRPktYxg
-         FzDE6D940PD95SzupBwE8kSIyphHBAyUfbN14nTA6IxT8h+O3lr2SPHCLILQLQjg8/
-         0x+dS+zw+gYiqP2JmGyxWEug33j+8CX/tNpKKe3+YqOoIvhYrXbC3ZqXZ7Lgp9kZH5
-         jE6W5P0veqTKQPlK9QFbkyOumw6z54lpuB18SgxkMKwXIoZML4qHW6/eX+1U4REQmr
-         1raCGRacrswtxGCuQazwCJ+S1wpq6cnvbsnr93N/XjXw9QcXnytZpUjG4SA6NyYVWW
-         h3eKNAz/2OgmA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id B9DF2154039D; Mon, 20 Mar 2023 18:08:22 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH locktorture 5/5] locktorture: Add raw_spinlock* torture tests for PREEMPT_RT kernels
-Date:   Mon, 20 Mar 2023 18:08:21 -0700
-Message-Id: <20230321010821.51601-5-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc2
-In-Reply-To: <3679d2b2-bdb9-4fa3-8134-240a8d0f449b@paulmck-laptop>
-References: <3679d2b2-bdb9-4fa3-8134-240a8d0f449b@paulmck-laptop>
+        Mon, 20 Mar 2023 21:11:25 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D436FE2
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:10:34 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id le6so14383050plb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 18:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1679360957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ard8tYEtuim88umne0gyaePxSaABF63V8F0JJy1BBA8=;
+        b=2j9RQkllMk34kvITCdHHjbV+9is81Ls1mIfbwpFF0L5ntmfjrZkH3/NfJCdQkerk9F
+         9jB+kVCeIcfsN4zSQqa7P/4mc6GGhWbZgjj6RwGJlqMG1cieO7aTZXyE505+yaBuKcCF
+         T2Yy3ULdf0DVv5/fivzuhR2U2Uuuk556TlrBmuHg4esUEOa37J8uO1DpHIFXInGDsXGZ
+         uYUtaGTC4eyXjOo8Rrrnys7rGvTdpncaLTgYaT5qYQ1UpcpK7eMmgHj5YfTLC7lpcrNu
+         V427PnGRswjr8vdYxpl88XyC2Dqm2bCZiquR+94YqMrYGWDEN8Fu9BrhRowl4HCQjO67
+         qUdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679360957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ard8tYEtuim88umne0gyaePxSaABF63V8F0JJy1BBA8=;
+        b=orD2EzEz7Q1+eJHVA1bHBE9cbSKdhZr5XL1wDSB+/fIQO+RYpeLmfBhaJdye57oZ7w
+         e+op8cWKbt4OLVyuIo74jtYG2nZy1q6i1ohSmLIQwm6ghPDIX8w78ll8UDphYM4kUvNW
+         +rjZKKm+k8M+FHxFQOmA+dIPKVzaWwUvURP31xn2naveTC7CjtKmcWI+mR3rQZFCM8xx
+         e2vgsdJWmCyMVjH1+prNH/L0DCXUqXF2v4GfD60qZxowPtyP0gsoDaOZzfROan1A+B83
+         VdRk1THHPxLZ8yY557DuKh/17l5DudFl+Q4FT9+OC0S17qf9ykV5R801Rc9uZR3deOw9
+         r/6Q==
+X-Gm-Message-State: AO0yUKXT1ckypL010sa6VCNOs2t5FR478THVKhaxlfMvy+WlvSvVjexH
+        WPUZFtVGRqQDtWtVeWoZYSjEGg==
+X-Google-Smtp-Source: AK7set+UOYEWRVZ3UVEikJR6Cx2WhJxXds4/6C4hRFkW/myx6zHNT32/ivnnzhI1BkOCjTw/kBkjRw==
+X-Received: by 2002:a17:902:d48c:b0:1a0:57df:861c with SMTP id c12-20020a170902d48c00b001a057df861cmr16695481plg.1.1679360956742;
+        Mon, 20 Mar 2023 18:09:16 -0700 (PDT)
+Received: from destitution (pa49-196-94-140.pa.vic.optusnet.com.au. [49.196.94.140])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170903028400b0019a723a831dsm7344655plr.158.2023.03.20.18.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 18:09:16 -0700 (PDT)
+Received: from dave by destitution with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1peQUy-000WO0-0v;
+        Tue, 21 Mar 2023 12:09:12 +1100
+Date:   Tue, 21 Mar 2023 12:09:12 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
+ and vmap_block->lock
+Message-ID: <ZBkDuLKLhsOHNUeG@destitution>
+References: <cover.1679209395.git.lstoakes@gmail.com>
+ <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+On Sun, Mar 19, 2023 at 07:09:31AM +0000, Lorenzo Stoakes wrote:
+> vmalloc() is, by design, not permitted to be used in atomic context and
+> already contains components which may sleep, so avoiding spin locks is not
+> a problem from the perspective of atomic context.
+> 
+> The global vmap_area_lock is held when the red/black tree rooted in
+> vmap_are_root is accessed and thus is rather long-held and under
+> potentially high contention. It is likely to be under contention for reads
+> rather than write, so replace it with a rwsem.
+> 
+> Each individual vmap_block->lock is likely to be held for less time but
+> under low contention, so a mutex is not an outrageous choice here.
+> 
+> A subset of test_vmalloc.sh performance results:-
+> 
+> fix_size_alloc_test             0.40%
+> full_fit_alloc_test		2.08%
+> long_busy_list_alloc_test	0.34%
+> random_size_alloc_test		-0.25%
+> random_size_align_alloc_test	0.06%
+> ...
+> all tests cycles                0.2%
+> 
+> This represents a tiny reduction in performance that sits barely above
+> noise.
 
-In PREEMPT_RT kernels, both spin_lock() and spin_lock_irq() are converted
-to sleepable rt_spin_lock().  This means that the interrupt related
-suffixes for spin_lock/unlock(_irq, irqsave/irqrestore) do not affect
-the CPU's interrupt state. This commit therefore adds raw spin-lock
-torture tests.  This in turn permits pure spin locks to be tested in
-PREEMPT_RT kernels.
+I'm travelling right now, but give me a few days and I'll test this
+against the XFS workloads that hammer the global vmalloc spin lock
+really, really badly. XFS can use vm_map_ram and vmalloc really
+heavily for metadata buffers and hit the global spin lock from every
+CPU in the system at the same time (i.e. highly concurrent
+workloads). vmalloc is also heavily used in the hottest path
+throught the journal where we process and calculate delta changes to
+several million items every second, again spread across every CPU in
+the system at the same time.
 
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- kernel/locking/locktorture.c | 56 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
+We really need the global spinlock to go away completely, but in the
+mean time a shared read lock should help a little bit....
 
-diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-index 9425aff08936..153ddc4c47ef 100644
---- a/kernel/locking/locktorture.c
-+++ b/kernel/locking/locktorture.c
-@@ -55,7 +55,7 @@ torture_param(int, nested_locks, 0, "Number of nested locks (max = 8)");
- /* Going much higher trips "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!" errors */
- #define MAX_NESTED_LOCKS 8
- 
--static char *torture_type = "spin_lock";
-+static char *torture_type = IS_ENABLED(CONFIG_PREEMPT_RT) ? "raw_spin_lock" : "spin_lock";
- module_param(torture_type, charp, 0444);
- MODULE_PARM_DESC(torture_type,
- 		 "Type of lock to torture (spin_lock, spin_lock_irq, mutex_lock, ...)");
-@@ -257,6 +257,59 @@ static struct lock_torture_ops spin_lock_irq_ops = {
- 	.name		= "spin_lock_irq"
- };
- 
-+static DEFINE_RAW_SPINLOCK(torture_raw_spinlock);
-+
-+static int torture_raw_spin_lock_write_lock(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	raw_spin_lock(&torture_raw_spinlock);
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock(&torture_raw_spinlock);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock"
-+};
-+
-+static int torture_raw_spin_lock_write_lock_irq(int tid __maybe_unused)
-+__acquires(torture_raw_spinlock)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&torture_raw_spinlock, flags);
-+	cxt.cur_ops->flags = flags;
-+	return 0;
-+}
-+
-+static void torture_raw_spin_lock_write_unlock_irq(int tid __maybe_unused)
-+__releases(torture_raw_spinlock)
-+{
-+	raw_spin_unlock_irqrestore(&torture_raw_spinlock, cxt.cur_ops->flags);
-+}
-+
-+static struct lock_torture_ops raw_spin_lock_irq_ops = {
-+	.writelock	= torture_raw_spin_lock_write_lock_irq,
-+	.write_delay	= torture_spin_lock_write_delay,
-+	.task_boost	= torture_rt_boost,
-+	.writeunlock	= torture_raw_spin_lock_write_unlock_irq,
-+	.readlock	= NULL,
-+	.read_delay	= NULL,
-+	.readunlock	= NULL,
-+	.name		= "raw_spin_lock_irq"
-+};
-+
- static DEFINE_RWLOCK(torture_rwlock);
- 
- static int torture_rwlock_write_lock(int tid __maybe_unused)
-@@ -1017,6 +1070,7 @@ static int __init lock_torture_init(void)
- 	static struct lock_torture_ops *torture_ops[] = {
- 		&lock_busted_ops,
- 		&spin_lock_ops, &spin_lock_irq_ops,
-+		&raw_spin_lock_ops, &raw_spin_lock_irq_ops,
- 		&rw_lock_ops, &rw_lock_irq_ops,
- 		&mutex_lock_ops,
- 		&ww_mutex_lock_ops,
+-Dave.
 -- 
-2.40.0.rc2
-
+Dave Chinner
+david@fromorbit.com
