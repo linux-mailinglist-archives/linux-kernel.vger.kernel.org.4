@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EBD6C36E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DFA6C36E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCUQ0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S229497AbjCUQ0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCUQ0r (ORCPT
+        with ESMTP id S229583AbjCUQ0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:26:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98AB33471
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 09:26:46 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeoh-0001Tm-NK; Tue, 21 Mar 2023 17:26:31 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeog-005jOR-PC; Tue, 21 Mar 2023 17:26:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1peeof-006oMY-H4; Tue, 21 Mar 2023 17:26:29 +0100
-Date:   Tue, 21 Mar 2023 17:26:29 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        Tue, 21 Mar 2023 12:26:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04151367CA;
+        Tue, 21 Mar 2023 09:26:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCD4C61D1B;
+        Tue, 21 Mar 2023 16:26:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4C4C433D2;
+        Tue, 21 Mar 2023 16:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679416003;
+        bh=tKkWKaI2vB8Y3uT5D+N8CfXzL37wrUQjbZ1WKGqRlGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AKFeVjHsPQS6dAl6zd96IZOCGHqrPcab2l3l9yTBLAqJICxz3pLG0ytby4K5Vu++u
+         EwENZ9OiiTSX31CXM/bCq5C0KstSrArKmAg3KSeKnlil+6+WUCIK6D0Mn3wlJgGzMs
+         e7Ln2zF7W0W/KZOpUHrs5W6OPI7kIcp4mM9yyiGM=
+Date:   Tue, 21 Mar 2023 17:26:40 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
         johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
-        thierry.reding@gmail.com, greybus-dev@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: greybus: use inline function for macros
-Message-ID: <20230321162629.rjmivzhbdy4pcgii@pengutronix.de>
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 0/3] edits in greybus driver
+Message-ID: <ZBnawJvBVkgyVh78@kroah.com>
 References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <1274302b52ae905dab6f75377d625598facbbdf1.1679352669.git.eng.mennamahmoud.mm@gmail.com>
- <20230321154728.3r7ut3rl2pccmo2e@pengutronix.de>
- <82a4e5f1-a1f2-c70-3645-9464ccb17bab@inria.fr>
+ <ee77a227-13bd-70ad-1d8e-f9719970e0f8@inria.fr>
+ <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d5lucct4g3gdijlv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <82a4e5f1-a1f2-c70-3645-9464ccb17bab@inria.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,82 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 21, 2023 at 06:22:44PM +0200, Menna Mahmoud wrote:
+> 
+> On ٢١‏/٣‏/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
+> > 
+> > On Tue, 21 Mar 2023, Menna Mahmoud wrote:
+> > 
+> > > This patchset includes change happened in greybus driver in three
+> > > different files two of them patch one and three related to
+> > > checkpatch issue and in second patch convert two
+> > > `container_of` macros into inline functions.
+> > > 
+> > > Menna Mahmoud (3):
+> > >    staging: greybus: remove unnecessary blank line
+> > >    staging: greybus: use inline function for macros
+> > >    staging: greybus: remove unnecessary blank line
+> > Different patches should have different subject lines.
+> But I have already the same edit in both file, so should I re-write the
+> subject for one of them?
+> >    You need to either
+> > be more specific about the file affected or merge the two patches with the
+> > same subject into one.
+> 
+> each patch related to different file. So, Can I to merge two commits for
+> different files but have the same edit in one patch?
 
---d5lucct4g3gdijlv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, or make 2 different patches with 2 different subject lines as they
+are obviously doing different things.
 
-On Tue, Mar 21, 2023 at 04:59:49PM +0100, Julia Lawall wrote:
->=20
->=20
-> On Tue, 21 Mar 2023, Uwe Kleine-K=F6nig wrote:
->=20
-> > Hello,
-> >
-> > just some nitpicks:
-> >
-> > On Tue, Mar 21, 2023 at 01:04:33AM +0200, Menna Mahmoud wrote:
-> > > Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
-> > > static inline function.
-> > >
-> > > it is not great to have macro that use `container_of` macro,
-> >
-> > s/it/It/; s/macro/macros/; s/use/use the/;
-> >
-> > > because from looking at the definition one cannot tell what type
-> > > it applies to.
-> > > [...]
-> > > -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> > > +static inline struct gbphy_device *to_gbphy_dev(const struct device =
-*d)
-> >
-> > drivers/staging/greybus/gbphy.c always passes a variable named
-> > "dev" to this macro. So I'd call the parameter "dev", too, instead of
-> > "d". This is also a more typical name for variables of that type.
->=20
-> I argued against that.  Because then there are two uses of dev
-> in the argument of container_of, and they refer to completely different
-> things.  It's true that by the way container_of works, it's fine, but it
-> may be misleading.
+> but in this case no need to create patchset for all changes in `greybus`
+> driver, right?
+> 
+> If okay with that, should I versioning the patches to resend them again, or
+> should add "RESEND" subject prefix?
+> 
+> please tell me the best way to resend these patches, appreciate your help.
 
-Hmm, that seems to be subjective, but I have less problems with that
-than with using "d" for a struct device (or a struct device_driver).
-I'd even go so far as to consider it nice if they are identical.
+What would you want to see if you had to review and apply loads of
+patches like this?
 
-Maybe that's because having the first and third argument identical is
-quite common:
+(hint, it's not a resend, but a new version...)
 
-	$ git grep -P 'container_of\((?<ident>[A-Za-z_0-9-]*)\s*,[^,]*,\s*\g{ident=
-}\s*\)' | wc -l
-	5940
+thanks,
 
-which is >44% of all the usages
-
-	$ git grep -P 'container_of\((?<ident>[A-Za-z_0-9-]*)\s*,[^,]*,\s*(?&ident=
-)\s*\)' | wc -l
-	13362
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---d5lucct4g3gdijlv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQZ2rQACgkQj4D7WH0S
-/k5Wjwf9GmB1nEoIhAtbkSezDUMGtnRIA0mIAQmDVWMFAWrWo0IhdD4gZoKb2hCr
-cEG/usN3hNJoAnAHWzqmj20sOmxunSQjZzQKu1bxVf15CWKctvGeuX5aV41O8dTf
-oJjy7kz1tYX431ygPRw0ntOmU+M5r4C8qoABawI7WPKZF0BEDq74a1R7FHd4zU9t
-apiR76rkekQ2ZCMoOrilxTwCvJxjPcDNiKRugqOVWTKw324hhH+CnOqJIVF7fJ/8
-v3F8hUC8WDFEYxjBlXk+YIINGFArv4hJpZOQsJcenURyv/s0WEzAsf0h+W/WFvOA
-zD6QBpes1fBCwoRoC7uQ5vkI2aDHJg==
-=Wojb
------END PGP SIGNATURE-----
-
---d5lucct4g3gdijlv--
+greg k-h
