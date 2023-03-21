@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D91A6C398B
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3AA6C3985
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCUSt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S230460AbjCUStA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjCUStx (ORCPT
+        with ESMTP id S230371AbjCUSs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:49:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6126656524
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679424498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
-        b=XsSSwi/nqbkFz16wOrUMWiSrWxdTWKaBEdSm91p0PnhLR+5FTbunRDg4uYNTOuH0oEXFE5
-        72wWF2DLlOrZQFCjDLU3TSz4xg1yBcGEi/y4rtttToqeToNRWfcQwrn4eJgTQXA0GQ3986
-        5Fjd7BUFZVoSsYqdH/VEYFOKsAY/2VQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-283-U_Xo8_PvPUqLR6dBJYnYpg-1; Tue, 21 Mar 2023 14:48:17 -0400
-X-MC-Unique: U_Xo8_PvPUqLR6dBJYnYpg-1
-Received: by mail-qk1-f197.google.com with SMTP id s12-20020a37a90c000000b007468eaf866aso2839974qke.17
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:17 -0700 (PDT)
+        Tue, 21 Mar 2023 14:48:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE12254CAC
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:24 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id kc4so2413585plb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679424501;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OU2TpmTbkt/6hvSTm+PPEoXU/hSqJlv3qM+jLeXgjsM=;
+        b=OVw0ECtyo2lDexPfAB5v+xW9q4bqZYx4ZfJqU2SL5kXXnye4/lrm/ei4i+2v4vBE70
+         5lQb1OCAoRw8sN4zTYaaR0isVYdumbxVJQLLwe9hQvmcq8R/g9l0Bs3NyBkvFfslZmUA
+         4n2Hh8fqXkOGJeVfvZuoh1KkaZRFXyaONmAhQefe9xb/sNJrdGApo26vdhUnxorrgjNq
+         9GWI7d12jnIS+TqpVA200Zdmeu/lAGY9WQ1qZhNVlPfUkSQyDU73ANsjwWZ9R6vnrgjI
+         UqR9/hVdy9PEhsC0sYoGn0wZg/NfjqPKFHpEjUktqegt2qR1HUSjDqISD5j4a+q7TOqL
+         Va1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424497;
+        d=1e100.net; s=20210112; t=1679424501;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
-        b=e/tke/UHf3ua993S47eSy22JkxhoRJUQDyFumIAArWRGUNKnsmUIqg9JaiYYpEK4gD
-         AaqXfGS9GGfOpfEOhLod37KYz1LtBSx9gJGzyneJrMVokpA4idaSDv6b33HxDtCJYxYs
-         p9AtN5sP8BkNt3+gtXV/jVwa9no58Gxzx5J43CaIymTd7YVyQHpCiZ8pdxmM66ol0AEx
-         4BqUN/nKSVoMwfdhBc8kTLUQMuNcJjRim/ZlvbVr7DPRq9zTEtcUOh8uxpB/ov2hVB5t
-         1ZstrF+yhHES0whBfVdg6PufjTINcpP7beTnLr7qbUywZ3aRh/QLhkEVj78vOzwcEixT
-         59Pw==
-X-Gm-Message-State: AO0yUKW8bJRt6OETQtq2esDnPTTJ3N4xMLtII+coiYN4j/eAHxWrR9h6
-        Pb2vSGhaR3P3LC7J6ilkOc4lVLSoN8AFBpvPgsN7wlkNMDSm/srvgMamEAgjNtEV8cZocHQCUK+
-        uj0ytdKFt2dvHBEgfZty0PUk4
-X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318802qvc.29.1679424496990;
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/uiKZ9Rf3XmfwDfIlgK1+2Ku5dlt08hCszlwq6yiw64bq4vrpan11278XtwOhJWytpr/YkPw==
-X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318782qvc.29.1679424496733;
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 66-20020a370b45000000b0071eddd3bebbsm1525699qkl.81.2023.03.21.11.48.15
+        bh=OU2TpmTbkt/6hvSTm+PPEoXU/hSqJlv3qM+jLeXgjsM=;
+        b=iCsc+HKKCZBQA/vlS6WcAACh59RmsVnHTqApgLLvFvNSIRzkSJNk1MMr18ebbOoXZv
+         lSPYONsK0cEr4hw4Ji+k6LduUth/0pZs+LZtNDHUga8IwTZUZ3ng3ISdH6KNvjXuy7aM
+         Mw/fXLMyZayrUcC58BuqOlNsC6/dWQH1pkEdogaMs81f7l345m6181EUR10LWMIZAOzh
+         sRVPTG/xcXpRreXTVThHjPfYhQCElKFKcFpYmFTfIbSobzhdkQ0vT9Gni02W5GZ8ZpIU
+         wPnkfm0im1Lj2kx07HKtPaHJBClrmpXi2DIsc9ZIp8jHTHgHPQizbqaNKe8X0NJqnNw3
+         dGFQ==
+X-Gm-Message-State: AO0yUKU+Uyye+8oHsumbARlKa2iauudF9bpSwa9mZjTb3kcTTtoV8U9n
+        dPxiL+E7f2GF0KT31icnyJdF7A==
+X-Google-Smtp-Source: AK7set8XEqG4QjXF0VsgxuBGSQjsXwO402XZCIkV0X3tEjleTYEVr/x82XLGqxVgbgCGh5vDIOLbsA==
+X-Received: by 2002:a05:6a20:baa1:b0:d5:b3d1:bff9 with SMTP id fb33-20020a056a20baa100b000d5b3d1bff9mr2305721pzb.52.1679424500498;
+        Tue, 21 Mar 2023 11:48:20 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:d4c3:8671:83c0:33ae:5a96])
+        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b005d4360ed2bbsm8590817pfm.197.2023.03.21.11.48.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] liquidio: remove unused IQ_INSTR_MODE_64B function
-Date:   Tue, 21 Mar 2023 14:48:11 -0400
-Message-Id: <20230321184811.1827306-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 21 Mar 2023 11:48:20 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, vkoul@kernel.org,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org
+Subject: [PATCH v2 1/1] dt-bindings: dma: Add support for SM6115 and QCS2290 SoCs
+Date:   Wed, 22 Mar 2023 00:18:11 +0530
+Message-Id: <20230321184811.3325725-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,38 +73,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/ethernet/cavium/liquidio/request_manager.c:43:19: error:
-  unused function 'IQ_INSTR_MODE_64B' [-Werror,-Wunused-function]
-static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
-                  ^
-This function and its macro wrapper are not used, so remove them.
+Add new compatible for BAM DMA engine version v1.7.4 which is
+found on Qualcomm SM6115 and QCS2290 SoCs. Since its very similar
+to v1.7.0 used on SM8150 like SoCs, mark the comptible scheme
+accordingly.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+While at it, also update qcom,bam-dma bindings to add comments
+which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
+This provides an easy reference for identifying the actual BAM DMA
+version available on Qualcomm SoCs.
+
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- drivers/net/ethernet/cavium/liquidio/request_manager.c | 9 ---------
- 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/cavium/liquidio/request_manager.c b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-index 8e59c2825533..32f854c0cd79 100644
---- a/drivers/net/ethernet/cavium/liquidio/request_manager.c
-+++ b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-@@ -40,15 +40,6 @@ static void  __check_db_timeout(struct octeon_device *oct, u64 iq_no);
+Changes since v1:
+ ~ v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230320071211.3005769-1-bhupesh.sharma@linaro.org/
+ ~ Addressed Konrad's comments on v1, where he suggested how compatibles
+   should be used for SoCs which support BAM DMA engine v1.7.4
+ ~ Dropped v1's [PATCH 2/2] in v2.
+
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 22 +++++++++++++------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+index f1ddcf672261..bed966fa7653 100644
+--- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+@@ -15,13 +15,21 @@ allOf:
  
- static void (*reqtype_free_fn[MAX_OCTEON_DEVICES][REQTYPE_LAST + 1]) (void *);
+ properties:
+   compatible:
+-    enum:
+-        # APQ8064, IPQ8064 and MSM8960
+-      - qcom,bam-v1.3.0
+-        # MSM8974, APQ8074 and APQ8084
+-      - qcom,bam-v1.4.0
+-        # MSM8916 and SDM845
+-      - qcom,bam-v1.7.0
++    oneOf:
++      - items:
++          - enum:
++              # APQ8064, IPQ8064 and MSM8960
++              - qcom,bam-v1.3.0
++              # MSM8974, APQ8074 and APQ8084
++              - qcom,bam-v1.4.0
++              # MSM8916
++              - qcom,bam-v1.7.0
++
++      - items:
++          - enum:
++              # SDM845, SM6115, SM8150, SM8250 and QRB2290
++              - qcom,bam-v1.7.4
++          - const: qcom,bam-v1.7.0
  
--static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
--{
--	struct octeon_instr_queue *iq =
--	    (struct octeon_instr_queue *)oct->instr_queue[iq_no];
--	return iq->iqcmd_64B;
--}
--
--#define IQ_INSTR_MODE_32B(oct, iq_no)  (!IQ_INSTR_MODE_64B(oct, iq_no))
--
- /* Define this to return the request status comaptible to old code */
- /*#define OCTEON_USE_OLD_REQ_STATUS*/
- 
+   clocks:
+     maxItems: 1
 -- 
-2.27.0
+2.38.1
 
