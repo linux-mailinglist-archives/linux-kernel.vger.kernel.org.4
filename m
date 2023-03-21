@@ -2,665 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36386C33F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CECC6C33F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbjCUOVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S231256AbjCUOWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbjCUOVZ (ORCPT
+        with ESMTP id S230219AbjCUOWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:21:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0534722791;
-        Tue, 21 Mar 2023 07:21:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD42EB8172C;
-        Tue, 21 Mar 2023 14:21:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0561EC433D2;
-        Tue, 21 Mar 2023 14:21:05 +0000 (UTC)
-Message-ID: <2a508bef-1cf7-b91a-6efe-e01d4f43d862@xs4all.nl>
-Date:   Tue, 21 Mar 2023 15:21:04 +0100
+        Tue, 21 Mar 2023 10:22:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696552A162
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:22:26 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id i5so13456740eda.0
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679408545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jmucUrqyd/MnyOVAm1ejfduqN0HRUOWtSQ0Le0BhDUA=;
+        b=ArVS4qWOC6um6eUCwvOLZiQB4j9zKlC0VpZSAMTugyVyu0Psz3DHS3BQhRPTQ1M6yz
+         +JzS+CX+6SXP9uQX3kGoMFAS0VKea38e/40Tz5nWLx7h5CCvZwH9nyiOAn6xTB/6m9EU
+         1iQ+6Ku3wdAq+U9VfGMfrO+Hd+GCFeQS2TQleNS2P1xXRTic8DJhNqkSruWQFoT49ArT
+         GdqAjKYeD3uGpZa6zqcyVP6HVxNdYLIeY0cQeMf9o+AJK/JmEAC4EoPehqp3m9Xjzj/Y
+         YyDgKomCeLSohY2MXdATkrW+LMxsx4vMJAtDN8mcl37x3dtaogC4HxEqj41jV/oC0h5n
+         NaFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679408545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jmucUrqyd/MnyOVAm1ejfduqN0HRUOWtSQ0Le0BhDUA=;
+        b=wjYCz3TKmsZZEfjGTEk9VgSrnlZ6ZFBhfLU9KzdrjID24B/N9p1l1u93ZR0U86JJ+u
+         T9ytlThH2OJjVtIT5fGarrYl1pnGtNAAjY3xEETOKB0h+JBNfRdl6TvtFdmK/QAJPlX/
+         xKuxJjdCh3OSZ660+fubi76y2Z+vPPOBsoq9NqE0JgT1J9Xk6zSAm7Jk6pIXvbtwUSvK
+         0pQ591ngyOqo12KP7/3pBxMJh8dRcwlUbiuqDbvyVgY79cWJTXwPF9fNZajF2JITkkk5
+         oec1lwHwk6K2dNxZAAZMRpUoXQYLOkxk2lmYlXQ2zrsLVYnRg8zUGmKwyQwJWFPlNwSW
+         5bfQ==
+X-Gm-Message-State: AO0yUKWYperZbpampa/D/7bDQI9p+Mmfypa02K4nQtbgbaXLZB86FGex
+        5Usk1ry6S4OVire60D1tDgtv7g==
+X-Google-Smtp-Source: AK7set/D4BxAud5yooLeJMznBZZWW1+2FHW7UxONsijkvmadhk3b5rTv5/Lzj0oXdj8DjGRk6QT1XA==
+X-Received: by 2002:aa7:c04a:0:b0:4a2:5652:d8ba with SMTP id k10-20020aa7c04a000000b004a25652d8bamr3454251edo.18.1679408544853;
+        Tue, 21 Mar 2023 07:22:24 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id g3-20020a50d5c3000000b004fb17f10326sm6385484edj.10.2023.03.21.07.22.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 07:22:24 -0700 (PDT)
+Message-ID: <e99db638-8610-831b-2e3b-d875000e93e2@linaro.org>
+Date:   Tue, 21 Mar 2023 14:22:19 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/2] media: meson: vdec: implement 10bit bitstream
- handling
+Subject: Re: [PATCH v11 04/26] virt: gunyah: Add hypercalls to identify Gunyah
 Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Benjamin Roszak <benjamin545@gmail.com>
-References: <20230314114318.4057353-1-christianshewitt@gmail.com>
- <20230314114318.4057353-2-christianshewitt@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230314114318.4057353-2-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+ <20230304010632.2127470-5-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230304010632.2127470-5-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
 
-On 14/03/2023 12:43, Christian Hewitt wrote:
-> From: Benjamin Roszak <benjamin545@gmail.com>
+
+On 04/03/2023 01:06, Elliot Berman wrote:
+> Add hypercalls to identify when Linux is running a virtual machine under
+> Gunyah.
 > 
-> In order to support 10bit bitstream decoding, buffers and MMU
-> handling must be cleaned up to support either downscale output
-> from compressed 10bit decoding to uncompressed 8bit NV12 output
-> or to compressed 10bit proprietary encoded frame format.
+> There are two calls to help identify Gunyah:
 > 
-> For that, "am21c" name is moved to "amfbc" to reflect the upstream
-> Amlogic Compressed framebuffer modifier naming.
+> 1. gh_hypercall_get_uid() returns a UID when running under a Gunyah
+>     hypervisor.
+> 2. gh_hypercall_hyp_identify() returns build information and a set of
+>     feature flags that are supported by Gunyah.
 > 
-> Compressed frame buffers allocation is also cleaned up so it
-> can be shared with the HEVC decoder implementation.
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 
-This patch does multiple things: renaming, cleanup allocation and
-10 bit cleanup.
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-It's much easier to review if this is split up in separate patches,
-doing one thing at a time.
-
-Especially the renaming part should be a first patch that just renames
-and nothing else.
-
-Regards,
-
-	Hans
-
-> 
-> Signed-off-by: Benjamin Roszak <benjamin545@gmail.com>
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 > ---
->  drivers/staging/media/meson/vdec/codec_h264.c |   3 +-
->  .../media/meson/vdec/codec_hevc_common.c      | 161 +++++++++++-------
->  .../media/meson/vdec/codec_hevc_common.h      |   3 +-
->  drivers/staging/media/meson/vdec/codec_vp9.c  |  35 ++--
->  drivers/staging/media/meson/vdec/esparser.c   |   1 +
->  drivers/staging/media/meson/vdec/vdec.h       |   1 +
->  .../staging/media/meson/vdec/vdec_helpers.c   |  44 +++--
->  .../staging/media/meson/vdec/vdec_helpers.h   |  10 +-
->  8 files changed, 161 insertions(+), 97 deletions(-)
+>   arch/arm64/Kbuild                    |  1 +
+>   arch/arm64/gunyah/Makefile           |  3 ++
+>   arch/arm64/gunyah/gunyah_hypercall.c | 64 ++++++++++++++++++++++++++++
+>   drivers/virt/Kconfig                 |  2 +
+>   drivers/virt/gunyah/Kconfig          | 13 ++++++
+>   include/linux/gunyah.h               | 28 ++++++++++++
+>   6 files changed, 111 insertions(+)
+>   create mode 100644 arch/arm64/gunyah/Makefile
+>   create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
+>   create mode 100644 drivers/virt/gunyah/Kconfig
 > 
-> diff --git a/drivers/staging/media/meson/vdec/codec_h264.c b/drivers/staging/media/meson/vdec/codec_h264.c
-> index c61128fc4bb9..d53c9a464bde 100644
-> --- a/drivers/staging/media/meson/vdec/codec_h264.c
-> +++ b/drivers/staging/media/meson/vdec/codec_h264.c
-> @@ -353,7 +353,8 @@ static void codec_h264_src_change(struct amvdec_session *sess)
->  		frame_width, frame_height, crop_right, crop_bottom);
->  
->  	codec_h264_set_par(sess);
-> -	amvdec_src_change(sess, frame_width, frame_height, h264->max_refs + 5);
-> +	amvdec_src_change(sess, frame_width, frame_height,
-> +			  h264->max_refs + 5, 8);
->  }
->  
->  /*
-> diff --git a/drivers/staging/media/meson/vdec/codec_hevc_common.c b/drivers/staging/media/meson/vdec/codec_hevc_common.c
-> index 0315cc0911cd..1c74b4837dcb 100644
-> --- a/drivers/staging/media/meson/vdec/codec_hevc_common.c
-> +++ b/drivers/staging/media/meson/vdec/codec_hevc_common.c
-> @@ -30,8 +30,11 @@ const u16 vdec_hevc_parser_cmd[] = {
->  void codec_hevc_setup_decode_head(struct amvdec_session *sess, int is_10bit)
->  {
->  	struct amvdec_core *core = sess->core;
-> -	u32 body_size = amvdec_am21c_body_size(sess->width, sess->height);
-> -	u32 head_size = amvdec_am21c_head_size(sess->width, sess->height);
-> +	u32 use_mmu = codec_hevc_use_mmu(core->platform->revision,
-> +					 sess->pixfmt_cap, is_10bit);
-> +	u32 body_size = amvdec_amfbc_body_size(sess->width, sess->height,
-> +					       is_10bit, use_mmu);
-> +	u32 head_size = amvdec_amfbc_head_size(sess->width, sess->height);
->  
->  	if (!codec_hevc_use_fbc(sess->pixfmt_cap, is_10bit)) {
->  		/* Enable 2-plane reference read mode */
-> @@ -39,9 +42,17 @@ void codec_hevc_setup_decode_head(struct amvdec_session *sess, int is_10bit)
->  		return;
->  	}
->  
-> +	/* enable mem saving mode for 8-bit */
-> +	if (!is_10bit)
-> +		amvdec_write_dos_bits(core, HEVC_SAO_CTRL5, BIT(9));
-> +	else
-> +		amvdec_clear_dos_bits(core, HEVC_SAO_CTRL5, BIT(9));
+> diff --git a/arch/arm64/Kbuild b/arch/arm64/Kbuild
+> index 5bfbf7d79c99..e4847ba0e3c9 100644
+> --- a/arch/arm64/Kbuild
+> +++ b/arch/arm64/Kbuild
+> @@ -3,6 +3,7 @@ obj-y			+= kernel/ mm/ net/
+>   obj-$(CONFIG_KVM)	+= kvm/
+>   obj-$(CONFIG_XEN)	+= xen/
+>   obj-$(subst m,y,$(CONFIG_HYPERV))	+= hyperv/
+> +obj-$(CONFIG_GUNYAH)	+= gunyah/
+>   obj-$(CONFIG_CRYPTO)	+= crypto/
+>   
+>   # for cleaning
+> diff --git a/arch/arm64/gunyah/Makefile b/arch/arm64/gunyah/Makefile
+> new file mode 100644
+> index 000000000000..84f1e38cafb1
+> --- /dev/null
+> +++ b/arch/arm64/gunyah/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
->  	if (codec_hevc_use_mmu(core->platform->revision,
->  			       sess->pixfmt_cap, is_10bit))
->  		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, BIT(4));
-> +	else if (!is_10bit)
-> +		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, BIT(3));
->  	else
->  		amvdec_write_dos(core, HEVCD_MPP_DECOMP_CTL1, 0);
->  
-> @@ -73,7 +84,7 @@ static void codec_hevc_setup_buffers_gxbb(struct amvdec_session *sess,
->  
->  		idx = vb->index;
->  
-> -		if (codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit))
-> +		if (codec_hevc_use_fbc(sess->pixfmt_cap, is_10bit))
->  			buf_y_paddr = comm->fbc_buffer_paddr[idx];
->  		else
->  			buf_y_paddr = vb2_dma_contig_plane_dma_addr(vb, 0);
-> @@ -114,8 +125,8 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
->  {
->  	struct amvdec_core *core = sess->core;
->  	struct v4l2_m2m_buffer *buf;
-> -	u32 revision = core->platform->revision;
->  	u32 pixfmt_cap = sess->pixfmt_cap;
-> +	const u32 revision = core->platform->revision;
->  	int i;
->  
->  	amvdec_write_dos(core, HEVCD_MPP_ANC2AXI_TBL_CONF_ADDR,
-> @@ -127,12 +138,14 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
->  		dma_addr_t buf_uv_paddr = 0;
->  		u32 idx = vb->index;
->  
-> -		if (codec_hevc_use_mmu(revision, pixfmt_cap, is_10bit))
-> -			buf_y_paddr = comm->mmu_header_paddr[idx];
-> -		else if (codec_hevc_use_downsample(pixfmt_cap, is_10bit))
-> -			buf_y_paddr = comm->fbc_buffer_paddr[idx];
-> -		else
-> +		if (codec_hevc_use_downsample(pixfmt_cap, is_10bit)) {
-> +			if (codec_hevc_use_mmu(revision, pixfmt_cap, is_10bit))
-> +				buf_y_paddr = comm->mmu_header_paddr[idx];
-> +			else
-> +				buf_y_paddr = comm->fbc_buffer_paddr[idx];
-> +		} else {
->  			buf_y_paddr = vb2_dma_contig_plane_dma_addr(vb, 0);
-> +		}
->  
->  		amvdec_write_dos(core, HEVCD_MPP_ANC2AXI_TBL_DATA,
->  				 buf_y_paddr >> 5);
-> @@ -150,60 +163,67 @@ static void codec_hevc_setup_buffers_gxl(struct amvdec_session *sess,
->  		amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_DATA_ADDR, 0);
->  }
->  
-> -void codec_hevc_free_fbc_buffers(struct amvdec_session *sess,
-> +void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
->  				 struct codec_hevc_common *comm)
->  {
->  	struct device *dev = sess->core->dev;
-> -	u32 am21_size = amvdec_am21c_size(sess->width, sess->height);
->  	int i;
->  
->  	for (i = 0; i < MAX_REF_PIC_NUM; ++i) {
-> -		if (comm->fbc_buffer_vaddr[i]) {
-> -			dma_free_coherent(dev, am21_size,
-> -					  comm->fbc_buffer_vaddr[i],
-> -					  comm->fbc_buffer_paddr[i]);
-> -			comm->fbc_buffer_vaddr[i] = NULL;
-> +		if (comm->mmu_header_vaddr[i]) {
-> +			dma_free_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
-> +					  comm->mmu_header_vaddr[i],
-> +					  comm->mmu_header_paddr[i]);
-> +			comm->mmu_header_vaddr[i] = NULL;
->  		}
->  	}
->  }
-> -EXPORT_SYMBOL_GPL(codec_hevc_free_fbc_buffers);
-> +EXPORT_SYMBOL_GPL(codec_hevc_free_mmu_headers);
->  
-> -static int codec_hevc_alloc_fbc_buffers(struct amvdec_session *sess,
-> +static int codec_hevc_alloc_mmu_headers(struct amvdec_session *sess,
->  					struct codec_hevc_common *comm)
->  {
->  	struct device *dev = sess->core->dev;
->  	struct v4l2_m2m_buffer *buf;
-> -	u32 am21_size = amvdec_am21c_size(sess->width, sess->height);
->  
->  	v4l2_m2m_for_each_dst_buf(sess->m2m_ctx, buf) {
->  		u32 idx = buf->vb.vb2_buf.index;
->  		dma_addr_t paddr;
-> -		void *vaddr = dma_alloc_coherent(dev, am21_size, &paddr,
-> -						 GFP_KERNEL);
-> +		void *vaddr = dma_alloc_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
-> +						 &paddr, GFP_KERNEL);
->  		if (!vaddr) {
-> -			codec_hevc_free_fbc_buffers(sess, comm);
-> +			codec_hevc_free_mmu_headers(sess, comm);
->  			return -ENOMEM;
->  		}
->  
-> -		comm->fbc_buffer_vaddr[idx] = vaddr;
-> -		comm->fbc_buffer_paddr[idx] = paddr;
-> +		comm->mmu_header_vaddr[idx] = vaddr;
-> +		comm->mmu_header_paddr[idx] = paddr;
->  	}
->  
->  	return 0;
->  }
->  
-> -void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
-> +void codec_hevc_free_fbc_buffers(struct amvdec_session *sess,
->  				 struct codec_hevc_common *comm)
->  {
->  	struct device *dev = sess->core->dev;
-> +	u32 use_mmu;
-> +	u32 am21_size;
->  	int i;
->  
-> +	use_mmu = codec_hevc_use_mmu(sess->core->platform->revision,
-> +				     sess->pixfmt_cap,
-> +				sess->bitdepth == 10 ? 1 : 0);
+> +obj-$(CONFIG_GUNYAH) += gunyah_hypercall.o
+> diff --git a/arch/arm64/gunyah/gunyah_hypercall.c b/arch/arm64/gunyah/gunyah_hypercall.c
+> new file mode 100644
+> index 000000000000..0d14e767e2c8
+> --- /dev/null
+> +++ b/arch/arm64/gunyah/gunyah_hypercall.c
+> @@ -0,0 +1,64 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
 > +
-> +	am21_size = amvdec_amfbc_size(sess->width, sess->height,
-> +				      sess->bitdepth == 10 ? 1 : 0, use_mmu);
+> +#include <linux/arm-smccc.h>
+> +#include <linux/module.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/uuid.h>
 > +
->  	for (i = 0; i < MAX_REF_PIC_NUM; ++i) {
-> -		if (comm->mmu_header_vaddr[i]) {
-> -			dma_free_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
-> -					  comm->mmu_header_vaddr[i],
-> -					  comm->mmu_header_paddr[i]);
-> -			comm->mmu_header_vaddr[i] = NULL;
-> +		if (comm->fbc_buffer_vaddr[i]) {
-> +			dma_free_coherent(dev, am21_size,
-> +					  comm->fbc_buffer_vaddr[i],
-> +					  comm->fbc_buffer_paddr[i]);
-> +			comm->fbc_buffer_vaddr[i] = NULL;
->  		}
->  	}
->  
-> @@ -213,33 +233,50 @@ void codec_hevc_free_mmu_headers(struct amvdec_session *sess,
->  				  comm->mmu_map_paddr);
->  		comm->mmu_map_vaddr = NULL;
->  	}
+> +static const uuid_t gh_known_uuids[] = {
+> +	/* Qualcomm's version of Gunyah {19bd54bd-0b37-571b-946f-609b54539de6} */
+> +	UUID_INIT(0x19bd54bd, 0x0b37, 0x571b, 0x94, 0x6f, 0x60, 0x9b, 0x54, 0x53, 0x9d, 0xe6),
+> +	/* Standard version of Gunyah {c1d58fcd-a453-5fdb-9265-ce36673d5f14} */
+> +	UUID_INIT(0xc1d58fcd, 0xa453, 0x5fdb, 0x92, 0x65, 0xce, 0x36, 0x67, 0x3d, 0x5f, 0x14),
+> +};
 > +
-> +	codec_hevc_free_mmu_headers(sess, comm);
->  }
-> -EXPORT_SYMBOL_GPL(codec_hevc_free_mmu_headers);
-> +EXPORT_SYMBOL_GPL(codec_hevc_free_fbc_buffers);
->  
-> -static int codec_hevc_alloc_mmu_headers(struct amvdec_session *sess,
-> +static int codec_hevc_alloc_fbc_buffers(struct amvdec_session *sess,
->  					struct codec_hevc_common *comm)
->  {
->  	struct device *dev = sess->core->dev;
->  	struct v4l2_m2m_buffer *buf;
-> +	u32 use_mmu;
-> +	u32 am21_size;
-> +	const u32 revision = sess->core->platform->revision;
-> +	const u32 is_10bit = sess->bitdepth == 10 ? 1 : 0;
-> +	int ret;
->  
-> -	comm->mmu_map_vaddr = dma_alloc_coherent(dev, MMU_MAP_SIZE,
-> -						 &comm->mmu_map_paddr,
-> -						 GFP_KERNEL);
-> -	if (!comm->mmu_map_vaddr)
-> -		return -ENOMEM;
-> +	use_mmu = codec_hevc_use_mmu(revision, sess->pixfmt_cap,
-> +				     is_10bit);
+> +bool arch_is_gh_guest(void)
+> +{
+> +	struct arm_smccc_res res;
+> +	uuid_t uuid;
+> +	int i;
 > +
-> +	am21_size = amvdec_amfbc_size(sess->width, sess->height,
-> +				      is_10bit, use_mmu);
->  
->  	v4l2_m2m_for_each_dst_buf(sess->m2m_ctx, buf) {
->  		u32 idx = buf->vb.vb2_buf.index;
->  		dma_addr_t paddr;
-> -		void *vaddr = dma_alloc_coherent(dev, MMU_COMPRESS_HEADER_SIZE,
-> -						 &paddr, GFP_KERNEL);
+> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
 > +
-> +		void *vaddr = dma_alloc_coherent(dev, am21_size, &paddr,
-> +						 GFP_KERNEL);
->  		if (!vaddr) {
-> -			codec_hevc_free_mmu_headers(sess, comm);
-> +			codec_hevc_free_fbc_buffers(sess, comm);
->  			return -ENOMEM;
->  		}
->  
-> -		comm->mmu_header_vaddr[idx] = vaddr;
-> -		comm->mmu_header_paddr[idx] = paddr;
-> +		comm->fbc_buffer_vaddr[idx] = vaddr;
-> +		comm->fbc_buffer_paddr[idx] = paddr;
-> +	}
+> +	((u32 *)&uuid.b[0])[0] = lower_32_bits(res.a0);
+> +	((u32 *)&uuid.b[0])[1] = lower_32_bits(res.a1);
+> +	((u32 *)&uuid.b[0])[2] = lower_32_bits(res.a2);
+> +	((u32 *)&uuid.b[0])[3] = lower_32_bits(res.a3);
 > +
-> +	if (codec_hevc_use_mmu(revision, sess->pixfmt_cap, is_10bit) &&
-> +	    codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
-> +		ret = codec_hevc_alloc_mmu_headers(sess, comm);
-> +		if (ret) {
-> +			codec_hevc_free_fbc_buffers(sess, comm);
-> +			return ret;
-> +		}
->  	}
->  
->  	return 0;
-> @@ -250,21 +287,24 @@ int codec_hevc_setup_buffers(struct amvdec_session *sess,
->  			     int is_10bit)
->  {
->  	struct amvdec_core *core = sess->core;
-> +	struct device *dev = core->dev;
->  	int ret;
->  
-> -	if (codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
-> -		ret = codec_hevc_alloc_fbc_buffers(sess, comm);
-> -		if (ret)
-> -			return ret;
-> +	if (codec_hevc_use_mmu(core->platform->revision,
-> +			       sess->pixfmt_cap, is_10bit)) {
-> +		comm->mmu_map_vaddr = dma_alloc_coherent(dev, MMU_MAP_SIZE,
-> +							 &comm->mmu_map_paddr,
-> +							 GFP_KERNEL);
-> +		if (!comm->mmu_map_vaddr)
-> +			return -ENOMEM;
->  	}
->  
->  	if (codec_hevc_use_mmu(core->platform->revision,
-> -			       sess->pixfmt_cap, is_10bit)) {
-> -		ret = codec_hevc_alloc_mmu_headers(sess, comm);
-> -		if (ret) {
-> -			codec_hevc_free_fbc_buffers(sess, comm);
-> +			       sess->pixfmt_cap, is_10bit) ||
-> +	    codec_hevc_use_downsample(sess->pixfmt_cap, is_10bit)) {
-> +		ret = codec_hevc_alloc_fbc_buffers(sess, comm);
-> +		if (ret)
->  			return ret;
-> -		}
->  	}
->  
->  	if (core->platform->revision == VDEC_REVISION_GXBB)
-> @@ -278,19 +318,24 @@ EXPORT_SYMBOL_GPL(codec_hevc_setup_buffers);
->  
->  void codec_hevc_fill_mmu_map(struct amvdec_session *sess,
->  			     struct codec_hevc_common *comm,
-> -			     struct vb2_buffer *vb)
-> +			     struct vb2_buffer *vb,
-> +			     u32 is_10bit)
->  {
-> -	u32 size = amvdec_am21c_size(sess->width, sess->height);
-> -	u32 nb_pages = size / PAGE_SIZE;
-> +	u32 use_mmu;
-> +	u32 size;
-> +	u32 nb_pages;
->  	u32 *mmu_map = comm->mmu_map_vaddr;
->  	u32 first_page;
->  	u32 i;
->  
-> -	if (sess->pixfmt_cap == V4L2_PIX_FMT_NV12M)
-> -		first_page = comm->fbc_buffer_paddr[vb->index] >> PAGE_SHIFT;
-> -	else
-> -		first_page = vb2_dma_contig_plane_dma_addr(vb, 0) >> PAGE_SHIFT;
-> +	use_mmu = codec_hevc_use_mmu(sess->core->platform->revision,
-> +				     sess->pixfmt_cap, is_10bit);
+> +	for (i = 0; i < ARRAY_SIZE(gh_known_uuids); i++)
+> +		if (uuid_equal(&uuid, &gh_known_uuids[i]))
+> +			return true;
 > +
-> +	size = amvdec_amfbc_size(sess->width, sess->height, is_10bit,
-> +				 use_mmu);
->  
-> +	nb_pages = size / PAGE_SIZE;
-> +	first_page = comm->fbc_buffer_paddr[vb->index] >> PAGE_SHIFT;
->  	for (i = 0; i < nb_pages; ++i)
->  		mmu_map[i] = first_page + i;
->  }
-> diff --git a/drivers/staging/media/meson/vdec/codec_hevc_common.h b/drivers/staging/media/meson/vdec/codec_hevc_common.h
-> index cf072b8a9da2..13f9f1d90a94 100644
-> --- a/drivers/staging/media/meson/vdec/codec_hevc_common.h
-> +++ b/drivers/staging/media/meson/vdec/codec_hevc_common.h
-> @@ -64,6 +64,7 @@ int codec_hevc_setup_buffers(struct amvdec_session *sess,
->  
->  void codec_hevc_fill_mmu_map(struct amvdec_session *sess,
->  			     struct codec_hevc_common *comm,
-> -			     struct vb2_buffer *vb);
-> +			     struct vb2_buffer *vb,
-> +			     u32 is_10bit);
->  
->  #endif
-> diff --git a/drivers/staging/media/meson/vdec/codec_vp9.c b/drivers/staging/media/meson/vdec/codec_vp9.c
-> index 394df5761556..8e3bbf0db4b3 100644
-> --- a/drivers/staging/media/meson/vdec/codec_vp9.c
-> +++ b/drivers/staging/media/meson/vdec/codec_vp9.c
-> @@ -458,12 +458,6 @@ struct codec_vp9 {
->  	struct list_head ref_frames_list;
->  	u32 frames_num;
->  
-> -	/* In case of downsampling (decoding with FBC but outputting in NV12M),
-> -	 * we need to allocate additional buffers for FBC.
-> -	 */
-> -	void      *fbc_buffer_vaddr[MAX_REF_PIC_NUM];
-> -	dma_addr_t fbc_buffer_paddr[MAX_REF_PIC_NUM];
-> -
->  	int ref_frame_map[REF_FRAMES];
->  	int next_ref_frame_map[REF_FRAMES];
->  	struct vp9_frame *frame_refs[REFS_PER_FRAME];
-> @@ -901,11 +895,8 @@ static void codec_vp9_set_sao(struct amvdec_session *sess,
->  		buf_y_paddr =
->  		       vb2_dma_contig_plane_dma_addr(vb, 0);
->  
-> -	if (codec_hevc_use_fbc(sess->pixfmt_cap, vp9->is_10bit)) {
-> -		val = amvdec_read_dos(core, HEVC_SAO_CTRL5) & ~0xff0200;
-> -		amvdec_write_dos(core, HEVC_SAO_CTRL5, val);
-> +	if (codec_hevc_use_fbc(sess->pixfmt_cap, vp9->is_10bit))
->  		amvdec_write_dos(core, HEVC_CM_BODY_START_ADDR, buf_y_paddr);
-> -	}
->  
->  	if (sess->pixfmt_cap == V4L2_PIX_FMT_NV12M) {
->  		buf_y_paddr =
-> @@ -920,8 +911,13 @@ static void codec_vp9_set_sao(struct amvdec_session *sess,
->  
->  	if (codec_hevc_use_mmu(core->platform->revision, sess->pixfmt_cap,
->  			       vp9->is_10bit)) {
-> -		amvdec_write_dos(core, HEVC_CM_HEADER_START_ADDR,
-> -				 vp9->common.mmu_header_paddr[vb->index]);
-> +		dma_addr_t header_adr;
+> +	return false;
+> +}
+> +EXPORT_SYMBOL_GPL(arch_is_gh_guest);
 > +
-> +		if (codec_hevc_use_downsample(sess->pixfmt_cap, vp9->is_10bit))
-> +			header_adr = vp9->common.mmu_header_paddr[vb->index];
-> +		else
-> +			header_adr = vb2_dma_contig_plane_dma_addr(vb, 0);
-> +		amvdec_write_dos(core, HEVC_CM_HEADER_START_ADDR, header_adr);
->  		/* use HEVC_CM_HEADER_START_ADDR */
->  		amvdec_write_dos_bits(core, HEVC_SAO_CTRL5, BIT(10));
->  	}
-> @@ -1148,9 +1144,13 @@ static void codec_vp9_set_mc(struct amvdec_session *sess,
->  {
->  	struct amvdec_core *core = sess->core;
->  	u32 scale = 0;
-> +	u32 use_mmu;
->  	u32 sz;
->  	int i;
->  
-> +	use_mmu = codec_hevc_use_mmu(core->platform->revision,
-> +				     sess->pixfmt_cap, vp9->is_10bit);
+> +#define GH_HYPERCALL(fn)	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_64, \
+> +						   ARM_SMCCC_OWNER_VENDOR_HYP, \
+> +						   fn)
 > +
->  	amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_ACCCONFIG_ADDR, 1);
->  	codec_vp9_set_refs(sess, vp9);
->  	amvdec_write_dos(core, HEVCD_MPP_ANC_CANVAS_ACCCONFIG_ADDR,
-> @@ -1166,8 +1166,9 @@ static void codec_vp9_set_mc(struct amvdec_session *sess,
->  		    vp9->frame_refs[i]->height != vp9->height)
->  			scale = 1;
->  
-> -		sz = amvdec_am21c_body_size(vp9->frame_refs[i]->width,
-> -					    vp9->frame_refs[i]->height);
-> +		sz = amvdec_amfbc_body_size(vp9->frame_refs[i]->width,
-> +					    vp9->frame_refs[i]->height,
-> +					    vp9->is_10bit, use_mmu);
->  
->  		amvdec_write_dos(core, VP9D_MPP_REFINFO_DATA,
->  				 vp9->frame_refs[i]->width);
-> @@ -1283,7 +1284,8 @@ static void codec_vp9_process_frame(struct amvdec_session *sess)
->  	if (codec_hevc_use_mmu(core->platform->revision, sess->pixfmt_cap,
->  			       vp9->is_10bit))
->  		codec_hevc_fill_mmu_map(sess, &vp9->common,
-> -					&vp9->cur_frame->vbuf->vb2_buf);
-> +					&vp9->cur_frame->vbuf->vb2_buf,
-> +					vp9->is_10bit);
->  
->  	intra_only = param->p.show_frame ? 0 : param->p.intra_only;
->  
-> @@ -2130,7 +2132,8 @@ static irqreturn_t codec_vp9_threaded_isr(struct amvdec_session *sess)
->  
->  	codec_vp9_fetch_rpm(sess);
->  	if (codec_vp9_process_rpm(vp9)) {
-> -		amvdec_src_change(sess, vp9->width, vp9->height, 16);
-> +		amvdec_src_change(sess, vp9->width, vp9->height, 16,
-> +				  vp9->is_10bit ? 10 : 8);
->  
->  		/* No frame is actually processed */
->  		vp9->cur_frame = NULL;
-> diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
-> index 1904d58875ad..3cd29ab4f979 100644
-> --- a/drivers/staging/media/meson/vdec/esparser.c
-> +++ b/drivers/staging/media/meson/vdec/esparser.c
-> @@ -320,6 +320,7 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
->  		if (esparser_vififo_get_free_space(sess) < payload_size ||
->  		    atomic_read(&sess->esparser_queued_bufs) >= num_dst_bufs)
->  			return -EAGAIN;
+> +#define GH_HYPERCALL_HYP_IDENTIFY		GH_HYPERCALL(0x8000)
 > +
->  	} else if (esparser_vififo_get_free_space(sess) < payload_size) {
->  		return -EAGAIN;
->  	}
-> diff --git a/drivers/staging/media/meson/vdec/vdec.h b/drivers/staging/media/meson/vdec/vdec.h
-> index 0906b8fb5cc6..a48170fe4cff 100644
-> --- a/drivers/staging/media/meson/vdec/vdec.h
-> +++ b/drivers/staging/media/meson/vdec/vdec.h
-> @@ -244,6 +244,7 @@ struct amvdec_session {
->  	u32 width;
->  	u32 height;
->  	u32 colorspace;
-> +	u32 bitdepth;
->  	u8 ycbcr_enc;
->  	u8 quantization;
->  	u8 xfer_func;
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> index 7d2a75653250..fef76142f0c5 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-> @@ -50,32 +50,40 @@ void amvdec_write_parser(struct amvdec_core *core, u32 reg, u32 val)
->  }
->  EXPORT_SYMBOL_GPL(amvdec_write_parser);
->  
-> -/* 4 KiB per 64x32 block */
-> -u32 amvdec_am21c_body_size(u32 width, u32 height)
-> +/* AMFBC body is made out of 64x32 blocks with varying block size */
-> +u32 amvdec_amfbc_body_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu)
->  {
->  	u32 width_64 = ALIGN(width, 64) / 64;
->  	u32 height_32 = ALIGN(height, 32) / 32;
-> +	u32 blk_size = 4096;
->  
-> -	return SZ_4K * width_64 * height_32;
-> +	if (!is_10bit) {
-> +		if (use_mmu)
-> +			blk_size = 3200;
-> +		else
-> +			blk_size = 3072;
-> +	}
+> +/**
+> + * gh_hypercall_hyp_identify() - Returns build information and feature flags
+> + *                               supported by Gunyah.
+> + * @hyp_identity: filled by the hypercall with the API info and feature flags.
+> + */
+> +void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity)
+> +{
+> +	struct arm_smccc_res res;
 > +
-> +	return blk_size * width_64 * height_32;
->  }
-> -EXPORT_SYMBOL_GPL(amvdec_am21c_body_size);
-> +EXPORT_SYMBOL_GPL(amvdec_amfbc_body_size);
->  
->  /* 32 bytes per 128x64 block */
-> -u32 amvdec_am21c_head_size(u32 width, u32 height)
-> +u32 amvdec_amfbc_head_size(u32 width, u32 height)
->  {
->  	u32 width_128 = ALIGN(width, 128) / 128;
->  	u32 height_64 = ALIGN(height, 64) / 64;
->  
->  	return 32 * width_128 * height_64;
->  }
-> -EXPORT_SYMBOL_GPL(amvdec_am21c_head_size);
-> +EXPORT_SYMBOL_GPL(amvdec_amfbc_head_size);
->  
-> -u32 amvdec_am21c_size(u32 width, u32 height)
-> +u32 amvdec_amfbc_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu)
->  {
-> -	return ALIGN(amvdec_am21c_body_size(width, height) +
-> -		     amvdec_am21c_head_size(width, height), SZ_64K);
-> +	return ALIGN(amvdec_amfbc_body_size(width, height, is_10bit, use_mmu) +
-> +		     amvdec_amfbc_head_size(width, height), SZ_64K);
->  }
-> -EXPORT_SYMBOL_GPL(amvdec_am21c_size);
-> +EXPORT_SYMBOL_GPL(amvdec_amfbc_size);
->  
->  static int canvas_alloc(struct amvdec_session *sess, u8 *canvas_id)
->  {
-> @@ -440,7 +448,7 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
->  EXPORT_SYMBOL_GPL(amvdec_set_par_from_dar);
->  
->  void amvdec_src_change(struct amvdec_session *sess, u32 width,
-> -		       u32 height, u32 dpb_size)
-> +		       u32 height, u32 dpb_size, u32 bitdepth)
->  {
->  	static const struct v4l2_event ev = {
->  		.type = V4L2_EVENT_SOURCE_CHANGE,
-> @@ -448,25 +456,27 @@ void amvdec_src_change(struct amvdec_session *sess, u32 width,
->  
->  	v4l2_ctrl_s_ctrl(sess->ctrl_min_buf_capture, dpb_size);
->  
-> +	sess->bitdepth = bitdepth;
+> +	arm_smccc_1_1_hvc(GH_HYPERCALL_HYP_IDENTIFY, &res);
 > +
->  	/*
->  	 * Check if the capture queue is already configured well for our
-> -	 * usecase. If so, keep decoding with it and do not send the event
-> +	 * usecase. If so, keep decoding with it.
->  	 */
->  	if (sess->streamon_cap &&
->  	    sess->width == width &&
->  	    sess->height == height &&
->  	    dpb_size <= sess->num_dst_bufs) {
->  		sess->fmt_out->codec_ops->resume(sess);
-> -		return;
-> +	} else {
-> +		sess->status = STATUS_NEEDS_RESUME;
-> +		sess->changed_format = 0;
->  	}
->  
-> -	sess->changed_format = 0;
->  	sess->width = width;
->  	sess->height = height;
-> -	sess->status = STATUS_NEEDS_RESUME;
->  
-> -	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB size %u\n",
-> -		width, height, dpb_size);
-> +	dev_dbg(sess->core->dev, "Res. changed (%ux%u), DPB %u, bitdepth %u\n",
-> +		width, height, dpb_size, bitdepth);
->  	v4l2_event_queue_fh(&sess->fh, &ev);
->  }
->  EXPORT_SYMBOL_GPL(amvdec_src_change);
-> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> index 4bf3e61d081b..1a711679d26a 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_helpers.h
-> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
-> @@ -27,9 +27,10 @@ void amvdec_clear_dos_bits(struct amvdec_core *core, u32 reg, u32 val);
->  u32 amvdec_read_parser(struct amvdec_core *core, u32 reg);
->  void amvdec_write_parser(struct amvdec_core *core, u32 reg, u32 val);
->  
-> -u32 amvdec_am21c_body_size(u32 width, u32 height);
-> -u32 amvdec_am21c_head_size(u32 width, u32 height);
-> -u32 amvdec_am21c_size(u32 width, u32 height);
-> +/* Helpers for the Amlogic compressed framebuffer format */
-> +u32 amvdec_amfbc_body_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu);
-> +u32 amvdec_amfbc_head_size(u32 width, u32 height);
-> +u32 amvdec_amfbc_size(u32 width, u32 height, u32 is_10bit, u32 use_mmu);
->  
->  /**
->   * amvdec_dst_buf_done_idx() - Signal that a buffer is done decoding
-> @@ -77,9 +78,10 @@ void amvdec_set_par_from_dar(struct amvdec_session *sess,
->   * @width: picture width detected by the hardware
->   * @height: picture height detected by the hardware
->   * @dpb_size: Decoded Picture Buffer size (= amount of buffers for decoding)
-> + * @bitdepth: Bit depth (usually 10 or 8) of the coded content
->   */
->  void amvdec_src_change(struct amvdec_session *sess, u32 width,
-> -		       u32 height, u32 dpb_size);
-> +		       u32 height, u32 dpb_size, u32 bitdepth);
->  
->  /**
->   * amvdec_abort() - Abort the current decoding session
-
+> +	hyp_identity->api_info = res.a0;
+> +	hyp_identity->flags[0] = res.a1;
+> +	hyp_identity->flags[1] = res.a2;
+> +	hyp_identity->flags[2] = res.a3;
+> +}
+> +EXPORT_SYMBOL_GPL(gh_hypercall_hyp_identify);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Gunyah Hypervisor Hypercalls");
+> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
+> index f79ab13a5c28..85bd6626ffc9 100644
+> --- a/drivers/virt/Kconfig
+> +++ b/drivers/virt/Kconfig
+> @@ -54,4 +54,6 @@ source "drivers/virt/coco/sev-guest/Kconfig"
+>   
+>   source "drivers/virt/coco/tdx-guest/Kconfig"
+>   
+> +source "drivers/virt/gunyah/Kconfig"
+> +
+>   endif
+> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+> new file mode 100644
+> index 000000000000..1a737694c333
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/Kconfig
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config GUNYAH
+> +	tristate "Gunyah Virtualization drivers"
+> +	depends on ARM64
+> +	depends on MAILBOX
+> +	help
+> +	  The Gunyah drivers are the helper interfaces that run in a guest VM
+> +	  such as basic inter-VM IPC and signaling mechanisms, and higher level
+> +	  services such as memory/device sharing, IRQ sharing, and so on.
+> +
+> +	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+> +	  virtual environment.
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> index 54b4be71caf7..bd080e3a6fc9 100644
+> --- a/include/linux/gunyah.h
+> +++ b/include/linux/gunyah.h
+> @@ -6,8 +6,10 @@
+>   #ifndef _LINUX_GUNYAH_H
+>   #define _LINUX_GUNYAH_H
+>   
+> +#include <linux/bitfield.h>
+>   #include <linux/errno.h>
+>   #include <linux/limits.h>
+> +#include <linux/types.h>
+>   
+>   /******************************************************************************/
+>   /* Common arch-independent definitions for Gunyah hypercalls                  */
+> @@ -80,4 +82,30 @@ static inline int gh_remap_error(enum gh_error gh_error)
+>   	}
+>   }
+>   
+> +enum gh_api_feature {
+> +	GH_FEATURE_DOORBELL = 1,
+> +	GH_FEATURE_MSGQUEUE = 2,
+> +	GH_FEATURE_VCPU = 5,
+> +	GH_FEATURE_MEMEXTENT = 6,
+> +};
+> +
+> +bool arch_is_gh_guest(void);
+> +
+> +u16 gh_api_version(void);
+> +bool gh_api_has_feature(enum gh_api_feature feature);
+> +
+> +#define GH_API_V1			1
+> +
+> +#define GH_API_INFO_API_VERSION_MASK	GENMASK_ULL(13, 0)
+> +#define GH_API_INFO_BIG_ENDIAN		BIT_ULL(14)
+> +#define GH_API_INFO_IS_64BIT		BIT_ULL(15)
+> +#define GH_API_INFO_VARIANT_MASK	GENMASK_ULL(63, 56)
+> +
+> +struct gh_hypercall_hyp_identify_resp {
+> +	u64 api_info;
+> +	u64 flags[3];
+> +};
+> +
+> +void gh_hypercall_hyp_identify(struct gh_hypercall_hyp_identify_resp *hyp_identity);
+> +
+>   #endif
