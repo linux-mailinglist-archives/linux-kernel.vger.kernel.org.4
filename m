@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAA26C3561
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B9B6C356A
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjCUPRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S231673AbjCUPRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbjCUPRR (ORCPT
+        with ESMTP id S231633AbjCUPR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:17:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51200231F8;
-        Tue, 21 Mar 2023 08:17:13 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LEfHcX031372;
-        Tue, 21 Mar 2023 15:17:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=dhhNXJsGDiYrFRftxc7OOljCn824ZAzW6LGRuHROY7M=;
- b=UNkxUlo7RrrMKtKByKTmuwSRd+b6JPnz5pTKXY+J7MIpCFMcU4r0gLB5bs4zmkVVumYz
- 6o6X02kQbFZjj2I4FKUXAAgKe4bz4tbsUGgtu/U1+wfoF8ljQxDCNEHPuAHYZfo+1MWX
- ZCZgivIVNwYYrDvgVlTTXFQKIm8uSQtulsLrd9YgJIZG8glV+9KtJFbdKFLDUCkogPiS
- k1RkogLtTB1FBrtTAQ4n9O9IxbnILSkrjMok6GoEbEfGOPFWebQKrPyfi+e2yV//C+6o
- X5wA5p3pgIVEaTHi0zW9R8wsim76ehpYG0ZZaRRh6xOtNyZ+dAEvz2w2gPF2+5DQP43N 2Q== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfat97mem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 15:17:01 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32LFEa3X029517;
-        Tue, 21 Mar 2023 15:17:00 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pd4x77y42-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 15:17:00 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32LFGwgX34406890
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Mar 2023 15:16:58 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 784D858067;
-        Tue, 21 Mar 2023 15:16:58 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F112C58063;
-        Tue, 21 Mar 2023 15:16:56 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.111.39])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 21 Mar 2023 15:16:56 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-        andrew@aj.id.au, joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v2 4/4] ARM: dts: aspeed: bonnell: Add DIMM SPD
-Date:   Tue, 21 Mar 2023 10:16:42 -0500
-Message-Id: <20230321151642.461618-5-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230321151642.461618-1-eajames@linux.ibm.com>
-References: <20230321151642.461618-1-eajames@linux.ibm.com>
+        Tue, 21 Mar 2023 11:17:28 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B2650739
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:17:22 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id i9so14075839wrp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679411840;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2GoInk7d9u47eng1vTzYqIGp8bdKWZRL2lDveNBhNVo=;
+        b=Cgzx71bgHE21nUmP0hjEF26eip8TPlh3F8/FjPtJF2bioLbK7ZA+qBIyMNLToyMypK
+         yqqUc1Irx30LJcAWdFUqSgqFcL0Ols5bQz4IMEx6s0PYC3r+itMIGJUFyAqoSB7Qcx1L
+         XNJXVyOQ1tfk0dL9L4BqV1AGQ3SBnqD43/S6pidHoXuCcAaeOfK3zAcNN2IY/pV8aJny
+         /asGrn/D1/4v3lr6oJRoVx9TwojCIB2B5voWSF+xkpMbieZR/NowITOlYd7i5B7IWtLT
+         bMUm2b2wKEllu4aPRMX22AxcsOo7V5J/0bzrHGkunSkkQ7LFtC+8skcNPVW7tvd2/Wu7
+         OKug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679411840;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2GoInk7d9u47eng1vTzYqIGp8bdKWZRL2lDveNBhNVo=;
+        b=eqFjLl9piz3VShdZdJd1waeSxrbXog0ivdrtRc4MepYJtg7QGZaQWFwiyLHP3sYI03
+         lYCUrQP6HlYGpcFHaz1eKD6R0i6c4j6xUhOWLW+rIEk2r9idhPMwMxX6acse+rdkVgF+
+         4oQVSlJRi/XRcT0vNFXHtWD8wI2F/7O1TRHXSR9Bi+OFZKRbmAQf20mD8EQKe/M+kbej
+         T952AXh1SMzEaYz+eGkZ20J7GxyCiILQswDG7mX8f2Sis/gFBiw8QhF8qzWVcEppjG/U
+         NJSgM7rN5DSDx2/I/ZZFlzZ5Sd2EzUvpDntTu1g00BnR9O7wbYu3Wd6F4p8zUpzocZuK
+         hkvw==
+X-Gm-Message-State: AO0yUKVaLR/NFcs4hD2VvvO9SzyVbTgWTqrQhvkcFHNqMLdPoC/k5Nbo
+        m/UBjaPaDM2yGHKHG/0E0zt8Ig==
+X-Google-Smtp-Source: AK7set/c9amb2MXvWMJuVzlYww2wkU04NIoAsnkM/hMhnYMf7zSMqJy/vh70Jj3/dkR9KvPgbxuVvQ==
+X-Received: by 2002:a5d:4f09:0:b0:2cf:e436:f722 with SMTP id c9-20020a5d4f09000000b002cfe436f722mr2724274wru.64.1679411840395;
+        Tue, 21 Mar 2023 08:17:20 -0700 (PDT)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id m8-20020a5d4a08000000b002c3f03d8851sm11518772wrq.16.2023.03.21.08.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 08:17:20 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 15:17:15 +0000
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <ZBnKe55cvTZybZLF@google.com>
+References: <20230317143310.1604700-1-vdonnefort@google.com>
+ <20230317143310.1604700-2-vdonnefort@google.com>
+ <20230320214516.01c18367@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3j_M-v25EPzmbn1EcklvNePnDon_0Bi3
-X-Proofpoint-GUID: 3j_M-v25EPzmbn1EcklvNePnDon_0Bi3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_10,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=653 bulkscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210118
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320214516.01c18367@gandalf.local.home>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,56 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DIMM SPD to the processor I2C busses.
+On Mon, Mar 20, 2023 at 09:45:16PM -0400, Steven Rostedt wrote:
+> On Fri, 17 Mar 2023 14:33:09 +0000
+> Vincent Donnefort <vdonnefort@google.com> wrote:
+> 
+> > Also, the meta-page being... a single page, this limits at the moment the
+> > number of pages in the ring-buffer that can be mapped: ~3MB on a 4K pages
+> > system.
+> 
+> I hate this limitation, so I fixed it ;-)
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Thanks a lot for having a look. Do you mind if I fold this in my patch for a V2?
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-index 79516dc21c01..72186020e75a 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
-@@ -232,18 +232,38 @@ cfam0_i2c1: i2c-bus@1 {
- 
- 			cfam0_i2c10: i2c-bus@a {
- 				reg = <10>;	/* OP3A */
-+
-+				eeprom@50 {
-+					compatible = "atmel,at30tse";
-+					reg = <0x50>;
-+				};
- 			};
- 
- 			cfam0_i2c11: i2c-bus@b {
- 				reg = <11>;	/* OP3B */
-+
-+				eeprom@50 {
-+					compatible = "atmel,at30tse";
-+					reg = <0x50>;
-+				};
- 			};
- 
- 			cfam0_i2c12: i2c-bus@c {
- 				reg = <12>;	/* OP4A */
-+
-+				eeprom@50 {
-+					compatible = "atmel,at30tse";
-+					reg = <0x50>;
-+				};
- 			};
- 
- 			cfam0_i2c13: i2c-bus@d {
- 				reg = <13>;	/* OP4B */
-+
-+				eeprom@50 {
-+					compatible = "atmel,at30tse";
-+					reg = <0x50>;
-+				};
- 			};
- 
- 			cfam0_i2c14: i2c-bus@e {
--- 
-2.31.1
+> 
+> I added a meta_page_size field to the meta page, and user space can do:
+> 
+> 	meta = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
+> 	if (meta == MAP_FAILED)
+> 		pdie("mmap");
+> 
+> 	map = meta;
+> 	meta_len = map->meta_page_size;
+> 
+> 	if (meta_len > page_size) {
+> 		munmap(meta, page_size);
+> 		meta = mmap(NULL, meta_len, PROT_READ, MAP_SHARED, fd, 0);
+> 		if (meta == MAP_FAILED)
+> 			pdie("mmap");
+> 		map = meta;
+> 	}
+> 
+> This appears to work (but I'm still testing it).
+> 
+> -- Steve
+> 
+> diff --git a/include/uapi/linux/trace_mmap.h b/include/uapi/linux/trace_mmap.h
+> index 24bcec754a35..12f3f7ee33d9 100644
+> --- a/include/uapi/linux/trace_mmap.h
+> +++ b/include/uapi/linux/trace_mmap.h
+> @@ -18,6 +18,7 @@ struct ring_buffer_meta_page {
+>  	__u32	reader_page;
+>  	__u32	nr_data_pages;	/* doesn't take into account the reader_page */
+>  	__u32	data_page_head;	/* index of data_pages[] */
+> +	__u32	meta_page_size;	/* size of the meta page */
 
+Do we want a specific field here? That could be deduced from nr_data_pages()
+quite easily?
+
+
+>  	__u32	data_pages[];
+>  };
+>  
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index 10a17e78cfe6..77c92e4a7adc 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -526,6 +526,7 @@ struct ring_buffer_per_cpu {
+>  	u64				read_stamp;
+>  
+>  	int				mapped;
+> +	int				meta_order;
+>  	struct mutex			mapping_lock;
+>  	unsigned long			*page_ids;	/* ID to addr */
+>  	struct ring_buffer_meta_page	*meta_page;
+> @@ -5898,7 +5899,7 @@ int ring_buffer_read_page(struct trace_buffer *buffer,
+>  EXPORT_SYMBOL_GPL(ring_buffer_read_page);
+>  
+>  #define META_PAGE_MAX_PAGES \
+> -	((PAGE_SIZE - (offsetof(struct ring_buffer_meta_page, data_page_head))) >> 2)
+> +	((PAGE_SIZE - (offsetof(struct ring_buffer_meta_page, data_pages))) >> 2)
+>
+
+[...]
