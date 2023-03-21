@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F1E6C373A
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BB66C373B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 17:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCUQnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 12:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S230134AbjCUQny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 12:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjCUQns (ORCPT
+        with ESMTP id S230159AbjCUQnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 12:43:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8501F515C9;
-        Tue, 21 Mar 2023 09:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Z+zwblPNJ3OUYOnKk/QBbkl8n+ZHXybiPX0PiQx3oXU=; b=YHEt7/8HVk+HXyQdyu4UIyshX9
-        24kbrya3mv8KOjHy2Mvq9WjJcPISA8U2TMNhAe71LJOCWB2xxAXOlT8a7A0sB0w1B06p8iCOAv+rL
-        0d8pFv2ojSaI9VUu343HerXQVkP2UWXXTYjzWFROZzX2elqgRzqjHVtLuN4zllt6HH2UQrFGl+iY0
-        7kGmtienyRFdp+fwP4KMvaE5qlhe7hqKwQj0G5fgN5END84mQjluWFCBg6A+13Yk6XimfuLf/Cq0D
-        GTDq/tUG4bI9++AFKsUWh2fAla691b9RQlx0W0uP24zEaKTuqhChjmaJQSEr9/MnrQixHA4mk1fFc
-        Iv/73d0Q==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pef4j-00D6ty-1A;
-        Tue, 21 Mar 2023 16:43:05 +0000
-Message-ID: <227fdc99-b54a-eeb0-c4e6-21ed92731240@infradead.org>
-Date:   Tue, 21 Mar 2023 09:43:04 -0700
+        Tue, 21 Mar 2023 12:43:49 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB6C43457;
+        Tue, 21 Mar 2023 09:43:21 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id le6so16622990plb.12;
+        Tue, 21 Mar 2023 09:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679417001;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JnyYD+qGyWtHFKB/udYykGTvYk8Hn8K4Y5iyubI2Yi4=;
+        b=OBy8lQWat22a/ba2tRylQDewdOXfII5Xl37c2cX2Ak1clLhQO8WYj2jo+5A7ue3AsF
+         HX1S65unOKIbsIFs0SGC1syuyrS9NPpVbAqNukBkwDm1IhrZgrovdodAGxrUO9U5TQRb
+         3ZITNO+0tVxaczuVIznblHu/BBi+sG2hCUVhWyp/R59vFgOr9DdoCLHh67b3ke3nEDM5
+         sG9vItjZgZ4QyCw9Nbs8VDwjzEO4HQinzCBUTvYEsbZTkp7BstsRqJbU8F0w0eksGpEP
+         ms9DxK4fZaPxHGHpQShzoIxTC0DLQXx7+ZzLgxiwQjpVhGqm1tJyBUPpAOjl+K9PGFTO
+         LMBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679417001;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnyYD+qGyWtHFKB/udYykGTvYk8Hn8K4Y5iyubI2Yi4=;
+        b=SiJOdsYZMomG4cs/1iGjt7IwsJALVFCrcgHqYhuz1Vpv56SALCQ/NEGu8MOwBLhnk4
+         4HfN4mtVWtZxwVXfT/jsa8StEXz+w9Zs8hnAZBs2k7gBvyQBtrg8rr76+8gN0P9T1BLa
+         WlefxbV9ktm13vQQpl4ivETBCLz5KCcNOVqqMz0zdYQMRDAQ/A0g5LOWwXHezEWY7K4x
+         5RzsTvb9T/ccTxLvwtdapxezvUoE7Sxw7JusS5n+ozMz01RFXZOC8hZxYDm+d0RenFgZ
+         ND7Tx/WAKQPqDd3tgcmNSFd3Vt9+jfA8ba758qBEiJAOO9jnWmyz0yKvjniKRVtHhIXB
+         QJzg==
+X-Gm-Message-State: AO0yUKXwYQBvzaNplShSm0JrwrFYJL5MfIiHf/gF2hZH/jt2Ff7v3tSp
+        3fAawJ8JezF4TSHIRlGryCQ=
+X-Google-Smtp-Source: AK7set9i8a98qPwJ5k8mzGePIo2yKEWkhhw9OhqyZdA8n/Q/SWP/K/euHsH4jOG8VXNjKS0Ytbbplw==
+X-Received: by 2002:a17:90b:17cb:b0:23f:5fe7:25a1 with SMTP id me11-20020a17090b17cb00b0023f5fe725a1mr468373pjb.13.1679417000997;
+        Tue, 21 Mar 2023 09:43:20 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ca20-20020a17090af31400b00233d6547000sm8297444pjb.54.2023.03.21.09.43.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 09:43:20 -0700 (PDT)
+Message-ID: <a7152f63-ebe5-d739-a184-d491f8477779@gmail.com>
+Date:   Tue, 21 Mar 2023 09:43:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
- and !SMP
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.4 00/57] 5.4.238-rc2 review
 Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
- <ZBneELQuakjva1xa@casper.infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ZBneELQuakjva1xa@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230321080647.018123628@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230321080647.018123628@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/21/23 09:40, Matthew Wilcox wrote:
-> On Tue, Mar 21, 2023 at 09:30:59AM +0100, Geert Uytterhoeven wrote:
->> -#if (defined(CONFIG_NUMA) && defined(CONFIG_MEMORY_HOTPLUG)) || defined(CONFIG_SMP)
->> +#if defined(CONFIG_NUMA) || defined(CONFIG_SMP)
+On 3/21/23 01:39, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.238 release.
+> There are 57 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I'm amused by the thought of CONFIG_NUMA without CONFIG_SMP.
-> Is it possible to have one node with memory and a single CPU, then
-> another node with memory and no CPU?
+> Responses should be made by Thu, 23 Mar 2023 08:06:33 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.238-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-More likely 1 with CPU+memory, 1 with memory only.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-I've been told that that are also I/O-only nodes.
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-~Randy
+Florian
+
