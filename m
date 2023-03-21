@@ -2,186 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBC96C3BDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B086C3BE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 21:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjCUUd3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 21 Mar 2023 16:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S230299AbjCUUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 16:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCUUd1 (ORCPT
+        with ESMTP id S230021AbjCUUdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:33:27 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB2AA5DD;
-        Tue, 21 Mar 2023 13:33:13 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1peif5-00045p-1e; Tue, 21 Mar 2023 21:32:51 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Cc:     slewis@rivosinc.com, Conor Dooley <conor@kernel.org>,
-        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Guo Ren <guoren@kernel.org>, Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Wei Fu <wefu@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 0/6] RISC-V Hardware Probing User Interface
-Date:   Tue, 21 Mar 2023 21:32:49 +0100
-Message-ID: <6291488.MhkbZ0Pkbq@diego>
-In-Reply-To: <20230314183220.513101-1-evan@rivosinc.com>
-References: <20230314183220.513101-1-evan@rivosinc.com>
+        Tue, 21 Mar 2023 16:33:55 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431A722115
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:33:53 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b20so31700912edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 13:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679430832;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KTpu7F9BL2yL3dz5JaGLJyVf1Ik8YB0yHGfUTS5ixLY=;
+        b=p+bIXPROrY9Nrek+Wmbtia3iwVn1uy5t5w/nMtRwmRA8GTLXIuMWRTOTMjAwvAADPV
+         DACTTt5AzcV0w90we/PtHmkPjievW5kvs59J9hzQLWyky5rRuUgY1b5xiseQW36ZPKK9
+         Qwqwk8npprKqw1mJPUEG7w210YMUp93BRMFT1lnoh9lD+y6tFqpkIoIQMg4RAUfh0KK6
+         Wwfbp+utgdZ+r1i1hW04RWiH5VYdU0mdiPpGB8DIcCsI+IupfeQ+6anQzwFCdo+wJWpT
+         nV9TgkqYd3VykDsAhd5lMfSMmXrgd36f605L+P5vjqTFjEEn8Fifu0TRTFskB/NSP27F
+         WaFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679430832;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTpu7F9BL2yL3dz5JaGLJyVf1Ik8YB0yHGfUTS5ixLY=;
+        b=kvbmd1jVtEv8YNHQDNwpQ95VuTUs0/MxPQ/mZDml2gEXgafl2dtaPj/uxOBtAAiD5K
+         JyrDdwV0/6FfFd/PWD2IoMaxz7BGJpjrO7SVIFmXwdkcbQjDxyDp8GD7bFCo4aM2mPRT
+         ZvdTC2yDSZkAuBECu/7TVehe8uvrhEhxDTlKKUxaLYuULXP1i8pSLjK6ZOyg8t7tz/6w
+         R6ikPYrWtzB0fNBXQGpytTR+xpDwP9z0Am9k5bkQbJt+pTYoXBK3APF2taIMglpE8mym
+         LC/8ICo48/FQLd2gISW5BF0oE135jMDzNCIcD8U/kdHKcQU+NQxZLNyNlXqF9GjCzHJ2
+         RlwA==
+X-Gm-Message-State: AO0yUKXeU1LU6s650rhe4pkyFfBeelKZEfty5VCpcB3jpBLyxyOnK62X
+        I9XYcd+TKXnFje3dkbvryjahPQ==
+X-Google-Smtp-Source: AK7set8DiQQyI/6A7EQc/HPSa7kGeb9afOqUgPq7x5HSX2RAXq6ySWlu8V7lc1HMMxcVwyd57KB7FA==
+X-Received: by 2002:a17:907:2122:b0:92f:b290:78c with SMTP id qo2-20020a170907212200b0092fb290078cmr4179455ejb.21.1679430831701;
+        Tue, 21 Mar 2023 13:33:51 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id b1-20020a1709065e4100b008ca52f7fbcbsm6212839eju.1.2023.03.21.13.33.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 13:33:51 -0700 (PDT)
+Message-ID: <4df4d530-f12a-cc34-692a-1f5ff784bbe5@linaro.org>
+Date:   Tue, 21 Mar 2023 20:33:49 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] clk: qcom: gfm-mux: use runtime pm while accessing
+ registers
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
+        andersson@kernel.org
+Cc:     konrad.dybcio@linaro.org, mturquette@baylibre.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>
+References: <20230321175758.26738-1-srinivas.kandagatla@linaro.org>
+ <c5273d67493cbb008f13d7538837828a.sboyd@kernel.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <c5273d67493cbb008f13d7538837828a.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 14. März 2023, 19:32:14 CET schrieb Evan Green:
+
+
+On 21/03/2023 18:46, Stephen Boyd wrote:
+> Quoting Srinivas Kandagatla (2023-03-21 10:57:58)
+>> gfm mux driver does support runtime pm but we never use it while
+>> accessing registers. Looks like this driver was getting lucky and
+>> totally depending on other drivers to leave the clk on.
+>>
+>> Fix this by doing runtime pm while accessing registers.
+>>
+>> Fixes: a2d8f507803e ("clk: qcom: Add support to LPASS AUDIO_CC Glitch Free Mux clocks")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: Amit Pundir <amit.pundir@linaro.org>
 > 
-> There's been a bunch of off-list discussions about this, including at
-> Plumbers.  The original plan was to do something involving providing an
-> ISA string to userspace, but ISA strings just aren't sufficient for a
-> stable ABI any more: in order to parse an ISA string users need the
-> version of the specifications that the string is written to, the version
-> of each extension (sometimes at a finer granularity than the RISC-V
-> releases/versions encode), and the expected use case for the ISA string
-> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
-> try and keep ABI compatible and it's probably going to continue to grow,
-> as even if there's no more complexity in the specifications we'll have
-> to deal with the various ISA string parsing oddities that end up all
-> over userspace.
+> Is there a link to the report?
+
+https://www.spinics.net/lists/stable/msg638380.html
+
 > 
-> Instead this patch set takes a very different approach and provides a set
-> of key/value pairs that encode various bits about the system.  The big
-> advantage here is that we can clearly define what these mean so we can
-> ensure ABI stability, but it also allows us to encode information that's
-> unlikely to ever appear in an ISA string (see the misaligned access
-> performance, for example).  The resulting interface looks a lot like
-> what arm64 and x86 do, and will hopefully fit well into something like
-> ACPI in the future.
+>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> ---
+>>   drivers/clk/qcom/lpass-gfm-sm8250.c | 29 ++++++++++++++++++++++++++++-
+>>   1 file changed, 28 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
+>> index 96f476f24eb2..bcf0ea534f7f 100644
+>> --- a/drivers/clk/qcom/lpass-gfm-sm8250.c
+>> +++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
+>> @@ -38,14 +38,37 @@ struct clk_gfm {
+>>   static u8 clk_gfm_get_parent(struct clk_hw *hw)
+>>   {
+>>          struct clk_gfm *clk = to_clk_gfm(hw);
+>> +       int ret;
+>> +       u8 parent;
+>> +
+>> +       ret = pm_runtime_resume_and_get(clk->priv->dev);
+>> +       if (ret < 0 && ret != -EACCES) {
+>> +               dev_err_ratelimited(clk->priv->dev,
+>> +                                   "pm_runtime_resume_and_get failed in %s, ret %d\n",
+>> +                                   __func__, ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       parent = readl(clk->gfm_mux) & clk->mux_mask;
+>> +
+>> +       pm_runtime_mark_last_busy(clk->priv->dev);
+>>   
+>> -       return readl(clk->gfm_mux) & clk->mux_mask;
+>> +       return parent;
+>>   }
+>>   
+>>   static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
+>>   {
+>>          struct clk_gfm *clk = to_clk_gfm(hw);
+>>          unsigned int val;
+>> +       int ret;
+>> +
+>> +       ret = pm_runtime_resume_and_get(clk->priv->dev);
 > 
-> The actual user interface is a syscall, with a vDSO function in front of
-> it. The vDSO function can answer some queries without a syscall at all,
-> and falls back to the syscall for cases it doesn't have answers to.
-> Currently we prepopulate it with an array of answers for all keys and
-> a CPU set of "all CPUs". This can be adjusted as necessary to provide
-> fast answers to the most common queries.
+> Doesn't the clk framework already do this? Why do we need to do it
+> again?
 
-I've built myself a small test-program [see below], to check the feature
-on the d1-nezha board. Which is how I found the tiny c-extension issue.
+You are right, clk core already does do pm_runtime_resume_and_get for 
+set_parent.
 
-Series works as expected there, so patches 1-4 on a d1-nezha:
-
-Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+this looks redundant here.
 
 
+so we need only need to add this for get_parent
 
-hwprobe.c:
-----------------
-#include <linux/types.h>
-#include <sys/syscall.h>
-#include <stdio.h>
-#include <unistd.h>
-
-#define __NR_riscv_hwprobe 258
-
-struct riscv_hwprobe {
-        __s64 key;
-        __u64 value;
-};
-
-#define RISCV_HWPROBE_KEY_MVENDORID     0
-#define RISCV_HWPROBE_KEY_MARCHID       1
-#define RISCV_HWPROBE_KEY_MIMPID        2
-#define RISCV_HWPROBE_KEY_BASE_BEHAVIOR 3
-#define         RISCV_HWPROBE_BASE_BEHAVIOR_IMA (1 << 0)
-#define RISCV_HWPROBE_KEY_IMA_EXT_0     4
-#define         RISCV_HWPROBE_IMA_FD            (1 << 0)
-#define         RISCV_HWPROBE_IMA_C             (1 << 1)
-#define RISCV_HWPROBE_KEY_CPUPERF_0     5
-#define         RISCV_HWPROBE_MISALIGNED_UNKNOWN        (0 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_EMULATED       (1 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_SLOW           (2 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_FAST           (3 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_UNSUPPORTED    (4 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_MASK           (7 << 0)
-
-int __riscv_hwprobe (struct riscv_hwprobe *pairs, long pair_count,
-  long cpu_count, unsigned long *cpus, unsigned long flags)
-{
-
-        return syscall(__NR_riscv_hwprobe, pairs, pair_count, cpu_count, cpus, flags);
-}
-
-int main(void)
-{
-        struct riscv_hwprobe pairs[3];
-
-        pairs[0].key = RISCV_HWPROBE_KEY_MVENDORID;
-        pairs[1].key = RISCV_HWPROBE_KEY_MARCHID;
-        pairs[2].key = RISCV_HWPROBE_KEY_MIMPID;
-        if (__riscv_hwprobe(pairs, 3, 0, NULL, 0) != 0) {
-                printf("syscall failed");
-                return -1;
-        }
-
-        printf("vendorid 0x%x, archid 0x%x, impid 0x%x\n",
-               pairs[0].value, pairs[1].value, pairs[2].value);
-
-
-        pairs[0].key = RISCV_HWPROBE_KEY_CPUPERF_0;
-        pairs[1].key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR;
-        pairs[2].key = RISCV_HWPROBE_KEY_IMA_EXT_0;
-        if (__riscv_hwprobe(&pairs[0], 3, 0, NULL, 0) != 0) {
-                printf("syscall failed");
-                return -1;
-        }
-
-        printf("ima-behavior %d, f+d %d, c %d, misaligned access: %s\n",
-        ((pairs[1].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA) == RISCV_HWPROBE_BASE_BEHAVIOR_IMA),
-        ((pairs[2].value & RISCV_HWPROBE_IMA_FD) == RISCV_HWPROBE_IMA_FD),
-        ((pairs[2].value & RISCV_HWPROBE_IMA_C) == RISCV_HWPROBE_IMA_C),
-        ((pairs[0].value & RISCV_HWPROBE_MISALIGNED_FAST) == RISCV_HWPROBE_MISALIGNED_FAST) ? "fast" : "not-fast"
-        );
-
-        return 0;
-}
-
-
-
+--srini
+> 
+>> +       if (ret < 0 && ret != -EACCES) {
+>> +               dev_err_ratelimited(clk->priv->dev,
+>> +                                   "pm_runtime_resume_and_get failed in %s, ret %d\n",
+>> +                                   __func__, ret);
+>> +               return ret;
+>> +       }
+>>   
+>>          val = readl(clk->gfm_mux);
+>>
