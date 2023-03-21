@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB42C6C2A7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB7D6C2A7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjCUGfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S230284AbjCUGfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjCUGfG (ORCPT
+        with ESMTP id S230285AbjCUGf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:35:06 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E57844BC
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:34:58 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id o40-20020a05600c512800b003eddedc47aeso3370932wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679380496;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aeU98+5k4UNo0IIDP5TmbAbzIZvq5NwXU7mw30mcFh4=;
-        b=my2o52HZ/sptlkDCPPrA12lnhy9kS2Xor6aihSPfCLGPAGYWnbaq5wsjIxLFRrx0Pb
-         1VwwZQmHVeIj8h/l3dJ+WtznDT6vtKV9Z7SgFiboHZ0MHkQxnWHInQlme3CkswRXZ8LT
-         39a/jWfDqoK4XjlyVVv2XnRL4BJLIM9OjhXrLFRsJSDuKWPYMfZkICKrhCPvJ3X9XyGZ
-         Jm6VR/WURvQKeHHy4IfIOidTpGijPOqS2FYmkcqchrw3fxHn33FyWnK4lQ9DygAIU7c/
-         eJbmffZoXUMSM+n0bbxErHrPoxcIOdeKQOKgyx1PieCXB0yxMmOLTHOeSjHwQmq05GoQ
-         vX7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679380496;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aeU98+5k4UNo0IIDP5TmbAbzIZvq5NwXU7mw30mcFh4=;
-        b=M3lUz+SvUxYdQ5PzYm6x3pKH5DWnAXXlXwcMCl4RTfWLwasZk3Q7CDU5V2Ar1C1/3B
-         CfP2Wqal/a31B1ls3egXK8F6R6chs/Lejq/WX2UBrhQg14ZIlDHlIZvJZ/3I14nzWPkp
-         xWRC2irmGNLRU9Yllz0Ue2gXeQ+rwcjwwnqZx+gMTwfv2gDXOhsmzzWIltc9V2Cb2V60
-         UUp1p0H4CYtkvV3DNxwGKW7AsKTtOOr4rs/ecxlWCgremYdS/AmyORHPt2oS2hOdkcpP
-         se1/KPxBqK92TWzC/wZYuufsC3iJbel//ldGxXKfrXKUYN//FTOGP0x80vB7m7xNiWAw
-         vtrQ==
-X-Gm-Message-State: AO0yUKV3IYSRyiyoWHWIoV7+WyWEgmJYWyXaXy8Xhv2rbz5p8kB9htpC
-        B3OnuytXlqCVUT4j2Ob9V61qWPsfUw1ve1YvfdBRLFkUOP+F/ZAr
-X-Google-Smtp-Source: AK7set+MTESzG510vY+KY7o33JEhtbA90pqbzZCqd1mGorBUpd1yfT2SUq/gLkeSmm1CWVVo0WzGsrlZxkxO34q3690=
-X-Received: by 2002:a7b:c444:0:b0:3ed:779c:4063 with SMTP id
- l4-20020a7bc444000000b003ed779c4063mr453053wmi.8.1679380496252; Mon, 20 Mar
- 2023 23:34:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
- <20230320071211.3005769-2-bhupesh.sharma@linaro.org> <0a8fcd57-94dc-61e6-0ba0-b1591e05e6f2@linaro.org>
-In-Reply-To: <0a8fcd57-94dc-61e6-0ba0-b1591e05e6f2@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 21 Mar 2023 12:04:45 +0530
-Message-ID: <CAH=2Ntxj6RyEtrxCZmg6gKR_RSxX-wnkoEqjQ9CGQXM0zuATKQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dmaengine: qcom: bam_dma: Add support for BAM engine v1.7.4
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, vkoul@kernel.org,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        vladimir.zapolskiy@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 21 Mar 2023 02:35:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BE159008
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 23:35:16 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxUOUiUBlksUQPAA--.22543S3;
+        Tue, 21 Mar 2023 14:35:14 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeUhUBlkUEcIAA--.35503S2;
+        Tue, 21 Mar 2023 14:35:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] lib/Kconfig.debug: Correct help info of LOCKDEP_STACK_TRACE_HASH_BITS
+Date:   Tue, 21 Mar 2023 14:35:08 +0800
+Message-Id: <1679380508-20830-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxAeUhUBlkUEcIAA--.35503S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZFy3JFyUWF4fJFyDGw1rJFb_yoWDXrb_Kr
+        y8Xr4rGF15AFyak3Wqqa1kXF1Iva17Wan3uFn3tr13Z3yq9r95A34kGrykAFZxW39F9F40
+        qrZ5Ar9IvryYkjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        q7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E
+        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
+        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY
+        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU
+        4AhLUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 at 16:12, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 20.03.2023 08:12, Bhupesh Sharma wrote:
-> > Qualcomm SoCs SM6115 and  QRB2290 support BAM engine version
-> > v1.7.4.
-> >
-> > Add the support for the same in driver. Since the reg info of
-> > this version is similar to version v1.7.0, so reuse the same.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/dma/qcom/bam_dma.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> > index 1e47d27e1f81..153d189de7d2 100644
-> > --- a/drivers/dma/qcom/bam_dma.c
-> > +++ b/drivers/dma/qcom/bam_dma.c
-> > @@ -1228,6 +1228,7 @@ static const struct of_device_id bam_of_match[] = {
-> >       { .compatible = "qcom,bam-v1.3.0", .data = &bam_v1_3_reg_info },
-> >       { .compatible = "qcom,bam-v1.4.0", .data = &bam_v1_4_reg_info },
-> >       { .compatible = "qcom,bam-v1.7.0", .data = &bam_v1_7_reg_info },
-> > +     { .compatible = "qcom,bam-v1.7.4", .data = &bam_v1_7_reg_info },
-> The compatible is meaningless as of today (it uses the exact same driver
-> data as v1.7.0), so I'd say going with:
->
-> compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
->
-> is what we want.
+We can see the following definition in kernel/locking/lockdep_internals.h:
 
-Ok, will send a v2.
+  #define STACK_TRACE_HASH_SIZE	(1 << CONFIG_LOCKDEP_STACK_TRACE_HASH_BITS)
 
-Thanks.
+CONFIG_LOCKDEP_STACK_TRACE_HASH_BITS is related with STACK_TRACE_HASH_SIZE
+instead of MAX_STACK_TRACE_ENTRIES, fix it.
+
+Fixes: 5dc33592e955 ("lockdep: Allow tuning tracing capacity constants.")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ lib/Kconfig.debug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index c8b379e..e2e33bf 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1392,7 +1392,7 @@ config LOCKDEP_STACK_TRACE_HASH_BITS
+ 	range 10 30
+ 	default 14
+ 	help
+-	  Try increasing this value if you need large MAX_STACK_TRACE_ENTRIES.
++	  Try increasing this value if you need large STACK_TRACE_HASH_SIZE.
+ 
+ config LOCKDEP_CIRCULAR_QUEUE_BITS
+ 	int "Bitsize for elements in circular_queue struct"
+-- 
+2.1.0
+
