@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CC66C2988
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216576C29D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCUFBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S229902AbjCUF1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCUFBJ (ORCPT
+        with ESMTP id S229672AbjCUF1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:01:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5661E22DC5;
-        Mon, 20 Mar 2023 22:00:53 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-215-171.ewe-ip-backbone.de [91.248.215.171])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CCEC9660304E;
-        Tue, 21 Mar 2023 05:00:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679374850;
-        bh=BnvyoteHKI9wY48ZjZ0iqWIQKPL57OZHpv/A2dQoasg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QyPhBokC0aPOnFnEZN3nuB9BOQziiQ4D6TZ016KmwguKWy5u+/AZKmnYQYoK91pKy
-         Lvb9VZwmxQVGO+WHI6xT7P89g7uhGuF5YIR0xwacZ7XaIztXwVinByXdsa4Hrod8Pr
-         6vciMxJln75EQt1feWGmN7o0C/yLRCbDZQkY/IKMyqEryMcYi9IjzeIQhVbayYC4h9
-         mdN/RlP8RiWI+fEXeG1xgHD8Pv4dBA9goRrqCIoQsX1LMlCdAhXwhuTzSPCyzTnGLb
-         KzWIL512wG9aYCrBK/QMdys6DQlBE/3UlL0sdZgD/0zIsILHr3G4VOJgn8oOQgRL4U
-         LQVXHior7eheg==
-Received: by mercury (Postfix, from userid 1000)
-        id 3E2EC1060FAB; Tue, 21 Mar 2023 06:00:48 +0100 (CET)
-Date:   Tue, 21 Mar 2023 06:00:48 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: add get max power support
-Message-ID: <20230321050048.3p7xtyikf2lkqwrg@mercury.elektranox.org>
-References: <20230320100711.3708-1-frank.wang@rock-chips.com>
- <20230320100711.3708-4-frank.wang@rock-chips.com>
- <20230320203139.quld3gmoo6esu56i@mercury.elektranox.org>
- <19b39d82-8510-2717-cf3b-71cb955373d0@rock-chips.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w2wopulsblcnnvo7"
-Content-Disposition: inline
-In-Reply-To: <19b39d82-8510-2717-cf3b-71cb955373d0@rock-chips.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        Tue, 21 Mar 2023 01:27:12 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099B2135;
+        Mon, 20 Mar 2023 22:27:01 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0662D5C00BE;
+        Tue, 21 Mar 2023 01:26:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 21 Mar 2023 01:26:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1679376418; x=1679462818; bh=X
+        4DAieLlRVUgBOIkUGiEOjKixLtPs6G2ZgCs8Z+IwsE=; b=sooniVB5OehRJc1uK
+        xO+5BdBUlN1fcRliRtxn3qj00aTKO08UXhDavrjsBDFMMaN++lFEmK07FBgCpwI5
+        xu/Fmid9fl84PqodV/rJGQZpBnOAMQKMOoz9NN0jWJFzPTkIM3mWlHUHeeextCRT
+        EzOmacKmqAIes9hfzchuFBirJnqI/LujxO55JZjDUbUBJx79Ls+O6tKs+pMNo8+7
+        QEcrUkERgkxAToQykgnJsGMb1a0xY7WlTXHXHPa8OObhKVyvmd8nDoU/urfRW7iL
+        51oBj3c/gS0b+CSM1vLE9alHUZetR7ZCVLG+g2Mgk03EegWaKtQRpp9KBrH3jLN8
+        tTgng==
+X-ME-Sender: <xms:IUAZZPSiIWC8Hf_XJlO8j2BO5vaGJNB-5izCqLFMjgkdW3632iUisg>
+    <xme:IUAZZAy2nz-PLPstWeIEpMi4hDIzC9AjJsWx7fuzsZxz0_JyUWOUebXoKMVyj0dab
+    _P_U5BhNUwOVzatBzo>
+X-ME-Received: <xmr:IUAZZE2j_8ZK3TRYgFZIG3bAywkESvt_uRNtIk3O_gVt5V04J52DvkMheSI-NGHSHQUvMenN8aTIZUkcKkgcClJauyzKP-XaDOo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvfevkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
+    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
+    hnpeehfffggeefveegvedtiefffeevuedtgefhueehieetffejfefggeevfeeuvdduleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
+    hinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:IUAZZPAhb_1an8FT3rFIM137ms8aftnaok_xhPJAUQkMNS_w0N6Y7g>
+    <xmx:IUAZZIjXUmYdYva6Uxu6jdy5vAiHK-X2sqI5Dbt7_uiwtCzcIhREIg>
+    <xmx:IUAZZDqRMCG-NFgKdmv-PT_sKQT2gaO7dNARHBH0tZ5hVUHyLE-0Zg>
+    <xmx:IkAZZCbw77PjlRC3DIFBCLUneehOELB206RaLz0myADoB65gMjqvaw>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 01:26:55 -0400 (EDT)
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Changzhong <zhangchangzhong@huawei.com>
+Message-Id: <6645a4b5c1e364312103f48b7b36783b94e197a2.1679370343.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH v2 net] net/sonic: use dma_mapping_error() for error check
+Date:   Tue, 21 Mar 2023 14:45:43 +1100
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,90 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zhang Changzhong <zhangchangzhong@huawei.com>
 
---w2wopulsblcnnvo7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The DMA address returned by dma_map_single() should be checked with
+dma_mapping_error(). Fix it accordingly.
 
-Hi,
+Fixes: efcce839360f ("[PATCH] macsonic/jazzsonic network drivers update")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Tested-by: Stan Johnson <userm57@yahoo.com>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+This was originally Zhang Changzhong's patch. I've just added the missing
+curly bracket which caused a build failure when the patch was first posted.
+---
+ drivers/net/ethernet/natsemi/sonic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Mar 21, 2023 at 09:32:53AM +0800, Frank Wang wrote:
-> On 2023/3/21 4:31, Sebastian Reichel wrote:
-> > On Mon, Mar 20, 2023 at 06:07:11PM +0800, Frank Wang wrote:
-> > > Traverse fixed pdos to calculate the maximum power that the charger
-> > > can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-> > > property.
-> > >=20
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > > ---
-> > >   drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
-> > >   1 file changed, 24 insertions(+)
-> > >=20
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/t=
-cpm.c
-> > > index 13830b5e2d09f..d6ad3cdf9e4af 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -6320,6 +6320,27 @@ static int tcpm_psy_get_current_now(struct tcp=
-m_port *port,
-> > >   	return 0;
-> > >   }
-> > > +static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-> > > +					  union power_supply_propval *val)
-> > > +{
-> > > +	unsigned int src_mv, src_ma, max_src_mw =3D 0;
-> > > +	unsigned int i, tmp;
-> > > +
-> > > +	for (i =3D 0; i < port->nr_source_caps; i++) {
-> > > +		u32 pdo =3D port->source_caps[i];
-> > > +
-> > > +		if (pdo_type(pdo) =3D=3D PDO_TYPE_FIXED) {
-> > > +			src_mv =3D pdo_fixed_voltage(pdo);
-> > > +			src_ma =3D pdo_max_current(pdo);
-> > > +			tmp =3D src_mv * src_ma / 1000;
-> > > +			max_src_mw =3D tmp > max_src_mw ? tmp : max_src_mw;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	val->intval =3D max_src_mw;
-> > The power-supply subsystem expects Microwatts and not Milliwatts.
->=20
-> Yes, but I see the 'power_supply_propval' member 'intval' is an integer
-> type, I worry about it may be overflowed that uses Microwatts.
+diff --git a/drivers/net/ethernet/natsemi/sonic.c b/drivers/net/ethernet/natsemi/sonic.c
+index d17d1b4f2585..825356ee3492 100644
+--- a/drivers/net/ethernet/natsemi/sonic.c
++++ b/drivers/net/ethernet/natsemi/sonic.c
+@@ -292,7 +292,7 @@ static int sonic_send_packet(struct sk_buff *skb, struct net_device *dev)
+ 	 */
+ 
+ 	laddr = dma_map_single(lp->device, skb->data, length, DMA_TO_DEVICE);
+-	if (!laddr) {
++	if (dma_mapping_error(lp->device, laddr)) {
+ 		pr_err_ratelimited("%s: failed to map tx DMA buffer.\n", dev->name);
+ 		dev_kfree_skb_any(skb);
+ 		return NETDEV_TX_OK;
+@@ -509,7 +509,7 @@ static bool sonic_alloc_rb(struct net_device *dev, struct sonic_local *lp,
+ 
+ 	*new_addr = dma_map_single(lp->device, skb_put(*new_skb, SONIC_RBSIZE),
+ 				   SONIC_RBSIZE, DMA_FROM_DEVICE);
+-	if (!*new_addr) {
++	if (dma_mapping_error(lp->device, *new_addr)) {
+ 		dev_kfree_skb(*new_skb);
+ 		*new_skb = NULL;
+ 		return false;
+-- 
+2.37.5
 
-Data being encoded in Microwatts is part of the ABI. The data
-you are supplying will be interpreted in =B5W. If you submit your
-data in mW it is basically always wrong even without an overflow.
-
-Now regarding the overflow: A signed int can store 2^31 bit, so
-2,147,483,648 =B5W =3D 2147 W. Looking at your code you effectively
-calculate Microwatts in an unsigned int and then divide by 1000.
-Since the intermediate value (before dividing by 1000) needs to be
-stored you gain only one bit. That raises the question: Why do you
-expect data to be between 2147 W and 4294 W when the latest released
-USB PD spec allows 5A@48V =3D 240W?
-
--- Sebastian
-
---w2wopulsblcnnvo7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQZOfsACgkQ2O7X88g7
-+pojhBAAhgzwQSDfENO6eGtWR2yQMwgG0jOd4CTCv9Cp3UuxB60XUdp9lDcRosz3
-T5InXJ/FMWUhEiHoo/pq/95CsrKW7ybUylCTbhWaiWmipBsKURaJGiJWUopdYN01
-M2zhd78L0nGghRkF/vJcBxl4TPoQtp2YUr+oEmKGcar4+cNaVAYOuzChOKx61H+/
-J7U06yL3GcrGu00upnbY49prr5lJIWHV7zinHFpx79y9joYYh9Nh6766y2EQCo7g
-iMj5LxYyxLtPMJLTl0eS1U0hQb3l9AvJLUoDaAU92x9+CEbpTczk2XBrpBJfHJQc
-/x0PtQ+xlaxdABsN62RdwPiUCQOs1FqPMbLNr2oqwbmiY4caj8uogJl0nnhMYz34
-HMUtHgZL/O+Hlrd/bVliGabySpgUQjZKfvk03E7nNRyNygscUSpNGSPMCqhFLfkW
-FY8quL01XZIEyCfgHoxKAv6geKAtmZ5TfJdGw68V/8z3FJJHZ3/Gun6sqewc+RCe
-J0lM3M2htBeV8lsMua+PhRDnHDr/6FMxAM4eMmRqVXgIsfFkwjnwQJyjQUEpD8na
-wJCEufjleDMfkBLwet9C4SclnGgGOTWw+dsF6CYfnY9kZM7r/zed1znyWrsXm58i
-fTqzppOzwPzLtoUXO9Si4fCxZeoZrdav0JqoKyI026D9y+v6e0k=
-=do4N
------END PGP SIGNATURE-----
-
---w2wopulsblcnnvo7--
