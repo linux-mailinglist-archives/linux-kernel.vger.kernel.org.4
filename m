@@ -2,269 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A8C6C38BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825496C38C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCUR47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S229832AbjCUR6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjCUR4u (ORCPT
+        with ESMTP id S230416AbjCUR6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:56:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83C455076;
-        Tue, 21 Mar 2023 10:56:22 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8B9310B;
-        Tue, 21 Mar 2023 18:56:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679421380;
-        bh=qUl73zAreteh4tygAoGY7Wt9PYd+S1ypY5ZT9bhJVDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ukY4KOk9jKXfhWRu9zVGMpIr/bv06kOTxC29OWXxgVm1lx2a3/fmFsR6yTJSDAL1+
-         i/jvAoX1V6kkOPDMliwQFhhQwCHFL0q11rTNW33BXwL9i0mdgI+mT6PSrCLelhqGOK
-         dOYCC2e0R88jo66EuMNyCWo+/ECyv1Sh1m4OQ4vc=
-Date:   Tue, 21 Mar 2023 19:56:26 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v2 6/6] media: starfive: Add Starfive Camera Subsystem
- driver
-Message-ID: <20230321175626.GD20234@pendragon.ideasonboard.com>
-References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
- <20230310120553.60586-7-jack.zhu@starfivetech.com>
- <20230312124339.GD2545@pendragon.ideasonboard.com>
- <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
+        Tue, 21 Mar 2023 13:58:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7493D1C5AF
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:58:07 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x3so62969217edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679421485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=beQg10Ver7dN23IwCsKB//20vr3DygviG7yoTEe+FxY=;
+        b=QYAinkUisZBUcqo8VDaVOtNZcE9iFdEWTyzmy+5Vslhmfcvc2PXM46b3gIzf8PAWNg
+         wk0cuUkFBYCNPNdWsdLs75cyRkOfwGriVmanTFGFlETNqFqo+vVRhE22syEXMoAc9YT+
+         l3W4AOQF/7195XmOmm9TRVJ+f2Iu1nTZ/mW+CJZRAfSzResa+vuByUXUjgjkMWReRX2N
+         /28pe7mcY0it3eefC1NF6gAxt+MYwlGEE+fSDAhzvXVeyFDiq2H3jJst7I1sJOOOSlWl
+         H587CiPo+Mczy397Hvvc6VZ3O8LQZHVzD6AmcNx5XrHWiMLMVuVgF1gRtnWi3rhlBEcB
+         go3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679421485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=beQg10Ver7dN23IwCsKB//20vr3DygviG7yoTEe+FxY=;
+        b=4ZAq+Bk3m+rfrKk/Z1V2xFvzt6bGAHQhB0SoA9VWUUwgpFM5/hmlj3icLGQof0WFW8
+         rnDMsvNHYj50fbcupAIJ2HOy8jpbRWkuXTa+rIhnGhDKZ7B6zQhASONIoqsVfMwPFk/f
+         88Jclz0mcJ/q/jNauaWGKeH+PT/wCQWHynr7n0Gm/wBgqdfs66o6tuDyK4UH7m0ul09t
+         gTmZmszKVdIwbScGXdPwUtwUhjqWJR7FkqIb2nujOKDfISpEbqDbcz31lAdTSt4ILDXK
+         RGtjFRuZPhNEpmcD7WKpTzcGTs2xb0h1zZGjqCdrmUtJ1ZQePblZPWu5d24uZvAxuvoC
+         QZbg==
+X-Gm-Message-State: AO0yUKXhvhAz2TzYLw9pYXBi+hBK+/pDunwF9Yr3SttXsNItn1utOF0m
+        euBNuH7GG8xLMq86ubIjupgBbg==
+X-Google-Smtp-Source: AK7set8gOMiqKZ8ghAMrSL9tsj+E0T5/dhTV2S9V9Tjnei/fZr6elg7a8benpEtAOLJHv9tHtR9fcA==
+X-Received: by 2002:a17:906:2855:b0:92a:7178:ab56 with SMTP id s21-20020a170906285500b0092a7178ab56mr3498973ejc.39.1679421485742;
+        Tue, 21 Mar 2023 10:58:05 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709060e8900b0093313f4fc3csm4887360ejf.70.2023.03.21.10.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:58:04 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     andersson@kernel.org, agross@kernel.org
+Cc:     konrad.dybcio@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        stable@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
+Subject: [PATCH] clk: qcom: gfm-mux: use runtime pm while accessing registers
+Date:   Tue, 21 Mar 2023 17:57:58 +0000
+Message-Id: <20230321175758.26738-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
+gfm mux driver does support runtime pm but we never use it while
+accessing registers. Looks like this driver was getting lucky and
+totally depending on other drivers to leave the clk on.
 
-On Tue, Mar 21, 2023 at 08:56:34PM +0800, Jack Zhu wrote:
-> On 2023/3/12 20:43, Laurent Pinchart wrote:
-> > Hi Jack,
-> > 
-> > Thank you for the patch.
-> > 
-> > I'll do a partial review here as the patch is huge and I'm lacking time
-> > at the moment.
-> 
-> Thank you for the review and your time.
-> 
-> > On Fri, Mar 10, 2023 at 08:05:53PM +0800, Jack Zhu wrote:
-> >> Add the driver for Starfive Camera Subsystem found on
-> >> Starfive JH7110 SoC. It is used for handing image sensor
-> >> data.
-> >> 
-> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
-> >> ---
-> >>  drivers/media/platform/Kconfig                |    1 +
-> >>  drivers/media/platform/Makefile               |    1 +
-> >>  drivers/media/platform/starfive/Kconfig       |   18 +
-> >>  drivers/media/platform/starfive/Makefile      |   14 +
-> >>  drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
-> >>  drivers/media/platform/starfive/stf_camss.h   |  104 ++
-> >>  drivers/media/platform/starfive/stf_common.h  |  149 ++
-> >>  drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
-> >>  drivers/media/platform/starfive/stf_isp.h     |  183 +++
-> >>  .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
-> >>  drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
-> >>  drivers/media/platform/starfive/stf_video.h   |   89 ++
-> >>  drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
-> >>  drivers/media/platform/starfive/stf_vin.h     |  194 +++
-> >>  .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
-> >>  include/uapi/linux/stf_isp_ioctl.h            |  127 ++
-> >>  16 files changed, 6930 insertions(+)
-> >>  create mode 100644 drivers/media/platform/starfive/Kconfig
-> >>  create mode 100644 drivers/media/platform/starfive/Makefile
-> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.c
-> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.h
-> >>  create mode 100644 drivers/media/platform/starfive/stf_common.h
-> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
-> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
-> >>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
-> >>  create mode 100644 drivers/media/platform/starfive/stf_video.c
-> >>  create mode 100644 drivers/media/platform/starfive/stf_video.h
-> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.c
-> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.h
-> >>  create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
-> >>  create mode 100644 include/uapi/linux/stf_isp_ioctl.h
+Fix this by doing runtime pm while accessing registers.
 
-[snip]
+Fixes: a2d8f507803e ("clk: qcom: Add support to LPASS AUDIO_CC Glitch Free Mux clocks")
+Cc: stable@vger.kernel.org
+Reported-by: Amit Pundir <amit.pundir@linaro.org>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/clk/qcom/lpass-gfm-sm8250.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
-> >> diff --git a/drivers/media/platform/starfive/stf_camss.c b/drivers/media/platform/starfive/stf_camss.c
-> >> new file mode 100644
-> >> index 000000000000..525f2d80c5eb
-> >> --- /dev/null
-> >> +++ b/drivers/media/platform/starfive/stf_camss.c
-> >> @@ -0,0 +1,728 @@
-
-[snip]
-
-> >> +/*
-> >> + * stfcamss_find_sensor - Find a linked media entity which represents a sensor
-> >> + * @entity: Media entity to start searching from
-> >> + *
-> >> + * Return a pointer to sensor media entity or NULL if not found
-> >> + */
-> >> +struct media_entity *stfcamss_find_sensor(struct media_entity *entity)
-> > 
-> > From a camss point of view, the source is the csi2rx. You shouldn't
-> > need to access the sensor directly, only the csi2rx. If you think you
-> > have a need to access the sensor, please explain why and we can discuss
-> > it.
-> 
-> need to use format and bpp of sensor to configure isp HW.
-
-You can obtain the same information from the ISP sink pad:
-
-
-+----------+       +------------+       +-----------+
-|          |       |            |       |           | 
-| Sensor [0| ----> |0] csi2rx [1| ----> |0]   ISP   |
-|          |       |            |       |           |
-+----------+       +------------+       +-----------+
-
-(I'm not entirely sure if the csi2rx and ISP pad numbers are correct,
-but that's the idea.)
-
-The csi2rx can't modify the format (size and bpp), so the format on the
-sensor's pad 0, csi2rx pad 0, csi2rx pad 1 and ISP pad 0 must be
-identical.
-
-In isp_sensor_fmt_to_index(), the ISP driver doesn't need to get the
-format from the sensor, it can use the format on ISP pad 0 instead.
-
-In video_enum_framesizes(), the ISP driver shouldn't look at the format
-on the ISP input at all, it must enumerate all sizes that the video node
-supports, regardless of what is connected to its input.
-
-video_enum_frameintervals() should be dropped, the ISP itself has no
-notion of frame interval. Userspace can query and configure the frame
-rate from the sensor subdev directly.
-
-In video_pipeline_s_fmt(), the ISP driver shouldn't look at the format
-on the ISP input at all either. It must accept any format supported by
-the ISP. It's only when starting streaming that the pipeline is
-validated to make sure the formats configured on all subdevs match. I
-recommend reading https://git.ideasonboard.org/doc/mc-v4l2.git for an
-overview of how Media Controller-based drivers should behave. The
-documentation describes how the API is meant to be used from userspace,
-but the operating principles apply to driver development too.
-
-video_subscribe_event() and video_unsubscribe_event() should also be
-dropped, events from the sensor can be accessed by userspace on the
-sensor subdev directly.
-
-vin_set_stream() should call .s_stream() on the csi2rx, not the sensor.
-The csi2rx .s_stream() handler will forward the call to the sensor.
-
-> >> +{
-> >> +	struct media_pad *pad;
-> >> +
-> >> +	while (1) {
-> >> +		if (!entity->pads)
-> >> +			return NULL;
-> >> +
-> >> +		pad = &entity->pads[0];
-> >> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
-> >> +			return NULL;
-> >> +
-> >> +		pad = media_pad_remote_pad_first(pad);
-> >> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
-> >> +			return NULL;
-> >> +
-> >> +		entity = pad->entity;
-> >> +
-> >> +		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
-> >> +			return entity;
-> >> +	}
-> >> +}
-
-[snip]
-
-> >> diff --git a/include/uapi/linux/stf_isp_ioctl.h b/include/uapi/linux/stf_isp_ioctl.h
-> >> new file mode 100644
-> >> index 000000000000..3f302ef235d2
-> >> --- /dev/null
-> >> +++ b/include/uapi/linux/stf_isp_ioctl.h
-> >> @@ -0,0 +1,127 @@
-
-[snip]
-
-> >> +enum _STF_ISP_IOCTL {
-> > 
-> > Device-specific ioctls are allowed, but they must all be clearly
-> > documented.
-> 
-> OK, I will add annotations for these ioctls.
-> 
-> > 
-> >> +	STF_ISP_IOCTL_LOAD_FW = BASE_VIDIOC_PRIVATE + 1,
-> > 
-> > Why can't you use the Linux kernel firmware API ?
-> 
-> The ioctl is used for loading config file, it is different from
-> the Linux kernel firmware API. I will rename it.
-
-Could you explain what the config file is used for ?
-
-> >> +	STF_ISP_IOCTL_DMABUF_ALLOC,
-> >> +	STF_ISP_IOCTL_DMABUF_FREE,
-> >> +	STF_ISP_IOCTL_GET_HW_VER,
-> > 
-> > Not used, drop them.
-> 
-> OK, will drop them.
-> 
-> > 
-> >> +	STF_ISP_IOCTL_REG,
-> > 
-> > Setting registers from userspace isn't allowed. No exception.
-> 
-> OK, will fix.
-> 
-> > 
-> >> +	STF_ISP_IOCTL_SHADOW_LOCK,
-> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK,
-> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK_N_TRIGGER,
-> >> +	STF_ISP_IOCTL_SET_USER_CONFIG_ISP,
-> > 
-> > I'm not sure what these ioctls do exactly as documentation is missing,
-> > but I don't think they are the right API. Please describe the problem
-> > you're trying to solve, and we'll find a good API.
-> 
-> These were used for debugging, I will drop them. Thanks.
-> 
-> >> +	STF_ISP_IOCTL_MAX
-> >> +};
-
-[snip]
-
+diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
+index 96f476f24eb2..bcf0ea534f7f 100644
+--- a/drivers/clk/qcom/lpass-gfm-sm8250.c
++++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
+@@ -38,14 +38,37 @@ struct clk_gfm {
+ static u8 clk_gfm_get_parent(struct clk_hw *hw)
+ {
+ 	struct clk_gfm *clk = to_clk_gfm(hw);
++	int ret;
++	u8 parent;
++
++	ret = pm_runtime_resume_and_get(clk->priv->dev);
++	if (ret < 0 && ret != -EACCES) {
++		dev_err_ratelimited(clk->priv->dev,
++				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
++				    __func__, ret);
++		return ret;
++	}
++
++	parent = readl(clk->gfm_mux) & clk->mux_mask;
++
++	pm_runtime_mark_last_busy(clk->priv->dev);
+ 
+-	return readl(clk->gfm_mux) & clk->mux_mask;
++	return parent;
+ }
+ 
+ static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
+ {
+ 	struct clk_gfm *clk = to_clk_gfm(hw);
+ 	unsigned int val;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(clk->priv->dev);
++	if (ret < 0 && ret != -EACCES) {
++		dev_err_ratelimited(clk->priv->dev,
++				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
++				    __func__, ret);
++		return ret;
++	}
+ 
+ 	val = readl(clk->gfm_mux);
+ 
+@@ -57,6 +80,8 @@ static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
+ 
+ 	writel(val, clk->gfm_mux);
+ 
++	pm_runtime_mark_last_busy(clk->priv->dev);
++
+ 	return 0;
+ }
+ 
+@@ -251,6 +276,8 @@ static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
+ 	if (IS_ERR(cc->base))
+ 		return PTR_ERR(cc->base);
+ 
++	cc->dev = dev;
++
+ 	err = devm_pm_runtime_enable(dev);
+ 	if (err)
+ 		return err;
 -- 
-Regards,
+2.21.0
 
-Laurent Pinchart
