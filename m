@@ -2,637 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBDA6C3929
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12D76C392F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjCUS1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S229648AbjCUS3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjCUS05 (ORCPT
+        with ESMTP id S230219AbjCUS3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:26:57 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601B193C5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:26:52 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id i19so8572323ila.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:26:51 -0700 (PDT)
+        Tue, 21 Mar 2023 14:29:09 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB77F172F;
+        Tue, 21 Mar 2023 11:28:30 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5416698e889so295829237b3.2;
+        Tue, 21 Mar 2023 11:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679423211;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679423310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jlTFANVhQrSFhHrzr3b0Xml4f/roBlY85dQdBma11nc=;
-        b=gMR5i65qvTBW71E//IE485A+pUv1j+WSvDnzB9jHoCnkz2Ng/Z8yeEwmmDWJkYDPED
-         APMeig1ztxBomBKhvtEuh0SRNjlspIMbp/E4xSWFabHG567Wp4DvKIsUgTes++Sx7zbr
-         5VsT7IR1TxqqcNmyeVtTKb431/Gkw9WEgYPMkKSgj//x5JMfSzIR/Ca28INjXvX5DusF
-         7fc/d09ieQrZTceFUr0inYsZSZYMnorBUKQ3ZjTQ8hAzS0BtsLWJRHeYdh8w4pjycrsH
-         IJpG9oP9mNXUDKDhlwJbc0dMRTqm/voeSu3MKeGx7xRE1OSJJgnP4mz6wxRZh6AxnaiE
-         +PZQ==
+        bh=UIdpfSxmJYCkpNMIM562CRwblghzNfrCH8Znt15LNC0=;
+        b=qqnQqmeqFP+DWopEpewSm0PGE30t8YaP+DdN6uySAfx3JED/MyMRl1jkiSiVZOoeYc
+         OcvuLRGAxZHHV2/jVDGCQRLCMhs4G4J/pSPFS6VBS9fqEhSbaVHrsulfNeBZRrQWSDqg
+         bmD5th1hepxfWFVPLgv1LVo4NGeN6z678AuumBI0JnHHm+K6jiNteshJXprLch5gfz2Z
+         tKOILC8tYFAjylEY3OQ0LgDZ4nlPpYbufZUbWLkvP/NumPi0qNKQf0Q1x3kw9dLDxiRq
+         BB3mpaTnbTqnU/SNPNeikQ/oxq78NwzBr4hQzPNAOR6dTT2xWW47VKF2tFjgzWnm0RnJ
+         VnLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679423211;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679423310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jlTFANVhQrSFhHrzr3b0Xml4f/roBlY85dQdBma11nc=;
-        b=gYdy2tfjj4NmhUnMn/gEW6ZkOR18mnV7wLYDI/KDsuQ03c1sx17UBiwx8ZFe/Cy2nx
-         ypbAFTAy5YhYi/pxfZO0Z7T0WbKN/t629Dk3EjfyQ4jdpRnULcrX2z5YSq7nvmZFvBXP
-         pyMxmsm3gvYcq0RKQ0FqwBt/HgoDqRgRjNxCh4Qyy3sEEUa6/jQWqdb8MUIk3pOJhA9L
-         wyPFNPKOBndiJndzbCGNRqLSY4XE/A5OWwluQ8s+rKwImKNf3Sw1+6Kh1B8eewnUdwIC
-         XvlIIn/XGRiqhbViOJpAMP3nnlkuDKyJvzoHBJgTLAmmWeF/Ic787JQaQf2zrWx8hqIK
-         zVhQ==
-X-Gm-Message-State: AO0yUKUuDHdCy9aXHLtnqlIlmQf7+/0DDDgiCw60gehc4V9itFYvmuac
-        gl1BmqTeV8rNmwtNnT4qwQFUWw==
-X-Google-Smtp-Source: AK7set9l/Y5vHsfvSRyhvdqNgNPM3gpNSGu0jq/BXivOVJdN6+agKN1lRD4I9nM+3gxKH1OAgS3Tmw==
-X-Received: by 2002:a92:cf51:0:b0:322:fcb1:878a with SMTP id c17-20020a92cf51000000b00322fcb1878amr2310721ilr.29.1679423211562;
-        Tue, 21 Mar 2023 11:26:51 -0700 (PDT)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id m1-20020a0566380dc100b004064207454bsm3405858jaj.30.2023.03.21.11.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:26:51 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] net: ipa: add IPA v5.0 configuration data
-Date:   Tue, 21 Mar 2023 13:26:44 -0500
-Message-Id: <20230321182644.2143990-4-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230321182644.2143990-1-elder@linaro.org>
-References: <20230321182644.2143990-1-elder@linaro.org>
+        bh=UIdpfSxmJYCkpNMIM562CRwblghzNfrCH8Znt15LNC0=;
+        b=BE+tKHlNR07OWdZTuvQaaOBl41LOKhzgllG/4qibslVjw1EhYpaTpLC3WirbldETog
+         gCn39S1Cc2VGvlYSdIgTvxxq1uf4Rqsg4ZBuQvLYNEHVlV/deSPHy6dLnQom0wvsNLB+
+         UOIzxZQVlitPMew2clgiC0y75XiDbwGc1oWv1nOaGkZHbuNuttK5nI8TylHAoa3/79Qr
+         pVTtMPqfLMOjx1ZT6kPTUS6STm1c1kCAHFoip31qQfBXwmrxjD7PuYOmreZ+Rc9tQVlS
+         8GNnBHj+E6SMD30/kFcjY7j401m8tbIbxYtPllzd2biLPzLqNEYb6DlsNHSN/hYl4NBN
+         MXnQ==
+X-Gm-Message-State: AAQBX9eD2BdJzWVPwj2b0iQdXuG3eK+iHJB7bBtCgATkN5l/8fIu9pWy
+        tzBLNqsueU3+lUV3olnUIz/YWnXHATspq/34Ow==
+X-Google-Smtp-Source: AKy350ZSbNZkoIOKOLf/00pr7muRyukY8d2LbQOH796fxqgN/2w3D6XqlRwdIvVaeF4X8n1O7iEnz6ZwiCGOsXuqJUE=
+X-Received: by 2002:a81:ad11:0:b0:544:51f7:83c5 with SMTP id
+ l17-20020a81ad11000000b0054451f783c5mr1765941ywh.1.1679423310042; Tue, 21 Mar
+ 2023 11:28:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230316222109.1940300-1-usama.arif@bytedance.com> <20230316222109.1940300-10-usama.arif@bytedance.com>
+In-Reply-To: <20230316222109.1940300-10-usama.arif@bytedance.com>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Tue, 21 Mar 2023 14:28:19 -0400
+Message-ID: <CAMzpN2jMyLP9h5o_wwdThHipAns2_dx3Nf8JYhj5pEqaeWXqYg@mail.gmail.com>
+Subject: Re: [PATCH v15 09/12] x86/smpboot: Support parallel startup of
+ secondary CPUs
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the configuration data required for IPA v5.0, which is used in
-the SDX65 SoC.
+On Thu, Mar 16, 2023 at 6:21=E2=80=AFPM Usama Arif <usama.arif@bytedance.co=
+m> wrote:
+>
+> From: David Woodhouse <dwmw@amazon.co.uk>
+>
+> Rework the real-mode startup code to allow for APs to be brought up in
+> parallel. This is in two parts:
+>
+> 1. Introduce a bit-spinlock to prevent them from all using the real
+>    mode stack at the same time.
+>
+> 2. Avoid needing to use the global smpboot_control variable to pass
+>    each AP its CPU#.
+>
+> To achieve the latter, export the cpuid_to_apicid[] array so that each
+> AP can find its own CPU# by searching therein based on its APIC ID.
+>
+> Introduce flags in the top bits of smpboot_control which indicate methods
+> by which an AP should find its CPU#. For a serialized bringup, the CPU#
+> is explicitly passed in the low bits of smpboot_control as before. For
+> parallel mode there are flags directing the AP to find its APIC ID in
+> CPUID leaf 0x0b (for X2APIC mode) or CPUID leaf 0x01 where 8 bits are
+> sufficient, then perform the cpuid_to_apicid[] lookup with that.
+>
+> Parallel startup may be disabled by a command line option, and also if:
+>  =E2=80=A2 AMD SEV-ES is in use, since the AP may not use CPUID that earl=
+y.
+>  =E2=80=A2 X2APIC is enabled, but CPUID leaf 0xb is not present and corre=
+ct.
+>  =E2=80=A2 X2APIC is not enabled but not even CPUID leaf 0x01 exists.
+>
+> Aside from the fact that APs will now look up their CPU# via the
+> newly-exported cpuid_to_apicid[] table, there is no behavioural change
+> intended yet, since new parallel CPUHP states have not =E2=80=94 yet =E2=
+=80=94 been
+> added.
+>
+> [ tglx: Initial proof of concept patch with bitlock and APIC ID lookup ]
+> [ dwmw2: Rework and testing, commit message, CPUID 0x1 and CPU0 support ]
+> [ seanc: Fix stray override of initial_gs in common_cpu_up() ]
+> [ Oleksandr Natalenko: reported suspend/resume issue fixed in
+>   x86_acpi_suspend_lowlevel ]
+> Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
+> Co-developed-by: Brian Gerst <brgerst@gmail.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+> Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> Tested-by: Kim Phillips <kim.phillips@amd.com>
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  3 +
+>  arch/x86/include/asm/cpu.h                    |  1 +
+>  arch/x86/include/asm/realmode.h               |  3 +
+>  arch/x86/include/asm/smp.h                    |  6 ++
+>  arch/x86/kernel/acpi/sleep.c                  |  9 ++-
+>  arch/x86/kernel/apic/apic.c                   |  2 +-
+>  arch/x86/kernel/cpu/topology.c                |  3 +-
+>  arch/x86/kernel/head_64.S                     | 65 +++++++++++++++++++
+>  arch/x86/kernel/smpboot.c                     | 50 +++++++++++++-
+>  arch/x86/realmode/init.c                      |  3 +
+>  arch/x86/realmode/rm/trampoline_64.S          | 27 ++++++--
+>  11 files changed, 163 insertions(+), 9 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..7bb7020f97e2 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3819,6 +3819,9 @@
+>
+>         nomodule        Disable module load
+>
+> +       no_parallel_bringup
+> +                       [X86,SMP] Disable parallel bring-up of secondary =
+cores.
+> +
+>         nopat           [X86] Disable PAT (page attribute table extension=
+ of
+>                         pagetables) support.
+>
+> diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+> index 78796b98a544..ef8ba318dca1 100644
+> --- a/arch/x86/include/asm/cpu.h
+> +++ b/arch/x86/include/asm/cpu.h
+> @@ -97,5 +97,6 @@ static inline bool intel_cpu_signatures_match(unsigned =
+int s1, unsigned int p1,
+>  extern u64 x86_read_arch_cap_msr(void);
+>  int intel_find_matching_signature(void *mc, unsigned int csig, int cpf);
+>  int intel_microcode_sanity_check(void *mc, bool print_err, int hdr_type)=
+;
+> +int check_extended_topology_leaf(int leaf);
+>
+>  #endif /* _ASM_X86_CPU_H */
+> diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realm=
+ode.h
+> index f6a1737c77be..87e5482acd0d 100644
+> --- a/arch/x86/include/asm/realmode.h
+> +++ b/arch/x86/include/asm/realmode.h
+> @@ -52,6 +52,7 @@ struct trampoline_header {
+>         u64 efer;
+>         u32 cr4;
+>         u32 flags;
+> +       u32 lock;
+>  #endif
+>  };
+>
+> @@ -64,6 +65,8 @@ extern unsigned long initial_stack;
+>  extern unsigned long initial_vc_handler;
+>  #endif
+>
+> +extern u32 *trampoline_lock;
+> +
+>  extern unsigned char real_mode_blob[];
+>  extern unsigned char real_mode_relocs[];
+>
+> diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+> index bf2c51df9e0b..1cf4f1e57570 100644
+> --- a/arch/x86/include/asm/smp.h
+> +++ b/arch/x86/include/asm/smp.h
+> @@ -203,4 +203,10 @@ extern unsigned int smpboot_control;
+>
+>  #endif /* !__ASSEMBLY__ */
+>
+> +/* Control bits for startup_64 */
+> +#define STARTUP_APICID_CPUID_0B        0x80000000
+> +#define STARTUP_APICID_CPUID_01        0x40000000
+> +
+> +#define STARTUP_PARALLEL_MASK (STARTUP_APICID_CPUID_01 | STARTUP_APICID_=
+CPUID_0B)
+> +
+>  #endif /* _ASM_X86_SMP_H */
+> diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+> index 1328c221af30..6dfecb27b846 100644
+> --- a/arch/x86/kernel/acpi/sleep.c
+> +++ b/arch/x86/kernel/acpi/sleep.c
+> @@ -16,6 +16,7 @@
+>  #include <asm/cacheflush.h>
+>  #include <asm/realmode.h>
+>  #include <asm/hypervisor.h>
+> +#include <asm/smp.h>
+>
+>  #include <linux/ftrace.h>
+>  #include "../../realmode/rm/wakeup.h"
+> @@ -127,7 +128,13 @@ int x86_acpi_suspend_lowlevel(void)
+>          * value is in the actual %rsp register.
+>          */
+>         current->thread.sp =3D (unsigned long)temp_stack + sizeof(temp_st=
+ack);
+> -       smpboot_control =3D smp_processor_id();
+> +       /*
+> +        * Ensure the CPU knows which one it is when it comes back, if
+> +        * it isn't in parallel mode and expected to work that out for
+> +        * itself.
+> +        */
+> +       if (!(smpboot_control & STARTUP_PARALLEL_MASK))
+> +               smpboot_control =3D smp_processor_id();
+>  #endif
+>         initial_code =3D (unsigned long)wakeup_long64;
+>         saved_magic =3D 0x123456789abcdef0L;
+> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+> index 20d9a604da7c..ac1d7e5da1f2 100644
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -2377,7 +2377,7 @@ static int nr_logical_cpuids =3D 1;
+>  /*
+>   * Used to store mapping between logical CPU IDs and APIC IDs.
+>   */
+> -static int cpuid_to_apicid[] =3D {
+> +int cpuid_to_apicid[] =3D {
+>         [0 ... NR_CPUS - 1] =3D -1,
+>  };
+>
+> diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topolog=
+y.c
+> index 5e868b62a7c4..4373442e500a 100644
+> --- a/arch/x86/kernel/cpu/topology.c
+> +++ b/arch/x86/kernel/cpu/topology.c
+> @@ -9,6 +9,7 @@
+>  #include <asm/apic.h>
+>  #include <asm/memtype.h>
+>  #include <asm/processor.h>
+> +#include <asm/cpu.h>
+>
+>  #include "cpu.h"
+>
+> @@ -32,7 +33,7 @@ EXPORT_SYMBOL(__max_die_per_package);
+>  /*
+>   * Check if given CPUID extended topology "leaf" is implemented
+>   */
+> -static int check_extended_topology_leaf(int leaf)
+> +int check_extended_topology_leaf(int leaf)
+>  {
+>         unsigned int eax, ebx, ecx, edx;
+>
+> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> index 6a8238702eab..65bca47d84a1 100644
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -25,6 +25,7 @@
+>  #include <asm/export.h>
+>  #include <asm/nospec-branch.h>
+>  #include <asm/fixmap.h>
+> +#include <asm/smp.h>
+>
+>  /*
+>   * We are not able to switch in one step to the final KERNEL ADDRESS SPA=
+CE
+> @@ -234,8 +235,61 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_=
+L_GLOBAL)
+>         ANNOTATE_NOENDBR // above
+>
+>  #ifdef CONFIG_SMP
+> +       /*
+> +        * For parallel boot, the APIC ID is retrieved from CPUID, and th=
+en
+> +        * used to look up the CPU number.  For booting a single CPU, the
+> +        * CPU number is encoded in smpboot_control.
+> +        *
+> +        * Bit 31       STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
+> +        * Bit 30       STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
+> +        * Bit 0-24     CPU# if STARTUP_APICID_CPUID_xx flags are not set
+> +        */
+>         movl    smpboot_control(%rip), %ecx
+> +       testl   $STARTUP_APICID_CPUID_0B, %ecx
+> +       jnz     .Luse_cpuid_0b
+> +       testl   $STARTUP_APICID_CPUID_01, %ecx
+> +       jnz     .Luse_cpuid_01
+> +       andl    $0x0FFFFFFF, %ecx
+> +       jmp     .Lsetup_cpu
+> +
+> +.Luse_cpuid_01:
+> +       mov     $0x01, %eax
+> +       cpuid
+> +       mov     %ebx, %edx
+> +       shr     $24, %edx
+> +       jmp     .Lsetup_AP
+>
+> +.Luse_cpuid_0b:
+> +       mov     $0x0B, %eax
+> +       xorl    %ecx, %ecx
+> +       cpuid
+> +
+> +.Lsetup_AP:
+> +       /* EDX contains the APIC ID of the current CPU */
+> +       xorq    %rcx, %rcx
+> +       leaq    cpuid_to_apicid(%rip), %rbx
+> +
+> +.Lfind_cpunr:
+> +       cmpl    (%rbx,%rcx,4), %edx
+> +       jz      .Lsetup_cpu
+> +       inc     %ecx
+> +#ifdef CONFIG_FORCE_NR_CPUS
+> +       cmpl    $NR_CPUS, %ecx
+> +#else
+> +       cmpl    nr_cpu_ids(%rip), %ecx
+> +#endif
+> +       jb      .Lfind_cpunr
+> +
+> +       /*  APIC ID not found in the table. Drop the trampoline lock and =
+bail. */
+> +       movq    trampoline_lock(%rip), %rax
+> +       lock
+> +       btrl    $0, (%rax)
+> +
+> +1:     cli
+> +       hlt
+> +       jmp     1b
+> +
+> +.Lsetup_cpu:
+>         /* Get the per cpu offset for the given CPU# which is in ECX */
+>         movq    __per_cpu_offset(,%rcx,8), %rdx
+>  #else
+> @@ -264,6 +318,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_=
+L_GLOBAL)
+>         lgdt    (%rsp)
+>         addq    $16, %rsp
+>
+> +       /* Drop the realmode protection. For the boot CPU the pointer is =
+NULL! */
+> +       movq    trampoline_lock(%rip), %rax
+> +       testq   %rax, %rax
+> +       jz      .Lsetup_data_segments
+> +       lock
+> +       btrl    $0, (%rax)
+> +
+> +.Lsetup_data_segments:
+>         /* set up data segments */
+>         xorl %eax,%eax
+>         movl %eax,%ds
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/Makefile             |   2 +-
- drivers/net/ipa/data/ipa_data-v5.0.c | 481 +++++++++++++++++++++++++++
- drivers/net/ipa/ipa_data.h           |   3 +-
- drivers/net/ipa/ipa_main.c           |   6 +-
- 4 files changed, 489 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/ipa/data/ipa_data-v5.0.c
+This can still go earlier, right after "movq TASK_threadsp(%rax),
+%rsp".  The GDT descriptor is placed on the idle thread stack, so it's
+safe to drop the lock before it.
 
-diff --git a/drivers/net/ipa/Makefile b/drivers/net/ipa/Makefile
-index 514b7b6cd0737..7293d5cc2b2b7 100644
---- a/drivers/net/ipa/Makefile
-+++ b/drivers/net/ipa/Makefile
-@@ -7,7 +7,7 @@ IPA_REG_VERSIONS	:=	3.1 3.5.1 4.2 4.5 4.7 4.9 4.11 5.0
- # Some IPA versions can reuse another set of GSI register definitions.
- GSI_REG_VERSIONS	:=	3.1 3.5.1 4.0 4.5 4.9 4.11 5.0
- 
--IPA_DATA_VERSIONS	:=	3.1 3.5.1 4.2 4.5 4.7 4.9 4.11
-+IPA_DATA_VERSIONS	:=	3.1 3.5.1 4.2 4.5 4.7 4.9 4.11 5.0
- 
- obj-$(CONFIG_QCOM_IPA)	+=	ipa.o
- 
-diff --git a/drivers/net/ipa/data/ipa_data-v5.0.c b/drivers/net/ipa/data/ipa_data-v5.0.c
-new file mode 100644
-index 0000000000000..4d8171dae4cd7
---- /dev/null
-+++ b/drivers/net/ipa/data/ipa_data-v5.0.c
-@@ -0,0 +1,481 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Copyright (C) 2023 Linaro Ltd. */
-+
-+#include <linux/log2.h>
-+
-+#include "../gsi.h"
-+#include "../ipa_data.h"
-+#include "../ipa_endpoint.h"
-+#include "../ipa_mem.h"
-+
-+/** enum ipa_resource_type - IPA resource types for an SoC having IPA v5.0 */
-+enum ipa_resource_type {
-+	/* Source resource types; first must have value 0 */
-+	IPA_RESOURCE_TYPE_SRC_PKT_CONTEXTS		= 0,
-+	IPA_RESOURCE_TYPE_SRC_DESCRIPTOR_LISTS,
-+	IPA_RESOURCE_TYPE_SRC_DESCRIPTOR_BUFF,
-+	IPA_RESOURCE_TYPE_SRC_HPS_DMARS,
-+	IPA_RESOURCE_TYPE_SRC_ACK_ENTRIES,
-+
-+	/* Destination resource types; first must have value 0 */
-+	IPA_RESOURCE_TYPE_DST_DATA_SECTORS		= 0,
-+	IPA_RESOURCE_TYPE_DST_DPS_DMARS,
-+	IPA_RESOURCE_TYPE_DST_ULSO_SEGMENTS,
-+};
-+
-+/* Resource groups used for an SoC having IPA v5.0 */
-+enum ipa_rsrc_group_id {
-+	/* Source resource group identifiers */
-+	IPA_RSRC_GROUP_SRC_UL				= 0,
-+	IPA_RSRC_GROUP_SRC_DL,
-+	IPA_RSRC_GROUP_SRC_UNUSED_2,
-+	IPA_RSRC_GROUP_SRC_UNUSED_3,
-+	IPA_RSRC_GROUP_SRC_URLLC,
-+	IPA_RSRC_GROUP_SRC_U_RX_QC,
-+	IPA_RSRC_GROUP_SRC_COUNT,	/* Last in set; not a source group */
-+
-+	/* Destination resource group identifiers */
-+	IPA_RSRC_GROUP_DST_UL				= 0,
-+	IPA_RSRC_GROUP_DST_DL,
-+	IPA_RSRC_GROUP_DST_DMA,
-+	IPA_RSRC_GROUP_DST_QDSS,
-+	IPA_RSRC_GROUP_DST_CV2X,
-+	IPA_RSRC_GROUP_DST_UC,
-+	IPA_RSRC_GROUP_DST_DRB_IP,
-+	IPA_RSRC_GROUP_DST_COUNT,	/* Last; not a destination group */
-+};
-+
-+/* QSB configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_qsb_data ipa_qsb_data[] = {
-+	[IPA_QSB_MASTER_DDR] = {
-+		.max_writes		= 0,
-+		.max_reads		= 0,	/* no limit (hardware max) */
-+		.max_reads_beats	= 0,
-+	},
-+	[IPA_QSB_MASTER_PCIE] = {
-+		.max_writes		= 0,
-+		.max_reads		= 0,	/* no limit (hardware max) */
-+		.max_reads_beats	= 0,
-+	},
-+};
-+
-+/* Endpoint configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_gsi_endpoint_data ipa_gsi_endpoint_data[] = {
-+	[IPA_ENDPOINT_AP_COMMAND_TX] = {
-+		.ee_id		= GSI_EE_AP,
-+		.channel_id	= 12,
-+		.endpoint_id	= 14,
-+		.toward_ipa	= true,
-+		.channel = {
-+			.tre_count	= 256,
-+			.event_count	= 256,
-+			.tlv_count	= 20,
-+		},
-+		.endpoint = {
-+			.config = {
-+				.resource_group	= IPA_RSRC_GROUP_SRC_UL,
-+				.dma_mode	= true,
-+				.dma_endpoint	= IPA_ENDPOINT_AP_LAN_RX,
-+				.tx = {
-+					.seq_type = IPA_SEQ_DMA,
-+				},
-+			},
-+		},
-+	},
-+	[IPA_ENDPOINT_AP_LAN_RX] = {
-+		.ee_id		= GSI_EE_AP,
-+		.channel_id	= 13,
-+		.endpoint_id	= 16,
-+		.toward_ipa	= false,
-+		.channel = {
-+			.tre_count	= 256,
-+			.event_count	= 256,
-+			.tlv_count	= 9,
-+		},
-+		.endpoint = {
-+			.config = {
-+				.resource_group	= IPA_RSRC_GROUP_DST_UL,
-+				.aggregation	= true,
-+				.status_enable	= true,
-+				.rx = {
-+					.buffer_size	= 8192,
-+					.pad_align	= ilog2(sizeof(u32)),
-+					.aggr_time_limit = 500,
-+				},
-+			},
-+		},
-+	},
-+	[IPA_ENDPOINT_AP_MODEM_TX] = {
-+		.ee_id		= GSI_EE_AP,
-+		.channel_id	= 11,
-+		.endpoint_id	= 2,
-+		.toward_ipa	= true,
-+		.channel = {
-+			.tre_count	= 512,
-+			.event_count	= 512,
-+			.tlv_count	= 25,
-+		},
-+		.endpoint = {
-+			.filter_support	= true,
-+			.config = {
-+				.resource_group	= IPA_RSRC_GROUP_SRC_UL,
-+				.checksum       = true,
-+				.qmap		= true,
-+				.status_enable	= true,
-+				.tx = {
-+					.seq_type = IPA_SEQ_2_PASS_SKIP_LAST_UC,
-+					.status_endpoint =
-+						IPA_ENDPOINT_MODEM_AP_RX,
-+				},
-+			},
-+		},
-+	},
-+	[IPA_ENDPOINT_AP_MODEM_RX] = {
-+		.ee_id		= GSI_EE_AP,
-+		.channel_id	= 1,
-+		.endpoint_id	= 23,
-+		.toward_ipa	= false,
-+		.channel = {
-+			.tre_count	= 256,
-+			.event_count	= 256,
-+			.tlv_count	= 9,
-+		},
-+		.endpoint = {
-+			.config = {
-+				.resource_group	= IPA_RSRC_GROUP_DST_DL,
-+				.checksum       = true,
-+				.qmap		= true,
-+				.aggregation	= true,
-+				.rx = {
-+					.buffer_size	= 8192,
-+					.aggr_time_limit = 500,
-+					.aggr_close_eof	= true,
-+				},
-+			},
-+		},
-+	},
-+	[IPA_ENDPOINT_MODEM_AP_TX] = {
-+		.ee_id		= GSI_EE_MODEM,
-+		.channel_id	= 0,
-+		.endpoint_id	= 12,
-+		.toward_ipa	= true,
-+		.endpoint = {
-+			.filter_support	= true,
-+		},
-+	},
-+	[IPA_ENDPOINT_MODEM_AP_RX] = {
-+		.ee_id		= GSI_EE_MODEM,
-+		.channel_id	= 7,
-+		.endpoint_id	= 21,
-+		.toward_ipa	= false,
-+	},
-+	[IPA_ENDPOINT_MODEM_DL_NLO_TX] = {
-+		.ee_id		= GSI_EE_MODEM,
-+		.channel_id	= 2,
-+		.endpoint_id	= 15,
-+		.toward_ipa	= true,
-+		.endpoint = {
-+			.filter_support	= true,
-+		},
-+	},
-+};
-+
-+/* Source resource configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_resource ipa_resource_src[] = {
-+	[IPA_RESOURCE_TYPE_SRC_PKT_CONTEXTS] = {
-+		.limits[IPA_RSRC_GROUP_SRC_UL] = {
-+			.min = 3,	.max = 9,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_DL] = {
-+			.min = 4,	.max = 10,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_URLLC] = {
-+			.min = 1,	.max = 63,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_U_RX_QC] = {
-+			.min = 0,	.max = 63,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_SRC_DESCRIPTOR_LISTS] = {
-+		.limits[IPA_RSRC_GROUP_SRC_UL] = {
-+			.min = 9,	.max = 9,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_DL] = {
-+			.min = 12,	.max = 12,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_URLLC] = {
-+			.min = 10,	.max = 10,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_SRC_DESCRIPTOR_BUFF] = {
-+		.limits[IPA_RSRC_GROUP_SRC_UL] = {
-+			.min = 9,	.max = 9,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_DL] = {
-+			.min = 24,	.max = 24,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_URLLC] = {
-+			.min = 20,	.max = 20,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_SRC_HPS_DMARS] = {
-+		.limits[IPA_RSRC_GROUP_SRC_UL] = {
-+			.min = 0,	.max = 63,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_DL] = {
-+			.min = 0,	.max = 63,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_URLLC] = {
-+			.min = 1,	.max = 63,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_U_RX_QC] = {
-+			.min = 0,	.max = 63,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_SRC_ACK_ENTRIES] = {
-+		.limits[IPA_RSRC_GROUP_SRC_UL] = {
-+			.min = 22,	.max = 22,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_DL] = {
-+			.min = 16,	.max = 16,
-+		},
-+		.limits[IPA_RSRC_GROUP_SRC_URLLC] = {
-+			.min = 16,	.max = 16,
-+		},
-+	},
-+};
-+
-+/* Destination resource configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_resource ipa_resource_dst[] = {
-+	[IPA_RESOURCE_TYPE_DST_DATA_SECTORS] = {
-+		.limits[IPA_RSRC_GROUP_DST_UL] = {
-+			.min = 6,	.max = 6,
-+		},
-+		.limits[IPA_RSRC_GROUP_DST_DL] = {
-+			.min = 5,	.max = 5,
-+		},
-+		.limits[IPA_RSRC_GROUP_DST_DRB_IP] = {
-+			.min = 39,	.max = 39,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_DST_DPS_DMARS] = {
-+		.limits[IPA_RSRC_GROUP_DST_UL] = {
-+			.min = 0,	.max = 3,
-+		},
-+		.limits[IPA_RSRC_GROUP_DST_DL] = {
-+			.min = 0,	.max = 3,
-+		},
-+	},
-+	[IPA_RESOURCE_TYPE_DST_ULSO_SEGMENTS] = {
-+		.limits[IPA_RSRC_GROUP_DST_UL] = {
-+			.min = 0,	.max = 63,
-+		},
-+		.limits[IPA_RSRC_GROUP_DST_DL] = {
-+			.min = 0,	.max = 63,
-+		},
-+	},
-+};
-+
-+/* Resource configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_resource_data ipa_resource_data = {
-+	.rsrc_group_dst_count	= IPA_RSRC_GROUP_DST_COUNT,
-+	.rsrc_group_src_count	= IPA_RSRC_GROUP_SRC_COUNT,
-+	.resource_src_count	= ARRAY_SIZE(ipa_resource_src),
-+	.resource_src		= ipa_resource_src,
-+	.resource_dst_count	= ARRAY_SIZE(ipa_resource_dst),
-+	.resource_dst		= ipa_resource_dst,
-+};
-+
-+/* IPA-resident memory region data for an SoC having IPA v5.0 */
-+static const struct ipa_mem ipa_mem_local_data[] = {
-+	{
-+		.id		= IPA_MEM_UC_EVENT_RING,
-+		.offset		= 0x0000,
-+		.size		= 0x1000,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_UC_SHARED,
-+		.offset		= 0x1000,
-+		.size		= 0x0080,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_UC_INFO,
-+		.offset		= 0x1080,
-+		.size		= 0x0200,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_V4_FILTER_HASHED,
-+		.offset		= 0x1288,
-+		.size		= 0x0078,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V4_FILTER,
-+		.offset		= 0x1308,
-+		.size		= 0x0078,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V6_FILTER_HASHED,
-+		.offset		= 0x1388,
-+		.size		= 0x0078,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V6_FILTER,
-+		.offset		= 0x1408,
-+		.size		= 0x0078,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V4_ROUTE_HASHED,
-+		.offset		= 0x1488,
-+		.size		= 0x0098,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V4_ROUTE,
-+		.offset		= 0x1528,
-+		.size		= 0x0098,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V6_ROUTE_HASHED,
-+		.offset		= 0x15c8,
-+		.size		= 0x0098,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_V6_ROUTE,
-+		.offset		= 0x1668,
-+		.size		= 0x0098,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_MODEM_HEADER,
-+		.offset		= 0x1708,
-+		.size		= 0x0240,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_AP_HEADER,
-+		.offset		= 0x1948,
-+		.size		= 0x01e0,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_MODEM_PROC_CTX,
-+		.offset		= 0x1b40,
-+		.size		= 0x0b20,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_AP_PROC_CTX,
-+		.offset		= 0x2660,
-+		.size		= 0x0200,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_STATS_QUOTA_MODEM,
-+		.offset		= 0x2868,
-+		.size		= 0x0060,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_STATS_QUOTA_AP,
-+		.offset		= 0x28c8,
-+		.size		= 0x0048,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_AP_V4_FILTER,
-+		.offset		= 0x2918,
-+		.size		= 0x0118,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_AP_V6_FILTER,
-+		.offset		= 0x2aa0,
-+		.size		= 0x0228,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_STATS_FILTER_ROUTE,
-+		.offset		= 0x2cd0,
-+		.size		= 0x0ba0,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_STATS_DROP,
-+		.offset		= 0x3870,
-+		.size		= 0x0020,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_MODEM,
-+		.offset		= 0x3898,
-+		.size		= 0x0d48,
-+		.canary_count	= 2,
-+	},
-+	{
-+		.id		= IPA_MEM_NAT_TABLE,
-+		.offset		= 0x45e0,
-+		.size		= 0x0900,
-+		.canary_count	= 0,
-+	},
-+	{
-+		.id		= IPA_MEM_PDN_CONFIG,
-+		.offset		= 0x4ee8,
-+		.size		= 0x0100,
-+		.canary_count	= 2,
-+	},
-+};
-+
-+/* Memory configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_mem_data ipa_mem_data = {
-+	.local_count	= ARRAY_SIZE(ipa_mem_local_data),
-+	.local		= ipa_mem_local_data,
-+	.imem_addr	= 0x14688000,
-+	.imem_size	= 0x00003000,
-+	.smem_id	= 497,
-+	.smem_size	= 0x00009000,
-+};
-+
-+/* Interconnect rates are in 1000 byte/second units */
-+static const struct ipa_interconnect_data ipa_interconnect_data[] = {
-+	{
-+		.name			= "memory",
-+		.peak_bandwidth		= 1900000,	/* 1.9 GBps */
-+		.average_bandwidth	= 600000,	/* 600 MBps */
-+	},
-+	/* Average rate is unused for the next interconnect */
-+	{
-+		.name			= "config",
-+		.peak_bandwidth		= 76800,	/* 76.8 MBps */
-+		.average_bandwidth	= 0,		/* unused */
-+	},
-+};
-+
-+/* Clock and interconnect configuration data for an SoC having IPA v5.0 */
-+static const struct ipa_power_data ipa_power_data = {
-+	.core_clock_rate	= 120 * 1000 * 1000,	/* Hz */
-+	.interconnect_count	= ARRAY_SIZE(ipa_interconnect_data),
-+	.interconnect_data	= ipa_interconnect_data,
-+};
-+
-+/* Configuration data for an SoC having IPA v5.0. */
-+const struct ipa_data ipa_data_v5_0 = {
-+	.version		= IPA_VERSION_5_0,
-+	.qsb_count		= ARRAY_SIZE(ipa_qsb_data),
-+	.qsb_data		= ipa_qsb_data,
-+	.modem_route_count	= 11,
-+	.endpoint_count		= ARRAY_SIZE(ipa_gsi_endpoint_data),
-+	.endpoint_data		= ipa_gsi_endpoint_data,
-+	.resource_data		= &ipa_resource_data,
-+	.mem_data		= &ipa_mem_data,
-+	.power_data		= &ipa_power_data,
-+};
-diff --git a/drivers/net/ipa/ipa_data.h b/drivers/net/ipa/ipa_data.h
-index 818e64114ed50..ce82b00fdc498 100644
---- a/drivers/net/ipa/ipa_data.h
-+++ b/drivers/net/ipa/ipa_data.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- 
- /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
-- * Copyright (C) 2019-2022 Linaro Ltd.
-+ * Copyright (C) 2019-2023 Linaro Ltd.
-  */
- #ifndef _IPA_DATA_H_
- #define _IPA_DATA_H_
-@@ -249,5 +249,6 @@ extern const struct ipa_data ipa_data_v4_5;
- extern const struct ipa_data ipa_data_v4_7;
- extern const struct ipa_data ipa_data_v4_9;
- extern const struct ipa_data ipa_data_v4_11;
-+extern const struct ipa_data ipa_data_v5_0;
- 
- #endif /* _IPA_DATA_H_ */
-diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-index 4cc8d8d6bc9b7..6a2f2fc2f501e 100644
---- a/drivers/net/ipa/ipa_main.c
-+++ b/drivers/net/ipa/ipa_main.c
-@@ -285,7 +285,7 @@ static void ipa_hardware_config_comp(struct ipa *ipa)
- 	} else if (ipa->version < IPA_VERSION_4_5) {
- 		val |= reg_bit(reg, GSI_MULTI_AXI_MASTERS_DIS);
- 	} else {
--		/* For IPA v4.5 FULL_FLUSH_WAIT_RS_CLOSURE_EN is 0 */
-+		/* For IPA v4.5+ FULL_FLUSH_WAIT_RS_CLOSURE_EN is 0 */
- 	}
- 
- 	val |= reg_bit(reg, GSI_MULTI_INORDER_RD_DIS);
-@@ -684,6 +684,10 @@ static const struct of_device_id ipa_match[] = {
- 		.compatible	= "qcom,sc7280-ipa",
- 		.data		= &ipa_data_v4_11,
- 	},
-+	{
-+		.compatible	= "qcom,sdx65-ipa",
-+		.data		= &ipa_data_v5_0,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, ipa_match);
--- 
-2.34.1
-
+--
+Brian Gerst
