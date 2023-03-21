@@ -2,160 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B356C2C41
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57F96C2C3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 09:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjCUIZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 04:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S229808AbjCUIZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 04:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjCUIZB (ORCPT
+        with ESMTP id S229511AbjCUIZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:25:01 -0400
-X-Greylist: delayed 246 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Mar 2023 01:25:00 PDT
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9162EAF3F;
-        Tue, 21 Mar 2023 01:25:00 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id 724D62B0786B;
-        Tue, 21 Mar 2023 04:24:56 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 21 Mar 2023 04:24:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1679387096; x=1679394296; bh=4iLq9Xa+73gwOb3UlDSdvfiv5ERn90/uFq1
-        d82g+tiU=; b=rdHvg9X4s7IuEFLwOqkG2UcVTIQtMo8CBrROImB1m0gBuy+6tJz
-        nvN25hQYXWBWd5TzOsNAIqUSBdYOZO1LNd4xgYDblKk1cO1IIxfJRNa0bvyvrazT
-        xrQvrf7L3YhkORUS0fS9fSWLf4ZxEyyNkc5xzP30dy1zJYFIHDjhau2Elll//dY9
-        nYo/KGN53Slm4iVLuTGVY/ucB82e0s6lj9GBrB0b2RBU4jKugBQlAzYVvGCyLsvK
-        2ODAwwWJq1I2P/+tdewXjtdtX5Sv2Kgq2XB+/9KpDgnNksthZYFizt8nG6W7AYF2
-        4O39Vbl93iCYb/8DvYwEw037Qaa+zZGkWCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1679387096; x=
-        1679394296; bh=4iLq9Xa+73gwOb3UlDSdvfiv5ERn90/uFq1d82g+tiU=; b=B
-        hyxCBqLaapFDZlJ/HOkIlV7PkLct4IPKtWpVJysyq05qIwjT91pxeaQ/1D+SxwNg
-        H996FUt8AgY59kr/cndqRtmddhjjtBqoXd+P+jhcdCxSOu/AcOSw6g8fNIYCNDsH
-        W2TAUc2dJQ/hHGo+zVZSt76m4iGOdKhAgczNI1j5EjJJv+CUm8A5bhWhSyuMRP36
-        Mq06D0tf6/F6GGpwLfPyyKaN6v53AhqU3QLGMoIcZ/EBbIbwFFnWqLAL8j8iSvxA
-        072iFPGtt/rf2otztkR9jlPOdcwq4gr+6Lh6n5qBRFUEV7UhjwNarXciqTCZXfe7
-        FQNDgYBCRA7QP/+/ZPeYQ==
-X-ME-Sender: <xms:1WkZZGXrpB-bCzWA0vrcEQrvJKNMHcgkvOtw4MMBqNSm0yE40GuuIA>
-    <xme:1WkZZCkUx4PzphnKgVxbx2x-w-4-Ur27OODA8sdKYb1jL1Rq1Zlt7RBDtskyQ--4g
-    afdIPi0VZx5axXnCOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffkedtffejkeeihedtffevtedvhfdvhfehfffgleekgffgveeftdefgeek
-    vedvjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:1WkZZKbDDBO7G9zG6aM76fUgHKZuJRgiGx001mneKGt_bEavigDz5g>
-    <xmx:1WkZZNXdISqhAYAQRAIDIM-Fw0V3uIrscbZkVvbBnHoPV5Coh5zkxQ>
-    <xmx:1WkZZAmWWNDcJWKV2dZpqSHpIRhV5OGT-3qQH-5yKjBiwJ7lDCZHug>
-    <xmx:2GkZZIhAHpgfZEhxZJ_CzumJNBOoMxu-GwEfC42g24b9XnBmRluH5M0OZTc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C764EB60086; Tue, 21 Mar 2023 04:24:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <b9342459-efec-4e17-aee6-332ee17f44d2@app.fastmail.com>
-In-Reply-To: <8b7816b0-1daa-1c49-6f9d-40769d228a39@linaro.org>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
- <86431868-488b-4a72-944b-231b6d0382b0@app.fastmail.com>
- <8b7816b0-1daa-1c49-6f9d-40769d228a39@linaro.org>
-Date:   Tue, 21 Mar 2023 09:24:33 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Joe Tessler" <jrt@google.com>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Kevin Hilman" <khilman@baylibre.com>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Michael Tretter" <m.tretter@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Jacopo Mondi" <jacopo+renesas@jmondi.org>,
-        "Kieran Bingham" <kieran.bingham+renesas@ideasonboard.com>,
-        "Laurent Pinchart" <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        "Rui Miguel Silva" <rmfrfs@gmail.com>,
-        "Wenyou Yang" <wenyou.yang@microchip.com>,
-        "Bin Liu" <bin.liu@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Minghsiu Tsai" <minghsiu.tsai@mediatek.com>,
-        "Houlong Wei" <houlong.wei@mediatek.com>,
-        "Andrew-CT Chen" <andrew-ct.chen@mediatek.com>,
-        "Andrzej Pietrasiewicz" <andrzejtp2010@gmail.com>,
-        "Jacek Anaszewski" <jacek.anaszewski@gmail.com>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        "Patrice Chotard" <patrice.chotard@foss.st.com>,
-        "Yong Deng" <yong.deng@magewell.com>,
-        "Paul Kocialkowski" <paul.kocialkowski@bootlin.com>,
-        "Chen-Yu Tsai" <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Sean Young" <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: Re: [PATCH 20/28] media: platform: jpeg: always reference OF data
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 21 Mar 2023 04:25:00 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C2AD53E;
+        Tue, 21 Mar 2023 01:24:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679387085; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=i05bnC+eqsZ/guCkE1iDRgrw/24mMV66GoLFVESxqjw3330+WDiXIPf5bJdpAJX6vUCQT+xiICC32CVERizh4mfpG+cRfxxnfR4pidCsrBqE9E5DjnseudCIh85QaNRRhirmn6vJ9Ouq752FVeqevCobspMyyYLAGBYGxJG48BQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679387085; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=od2igUX/Gb6z7tl9jzyrfJnWIXU+B/ka6PHP7kBPVDQ=; 
+        b=Vde4uie4FCtAiYzgRpH6dPsFp8dxCqhagPU4pCNu12bnjsdbsrKhYDAU9G+6Rb03nrijskINTzuwkWJysnzAEOzkDq6khxnXkx51VN3w59Drk9PgTcz5iAAISv5gV17Ua0vj33LCpW6LfQSdiNljJ4qvx/Lj/59Q+9s/P0rrT4I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679387085;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=od2igUX/Gb6z7tl9jzyrfJnWIXU+B/ka6PHP7kBPVDQ=;
+        b=C7pD7bJJX6X9uVIcDUYWRRDn352MDvLOKIE8pWASUbWXtgMKJgDpg9UBvrPX8iBe
+        ZS2ItuAaF1UW/LK1P3d5UO/2IoFSuX2M8rNhI2FcuQMQ7dHM6ld/h/+PO0Nb+2YsepF
+        g6GwWz0xmMvuQ00s4IhIrd7syVBOncSAB+z+lsWg=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679387084074537.1592183726682; Tue, 21 Mar 2023 01:24:44 -0700 (PDT)
+Message-ID: <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
+Date:   Tue, 21 Mar 2023 11:24:39 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+ <20230320161823.1424278-2-sergio.paracuellos@gmail.com>
+ <1e2f67b4-3bfb-d394-4f60-e6f63ce6a2fd@linaro.org>
+ <CAMhs-H8OQ9gJLsifLuHD2GN8rYwnY=Zmdb0kMEfX4UUHhjMUyQ@mail.gmail.com>
+ <d0f74721-bf5a-62de-53dc-62e7e735e2dc@linaro.org>
+ <bdc82b4a-f1a9-0372-5a57-200a422b1b70@arinc9.com>
+ <21a90597-78c9-4d46-7b01-257702e7afca@linaro.org>
+ <525a6388-a4b8-3052-fe81-5aa21d8f424a@arinc9.com>
+ <507f79cf-acd8-5238-031a-fd71024e0c6a@linaro.org>
+ <CAMhs-H8_S5eO7B+dZ7jeq7Jjnw71QBmSo4M+woe3U5sH7dCADg@mail.gmail.com>
+ <39ba681e-5bab-cffc-edf7-4bf86387987c@linaro.org>
+ <132de602-6467-536c-c66d-657f22a59bd5@arinc9.com>
+ <40e3acac-b58a-7af8-b025-3678f84434da@linaro.org>
+ <CAMhs-H9AWXvtbg=qz06HN3piUO0E5YF3RmrdRLC7qH2n6KjrSw@mail.gmail.com>
+ <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
+ <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
+ <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023, at 09:21, Krzysztof Kozlowski wrote:
-> On 21/03/2023 09:11, Arnd Bergmann wrote:
->> On Sun, Mar 12, 2023, at 14:13, Krzysztof Kozlowski wrote:
->>> The driver can match only via the DT table so the table should be al=
-ways
->>> used and the of_match_ptr does not have any sense (this also allows =
-ACPI
->>> matching via PRP0001, even though it might not be relevant here).  T=
-his
->>> also fixes !CONFIG_OF error:
+On 21.03.2023 11:04, Krzysztof Kozlowski wrote:
+> On 21/03/2023 08:39, Arınç ÜNAL wrote:
+>>>>
+>>>> arch/mips/ralink/mt7620.c:      rt_sysc_membase =
+>>>> plat_of_remap_node("ralink,mt7620a-sysc");
+>>>>
+>>>> That's the reason I also used prefix ralink for the rest.
+>>>>
+>>>> Does it make sense to you to maintain this one as ralink,mt7620a-sysc
+>>>> and add the following with mediatek prefix?
+>>>>
+>>>> mediatek,mt7620-sysc
+>>>> mediatek,mt7628-sysc
+>>>> mediatek,mt7688-sysc
+>>>>
+>>>> That would be weird IMHO.
 >>>
->>>   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1890:38: erro=
-r:=20
->>> =E2=80=98mtk8195_jpegdec_drvdata=E2=80=99 defined but not used=20
->>> [-Werror=3Dunused-const-variable=3D]
+>>> What exactly would be weird? Did you read the discussion about vendor
+>>> prefix from Arinc? mt7620 is not a Ralink product, so what would be
+>>> weird is to use "ralink" vendor prefix. This was never a Ralink. However
+>>> since there are compatibles using "ralink" for non-ralink devices, we
+>>> agreed not to change them.
 >>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>=20
->> I see now that we both submitted the same patch, but now Hans
->
-> We as you and me? I cannot find your patch on lore:
-> https://lore.kernel.org/all/?q=3Df%3Aarnd%40arndb.de
+>>> These though use at least in one place mediatek, so the above argument
+>>> does not apply. (and before you say "but they also use ralink and
+>>> mediatek", it does not matter - it is already inconsistent thus we can
+>>> choose whatever we want and ralink is not correct).
+>>
+>> My argument was that your point being Ralink is now Mediatek, thus there
+>> is no conflict and no issues with different vendor used. It's the next
+>> best thing to be able to address the inconsistency, call everything of
+>> the MTMIPS platform ralink on the compatible strings.
+> 
+> And how does it help consistency? The mt7620 is used also with mediatek
+> prefix and adding more variants of realtek does not make the
+> inconsistency smaller. It's still inconsistent.
+> 
+>>
+>> If we take the calling new things mediatek route, we will never get to
+>> the bottom of fixing the naming inconsistency.
+> 
+> All new things, so new SoCs, should be called mediatek, because there is
+> no ralink and mediatek is already used for them. So why some new
+> Mediatek SoCs are "mediatek" but some other also new SoCs are "ralink"?
+> 
+> You can do nothing (and no actual need) about existing inconsistency...
 
-This is the one that I sent back in January:
+I couldn't change ralink -> mediatek because company acquisitions don't 
+grant the change. I don't see any reason to prevent changing mediatek -> 
+ralink without breaking the ABI on the existing schemas.
 
-https://lore.kernel.org/all/20230117172644.3044265-1-arnd@kernel.org
-
-      Arnd
+Arınç
