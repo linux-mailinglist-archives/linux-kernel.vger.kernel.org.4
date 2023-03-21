@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370126C2809
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0056C280B
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 03:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCUCVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 22:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S229776AbjCUCWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 22:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCUCVp (ORCPT
+        with ESMTP id S229685AbjCUCWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 22:21:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DF649C7
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 19:21:43 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PgZyz61WXznYyl;
-        Tue, 21 Mar 2023 10:18:35 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 21 Mar 2023 10:21:40 +0800
-Subject: Re: [PATCH v9 1/5] vfio/migration: Add debugfs to live migration
- driver
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-CC:     <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-References: <20230320092338.2889-1-liulongfang@huawei.com>
- <20230320092338.2889-2-liulongfang@huawei.com>
- <20230320153336.74b853c7.alex.williamson@redhat.com>
- <ZBjTXwZQs603zHy3@nvidia.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <41e59e5d-9bf7-2834-4fd1-09ec4c48fa24@huawei.com>
-Date:   Tue, 21 Mar 2023 10:21:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 20 Mar 2023 22:22:02 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDE038EAF;
+        Mon, 20 Mar 2023 19:21:58 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p3-20020a17090a74c300b0023f69bc7a68so9960663pjl.4;
+        Mon, 20 Mar 2023 19:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679365318;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wk7k/qCAEMpFxh6ljdNclCqPNBMbolmdQlBNy8zLG6c=;
+        b=b1MSLsahswHQ/R2ruWXyq261SamPgeFglyhnW66D2sIrLNRx0SFsX2VXITmRYCB6CK
+         fehaT1Sk5io6kbOcCAYGe2hREFU03baYDHSh2xbF20lhO36WlTb+uSykO6VpHg2RvkVn
+         wXpDivVKoVSLiYqu/w1mYxJAluWFnzUd9Nwxd2AXQJjpxxurB3/X+fMG/8ciSgOMcLHb
+         8eIR51rNeI+e+iOW9ez/PS7iLRc6f9SGJRd31JzU8Jb5oOT/CYKm82d5R1qClNgfAD43
+         8uOf8uMEoHFSTCKKBNRPCIMDKMRnHKxSfc5CE5yqB4tT1QPeq4swNoMiFJ1bilaFgTjd
+         dg5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679365318;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wk7k/qCAEMpFxh6ljdNclCqPNBMbolmdQlBNy8zLG6c=;
+        b=EHDyP2PrRMbRVMg8wpcIae9VTvk9PYRuCwl5zdOgPrGcAtJV17fkMzFl4O0BlqdxUO
+         la9vnUrfPphE4oq259e9LzI38omBL7Cy70BJYLl7ADRpfzFl9sa4EtayWLUzfOw+hEFg
+         v3W2DkoQDvdtJLufY5giZO8ZaJ36u2so40sI1OOfAO18thhPhAajTzYsJCwKhAUlDKRv
+         Czb2bm26v/Z44a+tLdAiIuev1SwAkXIaGILC9j/uU+ua5LqcZ+yaKnFm+sebiFbwZHwN
+         hql2tU/3QmVN5wWb99juJ6gEt7XRClgJgEecXo7i3cQVvyAYtcMnDKPWy6MHb+jERJ4M
+         aoAg==
+X-Gm-Message-State: AO0yUKXOdQem0fdv8lrc1m6EVfuXrwFVotv3Mk1Sr8jUyiQPazQj5FKq
+        K4JaGN3Hgl5yWN/bNhWl8OdaJhGuXOyueUJJwDg=
+X-Google-Smtp-Source: AK7set/6yamH3SwJz12TWGOrpA7X6sERswa68dKqJacheL9RN5DQS5iOTenIxqkTYSJIWjI0P/gz4qQ3xJOrBW1iYHU=
+X-Received: by 2002:a17:90a:29c5:b0:23d:2f4:af49 with SMTP id
+ h63-20020a17090a29c500b0023d02f4af49mr200529pjd.4.1679365318063; Mon, 20 Mar
+ 2023 19:21:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ZBjTXwZQs603zHy3@nvidia.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230320145449.336983711@linuxfoundation.org>
+In-Reply-To: <20230320145449.336983711@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Mon, 20 Mar 2023 19:21:46 -0700
+Message-ID: <CAJq+SaDtjHaEHH0Yo38ygEmXfnTTDEtuVd0bLF49E2W2UGc6oQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/115] 5.15.104-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,27 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/21 5:42, Jason Gunthorpe wrote:
-> On Mon, Mar 20, 2023 at 03:33:36PM -0600, Alex Williamson wrote:
-> 
->> This would allow that mlx5 and future drivers automatically get this
->> with no driver code, and in fact all devices would get debugfs dev_name
->> directories for better test coverage.  hisi_acc would only need to add
->> driver specific entries after registering the device and free any
->> related data after unregistering the device.  In this way, none of the
->> entry points here would need to be exported for drivers, which is
->> perhaps the direction Jason was thinking with his prior comments.
-> 
-> Yes, my point was more not to add more ops specifically to wrapper
-> debugfs stuff. If drivers want a special debugfs file then there is
-> lots of infrastructure to just create that off a common point
-> 
+> This is the start of the stable review cycle for the 5.15.104 release.
+> There are 115 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 22 Mar 2023 14:54:26 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.104-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-OK! I understand what you and Alex are asking for.
-I will re-debug a version based on your request.
+
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
+
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
 Thanks.
-Longfang.
-> Jason
-> .
-> 
