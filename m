@@ -2,249 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65A66C35CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071C26C35D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjCUPg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S230425AbjCUPiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjCUPg5 (ORCPT
+        with ESMTP id S231140AbjCUPiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:36:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F072200D
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:36:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 195FE201C5;
-        Tue, 21 Mar 2023 15:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679413013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8GR3nqVPTvIIUemQinUM3ZRWVv3nUcZCac4iLqxkiYA=;
-        b=Avdna0atBakXPjFjYggo5LoWoSf6DOuF45QWLuNb6ViEM6ZM89nQsnHxlI2Zunf128fqn9
-        ZuwEPZcQA/jTnnJ2HJYIxbyOdoigfnnusCoFmzoQuURX1ESsxhXE/RhB3jMNwMJJWGwNOS
-        d8jdPtYdVctX6h9LkkfoD27qvgdGIkQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id ABCDC2C141;
-        Tue, 21 Mar 2023 15:36:52 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 16:36:49 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: simplify: was: Re: [PATCH printk v1 06/18] printk: nobkl: Add
- acquire/release logic
-Message-ID: <ZBnPEaJKdHyTtUNS@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-7-john.ogness@linutronix.de>
- <ZBSkoKCdG5uiVNPq@alley>
+        Tue, 21 Mar 2023 11:38:13 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296477D89
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j11so19620425lfg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679413087;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/hHAe5iawN3skZzVZDnwhhdvLIa9hx/rH3tuAV1a/Y=;
+        b=nl+cB0MrV4ln5nxojPnc/K4a0UCvfGjtmVhygVZpD7PVa/igo4qoW/bWhyN58nE345
+         sOcsidbdyQelA0q5yyb9CKK/7Vdshos6+YQWgiK6za7PZtTRs9l2JhRNFtr6F58VsC3o
+         S/rBGzfytaeT4LmmjvNV+ZFZjYV5vQOzTmLE2zmjJBni0QbfsVsemeBI8eF5EtzZw285
+         lthQRCX/7kOEOvH+7gtdT2tVdw892MHQ+A4eeK3Tk4Baa1cKXWyZIxE5TVjGxsP7ArPG
+         ZWQc1ymC0IKKpOvNebI4KA1kF/jgmkC0wft0eIjYAlPVZpO2wPPcK+ED2RtpBZXfIQiE
+         njcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679413087;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/hHAe5iawN3skZzVZDnwhhdvLIa9hx/rH3tuAV1a/Y=;
+        b=rACy45kZoxN0MS3bDbOR6N+Sc8TDnjmWAiwIq8jHp12BjIfZxQE1XhxrPAbylAnoh+
+         cdwa00BAw3ipiGlHqVReZgoJf4tq+EPPCfz78+kxOPHAl7NtNoZ3Jqj7no4E9aV8JKc4
+         ve1IVM2QivdfePcGUeMuPHl+GmCQLgTNdxSG4kafQuXqYDCxs8spQdK23m/GsE3itvsl
+         WJWwb3Eg2scRUEf47PCwiq7jzI2C7F0NtPj4wTfttJoBknEa1j8YKIALDXsHWDEDog0k
+         87Eh6T6SuHiggawC+EBgCEumooZG4iqYSaxb6R3ZIV19ZGoV0B8tXtO9s3SbRqOpi67j
+         hSRA==
+X-Gm-Message-State: AO0yUKXKzFa8BUJLwEkInm3vPUH97xF319Q2sSEFVOTVW1C+cvDph6Aa
+        3FzNgtLWbjsTAznKfM/b8i3nLA==
+X-Google-Smtp-Source: AK7set+STU3G9QvNmNnVmdGOtK+qF7WbPNGCp2TWURDMZxtNtpOd5g+l+wav4QS+f2Wk7N556My/8Q==
+X-Received: by 2002:ac2:424e:0:b0:4db:3e56:55c8 with SMTP id m14-20020ac2424e000000b004db3e5655c8mr1010770lfl.59.1679413087349;
+        Tue, 21 Mar 2023 08:38:07 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v5-20020a056512048500b004db513b0175sm2208560lfq.136.2023.03.21.08.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 08:38:06 -0700 (PDT)
+Message-ID: <7ef646e0-388e-b2ef-a28c-f1fcce486203@linaro.org>
+Date:   Tue, 21 Mar 2023 17:38:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBSkoKCdG5uiVNPq@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 04/12] soc: qcom: pmic_glink: register ucsi aux device
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v5-4-552f3b721f9e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v5-4-552f3b721f9e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-03-17 18:34:30, Petr Mladek wrote:
-> Hi,
+On 21/03/2023 15:21, Neil Armstrong wrote:
+> Only register UCSI on know working devices, like on the SM8450
+> or SM8550 which requires UCSI to get USB mode switch events.
 > 
-> I send this before reading today's answers about the basic rules.
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Two nits below:
+
+> ---
+>   drivers/soc/qcom/pmic_glink.c | 65 +++++++++++++++++++++++++++++++++++--------
+>   1 file changed, 54 insertions(+), 11 deletions(-)
 > 
-> I have spent on this answer few days and I do not want to delay
-> it indefinitely. It documents my initial feelings about the code.
-> Also it describes some ideas that might or need not be useful
-> anyway.
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> index bb3fb57abcc6..8bf95df0a56a 100644
+> --- a/drivers/soc/qcom/pmic_glink.c
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -4,6 +4,7 @@
+>    * Copyright (c) 2022, Linaro Ltd
+>    */
+>   #include <linux/auxiliary_bus.h>
+> +#include <linux/of_device.h>
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/rpmsg.h>
+> @@ -11,12 +12,23 @@
+>   #include <linux/soc/qcom/pdr.h>
+>   #include <linux/soc/qcom/pmic_glink.h>
+>   
+> +enum {
+> +	PMIC_GLINK_CLIENT_BATT = 0,
+> +	PMIC_GLINK_CLIENT_ALTMODE,
+> +	PMIC_GLINK_CLIENT_UCSI,
+> +};
+> +
+> +#define PMIC_GLINK_CLIENT_DEFAULT	(BIT(PMIC_GLINK_CLIENT_BATT) |	\
+> +					 BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +
+>   struct pmic_glink {
+>   	struct device *dev;
+>   	struct pdr_handle *pdr;
+>   
+>   	struct rpmsg_endpoint *ept;
+>   
+> +	unsigned long client_mask;
+> +
+>   	struct auxiliary_device altmode_aux;
+>   	struct auxiliary_device ps_aux;
+>   	struct auxiliary_device ucsi_aux;
+> @@ -233,6 +245,7 @@ static struct rpmsg_driver pmic_glink_rpmsg_driver = {
+>   
+>   static int pmic_glink_probe(struct platform_device *pdev)
+>   {
+> +	const unsigned long *match_data;
+>   	struct pdr_service *service;
+>   	struct pmic_glink *pg;
+>   	int ret;
+> @@ -249,12 +262,27 @@ static int pmic_glink_probe(struct platform_device *pdev)
+>   	mutex_init(&pg->client_lock);
+>   	mutex_init(&pg->state_lock);
+>   
+> -	ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
+> -	if (ret)
+> -		return ret;
+> -	ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
+> -	if (ret)
+> -		goto out_release_altmode_aux;
+> +	match_data = (unsigned long *)of_device_get_match_data(&pdev->dev);
+
+Nit: type cast should not be necessary here.
+
+> +	if (match_data)
+> +		pg->client_mask = *match_data;
+> +	else
+> +		pg->client_mask = PMIC_GLINK_CLIENT_DEFAULT;
+> +
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
+> +		if (ret)
+> +			goto out_release_ucsi_aux;
+> +	}
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT)) {
+> +		ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
+> +		if (ret)
+> +			goto out_release_altmode_aux;
+> +	}
+>   
+>   	pg->pdr = pdr_handle_alloc(pmic_glink_pdr_callback, pg);
+>   	if (IS_ERR(pg->pdr)) {
+> @@ -278,9 +306,14 @@ static int pmic_glink_probe(struct platform_device *pdev)
+>   out_release_pdr_handle:
+>   	pdr_handle_release(pg->pdr);
+>   out_release_aux_devices:
+> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
+> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
+>   out_release_altmode_aux:
+> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +out_release_ucsi_aux:
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
+> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
+>   
+>   	return ret;
+>   }
+> @@ -291,8 +324,12 @@ static int pmic_glink_remove(struct platform_device *pdev)
+>   
+>   	pdr_handle_release(pg->pdr);
+>   
+> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
+> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
+> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
+> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
+>   
+>   	mutex_lock(&__pmic_glink_lock);
+>   	__pmic_glink = NULL;
+> @@ -301,8 +338,14 @@ static int pmic_glink_remove(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +/* Do not handle altmode for now on those platforms */
+> +static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
+> +							   BIT(PMIC_GLINK_CLIENT_UCSI);
+> +
+>   static const struct of_device_id pmic_glink_of_match[] = {
+> -	{ .compatible = "qcom,pmic-glink", },
+
+Nit: one can leave comma in place to remove noise.
+
+> +	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
+> +	{ .compatible = "qcom,pmic-glink" },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
 > 
-> Also there is a POC that slightly modifies the logic. But the basic
-> approach remains the same.
 
-I looked at this with a "fresh" mind. I though if there was any real
-advantage in the proposed change of the cons_release() logic. I mean
-to just clear .cpu and .cur_prio and let cons_try_acquire() to take
-over the lock.
+-- 
+With best wishes
+Dmitry
 
-I tried to describe my view below.
-
-> > +/**
-> > + * __cons_release - Release the console after output is done
-> > + * @ctxt:	The acquire context that contains the state
-> > + *		at cons_try_acquire()
-> > + *
-> > + * Returns:	True if the release was regular
-> > + *
-> > + *		False if the console is in unusable state or was handed over
-> > + *		with handshake or taken	over hostile without handshake.
-> > + *
-> > + * The return value tells the caller whether it needs to evaluate further
-> > + * printing.
-> > + */
-> > +static bool __cons_release(struct cons_context *ctxt)
-> > +{
-> > +	struct console *con = ctxt->console;
-> > +	short flags = console_srcu_read_flags(con);
-> > +	struct cons_state hstate;
-> > +	struct cons_state old;
-> > +	struct cons_state new;
-> > +
-> > +	if (WARN_ON_ONCE(!(flags & CON_NO_BKL)))
-> > +		return false;
-> > +
-> > +	cons_state_read(con, CON_STATE_CUR, &old);
-> > +again:
-> > +	if (!cons_state_bits_match(old, ctxt->state))
-> > +		return false;
-> > +
-> > +	/* Release it directly when no handover request is pending. */
-> > +	if (!old.req_prio)
-> > +		goto unlock;
-> > +
-> > +	/* Read the handover target state */
-> > +	cons_state_read(con, CON_STATE_REQ, &hstate);
-> > +
-> > +	/* If the waiter gave up hstate is 0 */
-> > +	if (!hstate.atom)
-> > +		goto unlock;
-> > +
-> > +	/*
-> > +	 * If a higher priority waiter raced against a lower priority
-> > +	 * waiter then unlock instead of handing over to either. The
-> > +	 * higher priority waiter will notice the updated state and
-> > +	 * retry.
-> > +	 */
-> > +	if (hstate.cur_prio != old.req_prio)
-> > +		goto unlock;
-
-The above check might cause that CUR will be completely unlocked
-even when there is a request. It is a corner case. It would happen
-when a higher priority context is in the middle of over-ridding
-an older request (already took REQ but have not updated
-CUR.req_prio yet).
-
-As a result any context might take CUR while the higher priority
-context is re-starting the request and tries to get the lock with
-the updated CUR.
-
-It is a bit pity but it is not end of the world. The higher priority
-context would just need to wait for another context.
-
-That said, my proposal would solve this a bit cleaner way.
-CUR would stay blocked for the .req_prio context. As a result,
-the being-overridden REQ owner would become CUR owner.
-And the higher priority context would then need to setup
-new REQ against the previous REQ owner.
-
-> > +
-> > +	/* Switch the state and preserve the sequence on 64bit */
-> > +	copy_bit_state(new, hstate);
-> > +	copy_seq_state64(new, old);
-> > +	if (!cons_state_try_cmpxchg(con, CON_STATE_CUR, &old, &new))
-> > +		goto again;
-
-The other difference is that the above code will do just half of
-the request-related manipulation. It will assing CUR to the REQ owner.
-The REQ owner will need to realize that it got the lock and
-clean up REQ part.
-
-Or by other words, there are 3 pieces of information:
-
-   + CUR owner is defined by CUR.cpu and CUR.cur_prio
-   + REQ owner is defined by REQ.cpu and REQ.cur_prio
-   + CUR knows about the request by CUR.req_prio
-
-The current code modifies the pieces in thie order:
-
-CPU0				CPU1
-
-// take a free lock
-set CUR.cpu
-set CUR.cur_prio
-
-				// set request
-				set REQ.cpu
-				set REQ.cur_prio
-
-				// notify CUR
-				set CUR.req_prio
-
-// re-assign the lock to CPU1
-set CUR.cpu = REQ.cpu
-set CUR.cur_prio = REQ.cur_prio
-set CUR.req_prio = 0
-
-				// clean REQ
-				REQ.cpu =0;
-				REQ.cur_prio = 0;
-
-
-In this case, CPU0 has to read REQ and does a job for CPU1.
-
-Instead, my proposal does:
-
-CPU0				CPU1
-
-// take a free lock
-set CUR.cpu
-set cur.prio
-
-				// set request
-				set REQ.cpu
-				set REQ,cur_prio
-
-				// notify CUR
-				set CUR.req_prio
-
-// unlock CPU0
-set CUR.cpu = 0
-set CUR.cur_prio = 0;
-keep CUR.req_prio == REQ.cur_prio
-
-				// take the lock and clean notification
-				set CUR.cpu = REQ.cpu
-				set CUR.cur_prio = REQ.cur_prio
-				set CUR.req_prio = 0
-
-				// clean REQ
-				REQ.cpu =0;
-				REQ.cur_prio = 0;
-
-
-In this case:
-
-   + CPU0: It manipulates only CUR. And it keeps CUR.req_prio value.
-	   It does not check REQ at all.
-
-   + CPU1: Manipulates all REQ-related variables and fields.
-	   It modifies SEQ.cpu and SEQ.cur_prio only when
-	   they are free.
-
-It looks a bit cleaner. Also it might help to think about barriers
-because each side touches only its variables and fields. We might
-need less explicit barriers that might be needed when one CPU
-does a change for the other.
-
-
-My view:
-
-I would prefer to do the logic change. It might help with review
-and also with the long term maintenance.
-
-But I am not 100% sure if it is worth it. The original approach might
-be good enough. The important thing is that it modifies CUR and REQ
-variables and fields in the right order. And I do not see any
-chicken-and-egg problems. Also the barriers should be doable.
-
-Best Regards,
-Petr
