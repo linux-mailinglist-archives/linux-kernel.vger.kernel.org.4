@@ -2,368 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992CF6C29CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09506C29D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 06:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjCUFYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 01:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S230046AbjCUFYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 01:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjCUFXu (ORCPT
+        with ESMTP id S229634AbjCUFYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 01:23:50 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB45086AF;
-        Mon, 20 Mar 2023 22:23:46 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L5NSZD050314;
-        Tue, 21 Mar 2023 00:23:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679376208;
-        bh=C/RRrJiDKWcYW9nfp7ifTMhWpmvJInngbLn6f54awts=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=F/84IAoMH1n8GO0JLYejkMfazlNsQiz6scUcofC3eLSd6FMcdnHJJ+yOBusWgIZRq
-         Hxnt6yIlSplJFGCsKVE5EOxoeAzo5Ec2iuR28XDqNOORK+AMDKo4out1BtjyLIcp2f
-         IKW7OMXCff1x6AiSagrtouj1ZaQUUqzoySHfXOlE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L5NSf1012720
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 00:23:28 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 00:23:28 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 00:23:28 -0500
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L5NNRp041120;
-        Tue, 21 Mar 2023 00:23:24 -0500
-Message-ID: <5b936f1b-3c5b-30ab-7074-e202fd6555b6@ti.com>
-Date:   Tue, 21 Mar 2023 10:53:22 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [PATCH v4 2/5] soc: ti: pruss: Add
- pruss_{request,release}_mem_region() API
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-3-danishanwar@ti.com>
- <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
- <52aeb13f-1fe4-825f-9d28-ba64860ae76d@ti.com>
- <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <13048b01-641a-1d92-178c-02b87c5fa1b9@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Tue, 21 Mar 2023 01:24:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC24318A91;
+        Mon, 20 Mar 2023 22:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679376263; x=1710912263;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=nqNq6hBpFp6r6NRgDicIUmgboxRSlDZI/134df8WGSw=;
+  b=hQFWd2y5u+SrPqpYSmQqnjbbwdCbmcbQHewgeylsF3IdoDZUhZ+YRIz4
+   LkRc7afiJPe1H78nvk6c/K4KYnzUQIMSBrbbxn9T/d9VKo5L0ypMUillh
+   tWR+dISGAFfOidd1jmTKL5jZBlujcFNN7KRt8YIfEVuJR+tMn09hVkZIr
+   EkvYvLgmWIN+68JP5t5wFyQS/WA+dN73+qMvBqQPF64xNSNyEQDKdAiVb
+   Hwo9b5TJXk1648xBSpxddMJ+3OSOw/Ox3PJvIAp0RBE3B3ce8HzWhFUmd
+   B0W4XVRApU9sEJSujkDM6k1U52lIidIpZd3AOgpPG4TaUIb9NNvJr0Yzb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="337571134"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="337571134"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:24:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="750397857"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="750397857"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.109])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 22:24:20 -0700
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     paulmck@kernel.org
+Cc:     dave@stgolabs.net, frederic@kernel.org, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        qiuxu.zhuo@intel.com, quic_neeraju@quicinc.com,
+        rcu@vger.kernel.org, rostedt@goodmis.org
+Subject: [PATCH v3 1/2] rcu/rcuscale: Move rcu_scale_*() after kfree_scale_cleanup()
+Date:   Tue, 21 Mar 2023 13:23:36 +0800
+Message-Id: <20230321052337.26553-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <72ba8619-88cb-4bf4-8232-18d8a1b6b5bf@paulmck-laptop>
+References: <72ba8619-88cb-4bf4-8232-18d8a1b6b5bf@paulmck-laptop>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew, Roger,
+Move rcu_scale_cleanup() and rcu_scale_shutdown() functions after
+kfree_scale_cleanup(). There are no function changes.
 
-On 20/03/23 21:48, Andrew Davis wrote:
-> On 3/20/23 12:11 AM, Md Danish Anwar wrote:
->> Hi Roger,
->>
->> On 17/03/23 14:26, Roger Quadros wrote:
->>> Hi Andrew & Danish,
->>>
->>>
->>> On 13/03/2023 13:11, MD Danish Anwar wrote:
->>>> From: "Andrew F. Davis" <afd@ti.com>
->>>>
->>>> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
->>>> to the PRUSS platform driver to allow client drivers to acquire and release
->>>> the common memory resources present within a PRU-ICSS subsystem. This
->>>> allows the client drivers to directly manipulate the respective memories,
->>>> as per their design contract with the associated firmware.
->>>>
->>>> Co-developed-by: Suman Anna <s-anna@ti.com>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> Signed-off-by: Andrew F. Davis <afd@ti.com>
->>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>>> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->>>> ---
->>>>   drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
->>>>   include/linux/pruss_driver.h     | 27 +++--------
->>>>   include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
->>>
->>>
->>> We have these 2 header files and I think anything that deals with
->>> 'struct pruss' should go in include/linux/pruss_driver.h
->>>
->>> Anything that deals with pru_rproc (i.e. struct rproc) should go in
->>> include/linux/remoteproc/pruss.h
->>>
->>> Do you agree?
->>>
->>
->> I agree with you Roger but Andrew is the right person to comment here as he is
->> the author of this and several other patches.
->>
->> Hi Andrew, Can you please comment on this?
->>
-> 
-> Original idea was a consumer driver (like "ICSSG Ethernet Driver" in your other
-> series) could just
-> 
-> #include <linux/remoteproc/pruss.h>
-> 
-> and get everything they need, and nothing they do not.
-> 
+The intention of this moving is a preparation for a subsequent patch
+that will fix a call-trace bug by invoking kfree_scale_cleanup() from
+rcu_scale_cleanup() without the declaration of kfree_scale_cleanup().
 
-If we plan on continuing the original idea, then I think keeping the header
-files as it is will be the best. Because if we move anything that deals with
-'struct pruss' to include/linux/pruss_driver.h and anything that deals with
-pru_rproc (i.e. struct rproc) to include/linux/remoteproc/pruss.h, then the
-consumer drivers will need to do,
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+ Paul, please modify the commit message if needed. Thanks!
 
-#include <linux/remoteproc/pruss.h>
-#include <linux/pruss_driver.h>
+ kernel/rcu/rcuscale.c | 196 +++++++++++++++++++++---------------------
+ 1 file changed, 98 insertions(+), 98 deletions(-)
 
-Roger, should I keep the header files arrangement as it is?
-
-> pruss_driver.h (which could be renamed pruss_internal.h) exists to allow
-> comunication between the pruss core and the pru rproc driver which live
-> in different subsystems.
-> 
-> Andrew
-> 
->>>>   3 files changed, 121 insertions(+), 22 deletions(-)
->>>>
->>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>> index a169aa1ed044..c8053c0d735f 100644
->>>> --- a/drivers/soc/ti/pruss.c
->>>> +++ b/drivers/soc/ti/pruss.c
->>>> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(pruss_put);
->>>>   +/**
->>>> + * pruss_request_mem_region() - request a memory resource
->>>> + * @pruss: the pruss instance
->>>> + * @mem_id: the memory resource id
->>>> + * @region: pointer to memory region structure to be filled in
->>>> + *
->>>> + * This function allows a client driver to request a memory resource,
->>>> + * and if successful, will let the client driver own the particular
->>>> + * memory region until released using the pruss_release_mem_region()
->>>> + * API.
->>>> + *
->>>> + * Return: 0 if requested memory region is available (in such case pointer to
->>>> + * memory region is returned via @region), an error otherwise
->>>> + */
->>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>> +                 struct pruss_mem_region *region)
->>>> +{
->>>> +    if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
->>>> +        return -EINVAL;
->>>> +
->>>> +    mutex_lock(&pruss->lock);
->>>> +
->>>> +    if (pruss->mem_in_use[mem_id]) {
->>>> +        mutex_unlock(&pruss->lock);
->>>> +        return -EBUSY;
->>>> +    }
->>>> +
->>>> +    *region = pruss->mem_regions[mem_id];
->>>> +    pruss->mem_in_use[mem_id] = region;
->>>> +
->>>> +    mutex_unlock(&pruss->lock);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
->>>> +
->>>> +/**
->>>> + * pruss_release_mem_region() - release a memory resource
->>>> + * @pruss: the pruss instance
->>>> + * @region: the memory region to release
->>>> + *
->>>> + * This function is the complimentary function to
->>>> + * pruss_request_mem_region(), and allows the client drivers to
->>>> + * release back a memory resource.
->>>> + *
->>>> + * Return: 0 on success, an error code otherwise
->>>> + */
->>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>> +                 struct pruss_mem_region *region)
->>>> +{
->>>> +    int id;
->>>> +
->>>> +    if (!pruss || !region)
->>>> +        return -EINVAL;
->>>> +
->>>> +    mutex_lock(&pruss->lock);
->>>> +
->>>> +    /* find out the memory region being released */
->>>> +    for (id = 0; id < PRUSS_MEM_MAX; id++) {
->>>> +        if (pruss->mem_in_use[id] == region)
->>>> +            break;
->>>> +    }
->>>> +
->>>> +    if (id == PRUSS_MEM_MAX) {
->>>> +        mutex_unlock(&pruss->lock);
->>>> +        return -EINVAL;
->>>> +    }
->>>> +
->>>> +    pruss->mem_in_use[id] = NULL;
->>>> +
->>>> +    mutex_unlock(&pruss->lock);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>>> +
->>>>   static void pruss_of_free_clk_provider(void *data)
->>>>   {
->>>>       struct device_node *clk_mux_np = data;
->>>> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
->>>>           return -ENOMEM;
->>>>         pruss->dev = dev;
->>>> +    mutex_init(&pruss->lock);
->>>>         child = of_get_child_by_name(np, "memories");
->>>>       if (!child) {
->>>> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
->>>> index 86242fb5a64a..22b4b37d2536 100644
->>>> --- a/include/linux/pruss_driver.h
->>>> +++ b/include/linux/pruss_driver.h
->>>> @@ -9,37 +9,18 @@
->>>>   #ifndef _PRUSS_DRIVER_H_
->>>>   #define _PRUSS_DRIVER_H_
->>>>   +#include <linux/mutex.h>
->>>>   #include <linux/remoteproc/pruss.h>
->>>>   #include <linux/types.h>
->>>>   -/*
->>>> - * enum pruss_mem - PRUSS memory range identifiers
->>>> - */
->>>> -enum pruss_mem {
->>>> -    PRUSS_MEM_DRAM0 = 0,
->>>> -    PRUSS_MEM_DRAM1,
->>>> -    PRUSS_MEM_SHRD_RAM2,
->>>> -    PRUSS_MEM_MAX,
->>>> -};
->>>> -
->>>> -/**
->>>> - * struct pruss_mem_region - PRUSS memory region structure
->>>> - * @va: kernel virtual address of the PRUSS memory region
->>>> - * @pa: physical (bus) address of the PRUSS memory region
->>>> - * @size: size of the PRUSS memory region
->>>> - */
->>>> -struct pruss_mem_region {
->>>> -    void __iomem *va;
->>>> -    phys_addr_t pa;
->>>> -    size_t size;
->>>> -};
->>>> -
->>>>   /**
->>>>    * struct pruss - PRUSS parent structure
->>>>    * @dev: pruss device pointer
->>>>    * @cfg_base: base iomap for CFG region
->>>>    * @cfg_regmap: regmap for config region
->>>>    * @mem_regions: data for each of the PRUSS memory regions
->>>> + * @mem_in_use: to indicate if memory resource is in use
->>>> + * @lock: mutex to serialize access to resources
->>>>    * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
->>>>    * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
->>>>    */
->>>> @@ -48,6 +29,8 @@ struct pruss {
->>>>       void __iomem *cfg_base;
->>>>       struct regmap *cfg_regmap;
->>>>       struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
->>>> +    struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
->>>> +    struct mutex lock; /* PRU resource lock */
->>>>       struct clk *core_clk_mux;
->>>>       struct clk *iep_clk_mux;
->>>>   };
->>>> diff --git a/include/linux/remoteproc/pruss.h
->>>> b/include/linux/remoteproc/pruss.h
->>>> index 93a98cac7829..33f930e0a0ce 100644
->>>> --- a/include/linux/remoteproc/pruss.h
->>>> +++ b/include/linux/remoteproc/pruss.h
->>>> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
->>>>       PRU_C31,
->>>>   };
->>>>   +/*
->>>> + * enum pruss_mem - PRUSS memory range identifiers
->>>> + */
->>>> +enum pruss_mem {
->>>> +    PRUSS_MEM_DRAM0 = 0,
->>>> +    PRUSS_MEM_DRAM1,
->>>> +    PRUSS_MEM_SHRD_RAM2,
->>>> +    PRUSS_MEM_MAX,
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct pruss_mem_region - PRUSS memory region structure
->>>> + * @va: kernel virtual address of the PRUSS memory region
->>>> + * @pa: physical (bus) address of the PRUSS memory region
->>>> + * @size: size of the PRUSS memory region
->>>> + */
->>>> +struct pruss_mem_region {
->>>> +    void __iomem *va;
->>>> +    phys_addr_t pa;
->>>> +    size_t size;
->>>> +};
->>>> +
->>>>   struct device_node;
->>>>   struct rproc;
->>>>   struct pruss;
->>>> @@ -52,6 +74,10 @@ struct pruss;
->>>>     struct pruss *pruss_get(struct rproc *rproc);
->>>>   void pruss_put(struct pruss *pruss);
->>>> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
->>>> +                 struct pruss_mem_region *region);
->>>> +int pruss_release_mem_region(struct pruss *pruss,
->>>> +                 struct pruss_mem_region *region);
->>>>     #else
->>>>   @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc
->>>> *rproc)
->>>>     static inline void pruss_put(struct pruss *pruss) { }
->>>>   +static inline int pruss_request_mem_region(struct pruss *pruss,
->>>> +                       enum pruss_mem mem_id,
->>>> +                       struct pruss_mem_region *region)
->>>> +{
->>>> +    return -EOPNOTSUPP;
->>>> +}
->>>> +
->>>> +static inline int pruss_release_mem_region(struct pruss *pruss,
->>>> +                       struct pruss_mem_region *region)
->>>> +{
->>>> +    return -EOPNOTSUPP;
->>>> +}
->>>> +
->>>>   #endif /* CONFIG_TI_PRUSS */
->>>>     #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->>>
->>> cheers,
->>> -roger
->>
-
+diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+index 91fb5905a008..e99096a4f094 100644
+--- a/kernel/rcu/rcuscale.c
++++ b/kernel/rcu/rcuscale.c
+@@ -522,89 +522,6 @@ rcu_scale_print_module_parms(struct rcu_scale_ops *cur_ops, const char *tag)
+ 		 scale_type, tag, nrealreaders, nrealwriters, verbose, shutdown);
+ }
+ 
+-static void
+-rcu_scale_cleanup(void)
+-{
+-	int i;
+-	int j;
+-	int ngps = 0;
+-	u64 *wdp;
+-	u64 *wdpp;
+-
+-	/*
+-	 * Would like warning at start, but everything is expedited
+-	 * during the mid-boot phase, so have to wait till the end.
+-	 */
+-	if (rcu_gp_is_expedited() && !rcu_gp_is_normal() && !gp_exp)
+-		SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
+-	if (rcu_gp_is_normal() && gp_exp)
+-		SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
+-	if (gp_exp && gp_async)
+-		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
+-
+-	if (torture_cleanup_begin())
+-		return;
+-	if (!cur_ops) {
+-		torture_cleanup_end();
+-		return;
+-	}
+-
+-	if (reader_tasks) {
+-		for (i = 0; i < nrealreaders; i++)
+-			torture_stop_kthread(rcu_scale_reader,
+-					     reader_tasks[i]);
+-		kfree(reader_tasks);
+-	}
+-
+-	if (writer_tasks) {
+-		for (i = 0; i < nrealwriters; i++) {
+-			torture_stop_kthread(rcu_scale_writer,
+-					     writer_tasks[i]);
+-			if (!writer_n_durations)
+-				continue;
+-			j = writer_n_durations[i];
+-			pr_alert("%s%s writer %d gps: %d\n",
+-				 scale_type, SCALE_FLAG, i, j);
+-			ngps += j;
+-		}
+-		pr_alert("%s%s start: %llu end: %llu duration: %llu gps: %d batches: %ld\n",
+-			 scale_type, SCALE_FLAG,
+-			 t_rcu_scale_writer_started, t_rcu_scale_writer_finished,
+-			 t_rcu_scale_writer_finished -
+-			 t_rcu_scale_writer_started,
+-			 ngps,
+-			 rcuscale_seq_diff(b_rcu_gp_test_finished,
+-					   b_rcu_gp_test_started));
+-		for (i = 0; i < nrealwriters; i++) {
+-			if (!writer_durations)
+-				break;
+-			if (!writer_n_durations)
+-				continue;
+-			wdpp = writer_durations[i];
+-			if (!wdpp)
+-				continue;
+-			for (j = 0; j < writer_n_durations[i]; j++) {
+-				wdp = &wdpp[j];
+-				pr_alert("%s%s %4d writer-duration: %5d %llu\n",
+-					scale_type, SCALE_FLAG,
+-					i, j, *wdp);
+-				if (j % 100 == 0)
+-					schedule_timeout_uninterruptible(1);
+-			}
+-			kfree(writer_durations[i]);
+-		}
+-		kfree(writer_tasks);
+-		kfree(writer_durations);
+-		kfree(writer_n_durations);
+-	}
+-
+-	/* Do torture-type-specific cleanup operations.  */
+-	if (cur_ops->cleanup != NULL)
+-		cur_ops->cleanup();
+-
+-	torture_cleanup_end();
+-}
+-
+ /*
+  * Return the number if non-negative.  If -1, the number of CPUs.
+  * If less than -1, that much less than the number of CPUs, but
+@@ -624,21 +541,6 @@ static int compute_real(int n)
+ 	return nr;
+ }
+ 
+-/*
+- * RCU scalability shutdown kthread.  Just waits to be awakened, then shuts
+- * down system.
+- */
+-static int
+-rcu_scale_shutdown(void *arg)
+-{
+-	wait_event(shutdown_wq,
+-		   atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
+-	smp_mb(); /* Wake before output. */
+-	rcu_scale_cleanup();
+-	kernel_power_off();
+-	return -EINVAL;
+-}
+-
+ /*
+  * kfree_rcu() scalability tests: Start a kfree_rcu() loop on all CPUs for number
+  * of iterations and measure total time and number of GP for all iterations to complete.
+@@ -875,6 +777,104 @@ kfree_scale_init(void)
+ 	return firsterr;
+ }
+ 
++static void
++rcu_scale_cleanup(void)
++{
++	int i;
++	int j;
++	int ngps = 0;
++	u64 *wdp;
++	u64 *wdpp;
++
++	/*
++	 * Would like warning at start, but everything is expedited
++	 * during the mid-boot phase, so have to wait till the end.
++	 */
++	if (rcu_gp_is_expedited() && !rcu_gp_is_normal() && !gp_exp)
++		SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
++	if (rcu_gp_is_normal() && gp_exp)
++		SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
++	if (gp_exp && gp_async)
++		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
++
++	if (torture_cleanup_begin())
++		return;
++	if (!cur_ops) {
++		torture_cleanup_end();
++		return;
++	}
++
++	if (reader_tasks) {
++		for (i = 0; i < nrealreaders; i++)
++			torture_stop_kthread(rcu_scale_reader,
++					     reader_tasks[i]);
++		kfree(reader_tasks);
++	}
++
++	if (writer_tasks) {
++		for (i = 0; i < nrealwriters; i++) {
++			torture_stop_kthread(rcu_scale_writer,
++					     writer_tasks[i]);
++			if (!writer_n_durations)
++				continue;
++			j = writer_n_durations[i];
++			pr_alert("%s%s writer %d gps: %d\n",
++				 scale_type, SCALE_FLAG, i, j);
++			ngps += j;
++		}
++		pr_alert("%s%s start: %llu end: %llu duration: %llu gps: %d batches: %ld\n",
++			 scale_type, SCALE_FLAG,
++			 t_rcu_scale_writer_started, t_rcu_scale_writer_finished,
++			 t_rcu_scale_writer_finished -
++			 t_rcu_scale_writer_started,
++			 ngps,
++			 rcuscale_seq_diff(b_rcu_gp_test_finished,
++					   b_rcu_gp_test_started));
++		for (i = 0; i < nrealwriters; i++) {
++			if (!writer_durations)
++				break;
++			if (!writer_n_durations)
++				continue;
++			wdpp = writer_durations[i];
++			if (!wdpp)
++				continue;
++			for (j = 0; j < writer_n_durations[i]; j++) {
++				wdp = &wdpp[j];
++				pr_alert("%s%s %4d writer-duration: %5d %llu\n",
++					scale_type, SCALE_FLAG,
++					i, j, *wdp);
++				if (j % 100 == 0)
++					schedule_timeout_uninterruptible(1);
++			}
++			kfree(writer_durations[i]);
++		}
++		kfree(writer_tasks);
++		kfree(writer_durations);
++		kfree(writer_n_durations);
++	}
++
++	/* Do torture-type-specific cleanup operations.  */
++	if (cur_ops->cleanup != NULL)
++		cur_ops->cleanup();
++
++	torture_cleanup_end();
++}
++
++/*
++ * RCU scalability shutdown kthread.  Just waits to be awakened, then shuts
++ * down system.
++ */
++static int
++rcu_scale_shutdown(void *arg)
++{
++	wait_event(shutdown_wq,
++		   atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
++	smp_mb(); /* Wake before output. */
++	rcu_scale_cleanup();
++	kernel_power_off();
++	return -EINVAL;
++}
++
+ static int __init
+ rcu_scale_init(void)
+ {
 -- 
-Thanks and Regards,
-Danish.
+2.17.1
+
