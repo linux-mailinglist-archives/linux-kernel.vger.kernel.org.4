@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE0F6C33DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662C66C33E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCUOQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S231286AbjCUOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjCUOQ1 (ORCPT
+        with ESMTP id S230141AbjCUOSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:16:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB5863FBA6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:15:44 -0700 (PDT)
-Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2BA8820FB43F;
-        Tue, 21 Mar 2023 07:15:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2BA8820FB43F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679408144;
-        bh=Nr87Vua9VkNv3gisRBH+jpbFzanrwR4a/aR7MlCRrNo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k3a9xnoz8aR+0CgqquUOO/8+fObM7YRIVdajbV09dNBYguaDwV2wQIQgL4hNOr4SX
-         GYsYINpfn8/ysU61J2OVVTtvjMee87Vg6vnSdfrf88ihFSWhKl8qNOcRhBbKvIJ+0s
-         ZrrXa7wpe1JlodpErHUa7VVGCdcJn5Wz1oRbi8fo=
-Message-ID: <8ab5804c-86b9-fe7a-3879-df231531a7a2@linux.microsoft.com>
-Date:   Tue, 21 Mar 2023 15:15:40 +0100
+        Tue, 21 Mar 2023 10:18:00 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7123AF3C
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:17:50 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id f16so15642556ljq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679408269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tMn7LHKKTu4Ns9vFmGoBtS8cTIhQAr15IAlChqCRIjg=;
+        b=XNmIG6LCixSgb0IbQeT7vxzIHWMRiNclEzB7QBxzg+WYYt2jEZNuEIrOFo2bGCmdk2
+         Sjbl+pBpHvovFPW7yF74xFa4B9WUOkxNhoOge0xavCIjfKbZm4JB+4EAhBPBlvwGZZcg
+         xP05I38BIyJxDjUtlct1p3PRgWTylor6TbfUlQvxXA4gFsGMxyK2kNGgsMLi1ScKip7Q
+         OXhhehwButp4x98UVyIvVYHQPAuP+8HzSjqvtI3KBwSA1HJG2tScxkEaca4/9cKGFdFg
+         WsrKIgUgJ7Xi70lJPWPUs6V2WIBG/muqmycPiNNF3jnlNez3kTH45mqbrnPYvE2aRsOh
+         utrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679408269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tMn7LHKKTu4Ns9vFmGoBtS8cTIhQAr15IAlChqCRIjg=;
+        b=SjkA/WXEFtdHXT15YeBD+C2gXqwrO0lR6PE9C6GVFZTpKU4FPnAkjXYuYxuAaC8pXz
+         0OV2Y+L4DewcyVrYT1naS01IgjyFB5IWGdISFsCgKz7K+MKuDeoUL9q77e3rJCeK42vG
+         F6drSMgIHfi60x5Iic4pz+v+6jgaHETChdTjC3+J/IpvQV0J0/mSf6qDnAQx45QQbD3o
+         5VMwnM268PZtt4QQyWd1apZDpMGsqGiFKM2JKc3tD2DypQ8F24jPGaHONE4lLGGQ7QtV
+         3cnF4Wl1bd4x9S/Zwbbr/7JFgEuPh5GzpyqBNPmTg3J5ERMtp9mRDEJO4vooQbG06aE8
+         JdTQ==
+X-Gm-Message-State: AO0yUKXWTCWWT/U0o8RFZwT9+yERJJxJgFUblPEp+DQaUbBq1m8Ou683
+        fYH9XRyGLRoVgTSU+JxhOuGii6xhenABwZ0/tmFLkLoa890rsfAb
+X-Google-Smtp-Source: AK7set8b0x6Hc/6GcdfBaiyGfeNfULbWOK7+qOwTD2eBr42E8cIkkxgtVYted3CNCO2pKDyXkWKZbmkwrodDXaQN4ck=
+X-Received: by 2002:a2e:901a:0:b0:299:aa7a:94c8 with SMTP id
+ h26-20020a2e901a000000b00299aa7a94c8mr896022ljg.10.1679408269057; Tue, 21 Mar
+ 2023 07:17:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 3/8] x86/psp: Register PSP platform device when ASP
- table is present
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230320191956.1354602-4-jpiotrowski@linux.microsoft.com>
- <20230320192504.GCZBizEGDjVtGWpNP3@fat_crate.local>
- <6d3d512b-55e9-8205-461c-02f1e71f2b63@linux.microsoft.com>
- <20230320200321.GDZBi8CXCyE6kD7qSN@fat_crate.local>
- <9b86ac2a-4ef9-1e98-ae5d-94b2655fbe6f@linux.microsoft.com>
- <20230320210302.GEZBjKBj+5CLCm1+Tl@fat_crate.local>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <20230320210302.GEZBjKBj+5CLCm1+Tl@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230320154841.327908-1-brgl@bgdev.pl> <20230320154841.327908-10-brgl@bgdev.pl>
+ <65d15d82-c106-b0a7-11b4-703bf22c28b1@linaro.org> <c74e0683-304d-7571-1d22-c2c65d02dc6a@linaro.org>
+In-Reply-To: <c74e0683-304d-7571-1d22-c2c65d02dc6a@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 21 Mar 2023 15:17:35 +0100
+Message-ID: <CAMRc=McNAy_08es7CRwhyE+OGHM-+GSsd0xGJNAdNcOs9eNq7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 09/15] arm64: dts: qcom: sa8775p: add the Power On
+ device node
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 22:03, Borislav Petkov wrote:
-> On Mon, Mar 20, 2023 at 09:18:19PM +0100, Jeremi Piotrowski wrote:
->> I agree with you here. The irq config of this thing requires specifying
->> passing a CPU vector, this follows the hardware spec which I linked in the
->> first 2 commits, pages 13-15 here:
-> 
-> You mean the interrupt vector in table 19?
-> 
+On Mon, Mar 20, 2023 at 6:25=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
+>
+>
+>
+> On 20.03.2023 18:23, Konrad Dybcio wrote:
+> >
+> >
+> > On 20.03.2023 16:48, Bartosz Golaszewski wrote:
+> >> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>
+> >> Add the PON node to PMIC #0 for sa8775p platforms.
+> >>
+> >> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> ---
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >
+> > Konrad
+> Hold up, I am not sure if PBS is there on PMM8654AU. Check the
+> -pmic-overlay.dtsi.
+>
 
-Yes - this thing wants to receive an interrupt vector and APIC id which it will
-then use to target its interrupt at.
+Yep, it's there alright.
 
->> https://www.amd.com/system/files/TechDocs/58028_1.00-PUB.pdf
->>
->> The only way I found to get this to work was going through x86_vector_domain
->> or statically defining a system vector (the latter felt worse).
-> 
-> Hmm. Why is that thing special and can't use devm_request_irq() like the
-> rest of the drivers out there?
-> 
+Bartosz
 
-Because the device is not exposed through AML (with ACPI managed irq routing)
-and needs to be discovered manually and the interrupt programmed by hand.
-I don't know the reasoning behind it being specified this way.
-
-But essentially I am doing all this nasty stuff so that I get a simple irq number.
-This is then passed to the actual driver that binds to the platform_device
-(drivers/crypto/ccp/sp-platform.c) which uses it with devm_request_irq.
-
+> Konrad
+> >>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 8 ++++++++
+> >>  1 file changed, 8 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/=
+boot/dts/qcom/sa8775p-pmics.dtsi
+> >> index afe220b374c2..dbc596e32253 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> >> @@ -12,6 +12,14 @@ pmm8654au_0: pmic@0 {
+> >>              reg =3D <0x0 SPMI_USID>;
+> >>              #address-cells =3D <1>;
+> >>              #size-cells =3D <0>;
+> >> +
+> >> +            pmm8654au_0_pon: pon@1200 {
+> >> +                    compatible =3D "qcom,pmk8350-pon";
+> >> +                    reg =3D <0x1200>, <0x800>;
+> >> +                    reg-names =3D "hlos", "pbs";
+> >> +                    mode-recovery =3D <0x1>;
+> >> +                    mode-bootloader =3D <0x2>;
+> >> +            };
+> >>      };
+> >>
+> >>      pmm8654au_1: pmic@2 {
