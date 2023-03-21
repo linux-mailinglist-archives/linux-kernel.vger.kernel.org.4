@@ -2,167 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939216C35DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9436C35D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 16:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjCUPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 11:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
+        id S231733AbjCUPir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 11:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjCUPit (ORCPT
+        with ESMTP id S230351AbjCUPip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 11:38:49 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C671FF2B;
-        Tue, 21 Mar 2023 08:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wqHE/HmFnAipyC15YC6kC4z9qeOa5pYSIMhsUmlBcnA=; b=cvRImtCFf+1tr5TBScdJO6JydN
-        ilS/AfrFAwSiENYVw8xmUupqouZwJGMhMscvrgZJjo8YPiSXT16Ur6uSDZlBQUGhb+u3u8CNoltIT
-        iDlh1W4Zrm6JPt9H2da1BgMVIv0FmoMn20BzHteqD3UBlrCDRblFrnUJlwn2drXLnBZQa6utu/fWP
-        Wr4SPROlrhBWhLjsBO0DrfxDObVnfbdQhkkwtQwMUpZJ5UqrtxgHSw5Ni17n2BdP811DLwIw3QxLS
-        fui3k4rZy5Zj65i0CKI0LTge8AoOllWu1SCpiuIMuVxiIjJPnW+pOokL1BooWUswiM+LJy82T+ah1
-        KzBkkLYg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52814)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pee4G-0001R7-Ty; Tue, 21 Mar 2023 15:38:32 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pee4E-0007qF-T0; Tue, 21 Mar 2023 15:38:30 +0000
-Date:   Tue, 21 Mar 2023 15:38:30 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
- for SGMII mode
-Message-ID: <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
-References: <20230321111958.2800005-1-s-vadapalli@ti.com>
- <20230321111958.2800005-3-s-vadapalli@ti.com>
- <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
- <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
+        Tue, 21 Mar 2023 11:38:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5323D8E
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 08:38:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679413119; x=1710949119;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Oldf4kjaQJcTQ9uXaaXfmdQbhwPXm+kkDs/uC9KsfFM=;
+  b=aDNmgXkMA9LlgMCvLptys6CZpLGf/KfTg7FXA/RSuHs3W/GI1S/4540M
+   I5BeoUxGz8z96UvXDnf8u6KTNLwKSfzkZIWNgqSDECwFEnjqTulA1s0KR
+   NozEkBbUavpjSgKrOFaDehj1wT+cp1ne+lNAxr+JkW45wKpE02jVSjXAj
+   jbNsMvfDsyC2+OiYEt1ZfDawH9EQuL9r7kRmalD0Si6/dWy07NM6bjI0P
+   +op2ARe/TyMd7H3xv/X1nRdPd5fnSSjLYnuUCCehnyhp4Hoag2dYS9BWs
+   d5tzjzX/yeokSItzSMn95TT/OGsTvoKJM1UDrPA5INL1oW7o1+18Q/Ujz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="319364829"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="319364829"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 08:38:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="770691221"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="770691221"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 08:38:39 -0700
+Received: from [10.209.33.254] (kliang2-mobl1.ccr.corp.intel.com [10.209.33.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id CAE755805CB;
+        Tue, 21 Mar 2023 08:38:37 -0700 (PDT)
+Message-ID: <29588394-0b14-86f3-9933-1a852707c233@linux.intel.com>
+Date:   Tue, 21 Mar 2023 11:38:36 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH V2 4/9] perf/x86: Enable post-processing monotonic raw
+ conversion
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, jstultz@google.com,
+        peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     sboyd@kernel.org, eranian@google.com, namhyung@kernel.org,
+        ak@linux.intel.com, adrian.hunter@intel.com,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-5-kan.liang@linux.intel.com> <875yc4rp68.ffs@tglx>
+ <4372ae84-76e2-8bae-b0ad-87102973df67@linux.intel.com> <873578rmp2.ffs@tglx>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <873578rmp2.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:04:50PM +0530, Siddharth Vadapalli wrote:
-> Hello Russell,
+Hi Thomas,
+
+On 2023-02-14 3:55 p.m., Thomas Gleixner wrote:
+> On Tue, Feb 14 2023 at 15:21, Kan Liang wrote:
+>> On 2023-02-14 3:02 p.m., Thomas Gleixner wrote:
+>>>
+>>> What guarantees that the clocksource used by the timekeeping core is
+>>> actually TSC? Nothing at all. You cannot make assumptions here.
+>>>
+>>
+>> Yes, you are right.
+>> I will add a check to make sure the clocksource is TSC when perf does
+>> the conversion.
+>>
+>> Could you please comment on whether the patch is in the right direction?
+>> This V2 patch series expose the kernel internal conversion information
+>> into the user space. Is it OK for you?
 > 
-> On 21-03-2023 16:59, Russell King (Oracle) wrote:
-> > On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
-> >> Add support for configuring the CPSW Ethernet Switch in SGMII mode.
-> >>
-> >> Depending on the SoC, allow selecting SGMII mode as a supported interface,
-> >> based on the compatible used.
-> >>
-> >> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> >> ---
-> >>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
-> >>  1 file changed, 10 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> index cba8db14e160..d2ca1f2035f4 100644
-> >> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> >> @@ -76,6 +76,7 @@
-> >>  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
-> >>  
-> >>  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
-> >> +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
-> >>  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
-> > 
-> > Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
-> > after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
-> > from its register offset definition?
+> Making the conversion info an ABI is suboptimal at best. I'm still
+> trying to wrap my brain around all of this. Will reply over there once
+> my confusion subsides.
 > 
-> Thank you for reviewing the patch. The registers are as follows:
-> CONTROL_REG offset 0x10
-> STATUS_REG offset  0x14
-> MR_ADV_REG offset  0x18
-> 
-> Since the STATUS_REG is not used in the driver, its offset is omitted.
-> The next register is the MR_ADV_REG, which I placed after the
-> CONTROL_REG. I grouped the register offsets together, to represent the
-> order in which the registers are placed. Due to this, the
-> MR_ADV_ABILITY_REG offset is placed after the CONTROL_REG offset define.
-> 
-> Please let me know if I should move it after the CONTROL_MR_AN_ENABLE
-> define instead.
 
-Well, it's up to you - whether you wish to group the register offsets
-separately from the bit definitions for those registers, or whether
-you wish to describe the register offset and its associated bit
-definitions in one group before moving on to the next register.
+John and I have tried a pure user-space solution (avoid exposing
+internal conversion info) to convert a given TSC to a monotonic raw.
+But it doesn't work well.
+https://lore.kernel.org/lkml/CANDhNComKRDdZJ8SJECNdoAzQhmR3vu9yKAtp7NKDmECxff=fg@mail.gmail.com/
 
-> > If the advertisement register is at 0x18, and the lower 16 bits is the
-> > advertisement, are the link partner advertisement found in the upper
-> > 16 bits?
-> 
-> The MR_LP_ADV_ABILITY_REG is at offset 0x020, which is the the register
-> corresponding to the Link Partner advertised value. Also, the
-> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE Bit is in the CONTROL_REG. The CPSW
-> Hardware specification describes the process of configuring the CPSW MAC
-> for SGMII mode as follows:
-> 1. Write 0x1 (ADVERTISE_SGMII) to the MR_ADV_ABILITY_REG register.
-> 2. Enable auto-negotiation in the CONTROL_REG by setting the
-> AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE bit.
+So, for now, there seems only two solutions.
+Solution 1: Do the conversion in the kernel (Similar to V1).
+https://lore.kernel.org/lkml/20230123182728.825519-1-kan.liang@linux.intel.com/
 
-Good to hear that there is a link partner register.
+Solution 2: Expose the internal conversion information to the user space
+via perf mmap and does post-processing conversion. (Implemented in this V2)
 
-> >>  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
-> >> @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
-> >>  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-> >>  	struct am65_cpsw_common *common = port->common;
-> >>  
-> >> -	if (common->pdata.extra_modes & BIT(state->interface))
-> >> +	if (common->pdata.extra_modes & BIT(state->interface)) {
-> >> +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> >> +			writel(ADVERTISE_SGMII,
-> >> +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-> >> +
-> > 
-> > I think we can do better with this, by implementing proper PCS support.
-> > 
-> > It seems manufacturers tend to use bought-in IP for this, so have a
-> > look at drivers/net/pcs/ to see whether any of those (or the one in
-> > the Mediatek patch set on netdev that has recently been applied) will
-> > idrive your hardware.
-> > 
-> > However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-> > I suspect you won't find a compatible implementation.
-> 
-> I have tested with an SGMII Ethernet PHY in the standard SGMII MAC2PHY
-> configuration. I am not sure if PCS support will be required or not. I
-> hope that the information shared above by me regarding the CPSW
-> Hardware's specification for configuring it in SGMII mode will help
-> determine what the right approach might be. Please let me know whether
-> the current implementation is acceptable or PCS support is necessary.
+Personally, I incline the solution 1. Because
+- The current monotonic raw is calculated in the kernel as well.
+  The solution 1 just follow the existing method. It doesn't introduce
+extra overhead.
+- It avoids exposing the internal timekeeping state directly to userspace.
 
-Nevertheless, this SGMII block is a PCS, and if you're going to want to
-support inband mode (e.g. to read the SGMII word from the PHY), or if
-someone ever wants to use 1000base-X, you're going to need to implement
-this properly as a PCS.
 
-That said, it can be converted later, so isn't a blocking sisue.
+What do you think? Are there other directions I can explore?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Kan
