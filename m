@@ -2,166 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964BB6C393C
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5506B6C3968
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 19:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjCUSdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 14:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S230446AbjCUSpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 14:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjCUSdR (ORCPT
+        with ESMTP id S230328AbjCUSpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:33:17 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F8EAD2C;
-        Tue, 21 Mar 2023 11:33:14 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LGEj7o029939;
-        Tue, 21 Mar 2023 18:33:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=N7rjdkk2VBnMhk+iF3Zl/KI4r7dcDpWPOfVT+/Bb/ko=;
- b=fwAND6FWzf5hpb/Tzr3X3bu/kf4/bbKbe/LdkhPPfoTibt0YsvrpwAf4LZIazhxFB1pQ
- /CuzxFVIvW3VWW9Do9MNjTBm2gqP29QggIvE2Cu1WwiA/wa/edR1iqBzv03fI6ALJrJE
- tjWmDiNqIQFJ6PfjYkHbTolaZXCn7q05NxZ1XQ7xhv8kTGf+mRiMWa+8jP+8avyMybnp
- bMgW4uxaIcbUKo/MIAaH2ibAvDQFePUYXNk2xkBw3vXz8BxjBwNCos1XcFMNaHA+7AM4
- IgpDq+CdcULtX/hZ2pG/qOd3H5ZTS5NAEuFgdgAA2H0o72itvbIRMdYgb5aoYrNt21d0 oQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfbjy9ayh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 18:33:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32LIX4fo023252
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 21 Mar 2023 18:33:04 GMT
-Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 21 Mar 2023 11:33:03 -0700
-From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        "Gokul krishna Krishnakumar" <quic_gokukris@quicinc.com>
-Subject: [PATCH v3 1/1] soc: qcom: mdt_loader: Enhance split binary detection
-Date:   Tue, 21 Mar 2023 11:32:49 -0700
-Message-ID: <20230321183249.24154-1-quic_gokukris@quicinc.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 21 Mar 2023 14:45:38 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DA853739
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:45:36 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 47A5944519
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:45:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1679424333;
+        bh=yvq6UMt9yN5iUlZuMyY0OG5lD/RxD6knn9gceCIGOkg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=HIPJQxMlM/Wv+lrL18I9c68nP4KtaXtCro/RU+uaaECc8R3DBz1wC8kLaGJqF/jXr
+         tmVsFi4/6c4R7175sYqfYkla0ehDYwVFlj+V/I1tFYYzJIBfDVP+fHqkKNW9YPHYTA
+         nfq1DpixlNc2rwdZgFQSbpddMkV6FSaBck7fsVQ1rqEdy+q5PCRNzzt2yns2ORMnQs
+         RVQ14NiZk/L/iazpZu9HAVV+EVXIUJtsKue5MKkRBhtqn7j8IIdaWZo2D1ek4kTcrQ
+         kFgszDVCK03s9zZVnkOIyJTjKtUFNg9AQH/MggKWDgiKFltebjk7VLJrfnXNQQ82UJ
+         oFyWIQoIa1e/g==
+Received: by mail-ed1-f72.google.com with SMTP id s30-20020a508d1e000000b005005cf48a93so12083121eds.8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 11:45:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679424332;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yvq6UMt9yN5iUlZuMyY0OG5lD/RxD6knn9gceCIGOkg=;
+        b=qZDBxSEmvs+bbYhOIgQbnY3pO7DBDAYCMRnHiNfsTq59pMlHlHFF1K4MBgahOPZxXJ
+         NxrVUfAxh/tPwI4OY4iO3/MoN5Y7MRoJwvgSslMguj4gulKlvBURy5LoVMMF/QZeO7M+
+         Vmtyt/oY6o3EdrjgIjSyEe4n8TfDME2YiGdC42P++kJGsgOZmNmw90qfJ1z+FEPwBEG1
+         m230JZ+9FK7Zy5UCISMHTiUx2KgkGAEXCaLVdN9aHofLM8pjOMsVErzDlM1Dvm8JViCW
+         Hnvp+HECg8bUNc4MrM+GFiJcVaEANQPVNNyUEPg1K65pGUmt4dytVS7HbBG96c8bO6QI
+         Kxqg==
+X-Gm-Message-State: AO0yUKUvVDIIIRIaBFWMumie4UieZ2YPfR/dC3jlMKLPv9x5hr/e7vHB
+        AXEvoO8mRwE09s0Bu0vnj1ZRppH+/LOj+tGz6iKrBbbSX3bvc6dY/XGznqMaTJ8V6VF41CgiLNB
+        LgPKS9FKBQXjZ5M1ZCK6uJOkpPiYr+ILeGYpodXBcoObpUbFsjA==
+X-Received: by 2002:a17:906:8476:b0:931:96c5:7646 with SMTP id hx22-20020a170906847600b0093196c57646mr3965063ejc.57.1679424332652;
+        Tue, 21 Mar 2023 11:45:32 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+h4AxTZC2eEvXbNStSrd7vEgU483k1w+wvWlNjFWtlvw+Tar3b0aYg/x+Y147Rd5JSOKP06g==
+X-Received: by 2002:a17:906:8476:b0:931:96c5:7646 with SMTP id hx22-20020a170906847600b0093196c57646mr3965041ejc.57.1679424332403;
+        Tue, 21 Mar 2023 11:45:32 -0700 (PDT)
+Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709060e8900b0093313f4fc3csm4928194ejf.70.2023.03.21.11.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:45:31 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>
+Subject: [PATCH net-next v2 0/3] Add SCM_PIDFD and SO_PEERPIDFD
+Date:   Tue, 21 Mar 2023 19:33:39 +0100
+Message-Id: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gomtDVaNqWGXs04bpBSt_d-849-pxFzb
-X-Proofpoint-ORIG-GUID: gomtDVaNqWGXs04bpBSt_d-849-pxFzb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 malwarescore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303210147
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It may be that the offset of the first program header lies inside the mdt's
-filesize, in this case the loader would incorrectly assume that the bins
-were not split. The loading would then continue on to fail for split bins.
-This change updates the logic used by the mdt loader to understand whether
-the firmware images are split or not. It figures this out by checking if
-each programs header's segment lies within the file or not.
+1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+but it contains pidfd instead of plain pid, which allows programmers not
+to care about PID reuse problem.
 
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
----
-This patch is separated out from [1] and includes
-changes addressing comments from that patch set.
+2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 
-[1] https://lore.kernel.org/all/20230306231202.12223-5-quic_molvera@quicinc.com/
----
- drivers/soc/qcom/mdt_loader.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+3. Add SCM_PIDFD / SO_PEERPIDFD kselftest
 
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 3f11554df2f3..08ed4c0293f2 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -258,6 +258,26 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
- }
- EXPORT_SYMBOL_GPL(qcom_mdt_pas_init);
- 
-+static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char* fw_name)
-+{
-+	const struct elf32_phdr *phdrs;
-+	const struct elf32_hdr *ehdr;
-+	uint64_t seg_start, seg_end;
-+	int i;
-+
-+	ehdr = (struct elf32_hdr *)fw->data;
-+	phdrs = (struct elf32_phdr *)(ehdr + 1);
-+
-+	for (i = 0; i < ehdr->e_phnum; i++) {
-+		seg_start = phdrs[i].p_offset;
-+		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
-+		if (seg_start > fw->size || seg_end > fw->size)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 			   const char *fw_name, int pas_id, void *mem_region,
- 			   phys_addr_t mem_phys, size_t mem_size,
-@@ -270,6 +290,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 	phys_addr_t min_addr = PHYS_ADDR_MAX;
- 	ssize_t offset;
- 	bool relocate = false;
-+	bool is_split;
- 	void *ptr;
- 	int ret = 0;
- 	int i;
-@@ -277,6 +298,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 	if (!fw || !mem_region || !mem_phys || !mem_size)
- 		return -EINVAL;
- 
-+
-+	is_split = qcom_mdt_bins_are_split(fw, fw_name);
- 	ehdr = (struct elf32_hdr *)fw->data;
- 	phdrs = (struct elf32_phdr *)(ehdr + 1);
- 
-@@ -330,8 +353,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
- 
- 		ptr = mem_region + offset;
- 
--		if (phdr->p_filesz && phdr->p_offset < fw->size &&
--		    phdr->p_offset + phdr->p_filesz <= fw->size) {
-+
-+		if (phdr->p_filesz && !is_split) {
- 			/* Firmware is large enough to be non-split */
- 			if (phdr->p_offset + phdr->p_filesz > fw->size) {
- 				dev_err(dev, "file %s segment %d would be truncated\n",
+Idea comes from UAPI kernel group:
+https://uapi-group.org/kernel-features/
+
+Big thanks to Christian Brauner and Lennart Poettering for productive
+discussions about this.
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+
+Alexander Mikhalitsyn (3):
+  scm: add SO_PASSPIDFD and SCM_PIDFD
+  net: core: add getsockopt SO_PEERPIDFD
+  selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+
+ arch/alpha/include/uapi/asm/socket.h          |   3 +
+ arch/mips/include/uapi/asm/socket.h           |   3 +
+ arch/parisc/include/uapi/asm/socket.h         |   3 +
+ arch/sparc/include/uapi/asm/socket.h          |   3 +
+ include/linux/net.h                           |   1 +
+ include/linux/socket.h                        |   1 +
+ include/net/scm.h                             |  14 +-
+ include/uapi/asm-generic/socket.h             |   3 +
+ net/core/sock.c                               |  32 ++
+ net/mptcp/sockopt.c                           |   1 +
+ net/unix/af_unix.c                            |  18 +-
+ tools/include/uapi/asm-generic/socket.h       |   3 +
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/af_unix/Makefile  |   3 +-
+ .../testing/selftests/net/af_unix/scm_pidfd.c | 336 ++++++++++++++++++
+ 15 files changed, 417 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+
 -- 
-2.39.2
+2.34.1
 
