@@ -2,125 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852556C2B04
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905E46C2AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 08:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjCUHFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 03:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S229642AbjCUHEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 03:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCUHFF (ORCPT
+        with ESMTP id S229497AbjCUHEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 03:05:05 -0400
-Received: from out-24.mta1.migadu.com (out-24.mta1.migadu.com [95.215.58.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03E414EBB
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:05:02 -0700 (PDT)
-Message-ID: <c22e1d58-e16f-fde5-cee7-c13dedbe1656@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679382299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+McZTV1kAS70sseCFB9E43G9HETXQ3b8ag52JbteiD0=;
-        b=CJL06fy9Y/XNtRhQXe1npEGcF1jFne3go0w6cCUnG7ZySGZtj8jkIWiMXOiMlNC1gWEP9f
-        fR1vAOULQZrNyar2EDI+qg5PsTB9vKe6mP4Es8h4IzlElQAI209GZcBkFuSWRiZ9O2QLQw
-        /YQngQDOs65kiseKrpdVlavJoQUSVls=
-Date:   Tue, 21 Mar 2023 15:04:46 +0800
+        Tue, 21 Mar 2023 03:04:10 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0741DD32D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:04:09 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t11so17901595lfr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 00:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679382247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7tbyVoCIUkuwnDzcG32W4OdMDrXEIavgnsGn9li74v8=;
+        b=yChraET9/arxywpaBm0uIpGnJjZC7VyiDllMVup03dJnlPiufNi9e3Nzj2lf+ZHniA
+         sfwe1q/uW22fPn+PDlUaZSzwboQs/dLxeD6coJsXjg1Vc6agsTpqORr3LtFwF6JzIPwS
+         bqM9PvVbLgTH5uQBOty43tuqXiJXsgs4tN907D7qyHAw+cT2oOYwX7soOdk+dRUe1u5H
+         5rA5sBjs4q/+BUOf9PhruG/zel79U8rHZVf54CyRIyAXuyRBJoDYrXZAHiEZ7OZBa87E
+         Odw6OVcnAPoed2CfhtSRhJgjoCweO0W2ieWzkyFD8CzN+/R9DNN9s9h4WXnPc4u+Ydme
+         JK/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679382247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7tbyVoCIUkuwnDzcG32W4OdMDrXEIavgnsGn9li74v8=;
+        b=npAjJQNiT6+/75dllVZ99nZ6J1WTnSXXLfJDVjkEiBBw6c13YN6WUpdGqdUuOFjaTu
+         KmTjKqoaGoA9FdYTUXHOa4490TZb87fcfnTw0CcvNwN85voVGgdFJ/sNFEcHs7I54sZE
+         h82bC7PCtLizoH7gaGXzHBp9gXTVojFUKXK8QkfropCFB0PLjRBqmhpSEw+b84bjy2dV
+         lBtW6MY1W6YiJTHA4s4Yvv5d1gIMgD3LaKNrztGJvQ9+R1GCf8uAefWQYxjlNo+YQHpe
+         /WRccfRYZ1raehKF34zi+tRfdTGugtuR+NRgKbgDJSqKZB9yDX1pk5nTJXvqDdfdESWF
+         n8pQ==
+X-Gm-Message-State: AO0yUKWjET2/PlfeEXuY/4o2WPgm6UkJ/VnZsPToPs8grIGp/zx01Tk7
+        rHk73U1G9FdQvSsfekrJdYgkMh7NVs+Fi1KO2+k0Vg==
+X-Google-Smtp-Source: AK7set9T3I8GA2uJOUQygr+w4BX+oII8CcfEQqUcpktFtsWlC8MeRy03+La5618HVmKpwn5tRsvyiGGX13XsEv0bYdA=
+X-Received: by 2002:ac2:41c6:0:b0:4d5:ca43:704a with SMTP id
+ d6-20020ac241c6000000b004d5ca43704amr476391lfi.13.1679382247216; Tue, 21 Mar
+ 2023 00:04:07 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: kfence: fix PG_slab and memcg_data clearing
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, dvyukov@google.com,
-        roman.gushchin@linux.dev, jannh@google.com, sjpark@amazon.de,
-        akpm@linux-foundation.org, elver@google.com, glider@google.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20230320030059.20189-1-songmuchun@bytedance.com>
- <974ef73e-ab4f-7b24-d070-c981654e8c22@bytedance.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <974ef73e-ab4f-7b24-d070-c981654e8c22@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20230319133732.1702841-1-trix@redhat.com>
+In-Reply-To: <20230319133732.1702841-1-trix@redhat.com>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Tue, 21 Mar 2023 15:05:07 +0800
+Message-ID: <CABymUCMha=XE_=LDNXiJDzhNCpGU4bckuNkoCAmb_bWO8bPu0w@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tipd: remove unused tps6598x_write16,32 functions
+To:     Tom Rix <trix@redhat.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        nathan@kernel.org, ndesaulniers@google.com, sven@svenpeter.dev,
+        agx@sigxcpu.org, Jonathan.Cameron@huawei.com,
+        u.kleine-koenig@pengutronix.de, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/21 12:14, Peng Zhang wrote:
+Tom Rix <trix@redhat.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8819=E6=97=A5=E5=91=
+=A8=E6=97=A5 21:37=E5=86=99=E9=81=93=EF=BC=9A
 >
-> 在 2023/3/20 11:00, Muchun Song 写道:
->> It does not reset PG_slab and memcg_data when KFENCE fails to initialize
->> kfence pool at runtime. It is reporting a "Bad page state" message when
->> kfence pool is freed to buddy. The checking of whether it is a compound
->> head page seems unnecessary sicne we already guarantee this when 
->> allocating
->> kfence pool, removing the check to simplify the code.
->>
->> Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
->> Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
->> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
->> ---
->>   mm/kfence/core.c | 30 +++++++++++++++---------------
->>   1 file changed, 15 insertions(+), 15 deletions(-)
->>
->> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
->> index 79c94ee55f97..d66092dd187c 100644
->> --- a/mm/kfence/core.c
->> +++ b/mm/kfence/core.c
->> @@ -561,10 +561,6 @@ static unsigned long kfence_init_pool(void)
->>           if (!i || (i % 2))
->>               continue;
->>   -        /* Verify we do not have a compound head page. */
->> -        if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
->> -            return addr;
->> -
->>           __folio_set_slab(slab_folio(slab));
->>   #ifdef CONFIG_MEMCG
->>           slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 
->> 1].objcg |
->> @@ -597,12 +593,26 @@ static unsigned long kfence_init_pool(void)
->>             /* Protect the right redzone. */
->>           if (unlikely(!kfence_protect(addr + PAGE_SIZE)))
->> -            return addr;
->> +            goto reset_slab;
->>             addr += 2 * PAGE_SIZE;
->>       }
->>         return 0;
->> +
->> +reset_slab:
->> +    for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
->> +        struct slab *slab = page_slab(&pages[i]);
->> +
->> +        if (!i || (i % 2))
->> +            continue;
->> +#ifdef CONFIG_MEMCG
->> +        slab->memcg_data = 0;
->> +#endif
->> +        __folio_clear_slab(slab_folio(slab));
->> +    }
-> Can this loop be simplified to this?
+> clang with W=3D1 reports
+> drivers/usb/typec/tipd/core.c:180:19: error: unused function
+>   'tps6598x_write16' [-Werror,-Wunused-function]
+> static inline int tps6598x_write16(struct tps6598x *tps, u8 reg, u16 val)
+>                   ^
+> drivers/usb/typec/tipd/core.c:185:19: error: unused function
+>   'tps6598x_write32' [-Werror,-Wunused-function]
+> static inline int tps6598x_write32(struct tps6598x *tps, u8 reg, u32 val)
+>                   ^
+> These static functions are not used, so remove them.
 >
->     for (i = 2; i < KFENCE_POOL_SIZE / PAGE_SIZE; i+=2) {
->         struct slab *slab = page_slab(&pages[i]);
-> #ifdef CONFIG_MEMCG
->         slab->memcg_data = 0;
-> #endif
->         __folio_clear_slab(slab_folio(slab));
->     }
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/usb/typec/tipd/core.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 >
-
-It's a good simplification. The loop setting Pg_slab before this
-also can be simplified in the same way. However, I choose a
-consistent way to fix this bug. I'd like to send a separate
-simplification patch to simplify both two loops instead of
-in a bugfix patch.
-
-Thanks.
+Reviewed-by: Jun Nie <jun.nie@linaro.org>
