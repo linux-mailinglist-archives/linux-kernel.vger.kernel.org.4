@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24966C3129
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF99B6C312F
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 13:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjCUMCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 08:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S229788AbjCUMC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 08:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCUMCG (ORCPT
+        with ESMTP id S229822AbjCUMCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 08:02:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AAB3EB54;
-        Tue, 21 Mar 2023 05:02:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3BEF8AD7;
-        Tue, 21 Mar 2023 05:02:47 -0700 (PDT)
-Received: from [10.57.53.10] (unknown [10.57.53.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 993363F71E;
-        Tue, 21 Mar 2023 05:02:00 -0700 (PDT)
-Message-ID: <458b2a97-494b-7772-3499-4fba088b6a67@arm.com>
-Date:   Tue, 21 Mar 2023 12:01:59 +0000
+        Tue, 21 Mar 2023 08:02:55 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D412818A83;
+        Tue, 21 Mar 2023 05:02:46 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32LC2Kxw113141;
+        Tue, 21 Mar 2023 07:02:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679400140;
+        bh=RmbmhgCa8+U7icS0fTHWPYo6SizfHxfnN91iZUtJfZE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ljW6YZMpmlmNCmaQLB49LKcQBk5fJMEEByQ8l4yAgLl7RUUme3ehc7E1aNTRfF7x2
+         Uc3R4GOV7a2xmUnaG6w4ynP65EUfl0QDt39g1YKIRwjErGW/ob1mzdQ+8/LuXFqpDQ
+         FLHZgH2AkrrawgZXtNVFos/8JzXgk7aieLNU1Nyg=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32LC2KoB031034
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Mar 2023 07:02:20 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
+ Mar 2023 07:02:19 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 21 Mar 2023 07:02:20 -0500
+Received: from [172.24.145.160] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32LC2CWj124142;
+        Tue, 21 Mar 2023 07:02:13 -0500
+Message-ID: <79ce5fe8-9fb0-5caa-67a0-87dee7867856@ti.com>
+Date:   Tue, 21 Mar 2023 17:32:12 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 0/7] coresight: etm4x: Migrate AMBA devices to platform
- driver
-To:     Rob Herring <robh+dt@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        scclevenger@os.amperecomputing.com,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
- <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <CAL_JsqKsnq0d-x3m3xQe8m0pnk_Jeh9J1oFBtPAn3LV8-MFH0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] dt-bindings: drm/bridge: Add no-hpd property
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <andrzej.hajda@intel.com>, <neil.armstrong@linaro.org>,
+        <rfoss@kernel.org>, <Laurent.pinchart@ideasonboard.com>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <sam@ravnborg.org>,
+        <jani.nikula@intel.com>, <tzimmermann@suse.de>,
+        <javierm@redhat.com>, <ville.syrjala@linux.intel.com>,
+        <r-ravikumar@ti.com>, <lyude@redhat.com>,
+        <alexander.deucher@amd.com>, <sjakhade@cadence.com>,
+        <yamonkar@cadence.com>, <a-bhatia1@ti.com>
+References: <20230316140823.234263-1-j-choudhary@ti.com>
+ <20230316140823.234263-2-j-choudhary@ti.com>
+ <dbc43c09-f8ec-f877-598a-adff47d44b0e@linaro.org>
+Content-Language: en-US
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <dbc43c09-f8ec-f877-598a-adff47d44b0e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,74 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2023 14:17, Rob Herring wrote:
-> On Thu, Mar 16, 2023 at 10:05 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
+Hello Krzysztof,
+
+On 17/03/23 18:08, Krzysztof Kozlowski wrote:
+> On 16/03/2023 15:08, Jayesh Choudhary wrote:
+>> From: Rahul T R <r-ravikumar@ti.com>
 >>
->> CoreSight ETM4x devices could be accessed either via MMIO (handled via
->> amba_driver) or CPU system instructions (handled via platform driver). But
->> this has the following issues :
+>> Add no-hpd property to the bindings, to disable
+>> hpd when not connected or unusable
 >>
->>    - Each new CPU comes up with its own PID and thus we need to keep on
->>      adding the "known" PIDs to get it working with AMBA driver. While
->>      the ETM4 architecture (and CoreSight architecture) defines way to
->>      identify a device as ETM4. Thus older kernels  won't be able to
->>      "discover" a newer CPU, unless we add the PIDs.
+>> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>>   .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+>> index b2e8bc6da9d0..69d381195218 100644
+>> --- a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+>> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+>> @@ -57,6 +57,12 @@ properties:
+>>     interrupts:
+>>       maxItems: 1
+>>   
+>> +  cdns,no-hpd:
 > 
-> But v8.4 discourages MMIO access, so this problem will go away on its
-> own. Even if not, adding IDs to stable kernels is standard practice
-> whether it is PCI VID/PID, compatible string or AMBA PID.
-
-Yes, it would eventually go away. As for adding the PIDs, the
-fundamental issue is, unlike other drivers, except for the "PIDs"
-everything else is architected and each CPU has this PID alone
-different and we have plenty of CPUs implementaions out there.
-
-But all that said, since we added this as an AMBA driver in the first
-place (all for simply getting the apb_clk management), I am happy to
-choose the "Add PIDs to stable kernel approach" for this problem.
-
+> There is already no-hpd property.
 > 
->>    - With ACPI, the ETM4x devices have the same HID to identify the device
->>      irrespective of the mode of access. This creates a problem where two
->>      different drivers (both AMBA based driver and platform driver) would
->>      hook into the "HID" and could conflict. e.g., if AMBA driver gets
->>      hold of a non-MMIO device, the probe fails. If we have single driver
->>      hooked into the given "HID", we could handle them seamlessly,
->>      irrespective of the mode of access.
+>> +    type: boolean
+>> +    description:
+>> +      Set if the HPD line on the bridge isn't hooked up to anything or is
+>> +      otherwise unusable.
 > 
-> Why are we changing DT for ACPI? Just always use the platform driver
-> for ACPI and leave DT systems alone.
+> It's the property of the panel, not bridge. Unless you want to say that
+> bridge physically does not have HPD? Does it follow the standard in such
+> case?
 
-This was mainly due to (1), given we have a platform driver anyway for
-ACPI. As mentioned above, we could leave the DT alone.
+MHDP does have hpd. But the mhdp driver should handle the cases when the
+hpd pin of bridge is not connected to that of the DP-connector. This is 
+to add support for that. (optional property)
 
-> 
->>    - CoreSight is heavily dependent on the runtime power management. With
->>      ACPI, amba_driver doesn't get us anywhere with handling the power
->>      and thus one need to always turn the power ON to use them. Moving to
->>      platform driver gives us the power management for free.
-> 
-> This sounds like an issue for any amba driver. If this is an issue,
-> solve it for everyone, not just work around it in one driver.
-
-This alone wouldn't be sufficient. We need a platform driver anyway to
-handle the two different modes in  ACPI for ETMs. But this will be a
-an option for the other CoreSight components which are always MMIO.
-
-Thanks
-Suzuki
+-Jayesh
 
 
 > 
-> When someone puts another primecell device into an ACPI system, are we
-> going to go do the same one-off change in that driver too? (We kind of
-> already did with SBSA UART...)
-
-
-
-
-
+> Best regards,
+> Krzysztof
 > 
-> Rob
-
