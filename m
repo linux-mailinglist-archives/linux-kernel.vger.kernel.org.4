@@ -2,98 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122BE6C3893
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7316C3894
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCURsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S230216AbjCURsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjCURsH (ORCPT
+        with ESMTP id S230035AbjCURsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:48:07 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2A550712
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:47:44 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id t10-20020a9d774a000000b00698d7d8d512so8950490otl.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1679420864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Oh/NRypT41xqHY7iBI+4eeqSHLuP1WSz+18dRCjF/yk=;
-        b=U960HkFExD4cUMhKJoYwJZ5BCAQOcY38BnjdWdlowG0QjMHx6JxQHjftx5kE6lmxpA
-         FJBv124lwiBHtOsdYdNc17qHaKO4yRuKR7NndENcLWxMJznndJGGqUnnhexuQ5pKn650
-         IJbql1auv/7Q3NgZnakIANEf6AtyXNyTWSRQE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679420864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Oh/NRypT41xqHY7iBI+4eeqSHLuP1WSz+18dRCjF/yk=;
-        b=G+V6aWlXz0pdNNxV0ID1VNVM0S02drpSHjt/CyE02hEmMFXufhLMxham4yqzeIyGi7
-         TbZIpDLDG5Dftv8U1kQpWtt7MPWkvTs1zTiqzSweP2eBybhQ0xf/SX4DFqTNGbDxCQDG
-         YG1GQjMJdv1YHdACjF141kDN4IHkYy3/G86OvUmDNzFtpIS6KwYnWoMddF09G0iB9W42
-         PvJ6xA/SX5soS4lgf4P+3F/cpgshUHyeLKyTk9iNEdxDfIudVo9PKO7Vha8SlOC9+OOB
-         5XGokYhnMXmnEUPOQ1HgFSjIgQoFNninbCMkUu2z5jXOwxI4Q+alGihqzCMkDYUcyjMD
-         0TGg==
-X-Gm-Message-State: AO0yUKWgiGgaQMUqSEcRHodA9M0CqDthEl+ZzdEhpoi9O1jF54VAKORR
-        LvRmtDyHXtr364VT3UUtvEpjyQ==
-X-Google-Smtp-Source: AK7set/i5TBQzSzoNWAOLP7VH6qXuwvqxtDuxdnWQyD+FOv1VNFNbEhe8knorRi2x/EJgHc1QrIWyw==
-X-Received: by 2002:a9d:6a07:0:b0:690:f7da:5390 with SMTP id g7-20020a9d6a07000000b00690f7da5390mr1742353otn.25.1679420863816;
-        Tue, 21 Mar 2023 10:47:43 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id g4-20020a9d6c44000000b0069df89fe195sm5319452otq.37.2023.03.21.10.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 10:47:43 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 21 Mar 2023 12:47:41 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/213] 6.2.8-rc2 review
-Message-ID: <ZBntvcBaPgleWaa8@fedora64.linuxtx.org>
-References: <20230321080604.493429263@linuxfoundation.org>
+        Tue, 21 Mar 2023 13:48:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4E893FB;
+        Tue, 21 Mar 2023 10:48:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A481E61D70;
+        Tue, 21 Mar 2023 17:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17C2C433EF;
+        Tue, 21 Mar 2023 17:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679420888;
+        bh=XdBv7dMWKQWKxGOS239zoahEirm3umu1JUUI+nQGGoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T6Cfh60uLTCqTDgwE6WCuaEtBG/0Idu8xTtckfw1rqfo3G+/vj/NkUIH+f2QbP0ld
+         LLJ4Oq/kXzTVcAzi5osGVtIkJET7Pe54+KZZFObAcN1MDkMgMAU0Vgml5XMeUHuvjk
+         CRj9FdJv5YFPGoCmhnPlemFgdmOt9jjo9GK81fMyeMldV/tQKkcW2QHb9qblF/itow
+         kkjjI7gP7RSn367adaoU/6oOl47C0WPlPCiKt3732PwcEiB0iJ/cst85w5hTv7KiNk
+         5fzwZ3Kx3gO0hSUityQeAmZpUBSjs553w531+dK56Rn8KTDQxcHbl8DI4Ma2oskT7p
+         tOrZVs8YceDfQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 505584052D; Tue, 21 Mar 2023 14:48:05 -0300 (-03)
+Date:   Tue, 21 Mar 2023 14:48:05 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] perf kvm: Support refcnt in structure kvm_info
+Message-ID: <ZBnt1XhhJL/7lsdl@kernel.org>
+References: <20230320061619.29520-1-leo.yan@linaro.org>
+ <20230320061619.29520-2-leo.yan@linaro.org>
+ <ZBmqiKC1FSGI0/iE@kernel.org>
+ <20230321142235.GD221467@leoy-yangtze.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230321080604.493429263@linuxfoundation.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230321142235.GD221467@leoy-yangtze.lan>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:39:22AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.8 release.
-> There are 213 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Em Tue, Mar 21, 2023 at 10:22:35PM +0800, Leo Yan escreveu:
+> On Tue, Mar 21, 2023 at 10:00:56AM -0300, Arnaldo Carvalho de Melo wrote:
 > 
-> Responses should be made by Thu, 23 Mar 2023 08:05:23 +0000.
-> Anything received after that time might be too late.
+> [...]
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.8-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
+> > > +static inline void __kvm_info__zput(struct kvm_info **ki)
+> > > +{
+> > > +	kvm_info__put(*ki);
+> > > +	*ki = NULL;
+> > > +}
+> > > +
+> > > +#define kvm_info__zput(ki) __kvm_info__zput(&ki)
+> > > +
+> > > +static inline struct kvm_info *kvm_info__new(void)
+> > > +{
+> > > +	struct kvm_info *ki;
+> > > +
+> > > +	ki = zalloc(sizeof(*ki));
+> > > +	if (ki)
+> > > +		refcount_set(&ki->refcnt, 1);
+> > > +
+> > > +	return ki;
+> > > +}
+> > > +
+> > >  #endif /* HAVE_KVM_STAT_SUPPORT */
+> > >  
+> > >  extern int kvm_add_default_arch_event(int *argc, const char **argv);
+> > 
+> > I had to add this:
+> > 
+> > Provide a nop version of kvm_info__zput() to be used when
+> > HAVE_KVM_STAT_SUPPORT isn't defined as it is used unconditionally in
+> > hists__findnew_entry() and hist_entry__delete().
 > 
-> thanks,
+> Thanks a lot, Arnaldo.
 > 
-> greg k-h
+> Just want to check, before I sent out this series I have run building
+> test with the command `make -C tools/perf build-test` and I didn't see
+> the building failure.  Do I need to run other testing?
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Yes, but I didn't manage yet to make them public in a way that you could
+use it easily :-\
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+I have a set of perf build containers and in some cases
+HAVE_KVM_STAT_SUPPORT isn't defined, thus I noticed the problem.
+
+Since you're working on kvm stat, maybe you could add a way to disable
+it from the make command line and then add it to tools/perf/tests/make?
+
+Here is an example of this for something that was opt-in:
+
+⬢[acme@toolbox perf-tools-next]$ git show 9300acc6fed8e957c8d60f6f8e4451b508feea2c
+commit 9300acc6fed8e957c8d60f6f8e4451b508feea2c
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Fri May 29 16:25:34 2020 -0300
+
+    perf build: Add a LIBPFM4=1 build test entry
+
+    So that when one runs:
+
+      $ make -C tools/perf build-test
+
+    We make sure that recent changes don't break that opt-in build.
+
+    Cc: Adrian Hunter <adrian.hunter@intel.com>
+    Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+    Cc: Alexei Starovoitov <ast@kernel.org>
+    Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+    Cc: Andi Kleen <ak@linux.intel.com>
+    Cc: Andrii Nakryiko <andriin@fb.com>
+    Cc: Daniel Borkmann <daniel@iogearbox.net>
+    Cc: Florian Fainelli <f.fainelli@gmail.com>
+    Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Cc: Ian Rogers <irogers@google.com>
+    Cc: Igor Lubashev <ilubashe@akamai.com>
+    Cc: Jin Yao <yao.jin@linux.intel.com>
+    Cc: Jiri Olsa <jolsa@redhat.com>
+    Cc: Jiwei Sun <jiwei.sun@windriver.com>
+    Cc: John Garry <john.garry@huawei.com>
+    Cc: Kan Liang <kan.liang@linux.intel.com>
+    Cc: Leo Yan <leo.yan@linaro.org>
+    Cc: Mark Rutland <mark.rutland@arm.com>
+    Cc: Martin KaFai Lau <kafai@fb.com>
+    Cc: Namhyung Kim <namhyung@kernel.org>
+    Cc: Peter Zijlstra <peterz@infradead.org>
+    Cc: Stephane Eranian <eranian@google.com>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
+    Cc: Yonghong Song <yhs@fb.com>
+    Cc: yuzhoujian <yuzhoujian@didichuxing.com>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+index 8fe6c7911f46e7ef..9b651dfe0a6b8a91 100644
+--- a/tools/perf/tests/make
++++ b/tools/perf/tests/make
+@@ -90,6 +90,7 @@ make_with_babeltrace:= LIBBABELTRACE=1
+ make_no_sdt        := NO_SDT=1
+ make_no_syscall_tbl := NO_SYSCALL_TABLE=1
+ make_with_clangllvm := LIBCLANGLLVM=1
++make_with_libpfm4   := LIBPFM4=1
+ make_tags           := tags
+ make_cscope         := cscope
+ make_help           := help
+@@ -152,6 +153,7 @@ run += make_no_sdt
+ run += make_no_syscall_tbl
+ run += make_with_babeltrace
+ run += make_with_clangllvm
++run += make_with_libpfm4
+ run += make_help
+ run += make_doc
+ run += make_perf_o
+⬢[acme@toolbox perf-tools-next]$
+
+
+----------------------
+
+Look at tools/perf/Makefile.perf and try to add a NO_KVM_STAT=1 perhaps,
+and then add it to tools/perf/tests/make so that we catch problems like
+the one I found and fixed in this thread.
+
+
+Thanks,
+
+- Arnaldo
