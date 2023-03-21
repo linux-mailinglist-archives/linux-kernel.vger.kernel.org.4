@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DCF6C2AD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4576C2ADC
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 07:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCUGzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 02:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S230454AbjCUGzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 02:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUGzC (ORCPT
+        with ESMTP id S230366AbjCUGzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 02:55:02 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C4AAD2F;
-        Mon, 20 Mar 2023 23:55:00 -0700 (PDT)
+        Tue, 21 Mar 2023 02:55:05 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F15AD2F;
+        Mon, 20 Mar 2023 23:55:03 -0700 (PDT)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L6sslc047792;
-        Tue, 21 Mar 2023 01:54:54 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32L6suvN069928;
+        Tue, 21 Mar 2023 01:54:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679381694;
-        bh=Lob/XlcFs6XGTHspWwc1uOj7uZm9qY0Zu6ex2SPTw0o=;
+        s=ti-com-17Q1; t=1679381696;
+        bh=vh9bxu0G3DnVYUFcXgl/1jVScKuNjH1dp3xz6scAKvs=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=XxKFVWqCsB0vS9higRgFyDb7I2GA8h/nsqQmH+ZK2fX9dRWg48miNGNdlC0I7khgp
-         DlfKjJVqRfL8wKMiypQMBqUyvohjbMxOgx41unLgGHK+IC9fjQ/hps2qBkdg9DCqaN
-         5BtZIj+242wpftS2akGhU8yaLi4TeCIz4/tl1pGE=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L6ss7p016567
+        b=lBkryeyYCJhaXigQ+KodvCY56YwmM8fN3VoCNYiN+ESAgcPXuLBEPO5HTFzTbpjWf
+         bKE48nLkFDJkByUfnTbY25nWFzPOZDgUxj1LcEY742T0Hex6yCPbIAMwZ1bH49rvi9
+         wpwcf+9w5JrR3k3bmUOMh5QxAHKddBcXZ6vpexZI=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32L6subF016593
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Mar 2023 01:54:54 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 21 Mar 2023 01:54:56 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 21
- Mar 2023 01:54:54 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 01:54:56 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 21 Mar 2023 01:54:54 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L6srQ1021571;
-        Tue, 21 Mar 2023 01:54:53 -0500
+ Frontend Transport; Tue, 21 Mar 2023 01:54:56 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32L6st3M000989;
+        Tue, 21 Mar 2023 01:54:55 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
@@ -47,9 +47,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <j-keerthy@ti.com>, <u-kumar1@ti.com>, <j-luthra@ti.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v2 3/4] arm64: dts: ti: k3-j721s2: Add MCSPI nodes
-Date:   Tue, 21 Mar 2023 12:24:46 +0530
-Message-ID: <20230321065447.6997-4-vaishnav.a@ti.com>
+Subject: [PATCH v2 4/4] arm64: dts: ti: k3-j784s4: Add MCSPI nodes
+Date:   Tue, 21 Mar 2023 12:24:47 +0530
+Message-ID: <20230321065447.6997-5-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230321065447.6997-1-vaishnav.a@ti.com>
 References: <20230321065447.6997-1-vaishnav.a@ti.com>
@@ -66,7 +66,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721S2 has 8 MCSPI instances in the main domain and 3 instances
+J784S4 has 8 MCSPI instances in the main domain and 3 instances
 in the MCU domain. Add the DT nodes for all the 11 instances and
 keep them disabled.
 
@@ -77,16 +77,16 @@ V1->V2:
   * Combine main, mcu domain, MCSPI node addition changes
   to single commit.
 
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 88 +++++++++++++++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 33 +++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 88 +++++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 33 +++++++
  2 files changed, 121 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-index 8915132efcc1..2dd7865f7654 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-@@ -1014,4 +1014,92 @@
- 		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+index 80a1b08c51a8..432592ef3bc4 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+@@ -1005,4 +1005,92 @@
+ 		bosch,mram-cfg = <0x00 128 64 64 64 64 32 32>;
  		status = "disabled";
  	};
 +
@@ -96,8 +96,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 339 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 339 1>;
++		power-domains = <&k3_pds 376 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 376 1>;
 +		status = "disabled";
 +	};
 +
@@ -107,8 +107,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 340 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 340 1>;
++		power-domains = <&k3_pds 377 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 377 1>;
 +		status = "disabled";
 +	};
 +
@@ -118,8 +118,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 341 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 341 1>;
++		power-domains = <&k3_pds 378 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 378 1>;
 +		status = "disabled";
 +	};
 +
@@ -129,8 +129,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 342 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 342 1>;
++		power-domains = <&k3_pds 379 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 379 1>;
 +		status = "disabled";
 +	};
 +
@@ -140,8 +140,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 343 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 343 1>;
++		power-domains = <&k3_pds 380 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 380 1>;
 +		status = "disabled";
 +	};
 +
@@ -151,8 +151,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 344 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 344 1>;
++		power-domains = <&k3_pds 381 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 381 1>;
 +		status = "disabled";
 +	};
 +
@@ -162,8 +162,8 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 345 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 345 1>;
++		power-domains = <&k3_pds 382 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 382 1>;
 +		status = "disabled";
 +	};
 +
@@ -173,16 +173,16 @@ index 8915132efcc1..2dd7865f7654 100644
 +		interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 346 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 346 1>;
++		power-domains = <&k3_pds 383 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 383 1>;
 +		status = "disabled";
 +	};
  };
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 0af242aa9816..9e5a8a35a01b 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -203,6 +203,39 @@
+diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+index 64bd3dee14aa..f04fcb614cbe 100644
+--- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+@@ -204,6 +204,39 @@
  		status = "disabled";
  	};
  
@@ -192,8 +192,8 @@ index 0af242aa9816..9e5a8a35a01b 100644
 +		interrupts = <GIC_SPI 848 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 347 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 347 0>;
++		power-domains = <&k3_pds 384 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 384 0>;
 +		status = "disabled";
 +	};
 +
@@ -203,8 +203,8 @@ index 0af242aa9816..9e5a8a35a01b 100644
 +		interrupts = <GIC_SPI 849 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 348 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 348 0>;
++		power-domains = <&k3_pds 385 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 385 0>;
 +		status = "disabled";
 +	};
 +
@@ -214,13 +214,13 @@ index 0af242aa9816..9e5a8a35a01b 100644
 +		interrupts = <GIC_SPI 850 IRQ_TYPE_LEVEL_HIGH>;
 +		#address-cells = <1>;
 +		#size-cells = <0>;
-+		power-domains = <&k3_pds 349 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 349 0>;
++		power-domains = <&k3_pds 386 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 386 0>;
 +		status = "disabled";
 +	};
 +
  	mcu_navss: bus@28380000{
- 		compatible = "simple-mfd";
+ 		compatible = "simple-bus";
  		#address-cells = <2>;
 -- 
 2.17.1
