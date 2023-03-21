@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771566C3CC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A646C3CC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 22:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjCUVc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 17:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S229820AbjCUVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 17:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjCUVc4 (ORCPT
+        with ESMTP id S229584AbjCUVgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 17:32:56 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FDA58485
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id w4so9394998plg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
+        Tue, 21 Mar 2023 17:36:10 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A2E3A4D3
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:36:09 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x17so20908236lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 14:36:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679434373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzHxTn/xBhnpdgy8S5E8M4unosxnUcsaF4INeWuGSNM=;
-        b=kxyTO4v7cC+7AJfDMMODMO/Ytb5E95ibpucDviLwkUuXDhCSN5gCydR3ahhruangOc
-         DViOKaJQUNBhP5v1Um9hVcsrbGIMno2OjwUCKR3JEYx4LGJJ8eT1OoeVbibpgjS4zsnR
-         vMPaHiyBlZ3YEAx4buv3XVKaY6lYABPmnMxxt/x2ZB9D2hAxPjs8ZkPInbfN6ShFXmlO
-         Q2d56ojjw2xhKUcppHYjGNUrOu1ehGvSv9rll3kccRJG1XY5PNZD3/xG7W7o8UPF8Xs2
-         UxiyQ+9As6JD7CUVqEMWGViPRwjg4geklBa0yu2evkg8aKC9nIvlYxDN8TJUDPN1iyFL
-         YTOw==
+        d=linaro.org; s=google; t=1679434567;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BDa7nKMtXb7S3BjrifS1ahAFl7WEVFVrO1TP6BvYQW8=;
+        b=HygJVWLJQYQZzv5qKjvJmDNkHdctvMuXyb5WW+Szi1sbR0fCUv2Tb5kL2qWEFlLjxq
+         Onl2baFYfm7n857a0DVCwVyr6TpeVkmg9s8vk14GaL394coBZtbSqRSutIFUdqKGrzuw
+         P5YcVMeYFIG5D66Z77S1qRV8busNsX1apl7Gq0Edpdf15NbtTtDNC5um4zP97/fRi1Ct
+         2Qr/3UJ9qLRgha30++4X7M/1HO2ApQ3CEsykXpAy+DuJ6gJr6iO5n3R/LNn25nhqi4m6
+         Qm1bUbW81MHQUToYOdQ/2zg9UjrMwyCX9MOXxwvh/ygj3MCPSWedvtxaIlE2uA76wpRY
+         MD7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679434373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZzHxTn/xBhnpdgy8S5E8M4unosxnUcsaF4INeWuGSNM=;
-        b=4CFFj63S8osn4l9oFZfpJyAWD36+G9kuf6GvkKeqmFQmmHRiGo6HI6RjZHNhFRgk6z
-         eQNuYTTjlvLWLnW8J/aLcGSo9IzYt3TdoyHDn12Hpv3YKQjC7iEOiWLcQW0esG3NOpJA
-         n+/+TCioftntGnSBzxBZ261GDMYC5e26pOosLlJqM/fNT2w6OuBfyO+SbC6VD8mYVoxv
-         rbPofgPOsuIZ/yRG0rvGMcC3Ni6o+M74SV29iywPJ4om/LTmBBcUQLIYRslvO5QFzbdN
-         7w1EQQtS6NMYf5ZbxTENvb2SzfiZqEKM5bHRyVN5anfUMA1e0wYXBmq7ZzQR5vUrt7LQ
-         lStw==
-X-Gm-Message-State: AO0yUKWA/LdtESFih+IT+ljN1qHm9DX1cKP4eyCMBq7jsS/E41W7IJz+
-        xopInK23BJADSP/KLzZFQiItYw==
-X-Google-Smtp-Source: AK7set+bYfttSbCp8Gd0XqK/tsJh4Hz36v//vxiF2sH/A3Ougn4M9ogwYRnxlnTuwek7ZhDq9iXwXw==
-X-Received: by 2002:a05:6a20:dc9d:b0:da:f525:e629 with SMTP id ky29-20020a056a20dc9d00b000daf525e629mr1939980pzb.53.1679434373294;
-        Tue, 21 Mar 2023 14:32:53 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:8a45:c131:e8ed:3f53])
-        by smtp.gmail.com with ESMTPSA id n1-20020aa78a41000000b0062604b7552fsm8728060pfa.63.2023.03.21.14.32.52
+        d=1e100.net; s=20210112; t=1679434567;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BDa7nKMtXb7S3BjrifS1ahAFl7WEVFVrO1TP6BvYQW8=;
+        b=m/Oepasafpr8LBZ7FDHE12b+c5vtpWLtn+AgOHQIH2v/4SKi5kkxTItt6UQ5yePYYK
+         fmQ73nztY0bb5yo/eoPiJRxHe55QFi28RDSleACLKsjK8CT423IJvbazlpIaxyaDSpAU
+         u0UTKVSIv+088VgUgeIkSoxM+0oMHc2OrxeKRhBTbKyMaW9EDqb0SuOkzEnWAZZhqs0M
+         bdbncmDUxWnFZ67H8aEDpOPoNCVMHOWFTig/6Bd4FYVKwPQz2P2SA4dlilvpg1SCNGin
+         KeTeYK44NL9cCfYEObTxKdE1MvSq/8Br8dZ4JYDd2PGySUeeZFrrrrNmwgsJ+zxf2rqL
+         FQ4g==
+X-Gm-Message-State: AO0yUKURM1Igq9SmuJBhn2Su0I+XR/WcJJCH9c/ImV0AeP8J0ZFEKdsp
+        xWlTSdWC+tYQ6ydkNrXWf7KOBg==
+X-Google-Smtp-Source: AK7set/KwCx7+18m5if4fSBoPJCV6gjU21k1/n3wZtbtG6AVFjcu/qxY4/gwTtP4iZ9QQAPQ+znOBw==
+X-Received: by 2002:ac2:5544:0:b0:4e8:3fc7:9483 with SMTP id l4-20020ac25544000000b004e83fc79483mr1339983lfk.23.1679434567543;
+        Tue, 21 Mar 2023 14:36:07 -0700 (PDT)
+Received: from localhost.localdomain (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
+        by smtp.gmail.com with ESMTPSA id j12-20020a19f50c000000b004b40c1f1c70sm2324628lfb.212.2023.03.21.14.36.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 14:32:52 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 15:32:50 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        patrice.chotard@foss.st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, arnaud.pouliquen@st.com,
-        hongxing.zhu@nxp.com, peng.fan@nxp.com, shengjiu.wang@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] remoteproc: stm32: Call of_node_put() on iteration
- error
-Message-ID: <20230321213250.GB2782856@p14s>
-References: <20230320221826.2728078-1-mathieu.poirier@linaro.org>
- <20230320221826.2728078-2-mathieu.poirier@linaro.org>
- <e3644e19-7453-440b-00dc-781104ca83cf@foss.st.com>
+        Tue, 21 Mar 2023 14:36:07 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: display: msm: sm8350-mdss: Fix DSI compatible
+Date:   Tue, 21 Mar 2023 22:35:56 +0100
+Message-Id: <20230321213557.1737905-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3644e19-7453-440b-00dc-781104ca83cf@foss.st.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
@@ -78,74 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:00:03AM +0100, Arnaud POULIQUEN wrote:
-> Hi Mathieu,
-> 
-> On 3/20/23 23:18, Mathieu Poirier wrote:
-> > Function of_phandle_iterator_next() calls of_node_put() on the last
-> > device_node it iterated over, but when the loop exits prematurely it has
-> > to be called explicitly> 
-> > Fixes: 13140de09cc2 ("remoteproc: stm32: add an ST stm32_rproc driver")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > ---
-> >  drivers/remoteproc/stm32_rproc.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> > index 7d782ed9e589..23c1690b8d73 100644
-> > --- a/drivers/remoteproc/stm32_rproc.c
-> > +++ b/drivers/remoteproc/stm32_rproc.c
-> > @@ -223,11 +223,13 @@ static int stm32_rproc_prepare(struct rproc *rproc)
-> >  	while (of_phandle_iterator_next(&it) == 0) {
-> >  		rmem = of_reserved_mem_lookup(it.node);
-> >  		if (!rmem) {
-> > +			of_node_put(it.node);
-> >  			dev_err(dev, "unable to acquire memory-region\n");
-> >  			return -EINVAL;
-> >  		}
-> >  
-> >  		if (stm32_rproc_pa_to_da(rproc, rmem->base, &da) < 0) {
-> > +			of_node_put(it.node);
-> >  			dev_err(dev, "memory region not valid %pa\n",
-> >  				&rmem->base);
-> >  			return -EINVAL;
-> > @@ -254,8 +256,10 @@ static int stm32_rproc_prepare(struct rproc *rproc)
-> >  							   it.node->name);
-> >  		}
-> >  
-> > -		if (!mem)
-> > +		if (!mem) {
-> > +			of_node_put(it.node);
-> >  			return -ENOMEM;
-> > +		}
-> 
-> Good catch!
-> 
-> Looking in code I don't see that we call of_node_put() when we release the
-> carveouts. 
-> Please tell me if I'm wrong but look to me that we should also call of_node_put()
-> in mem->release() op, in drivers. 
->
+The DSI compatible changed between patchset revisions, but that wasn't
+reflected in the bindings. Fix it.
 
-Are you referring to entry->release(), which for stm32 is
-stm32_rproc_mem_release(), in rproc_resource_cleanup()?
+Fixes: 430e11f42bff ("dt-bindings: display: msm: Add qcom, sm8350-mdss binding")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If so then no, it is not needed since of_phandle_iterator_next() calls
-of_node_put() on the previous device_node with each iteration.
+diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+index 4d94dbff3054..79a226e4cc6a 100644
+--- a/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
++++ b/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+@@ -64,7 +64,7 @@ patternProperties:
+     type: object
+     properties:
+       compatible:
+-        const: qcom,dsi-phy-5nm-8350
++        const: qcom,sm8350-dsi-phy-5nm
+ 
+ unevaluatedProperties: false
+ 
+-- 
+2.40.0
 
-Otherwise I fail to understand the question and will ask you to clarify.
-
-> This one remains valid.
-> reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> 
-
-Ok
-
-> Thanks,
-> Arnaud
-> 
-> 
-> >  
-> >  		rproc_add_carveout(rproc, mem);
-> >  		index++;
