@@ -2,170 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FE56C3ACF
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBFD6C3AD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 20:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjCUTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 15:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S229676AbjCUTko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 15:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjCUTjY (ORCPT
+        with ESMTP id S230418AbjCUTkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 15:39:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3D11E9CA
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679427400;
+        Tue, 21 Mar 2023 15:40:17 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE73C132F5;
+        Tue, 21 Mar 2023 12:39:48 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 600B420002;
+        Tue, 21 Mar 2023 19:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679427559;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IufgFsRJpEMxp/FKffUoEQzZ0rl2Zjr3udyfqAjAgP8=;
-        b=Y9DUQDDArEgLb0elQpph613mkbjmAAe2YmKj3XSAwkI81oieDDkNf44UPCts8HLI/yF6v2
-        COZQLU3MgieTA3brIi546gD2+7Jk3s3RPbrhGqYgz/FkaV4p9s7lbs+pc4FsU8jA7akwFO
-        lzOAVtCSQ2Pl/7nEnss2IciGYzW8/R4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-30-pai-7E31OpqYOeWM2qLAqg-1; Tue, 21 Mar 2023 15:36:38 -0400
-X-MC-Unique: pai-7E31OpqYOeWM2qLAqg-1
-Received: by mail-wm1-f70.google.com with SMTP id fl22-20020a05600c0b9600b003ed26ca6206so10480514wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 12:36:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679427397;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IufgFsRJpEMxp/FKffUoEQzZ0rl2Zjr3udyfqAjAgP8=;
-        b=fAJUixA8pX6E5MBmA4c9N1/+zlZlyDsEQEtyNq7ReWVUPRrnRQuBikZ137u0yd67p6
-         pUdDOKxWB7ShJ8IKK/wUz+sNPgS7Gjj3z+pSYL3cDQ5JGjB7B9R624leshmnFQDy06Rp
-         8SUeOljtedMF7gtMVTIy8QAN8oOV8BYmT/aHUeer0pNCMJfOwZbFtxvUceewOxTCPQsY
-         ufHu6oKRFw49hafJNTxCGbFFCowtvd3/hgbZYLUVYZTyY9hLq8T9arjEry67LYNloqZ5
-         WeMHqqzYt577JKSTyUFOHUtKvRsTtZxFUFudAwMMvnS6F71Vi1V9s0v4zybMZ1X1AW8V
-         cO3Q==
-X-Gm-Message-State: AO0yUKXN13VQxdgC0ixj6ghV4uco63pIubsK/VCKopXgu8jz9hi1Nk4N
-        0fUzw/8Hu+AfFKd+DYCzv24r6bUwUytmfoQ+pBim12VICxqg21obbW7Qy0obYlaWCthJlq5mwmq
-        Hb+PybEsI7t4e1qh9M1QahfPO
-X-Received: by 2002:a05:600c:2312:b0:3df:e6bb:768 with SMTP id 18-20020a05600c231200b003dfe6bb0768mr3535116wmo.24.1679427397708;
-        Tue, 21 Mar 2023 12:36:37 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9h8fPjflOzdypqi76qNk4yHTBoYHiz6YZoSnbVedGSf90r++ZgffqBF0e1cmjLWKc7IGJH5w==
-X-Received: by 2002:a05:600c:2312:b0:3df:e6bb:768 with SMTP id 18-20020a05600c231200b003dfe6bb0768mr3535095wmo.24.1679427397062;
-        Tue, 21 Mar 2023 12:36:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7f00:8245:d031:7f8b:e004? (p200300cbc7057f008245d0317f8be004.dip0.t-ipconnect.de. [2003:cb:c705:7f00:8245:d031:7f8b:e004])
-        by smtp.gmail.com with ESMTPSA id d8-20020a1c7308000000b003ed1f6878a5sm14589794wmb.5.2023.03.21.12.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 12:36:36 -0700 (PDT)
-Message-ID: <44aae7fc-fb1f-b38e-bc17-504abf054e3f@redhat.com>
-Date:   Tue, 21 Mar 2023 20:36:35 +0100
+        bh=yBHkU6tb5xg5smOIlShgBtygMh+FM3sL86bax3a5bDo=;
+        b=Gqqu81VcF0q1VsN48gRKkyeZZ3R6+UANTWm2J0WaavxgBCkF8PFF1FerT5b2POxH1Hq7s9
+        1Qv0wA5bBLGiB1yBLatCXEeo/olRqMhkC5dE4arA3WU73R7BIuzPPg4vfFc1u/sVLYaKUn
+        m2OghwcQmLKpja/d6gy4765C02hTkInW1+wBxz83j1dyTKQe4ZMhwBitXC40IKLdqmfHTU
+        BAMM0YHBvatH/VDQ67MXVxu7s73gDTtd4aJxEGXc5aVBqOchr9VzbdyawWSJcaBYaQZlD0
+        VbHpWvQhmbAASjUzsLZ8sIYPYNcy9pB0mKubjbE0R6u2nurh6F5U/M0+ADg2EA==
+Date:   Tue, 21 Mar 2023 20:39:15 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: rtc: Drop unneeded quotes
+Message-ID: <167942752119.675121.3470511868063129229.b4-ty@bootlin.com>
+References: <20230317233634.3968656-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm/hugetlb: Fix uffd wr-protection for CoW optimization
- path
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-stable <stable@vger.kernel.org>
-References: <20230321191840.1897940-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230321191840.1897940-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317233634.3968656-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.23 20:18, Peter Xu wrote:
-> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
-> writable even with uffd-wp bit set.  It only happens with all these
-> conditions met: (1) hugetlb memory (2) private mapping (3) original mapping
-> was missing, then (4) being wr-protected (IOW, pte marker installed).  Then
-> write to the page to trigger.
-> 
-> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
-> even reaching hugetlb_wp() to avoid taking more locks that userfault won't
-> need.  However there's one CoW optimization path for missing hugetlb page
-> that can trigger hugetlb_wp() inside hugetlb_no_page(), that can bypass the
-> userfaultfd-wp traps.
-> 
-> A few ways to resolve this:
-> 
->    (1) Skip the CoW optimization for hugetlb private mapping, considering
->    that private mappings for hugetlb should be very rare, so it may not
->    really be helpful to major workloads.  The worst case is we only skip the
->    optimization if userfaultfd_wp(vma)==true, because uffd-wp needs another
->    fault anyway.
-> 
->    (2) Move the userfaultfd-wp handling for hugetlb from hugetlb_fault()
->    into hugetlb_wp().  The major cons is there're a bunch of locks taken
->    when calling hugetlb_wp(), and that will make the changeset unnecessarily
->    complicated due to the lock operations.
-> 
->    (3) Carry over uffd-wp bit in hugetlb_wp(), so it'll need to fault again
->    for uffd-wp privately mapped pages.
-> 
-> This patch chose option (3) which contains the minimum changeset (simplest
-> for backport) and also make sure hugetlb_wp() itself will start to be
-> always safe with uffd-wp ptes even if called elsewhere in the future.
-> 
-> This patch will be needed for v5.19+ hence copy stable.
-> 
-> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Cc: linux-stable <stable@vger.kernel.org>
-> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/hugetlb.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 8bfd07f4c143..22337b191eae 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
->   		       struct folio *pagecache_folio, spinlock_t *ptl)
->   {
->   	const bool unshare = flags & FAULT_FLAG_UNSHARE;
-> -	pte_t pte;
-> +	pte_t pte, newpte;
->   	struct hstate *h = hstate_vma(vma);
->   	struct page *old_page;
->   	struct folio *new_folio;
-> @@ -5622,8 +5622,10 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
->   		mmu_notifier_invalidate_range(mm, range.start, range.end);
->   		page_remove_rmap(old_page, vma, true);
->   		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
-> -		set_huge_pte_at(mm, haddr, ptep,
-> -				make_huge_pte(vma, &new_folio->page, !unshare));
-> +		newpte = make_huge_pte(vma, &new_folio->page, !unshare);
-> +		if (huge_pte_uffd_wp(pte))
-> +			newpte = huge_pte_mkuffd_wp(newpte);
-> +		set_huge_pte_at(mm, haddr, ptep, newpte);
->   		folio_set_hugetlb_migratable(new_folio);
->   		/* Make the old page be freed below */
->   		new_folio = page_folio(old_page);
 
-Looks correct to me. Do we have a reproducer?
+On Fri, 17 Mar 2023 18:36:33 -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> 
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Applied, thanks!
+
+[1/1] dt-bindings: rtc: Drop unneeded quotes
+      commit: ab0fccc373d505c9a09bf459557768ab3177e0d2
+
+Best regards,
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
