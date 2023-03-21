@@ -2,124 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D06846C2635
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E8C6C2637
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 01:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCUAJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Mar 2023 20:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S229924AbjCUAKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Mar 2023 20:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCUAJP (ORCPT
+        with ESMTP id S229670AbjCUAKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:09:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0117EB56
-        for <linux-kernel@vger.kernel.org>; Mon, 20 Mar 2023 17:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=buOs6OTUuEh7yaWqQoZ4zABNIq5hoZjF+8q53WL+W5E=; b=FdeHr1QXM0GCrTnqSVS4Rny0dO
-        OkQgHiLV/nkkb95GONnrCn8ixzwAR2rpeN/wWbAu8FqFR+WHGACkf1XVmVt1G1WDVryZV0msmgz0b
-        o+J24oMCaWQXxkZpCPaf1vUGTSH7o4IXvM5/tiJX2lE9BhxWthQmnrwFDdsRS41jWA03GXfH/ui4t
-        QOYtZ3Pvq4A30dSzJg9SZnQML2t2fKRgAF6T7duBipKdkBCI6D4QLLsmdif3/FiR2Y8i+kLx8k73P
-        Yk924E3+cSvgB7MqtFwF4nJqlIzSSRvBzlHFaeMHIEDW4izcZC10KRVOtEo2yn7SA+Ob0j0Wq96um
-        IHzT3Chg==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pePYq-00ArLi-2m;
-        Tue, 21 Mar 2023 00:09:08 +0000
-Message-ID: <23fe0765-fb3b-9bf4-ecb4-507e6f3edefe@infradead.org>
-Date:   Mon, 20 Mar 2023 17:09:07 -0700
+        Mon, 20 Mar 2023 20:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA791BACC;
+        Mon, 20 Mar 2023 17:10:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC30D618CF;
+        Tue, 21 Mar 2023 00:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5D4C433EF;
+        Tue, 21 Mar 2023 00:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679357401;
+        bh=EJtjR7BOHMOTkea9e96bCqvYUnOPBRnLYJVtCK05GVQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F4UeGaoOL8B0wGHYiiIYPUYr0BFjZsEXjh8pkkRJ12XDg/bDglH0WnxUz4D92yyy/
+         kVdBg25H4pZgCLUfbbPP3MfsO7jGlu5CoK8LxnXjk7m/Oth0GUAQL8NHge383aQdPO
+         /LKvhgJrtS87dmJ961VfOlbo6j3Sj8c2ushxe7OWXN6PZ+0OgcbMr6SVUhbz1X1vhG
+         QC3D1d5l7AyAjGMlKSXd7G2n3GCeD8HMiO9pEoRMAoVgY78iJhn5NP2jNXrOWkWCRj
+         F8gTW6+CVjidtD/S81dzRYE/wR7YNALnDVBxOB68MuLnFR/ix0H28/4n9pjXqY7fqP
+         AYaxhOxcuMMZQ==
+Message-ID: <cc53723d-e7ab-5e75-aaa1-33da75118d9d@kernel.org>
+Date:   Tue, 21 Mar 2023 10:09:57 +1000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 06/37] drm/vkms/vkms_composer: Fix a few different
- kerneldoc formatting
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] m68k: Kconfig.machine: remove obsolete configs ROMBASE
+ and ROMSIZE
 Content-Language: en-US
-To:     Melissa Wen <mwen@igalia.com>, Lee Jones <lee@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel@vger.kernel.org, Melissa Wen <melissa.srw@gmail.com>
-References: <20230317081718.2650744-1-lee@kernel.org>
- <20230317081718.2650744-7-lee@kernel.org>
- <20230320234639.va6an7gton3u6eke@mail.igalia.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230320234639.va6an7gton3u6eke@mail.igalia.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230320135418.2055-1-lukas.bulwahn@gmail.com>
+From:   Greg Ungerer <gerg@kernel.org>
+In-Reply-To: <20230320135418.2055-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lukas,
 
-
-On 3/20/23 16:46, Melissa Wen wrote:
-> On 03/17, Lee Jones wrote:
->> Fixes the following W=1 kernel build warning(s):
->>
->>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Function parameter or member 'frame_info' not described in 'pre_mul_alpha_blend'
->>  drivers/gpu/drm/vkms/vkms_composer.c:41: warning: Excess function parameter 'src_frame_info' description in 'pre_mul_alpha_blend'
->>  drivers/gpu/drm/vkms/vkms_composer.c:72: warning: Cannot understand  * @wb_frame_info: The writeback frame buffer metadata
->>
->> Cc: Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>
->> Cc: Melissa Wen <melissa.srw@gmail.com>
->> Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: David Airlie <airlied@gmail.com>
->> Cc: dri-devel@lists.freedesktop.org
->> Signed-off-by: Lee Jones <lee@kernel.org>
->> ---
->>  drivers/gpu/drm/vkms/vkms_composer.c | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
->> index 8e53fa80742b2..41668eedf4272 100644
->> --- a/drivers/gpu/drm/vkms/vkms_composer.c
->> +++ b/drivers/gpu/drm/vkms/vkms_composer.c
->> @@ -22,7 +22,7 @@ static u16 pre_mul_blend_channel(u16 src, u16 dst, u16 alpha)
->>  
->>  /**
->>   * pre_mul_alpha_blend - alpha blending equation
->> - * @src_frame_info: source framebuffer's metadata
->> + * @frame_info: source framebuffer's metadata
->>   * @stage_buffer: The line with the pixels from src_plane
->>   * @output_buffer: A line buffer that receives all the blends output
->>   *
->> @@ -69,11 +69,13 @@ static void fill_background(const struct pixel_argb_u16 *background_color,
->>  }
->>  
->>  /**
->> - * @wb_frame_info: The writeback frame buffer metadata
->> + * blend
-> As we are already here:
-> * blend - blend pixels from a given row and calculate crc
-
- * blend: blend pixels from a given row and calculate CRC
-
-preferably.
-
-> Reviewed-by: Melissa Wen <mwen@igalia.com>
+On 20/3/23 23:54, Lukas Bulwahn wrote:
+> The configs ROMBASE and ROMSIZE were used in arch/m68k/68360/head-ram.S,
+> which was removed with commit a3595962d824 ("m68knommu: remove obsolete
+> 68360 support").
 > 
->> + * @wb: The writeback frame buffer metadata
->>   * @crtc_state: The crtc state
->>   * @crc32: The crc output of the final frame
->>   * @output_buffer: A buffer of a row that will receive the result of the blend(s)
->>   * @stage_buffer: The line with the pixels from plane being blend to the output
->> + * @row_size: Size of memory taken up by row data (line_width * pixel_size)
->>   *
->>   * This function blends the pixels (Using the `pre_mul_alpha_blend`)
->>   * from all planes, calculates the crc32 of the output from the former step,
->> -- 
->> 2.40.0.rc1.284.g88254d51c5-goog
->>
+> Remove the obsolete configs ROMBASE and ROMSIZE.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
--- 
-~Randy
+Looks good thanks.
+
+I have pushed this into the m68knommu git tree, for next branch,
+after adding Geerts Fixes and Reviewed-by tags.
+
+Regards
+Greg
+
+
+> ---
+>   arch/m68k/Kconfig.machine | 17 -----------------
+>   1 file changed, 17 deletions(-)
+> 
+> diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
+> index e2f961208f18..255d50574065 100644
+> --- a/arch/m68k/Kconfig.machine
+> +++ b/arch/m68k/Kconfig.machine
+> @@ -439,15 +439,6 @@ config ROM
+>   	  that can be stored in flash, with possibly the text, and data
+>   	  regions being copied out to RAM at startup.
+>   
+> -config ROMBASE
+> -	hex "Address of the base of ROM device"
+> -	default "0"
+> -	depends on ROM
+> -	help
+> -	  Define the address that the ROM region starts at. Some platforms
+> -	  use this to set their chip select region accordingly for the boot
+> -	  device.
+> -
+>   config ROMVEC
+>   	hex "Address of the base of the ROM vectors"
+>   	default "0"
+> @@ -465,14 +456,6 @@ config ROMSTART
+>   	  Define the start address of the system image in ROM. Commonly this
+>   	  is strait after the ROM vectors.
+>   
+> -config ROMSIZE
+> -	hex "Size of the ROM device"
+> -	default "0x100000"
+> -	depends on ROM
+> -	help
+> -	  Size of the ROM device. On some platforms this is used to setup
+> -	  the chip select that controls the boot ROM device.
+> -
+>   choice
+>   	prompt "Kernel executes from"
+>   	help
