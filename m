@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8E36C4577
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAE36C485B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCVI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S229869AbjCVK60 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 06:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjCVI5g (ORCPT
+        with ESMTP id S229524AbjCVK6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:57:36 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C95F5D740
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id le6so18615268plb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=areca-com-tw.20210112.gappssmtp.com; s=20210112; t=1679475451;
-        h=content-transfer-encoding:mime-version:date:to:from:subject
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Juje1TVQx9Ir6TCrjjYr/9fB6NcAn5fIZLLXlfSDEo=;
-        b=oNQzP0dukP/A7MuNRdlbB7Kqk3Z1UH2gZqPOxBqV5zwD0alq000MNUTJ2tu/wlqNAb
-         /sl+veH6npPUS+889YV+ZzJIAHNtu//H1xFA7WsX8Pj66Sf0Lhd+7zQujOzIBNlZGO/M
-         4C4ipK5jHh1F6Qjpv8rH+WH3d/JhawU3CI9bAkWA1q8Px1JpVt+YhxX1Nzh5A9RqckL1
-         +LU4E0gjJzmVyLG9S/mTHX6SOFNSjPPupOSmwMrgKe52dZB2hpADmN/wUtjjYy/JOK7A
-         aHEMnxgU55bTIM2EzXWAbZKbUuAWeVceYKDVGm5D0VB80h6+HYyrqntlA1pSywrLIkes
-         3KjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679475451;
-        h=content-transfer-encoding:mime-version:date:to:from:subject
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Juje1TVQx9Ir6TCrjjYr/9fB6NcAn5fIZLLXlfSDEo=;
-        b=nyGmJv/L1DB64/cwxQC3E3HCwPW5yMEQSBmF9XGvWdqiK3aUJpsgy7NufaSvl8EPhT
-         MfjmsJGJ62EvUIn5nyDe6uLOyrVM9VdzBlEImmpx2qcA0Ie5/O1vhtMS6iyrm1EjwwbR
-         CvUFzleKgewVUxz4PJe+7HQIiM0rBdOXWOvIMFhM4JLWi1GeGnbEc/3ql1VjJvsCjnen
-         ueVvnZSBF+8zaFn32DjdgY5WJIp2EpM+56Z/FLHDkQEbhI2x2hBeB95QDv0obNnAhqjf
-         oJy4vYy9EJiQagz38MLDk7sEI8Y89+DFSdOzGwu91IzunX7CWjNMj0SplRRVs2yu4MOs
-         dgCg==
-X-Gm-Message-State: AO0yUKXmd5OQT+eiiXlANC+OI+qHHFJguaAyRG+bhZhCzeRQ4Wd30z4q
-        vPI0iMm8B976zPD57hhowhrBJjrJlVrZlbt2plLw4g==
-X-Google-Smtp-Source: AK7set8dI/0YZUWwik1LXJ9k+RGWdA5H1O9HkHJA/yPcJ9IgPwsEWVg+Ga1cCZ90yAwECJuOKN1oqw==
-X-Received: by 2002:a17:903:430f:b0:19e:ecaf:c4b4 with SMTP id jz15-20020a170903430f00b0019eecafc4b4mr1970578plb.4.1679475451445;
-        Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
-Received: from centos78 (60-248-88-209.hinet-ip.hinet.net. [60.248.88.209])
-        by smtp.googlemail.com with ESMTPSA id g5-20020a170902c38500b0019cbec6c17bsm10080147plg.190.2023.03.22.01.57.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
-Message-ID: <6f3eb04dbe89d2b9f239600dd2c575227f3c0afc.camel@areca.com.tw>
-Subject: [PATCH 0/5] scsi: arcmsr: fix reading buffer empty length error
-From:   ching Huang <ching2048@areca.com.tw>
-To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 23 Mar 2023 00:57:29 +0800
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DATE_IN_FUTURE_06_12,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 22 Mar 2023 06:58:24 -0400
+X-Greylist: delayed 87945 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Mar 2023 03:58:22 PDT
+Received: from mail.tabnak.ir (mail.tabnak.ir [94.182.146.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7F6028D04
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:58:21 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.tabnak.ir (Postfix) with ESMTP id 88BD5E81B6;
+        Tue, 21 Mar 2023 03:34:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at example.com
+Received: from mail.tabnak.ir ([127.0.0.1])
+        by localhost (mail.tabnak.ir [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BOhyHiQODmbf; Tue, 21 Mar 2023 07:04:58 +0330 (+0330)
+Received: from [80.94.95.138] (unknown [80.94.95.138])
+        (Authenticated sender: Mahmoudi@tabnak.ir)
+        by mail.tabnak.ir (Postfix) with ESMTPSA id E9C89D553D;
+        Tue, 21 Mar 2023 03:46:32 +0330 (+0330)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re
+To:     Recipients <info@group.org>
+From:   ''GFG'' <info@group.org>
+Date:   Mon, 20 Mar 2023 17:16:29 -0700
+Reply-To: globefinancegroup@gmail.com
+Message-Id: <20230321033459.88BD5E81B6@mail.tabnak.ir>
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FROM_MISSP_REPLYTO,RCVD_IN_MSPIKE_H2,RCVD_IN_PSBL,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [94.182.146.22 listed in psbl.surriel.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [94.182.146.22 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.9 FROM_MISSP_REPLYTO From misspaced, has Reply-To
+        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patched were made over mkp's 6.4/scsi-staging
+Wir freuen uns, uns als globaler Finanzberater vorzustellen.
 
-This series comtain some fixes.
-- deprecated arcmsr_pci_unmap_dma()
-- fixed ADAPTER_TYPE_B 64bits dma compatibility issue
-- fixed reading buffer empty length error
-- added driver proc_name
-- updated driver's version to v1.50.00.13-20230206
----
 
+- Wir bieten Privat- und Geschäftskredite zu einem Zinssatz von 2 % ohne Vorauszahlung an.
+
+
+- Für jedes Darlehen oder jede Investition kontaktieren Sie uns für weitere Informationen. Bitte mailen Sie uns.
+
+
+
+Grüße
+
+Online-Werbeagentur.
