@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FC06C381F
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3BE6C3829
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjCURYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S230498AbjCUR0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjCURYH (ORCPT
+        with ESMTP id S229617AbjCUR0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:24:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D344C6E5;
-        Tue, 21 Mar 2023 10:24:06 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id cn12so17005221edb.4;
-        Tue, 21 Mar 2023 10:24:06 -0700 (PDT)
+        Tue, 21 Mar 2023 13:26:08 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DA3199E1;
+        Tue, 21 Mar 2023 10:26:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eg48so62565391edb.13;
+        Tue, 21 Mar 2023 10:26:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679419444;
+        d=gmail.com; s=20210112; t=1679419563;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uYD3ffgIy5duZGLsx0RR5hgJ1e2w3VJSqGeiI7Av+FI=;
-        b=L1lPVvZ5E6UpwmZadJUbK15jSxOHnY/A28IPax05Ns8kDIfpBIx0fNGv83KNDVFOJb
-         LlWaibrQJ9YSaPIolzFsRxiaoPJAjZrreP8Koko8WDnVLsozgHPaioNp3zmbDLJNO10m
-         UwYWHU6mYyyLbKbzHko+nkptaRQbcSRtFDfeOGAfFCzhvDJ+GFLpxQN3F2Ji7+6J+9JY
-         M/7xZCyzrh6FQB1PCV4T/L0ZAMFf4ZBWTWS8i+5/DdfgbCmn++i34P+tMM0qqpiJZv90
-         zvu5PLEAQLlYpdnYyIIfZpN+DN845ITNY+kevBARLUZ89BD09jdix6xw6TbkV3vTm0N1
-         kSHA==
+        bh=/SnwtyCeqfxN+W4U7ez13LVb+d2R2LMwy11y/Jz9LSw=;
+        b=litogbTU0fH+k6JlYoZGvbaT5Hq90vpRJXH6co7YHtPjy6GL7l1hcYkbR9W6LJTley
+         /QC3Cm+TaFE531qQTrcwnikTApOJrtVklzYCfYrs6NvTwNKLZqHqKQ8MXRuUbwEL8oM+
+         8fLVJduQ+OTnwBuxEpJ60Vn1XPeV7d5dmW4gWh0YHE5/3VW1ZXHIFh0UniHcoPHGaxHy
+         MR0Nh66FbEL9n1SdmB5B5O1Eka3N858+qEGBwzRV2HWXYAfTTt6uWGtXjJnHwiZsMeBq
+         VCZLadbrdEJyvuiqTQYKOsHIox9IOjOlMK5BOp1cZPxO40YRAa4JKUZOpJTbau7FKB3z
+         tGbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679419444;
+        d=1e100.net; s=20210112; t=1679419563;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uYD3ffgIy5duZGLsx0RR5hgJ1e2w3VJSqGeiI7Av+FI=;
-        b=JzuPdiZeRV8ZwBk+ouCFMNnoxYiFf8Tes1GVaHnJEO3XHzQ5Elu7wnu1lQ9IJUyCRe
-         WuaO6RNAd+IBfZO7NOIi41MKYm/kbVk9uxzMhjzOtCYnBatc6P6BCjvjNFBAvMlNFkbJ
-         r77KRCECQKPYISqPr6HWOETIM9WVfVbIYYHgBEb2yzJR3TZhjPzynabK3uITVE1fGQ/b
-         ZjpM+8XuXsutWhb48Zdl9lNrV130z6geR+MFB1Xm8dUBfq/IEAYz9FRk1EgmmcIh9Axm
-         w5pBR9WTrh3FBwV/jiv4igkwaHtJK7sGsBq9ZE46vT4OZbz5juA56kX/lrwp/+oMpKuS
-         qrog==
-X-Gm-Message-State: AO0yUKUYrrZUhnl90nNrwCvMJs9UtDkVZLrSiOxi3i0H9Fy2HIN5/vlo
-        IvA/m/AS+5VyxqCNm3SKJQ7MNkkATCQ=
-X-Google-Smtp-Source: AK7set/osmJFQCobrauQUqZc0NNqdgQSfyrKXjZAcy946p+Q5sYBnO9HsdZyYANE2uWKqPQa9ver1A==
-X-Received: by 2002:a17:906:170c:b0:931:c2f0:9437 with SMTP id c12-20020a170906170c00b00931c2f09437mr4078563eje.8.1679419444466;
-        Tue, 21 Mar 2023 10:24:04 -0700 (PDT)
+        bh=/SnwtyCeqfxN+W4U7ez13LVb+d2R2LMwy11y/Jz9LSw=;
+        b=hncPpfcdRq3FcsemahwYt8pRTkv1Ok8r/TT7xE0bUUwsGdrNPEndFRL/3Ud3uRUOW9
+         5kDGB6THa3y/7PT5/qvEtvJedr31s84CVueCfC1OvTTwrRdycvDeEtwGofg6JHk1U9gP
+         G7jAPPD4XLYxzflcQ135uwXbSJP05WdjfnSL+xzqnzKGcQHuMlxCRL/jnvygN976ktvv
+         w4r13GoQnYcjSgZhAGjt4zPTOajgG7OoGGtx6/l3MFFgyWvqtQH5ccSpSaMQOOSzL2zg
+         S7RFDIqqdIbMFQY0Zr0sW+a8E2N6dgP7ANJKhs8rrht6S6KYGswQHuo/nj8TZy0FjV7w
+         u3yw==
+X-Gm-Message-State: AO0yUKXg9GATv8cBVwnPF1pQGo0g9C451Db5kB7CgZwUkBA9n4FuI+3j
+        i4MOGatSgBSIlhP4EP2tOmk=
+X-Google-Smtp-Source: AK7set+CABg3f1+mYA3u1QDkoUb8lm/4Sppl7dLBmBjX4+Czz1G/Js2gGQwEPDHRJLet/KbaByWEBQ==
+X-Received: by 2002:a17:906:646:b0:8a5:8620:575 with SMTP id t6-20020a170906064600b008a586200575mr3677381ejb.3.1679419563139;
+        Tue, 21 Mar 2023 10:26:03 -0700 (PDT)
 Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id t25-20020a170906065900b00939a61113d3sm1299865ejb.110.2023.03.21.10.24.03
+        by smtp.gmail.com with ESMTPSA id u7-20020a170906b10700b0092f38a6d082sm6043318ejy.209.2023.03.21.10.26.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 10:24:04 -0700 (PDT)
-Message-ID: <9ba49867-20d4-1732-b983-b2d6e14ad4ad@gmail.com>
-Date:   Tue, 21 Mar 2023 19:24:02 +0200
+        Tue, 21 Mar 2023 10:26:02 -0700 (PDT)
+Message-ID: <d98bd7af-d9f9-bb78-9aad-80c06a7a12a7@gmail.com>
+Date:   Tue, 21 Mar 2023 19:26:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Subject: Re: [PATCH 0/3] edits in greybus driver
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
         johan@kernel.org, elder@kernel.org, vireshk@kernel.org,
         thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
         greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org
 References: <cover.1679352669.git.eng.mennamahmoud.mm@gmail.com>
  <ee77a227-13bd-70ad-1d8e-f9719970e0f8@inria.fr>
- <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com> <ZBnawJvBVkgyVh78@kroah.com>
+ <196b5d53-701f-e2dd-596c-9fdb6a59f5cd@gmail.com>
+ <8020f263-158d-db6e-f34-425b72983bb@inria.fr>
 From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <ZBnawJvBVkgyVh78@kroah.com>
+In-Reply-To: <8020f263-158d-db6e-f34-425b72983bb@inria.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,9 +82,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On ٢١‏/٣‏/٢٠٢٣ ١٨:٢٦, Greg KH wrote:
-> On Tue, Mar 21, 2023 at 06:22:44PM +0200, Menna Mahmoud wrote:
->> On ٢١‏/٣‏/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
+On ٢١‏/٣‏/٢٠٢٣ ١٨:٣٩, Julia Lawall wrote:
+>
+> On Tue, 21 Mar 2023, Menna Mahmoud wrote:
+>
+>> On ٢١/٣/٢٠٢٣ ١٣:٤٦, Julia Lawall wrote:
 >>> On Tue, 21 Mar 2023, Menna Mahmoud wrote:
 >>>
 >>>> This patchset includes change happened in greybus driver in three
@@ -103,28 +106,50 @@ On ٢١‏/٣‏/٢٠٢٣ ١٨:٢٦, Greg KH wrote:
 >>> same subject into one.
 >> each patch related to different file. So, Can I to merge two commits for
 >> different files but have the same edit in one patch?
-> Yes, or make 2 different patches with 2 different subject lines as they
-> are obviously doing different things.
-okay, I will fix it.
+> They are both for greybus, which is what you advertise in the subject
+> line.  And the sense of the changes is the same, and the changes are quite
+> simple.  So I think you could just put them in one patch.  If you find
+> other occurrences of the problem in greybus you could make one patch that
+> fixes all of them.
 >
 >> but in this case no need to create patchset for all changes in `greybus`
 >> driver, right?
->>
+> A patchset is needed if the changes affect the same file, because there
+> might be complications if the patches are applied in the wrong order.
+>
 >> If okay with that, should I versioning the patches to resend them again, or
 >> should add "RESEND" subject prefix?
->>
->> please tell me the best way to resend these patches, appreciate your help.
-> What would you want to see if you had to review and apply loads of
-> patches like this?
-sure add version number will be easy to review.
-> (hint, it's not a resend, but a new version...)
+> RESEND would be if you send exactly the same thing, because some time has
+> passed and you are worried that the patch has been lost.  Now that you
+> have put these in a series, it is perhaps best to leave them in a series
+> and increase the version number, to avoid confusion on the part of people
+> reading the patches.
 >
-> thanks,
->
-> greg k-h
+> julia
 
 
-Thanks,
+understood, thanks Julia.
+
 
 Menna
 
+>
+>> please tell me the best way to resend these patches, appreciate your help.
+>>
+>>
+>> Menna
+>>
+>>
+>>> julia
+>>>
+>>>>    drivers/staging/greybus/gbphy.h                  | 10 ++++++++--
+>>>>    drivers/staging/greybus/greybus_authentication.h |  1 -
+>>>>    drivers/staging/greybus/pwm.c                    |  1 -
+>>>>    3 files changed, 8 insertions(+), 4 deletions(-)
+>>>>
+>>>> --
+>>>> 2.34.1
+>>>>
+>>>>
+>>>>
+> >
