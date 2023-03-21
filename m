@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB4E6C37BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCB36C37C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjCURGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S231128AbjCURGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjCURGN (ORCPT
+        with ESMTP id S230487AbjCURGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:06:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9F41C597;
-        Tue, 21 Mar 2023 10:05:50 -0700 (PDT)
+        Tue, 21 Mar 2023 13:06:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA5532BF;
+        Tue, 21 Mar 2023 10:05:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A434D61D40;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B44AB818B9;
+        Tue, 21 Mar 2023 17:05:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5914C433EF;
         Tue, 21 Mar 2023 17:05:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACEA9C4339E;
-        Tue, 21 Mar 2023 17:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679418348;
-        bh=yFWOiCGTMb0kxnXPUeW5UI17+2jMfP/fnjpb1q+J7gk=;
+        s=k20201202; t=1679418352;
+        bh=PM92BQVLa2WxBbnDUdLvSknVaFsEpK5ocCyJK48uW0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A9Gkip7tvni7Mnk6n8TnDZm1hR1VR1sJVwbjOXRQMBdSY6XQ/jhJ8WEU/oTZwSlE1
-         GP/lFo6JYzaIYubsVYtTlwq8hx6XR2v8y1h712a2FPq/Pa6aFUL5xK/t99zP5SJIuD
-         sZvf8FuC7AqYl3VSwrRJSJYzLka8040ITH3d7XbHNuTpDpF3wPabprMDq7Ru72qm6x
-         K62Om+CkOZFw3ZN4t3JSw3GkOICBNja2MmgJ33e9HWVB2x0mXlLMBEa7RGxcSegz3g
-         NEoSCfxTQ69n+/jiDvPFYL2WiWcO7I0PhFAnazvV+AZWMATjfg2SvTCTTdOdaWWfJD
-         7j6iOQu0oR4Pw==
+        b=VV0W2zZWcfrS0Pnp7+uSdWblosvpxij7nM1hHcrlG6KllIxLpgkWjfxg6L8pJn6fS
+         BuLcNFnrrsqJZ2HjcQZgwa16TIsHGm+PlSEnS618ROJunWIwJUgEEKS9BmC8kn9mtZ
+         +a/7bhMFsF80Ers2bOuy4wk2Hv6uXB6fN16IauXtYO3TdhOGMD2w+MVQYE18Gy8lNX
+         I0UmErrOkPo74b4zSg9+e3g/fu3Q03+8nBlqGdPNQDWEi47Z/ABd4ZcARfsXP8gp/4
+         en9kBBqp2MCxbotDylFJMqcRb66FWu2xCKl7T8IUAf9yteeqDDhCD3NcqHA5r7EPKp
+         9OrwGIUQYSbLQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -42,16 +42,16 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 05/14] mm/page_alloc: rename page_alloc_init() to page_alloc_init_cpuhp()
-Date:   Tue, 21 Mar 2023 19:05:04 +0200
-Message-Id: <20230321170513.2401534-6-rppt@kernel.org>
+Subject: [PATCH v2 06/14] init: fold build_all_zonelists() and page_alloc_init_cpuhp() to mm_init()
+Date:   Tue, 21 Mar 2023 19:05:05 +0200
+Message-Id: <20230321170513.2401534-7-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230321170513.2401534-1-rppt@kernel.org>
 References: <20230321170513.2401534-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,59 +61,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-The page_alloc_init() name is really misleading because all this
-function does is sets up CPU hotplug callbacks for the page allocator.
+Both build_all_zonelists() and page_alloc_init_cpuhp() must be called
+after SMP setup is complete but before the page allocator is set up.
 
-Rename it to page_alloc_init_cpuhp() so that name will reflect what the
-function does.
+Still, they both are a part of memory management initialization, so move
+them to mm_init().
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/gfp.h | 2 +-
- init/main.c         | 2 +-
- mm/page_alloc.c     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ init/main.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 7c554e4bd49f..ed8cb537c6a7 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -319,7 +319,7 @@ extern void page_frag_free(void *addr);
- #define __free_page(page) __free_pages((page), 0)
- #define free_page(addr) free_pages((addr), 0)
- 
--void page_alloc_init(void);
-+void page_alloc_init_cpuhp(void);
- void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp);
- void drain_all_pages(struct zone *zone);
- void drain_local_pages(struct zone *zone);
 diff --git a/init/main.c b/init/main.c
-index 4425d1783d5c..b2499bee7a3c 100644
+index b2499bee7a3c..4423906177c1 100644
 --- a/init/main.c
 +++ b/init/main.c
-@@ -969,7 +969,7 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+@@ -833,6 +833,10 @@ static void __init report_meminit(void)
+  */
+ static void __init mm_init(void)
+ {
++	/* Initializations relying on SMP setup */
++	build_all_zonelists(NULL);
++	page_alloc_init_cpuhp();
++
+ 	/*
+ 	 * page_ext requires contiguous pages,
+ 	 * bigger than MAX_ORDER unless SPARSEMEM.
+@@ -968,9 +972,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
  	boot_cpu_hotplug_init();
  
- 	build_all_zonelists(NULL);
--	page_alloc_init();
-+	page_alloc_init_cpuhp();
- 
+-	build_all_zonelists(NULL);
+-	page_alloc_init_cpuhp();
+-
  	pr_notice("Kernel command line: %s\n", saved_command_line);
  	/* parameters may set static keys */
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ff6a2fff2880..d1276bfe7a30 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6383,7 +6383,7 @@ static int page_alloc_cpu_online(unsigned int cpu)
- 	return 0;
- }
- 
--void __init page_alloc_init(void)
-+void __init page_alloc_init_cpuhp(void)
- {
- 	int ret;
- 
+ 	jump_label_init();
 -- 
 2.35.1
 
