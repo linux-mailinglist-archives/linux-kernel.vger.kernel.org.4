@@ -2,81 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD5D6C34D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5FC6C34DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 15:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbjCUOz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 10:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231511AbjCUO46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 10:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCUOz4 (ORCPT
+        with ESMTP id S229944AbjCUO4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 10:55:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AFE2E0D6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:55:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1pedOz-0003VA-R4; Tue, 21 Mar 2023 15:55:53 +0100
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1pedOz-005iFh-0z; Tue, 21 Mar 2023 15:55:53 +0100
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1pedOy-005Who-34; Tue, 21 Mar 2023 15:55:52 +0100
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-Subject: [PATCH v1] =?UTF-8?q?.mailmap:=20add=20entry=20for=20Leonard=20G?= =?UTF-8?q?=C3=B6hrs?=
-Date:   Tue, 21 Mar 2023 15:55:25 +0100
-Message-Id: <20230321145525.1317230-1-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 21 Mar 2023 10:56:55 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF853B86F
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 07:56:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6A7185C00FD;
+        Tue, 21 Mar 2023 10:56:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 21 Mar 2023 10:56:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679410609; x=1679497009; bh=Kr
+        zg0wsgi3e1+bN2uZEn+LdbVtw9+KSDVRGMqDt0WbY=; b=rOFJfN0ZWr4AOuVBov
+        h67qAC7OEWFK6+Lcmoxr4zy9jam8b5UPcV4rttDgUYhblJwTiNkoPAZ8S2f4QXqI
+        khWQvUhOMUEXRA5Tnh3pnwhqy2vYe6cUxkaI8XKypB/U3jv5bWB4Gml3l2M0vqRI
+        8mJa7sS91lwUUOuEiTaCZduzUxOZFgbgLsj5Q6hKNQV6TS7MUWHp2lqfLTR9w6/n
+        wvZ3/6VplK1vWi4bxTNvF2DJzRBFZuFpLluihrbUXyRbWuZzCLxjldNoxRCDnsIh
+        YDK98MSyNUuENuemqGZkDWxgnuS1pz1N9motRBRTE1SifM2zDEmsDjkPoL7Wh7W3
+        8gPw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679410609; x=1679497009; bh=Krzg0wsgi3e1+
+        bN2uZEn+LdbVtw9+KSDVRGMqDt0WbY=; b=HyLtwTHXPYjFq/3VilH0N4YsaxI0U
+        CEVCkcQlv5EwGi/cmTpvzouxVUQuETIwpkz+XgS6rlxpVg52+XbaPvXlUdLCoEPu
+        AQvzDhp84NU/D85de731dJQcXhKYsKOgUGNHvoRJntDpBN74Jj4m3vuOGhBOl8By
+        6fijWW30/KVCyv7WzBJscCRUvjulbNSCpJfZZrudFjKXijsxQPuGAglSLDxEtw4p
+        OPLG56lSNeXsyN7rffp/TVlZADqDIlHO8bVrrpx7C5ghZtlnnt3w3pjQxodFl0cG
+        GeI19nlM6sIQuSxgfTk+N3MeMbugxnLsuiQ5013S/CAV/uVWXsUdr9C3g==
+X-ME-Sender: <xms:sMUZZDA6TTiiQ4dKff3RNcFHbyTWFupKfv2GGsBnqNxInfOMRe7y1Q>
+    <xme:sMUZZJgCX-c8oV6GxFI7VLrIiN9jaNV7_l9x0KlRcYr5oPFPER9Wj36o_WfAQR0CD
+    FN_Coh-rwk1WVrOFbE>
+X-ME-Received: <xmr:sMUZZOkCSQvDPdl7-gbbxEhgX0ekXFynCmUVMplv-HGOGMFE_nz8a4YF-NtdDJfMqLa8zKqL3MfvqsUKH2hS0cbRwOGXzhM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuvdejfefhueeukeegffekieejtdefkeejuedtueegleeijefgjeeigfej
+    hedtteenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhm
+    vgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:sMUZZFz_YmheqIOzHQHDNT-qXP8dWAxzYkM1ntWuaip3sD4Hwdvbsw>
+    <xmx:sMUZZIQmp9BzpaaH9ozAMrLOrqi1LiQ9PiH65ob3FXOqZpXIWk9sZg>
+    <xmx:sMUZZIaaXH7DIfEVzrygybErvVHAUBAoHB21dttCxAYwxvnJv8Kdtw>
+    <xmx:scUZZJL7YCbwJh8p6dSlsi-QwqvWQhUHCD9XhyeqSW73288P1g_s1A>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Mar 2023 10:56:47 -0400 (EDT)
+Date:   Tue, 21 Mar 2023 15:56:46 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Roman Beranek <romanberanek@icloud.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
+ TCON0_DCLK_REG
+Message-ID: <20230321145646.w6kr7ddurfxpg5rt@houat>
+References: <20230320161636.24411-1-romanberanek@icloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zucvqkk7astyp3jt"
+Content-Disposition: inline
+In-Reply-To: <20230320161636.24411-1-romanberanek@icloud.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My very first kernel commit:
 
-  e4e1d47c7906 ("ALSA: ppc: remove redundant checks in PS3 driver probe")
+--zucvqkk7astyp3jt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-was sent with the umlaut in my last name transcribed (Göhrs -> Goehrs).
+Hi,
 
-Add a mailmap entry so all my commits use the same name.
+On Mon, Mar 20, 2023 at 05:16:36PM +0100, Roman Beranek wrote:
+> In the case of DSI output, the value of SUN4I_TCON0_DCLK_DIV (4) does
+> not represent the actual dotclock divider, PLL_MIPI instead runs at
+> (bpp / lanes )-multiple [1] of the dotclock. [2] Setting 4 as dotclock
+> divder thus leads to reduced frame rate, specifically by 1/3 on 4-lane
+> panels, and by 2/3 on 2-lane panels respectively.
+>=20
+> As sun4i_dotclock driver stores its calculated divider directly in
+> the register, conditional handling of the DSI output scenario is needed.
+> Instead of reading the divider from SUN4I_TCON0_DCLK_REG, retrieve
+> the value from tcon->dclk_min_div.
+>=20
+> [1] bits per pixel / number of DSI lanes
+> [2] https://github.com/BPI-SINOVOIP/BPI-M64-bsp-4.4/blob/66bef0f2f30b367e=
+b93b1cbad21ce85e0361f7ae/linux-sunxi/drivers/video/fbdev/sunxi/disp2/disp/d=
+e/lowlevel_sun50iw1/disp_al.c#L322
+>=20
+> Signed-off-by: Roman Beranek <romanberanek@icloud.com>
 
-Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
----
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
+This is similar to
+https://lore.kernel.org/all/20230319160704.9858-2-frank@oltmanns.dev/
 
-diff --git a/.mailmap b/.mailmap
-index 317e51a0065c..4094da35805e 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -264,6 +264,7 @@ Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
- Kuogee Hsieh <quic_khsieh@quicinc.com> <khsieh@codeaurora.org>
- Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
-+Leonard Göhrs <l.goehrs@pengutronix.de>
- Leonid I Ananiev <leonid.i.ananiev@intel.com>
- Leon Romanovsky <leon@kernel.org> <leon@leon.nu>
- Leon Romanovsky <leon@kernel.org> <leonro@mellanox.com>
+What's the story there? Also, how was it tested/confirmed?
 
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
--- 
-2.30.2
+Maxime
 
+--zucvqkk7astyp3jt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBnFrgAKCRDj7w1vZxhR
+xW1uAP9976ZsRECK0eQpWRQZgu8XVlengWG8ooPy6U2I7N47ZgEA6brbh4HoKGtV
+lwnpwiadCnsprq26idTI18GGtM6lrAY=
+=giCa
+-----END PGP SIGNATURE-----
+
+--zucvqkk7astyp3jt--
