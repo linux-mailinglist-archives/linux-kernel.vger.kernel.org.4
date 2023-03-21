@@ -2,232 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666D86C3838
-	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD766C3837
+	for <lists+linux-kernel@lfdr.de>; Tue, 21 Mar 2023 18:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCURco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 13:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S229749AbjCURc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 13:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCURcm (ORCPT
+        with ESMTP id S229571AbjCURc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:32:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D2A13538
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 10:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679419906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wgy4ya1FwxC/XDxzCB8Jfy4+qKCjl6s0tQNELR6EvdQ=;
-        b=T3ARX4j/57I2EZtyVRI/Q9xKbgF/UH8GqvnOdwDdgiL5mACSvOGykgJXaz1AXlzRdFP1+6
-        myEqLSvb+rPSl98HaSKLLcfTM3chhgv/7p+qsuWiDdksezw+cetttwGoLyUIOqp4hRK6OV
-        msiPfDckXsfx2Hzyu9UXGIDsohx0YWg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-425-CSeqk2H1NPqZO1WRKhaNgg-1; Tue, 21 Mar 2023 13:31:42 -0400
-X-MC-Unique: CSeqk2H1NPqZO1WRKhaNgg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B2E880C8C3;
-        Tue, 21 Mar 2023 17:31:42 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF273175AD;
-        Tue, 21 Mar 2023 17:31:41 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 0F9E84038ED8A; Tue, 21 Mar 2023 14:31:23 -0300 (-03)
-Date:   Tue, 21 Mar 2023 14:31:23 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 01/11] mm/vmstat: remove remote node draining
-Message-ID: <ZBnp69SHwM5SOttF@tpad>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.656996515@redhat.com>
- <6b6cd2fe-2309-b471-8950-3c4334462e69@redhat.com>
- <Y/5XoAnv43zYzxLR@tpad>
- <3329f63e-5671-1500-0730-cd46ba461d04@redhat.com>
- <20230321152031.2bzcury6k6aj7p6k@suse.de>
+        Tue, 21 Mar 2023 13:32:27 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A170B13D5C;
+        Tue, 21 Mar 2023 10:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xUZFSZQsr16SNSQJKusTXYyu832nutqEq5J/FsHnccU=; b=AVftADjchhmt+Jp4bRXmDpPWgb
+        QPWGGGotXG4NW1Bxs8o7Mp2rYgt/rL0QpXwz7h7on7QEc0WLk1BogpwK3a4peFkSHmTxBkVUyXocp
+        j16OfEx0Oa09g8pUR/qFB7nkgAKzV/AW/0T7oiuhW2LiRPbNE7GT6NZmc/fLBVcY22b/BpDYwIOMJ
+        2N+0YvkAiRDtyivAXO6s+QL9tNvKIH+3z2wm6TRGR2P1oF6tdGWQwzSQ2WpgY5ufuJR9Gx3RyzHQF
+        kR1xJKNsXr60PT+/7CeaDjk9yyvTwktOC8fZrAOTP1SzL9jUPDeglbIOlB9HuOkQdulRWp8kKMoJC
+        oqAmnEXA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51692)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pefq5-0001da-I2; Tue, 21 Mar 2023 17:32:01 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pefpp-0007vh-5A; Tue, 21 Mar 2023 17:31:45 +0000
+Date:   Tue, 21 Mar 2023 17:31:45 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing
+ the return value of function
+Message-ID: <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
+References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
+ <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321152031.2bzcury6k6aj7p6k@suse.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 03:20:31PM +0000, Mel Gorman wrote:
-> On Thu, Mar 02, 2023 at 11:10:03AM +0100, David Hildenbrand wrote:
-> > [...]
-> > 
-> > > 
-> > > > (2) drain_zone_pages() documents that we're draining the PCP
-> > > >      (bulk-freeing them) of the current CPU on remote nodes. That bulk-
-> > > >      freeing will properly adjust free memory counters. What exactly is
-> > > >      the impact when no longer doing that? Won't the "snapshot" of some
-> > > >      counters eventually be wrong? Do we care?
-> > > 
-> > > Don't see why the snapshot of counters will be wrong.
-> > > 
-> > > Instead of freeing pages on pcp list of remote nodes after they are
-> > > considered idle ("3 seconds idle till flush"), what will happen is that
-> > > drain_all_pages() will free those pcps, for example after an allocation
-> > > fails on direct reclaim:
-> > > 
-> > >          page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
-> > > 
-> > >          /*
-> > >           * If an allocation failed after direct reclaim, it could be because
-> > >           * pages are pinned on the per-cpu lists or in high alloc reserves.
-> > >           * Shrink them and try again
-> > >           */
-> > >          if (!page && !drained) {
-> > >                  unreserve_highatomic_pageblock(ac, false);
-> > >                  drain_all_pages(NULL);
-> > >                  drained = true;
-> > >                  goto retry;
-> > >          }
-> > > 
-> > > In both cases the pages are freed (and counters maintained) here:
-> > > 
-> > > static inline void __free_one_page(struct page *page,
-> > >                  unsigned long pfn,
-> > >                  struct zone *zone, unsigned int order,
-> > >                  int migratetype, fpi_t fpi_flags)
-> > > {
-> > >          struct capture_control *capc = task_capc(zone);
-> > >          unsigned long buddy_pfn = 0;
-> > >          unsigned long combined_pfn;
-> > >          struct page *buddy;
-> > >          bool to_tail;
-> > > 
-> > >          VM_BUG_ON(!zone_is_initialized(zone));
-> > >          VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
-> > > 
-> > >          VM_BUG_ON(migratetype == -1);
-> > >          if (likely(!is_migrate_isolate(migratetype)))
-> > >                  __mod_zone_freepage_state(zone, 1 << order, migratetype);
-> > > 
-> > >          VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
-> > >          VM_BUG_ON_PAGE(bad_range(zone, page), page);
-> > > 
-> > >          while (order < MAX_ORDER - 1) {
-> > >                  if (compaction_capture(capc, page, order, migratetype)) {
-> > >                          __mod_zone_freepage_state(zone, -(1 << order),
-> > >                                                                  migratetype);
-> > >                          return;
-> > >                  }
-> > > 
-> > > > Describing the difference between instructed refresh of vmstat and "remotely
-> > > > drain per-cpu lists" in order to move free memory from the pcp to the buddy
-> > > > would be great.
-> > > 
-> > > The difference is that now remote PCPs will be drained on demand, either via
-> > > kcompactd or direct reclaim (through drain_all_pages), when memory is
-> > > low.
-> > > 
-> > > For example, with the following test:
-> > > 
-> > > dd if=/dev/zero of=file bs=1M count=32000 on a tmpfs filesystem:
-> > > 
-> > >        kcompactd0-116     [005] ...1 228232.042873: drain_all_pages <-kcompactd_do_work
-> > >        kcompactd0-116     [005] ...1 228232.042873: __drain_all_pages <-kcompactd_do_work
-> > >                dd-479485  [003] ...1 228232.455130: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
-> > >                dd-479485  [011] ...1 228232.721994: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
-> > >       gnome-shell-3750    [015] ...1 228232.723729: __drain_all_pages <-__alloc_pages_slowpath.constprop.0
-> > > 
-> > > The commit message was indeed incorrect. Updated one:
-> > > 
-> > > "mm/vmstat: remove remote node draining
-> > > 
-> > > Draining of pages from the local pcp for a remote zone should not be
-> > > necessary, since once the system is low on memory (or compaction on a
-> > > zone is in effect), drain_all_pages should be called freeing any unused
-> > > pcps."
-> > > 
-> > > Thanks!
-> > 
-> > Thanks for the explanation, that makes sense to me. Feel free to add my
-> > 
-> > Acked-by: David Hildenbrand <david@redhat.com>
-> > 
-> > ... hoping that some others (Mel, Vlastimil?) can have another look.
-> > 
-> 
-> I was on extended leave and am still in the process of triaging a few
-> thousand mails so I'm working off memory here instead of the code. This
-> is a straight-forward enough question to answer quickly in case I forget
-> later.
-> 
-> Short answer: I'm not a fan of the patch in concept and I do not think it
-> should be merged.
-> 
-> I agree that drain_all_pages() would free the PCP pages on demand in
-> direct reclaim context but it happens after reclaim has already
-> happened. Hence, the reclaim may be necessary and may cause overreclaim
-> in some situations due to remote CPUs pinning memory in PCP lists.
-> 
-> Similarly, kswapd may trigger early because PCP pages do not contribute
-> to NR_FREE_PAGES so watermark checks can fail even though pages are
-> free, just inaccessible.
-> 
-> Finally, remote pages expire because ideally CPUs allocate local memory
-> assuming memory policies are not forcing use of remote nodes. The expiry
-> means that remote pages get freed back to the buddy lists after a short
-> period. By removing the expiry, it's possible that a local allocation will
-> fail and spill over to a remote node prematurely because free pages were
-> pinned on the PCP lists.
-> 
-> As this patch has the possibility of reclaiming early in both direct and
-> kswapd context and increases the risk of remote node fallback, I think it
-> needs much stronger justification and a warning about the side-effects. For
-> this version unless I'm very wrong -- NAK :(
+On Mon, Mar 20, 2023 at 06:16:49AM -0700, Donglin Peng wrote:
+> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+> index 3e7bcaca5e07..ba1986e27af8 100644
+> --- a/arch/arm/kernel/entry-ftrace.S
+> +++ b/arch/arm/kernel/entry-ftrace.S
+> @@ -258,7 +258,15 @@ ENDPROC(ftrace_graph_regs_caller)
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  ENTRY(return_to_handler)
+>  	stmdb	sp!, {r0-r3}
+> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+> +	/*
+> +	 * Pass both the function return values in the register r0 and r1
+> +	 * to ftrace_return_to_handler
+> +	 */
+> +	add	r2, sp, #16		@ sp at exit of instrumented routine
+> +#else
+>  	add	r0, sp, #16		@ sp at exit of instrumented routine
+> +#endif
+>  	bl	ftrace_return_to_handler
+...
+> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+> +static unsigned long __ftrace_return_to_handler(unsigned long retval_1st,
+> +			unsigned long retval_2nd, unsigned long frame_pointer)
+...
+> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+> +unsigned long ftrace_return_to_handler(unsigned long retval_1st,
+> +			unsigned long retval_2nd, unsigned long frame_pointer)
+> +{
+> +	return __ftrace_return_to_handler(retval_1st, retval_2nd, frame_pointer);
+> +}
+> +#else
+> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+> +{
+> +	return __ftrace_return_to_handler(0, 0, frame_pointer);
+> +}
+> +#endif
+> +
 
-Mel,
+Hi,
 
-Agreed. -v7 of the series dropped this patch and implements draining 
-of non-local NUMA node memory on pcp caches to happen from cpu_vm_stats_fold
-(which might execute remotely from vmstat_shepherd).
-If you can take a look at -v7, it would be awesome.
+To echo Mark's criticism, I also don't like this. I feel it would be
+better if ftrace_return_to_handler() always took the same arguments
+irrespective of the setting of CONFIG_FUNCTION_GRAPH_RETVAL.
 
-Subject: [PATCH v7 13/13] vmstat: add pcp remote node draining via cpu_vm_stats_fold
+On 32-bit ARM, we have to stack r0-r3 anyway to prevent the call to
+ftrace_return_to_handler() corrupting the return value, and these
+are the registers we need. So we might as well pass a pointer to
+these stacked registers. Whether that's acceptable on other
+architectures, I couldn't say.
 
-Large NUMA systems might have significant portions
-of system memory to be trapped in pcp queues. The number of pcp is
-determined by the number of processors and nodes in a system. A system
-with 4 processors and 2 nodes has 8 pcps which is okay. But a system
-with 1024 processors and 512 nodes has 512k pcps with a high potential
-for large amount of memory being caught in them.
+Thanks.
 
-Enable remote node draining for the CONFIG_HAVE_CMPXCHG_LOCAL case,
-where vmstat_shepherd will perform the aging and draining via
-cpu_vm_stats_fold.
-
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-
-
-
-
-> 
-> -- 
-> Mel Gorman
-> SUSE Labs
-> 
-> 
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
