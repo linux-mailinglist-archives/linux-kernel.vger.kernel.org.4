@@ -2,180 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEAE6C4F17
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC626C4F1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjCVPLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S231497AbjCVPNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjCVPLK (ORCPT
+        with ESMTP id S231263AbjCVPND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:11:10 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87E25AB7D;
-        Wed, 22 Mar 2023 08:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Vfvi+ibcFfyRTZet079sDBBX25A/mF74/mjZ8afd+aM=; b=hA4kdUoClzu50rLwJutFUQR1Y2
-        0uPRlhvYvh+KMN7O9SRcAdp/YYkAbdZc1Z9c9XFWnVxhqtwWoplYMJyrRoDnzUqB63+9SWqzTyqqQ
-        C3+Vr1EBvJN48FDL/jzTWJ/BSAP8TCmGhwcFBchWVt6Ty4x4yt7lSv18e9aSBVo+T4XDPH5j71hBo
-        9rV9ZjTWpumnWSrUdRNGUUADpT0Oz04bIeApA67PaYsRopQqmyGQ86j6qrpF/yWi0OIK59sZoRd/S
-        VBz5lE/khwsKWx3IOnejCiYCLbXjJqgo3OUlOAoKJ+nNf0L5LxN5yVdw4hjs6Jq5qzIv5Ng4bCnIQ
-        fI6esjgw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58984)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pf076-0003QQ-40; Wed, 22 Mar 2023 15:10:56 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pf074-0000SG-G5; Wed, 22 Mar 2023 15:10:54 +0000
-Date:   Wed, 22 Mar 2023 15:10:54 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, rogerq@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com
-Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
- for SGMII mode
-Message-ID: <ZBsafikKXRonAcp+@shell.armlinux.org.uk>
-References: <20230321111958.2800005-1-s-vadapalli@ti.com>
- <20230321111958.2800005-3-s-vadapalli@ti.com>
- <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
- <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
- <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
- <3b9793e1b2d16c49eb4af40c2c48609a09e2bc5a.camel@redhat.com>
+        Wed, 22 Mar 2023 11:13:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D563977A;
+        Wed, 22 Mar 2023 08:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679497982; x=1711033982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BPRQUKu+qBgifK27Px0rE+E2xaVa1QPMWTqx7CnVwA0=;
+  b=jGmtvD3EvZbX2DsO3l7Xdi7d8DtddiK2YxQbmtfIyoOtBCOyMxUBoBOi
+   UDMUGCWHA8QJvtXJ0QFwld3UrBArEVXdUztXbu4v6Oec96VBUQ4Akk6nx
+   Bt2nbYM8XXzjVOawvneL3V0xe1dfqwOxaHo+Qx6SQkC5RKvm2XAW913H5
+   yxUBslpfK0SPhOqMgSIdHZVLVmnaYpJvOow0akUtptuqiQR5aK9HO0Oy2
+   oy0+9tROtCjFJQisuBIxB/bT7dZ1LoBzi3ZxSGNj+GGv1cVVmzdgSx0yb
+   VLx4DBUrIMD5bHtl6no0ecfeTlvwmN2ENFZoovRD+IHSMIKpikEgpso+q
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336743520"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="336743520"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 08:12:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="746359567"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="746359567"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Mar 2023 08:12:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf08o-000DQM-0W;
+        Wed, 22 Mar 2023 15:12:42 +0000
+Date:   Wed, 22 Mar 2023 23:12:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ye.xingchen@zte.com.cn, wsa+renesas@sang-engineering.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: gpio: Use dev_err_probe()
+Message-ID: <202303222240.y3A3yNqb-lkp@intel.com>
+References: <202303221640559786295@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3b9793e1b2d16c49eb4af40c2c48609a09e2bc5a.camel@redhat.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <202303221640559786295@zte.com.cn>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:49:41PM +0100, Paolo Abeni wrote:
-> Hi Russell,
-> 
-> On Tue, 2023-03-21 at 15:38 +0000, Russell King (Oracle) wrote:
-> > On Tue, Mar 21, 2023 at 07:04:50PM +0530, Siddharth Vadapalli wrote:
-> > > Hello Russell,
-> > > 
-> > > On 21-03-2023 16:59, Russell King (Oracle) wrote:
-> > > > On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
-> > > > > Add support for configuring the CPSW Ethernet Switch in SGMII mode.
-> > > > > 
-> > > > > Depending on the SoC, allow selecting SGMII mode as a supported interface,
-> > > > > based on the compatible used.
-> > > > > 
-> > > > > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> > > > > ---
-> > > > >  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
-> > > > >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > > > > index cba8db14e160..d2ca1f2035f4 100644
-> > > > > --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > > > > +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> > > > > @@ -76,6 +76,7 @@
-> > > > >  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
-> > > > >  
-> > > > >  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
-> > > > > +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
-> > > > >  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
-> > > > 
-> > > > Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG come
-> > > > after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting that
-> > > > from its register offset definition?
-> > > 
-> > > Thank you for reviewing the patch. The registers are as follows:
-> > > CONTROL_REG offset 0x10
-> > > STATUS_REG offset  0x14
-> > > MR_ADV_REG offset  0x18
-> > > 
-> > > Since the STATUS_REG is not used in the driver, its offset is omitted.
-> > > The next register is the MR_ADV_REG, which I placed after the
-> > > CONTROL_REG. I grouped the register offsets together, to represent the
-> > > order in which the registers are placed. Due to this, the
-> > > MR_ADV_ABILITY_REG offset is placed after the CONTROL_REG offset define.
-> > > 
-> > > Please let me know if I should move it after the CONTROL_MR_AN_ENABLE
-> > > define instead.
-> > 
-> > Well, it's up to you - whether you wish to group the register offsets
-> > separately from the bit definitions for those registers, or whether
-> > you wish to describe the register offset and its associated bit
-> > definitions in one group before moving on to the next register.
-> > 
-> > > > If the advertisement register is at 0x18, and the lower 16 bits is the
-> > > > advertisement, are the link partner advertisement found in the upper
-> > > > 16 bits?
-> > > 
-> > > The MR_LP_ADV_ABILITY_REG is at offset 0x020, which is the the register
-> > > corresponding to the Link Partner advertised value. Also, the
-> > > AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE Bit is in the CONTROL_REG. The CPSW
-> > > Hardware specification describes the process of configuring the CPSW MAC
-> > > for SGMII mode as follows:
-> > > 1. Write 0x1 (ADVERTISE_SGMII) to the MR_ADV_ABILITY_REG register.
-> > > 2. Enable auto-negotiation in the CONTROL_REG by setting the
-> > > AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE bit.
-> > 
-> > Good to hear that there is a link partner register.
-> > 
-> > > > >  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
-> > > > > @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned in
-> > > > >  	struct am65_cpsw_port *port = container_of(slave, struct am65_cpsw_port, slave);
-> > > > >  	struct am65_cpsw_common *common = port->common;
-> > > > >  
-> > > > > -	if (common->pdata.extra_modes & BIT(state->interface))
-> > > > > +	if (common->pdata.extra_modes & BIT(state->interface)) {
-> > > > > +		if (state->interface == PHY_INTERFACE_MODE_SGMII)
-> > > > > +			writel(ADVERTISE_SGMII,
-> > > > > +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
-> > > > > +
-> > > > 
-> > > > I think we can do better with this, by implementing proper PCS support.
-> > > > 
-> > > > It seems manufacturers tend to use bought-in IP for this, so have a
-> > > > look at drivers/net/pcs/ to see whether any of those (or the one in
-> > > > the Mediatek patch set on netdev that has recently been applied) will
-> > > > idrive your hardware.
-> > > > 
-> > > > However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE,
-> > > > I suspect you won't find a compatible implementation.
-> > > 
-> > > I have tested with an SGMII Ethernet PHY in the standard SGMII MAC2PHY
-> > > configuration. I am not sure if PCS support will be required or not. I
-> > > hope that the information shared above by me regarding the CPSW
-> > > Hardware's specification for configuring it in SGMII mode will help
-> > > determine what the right approach might be. Please let me know whether
-> > > the current implementation is acceptable or PCS support is necessary.
-> > 
-> > Nevertheless, this SGMII block is a PCS, and if you're going to want to
-> > support inband mode (e.g. to read the SGMII word from the PHY), or if
-> > someone ever wants to use 1000base-X, you're going to need to implement
-> > this properly as a PCS.
-> > 
-> > That said, it can be converted later, so isn't a blocking sisue.
-> 
-> Just to be on the same page, I read all the above as you do accept/do
-> not oppose to this series in the current form, am I correct?
+Hi,
 
-I don't oppose this series.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks.
+[auto build test WARNING on wsa/i2c/for-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/i2c-gpio-Use-dev_err_probe/20230322-164142
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/202303221640559786295%40zte.com.cn
+patch subject: [PATCH] i2c: gpio: Use dev_err_probe()
+config: arm-randconfig-r046-20230322 (https://download.01.org/0day-ci/archive/20230322/202303222240.y3A3yNqb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/6d20957af4d6ae04d7249889f6a52bb88a89ce29
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/i2c-gpio-Use-dev_err_probe/20230322-164142
+        git checkout 6d20957af4d6ae04d7249889f6a52bb88a89ce29
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/i2c/busses/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303222240.y3A3yNqb-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-gpio.c:359:43: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                         "error trying to get descriptor: %d\n");
+                                                          ~^
+   1 warning generated.
+
+
+vim +359 drivers/i2c/busses/i2c-gpio.c
+
+   327	
+   328	static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
+   329						   const char *con_id,
+   330						   unsigned int index,
+   331						   enum gpiod_flags gflags)
+   332	{
+   333		struct gpio_desc *retdesc;
+   334		int ret;
+   335	
+   336		retdesc = devm_gpiod_get(dev, con_id, gflags);
+   337		if (!IS_ERR(retdesc)) {
+   338			dev_dbg(dev, "got GPIO from name %s\n", con_id);
+   339			return retdesc;
+   340		}
+   341	
+   342		retdesc = devm_gpiod_get_index(dev, NULL, index, gflags);
+   343		if (!IS_ERR(retdesc)) {
+   344			dev_dbg(dev, "got GPIO from index %u\n", index);
+   345			return retdesc;
+   346		}
+   347	
+   348		ret = PTR_ERR(retdesc);
+   349	
+   350		/* FIXME: hack in the old code, is this really necessary? */
+   351		if (ret == -EINVAL)
+   352			retdesc = ERR_PTR(-EPROBE_DEFER);
+   353	
+   354		/* This happens if the GPIO driver is not yet probed, let's defer */
+   355		if (ret == -ENOENT)
+   356			retdesc = ERR_PTR(-EPROBE_DEFER);
+   357	
+   358		dev_err_probe(dev, PTR_ERR(retdesc),
+ > 359			      "error trying to get descriptor: %d\n");
+   360	
+   361		return retdesc;
+   362	}
+   363	
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
