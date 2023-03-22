@@ -2,219 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6496C40D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464A66C40EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCVDQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S230116AbjCVDVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjCVDQT (ORCPT
+        with ESMTP id S229922AbjCVDVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:16:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249412884E;
-        Tue, 21 Mar 2023 20:16:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DA3861F24;
-        Wed, 22 Mar 2023 03:16:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB1AC433D2;
-        Wed, 22 Mar 2023 03:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679454976;
-        bh=bnAyPFcvfn3yjJZ4/00BRfbbJTpOw/6izVsNwBXCpbs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K29+pa7naURrYEosVvSHCQ3LqsBJA1T3maQuMRW4ZSb3xEtDOMByKpd3z+WKfv8OR
-         VPlZbyMEd9M7y1uI+zZGOJSzs6CTHlui4QYp/etKwuDOLDP6gEvlSafZey4CEJMrj/
-         2+T3X9IsyeGtZcdpDlOa8WOQBeIa98sFFKD+wjmjtDJmXEQtGcrFgJTYwPuF+0zAKd
-         JU/T3/cn+3I1Em1qxZL5K9Dn8tZFFS3oh2/ugtOQjoyoTVKdly2PIuF5NFm5pxQYur
-         IOhwiEvHScUjHCVKBDoKWJj5E2W4p7zrjV+i2WeZ3X+Dm40mt4i7UprbN1gRfD2gO4
-         UI1J2OP4eeTgA==
-Date:   Tue, 21 Mar 2023 20:19:28 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH RFT v2 11/14] clk: qcom: smd-rpm: Hook up PCNoC_0
- keep_alive
-Message-ID: <20230322031928.vugzh4de2yecd5j2@ripper>
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <20230303-topic-rpmcc_sleep-v2-11-ae80a325fe94@linaro.org>
+        Tue, 21 Mar 2023 23:21:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57630559FC;
+        Tue, 21 Mar 2023 20:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=DSyI8L5oT8eOqUOSX8aSXNDzQ40wNn5rmXBNbP1Vl/I=; b=f97vUw9NR76Vf9DY8rj3DhncTg
+        1dk9JXIvIaYWwy06I4CWh6DY5f6k/R3dHsBaKsD9RvY0PeEvla3Oj+oDyQouT1vnJ69la57Z950nh
+        qnOcCudCmroTgtmwaYOnwvVvAWnXawpCHiBYh1VPsTOYk6ssdoW0GkC/j0M5zEN15pOwojjnCCOWl
+        i4Hdu1bohsa+3kBRcGG0n9rO6/gKWrPeDE71dJQ7nY6+ulN+dyI+L3XYSU849i9MtJoQlSzy1In/t
+        oO/8q/n9SmB8DdZgSdkzdFWI8/GDsLC2KPju1+juadsV85QXbv91OxwyK2310+Ha994xVePUG7ZVd
+        nVsb63AQ==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pep2d-00EQDw-1m;
+        Wed, 22 Mar 2023 03:21:35 +0000
+Message-ID: <ee585b21-7b75-c7fe-57fd-ad6d35986a11@infradead.org>
+Date:   Tue, 21 Mar 2023 20:21:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303-topic-rpmcc_sleep-v2-11-ae80a325fe94@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] of: fix htmldocs build warning
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230220163638.04e9d0c4@canb.auug.org.au>
+ <20230310113258.463f836c@canb.auug.org.au>
+ <b8e8e51e-1ccf-e413-0831-ae5f70da539b@infradead.org>
+In-Reply-To: <b8e8e51e-1ccf-e413-0831-ae5f70da539b@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:35:27PM +0100, Konrad Dybcio wrote:
-> 14 [1] of our 18 supported platforms need an active keepalive vote on
-> PCNoC_0 so as not to cause havoc on the entire SoC. Guarantee that.
+Hi--
+
+On 3/9/23 20:52, Randy Dunlap wrote:
+> 
+> 
+> On 3/9/23 16:32, Stephen Rothwell wrote:
+>>
+>> Fix this htmldoc build warning:
+>>
+>> include/linux/of.h:115: warning: cannot understand function prototype: 'const struct kobj_type of_node_ktype; '
+>>
+>> Reported by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node creation functions")
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > 
 
-Given that these are all clocks for peripheral (or peripheral & config)
-noc clocks, doesn't this just ensure that the running CPU is able to
-reach something on the peripheral bus?
+Can we get Stephen's patch merged, please?
+Thanks.
 
-That is, are you encoding a active-only keep-alive interconnect path?
-Could we somehow express that using the interconnect driver on top
-instead?
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> Thanks.
+> 
+> After this patch, there is another warning for this function:
+> 
+> ../include/linux/of.h:118: warning: Excess function parameter 'phandle_name' description in 'of_node_init'
+> 
+>> ---
+>>  include/linux/of.h | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> This is actually untested, but seems pretty straight forward.
+>>
+>> diff --git a/include/linux/of.h b/include/linux/of.h
+>> index 0af611307db2..814d33f3835a 100644
+>> --- a/include/linux/of.h
+>> +++ b/include/linux/of.h
+>> @@ -100,6 +100,9 @@ struct of_reconfig_data {
+>>  	struct property		*old_prop;
+>>  };
+>>  
+>> +extern const struct kobj_type of_node_ktype;
+>> +extern const struct fwnode_operations of_fwnode_ops;
+>> +
+>>  /**
+>>   * of_node_init - initialize a devicetree node
+>>   * @node: Pointer to device node that has been created by kzalloc()
+>> @@ -111,9 +114,6 @@ struct of_reconfig_data {
+>>   * whether to free the memory will be done by node->release(), which is
+>>   * of_node_release().
+>>   */
+>> -/* initialize a node */
+>> -extern const struct kobj_type of_node_ktype;
+>> -extern const struct fwnode_operations of_fwnode_ops;
+>>  static inline void of_node_init(struct device_node *node)
+>>  {
+>>  #if defined(CONFIG_OF_KOBJ)
+> 
 
-Regards,
-Bjorn
-
-> [1] there are 13 changes to driver data, but 8226 reuses 8974.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 27 ++++++++++++++-------------
->  1 file changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index 8e25b3d7d30c..a44b52bd0c83 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -500,6 +500,7 @@ DEFINE_CLK_SMD_RPM(aggre1_noc, QCOM_SMD_RPM_AGGR_CLK, 1);
->  DEFINE_CLK_SMD_RPM(aggre2_noc, QCOM_SMD_RPM_AGGR_CLK, 2);
->  
->  DEFINE_CLK_SMD_RPM_BUS(pcnoc, 0);
-> +DEFINE_CLK_SMD_RPM_BUS_KEEP_ALIVE(pcnoc, 0);
->  DEFINE_CLK_SMD_RPM_BUS(snoc, 1);
->  DEFINE_CLK_SMD_RPM_BUS(sysmmnoc, 2);
->  DEFINE_CLK_SMD_RPM_BUS(cnoc, 2);
-> @@ -558,7 +559,7 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
->  
->  static struct clk_smd_rpm *msm8909_clks[] = {
->  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
-> @@ -592,7 +593,7 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8909 = {
->  
->  static struct clk_smd_rpm *msm8916_clks[] = {
->  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
-> @@ -626,7 +627,7 @@ static struct clk_smd_rpm *msm8936_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
-> @@ -660,7 +661,7 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
->  
->  static struct clk_smd_rpm *msm8974_clks[] = {
->  	[RPM_SMD_PNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_CNOC_CLK]		= &clk_smd_rpm_bus_2_cnoc_clk,
-> @@ -712,7 +713,7 @@ static struct clk_smd_rpm *msm8976_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
-> @@ -746,7 +747,7 @@ static struct clk_smd_rpm *msm8992_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_OCMEMGX_CLK] = &clk_smd_rpm_ocmemgx_clk,
->  	[RPM_SMD_OCMEMGX_A_CLK] = &clk_smd_rpm_ocmemgx_a_clk,
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
-> @@ -804,7 +805,7 @@ static struct clk_smd_rpm *msm8994_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_OCMEMGX_CLK] = &clk_smd_rpm_ocmemgx_clk,
->  	[RPM_SMD_OCMEMGX_A_CLK] = &clk_smd_rpm_ocmemgx_a_clk,
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
-> @@ -864,7 +865,7 @@ static struct clk_smd_rpm *msm8996_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
-> @@ -918,7 +919,7 @@ static struct clk_smd_rpm *qcs404_clks[] = {
->  	[RPM_SMD_QDSS_CLK] = &clk_smd_rpm_qdss_clk,
->  	[RPM_SMD_QDSS_A_CLK] = &clk_smd_rpm_qdss_a_clk,
->  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
-> @@ -948,7 +949,7 @@ static struct clk_smd_rpm *msm8998_clks[] = {
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->  	[RPM_SMD_BIMC_A_CLK] = &clk_smd_rpm_bimc_a_clk,
->  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
-> @@ -1010,7 +1011,7 @@ static struct clk_smd_rpm *sdm660_clks[] = {
->  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
->  	[RPM_SMD_CNOC_A_CLK] = &clk_smd_rpm_bus_2_cnoc_a_clk,
->  	[RPM_SMD_CNOC_PERIPH_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_CNOC_PERIPH_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_CNOC_PERIPH_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->  	[RPM_SMD_BIMC_A_CLK] = &clk_smd_rpm_bimc_a_clk,
->  	[RPM_SMD_MMSSNOC_AXI_CLK] = &clk_smd_rpm_mmssnoc_axi_rpm_clk,
-> @@ -1052,7 +1053,7 @@ static struct clk_smd_rpm *mdm9607_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->  	[RPM_SMD_BIMC_A_CLK]		= &clk_smd_rpm_bimc_a_clk,
->  	[RPM_SMD_QPIC_CLK]		= &clk_smd_rpm_qpic_clk,
-> @@ -1074,7 +1075,7 @@ static struct clk_smd_rpm *msm8953_clks[] = {
->  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
-> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
-> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
-> 
-> -- 
-> 2.39.2
-> 
+-- 
+~Randy
