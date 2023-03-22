@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0686C4043
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48A46C4046
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjCVCTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S230221AbjCVCUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 22:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCVCTJ (ORCPT
+        with ESMTP id S229541AbjCVCU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:19:09 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A17158A1
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:19:08 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53d277c1834so313881347b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:19:08 -0700 (PDT)
+        Tue, 21 Mar 2023 22:20:27 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DF84DBFA;
+        Tue, 21 Mar 2023 19:20:26 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id f14so7855139iow.5;
+        Tue, 21 Mar 2023 19:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679451548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LsGzDD7N3xIQioCZ8vaIzqIq9YbJo7VI7CSEkK+5Bjk=;
-        b=iccskpPGlSypcpFSCe6ACliA/LfvS8jKKHNiTJqYMKauomRuO3KAqRJY51xakk1cRn
-         2X8dbM0kBrIM1OqZCP9OeAxe9OdH+2J4fUr5ydrF1SWtl8hzduUuwHEwhKHtYv0PmkjQ
-         eooelkFcDKR8YQ8XUmxpWMdFQVjqQuoYlkGTs=
+        d=gmail.com; s=20210112; t=1679451626;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LoYhF+v3FctdaWwoqqIIS1qqDpKm5L/AMYSClAzsXQw=;
+        b=aEviMH7nUPuN7OK3kZYZEZ2e4laI65KPQ814H3yNXG+Rbu5Bc6+C/k6qRJXVxe8VpC
+         ZKnjY1Qw8xcPHoGXqzRjqJlvwi5Cb52rKRLUNyUlyMe8c4HApghxE+woWgvZZ4ZpURsd
+         Z8SvTPJNWfsAsCWyvTh8cHvN89tk397rMLFyykmZ1awvz0sMYVveMM5kapKmech5Q88B
+         MwF5FZY2B/GdPP5v+ptOnd1R6nM7rcWS7CrOUjUxx8IoBxfR472C3uqaPoCUxYgDBVq9
+         VdSEoYhp4ELoUTL4o7vVLbjIgEFKTUdRmg6UrS13t4l8QkcrG6Ztbe7BS99CVyue5TkA
+         ealQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679451548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LsGzDD7N3xIQioCZ8vaIzqIq9YbJo7VI7CSEkK+5Bjk=;
-        b=AoK70BNf8pjFVgIjRA3j+x/YPodG4nbnNIamIsB8XJZwdk3NBnVC8iYKdF9PxDWsSs
-         J6lyjeye8Z/W9Fv095ZfVsBbP14xBJ6IAgY+rtTtsh4yui5BqSQJUzjwkUynjygFHMtu
-         4LeqZrqD2ClcEEiUf/MPhLYab6NOqMK858lxs+vrjYT51xyc/vuNOIGhvu6ARAKirPE+
-         ucSiy+M2sHsLmrwbZQ/YFvxU89n/1esyC8sa9seuMl61843or389nxnAkIEEnX+fZpzh
-         f/dPh63EYCsZwvDfWt0x7H/9ATu7IrUgMZAIdiYUuX/alLT+7pzd7/cdmHANWPtxZr9s
-         4lag==
-X-Gm-Message-State: AAQBX9ciyxNMt5SFiVUaEZzNktW4DwFb/JiwGYCzCZEGi2X56Tm8TzxE
-        /YuQv+TYIRiCwoG1cG6tfbuyFWb309ghyDr/do5Afg==
-X-Google-Smtp-Source: AKy350Zx/zVrikbH2Sze2FBliqyAFfVtV5zQypq84Ibep+cu7qoQ+4M54ZZiLEbmGH04pC5+f7pl6MKK/5RGMVX034s=
-X-Received: by 2002:a81:b346:0:b0:530:b21f:d604 with SMTP id
- r67-20020a81b346000000b00530b21fd604mr2211123ywh.9.1679451547791; Tue, 21 Mar
- 2023 19:19:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679451626;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LoYhF+v3FctdaWwoqqIIS1qqDpKm5L/AMYSClAzsXQw=;
+        b=lVzJSXaHm4susmuMKn5LtZ0DKk1PGKaD5zLvxTG4PK4RNvURBuz+YRrsUwYbMV2ABQ
+         WaWNV2ybcXdvrFX8dccKq41FY+HsOBA9WkojVKPvLAmfjwDefYuIu0sWAr743Iekb+tJ
+         28YNfpOysmIuKm/l6i32CpRgBEYfIkw20I6xhyzOHaogmCHVglR71R/nlkItJso04+U4
+         HIY8hi6vyYUr3R2YrDBhGgtXsc9q+GLeu4LpmQ8+eYSMuE3V89IZygMsx27NKRgxeuX2
+         jodTF+8bNYCnyboQnYQQ/6+MzKYDEvBJIQch0sD8sT0oEhdO1YMJ+SnBJMQAxQtVyksS
+         FrYA==
+X-Gm-Message-State: AO0yUKWhO1eJ6JjC8y+oqmibYetOdntvkWz9NMputMwhpkz9WHs2p/eb
+        61vSB6M7i05j2T2wfo6PywQne/BIA6Y=
+X-Google-Smtp-Source: AK7set/C/SfWxGH1Sp8hVcBJxUsvqRvc0/EhaVW0OtF5hv+jZrDCS2QDMJlMqIjanUenH01tcyHhIA==
+X-Received: by 2002:a5e:c605:0:b0:753:13ec:4ba with SMTP id f5-20020a5ec605000000b0075313ec04bamr3527548iok.4.1679451626214;
+        Tue, 21 Mar 2023 19:20:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z18-20020a5e8612000000b0074ce0b89a37sm4083370ioj.1.2023.03.21.19.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 19:20:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 21 Mar 2023 19:20:24 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     stable <stable@vger.kernel.org>, Xi Ruoyao <xry111@xry111.site>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] LoongArch: Check unwind_error() in arch_stack_walk()
+Message-ID: <b4592fa4-35ec-4062-b965-962fc1ea12f6@roeck-us.net>
+References: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
+ <253a5dfcb7e41e44d15232e1891e7ea9d39dc953.camel@xry111.site>
+ <f61ac027-0068-40f0-87bd-17f916141884@roeck-us.net>
+ <CAAhV-H5kFRt9z0U_TqSQeqX9WuUJ2cg0LOboUXHp-fLR0PoTJg@mail.gmail.com>
 MIME-Version: 1.0
-References: <72ba8619-88cb-4bf4-8232-18d8a1b6b5bf@paulmck-laptop>
- <20230321052337.26553-1-qiuxu.zhuo@intel.com> <20230321052337.26553-2-qiuxu.zhuo@intel.com>
- <20230321154751.hgeppd5v327juc36@offworld> <a4a3e103-78b3-4be3-80b8-bbae7b1bb2f4@paulmck-laptop>
- <SJ1PR11MB61797170867CD7B98CC68BEE89869@SJ1PR11MB6179.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB61797170867CD7B98CC68BEE89869@SJ1PR11MB6179.namprd11.prod.outlook.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 21 Mar 2023 22:18:56 -0400
-Message-ID: <CAEXW_YS_=qCkpKBPfc3o9dnTW2RKNwByZFBDun-KKEDhPy1z3Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] rcu/rcuscale: Stop kfree_scale_thread thread(s)
- after unloading rcuscale
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H5kFRt9z0U_TqSQeqX9WuUJ2cg0LOboUXHp-fLR0PoTJg@mail.gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 9:26=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
-wrote:
->
-> > From: Paul E. McKenney <paulmck@kernel.org>
-> > [...]
-> > > > Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
-> > > > Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+On Wed, Mar 22, 2023 at 08:50:07AM +0800, Huacai Chen wrote:
+> On Tue, Mar 21, 2023 at 10:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On Tue, Mar 21, 2023 at 08:35:34PM +0800, Xi Ruoyao wrote:
+> > > On Tue, 2023-03-21 at 14:29 +0800, Tiezhu Yang wrote:
+> > > > We can see the following messages with CONFIG_PROVE_LOCKING=y on
+> > > > LoongArch:
+> > > >
+> > > >   BUG: MAX_STACK_TRACE_ENTRIES too low!
+> > > >   turning off the locking correctness validator.
+> > > >
+> > > > This is because stack_trace_save() returns a big value after call
+> > > > arch_stack_walk(), here is the call trace:
+> > > >
+> > > >   save_trace()
+> > > >     stack_trace_save()
+> > > >       arch_stack_walk()
+> > > >         stack_trace_consume_entry()
+> > > >
+> > > > arch_stack_walk() should return immediately if unwind_next_frame()
+> > > > failed, no need to do the useless loops to increase the value of
+> > > > c->len in stack_trace_consume_entry(), then we can fix the above
+> > > > problem.
+> > > >
+> > > > Reported-by: Guenter Roeck <linux@roeck-us.net>
+> > > > Link: https://lore.kernel.org/all/8a44ad71-68d2-4926-892f-72bfc7a67e2a@roeck-us.net/
+> > > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > > >
-> > > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> > > The fix makes sense, but I'm asking the same question again (sorry if
+> > > it's noisy): should we Cc stable@vger.kernel.org and/or make a PR for
+> > > 6.3?
+> > >
+> > > To me a bug fixes should be backported into all stable branches affected
+> > > by the bug, unless there is some serious difficulty.  As 6.3 release
+> > > will work on launched 3A5000 boards out-of-box, people may want to stop
+> > > staying on the leading edge and use a LTS/stable release series. We
+> > > can't just say (or behave like) "we don't backport, please use latest
+> > > mainline" IMO :).
 > >
-> > Much better, thank you both!
-> >
-> > But unfortunately, these patches do not apply cleanly.  Qiuxu Zhuo, cou=
-ld
-> > you please forward port these to the -rcu "dev" branch [1]?
-> >
->
-> Hi Paul,
->
-> OK.
-> I'll be making v4 patches rebased on the top of the -rcu "dev" branch.
-> Thanks for letting me know more about the RCU patch workflow.
->
-> Also thank you Davidlohr Bueso and Joel for reviewing the patches.
+> > It is a bug fix, isn't it ? It should be backported to v6.1+. Otherwise,
+> > if your policy is to not backport bug fixes, I might as well stop testing
+> > loongarch on all but the most recent kernel branch. Let me know if this is
+> > what you want. If so, I think you should let all other regression testers
+> > know that they should only test loongarch on mainline and possibly on
+> > linux-next.
+> This is of course a bug fix, but should Tiezhu resend this patch? Or
+> just replying to this message with CC stable@vger.kernel.org is
+> enough?
+> 
 
-You're welcome and thanks for your interactions on the mailing list
-and RCU interest. :-)
+Normally the maintainer, before sending a pull request to Linus, would add
+"Cc: stable@vger.kernel.org" to the patch. Actually sending the patch to
+the stable@ mailing list is only necessary if it was applied to the
+upstream kernel without Cc: stable@ in the commit message.
 
-
- - Joel
+Guenter
