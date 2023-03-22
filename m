@@ -2,246 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BAD6C4B1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DA96C4B27
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjCVMvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S230454AbjCVM4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjCVMvS (ORCPT
+        with ESMTP id S230448AbjCVM4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:51:18 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2048.outbound.protection.outlook.com [40.107.20.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E1811EBB;
-        Wed, 22 Mar 2023 05:51:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N4RkyQgMBeh2kj+hHrxCcty1iRz6lCAfW30Q2WQjQIoJLdfPkDFwyy8kFYpdz93uoACbsdQyrUfKMAu6QhzE5JgbXfiEzdPc4uDpQSBKcfNcYztq/kB+FNg1l5LRfDB8X7R7DFBYssg4oKDSvskBfWnRS/0MUPvu3l8lakgByc1ks5O9RH4VnQt80vSnCZ43vkLVteiQhuc2Om1NXGbEHCKsbLdUB0hJFExa2fcx8kG54HPedrYsgJsnYbHeLXVWX+XqvpE4pjXA0fsaT0RKEtXP4ZpE+fxBWW1gBbQs4YagiImKy8VpZniddGgm0ws6YPS8/2t5J7KOP8VSTyeNiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yE+SF97Nr9xmxw2bxHnZ1+fzvQeNqUA1CQdOXXeesDM=;
- b=fijcRX4vdIXzNhBSuM3++HWMOzKIHHXHH1vcU4nzmS7YIpVFrHnKAoh2m+YKNbhGs+KV1F5V2RtJztsjBOUEISUnSaCjo33YrJjit3IvHQjhCz7abk2/mcv6aqIenbq8Io1j+fs7cqcZtTGjUfqCap41DHp8yPc+apoOTz4pAtyHWdQKfd5L9KqAMEqLZDKVOGLB7gM+U3kPxv6W5hYNoUsXfxz8cpcCLwym5TbUFW22szPcDw0yLLY0SbZHivVrjrx/hXr56/Yp+MANkz1qVi5SlZt2DN4IF1IX4VXH8pEK1XgDbL9IAzgu+APmY6UVXwsb2SRoHmdkX0AkJrll7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yE+SF97Nr9xmxw2bxHnZ1+fzvQeNqUA1CQdOXXeesDM=;
- b=BPri4+22Y+GvuumeejvXU+p3ScyaVm6WAbMdMWzQRag21Q61zZbUKWWcRl3xz2LR98EyXkaLkSeNrrfDxry26DrRGaVwhEoifwdFVu4qzyWKsgSDIQAf3L1s9UXZ0T1FT7z8ZqFlkorSrcgu0SRKuo4FIvXT/kxW43qoi4dSYB4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS5PR04MB9756.eurprd04.prod.outlook.com (2603:10a6:20b:677::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 12:51:13 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 12:51:13 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH linux-next V2] dt-bindings: usb: snps,dwc3: correct i.MX8MQ support
-Date:   Wed, 22 Mar 2023 20:56:18 +0800
-Message-Id: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0010.apcprd02.prod.outlook.com
- (2603:1096:4:194::15) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Wed, 22 Mar 2023 08:56:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E85A5D8A1;
+        Wed, 22 Mar 2023 05:56:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7EAE620D7;
+        Wed, 22 Mar 2023 12:56:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54807C433A0;
+        Wed, 22 Mar 2023 12:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679489801;
+        bh=pFBXYdxdFklmnPVMqDW3np+O3CSV0Nc/150QPIQEDko=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B1YqJ662CNRHq1SZZ5xOnh8JZWS5raGfq0N8HP4Ui1eqjznKBGcNLyknUY5pMRoe5
+         bjAgEs+5gvX4iHoTQB5NKwDQWtGHaS1YkCrBUcfNJjdgaINaMVknMV260jrfbobz1z
+         R4y0oUjl+b3njnY3dXf1kBEoeE95No6VoXmjz4gtExGMkdLhrX0C7pdoeSCJRx+7no
+         ncZaQG2cAfBFaaTCLVdjswDPeVHcK7HLTR1Nxdy8tmuc8FQLbCyPb/hlo7qNBzlWm4
+         stU5rExSIY1Qya/lJnjLsEF5IksVXnozsbRSYjGf/6X7FXzillc9kgNTQI7BVv7tja
+         2Bb0SS8IwVB5g==
+Received: by mail-yb1-f180.google.com with SMTP id e65so20817059ybh.10;
+        Wed, 22 Mar 2023 05:56:41 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fQoULuSVbPqqNd292FwlBJATH/Fd7t7JFhC4kyvc8Cbdl7TMHp
+        OT0gG6PYOCmXl8esQOvl32iBw3qbqvhabyD6VQ==
+X-Google-Smtp-Source: AKy350bdJZMyzaTU1EssNK+DI7EbAc1FdWvsdKrzrsaQLrlv+0e71ugQkgXFJRYmdHQVGZUfpbVoUPOCBzQN8RX6K70=
+X-Received: by 2002:a05:6902:283:b0:b33:531b:3dd4 with SMTP id
+ v3-20020a056902028300b00b33531b3dd4mr3273257ybh.1.1679489800138; Wed, 22 Mar
+ 2023 05:56:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS5PR04MB9756:EE_
-X-MS-Office365-Filtering-Correlation-Id: aab6a2a0-bb18-46c8-668b-08db2ad41e28
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 83afpwXshU6CCoVx2X37b+78ny5EfJVkxwrvipwYftxFqVH7zM/r+2YAfIuUzu+lii66h14NvlfprNQYwNQGtgOczT2/B0bcd5dmNV43ZDi7cd8bVbiooQq6PIWj9rclf9gk7shhRaSWV74GV2zUij1/lN1uri1WdGtvAVhYcThOfPKqCTc2M6bgsHlSXMnCQq6ktdc5rqGasZQu+twJRxsiNyYw99DQtDzYHCSMEnl2LTiptF24bYmGwVanLWPHAh5LA4R+yqBYt3LIkcdVYOMEz/J/ISJggXcVLQ2hwPM7rZlfD5ZUzUeUrbZKVxjN1NXHgsak2ufGzEhGxIN/V6VGlj9vnq6dMccBOVmDiYLfZa0K6q6J6DyCEVma1E/xroQPmbTeCLbigZneLr5W6eiei4vdWVVJ2bw6UnvqTGU8J8eGLy4vzGYKRY7G61ubAw7aAx30hdbulugMqlFdks5+ZIoRqA3IS/yyX2wiWMiGV/6f4LjfYFdf2Mre9D+pV5dPUMOaHzO83pNo2HAcmWmJENnnG70/1gR315RBlkc5jBPwnhSsqwxMM+DBSUmwPcdqZiwgp6rjThsD9TmC2hhgdFS4fDsbsF/eFjWS/YL1sdB3ITlGebTDYoSu33H3mfENvSdKJ7CSOXh4mN9s/COVmZxp3hoAXWR1TXFwcZ298RMNB0vj3smOpia3NvMaUwZsg/KYYE/+WLqmdZq0cEx6h6B97MqHCvxEGdtXUK8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(366004)(396003)(346002)(451199018)(2616005)(83380400001)(478600001)(6486002)(26005)(6512007)(52116002)(6506007)(186003)(5660300002)(1076003)(7416002)(316002)(966005)(38100700002)(86362001)(8936002)(66946007)(66556008)(8676002)(2906002)(4326008)(41300700001)(38350700002)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uySpZ5VGdvmGF4dueO8sHkT8BrJsqn2F+HWFN+DJwG/x57v6X6OqNySgJwVE?=
- =?us-ascii?Q?rBn0nOm6oxo1k4kAUaO40hpdRSfkl/bHoUVc+R+tLcpYKbhIRWNoZrDrSdTn?=
- =?us-ascii?Q?jzHolKB7eOMwIO1ZqW9/RQA/GZ6mLFDILn9mWS5E0UY2F/XkA4c7x7NGrkjs?=
- =?us-ascii?Q?dmcyvOMGuNj1Nn0LU5yu5WbeQYwxwLpp/RbaKQz1WU8oEgWHkqLPuhYSE57+?=
- =?us-ascii?Q?xmOViT3j48wMVButPmg4rb6gWlMO4YBgFFp9jLQJxtyXGFjLG79b+DCiCsCz?=
- =?us-ascii?Q?59YFpK3ErRYJBMpYJGA+/Y4Xn0/ufna/B2hmerYO83BAmdETMxP5ILsqTOly?=
- =?us-ascii?Q?HNoAP+cyDbWczIH9QzGloE/cPq0ytbMEjQTNzN9KUmZVrE+9PwNdunBPqqDk?=
- =?us-ascii?Q?e9s6KbfjnJN8xlbxG4hgCPC4rebLAktHb/Uybi+JqdBoe21RG3GAv6AZW5ik?=
- =?us-ascii?Q?yKTbt0fryCPx+bzBiBQxUl91FnGxybx3qRK9VIoFq/kd/lCL/P87RxgDXGX2?=
- =?us-ascii?Q?nzmaY4DQBQCQup175+zruKF0Dq0ym97ULRFGv9lsfoHhU1pXS8RzXzxrO/1V?=
- =?us-ascii?Q?/daC4frG16TtTLJhMH5oHsnpGnK4DxZwMOvVIuigck7ooYWyXqptzppSnNxa?=
- =?us-ascii?Q?mdA8RVFyRx0BO2OEhq7Y397N8djoz1QhQxTe3blQzhCOT/0L2aAlno+5n9cC?=
- =?us-ascii?Q?ZVBhph50emlGOiQzOmYDtMTKXHjxD9xAsCS7LERt6x9Er5HhUuTXcKMCcuVt?=
- =?us-ascii?Q?WbLHRP8ofSHGWjOey5ZVBkv/CSf6WtqTtNOuuuofZC6IhD0QxFCmzFg1uxX6?=
- =?us-ascii?Q?Xbk2p9mTbd5p0i5PJMv9LAjUHy8EmN8A+AMo2I46ZztGc42enASUgZhKNurp?=
- =?us-ascii?Q?sU9/66GZXK4oiJC3zJxpI2ku1qGhZ8zBsahYS7f8nsuU37kRWkLLksdzO0Vk?=
- =?us-ascii?Q?jfXElGQ5ERa9b2cEn7hZjNaCL8DQoBDGvNWoaRmC15tGO4/ixm7UxDz6Hx5g?=
- =?us-ascii?Q?b0hel74Pz60BSJzdtNSmSjO1hruDnmFVA7KDO5T9kkNvYAPcFpOd82ZWvhSs?=
- =?us-ascii?Q?KPxuKTRzG44h12wSRienFKKWQH//iS0RiOCOUiPQ/sbBJwAOwf/D30Jq3mVM?=
- =?us-ascii?Q?O0+JetyYU3dh46LnjYXZ21+YvlMLjB0aBWTHQ7xSsjggOJBTHJZvcziN1Xi8?=
- =?us-ascii?Q?9UMHofGF3S2XPTGvjEEn1PSa28qNSeA/w7+5aZNxpmrAwWeRY8y3HbVHPrNP?=
- =?us-ascii?Q?vseYYKJhuEzTolG+NlCx3KuuA4Cs0oaVs+G7T0B41TnqeRag49+ucOyGk4sQ?=
- =?us-ascii?Q?nhRLyGeClozOsAJDdsvwEK25tJRkEUZAMXBXWilCALgMN585rkaLGE66t339?=
- =?us-ascii?Q?/62aYONEzazoBNyDgUzhHxxC5qESpOd187dttWN0r1z07S0DCsmMtqGdffFt?=
- =?us-ascii?Q?01ix/d1ttmqJ7RacI/QBY6LJloKUrbmLeWFbX3BOucNVXxhOAQ4lHLcEph3Z?=
- =?us-ascii?Q?+8N+qwFpQwZmSju4QU7wIlcqnfngB7yN+eOHGJ+sprTPKrtTsArtslbv//1S?=
- =?us-ascii?Q?nNZ9At3W/5z9UZBiGyxILcpR4IL/pYWLP7SRkX++?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aab6a2a0-bb18-46c8-668b-08db2ad41e28
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 12:51:13.3110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AFEsE4OEf5T0fCnXVzVj10/WTjIPo5RYXByxI6EBZL3i44hkkfBW7daw4ExJBp9ZRfWX/yfKACkXJcvhD6QhFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9756
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230316122741.577663-1-herve.codina@bootlin.com>
+ <20230316122741.577663-2-herve.codina@bootlin.com> <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+ <167930560089.26.8624952010101991814@mailman-core.alsa-project.org>
+ <20230320185127.GA2233912-robh@kernel.org> <20230322112056.7ffcd503@bootlin.com>
+In-Reply-To: <20230322112056.7ffcd503@bootlin.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 22 Mar 2023 07:56:29 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK-=9BJEbEUji0ac=cXqBz3ijD5m33MBPyms-9O44gvag@mail.gmail.com>
+Message-ID: <CAL_JsqK-=9BJEbEUji0ac=cXqBz3ijD5m33MBPyms-9O44gvag@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466 E1/T1/J1 framer
+To:     Herve Codina <herve.codina@bootlin.com>,
+        alsa-devel-owner@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Wed, Mar 22, 2023 at 5:21=E2=80=AFAM Herve Codina <herve.codina@bootlin.=
+com> wrote:
+>
+> Hi Rob,
+>
+> On Mon, 20 Mar 2023 13:51:27 -0500
+> Rob Herring <robh@kernel.org> wrote:
+>
+> > On Mon, Mar 20, 2023 at 10:46:19AM +0100, Herve Codina via Alsa-devel w=
+rote:
+> > > Received: by alsa1.perex.cz (Postfix, from userid 50401) id 16494F802=
+7B;
+> > >  Mon, 20 Mar 2023 10:46:37 +0100 (CET)
+> > > X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on alsa1.pere=
+x.cz
+> > > X-Spam-Level:
+> > > X-Spam-Status: No, score=3D-5.2 required=3D5.0 tests=3DDKIM_SIGNED,DK=
+IM_VALID,
+> > >  DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+> > >  URIBL_BLOCKED shortcircuit=3Dno autolearn=3Dham autolearn_force=3Dno
+> > >  version=3D3.4.6
+> > > Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+> > >  [217.70.183.198]) (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384
+> > >  (256/256 bits)) (No client certificate requested) by alsa1.perex.cz
+> > >  (Postfix) with ESMTPS id 3FF5FF80105 for <alsa-devel@alsa-project.or=
+g>;
+> > >  Mon, 20 Mar 2023 10:46:22 +0100 (CET)
+> > > DKIM-Filter: OpenDKIM Filter v2.11.0 alsa1.perex.cz 3FF5FF80105
+> > > Authentication-Results: alsa1.perex.cz; dkim=3Dpass (2048-bit key,
+> > >  unprotected) header.d=3Dbootlin.com header.i=3D@bootlin.com
+> > >  header.a=3Drsa-sha256 header.s=3Dgm1 header.b=3Dm4O7nLC1
+> > > Received: (Authenticated sender: herve.codina@bootlin.com) by
+> > >  mail.gandi.net (Postfix) with ESMTPSA id 40453C0009; Mon, 20 Mar 202=
+3
+> > >  09:46:20 +0000 (UTC)
+> > > DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dbootl=
+in.com; s=3Dgm1;
+> > >  t=3D1679305582;
+> > >  h=3Dfrom:from:reply-to:subject:subject:date:date:message-id:message-=
+id:
+> > >   to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+> > >   content-transfer-encoding:content-transfer-encoding:
+> > >   in-reply-to:in-reply-to:references:references;
+> > >  bh=3DIeu9Fv38se4lD4z/BVXUHLrVJL9Tx5iKWZgvO8X+VoY=3D;
+> > >  b=3Dm4O7nLC1LPZDOI5eM/hmgqouxdkin2veA6CvJhT9kU9rGQALB3ya2fuybMfDvrkT=
+qqBjEd
+> > >  j6DAxXMgOKgwuUfEsZsp3BFJpoii00hSaf0r2uIbnnGcUrDGVQqUQVEqv51O6VBqnrVi=
+Qk
+> > >  PstlJM0lcE9R/AFASd5D/HQGoYYyRY+NKT7xt8g1Ax23Yk/tUG59LXku/skn/4faSLod=
+nU
+> > >  vV2ng3VMUcoLuvSMJtdYY3hrXEWqUrW1ZogxAFHJNiKuyOELmqZGmNo4B4yAFOEcqqya=
+no
+> > >  /f4m/7BtT7X1wwPvGu29gg+0aOFrGQq5kb4UNrMoriSQyKnxPRha8zL3J2Jckw=3D=3D
+> > > Date: Mon, 20 Mar 2023 10:46:19 +0100
+> > > From: Herve Codina <herve.codina@bootlin.com>
+> > > To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466
+> > >  E1/T1/J1 framer
+> > > Message-ID: <20230320104619.468a304b@bootlin.com>
+> > > In-Reply-To: <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> > > References: <20230316122741.577663-1-herve.codina@bootlin.com>
+> > >  <20230316122741.577663-2-herve.codina@bootlin.com>
+> > >  <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> > > Organization: Bootlin
+> > > X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+> > > MIME-Version: 1.0
+> > > Content-Type: text/plain; charset=3DUTF-8
+> > > Content-Transfer-Encoding: quoted-printable
+> > > Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> > > X-Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> > > X-MailFrom: herve.codina@bootlin.com
+> > > X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emerge=
+ncy;
+> > >  loop; banned-address; member-moderation;
+> > >  header-match-alsa-devel.alsa-project.org-0;
+> > >  header-match-alsa-devel.alsa-project.org-1; nonmember-moderation;
+> > >  administrivia; implicit-dest; max-recipients; max-size; news-moderat=
+ion;
+> > >  no-subject; digests; suspicious-header
+> > > CC: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+> > >  <krzysztof.kozlowski+dt@linaro.org>, Liam Girdwood <lgirdwood@gmail.=
+com>,
+> > >  Mark Brown <broonie@kernel.org>, Derek Kiernan <derek.kiernan@xilinx=
+.com>,
+> > >  Dragan Cvetic <dragan.cvetic@xilinx.com>, Arnd Bergmann <arnd@arndb.=
+de>,
+> > >  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Takashi Iwai
+> > >  <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+> > >  devicetree@vger.kernel.org, alsa-devel@alsa-project.org, Christophe =
+Leroy
+> > >  <christophe.leroy@csgroup.eu>, Thomas Petazzoni
+> > >  <thomas.petazzoni@bootlin.com>
+> > > X-Mailman-Version: 3.3.8
+> > > Precedence: list
+> > > List-Id: "Alsa-devel mailing list for ALSA developers -
+> > >  http://www.alsa-project.org" <alsa-devel.alsa-project.org>
+> > > Archived-At: <https://mailman.alsa-project.org/hyperkitty/list/alsa-d=
+evel@alsa-project.org/message/AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB/>
+> > > List-Archive: <https://mailman.alsa-project.org/hyperkitty/list/alsa-=
+devel@alsa-project.org/>
+> > > List-Help: <mailto:alsa-devel-request@alsa-project.org?subject=3Dhelp=
+>
+> > > List-Owner: <mailto:alsa-devel-owner@alsa-project.org>
+> > > List-Post: <mailto:alsa-devel@alsa-project.org>
+> > > List-Subscribe: <mailto:alsa-devel-join@alsa-project.org>
+> > > List-Unsubscribe: <mailto:alsa-devel-leave@alsa-project.org>
+> >
+> > The alsa-devel list doesn't seem to like your emails. The archives
+> > (lore) has 2 copies with the 2nd having the original headers in the
+> > body. I'm seeing this recently on other senders too. Best I can tell is
+> > you sent this as quoted-printable.
+> >
+> > Rob
+>
+> I don't known what happened with alsa-devel list.
+>
+> For this answer, I tried to force '8bit' encoding instead of quoted-print=
+able.
+> Let me know if it is better.
 
-The previous i.MX8MQ support breaks rockchip,dwc3 support,
-so use select to restrict i.MX8MQ support and avoid break others.
+Nope, still the same issue:
 
-Fixes: 3754c41c7686 ("dt-bindings: usb: snps,dwc3: support i.MX8MQ")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
+https://lore.kernel.org/all/167948048307.26.16805930109507404147@mailman-co=
+re.alsa-project.org/
 
-V2:
- Add a new yaml file for i.MX8MQ DWC3. I am not sure whether this is right,
- still meet dtbs error:
- arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dtb: usb@38100000:
- Unevaluated properties are not allowed ('phys', 'phy-names', 'maximum-speed'
- were unexpected)
- But there is already ref to snps,dwc3.yaml and dwc3 yaml ref to usb-x.yaml
+I added the alsa-devel owner. Maybe they know what's happening.
 
- .../bindings/usb/fsl,imx8mq-dwc3.yaml         | 74 +++++++++++++++++++
- .../devicetree/bindings/usb/snps,dwc3.yaml    | 12 ++-
- 2 files changed, 79 insertions(+), 7 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
-new file mode 100644
-index 000000000000..055ffb122db7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/fsl,imx8mq-dwc3.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/fsl,imx8mq-dwc3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP iMX8MQ Soc USB Controller
-+
-+maintainers:
-+  - Li Jun <jun.li@nxp.com>
-+  - Peng Fan <peng.fan@nxp.com>
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - fsl,imx8mq-dwc3
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: fsl,imx8mq-dwc3
-+      - const: snps,dwc3
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Controller root clock
-+      - description: Controller core reference clock
-+      - description: clock that used for wakeup
-+
-+  clock-names:
-+    items:
-+      - const: bus_early
-+      - const: ref
-+      - const: suspend
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+allOf:
-+  - $ref: snps,dwc3.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx8mq-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb_dwc3_1: usb@38200000 {
-+        compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
-+        reg = <0x38200000 0x10000>;
-+        clocks = <&clk IMX8MQ_CLK_USB2_CTRL_ROOT>,
-+                 <&clk IMX8MQ_CLK_USB_CORE_REF>,
-+                 <&clk IMX8MQ_CLK_32K>;
-+        clock-names = "bus_early", "ref", "suspend";
-+        interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
-+        phys = <&usb3_phy1>, <&usb3_phy1>;
-+        phy-names = "usb2-phy", "usb3-phy";
-+    };
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 16c7d06c9172..c167fd577cae 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -30,13 +30,11 @@ allOf:
- 
- properties:
-   compatible:
--    oneOf:
--      - items:
--          - const: fsl,imx8mq-dwc3
--          - const: snps,dwc3
--      - const: snps,dwc3
--      - const: synopsys,dwc3
--        deprecated: true
-+    contains:
-+      oneOf:
-+        - const: snps,dwc3
-+        - const: synopsys,dwc3
-+          deprecated: true
- 
-   reg:
-     maxItems: 1
--- 
-2.37.1
-
+Rob
