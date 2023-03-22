@@ -2,214 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6BB6C3FA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08426C3F83
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjCVBQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S229980AbjCVBOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCVBP6 (ORCPT
+        with ESMTP id S230005AbjCVBOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:15:58 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6E159E41
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:15:31 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5417f156cb9so172491227b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:15:31 -0700 (PDT)
+        Tue, 21 Mar 2023 21:14:48 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D2B53704
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:14:46 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id s8so2656645ois.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679447724;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKp3cWIz4EB3TSxmAohTftvSjLswbqRY4EZ6PCZ/cQw=;
-        b=SZzJVjS73HjISYGSqDl5X10T5A6vxZwc8w9BaiTNsBSO0cSNyB4hlwaM9sKizC4ghB
-         YDRUGjRaM4MzLZ4G5+W5IAV2W19DJGyDRDcPXvhb3f3SqjoKsnvIYKT8KW8R/4xVV+H6
-         RSugV8g6sUBq5chuQC3PsCeCghkYlm+xXE0o4X6rHCbn6QvhYmjpw8YtsPRNt/suO3VU
-         gZfRSe1rwJCkvO3LNXWIp88QcFwDwTVMzZjFikJ6bDs9LRsjMr54Cf4DAC56UN7Ts3Vz
-         EtqGl2A2qZlAFhHKJw59aMgVCZDNFW6pplnwFeTCUoKrP2ES/9Yc5H5OuoP3UvGc5AGY
-         A8Hg==
+        d=kali.org; s=google; t=1679447685;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5gTZseNIfPdBe/0NuqBE26CCNGdGPf26kM9+Ru7h+44=;
+        b=TrH+dk0EXzS3HGqqtjcqdZ4Fubti3ErYYie0R2TMzVWqXr4cDCdjBiwIO6eeiGxd0G
+         Mm6mflQch7aa7Y4bgl7rhsTPVGNebZvk6GOyR23wGV2pJyp0PvQQsNBN0FEkopFuZ3Ed
+         AVS49QTNG5CvYlSB+VzEv+7s6tQJazV+mM9EUsdsw3Tgj01ERc4DrfBw0HuJLOqPIl8N
+         9K659i+HGMW8p8KZOVpm/bzdNmdM+WYgqFdcQOM4KdgMA50VgrzKGtIbbi7dyT8rBo+o
+         XYhkH5eU4i53EKcaCNVW6Ozq9Ve3VuGvEyCC7Oz078ioMvee5xOywtGPdQyIEK0joc3r
+         TOeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679447724;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WKp3cWIz4EB3TSxmAohTftvSjLswbqRY4EZ6PCZ/cQw=;
-        b=EV9UFJFfA702OtrTK0J/wqapoI8oskyqPRrgKi6KiPoc6xZTpEntVcfVZiH1SgGGbh
-         hy6jgO5M98SNyngOppueXbDHc00mrR/jfeelObCyfTPJWS5oc3yAGAeyexBk9BdCwaPz
-         FttYP6+FDetithEfbuaIgpXZgj/qs32SOk+4mqAyx/9GUFmABaQRKf6OZDxLXeAEs45Q
-         Yu+jjd4WNVwwyfTSRGgvWy6HhG//y6EovtZnGa1fQhSZjLhIHulepY64LoQVs3ktviqx
-         spAhxGxtiB4pc3lpIhcPXOqnFKcns8EWQuVbPD8gWJ96Dl7xh4aqNzRFKZbgyGpE0fZz
-         y2Og==
-X-Gm-Message-State: AAQBX9eZ4/Apa6bnxIu8bQifYb/YtASIB4+t/LVPdtoEtBMQxUt/93yJ
-        uLBiNg7WQ9m0mTD+8WFgzjzi+JkKqjg=
-X-Google-Smtp-Source: AKy350bODg0yg1Ds22N+XsPtajs1sxEVcp7uCpy/Qzri1NtkVKUYP4coiqPgFy52W7qxjc83WnVLcP6v3+8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b285:0:b0:541:8291:5237 with SMTP id
- q127-20020a81b285000000b0054182915237mr352609ywh.0.1679447724562; Tue, 21 Mar
- 2023 18:15:24 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 21 Mar 2023 18:14:39 -0700
-In-Reply-To: <20230322011440.2195485-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230322011440.2195485-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Message-ID: <20230322011440.2195485-6-seanjc@google.com>
-Subject: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough MSR_IA32_FLUSH_CMD
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679447685;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5gTZseNIfPdBe/0NuqBE26CCNGdGPf26kM9+Ru7h+44=;
+        b=qyyXN48tSHCKYDi39c4moXkin80a6zg56n2iBLbveIDPARGcy0kc4jCTGRd6EBSNyR
+         9d86mBuTzkmgWDbXcMCWIDiLEg8NG1px7IKP6+3/YcisYWUL3pwQ2gYt1v09fdUIxhM5
+         qZr7qzRfBbf3erqXTQHFXhA1aLwkU73Z8HAuha+u+FPgJd0oznJ+YdofZkaZx4Np1mHt
+         KYqb3ZLh+hYidKZkx77YJ0Mcw9iT1wWgw08W8IafaZ8ok4jLoONs2c1p70QT5hvk+8eQ
+         3s/RmebU3o8a0ZHIiynGZHa6j5D6S+43bgpFKQUtDtrPnA12PNosH0AW5lOupJdVlEU+
+         plxg==
+X-Gm-Message-State: AO0yUKVdQeFJ3dPf+asS78G9grke6yV/IVmxaR0yqOEKwY1JTynq3GwK
+        o82rfISfdN+BxEJMuYAIObfJXg==
+X-Google-Smtp-Source: AK7set+gB17zX+JyMlvxgHvJlgFOOvTWlXwtbz30b6VRPvN7jPpWC9VC/NSloAstlDVcGDg2hkeMkg==
+X-Received: by 2002:aca:190a:0:b0:383:ee1d:f489 with SMTP id l10-20020aca190a000000b00383ee1df489mr590575oii.0.1679447685426;
+        Tue, 21 Mar 2023 18:14:45 -0700 (PDT)
+Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
+        by smtp.gmail.com with ESMTPSA id e13-20020a9d63cd000000b0069f9a73a65fsm40505otl.29.2023.03.21.18.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 18:14:45 -0700 (PDT)
+From:   Steev Klimaszewski <steev@kali.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 1/4] dt-bindings: net: Add WCN6855 Bluetooth
+Date:   Tue, 21 Mar 2023 20:14:39 -0500
+Message-Id: <20230322011442.34475-2-steev@kali.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230322011442.34475-1-steev@kali.org>
+References: <20230322011442.34475-1-steev@kali.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtualize FLUSH_L1D so that the guest can use the performant L1D flush
-if one of the many mitigations might require a flush in the guest, e.g.
-Linux provides an option to flush the L1D when switching mms.
+Add bindings for the QTI WCN6855 chipset.
 
-Passthrough MSR_IA32_FLUSH_CMD for write when it's supported in hardware
-and exposed to the guest, i.e. always let the guest write it directly if
-FLUSH_L1D is fully supported.
-
-Forward writes to hardware in host context on the off chance that KVM
-ends up emulating a WRMSR, or in the really unlikely scenario where
-userspace wants to force a flush.  Restrict these forwarded WRMSRs to
-the known command out of an abundance of caution.  Passing through the
-MSR means the guest can throw any and all values at hardware, but doing
-so in host context is arguably a bit more dangerous.
-
-Link: https://lkml.kernel.org/r/CALMp9eTt3xzAEoQ038bJQ9LN0ZOXrSWsN7xnNUD%2B0SS%3DWwF7Pg%40mail.gmail.com
-Link: https://lore.kernel.org/all/20230201132905.549148-2-eesposit@redhat.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Steev Klimaszewski <steev@kali.org>
 ---
- arch/x86/kvm/cpuid.c      |  2 +-
- arch/x86/kvm/svm/svm.c    |  5 +++++
- arch/x86/kvm/vmx/nested.c |  3 +++
- arch/x86/kvm/vmx/vmx.c    |  5 +++++
- arch/x86/kvm/vmx/vmx.h    |  2 +-
- arch/x86/kvm/x86.c        | 12 ++++++++++++
- 6 files changed, 27 insertions(+), 2 deletions(-)
+Changes since v6:
+ * None
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 599aebec2d52..9583a110cf5f 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -653,7 +653,7 @@ void kvm_set_cpu_caps(void)
- 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
- 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
- 		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
--		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
-+		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(FLUSH_L1D)
- 	);
+ .../net/bluetooth/qualcomm-bluetooth.yaml       | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
+index a6a6b0e4df7a..68f78b90d23a 100644
+--- a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
+@@ -23,6 +23,7 @@ properties:
+       - qcom,wcn3998-bt
+       - qcom,qca6390-bt
+       - qcom,wcn6750-bt
++      - qcom,wcn6855-bt
  
- 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 85bb535fc321..b32edaf5a74b 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -95,6 +95,7 @@ static const struct svm_direct_access_msrs {
- #endif
- 	{ .index = MSR_IA32_SPEC_CTRL,			.always = false },
- 	{ .index = MSR_IA32_PRED_CMD,			.always = false },
-+	{ .index = MSR_IA32_FLUSH_CMD,			.always = false },
- 	{ .index = MSR_IA32_LASTBRANCHFROMIP,		.always = false },
- 	{ .index = MSR_IA32_LASTBRANCHTOIP,		.always = false },
- 	{ .index = MSR_IA32_LASTINTFROMIP,		.always = false },
-@@ -4140,6 +4141,10 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_PRED_CMD, 0,
- 				     !!guest_has_pred_cmd_msr(vcpu));
+   enable-gpios:
+     maxItems: 1
+@@ -133,6 +134,22 @@ allOf:
+         - vddrfa1p7-supply
+         - vddrfa1p2-supply
+         - vddasd-supply
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,wcn6855-bt
++    then:
++      required:
++        - enable-gpios
++        - swctrl-gpios
++        - vddio-supply
++        - vddbtcxmx-supply
++        - vddrfacmn-supply
++        - vddrfa0p8-supply
++        - vddrfa1p2-supply
++        - vddrfa1p7-supply
  
-+	if (boot_cpu_has(X86_FEATURE_FLUSH_L1D))
-+		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_FLUSH_CMD, 0,
-+				     !!guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D));
-+
- 	/* For sev guests, the memory encryption bit is not reserved in CR3.  */
- 	if (sev_guest(vcpu->kvm)) {
- 		best = kvm_find_cpuid_entry(vcpu, 0x8000001F);
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 1bc2b80273c9..f63b28f46a71 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -654,6 +654,9 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
- 	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
- 					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
- 
-+	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-+					 MSR_IA32_FLUSH_CMD, MSR_TYPE_W);
-+
- 	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
- 
- 	vmx->nested.force_msr_bitmap_recalc = false;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 29807be219b9..56e0c7ae961d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -164,6 +164,7 @@ module_param(allow_smaller_maxphyaddr, bool, S_IRUGO);
- static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_IA32_SPEC_CTRL,
- 	MSR_IA32_PRED_CMD,
-+	MSR_IA32_FLUSH_CMD,
- 	MSR_IA32_TSC,
- #ifdef CONFIG_X86_64
- 	MSR_FS_BASE,
-@@ -7720,6 +7721,10 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		vmx_set_intercept_for_msr(vcpu, MSR_IA32_PRED_CMD, MSR_TYPE_W,
- 					  !guest_has_pred_cmd_msr(vcpu));
- 
-+	if (boot_cpu_has(X86_FEATURE_FLUSH_L1D))
-+		vmx_set_intercept_for_msr(vcpu, MSR_IA32_FLUSH_CMD, MSR_TYPE_W,
-+					  !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D));
-+
- 	set_cr4_guest_host_mask(vmx);
- 
- 	vmx_write_encls_bitmap(vcpu, NULL);
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 2acdc54bc34b..cb766f65a3eb 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -369,7 +369,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
- 
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	16
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index c83ec88da043..3c58dbae7b4c 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3628,6 +3628,18 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 
- 		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
- 		break;
-+	case MSR_IA32_FLUSH_CMD:
-+		if (!msr_info->host_initiated &&
-+		    !guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D))
-+			return 1;
-+
-+		if (!boot_cpu_has(X86_FEATURE_FLUSH_L1D) || (data & ~L1D_FLUSH))
-+			return 1;
-+		if (!data)
-+			break;
-+
-+		wrmsrl(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
-+		break;
- 	case MSR_EFER:
- 		return set_efer(vcpu, msr_info);
- 	case MSR_K7_HWCR:
+ examples:
+   - |
 -- 
-2.40.0.rc2.332.ga46443480c-goog
+2.39.2
 
