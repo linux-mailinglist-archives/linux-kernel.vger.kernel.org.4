@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA4A6C536F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1873C6C536D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjCVSPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S230449AbjCVSPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCVSPq (ORCPT
+        with ESMTP id S229519AbjCVSPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:15:46 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2BB6505A;
-        Wed, 22 Mar 2023 11:15:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 2459C604F0;
-        Wed, 22 Mar 2023 19:15:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679508931; bh=uwjYpsJXPD7FhPZaDDmtv+fmfdYShZVfMh/QdHtxRZc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WwCN4ZdXYs5BOsQiqRQ8Rw3M2sbnYdUWzcCEf37qnBBbp5V2Civ9wjsJdENmzIXF0
-         dDEYr+ufV/tJuE+TeqbUwoyjKwn8ljdg9BPOHqiuPR9CpS83nxs0KbNOQNm0nYmkbw
-         BRAGEM5TyWqgxvRnd/JajguDccsGFkEJX6BPgRmTZ+PQfGSuZLoOy5YV8+BjGR35+h
-         s9xS13JzXSEDvp0bUQwR/P28/HiAQIBAGZNyGd3UYDW8KGYOhQtUGOKBtrGiKFR0qT
-         ezo+Asu8iqrZNIiCpvEA2SEsle3+lfzluY8FV8cwEgGI+Z8v0cO171Sngkoz0WhtH5
-         9Aq000GOmrJZw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id U-JVEDwxHgAI; Wed, 22 Mar 2023 19:15:28 +0100 (CET)
-Received: from [192.168.1.4] (unknown [109.227.34.15])
-        by domac.alu.hr (Postfix) with ESMTPSA id 49748604EF;
-        Wed, 22 Mar 2023 19:14:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679508928; bh=uwjYpsJXPD7FhPZaDDmtv+fmfdYShZVfMh/QdHtxRZc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OU4UpEc2NVjeO4vFYbos9thOiUFCJXpXMzgmZLYIE5R+1L/KCPqSezEgdzQywYLN0
-         hASlG7wX3E/2+mvvcCZhucIBb4A7zR11iWvU3rf4Wyw7/knQy9xjjknuLbx/AcWGEN
-         AeepQ+bexmfJeI97Z+QlYLvmqH0bUeDTJxxVwkOK94tPz/nh9NeVvQSccWxODx1Fxp
-         a8km5arkhfrRBaby4/PP+LB98k28g5kWtvTyzxe1uqDU1DrtZcVHmpqPgdfwDQSHPb
-         L+Snp0rt8PzdaogujWF5kRdoG1EDo0ecSlhZy5+wvPf0R4YRdg3C5jV9CFxpnNbwkY
-         haxbkgDZQ08hA==
-Message-ID: <cb386732-7509-497d-8641-473ad853c9ed@alu.unizg.hr>
-Date:   Wed, 22 Mar 2023 19:14:58 +0100
+        Wed, 22 Mar 2023 14:15:30 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DFB64241
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:15:23 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id m6so12759838qvq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679508921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q6E9eFLmm6ygcs6kDLNjXTtbQ9rYQAmNSLK7F6Ytjeo=;
+        b=m4vSWntEg2ZoxWKxicPTMF/nFx6Xjvf6X97Bazqxn+ZvOrc5xR/nWb1X0yaZXKjnAG
+         fbDcYRx6sVzFha5lhgNSyKBQ+jajzSmtjTvh6kQ6Swo5pfAJJs+HBNw47kiOyXIEA0IQ
+         XzkxVb/CU2WWreTMWYUUFA6lYn7AwooiD/Iq4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679508921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q6E9eFLmm6ygcs6kDLNjXTtbQ9rYQAmNSLK7F6Ytjeo=;
+        b=bwpFiOdq5qsHIfNzTPHX1aTkN/SvZI0mor0IcrSrlXCfIpv1AUGxMb868+g0pnoq8l
+         XePKbVU8WQQAH31NXnLom4Tiwne37BDhL+55TVd6Aj975Pn8TUQ4s60IUIPX7tbXAQrv
+         v1gVejb3QABbzmSKadO9TCG3v/SlekNPOD03bxQv9UvpnP8kV5vvaG79o2Fc6ys8viCJ
+         Ut7AsQpBbXIKykNJPWhHTm0EsY0k8OvWI/SzYul2NDy4eF1pQL6vhTI3QyVgj1KGM6wK
+         mB3QOgHYMTr537zU7C3b1aVs2oO5A1dVA1TEpSfae8XRAfCxt4+95IvpbHh/HWU6dSPa
+         aKqA==
+X-Gm-Message-State: AO0yUKXJphLF6vyNu4ZknRColyLQ1SDhNpuuI93+06NVuvbABzTK6Vya
+        Oyq8QLH+r+on2/OUR9Y0Ilr0o2sJRWTFVeikWgo=
+X-Google-Smtp-Source: AK7set/eDM5A4hTem0yca0THejx8TMaTgafLEqJZRv1Exyutq8+PH+3cqvY5e2CvwANmoNHIbhAb1Q==
+X-Received: by 2002:a05:6214:27c9:b0:5ab:e259:b2a9 with SMTP id ge9-20020a05621427c900b005abe259b2a9mr4677147qvb.14.1679508921428;
+        Wed, 22 Mar 2023 11:15:21 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id 201-20020a3708d2000000b007456efa7f73sm6987183qki.85.2023.03.22.11.15.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 11:15:20 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id k17so11327740ybm.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:15:20 -0700 (PDT)
+X-Received: by 2002:a05:6902:124a:b0:b69:fab9:de60 with SMTP id
+ t10-20020a056902124a00b00b69fab9de60mr540062ybu.0.1679508920292; Wed, 22 Mar
+ 2023 11:15:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/1] scripts: merge_config: Fix typo in variable name.
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Mark Brown <broonie@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>
-References: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
- <c93723aa-f01c-9f1e-c9c7-aa79f38390c1@infradead.org>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <c93723aa-f01c-9f1e-c9c7-aa79f38390c1@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230217155838.848403-1-krzysztof.kozlowski@linaro.org> <20230217155838.848403-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230217155838.848403-3-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 22 Mar 2023 11:15:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X7-abQsE5s6Tbz9B22ZXT_yRFii55cUF2LR81BSVnbVg@mail.gmail.com>
+Message-ID: <CAD=FV=X7-abQsE5s6Tbz9B22ZXT_yRFii55cUF2LR81BSVnbVg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc7280: align RPMh regulator nodes
+ with bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 03. 2023. 16:20, Randy Dunlap wrote:
-> 
-> 
-> On 3/22/23 01:51, Mirsad Goran Todorovac wrote:
->> ${WARNOVERRIDE} was misspelled as ${WARNOVVERIDE}, which caused a shell
->> syntax error in certain paths of the script execution.
->>
-> 
-> Fixes: 46dff8d7e381e ("scripts: merge_config: Add option to suppress warning on overrides")
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Thanks.
+Hi,
 
-Hi, Randy,
+On Fri, Feb 17, 2023 at 7:58=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Device node names should be generic and bindings expect certain pattern
+> for RPMh regulator nodes.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> I was fixing these in other boards, but missed SC7280. Previous
+> (applied) set:
+> https://lore.kernel.org/r/20230127114347.235963-4-krzysztof.kozlowski@lin=
+aro.org
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts        | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts           | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi          | 4 ++--
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi        | 4 ++--
+>  5 files changed, 7 insertions(+), 7 deletions(-)
 
-I think this time thanks go to the Heavens, for preserving my physical integrity.
-
-Though I don't know of a bike with ABS.
-
->> Cc: Mark Brown <broonie@kernel.org>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Cc: linux-kbuild@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-of-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> ---
->>  scripts/kconfig/merge_config.sh | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_config.sh
->> index 32620de473ad..902eb429b9db 100755
->> --- a/scripts/kconfig/merge_config.sh
->> +++ b/scripts/kconfig/merge_config.sh
->> @@ -145,7 +145,7 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
->>  		NEW_VAL=$(grep -w $CFG $MERGE_FILE)
->>  		BUILTIN_FLAG=false
->>  		if [ "$BUILTIN" = "true" ] && [ "${NEW_VAL#CONFIG_*=}" = "m" ] && [ "${PREV_VAL#CONFIG_*=}" = "y" ]; then
->> -			${WARNOVVERIDE} Previous  value: $PREV_VAL
->> +			${WARNOVERRIDE} Previous  value: $PREV_VAL
->>  			${WARNOVERRIDE} New value:       $NEW_VAL
->>  			${WARNOVERRIDE} -y passed, will not demote y to m
->>  			${WARNOVERRIDE}
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
