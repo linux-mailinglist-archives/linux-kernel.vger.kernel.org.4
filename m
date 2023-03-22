@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A592B6C53F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B8C6C53FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjCVSoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S229784AbjCVSqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjCVSnj (ORCPT
+        with ESMTP id S231154AbjCVSqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:43:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845702DE50
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A9E6B81DAA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA993C4339E;
-        Wed, 22 Mar 2023 18:43:35 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pf3Qs-000pZ5-2z;
-        Wed, 22 Mar 2023 14:43:34 -0400
-Message-ID: <20230322184334.744106182@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 22 Mar 2023 14:42:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florent Revest <revest@chromium.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: [for-next][PATCH 06/11] ftrace: Make DIRECT_CALLS work WITH_ARGS and !WITH_REGS
-References: <20230322184239.594953818@goodmis.org>
+        Wed, 22 Mar 2023 14:46:17 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D19059E59
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:46:04 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 6EBAB5FD3E;
+        Wed, 22 Mar 2023 21:45:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679510758;
+        bh=rVtVHS3YbcTr4exAe5aUDPpvfNLxMi2NgaBzD0hJtkI=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=cmNVA/O5C1NVFgyexdnp+OOdABIBGzbys02plXb0EjUgKtFozxdkfVzG9zLs16WR5
+         BsDm1Ai5iKya/Py+xGP0fiefb0ajDtIqzMdjE/cbJQUeuzWFFcbZajrGe7vfPt/u4j
+         Ze0/KQll445prTsaFh0JAdlUD3KFYhCh3wc+OuS86VMVRL5FIM/KIJNUIliCeWqPhU
+         TG2rfabA/1YuF3Fbrw4wxLfszRw0vUTL5hIvi6FBs/i7sQNU6Tcw5LbQ8US5iZ13nb
+         KmIEmJqmGwZSSGPhF5H71bWPsXokRiWewwBpjLJBbEDDUn69QTgYk/WCU0Ybf5ps9N
+         gjeqj6iSL2mMg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 22 Mar 2023 21:45:56 +0300 (MSK)
+Message-ID: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
+Date:   Wed, 22 Mar 2023 21:42:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>
+CC:     <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH v1] mtd: rawnand: meson: fix bitmask for length in command
+ word
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 14:20:00 #20991698
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florent Revest <revest@chromium.org>
+Valid mask is 0x3FFF, without this patch the following problems were
+found:
 
-Direct called trampolines can be called in two ways:
-- either from the ftrace callsite. In this case, they do not access any
-  struct ftrace_regs nor pt_regs
-- Or, if a ftrace ops is also attached, from the end of a ftrace
-  trampoline. In this case, the call_direct_funcs ops is in charge of
-  setting the direct call trampoline's address in a struct ftrace_regs
+1) [    0.938914] Could not find a valid ONFI parameter page, trying
+                  bit-wise majority to recover it
+   [    0.947384] ONFI parameter recovery failed, aborting
 
-Since:
+2) Read with disabled ECC mode was broken.
 
-commit 9705bc709604 ("ftrace: pass fregs to arch_ftrace_set_direct_caller()")
-
-The later case no longer requires a full pt_regs. It only needs a struct
-ftrace_regs so DIRECT_CALLS can work with both WITH_ARGS or WITH_REGS.
-With architectures like arm64 already abandoning WITH_REGS in favor of
-WITH_ARGS, it's important to have DIRECT_CALLS work WITH_ARGS only.
-
-Link: https://lkml.kernel.org/r/20230321140424.345218-7-revest@chromium.org
-
-Signed-off-by: Florent Revest <revest@chromium.org>
-Co-developed-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 ---
- include/linux/ftrace.h | 6 ++++++
- kernel/trace/Kconfig   | 2 +-
- kernel/trace/ftrace.c  | 2 +-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/mtd/nand/raw/meson_nand.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 6a532dd6789e..31f1e1df2af3 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -241,6 +241,12 @@ enum {
- 	FTRACE_OPS_FL_DIRECT			= BIT(17),
- };
+diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+index a28574c00900..074e14225c06 100644
+--- a/drivers/mtd/nand/raw/meson_nand.c
++++ b/drivers/mtd/nand/raw/meson_nand.c
+@@ -280,7 +280,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
  
-+#ifndef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-+#define FTRACE_OPS_FL_SAVE_ARGS                        FTRACE_OPS_FL_SAVE_REGS
-+#else
-+#define FTRACE_OPS_FL_SAVE_ARGS                        0
-+#endif
-+
- /*
-  * FTRACE_OPS_CMD_* commands allow the ftrace core logic to request changes
-  * to a ftrace_ops. Note, the requests may fail.
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index a856d4a34c67..5b1e7fa41ca8 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -257,7 +257,7 @@ config DYNAMIC_FTRACE_WITH_REGS
+ 	if (raw) {
+ 		len = mtd->writesize + mtd->oobsize;
+-		cmd = (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
++		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+ 		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+ 		return;
+ 	}
+@@ -544,7 +544,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+ 	if (ret)
+ 		goto out;
  
- config DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	def_bool y
--	depends on DYNAMIC_FTRACE_WITH_REGS
-+	depends on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
- 	depends on HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+-	cmd = NFC_CMD_N2M | (len & GENMASK(5, 0));
++	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+ 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
  
- config DYNAMIC_FTRACE_WITH_CALL_OPS
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 3bef2abc037a..3b46dba3f69b 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5288,7 +5288,7 @@ static LIST_HEAD(ftrace_direct_funcs);
+ 	meson_nfc_drain_cmd(nfc);
+@@ -568,7 +568,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+ 	if (ret)
+ 		return ret;
  
- static int register_ftrace_function_nolock(struct ftrace_ops *ops);
+-	cmd = NFC_CMD_M2N | (len & GENMASK(5, 0));
++	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+ 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
  
--#define MULTI_FLAGS (FTRACE_OPS_FL_DIRECT | FTRACE_OPS_FL_SAVE_REGS)
-+#define MULTI_FLAGS (FTRACE_OPS_FL_DIRECT | FTRACE_OPS_FL_SAVE_ARGS)
- 
- static int check_direct_multi(struct ftrace_ops *ops)
- {
+ 	meson_nfc_drain_cmd(nfc);
 -- 
-2.39.1
+2.35.0
