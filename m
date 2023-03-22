@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37256C4E80
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128DC6C4E88
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjCVOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S231210AbjCVOwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjCVOvC (ORCPT
+        with ESMTP id S230285AbjCVOwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:51:02 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945EF67709
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:33 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p34so6699682wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679496572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QgpnOGjVLEuypN3ErDTiOI3NLlX/0j8wRBIzyu6JHTA=;
-        b=X4fwNuM+lvoCT0eDdhrh8qu0d3y8CTVo2fmzUHYgTsVwCWryX5ksmhn3yTXvLSCuAr
-         ZqLivJqI7xfK3Y/fQajsIQapKLatPD2OZA7WnIOmZqMJuX0vmG5fgBgAZAzfEjtFaqqF
-         0ygbTqiK1sWJZIVWPfCzGJ3yY0TtYjm00Tc03VMP5QMq8gsB0HJwcGgCTjAIh2niCs1R
-         iYCu7tcRl135CP8hLfhfwt6i3Ux5cCOqF61Soa/Xii7F7h3ql5RG9mPYNgoR6Ffmnvbl
-         gp0PojSSjNZQm3RnK3A5o2A4IOJH10vJouXGQlA1ZpTf5dW+cJBApJ0lHl2u1onEQiQz
-         YKlQ==
+        Wed, 22 Mar 2023 10:52:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32986922F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679496587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HPCji8KxlP8RVox763kqVVCoDfgGEnOq0lSEgexYy6Y=;
+        b=O1Nn4k4El/3Tpbc7Rmu4g5VQdHjDvwhVk5ArDqmBLBuJMdhFUEo+zkLhpMX+L2a45YOspp
+        WWdqYILwABkrf29wSWVOjYpMPeVgAEMgapJ305MS4KR1U3YirQOzuJNrGzMcFPydzO1Q2z
+        FVFfdSVHFaONwKm2shHGN1q/sHS6Ym0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-669-9A85TOqMP0K6gXX3zFRbnQ-1; Wed, 22 Mar 2023 10:49:45 -0400
+X-MC-Unique: 9A85TOqMP0K6gXX3zFRbnQ-1
+Received: by mail-qt1-f198.google.com with SMTP id t15-20020a05622a180f00b003e37dd114e3so4265881qtc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679496572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QgpnOGjVLEuypN3ErDTiOI3NLlX/0j8wRBIzyu6JHTA=;
-        b=1+u+GXWxQdF6LL1JeNLeejVX+K/cdf85Njl//Ly0KdFDyBLrJ74FdIXkUiHPM9z6OF
-         5XoRxpm7rsNHPGRH94YfLco3fGRqaQLaR4ml1iZO8en3v+5ldbGc0TshEYAuZT5wfrmn
-         D/VYBdHiJU+9lHQSG9SdOkRGFWngWgt16ElNaQDnHkzLy8nLkC4ykECW93hL7sHKtmnw
-         prsbhbNiQWL1qaRq9bTaEXYLOD6lEoDsrG63rYIs87r3ogpHbQHp+JAwAUR2VrhrIiMV
-         BDS8PARBSkY5o0F0ci6A4DSVaRYkdJ27aBflIDnlcpUTwEx0q8Qef/GydMZusjA75emX
-         JUyg==
-X-Gm-Message-State: AO0yUKWo1GnGHTGMB/m10sI5tpNeUuIeiyTYMeWdkRnvdnB5g8NUycZf
-        XEBEV/Qx5ORb+7n6xr5TyJy9hA==
-X-Google-Smtp-Source: AK7set+9XZgGgwvM+OLoRVwuVwrg4HkIiNlpgiPve/1U/yoqf+U/sCmAPCSUxB1b4JfefI4G4O7OFQ==
-X-Received: by 2002:a7b:c7c4:0:b0:3ea:ed4d:38f6 with SMTP id z4-20020a7bc7c4000000b003eaed4d38f6mr5600772wmk.4.1679496572162;
-        Wed, 22 Mar 2023 07:49:32 -0700 (PDT)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm8733633wrn.111.2023.03.22.07.49.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 07:49:31 -0700 (PDT)
-Message-ID: <d7330917-730b-0219-979f-dd770ff0180f@linaro.org>
-Date:   Wed, 22 Mar 2023 15:49:30 +0100
+        d=1e100.net; s=20210112; t=1679496585;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HPCji8KxlP8RVox763kqVVCoDfgGEnOq0lSEgexYy6Y=;
+        b=NgXpQ2XUGemY200jQgZ25UDuDPSzznos4+n+zAzMqpSlgftxrEblbuEHdc3awe8dRX
+         eoH5Z9KWnXAtaZu6CyHSILKo4Uw366yfS9F05hFSb8EelM+qnLpSfcYVYj/8s+jMhlQx
+         wuWjSYpZ2N+B5xE+mHvfYUTPUqdAqqdjj+mmBFcbnOV8khvHHa+FDdI7k6iYJYT/aDEe
+         dk5wal8AinFYoiregx7I6dakf9IEe3HlkFsrlubS2k2OJhjUalGd48jNZD2AUOO7ibuY
+         q32Whz3QPTaxwiNuHkokIM3seo52/QSTqiNVTpYVup9rfMOvbB/pyJ1lkmllXe0HoozH
+         HT0Q==
+X-Gm-Message-State: AO0yUKU2uwTqUfj0bXA9SSxa65qX8PO35Fo00fXM2isNQNuE2plA8KPJ
+        euRVHyh1JKkCvfyhbqx6/0ymRd1hI4JojgU1XJTo8UZfvnAlIQasURASmlk4lkBuOnSVeji3Z6z
+        WlOjrbQhxGpfS2lDAN2Oz7t2t
+X-Received: by 2002:a05:622a:198b:b0:3e1:b2b4:f766 with SMTP id u11-20020a05622a198b00b003e1b2b4f766mr10608258qtc.5.1679496585391;
+        Wed, 22 Mar 2023 07:49:45 -0700 (PDT)
+X-Google-Smtp-Source: AK7set83+n/pztQhG0B5NmXUaaIX9TsRMBjqkX8q3XBT3i8cD2jdTaYA03sxBlOy5HHAN4ULkFjYyg==
+X-Received: by 2002:a05:622a:198b:b0:3e1:b2b4:f766 with SMTP id u11-20020a05622a198b00b003e1b2b4f766mr10608233qtc.5.1679496585125;
+        Wed, 22 Mar 2023 07:49:45 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-244-168.dyn.eolo.it. [146.241.244.168])
+        by smtp.gmail.com with ESMTPSA id r132-20020a37448a000000b007466432a559sm9267612qka.86.2023.03.22.07.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 07:49:44 -0700 (PDT)
+Message-ID: <3b9793e1b2d16c49eb4af40c2c48609a09e2bc5a.camel@redhat.com>
+Subject: Re: [PATCH net-next 2/4] net: ethernet: ti: am65-cpsw: Add support
+ for SGMII mode
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        rogerq@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Date:   Wed, 22 Mar 2023 15:49:41 +0100
+In-Reply-To: <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
+References: <20230321111958.2800005-1-s-vadapalli@ti.com>
+         <20230321111958.2800005-3-s-vadapalli@ti.com>
+         <ZBmVGu2vf1ADmEuN@shell.armlinux.org.uk>
+         <9b9ba199-8379-0840-b99a-d729f8ad33e1@ti.com>
+         <ZBnPdlFS2P3Iie5k@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v2 01/14] mips: fix comment about pgtable_init()
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-References: <20230321144842.2401182-1-rppt@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230321144842.2401182-1-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +87,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/3/23 15:48, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Comment about fixrange_init() says that its called from pgtable_init()
-> while the actual caller is pagetabe_init().
-> 
-> Update comment to match the code.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> ---
->   arch/mips/include/asm/fixmap.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/asm/fixmap.h b/arch/mips/include/asm/fixmap.h
-> index beea14761cef..b037718d7e8b 100644
-> --- a/arch/mips/include/asm/fixmap.h
-> +++ b/arch/mips/include/asm/fixmap.h
-> @@ -70,7 +70,7 @@ enum fixed_addresses {
->   #include <asm-generic/fixmap.h>
->   
->   /*
-> - * Called from pgtable_init()
-> + * Called from pagetable_init()
+Hi Russell,
 
-I'm not sure about the usefulness of this comment; I suppose it
-predates git-grep. Anyhow,
+On Tue, 2023-03-21 at 15:38 +0000, Russell King (Oracle) wrote:
+> On Tue, Mar 21, 2023 at 07:04:50PM +0530, Siddharth Vadapalli wrote:
+> > Hello Russell,
+> >=20
+> > On 21-03-2023 16:59, Russell King (Oracle) wrote:
+> > > On Tue, Mar 21, 2023 at 04:49:56PM +0530, Siddharth Vadapalli wrote:
+> > > > Add support for configuring the CPSW Ethernet Switch in SGMII mode.
+> > > >=20
+> > > > Depending on the SoC, allow selecting SGMII mode as a supported int=
+erface,
+> > > > based on the compatible used.
+> > > >=20
+> > > > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> > > > ---
+> > > >  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 11 ++++++++++-
+> > > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net=
+/ethernet/ti/am65-cpsw-nuss.c
+> > > > index cba8db14e160..d2ca1f2035f4 100644
+> > > > --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> > > > +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> > > > @@ -76,6 +76,7 @@
+> > > >  #define AM65_CPSW_PORTN_REG_TS_CTL_LTYPE2       0x31C
+> > > > =20
+> > > >  #define AM65_CPSW_SGMII_CONTROL_REG		0x010
+> > > > +#define AM65_CPSW_SGMII_MR_ADV_ABILITY_REG	0x018
+> > > >  #define AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE	BIT(0)
+> > >=20
+> > > Isn't this misplaced? Shouldn't AM65_CPSW_SGMII_MR_ADV_ABILITY_REG co=
+me
+> > > after AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE, rather than splitting tha=
+t
+> > > from its register offset definition?
+> >=20
+> > Thank you for reviewing the patch. The registers are as follows:
+> > CONTROL_REG offset 0x10
+> > STATUS_REG offset  0x14
+> > MR_ADV_REG offset  0x18
+> >=20
+> > Since the STATUS_REG is not used in the driver, its offset is omitted.
+> > The next register is the MR_ADV_REG, which I placed after the
+> > CONTROL_REG. I grouped the register offsets together, to represent the
+> > order in which the registers are placed. Due to this, the
+> > MR_ADV_ABILITY_REG offset is placed after the CONTROL_REG offset define=
+.
+> >=20
+> > Please let me know if I should move it after the CONTROL_MR_AN_ENABLE
+> > define instead.
+>=20
+> Well, it's up to you - whether you wish to group the register offsets
+> separately from the bit definitions for those registers, or whether
+> you wish to describe the register offset and its associated bit
+> definitions in one group before moving on to the next register.
+>=20
+> > > If the advertisement register is at 0x18, and the lower 16 bits is th=
+e
+> > > advertisement, are the link partner advertisement found in the upper
+> > > 16 bits?
+> >=20
+> > The MR_LP_ADV_ABILITY_REG is at offset 0x020, which is the the register
+> > corresponding to the Link Partner advertised value. Also, the
+> > AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE Bit is in the CONTROL_REG. The CPS=
+W
+> > Hardware specification describes the process of configuring the CPSW MA=
+C
+> > for SGMII mode as follows:
+> > 1. Write 0x1 (ADVERTISE_SGMII) to the MR_ADV_ABILITY_REG register.
+> > 2. Enable auto-negotiation in the CONTROL_REG by setting the
+> > AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE bit.
+>=20
+> Good to hear that there is a link partner register.
+>=20
+> > > >  #define AM65_CPSW_CTL_VLAN_AWARE		BIT(1)
+> > > > @@ -1496,9 +1497,14 @@ static void am65_cpsw_nuss_mac_config(struct=
+ phylink_config *config, unsigned in
+> > > >  	struct am65_cpsw_port *port =3D container_of(slave, struct am65_c=
+psw_port, slave);
+> > > >  	struct am65_cpsw_common *common =3D port->common;
+> > > > =20
+> > > > -	if (common->pdata.extra_modes & BIT(state->interface))
+> > > > +	if (common->pdata.extra_modes & BIT(state->interface)) {
+> > > > +		if (state->interface =3D=3D PHY_INTERFACE_MODE_SGMII)
+> > > > +			writel(ADVERTISE_SGMII,
+> > > > +			       port->sgmii_base + AM65_CPSW_SGMII_MR_ADV_ABILITY_REG);
+> > > > +
+> > >=20
+> > > I think we can do better with this, by implementing proper PCS suppor=
+t.
+> > >=20
+> > > It seems manufacturers tend to use bought-in IP for this, so have a
+> > > look at drivers/net/pcs/ to see whether any of those (or the one in
+> > > the Mediatek patch set on netdev that has recently been applied) will
+> > > idrive your hardware.
+> > >=20
+> > > However, given the definition of AM65_CPSW_SGMII_CONTROL_MR_AN_ENABLE=
+,
+> > > I suspect you won't find a compatible implementation.
+> >=20
+> > I have tested with an SGMII Ethernet PHY in the standard SGMII MAC2PHY
+> > configuration. I am not sure if PCS support will be required or not. I
+> > hope that the information shared above by me regarding the CPSW
+> > Hardware's specification for configuring it in SGMII mode will help
+> > determine what the right approach might be. Please let me know whether
+> > the current implementation is acceptable or PCS support is necessary.
+>=20
+> Nevertheless, this SGMII block is a PCS, and if you're going to want to
+> support inband mode (e.g. to read the SGMII word from the PHY), or if
+> someone ever wants to use 1000base-X, you're going to need to implement
+> this properly as a PCS.
+>=20
+> That said, it can be converted later, so isn't a blocking sisue.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Just to be on the same page, I read all the above as you do accept/do
+not oppose to this series in the current form, am I correct?
 
->    */
->   extern void fixrange_init(unsigned long start, unsigned long end,
->   	pgd_t *pgd_base);
+Thanks,
+
+Paolo
 
