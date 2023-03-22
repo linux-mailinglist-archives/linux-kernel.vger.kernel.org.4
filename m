@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761826C4D0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587986C4CFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjCVOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S231281AbjCVOHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjCVOIS (ORCPT
+        with ESMTP id S231337AbjCVOGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:08:18 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37351C83
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:11 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id jl13so12185372qvb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679494090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvCFOq9fKW00r1IpstANHOSKK4Phqzk0S4NhhOp89zc=;
-        b=mu4jN/jQH85RkPCRcT6hRxvGoiz0PFJHwP1g/VQgtDQkTk5wUBxBkXYS3FEDPkjPRB
-         /487N3pC5jXT9Vz42AwictF4U9E0Ek3sVAhM6NiXYnObOR2EzEkda4YTucyO18pa8KYr
-         A82QZOK8rNYF5UW7MoPRg4KqV4xLsMFDzE6w9JEV94iWE43WUp0WNcrlBuM1HZoinmrY
-         ISj3SQFDtbdI1OdxwxMbnJGE3UPpqSjQUQFgL7aL7IYPwDnkDGZs9cKki2DfA0MMEkjL
-         WrHFvkxfcWbnDeRWcFsdkTzAx9qW8kXfhlYXPctOJu+q1XR3jPrTcYjE+UZAklpjl09B
-         8tzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679494090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvCFOq9fKW00r1IpstANHOSKK4Phqzk0S4NhhOp89zc=;
-        b=CAveqrIwa+MYg4B6m7E+hgCwCqvt50Zihyf5+0hc9XT8aY7Ge6xooR9anMpJmCbzfs
-         Or7tIsS3EwtjfLbzzbYi5eSA7XGn5CoWe4imV+TgzCJd3Vb2Rxd3PxDghzCNvueamtAY
-         m/L0dw2pH9nEypPbEXCCKj+ublV+Mi/AAmQk99SXB5YVZ9zzYdIMI+XM8ouT54S3b5zW
-         xws/X4wST+k0BHezh2MC00gG/NO/UbRQ6KJgA8e4PLUlvTcmjHDI/N96y1JZ0HZQ8FBi
-         k5xeAVXzLz/EKo7KftOkCAROCf5LU4ihtj+oXioHX3x9lsAmLFtKXvyJ961iSeWbd7NA
-         RhZQ==
-X-Gm-Message-State: AO0yUKUvwsR6kWdCIxLtxsHw9RWZd96AFb344d+syM6VI4fGv81KCrwH
-        UaeQTcNM7oxsI4uPK2hVCIBumvtgS3GMd+1AvYoy8w==
-X-Google-Smtp-Source: AK7set94uO8JOul1kgpX5ATBARFVd9wAjqSi2jIBiBUNgq4sOu1g2uq9mq41BCGoQwQ+YIG4wDLjzjmdW4YAEJNIZJA=
-X-Received: by 2002:a05:6214:5650:b0:56e:ac29:dc16 with SMTP id
- mh16-20020a056214565000b0056eac29dc16mr739779qvb.9.1679494090188; Wed, 22 Mar
- 2023 07:08:10 -0700 (PDT)
+        Wed, 22 Mar 2023 10:06:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B8B64873
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:06:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DD17B81CEA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:06:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CEFDC433D2;
+        Wed, 22 Mar 2023 14:06:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679493991;
+        bh=mSFTh2io+5nE1DlYXY/49SnI5K+3qCrWULBm9ytRUMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rJrI86yPgo9CQzNsI67X4JmWkFOuqsLXgouJaUzBpka6eS3mzGYQ/ieRqDEBJzDY7
+         BfGQuocSKpcpHH9Vd+dFU5fpdlMJsujL1nVgM7LXzp42GfXHQyRVFMphQcqns0MYi9
+         mTuy2bucnxHKUEMlO0Y26hx8j1mvu1lTZ0zS2qaegunYOaK2Z/RIoeS+yhMA/ly2U+
+         FzKIRq7NBdBwh9T1VnKOMRzP0eSSeCu4Ko4z97FOEPsauSYJ1fITXQvMFJ0LotMtX/
+         CcNMLaOiOBI7280uhQmF3ga0jyB4ui/oI83f5vLYxyjMZA6IPDWSw+am7f+AMicM3Z
+         VFfo1+ULWhLIA==
+Date:   Wed, 22 Mar 2023 07:09:43 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
+        johan+linaro@kernel.org, steev@kali.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] iommu/arm-smmu-qcom: Limit the SMR groups to 128
+Message-ID: <20230322140943.v6hhtyszw4k3vclr@ripper>
+References: <20230321091332.18334-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-10-james.morse@arm.com>
-In-Reply-To: <20230320172620.18254-10-james.morse@arm.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 22 Mar 2023 15:07:59 +0100
-Message-ID: <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
-Subject: Re: [PATCH v3 09/19] x86/resctrl: Queue mon_event_read() instead of
- sending an IPI
-To:     James Morse <james.morse@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321091332.18334-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Tue, Mar 21, 2023 at 02:43:32PM +0530, Manivannan Sadhasivam wrote:
+> On some Qualcomm platforms, the hypervisor emulates more than 128 SMR
+> (Stream Matching Register) groups.
 
-On Mon, Mar 20, 2023 at 6:27=E2=80=AFPM James Morse <james.morse@arm.com> w=
-rote:
->
-> x86 is blessed with an abundance of monitors, one per RMID, that can be
+As we last week discussed, this isn't at all the case. The hardware has
+more than 128 SMRs, it's _not_ emulating additional SMRs.
 
-As I explained earlier, this is not the case on AMD.
+As pointed out by Robin that might not be according to spec, so it might
+be wrong to claim it's compatible with mmu-500. I think limiting the
+num_mapping_groups to 128 is a good way to handle this until further
+clarity can be acquired.
 
-> read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
-> the number implemented is up to the manufacturer. This means when there a=
-re
-> fewer monitors than needed, they need to be allocated and freed.
->
-> Worse, the domain may be broken up into slices, and the MMIO accesses
-> for each slice may need performing from different CPUs.
->
-> These two details mean MPAMs monitor code needs to be able to sleep, and
-> IPI another CPU in the domain to read from a resource that has been slice=
-d.
+> This doesn't conform to the ARM SMMU
+> architecture specification which defines the range of 0-127. Moreover, the
+> emulated groups don't exhibit the same behavior as the architecture
+> supported ones.
+> 
+> For instance, emulated groups will not detect the quirky behavior of some
+> firmware versions intercepting writes to S2CR register, thus skipping the
+> quirk implemented in the driver and causing boot crash.
+> 
 
-This doesn't sound very convincing. Could mon_event_read() IPI all the
-CPUs in the domain? (after waiting to allocate and install monitors
-when necessary?)
+From the history of this driver we know that hypervisor traps the writes
+to these registers, could it be that the trap doesn't act correctly for
+the higher SMRs - for some reason?
 
+> So let's limit the groups to 128 and issue a notice to users in that case.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+> 
+> Changes in v4:
+> 
+> * Spun off the SMR limiting part into a separate patch
+> * Dropped the quirk rework part as it is not really needed for now
+> 
+> Changes in v3:
+> 
+> * Limited num_mapping_groups to 128 as per ARM SMMU spec and removed the
+>   check for 128 groups in qcom_smmu_bypass_quirk()
+> * Reworded the commit message accordingly
+> 
+> Changes in v2:
+> 
+> * Limited the check to 128 groups as per ARM SMMU spec's NUMSMRG range
+> * Moved the quirk handling to its own function
+> * Collected review tag from Bjorn
+> 
+>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index d1b296b95c86..54f62d409619 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -268,12 +268,26 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
+>  
+>  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
+>  {
+> -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
+>  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
+> +	unsigned int last_s2cr;
+>  	u32 reg;
+>  	u32 smr;
+>  	int i;
+>  
+> +	/*
+> +	 * Limit the number of stream matching groups to 128 as the ARM SMMU
+> +	 * architecture specification defines NUMSMRG (Number of Stream Mapping
+> +	 * Register Groups) in the range of 0-127, but some Qcom platforms
+> +	 * emulate more stream mapping groups.
 
->
-> mon_event_read() already invokes mon_event_count() via IPI, which means
-> this isn't possible. On systems using nohz-full, some CPUs need to be
-> interrupted to run kernel work as they otherwise stay in user-space
-> running realtime workloads. Interrupting these CPUs should be avoided,
-> and scheduling work on them may never complete.
->
-> Change mon_event_read() to pick a housekeeping CPU, (one that is not usin=
-g
-> nohz_full) and schedule mon_event_count() and wait. If all the CPUs
-> in a domain are using nohz-full, then an IPI is used as the fallback.
->
-> This function is only used in response to a user-space filesystem request
-> (not the timing sensitive overflow code).
->
-> This allows MPAM to hide the slice behaviour from resctrl, and to keep
-> the monitor-allocation in monitor.c.
+As discussed, this isn't true.
 
-This goal sounds more likely.
+>                                              And those groups don't exhibit
+> +	 * the same behavior as the architecture supported ones.
 
-If it makes the initial enablement smoother, then I'm all for it.
+I share this observation, and I think the patch is reasonable - but not
+the commit message and above part of the comment.
 
-Reviewed-By: Peter Newman <peternewman@google.com>
+Regards,
+Bjorn
 
-These changes worked fine for me on tip/master, though there were merge
-conflicts to resolve.
-
-Tested-By: Peter Newman <peternewman@google.com>
-
-Thanks!
-
--Peter
+> +	 */
+> +	if (smmu->num_mapping_groups > 128) {
+> +		dev_notice(smmu->dev, "\tLimiting the stream matching groups to 128\n");
+> +		smmu->num_mapping_groups = 128;
+> +	}
+> +
+> +	last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
+> +
+>  	/*
+>  	 * With some firmware versions writes to S2CR of type FAULT are
+>  	 * ignored, and writing BYPASS will end up written as FAULT in the
+> -- 
+> 2.25.1
+> 
