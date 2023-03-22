@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7096C4B30
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3EA6C4B31
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCVM5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S230493AbjCVM5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjCVM5B (ORCPT
+        with ESMTP id S230463AbjCVM5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:57:01 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD435F509;
-        Wed, 22 Mar 2023 05:57:00 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l27so8649656wrb.2;
-        Wed, 22 Mar 2023 05:57:00 -0700 (PDT)
+        Wed, 22 Mar 2023 08:57:02 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620C75DC94;
+        Wed, 22 Mar 2023 05:57:01 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id h17so16955581wrt.8;
+        Wed, 22 Mar 2023 05:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679489819;
+        d=gmail.com; s=20210112; t=1679489820;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xZCXW/2DQwjo2NSTCO/6DdFMwtXOMhz06C8yg8pHV5o=;
-        b=Q0fG6vWI7svwUfChlkkFxcYCw20TeLJIIoqJYTM8Jj4GUwnNu+UktrrzC8eNEBYw+o
-         H7Uzk8n0KQ9T3vQ7HH+959W4gNAA6M3aCx70CfJKas6CQujn0VrNga3G4HibZ83UFnby
-         NNM078l6NiANsWA03PC4dduWBLzLwz+AXsETMCceW1KGfhqaJok3DHyUF/20hCWRUOUw
-         PJ2cNJxKQjetbT8txG4hJQfOKfm4aRy2wjssdtGqYlcn4EQwlf5L/JxdhFSmLEfsCaNT
-         b5Db9qE+YP3gVkv+YlioeaHt0unG39bdUatCgnsGa9i5qvMvu7Ot7wZImbRmIE28Fcpz
-         CWow==
+        bh=UETI/o1VyrzdJ5JktzswARWiINVYl7e4LvF4s43JmGU=;
+        b=FF1sP46E++GE8R+JZt5Xd7n8/SIz15OCSqly/mfs2V9LvpQIB00GdQkZoWqHOX79Xb
+         8WFU49Zi1TE22S4P/Ko2v+ZCa8IOjkWFOMwDnhjJ87eowD1ufeQi3TOE2Hy3rKaQYCMP
+         moRPyI5m+qXrMkKBGJTq/efREsiTWK2ka3ybopAa3QtjoA7IRm5m9VoGsyN0oLg4+vum
+         moQqK9GozuYUGE2k1AalngBJdB4MLb6CYc5mAeqet7Wg+mWLW/9zdcUN1v13JZ/FZOAp
+         cHyLnXdfcAPOwIfF2Ljtmrp1k8V433GYjbCiyCEbNJJM2PobIR22DjU0YfjBncesZ/jX
+         JNzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489819;
+        d=1e100.net; s=20210112; t=1679489820;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xZCXW/2DQwjo2NSTCO/6DdFMwtXOMhz06C8yg8pHV5o=;
-        b=e52BOXjitSetfI89Ff+NUMpFwcs8a4NPKdIxKQXpatVInT7tG22m2DOsqdsGsMT9Wr
-         KzxqLaT8USq1POW9kVLUS2FC8k/SPig64QXbnK5zlCFJem1Z1TINg99SjSgmuT/W76qM
-         8fe2XVD0BhVX+hd+Luj37qoFb0PbJXmToUKdlbJywb3BgCAAZlc078VEHgEEmHbWJcyk
-         GV9eKw6hc20y/z0hwThIYexs71Kp4MH0MV6GM6k2JH9TVDIZJolHC+rIGMQ5Qb43IpOO
-         /AZPcYjCdzD/Pa1HiAdAOC0jyJxl/jP8xbucm10Gs0E7h6ZiJxcr5UgDIDF2UDfpGr3F
-         WbHA==
-X-Gm-Message-State: AO0yUKXngpHl/L+2P/OGA3I4RAV5/A5orgXdUs6BTKDdrRTPZDSzXLLQ
-        bSCfTQbI3vWcxy/D5aL76Fc=
-X-Google-Smtp-Source: AK7set8cbl9u+5mkG/G/yMYQXCKk/1NeZvSEND4VC11p/GMEzKPgZsjBfwps878+vvt2K4QuFkDK6w==
-X-Received: by 2002:a5d:624a:0:b0:2d2:62b3:87e9 with SMTP id m10-20020a5d624a000000b002d262b387e9mr4751576wrv.45.1679489818556;
-        Wed, 22 Mar 2023 05:56:58 -0700 (PDT)
+        bh=UETI/o1VyrzdJ5JktzswARWiINVYl7e4LvF4s43JmGU=;
+        b=ahY5+N8GCzLcdmjuWtQIve8Ije4/7l3Tp6R9txY1KHENQvrS2LPBS6SmUV9R9sW9ji
+         i3d+JVQUwsL78jl18K4hbPRslI/xKz1kOaB9oSWbtx+IkPsGq2egQSz+o1VAT+/Egnut
+         AXK08stazzhVdLeSHOM84PDeW3zbK2xD8H4Bc4K5/uDLxjufMvcfKTrlYNs/lA77B3c6
+         MueebxGwn+GBAfv9wV9r6f6fKmLRhHUTWgm+iocnUI4wH2iRJCPXfOB+Casatw1oQWFr
+         VJJqReDGoKXKDNTU8Gtdx7PgCrSFDol/2pERI+cPDvUGB2OHZ7SowMSSnU4RKcRrIhLS
+         AhYg==
+X-Gm-Message-State: AO0yUKVImZL9W7xT/8OhXIzo+Sc0UiI3U4MJiwKoA+Vk7zQi0QEeS5O0
+        jNnOAUJmc6qPM1QU0zZtmk0=
+X-Google-Smtp-Source: AK7set9fSDfwN5Ckv5IXNHoV2kIockWCUGHD0+QFOgBhjd9v0wpQJZBvaTKHkYRnZhw9OizDLcdXnA==
+X-Received: by 2002:a5d:55cb:0:b0:2ce:c982:5e4b with SMTP id i11-20020a5d55cb000000b002cec9825e4bmr4926194wrw.57.1679489819752;
+        Wed, 22 Mar 2023 05:56:59 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:9c35:3f3f:458c:5fef])
-        by smtp.gmail.com with ESMTPSA id m23-20020a056000181700b002c5694aef92sm13707167wrh.21.2023.03.22.05.56.57
+        by smtp.gmail.com with ESMTPSA id m23-20020a056000181700b002c5694aef92sm13707167wrh.21.2023.03.22.05.56.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 22 Mar 2023 05:56:58 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
@@ -61,9 +61,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 1/2] arm64: dts: renesas: r9a07g044: Add CSI and CRU nodes
-Date:   Wed, 22 Mar 2023 12:56:47 +0000
-Message-Id: <20230322125648.24948-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 2/2] arm64: dts: renesas: rzg2l-smarc: Enable CRU, CSI support
+Date:   Wed, 22 Mar 2023 12:56:48 +0000
+Message-Id: <20230322125648.24948-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230322125648.24948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20230322125648.24948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -81,111 +81,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Add CSI and CRU nodes r9a07g044 (RZ/G2L) SoC DTSI.
+Enable CRU, CSI on RZ/G2L SMARC EVK and tie the CSI to OV5645 sensor
+using Device Tree overlay. rz-smarc-cru-csi-ov5645.dtsi is created so
+that RZ/G2L alike EVKs can make use of it.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
+setenv bootfile kernel_fdt.itb
+tftpboot ${bootfile}
+bootm ${fileaddr}#rzg2l-smarc#ov5645
+
 v2->v3
-* No change
+* Moved the gpio.h and rzg2l-pinctrl.h headers to
+  r9a07g044l2-smarc-cru-csi-ov5645.dtso
 
 v1->v2
-* Dropped using SOC_PREFIX() macro
-* Added RB tag
+* New patch
 ---
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ arch/arm64/boot/dts/renesas/Makefile          |  1 +
+ .../r9a07g044l2-smarc-cru-csi-ov5645.dtso     | 21 +++++
+ .../dts/renesas/rz-smarc-cru-csi-ov5645.dtsi  | 80 +++++++++++++++++++
+ 3 files changed, 102 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
+ create mode 100644 arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 79cffbf20c55..0a50926cb53e 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -618,6 +618,85 @@ sbc: spi@10060000 {
- 			status = "disabled";
- 		};
+diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
+index 23b10c03091c..a553d99175cb 100644
+--- a/arch/arm64/boot/dts/renesas/Makefile
++++ b/arch/arm64/boot/dts/renesas/Makefile
+@@ -79,6 +79,7 @@ dtb-$(CONFIG_ARCH_R9A07G043) += r9a07g043u11-smarc.dtb
  
-+		cru: video@10830000 {
-+			compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
-+			reg = <0 0x10830000 0 0x400>;
-+			clocks = <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-+				 <&cpg CPG_MOD R9A07G044_CRU_PCLK>,
-+				 <&cpg CPG_MOD R9A07G044_CRU_ACLK>;
-+			clock-names = "video", "apb", "axi";
-+			interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
-+			resets = <&cpg R9A07G044_CRU_PRESETN>,
-+				 <&cpg R9A07G044_CRU_ARESETN>;
-+			reset-names = "presetn", "aresetn";
-+			power-domains = <&cpg>;
-+			status = "disabled";
+ dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c2-smarc.dtb
+ dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc.dtb
++dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc-cru-csi-ov5645.dtbo
+ 
+ dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
+ 
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
+new file mode 100644
+index 000000000000..d834bff9bda2
+--- /dev/null
++++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree overlay for the RZ/G2L SMARC EVK with OV5645 camera
++ * connected to CSI and CRU enabled.
++ *
++ * Copyright (C) 2023 Renesas Electronics Corp.
++ */
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++/dts-v1/;
++/plugin/;
 +
-+				port@0 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
 +
-+					reg = <0>;
-+					cruparallel: endpoint@0 {
-+						reg = <0>;
-+					};
-+				};
++#define OV5645_PARENT_I2C i2c0
++#include "rz-smarc-cru-csi-ov5645.dtsi"
 +
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
++&ov5645 {
++	enable-gpios = <&pinctrl RZG2L_GPIO(2, 0) GPIO_ACTIVE_HIGH>;
++	reset-gpios = <&pinctrl RZG2L_GPIO(40, 2) GPIO_ACTIVE_LOW>;
++};
+diff --git a/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+new file mode 100644
+index 000000000000..6efa8958bc36
+--- /dev/null
++++ b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Common Device Tree for the RZ/G2L SMARC EVK (and alike EVKs) with
++ * OV5645 camera connected to CSI and CRU enabled.
++ *
++ * Copyright (C) 2023 Renesas Electronics Corp.
++ */
 +
-+					reg = <1>;
-+					crucsi2: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi2cru>;
-+					};
-+				};
++&{/} {
++	ov5645_vdddo_1v8: 1p8v {
++		compatible = "regulator-fixed";
++		regulator-name = "camera_vdddo";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	ov5645_vdda_2v8: 2p8v {
++		compatible = "regulator-fixed";
++		regulator-name = "camera_vdda";
++		regulator-min-microvolt = <2800000>;
++		regulator-max-microvolt = <2800000>;
++		regulator-always-on;
++	};
++
++	ov5645_vddd_1v5: 1p5v {
++		compatible = "regulator-fixed";
++		regulator-name = "camera_vddd";
++		regulator-min-microvolt = <1500000>;
++		regulator-max-microvolt = <1500000>;
++		regulator-always-on;
++	};
++
++	ov5645_fixed_clk: osc25250_clk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++	};
++};
++
++&cru {
++	status = "okay";
++};
++
++&csi2 {
++	status = "okay";
++
++	ports {
++		port@0 {
++			csi2_in: endpoint {
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				remote-endpoint = <&ov5645_ep>;
 +			};
 +		};
++	};
++};
 +
-+		csi2: csi2@10830400 {
-+			compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
-+			reg = <0 0x10830400 0 0xfc00>;
-+			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD R9A07G044_CRU_SYSCLK>,
-+				 <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-+				 <&cpg CPG_MOD R9A07G044_CRU_PCLK>;
-+			clock-names = "system", "video", "apb";
-+			resets = <&cpg R9A07G044_CRU_PRESETN>,
-+				 <&cpg R9A07G044_CRU_CMN_RSTB>;
-+			reset-names = "presetn", "cmn-rstb";
-+			power-domains = <&cpg>;
-+			status = "disabled";
++&OV5645_PARENT_I2C {
++	#address-cells = <1>;
++	#size-cells = <0>;
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++	ov5645: camera@3c {
++		compatible = "ovti,ov5645";
++		reg = <0x3c>;
++		clocks = <&ov5645_fixed_clk>;
++		clock-frequency = <24000000>;
++		vdddo-supply = <&ov5645_vdddo_1v8>;
++		vdda-supply = <&ov5645_vdda_2v8>;
++		vddd-supply = <&ov5645_vddd_1v5>;
 +
-+				port@0 {
-+					reg = <0>;
-+				};
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <1>;
-+
-+					csi2cru: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&crucsi2>;
-+					};
-+				};
++		port {
++			ov5645_ep: endpoint {
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				remote-endpoint = <&csi2_in>;
 +			};
 +		};
-+
- 		cpg: clock-controller@11010000 {
- 			compatible = "renesas,r9a07g044-cpg";
- 			reg = <0 0x11010000 0 0x10000>;
++	};
++};
 -- 
 2.25.1
 
