@@ -2,159 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181E56C4588
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8116C4587
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCVJCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S229847AbjCVJCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCVJCR (ORCPT
+        with ESMTP id S229611AbjCVJCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:02:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5D953DB5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679475687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mFVpzwEJYt2no2NNxFKxaFJZexC0zVUmzATggS8rAKc=;
-        b=JcROl8G8ZMS55dP4MAfQMgWL0Fwn3/k4zPJHqwJs16B2NwRZPRflyXEx6CQvv242NUf00A
-        YfGyIkp6iwU2DdCldOrwVK2IR9wgw3t+zO1lhydk0WPCUayLPc1jI1r9asm7OxQmHR01sX
-        G4lmORoE2F4/8KqtDNNm3LamuAFzdB4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-496-RmrEer-EPSmvpbsJ6mNzkA-1; Wed, 22 Mar 2023 05:01:19 -0400
-X-MC-Unique: RmrEer-EPSmvpbsJ6mNzkA-1
-Received: by mail-wm1-f69.google.com with SMTP id q21-20020a05600c46d500b003ee570749f7so730564wmo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:01:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679475678;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mFVpzwEJYt2no2NNxFKxaFJZexC0zVUmzATggS8rAKc=;
-        b=vdP/st7Ejx+3hhW9l6BnVKe8djgND6eG5DaaqZ40Zq72STjRBmKkoB7nm5ZjdToQnm
-         DklUoN1i+WeuSJf4T9sZrViVY/5wr+Br5JstKookk/pXnJ5sIP6v/udxN0W8QnpNeQCb
-         fOl8O+7kg4WRbgjHXxMCaxqD1jRVl2IThfQZgfCnlujAUx4zxVpQpm3487GgbRY4BtbQ
-         LY1VM5vLu9Q63lOA33X2V4TxCMnsfHrpLQtvt8OpxleT6O5vq+MLVGElCWJD49SQA1SH
-         ZA2v4OOi0rGeEDhyJXDTTJVnSNhmSAW7ghOnE3ZD4tRJw0r6YuW0e1hgaMMJIS7vnYHK
-         tPZg==
-X-Gm-Message-State: AO0yUKXryAX8EcuRhVFkv4+IIUhaFXFo6b+pSK4q/8ptf21XdIjtoQ/i
-        TFtPwwRnCU2ZQj7ow7sB6MTsM9afOwDeHwdPkobgqetxw8HPNrswuIkNAbZHY5rASTB2Nh/xnP8
-        8Cv5XImCEIJf5Yt8l0y1Op5pi
-X-Received: by 2002:a05:600c:2155:b0:3ed:93de:49ff with SMTP id v21-20020a05600c215500b003ed93de49ffmr4587066wml.0.1679475678539;
-        Wed, 22 Mar 2023 02:01:18 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/8yN8AH64pyojIF3y/RKbehT7oWGYoqR9SMYxxN3EQ7/UjR+ICmjI1ZsqeI2QMDySSvO224Q==
-X-Received: by 2002:a05:600c:2155:b0:3ed:93de:49ff with SMTP id v21-20020a05600c215500b003ed93de49ffmr4587041wml.0.1679475678153;
-        Wed, 22 Mar 2023 02:01:18 -0700 (PDT)
-Received: from [192.168.3.108] (p5b0c68dc.dip0.t-ipconnect.de. [91.12.104.220])
-        by smtp.gmail.com with ESMTPSA id d17-20020a05600c34d100b003ee443bf0c7sm3505222wmq.16.2023.03.22.02.01.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 02:01:17 -0700 (PDT)
-Message-ID: <9b531543-9f97-178f-8a97-494322410806@redhat.com>
-Date:   Wed, 22 Mar 2023 10:01:16 +0100
+        Wed, 22 Mar 2023 05:02:03 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D95B42A;
+        Wed, 22 Mar 2023 02:02:01 -0700 (PDT)
+Received: from [10.128.10.193] (unknown [117.133.56.22])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 9E5CB5807BE;
+        Wed, 22 Mar 2023 17:01:55 +0800 (CST)
+Message-ID: <88c2c37b-c221-5c27-9663-7026084adf8d@sangfor.com.cn>
+Date:   Wed, 22 Mar 2023 17:01:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/4] mm/mlock: return EINVAL if len overflows for
- mlock/munlock
+Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing the
+ return value of function
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     mawupeng <mawupeng1@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kuleshovmail@gmail.com, aneesh.kumar@linux.ibm.com
-References: <20230320024739.224850-1-mawupeng1@huawei.com>
- <20230320024739.224850-2-mawupeng1@huawei.com>
- <27b9cb5b-0118-f989-80c2-6a143a4232af@redhat.com>
- <3ef9520c-6713-527a-0214-ac7a8bb2d49c@huawei.com>
- <6dd844f7-d43b-c744-f295-9f14c68d3928@redhat.com>
- <8be13253-b4ca-b134-3e85-b4097484bb29@huawei.com>
- <9583bc53-716d-f2ff-38e7-1dda7e57dd5d@redhat.com>
-Organization: Red Hat
-In-Reply-To: <9583bc53-716d-f2ff-38e7-1dda7e57dd5d@redhat.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
+ <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
+ <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+In-Reply-To: <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTx4eVkwdS0NOT04YGR0eTFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS09ISFVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PC46GSo*Kj0OKRRJLRI3QiE2
+        NwNPFA9VSlVKTUxCT0xOTEpMS01MVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFPTU1DNwY+
+X-HM-Tid: 0a87088db1662eb7kusn9e5cb5807be
+X-HM-MType: 1
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.03.23 09:54, David Hildenbrand wrote:
-> On 22.03.23 03:14, mawupeng wrote:
->>
->>
->> On 2023/3/21 22:19, David Hildenbrand wrote:
->>> On 21.03.23 08:44, mawupeng wrote:
->>>>
->>>>
->>>> On 2023/3/20 18:54, David Hildenbrand wrote:
->>>>> On 20.03.23 03:47, Wupeng Ma wrote:
->>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>>>>
->>>>>> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
->>>>>> The return value of mlock is zero. But nothing will be locked since the
->>>>>> len in do_mlock overflows to zero due to the following code in mlock:
->>>>>>
->>>>>>       len = PAGE_ALIGN(len + (offset_in_page(start)));
->>>>>>
->>>>>> The same problem happens in munlock.
->>>>>>
->>>>>> Add new check and return -EINVAL to fix this overflowing scenarios since
->>>>>> they are absolutely wrong.
->>>>>
->>>>> Thinking again, wouldn't we reject mlock(0, ULONG_MAX) now as well?
->>>>
->>>> mlock will return 0 if len is zero which is the same w/o this patchset.
->>>> Here is the calltrace if len is zero.
->>>>
->>>> mlock(len == 0)
->>>>       do_mlock(len == 0)
->>>>           if (!len)
->>>>               return 0
->>>>
->>>
->>> I was asking about addr=0, len=ULONG_MAX.
->>>
->>> IIUC, that used to work but could now fail? I haven't played with it, though.
->>
->> Thanks for reviewing.
->>
->> Previous for add = 0 and len == ULONG_MAX, mlock will return ok(0) since len overflows to zero.
->> IFAICT, this is not right since mlock do noting(lock nothing) and return ok(0).
->>
->> With this patch, for the same situation, mlock can return EINVAL as expected.
+On 2023/3/22 1:31, Russell King (Oracle) wrote:
+> On Mon, Mar 20, 2023 at 06:16:49AM -0700, Donglin Peng wrote:
+>> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+>> index 3e7bcaca5e07..ba1986e27af8 100644
+>> --- a/arch/arm/kernel/entry-ftrace.S
+>> +++ b/arch/arm/kernel/entry-ftrace.S
+>> @@ -258,7 +258,15 @@ ENDPROC(ftrace_graph_regs_caller)
+>>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>>   ENTRY(return_to_handler)
+>>   	stmdb	sp!, {r0-r3}
+>> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+>> +	/*
+>> +	 * Pass both the function return values in the register r0 and r1
+>> +	 * to ftrace_return_to_handler
+>> +	 */
+>> +	add	r2, sp, #16		@ sp at exit of instrumented routine
+>> +#else
+>>   	add	r0, sp, #16		@ sp at exit of instrumented routine
+>> +#endif
+>>   	bl	ftrace_return_to_handler
+> ...
+>> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+>> +static unsigned long __ftrace_return_to_handler(unsigned long retval_1st,
+>> +			unsigned long retval_2nd, unsigned long frame_pointer)
+> ...
+>> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+>> +unsigned long ftrace_return_to_handler(unsigned long retval_1st,
+>> +			unsigned long retval_2nd, unsigned long frame_pointer)
+>> +{
+>> +	return __ftrace_return_to_handler(retval_1st, retval_2nd, frame_pointer);
+>> +}
+>> +#else
+>> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+>> +{
+>> +	return __ftrace_return_to_handler(0, 0, frame_pointer);
+>> +}
+>> +#endif
+>> +
 > 
-> Quoting the man page:
+> Hi,
 > 
-> "EINVAL (mlock(),  mlock2(),  and  munlock()) The result of the addition
-> addr+len was less than addr (e.g., the addition may have resulted in an
-> overflow)."
+> To echo Mark's criticism, I also don't like this. I feel it would be
+> better if ftrace_return_to_handler() always took the same arguments
+> irrespective of the setting of CONFIG_FUNCTION_GRAPH_RETVAL.
 > 
-> ULONG_MAX+0 = ULONG_MAX
-> 
-> There is no overflow expected. The proper way to implement it would be
-> to handle that case and not fail with EINVAL.
-> 
-> At least that would be expected when reading the man page.
-> 
+> On 32-bit ARM, we have to stack r0-r3 anyway to prevent the call to
+> ftrace_return_to_handler() corrupting the return value, and these
+> are the registers we need. So we might as well pass a pointer to
+> these stacked registers. Whether that's acceptable on other
+> architectures, I couldn't say.
 
-As a side note, I agree that failing with EINVAL is better than doing 
-noting (mlocking nothing). But I am not sure what we are expected to do 
-in that case ... the man page is a bit vague on that.
+Agree, I think we can introduce a new structure called pt_ret_regs for
+each relevant architecture. The pt_ret_regs should only contain the
+return registers and the frame pointer register, for arm, they are r0~r3
+and r11.Then we can pass the pointer to the pt_ret_regs to 
+ftrace_return_to_handler.
 
--- 
-Thanks,
-
-David / dhildenb
+> 
+> Thanks.
+> 
 
