@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAFE6C3FDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626666C3FD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjCVBfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S230036AbjCVBfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjCVBfW (ORCPT
+        with ESMTP id S230047AbjCVBfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:35:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F92E820
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679448873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cLkdy2H+ruuA4UL25SaUZEhvU4tJRBpVJAsfKLpml+U=;
-        b=BFmEdz7BDYFn0X+4oZANoDyKB/pjY5swHKAmwkUYQ3BxphcyBPWsDDoT6aYyR7DisVxd1G
-        K8OYB1yASQ9rVHmxe82NcbE50I5a+Vyw9KDqLCbPdFzFMzPsbS7IkLlT99a/WDBuLOE8zb
-        KZ68Qjt6SeLPYKaft5Ak+Sbbjqvsx2k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-TwrdUqlOP3qyDEKJ_lEd2g-1; Tue, 21 Mar 2023 21:34:29 -0400
-X-MC-Unique: TwrdUqlOP3qyDEKJ_lEd2g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 396543C0F18C;
-        Wed, 22 Mar 2023 01:34:29 +0000 (UTC)
-Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 29D772166B29;
-        Wed, 22 Mar 2023 01:34:21 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 09:34:16 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>,
-        Changhui Zhong <czhong@redhat.com>
-Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
- device again
-Message-ID: <ZBpbGKxPQcs9NYst@ovpn-8-18.pek2.redhat.com>
-References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
- <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
- <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
+        Tue, 21 Mar 2023 21:35:13 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8121F5A6DF;
+        Tue, 21 Mar 2023 18:34:57 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8Bxok44WxpkrskPAA--.12096S3;
+        Wed, 22 Mar 2023 09:34:48 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxX+Q2Wxpkt0MJAA--.37863S3;
+        Wed, 22 Mar 2023 09:34:46 +0800 (CST)
+Subject: Re: [PATCH v4 05/29] LoongArch: KVM: Add vcpu related header files
+To:     Xi Ruoyao <xry111@xry111.site>, Paolo Bonzini <pbonzini@redhat.com>
+References: <20230321035651.598505-1-zhaotianrui@loongson.cn>
+ <20230321035651.598505-6-zhaotianrui@loongson.cn>
+ <75f843b2780fc3c3dcc1d0d8f78f2b955956316b.camel@xry111.site>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <554dc19a-cd94-0f94-7e81-9cdc137dac7d@loongson.cn>
+Date:   Wed, 22 Mar 2023 09:34:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <75f843b2780fc3c3dcc1d0d8f78f2b955956316b.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxX+Q2Wxpkt0MJAA--.37863S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Xr18JrW8JryrtFyfurykKrg_yoWDZFb_Xr
+        s8JF15Ca1kWF4xtanIkFWrX347Gr43Zw15Aa1jqws0qr4rKry0qws3Krs2yrs3tw109F17
+        Cay5J3sIg3sxujkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=3.6 required=5.0 tests=NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:26:07AM +0800, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2023/03/21 19:43, Ming Lei 写道:
-> > On Fri, Feb 17, 2023 at 10:21:58AM +0800, Yu Kuai wrote:
-> > > From: Yu Kuai <yukuai3@huawei.com>
-> > > 
-> > > Changes from RFC:
-> > >   - remove the patch to factor out GD_NEED_PART_SCAN
-> > > 
-> > > Yu Kuai (2):
-> > >    block: Revert "block: Do not reread partition table on exclusively
-> > >      open device"
-> > >    block: fix scan partition for exclusively open device again
-> > 
-> > Hi Yu kuai,
-> > 
-> > Looks the original issue starts to re-appear now with the two patches:
-> > 
-> > https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
-> > 
-> > And underlying disk partition and raid partition can be observed at the
-> > same time.
-> > 
-> > Can you take a look?
-> Yes, thanks for the report. I realize that sda1 adn sdb1 is created
-> while raid open sda and sdb excl, and I think this problem should exist
-> before this patchset.
-
-Looks not reproduced before applying your two patches, that is exactly what Jan
-tried to fix with 36369f46e917 ("block: Do not reread partition table on exclusively open device").
-
-The issue is reported by Changhui's block regression test.
 
 
-Thanks, 
-Ming
+在 2023年03月21日 20:30, Xi Ruoyao 写道:
+> On Tue, 2023-03-21 at 11:56 +0800, Tianrui Zhao wrote:
+>> +/* Tracepoints for VM exits */
+>> +#define kvm_trace_symbol_exit_types                    \
+>> +       ({ KVM_TRACE_EXIT_IDLE,         "IDLE" },       \
+>> +       { KVM_TRACE_EXIT_CACHE,         "CACHE" },      \
+>> +       { KVM_TRACE_EXIT_SIGNAL,        "Signal" })
+> Looks like there shouldn't be "(" and ")".
+>
+>> +#define kvm_trace_symbol_aux_op				\
+>> +	({ KVM_TRACE_AUX_RESTORE,	"restore" },	\
+>> +	{ KVM_TRACE_AUX_SAVE,		"save" },	\
+>> +	{ KVM_TRACE_AUX_ENABLE,		"enable" },	\
+>> +	{ KVM_TRACE_AUX_DISABLE,	"disable" },	\
+>> +	{ KVM_TRACE_AUX_DISCARD,	"discard" })
+> Likewise.
+>
+> See the test robot report, and https://godbolt.org/z/bE8q97z1o.
+>
+> The lesson: if a text book claims "you should always wrap the content of
+> a macro in ( ... )", we should burn it in the fire! :)
+>
+
+Thanks, it should remove the "()" statement in the macros. The reason I 
+did this before because an error was triggered when I use checkpatch.py 
+to check it,  and now I know this error can be ignored.
+
+Thanks
+Tianrui Zhao
 
