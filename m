@@ -2,125 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D43B6C4B49
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0C36C4B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjCVNHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S230213AbjCVNJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCVNHr (ORCPT
+        with ESMTP id S230252AbjCVNJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:07:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133A961888
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:07:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Mar 2023 09:09:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0A567A3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679490534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sOkHuOKT5TrdMbQ7ausoErRO6DBZAgZjkwk79qxntJo=;
+        b=KnlCVXVvGaNhaN4l8DbWHB7M8DUSr4ebEr608zp6/Dxp9c062gQdE0uIDDIwHiaVXlg+uB
+        K5oPZnjyTikE8ypQcTvr2P0HlwT83DsO95PEyw0P4IOk/4Dc8JeCdGoX7VEvPI8dfC3gb7
+        OYuO3cLPexTrDmUD2/tYpQic8cC03/c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-313-iG2ZqcGGOo2BI97vMjqxrQ-1; Wed, 22 Mar 2023 09:08:51 -0400
+X-MC-Unique: iG2ZqcGGOo2BI97vMjqxrQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAAFDB81CE6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C5CC433EF;
-        Wed, 22 Mar 2023 13:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679490463;
-        bh=2Y7bTCRnlSlrxK3L/xRJycRafvM776NSZ/Krg4zHKwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kiW+ueNetZbct+oeecx3pIRKgXYRoB0MujJ6y7p74Bnxfg4mHSKAflQFuIoL1OM0z
-         YfwaJwepj/h1PqtqdJFEYLtJATdPJqrD3bi+niSbmb7ZnbNDBNCAmnsnUMWXgdr1kF
-         ISflWttkCzGmRl5+rSnUcUeLch46tx3qik6Sy16V3nNQAOlGy2hlXST0JhSYFcjvIa
-         rhVu0Ks/TaeYzsM8kSRLwL3xynQuTWta/div7YAC7uZBWDN1axi/bEHKdJHHPia6A8
-         bHWjl6s22r0vCDQKSHO2Yc4ls1AF+jwBePPjmLDgRXflvplvklsKqjIGBQU1vbjR7C
-         FtVQrwfCr+UUQ==
-Date:   Wed, 22 Mar 2023 13:07:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marian Postevca <posteuca@mutex.one>
-Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 3/4] ASoC: amd: acp: Add machine driver that enables
- sound for systems with a ES8336 codec
-Message-ID: <ZBr9rJn50ovG1w9W@sirena.org.uk>
-References: <20230320203519.20137-1-posteuca@mutex.one>
- <20230320203519.20137-4-posteuca@mutex.one>
- <141a3320-ff65-459f-9d00-c8bed691dcfc@sirena.org.uk>
- <87lejpwxzf.fsf@mutex.one>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD6CE886466;
+        Wed, 22 Mar 2023 13:08:50 +0000 (UTC)
+Received: from localhost (ovpn-13-195.pek2.redhat.com [10.72.13.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B9A01731B;
+        Wed, 22 Mar 2023 13:08:49 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 21:08:46 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v4 3/4] iov_iter: add copy_page_to_iter_atomic()
+Message-ID: <ZBr93qtCxRXl7o0V@MiWiFi-R3L-srv>
+References: <cover.1679431886.git.lstoakes@gmail.com>
+ <31482908634cbb68adafedb65f0b21888c194a1b.1679431886.git.lstoakes@gmail.com>
+ <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
+ <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ox7OggTfOqKWPV/Q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87lejpwxzf.fsf@mutex.one>
-X-Cookie: Single tasking: Just Say No.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/22/23 at 10:32am, Lorenzo Stoakes wrote:
+> On Wed, Mar 22, 2023 at 06:17:25PM +0800, Baoquan He wrote:
+> > On 03/21/23 at 08:54pm, Lorenzo Stoakes wrote:
+> > > Provide an atomic context equivalent for copy_page_to_iter(). This eschews
+> > > the might_fault() check copies memory in the same way that
+> > > copy_page_from_iter_atomic() does.
+> > >
+> > > This functions assumes a non-compound page, however this mimics the
+> > > existing behaviour of copy_page_from_iter_atomic(). I am keeping the
+> > > behaviour consistent between the two, deferring any such change to an
+> > > explicit folio-fication effort.
+> > >
+> > > This is being added in order that an iteratable form of vread() can be
+> > > implemented with known prefaulted pages to avoid the need for mutex
+> > > locking.
+> > >
+> > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > > ---
+> > >  include/linux/uio.h |  2 ++
+> > >  lib/iov_iter.c      | 28 ++++++++++++++++++++++++++++
+> > >  2 files changed, 30 insertions(+)
+> > >
+> > > diff --git a/include/linux/uio.h b/include/linux/uio.h
+> > > index 27e3fd942960..fab07103090f 100644
+> > > --- a/include/linux/uio.h
+> > > +++ b/include/linux/uio.h
+> > > @@ -154,6 +154,8 @@ static inline struct iovec iov_iter_iovec(const struct iov_iter *iter)
+> > >
+> > >  size_t copy_page_from_iter_atomic(struct page *page, unsigned offset,
+> > >  				  size_t bytes, struct iov_iter *i);
+> > > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset,
+> > > +				size_t bytes, struct iov_iter *i);
+> > >  void iov_iter_advance(struct iov_iter *i, size_t bytes);
+> > >  void iov_iter_revert(struct iov_iter *i, size_t bytes);
+> > >  size_t fault_in_iov_iter_readable(const struct iov_iter *i, size_t bytes);
+> > > diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> > > index 274014e4eafe..48ca1c5dfc04 100644
+> > > --- a/lib/iov_iter.c
+> > > +++ b/lib/iov_iter.c
+> > > @@ -821,6 +821,34 @@ size_t copy_page_from_iter_atomic(struct page *page, unsigned offset, size_t byt
+> > >  }
+> > >  EXPORT_SYMBOL(copy_page_from_iter_atomic);
+> > >
+> > > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset, size_t bytes,
+> > > +				struct iov_iter *i)
+> > > +{
+> > > +	char *kaddr = kmap_local_page(page);
+> >
+> > I am a little confused about the name of this new function. In its
+> > conterpart, copy_page_from_iter_atomic(), kmap_atomic()/kunmpa_atomic()
+> > are used. With them, if CONFIG_HIGHMEM=n, it's like below:
+> 
+> The reason for this is that:-
+> 
+> 1. kmap_atomic() explicitly states that it is now deprecated and must no longer
+>    be used, and kmap_local_page() should be used instead:-
+> 
+>  * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
+> 
+>  * Do not use in new code. Use kmap_local_page() instead.
+> 
+> 2. kmap_local_page() explicitly states that it can be used in any context:-
+> 
+>  * Can be invoked from any context, including interrupts.
 
---Ox7OggTfOqKWPV/Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, I saw that stated in document too. With my understanding, it's the
+page mapping itself will be guaranteed and can be used in any context
+when kmap_local_page() is taken. However, here kmap_local_page() is used
+to make the code block atomic, it could be not achieved.
 
-On Wed, Mar 22, 2023 at 12:17:24AM +0200, Marian Postevca wrote:
-> Mark Brown <broonie@kernel.org> writes:
+> 
+> I wanted follow this advice as strictly as I could, hence the change. However,
+> we do need preemption/pagefaults explicitly disabled in this context (we are
+> happy to fail if the faulted in pages are unmapped in meantime), and I didn't
+> check the internals to make sure.
+> 
+> So I think for safety it is better to use k[un]map_atomic() here, I'll respin
+> and put that back in, good catch!
+> 
+> >
+> > static inline void *kmap_atomic(struct page *page)
+> > {
+> >         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> >                 migrate_disable();
+> >         else
+> >                 preempt_disable();
+> >         pagefault_disable();
+> >         return page_address(page);
+> > }
+> >
+> > But kmap_local_page() is only having page_address(), the code block
+> > between kmap_local_page() and kunmap_local() is also atomic, it's a
+> > little messy in my mind.
+> >
+> > static inline void *kmap_local_page(struct page *page)
+> > {
+> >         return page_address(page);
+> > }
+> >
+> > > +	char *p = kaddr + offset;
+> > > +	size_t copied = 0;
+> > > +
+> > > +	if (!page_copy_sane(page, offset, bytes) ||
+> > > +	    WARN_ON_ONCE(i->data_source))
+> > > +		goto out;
+> > > +
+> > > +	if (unlikely(iov_iter_is_pipe(i))) {
+> > > +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	iterate_and_advance(i, bytes, base, len, off,
+> > > +		copyout(base, p + off, len),
+> > > +		memcpy(base, p + off, len)
+> > > +	)
+> > > +	copied = bytes;
+> > > +
+> > > +out:
+> > > +	kunmap_local(kaddr);
+> > > +	return copied;
+> > > +}
+> > > +EXPORT_SYMBOL(copy_page_to_iter_atomic);
+> > > +
+> > >  static void pipe_advance(struct iov_iter *i, size_t size)
+> > >  {
+> > >  	struct pipe_inode_info *pipe = i->pipe;
+> > > --
+> > > 2.39.2
+> > >
+> >
+> 
 
-> >> +	if (SND_SOC_DAPM_EVENT_ON(event))
-> >> +		acp3x_es83xx_set_gpios_values(priv, 1, 0);
-> >> +	else
-> >> +		acp3x_es83xx_set_gpios_values(priv, 0, 1);
-
-> > Why are these two GPIOs tied together like this?
-
-> These GPIOs represent the speaker and the headphone switches. When
-> activating the speaker GPIO you have to deactivate the headphone GPIO
-> and vice versa. The logic is taken from the discussion on the sofproject
-> pull request:
-> https://github.com/thesofproject/linux/pull/4112/commits/810d03e0aecdf0caf580a5179ee6873fb33485ab
-> and
-> https://github.com/thesofproject/linux/pull/4066
-
-Sure, but that doesn't answer the question.  What is the reason
-they're tied together - what if someone wants to play back from
-both speaker and headphones simultaneously?
-
-> >> +static int acp3x_es83xx_suspend_pre(struct snd_soc_card *card)
-> >> +{
-> >> +	struct acp3x_es83xx_private *priv = get_mach_priv(card);
-> >> +
-> >> +	dev_dbg(priv->codec_dev, "card suspend\n");
-> >> +	snd_soc_component_set_jack(priv->codec, NULL, NULL);
-> >> +	return 0;
-> >> +}
-
-> > That's weird, why do that?
-
-> This is needed because if suspending the laptop with the headphones
-> inserted, when resuming, the sound is not working anymore. Sound stops
-> working on speakers and headphones. Reinsertion and removals of the
-> headphone doesn't solve the problem.
-
-> This seems to be caused by the fact
-> that the GPIO IRQ stops working in es8316_irq() after resume.
-
-That's a bug that should be fixed.
-
---Ox7OggTfOqKWPV/Q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQa/akACgkQJNaLcl1U
-h9Ae4gf/e6/5uF/Cshw0/KAUpswFNPMtqowgQJKCeb1t0sE1bo9NguN2cK8tey2g
-tycLYii10gLKkaZAHbwUntUmcTPMR/lpArrSRCfrycoJyqZ0XikSIeGloLdOlqAS
-czi8c7f/CRq2XJP2YQQ7BY7/6z00KnP7+qXcKO9/Lk1DLd1ZorBC0WEuKPEX6+lz
-0FygLY91cCbw1pWB6JiUbvEhgPUXKTKpIaM51W0UB5ShX9hSMiPb2XrWjlY5JOzo
-8y3rIClYOMkrrpW855Ep8wZDsx3WbbwjqKvl9onarPQvINYHxA5waQUm3O6rOwwV
-gI9AVmGankR8assP1w8NLp1ZcQBmwg==
-=s0wu
------END PGP SIGNATURE-----
-
---Ox7OggTfOqKWPV/Q--
