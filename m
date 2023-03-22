@@ -2,152 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CD06C456D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 179516C456E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjCVIzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S230109AbjCVIzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCVIzE (ORCPT
+        with ESMTP id S229487AbjCVIzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA3B1E1E0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679475260;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IApH7V/JlJdEuuLgSYXZarTqHccnCAL1QO8ubX/jbCQ=;
-        b=UKJtOgT//zyuo8XxHBT/53jU6wsZHDWY5f4R0kU75Sn2xDRP9wj4S+n5rt8zB8GSP62Qop
-        GvmZCyz6JtJatGulKJsWelXLVOLC85lDHmD7Gu4OQHNDZgLsjR9jZfXZ80XF/3MMT4/Csq
-        S3Eyxewqi3P3huNRa8ao0gtwbuSA304=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-150-2RVR0I-_PzOIr56-_YI8xA-1; Wed, 22 Mar 2023 04:54:19 -0400
-X-MC-Unique: 2RVR0I-_PzOIr56-_YI8xA-1
-Received: by mail-wm1-f72.google.com with SMTP id bi7-20020a05600c3d8700b003edecc610abso4598211wmb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:54:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679475258;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IApH7V/JlJdEuuLgSYXZarTqHccnCAL1QO8ubX/jbCQ=;
-        b=QgtpD7bcWXWo+H67UMV2UMjFqM9g64n5pwcO/d2hS64/MFqDew83J9p+ExZ7+L+eHu
-         qkynL2bqx4RX/OQegZQ2gyQuBkrB+FINCYk+65WlWPV5sNWYiNOb/Ypkwwv8k/XL6uQB
-         JDYIrdmvj59xZGP462vk66kChsONH14xGJbYtYMNmdxDGOiCgoSC0REagJCLCCHLHUEG
-         hmCub7e5NSwa8OdUIehWVouvijrYa/O2xMuT33TOm13lv+dkRqUrR9MG2+7NpYpTWi5j
-         5blQP9D4sGMLTIyLwQwUiUScbpH5yO2byQF7JWcwlA/3ctDDBvNrf4Ykjw2injxvT1H7
-         jb3w==
-X-Gm-Message-State: AO0yUKWPa3WNIcrViWvETDdYBCvDp5fNgPuzzZX+dG7cbOnyDp9W6uzh
-        hYRChGyauno3npTDHj8YwmL5sN04G1ZHmL7FbwkeHFrtVX1cQIm25OlW3WNcwzSSBhFFtvkJbue
-        EGpCS93aByfYegIVYSwy/2WjipEn78Vp8
-X-Received: by 2002:a05:600c:228d:b0:3ed:a07b:c591 with SMTP id 13-20020a05600c228d00b003eda07bc591mr4743842wmf.1.1679475258040;
-        Wed, 22 Mar 2023 01:54:18 -0700 (PDT)
-X-Google-Smtp-Source: AK7set95drn2g5O/s1b42KEdPz4+LCYpJnJgOQFnwZgakJtZnoU5K1hIa8lWzMnEXqhx3uG3aCNH1g==
-X-Received: by 2002:a05:600c:228d:b0:3ed:a07b:c591 with SMTP id 13-20020a05600c228d00b003eda07bc591mr4743830wmf.1.1679475257723;
-        Wed, 22 Mar 2023 01:54:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c469400b003ee2a0d49dbsm5197275wmo.25.2023.03.22.01.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:54:17 -0700 (PDT)
-Message-ID: <9583bc53-716d-f2ff-38e7-1dda7e57dd5d@redhat.com>
-Date:   Wed, 22 Mar 2023 09:54:16 +0100
+        Wed, 22 Mar 2023 04:55:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523D451F93
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679475332; x=1711011332;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+rm26N75H5kN42G3Mb2Br6Ujuqh6hH59qcWsWoYPxY4=;
+  b=HZ1HPR/KqNRiZk2UAAK1JEeWiJ/aZ7DJK+g5P8peD6IKJCiDDQOMzCD6
+   rwg6FB/O5rwGwFTLMJEdveXj3e0NH6j0fKE6Oqax5m6PtD56ggTjiAFI2
+   74+hOvxmW9cmgyNDpGWgxVUHClPd7W7jEn3cv7xXyOfS4VEHY0C4yzSWI
+   0K6VS8NHnDi4jZqA8Ei+pr7RijfZMPbrws6Idot/WYQBgk/VqGuYbXS9e
+   zGO6wN1ALm71uCId3c3wNGU/kFzKG1ixFAGAH52sZJxc2bBfgRe5lGpjN
+   dvayxPx2OghG8DYpdm9Lq+6j5LNS0zI0X/z3792XEajmIsYahvjWRxAyH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340699664"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="340699664"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 01:55:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="712139447"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="712139447"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2023 01:55:30 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1peuFl-000D6e-1m;
+        Wed, 22 Mar 2023 08:55:29 +0000
+Date:   Wed, 22 Mar 2023 16:54:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lior Nahmanson <liorna@nvidia.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Raed Salem <raeds@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13:
+ sparse: sparse: restricted __be64 degrades to integer
+Message-ID: <202303221650.fdu0dJdI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 1/4] mm/mlock: return EINVAL if len overflows for
- mlock/munlock
-To:     mawupeng <mawupeng1@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kuleshovmail@gmail.com, aneesh.kumar@linux.ibm.com
-References: <20230320024739.224850-1-mawupeng1@huawei.com>
- <20230320024739.224850-2-mawupeng1@huawei.com>
- <27b9cb5b-0118-f989-80c2-6a143a4232af@redhat.com>
- <3ef9520c-6713-527a-0214-ac7a8bb2d49c@huawei.com>
- <6dd844f7-d43b-c744-f295-9f14c68d3928@redhat.com>
- <8be13253-b4ca-b134-3e85-b4097484bb29@huawei.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <8be13253-b4ca-b134-3e85-b4097484bb29@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.03.23 03:14, mawupeng wrote:
-> 
-> 
-> On 2023/3/21 22:19, David Hildenbrand wrote:
->> On 21.03.23 08:44, mawupeng wrote:
->>>
->>>
->>> On 2023/3/20 18:54, David Hildenbrand wrote:
->>>> On 20.03.23 03:47, Wupeng Ma wrote:
->>>>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>>>
->>>>> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
->>>>> The return value of mlock is zero. But nothing will be locked since the
->>>>> len in do_mlock overflows to zero due to the following code in mlock:
->>>>>
->>>>>      len = PAGE_ALIGN(len + (offset_in_page(start)));
->>>>>
->>>>> The same problem happens in munlock.
->>>>>
->>>>> Add new check and return -EINVAL to fix this overflowing scenarios since
->>>>> they are absolutely wrong.
->>>>
->>>> Thinking again, wouldn't we reject mlock(0, ULONG_MAX) now as well?
->>>
->>> mlock will return 0 if len is zero which is the same w/o this patchset.
->>> Here is the calltrace if len is zero.
->>>
->>> mlock(len == 0)
->>>      do_mlock(len == 0)
->>>          if (!len)
->>>              return 0
->>>
->>
->> I was asking about addr=0, len=ULONG_MAX.
->>
->> IIUC, that used to work but could now fail? I haven't played with it, though.
-> 
-> Thanks for reviewing.
-> 
-> Previous for add = 0 and len == ULONG_MAX, mlock will return ok(0) since len overflows to zero.
-> IFAICT, this is not right since mlock do noting(lock nothing) and return ok(0).
-> 
-> With this patch, for the same situation, mlock can return EINVAL as expected.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a1effab7a3a35a837dd9d2b974a1bc4939df1ad5
+commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 net/mlx5e: Add MACsec RX steering rules
+date:   7 months ago
+config: m68k-randconfig-s031-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221650.fdu0dJdI-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
 
-Quoting the man page:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303221650.fdu0dJdI-lkp@intel.com/
 
-"EINVAL (mlock(),  mlock2(),  and  munlock()) The result of the addition 
-addr+len was less than addr (e.g., the addition may have resulted in an 
-overflow)."
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13: sparse: sparse: restricted __be64 degrades to integer
 
-ULONG_MAX+0 = ULONG_MAX
+vim +1183 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
 
-There is no overflow expected. The proper way to implement it would be 
-to handle that case and not fail with EINVAL.
-
-At least that would be expected when reading the man page.
+  1105	
+  1106	static union mlx5e_macsec_rule *
+  1107	macsec_fs_rx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
+  1108			      const struct macsec_context *macsec_ctx,
+  1109			      struct mlx5_macsec_rule_attrs *attrs,
+  1110			      u32 fs_id)
+  1111	{
+  1112		u8 action[MLX5_UN_SZ_BYTES(set_add_copy_action_in_auto)] = {};
+  1113		struct mlx5e_macsec_rx *rx_fs = macsec_fs->rx_fs;
+  1114		struct net_device *netdev = macsec_fs->netdev;
+  1115		struct mlx5_modify_hdr *modify_hdr = NULL;
+  1116		struct mlx5_flow_destination dest = {};
+  1117		struct mlx5e_macsec_tables *rx_tables;
+  1118		union mlx5e_macsec_rule *macsec_rule;
+  1119		struct mlx5e_macsec_rx_rule *rx_rule;
+  1120		struct mlx5_flow_act flow_act = {};
+  1121		struct mlx5e_flow_table *ft_crypto;
+  1122		struct mlx5_flow_handle *rule;
+  1123		struct mlx5_flow_spec *spec;
+  1124		int err = 0;
+  1125	
+  1126		spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
+  1127		if (!spec)
+  1128			return NULL;
+  1129	
+  1130		err = macsec_fs_rx_ft_get(macsec_fs);
+  1131		if (err)
+  1132			goto out_spec;
+  1133	
+  1134		macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+  1135		if (!macsec_rule) {
+  1136			macsec_fs_rx_ft_put(macsec_fs);
+  1137			goto out_spec;
+  1138		}
+  1139	
+  1140		rx_rule = &macsec_rule->rx_rule;
+  1141		rx_tables = &rx_fs->tables;
+  1142		ft_crypto = &rx_tables->ft_crypto;
+  1143	
+  1144		/* Set bit[31 - 30] macsec marker - 0x01 */
+  1145		/* Set bit[3-0] fs id */
+  1146		MLX5_SET(set_action_in, action, action_type, MLX5_ACTION_TYPE_SET);
+  1147		MLX5_SET(set_action_in, action, field, MLX5_ACTION_IN_FIELD_METADATA_REG_B);
+  1148		MLX5_SET(set_action_in, action, data, fs_id | BIT(30));
+  1149		MLX5_SET(set_action_in, action, offset, 0);
+  1150		MLX5_SET(set_action_in, action, length, 32);
+  1151	
+  1152		modify_hdr = mlx5_modify_header_alloc(macsec_fs->mdev, MLX5_FLOW_NAMESPACE_KERNEL_RX_MACSEC,
+  1153						      1, action);
+  1154		if (IS_ERR(modify_hdr)) {
+  1155			err = PTR_ERR(modify_hdr);
+  1156			netdev_err(netdev, "fail to alloc MACsec set modify_header_id err=%d\n", err);
+  1157			modify_hdr = NULL;
+  1158			goto err;
+  1159		}
+  1160		rx_rule->meta_modhdr = modify_hdr;
+  1161	
+  1162		/* Rx crypto table with SCI rule */
+  1163		macsec_fs_rx_setup_fte(spec, &flow_act, attrs, true);
+  1164	
+  1165		flow_act.modify_hdr = modify_hdr;
+  1166		flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+  1167				  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
+  1168				  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
+  1169	
+  1170		dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+  1171		dest.ft = rx_tables->ft_check;
+  1172		rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
+  1173		if (IS_ERR(rule)) {
+  1174			err = PTR_ERR(rule);
+  1175			netdev_err(netdev,
+  1176				   "Failed to add SA with SCI rule to Rx crypto rule, err=%d\n",
+  1177				   err);
+  1178			goto err;
+  1179		}
+  1180		rx_rule->rule[0] = rule;
+  1181	
+  1182		/* Rx crypto table without SCI rule */
+> 1183		if (cpu_to_be64((__force u64)attrs->sci) & ntohs(MACSEC_PORT_ES)) {
+  1184			memset(spec, 0, sizeof(struct mlx5_flow_spec));
+  1185			memset(&dest, 0, sizeof(struct mlx5_flow_destination));
+  1186			memset(&flow_act, 0, sizeof(flow_act));
+  1187	
+  1188			macsec_fs_rx_setup_fte(spec, &flow_act, attrs, false);
+  1189	
+  1190			flow_act.modify_hdr = modify_hdr;
+  1191			flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+  1192					  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
+  1193					  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
+  1194	
+  1195			dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+  1196			dest.ft = rx_tables->ft_check;
+  1197			rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
+  1198			if (IS_ERR(rule)) {
+  1199				err = PTR_ERR(rule);
+  1200				netdev_err(netdev,
+  1201					   "Failed to add SA without SCI rule to Rx crypto rule, err=%d\n",
+  1202					   err);
+  1203				goto err;
+  1204			}
+  1205			rx_rule->rule[1] = rule;
+  1206		}
+  1207	
+  1208		return macsec_rule;
+  1209	
+  1210	err:
+  1211		macsec_fs_rx_del_rule(macsec_fs, rx_rule);
+  1212		macsec_rule = NULL;
+  1213	out_spec:
+  1214		kvfree(spec);
+  1215		return macsec_rule;
+  1216	}
+  1217	
 
 -- 
-Thanks,
-
-David / dhildenb
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
