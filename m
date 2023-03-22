@@ -2,130 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE006C5227
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640A16C522B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjCVRR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S229717AbjCVRSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjCVRRO (ORCPT
+        with ESMTP id S229836AbjCVRSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:17:14 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2774366D39;
-        Wed, 22 Mar 2023 10:16:47 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o11so19924385ple.1;
-        Wed, 22 Mar 2023 10:16:47 -0700 (PDT)
+        Wed, 22 Mar 2023 13:18:05 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D4F66D15
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:17:35 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so19854645pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505390;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=konsulko.com; s=google; t=1679505444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p1yrkQdQ3+rHj7HsA6aFbOnS34klVtYP6UuejOzccco=;
-        b=FdEEsUfa3PpP/5KX+nodVmJ/QDYTpkGk6vjFgTQcEWYlttjVuXrZOrtxUzVmwNt2GF
-         Ir2FdFN+BcYh1XaSxJP0z2qvD0SuNiQHTcTmQdm5PnaYUAmsO0YCYfDqpGNRQwksQuR1
-         77Tu/+Oj5kUzS5Ox0smxHgVpK1Jds3TgxcY2oPI0smqdKopAF+ndU2XQ96pahTeSd8TU
-         1EftFOKJLk5Y830v0F5IUTeZHVFj3tr5omNCs2bnWkgXYnnjM7OTAqz9N2t8iyjksvvw
-         TTw9Gv+7XPvLAFJThflRTqaKZuJgc53tH9GG6u96L3bfIzbu1pVf+o3jlJc243juRYIR
-         qetw==
+        bh=UittgdXM3g+Qbt7hZmz9fDwi45VTM0z8aAr7Vg+o+os=;
+        b=CQ2n4+5TduAQlvRuSopwcvMBwx1aMvm0NwYexjQsp/nXY2wMaefj0B1ffmN8DwAkv2
+         IKNoqVGc8o5V77z7pxmAKfmYrJk3fkC+m/B6vR+qyAkOjXZRI91G2B2UQ/ohroF2PhVD
+         HP64OD7bXnzRISmJ9dvNmQj/AjwSSW3Pqvi9s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505390;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679505444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p1yrkQdQ3+rHj7HsA6aFbOnS34klVtYP6UuejOzccco=;
-        b=ZdlxJHzuYSuwSSAwelyhCLUmbam9KcqGpDJe6MeG2T/aQpOQq8WWbe1xulfqE5T5Rs
-         o3DOslrwPnolUxqo7Fr3lmaFTNgcYEg+fdV1XpjXm2dTSxUfYG8kFDx1PEBo4j3vsn2P
-         GPD1gTkDcFQQZguOmmTp+NMcAksQmxkaCCmM+nyfteS6lr8KtMp8+E2EAyI1BtgXOpgK
-         j1xJLB+zmaBwxgiBN329k+/f5VSbHxBhDA7zG0TnHZsCCfttzniixjc9Xv9hcx4oGdp5
-         nKWg1f1mkDf9m0WddzgUbU72gNZG3EN+gH5r0Wp7eVomW4fG+TO6p9wEwduCy+csF8vR
-         fviQ==
-X-Gm-Message-State: AO0yUKX/4axMI0TVcAlrNBlLp1Dd88RDlkVCP68osTHckjwGigsvtNzQ
-        KNItsF4n6jbxrwg0k0jV9Rk=
-X-Google-Smtp-Source: AK7set+lu45jd1DtvFuWe2CYnFxa9HE3DUcqRoqsFsNOGGngMHbaXLMxO5r/GOaBx9wUKbAkbO2gMw==
-X-Received: by 2002:a05:6a20:bb1a:b0:d4:b24b:4459 with SMTP id fc26-20020a056a20bb1a00b000d4b24b4459mr344759pzb.13.1679505390190;
-        Wed, 22 Mar 2023 10:16:30 -0700 (PDT)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id b1-20020a6567c1000000b005023496e339sm10097353pgs.63.2023.03.22.10.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:16:29 -0700 (PDT)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sm8250-xiaomi-elish-csot: Add Xiaomi Mi Pad 5 Pro CSOT variant
-Date:   Thu, 23 Mar 2023 01:15:55 +0800
-Message-Id: <20230322171555.2154-4-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230322171555.2154-1-lujianhua000@gmail.com>
-References: <20230322171555.2154-1-lujianhua000@gmail.com>
+        bh=UittgdXM3g+Qbt7hZmz9fDwi45VTM0z8aAr7Vg+o+os=;
+        b=6M9/KVZlyHJC0S8xN5HT+v1dwVLNnOFkr8aN4CroaqBn9nC3Sw4MIZ8g8TRdIPXOzG
+         YEj0M+qsGemc6Is074oIk7s9mDM4EGcx5EZgXNObwVY+XT5Wfkl7zQUo7fh4IpgxTfLE
+         C0+VO/hH4p+4llahCWMK+JFgcRpfEAQCSEk0yvn3HE6bL/Kx52OnnXkkWc0+4YX7RSXB
+         nEeLQl/kvzC3yrVBVdT5b4HYCp2AcmtN45vpoXx+yX7oYIAHjZu7mqjHo5FlYyrnt9MS
+         /9+YvR9zJynoNN90Dmc0vL9cojYy9WSVCMsBIR6+9Uvetfo6hj41NQnLwon+lArUJDUy
+         DKDA==
+X-Gm-Message-State: AO0yUKUhJyDn/p1Bk0FpYYfIiNsbgUrSU4LoBuMnuyaAfCmKKW+6w9t4
+        bidC1kgONZWEqX/D/Q89s8dMerYdBpWmPzjfPXiHKQ==
+X-Google-Smtp-Source: AK7set/gRfEg9ZkMBG8RvdC24JfXTCE8uD3xzdGBfjruc84EYtVudASDkkG+lq/J5/fnXnQhZxyJt4P4RbTPQS/9SeY=
+X-Received: by 2002:a17:902:6a84:b0:19f:2aa4:b1e5 with SMTP id
+ n4-20020a1709026a8400b0019f2aa4b1e5mr1495889plk.2.1679505443863; Wed, 22 Mar
+ 2023 10:17:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230322102006.780624-1-liushixin2@huawei.com> <20230322102006.780624-3-liushixin2@huawei.com>
+In-Reply-To: <20230322102006.780624-3-liushixin2@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Wed, 22 Mar 2023 18:17:12 +0100
+Message-ID: <CAM4kBBJT1xSGe7KthBvBLstZ43cPP-PDKE7a-6hC5Fn6TneL0g@mail.gmail.com>
+Subject: Re: [PATCH -next v6 2/2] mm/zswap: delay the initializaton of zswap
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Xiaomi Mi Pad 5 Pro CSOT variant. The CSOT variant
-uses China Star Optoelectronics Technology (CSOT) panel.
+On Wed, Mar 22, 2023 at 10:30=E2=80=AFAM Liu Shixin <liushixin2@huawei.com>=
+ wrote:
+>
+> Since some users may not use zswap, the zswap_pool is wasted. Save memory
+> by delaying the initialization of zswap until enabled.
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
-No changes in v2
+To be honest, I'm not a huge fan of this. Would enabling zswap module
+build instead solve your problem?
 
- arch/arm64/boot/dts/qcom/Makefile              |  1 +
- .../boot/dts/qcom/sm8250-xiaomi-elish-csot.dts | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
+~Vitaly
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 808f46947661..b755b198cfb7 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -184,6 +184,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-boe.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-csot.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
-new file mode 100644
-index 000000000000..a4d5341495cf
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2023 Jianhua Lu <lujianhua000@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "sm8250-xiaomi-elish-common.dtsi"
-+
-+/ {
-+	model = "Xiaomi Mi Pad 5 Pro (CSOT)";
-+	compatible = "xiaomi,elish", "qcom,sm8250";
-+};
-+
-+&display_panel {
-+	compatible = "xiaomi,elish-csot-nt36523";
-+	status = "okay";
-+};
--- 
-2.39.2
-
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+> ---
+>  mm/zswap.c | 51 +++++++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 41 insertions(+), 10 deletions(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index 09fa956920fa..3aed3b26524a 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -81,6 +81,8 @@ static bool zswap_pool_reached_full;
+>
+>  #define ZSWAP_PARAM_UNSET ""
+>
+> +static int zswap_setup(void);
+> +
+>  /* Enable/disable zswap */
+>  static bool zswap_enabled =3D IS_ENABLED(CONFIG_ZSWAP_DEFAULT_ON);
+>  static int zswap_enabled_param_set(const char *,
+> @@ -220,6 +222,9 @@ static bool zswap_init_started;
+>  /* fatal error during init */
+>  static bool zswap_init_failed;
+>
+> +/* used to ensure the integrity of initialization */
+> +static DEFINE_MUTEX(zswap_init_lock);
+> +
+>  /* init completed, but couldn't create the initial pool */
+>  static bool zswap_has_pool;
+>
+> @@ -272,13 +277,13 @@ static void zswap_update_total_size(void)
+>  **********************************/
+>  static struct kmem_cache *zswap_entry_cache;
+>
+> -static int __init zswap_entry_cache_create(void)
+> +static int zswap_entry_cache_create(void)
+>  {
+>         zswap_entry_cache =3D KMEM_CACHE(zswap_entry, 0);
+>         return zswap_entry_cache =3D=3D NULL;
+>  }
+>
+> -static void __init zswap_entry_cache_destroy(void)
+> +static void zswap_entry_cache_destroy(void)
+>  {
+>         kmem_cache_destroy(zswap_entry_cache);
+>  }
+> @@ -663,7 +668,7 @@ static struct zswap_pool *zswap_pool_create(char *typ=
+e, char *compressor)
+>         return NULL;
+>  }
+>
+> -static __init struct zswap_pool *__zswap_pool_create_fallback(void)
+> +static struct zswap_pool *__zswap_pool_create_fallback(void)
+>  {
+>         bool has_comp, has_zpool;
+>
+> @@ -784,8 +789,15 @@ static int __zswap_param_set(const char *val, const =
+struct kernel_param *kp,
+>         /* if this is load-time (pre-init) param setting,
+>          * don't create a pool; that's done during init.
+>          */
+> -       if (!zswap_init_started)
+> -               return param_set_charp(s, kp);
+> +       if (!zswap_init_started) {
+> +               mutex_lock(&zswap_init_lock);
+> +               if (!zswap_init_started) {
+> +                       ret =3D param_set_charp(s, kp);
+> +                       mutex_unlock(&zswap_init_lock);
+> +                       return ret;
+> +               }
+> +               mutex_unlock(&zswap_init_lock);
+> +       }
+>
+>         if (!type) {
+>                 if (!zpool_has_pool(s)) {
+> @@ -884,6 +896,15 @@ static int zswap_enabled_param_set(const char *val,
+>         if (res =3D=3D *(bool *)kp->arg)
+>                 return 0;
+>
+> +       if (!zswap_init_started && (system_state =3D=3D SYSTEM_RUNNING)) =
+{
+> +               mutex_lock(&zswap_init_lock);
+> +               if (zswap_setup()) {
+> +                       mutex_unlock(&zswap_init_lock);
+> +                       return -ENODEV;
+> +               }
+> +               mutex_unlock(&zswap_init_lock);
+> +       }
+> +
+>         if (zswap_init_failed) {
+>                 pr_err("can't enable, initialization failed\n");
+>                 return -ENODEV;
+> @@ -1451,7 +1472,7 @@ static const struct frontswap_ops zswap_frontswap_o=
+ps =3D {
+>
+>  static struct dentry *zswap_debugfs_root;
+>
+> -static int __init zswap_debugfs_init(void)
+> +static int zswap_debugfs_init(void)
+>  {
+>         if (!debugfs_initialized())
+>                 return -ENODEV;
+> @@ -1482,7 +1503,7 @@ static int __init zswap_debugfs_init(void)
+>         return 0;
+>  }
+>  #else
+> -static int __init zswap_debugfs_init(void)
+> +static int zswap_debugfs_init(void)
+>  {
+>         return 0;
+>  }
+> @@ -1491,12 +1512,13 @@ static int __init zswap_debugfs_init(void)
+>  /*********************************
+>  * module init and exit
+>  **********************************/
+> -static int __init init_zswap(void)
+> +static int zswap_setup(void)
+>  {
+>         struct zswap_pool *pool;
+>         int ret;
+>
+> -       zswap_init_started =3D true;
+> +       if (zswap_init_started)
+> +               return 0;
+>
+>         if (zswap_entry_cache_create()) {
+>                 pr_err("entry cache creation failed\n");
+> @@ -1537,6 +1559,7 @@ static int __init init_zswap(void)
+>                 goto destroy_wq;
+>         if (zswap_debugfs_init())
+>                 pr_warn("debugfs initialization failed\n");
+> +       zswap_init_started =3D true;
+>         return 0;
+>
+>  destroy_wq:
+> @@ -1551,11 +1574,19 @@ static int __init init_zswap(void)
+>  cache_fail:
+>         /* if built-in, we aren't unloaded on failure; don't allow use */
+>         zswap_init_failed =3D true;
+> +       zswap_init_started =3D true;
+>         zswap_enabled =3D false;
+>         return -ENOMEM;
+>  }
+> +
+> +static int __init zswap_init(void)
+> +{
+> +       if (!zswap_enabled)
+> +               return 0;
+> +       return zswap_setup();
+> +}
+>  /* must be late so crypto has time to come up */
+> -late_initcall(init_zswap);
+> +late_initcall(zswap_init);
+>
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Seth Jennings <sjennings@variantweb.net>");
+> --
+> 2.25.1
+>
