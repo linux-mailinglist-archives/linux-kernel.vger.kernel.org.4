@@ -2,144 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775656C4EE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BC36C4EFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjCVPFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S231254AbjCVPIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjCVPFb (ORCPT
+        with ESMTP id S230093AbjCVPIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:05:31 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343F64865
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:05:30 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id n2so23013467qtp.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679497529;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3rB368t/nydD6WH/cMLlFJuGK99aN+ScRI5LJ5IOVeo=;
-        b=Jb3zISwQhXBZzizyXFBukl8CpUrXx2BxGv9Su1VoGLxyTy2CzHGtf+OrIN+URu+Ocs
-         ljNm1pgdKQQrolTiTR8P2jTPNlEBfxg8mpWANm2OeYCKoviI2cIuJVHedg/CEpmvyIG0
-         GirxCLiUPA37H8NNnr+VC4a0IspzpjLtYpz+N+dXIg7Zrp9PyYwb70DF9GCPCEV1Kwas
-         l5aoK7wo3MqFXCMVBl/4jYFKbTt9VL9hiLCHXs4LGTL8UIIlqyfYbG8bvt/gK4yEzx9Q
-         JARrGDm8nNNmfKgrvhb0uvnXyPPzADMoniy0GJX7wvJ5G8+8QYUoqj+3R9SAnnx0UC4D
-         20Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679497529;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rB368t/nydD6WH/cMLlFJuGK99aN+ScRI5LJ5IOVeo=;
-        b=oJh+nR56BH7yk84yL2PjkY5fspeEt/iBqCH9cg/9d7fxgkZ8hH73eN5wfLFR3phcs5
-         5HgOb8iAUPU80FZx6bFTLnlMjjoyArmrNm60ZxmeoCDCfxDH9IzyVUq/gWM7oFQFOMj+
-         50OuA++2u4Xa6ado6yyOL/OrlVmV1fQX1mSWPSvLrRakVQiB7YizLibBuv0ErazLbOXS
-         6XTAPk+MabU8HonydopDObJXzTqX2YF/+a0yl+F/aaOkK1QOHQhHPdiTnrPTLTBqolz1
-         +5UpEfMZIPkbXPr7mK2RETcHxh69d2YA+5Sv3/BlB0CjSgif3NfiaEifzgzKOGKds1Fy
-         ryfA==
-X-Gm-Message-State: AO0yUKUTr37A4aUgM8epaOJ53xK/dijfrvuvt7NXw6jzZlBY0mnW2Ws3
-        X4Br8n639SRWtva7eZMUXAQ=
-X-Google-Smtp-Source: AK7set+Tq8viTsA6biPlL35ZSG9Q2o3MW/I++pB5GfUje3apGWK6xwxoit8t07UsoWNw6sMFmgP+Ig==
-X-Received: by 2002:ac8:574c:0:b0:3e2:78f0:d27b with SMTP id 12-20020ac8574c000000b003e278f0d27bmr6251924qtx.60.1679497529472;
-        Wed, 22 Mar 2023 08:05:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d184-20020a3768c1000000b0074688c36facsm5992743qkc.56.2023.03.22.08.05.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 08:05:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 22 Mar 2023 08:05:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Alejandro Vazquez <avazquez.dev@gmail.com>,
-        sergey.senozhatsky@gmail.com, rostedt@goodmis.org,
-        shreyasjoshi15@gmail.com
-Subject: Re: Change of behaviour when console=null and ttynull driver is used
-Message-ID: <755a8541-adf5-4454-9bd5-9ea439a5a4ea@roeck-us.net>
-References: <CABDcavZWz=YOvZnW8pkQmuTVjTDxPPoa0zOiC7A_0HAEg_Vi3w@mail.gmail.com>
- <ZBRiRu7hlwxSKHBg@alley>
- <CABDcavYLQ63V81z5JiOxZ6hXMj=M+PQpfDLPk6AQynLGwuYTKQ@mail.gmail.com>
+        Wed, 22 Mar 2023 11:08:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C53281043D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:08:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DE514B3;
+        Wed, 22 Mar 2023 08:09:29 -0700 (PDT)
+Received: from [10.57.53.137] (unknown [10.57.53.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B8623F71E;
+        Wed, 22 Mar 2023 08:08:43 -0700 (PDT)
+Message-ID: <a5b946f0-5be8-a656-a8d5-1cd75399f0c4@arm.com>
+Date:   Wed, 22 Mar 2023 15:08:41 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABDcavYLQ63V81z5JiOxZ6hXMj=M+PQpfDLPk6AQynLGwuYTKQ@mail.gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+References: <20230315164152.333251-1-steven.price@arm.com>
+ <ZBnBU9OU4iV6CV0W@ziepe.ca> <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
+ <ZBr5e6tn1i7EE/16@ziepe.ca>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <ZBr5e6tn1i7EE/16@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:33:32AM +0100, Guillermo Rodriguez Garcia wrote:
-> Hi Petr,
+On 22/03/2023 12:50, Jason Gunthorpe wrote:
+> On Wed, Mar 22, 2023 at 09:02:41AM +0000, Steven Price wrote:
+>> On 21/03/2023 14:38, Jason Gunthorpe wrote:
+>>> On Wed, Mar 15, 2023 at 04:41:52PM +0000, Steven Price wrote:
+>>>> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+>>>> operation on ARM 32 bit after recent changes in the IOMMU framework
+>>>> (detach ops removal).
+>>>>
+>>>> Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
+>>>> Signed-off-by: Steven Price <steven.price@arm.com>
+>>>> ---
+>>>> This fixes a splat I was seeing on a Firefly-RK3288, more details here:
+>>>> https://lore.kernel.org/all/26a5d1b8-40b3-b1e4-bc85-740409c26838@arm.com/
+>>>
+>>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>>
+>> Thanks for the review.
+>>
+>>> Do you know what state the iommu is left in after
+>>> rk_iommu_detach_device()? Ie is it blocking DMA or doing identity or
+>>> something else?
+>>
+>> To be honest I really don't know for sure. But from my small
+>> understanding of the code: rk_iommu_detach_device() ends up in
+>> rk_iommu_disable_paging() which appears to switch to identity mode
+>> ("Disable memory translation").
 > 
-> El vie, 17 mar 2023 a las 13:51, Petr Mladek (<pmladek@suse.com>) escribió:
-> >
-> > On Thu 2023-03-16 11:29:26, Guillermo Rodriguez Garcia wrote:
-> > > Hi all,
-> > >
-> > > We have several embedded systems where pass console= or console=null
-> > > in production to disable the console.
-> > >
-> > > Later we check for this in user space: in our inittab we check if fd0
-> > > is "associated with a terminal" (test -t 0); if so, we are in
-> > > development mode and we open a debug shell; otherwise (console
-> > > disabled) we just start the application.
-> > >
-> > > Recently [1] this behaviour has changed and now if we pass console= or
-> > > console=null, the new ttynull driver is used. This breaks the check we
-> > > were doing (test -t 0 always true now).
-> > >
-> > > [1]: https://lore.kernel.org/lkml/X%2FcDG%2FxCCzSWW2cd@alley/t/
-> >
-> > This is actually exactly the problem that the change tried to solve.
-> > Some systems failed to boot when there was no console and they tried
-> > to write something at stdout.
+> Can you consider writing this patch like this instead:
 > 
-> Well, I did not have any problem before this change.
+> https://lore.kernel.org/linux-iommu/ZBnef7g7GCxogPNz@ziepe.ca/
 > 
-> I understand that some systems had a problem (many others didn't, and
-> setting console= or console=null has been standard practice for a long
-> time). Since this change in behaviour could (and did) break things in
-> user space, perhaps it should have been made opt-in...
+> ?
 > 
-> >
-> > > Is there a way to get the previous behaviour? If not, is there an easy
-> > > way for userspace to detect whether the console device is a "real" tty
-> > > or ttynull (other than trying to parse the kernel boot args, which
-> > > would be a bit fragile).
-> >
-> > A solution would be to check that /proc/consoles has ttynull as the
-> > only registred console, for example:
-> >
-> > grep -q ttynull /proc/consoles && test `cat /proc/consoles | wc -l` -eq 1
-> >
-> > Would this work for you, please?
-> 
-> I was trying to avoid something like this as it feels like userspace
-> now needs to have too much knowledge of what the kernel is doing
-> internally, however I guess this is the best option.
-> 
-> The suggested check seems to work but now I am seeing a different
-> (related?) issue: when I try to reboot from the console (using
-> busybox's reboot command), the system reboots normally if I am using a
-> "normal" console (e.g. console=ttyXXX), however when using
-> console=ttynull, the command takes 20-25 seconds to complete. I am not
-> sure why this would happen; if I understand correctly, for userspace
-> ttynull is just like a regular tty driver, so why would there be a
-> difference?
-> 
+> I'd much rather we move toward clearly documenting what is going on
+> with the HW and remove this undefined "detach" language.
 
-I think we may have seen something similar, causing us to revert the
-upstream patches in ChromeOS. We did not try to find out what exactly
-caused the problems.
+I'm really not very familiar with the code or hardware, but I had a
+go at doing the same sort of conversion. The below successfully boots,
+but it would be good if someone more knowledgable could take a look as
+I can't say I really understand this code.
 
-Guenter
+Steve
+
+diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+index f30db22ea5d7..3fd108f04a2a 100644
+--- a/drivers/iommu/rockchip-iommu.c
++++ b/drivers/iommu/rockchip-iommu.c
+@@ -124,6 +124,7 @@ struct rk_iommudata {
+ 
+ static struct device *dma_dev;
+ static const struct rk_iommu_ops *rk_ops;
++static struct iommu_domain rk_identity_domain;
+ 
+ static inline void rk_table_flush(struct rk_iommu_domain *dom, dma_addr_t dma,
+ 				  unsigned int count)
+@@ -980,26 +981,27 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+ 	return ret;
+ }
+ 
+-static void rk_iommu_detach_device(struct iommu_domain *domain,
+-				   struct device *dev)
++static int rk_iommu_identity_attach(struct iommu_domain *identity_domain,
++				    struct device *dev)
+ {
+ 	struct rk_iommu *iommu;
+-	struct rk_iommu_domain *rk_domain = to_rk_domain(domain);
++	struct rk_iommu_domain *rk_domain;
+ 	unsigned long flags;
+ 	int ret;
+ 
+ 	/* Allow 'virtual devices' (eg drm) to detach from domain */
+ 	iommu = rk_iommu_from_dev(dev);
+ 	if (!iommu)
+-		return;
++		return -ENODEV;
++
++	rk_domain = to_rk_domain(iommu->domain);
+ 
+ 	dev_dbg(dev, "Detaching from iommu domain\n");
+ 
+-	/* iommu already detached */
+-	if (iommu->domain != domain)
+-		return;
++	if (iommu->domain == identity_domain)
++		return 0;
+ 
+-	iommu->domain = NULL;
++	iommu->domain = identity_domain;
+ 
+ 	spin_lock_irqsave(&rk_domain->iommus_lock, flags);
+ 	list_del_init(&iommu->node);
+@@ -1011,8 +1013,26 @@ static void rk_iommu_detach_device(struct iommu_domain *domain,
+ 		rk_iommu_disable(iommu);
+ 		pm_runtime_put(iommu->dev);
+ 	}
++
++	return 0;
+ }
+ 
++static struct iommu_domain_ops rk_identity_ops = {
++	.attach_dev = rk_iommu_identity_attach,
++};
++
++static struct iommu_domain rk_identity_domain = {
++	.type = IOMMU_DOMAIN_IDENTITY,
++	.ops = &rk_identity_ops,
++};
++
++#ifdef CONFIG_ARM
++static void rk_iommu_set_platform_dma(struct device *dev)
++{
++	WARN_ON(rk_iommu_identity_attach(&rk_identity_domain, dev));
++}
++#endif
++
+ static int rk_iommu_attach_device(struct iommu_domain *domain,
+ 		struct device *dev)
+ {
+@@ -1035,8 +1055,9 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
+ 	if (iommu->domain == domain)
+ 		return 0;
+ 
+-	if (iommu->domain)
+-		rk_iommu_detach_device(iommu->domain, dev);
++	ret = rk_iommu_identity_attach(&rk_identity_domain, dev);
++	if (ret)
++		return ret;
+ 
+ 	iommu->domain = domain;
+ 
+@@ -1049,8 +1070,6 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
+ 		return 0;
+ 
+ 	ret = rk_iommu_enable(iommu);
+-	if (ret)
+-		rk_iommu_detach_device(iommu->domain, dev);
+ 
+ 	pm_runtime_put(iommu->dev);
+ 
+@@ -1061,6 +1080,9 @@ static struct iommu_domain *rk_iommu_domain_alloc(unsigned type)
+ {
+ 	struct rk_iommu_domain *rk_domain;
+ 
++	if (type == IOMMU_DOMAIN_IDENTITY)
++		return &rk_identity_domain;
++
+ 	if (type != IOMMU_DOMAIN_UNMANAGED && type != IOMMU_DOMAIN_DMA)
+ 		return NULL;
+ 
+@@ -1176,6 +1198,7 @@ static int rk_iommu_of_xlate(struct device *dev,
+ 	iommu_dev = of_find_device_by_node(args->np);
+ 
+ 	data->iommu = platform_get_drvdata(iommu_dev);
++	data->iommu->domain = &rk_identity_domain;
+ 	dev_iommu_priv_set(dev, data);
+ 
+ 	platform_device_put(iommu_dev);
+@@ -1188,6 +1211,9 @@ static const struct iommu_ops rk_iommu_ops = {
+ 	.probe_device = rk_iommu_probe_device,
+ 	.release_device = rk_iommu_release_device,
+ 	.device_group = rk_iommu_device_group,
++#ifdef CONFIG_ARM
++	.set_platform_dma_ops = rk_iommu_set_platform_dma,
++#endif
+ 	.pgsize_bitmap = RK_IOMMU_PGSIZE_BITMAP,
+ 	.of_xlate = rk_iommu_of_xlate,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+
