@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10E96C3F45
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D912E6C3F44
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCVApk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 20:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S229694AbjCVAph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 20:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjCVApZ (ORCPT
+        with ESMTP id S229970AbjCVAp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 20:45:25 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B639BB3
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 17:45:23 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ek18so66644084edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 17:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679445922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrtn8nmTpdpmlgteuK1+I9kCTEi3WBSapYh/Vb77bok=;
-        b=VW31Rf9rgwMP9zlJPFNGWbV/hbH9wFiZ9VXmZSwuQsH+/Lwds11o8qr14npM4cUj9p
-         2z1mwUFi9nvypKReOlWlhwqyw/WvoPUvkTAeIwGPSrw6tcZr0QSL9m/EmLybxR2c/8dA
-         uxGa3OdLJAVyZnZkBGKhx3UyuFp26ofXvTDURP4Gtawcv5r5JsahT+G+0px4ilVqFRGm
-         0zpONLmv1eqvpK2id/1vhlb6fwSPOXgCQxjy3yhaf+lnNN/8y4qEKUCE4/Aj4Z3LBFs0
-         04ocCUbGQr6uscy1auN6Wn5lcJe0dGi9r5k2wOv0LMioodyuuAk3ibVkaIldh8IQO4U3
-         QPhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679445922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rrtn8nmTpdpmlgteuK1+I9kCTEi3WBSapYh/Vb77bok=;
-        b=wH/0N3Y7RiXl7lYIUZcTvpTucESfV68h2L46UNFBAxJqjYlFiUrWzcKVF7OOh0UIql
-         5rX1ZZDmqAnfxZ7NgqigCsra/Czhyc119HVtN078PGuFDEZ0y0vYn7bsPrpst7tKaWYw
-         tKhLZwkGcBPMxAG0bpXxK9Ecvt9fRbnBUQNDNI/DRlDpl3B35fx3RgWm5elQ8yWvEyYm
-         gT2eXZigHWePKm4C5xBL3HHdmt0LCprEsDrRsRvLmrpDqnn6AeNxYqlT8Z3ZtnCIaVzF
-         gxhMKAmVzykXh1Spa/jWeOfp5Em4v16xaVwPDSEgTmuQ1+kA0a1TTzJJpFu/A5SIXiar
-         B17g==
-X-Gm-Message-State: AO0yUKUiA+NZwLnD3JO10wfQAVK1RNQGo6iblY+mhc4IzD/j7cDtorwz
-        35XAZoB4jrLpCaF6HkKy0YU=
-X-Google-Smtp-Source: AK7set9+toSZFFbOheWMw08WFtHuw2LBGIYFjBR36MoXWEw//iln1ImIgpEqD5zQkjHozI7eOTQi5g==
-X-Received: by 2002:a17:906:b115:b0:8b1:76ca:f228 with SMTP id u21-20020a170906b11500b008b176caf228mr4968055ejy.39.1679445922119;
-        Tue, 21 Mar 2023 17:45:22 -0700 (PDT)
-Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id u24-20020a17090657d800b00934823127c8sm3249365ejr.78.2023.03.21.17.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 17:45:21 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 01:45:14 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Leonardo Bras <leobras@redhat.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND RFC PATCH v2 1/6] riscv/cmpxchg: Deduplicate cmpxchg()
- asm functions
-Message-ID: <ZBpPms0PGv4sWR1Y@andrea>
-References: <20230321074249.2221674-1-leobras@redhat.com>
- <20230321074249.2221674-2-leobras@redhat.com>
+        Tue, 21 Mar 2023 20:45:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099BC3E606
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 17:45:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A386561EED
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:45:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F00C433EF;
+        Wed, 22 Mar 2023 00:45:26 +0000 (UTC)
+Date:   Tue, 21 Mar 2023 20:45:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH] context_tracking: Have ct_state() use
+ preempt_disable_notrace()
+Message-ID: <20230321204524.44733a13@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321074249.2221674-2-leobras@redhat.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 04:42:44AM -0300, Leonardo Bras wrote:
-> In this header every cmpxchg define (_relaxed, _acquire, _release,
-> vanilla) contain it's own asm file, both for 4-byte variables an 8-byte
-> variables, on a total of 8 versions of mostly the same asm.
-> 
-> This is usually bad, as it means any change may be done in up to 8
-> different places.
-> 
-> Unify those versions by creating a new define with enough parameters to
-> generate any version of the previous 8.
-> 
-> (This did not cause any change in generated asm)
-> 
-> Signed-off-by: Leonardo Bras <leobras@redhat.com>
-> ---
->  arch/riscv/include/asm/cmpxchg.h | 102 ++++++++-----------------------
->  1 file changed, 24 insertions(+), 78 deletions(-)
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Diff looks nice,
+One of my tests triggered:
 
+ ------------[ cut here ]------------
+ WARNING: CPU: 0 PID: 1 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x7c/0x80
+ Modules linked in:
+ CPU: 0 PID: 1 Comm: init Not tainted 6.3.0-rc3-test-00011-ge11b521a7b69-dirty #31
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+ RIP: 0010:trace_preempt_off+0x7c/0x80
+ Code: 74 0f 48 8b 78 08 48 89 f2 48 89 de e8 5d f9 ff ff 65 ff 0d 6e d6 ce 68 75 a2 0f 1f 44 00 00 eb 9b e8 28 ea f3 ff 84 c0 75 a5 <0f> 0b eb a1 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f
+ RSP: 0000:ffffaf0880013f00 EFLAGS: 00010046
+ RAX: 0000000000000000 RBX: ffffffff97fafe59 RCX: 0000000000000001
+ RDX: 0000000000000000 RSI: ffffffff986f4b71 RDI: ffffffff986fa0dd
+ RBP: ffffffff97fafe59 R08: 0000000000000000 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+ R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000000
+ FS:  0000000000000000(0000) GS:ffff8adf7bc00000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00007f125de099c0 CR3: 000000010498a001 CR4: 0000000000170ef0
+ Call Trace:
+  <TASK>
+  irqentry_enter_from_user_mode+0x39/0x80
+  irqentry_enter+0x51/0x60
+  exc_page_fault+0x3d/0x200
+  asm_exc_page_fault+0x26/0x30
+ RIP: 0033:0x7f125de099c0
+ Code: Unable to access opcode bytes at 0x7f125de09996.
+ RSP: 002b:00007ffd1fdbf220 EFLAGS: 00010202
+ RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+ RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+ R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+  </TASK>
+ irq event stamp: 13182054
+ hardirqs last  enabled at (13182053): [<ffffffff97002e3f>] ret_from_fork+0x1f/0x50
+ hardirqs last disabled at (13182054): [<ffffffff97faff01>] irqentry_enter+0x51/0x60
+ softirqs last  enabled at (13181978): [<ffffffff97fc97d2>] __do_softirq+0x322/0x429
+ softirqs last disabled at (13181969): [<ffffffff971c2cce>] irq_exit_rcu+0xe/0x30
+ ---[ end trace 0000000000000000 ]---
+ ------------[ cut here ]------------
 
-> +#define ___cmpxchg(lr_sfx, sc_sfx, prepend, append)			\
-> +{									\
-> +	__asm__ __volatile__ (						\
-> +		prepend							\
-> +		"0:	lr" lr_sfx " %0, %2\n"				\
-> +		"	bne  %0, %z3, 1f\n"				\
-> +		"	sc" sc_sfx " %1, %z4, %2\n"			\
-> +		"	bnez %1, 0b\n"					\
-> +		append							\
-> +		"1:\n"							\
-> +		: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)		\
-> +		: "rJ" ((long)__old), "rJ" (__new)			\
-> +		: "memory");						\
-> +}
+It appears that ct_state() can be called in noinst mode. Do not trace the
+disabling of preemption.
 
-Though I'm not really a fan of macros depending on local variables with
-"magic" names, can this be avoided?
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/context_tracking_state.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-  Andrea
+diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
+index 4a4d56f77180..38e269174a7f 100644
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -130,9 +130,9 @@ static __always_inline int ct_state(void)
+ 	if (!context_tracking_enabled())
+ 		return CONTEXT_DISABLED;
+ 
+-	preempt_disable();
++	preempt_disable_notrace();
+ 	ret = __ct_state();
+-	preempt_enable();
++	preempt_enable_notrace();
+ 
+ 	return ret;
+ }
+-- 
+2.39.1
+
