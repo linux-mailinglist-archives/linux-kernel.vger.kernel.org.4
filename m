@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C766C57C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846D26C5705
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCVUh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S232134AbjCVULn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbjCVUhi (ORCPT
+        with ESMTP id S232024AbjCVUKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:37:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D764974AC;
-        Wed, 22 Mar 2023 13:29:15 -0700 (PDT)
+        Wed, 22 Mar 2023 16:10:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D956B310;
+        Wed, 22 Mar 2023 13:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AFCE9B81DF7;
-        Wed, 22 Mar 2023 20:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA1AC433D2;
-        Wed, 22 Mar 2023 20:02:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4BC622C0;
+        Wed, 22 Mar 2023 20:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61500C433EF;
+        Wed, 22 Mar 2023 20:02:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679515361;
-        bh=iIimPAl3W7sA8efoe/qBB54Hy/DRWY0cczHHWIEH6Vk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BL9zUycoGyYhx383X2RMCdV0iEK547vRP5vI/Z3dMLx0LZp3zUEZfVm34TwrRd+gI
-         81B4mLnOKgqWRDyEZJaZR5oszj0LcACcZVi+RCSok2Nzo5CS6mCHXXZQksjrZil398
-         i03x+xN9587BmAfmQUdpMz7fI7VJiLvGnGrG3lHlWuJK4A2J7HO1zTdvUsEOvmpjDD
-         Uya/jIU/tF6/xX0Hboi5zHgrYNKQOUqXM2c/InNwK3IBIEkF2P7BEN+RWyKv+O2WQA
-         OfY8w9DcAiW+gS5Q1T7gK0HB+l5IBKSuzTgydMvVUwVpqfnLrJ19MNnZT0SScV2OuO
-         MBQt6ask6SQfA==
+        s=k20201202; t=1679515365;
+        bh=RuYnVTJwWCkgS5pZsTRyfgbm1jPX/9A6YF9I++YlZ7Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cBiSET3Fpf+y2+2BG/5QIGlDsq6wXl1gjfmAEIQR1bSS5NuH93cFUyyRlGrovxalV
+         mynPoJlajZReORER+DaY9sLMzM+4uorwzSRoDrKceUJKuqZEuhiXPghe9IDVLV/mJw
+         KfqTHGZnFWm/kGai3e1iAItLRj0dJypWY4qRX+t/Xl8ayKe565xj8jssCoYTzfgId9
+         h7Sus9FvHUPsJEMtyFGWbgjLGYh7ZoDrkc0m+eWfevPFkSd/mhq7YRtBDUuC8AiJER
+         reO5Bx31DfNshJVY9SZAZfgsKm5HdscdJDWLYxbwIPGt08bdu0iv2zu13fIK5MXgUh
+         a0wHuyzX7Bczw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anton Gusev <aagusev@ispras.ru>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 12/12] tracing: Fix wrong return in kprobe_event_gen_test.c
-Date:   Wed, 22 Mar 2023 16:02:06 -0400
-Message-Id: <20230322200207.1997367-12-sashal@kernel.org>
+Cc:     NeilBrown <neilb@suse.de>, Dan Carpenter <error27@gmail.com>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-raid@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 1/9] md: avoid signed overflow in slot_store()
+Date:   Wed, 22 Mar 2023 16:02:33 -0400
+Message-Id: <20230322200242.1997527-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230322200207.1997367-1-sashal@kernel.org>
-References: <20230322200207.1997367-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,51 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Gusev <aagusev@ispras.ru>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit bc4f359b3b607daac0290d0038561237a86b38cb ]
+[ Upstream commit 3bc57292278a0b6ac4656cad94c14f2453344b57 ]
 
-Overwriting the error code with the deletion result may cause the
-function to return 0 despite encountering an error. Commit b111545d26c0
-("tracing: Remove the useless value assignment in
-test_create_synth_event()") solves a similar issue by
-returning the original error code, so this patch does the same.
+slot_store() uses kstrtouint() to get a slot number, but stores the
+result in an "int" variable (by casting a pointer).
+This can result in a negative slot number if the unsigned int value is
+very large.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+A negative number means that the slot is empty, but setting a negative
+slot number this way will not remove the device from the array.  I don't
+think this is a serious problem, but it could cause confusion and it is
+best to fix it.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230131075818.5322-1-aagusev@ispras.ru
-
-Signed-off-by: Anton Gusev <aagusev@ispras.ru>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/kprobe_event_gen_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/md/md.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
-index c736487fc0e48..e0c420eb0b2b4 100644
---- a/kernel/trace/kprobe_event_gen_test.c
-+++ b/kernel/trace/kprobe_event_gen_test.c
-@@ -146,7 +146,7 @@ static int __init test_gen_kprobe_cmd(void)
- 	if (trace_event_file_is_valid(gen_kprobe_test))
- 		gen_kprobe_test = NULL;
- 	/* We got an error after creating the event, delete it */
--	ret = kprobe_event_delete("gen_kprobe_test");
-+	kprobe_event_delete("gen_kprobe_test");
- 	goto out;
- }
- 
-@@ -211,7 +211,7 @@ static int __init test_gen_kretprobe_cmd(void)
- 	if (trace_event_file_is_valid(gen_kretprobe_test))
- 		gen_kretprobe_test = NULL;
- 	/* We got an error after creating the event, delete it */
--	ret = kprobe_event_delete("gen_kretprobe_test");
-+	kprobe_event_delete("gen_kretprobe_test");
- 	goto out;
- }
- 
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index aa2993d5d5d38..64558991ce0a0 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -3082,6 +3082,9 @@ slot_store(struct md_rdev *rdev, const char *buf, size_t len)
+ 		err = kstrtouint(buf, 10, (unsigned int *)&slot);
+ 		if (err < 0)
+ 			return err;
++		if (slot < 0)
++			/* overflow */
++			return -ENOSPC;
+ 	}
+ 	if (rdev->mddev->pers && slot == -1) {
+ 		/* Setting 'slot' on an active array requires also
 -- 
 2.39.2
 
