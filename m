@@ -2,609 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB696C468F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E2F6C4641
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjCVJgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S230143AbjCVJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCVJgQ (ORCPT
+        with ESMTP id S229550AbjCVJXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:36:16 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309155B5EB;
-        Wed, 22 Mar 2023 02:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1679476889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Wed, 22 Mar 2023 05:23:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B05DEDE;
+        Wed, 22 Mar 2023 02:22:27 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 09:22:24 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679476945;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n9BZxja6OPxkoW/Pr/5zyuJjOVcEhn2qcfBGacm4biQ=;
-        b=wthtQQZtyOnhrcXoagzWxiGeNSkDkiK92F55Rvw8/gnwMW7uRURTfIP5aGPWyvLYOWKlKT
-        dZYDw5Plukkkb4jsnERKRMidJMCuT2Ntc2ub5gkjyLhdOFvbPh+Vd7MjOhcdMZM0N0ATi5
-        0YlnjWFPNv7irFugz8kjYJaIhIKGuFI=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 3/3] usb: gadget: functionfs: Add DMABUF import interface
-Date:   Wed, 22 Mar 2023 10:21:18 +0100
-Message-Id: <20230322092118.9213-4-paul@crapouillou.net>
-In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
-References: <20230322092118.9213-1-paul@crapouillou.net>
+        bh=zz9ppyfae31Jdq8hRGy2CPEZ9oMRwUzniy9rsq8qKRs=;
+        b=S5+uMMMrPI+L/wq9RR4FzUpMS4FUAFN5FA3vkbeqe70Cwv61zRsjzu771AUEOD/cQqeTm6
+        wFyVY9U92PttN37opCb/zwHLBGuBiwJ9n2fopNYk0ik4WzK3bJC4o4l0YhiGXGq7uRrq2R
+        oTQBxzwEFRh/aQAbeIWwrlMsJh9UkOoM2Ce9R0VQVqe2n99vxbNinuGgai5Vj6H3Y2no17
+        afSFFgqcIgT5cJY6JHU4VDl6mmdf1SPByyyUERZy58DPp7Ft1D6RYUMogx/LCG+krM9ldd
+        1OBnYkQ6KtWoAAyyllYjJSaemorhaunIj3caVV+8jurCex3KXXMopoE5Brm4ng==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679476945;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zz9ppyfae31Jdq8hRGy2CPEZ9oMRwUzniy9rsq8qKRs=;
+        b=vykCPShvKvzArN6yIuspDgMWIMOVm7sGHKrhRWINJYH5ksxfzZSyPKwouYezV5kjziJK2A
+        CRRrvll4f+0MHzAQ==
+From:   "tip-bot2 for wuchi" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/core: Reduce cost of sched_move_task when
+ config autogroup
+Cc:     wuchi <wuchi.zero@gmail.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230321064459.39421-1-wuchi.zero@gmail.com>
+References: <20230321064459.39421-1-wuchi.zero@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <167947694474.5837.2005982261299761912.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces three new ioctls. They all should be called on a
-data endpoint (ie. not ep0). They are:
+The following commit has been merged into the sched/core branch of tip:
 
-- FUNCTIONFS_DMABUF_ATTACH, which takes the file descriptor of a DMABUF
-  object to attach to the endpoint.
+Commit-ID:     eff6c8ce8d4d7faef75f66614dd20bb50595d261
+Gitweb:        https://git.kernel.org/tip/eff6c8ce8d4d7faef75f66614dd20bb50595d261
+Author:        wuchi <wuchi.zero@gmail.com>
+AuthorDate:    Tue, 21 Mar 2023 14:44:59 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 22 Mar 2023 10:10:58 +01:00
 
-- FUNCTIONFS_DMABUF_DETACH, which takes the file descriptor of the
-  DMABUF to detach from the endpoint. Note that closing the endpoint's
-  file descriptor will automatically detach all attached DMABUFs.
+sched/core: Reduce cost of sched_move_task when config autogroup
 
-- FUNCTIONFS_DMABUF_TRANSFER, which requests a data transfer from / to
-  the given DMABUF. Its argument is a structure that packs the DMABUF's
-  file descriptor, the size in bytes to transfer (which should generally
-  be set to the size of the DMABUF), and a 'flags' field which is unused
-  for now.
-  Before this ioctl can be used, the related DMABUF must be attached
-  with FUNCTIONFS_DMABUF_ATTACH.
+Some sched_move_task calls are useless because that
+task_struct->sched_task_group maybe not changed (equals task_group
+of cpu_cgroup) when system enable autogroup. So do some checks in
+sched_move_task.
 
-These three ioctls enable the FunctionFS code to transfer data between
-the USB stack and a DMABUF object, which can be provided by a driver
-from a completely different subsystem, in a zero-copy fashion.
+sched_move_task eg:
+task A belongs to cpu_cgroup0 and autogroup0, it will always belong
+to cpu_cgroup0 when do_exit. So there is no need to do {de|en}queue.
+The call graph is as follow.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+  do_exit
+    sched_autogroup_exit_task
+      sched_move_task
+	dequeue_task
+	  sched_change_group
+	    A.sched_task_group = sched_get_task_group (=cpu_cgroup0)
+	enqueue_task
 
+Performance results:
+===========================
+1. env
+        cpu: bogomips=4600.00
+     kernel: 6.3.0-rc3
+ cpu_cgroup: 6:cpu,cpuacct:/user.slice
+
+2. cmds
+do_exit script:
+
+  for i in {0..10000}; do
+      sleep 0 &
+      done
+  wait
+
+Run the above script, then use the following bpftrace cmd to get
+the cost of sched_move_task:
+
+  bpftrace -e 'k:sched_move_task { @ts[tid] = nsecs; }
+	       kr:sched_move_task /@ts[tid]/
+		  { @ns += nsecs - @ts[tid]; delete(@ts[tid]); }'
+
+3. cost time(ns):
+  without patch: 43528033
+  with    patch: 18541416
+           diff:-24986617  -57.4%
+
+As the result show, the patch will save 57.4% in the scenario.
+
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230321064459.39421-1-wuchi.zero@gmail.com
 ---
-v2:
-- Make ffs_dma_resv_lock() static
-- Add MODULE_IMPORT_NS(DMA_BUF);
-- The attach/detach functions are now performed without locking the
-  eps_lock spinlock. The transfer function starts with the spinlock
-  unlocked, then locks it before allocating and queueing the USB
-  transfer.
----
- drivers/usb/gadget/function/f_fs.c  | 421 ++++++++++++++++++++++++++++
- include/uapi/linux/usb/functionfs.h |  14 +-
- 2 files changed, 434 insertions(+), 1 deletion(-)
+ kernel/sched/core.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 8da64f0fdef0..f5c609c83b36 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -15,6 +15,9 @@
- /* #define VERBOSE_DEBUG */
- 
- #include <linux/blkdev.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-fence.h>
-+#include <linux/dma-resv.h>
- #include <linux/pagemap.h>
- #include <linux/export.h>
- #include <linux/fs_parser.h>
-@@ -43,6 +46,8 @@
- 
- #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- /* Reference counter handling */
- static void ffs_data_get(struct ffs_data *ffs);
- static void ffs_data_put(struct ffs_data *ffs);
-@@ -124,6 +129,26 @@ struct ffs_ep {
- 	u8				num;
- };
- 
-+struct ffs_dmabuf_priv {
-+	struct list_head entry;
-+	struct kref ref;
-+	struct dma_buf_attachment *attach;
-+	spinlock_t lock;
-+	u64 context;
-+};
-+
-+struct ffs_dma_fence {
-+	struct dma_fence base;
-+	struct ffs_dmabuf_priv *priv;
-+	struct sg_table *sgt;
-+	enum dma_data_direction dir;
-+};
-+
-+static inline struct ffs_dma_fence *to_ffs_dma_fence(struct dma_fence *fence)
-+{
-+	return container_of(fence, struct ffs_dma_fence, base);
-+}
-+
- struct ffs_epfile {
- 	/* Protects ep->ep and ep->req. */
- 	struct mutex			mutex;
-@@ -197,6 +222,8 @@ struct ffs_epfile {
- 	unsigned char			isoc;	/* P: ffs->eps_lock */
- 
- 	unsigned char			_pad;
-+
-+	struct list_head		dmabufs;
- };
- 
- struct ffs_buffer {
-@@ -1292,19 +1319,374 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
- 	return res;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 9140a33..5ddd961 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -10351,7 +10351,7 @@ void sched_release_group(struct task_group *tg)
+ 	spin_unlock_irqrestore(&task_group_lock, flags);
  }
  
-+static void ffs_dmabuf_release(struct kref *ref)
-+{
-+	struct ffs_dmabuf_priv *priv = container_of(ref, struct ffs_dmabuf_priv, ref);
-+	struct dma_buf_attachment *attach = priv->attach;
-+	struct dma_buf *dmabuf = attach->dmabuf;
-+
-+	pr_debug("FFS DMABUF release\n");
-+	dma_buf_detach(attach->dmabuf, attach);
-+	dma_buf_put(dmabuf);
-+
-+	list_del(&priv->entry);
-+	kfree(priv);
-+}
-+
-+static void ffs_dmabuf_get(struct dma_buf_attachment *attach)
-+{
-+	struct ffs_dmabuf_priv *priv = attach->importer_priv;
-+
-+	kref_get(&priv->ref);
-+}
-+
-+static void ffs_dmabuf_put(struct dma_buf_attachment *attach)
-+{
-+	struct ffs_dmabuf_priv *priv = attach->importer_priv;
-+
-+	kref_put(&priv->ref, ffs_dmabuf_release);
-+}
-+
- static int
- ffs_epfile_release(struct inode *inode, struct file *file)
+-static void sched_change_group(struct task_struct *tsk)
++static struct task_group *sched_get_task_group(struct task_struct *tsk)
  {
- 	struct ffs_epfile *epfile = inode->i_private;
-+	struct ffs_dmabuf_priv *priv, *tmp;
+ 	struct task_group *tg;
  
- 	ENTER();
- 
-+	/* Close all attached DMABUFs */
-+	list_for_each_entry_safe(priv, tmp, &epfile->dmabufs, entry) {
-+		ffs_dmabuf_put(priv->attach);
-+	}
+@@ -10363,7 +10363,13 @@ static void sched_change_group(struct task_struct *tsk)
+ 	tg = container_of(task_css_check(tsk, cpu_cgrp_id, true),
+ 			  struct task_group, css);
+ 	tg = autogroup_task_group(tsk, tg);
+-	tsk->sched_task_group = tg;
 +
- 	__ffs_epfile_read_buffer_free(epfile);
- 	ffs_data_closed(epfile->ffs);
++	return tg;
++}
++
++static void sched_change_group(struct task_struct *tsk, struct task_group *group)
++{
++	tsk->sched_task_group = group;
  
- 	return 0;
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+ 	if (tsk->sched_class->task_change_group)
+@@ -10384,10 +10390,19 @@ void sched_move_task(struct task_struct *tsk)
+ {
+ 	int queued, running, queue_flags =
+ 		DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
++	struct task_group *group;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
+ 
+ 	rq = task_rq_lock(tsk, &rf);
++	/*
++	 * Esp. with SCHED_AUTOGROUP enabled it is possible to get superfluous
++	 * group changes.
++	 */
++	group = sched_get_task_group(tsk);
++	if (group == tsk->sched_task_group)
++		goto unlock;
++
+ 	update_rq_clock(rq);
+ 
+ 	running = task_current(rq, tsk);
+@@ -10398,7 +10413,7 @@ void sched_move_task(struct task_struct *tsk)
+ 	if (running)
+ 		put_prev_task(rq, tsk);
+ 
+-	sched_change_group(tsk);
++	sched_change_group(tsk, group);
+ 
+ 	if (queued)
+ 		enqueue_task(rq, tsk, queue_flags);
+@@ -10412,6 +10427,7 @@ void sched_move_task(struct task_struct *tsk)
+ 		resched_curr(rq);
+ 	}
+ 
++unlock:
+ 	task_rq_unlock(rq, tsk, &rf);
  }
  
-+static void ffs_dmabuf_signal_done(struct ffs_dma_fence *dma_fence, int ret)
-+{
-+	struct ffs_dmabuf_priv *priv = dma_fence->priv;
-+	struct dma_fence *fence = &dma_fence->base;
-+
-+	dma_fence_get(fence);
-+	fence->error = ret;
-+	dma_fence_signal(fence);
-+
-+	dma_buf_unmap_attachment(priv->attach, dma_fence->sgt, dma_fence->dir);
-+	dma_fence_put(fence);
-+	ffs_dmabuf_put(priv->attach);
-+}
-+
-+static void ffs_epfile_dmabuf_io_complete(struct usb_ep *ep,
-+					  struct usb_request *req)
-+{
-+	ENTER();
-+
-+	pr_debug("FFS: DMABUF transfer complete, status=%d\n", req->status);
-+	ffs_dmabuf_signal_done(req->context, req->status);
-+	usb_ep_free_request(ep, req);
-+}
-+
-+static const char *ffs_dmabuf_get_driver_name(struct dma_fence *fence)
-+{
-+	return "functionfs";
-+}
-+
-+static const char *ffs_dmabuf_get_timeline_name(struct dma_fence *fence)
-+{
-+	return "";
-+}
-+
-+static void ffs_dmabuf_fence_release(struct dma_fence *fence)
-+{
-+	struct ffs_dma_fence *dma_fence = to_ffs_dma_fence(fence);
-+
-+	kfree(dma_fence);
-+}
-+
-+static const struct dma_fence_ops ffs_dmabuf_fence_ops = {
-+	.get_driver_name	= ffs_dmabuf_get_driver_name,
-+	.get_timeline_name	= ffs_dmabuf_get_timeline_name,
-+	.release		= ffs_dmabuf_fence_release,
-+};
-+
-+static int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
-+{
-+	int ret;
-+
-+	ret = dma_resv_lock_interruptible(dmabuf->resv, NULL);
-+	if (ret) {
-+		if (ret != -EDEADLK)
-+			goto out;
-+		if (nonblock) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+
-+		ret = dma_resv_lock_slow_interruptible(dmabuf->resv, NULL);
-+	}
-+
-+out:
-+	return ret;
-+}
-+
-+static struct dma_buf_attachment *
-+ffs_dmabuf_find_attachment(struct device *dev, struct dma_buf *dmabuf,
-+			   bool nonblock)
-+{
-+	struct dma_buf_attachment *elm, *attach = NULL;
-+	int ret;
-+
-+	ret = ffs_dma_resv_lock(dmabuf, nonblock);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	list_for_each_entry(elm, &dmabuf->attachments, node) {
-+		if (elm->dev == dev) {
-+			attach = elm;
-+			break;
-+		}
-+	}
-+
-+	if (attach)
-+		ffs_dmabuf_get(elm);
-+
-+	dma_resv_unlock(dmabuf->resv);
-+
-+	return attach ?: ERR_PTR(-EPERM);
-+}
-+
-+static int ffs_dmabuf_attach(struct file *file, int fd)
-+{
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	struct dma_buf_attachment *attach;
-+	struct ffs_dmabuf_priv *priv;
-+	struct dma_buf *dmabuf;
-+	int err;
-+
-+	if (!gadget || !gadget->sg_supported)
-+		return -EPERM;
-+
-+	dmabuf = dma_buf_get(fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	attach = dma_buf_attach(dmabuf, gadget->dev.parent);
-+	if (IS_ERR(attach)) {
-+		err = PTR_ERR(attach);
-+		goto err_dmabuf_put;
-+	}
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv) {
-+		err = -ENOMEM;
-+		goto err_dmabuf_detach;
-+	}
-+
-+	attach->importer_priv = priv;
-+
-+	priv->attach = attach;
-+	spin_lock_init(&priv->lock);
-+	kref_init(&priv->ref);
-+	priv->context = dma_fence_context_alloc(1);
-+
-+	list_add(&priv->entry, &epfile->dmabufs);
-+
-+	return 0;
-+
-+err_dmabuf_detach:
-+	dma_buf_detach(dmabuf, attach);
-+err_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+
-+	return err;
-+}
-+
-+static int ffs_dmabuf_detach(struct file *file, int fd)
-+{
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	bool nonblock = file->f_flags & O_NONBLOCK;
-+	struct dma_buf_attachment *attach;
-+	struct dma_buf *dmabuf;
-+	int ret = 0;
-+
-+	dmabuf = dma_buf_get(fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
-+					    dmabuf, nonblock);
-+	if (IS_ERR(attach)) {
-+		ret = PTR_ERR(attach);
-+		goto out_dmabuf_put;
-+	}
-+
-+	ffs_dmabuf_put(attach);
-+	ffs_dmabuf_put(attach);
-+
-+out_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+	return ret;
-+}
-+
-+static int ffs_dmabuf_transfer(struct file *file,
-+			       const struct usb_ffs_dmabuf_transfer_req *req)
-+{
-+	bool dma_to_ram, nonblock = file->f_flags & O_NONBLOCK;
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	struct dma_buf_attachment *attach;
-+	struct ffs_dmabuf_priv *priv;
-+	enum dma_data_direction dir;
-+	struct ffs_dma_fence *fence;
-+	struct usb_request *usb_req;
-+	struct sg_table *sg_table;
-+	struct dma_buf *dmabuf;
-+	struct ffs_ep *ep;
-+	int ret;
-+
-+	if (req->flags & ~USB_FFS_DMABUF_TRANSFER_MASK)
-+		return -EINVAL;
-+
-+	dmabuf = dma_buf_get(req->fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	if (req->length > dmabuf->size || req->length == 0) {
-+		ret = -EINVAL;
-+		goto err_dmabuf_put;
-+	}
-+
-+	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
-+					    dmabuf, nonblock);
-+	if (IS_ERR(attach)) {
-+		ret = PTR_ERR(attach);
-+		goto err_dmabuf_put;
-+	}
-+
-+	priv = attach->importer_priv;
-+
-+	if (epfile->in)
-+		dir = DMA_FROM_DEVICE;
-+	else
-+		dir = DMA_TO_DEVICE;
-+
-+	sg_table = dma_buf_map_attachment(attach, dir);
-+	if (IS_ERR(sg_table)) {
-+		ret = PTR_ERR(sg_table);
-+		goto err_attachment_put;
-+	}
-+
-+	ep = ffs_epfile_wait_ep(file);
-+	if (IS_ERR(ep)) {
-+		ret = PTR_ERR(ep);
-+		goto err_unmap_attachment;
-+	}
-+
-+	ret = ffs_dma_resv_lock(dmabuf, nonblock);
-+	if (ret)
-+		goto err_unmap_attachment;
-+
-+	/* Make sure we don't have writers */
-+	if (!dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_WRITE)) {
-+		pr_debug("FFS WRITE fence is not signaled\n");
-+		ret = -EBUSY;
-+		goto err_resv_unlock;
-+	}
-+
-+	dma_to_ram = dir == DMA_FROM_DEVICE;
-+
-+	/* If we're writing to the DMABUF, make sure we don't have readers */
-+	if (dma_to_ram &&
-+	    !dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_READ)) {
-+		pr_debug("FFS READ fence is not signaled\n");
-+		ret = -EBUSY;
-+		goto err_resv_unlock;
-+	}
-+
-+	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
-+	if (ret)
-+		goto err_resv_unlock;
-+
-+	fence = kmalloc(sizeof(*fence), GFP_KERNEL);
-+	if (!fence) {
-+		ret = -ENOMEM;
-+		goto err_resv_unlock;
-+	}
-+
-+	fence->sgt = sg_table;
-+	fence->dir = dir;
-+	fence->priv = priv;
-+
-+	dma_fence_init(&fence->base, &ffs_dmabuf_fence_ops,
-+		       &priv->lock, priv->context, 0);
-+
-+	spin_lock_irq(&epfile->ffs->eps_lock);
-+
-+	/* In the meantime, endpoint got disabled or changed. */
-+	if (epfile->ep != ep) {
-+		ret = -ESHUTDOWN;
-+		goto err_spin_unlock;
-+	}
-+
-+	usb_req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC);
-+	if (!usb_req) {
-+		ret = -ENOMEM;
-+		goto err_spin_unlock;
-+	}
-+
-+	dma_resv_add_fence(dmabuf->resv, &fence->base,
-+			   dma_resv_usage_rw(dma_to_ram));
-+	dma_resv_unlock(dmabuf->resv);
-+
-+	/* Now that the dma_fence is in place, queue the transfer. */
-+
-+	usb_req->length = req->length;
-+	usb_req->buf = NULL;
-+	usb_req->sg = sg_table->sgl;
-+	usb_req->num_sgs = sg_nents_for_len(sg_table->sgl, req->length);
-+	usb_req->sg_was_mapped = true;
-+	usb_req->context  = fence;
-+	usb_req->complete = ffs_epfile_dmabuf_io_complete;
-+
-+	ret = usb_ep_queue(ep->ep, usb_req, GFP_ATOMIC);
-+	if (ret) {
-+		usb_ep_free_request(ep->ep, usb_req);
-+
-+		spin_unlock_irq(&epfile->ffs->eps_lock);
-+
-+		pr_warn("FFS: Failed to queue DMABUF: %d\n", ret);
-+		ffs_dmabuf_signal_done(fence, ret);
-+		goto out_dma_buf_put;
-+	}
-+
-+	spin_unlock_irq(&epfile->ffs->eps_lock);
-+
-+out_dma_buf_put:
-+	dma_buf_put(dmabuf);
-+
-+	return ret;
-+
-+err_spin_unlock:
-+	spin_unlock_irq(&epfile->ffs->eps_lock);
-+	dma_fence_put(&fence->base);
-+err_resv_unlock:
-+	dma_resv_unlock(dmabuf->resv);
-+err_unmap_attachment:
-+	dma_buf_unmap_attachment(attach, sg_table, dir);
-+err_attachment_put:
-+	ffs_dmabuf_put(attach);
-+err_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+
-+	return ret;
-+}
-+
- static long ffs_epfile_ioctl(struct file *file, unsigned code,
- 			     unsigned long value)
- {
-@@ -1317,6 +1699,44 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
- 	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
- 		return -ENODEV;
- 
-+	switch (code) {
-+	case FUNCTIONFS_DMABUF_ATTACH:
-+	{
-+		int fd;
-+
-+		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		return ffs_dmabuf_attach(file, fd);
-+	}
-+	case FUNCTIONFS_DMABUF_DETACH:
-+	{
-+		int fd;
-+
-+		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		return ffs_dmabuf_detach(file, fd);
-+	}
-+	case FUNCTIONFS_DMABUF_TRANSFER:
-+	{
-+		struct usb_ffs_dmabuf_transfer_req req;
-+
-+		if (copy_from_user(&req, (void __user *)value, sizeof(req))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		return ffs_dmabuf_transfer(file, &req);
-+	}
-+	default:
-+		break;
-+	}
-+
- 	/* Wait for endpoint to be enabled */
- 	ep = ffs_epfile_wait_ep(file);
- 	if (IS_ERR(ep))
-@@ -1931,6 +2351,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
- 	for (i = 1; i <= count; ++i, ++epfile) {
- 		epfile->ffs = ffs;
- 		mutex_init(&epfile->mutex);
-+		INIT_LIST_HEAD(&epfile->dmabufs);
- 		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
- 			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
- 		else
-diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
-index d77ee6b65328..1412ab9f8ccc 100644
---- a/include/uapi/linux/usb/functionfs.h
-+++ b/include/uapi/linux/usb/functionfs.h
-@@ -84,6 +84,15 @@ struct usb_ext_prop_desc {
- 	__le16	wPropertyNameLength;
- } __attribute__((packed));
- 
-+/* Flags for usb_ffs_dmabuf_transfer_req->flags (none for now) */
-+#define USB_FFS_DMABUF_TRANSFER_MASK	0x0
-+
-+struct usb_ffs_dmabuf_transfer_req {
-+	int fd;
-+	__u32 flags;
-+	__u64 length;
-+} __attribute__((packed));
-+
- #ifndef __KERNEL__
- 
- /*
-@@ -288,6 +297,9 @@ struct usb_functionfs_event {
- #define	FUNCTIONFS_ENDPOINT_DESC	_IOR('g', 130, \
- 					     struct usb_endpoint_descriptor)
- 
--
-+#define FUNCTIONFS_DMABUF_ATTACH	_IOW('g', 131, int)
-+#define FUNCTIONFS_DMABUF_DETACH	_IOW('g', 132, int)
-+#define FUNCTIONFS_DMABUF_TRANSFER	_IOW('g', 133, \
-+					     struct usb_ffs_dmabuf_transfer_req)
- 
- #endif /* _UAPI__LINUX_FUNCTIONFS_H__ */
--- 
-2.39.2
-
