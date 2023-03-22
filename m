@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CDA6C4F52
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5566C4F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjCVPVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
+        id S231220AbjCVPWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbjCVPVL (ORCPT
+        with ESMTP id S230127AbjCVPWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:21:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32095F532;
-        Wed, 22 Mar 2023 08:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Ymz7yB6cbYqKNYSi++1QmEXQK8vFGrnnfNHKydr8KJU=; b=1LvptSAA5ASQ4t4tRAFgrNI812
-        a7SPVmaFBSzq+y53wSdvvPIZmTXoDp08upRyxjvt6ug0zszVB9DHPCOIBbtS8XaWQFEwFHWrlGrkS
-        G0HDKUPkKJsPq0x2CfLIDVWjIQh0LBwCm1XhXfDZH77VpttjNyoRrfVHDJZByh7Q3sqAL4svaJi0Y
-        uFEqWDTCH6kPzfPCz2/IlaGGY+oi0LZgd0N0wVyzzenegAlAhiL4bgMbVgR9Cto0/9AcsdHbdTaNi
-        YW4sWozBCM7d9SU+jP904ZFcahSgQmxgzepx800oQt8+CSwQa5E6WI5t6ntXxjfxBhFYAdfAm5Zca
-        aXwRN0gg==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pf0Gp-00GUTZ-1E;
-        Wed, 22 Mar 2023 15:20:59 +0000
-Message-ID: <c93723aa-f01c-9f1e-c9c7-aa79f38390c1@infradead.org>
-Date:   Wed, 22 Mar 2023 08:20:58 -0700
+        Wed, 22 Mar 2023 11:22:09 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3092A6189A;
+        Wed, 22 Mar 2023 08:22:08 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C8BBABC4;
+        Wed, 22 Mar 2023 16:22:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679498526;
+        bh=ECK/hhQogZ8dTEHvIQvrK0ZnIJ6cFQoDnWNyVMenZ30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NE7YxpTO9SxNdNQR4V4tSiHobmBwpockjhKa20DZnNebz4IVkqptgA5XMo/w3pMLD
+         3L81daijr0e+cB2jQz4OxgLiG2mZkmS9ckP6jf5Wu8IkbTMDsIU7fmWvN/F+3Hm5GA
+         rb5m0LEZkiwysf9Mtvy8Inu1qoTysp7vEhVMRa1s=
+Date:   Wed, 22 Mar 2023 17:22:11 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Adrien Grassein <adrien.grassein@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Matheus Castello <matheus.castello@toradex.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v2] drm/bridge: lt8912b: return EPROBE_DEFER if bridge is
+ not found
+Message-ID: <20230322152211.GP20234@pendragon.ideasonboard.com>
+References: <20230322143821.109744-1-francesco@dolcini.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/1] scripts: merge_config: Fix typo in variable name.
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mark Brown <broonie@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>
-References: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230322143821.109744-1-francesco@dolcini.it>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Francesco,
 
+Thank you for the patch.
 
-On 3/22/23 01:51, Mirsad Goran Todorovac wrote:
-> ${WARNOVERRIDE} was misspelled as ${WARNOVVERIDE}, which caused a shell
-> syntax error in certain paths of the script execution.
+On Wed, Mar 22, 2023 at 03:38:21PM +0100, Francesco Dolcini wrote:
+> From: Matheus Castello <matheus.castello@toradex.com>
 > 
+> Returns EPROBE_DEFER when of_drm_find_bridge() fails, this is consistent
+> with what all the other DRM bridge drivers are doing and this is
+> required since the bridge might not be there when the driver is probed
+> and this should not be a fatal failure.
+> 
+> Cc: <stable@vger.kernel.org>
+> Fixes: 30e2ae943c26 ("drm/bridge: Introduce LT8912B DSI to HDMI bridge")
+> Signed-off-by: Matheus Castello <matheus.castello@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Fixes: 46dff8d7e381e ("scripts: merge_config: Add option to suppress warning on overrides")
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-of-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 > ---
->  scripts/kconfig/merge_config.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: use dev_err_probe() instead of dev_dbg() (Laurent)
+> ---
+>  drivers/gpu/drm/bridge/lontium-lt8912b.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_config.sh
-> index 32620de473ad..902eb429b9db 100755
-> --- a/scripts/kconfig/merge_config.sh
-> +++ b/scripts/kconfig/merge_config.sh
-> @@ -145,7 +145,7 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
->  		NEW_VAL=$(grep -w $CFG $MERGE_FILE)
->  		BUILTIN_FLAG=false
->  		if [ "$BUILTIN" = "true" ] && [ "${NEW_VAL#CONFIG_*=}" = "m" ] && [ "${PREV_VAL#CONFIG_*=}" = "y" ]; then
-> -			${WARNOVVERIDE} Previous  value: $PREV_VAL
-> +			${WARNOVERRIDE} Previous  value: $PREV_VAL
->  			${WARNOVERRIDE} New value:       $NEW_VAL
->  			${WARNOVERRIDE} -y passed, will not demote y to m
->  			${WARNOVERRIDE}
+> diff --git a/drivers/gpu/drm/bridge/lontium-lt8912b.c b/drivers/gpu/drm/bridge/lontium-lt8912b.c
+> index 2019a8167d69..b40baced1331 100644
+> --- a/drivers/gpu/drm/bridge/lontium-lt8912b.c
+> +++ b/drivers/gpu/drm/bridge/lontium-lt8912b.c
+> @@ -676,8 +676,8 @@ static int lt8912_parse_dt(struct lt8912 *lt)
+>  
+>  	lt->hdmi_port = of_drm_find_bridge(port_node);
+>  	if (!lt->hdmi_port) {
+> -		dev_err(lt->dev, "%s: Failed to get hdmi port\n", __func__);
+> -		ret = -ENODEV;
+> +		ret = -EPROBE_DEFER;
+> +		dev_err_probe(lt->dev, ret, "%s: Failed to get hdmi port\n", __func__);
+>  		goto err_free_host_node;
+>  	}
+>  
 
 -- 
-~Randy
+Regards,
+
+Laurent Pinchart
