@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF3D6C4169
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF58E6C416B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCVECU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 00:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S230371AbjCVEDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 00:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjCVEBt (ORCPT
+        with ESMTP id S230436AbjCVEDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 00:01:49 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99864DE0E;
-        Tue, 21 Mar 2023 21:00:52 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PhFBN2cr1z4f3mKt;
-        Wed, 22 Mar 2023 12:00:44 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDHcyFqfRpki+pjFQ--.44895S3;
-        Wed, 22 Mar 2023 12:00:43 +0800 (CST)
-Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
- device again
-To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Changhui Zhong <czhong@redhat.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
- <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
- <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
- <ZBpbGKxPQcs9NYst@ovpn-8-18.pek2.redhat.com>
- <5facd7c1-fa90-99ff-bd08-cdf67fe6c1ab@huaweicloud.com>
- <a8505ded-dadd-9096-4b13-31512a2c703e@huaweicloud.com>
- <ZBp4Ql08g5YvTDAA@ovpn-8-17.pek2.redhat.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <28ee8ba9-fa42-d3bb-d3c4-44d7e77c64be@huaweicloud.com>
-Date:   Wed, 22 Mar 2023 12:00:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 22 Mar 2023 00:03:19 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFDF5BD95;
+        Tue, 21 Mar 2023 21:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679457732; x=1710993732;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7Hj7tRv4+Rc9UMP86VA4Ii4mE8aI+72mPUgX4/qzk3g=;
+  b=Iqh/a+UA/7ZFHwjluWsS/3q6Ihpk6MOMZdWQnSfXZS4Wk8xSJBTVlWja
+   Sfgaiy+SKiYE6se6Ga9IA5mJNoEs9hMquc0yKiv8UH6YB7sUQO/cGGBue
+   occeMexe+sSscZvzeebj5dT9OmF1Lw+pgP5ob5b1OWJ+UKbQvph6tYVIn
+   tMSdsFXRmbC43+6R02RZTLLW0Gi6IvRVsBiqb4oHe9ixCkqxALsLlLlGm
+   vCDb0lGEyYi/SPq7g1mpSxD98ngcchf0/nr52JIA+VD9eozr5L39QX2np
+   AdSHcvDNqrWklt8kSlOW1VdsWtNiXtNT7rBXRsAfXHFV1K9im07/ZpfVr
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="341477218"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="341477218"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 21:01:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="1011222409"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="1011222409"
+Received: from rhchan-mobl1.amr.corp.intel.com (HELO [10.212.217.72]) ([10.212.217.72])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 21:01:18 -0700
+Message-ID: <7a3bf16a-5ad2-39b0-c68d-f36d40b8dfc4@intel.com>
+Date:   Tue, 21 Mar 2023 21:01:17 -0700
 MIME-Version: 1.0
-In-Reply-To: <ZBp4Ql08g5YvTDAA@ovpn-8-17.pek2.redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 22/34] x86/fred: FRED initialization code
+Content-Language: en-US
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-23-xin3.li@intel.com>
+ <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
+ <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
+ <CAJhGHyC0_1xJD2R03-NoRVpMXFTHR4v8CdzyJOZe_k0rdv=NfQ@mail.gmail.com>
+ <SA1PR11MB673486AB91F77B468ED1BD82A8869@SA1PR11MB6734.namprd11.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <SA1PR11MB673486AB91F77B468ED1BD82A8869@SA1PR11MB6734.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDHcyFqfRpki+pjFQ--.44895S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF47WryfZF15tFykZw4Utwb_yoW8Cr1fpF
-        WxGa13JF4DJryYkw1Iqw17GFW5Kw4xZry5WFyUGr10k3s0vr98trZ7t3yq9r9Fqr1UGw1Y
-        9F15JFn3Xa4jyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r4j6FyU
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 3/21/23 19:22, Li, Xin3 wrote:
+>> If there is no other concrete reason other than overflowing for assigning NMI and
+>> #DB with a stack level > 0, #VE should also be assigned with a stack level > 0, and
+>> #BP too. #VE can happen anytime and anywhere, so it is subject to overflowing too.
+> With IDT, both #VE and #BP do not use IST, but NMI, #DB, #MC and #DF do.
+> 
+> Let's keep this "secret" logic for now, i.e., not change the stack levels
+> for #VE and #BP at this point. We can do "optimization", i.e., change them
+> later 😄.
 
-在 2023/03/22 11:38, Ming Lei 写道:
->>>>>> Hi Yu kuai,
->>>>>>
->>>>>> Looks the original issue starts to re-appear now with the two patches:
->>>>>>
->>>>>> https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
->>>>>>
->>>>>>
->>>>>> And underlying disk partition and raid partition can be observed at the
->>>>>> same time.
->>>>>>
->>>>>> Can you take a look?
->>>>> Yes, thanks for the report. I realize that sda1 adn sdb1 is created
->>>>> while raid open sda and sdb excl, and I think this problem should exist
->>>>> before this patchset.
->>>>
->>>> Looks not reproduced before applying your two patches, that is
->>>> exactly what Jan
->>>> tried to fix with 36369f46e917 ("block: Do not reread partition
->>>> table on exclusively open device").
->>>
->>> Hi, Ming
->>>
->>> I just tried your test with this patchset reverted, and I can still
->>> reporduce the problem myself.
->>
->> Oops, I forgot to revert the first patch. It's right the problem can't
->> be reporduced.
->>>
->>> raid only open this device excl, and disk_scan_partitions is not called:
->>>
->>> md_import_device
->>>    blkdev_get_by_devo
->>>
->>> I need to add some debuginfo to figure out how GD_NEED_PART_SCAN is set
->>> for sda after raid is stopped. And this should explain why sda1 is
->>> created.
->>
->> I found how GD_NEED_PART_SCAN is set now, in patch 2, this is set before
->> bd_prepare_to_claim, so preciously faild part scan will still set this
->> bit, and following patch shold fix this problem:
-> 
-> Just run quick test, the issue won't be reproduced with your patch, and
-> the change looks rational too,
-> 
-> Reviewed-by: Ming Lei <ming.lei@redhat.com>
-> 
+#VE also can't happen anywhere.  There is some documentation about it in
+here:
 
-Thanks for the test and review, I just do some additional change to
-clear GD_NEED_PART_SCAN, I will send a patch, can you take a look?
+	https://docs.kernel.org/x86/tdx.html#linux-ve-handler
 
-Kuai
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
+But, basically, the only halfway sane thing a guest might do to hit a
+#VE is touch some "MMIO".  The host can *not* cause them in arbitrary
+places because of the SEPT_VE_DISABLE attribute.
 
+#VE's also can't nest until after the guest retrieves the "VE info".
+That means that the #VE handler at _least_ reaches C code before it's
+subject to another #VE and that second one would still need to be
+induced by something the guest does explicitly.
