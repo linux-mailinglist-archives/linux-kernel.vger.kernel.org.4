@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D266C4F20
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9351E6C4F27
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCVPN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S230519AbjCVPPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjCVPNy (ORCPT
+        with ESMTP id S229589AbjCVPPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:13:54 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4E71E1C1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:13:52 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so19483566pjz.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679498032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9ZTp7ZZm4J7TRIYDhiFVRzOC61nUJhSd8nfAEWPRzg=;
-        b=W44GNUYI9bL7w9zg1EGFmSrVNq2zwlsVHXMuWzpOr88CtaRzO8/PScZ+qKQzs2Ci/M
-         5p+1N4uCAUCgfk00bQ9MKO/LkBxJplRuMisPePd4xfR4B4eqn9EcwNS8p8FAH/hHw6UC
-         alIMBfQvwzxQiN5+8+a5Ze6g9H7rxHHzqVc15MyoeJvzlRW8f/UEyjDwk09Tq2nHHoFS
-         hfxIpMtVO/oBB5OMIiKGVkZ7u8Rt+Ki22OGYPAjDSHrV4oupbqK7bKBAMSXf5zB4L+Do
-         Xj0LR2FC8mO3xRlBhDfOuNwd96ZyfqShl4O7MzpsfMPiPZZHYl01k7qmJ9qfptsV6NW7
-         EYSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679498032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x9ZTp7ZZm4J7TRIYDhiFVRzOC61nUJhSd8nfAEWPRzg=;
-        b=SlSHpLNdQRlDtkSmEJwnzKu1GJH0Ag5ul6go/Q3maOYG/K5BFzS/cxDdxB2aF5uOSP
-         aZ8jDvFX1R9fUMRALWReQbdleMrFtcU9Y78vtQyRIYixedyOTWZsjnxK19yITeSy5kUI
-         qIH5q8A8/C0HxV34WjMy3aCTFygLxPrew2kuxDxXzMZ9UHbk832Njw3IgYJUebTkO2mv
-         WrgVvxqjGNHPNlEJRyDYP2Twd7Eg8EaoOB/I5wz3WClbiEIJ/vvyB6j29T/GSc8DfRwR
-         AF02unloYRWE1FwrKm8VqHX9/PUqFVe1pLddAz/ecoDnIUnTyYJtx8y2ZimDrydfHNbb
-         OaxQ==
-X-Gm-Message-State: AO0yUKW6MLV2Js+JKqKiupqerRviIbKl3IN1kNwCe7v+WKir8fm+McsE
-        Wb58sMXsZIpgk3iBRL46DrLleg==
-X-Google-Smtp-Source: AK7set9zstRexLFTBKYTDeSdKyZ1uelByjZNJYf0PfMiNC9558pcmsd+EU3UiuFsb6BEV7H1OwdqjA==
-X-Received: by 2002:a17:902:f681:b0:1a1:c9f7:cec5 with SMTP id l1-20020a170902f68100b001a1c9f7cec5mr4621071plg.2.1679498032277;
-        Wed, 22 Mar 2023 08:13:52 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:2eb7:bf6c:83a2:9d2f])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1709028a8700b001a1860da968sm10668805plo.178.2023.03.22.08.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 08:13:51 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 09:13:49 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     Peng Fan <peng.fan@oss.nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
-Message-ID: <20230322151349.GA2821487@p14s>
-References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
- <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
- <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
- <20230213175006.GA310433@p14s>
- <343571ba-faed-35d7-2859-2668391dadb2@oss.nxp.com>
- <20230307202629.GA1693781@p14s>
- <021fd1cc-0ac6-c7fc-2523-48c1debf96ae@kontron.de>
+        Wed, 22 Mar 2023 11:15:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938995FA7E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Oo95ksNo438JOehySiTYm2xvtjpxki70aoJy1x654ic=; b=AmZ2yrsZzD4hIqyo5kv7jGnakK
+        Xp5HymcULYHKiPmU0NelZiXniuv5bFpGR4XawrJ9sicQHGWK8yJCFBqUzgBSY/VQtud4N1DN87+KC
+        c7pFK8A2II1Hy5hc2crVFOA5N7MCOp5rAIYa90s0SQ7AY8EXjL0hhDQc/gXoq9tiv/K9baikGBPuv
+        tdWmywNXyOa5NgV+l9hSZzN+DLj+qPo6+FCxVGRHhNucOHc+/gY86qQAlEH8bmbuJkIW+4qve6g/o
+        iIO3PraeOxVCPa+EqiGS2TzqFHBGsT2QddsWck3WlnOr5TUuy1ZDh5l3SATp28cz6IY8w6zsEqqEg
+        VX7N1KXA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pf0Bb-0036gM-8p; Wed, 22 Mar 2023 15:15:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D005300379;
+        Wed, 22 Mar 2023 16:15:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 33289201FFA49; Wed, 22 Mar 2023 16:15:32 +0100 (CET)
+Date:   Wed, 22 Mar 2023 16:15:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 11/11] static_call: Remove DEFINE_STATIC_CALL_RET0()
+Message-ID: <20230322151532.GG2357380@hirez.programming.kicks-ass.net>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
+ <8aab02492c2bf512c7ffe458e41acc1b930ed2dc.1679456900.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <021fd1cc-0ac6-c7fc-2523-48c1debf96ae@kontron.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <8aab02492c2bf512c7ffe458e41acc1b930ed2dc.1679456900.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,169 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 11:59:02AM +0100, Frieder Schrempf wrote:
-> Hi,
-> 
-> On 07.03.23 21:26, Mathieu Poirier wrote:
-> > On Sat, Mar 04, 2023 at 03:59:38PM +0800, Peng Fan wrote:
-> >>
-> >>
-> >> On 2/14/2023 1:50 AM, Mathieu Poirier wrote:
-> >>> On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
-> >>>> On 2/12/2023 9:43 AM, Peng Fan wrote:
-> >>>>> Hi Iuliana,
-> >>>>>
-> >>>>>> Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
-> >>>>>> DDR
-> >>>>>>
-> >>>>>>
-> >>>>>> On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
-> >>>>>>> From: Peng Fan <peng.fan@nxp.com>
-> >>>>>>>
-> >>>>>>> V3:
-> >>>>>>>
-> >>>>>>>     Daniel, Iuliana
-> >>>>>>>
-> >>>>>>>       Please help review this patchset per Mathieu's comments.
-> >>>>>>>
-> >>>>>>>     Thanks,
-> >>>>>>>     Peng.
-> >>>>>>>
-> >>>>>>>     Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
-> >>>>>>>     IMX_RPROC_ANY in patch 3 Per Mathieu
-> >>>>>>>     Update comment and commit log in patch 5, 6.
-> >>>>>>>
-> >>>>>>>     NXP SDK provides ".interrupts" section, but I am not sure how others
-> >>>>>>>     build the firmware. So I still keep patch 6 as v2, return bootaddr
-> >>>>>>>     if there is no ".interrupts" section.
-> >>>>>>>
-> >>>>>>> V2:
-> >>>>>>>     patch 4 is introduced for sparse check warning fix
-> >>>>>>>
-> >>>>>>> This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
-> >>>>>>> could be in DDR, not just the default TCM.
-> >>>>>>>
-> >>>>>>> i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
-> >>>>>>> initial value could be got from firmware first section ".interrupts".
-> >>>>>>> i.MX93 is a bit different, it just needs the address of .interrupts
-> >>>>>>> section. NXP SDK always has .interrupts section.
-> >>>>>>>
-> >>>>>>> So first we need find the .interrupts section from firmware, so patch
-> >>>>>>> 1 is to reuse the code of find_table to introduce a new API
-> >>>>>>> rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
-> >>>>>>>
-> >>>>>>> Patch 2 is introduce devtype for i.MX8M/93
-> >>>>>>>
-> >>>>>>> Although patch 3 is correct the mapping, but this area was never used
-> >>>>>>> by NXP SW team, we directly use the DDR region, not the alias region.
-> >>>>>>> Since this patchset is first to support firmware in DDR, mark this
-> >>>>>>> patch as a fix does not make much sense.
-> >>>>>>>
-> >>>>>>> patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
-> >>>>>>> .interrupts section. Detailed information in each patch commit message.
-> >>>>>>>
-> >>>>>>> Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
-> >>>>>> If one can build their firmware as they want, then the .interrupt section can
-> >>>>>> also be called differently.
-> >>>>>> I don't think is a good idea to base all your implementation on this
-> >>>>>> assumption.
-> >>>>>>
-> >>>>>> It's clear there's a limitation when linking firmware in DDR, so this should be
-> >>>>>> well documented so one can compile their firmware and put the needed
-> >>>>>> section (interrupt as we call it in NXP SDK) always in TCML - independently
-> >>>>>> where the other section go.
-> >>>>> Ok, so .interrupt section should be a must in elf file if I understand correctly.
-> >>>>>
-> >>>>> I could add a check in V4 that if .interrupt section is not there, driver will report
-> >>>>> failure.
-> >>>>>
-> >>>>> How do you think?
-> >>>>
-> >>>> Peng, I stand by my opinion that the limitation of linking firmware in DDR
-> >>>> should be documented in an Application Note, or maybe there are other
-> >>>> documents where how to use imx_rproc is explained.
-> >>>>
-> >>>> The implementation based on the .interrupt section is not robust.
-> >>>> Maybe a user linked his firmware correctly in TCML, but the section is not
-> >>>> called .interrupt so the firmware loading will work.
-> >>>>
-> >>>> So, instead of using the section name, you should use the address.
-> >>>
-> >>> Can you be more specific on the above?
-> >>>
-> >>>>
-> >>>> First, check whether there is a section linked to TCML.
-> >>>> If there is none, check for section name - as you did.
-> >>>> If there is no section called .interrupt, give an error message.
-> >>>
-> >>> We have two ways of booting, one that puts the firmware image in the TCML and
-> >>> another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
-> >>> to include the address for the stack and PC value.
-> >>>
-> >>> I think the first thing to do is have two different firmware images, one for
-> >>> i.MX8M and another one for i.MX93.  That should greatly simplify things.
-> >>
-> >> sorry, I not got your points. i.MX8M and i.MX93 are not sharing firmware
-> > 
-> > Perfect.
-> > 
-> >> images. i.MX93 M33 has ROM, kicking M33 firmware just requires the
-> >> address of the .interrupt address which holds stack/pc value.
-> >> i.MX8M not has ROM, kick M33 firmware requires driver to copy
-> >> stack/pc into the TCML beginning address.
-> > 
-> > It's been more than a month since I have looked at this patchset so the details are
-> > vague in my memory.  That said, there should be one image for the TCML and
-> > another one for the RAM.  And the image that runs in RAM should have a program
-> > segment that write the correct information in the first 8 bytes.
-> > 
-> >>
-> >> Whether i.MX8M/i.MX93, the NXP released MCU SDK use the section
-> >> ".interrupt" to hold stack/pc initialization value in the beginning
-> >> 8 bytes of the section.
-> >>
-> > 
-> > And that is fine.  Simply release another version of the SDK that does the right
-> > thing.
-> > 
-> > I suggest to work with Daniel and Iuliana if some details are still unclear.
-> > Unlike me, they have access to the reference manual and the boot requirements.
-> > 
-> > 
-> >>>
-> >>> Second, there should always be a segment that adds the right information to the
-> >>> TMCL.  That segment doesn't need a name, it simply have to be part of the
-> >>> segments that are copied to memory (any kind of memory) so that function
-> >>> rproc_elf_load_segments() can do its job.
-> >>>
-> >>> That pushes the complexity to the tool that generates the firmware image,
-> >>> exactly where it should be.
-> >>
-> >> For i.MX8M, yes. For i.MX93, the M33 ROM needs address of storing stack/pc.
-> >>>
-> >>> This is how I think we should solve this problem based on the very limited
-> >>> information provided with this patchset.  Please let me know if I missed
-> >>> something and we'll go from there.
-> >>
-> >> I am not sure how to proceed on supporting the current firmware. what should
-> >> I continue with current patchset?
-> 
-> I've successfully tested this on i.MX8MM with an elf file generated by
-> the NXP SDK.
-> 
-> I would really like to see this upstreamed. If this requires changes
-> that are not compatible with binaries compiled with the current SDK as
-> discussed above, that would be fine for me as long as the kernel is able
-> to detect the malformed binary and warns the user about it.
->
+On Tue, Mar 21, 2023 at 09:00:17PM -0700, Josh Poimboeuf wrote:
+> NULL and RET0 static calls are both slightly different ways of nopping a
+> static call.  A not-insignificant amount of code and complexity is spent
+> maintaining them separately.  It's also somewhat tricky for the user who
+> has to try to remember to use the correct one for the given function
+> type.
 
-I agree.
+Well, I have very little sympathy for that argument. The return type
+should be a big frigging clue.
 
-> The user can then manually adjust the linker script, etc. in the SDK to
-> match the requirements of the kernel.
+> Simplify things all around by just combining them, such that NULL static
+> calls always return 0.
 > 
+> While it doesn't necessarily make sense for void-return functions to
+> return 0, it's pretty much harmless.  The return value register is
+> already callee-clobbered, and an extra "xor %eax, %eax" shouldn't affect
+> performance (knock on wood).
 
-That is exactly what I suggested.
+Urgh.. OTOH I do like the lines removes.
 
-> Thanks
-> Frieder
+> This "do nothing return 0" default should work for the vast majority of
+> NULL cases.  Otherwise it can be easily overridden with a user-specified
+> function which panics or returns 0xdeadbeef or does whatever one wants.
+> 
+> This simplifies the static call code and also tends to help simplify
+> users' code as well.
+
+Can we at least keep the DEFINE_STATIC_CALL_RET0() and
+__static_call_return0 as aliases? It reads really daft to use _NULL or
+__static_call_nop for non-void functions.
+
