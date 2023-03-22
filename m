@@ -2,80 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFFA6C4D18
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385F86C4D2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjCVOJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S231329AbjCVOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCVOJF (ORCPT
+        with ESMTP id S229794AbjCVOMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:09:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA8B559D4;
-        Wed, 22 Mar 2023 07:09:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEAE66211D;
-        Wed, 22 Mar 2023 14:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04683C433D2;
-        Wed, 22 Mar 2023 14:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679494143;
-        bh=+cCRwtJPdwxej4B9LZ/zxX+smQUuOkT8U2aueNMAgug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KyGKR6bAbqjbzS0uBJHYs835IQGCTVhyI7NYS4hkUZwgvzPfvuZjnAuxDXqlbAzF/
-         EiCYxUt7MC/yVLzpMoHRnbyQLgSVQbtWGPej7+FGJYMZo3R//ZzO3B1G/6pUhSZevl
-         aJNqGEjiT8HscdE/T5UTfGF5rEYO5KlF4CGrzVZk4Z01rQyeXygJWhDKhzt39lR4Y1
-         36IlMxS52LXcjKRK+lktCLPGje0HszJl37rxKEKJlVaw6neyskZE3uKIFt8et2m+Gx
-         giZftk0aaNw9BOSp8EBHUWe1UmaLk0GLQsZAjX685N9h05km6qQ4f5a05q1HJyDHJh
-         +Ja3HRVOGzBNw==
-Date:   Wed, 22 Mar 2023 07:12:15 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Tanmay Shah <tanmay.shah@amd.com>
-Cc:     mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] remoteproc: get rproc devices for clusters
-Message-ID: <20230322141215.ygicmrppqaawlgeb@ripper>
-References: <20230322040933.924813-1-tanmay.shah@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322040933.924813-1-tanmay.shah@amd.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 22 Mar 2023 10:12:34 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211CD6486F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:12:24 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54476ef9caeso188065817b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679494343;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h3g8Rn77aV2QcyJGm9ePKuJvFxr4MQGLJYaNKJMKDWU=;
+        b=r3mX0acHgQFJ/12GN3ObmLvXudUkJrxw9cCmhw7vFuhOdavMwvBHJvlPQzoM9ZnLwg
+         MvwtnJVXs2hfUcZXcO4ksYztfpbTOdQtPxGfDGOu7ZKeA3KBKO5HgxS5D+oIvjUJZut5
+         YdZe0Fkq8vI1FqZp//uQpLX/+hvNC9g8yAp8rYj6poswJxK9Qe7fIYyAmWN/Ts7SCtrW
+         l/9hx6gJ+y3K29/RprDY2OpfnUqLLdinU1/+HANADLUpUJRRcMHNhrEoUT3E9DPucq4x
+         OZgeodp/IwCYc6WqkL4h46eiziMvO7xKLFNh2Ruh4CQiLEIeue98vW88tqjs4djKGlhQ
+         f3VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679494343;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h3g8Rn77aV2QcyJGm9ePKuJvFxr4MQGLJYaNKJMKDWU=;
+        b=iRqU0guTyu3CQhfD3uIcS7Foqs22SdyN9tvksg874UMRvGKXZ5mx7t8DbQs2jrvNmw
+         7hEyOvIBYptiMu2LZbw0/dY8oxLz1CBdEpE/DVCDxckkH/zJNAaQgRE45kZHHS7VziSL
+         GJ1WPO6uye3GNRSpKFBzJifBNeNXE59M1ZMuRr2iLe8lKHnf9WjwxPfsYYsyyRgDAMJp
+         PwZ/Mf5Ml+Y8SwZDW+REUV4m1xe4rJ1wkGrQePDLBpjsbbuSRzPV6GlQBljVSatv3mm/
+         dBMY77AQvag0u7yNFj+zV9gdZkqTG/cI1jyR1hnK/8E6HorFcxUkTlsyewXO69KfAVoF
+         nLJQ==
+X-Gm-Message-State: AAQBX9cWbZJK8/8jLzAYjG65lhNa/f/pXARjeFyOiVUsTAR4hlRvOCdt
+        lUxEffdq9dwM4rf54ESxRFDR5F6NI8w=
+X-Google-Smtp-Source: AKy350YjDBGga+E95xC44mu6eIl/sGGbUle3DeXTznmceO6Y5LmPpD76/SMxGXNVMpR7fsEKiLQl8FcjBo4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1247:b0:a5f:0:bf12 with SMTP id
+ t7-20020a056902124700b00a5f0000bf12mr3324492ybu.13.1679494343468; Wed, 22 Mar
+ 2023 07:12:23 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 22 Mar 2023 07:12:20 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
+Message-ID: <20230322141220.2206241-1-seanjc@google.com>
+Subject: [PATCH] KVM: x86: Suppress pending MMIO write exits if emulator
+ detects exception
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangjianguo <zhangjianguo18@huawei.com>,
+        syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com,
+        syzbot+8accb43ddc6bd1f5713a@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:09:32PM -0700, Tanmay Shah wrote:
-> This series extends original patch and makes rproc_put() work
-> for clusters along with rprog_get_by_phandle().
-> 
-> v1 is here: https://lore.kernel.org/all/20221214221643.1286585-1-mathieu.poirier@linaro.org/
-> 
+Clear vcpu->mmio_needed when injecting an exception from the emulator to
+squash a (legitimate) warning about vcpu->mmio_needed being true at the
+start of KVM_RUN without a callback being registered to complete the
+userspace MMIO exit.  Suppressing the MMIO write exit is inarguably wrong
+from an architectural perspective, but it is the least awful hack-a-fix
+due to shortcomings in KVM's uAPI, not to mention that KVM already
+suppresses MMIO writes in this scenario.
 
-What changed since v1?
+Outside of REP string instructions, KVM doesn't provide a way to resume
+an instruction at the exact point where it was "interrupted" if said
+instruction partially completed before encountering an MMIO access.  For
+MMIO reads, KVM immediately exits to userspace upon detecting MMIO as
+userspace provides the to-be-read value in a buffer, and so KVM can safely
+(more or less) restart the instruction from the beginning.  When the
+emulator re-encounters the MMIO read, KVM will service the MMIO by getting
+the value from the buffer instead of exiting to userspace, i.e. KVM won't
+put the vCPU into an infinite loop.
 
-Thanks,
-Bjorn
+On an emulated MMIO write, KVM finishes the instruction before exiting to
+userspace, as exiting immediately would ultimately hang the vCPU due to
+the aforementioned shortcoming of KVM not being able to resume emulation
+in the middle of an instruction.
 
-> Mathieu Poirier (1):
->   remoteproc: Make rproc_get_by_phandle() work for clusters
-> 
-> Tanmay Shah (1):
->   remoteproc: enhance rproc_put() for clusters
-> 
->  drivers/remoteproc/remoteproc_core.c | 41 +++++++++++++++++++++++++++-
->  1 file changed, 40 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: e19967994d342a5986d950a1bfddf19d7e1191b7
-> -- 
-> 2.25.1
-> 
+For the vast majority of _emulated_ instructions, deferring the userspace
+exit doesn't cause problems as very few x86 instructions (again ignoring
+string operations) generate multiple writes.  But for instructions that
+generate multiple writes, e.g. PUSHA (multiple pushes onto the stack),
+deferring the exit effectively results in only the final write triggering
+an exit to userspace.  KVM does support multiple MMIO "fragments", but
+only for page splits; if an instruction performs multiple distinct MMIO
+writes, the number of fragments gets reset when the next MMIO write comes
+along and any previous MMIO writes are dropped.
+
+Circling back to the warning, if a deferred MMIO write coincides with an
+exception, e.g. in this case a #SS due to PUSHA underflowing the stack
+after queueing a write to an MMIO page on a previous push, KVM injects
+the exceptions and leaves the deferred MMIO pending without registering a
+callback, thus triggering the splat.
+
+Sweep the problem under the proverbial rug as dropping MMIO writes is not
+unique to the exception scenario (see above), i.e. instructions like PUSHA
+are fundamentally broken with respect to MMIO, and have been since KVM's
+inception.
+
+Reported-by: zhangjianguo <zhangjianguo18@huawei.com>
+Reported-by: syzbot+760a73552f47a8cd0fd9@syzkaller.appspotmail.com
+Reported-by: syzbot+8accb43ddc6bd1f5713a@syzkaller.appspotmail.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index f706621c35b8..6a3e358a32a6 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8881,6 +8881,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 	}
+ 
+ 	if (ctxt->have_exception) {
++		WARN_ON_ONCE(vcpu->mmio_needed && !vcpu->mmio_is_write);
++		vcpu->mmio_needed = false;
+ 		r = 1;
+ 		inject_emulated_exception(vcpu);
+ 	} else if (vcpu->arch.pio.count) {
+
+base-commit: 45dd9bc75d9adc9483f0c7d662ba6e73ed698a0b
+-- 
+2.40.0.rc2.332.ga46443480c-goog
+
