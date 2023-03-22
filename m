@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FC06C451F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03D96C4529
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCVIgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S229843AbjCVIhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjCVIf7 (ORCPT
+        with ESMTP id S229452AbjCVIhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:35:59 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7695D75E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:35:31 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6C783A58;
-        Wed, 22 Mar 2023 09:35:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679474128;
-        bh=dzRkl61AnobAS2ipZh6Jf0RiwfAoBUdWthcPEZM9bHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GMSutXQ/60qmKy2BkVjuWbDTdI/Jlo6Hhtaq52EPoozPHoxeO/0IPOZSfJ9LDpT1K
-         wSw0pwEWctTkp6S8rpyO42Iqw+MGh9GU/WHHjktDIYdpHcuMYtTwZtgT9mr4HTh8n/
-         O53BOPzxBDXvefnwu7+4sxjCC1LmBtY9Dveuu4h8=
-Date:   Wed, 22 Mar 2023 10:35:35 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        rfoss@kernel.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/bridge: display-connector: Use dev_err_probe()
-Message-ID: <20230322083535.GH20234@pendragon.ideasonboard.com>
-References: <202303221621336645576@zte.com.cn>
+        Wed, 22 Mar 2023 04:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EB05D89A;
+        Wed, 22 Mar 2023 01:36:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFA49B81B8B;
+        Wed, 22 Mar 2023 08:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35703C433D2;
+        Wed, 22 Mar 2023 08:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679474210;
+        bh=WUxmnRvTd0FvURbgK1vrDNjlJjS1QMteze29duvTQlM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ug0Xo6ptb8cXZCjg0bvriKbTToHXMFAko5RoPZUFXg74hC8e9pU20mV/GsLnO5IzA
+         wZDjEHdrAdxqcguMYWQHthnTBLXjqPP9Gk4YAZaqIQtVfmoq/y0uRgcffu+RXn9iDh
+         nv31Vvb3ezs3ezV7bQ5P5f9T0qiK3teuq2CZamBs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: [PATCH v2 02/19] ACPI: LPIT: move to use bus_get_dev_root()
+Date:   Wed, 22 Mar 2023 09:36:46 +0100
+Message-Id: <20230322083646.2937580-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <CAJZ5v0goaS5O1_Hds2DnWsw_G-Dg4fU9NEY0=chyn5ECTcBmDw@mail.gmail.com>
+References: <CAJZ5v0goaS5O1_Hds2DnWsw_G-Dg4fU9NEY0=chyn5ECTcBmDw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202303221621336645576@zte.com.cn>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2262; i=gregkh@linuxfoundation.org; h=from:subject; bh=WUxmnRvTd0FvURbgK1vrDNjlJjS1QMteze29duvTQlM=; b=owGbwMvMwCRo6H6F97bub03G02pJDClS++QKCxKDdEo//Uyrurjk0ZIrv5xckoN3/RF+U22Vt yi2fsKVjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIlycMC/o7pvxlvOiSN81t VeT9/o17D0/eepRhroy1RWq46BkmaRWh2RJLbf/uEgqdBgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+Direct access to the struct bus_type dev_root pointer is going away soon
+so replace that with a call to bus_get_dev_root() instead, which is what
+it is there for.
 
-Thank you for the patch.
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: linux-acpi@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2: - change logic to test for dev_root at the beginning of the function
+      and error out then based on review comments from Rafael.
+    - fix error handling for ioremap() call to properly drop the
+      reference on dev_root if it failed.
 
-On Wed, Mar 22, 2023 at 04:21:33PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Replace the open-code with dev_err_probe() to simplify the code.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+ drivers/acpi/acpi_lpit.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/gpu/drm/bridge/display-connector.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/display-connector.c b/drivers/gpu/drm/bridge/display-connector.c
-> index fbb3e102c02f..56ae511367b1 100644
-> --- a/drivers/gpu/drm/bridge/display-connector.c
-> +++ b/drivers/gpu/drm/bridge/display-connector.c
-> @@ -271,12 +271,9 @@ static int display_connector_probe(struct platform_device *pdev)
->  	    type == DRM_MODE_CONNECTOR_DisplayPort) {
->  		conn->hpd_gpio = devm_gpiod_get_optional(&pdev->dev, "hpd",
->  							 GPIOD_IN);
-> -		if (IS_ERR(conn->hpd_gpio)) {
-> -			if (PTR_ERR(conn->hpd_gpio) != -EPROBE_DEFER)
-> -				dev_err(&pdev->dev,
-> -					"Unable to retrieve HPD GPIO\n");
-> -			return PTR_ERR(conn->hpd_gpio);
-> -		}
-> +		if (IS_ERR(conn->hpd_gpio))
-> +			return dev_err_probe(&pdev->dev, PTR_ERR(conn->hpd_gpio),
-> +					     "Unable to retrieve HPD GPIO\n");
-> 
->  		conn->hpd_irq = gpiod_to_irq(conn->hpd_gpio);
->  	} else {
-
+diff --git a/drivers/acpi/acpi_lpit.c b/drivers/acpi/acpi_lpit.c
+index 3843d2576d3f..c5598b6d5db8 100644
+--- a/drivers/acpi/acpi_lpit.c
++++ b/drivers/acpi/acpi_lpit.c
+@@ -98,6 +98,12 @@ EXPORT_SYMBOL_GPL(lpit_read_residency_count_address);
+ static void lpit_update_residency(struct lpit_residency_info *info,
+ 				 struct acpi_lpit_native *lpit_native)
+ {
++	struct device *dev_root = bus_get_dev_root(&cpu_subsys);
++
++	/* Silently fail, if cpuidle attribute group is not present */
++	if (!dev_root)
++		return;
++
+ 	info->frequency = lpit_native->counter_frequency ?
+ 				lpit_native->counter_frequency : tsc_khz * 1000;
+ 	if (!info->frequency)
+@@ -108,18 +114,18 @@ static void lpit_update_residency(struct lpit_residency_info *info,
+ 		info->iomem_addr = ioremap(info->gaddr.address,
+ 						   info->gaddr.bit_width / 8);
+ 		if (!info->iomem_addr)
+-			return;
++			goto exit;
+ 
+-		/* Silently fail, if cpuidle attribute group is not present */
+-		sysfs_add_file_to_group(&cpu_subsys.dev_root->kobj,
++		sysfs_add_file_to_group(&dev_root->kobj,
+ 					&dev_attr_low_power_idle_system_residency_us.attr,
+ 					"cpuidle");
+ 	} else if (info->gaddr.space_id == ACPI_ADR_SPACE_FIXED_HARDWARE) {
+-		/* Silently fail, if cpuidle attribute group is not present */
+-		sysfs_add_file_to_group(&cpu_subsys.dev_root->kobj,
++		sysfs_add_file_to_group(&dev_root->kobj,
+ 					&dev_attr_low_power_idle_cpu_residency_us.attr,
+ 					"cpuidle");
+ 	}
++exit:
++	put_device(dev_root);
+ }
+ 
+ static void lpit_process(u64 begin, u64 end)
 -- 
-Regards,
+2.40.0
 
-Laurent Pinchart
