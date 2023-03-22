@@ -2,68 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D25E6C4A46
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC666C4A4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCVMVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S230218AbjCVMWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjCVMVa (ORCPT
+        with ESMTP id S230111AbjCVMWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:21:30 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88D20526D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:20:58 -0700 (PDT)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 8D44C242D46;
-        Wed, 22 Mar 2023 13:20:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1679487657;
-        bh=x6zKmZSNIkH5LKJBa5kynkTRRptRZMcqJv2vXwQmUVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P2EUlaWdQuQbxWwtZvUxSmpn0dZVU74T+aJqXx4xiEO4ktZlQHrs+jWXX6fVpPRf+
-         C2yseqq5ZVnO3OcnTdu27IhCffNb9PuQexnPkpwoQkdtz2zSN7UNZ4i/Zi9Y+S5OoX
-         jRjQ7f3NVMuwYWfmCMMHbsjM1Q3yIL8iXPrnEqotzG5fgYb3XCQy/WBf9JQkTRk4+O
-         yDjVIbzBm83vdC7TyxiXFYiNWfQ+Wu/txQ6quKqeQ6Dd8TRbrU55NB3Vae3cnxSwHY
-         9kB8631jYn1qUFAmidvClMMuS9wdXnyxje/YSZ4E/71cNgLlhOGBl6LuDShLismRVw
-         NWsS4xlVvoRfA==
-Date:   Wed, 22 Mar 2023 13:20:56 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: Re: [PATCH 09/10] iommu: Fix MAX_ORDER usage in
- __iommu_dma_alloc_pages()
-Message-ID: <ZBryqPza5Ato+HFT@8bytes.org>
-References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
- <20230315113133.11326-10-kirill.shutemov@linux.intel.com>
- <97aced64-c0ac-6041-41cd-ae3439216089@arm.com>
+        Wed, 22 Mar 2023 08:22:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0120F1986
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:22:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BBBD4B3;
+        Wed, 22 Mar 2023 05:22:56 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.53.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5318C3F67D;
+        Wed, 22 Mar 2023 05:22:10 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 12:22:07 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 08/11] arm64/static_call: Fix static call CFI
+ violations
+Message-ID: <ZBry75KS3F+a0VM0@FVFF77S0Q05N>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
+ <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97aced64-c0ac-6041-41cd-ae3439216089@arm.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:18:31PM +0000, Robin Murphy wrote:
-> I'm guessing you probably want to take this through the mm tree - that
-> should be fine since I don't expect any conflicting changes in the IOMMU
-> tree for now (cc'ing Joerg just as a heads-up).
+On Tue, Mar 21, 2023 at 09:00:14PM -0700, Josh Poimboeuf wrote:
+> On arm64, with CONFIG_CFI_CLANG, it's trivial to trigger CFI violations
+> by running "perf record -e sched:sched_switch -a":
+> 
+>   CFI failure at perf_misc_flags+0x34/0x70 (target: __static_call_return0+0x0/0xc; expected type: 0x837de525)
+>   WARNING: CPU: 3 PID: 32 at perf_misc_flags+0x34/0x70
+>   CPU: 3 PID: 32 Comm: ksoftirqd/3 Kdump: loaded Tainted: P                   6.3.0-rc2 #8
+>   Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+>   pstate: 904000c5 (NzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : perf_misc_flags+0x34/0x70
+>   lr : perf_event_output_forward+0x74/0xf0
+>   sp : ffff80000a98b970
+>   x29: ffff80000a98b970 x28: ffff00077bd34d00 x27: ffff8000097d2d00
+>   x26: fffffbffeff6a360 x25: ffff800009835a30 x24: ffff0000c2e8dca0
+>   x23: 0000000000000000 x22: 0000000000000080 x21: ffff00077bd31610
+>   x20: ffff0000c2e8dca0 x19: ffff00077bd31610 x18: ffff800008cd52f0
+>   x17: 00000000837de525 x16: 0000000072923c8f x15: 000000000000b67e
+>   x14: 000000000178797d x13: 0000000000000004 x12: 0000000070b5b3a8
+>   x11: 0000000000000015 x10: 0000000000000048 x9 : ffff80000829e2b4
+>   x8 : ffff80000829c6f0 x7 : 0000000000000000 x6 : 0000000000000000
+>   x5 : fffffbffeff6a340 x4 : ffff00077bd31610 x3 : ffff00077bd31610
+>   x2 : ffff800009833400 x1 : 0000000000000000 x0 : ffff00077bd31610
+>   Call trace:
+>    perf_misc_flags+0x34/0x70
+>    perf_event_output_forward+0x74/0xf0
+>    __perf_event_overflow+0x12c/0x1e8
+>    perf_swevent_event+0x98/0x1a0
+>    perf_tp_event+0x140/0x558
+>    perf_trace_run_bpf_submit+0x88/0xc8
+>    perf_trace_sched_switch+0x160/0x19c
+>    __schedule+0xabc/0x153c
+>    dynamic_cond_resched+0x48/0x68
+>    run_ksoftirqd+0x3c/0x138
+>    smpboot_thread_fn+0x26c/0x2f8
+>    kthread+0x108/0x1c4
+>    ret_from_fork+0x10/0x20
+> 
+> The problem is that the __perf_guest_state() static call does an
+> indirect branch to __static_call_return0(), which isn't CFI-compliant.
 
-Yes, mm tree is fine for this:
+IIUC that'd be broken even with the old CFI mechanism, since commit:
 
-Acked-by: Joerg Roedel <jroedel@suse.de>
+  87b940a0675e2526 ("perf/core: Use static_call to optimize perf_guest_info_callbacks")
+
+If so, we probably want a Fixes tag?
+
+> Fix that by generating custom CFI-compliant ret0 functions for each
+> defined static key.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/Kconfig                            |  4 ++
+>  arch/arm64/include/asm/static_call.h    | 29 +++++++++++
+>  include/linux/static_call.h             | 64 +++++++++++++++++++++----
+>  include/linux/static_call_types.h       |  4 ++
+>  kernel/Makefile                         |  2 +-
+>  kernel/static_call.c                    |  2 +-
+>  tools/include/linux/static_call_types.h |  4 ++
+>  7 files changed, 97 insertions(+), 12 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/static_call.h
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e3511afbb7f2..8800fe80a0f9 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1348,6 +1348,10 @@ config HAVE_STATIC_CALL_INLINE
+>  	depends on HAVE_STATIC_CALL
+>  	select OBJTOOL
+>  
+> +config CFI_WITHOUT_STATIC_CALL
+> +	def_bool y
+> +	depends on CFI_CLANG && !HAVE_STATIC_CALL
+> +
+>  config HAVE_PREEMPT_DYNAMIC
+>  	bool
+>  
+> diff --git a/arch/arm64/include/asm/static_call.h b/arch/arm64/include/asm/static_call.h
+> new file mode 100644
+> index 000000000000..b3489cac7742
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/static_call.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_ARM64_STATIC_CALL_H
+> +#define _ASM_ARM64_STATIC_CALL_H
+> +
+> +/*
+> + * Make a dummy reference to a function pointer in C to force the compiler to
+> + * emit a __kcfi_typeid_ symbol for asm to use.
+> + */
+> +#define GEN_CFI_SYM(func)						\
+> +	static typeof(func) __used __section(".discard.cfi") *__UNIQUE_ID(cfi) = func
+> +
+> +
+> +/* Generate a CFI-compliant static call NOP function */
+> +#define __ARCH_DEFINE_STATIC_CALL_CFI(name, insns)			\
+> +	asm(".align 4						\n"	\
+> +	    ".word __kcfi_typeid_" name "			\n"	\
+> +	    ".globl " name "					\n"	\
+> +	    name ":						\n"	\
+> +	    "bti c						\n"	\
+> +	    insns "						\n"	\
+> +	    "ret						\n"	\
+> +	    ".type " name ", @function				\n"	\
+> +	    ".size " name ", . - " name "			\n")
+> +
+> +#define __ARCH_DEFINE_STATIC_CALL_RET0_CFI(name)			\
+> +	GEN_CFI_SYM(STATIC_CALL_RET0_CFI(name));			\
+> +	__ARCH_DEFINE_STATIC_CALL_CFI(STATIC_CALL_RET0_CFI_STR(name), "mov x0, xzr")
+
+This looks correct, but given we're generating a regular functions it's
+unfortunate we can't have the compiler generate the actual code with something
+like:
+
+#define __ARCH_DEFINE_STATIC_CALL_RET0_CFI(rettype, name, args...)	\
+rettype name(args)							\
+{									\
+	return (rettype)0;						\
+}
+
+... but I guess passing the rettype and args around is painful.
+
+Regardless, I gave this a spin atop v6.3-rc3 using LLVM 16.0.0 and CFI_CLANG,
+and it does seem to work, so:
+
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+
+Thanks,
+Mark.
