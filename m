@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033436C544F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F806C5453
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCVS4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S231317AbjCVS6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjCVS4D (ORCPT
+        with ESMTP id S230466AbjCVS5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:56:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0846A043;
-        Wed, 22 Mar 2023 11:54:26 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 18:54:11 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679511252;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=A+gI28LSL9lsNL+RXPBvchUT9Vk3rqUxL+KSWkY39mY=;
-        b=L8doCyZXKwR2xK2krWvW71riO6Yy++aqCtMp/3InHJzmTcKZhMPKhXSmr8Uhjn8NKsuVCo
-        dwQ6WzW8QGzrBe85YEBLBVKImWGzzNI7BsMF2JjPyKe+trr9F9v+K+2eCBtP143B1Phkh4
-        Q1L2w2cwxqojJoSItCY1qzWodpiVwKcKxMGLK8/NpPrwL0XqoeB3YE4tGU/KHrjje4xe57
-        ViaieZlYO6+GHShOaHXHg25z1+skH3X8bzFf4/SotHA7yttpVUS6qKwkniByYjD9+WoJe3
-        NlaXYf2mrUv2/a3Gn3KFAzpQJbz+SAsIPa28C+IhWouMkypj7dLXevv63caW8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679511252;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=A+gI28LSL9lsNL+RXPBvchUT9Vk3rqUxL+KSWkY39mY=;
-        b=WZC2rmjqWvhgpfjJnRYqQYYqth5IzjgxC/iHA4Vhtp+w3qVPgB1FHMI76YeWRpYgNyVfvk
-        XI1knlV7H0N7JVDA==
-From:   "tip-bot2 for Luis Chamberlain" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86: Simplify one-level sysctl registration for
- itmt_kern_table
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 22 Mar 2023 14:57:47 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61A7664D5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:56:56 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MIMkjQ030889;
+        Wed, 22 Mar 2023 18:56:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=nXUkYuAUVgMJXfQ1b2OVpiN3TmnwlbMSYdai19XO/8o=;
+ b=uJjJm+G2o9N9d0ehFB2lSzjMQcXhAkWVETOR7f1AqC7N/z6FVP10KCVZzVLoim1XlKcE
+ FW6+mcYltY9Qp3jYMkh3LpiBWhvGV6Z763IXxd4W8NjTUX1X5yDooJ6WufiIdB4IiDNa
+ IQFAL509YYR8+sGFZnIsLjrRVD+7vFeJE+cxXK/3EALlV85JiBzFTD79+FOW/k/CNxKC
+ kzbOOqAe2r9PxDpPzf4XoVyLQTLPoalymfHO4QiI9xGMZg7og3xhzOmgYwaq+h9QiuWZ
+ ae1h8NpdYmPvcP8Bwetd7gnrVOSooy6LF1nwkHMBUZoVW4hDHuHn7j69U/KXGIiiFjHZ uw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd56b1qrn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Mar 2023 18:56:10 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32MIWp9n002235;
+        Wed, 22 Mar 2023 18:56:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pg7238srj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Mar 2023 18:56:08 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32MIu8UY000312;
+        Wed, 22 Mar 2023 18:56:08 GMT
+Received: from mnchrist-mac.us.oracle.com (dhcp-10-154-169-59.vpn.oracle.com [10.154.169.59])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3pg7238spf-1;
+        Wed, 22 Mar 2023 18:56:07 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com
+Subject: [PATCH 1/1] vhost_task: Fix vhost_task_create return value
+Date:   Wed, 22 Mar 2023 13:56:05 -0500
+Message-Id: <20230322185605.1307-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <167951125144.5837.13563627492403972761.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_15,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=949
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303220131
+X-Proofpoint-ORIG-GUID: aHz4IwfU2BEZ_HtlkxtmGjInSvl1fI5p
+X-Proofpoint-GUID: aHz4IwfU2BEZ_HtlkxtmGjInSvl1fI5p
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+vhost_task_create is supposed to return the vhost_task or NULL on
+failure. This fixes it to return the correct value when the allocation
+of the struct fails.
 
-Commit-ID:     89d7971eb2318595bc3b6ab7c5caede112c302ff
-Gitweb:        https://git.kernel.org/tip/89d7971eb2318595bc3b6ab7c5caede112c302ff
-Author:        Luis Chamberlain <mcgrof@kernel.org>
-AuthorDate:    Fri, 10 Mar 2023 15:32:48 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 22 Mar 2023 11:47:21 -07:00
-
-x86: Simplify one-level sysctl registration for itmt_kern_table
-
-There is no need to declare an extra tables to just create directory,
-this can be easily be done with a prefix path with register_sysctl().
-
-Simplify this registration.
-
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20230310233248.3965389-3-mcgrof%40kernel.org
+Fixes: 77feab3c4156 ("vhost_task: Allow vhost layer to use copy_process") # mainline only
+Reported-by: syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- arch/x86/kernel/itmt.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ kernel/vhost_task.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
-index 9ff480e..670eb08 100644
---- a/arch/x86/kernel/itmt.c
-+++ b/arch/x86/kernel/itmt.c
-@@ -77,15 +77,6 @@ static struct ctl_table itmt_kern_table[] = {
- 	{}
- };
+diff --git a/kernel/vhost_task.c b/kernel/vhost_task.c
+index 4b8aff160640..b7cbd66f889e 100644
+--- a/kernel/vhost_task.c
++++ b/kernel/vhost_task.c
+@@ -88,7 +88,7 @@ struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg,
  
--static struct ctl_table itmt_root_table[] = {
--	{
--		.procname	= "kernel",
--		.mode		= 0555,
--		.child		= itmt_kern_table,
--	},
--	{}
--};
--
- static struct ctl_table_header *itmt_sysctl_header;
- 
- /**
-@@ -114,7 +105,7 @@ int sched_set_itmt_support(void)
- 		return 0;
- 	}
- 
--	itmt_sysctl_header = register_sysctl_table(itmt_root_table);
-+	itmt_sysctl_header = register_sysctl("kernel", itmt_kern_table);
- 	if (!itmt_sysctl_header) {
- 		mutex_unlock(&itmt_update_mutex);
- 		return -ENOMEM;
+ 	vtsk = kzalloc(sizeof(*vtsk), GFP_KERNEL);
+ 	if (!vtsk)
+-		return ERR_PTR(-ENOMEM);
++		return NULL;
+ 	init_completion(&vtsk->exited);
+ 	vtsk->data = arg;
+ 	vtsk->fn = fn;
+-- 
+2.25.1
+
