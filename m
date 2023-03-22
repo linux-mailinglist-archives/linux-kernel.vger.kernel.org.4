@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC06A6C407C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CB56C407B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjCVCmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S229713AbjCVCkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 22:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVCmN (ORCPT
+        with ESMTP id S229487AbjCVCkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:42:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153293C7BF
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:42:11 -0700 (PDT)
-Received: from dggpeml500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PhCP40LY7zKsyG;
-        Wed, 22 Mar 2023 10:39:52 +0800 (CST)
-Received: from [10.174.186.25] (10.174.186.25) by
- dggpeml500004.china.huawei.com (7.185.36.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 22 Mar 2023 10:42:08 +0800
-Message-ID: <e1f373f2-59ec-dc26-1624-f4b9d4ede254@huawei.com>
-Date:   Wed, 22 Mar 2023 10:42:08 +0800
+        Tue, 21 Mar 2023 22:40:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360373803D;
+        Tue, 21 Mar 2023 19:40:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C11F461F1D;
+        Wed, 22 Mar 2023 02:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76A3C433D2;
+        Wed, 22 Mar 2023 02:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679452851;
+        bh=79dMe7RsL9m8pXI5ORMx795he2zXkKmcbbpL+80vMiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z3UXnnuKedblvn/nRQfhBeuDKLUTEt0aMd/m/ImG+mVm9ivGKl8i1BP4ka4+jJgVe
+         W/kt+4V5ixJhH12L4DIbpz3YxnSR7m6/ncJybF4AL/7Ss9VPilMUoWhFT+sGsFcIN6
+         FSa+iB295LWnPVfEhWVVHj7dkMW9DKZADVgVGj5l6fe5ECTUWn98SSNYRQmytgKvnM
+         AzhvN9/G2jR/DDWTrBSViGw+uQa2HYUJpPkwabe05pcROAV5tVD3uPZDUePzuZLryP
+         dpA2aPhCAWfClyELnIP6v0rRXhQcaGHzEm5n5kIWDThzJMd02piaIclj6g7D0dV/tr
+         TXR8cMR9BcCzw==
+Date:   Tue, 21 Mar 2023 19:44:02 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        agross@kernel.org, konrad.dybcio@linaro.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
+Subject: Re: [PATCH net-next v2 00/12] Add EMAC3 support for sa8540p-ride
+Message-ID: <20230322024402.l6awwelwdzxydmam@ripper>
+References: <20230320221617.236323-1-ahalaney@redhat.com>
+ <20230320202802.4e7dc54c@kernel.org>
+ <20230321184435.5pqkjp4adgn6cpxy@halaney-x13s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/4] arm64/signal: Add tpidr2/za/zt sigframe size in
- comment
-To:     Mark Brown <broonie@kernel.org>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wanghaibin.wang@huawei.com>
-References: <20230317124915.1263-1-sundongxu3@huawei.com>
- <20230317124915.1263-4-sundongxu3@huawei.com>
- <e47440be-5dcd-4d2c-b7ff-8d45c9f82537@sirena.org.uk>
-Content-Language: en-US
-From:   Dongxu Sun <sundongxu3@huawei.com>
-In-Reply-To: <e47440be-5dcd-4d2c-b7ff-8d45c9f82537@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.186.25]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500004.china.huawei.com (7.185.36.140)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321184435.5pqkjp4adgn6cpxy@halaney-x13s>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/17 21:03, Mark Brown wrote:
-> On Fri, Mar 17, 2023 at 08:49:14PM +0800, Dongxu Sun wrote:
+On Tue, Mar 21, 2023 at 01:44:35PM -0500, Andrew Halaney wrote:
+> On Mon, Mar 20, 2023 at 08:28:02PM -0700, Jakub Kicinski wrote:
+> > On Mon, 20 Mar 2023 17:16:05 -0500 Andrew Halaney wrote:
+> > > This is a forward port / upstream refactor of code delivered
+> > > downstream by Qualcomm over at [0] to enable the DWMAC5 based
+> > > implementation called EMAC3 on the sa8540p-ride dev board.
+> > > 
+> > > From what I can tell with the board schematic in hand,
+> > > as well as the code delivered, the main changes needed are:
+> > > 
+> > >     1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
+> > >     2. A new programming sequence required for the EMAC3 base platforms
+> > > 
+> > > This series makes those adaptations as well as other housekeeping items
+> > > such as converting dt-bindings to yaml, adding clock descriptions, etc.
+> > > 
+> > > [0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
+> > > 
+> > > v1: https://lore.kernel.org/netdev/20230313165620.128463-1-ahalaney@redhat.com/
+> > 
+> > At a glance 1-4,8-12 need to go via networking, 5 via clock tree,
+> > and 6,7 via ARM/Qualcomm.
+> > 
+> > AFAICT there are no strong (compile) dependencies so we can each merge
+> > our chunk and they will meet in Linus's tree? If so please repost just
+> > the networking stuff for net-next, and the other bits to respective
+> > trees, as separate series.
+> > 
 > 
->>   *	0x8a0		sve_context (vl <= 64) (optional)
->> + *	 0x10		tpidr2_context (optional)
->> + *	 0x10		za_context (optional)
+> That makes sense to me, thanks for the advice.
 > 
-> The size of the ZA context is variable, going with what the SVE has a VL
-> which might fit into the base context should be included but that's
-> complicated what with it likely appearing after another variably sized
-> frame.
+> The only note is that 5 (the clk patch) is depended on by 6/7 to
+> compile (they use the header value in 5)... So I'll keep those together!
 > 
->> + *	 0x10		zt_context (optional)
-> 
-> The ZT context is never this small, it's always got register contents if
-> present.
 
-The context size of ZA and ZT here is wrong due to oversight. The ZA context size is related to the SVL, and the ZT context size may also get changed with further extensions.
+Sounds good to me!
+
+Regards,
+Bjorn
+
+> So all in all it will be the dt-binding changes + stmmac changes in one
+> series for networking, and the clock + devicetree changes via
+> ARM/Qualcomm if I am following properly.
 > 
->>   *	 0x20		extra_context (optional)
->>   *	 0x10		terminator (null _aarch64_ctx)
->>   *
->> - *	0x510		(reserved for future allocation)
->> + *	0x4e0		(reserved for future allocation)
+> I'll go that route for v3 and link here (just to make finding the split
+> easier) unless someone objects (got some time as I need to refactor
+> based on series feedback)!
 > 
-> TBH I'm not sure this comment is actually useful or helpful, it's
-> already not fully taking into account the variablility of the SVE frame
-> size (quoting a fixed value) and with the way we allocate things once
-> we've gone into the extra_context we'll allocate new frames from there
-> so even smaller frames like the tpidr2_context will go there.  I'm not
-> sure trying to suggest a layout/ordering is clarifying anything for
-> anyone.
-
-Thanks for your point, considering the scalability of SME/SME2, maybe there is no need to add layout suggestion. So, let's discard this commit:)
-
-Thanks，
-Dongxu
-
+> Thanks,
+> Andrew
+> 
