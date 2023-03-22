@@ -2,207 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83376C5132
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5401A6C5147
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjCVQuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S230491AbjCVQvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbjCVQuH (ORCPT
+        with ESMTP id S230471AbjCVQvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:50:07 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160D25CEC2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:50:06 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MFCGu8005417;
-        Wed, 22 Mar 2023 11:49:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=mquCtuwPBAYKtBO2y0kIfAC9f2JLfge3sJ7cZAhtsrg=;
- b=ZYchTHjuKLXj2UQmXz/84gs+JIC3qV3WlcoqXTjnv+CvI59bzawDnpWOPVRMSQpGEu4I
- fb6qTwByrNvKvYnTZ6d/KeD++Xue2+XZ7qilwCOlLr6gzHyttXgoES3cUt/0iC11pSAv
- Gt2dAWTRJPjGAJKNKuoB6cHgzfcffuVmnA/TWVsKGgG/l7ss8CuFXmKD9eRg6fYAy10t
- UT1prOMIkH0WD/Fqoow1qiAgRpeuIYkRh9HTGRg+mU1wsS30nPhdHHEHCQuTIBVRbMbQ
- u026Vhn8iSjNAH+TWu4A94kt+II0yzLaVx8ywKTTi7l46XtKC98h9qFpzsieeqtfCUGB yQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pdaq35kas-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 11:49:51 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 22 Mar
- 2023 11:49:48 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 22 Mar 2023 11:49:48 -0500
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A1EE12A1;
-        Wed, 22 Mar 2023 16:49:48 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <vkoul@kernel.org>
-CC:     <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH v2 3/3] soundwire: bus: Update sdw_nread/nwrite_no_pm to handle page boundaries
-Date:   Wed, 22 Mar 2023 16:49:48 +0000
-Message-ID: <20230322164948.566962-3-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230322164948.566962-1-ckeepax@opensource.cirrus.com>
-References: <20230322164948.566962-1-ckeepax@opensource.cirrus.com>
+        Wed, 22 Mar 2023 12:51:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD715DC95;
+        Wed, 22 Mar 2023 09:51:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 645A1621E4;
+        Wed, 22 Mar 2023 16:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B46C433B3;
+        Wed, 22 Mar 2023 16:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679503885;
+        bh=6GNEDWgr7VVRz7NPm97DxehnVfnk+0fq8yASr93HUOA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZE7hjmj2+QRS2dZjZsPm8jjIaRYkQ2pHY7E84wzEmDGUgfTQvHr3iAb2YvIRtfhf2
+         uCVnDTp9GOpyIeyysyzaiWkGNJLT4AA95TJW4fvdiIJIb8FP7yK04pODHQhqC2U4Hl
+         k9ezrKOcT5Wb/eyj62goNFkRFqIrskIHi8qbKGHc46xbMt/VJJhJMVP8WA0v9bUqAS
+         OtaSdtKd7NAMrAZLjNdNIvKG7WHlU3CJDwtOvbyB7KaRa0Psvg2WUEP4aS27fLZ/tJ
+         Jm2X8W2MN/IuuSDjqWRScWb8XY6AkTY9KY8K9fvS6zObIAeOoxQet1LuivQffQ46EM
+         bbTsOdSHwWIZw==
+Received: by mail-lj1-f177.google.com with SMTP id z42so19619406ljq.13;
+        Wed, 22 Mar 2023 09:51:25 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXiQIdWoaIUm6D1LHWSs0rsHr4mhsfnW5/1AVIN4L9hRBSp9nGy
+        od28zQNWVI+kL/8T9b9xSaSlk4qPQFsS5lRw0Q==
+X-Google-Smtp-Source: AK7set/Nxa14TE9o0KQWv+emcZPWRAYwWy2WPZI53bEe9owida1TfXWTT2bMHIbAdLTtnJOH/QRwHHJ+in1FHkctNRU=
+X-Received: by 2002:a2e:901a:0:b0:299:aa7a:94c8 with SMTP id
+ h26-20020a2e901a000000b00299aa7a94c8mr2204792ljg.10.1679503883593; Wed, 22
+ Mar 2023 09:51:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: mkq9JCy9hJCyG5xSvx8VijlZbo0oKhb7
-X-Proofpoint-GUID: mkq9JCy9hJCyG5xSvx8VijlZbo0oKhb7
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230321121859.2355-1-nancy.lin@mediatek.com>
+In-Reply-To: <20230321121859.2355-1-nancy.lin@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Thu, 23 Mar 2023 00:51:11 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-XSBDZqo5jPgq+kP3sQrGnSR9Srhq5asu0QyDOeUoSOA@mail.gmail.com>
+Message-ID: <CAAOTY_-XSBDZqo5jPgq+kP3sQrGnSR9Srhq5asu0QyDOeUoSOA@mail.gmail.com>
+Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org, Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        clang-built-linux@googlegroups.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        singo.chang@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently issuing a sdw_nread/nwrite_no_pm across a page boundary
-will silently fail to write correctly as nothing updates the page
-registers, meaning the same page of the chip will get rewritten
-with each successive page of data.
+Hi, Nancy:
 
-As the sdw_msg structure contains page information it seems
-reasonable that a single sdw_msg should always be within one
-page. It is also mostly simpler to handle the paging at the
-bus level rather than each master having to handle it in their
-xfer_msg callback.
+Nancy.Lin <nancy.lin@mediatek.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=8821=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:19=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> The hardware path of vdosys1 with DPTx output need to go through by sever=
+al modules, such as, OVL_ADAPTOR and MERGE.
 
-As such add handling to the bus code to split up a transfer into
-multiple sdw_msg's when they go across page boundaries.
+For this series, applied to mediatek-drm-next [1], thanks.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
 
-Changes since v1:
- - Switch from min to min_t to avoid the build issues on MIPs/i386
- - Added comments to the kernel doc to say that large transactions will
-   be broken up.
+Regards,
+Chun-Kuang.
 
-Thanks,
-Charles
-
- drivers/soundwire/bus.c | 63 +++++++++++++++++++++++++----------------
- 1 file changed, 39 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index f1ffb8e0839dd..e157a39a82ce5 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -386,27 +386,46 @@ int sdw_fill_msg(struct sdw_msg *msg, struct sdw_slave *slave,
-  * Read/Write IO functions.
-  */
- 
-+static int sdw_ntransfer_no_pm(struct sdw_slave *slave, u32 addr, u8 flags,
-+			       size_t count, u8 *val)
-+{
-+	struct sdw_msg msg;
-+	size_t size;
-+	int ret;
-+
-+	while (count) {
-+		// Only handle bytes up to next page boundary
-+		size = min_t(size_t, count, (SDW_REGADDR + 1) - (addr & SDW_REGADDR));
-+
-+		ret = sdw_fill_msg(&msg, slave, addr, size, slave->dev_num, flags, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = sdw_transfer(slave->bus, &msg);
-+		if (ret < 0 && !slave->is_mockup_device)
-+			return ret;
-+
-+		addr += size;
-+		val += size;
-+		count -= size;
-+	}
-+
-+	return 0;
-+}
-+
- /**
-  * sdw_nread_no_pm() - Read "n" contiguous SDW Slave registers with no PM
-  * @slave: SDW Slave
-  * @addr: Register address
-  * @count: length
-  * @val: Buffer for values to be read
-+ *
-+ * Note that if the message crosses a page boundary each page will be
-+ * transferred under a separate invocation of the msg_lock.
-  */
- int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
- {
--	struct sdw_msg msg;
--	int ret;
--
--	ret = sdw_fill_msg(&msg, slave, addr, count,
--			   slave->dev_num, SDW_MSG_FLAG_READ, val);
--	if (ret < 0)
--		return ret;
--
--	ret = sdw_transfer(slave->bus, &msg);
--	if (slave->is_mockup_device)
--		ret = 0;
--	return ret;
-+	return sdw_ntransfer_no_pm(slave, addr, SDW_MSG_FLAG_READ, count, val);
- }
- EXPORT_SYMBOL(sdw_nread_no_pm);
- 
-@@ -416,21 +435,13 @@ EXPORT_SYMBOL(sdw_nread_no_pm);
-  * @addr: Register address
-  * @count: length
-  * @val: Buffer for values to be written
-+ *
-+ * Note that if the message crosses a page boundary each page will be
-+ * transferred under a separate invocation of the msg_lock.
-  */
- int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
- {
--	struct sdw_msg msg;
--	int ret;
--
--	ret = sdw_fill_msg(&msg, slave, addr, count,
--			   slave->dev_num, SDW_MSG_FLAG_WRITE, (u8 *)val);
--	if (ret < 0)
--		return ret;
--
--	ret = sdw_transfer(slave->bus, &msg);
--	if (slave->is_mockup_device)
--		ret = 0;
--	return ret;
-+	return sdw_ntransfer_no_pm(slave, addr, SDW_MSG_FLAG_WRITE, count, (u8 *)val);
- }
- EXPORT_SYMBOL(sdw_nwrite_no_pm);
- 
-@@ -566,6 +577,8 @@ EXPORT_SYMBOL(sdw_update);
-  *
-  * This version of the function will take a PM reference to the slave
-  * device.
-+ * Note that if the message crosses a page boundary each page will be
-+ * transferred under a separate invocation of the msg_lock.
-  */
- int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
- {
-@@ -593,6 +606,8 @@ EXPORT_SYMBOL(sdw_nread);
-  *
-  * This version of the function will take a PM reference to the slave
-  * device.
-+ * Note that if the message crosses a page boundary each page will be
-+ * transferred under a separate invocation of the msg_lock.
-  */
- int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
- {
--- 
-2.30.2
-
+>
+> Add DRM and these modules support by the patches below:
+>
+> Changes in v30:
+> - rebase to next-20230321
+> - fix ethdr dt_binding_check message
+>
+> Changes in v29:
+> - rebase to next-20221226
+> - fix reviewer comment in v28
+>   - keep original flow if comp node not found in mtk_drm_crtc_create()
+>
+> Changes in v28:
+> - rebase to next-20221107
+> - fix reviewer comment in v27
+>   - extra new line at the end mtk_ethdr.h
+>
+> Changes in v27:
+> - rebase to next-20221102
+> - change mmsys compatible for mt8195 vdosys1
+>   - base on jason's series[ref 1]
+> - fix reviewer comment
+>   - add error return code if no ovl_adaptor's comp found
+>
+> Changes in v26:
+> - rebase to next-20220819
+> - resend for patch corrupted in v25
+>
+> Changes in v25:
+> - rebase to next-20220803
+>
+> Changes in v24:
+> - fix ovl_adaptor binding issue (mtk_disp_ovl_adaptor.c)
+>   - Since ovl_adaptor is an aggregated component, it should be bounded af=
+ter
+>     all its child components are bounded.
+> - rebase to next-20220708
+>
+> Changes in v23:
+> - separate[7] mmsys/mutex and drm patches into two series
+>
+> Changes in v22:
+> - rebase to next-20220525
+> - rebase to vdosys0 series v22
+> - separate dts to a new patch
+>
+> Changes in v21:
+> - fix reviewer comment
+>   - fix rdma and ethdr binding doc and dts
+>
+> Changes in v20:
+> - fix reviewer comment
+>   - update mmsys update bit api name
+>   - add mtk_mmsys_update_bits error message if lose gce property
+>   - list all mt8195 vdosys1 reset bits
+>
+> Changes in v19:
+> - fix reviewer comment
+>   - separate mt8195 mmsys component to a new patch
+>   - separate mt8195 vdo0 and vdo1 routing table
+>   - separate mmsys_write_reg api to a new patch and simplify write reg co=
+de
+>   - separate mmsys 64 bit reset to a new patch
+>   - separate mtk-mutex dp_intf1 component to a new patch
+>
+> Changes in v18:
+> - fix reviewer comment
+>   - fix rdma binding doc
+>   - fix ethdr binding doc
+>   - refine mmsys config cmdq support
+>   - refine merge reset control flow, get reset control in probe function
+>   - add ethdr reset control error handling and remove dbg log
+> - rebase to vdosys0 series v20 (ref [5])
+>
+> Changes in v17:
+> - fix reviewer comment in v16
+>   - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
+>   - separate mmsys config API
+>   - move mdp_rdma binding yaml
+> - fix ovl adaptor pm runtime get sync timing issue
+> - rebase to vdosys0 series v19 (ref [5])
+> - rebase to [7] for modify vblank register change
+>
+> Changes in v16:
+> - fix reviewer comment in v 15
+>   - fix mtk_drm_ddp_comp.c alignment
+>   - fix vdosys0 mmsys num before adding vdosys1 patch
+>
+> Changes in v15:
+> - fix ethdr uppercase hex number in dts
+>
+> Changes in v14:
+> - remove MTK_MMSYS 64 bit dependency
+> - add ethdr.yaml back and fix dt_schema check fail
+>
+> Resend v13
+> - add related maintainer in maillist
+>
+> Changes in v13:
+> - fix reviewer comment in v12
+>   - fix rdma dt-binding format
+>   - fix dts node naming
+> - fix 32 bit build error
+>   - modify 64bit dependency for mtk-mmsys
+> - rebase to vdosys0 series v16. (ref [5])
+>
+> Changes in v12:
+> - fix reviewer comment in v11
+>   - modify mbox index
+>   - refine dma dev for ovl_adaptor sub driver
+>
+> Changes in v11:
+> - remove ethdr vblank spin lock
+> - refine ovl_adaptor print message
+>
+> Changes in v10:
+> - refine ethdr reset control using devm_reset_control_array_get_optional_=
+exclusive
+> - fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
+>
+> Changes in v9:
+> - rebase on kernel-5.16-rc1
+> - rebase on vdosys0 series v13. (ref [5])
+> - fix ovl_adaptor sub driver is brought up unintentionally
+> - fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup=
+_module symbol issue
+>
+> Changes in v8:
+> - separate merge async reset to new patch.
+> - separate drm ovl_adaptor sub driver to new patch.
+> - fix reviewer comment in v7.
+>
+> Changes in v7:
+> - rebase on vdosys0 series v12 (ref[5])
+> - add dma description in ethdr binding document.
+> - refine vdosys1 bit definition of mmsys routing table.
+> - separate merge modification into 3 pathces.
+> - separate mutex modification into 2 patches.
+> - add plane color coding for mdp_rdma csc.
+> - move mdp_rdma pm control to ovl_adaptor.
+> - fix reviewer comment in v6.
+>
+> Changes in v6:
+> - rebase on kernel-5.15-rc1.
+> - change mbox label to gce0 for dts node of vdosys1.
+> - modify mmsys reset num for mt8195.
+> - rebase on vdosys0 series v10. (ref [5])
+> - use drm to bring up ovl_adaptor driver.
+> - move drm iommu/mutex check from kms init to drm bind.
+> - modify rdma binding doc location. (Documentation/devicetree/bindings/ar=
+m/)
+> - modify for reviewer's comment in v5.
+>
+> Changes in v5:
+> - add mmsys reset controller reference.
+>
+> Changes in v4:
+> - use merge common driver for merge1~4.
+> - refine ovl_adaptor rdma driver.
+> - use ovl_adaptor ddp_comp function instead of ethdr.
+> - modify for reviewer's comment in v3.
+>
+> Changes in v3:
+> - modify for reviewer's comment in v2.
+> - add vdosys1 2 pixels align limit.
+> - add mixer odd offset support.
+>
+> Changes in v2:
+> - Merge PSEUDO_OVL and ETHDR into one DRM component.
+> - Add mmsys config API for vdosys1 hardware setting.
+> - Add mmsys reset control using linux reset framework.
+>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+>
+> This series are based on the following patch:
+> [1] Change mmsys compatible for mt8195 mediatek-drm
+>     20221126101220.18179-1-jason-jh.lin@mediatek.com
+>
+> Nancy.Lin (7):
+>   dt-bindings: mediatek: add ethdr definition for mt8195
+>   drm/mediatek: add ETHDR support for MT8195
+>   drm/mediatek: add ovl_adaptor support for MT8195
+>   drm/mediatek: add dma dev get function
+>   drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
+>   drm/mediatek: add drm ovl_adaptor sub driver for MT8195
+>   drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
+>
+>  .../display/mediatek/mediatek,ethdr.yaml      | 182 ++++++
+>  drivers/gpu/drm/mediatek/Makefile             |   2 +
+>  drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
+>  .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 533 ++++++++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  85 ++-
+>  drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 129 +++--
+>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 366 ++++++++----
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  24 +-
+>  drivers/gpu/drm/mediatek/mtk_ethdr.c          | 370 ++++++++++++
+>  drivers/gpu/drm/mediatek/mtk_ethdr.h          |  25 +
+>  12 files changed, 1618 insertions(+), 188 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/me=
+diatek,ethdr.yaml
+>  create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+>  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
+>  create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
+>
+> --
+> 2.18.0
+>
