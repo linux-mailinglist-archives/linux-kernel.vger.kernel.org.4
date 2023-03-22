@@ -2,213 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9716C46EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A16C46EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjCVJs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S230219AbjCVJtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCVJs3 (ORCPT
+        with ESMTP id S229937AbjCVJsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:48:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBE49755;
-        Wed, 22 Mar 2023 02:48:02 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M9OrKs025525;
-        Wed, 22 Mar 2023 09:47:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=7Ack44PB3zTTbzytb5hEniJhenc7E3k7ShJ83XU9AFs=;
- b=cAGnV2rdW112EV2xjo0TNQO5aE3AMq39Ipo+MmBNhazIJcOZJsuvmzzgMTcNSDkkZqR4
- pJAa8d4Dz+7B6ks3UpOLFXvblBqzW408iBVlnMKBR2c3jj5+9TDJ7fgJtc5JafsvV/tC
- q02On1zEeprVQg+c4kDg1sARkFSloTtxHxWsmbDWOT40uVJvs7bknpgIkJTcr5GurmP5
- Ib6R0iHUDavluucIRI5bH6ODDf5UulGmvRAR5EPRwbKSFaf0S2iXPV7N9qtZZGoQ/Svb
- su8DhHtMtA+rM/+KjeSU/KWAZbtoIQU5TpiUbCAVoZKaOnxqWeZlknDPTYTo6ltDC0qI tA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfy0y8ed6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 09:47:43 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32M9OmRU025302;
-        Wed, 22 Mar 2023 09:47:42 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfy0y8ec7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 09:47:42 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32M2erQr001485;
-        Wed, 22 Mar 2023 09:47:40 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pd4x6cs38-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 09:47:40 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32M9la6p43188512
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Mar 2023 09:47:36 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7F5C2004E;
-        Wed, 22 Mar 2023 09:47:36 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 629DA2004B;
-        Wed, 22 Mar 2023 09:47:36 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 09:47:36 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, acme@redhat.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: [Ping PATCH] perf/test: Fix wrong size for perf test Setup struct perf_event_attr
-Date:   Wed, 22 Mar 2023 10:47:31 +0100
-Message-Id: <20230322094731.1768281-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 22 Mar 2023 05:48:36 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C647E057
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:48:08 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id dw14so5299442pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1679478487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dZEyT76Ylx2LDLESLuMJ9Z9uXe1CrK9nrJ2/iOxcF3k=;
+        b=cUpYMCgv693QwatWKzixshCxoQSXuGYbKMfagpOIe2xjTr527/GRXi5Y3k7LYnU/G0
+         YAL+P3mh6cy0Rzf1ZsnNGpzJvqqVzN6MnL+SykExahAlwBUIZxEQCCH+2TQaEwZK516J
+         q+96h+khT2gmMTR6VndB9edDUPJlyExOxdW3Q63h8eVGqhsnat+KpIHMMmPyMp/y3+FD
+         sw5GxIIwIdTnL34J8ntohBTu9RFZnwyIwnF3KrBIcSRo35Cci8yvIZHxYfpvsR9ZWXoB
+         mbtCnfOB2WOhDmEmDZ3B3bdeZe3HU/SwKVprnfk2Lno5JrVZO65m5wCkDfGygKJwCI5I
+         b8fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679478487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dZEyT76Ylx2LDLESLuMJ9Z9uXe1CrK9nrJ2/iOxcF3k=;
+        b=CfDuTWnL7g/XaVa22Fgz1Yr/PTn7XPpXKZUQvbNC37kCs7vmdUkSQwiF5580Ue05U6
+         VulHRtcO17bY9DDZhCrVi8uZl94bgf1grEYYEKJ55O21WL5hhmwwDLorOB4tCr2bF8hm
+         iWj4cXK397z99/gUZ5U5hdneS8yYFluTPq/M+nU+shx/IrkykFNQ48x5Fu2rtq/XLhii
+         tfOagYD1rTLSYeQgeqlVbrb+L9kTkWuibPnK5TU+tB8H6/TknKBU9+9ZyzGyjnGUmei/
+         zdxrJzrzsVRk1e79B3gG3Al9Ir8hNU5PviquOvJt+/z7Xq/YUWZOk9ibnA0JU+nGa2on
+         dquA==
+X-Gm-Message-State: AO0yUKUMFrgVmWowdNE6VUySlJMUx1gUvmUjmpGvt0JJ+aYMmyYPSZaP
+        xpXDYmOZllkSeTtpnyKKL8brIsd3Vm9B2C06Rl2skQ==
+X-Google-Smtp-Source: AK7set8rmLxVv8cvbcKDum0lwgAjtZhOiGkHbf48mP790E8TYykdbByLbiDDHOYVKTO8PvitCOxUUTo9s28a2/+2L5Y=
+X-Received: by 2002:a65:50c5:0:b0:503:3747:cea3 with SMTP id
+ s5-20020a6550c5000000b005033747cea3mr602429pgp.10.1679478487341; Wed, 22 Mar
+ 2023 02:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oBv38gsgOCrgTPqOKrgCyAVsoBVza19j
-X-Proofpoint-ORIG-GUID: j1v-wpUGbGS7pVQuZlsQLFK087frg8wi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_06,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- bulkscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220070
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230307220553.631069-1-jaz@semihalf.com> <20230307164158.4b41e32f.alex.williamson@redhat.com>
+ <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+ <20230308104944.578d503c.alex.williamson@redhat.com> <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+ <20230308130619.3736cf18.alex.williamson@redhat.com> <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
+ <20230308163803.6bfc2922.alex.williamson@redhat.com> <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
+In-Reply-To: <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Wed, 22 Mar 2023 10:47:56 +0100
+Message-ID: <CAH76GKMVquX7eLoGYtwMo06ar0dE9J3LtJEnYJKY0-3X5XFwow@mail.gmail.com>
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the user-space
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Dominik Behr <dbehr@google.com>, Dominik Behr <dbehr@chromium.org>,
+        linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        upstream@semihalf.com, dtor@google.com, jgg@ziepe.ca,
+        kevin.tian@intel.com, cohuck@redhat.com, abhsahu@nvidia.com,
+        yishaih@nvidia.com, yi.l.liu@intel.com, kvm@vger.kernel.org,
+        libvir-list@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test case ./perf test 'Setup struct perf_event_attr' fails.
-On s390 this output is observed:
+Hi Alex
 
- # ./perf test -Fvvvv 17
- 17: Setup struct perf_event_attr                                    :
- --- start ---
- running './tests/attr/test-stat-C0'
- Using CPUID IBM,8561,703,T01,3.6,002f
- .....
- Event event:base-stat
-      fd = 1
-      group_fd = -1
-      flags = 0|8
-      cpu = *
-      type = 0
-      size = 128     <<<--- wrong, specified in file base-stat
-      config = 0
-      sample_period = 0
-      sample_type = 65536
-      ...
- 'PERF_TEST_ATTR=/tmp/tmpgw574wvg ./perf stat -o \
-	/tmp/tmpgw574wvg/perf.data -e cycles -C 0 kill >/dev/null \
-	2>&1 ret '1', expected '1'
-  loading result events
-    Event event-0-0-4
-      fd = 4
-      group_fd = -1
-      cpu = 0
-      pid = -1
-      flags = 8
-      type = 0
-      size = 136     <<<--- actual size used in system call
-      .....
-  compare
-    matching [event-0-0-4]
-      to [event:base-stat]
-      [cpu] 0 *
-      [flags] 8 0|8
-      [type] 0 0
-      [size] 136 128
-    ->FAIL
-    match: [event-0-0-4] matches []
-  expected size=136, got 128
-  FAILED './tests/attr/test-stat-C0' - match failure
+Could you please refer to my previous message?
 
-This mismatch is caused by
-commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-which enlarges the structure perf_event_attr by 8 bytes.
+Thank you in advance,
+Grzegorz
 
-Fix this by adjusting the expected value of size.
-
-Output after:
- # ./perf test -Fvvvv 17
- 17: Setup struct perf_event_attr                                    :
- --- start ---
- running './tests/attr/test-stat-C0'
- Using CPUID IBM,8561,703,T01,3.6,002f
- ...
-  matched
-  compare
-    matching [event-0-0-4]
-      to [event:base-stat]
-      [cpu] 0 *
-      [flags] 8 0|8
-      [type] 0 0
-      [size] 136 136
-      ....
-   ->OK
-   match: [event-0-0-4] matches ['event:base-stat']
- matched
-
-Fixes: 09519ec3b19e ("perf: Add perf_event_attr::config3")
-
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/tests/attr/base-record       | 2 +-
- tools/perf/tests/attr/base-stat         | 2 +-
- tools/perf/tests/attr/system-wide-dummy | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
-index 3ef07a12aa14..27c21271a16c 100644
---- a/tools/perf/tests/attr/base-record
-+++ b/tools/perf/tests/attr/base-record
-@@ -5,7 +5,7 @@ group_fd=-1
- flags=0|8
- cpu=*
- type=0|1
--size=128
-+size=136
- config=0
- sample_period=*
- sample_type=263
-diff --git a/tools/perf/tests/attr/base-stat b/tools/perf/tests/attr/base-stat
-index 408164456530..a21fb65bc012 100644
---- a/tools/perf/tests/attr/base-stat
-+++ b/tools/perf/tests/attr/base-stat
-@@ -5,7 +5,7 @@ group_fd=-1
- flags=0|8
- cpu=*
- type=0
--size=128
-+size=136
- config=0
- sample_period=0
- sample_type=65536
-diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
-index 8fec06eda5f9..2f3e3eb728eb 100644
---- a/tools/perf/tests/attr/system-wide-dummy
-+++ b/tools/perf/tests/attr/system-wide-dummy
-@@ -7,7 +7,7 @@ cpu=*
- pid=-1
- flags=8
- type=1
--size=128
-+size=136
- config=9
- sample_period=4000
- sample_type=455
--- 
-2.39.1
-
+czw., 9 mar 2023 o 14:41 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=C5=82(=
+a):
+>
+> czw., 9 mar 2023 o 00:38 Alex Williamson <alex.williamson@redhat.com>
+> napisa=C5=82(a):
+> >
+> > On Wed, 8 Mar 2023 14:44:28 -0800
+> > Dominik Behr <dbehr@google.com> wrote:
+> >
+> > > On Wed, Mar 8, 2023 at 12:06=E2=80=AFPM Alex Williamson
+> > > <alex.williamson@redhat.com> wrote:
+> > > >
+> > > > On Wed, 8 Mar 2023 10:45:51 -0800
+> > > > Dominik Behr <dbehr@chromium.org> wrote:
+> > > >
+> > > > > It is the same interface as other ACPI events like AC adapter LID=
+ etc
+> > > > > are forwarded to user-space.
+> > > > >  ACPI events are not particularly high frequency like interrupts.
+> > > >
+> > > > I'm not sure that's relevant, these interfaces don't proclaim to
+> > > > provide isolation among host processes which manage behavior relati=
+ve
+> > > > to accessories.  These are effectively system level services.  It's=
+ only
+> > > > a very, very specialized use case that places a VMM as peers among =
+these
+> > > > processes.  Generally we don't want to grant a VMM any privileges b=
+eyond
+> > > > what it absolutely needs, so letting a VMM managing an assigned NIC
+> > > > really ought not to be able to snoop host events related to anythin=
+g
+> > > > other than the NIC.
+> > > How is that related to the fact that we are forwarding VFIO-PCI event=
+s
+> > > to netlink? Kernel does not grant any privileges to VMM.
+> > > There are already other ACPI events on netlink. The implementer of th=
+e
+> > > VMM can choose to allow VMM to snoop them or not.
+> > > In our case our VMM (crosvm) does already snoop LID, battery and AC
+> > > adapter events so the guest can adjust its behavior accordingly.
+> > > This change just adds another class of ACPI events that are forwarded
+> > > to netlink.
+> >
+> > That's true, it is the VMM choice whether to allow snooping netlink,
+> > but this is being proposed as THE solution to allow VMMs to receive
+> > ACPI events related to vfio assigned devices.  If the solution
+> > inherently requires escalating the VMM privileges to see all netlink
+> > events, that's a weakness in the proposal.  As noted previously,
+> > there's also no introspection here, the VMM can't know whether it
+> > should listen to netlink for ACPI events or include AML related to a
+> > GPE for the device.  It cannot determine if either the kernel supports
+> > this feature or if the device has an ACPI companion that can generate
+> > these events.
+>
+> To be precise the VMM doesn't listen to all netlink events: it listens
+> only to "acpi_event" family and acpi related multicast group, which
+> means it listens to all events generated through
+> acpi_bus_generate_netlink_event.
+>
+> Before sending this patch I thought about using eventfd instead
+> netalink which will actually provide a channel associated with a given
+> device and therefore such notifications will be received only by the
+> VMM associated with such a device. Nevertheless, it seems like eventfd
+> will allow to signalize events happening (notify on a given device)
+> but is not capable of sending any payload so in our case there is no
+> room for propagating notification value via eventfd. Maybe there is
+> other mechanism eventfd-like which will allow to achieve above?
+>
+> If there is no such mechanism, maybe instead of using existing acpi
+> netlink events, which are associated with "acpi_event" netlink family
+> and acpi multicast group, we could create per vfio-pci a different
+> netlink family or probably reuse "acpi_event" family but use different
+> multicast group, so each device will have dedicated netlink family.
+> Does it seem reasonable?
+>
+> >
+> > > >
+> > > > > > > > What sort of ACPI events are we expecting to see here and w=
+hat does user space do with them?
+> > > > > The use we are looking at right now are D-notifier events about t=
+he
+> > > > > GPU power available to mobile discrete GPUs.
+> > > > > The firmware notifies the GPU driver and resource daemon to
+> > > > > dynamically adjust the amount of power that can be used by the GP=
+U.
+> > > > >
+> > > > > > The proposed interface really has no introspection, how does th=
+e VMM
+> > > > > > know which devices need ACPI tables added "upfront"?  How do th=
+ese
+> > > > > > events factor into hotplug device support, where we may not be =
+able to
+> > > > > > dynamically inject ACPI code into the VM?
+> > > > >
+> > > > > The VMM can examine PCI IDs and the associated firmware node of t=
+he
+> > > > > PCI device to figure out what events to expect and what ACPI tabl=
+e to
+> > > > > generate to support it but that should not be necessary.
+> > > >
+> > > > I'm not entirely sure where your VMM is drawing the line between th=
+e VM
+> > > > and management tools, but I think this is another case where the
+> > > > hypervisor itself should not have privileges to examine the host
+> > > > firmware tables to build its own.  Something like libvirt would be
+> > > > responsible for that.
+> > > Yes, but that depends on the design of hypervisor and VMM and is not
+> > > related to this patch.
+> >
+> > It is very much related to this patch if it proposes an interface to
+> > solve a problem which is likely not compatible with the security model
+> > of other VMMs.  We need a single solution to support all VMMs.
+> >
+> > > >
+> > > > > A generic GPE based ACPI event forwarder as Grzegorz proposed can=
+ be
+> > > > > injected at VM init time and handle any notification that comes l=
+ater,
+> > > > > even from hotplug devices.
+> > > >
+> > > > It appears that forwarder is sending the notify to a specific ACPI
+> > > > device node, so it's unclear to me how that becomes boilerplate AML
+> > > > added to all VMs.  We'll need to notify different devices based on
+> > > > different events, right?
+> > > Valid point. The notifications have a "scope" ACPI path.
+> > > In my experience these events are consumed without looking where they
+> > > came from but I believe the patch can be extended to
+> > > provide ACPI path, in your example "_SB.PCI0.GPP0.PEGP" instead of
+> > > generic vfio_pci which VMM could use to translate an equivalent ACPI
+> > > path in the guest and pass it to a generic ACPI GPE based notifier vi=
+a
+> > > shared memory. Grzegorz could you chime in whether that would be
+> > > possible?
+> >
+> > So effectively we're imposing the host ACPI namespace on the VM, or at
+> > least a mapping between the host and VM namespace?  The generality of
+> > this is not improving.
+>
+> Yes, in the example VMM implementation we have mapping between the
+> host pci device address and guest pci device. Therefore VMM knows,
+> based on device name (BDF) sent via netlink, to which guest device
+> this notification should be propagated. The boilerplate AML is added
+> to each vfio-pci device which belongs to VMM and each vfio-pci device
+> has associated pre-allocated GPE so the VMM knows which GPE should be
+> triggered to replicate notification for a given device. BTW this is
+> only current WIP VMM implementation - this could probably be optimized
+> if needed.
+>
+> Handling hotplug devices is more problematic. I see that the kernel
+> provides some runtime ACPI patching mechanism:
+> https://www.kernel.org/doc/html/latest/firmware-guide/acpi/method-customi=
+zing.html
+> (which I never tried) but not even sure how VMM could take advantage
+> of it. BTW this realized me that the same problem with hotplug applies
+> to other vfio-pci use-cases e.g. runtime PM, which relies on guest
+> virtual ACPI method:
+> https://patchwork.kernel.org/project/linux-pm/patch/20220829114850.4341-5=
+-abhsahu@nvidia.com/.
+> Generating virtual ACPI content for hotplug devices seems like a more
+> generic issue.
+>
+> >
+> > > > > > The acpi_bus_generate_netlink_event() below really only seems t=
+o form a
+> > > > > > u8 event type from the u32 event.  Is this something that could=
+ be
+> > > > > > provided directly from the vfio device uAPI with an ioeventfd, =
+thus
+> > > > > > providing introspection that a device supports ACPI event notif=
+ications
+> > > > > > and the ability for the VMM to exclusively monitor those events=
+, and
+> > > > > > only those events for the device, without additional privileges=
+?
+> > > > >
+> > > > > From what I can see these events are 8 bit as they come from ACPI=
+.
+> > > > > They also do not carry any payload and it is up to the receiving
+> > > > > driver to query any additional context/state from the device.
+> > > > > This will work the same in the VM where driver can query the same
+> > > > > information from the passed through PCI device.
+> > > > > There are multiple other netflink based ACPI events forwarders wh=
+ich
+> > > > > do exactly the same thing for other devices like AC adapter, lid/=
+power
+> > > > > button, ACPI thermal notifications, etc.
+> > > > > They all use the same mechanism and can be received by user-space
+> > > > > programs whether VMMs or others.
+> > > >
+> > > > But again, those other receivers are potentially system services, n=
+ot
+> > > > an isolated VM instance operating in a limited privilege environmen=
+t.
+> > > > IMO, it's very different if the host display server has access to l=
+id
+> > > > or power events than it is to allow some arbitrary VM that happens =
+to
+> > > > have an unrelated assigned device that same privilege.
+> > > Therefore these VFIO related ACPI events could be received by a syste=
+m
+> > > service via this netlink event and selectively forwarded to VMM if
+> > > such is a desire of whoever implements the userspace.
+> > > This is outside the scope of this patch. In our case our VMM does
+> > > receive these LID, AC or battery events.
+> >
+> > But this is backwards, we're presupposing the choice to use netlink
+> > based on the convenience of one VMM, which potentially creates
+> > obstacles, maybe even security isolation issues for other VMMs.  The
+> > method of delivering ACPI events to a VMM is very much within the scope
+> > of this proposal.  Thanks,
+> >
+> > Alex
+> >
+>
+> regarding:
+> > > > On my laptop, I see multiple _GPE scopes, each apparently very uniq=
+ue
+> > > > to the devices:
+> > > >
+> > > >    Scope (_GPE)
+> > > >    {
+> > > >        Method (_L0C, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+> > > >        }
+> > > >
+> > > >        Method (_L0D, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Chang=
+e
+> > > >        }
+> > > >
+> > > >        Method (_L0F, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Chang=
+e
+> > > >         }
+> > > >     }
+> > > >
+> > > >     Scope (_GPE)
+> > > >     {
+> > > >         Method (_L19, 0, NotSerialized)  // _Lxx: Level-Triggered G=
+PE, xx=3D0x00-0xFF
+> > > >         {
+> > > >             Notify (\_SB.PCI0.GP17, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GP17.XHC0, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GP17.XHC1, 0x02) // Device Wake
+> > > >             Notify (\_SB.PWRB, 0x02) // Device Wake
+> > > >         }
+> > > >
+> > > >         Method (_L08, 0, NotSerialized)  // _Lxx: Level-Triggered G=
+PE, xx=3D0x00-0xFF
+> > > >         {
+> > > >            Notify (\_SB.PCI0.GP18, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP0, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP1, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP5, 0x02) // Device Wake
+> > > >         }
+> > > >     }
+> > > >
+> > > > At least one more even significantly more extensive, calling method=
+s
+> > > > that interact with OpRegions.  So how does a simple stub of a
+> > > > GPE block replicate this sort of behavior in the host AML?  Thanks,
+>
+> The simple stub of GPE block will work to replicate the ACPI
+> notification only: as mentioned earlier GPE handler will be generated
+> per-vfio device so in your example if let assume that only:
+> - \_SB.PCI0.GPP0.PEGP
+> - \_SB.PCI0.GP17.XHC1
+> will be pass-through to the guest, the generated AML code for VM will
+> look more-less like below:
+>
+>         Scope (_GPE)
+>         {
+>             Method (_E00, 0, NotSerialized)
+>             {
+>                 Local0 =3D  \_SB.PCI0.GPP0.PEGP.NOTY
+>                 Notify ( \_SB.PCI0.GPP0.PEGP, Local0)
+>             }
+>         }
+>         Scope (_GPE)
+>         {
+>             Method (_E01, 0, NotSerialized)
+>             {
+>                 Local0 =3D\_SB.PCI0.GP17.XHC1.NOTY
+>                 Notify (\_SB.PCI0.GP17.XHC1, Local0)
+>             }
+>         }
+>
+> So each pass-through device will have associated GPE (0 for
+> \_SB.PCI0.GPP0.PEGP and 1 for \_SB.PCI0.GP17.XHC1). The path in Notify
+> could actually be different and related to guest pci hierarchy (but
+> associated to those host devices). Please also note that in this case
+> we use GPE in order to "inform" guest about notification coming and we
+> do not try to replicate host GPE scope description.
+>
+> Above we assumed that other devices (like \_SB.PCI0.GPP0/1) are not
+> pass-through to the guest and notification are handled in host as
+> usual (they are not binded to pci-vfio) and there is no need to
+> generate AML code, allocate GPE for them and so on.
+>
+> Thank you,
+> Grzegorz
