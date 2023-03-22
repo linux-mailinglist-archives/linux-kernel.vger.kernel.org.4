@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7175F6C505C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2973D6C5061
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjCVQTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        id S229624AbjCVQU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCVQT3 (ORCPT
+        with ESMTP id S229436AbjCVQU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:19:29 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131056E96;
-        Wed, 22 Mar 2023 09:19:27 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MBnQJ3007798;
-        Wed, 22 Mar 2023 16:19:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=emt2nFclvijCJPmzUPqyfZAG/M+5FrVGUpsJxVKKHuI=;
- b=DuWkTse+FJMx1qKG1XCwsJTKpdn8sc2nXX0Ki1510MQ+8wwZecExtR/91q6MShFvklhP
- 4UvWmPTRFbXpTYOYwUjriKkDFC7ucu3E4/JTBAbjOKRSRET66YnQ93g/bI4BtgfXGyQk
- BFVNe6OtKbBlcqNvGmJfLYvblU4l3zavclzDwguiPkrzyARMOKFdydZVmMndUwpHoi5f
- Xp0hWbKdbSr1DBmfHV08jtBJ7sUkcawveuOTP+h6DLGK+WaXL3PH7icoRRxNRCj6qToO
- q7KURp4sQANSmU00shaIrfz0Rs5vioxqwr0cuRQ5xe7MQjxaNcrSYS8wAIv06M7XZYi8 og== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfhnv2p1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 16:19:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MGJMrd020204
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 16:19:22 GMT
-Received: from [10.50.28.236] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Mar
- 2023 09:19:17 -0700
-Message-ID: <52967ff4-0ca7-463e-1b62-df455584f199@quicinc.com>
-Date:   Wed, 22 Mar 2023 21:49:14 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V3 0/5] Add APSS clock driver support for IPQ5332
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
-References: <20230217083308.12017-1-quic_kathirav@quicinc.com>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <20230217083308.12017-1-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3LcisabJFNk_pKSgd78I04FWdTR_z4Ya
-X-Proofpoint-ORIG-GUID: 3LcisabJFNk_pKSgd78I04FWdTR_z4Ya
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_13,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=837 clxscore=1011 mlxscore=0 phishscore=0 bulkscore=0
- malwarescore=0 spamscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220115
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        Wed, 22 Mar 2023 12:20:26 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2627C4495
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:20:24 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5446a91c40cso193374807b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679502023;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gW+4nkrtvrpqD1DYdSpd9Q5E1HZhIqm3BROgAyQCa7U=;
+        b=M8w/J5hwKrNpQJt4fou1FrsYAMsyxUuW7NVIZQGfzfyw3hUNoJHvatMCnH0lwXWjND
+         jitzGv7U/0Vz8ipDuUdWaYJ1SJO6/xoEpainNpchrKP2S2VBgXnaKIE3n2Xb4V/HhyF9
+         cRQ2NiI6AqWFIYWBhFMMnvv4LqGhbDW4+8UBHw5/nXG3lhhdRcc8DROeTupXkN8gjgCI
+         VagMCsjvT61O3Uyxqqfx4vFBlZ9VEHwic2PQ35DTVTubGiHUeQIvKTPm6lP2oMa8Dxwy
+         fpuqfJqugXRPPnboBvYnqOYYhPr0rfFN/jSAbqHbS7B/EnFuu0BO3VFLcXjgIzQym5gc
+         TbYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679502023;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gW+4nkrtvrpqD1DYdSpd9Q5E1HZhIqm3BROgAyQCa7U=;
+        b=36IpBe1igQN5H0g38TVk6UZWhoTd5XCXMl3nfQXEbFq53elVfKYM/L63i5VzhnjOS8
+         PS1eFWwBTUeTY4fyRY0WYY6ZzCRXe/jxgKew02wQT4BHu2TT2smeHCfbV47YEpN3GhRi
+         xRFE33ETbuwQ9hTuEdVYRk/iyQzIse67EzJc+QiAF5Rtlre70Ilq/xXlqPlvGwV9JFwf
+         0wJHEU0OzSXBHPKjHExQwgkx84E+SyRvOMdrsi3fwHWbajH/Fou+KMFyoudziaC3Pt3N
+         WALE8y9G/bR5ibNePEvZafFmc79Pt1cDIvydpzfkbgI3EdiAbPXb2MdQFrcQ699ognXV
+         4rLw==
+X-Gm-Message-State: AAQBX9croB8OwhKVzqdQtt+ebzMtCOgO68kyfe9iPt3Od2LsG7tx1zop
+        MYvzyaLQwXq7cpRlO1r4F7iZ9vKXnOo=
+X-Google-Smtp-Source: AKy350bSMJy9P0JW71a8nrVsm2ruBEsdB6aubGOIi2r2ruMX0d/JVOnKBvzZTJIc0F5aif7z4y4sA664j3I=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:688:b0:b6e:850b:77d3 with SMTP id
+ i8-20020a056902068800b00b6e850b77d3mr284207ybt.0.1679502023402; Wed, 22 Mar
+ 2023 09:20:23 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 09:20:21 -0700
+In-Reply-To: <20230320185110.1346829-1-jpiotrowski@linux.microsoft.com>
+Mime-Version: 1.0
+References: <20230320185110.1346829-1-jpiotrowski@linux.microsoft.com>
+Message-ID: <ZBsqxeRDh+iV8qmm@google.com>
+Subject: Re: [PATCH] KVM: SVM: Flush Hyper-V TLB when required
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,51 +69,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 20, 2023, Jeremi Piotrowski wrote:
+> ---
+>  arch/x86/kvm/kvm_onhyperv.c | 23 +++++++++++++++++++++++
+>  arch/x86/kvm/kvm_onhyperv.h |  5 +++++
+>  arch/x86/kvm/svm/svm.c      | 18 +++++++++++++++---
+>  3 files changed, 43 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/kvm_onhyperv.c b/arch/x86/kvm/kvm_onhyperv.c
+> index 482d6639ef88..036e04c0a161 100644
+> --- a/arch/x86/kvm/kvm_onhyperv.c
+> +++ b/arch/x86/kvm/kvm_onhyperv.c
+> @@ -94,6 +94,29 @@ int hv_remote_flush_tlb(struct kvm *kvm)
+>  }
+>  EXPORT_SYMBOL_GPL(hv_remote_flush_tlb);
+>  
+> +void hv_flush_tlb_current(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
+> +	hpa_t root_tdp = vcpu->arch.mmu->root.hpa;
+> +
+> +	if (kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb && VALID_PAGE(root_tdp)) {
+> +		spin_lock(&kvm_arch->hv_root_tdp_lock);
+> +		if (kvm_arch->hv_root_tdp != root_tdp) {
+> +			hyperv_flush_guest_mapping(root_tdp);
+> +			kvm_arch->hv_root_tdp = root_tdp;
 
-On 2/17/2023 2:03 PM, Kathiravan T wrote:
-> This series adds support for the APSS clock to bump the CPU frequency
-> above 800MHz.
->
-> APSS PLL found in the IPQ5332 is of type Stromer Plus. However the
-> existing IPQ targets uses the Huayra PLL. So the driver has to
-> refactored to accommodate the different PLL types. The first patch in
-> the series does the refactoring, which can be independenty merged.
->
-> For the Stromer PLL separate function clk_stromer_pll_configure is
-> introduced, so the 3rd patch in the series depends on the below patch
-> https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
->
-> DTS patch depends on the IPQ5332 baseport series
-> https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
->
-> Changes since V2:
-> 	- Pick up R-b tags and sort the node in DTS
-> 	- V2 can be found at
-> 	   https://lore.kernel.org/linux-arm-msm/20230208042850.1687-1-quic_kathirav@quicinc.com/
->
-> Changes since V1:
-> 	- Dropped the patch 5/6, since the fallback mechanism for compatible
-> 	  is introduced to avoid bloating the of_device_id table
-> 	- V1 can be found at
-> 	  https://lore.kernel.org/linux-arm-msm/20230202145208.2328032-1-quic_kathirav@quicinc.com/
+In a vacuum, accessing kvm_arch->hv_root_tdp in the flush path is wrong.  This
+likely fixes the issues you are seeing because the KVM bug only affects the case
+when KVM is loading a new root (that used to be valid), in which case hv_root_tdp
+is guaranteed to be different.  But KVM should not rely on that behavior, i.e. if
+KVM says flush, then we flush.  There might be scenarios where the flush is
+unnecessary, but those flushes should be elided by the code that knows the flush
+is unnecessary, not in this common code just because the target root is the
+globally shared root.
 
+Somewhat of a moot point, but setting hv_root_tdp to root_tdp is also wrong.  KVM's
+behavior is that hv_root_tdp points at a valid root if and only if all vCPUs share
+said root.  E.g. invoking this when vCPUs have different roots will "corrupt"
+hv_root_tdp and possibly cause a remote flush to do the wrong thing.
 
-Gentle Reminder ...
+> +		}
+> +		spin_unlock(&kvm_arch->hv_root_tdp_lock);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(hv_flush_tlb_current);
+> +
+> +void hv_flush_tlb_all(struct kvm_vcpu *vcpu)
+> +{
+> +	if (WARN_ON_ONCE(kvm_x86_ops.tlb_remote_flush == hv_remote_flush_tlb))
 
+Hmm, looking at the KVM code, AFAICT KVM only enables enlightened_npt_tlb for L1
+(L1 from KVM's perspective) as svm_hv_init_vmcb() is only ever called with vmcb01,
+never with vmcb02.  I don't know if that's intentional, but I do think it means
+KVM can skip the Hyper-V flush for vmcb02 and instead rely on the ASID flush,
+i.e. KVM can do the Hyper-V iff enlightened_npt_tlb is set in the current VMCB.
+And that should continue to work if KVM does ever enabled enlightened_npt_tlb for L2.
 
->
->
-> Kathiravan T (5):
->    clk: qcom: apss-ipq-pll: refactor the driver to accommodate different
->      PLL types
->    dt-bindings: clock: qcom,a53pll: add IPQ5332 compatible
->    clk: qcom: apss-ipq-pll: add support for IPQ5332
->    dt-bindings: mailbox: qcom: add compatible for the IPQ5332 SoC
->    arm64: dts: qcom: ipq5332: enable the CPUFreq support
->
->   .../bindings/clock/qcom,a53pll.yaml           |   1 +
->   .../mailbox/qcom,apcs-kpss-global.yaml        |  18 ++-
->   arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  37 ++++++
->   drivers/clk/qcom/apss-ipq-pll.c               | 116 +++++++++++++++---
->   4 files changed, 147 insertions(+), 25 deletions(-)
->
+> +		hv_remote_flush_tlb(vcpu->kvm);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_flush_tlb_all);
+
+I'd rather not add helpers to the common KVM code.  I do like minimizing the amount
+of #ifdeffery, but defining these as common helpers makes it seem like VMX-on-HyperV
+is broken, i.e. raises the question of why VMX doesn't use these helpers when running
+on Hyper-V.
+
+I'm thinking this?
+
+---
+ arch/x86/kvm/svm/svm.c          | 39 ++++++++++++++++++++++++++++++---
+ arch/x86/kvm/svm/svm_onhyperv.h |  7 ++++++
+ 2 files changed, 43 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 70183d2271b5..ab97fe8f1d81 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3746,7 +3746,7 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+ 	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+ }
+ 
+-static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
++static void svm_flush_tlb_asid(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
+@@ -3770,6 +3770,39 @@ static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+ 		svm->current_vmcb->asid_generation--;
+ }
+ 
++static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
++{
++#if IS_ENABLED(CONFIG_HYPERV)
++	hpa_t root_tdp = vcpu->arch.mmu->root.hpa;
++
++	/*
++	 * When running on Hyper-V with EnlightenedNptTlb enabled, explicitly
++	 * flush the NPT mappings via hypercall as flushing the ASID only
++	 * affects virtual to physical mappings, it does not invalidate guest
++	 * physical to host physical mappings.
++	 */
++	if (svm_hv_is_enlightened_tlb_enabled(vcpu) && VALID_PAGE(root_tdp))
++		hyperv_flush_guest_mapping(root_tdp);
++#endif
++	svm_flush_tlb_asid(vcpu);
++}
++
++static void svm_flush_tlb_all(struct kvm_vcpu *vcpu)
++{
++#if IS_ENABLED(CONFIG_HYPERV)
++	/*
++	 * When running on Hyper-V with EnlightenedNptTlb enabled, remote TLB
++	 * flushes should be routed to hv_remote_flush_tlb() without requesting
++	 * a "regular" remote flush.  Reaching this point means either there's
++	 * a KVM bug or a prior hv_remote_flush_tlb() call failed, both of
++	 * which might be fatal to the the guest.  Yell, but try to recover.
++	 */
++	if (WARN_ON_ONCE(svm_hv_is_enlightened_tlb_enabled(vcpu)))
++		hv_remote_flush_tlb(vcpu->kvm);
++#endif
++	svm_flush_tlb_asid(vcpu);
++}
++
+ static void svm_flush_tlb_gva(struct kvm_vcpu *vcpu, gva_t gva)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -4762,10 +4795,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.set_rflags = svm_set_rflags,
+ 	.get_if_flag = svm_get_if_flag,
+ 
+-	.flush_tlb_all = svm_flush_tlb_current,
++	.flush_tlb_all = svm_flush_tlb_all,
+ 	.flush_tlb_current = svm_flush_tlb_current,
+ 	.flush_tlb_gva = svm_flush_tlb_gva,
+-	.flush_tlb_guest = svm_flush_tlb_current,
++	.flush_tlb_guest = svm_flush_tlb_asid,
+ 
+ 	.vcpu_pre_run = svm_vcpu_pre_run,
+ 	.vcpu_run = svm_vcpu_run,
+diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+index cff838f15db5..d91e019fb7da 100644
+--- a/arch/x86/kvm/svm/svm_onhyperv.h
++++ b/arch/x86/kvm/svm/svm_onhyperv.h
+@@ -15,6 +15,13 @@ static struct kvm_x86_ops svm_x86_ops;
+ 
+ int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
+ 
++static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
++{
++	struct hv_vmcb_enlightenments *hve = &to_svm(vcpu)->vmcb->control.hv_enlightenments;
++
++	return !!hve->hv_enlightenments_control.enlightened_npt_tlb;
++}
++
+ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
+ {
+ 	struct hv_vmcb_enlightenments *hve = &vmcb->control.hv_enlightenments;
+
+base-commit: 50f13998451effea5c5fdc70fe576f8b435d6224
+-- 
+
