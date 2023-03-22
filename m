@@ -2,211 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179516C456E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DA16C4575
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCVIzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S229764AbjCVI5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVIzd (ORCPT
+        with ESMTP id S229459AbjCVI51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:55:33 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523D451F93
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679475332; x=1711011332;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+rm26N75H5kN42G3Mb2Br6Ujuqh6hH59qcWsWoYPxY4=;
-  b=HZ1HPR/KqNRiZk2UAAK1JEeWiJ/aZ7DJK+g5P8peD6IKJCiDDQOMzCD6
-   rwg6FB/O5rwGwFTLMJEdveXj3e0NH6j0fKE6Oqax5m6PtD56ggTjiAFI2
-   74+hOvxmW9cmgyNDpGWgxVUHClPd7W7jEn3cv7xXyOfS4VEHY0C4yzSWI
-   0K6VS8NHnDi4jZqA8Ei+pr7RijfZMPbrws6Idot/WYQBgk/VqGuYbXS9e
-   zGO6wN1ALm71uCId3c3wNGU/kFzKG1ixFAGAH52sZJxc2bBfgRe5lGpjN
-   dvayxPx2OghG8DYpdm9Lq+6j5LNS0zI0X/z3792XEajmIsYahvjWRxAyH
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340699664"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="340699664"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 01:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="712139447"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="712139447"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2023 01:55:30 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peuFl-000D6e-1m;
-        Wed, 22 Mar 2023 08:55:29 +0000
-Date:   Wed, 22 Mar 2023 16:54:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lior Nahmanson <liorna@nvidia.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Raed Salem <raeds@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13:
- sparse: sparse: restricted __be64 degrades to integer
-Message-ID: <202303221650.fdu0dJdI-lkp@intel.com>
+        Wed, 22 Mar 2023 04:57:27 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ADC37550;
+        Wed, 22 Mar 2023 01:57:26 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id v17so3319015oic.5;
+        Wed, 22 Mar 2023 01:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679475446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9R65xRwnP78FkfCIDRDlxuQWuoh+B5jkgUQeHyiYKs4=;
+        b=BzX2g/d/PwKi0WrbKxuspgEu6//KEqZez/h3Z4SUTXP7/jvKJFkby9B9GQO+KTUHsE
+         W65sf9Gy/trXdSt90so1/GOmmoLLZARD4IsKZCkDk2etHFHpArvzQbnFQtnMyl0zJb+d
+         8lMVmbmtH+esaMTP8fetOFOeRstHo8oBCemwCVBxkjMb7N/FqY8AzMSoUsWPeYbGu1lO
+         0PUtqEt3FEOi1IGQQFlnkuPbUYhbVn73y+u/oa8h8rdfPHogNrQPuGYx1I3ZOuGrKFP2
+         8SwuONbBbMSOwB+4qUVYYbU74/bATOlJOTBQ6EXFImNPzwm30PIfpebSvJmL75TiHoKq
+         V8Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679475446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9R65xRwnP78FkfCIDRDlxuQWuoh+B5jkgUQeHyiYKs4=;
+        b=Zl1IL6AuV4YSn4BmDtU3YMsW3ouVdRK+LMgLttaI/Q/ZpP6E7AKd8gd0KaQ14frAAM
+         9HZFV/VYAPrxRYIAEqQRQAFOA9c0m5KiJ+M1BSO0g0VGpshULpiCoUNkSaFLK1OJya0m
+         YDEuKX7mH31AvN5YiNjxvaykw4JnWE/GlWqZUOw/I+5oUD83dhWrr7LR2CNyhR8zdSE8
+         qsy8u/f6betY/IaovizQxB5ryUH2+h+lXCpSfozl/smU3jATUpmemi+3cFZ4dOmJh22T
+         CkYTCl9/FRPvefj3wBYLQShB8IacsGlCvegung46yLBlw/+mdm4bX3b2A7iqKq7GmWGY
+         ghEA==
+X-Gm-Message-State: AO0yUKXuHz7Fcm05b6H24RxQOrBgpK9y7mDPRIAxHc/bagHWm+0ON8JC
+        tun7qnUHcTgao8oKZvM9yZEctH05eUmUcail4XU=
+X-Google-Smtp-Source: AK7set+0gKpKBhnJuNAs/qFQdwquhXaQRSm9yoz9xDZO2H2W0KpJg3sc6xxviuNxkxak1UH7Y50S1EOegHBtt+qnVtg=
+X-Received: by 2002:aca:190a:0:b0:383:c459:1bc with SMTP id
+ l10-20020aca190a000000b00383c45901bcmr778745oii.0.1679475445949; Wed, 22 Mar
+ 2023 01:57:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+ <20230321050034.1431379-2-sergio.paracuellos@gmail.com> <5f295438-8334-d374-2ae6-2a385ffb317d@linaro.org>
+ <CAMhs-H_dSgcPNQVusHWVvztYHptOxSJ_o7G0eU9=M1C7RXdsVw@mail.gmail.com>
+ <ce13ca6c-e61a-d31e-2626-d818a5d0e15e@arinc9.com> <20230321221837.GA1751474-robh@kernel.org>
+ <5f9e9d79-a744-99cf-6a53-bd7342252b46@arinc9.com>
+In-Reply-To: <5f9e9d79-a744-99cf-6a53-bd7342252b46@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 22 Mar 2023 09:57:13 +0100
+Message-ID: <CAMhs-H_r0F=ewQqakzyo=XaUwCOXZACdWTuXZSXpueDy6xp=7g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: clock: add mtmips SoCs system controller
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a1effab7a3a35a837dd9d2b974a1bc4939df1ad5
-commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 net/mlx5e: Add MACsec RX steering rules
-date:   7 months ago
-config: m68k-randconfig-s031-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221650.fdu0dJdI-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
+On Wed, Mar 22, 2023 at 9:36=E2=80=AFAM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.un=
+al@arinc9.com> wrote:
+>
+> On 22.03.2023 01:18, Rob Herring wrote:
+> > On Tue, Mar 21, 2023 at 10:09:59AM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wro=
+te:
+> >> On 21.03.2023 10:00, Sergio Paracuellos wrote:
+> >>> On Tue, Mar 21, 2023 at 7:45=E2=80=AFAM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> On 21/03/2023 06:00, Sergio Paracuellos wrote:
+> >>>>> Adds device tree binding documentation for system controller node p=
+resent
+> >>>>> in Mediatek MIPS and Ralink SOCs. This node is a clock and reset pr=
+ovider
+> >>>>> for the rest of the world. This covers RT2880, RT3050, RT3052, RT33=
+50,
+> >>>>> RT3883, RT5350, MT7620, MT7628 and MT7688 SoCs.
+> >>>>>
+> >>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> >>>>> ---
+> >>>>>    .../bindings/clock/mediatek,mtmips-sysc.yaml  | 65 +++++++++++++=
+++++++
+> >>>>>    1 file changed, 65 insertions(+)
+> >>>>>    create mode 100644 Documentation/devicetree/bindings/clock/media=
+tek,mtmips-sysc.yaml
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmip=
+s-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.=
+yaml
+> >>>>> new file mode 100644
+> >>>>> index 000000000000..f07e1652723b
+> >>>>> --- /dev/null
+> >>>>> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.=
+yaml
+> >>>>> @@ -0,0 +1,65 @@
+> >>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>>>> +%YAML 1.2
+> >>>>> +---
+> >>>>> +$id: http://devicetree.org/schemas/clock/mediatek,mtmips-sysc.yaml=
+#
+> >>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>>>> +
+> >>>>> +title: MTMIPS SoCs System Controller
+> >>>>> +
+> >>>>> +maintainers:
+> >>>>> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> >>>>> +
+> >>>>> +description: |
+> >>>>> +  MediaTek MIPS and Ralink SoCs provides a system controller to al=
+low
+> >>>>> +  to access to system control registers. These registers include c=
+lock
+> >>>>> +  and reset related ones so this node is both clock and reset prov=
+ider
+> >>>>> +  for the rest of the world.
+> >>>>> +
+> >>>>> +  These SoCs have an XTAL from where the cpu clock is
+> >>>>> +  provided as well as derived clocks for the bus and the periphera=
+ls.
+> >>>>> +
+> >>>>> +properties:
+> >>>>> +  compatible:
+> >>>>> +    items:
+> >>>>> +      - enum:
+> >>>>> +          - ralink,mt7620-sysc
+> >>>>
+> >>>> Since you decided to send it before we finish discussion:
+> >>>> NAK - this is already used as mediatek
+> >>>
+> >>> Sorry, there was too much stuff commented so I preferred to clean up
+> >>> all of them while maintaining the compatibles with the ralink prefix
+> >>> instead since that was where the current discussion was at that point=
+.
+> >>>
+> >>>>
+> >>>>> +          - ralink,mt7620a-sysc
+> >>>
+> >>> As I have said, this one exists:
+> >>>
+> >>> arch/mips/ralink/mt7620.c:      rt_sysc_membase =3D
+> >>> plat_of_remap_node("ralink,mt7620a-sysc");
+> >>>
+> >>>
+> >>>>> +          - ralink,mt7628-sysc
+> >>>>
+> >>>> Same here.
+> >>>>
+> >>>>> +          - ralink,mt7688-sysc
+> >>>>
+> >>>> I expect you to check the others.
+> >>>
+> >>> I can change others to mediatek but that would be a bit weird, don't =
+you think?
+> >>
+> >> I've seen some parts of the MTMIPS platform use mediatek compatible st=
+rings
+> >> thanks to Krzysztof pointing them out. I don't like having some parts =
+of the
+> >> MTMIPS platform (pci, mmc, usbphy, etc.) with mediatek compatible stri=
+ng
+> >> while others are ralink.
+> >
+> > That's unfortunate, but again, compatibles are just unique identifiers.
+> > They are only wrong if they aren't unique...
+>
+> Understood. Sergio, please keep the new strings here ralink.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221650.fdu0dJdI-lkp@intel.com/
+So if I have to maintain this as "ralink" I think this patch is ok as
+it is now? If that is the case, I prefer to get Reviewed-by for this
+patch as it is now by Krzysztof or Rob before changing anything in my
+current code.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13: sparse: sparse: restricted __be64 degrades to integer
+>
+> >
+> >> Like Krzysztof said [0], Ralink is now Mediatek, thus there is no conf=
+lict
+> >> and no issues with different vendor used. So I'd rather keep new thing=
+s
+> >> Ralink and gradually change these mediatek strings to ralink.
+> >
+> > So break the ABI multiple times slowly. Again, either you live with
+> > *all* the existing compatible strings or you declare it is fine to brea=
+k
+> > the ABI on these platforms and switch everything at once. Carrying both
+> > strings (in bindings or drivers) and breaking the ABI is lose-lose.
+>
+> If removing the mediatek strings from the drivers and bindings is better
+> than keeping both strings on the drivers except the bindings, which
+> would keep the ABI intact, I'll do the prior and do it all at once.
+>
+> Ar=C4=B1n=C3=A7
 
-vim +1183 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
-
-  1105	
-  1106	static union mlx5e_macsec_rule *
-  1107	macsec_fs_rx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
-  1108			      const struct macsec_context *macsec_ctx,
-  1109			      struct mlx5_macsec_rule_attrs *attrs,
-  1110			      u32 fs_id)
-  1111	{
-  1112		u8 action[MLX5_UN_SZ_BYTES(set_add_copy_action_in_auto)] = {};
-  1113		struct mlx5e_macsec_rx *rx_fs = macsec_fs->rx_fs;
-  1114		struct net_device *netdev = macsec_fs->netdev;
-  1115		struct mlx5_modify_hdr *modify_hdr = NULL;
-  1116		struct mlx5_flow_destination dest = {};
-  1117		struct mlx5e_macsec_tables *rx_tables;
-  1118		union mlx5e_macsec_rule *macsec_rule;
-  1119		struct mlx5e_macsec_rx_rule *rx_rule;
-  1120		struct mlx5_flow_act flow_act = {};
-  1121		struct mlx5e_flow_table *ft_crypto;
-  1122		struct mlx5_flow_handle *rule;
-  1123		struct mlx5_flow_spec *spec;
-  1124		int err = 0;
-  1125	
-  1126		spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
-  1127		if (!spec)
-  1128			return NULL;
-  1129	
-  1130		err = macsec_fs_rx_ft_get(macsec_fs);
-  1131		if (err)
-  1132			goto out_spec;
-  1133	
-  1134		macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
-  1135		if (!macsec_rule) {
-  1136			macsec_fs_rx_ft_put(macsec_fs);
-  1137			goto out_spec;
-  1138		}
-  1139	
-  1140		rx_rule = &macsec_rule->rx_rule;
-  1141		rx_tables = &rx_fs->tables;
-  1142		ft_crypto = &rx_tables->ft_crypto;
-  1143	
-  1144		/* Set bit[31 - 30] macsec marker - 0x01 */
-  1145		/* Set bit[3-0] fs id */
-  1146		MLX5_SET(set_action_in, action, action_type, MLX5_ACTION_TYPE_SET);
-  1147		MLX5_SET(set_action_in, action, field, MLX5_ACTION_IN_FIELD_METADATA_REG_B);
-  1148		MLX5_SET(set_action_in, action, data, fs_id | BIT(30));
-  1149		MLX5_SET(set_action_in, action, offset, 0);
-  1150		MLX5_SET(set_action_in, action, length, 32);
-  1151	
-  1152		modify_hdr = mlx5_modify_header_alloc(macsec_fs->mdev, MLX5_FLOW_NAMESPACE_KERNEL_RX_MACSEC,
-  1153						      1, action);
-  1154		if (IS_ERR(modify_hdr)) {
-  1155			err = PTR_ERR(modify_hdr);
-  1156			netdev_err(netdev, "fail to alloc MACsec set modify_header_id err=%d\n", err);
-  1157			modify_hdr = NULL;
-  1158			goto err;
-  1159		}
-  1160		rx_rule->meta_modhdr = modify_hdr;
-  1161	
-  1162		/* Rx crypto table with SCI rule */
-  1163		macsec_fs_rx_setup_fte(spec, &flow_act, attrs, true);
-  1164	
-  1165		flow_act.modify_hdr = modify_hdr;
-  1166		flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
-  1167				  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
-  1168				  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
-  1169	
-  1170		dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
-  1171		dest.ft = rx_tables->ft_check;
-  1172		rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
-  1173		if (IS_ERR(rule)) {
-  1174			err = PTR_ERR(rule);
-  1175			netdev_err(netdev,
-  1176				   "Failed to add SA with SCI rule to Rx crypto rule, err=%d\n",
-  1177				   err);
-  1178			goto err;
-  1179		}
-  1180		rx_rule->rule[0] = rule;
-  1181	
-  1182		/* Rx crypto table without SCI rule */
-> 1183		if (cpu_to_be64((__force u64)attrs->sci) & ntohs(MACSEC_PORT_ES)) {
-  1184			memset(spec, 0, sizeof(struct mlx5_flow_spec));
-  1185			memset(&dest, 0, sizeof(struct mlx5_flow_destination));
-  1186			memset(&flow_act, 0, sizeof(flow_act));
-  1187	
-  1188			macsec_fs_rx_setup_fte(spec, &flow_act, attrs, false);
-  1189	
-  1190			flow_act.modify_hdr = modify_hdr;
-  1191			flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
-  1192					  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
-  1193					  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
-  1194	
-  1195			dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
-  1196			dest.ft = rx_tables->ft_check;
-  1197			rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
-  1198			if (IS_ERR(rule)) {
-  1199				err = PTR_ERR(rule);
-  1200				netdev_err(netdev,
-  1201					   "Failed to add SA without SCI rule to Rx crypto rule, err=%d\n",
-  1202					   err);
-  1203				goto err;
-  1204			}
-  1205			rx_rule->rule[1] = rule;
-  1206		}
-  1207	
-  1208		return macsec_rule;
-  1209	
-  1210	err:
-  1211		macsec_fs_rx_del_rule(macsec_fs, rx_rule);
-  1212		macsec_rule = NULL;
-  1213	out_spec:
-  1214		kvfree(spec);
-  1215		return macsec_rule;
-  1216	}
-  1217	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+    Sergio Paracuellos
