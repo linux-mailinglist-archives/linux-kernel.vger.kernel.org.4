@@ -2,134 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998026C4804
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53106C4814
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjCVKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S229788AbjCVKrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjCVKqM (ORCPT
+        with ESMTP id S229738AbjCVKrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:46:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52C561532;
-        Wed, 22 Mar 2023 03:45:50 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M6fKKw018927;
-        Wed, 22 Mar 2023 10:45:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=JoR4ofFBD5SydjryKLgZQztpIpJNYifQktMYUmFlUZM=;
- b=NjqVYkx0NUMn4FKhHY1A8PRwtAKktXNOOSdq6qkG2rgvbvOlo94tVhv16MBvJsL0l6dC
- uop6yzo6cj0dlAcbgSTSfiPWyCECvUirnLalIWcvg0EY+T6UrGraAYs1/MOMy2uHvCv8
- H4QHOscIEVw8UjPahnbXRqzPM69RO4zc0qY223VtmR+S6Fwkkf6gbbar0cJqVEatOTxF
- guC6zVuQg95NnxYwhUNZ9xQIbu9kcrQq/DutveE0SKtrjv+Z8f1HwwjlA2fAMqDrOYt9
- UwAcONEMA+VOo3cQq1tMusUy0F5pCXeGEW2M64MtrrwUES9I9KKgQ9bq65IGLRkcGPa5 tg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfhnthweg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:45:39 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MAjdQL012454
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:45:39 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 22 Mar 2023 03:45:33 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v3 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Wed, 22 Mar 2023 16:14:12 +0530
-Message-ID: <fa56426067bf5c3677c0359abf1fd7492d7bb985.1679479634.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1679479634.git.quic_varada@quicinc.com>
-References: <cover.1679479634.git.quic_varada@quicinc.com>
+        Wed, 22 Mar 2023 06:47:17 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802AF61506
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:46:52 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id iw3so18875088plb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679482009;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1i7/ik/z7PzthF0LtcXXLV4glwpiw3jmNHLrvqZUe4=;
+        b=gp9ll4ixIWG02zkDEpUNYehV6ogQBclVEBYQjH8j4GurP2cp19o0LJ2Znt1KOnUH0i
+         gJ/7JT2ZDzNLfl/0R/yA6dBhwBcFVEMmn6VIm25fvaok0CUiEQg9ifBehu6cOHyVVeGI
+         cJQ6PKylpvj0Qdrnt+PLQqgaQrKG+1wcHzq+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679482009;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i1i7/ik/z7PzthF0LtcXXLV4glwpiw3jmNHLrvqZUe4=;
+        b=SoVQ4yiH6RD96RfJALp9V6++WotCRrWyMDU+gfGIxzQSfacIln7mFh5EJxWdGniA+R
+         gBKNWggaj96usfvZ75wwATsYj70DS4HFF0o+IxpaJiqfGlajJ1RyeikpjpP4pQoFbIOj
+         Oc+Tog5L3jbBw3m8cFtZFoJtRTboNciQ7mt30C7ssErvMYOSj+7dD/CO2FP8zmW1dEDA
+         XxjvBL6cw8WDGtxvIz/jCigxs4tBTmQJnhqBbbAHcdPkv4Nkf1qCKLQBQ/88Dqn9EDLC
+         A4cQgl49oO3au1CJZykjoTkAkTaAz45mwm8LPzR53XIYZO21PKdOBSRnzy7YY13KGtdY
+         Eb5A==
+X-Gm-Message-State: AO0yUKUWs4wa/f3XNuWVWMK3YHsmcoCFZYgS48kWer/+KJDbTOg5q4xB
+        JxpNaOFH1rADoCKfkv1X2mj/DA==
+X-Google-Smtp-Source: AK7set9cCkJRlKlnXtH0IY4wVuZRd9EJOJLukMzvzq4+ZoVghave4Wi1qfLWigDe03muVZKKZJcemw==
+X-Received: by 2002:a17:90b:4d83:b0:23f:9a73:c20b with SMTP id oj3-20020a17090b4d8300b0023f9a73c20bmr3074236pjb.18.1679482008842;
+        Wed, 22 Mar 2023 03:46:48 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:343d:79bf:55f9:1da5])
+        by smtp.gmail.com with ESMTPSA id hg4-20020a17090b300400b002340d317f3esm9508742pjb.52.2023.03.22.03.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 03:46:48 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-acpi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH v14 00/10] Register Type-C mode-switch in DP bridge endpoints
+Date:   Wed, 22 Mar 2023 18:46:29 +0800
+Message-Id: <20230322104639.221402-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YiVRwbdMuhUQ0wDFsAot5xLKxjbXmeq3
-X-Proofpoint-ORIG-GUID: YiVRwbdMuhUQ0wDFsAot5xLKxjbXmeq3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_08,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 phishscore=0 mlxlogscore=952 bulkscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220077
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn on USB related nodes
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+This series introduces bindings for anx7625/it6505 to register Type-C
+mode-switch in their output endpoints, and use data-lanes property to
+describe the pin connections.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-index 8a6caae..d0d18e5 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-@@ -57,6 +57,10 @@
- 	status = "okay";
- };
- 
-+&qusb_phy_0 {
-+	status = "okay";
-+};
-+
- &rpm_requests {
- 	regulators {
- 		compatible = "qcom,rpm-mp5496-regulators";
-@@ -84,6 +88,10 @@
- 	clock-frequency = <32000>;
- };
- 
-+&ssphy_0 {
-+	status = "okay";
-+};
-+
- &tlmm {
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
-@@ -118,6 +126,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
+This series is not directly related to the built-in mux in anx7625,
+which automatically switches between the two orientations of a single
+Type-C connector. This series adds support of registering mode switches
+for two downstream devices, while we use orientation switches for two
+orientations of the Type-C connector.
+
+The first two patch modifies fwnode_graph_devcon_matches and
+cros_typec_init_ports to enable the registration of the switches.
+
+Patch 4~6 introduce the bindings for anx7625 and the corresponding driver
+modifications.
+
+Patch 7~9 add similar bindings and driver changes for it6505.
+
+v13: https://lore.kernel.org/all/20230303143350.815623-1-treapking@chromium.org/
+v12: https://lore.kernel.org/all/20230221095054.1868277-1-treapking@chromium.org/
+v11: https://lore.kernel.org/all/20230204133040.1236799-1-treapking@chromium.org/
+v10: https://lore.kernel.org/all/20230112042104.4107253-1-treapking@chromium.org/
+v9: https://lore.kernel.org/all/20230109084101.265664-1-treapking@chromium.org/
+v8: https://lore.kernel.org/all/20230107102231.23682-1-treapking@chromium.org/
+v7: https://lore.kernel.org/all/20230105132457.4125372-1-treapking@chromium.org/
+v6: https://lore.kernel.org/all/20221124102056.393220-1-treapking@chromium.org/
+v5: https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@chromium.org/
+
+Changes in v14:
+- Collect review tags
+- Introduce a new Kconfig because it didn't build when CONFIG_TYPEC=m
+- Add comments about devm_* usage
+- Fix style issues
+
+Changes in v13:
+- Update the kernel doc of fwnode_connection_find_match
+- Add typec_mode_switch_node_count helper
+- Fix style issues
+- Update a typo in the commit message
+- Collect Reviewed-by tag
+
+Changes in v12:
+- Check the availability of the device node in fwnode_graph_devcon_matches
+- Ensured valid access to "matches" in fwnode_graph_devcon_matches
+- Updated the documentation in fwnode_connection_find_match(es)
+- Add fwnode_for_each_typec_mode_switch macro
+- Remove a duplicated dmesg in the helper
+- Used IS_REACHABLE instead to guard the function signatures
+- Removed the 4-lane binding in analogix,anx7625.yaml
+- Reworded the description for the mode-switch property
+- Fixed style issues in anx7625 driver
+- Fixed the inverted orientation setting in anx7625 driver
+- Changed "&ctx->client->dev" to "ctx->dev"
+- Fixed the schema of "data-lanes" property for it6505
+- Fixes style issues in it6505 driver
+- Replaced &it6505->client->dev with it6505->dev
+- Updated the error logs when parsing data-lanes property
+
+Changes in v11:
+- Added missing fwnode_handle_put in drivers/base/property.c
+- Collected Acked-by tag
+- Use fwnode helpers instead of DT
+- Moved the helpers to a new file
+- Use "reg" instead of "data-lanes" to determine the port number
+- Updated the description of the endpoints in the bindings
+- Referenced video-interfaces.yaml instead for the endpoints binding
+- Removed duplicated definitions from inherited schema
+- Moved the "data-lanes" parsing logics to bridge drivers
+- Removed Kconfig dependencies for the bridge drivers
+- Updated the usage of the private bridge driver data
+- Added a clarification on the anx7625 built-in mux in the cover letter
+
+Changes in v10:
+- Collected Reviewed-by and Tested-by tags
+- Replaced "void *" with "typec_mux_set_fn_t" for mux_set callbacks
+- Print out the node name when errors on parsing DT
+- Use dev_dbg instead of dev_warn when no Type-C switch nodes available
+- Made the return path of drm_dp_register_mode_switch clearer
+- Added a TODO for implementing orientation switch for anx7625
+- Updated the commit message for the absence of orientation switch
+- Fixed typo in the commit message
+
+Changes in v9:
+- Collected Reviewed-by tag
+- Fixed subject prefix again
+- Changed the naming of the example node for it6505
+
+Changes in v8:
+- Fixed the build issue when CONFIG_TYPEC=m
+- Fixed some style issues
+- Fixed the subject prefixes for the bindings patch
+- Fixed the bindings for data-lanes properties
+
+Changes in v7:
+- Fix the long comment lines
+- Extracted the common codes to a helper function
+- Fixed style issues in anx7625 driver
+- Removed DT property validation in anx7625 driver.
+- Fixed style issues in it6505 driver
+- Removed the redundant sleep in it6505 driver
+- Removed DT property validation in it6505 driver
+- Rebased to drm-misc-next
+- Fixed indentations in bindings patches
+- Added a new patch to fix indentations in Kconfig
+
+Changes in v6:
+- Changed it6505_typec_mux_set callback function to accommodate with
+  the latest drm-misc patches
+- Changed the driver implementation to accommodate with the new binding
+- Dropped typec-switch binding and use endpoints and data-lanes properties
+  to describe the pin connections
+- Added new patches (patch 1,2,4) to fix probing issues
+- Changed the bindings of it6505/anx7625 and modified the drivers
+  accordingly
+- Merged it6505/anx7625 driver changes into a single patch
+
+Pin-yen Lin (8):
+  drm/display: Add Type-C switch helpers
+  dt-bindings: display: bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Check for Type-C during panel registration
+  drm/bridge: Remove redundant i2c_client in anx7625/it6505
+  drm/bridge: anx7625: Register Type C mode switches
+  dt-bindings: display: bridge: it6505: Add mode-switch support
+  drm/bridge: it6505: Fix Kconfig indentation
+  drm/bridge: it6505: Register Type C mode switches
+
+Prashant Malani (2):
+  device property: Add remote endpoint to devcon matcher
+  platform/chrome: cros_ec_typec: Purge blocking switch devlinks
+
+ .../display/bridge/analogix,anx7625.yaml      |  88 ++++-
+ .../bindings/display/bridge/ite,it6505.yaml   | 101 +++++-
+ drivers/base/property.c                       |  31 +-
+ drivers/gpu/drm/bridge/Kconfig                |  20 +-
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 256 +++++++++++---
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  22 +-
+ drivers/gpu/drm/bridge/ite-it6505.c           | 318 ++++++++++++++----
+ drivers/gpu/drm/display/Kconfig               |   8 +
+ drivers/gpu/drm/display/Makefile              |   2 +
+ drivers/gpu/drm/display/drm_dp_typec_helper.c | 105 ++++++
+ drivers/platform/chrome/cros_ec_typec.c       |  10 +
+ include/drm/display/drm_dp_helper.h           |  46 +++
+ 12 files changed, 855 insertions(+), 152 deletions(-)
+ create mode 100644 drivers/gpu/drm/display/drm_dp_typec_helper.c
+
 -- 
-2.7.4
+2.40.0.rc1.284.g88254d51c5-goog
 
