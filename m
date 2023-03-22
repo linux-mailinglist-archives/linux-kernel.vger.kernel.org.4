@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD256C4ECD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC896C4ED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjCVPBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S230338AbjCVPCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCVPBv (ORCPT
+        with ESMTP id S229999AbjCVPCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:01:51 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCAB11643;
-        Wed, 22 Mar 2023 08:01:50 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B113BC1;
-        Wed, 22 Mar 2023 16:01:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679497307;
-        bh=Az9CmcJ+XBb4olbWe91Aj3r8+M/Mn03lE84beJHYWcQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WKXlws0YL/fxPG1M5ZQGaWla8QrHlrOYNJMXI2o/UFolpE4TobnpdShV9cjraTqeO
-         MwA6homUVXpEZ5ca7dTz/vAQQhQlSiv7sA8a4cprGocH5iNqqFk8jBFOGn1mJ3u5mP
-         wimrpwmLpPfLk6YPVwEV2dY/f3itqV+8uUElZbK8=
-Date:   Wed, 22 Mar 2023 17:01:53 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "ming.qian@nxp.com" <ming.qian@nxp.com>,
-        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
-        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
-        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
-        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
-        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
-        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
-        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
-Message-ID: <20230322150153.GO20234@pendragon.ideasonboard.com>
-References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
- <20230313135916.862852-3-benjamin.gaignard@collabora.com>
- <20230313181155.GC22646@pendragon.ideasonboard.com>
- <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
- <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
- <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
- <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
- <20230319233358.GD20234@pendragon.ideasonboard.com>
- <f085aa9225c573df906bdc7ff032a8fd591b18b3.camel@ndufresne.ca>
+        Wed, 22 Mar 2023 11:02:20 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3542853DB1;
+        Wed, 22 Mar 2023 08:02:14 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w25so358318qtc.5;
+        Wed, 22 Mar 2023 08:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679497333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oYQM2jTlS604YN00nsC6X2GY/6e0UfH9fOU0JivRqjA=;
+        b=BepWEHbj3mt2tBk5UbRdoICuoZOmlUmehPOK+rh8KH6n7Gkz3nDN6yexr1uFBBCN08
+         n93JvWdYsFafoBStPlqo7Pfh2+dm6S3wgmHXiRf8EPgjomkKbXnRMWkD+T+9MZ/L9y7f
+         keA59Fx/mRmtKbiefe/YRaJL8tq99rW6rsHVf5pKq1dE0fOKaS7QfthYIdv3MOCOfoiv
+         dFyBizEhGxWmjyLPygxqW/tLFjKFhub+UAVsofox9zIGFV4H+QEmP9t/V12hN8d3bzY2
+         TOq7dLlK/9EdNk259OqeXrnrRCWLZg74+kSBn8lUWYvcCmqMj74T/+yur75BVJFJMjp4
+         FczA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679497333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oYQM2jTlS604YN00nsC6X2GY/6e0UfH9fOU0JivRqjA=;
+        b=oCaymZu2J7n8wd4GVyzqmbnwfgkryrkIKm6zWIVz9eXEwOzA41quAdG2rH/7w9wOm3
+         xJTwKjBsRaspxo2Okz/3D2iToQk0P867OTCnHdweyMnHuQ08h5ApOePTzNxgmr6HWHpw
+         vGjHxyEC2R2UMJ3hgWwpQOBAsCs+Hsi+hLI5j3v+3RL/6/mJikXHr+MkcCF5VCXZdCOh
+         g/FW2NitR7D1jfUxoEdoK61V8ULLPRvEpSq79nHpVqD2S1CY+cnGuueVpMTiOa8bW3r1
+         cVg6L/ra7VRigSACEA9OjGAxKuvP5qXpeGx6f1Vmm/UUGlJe1nSwl2MODrJ2roI5x652
+         FmSA==
+X-Gm-Message-State: AO0yUKU4POfp79wlJPt5s6VQdWiUG4w0aR5Mgg9l+taFB6RKRmeWI8Km
+        7ds4JchjuxmxVWja0x2OVhs=
+X-Google-Smtp-Source: AK7set+VSdynk8EYuC29vErScyxFanU8Uii9XxtvdSxj02AVCP1dgudhg6cXvrFOxzfMt0SkyJCcBw==
+X-Received: by 2002:a05:622a:314:b0:3bf:cfe8:f8f5 with SMTP id q20-20020a05622a031400b003bfcfe8f8f5mr6794567qtw.41.1679497333222;
+        Wed, 22 Mar 2023 08:02:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d3-20020ac851c3000000b003e37d646221sm3990901qtn.96.2023.03.22.08.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 08:02:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 22 Mar 2023 08:02:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/199] 6.1.21-rc3 review
+Message-ID: <ea7d76f4-806d-4643-8339-aced5bf4b858@roeck-us.net>
+References: <20230321180747.474321236@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f085aa9225c573df906bdc7ff032a8fd591b18b3.camel@ndufresne.ca>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230321180747.474321236@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:50:52AM -0400, Nicolas Dufresne wrote:
-> Hi Laurent,
+On Tue, Mar 21, 2023 at 07:08:16PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 199 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Le lundi 20 mars 2023 à 01:33 +0200, Laurent Pinchart a écrit :
-> > > The typical usage is that applications allocate N buffers with the
-> > > VIDIOC_REQBUFS ioctl, and in most cases that's all they use.
-> > 
-> > Note that once we get DELETE_BUF (or DELETE_BUFS) support I'd like to
-> > encourage applications to use the new API, and deprecate REQBUFS
-> > (dropping it isn't on my radar, as it would take forever before no
-> > userspace uses it anymore).
+> Responses should be made by Thu, 23 Mar 2023 18:07:05 +0000.
+> Anything received after that time might be too late.
 > 
-> I was wondering if you can extend on this. I'm worried the count semantic might
-> prevent emulating it over create_bufs() ops, but if that works, did you meant to
-> emulate it so driver no longer have to implement reqbufs() if they have
-> create_bufs() ?
 
-For drivers it should be fairly simply, as the reqbufs and create_bufs
-ioctl handlers should just point to the corresponding videobuf2 helpers.
+It is still Wednesday here, but v6.1.21 has already been released.
+Sorry, my test bed isn't that fast. No issues reported yet, but
+it seems pointless to send final results at this point. I'll only
+report if there is a problem. Same for v6.2.8.
 
-What I meant is that I'd like to encourage userspace to use the
-VIDIOC_CREATE_BUFS ioctl instead of VIDIOC_REQBUFS.
-
--- 
-Regards,
-
-Laurent Pinchart
+Guenter
