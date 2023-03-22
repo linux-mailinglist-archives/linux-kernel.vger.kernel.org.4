@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4606C4E7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810EA6C4E82
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjCVOvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
+        id S230444AbjCVOvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjCVOu4 (ORCPT
+        with ESMTP id S230396AbjCVOvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:50:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B722E67834
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679496516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 22 Mar 2023 10:51:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F316AD6;
+        Wed, 22 Mar 2023 07:49:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B0F8B20EDA;
+        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679496564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nv1rg/DAjDe5KwYu6JClmrs+DeW1EZyujTLakuo+/7c=;
-        b=HGpOeNSeuCg7H9ByF3E8WOnh8HmRLkPzFjNG12pHv8RHe62y5G3On1cta8IXoEPw/fKqHw
-        bg9QQFLcKrdswSVk7JjxaMI2V+YrmR7jSl7IryDkqHO22+oKBEZaqBVEUuN+mD9J2xer9n
-        szrQPfTlJZD/SzQAIc8tmfq3/A7bTyw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-a2tnyfd8OyOpozpcAAtxNg-1; Wed, 22 Mar 2023 10:48:31 -0400
-X-MC-Unique: a2tnyfd8OyOpozpcAAtxNg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
+        b=keua6vrzqFvD9d24VxKeN+P/9uXoYODOqtrErIG/mFeIbZVehzKEskAJmBFCi0Y8xj7WKJ
+        pmcGiXtk38EgR4HUZMpxbVMjRpbT/7Vrs/+Ks0XGUOUlTjb50+aaMtBeacMHGQzY1kN1mf
+        FM6J86xeBjnsaz6TLcApLK3UK5S0+us=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679496564;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
+        b=XDCCaVhwYzaOWYZn/gP36NSxpReGq7etaOQhGQ5VLmoob+pUe/n+MnmvWWMlCIgQIM3z77
+        KSRc22i5edVyCsBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61227185A78F;
-        Wed, 22 Mar 2023 14:48:30 +0000 (UTC)
-Received: from [10.22.8.189] (unknown [10.22.8.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 58BD91121314;
-        Wed, 22 Mar 2023 14:48:29 +0000 (UTC)
-Message-ID: <0473da14-81ce-74fd-4357-3142af9e3ce9@redhat.com>
-Date:   Wed, 22 Mar 2023 10:48:29 -0400
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 806FB138E9;
+        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OzqNHnQVG2RpNQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:49:24 +0000
+Message-ID: <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
+Date:   Wed, 22 Mar 2023 15:49:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 2/2] cgroup/cpuset: Free DL BW in case can_attach()
- fails
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 04/14] mm: handle hashdist initialization in
+ mm/mm_init.c
 Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Qais Yousef <qyousef@layalina.io>, Wei Wang <wvw@google.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-References: <20230322135959.1998790-1-dietmar.eggemann@arm.com>
- <20230322135959.1998790-3-dietmar.eggemann@arm.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230322135959.1998790-3-dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-5-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230321170513.2401534-5-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,203 +82,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 09:59, Dietmar Eggemann wrote:
-> cpuset_can_attach() can fail. Postpone DL BW allocation until all task
-> have been checked. DL BW is not allocated per-task but as a sum over
-> all DL tasks migrating.
->
-> If multiple controllers are attached to the cgroup next to cuset a
-Typo: "cuset" -> "cpuset"
-> non-cpuset can_attach() can fail. In this case free DL BW in
-> cpuset_cancel_attach().
->
-> Finally, update cpuset DL task count (nr_deadline_tasks) only in
-> cpuset_attach().
->
-> Suggested-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+On 3/21/23 18:05, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> The hashdist variable must be initialized before the first call to
+> alloc_large_system_hash() and free_area_init() looks like a better place
+> for it than page_alloc_init().
+> 
+> Move hashdist handling to mm/mm_init.c
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+Looks like this will move the fixup_hashdist() call earlier, but can't
+result in seeing less N_MEMORY nodes than before, right?
+I wonder if the whole thing lacks hotplug support anyway, what if system
+boots with one node and more are added later? Hmm.
+
 > ---
->   include/linux/sched.h  |  2 +-
->   kernel/cgroup/cpuset.c | 55 ++++++++++++++++++++++++++++++++++++++----
->   kernel/sched/core.c    | 17 ++-----------
->   3 files changed, 53 insertions(+), 21 deletions(-)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 658e997ba057..675ec74469d7 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1846,7 +1846,7 @@ current_restore_flags(unsigned long orig_flags, unsigned long flags)
->   }
->   
->   extern int cpuset_cpumask_can_shrink(const struct cpumask *cur, const struct cpumask *trial);
-> -extern int task_can_attach(struct task_struct *p, const struct cpumask *cs_effective_cpus);
-> +extern int task_can_attach(struct task_struct *p);
->   extern int dl_bw_alloc(int cpu, u64 dl_bw);
->   extern void dl_bw_free(int cpu, u64 dl_bw);
->   #ifdef CONFIG_SMP
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index f46192d2e97e..fdc476eefbed 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -198,6 +198,8 @@ struct cpuset {
->   	 * know when to rebuild associated root domain bandwidth information.
->   	 */
->   	int nr_deadline_tasks;
-> +	int nr_migrate_dl_tasks;
-> +	u64 sum_migrate_dl_bw;
->   
->   	/* Invalid partition error code, not lock protected */
->   	enum prs_errcode prs_err;
-> @@ -2462,16 +2464,23 @@ static int fmeter_getrate(struct fmeter *fmp)
->   
->   static struct cpuset *cpuset_attach_old_cs;
->   
-> +static void reset_migrate_dl_data(struct cpuset *cs)
+>  mm/mm_init.c    | 22 ++++++++++++++++++++++
+>  mm/page_alloc.c | 18 ------------------
+>  2 files changed, 22 insertions(+), 18 deletions(-)
+> 
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 68d0187c7886..2e60c7186132 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -607,6 +607,25 @@ int __meminit early_pfn_to_nid(unsigned long pfn)
+>  
+>  	return nid;
+>  }
+> +
+> +int hashdist = HASHDIST_DEFAULT;
+> +
+> +static int __init set_hashdist(char *str)
 > +{
-> +	cs->nr_migrate_dl_tasks = 0;
-> +	cs->sum_migrate_dl_bw = 0;
+> +	if (!str)
+> +		return 0;
+> +	hashdist = simple_strtoul(str, &str, 0);
+> +	return 1;
 > +}
+> +__setup("hashdist=", set_hashdist);
 > +
->   /* Called by cgroups to determine if a cpuset is usable; cpuset_mutex held */
->   static int cpuset_can_attach(struct cgroup_taskset *tset)
->   {
->   	struct cgroup_subsys_state *css;
-> -	struct cpuset *cs;
-> +	struct cpuset *cs, *oldcs;
->   	struct task_struct *task;
->   	int ret;
->   
->   	/* used later by cpuset_attach() */
->   	cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
-> +	oldcs = cpuset_attach_old_cs;
->   	cs = css_cs(css);
->   
->   	mutex_lock(&cpuset_mutex);
-> @@ -2489,7 +2498,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   		goto out_unlock;
->   
->   	cgroup_taskset_for_each(task, css, tset) {
-> -		ret = task_can_attach(task, cs->effective_cpus);
-> +		ret = task_can_attach(task);
->   		if (ret)
->   			goto out_unlock;
->   		ret = security_task_setscheduler(task);
-> @@ -2497,11 +2506,31 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   			goto out_unlock;
->   
->   		if (dl_task(task)) {
-> -			cs->nr_deadline_tasks++;
-> -			cpuset_attach_old_cs->nr_deadline_tasks--;
-> +			cs->nr_migrate_dl_tasks++;
-> +			cs->sum_migrate_dl_bw += task->dl.dl_bw;
-> +		}
-> +	}
+> +static inline void fixup_hashdist(void)
+> +{
+> +	if (num_node_state(N_MEMORY) == 1)
+> +		hashdist = 0;
+> +}
+> +#else
+> +static inline void fixup_hashdist(void) {}
+>  #endif /* CONFIG_NUMA */
+>  
+>  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> @@ -1855,6 +1874,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>  	}
+>  
+>  	memmap_init();
 > +
-> +	if (!cs->nr_migrate_dl_tasks)
-> +		goto out_succes;
-> +
-> +	if (!cpumask_intersects(oldcs->effective_cpus, cs->effective_cpus)) {
-> +		int cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-> +
-> +		if (unlikely(cpu >= nr_cpu_ids)) {
-> +			reset_migrate_dl_data(cs);
-> +			ret = -EINVAL;
-> +			goto out_unlock;
-> +		}
-> +
-> +		ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-> +		if (ret) {
-> +			reset_migrate_dl_data(cs);
-> +			goto out_unlock;
-
-I do have a question about just picking any cpu to see if there is 
-enough DL bandwidth. What happens if there are multiple DL tasks to be 
-migrated and their total bandwidth exceed any one cpu can provide?
-
-Other than that, the overall workflow looks good to me from the cpuset 
-point of view.
-
-Cheers,
-Longman
-
->   		}
->   	}
->   
-> +out_succes:
->   	/*
->   	 * Mark attach is in progress.  This makes validate_change() fail
->   	 * changes which zero cpus/mems_allowed.
-> @@ -2516,11 +2545,21 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->   {
->   	struct cgroup_subsys_state *css;
-> +	struct cpuset *cs;
->   
->   	cgroup_taskset_first(tset, &css);
-> +	cs = css_cs(css);
->   
->   	mutex_lock(&cpuset_mutex);
-> -	css_cs(css)->attach_in_progress--;
-> +	cs->attach_in_progress--;
-> +
-> +	if (cs->nr_migrate_dl_tasks) {
-> +		int cpu = cpumask_any(cs->effective_cpus);
-> +
-> +		dl_bw_free(cpu, cs->sum_migrate_dl_bw);
-> +		reset_migrate_dl_data(cs);
-> +	}
-> +
->   	mutex_unlock(&cpuset_mutex);
->   }
->   
-> @@ -2615,6 +2654,12 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   out:
->   	cs->old_mems_allowed = cpuset_attach_nodemask_to;
->   
-> +	if (cs->nr_migrate_dl_tasks) {
-> +		cs->nr_deadline_tasks += cs->nr_migrate_dl_tasks;
-> +		oldcs->nr_deadline_tasks -= cs->nr_migrate_dl_tasks;
-> +		reset_migrate_dl_data(cs);
-> +	}
-> +
->   	cs->attach_in_progress--;
->   	if (!cs->attach_in_progress)
->   		wake_up(&cpuset_attach_wq);
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 2f07aecb7434..4fb058b72886 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -9201,8 +9201,7 @@ int cpuset_cpumask_can_shrink(const struct cpumask *cur,
->   	return ret;
->   }
->   
-> -int task_can_attach(struct task_struct *p,
-> -		    const struct cpumask *cs_effective_cpus)
-> +int task_can_attach(struct task_struct *p)
->   {
->   	int ret = 0;
->   
-> @@ -9215,21 +9214,9 @@ int task_can_attach(struct task_struct *p,
->   	 * success of set_cpus_allowed_ptr() on all attached tasks
->   	 * before cpus_mask may be changed.
->   	 */
-> -	if (p->flags & PF_NO_SETAFFINITY) {
-> +	if (p->flags & PF_NO_SETAFFINITY)
->   		ret = -EINVAL;
-> -		goto out;
-> -	}
+> +	/* disable hash distribution for systems with a single node */
+> +	fixup_hashdist();
+>  }
+>  
+>  /**
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c56c147bdf27..ff6a2fff2880 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6383,28 +6383,10 @@ static int page_alloc_cpu_online(unsigned int cpu)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_NUMA
+> -int hashdist = HASHDIST_DEFAULT;
 > -
-> -	if (dl_task(p) && !cpumask_intersects(task_rq(p)->rd->span,
-> -					      cs_effective_cpus)) {
-> -		int cpu = cpumask_any_and(cpu_active_mask, cs_effective_cpus);
->   
-> -		if (unlikely(cpu >= nr_cpu_ids))
-> -			return -EINVAL;
-> -		ret = dl_bw_alloc(cpu, p->dl.dl_bw);
-> -	}
+> -static int __init set_hashdist(char *str)
+> -{
+> -	if (!str)
+> -		return 0;
+> -	hashdist = simple_strtoul(str, &str, 0);
+> -	return 1;
+> -}
+> -__setup("hashdist=", set_hashdist);
+> -#endif
 > -
-> -out:
->   	return ret;
->   }
->   
+>  void __init page_alloc_init(void)
+>  {
+>  	int ret;
+>  
+> -#ifdef CONFIG_NUMA
+> -	if (num_node_state(N_MEMORY) == 1)
+> -		hashdist = 0;
+> -#endif
+> -
+>  	ret = cpuhp_setup_state_nocalls(CPUHP_PAGE_ALLOC,
+>  					"mm/page_alloc:pcp",
+>  					page_alloc_cpu_online,
 
