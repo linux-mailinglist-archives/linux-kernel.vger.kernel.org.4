@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB186C4EF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769486C4EEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCVPGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
+        id S231268AbjCVPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjCVPGG (ORCPT
+        with ESMTP id S230397AbjCVPGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 11:06:06 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F3037725;
-        Wed, 22 Mar 2023 08:06:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9D8637D3;
+        Wed, 22 Mar 2023 08:06:05 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E565F5FD41;
-        Wed, 22 Mar 2023 18:06:02 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id BA4355FD42;
+        Wed, 22 Mar 2023 18:06:03 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679497562;
-        bh=eTQd2Y4ovzRd2JsVVJJ6xL7i63yb2NKMkofOC1iY5UQ=;
+        s=mail; t=1679497563;
+        bh=L/cZhXKdgtCamQglShAZ97PbA1w3JdiautYGqxltivc=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=kjuu67TLLhokyUl0zqlRRkAEQm8sl9wwsLAdlKeQfw2SUtfkK5YalzTxGlkP1Vrqd
-         tbKANfCR4jqjPhDMBSU5WQr2hmB+GpS1eNEbxPiBMERXY8rIyuDeh3K7EGjY9yhDDj
-         X9+YgeH3XRmdMEGIn+KN0I3X3rk5fN+8iq90A8w9/KFoosiXcBATOqv3mjBXCQr3ZO
-         /fj10e1wszNPQunskDzM8efw61e5A+PBuYqHKay78c03MnF4+BMN7o0ePYE4oyujmT
-         Z++NYCFZb7qmZeolobG42evY1MEMS5aMlayUoI4aaPnK8DLBESHmoc7NO8yqFBoxn6
-         vmlOKhOYz0e6A==
+        b=kO4DuoLRQa2nQjI/QpH5Rmx3n4zAO8rfTC2pfj2Ykor5jwZlV8hUgal1C0AwQbghG
+         jUtLRIEF2iN9SYny7Ifsr71hC0wTUrhhAXYsJZEQGo3igrbM5KjLIDnmFQvP2LtpyE
+         xlbgg2Mq9EjtFV/kQClAKCc/FsB/Tq+Ow7AQzZ4oxb+dRMOzRl5iSP0VHeCK9kpiG9
+         nEPiA3b3lgGTUAPhglsNGQf/n9Bwk9almp518koq81yS4P+3P78Tp3UtakCebiHZ42
+         Lai/0Uzcmn79OW/YeRf6+78YmmGFTPsxCyixsALvEenyB5wQmRNQ1Enm0kYa5CoDrh
+         Y1vUB2o66TNPA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 18:06:02 +0300 (MSK)
+        Wed, 22 Mar 2023 18:06:03 +0300 (MSK)
 From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
 To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -43,10 +43,12 @@ CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-amlogic@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
         Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Subject: [PATCH v1 0/2] add support for Meson A1 SPI Flash Controller
-Date:   Wed, 22 Mar 2023 18:04:56 +0300
-Message-ID: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
+Subject: [PATCH v1 1/2] dt-bindings: spi: add binding for meson-spifc-a1
+Date:   Wed, 22 Mar 2023 18:04:57 +0300
+Message-ID: <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
+References: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -69,33 +71,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset introduces DT bindings and driver for the Amlogic Meson A1
-SPI flash controller (A113L family).
+Add YAML devicetree binding for Amlogic Meson A113L (A1 family)
+SPIFC Driver.
 
-The existing spi-meson-spifc driver is incompatible with the A1 SPIFC
-at all.
-
-The implementation has been tested on the Amlogic A113L SoC based device
-connected with ESMT F50L1G41LB spinand flash.
-
-This patchset has dependencies on the A1 clock series which is still
-under review [1].
-
-Links:
-  [1] https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
-
-Martin Kurbanov (2):
-  dt-bindings: spi: add binding for meson-spifc-a1
-  spi: add support for Meson A1 SPI Flash Controller
-
- .../bindings/spi/amlogic,meson-a1-spifc.yaml  |  42 ++
- drivers/spi/Kconfig                           |   7 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-meson-spifc-a1.c              | 444 ++++++++++++++++++
- 4 files changed, 494 insertions(+)
+Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+---
+ .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
- create mode 100644 drivers/spi/spi-meson-spifc-a1.c
 
---
+diff --git a/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+new file mode 100644
+index 000000000000..5f84063b01f8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/amlogic,meson-a1-spifc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Meson A113L SPI Flash Controller
++
++maintainers:
++  - Martin Kurbanov <mmkurbanov@sberdevices.ru>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - amlogic,meson-a1-spifc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/amlogic,a1-clkc.h>
++    spi@fd000400 {
++          compatible = "amlogic,meson-a1-spifc";
++          reg = <0xfd000400 0x290>;
++          clocks = <&clkc_periphs CLKID_SPIFC>;
++          #address-cells = <1>;
++          #size-cells = <0>;
++    };
+-- 
 2.40.0
 
