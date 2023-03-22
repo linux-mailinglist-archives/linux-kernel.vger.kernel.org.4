@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F8B6C5375
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D926C537E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCVSQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S231209AbjCVSRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjCVSQs (ORCPT
+        with ESMTP id S231153AbjCVSRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:16:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E531364A9D;
-        Wed, 22 Mar 2023 11:16:47 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 18:16:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679509006;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=4ed9wOd5E4IQ7/49nmwLZdd9I3ON4s/AWtcEBl92lfg=;
-        b=Nibg+CIi6tjDL09xxLGewRzKYWCBgg4ZexQocKkshvT/bacBmPEUhasvOq7a/SBq6cD3g2
-        +Kgfg9Zowpu0L1bB1evUAmwfyLMRKi1fbWCVBW/uT5NGsEBA4vMkuj8+5comjamCqyNDZP
-        DYG+nb3ywEwnl+M1YuVAdMl53+V2rbAIuA6hy8ZCxXavu0I9kRgeGmpWxTu7IwXUKv01dU
-        TmiLO3pg6lX4PV46QTE6pLr8tjCkh+zRbEp6zl9BrEzOE+JR9NM71KJ/WIp5u6sRjosHg2
-        LEYWgvnC6biOE99/mM/g+z5DRO6Oa/RS0kfYxTYQv2r76Khl4zQbvssqVBFQXQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679509006;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=4ed9wOd5E4IQ7/49nmwLZdd9I3ON4s/AWtcEBl92lfg=;
-        b=2NKiZoWLqUJq5bYY9WqoK23xUSWMr1OaMZ03GoJ8FFp8n/qI3kGYyN70nwNOnk9w/J2fa6
-        DOKlTQ2xT9nLQNCQ==
-From:   "tip-bot2 for Andy Shevchenko" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/platform/intel-mid: Remove unused definitions
- from intel-mid.h
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 22 Mar 2023 14:17:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABA467030;
+        Wed, 22 Mar 2023 11:17:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D2562264;
+        Wed, 22 Mar 2023 18:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC589C433D2;
+        Wed, 22 Mar 2023 18:16:58 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 14:16:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ross Zwisler <zwisler@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
+Message-ID: <20230322141657.7d00a9bd@gandalf.local.home>
+In-Reply-To: <87v8is94n6.ffs@tglx>
+References: <20230321215121.71b339c5@gandalf.local.home>
+        <87y1np824t.ffs@tglx>
+        <20230322084834.37ed755e@gandalf.local.home>
+        <87v8is94n6.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <167950900603.5837.7897149755988999930.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+On Wed, 22 Mar 2023 16:39:41 +0100
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Commit-ID:     b72d6965eeac4503445ab64bc0aede4934e0a7a6
-Gitweb:        https://git.kernel.org/tip/b72d6965eeac4503445ab64bc0aede4934e0a7a6
-Author:        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-AuthorDate:    Thu, 16 Feb 2023 21:39:58 +02:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 22 Mar 2023 11:08:40 -07:00
+> But for figuring out how long a syscall, interrupt or exception takes
+> there are exactly TWO tracepoints required, not 10 or 8. And it's bloody
+> obvious where to place them, right?
 
-x86/platform/intel-mid: Remove unused definitions from intel-mid.h
+Not always, and it's pretty much always architecture dependent. I was
+looking for an architecture agnostic approach, as I imagine all archs will
+be eventually using this.
 
-After a few rounds of removal and refactoring Intel MID related code
-some artifacts are left untouched. However, they are not used anywhere.
-Remove them.
+> 
+> >> instrumentation_begin()/end() is solely meant for objtool validation and
+> >> nothing else.
+> >> 
+> >> There are clearly less horrible ways to retrieve the #PF duration, no?  
+> >
+> > It's not just for #PF, that was just one example. I use to use function
+> > graph tracing max_depth_count=1 to verify NO_HZ_FULL to make sure there's
+> > no entry into the kernel. That doesn't work anymore. Even compat syscalls
+> > are not traced.  
+> 
+> That still works. noinstr did neither break syscall tracing nor any of
+> the interrupt/exception tracepoints which can be used to validate the
+> NOHZ full mechanics. Your fancy favourite script might not work anymore,
+> but claiming that it can't be traced is just nonsense.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20230216193958.2971-1-andriy.shevchenko%40linux.intel.com
----
- arch/x86/include/asm/intel-mid.h | 21 ---------------------
- 1 file changed, 21 deletions(-)
+I don't remember fully, but there was something that was missing. It was
+back in 2021, so I do not remember fully. That's when I first wrote this
+patch. I only just redisovered it and wanted to share ;-) The only thing I
+did differently since then was to add the page fault logic, because that
+was something I am currently interested it.
 
-diff --git a/arch/x86/include/asm/intel-mid.h b/arch/x86/include/asm/intel-mid.h
-index c201083..a3abdcd 100644
---- a/arch/x86/include/asm/intel-mid.h
-+++ b/arch/x86/include/asm/intel-mid.h
-@@ -20,25 +20,4 @@ extern void intel_mid_pwr_power_off(void);
- 
- extern int intel_mid_pwr_get_lss_id(struct pci_dev *pdev);
- 
--#ifdef CONFIG_X86_INTEL_MID
--
--extern void intel_scu_devices_create(void);
--extern void intel_scu_devices_destroy(void);
--
--#else /* !CONFIG_X86_INTEL_MID */
--
--static inline void intel_scu_devices_create(void) { }
--static inline void intel_scu_devices_destroy(void) { }
--
--#endif /* !CONFIG_X86_INTEL_MID */
--
--/* Bus Select SoC Fuse value */
--#define BSEL_SOC_FUSE_MASK		0x7
--/* FSB 133MHz */
--#define BSEL_SOC_FUSE_001		0x1
--/* FSB 100MHz */
--#define BSEL_SOC_FUSE_101		0x5
--/* FSB 83MHz */
--#define BSEL_SOC_FUSE_111		0x7
--
- #endif /* _ASM_X86_INTEL_MID_H */
+Things could have changed since then. But if adding trace events for the
+missing syscalls and around exceptions for timing purposes is OK, then I'm
+happy to go that approach.
+
+> 
+> > I lost a kernel feature with the noinstr push and this is the closest that
+> > comes to bringing it back.  
+> 
+> This is the closest _you_ came up with without thinking about it for a
+> split second.
+> 
+> > And the more we add noinstr, the more the kernel becomes a black box
+> > again.  
+> 
+> It does not. noinstr is a technical requirement to keep instrumentation
+> out of code pathes which are not able to handle instrumentation. You
+> know that very well, so please stop this theatrical handwaving and come
+> back if you have sensible technical arguments.
+
+I never said nor implied that it's not important. I'm just concerned that
+we currently have no way to see when it's happening.
+
+But I'll drop this patch and look to add specific trace events in specific
+points to be able to get the timings that are useful.
+
+Thanks,
+
+-- Steve
