@@ -2,217 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01FD6C586E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D43F6C5873
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCVVFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S229958AbjCVVGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCVVFc (ORCPT
+        with ESMTP id S229691AbjCVVGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:05:32 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2068.outbound.protection.outlook.com [40.107.237.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F137B11EB9;
-        Wed, 22 Mar 2023 14:05:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iEl77jpAHOnkFcp1sStoZ01uWCYSopGM23YIQV11Lr2TcGxv2cnaiyY65Dbx63j/D7+Uy1cV+V8wmDlex4AflQoQVDVVYtjPmC2uHgvkmmMLicPEU3Sg4QaOJ4eE9vcwwO74gKgE1EJQ+14VKf3a/g8JYoSBTqOYxPMYMh0j2J5mPVwxKmNqHsYW3+KyGnz+wH03qaopJH5Q+aW9B8LRNXp6gI8tUOcQP0L3gs7MXri01Eip5TonMgdIDleW1BMrJGXW18kUj9sAW/94UpLsV0E6q/icvWVItmysJLUAz4PW6dTbWQc3jfuF7FQ88MUsRiX972qX5l8fbb0HSN6c8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gODEmt89Z8dHVcHdT+1aUJVpWvl7CCoeG8E+4vlXKVo=;
- b=UR63A9LBxatr3Tn4qKxivTjd8+Q/kK61jT5M9EeBcvzws/OXIc/zoV/AbmZ9ClS3g8pPbZKnoTEDqZh6PAwK6G7O/P4s2o85TblbmIOojENg3l0I4TmL2/PgUUZVzXR8+cSMbKIo/bkJ4G2YGCf0cvjkF0qsmeInjzkEWxjhgQ5m1w6nCUZhYchA/p9Nr8EFoo2aeMnuiVDXdpAZLMkUpX2qxWjFJFJzrC1ada5GmYi5czJDxDXsA7tGo+KgQkWXGpmFQCkZ4GskR7GuQ+vl9dbLilV5Hk9LHp2+etUBFLYPFyEQtlOztg2IFqWPHu8vmqGgkVHGh6vsSEDiS3rXMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gODEmt89Z8dHVcHdT+1aUJVpWvl7CCoeG8E+4vlXKVo=;
- b=W/gw3gCuknjdH9GI724LxsdCimxmHwSWJXMQNSpwLl6fWcNDODgZvaEPIiXuo3uM6ir2KDOFtExKX9hSZIFSAhuKUmjw7eN5xpZocWRoFCp+EJfUvqoKDdhWpAXKXhHquxNvpsBfFilxFyh67McdlZ7oB4rPWRGVY7d89FYEBiA=
-Received: from DS7PR03CA0048.namprd03.prod.outlook.com (2603:10b6:5:3b5::23)
- by SN7PR12MB7321.namprd12.prod.outlook.com (2603:10b6:806:298::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 21:05:28 +0000
-Received: from DM6NAM11FT086.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b5:cafe::77) by DS7PR03CA0048.outlook.office365.com
- (2603:10b6:5:3b5::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Wed, 22 Mar 2023 21:05:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT086.mail.protection.outlook.com (10.13.173.75) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6222.17 via Frontend Transport; Wed, 22 Mar 2023 21:05:28 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 22 Mar
- 2023 16:05:26 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 4/4] i2c: designware: Add doorbell support for Mendocino
-Date:   Wed, 22 Mar 2023 16:02:26 -0500
-Message-ID: <20230322210227.464-5-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230322210227.464-1-mario.limonciello@amd.com>
-References: <20230322210227.464-1-mario.limonciello@amd.com>
+        Wed, 22 Mar 2023 17:06:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEE8A76;
+        Wed, 22 Mar 2023 14:06:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 255C6622DB;
+        Wed, 22 Mar 2023 21:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BEBC433D2;
+        Wed, 22 Mar 2023 21:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679519166;
+        bh=IwqcGZUb+JAwQ49B5qlPxqjaSl7Z1L+y305zKBfg5xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IPpZBwRMbkG1hrPfdnOcabVKfBq9aOmy9U0hxbSGokCQcO0A8voh1JNXTo9Ui92e7
+         +oAT/mkzC3IcamAvCYtXv0yTUIfBeDgEbC1MtOWfzRWSdLSQnaSLHdaV4FSCSe0TaZ
+         MgWIkW/D5X8HBrSCyZyol0h6+jAai0ufW/Qz0HupiQKtpHtQhG8C2btGprgZi5lbFX
+         XEETgsDVJW0AEOVdeeiRlES75/Q25qQBvRYyGWVWpeLAuCmv6YHGGG+PhdExIvkXaA
+         j5UADPATWWUwZYM8aOmlJMFlGbHg83GJ9xvkYI1IpGGjzsIqtCCV8lEJLLkmdqBKb6
+         dOtDrHnzD9i/g==
+Date:   Wed, 22 Mar 2023 21:06:00 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Hal Feng <hal.feng@starfivetech.com>, kernel@esmil.dk,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/21] Basic clock, reset & device tree support for
+ StarFive JH7110 RISC-V SoC
+Message-ID: <a6358a5f-bbfd-4a14-a828-a3c28f82709a@spud>
+References: <20230320103750.60295-1-hal.feng@starfivetech.com>
+ <95f11f7c-611f-49a9-97e8-0de89846e430@spud>
+ <62b766cef78d95793af95f428693c359.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT086:EE_|SN7PR12MB7321:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47e31157-3af8-4422-4992-08db2b192a1d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y4h32OXAx/Yl1TS24xhOimEe8LvK3oNsWc7TFgM3bIRJ+NhhsDfO2jEvzLOPtY0+Q5z+JGhFqxp5LHO+G4yNb482C0w3wKqWbFMog18d6mFQTq7Y0PJ2TINKkMOpdpqNvzJ8q/XG43CzOSYP+A7+E2O9soTFIgOv5rJ8CkoRo8i7Ae8zeXUSOByQX8+DvX1YXFTbaJRlBNkiHmedMJLKY+z66y6/PbfcBqsClbfEQ7EeaL9By6hbe+lIVNktMy8SvXrFzD3a/qX40ccl4Cfpb8daS/qP0S4v5TRPOrL+VKHKT1SbTi7zL3Ghbe09qqwD8NUWj578ZOZcJbE3Po3Inlh3Opc3MVbyexQkfmkPQAFBDdu6Rr7TM8Kg3w3w3RN8Pzh5Gjljxv8v1nGCYxyptkiCtFdof3ZnUnDxehK39/Uwf2y49crzHHvBhKgLSTZqbcaWgHltVpwMR1Vt6TjPbkM+5GNnS9okO5myP65+hlxGktF3eGNvr74/5KR1VW6wwuoKj5l2bXptlsDyQ8erZplPq30WqH0g8JN2m4CcX+4DgIDgbnZQ8gnvpU5HWKdCEJSIPhbCXeLEbELl0BFVP5UaT0J9YyBvuT9SK/wsiSfYSLAPeKcWZ1OF5SGIPuJTq+97goAMqXzkwCMMsllnstYGp4BuTYBL9VUBCNjnO3uwXS6gDyxzPudfDXFgnKEy8iX8vpkJmYxdrQeYqPtVo2j8tTfFZ5tiONJoHVtLDU8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(376002)(346002)(451199018)(36840700001)(40470700004)(46966006)(81166007)(2906002)(86362001)(83380400001)(36860700001)(40480700001)(8936002)(5660300002)(336012)(82310400005)(356005)(2616005)(186003)(41300700001)(40460700003)(16526019)(1076003)(26005)(478600001)(54906003)(47076005)(7696005)(110136005)(316002)(36756003)(426003)(44832011)(966005)(70586007)(4326008)(8676002)(70206006)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 21:05:28.3015
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47e31157-3af8-4422-4992-08db2b192a1d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT086.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7321
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qDgrhF5nMeMRIFyO"
+Content-Disposition: inline
+In-Reply-To: <62b766cef78d95793af95f428693c359.sboyd@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mendocino and later platform don't use the platform feature mailbox for
-communication for I2C arbitration, they rely upon ringing a doorbell.
 
-Detect the platform by the device ID of the root port and choose the
-appropriate method.
+--qDgrhF5nMeMRIFyO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semihalf.com/
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v5->v6:
- * Handle Mendocino busy code like Cezanne
-v4->v5:
- * Poll for busy
- * Rename to mendocino
- * Add explicit dependency on PCI
-v3->v4:
- * Adjust to use PCI device ID and function pointers instead
-v2->v3:
- * Use CPU ID rather than ACPI ID, this will be pushed to a later patch
-v1->v2:
- * New patch
----
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-amdpsp.c | 25 +++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+On Tue, Mar 21, 2023 at 04:57:52PM -0700, Stephen Boyd wrote:
+> Quoting Conor Dooley (2023-03-21 16:03:54)
+> >=20
+> > If you're happy on the driver side of things, do you want to pick those
+> > patches up on top of the bindings and send a PR to Stephen?
+>=20
+> This sounds fine to me. Let me know if you plan to send a PR with the
+> starfive clk bits.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index d53bf716f97d..2aba5ffa8b03 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -568,6 +568,7 @@ config I2C_DESIGNWARE_AMDPSP
- 	bool "AMD PSP I2C semaphore support"
- 	depends on ACPI
- 	depends on I2C_DESIGNWARE_PLATFORM
-+	depends on PCI
- 	imply CRYPTO_DEV_SP_PSP
- 	help
- 	  This driver enables managed host access to the selected I2C bus shared
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 12870dc44bdb..f5c754919fbd 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/i2c.h>
-+#include <linux/pci.h>
- #include <linux/psp-platform-access.h>
- #include <linux/psp.h>
- #include <linux/workqueue.h>
-@@ -32,6 +33,8 @@ static u32 psp_i2c_access_count;
- static bool psp_i2c_mbox_fail;
- static struct device *psp_i2c_dev;
- 
-+static int (*_psp_send_i2c_req)(struct psp_i2c_req *req);
-+
- /* Helper to verify status returned by PSP */
- static int check_i2c_req_sts(struct psp_i2c_req *req)
- {
-@@ -72,6 +75,17 @@ static int psp_send_i2c_req_cezanne(struct psp_i2c_req *req)
- 	return ret;
- }
- 
-+static int psp_send_i2c_req_mendocino(struct psp_i2c_req *req)
-+{
-+	int ret;
-+
-+	ret = psp_ring_platform_doorbell(req->type, &req->hdr.status);
-+	if (ret == -EIO)
-+		return check_i2c_req_sts(req);
-+
-+	return ret;
-+}
-+
- static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
- {
- 	struct psp_i2c_req *req;
-@@ -87,7 +101,7 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
- 	req->type = i2c_req_type;
- 
- 	start = jiffies;
--	ret = read_poll_timeout(psp_send_i2c_req_cezanne, status,
-+	ret = read_poll_timeout(_psp_send_i2c_req, status,
- 				(status != -EBUSY),
- 				PSP_I2C_REQ_RETRY_DELAY_US,
- 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
-@@ -262,6 +276,8 @@ static const struct i2c_lock_operations i2c_dw_psp_lock_ops = {
- 
- int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
- {
-+	struct pci_dev *rdev;
-+
- 	if (!IS_REACHABLE(CONFIG_CRYPTO_DEV_CCP_DD))
- 		return -ENODEV;
- 
-@@ -275,6 +291,13 @@ int i2c_dw_amdpsp_probe_lock_support(struct dw_i2c_dev *dev)
- 	if (psp_i2c_dev)
- 		return -EEXIST;
- 
-+	/* Cezanne uses platform mailbox, Mendocino and later use doorbell */
-+	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
-+	if (rdev->device == 0x1630)
-+		_psp_send_i2c_req = psp_send_i2c_req_cezanne;
-+	else
-+		_psp_send_i2c_req = psp_send_i2c_req_mendocino;
-+
- 	if (psp_check_platform_access_status())
- 		return -EPROBE_DEFER;
- 
--- 
-2.34.1
+Since it was off-list:
+Emil and I spoke about this briefly today at the weekly linux-riscv
+meeting, the upshot of which is that it is likely to be me, rather than
+him, sending you a PR as he's pretty busy at the moment.
+That said, Emil mentioned that he has some doubts as to whether the
+bindings are correct, and from taking a look - he's right, so there'll
+likely not be a PR just yet! I'll go leave a comment about that...
 
+I've got no real desire to maintain these drivers going forward though,
+so perhaps Hal, or one of the other StarFive folks, can get themselves
+set up to send them to you going forwards?
+
+Cheers,
+Conor.
+
+--qDgrhF5nMeMRIFyO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBttuAAKCRB4tDGHoIJi
+0ov6AQCours97BTI/h1YoGjIRSzsJumk9V2x34rQsvT3HtmqjwEAsc+9b9pMzD1r
+LJ0vwnpZibKnjwdjkP9faV1TdgSO7Ac=
+=SQwY
+-----END PGP SIGNATURE-----
+
+--qDgrhF5nMeMRIFyO--
