@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6976C4440
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3199B6C4446
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCVHnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S229917AbjCVHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCVHnl (ORCPT
+        with ESMTP id S229476AbjCVHou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:43:41 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CB51DB8C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:43:40 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id b20so36196903edd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:43:40 -0700 (PDT)
+        Wed, 22 Mar 2023 03:44:50 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEF924C98
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:44:49 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id cy23so69037922edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679471019;
+        d=linaro.org; s=google; t=1679471088;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lA/e5G4rNQAHj7RMOPW1MBRBFjvSz849rKiCbqJsGfE=;
-        b=EwFlWF2cjR6CZPirutu+NzIF17PyFWTqM0QmVqPa21qP4fNUtatuFNMLOIFmv8cEHv
-         wonTIvW5UkPfbnb3zBKJJTDTn6Sc+8ot6BaQLeDsJcxxA7A/0pWtelw1mRlSba4SCRXj
-         MWlmeLXdHWINvkBcmLJ/qnqQZ1slXM/M7aXnQTXzIX33NZ9SOeEKZN/3X6XQEgitSPnT
-         GcRcTqCWKS3vEBwuU4dgO4T42HGxYu9tlQ2KyQpXowX0K86VakA1HIVyBMQqKvrsy94I
-         5VLpP5E6B86NaJ/c7pHRX+5vNKfsdup4v4UDwq9+RWMgnkDlqIPVCR9gCdkU8Rp0iESf
-         iJog==
+        bh=S3dGgcVJy56CLtMNjjLfSHiR4v8AC8/EHQCvrk5cImM=;
+        b=Q92NDs+Jr1AUX06FcUhFEtn78+j6vJ8Wrpk9z3vu/2gvD8oREGeNCAmWEW6ljtqtiV
+         keo8FVP806i0kaVPJ97c4AxvwG2+piRPwsLPj9XNdeuvrb07O7ioXdPCVguBYwwj9dqi
+         KNBYAlQaAzI76INTgaOTS6WN0uhHEU7B9qJhlisFznAMtLdX8YIyoNRvG6KGjyokaKgC
+         k7QVBDTs457ZVUAeV8A4UhCqZanUxJyWXGrs+FSk66lIyba81QFwop2WEGjv0NpaeMXj
+         y50BUeSWJ2085oXz7E/d9z1LNqpNHTHKIf1pSbWrmY3wmN/pYbt/+qtCRUU14q8hPVDz
+         3eYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679471019;
+        d=1e100.net; s=20210112; t=1679471088;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lA/e5G4rNQAHj7RMOPW1MBRBFjvSz849rKiCbqJsGfE=;
-        b=w6t0gaF+H71We+nirdfDTZsq8umP5rLwIwgBmekulLk7FsTdeMkO2yraCjwi1F9VJo
-         MW8auW3LApbJB5dHhUCOn6+6t/s8eec9Qcj52n+FsQ1mrJJ/PUqf3ZeQP5IjpTnPgioL
-         XE01v4wSxBUX9BTLbu1xpm9EwcKVr8rqze6In0KrhouCZtv/NL+q/1aRPHb+WHx8GfYq
-         HVsa1RP0WwA+eDwotM/nre4mPC2Fqz3cOWDtYg1TQCP1MBZanN+qiGW+jlpSgT6/Xfzw
-         Fd8rCRwyHUdmaYVBPGEIpWGFRZ87HjPRdCCbD7xpt4azqRMek5u8qkmALSvtGIqa8KZv
-         VpeA==
-X-Gm-Message-State: AO0yUKVD0Xi1YjibIXHu3EORKS3IoF4C2NRov8wAaIQeGppRSFfwyUqi
-        1/B+QYrvngXG0rMHTSute1U1vA==
-X-Google-Smtp-Source: AK7set+KqGAe4h2S0x3hml78os967F/lJ7W/0E6k2aOGzB+GYvorVjsRALdeum2WSRMclS9WBLJIcg==
-X-Received: by 2002:a17:906:3389:b0:8eb:d3a5:b9f0 with SMTP id v9-20020a170906338900b008ebd3a5b9f0mr5450530eja.67.1679471019394;
-        Wed, 22 Mar 2023 00:43:39 -0700 (PDT)
+        bh=S3dGgcVJy56CLtMNjjLfSHiR4v8AC8/EHQCvrk5cImM=;
+        b=3/WO+lUDy/MXmYB3OMeQJdiy3r/CsTy5JAhOt65HAZuK0ohsg37fGcG8o10obmW0nW
+         bnKy3j7tElTOVqAGfW/mSNnn/JSJe2arQ5Bx1JlsNGYzEr739zIVHvRN35fcHqWQUGWV
+         etRBUIDvX7Sa602MtcT0m7EPkplvKGXoEZ2HW1t11yaxz4Ljf3E54tN2om/UXjBGv67D
+         1q9l3viDz/zD39jQWBeLP5R6J2Bi/6lVHJoBHectcF/+oto9FcmUid969Y7OeCPoAsCG
+         DKIAEN0l7RuTrO8BRjHhBP2gIAwS9KeiEmmBWeR4/qjonXMJxDnBMjWp55WLstfarafr
+         481A==
+X-Gm-Message-State: AO0yUKX94kxZut/Q9+2peHw04odFfIxfkR60ZxvjPFSJZNQk6OgWfteL
+        Lm0Xa//zQKYLA/xmiwFetj0m3w==
+X-Google-Smtp-Source: AK7set95apHFzo5CUdeleFgQho6O1MV6v+VQQccJNVBd2oyCWvpIun4HICXyY/p9b5uzS0geTl79IQ==
+X-Received: by 2002:a17:906:1950:b0:921:54da:831c with SMTP id b16-20020a170906195000b0092154da831cmr1236868eje.31.1679471088266;
+        Wed, 22 Mar 2023 00:44:48 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm6761659eju.193.2023.03.22.00.43.38
+        by smtp.gmail.com with ESMTPSA id zc14-20020a170906988e00b00927f6c799e6sm6839389ejb.132.2023.03.22.00.44.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 00:43:39 -0700 (PDT)
-Message-ID: <6e4b135b-8cfe-f77c-1fe3-3dc62704f851@linaro.org>
-Date:   Wed, 22 Mar 2023 08:43:38 +0100
+        Wed, 22 Mar 2023 00:44:47 -0700 (PDT)
+Message-ID: <f62299b2-0140-f7a1-c307-925472e302cf@linaro.org>
+Date:   Wed, 22 Mar 2023 08:44:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: trivial-devices: Add acbel,fsg032
+Subject: Re: [PATCH] dt-bindings: display: msm: sm8350-mdss: Fix DSI
+ compatible
 Content-Language: en-US
-To:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, robh+dt@kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        eajames@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230321190914.2266216-1-lakshmiy@us.ibm.com>
- <20230321190914.2266216-3-lakshmiy@us.ibm.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230321213557.1737905-1-konrad.dybcio@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230321190914.2266216-3-lakshmiy@us.ibm.com>
+In-Reply-To: <20230321213557.1737905-1-konrad.dybcio@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,27 +86,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 20:09, Lakshmi Yadlapati wrote:
-> Add new Acbel FSG032 power supply to trivial devices.
+On 21/03/2023 22:35, Konrad Dybcio wrote:
+> The DSI compatible changed between patchset revisions, but that wasn't
+> reflected in the bindings. Fix it.
 > 
-> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+> Fixes: 430e11f42bff ("dt-bindings: display: msm: Add qcom, sm8350-mdss binding")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 6f482a254a1d..6fbfa79de343 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -30,6 +30,8 @@ properties:
->      items:
->        - enum:
->              # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
-> +            # Acbel fsg032 power supply
-> +          - acbel,fsg032
 
-No, still wrong. Open the file and look at the lines where you put the
-code. It seems you add it in random places.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
