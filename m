@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9786C44AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8312A6C44B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjCVIPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
+        id S229848AbjCVIQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCVIPd (ORCPT
+        with ESMTP id S229635AbjCVIQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:15:33 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1AC57D03
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:15:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so69290397edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:15:31 -0700 (PDT)
+        Wed, 22 Mar 2023 04:16:51 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76AE5C124
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:16:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so69428150edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1679472930;
+        d=linaro.org; s=google; t=1679473008;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yX1PylJsbOJ+Mtm+afJQlEAtJMN9YyqyzP0lJvmSfe4=;
-        b=H0DwALhNDlE/J8V0xykIX5ECvWWI3DSHDWw+50X4tY24ZMkyEimoUuHVxhbRdkTXjA
-         7/dAvvsIlM0e2pKgffcwBegoinBohHhmcWjohgdzm2xyyObozpzQ/1ZAUIZ9whpMzs2R
-         j9/0g6s0vtRI+JTRMKwEYOMefRXXDVWxAuvlLpD6GkNqXY58I24a4verkBpGOyYQFCzW
-         FB66iWQUok8lxZSfD4yVNsfJ3sBLIvOmeoMx5ij++JnSR+xQUgikfrQ9BNWrQ0QlOGdV
-         JxOUEH7hmKPBFD5uLL5V+ATqVM2iAEgBqlcTkj4/M7TQOCfES2vRq+B1Q/lbUa0Q+sT0
-         Nu0g==
+        bh=qXeMOsufe8hSFgTPxUltIiAHXtjsyiMFaKXE2Z0rVtc=;
+        b=UOQ3t5C0nu5cx0SLEhSzRiJDhCU4o1AERxtqslmrrJ0Msz/J5gwFEFw5SPNfDf3KQn
+         xE8TZAAVZ8fS3liTuyv0ta/JFMbECbDkvvkyz88nO55zspV8ldwXdmtnd3sN66Anfx//
+         gT+LLvfMCH+yZTQ/5XFkNhajC1H4ZNKSin80mFepu6TT2IFc9ZmxJKNz8mTJQXk03Apb
+         Z1Iv9Fn1f1r66Sn/4Gnr4CtInurCPgbAvi2SGHK05g3CSGYqv7VCKsyRop5hQvTeDV41
+         9cI7oU9hpyLQniI6w3SbChM03RVI5NJIrFBUM5Wf2WvH4m3n/o6tJK8CvmFWJsMlB9gi
+         T+Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679472930;
+        d=1e100.net; s=20210112; t=1679473008;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yX1PylJsbOJ+Mtm+afJQlEAtJMN9YyqyzP0lJvmSfe4=;
-        b=oulMlDDgCIByaFWNEDnezoVsOgHPKZ1g3LBkBqTOPUAmIDsGm1ce6TrRfTxw8slqUo
-         C5jvt6fJWLiuApW0GNt391a/o/7qsy6pzE9YhiqUEObtMnjUtJHvv6K3Ploc4rzJ1n09
-         vCRBBtRHmZrH2dassfXc7tvC3+k2VdPe8DILACL23cb4MwZtaJVb3FaWjKC5phFnfGVX
-         lP5jYHXdkgxqAjcfEip9Lrk7n23dxz5a2X+hfsrn4qXw1o/7mDmpvmAIFEQzETcjc1Sk
-         TmXO1fzYJ5tyl/b10u1yy8A0K+AAsEFQ1Q7aNAKqaqc8dyA2xo2fQSt0m5uE3KgrZYfB
-         8P0Q==
-X-Gm-Message-State: AO0yUKVsdyBjOr5fggKgNh87/1rJ38/fEN5mMoy6NigaXgGN4tQkBXuL
-        yoWvZhmh5u88buY8u2kJYQfsRQ==
-X-Google-Smtp-Source: AK7set/EaLANEGLX2Ch/dcG5mmfP8oVSyWtGJBvtDS60cnw2xvm1moXQgOY193jq2AapsyHx8UYEqA==
-X-Received: by 2002:a17:906:5a5c:b0:8f3:8bfd:a8e with SMTP id my28-20020a1709065a5c00b008f38bfd0a8emr1429648ejc.26.1679472929834;
-        Wed, 22 Mar 2023 01:15:29 -0700 (PDT)
-Received: from ?IPV6:2003:f6:af46:bf00:c0c2:695b:730f:946e? (p200300f6af46bf00c0c2695b730f946e.dip0.t-ipconnect.de. [2003:f6:af46:bf00:c0c2:695b:730f:946e])
-        by smtp.gmail.com with ESMTPSA id b4-20020a17090630c400b0092b5384d6desm6808314ejb.153.2023.03.22.01.15.28
+        bh=qXeMOsufe8hSFgTPxUltIiAHXtjsyiMFaKXE2Z0rVtc=;
+        b=XdAY5yTszLElZrZ+mObVGOStb/oExoKXQ07jpA12NOLKp2e8BHioAm42sSW0BHhZ/l
+         wzu2kAYJ4cjM7QOUS5Y7jJYglS9jV+N9eX9iq8QJXnSQhcUuMCcnmFKXT0PDXV7VMjUj
+         8CuIHOSjgG0pums/SYsmnlbpsDu5BDFr4Ych3CDjYJXy1IOa54V35ylFE0xURHKrrXZH
+         7GWO6sM2VUS5n8QDRdeM/JLn1EesvON2NHTFAzJh5YhBEn2/24f+P23DiU7S8YlDJcIC
+         cleNxvNmQOV1SDVsDaVM/K3LBjF0BKOhSHhlZkM0mMMwPaJN8f8c6li08J2YKsLy5Avf
+         JfmQ==
+X-Gm-Message-State: AO0yUKWqDr4nsj23g7apwRofa9xZGT4q64Icz72BLu6acngEZI69RZht
+        8cuoOAuk77XHvTjD5DPeeh2mMA==
+X-Google-Smtp-Source: AK7set9oGvfx3eMarIqqmx9cPnLmWTpEBMNaUrGWEQhYU1E1qPNKxTTukOWaBgC8HsULh/3229R/Jg==
+X-Received: by 2002:a17:906:4ad1:b0:8e3:74ad:94ce with SMTP id u17-20020a1709064ad100b008e374ad94cemr1376556ejt.8.1679473008210;
+        Wed, 22 Mar 2023 01:16:48 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
+        by smtp.gmail.com with ESMTPSA id i22-20020a17090671d600b0093348be32cfsm4838527ejk.90.2023.03.22.01.16.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:15:29 -0700 (PDT)
-Message-ID: <3b3f2e12-4812-af5f-6525-2c29fe035e9e@grsecurity.net>
-Date:   Wed, 22 Mar 2023 09:15:28 +0100
+        Wed, 22 Mar 2023 01:16:47 -0700 (PDT)
+Message-ID: <de3acab7-cf76-3135-9ff8-a0e5537a434b@linaro.org>
+Date:   Wed, 22 Mar 2023 09:16:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/6] KVM: x86: Revert MSR_IA32_FLUSH_CMD.FLUSH_L1D
- enabling
-Content-Language: en-US, de-DE
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>
-References: <20230322011440.2195485-1-seanjc@google.com>
- <20230322011440.2195485-2-seanjc@google.com>
-From:   Mathias Krause <minipli@grsecurity.net>
-In-Reply-To: <20230322011440.2195485-2-seanjc@google.com>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Julien Panis <jpanis@baylibre.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        corbet@lwn.net, arnd@arndb.de, gregkh@linuxfoundation.org,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com
+Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230321171020.74736-1-jpanis@baylibre.com>
+ <20230321171020.74736-2-jpanis@baylibre.com>
+ <88a6856e-c766-d4a5-1882-5350fd0e248a@linaro.org>
+ <bffba580-e737-8996-4812-3c76c880acc9@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bffba580-e737-8996-4812-3c76c880acc9@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,223 +85,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.03.23 02:14, Sean Christopherson wrote:
-> Revert the recently added virtualizing of MSR_IA32_FLUSH_CMD, as both
-> the VMX and SVM are fatally buggy to guests that use MSR_IA32_FLUSH_CMD or
-> MSR_IA32_PRED_CMD, and because the entire foundation of the logic is
-> flawed.
+On 22/03/2023 09:01, Julien Panis wrote:
+>>> +  ti,multi-phase-id:
+>>> +    description: |
+>>> +      Describes buck multi-phase configuration, if any. For instance, XY id means
+>>> +      that outputs of buck converters X and Y are combined in multi-phase mode.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> No improvements here. As Rob pointed out, this looks like coupled
+>> regulators.
 > 
-> The most immediate problem is an inverted check on @cmd that results in
-> rejecting legal values.  SVM doubles down on bugs and drops the error,
-> i.e. silently breaks all guest mitigations based on the command MSRs.
-> 
-> The next issue is that neither VMX nor SVM was updated to mark
-> MSR_IA32_FLUSH_CMD as being a possible passthrough MSR,
-> which isn't hugely problematic, but does break MSR filtering and triggers
-> a WARN on VMX designed to catch this exact bug.
-> 
-> The foundational issues stem from the MSR_IA32_FLUSH_CMD code reusing
-> logic from MSR_IA32_PRED_CMD, which in turn was likely copied from KVM's
-> support for MSR_IA32_SPEC_CTRL.  The copy+paste from MSR_IA32_SPEC_CTRL
-> was misguided as MSR_IA32_PRED_CMD (and MSR_IA32_FLUSH_CMD) is a
-> write-only MSR, i.e. doesn't need the same "deferred passthrough"
-> shenanigans as MSR_IA32_SPEC_CTRL.
-> 
-> Revert all MSR_IA32_FLUSH_CMD enabling in one fell swoop so that there is
-> no point where KVM advertises, but does not support, L1D_FLUSH.
-> 
-> This reverts commits 45cf86f26148e549c5ba4a8ab32a390e4bde216e,
-> 723d5fb0ffe4c02bd4edf47ea02c02e454719f28, and
-> a807b78ad04b2eaa348f52f5cc7702385b6de1ee.
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://lkml.kernel.org/r/20230317190432.GA863767%40dev-arch.thelio-3990X
-> Cc: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Cc: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/cpuid.c      |  2 +-
->  arch/x86/kvm/svm/svm.c    | 43 ++++++++-----------------
->  arch/x86/kvm/vmx/nested.c |  3 --
->  arch/x86/kvm/vmx/vmx.c    | 68 ++++++++++++++-------------------------
->  4 files changed, 39 insertions(+), 77 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 9583a110cf5f..599aebec2d52 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -653,7 +653,7 @@ void kvm_set_cpu_caps(void)
->  		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
->  		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
->  		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
-> -		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(FLUSH_L1D)
-> +		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
->  	);
->  
->  	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 70183d2271b5..252e7f37e4e2 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -2869,28 +2869,6 @@ static int svm_set_vm_cr(struct kvm_vcpu *vcpu, u64 data)
->  	return 0;
->  }
->  
-> -static int svm_set_msr_ia32_cmd(struct kvm_vcpu *vcpu, struct msr_data *msr,
-> -				bool guest_has_feat, u64 cmd,
-> -				int x86_feature_bit)
-> -{
-> -	struct vcpu_svm *svm = to_svm(vcpu);
-> -
-> -	if (!msr->host_initiated && !guest_has_feat)
-> -		return 1;
-> -
-> -	if (!(msr->data & ~cmd))
-> -		return 1;
-> -	if (!boot_cpu_has(x86_feature_bit))
-> -		return 1;
-> -	if (!msr->data)
-> -		return 0;
-> -
-> -	wrmsrl(msr->index, cmd);
-> -	set_msr_interception(vcpu, svm->msrpm, msr->index, 0, 1);
-> -
-> -	return 0;
-> -}
-> -
->  static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> @@ -2965,14 +2943,19 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
->  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SPEC_CTRL, 1, 1);
->  		break;
->  	case MSR_IA32_PRED_CMD:
-> -		r = svm_set_msr_ia32_cmd(vcpu, msr,
-> -					 guest_has_pred_cmd_msr(vcpu),
-> -					 PRED_CMD_IBPB, X86_FEATURE_IBPB);
-> -		break;
-> -	case MSR_IA32_FLUSH_CMD:
-> -		r = svm_set_msr_ia32_cmd(vcpu, msr,
-> -					 guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D),
-> -					 L1D_FLUSH, X86_FEATURE_FLUSH_L1D);
-> +		if (!msr->host_initiated &&
-> +		    !guest_has_pred_cmd_msr(vcpu))
-> +			return 1;
-> +
-> +		if (data & ~PRED_CMD_IBPB)
-> +			return 1;
-> +		if (!boot_cpu_has(X86_FEATURE_IBPB))
-> +			return 1;
-> +		if (!data)
-> +			break;
-> +
-> +		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
-> +		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_PRED_CMD, 0, 1);
->  		break;
->  	case MSR_AMD64_VIRT_SPEC_CTRL:
->  		if (!msr->host_initiated &&
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index f63b28f46a71..1bc2b80273c9 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -654,9 +654,6 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
->  	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
->  					 MSR_IA32_PRED_CMD, MSR_TYPE_W);
->  
-> -	nested_vmx_set_intercept_for_msr(vmx, msr_bitmap_l1, msr_bitmap_l0,
-> -					 MSR_IA32_FLUSH_CMD, MSR_TYPE_W);
-> -
->  	kvm_vcpu_unmap(vcpu, &vmx->nested.msr_bitmap_map, false);
->  
->  	vmx->nested.force_msr_bitmap_recalc = false;
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d7bf14abdba1..f777509ecf17 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2133,39 +2133,6 @@ static u64 vmx_get_supported_debugctl(struct kvm_vcpu *vcpu, bool host_initiated
->  	return debugctl;
->  }
->  
-> -static int vmx_set_msr_ia32_cmd(struct kvm_vcpu *vcpu,
-> -				struct msr_data *msr_info,
-> -				bool guest_has_feat, u64 cmd,
-> -				int x86_feature_bit)
-> -{
-> -	if (!msr_info->host_initiated && !guest_has_feat)
-> -		return 1;
-> -
-> -	if (!(msr_info->data & ~cmd))
-> -		return 1;
-> -	if (!boot_cpu_has(x86_feature_bit))
-> -		return 1;
-> -	if (!msr_info->data)
-> -		return 0;
-> -
-> -	wrmsrl(msr_info->index, cmd);
-> -
-> -	/*
-> -	 * For non-nested:
-> -	 * When it's written (to non-zero) for the first time, pass
-> -	 * it through.
-> -	 *
-> -	 * For nested:
-> -	 * The handling of the MSR bitmap for L2 guests is done in
-> -	 * nested_vmx_prepare_msr_bitmap. We should not touch the
-> -	 * vmcs02.msr_bitmap here since it gets completely overwritten
-> -	 * in the merging.
-> -	 */
-> -	vmx_disable_intercept_for_msr(vcpu, msr_info->index, MSR_TYPE_W);
-> -
-> -	return 0;
-> -}
-> -
->  /*
->   * Writes msr value into the appropriate "register".
->   * Returns 0 on success, non-0 otherwise.
-> @@ -2319,16 +2286,31 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  			return 1;
->  		goto find_uret_msr;
->  	case MSR_IA32_PRED_CMD:
-> -		ret = vmx_set_msr_ia32_cmd(vcpu, msr_info,
-> -					   guest_has_pred_cmd_msr(vcpu),
-> -					   PRED_CMD_IBPB,
-> -					   X86_FEATURE_IBPB);
-> -		break;
-> -	case MSR_IA32_FLUSH_CMD:
-> -		ret = vmx_set_msr_ia32_cmd(vcpu, msr_info,
-> -					   guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D),
-> -					   L1D_FLUSH,
-> -					   X86_FEATURE_FLUSH_L1D);
-> +		if (!msr_info->host_initiated &&
-> +		    !guest_has_pred_cmd_msr(vcpu))
-> +			return 1;
-> +
-> +		if (data & ~PRED_CMD_IBPB)
-> +			return 1;
-> +		if (!boot_cpu_has(X86_FEATURE_IBPB))
-> +			return 1;
-> +		if (!data)
-> +			break;
-> +
-> +		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
-> +
-> +		/*
-> +		 * For non-nested:
-> +		 * When it's written (to non-zero) for the first time, pass
-> +		 * it through.
-> +		 *
-> +		 * For nested:
-> +		 * The handling of the MSR bitmap for L2 guests is done in
-> +		 * nested_vmx_prepare_msr_bitmap. We should not touch the
-> +		 * vmcs02.msr_bitmap here since it gets completely overwritten
-> +		 * in the merging.
-> +		 */
-> +		vmx_disable_intercept_for_msr(vcpu, MSR_IA32_PRED_CMD, MSR_TYPE_W);
->  		break;
->  	case MSR_IA32_CR_PAT:
->  		if (!kvm_pat_valid(data))
+> I used 'oneOf' logic to handle mutual exclusion. But it seems that I did not
+> understand what you and Rob expected.
+> Does some generic property already exist for 'coupled regulators' ?
 
-This fixes the boot crash others an me ran into. Thanks a lot, Sean!
+Yes, see regulator.yaml binding.
 
-Tested-by: Mathias Krause <minipli@grsecurity.net>
+Best regards,
+Krzysztof
+
