@@ -2,114 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D43F6C5873
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35286C5878
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCVVGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S229739AbjCVVIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCVVGg (ORCPT
+        with ESMTP id S229768AbjCVVIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:06:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEE8A76;
-        Wed, 22 Mar 2023 14:06:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 255C6622DB;
-        Wed, 22 Mar 2023 21:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BEBC433D2;
-        Wed, 22 Mar 2023 21:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679519166;
-        bh=IwqcGZUb+JAwQ49B5qlPxqjaSl7Z1L+y305zKBfg5xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IPpZBwRMbkG1hrPfdnOcabVKfBq9aOmy9U0hxbSGokCQcO0A8voh1JNXTo9Ui92e7
-         +oAT/mkzC3IcamAvCYtXv0yTUIfBeDgEbC1MtOWfzRWSdLSQnaSLHdaV4FSCSe0TaZ
-         MgWIkW/D5X8HBrSCyZyol0h6+jAai0ufW/Qz0HupiQKtpHtQhG8C2btGprgZi5lbFX
-         XEETgsDVJW0AEOVdeeiRlES75/Q25qQBvRYyGWVWpeLAuCmv6YHGGG+PhdExIvkXaA
-         j5UADPATWWUwZYM8aOmlJMFlGbHg83GJ9xvkYI1IpGGjzsIqtCCV8lEJLLkmdqBKb6
-         dOtDrHnzD9i/g==
-Date:   Wed, 22 Mar 2023 21:06:00 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Hal Feng <hal.feng@starfivetech.com>, kernel@esmil.dk,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/21] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <a6358a5f-bbfd-4a14-a828-a3c28f82709a@spud>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
- <95f11f7c-611f-49a9-97e8-0de89846e430@spud>
- <62b766cef78d95793af95f428693c359.sboyd@kernel.org>
+        Wed, 22 Mar 2023 17:08:09 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C07940E2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:08:03 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id e13so1059439ioc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679519282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2NMs74zzuCtt5E+o+ysqW2tmIIs5ug4dARg5jHam9G0=;
+        b=NEfTegf9MNjv8z9211rRLvibighkYaTUQZyTA/djbicnxJjPEp4Y0VAgeIOGnJs+Kz
+         hlY0eEYwAQoEN6oD/a8WDhIFcdW9OaQ9TQd31udqQDfaIKgvbQGpAuHXCe9gmQo9xL4n
+         6wUNapeMfW/A2S79JUY9v32wx5296n6JJOjSdGjIp+nl1WfOO+uFbryqRtQ3DL79BLEA
+         Q9aB94r++4EXz6K4IeS4JN9SzTkhSEbF9o95BAE4wx3hIFVkmMwJ8NQUR8SyJ+nn0VFc
+         757uWDuSsbArvxnfMoYZwucnObeP4lxcvHCkC46KNtEY2KvXeIb+/1sR7qATHE4hLSle
+         7+vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679519282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2NMs74zzuCtt5E+o+ysqW2tmIIs5ug4dARg5jHam9G0=;
+        b=5PDDEJLg69rayA4/gUH3vsNaINbfpdXwp+1RiRa/cot+UBIqmPtN08XDN/BezZTyVj
+         k8ptLkOU9H1CSLKh7tnRGC3GguobtnG2cyqTi9+NMd2K/unNs+H+Be5Zac5cGrTXLhLL
+         ZAqnIxdFxhan5Oj416F1vRosGg8lZizqfX8Ev8owozYW74lcrISGL1sOFOmdL7UDb7Zd
+         ovrDAMe/ftj2xRswkGhNNCywLTrBzTMj4cb25Xe+HnrxLiHmSU0zxOy2miSUdFbfZkbU
+         6QggEGGfPLMumnC9SolMnPuG6R1oYxNzCuzIA9QTq3H6T450vw+ihpvYjjXs+yPuCHbJ
+         KvuQ==
+X-Gm-Message-State: AO0yUKVdiEye203bFx2YYRo9ypb+A5KfFcjvHIOawqtMSxZ3VOlp4s5y
+        bSEGhGIuyhiP3TsMZkN6gbqznw==
+X-Google-Smtp-Source: AK7set+Mlgw7Cv/VyLzttEDRzn0iS5chZBzcFn7OZZmh3jRipNXqRvrMTGaTZagW7DoKr31cM7L2mQ==
+X-Received: by 2002:a5e:8b01:0:b0:74c:a578:e3a0 with SMTP id g1-20020a5e8b01000000b0074ca578e3a0mr5306285iok.5.1679519282604;
+        Wed, 22 Mar 2023 14:08:02 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id g8-20020a5edf48000000b00758917bc309sm919372ioq.31.2023.03.22.14.08.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 14:08:02 -0700 (PDT)
+Message-ID: <a0e5f9e3-403d-3334-9f7c-9d649d794a96@linaro.org>
+Date:   Wed, 22 Mar 2023 16:08:01 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qDgrhF5nMeMRIFyO"
-Content-Disposition: inline
-In-Reply-To: <62b766cef78d95793af95f428693c359.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next] net: ipa: add IPA v5.0 to ipa_version_string()
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
+        evgreen@chromium.org, andersson@kernel.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230322144742.2203947-1-elder@linaro.org>
+ <ZBtrfLOh3EKBKW+F@corigine.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <ZBtrfLOh3EKBKW+F@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/22/23 3:56 PM, Simon Horman wrote:
+> Should IPA_VERSION_5_1 and IPA_VERSION_5_5 also be added?
 
---qDgrhF5nMeMRIFyO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+They could, since their symbols are defined.
 
-On Tue, Mar 21, 2023 at 04:57:52PM -0700, Stephen Boyd wrote:
-> Quoting Conor Dooley (2023-03-21 16:03:54)
-> >=20
-> > If you're happy on the driver side of things, do you want to pick those
-> > patches up on top of the bindings and send a PR to Stephen?
->=20
-> This sounds fine to me. Let me know if you plan to send a PR with the
-> starfive clk bits.
+We expect to support both of those versions pretty
+soon, and we'll certainly add them to this function
+then.  For now, unless someone thinks it's important
+to add this now, I'd rather keep it this way.
 
-Since it was off-list:
-Emil and I spoke about this briefly today at the weekly linux-riscv
-meeting, the upshot of which is that it is likely to be me, rather than
-him, sending you a PR as he's pretty busy at the moment.
-That said, Emil mentioned that he has some doubts as to whether the
-bindings are correct, and from taking a look - he's right, so there'll
-likely not be a PR just yet! I'll go leave a comment about that...
-
-I've got no real desire to maintain these drivers going forward though,
-so perhaps Hal, or one of the other StarFive folks, can get themselves
-set up to send them to you going forwards?
-
-Cheers,
-Conor.
-
---qDgrhF5nMeMRIFyO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBttuAAKCRB4tDGHoIJi
-0ov6AQCours97BTI/h1YoGjIRSzsJumk9V2x34rQsvT3HtmqjwEAsc+9b9pMzD1r
-LJ0vwnpZibKnjwdjkP9faV1TdgSO7Ac=
-=SQwY
------END PGP SIGNATURE-----
-
---qDgrhF5nMeMRIFyO--
+					-Alex
