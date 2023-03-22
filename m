@@ -2,189 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637306C57F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1BF6C57FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjCVUoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S231786AbjCVUoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbjCVUnj (ORCPT
+        with ESMTP id S230352AbjCVUo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:43:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654F8943B0;
-        Wed, 22 Mar 2023 13:36:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02E8662294;
-        Wed, 22 Mar 2023 20:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F4DC433D2;
-        Wed, 22 Mar 2023 20:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679517362;
-        bh=hE2w4AlCqCQiTuP+k7QtxIGexqc4E4HzGht5f7pSXto=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fDOSKjSIElrDPJuw6V2b2pglkrc/0ueVTVDsGM6sjNnd/PEuyhyJb1T6RtmV1aHqw
-         SIMoOiO6x65Ses4hsJQZF94mB6hA7ICejIHxunue3Z85uEVWnrhGzOxUThl2h/doRC
-         5oheGbKWN+MG3tF6qkvUdB50x9TLnvfL0nZGwVHRKP2bkaxMHkNP3C9EZaMLyiXs7R
-         gp417KrBcHyxqrIzwCWjHRTbVTnHWbai2lB29mDvmZgyIbrbygElvVJUDTShIvS53c
-         vHMb8rlRuy2Ln1AVBPCfxuFK8iEG3e0+0gMFUrxdvrOXc6UDSTuTp6TUE5tub1nwJj
-         88QkxWs2wLYAQ==
-Date:   Wed, 22 Mar 2023 13:36:00 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-Message-ID: <20230322203600.GA2837284@dev-arch.thelio-3990X>
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320180501.GA598084@dev-arch.thelio-3990X>
- <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
- <20230320185337.GA615556@dev-arch.thelio-3990X>
- <87pm91uf9c.fsf@kernel.org>
- <20230322163637.GA918620@dev-arch.thelio-3990X>
+        Wed, 22 Mar 2023 16:44:27 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50DB3E1E2;
+        Wed, 22 Mar 2023 13:37:31 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ew6so15090399edb.7;
+        Wed, 22 Mar 2023 13:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679517450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=17Wjze2y6t8a4zjcKa53kmqOgCJMw9ntTYn+G4muZxo=;
+        b=GUepQa4FzpVnJdj3SwadimZqcabtTzoGmqFjHse67Uu4gkiGslqm6j9V07lBXolcOw
+         r4qeHpPt5iGDTtqcul1BUlmiefkYFe/dxTn86OG3OIwWpfwxIfaQ33DwBXXT7dAMgwIB
+         IpFOTnS8OofaLs15P51FTOSfr8QY9h3t6AAGjlOLh3FuZQmKqvuN5y4xNiVmFM2jLpdJ
+         gVpQqIp43nAwNYTVz8BMmLKFUo6Xku8y3WQIlVOVYGVRweI/aUXPHIzTwogs+v0ogPnl
+         Y+rQVDJ8dpScuVUIII53iUNnxyEkw9N2bG2DbC0nghJH8p8RD6SAT57hpC3AoZSpgFfM
+         mDUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679517450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=17Wjze2y6t8a4zjcKa53kmqOgCJMw9ntTYn+G4muZxo=;
+        b=SXyIfRFrEvEwHkdf/ilhzB0PlUu5FFhY17GhOieekNkGOpiZdqCnIcYS3Cu+cQdzPA
+         7Wr7rWBd4Fii7QZ+ETtTsJka0SsPSWU4a7L4/qm93WTHaWB8aYkEJSe0lfDWmba4o57H
+         Kkh2GaIBGhgoS4N/xpWa1k/W74i3lO2JtL7rQowgi3QlV/En8JMUwOYkx+vpMWclkMxc
+         18miwzGYTvrmVF3dCsB4SYPxii1hoo+3l9hcN38WHsumA64Bx73ilptWOwFLPvGXl7Pq
+         M8ZxpCgHfBfSo5AMXTQCT/KWdH+5azAMJcnuawlSRj7o8KJEv9h9MYfJi52qaDbhpMe+
+         G6vw==
+X-Gm-Message-State: AAQBX9dPjMzWBiY6YrA1e87HoCmesOL+Qwiu9XAeQ319zPPde3RFG5P8
+        rO2It8uZ5LM7+Et9vhmD+Vw=
+X-Google-Smtp-Source: AK7set/OL6xIAJnNOtJzYybsbaA8EkueTTd9ranGekne3VZDLQzuxhHshbuJ98MDBcimsyp0ApUgsA==
+X-Received: by 2002:a05:6402:268e:b0:502:465:28d4 with SMTP id w14-20020a056402268e00b00502046528d4mr563537edd.1.1679517450319;
+        Wed, 22 Mar 2023 13:37:30 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id qh7-20020a170906eca700b0092bea699124sm7671936ejb.106.2023.03.22.13.37.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 13:37:30 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     shuah@kernel.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] selftests: sched: Add more core schedule prctl calls
+Date:   Thu, 23 Mar 2023 00:37:24 +0400
+Message-Id: <20230322203724.4757-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230322163637.GA918620@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:36:37AM -0700, Nathan Chancellor wrote:
-> On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
-> > Nathan Chancellor <nathan@kernel.org> writes:
-> > 
-> > > On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
-> > >> On Mon, Mar 20, 2023 at 11:05 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >> >
-> > >> > On the clang front, I am still seeing the following warning turned error
-> > >> > for arm64 allmodconfig at least:
-> > >> >
-> > >> >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-> > >> >           if (syncpt_irq < 0)
-> > >> >               ^~~~~~~~~~
-> > >> 
-> > >> Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
-> > >> that gcc doesn't warn about this.
-> > >
-> > > Perhaps these would make doing allmodconfig builds with clang more
-> > > frequently less painful for you?
-> > >
-> > > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
-> > 
-> > Thank you, at least for me this is really helpful.
-> 
-> Really glad to hear! I hope this helps make testing and verifying
-> changes with clang and LLVM easier for developers and maintainers.
-> 
-> > I tried now clang for the first time but seeing a strange problem.
-> > 
-> > I prefer to define the compiler in GNUmakefile so it's easy to change
-> > compilers and I don't need to remember the exact command line. So I have
-> > this in the top level GNUmakefile (all the rest commented out):
-> > 
-> > LLVM=/opt/clang/llvm-16.0.0/bin/
-> > 
-> > If I run 'make oldconfig' it seems to use clang but after I run just
-> > 'make' it seems to switch back to the host GCC compiler and ask for GCC
-> > specific config questions again. Workaround for this seems to be adding
-> > 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
-> > expected.
-> 
-> Interesting... I just tested with a basic GNUmakefile and everything
-> seems to work fine without an export. At the same time, the export
-> should not hurt anything, so as long as it works, that is what matters.
+The core sched kselftest makes prctl calls only with correct
+parameters. This patch will extend this test with more core
+schedule prctl calls with wrong parameters to increase code
+coverage.
 
-Ah, the export is needed so that mixed-build works properly (see lines
-324 to 361 in Makefile), as 'make' will be called to process each target
-individually; without the export, LLVM is not set for the subsequent
-'make' calls, so gcc is called. I just saw the same behavior as you did
-while testing with
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ tools/testing/selftests/sched/cs_prctl_test.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-  $ make -j(nproc) clean defconfig all
+diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+index 25e0d95d3713..df8e4629b3b5 100644
+--- a/tools/testing/selftests/sched/cs_prctl_test.c
++++ b/tools/testing/selftests/sched/cs_prctl_test.c
+@@ -334,6 +334,14 @@ int main(int argc, char *argv[])
+ 	validate(get_cs_cookie(pid) != 0);
+ 	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
+ 
++	printf("\n## Try to pass wrong subcommand PR_SCHED_CORE_MAX = %d to prctl (shouldn't succeed)\n", PR_SCHED_CORE_MAX);
++	validate(_prctl(PR_SCHED_CORE, PR_SCHED_CORE_MAX, 0, PIDTYPE_PGID, 0) < 0
++		&& errno == EINVAL);
++
++	printf("\n## Try to pass not-null uaddr with forbidden command (shouldn't succeed)\n");
++	validate(_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, PIDTYPE_PGID, 1) < 0
++		&& errno == EINVAL);
++
+ 	if (errors) {
+ 		printf("TESTS FAILED. errors: %d\n", errors);
+ 		res = 10;
+-- 
+2.34.1
 
-without the export (GCC was used instead of LLVM).
-
->     $ gcc --version
->     fish: Unknown command: gcc
-> 
-> 
->     $ fd -t x . $CBL_TC_LLVM_STORE/16.0.0/bin -x basename
->     clang-16
->     llvm-nm
->     llvm-objdump
->     llvm-objcopy
->     llvm-symbolizer
->     llvm-strings
->     llvm-readobj
->     llvm-dwarfdump
->     lld
->     llvm-ar
-> 
-> 
->     $ cat GNUmakefile
->     LLVM := $(CBL_TC_LLVM_STORE)/16.0.0/bin/
-> 
->     include Makefile
-> 
-> 
->     $ make -sj(nproc) defconfig
-> 
-> 
->     $ head -13 .config
->     #
->     # Automatically generated file; DO NOT EDIT.
->     # Linux/x86 6.3.0-rc3 Kernel Configuration
->     #
->     CONFIG_CC_VERSION_TEXT="ClangBuiltLinux clang version 16.0.0"
->     CONFIG_GCC_VERSION=0
->     CONFIG_CC_IS_CLANG=y
->     CONFIG_CLANG_VERSION=160000
->     CONFIG_AS_IS_LLVM=y
->     CONFIG_AS_VERSION=160000
->     CONFIG_LD_VERSION=0
->     CONFIG_LD_IS_LLD=y
->     CONFIG_LLD_VERSION=160000
-> 
-> 
->     $ make -sj(nproc) init/main.o
-> 
-> 
->     $ $CBL_TC_LLVM_STORE/16.0.0/bin/llvm-readelf -p .comment init/main.o
->     String dump of section '.comment':
->     [     1] ClangBuiltLinux clang version 16.0.0
-> 
-> 
-> I added an informational print and I always saw the correct value:
-> 
-> diff --git a/Makefile b/Makefile
-> index a2c310df2145..070394c4cb8c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -431,6 +431,7 @@ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
->  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
->  
->  ifneq ($(LLVM),)
-> +$(info LLVM: $(LLVM))
->  ifneq ($(filter %/,$(LLVM)),)
->  LLVM_PREFIX := $(LLVM)
->  else ifneq ($(filter -%,$(LLVM)),)
-> 
-> If you have any further issues, please do not hesitate to reach out!
-> 
-> Cheers,
-> Nathan
-> 
