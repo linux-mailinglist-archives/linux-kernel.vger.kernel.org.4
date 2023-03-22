@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE2F6C46B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CD06C46BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjCVJkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S229975AbjCVJmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjCVJkx (ORCPT
+        with ESMTP id S230207AbjCVJmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:40:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D831989;
-        Wed, 22 Mar 2023 02:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NIAHg4If27BetC+4UZobAV0PxBnmTt3z+fWts2bKQWA=; b=rgS/CEWAlsTurPe5ucKBiXaDhr
-        ew26BoXauCH9lin/sWfYKxjLJe0WysSt1P4iOSDXV1qfu4JSoUQNAlogwxNIDbcZw5jKIurC6wBP0
-        +/+Z8kdUTp/ZyyNP9QPql3dhW8rHV0QqkfTXWuMoE0vryMGgt+T+aOFFPTKbmbiRK5T84YLaG6C4t
-        iRHD6M2ZFvI2kES3RCcIFI7D2yWW07o0ZjcKw1qqr5MTJddfTUE9AHHetindb2rqkUVxpV/GEVyQu
-        B4Z/fkelloNxIIEvBXXKz9pvL88Uc5JVf1N0nCKJVM3jEC4cK78BNevAeHHN3c0k/dy9sGC9ChrU5
-        42+coITw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1peuwq-002t99-FB; Wed, 22 Mar 2023 09:40:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7E63F3001F7;
-        Wed, 22 Mar 2023 10:39:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 16170205D08C3; Wed, 22 Mar 2023 10:39:56 +0100 (CET)
-Date:   Wed, 22 Mar 2023 10:39:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/7] trace: Add trace_ipi_send_cpumask()
-Message-ID: <20230322093955.GR2017917@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-2-vschneid@redhat.com>
+        Wed, 22 Mar 2023 05:42:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7AE40E4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679478118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DFGRBQosIj9vyHsVGDhOFNURTnbZjTQuyPtt51CKxoE=;
+        b=UesyR/Vo4Jzz3JfdyQ1JzzklEQiLUcowuXraGDqmSWW+NxswxjcC37qFS53JtA4nSxYXDd
+        m8O8e/aU4PxBEO1pLEBd3cUHuontFc+ZDnE02MGUt1SKr4aAgLReqR5AwCmtsq5tAcQNvW
+        giTLgRQklI2F8KsHfQxcp6C55mS9FC8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-368-gVYQN53TOueYTum2WzKfyg-1; Wed, 22 Mar 2023 05:41:56 -0400
+X-MC-Unique: gVYQN53TOueYTum2WzKfyg-1
+Received: by mail-ed1-f70.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so26496563edc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:41:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679478115;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DFGRBQosIj9vyHsVGDhOFNURTnbZjTQuyPtt51CKxoE=;
+        b=g3AmsBr2/lSgHFG6UDsFbbnyoNHCGhOGuw4SlLsOVNHDOVfOHHyuFXYuOxRQwKoVGV
+         rQBV695ghqADBF9qsuiXDIUvoWZJwZ5spgaJvOSq6VFBIVvBerA+KnykWfzHxn5xncXX
+         qRdLw3ehqshQ6BlFPC7FlIA2/1jUfgswHtTY1kFmH/byVnmDWM+GoS9RCsDdpaIiAur4
+         ytqAdvYZIxvgGmkKyMXs9is5NexaDydEbKIMw+FSAWZa0s5MQWI9comXaVC9/Ho0JTMl
+         yLTb7MDIBASMfhzGce4nk5+SzMV4caNKE+jRUOEd+mk6o/JVdtDpZks/UGF+s3xm1FgV
+         dXRA==
+X-Gm-Message-State: AO0yUKXRUNKVr6O4yvHhrFoX+Jdk+muQMjudF86TUxn2uWmYypx83t5F
+        ZJsuZO14e7zBPc0Usk40q/ISLwgBmTZt2j5HVZ1JCXNt9FQ46JtzcNW/IpLQkyneaUSe/TLOaTq
+        EZpweugr9wzGXxB2H7Uz1ps3/
+X-Received: by 2002:a17:907:78cf:b0:889:58bd:86f1 with SMTP id kv15-20020a17090778cf00b0088958bd86f1mr6376580ejc.14.1679478115885;
+        Wed, 22 Mar 2023 02:41:55 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+pP0DzvWK9D2FJXhcECGDV7IlfuKGizE5Hr2SqOPT5W6JnRpLmA0d6YfCqhnBNmfbBA6z1xw==
+X-Received: by 2002:a17:907:78cf:b0:889:58bd:86f1 with SMTP id kv15-20020a17090778cf00b0088958bd86f1mr6376562ejc.14.1679478115557;
+        Wed, 22 Mar 2023 02:41:55 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ot17-20020a170906ccd100b008e51a1fd7bfsm7026055ejb.172.2023.03.22.02.41.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 02:41:54 -0700 (PDT)
+Message-ID: <41a38d9c-ad41-6611-1b43-dee9c557bdef@redhat.com>
+Date:   Wed, 22 Mar 2023 10:41:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307143558.294354-2-vschneid@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] Input: silead - Use dev_err_probe()
+To:     ye.xingchen@zte.com.cn
+Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202303221650190306634@zte.com.cn>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202303221650190306634@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:35:52PM +0000, Valentin Schneider wrote:
-> trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
-> its "reason" argument being an uninformative string (on arm64 all you get
-> is "Function call interrupts" for SMP calls).
+Hi,
+
+On 3/22/23 09:50, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> Add a variant of it that exports a target cpumask, a callsite and a callback.
+> Replace the open-code with dev_err_probe() to simplify the code.
 > 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
 > ---
->  include/trace/events/ipi.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>  drivers/input/touchscreen/silead.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
-> index 0be71dad6ec03..b1125dc27682c 100644
-> --- a/include/trace/events/ipi.h
-> +++ b/include/trace/events/ipi.h
-> @@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
->  	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
->  );
->  
-> +TRACE_EVENT(ipi_send_cpumask,
-> +
-> +	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
-> +
-> +	TP_ARGS(cpumask, callsite, callback),
-> +
-> +	TP_STRUCT__entry(
-> +		__cpumask(cpumask)
-> +		__field(void *, callsite)
-> +		__field(void *, callback)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_cpumask(cpumask, cpumask_bits(cpumask));
-> +		__entry->callsite = (void *)callsite;
-> +		__entry->callback = callback;
-> +	),
-> +
-> +	TP_printk("cpumask=%s callsite=%pS callback=%pS",
-> +		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
-> +);
+> diff --git a/drivers/input/touchscreen/silead.c b/drivers/input/touchscreen/silead.c
+> index a37fac089010..f464155aed65 100644
+> --- a/drivers/input/touchscreen/silead.c
+> +++ b/drivers/input/touchscreen/silead.c
+> @@ -706,11 +706,9 @@ static int silead_ts_probe(struct i2c_client *client)
+> 
+>  	/* Power GPIO pin */
+>  	data->gpio_power = devm_gpiod_get_optional(dev, "power", GPIOD_OUT_LOW);
+> -	if (IS_ERR(data->gpio_power)) {
+> -		if (PTR_ERR(data->gpio_power) != -EPROBE_DEFER)
+> -			dev_err(dev, "Shutdown GPIO request failed\n");
+> -		return PTR_ERR(data->gpio_power);
+> -	}
+> +	if (IS_ERR(data->gpio_power))
+> +		return dev_err_probe(dev, PTR_ERR(data->gpio_power),
+> +				     "Shutdown GPIO request failed\n");
+> 
+>  	error = silead_ts_setup(client);
+>  	if (error)
 
-Would it make sense to add a variant like: ipi_send_cpu() that records a
-single cpu instead of a cpumask. A lot of sites seems to do:
-cpumask_of(cpu) for that first argument, and it seems to me it is quite
-daft to have to memcpy a full multi-word cpumask in those cases.
-
-Remember, nr_possible_cpus > 64 is quite common these days.
