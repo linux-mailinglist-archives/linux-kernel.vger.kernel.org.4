@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2A96C44B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45B16C44BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjCVIRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
+        id S230140AbjCVISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjCVIRm (ORCPT
+        with ESMTP id S230119AbjCVISD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:17:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839C55D26C;
-        Wed, 22 Mar 2023 01:17:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Mar 2023 04:18:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC3A5259
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:18:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3AE961ED0;
-        Wed, 22 Mar 2023 08:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A400EC433D2;
-        Wed, 22 Mar 2023 08:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679473060;
-        bh=4Q0iAD9vF+3RBVg+My0zZAgAHRwIrYDxgeNinL++dLo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YW5WFWH/ZrLn+YDPpteJOhgqjZqeNf3+PKnv2gaSmlwxCVASe38G7lbaHQYrkqGwm
-         RlXZAD8+8gj7kcQ6bI8XNtuaKafkV+E15o9RAVKGoMu9pwUbamnqIu8pk/nbLi5yLa
-         EHGUEFuw3Kr5V4/pyVP0OVnMa9dgsKXvfMwbX0LXm+oIoUF3sadDIVTHRxyTNxnPDh
-         WEHe7sUk0XAsvmWm/fS1RXCTMGvLLRK6kMEiXTds4twUsF+dbUbsMC1f0QY/KI87Ln
-         lgNlVTiaD4uZykLSSFu4LQfc3AHsPwE+mqLOS8Bc0vlHNSLTrS0bitPJkxJBiIhtoA
-         N1BMZizPpPA2A==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-mips@vger.kernel.org
-Subject: [PATCH] loongarch: drop ranges for definition of ARCH_FORCE_MAX_ORDER
-Date:   Wed, 22 Mar 2023 10:17:27 +0200
-Message-Id: <20230322081727.2516291-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B462920B2D;
+        Wed, 22 Mar 2023 08:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679473078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yaCVa54jTiy0sgc0DeIq+Nm9gEuRnN1h71KkgJKmB4E=;
+        b=dJo2/XNAugQ+AaQYit0oTk7CuTVIeaxtvGeZTEB6kdq8JaGEYVpMvNaqUqTck9T6OTit1C
+        9RUYYtLNzOUByH+AcN1iCnDnsu08jYEn1qZmuVVVhFDMkjrbcy1tQB+6kY/2aGGnMgRMod
+        9poTiAg/NgHvbzsi9Zbqht9jl7LlS5g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679473078;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yaCVa54jTiy0sgc0DeIq+Nm9gEuRnN1h71KkgJKmB4E=;
+        b=wrJhbWHZK7vewa10Gts4vVrvtEjZ24d1g+UpMC05Gra3buqFZ4mZ0DmOo/Kg2v9rHuIz9C
+        ofh4C9Q1FGJ9s1Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 916EA138E9;
+        Wed, 22 Mar 2023 08:17:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0IDYIra5GmQPNgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 08:17:58 +0000
+Message-ID: <55f3b07b-13dd-f7a1-8d3a-bc79ae1b4f50@suse.cz>
+Date:   Wed, 22 Mar 2023 09:17:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 1/4] mm/mmap/vma_merge: further improve prev/next VMA
+ naming
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
+References: <cover.1679468982.git.lstoakes@gmail.com>
+ <f4474a419648fbbef13b29ce00880054da085788.1679468982.git.lstoakes@gmail.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <f4474a419648fbbef13b29ce00880054da085788.1679468982.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 3/22/23 08:13, Lorenzo Stoakes wrote:
+> Previously the ASCII diagram above vma_merge() and the accompanying
+> variable naming was rather confusing, however recent efforts by Liam
+> Howlett and Vlastimil Babka have significantly improved matters.
+> 
+> This patch goes a little further - replacing 'X' with 'N', which feels more
+> natural as this represents the _next_ VMA and replacing what was 'N' with
+> 'C' which represents the current VMA.
 
-LoongArch defines insane ranges for ARCH_FORCE_MAX_ORDER allowing
-MAX_ORDER up to 63, which implies maximal contiguous allocation size of
-2^63 pages.
+Might have wanted to mention the 'A' to '*' change as well?
 
-Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
-simple integer with sensible defaults.
+> No word quite describes a VMA that has coincident start as the input span,
+> however 'concurrent' (or more simply 'current') abbreviated to 'curr' fits
+> intuitions well alongside prev and next.
 
-Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
-will be able to do so but they won't be mislead by the bogus ranges.
+'curr' sounds good to me, I concur
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
+> This has no functional impact.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-This applies to akpm/mm-unstable tree
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
- arch/loongarch/Kconfig | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 272a3a12c98d..e1e3a3828962 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -420,11 +420,8 @@ config NODES_SHIFT
- 
- config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
--	range 13 63 if PAGE_SIZE_64KB
- 	default "13" if PAGE_SIZE_64KB
--	range 11 63 if PAGE_SIZE_16KB
- 	default "11" if PAGE_SIZE_16KB
--	range 10 63
- 	default "10"
- 	help
- 	  The kernel memory allocator divides physically contiguous memory
--- 
-2.35.1
+> ---
+>  mm/mmap.c | 86 +++++++++++++++++++++++++++----------------------------
+>  1 file changed, 43 insertions(+), 43 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 042d22e63528..c9834364ac98 100644
 
