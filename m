@@ -2,174 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70E66C44EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB446C44F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCVIak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
+        id S230059AbjCVIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCVIaf (ORCPT
+        with ESMTP id S229778AbjCVIc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:30:35 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549895C10F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:30:34 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id ek18so69546185edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:30:34 -0700 (PDT)
+        Wed, 22 Mar 2023 04:32:26 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98E5CC0F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:32:21 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id o32so4572124wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:32:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679473833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OdUQKUhhiP/AHFjE5Cg++X9BxgvEq6Ybodm+73BF1Fw=;
-        b=ZHmz7QEujqa25/gVodDyMAQAUXp9Sq/gc3xuQvmLY4G/iF1suO/4B3EYadt3zZRSsQ
-         oNtlOdEmUQxaHReUhUXnAGBpikHd+BULuuWXgRSsmjW0zWJq7LPff8oS4VjqQlcAmK37
-         oNdTdwKBTtIe5BEz2eD+tqLpBlT29sFwx/PFFVFkTaZyDFeHaKGio8EEN9VZIoYUqfRm
-         jCncRJBglQOyvitQLDtYPuCPW0IzmSbWJxKFJzl9OgpEciXUcCxH6Xl0mT9RmelvNNCO
-         2qm3S1vB7eNMbxciqnr2TLafjots2Anfi0V9IXFQoTzNWANthtcPYAGuufpaykyZo3IP
-         gSNg==
+        d=linaro.org; s=google; t=1679473940;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnZkdiX76ZN4vR+x/LMRxd2A2o1J9Wji75teHmv4ZGg=;
+        b=dWVu6SIIh8b+euxhaENPGQzYd8nRA7uF26Ge6FGV3JsAUisKNWU7N5sIui2caEBk3E
+         Ba10ioxVisjmg8Dn4S+t5uRM7xYas/Q7XRZkg24/J7o76yC5ABAl3D21DgHvsFdnmJvG
+         mB/byZH5fhFbN5ApzqL5rLSyZXS4BYgXMbrHQKGZZ4x1oLoEuws1Fn6D/VKE9QmW59ir
+         6pnV8mYg9as87TwK94YjE4vct41hXW9oUCJIw3VG7vBs4P7OciPecd7RX24CmX3us3XW
+         YLDY8wwvqInAe10Br8DeqCqi9B+PnJiZdxlX77PksSVaJPhpMSlXy8fqL1VHxiWTVU77
+         Nm2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679473833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdUQKUhhiP/AHFjE5Cg++X9BxgvEq6Ybodm+73BF1Fw=;
-        b=2FAvOQ5e3yTsGgzhLMYL60ER7ZmHuyPNdIqYuHkO4qockJ14IbJF83ilF54NAIO+Mn
-         VxG7qgW02QUXqstzlNdK6CUoA4oQl48djaQWf5HL/+ZW9daD2LAHBlGL4cQ23P9BoWE2
-         RgPHfQSQQR/n0jElbYUidqS/1pRr9CMewgqxUF3KrvJd70SHzwDQ+LYamILBfi8uUjSS
-         xWvBiP7KFz3UwAhAgqe46tvkomtEdb3PiGNBoOGscqWugKAGTM01DzKpAnSObqSV6rKC
-         YOAYimiCCkdj8T96X39hYr63c4p+71w7p7Caw6NVT9x2fEC8qkZQ/RqyhCg49SCaphwK
-         z9jw==
-X-Gm-Message-State: AO0yUKXdstjtCsroDie361lwle1FXf1ITTSlPW5f5rhe3J2WrCbbEKZv
-        vWhIqq2dYysuNpZV0AVpmXO1Bg==
-X-Google-Smtp-Source: AK7set8Iw48FCrfKo8mQ85Q2EkmWhTMQeVAiK+kQDGWX8UOpGZtycm/zegmmRF91tp4VF2dnVVk0Yg==
-X-Received: by 2002:a17:906:1501:b0:932:853c:c958 with SMTP id b1-20020a170906150100b00932853cc958mr4847233ejd.25.1679473832832;
-        Wed, 22 Mar 2023 01:30:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
-        by smtp.gmail.com with ESMTPSA id md12-20020a170906ae8c00b008e68d2c11d8sm6862203ejb.218.2023.03.22.01.30.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:30:32 -0700 (PDT)
-Message-ID: <afeecd42-ecda-4d92-bbb5-6dcff84fca7d@linaro.org>
-Date:   Wed, 22 Mar 2023 09:30:31 +0100
+        d=1e100.net; s=20210112; t=1679473940;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QnZkdiX76ZN4vR+x/LMRxd2A2o1J9Wji75teHmv4ZGg=;
+        b=g7JsFLZcYB9UKsBHaPX7UGADOYrNMo74aAmt+EmsswTqepTHxp292pSbDOc+UWL/pV
+         +W1sDcz1n0qx5M8ZvzymAn1rbYBb3GPOcIViCsbgGQ4GFtfhSjFGhzwpm3gx956nwbuZ
+         nEkh5TGBMN95Rc7CFi6TCUP707sgq/vj8AuMJqz8VRmyO6t491eeXknpecSh+Xm8tCed
+         qpoMgbt4xbeBDFbah/B/A078FbcjVCfSkyVR3pGLUrhOBxslmCxb4L0P2k6QxyCzmBOP
+         CFlLjdJBijGej43sEwB5N50cCdn66iR02paGceJo/XWr5PHydyCmEh1/GKlgTZYd82Y9
+         VEMA==
+X-Gm-Message-State: AO0yUKXKBUXd1OeZAYIerbeuITFUTcFQ/urZrCLXY/ww9TV0b4HrHuSH
+        toBdrw3hfqIZk1icsUTEgBHIVTBwhl3lJMJPq2r0MQ==
+X-Google-Smtp-Source: AK7set9jbx6IcXCXy5IlWquYuPV9FZa4fN8gjTQ+iLZe9YDGw/vuRit6/77PtV6GsQyRt50mmKUcUXD1tooXXwhGm6o=
+X-Received: by 2002:a1c:7c18:0:b0:3ed:d2ae:9aeb with SMTP id
+ x24-20020a1c7c18000000b003edd2ae9aebmr1348176wmc.8.1679473940269; Wed, 22 Mar
+ 2023 01:32:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 5/8] dt-bindings: power: supply: max77658: Add ADI
- MAX77658 Battery
-Content-Language: en-US
-To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
- <20230322055628.4441-6-Zeynep.Arslanbenzer@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230322055628.4441-6-Zeynep.Arslanbenzer@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230320073816.3012198-1-bhupesh.sharma@linaro.org> <20230321213139.GA1646917-robh@kernel.org>
+In-Reply-To: <20230321213139.GA1646917-robh@kernel.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 22 Mar 2023 14:02:09 +0530
+Message-ID: <CAH=2NtxpREHJptSaEmAOLrVQwSJ86TaneOv-MKqnZc-AF-222Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] dt-bindings: qcom-qce: Add compatibles for SM6115 and QCS2290
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        linux-crypto@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 06:56, Zeynep Arslanbenzer wrote:
-> Add ADI MAX77658 power supply devicetree document.
-> 
-> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> ---
->  .../power/supply/adi,max77658-battery.yaml    | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml b/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
-> new file mode 100644
-> index 000000000000..0b696f7c4d1b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/adi,max77658-battery.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/adi,max77658-battery.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Battery for MAX77658 PMIC from ADI.
+On Wed, 22 Mar 2023 at 03:01, Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Mar 20, 2023 at 01:08:16PM +0530, Bhupesh Sharma wrote:
+> > Crypto Engine block on Qualcomm SoCs SM6115 and QCS2290
+> > do not require clocks strictly, so add compatibles for these
+> > SoCs, indicating that they are similar to the flavour
+> > found on SM8150.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> > index e375bd981300..e6840d124af3 100644
+> > --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> > +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> > @@ -35,10 +35,12 @@ properties:
+> >
+> >        - items:
+> >            - enum:
+> > +              - qcom,sm6115-qce
+> >                - qcom,sm8250-qce
+> >                - qcom,sm8350-qce
+> >                - qcom,sm8450-qce
+> >                - qcom,sm8550-qce
+> > +              - qcom,qcs2290-qce
+>
+> 'q' goes before 's'
 
-Implement all previous comments, not just some.
+Ok, will send v2
 
-
-> +
-> +maintainers:
-> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> +
-> +description: |
-> +  This module is part of the MAX77658 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/adi,max77658.yaml.
-> +
-> +  The fuel gauge is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +properties:
-> +  compatible:
-> +    const:
-> +      adi,max77658-battery
-
-It's one line.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  adi,valrt-min-microvolt:
-> +    description: Minimum voltage value that triggers the alarm.
-> +
-> +  adi,valrt-max-microvolt:
-> +    description: Maximum voltage value that triggers the alarm.
-
-Use the same syntax as battery.yaml
-
-> +
-> +  adi,salrt-min-percent:
-> +    description: Minimum percentage of battery that triggers the alarm.
-> +
-> +  adi,salrt-max-percent:
-> +    description: Maximum percentage of battery that triggers the alarm.
-
-That's not suitable for DT. Do not encode policies into DT.
-
-> +
-> +  adi,ialrt-min-microamp:
-> +    description: Minimum current value that triggers the alarm.
-> +
-> +  adi,ialrt-max-microamp:
-> +    description: Maximum current value that triggers the alarm.
-> +
-> +  monitored-battery:
-> +    description: >
-> +      phandle to a "simple-battery" compatible node.
-> +
-> +      This property must be a phandle to a node using the format described
-
-You already said it above.
-
-> +      in battery.yaml, with the following properties being required:
-> +      - alert-celsius
-> +
-> +required:
-> +  - compatible
-
-Why reg and monitored-batter are not required?
-
-
-Best regards,
-Krzysztof
-
+Thanks,
+Bhupesh
