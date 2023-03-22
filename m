@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65E36C4A6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513526C4A7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjCVM1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S229797AbjCVM3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjCVM1b (ORCPT
+        with ESMTP id S229719AbjCVM3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:27:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D76F3430F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:27:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhSR374XHz4xFc;
-        Wed, 22 Mar 2023 23:27:27 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     mpe@ellerman.id.au, Nathan Chancellor <nathan@kernel.org>
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        erhard_f@mailbox.org, ndesaulniers@google.com, trix@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-In-Reply-To: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-Subject: Re: [PATCH 0/3] Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld 15+
-Message-Id: <167948793442.559204.2964050663889516909.b4-ty@ellerman.id.au>
-Date:   Wed, 22 Mar 2023 23:25:34 +1100
+        Wed, 22 Mar 2023 08:29:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC9734C38
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679488140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/RmaCdFiflknr5F/EzALZWl8EQAEMlohlo+Bq/6n784=;
+        b=IGRiaXY47/CqfQ0HhrV9YXycAt4KYHUdiaYitJlJoN7/+XZUvAlCO1iMkYBinss56kGpGa
+        I4VfKnY1V4KbvSmUIJIRMYVBqB1s6p2S0mASlZ/PXfsonM0pQGzWH+3UHIak4lL0kzT2Ui
+        AQa5juRrC8KEnTtunlpOkaxNBguWy6c=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-119-Bdx8tM68P1OWCdIqpFDIvg-1; Wed, 22 Mar 2023 08:28:58 -0400
+X-MC-Unique: Bdx8tM68P1OWCdIqpFDIvg-1
+Received: by mail-qt1-f197.google.com with SMTP id s4-20020a05622a1a8400b003dbc6fc558aso8446623qtc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679488138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/RmaCdFiflknr5F/EzALZWl8EQAEMlohlo+Bq/6n784=;
+        b=MT3ei08tWfYKnojRzB4Tzrgj1d2c4tXAIrxQwMDA/D+mXHmb7o5zbkiQzVBPyusj+z
+         68LAd9QTe+qmFXer1Mo9guvz0DKsIkToRUDx8WhwZx8+jMM37SkbuuJRAgr/QhXZsroh
+         961+Abqt4RLRBM+5cv5Qtq2NGb+JdGkIJ2iyT7v0gyesw9zrNKex9DifRqJzteTDGBZo
+         5xtLqetXkbv88QzFOsN00GjxlGNG8V1xdoyOOCQlvvwoHv2mk/6VqkZRuvI0qmrQ3tQj
+         eS50dfZKZyY8WcCMUzU8/j093Shl2X569DrrDvWiOPgsccWt008WKjTWnrNJvK9wfgod
+         RDZA==
+X-Gm-Message-State: AO0yUKX7Rw9OZNHi8OQWBazweFvSe4XxAuW6I3nirSL/Lpje8qKVBR7f
+        vAv2tR+8U6XB9ABzy/ptAbZLUP64QvMbAyOaCHKdgA55kPjw71GLWAdXR0HAzg02XcO0kVuYduY
+        uyl8+/cMydupGME9nvWwS5M5s
+X-Received: by 2002:ac8:7f8e:0:b0:3bf:d9d2:484f with SMTP id z14-20020ac87f8e000000b003bfd9d2484fmr5698836qtj.11.1679488138426;
+        Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8Gcxx8GdV/OeVtTOhHQR7MlyYiQ1UjJcEDEFgxn3029wWSBoOMbr8ofWD/oxpFcUXsweisow==
+X-Received: by 2002:ac8:7f8e:0:b0:3bf:d9d2:484f with SMTP id z14-20020ac87f8e000000b003bfd9d2484fmr5698812qtj.11.1679488138211;
+        Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j13-20020a37ef0d000000b00729b7d71ac7sm11174245qkk.33.2023.03.22.05.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 05:28:57 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
+Date:   Wed, 22 Mar 2023 08:28:55 -0400
+Message-Id: <20230322122855.2570417-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Feb 2023 11:41:14 -0700, Nathan Chancellor wrote:
-> Currently, CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 is not selectable with
-> ld.lld because of an explicit dependency on GNU ld, due to lack of
-> testing with LLVM.
-> 
-> Erhard was kind enough to test this option on his hardware with LLVM 15,
-> which ran without any issues. This should not be too surprising, as
-> ld.lld does not have support for the ELFv1 ABI, only ELFv2, so it should
-> have decent support. With this series, big endian kernels can be built
-> with LLVM=1.
-> 
-> [...]
+clang with W=1 reports
+drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
+  unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
+ath10k_get_ring_byte(unsigned int offset,
+^
+This function is not used so remove it.
 
-Applied to powerpc/next.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/ath/ath10k/ce.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-[1/3] powerpc/boot: Only use '-mabi=elfv2' with CONFIG_PPC64_BOOT_WRAPPER
-      https://git.kernel.org/powerpc/c/d1c5accacb234c3a9f1609a73b4b2eaa4ef07d1a
-[2/3] powerpc: Fix use of '-mabi=elfv2' with clang
-      https://git.kernel.org/powerpc/c/7c3bd8362b06cff0a4044a4975adb7d71db2dfba
-[3/3] powerpc: Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld 15+
-      https://git.kernel.org/powerpc/c/a11334d8327b3fd7987cbfb38e956a44c722d88f
+diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
+index b656cfc03648..c27b8204718a 100644
+--- a/drivers/net/wireless/ath/ath10k/ce.c
++++ b/drivers/net/wireless/ath/ath10k/ce.c
+@@ -84,13 +84,6 @@ ath10k_set_ring_byte(unsigned int offset,
+ 	return ((offset << addr_map->lsb) & addr_map->mask);
+ }
+ 
+-static inline unsigned int
+-ath10k_get_ring_byte(unsigned int offset,
+-		     struct ath10k_hw_ce_regs_addr_map *addr_map)
+-{
+-	return ((offset & addr_map->mask) >> (addr_map->lsb));
+-}
+-
+ static inline u32 ath10k_ce_read32(struct ath10k *ar, u32 offset)
+ {
+ 	struct ath10k_ce *ce = ath10k_ce_priv(ar);
+-- 
+2.27.0
 
-cheers
