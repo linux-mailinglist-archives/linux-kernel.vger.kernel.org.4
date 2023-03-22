@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2CA6C577B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418746C5778
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjCVU0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S231628AbjCVU01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjCVU0S (ORCPT
+        with ESMTP id S231571AbjCVU0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:26:18 -0400
+        Wed, 22 Mar 2023 16:26:09 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A88C967;
-        Wed, 22 Mar 2023 13:16:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5D75AB74;
+        Wed, 22 Mar 2023 13:16:14 -0700 (PDT)
 Date:   Wed, 22 Mar 2023 20:14:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679516097;
+        s=2020; t=1679516094;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=NQQuVQiY/sIoaQ5n0A3D+PWJlpQRmQdA8vFtOkT8Gsk=;
-        b=SLjWGkDXuJNDL12fSJydNVRbfzMtf5EXpP/AgYUjbmgIkT94WYBN8kaTVJEXxAfZMqbL4Q
-        KY7XhbNjLJtVOxtcKO6IbPQlagTQWNSqEo/hBcbhZ3S8FpbbMRtvQy5VLqf6/zt0j39gMU
-        t92SdepPx2ES7UzpBsX3+1UCjwKV5Ki6clPmtvKg4uUpDIR+fBDTk8xexBt8xenKULsCGg
-        YQbIR0a/bP/TvWXW38V9HN6iQVwvrZ+7I1JnzXSBzU/2C2BrjUbp4J9CGa5o+kcXVR2gof
-        2XpARYNvAgEBW0iv9L2fkhLFKM1YSjElDG6idVYsmwvxCIQ5WrsHVb8LkiMcvQ==
+        bh=TErJKltRRstNh1nsERKmjUwCIWoOFhKcp8MuDg4CLfI=;
+        b=Kgg7TCMUj05ZnWczCzjkfiokximoI9V8+46Lx+ASSnZpAUZq9A+VYpdqdpXgoiNEPQ7qH1
+        MuLnzq1f6h3K1zwRME3tQOoEUY9gY4hImGylCbpQWBPB3fXAc81I80UbkyjJzymOUTo7jo
+        gjYrl4raU0JUEfOIbOxNStjEP274vAUrJOGhDDWGrlGKuR3ciL+Ne+zrBTl3N5lAnoetpC
+        s2gsN8KzbwX+YnFCICmFbhivlPm7ivBhpUpp96Tqd067HP0xPSwv4edK6EW/+aB02rasbi
+        sDIwJpCubWB59HtDBFjZvgkzu62qTXFbNQKn+7gQ2ZZb8UfYF6IPTPvygo1s3w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679516097;
+        s=2020e; t=1679516094;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=NQQuVQiY/sIoaQ5n0A3D+PWJlpQRmQdA8vFtOkT8Gsk=;
-        b=sLiVViCR4387AXb2Bqoab1YuTB76BZwWUIjmIk3eZIpNLJYRaXOlP1BcO0rEE6DTQVj8kj
-        sVsJQ6jcC8qMi7DA==
+        bh=TErJKltRRstNh1nsERKmjUwCIWoOFhKcp8MuDg4CLfI=;
+        b=BR3Se9awzv0EntM16dQ5Q4RMpZiUowgzlacasZwrm0AGCYznWJlgkwtXu+asjjIIdb0/cY
+        iKTN+dh2nGXz2KDg==
 From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] Documentation/x86: Explain the state component
- permission for guests
+Subject: [tip: x86/fpu] x86/arch_prctl: Add AMX feature numbers as ABI constants
 Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Thiago Macieira <thiago.macieira@intel.com>,
-        Yang Zhong <yang.zhong@intel.com>,
         Tony Luck <tony.luck@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167951609339.5837.3788677511456464455.tip-bot2@tip-bot2>
+Message-ID: <167951609395.5837.17233221474519558802.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,63 +61,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/fpu branch of tip:
 
-Commit-ID:     5fbff260755750559aa12a30f6fa7f8a863666f1
-Gitweb:        https://git.kernel.org/tip/5fbff260755750559aa12a30f6fa7f8a863666f1
+Commit-ID:     a03c376ebaf38394a63a75292329f38a47520c2c
+Gitweb:        https://git.kernel.org/tip/a03c376ebaf38394a63a75292329f38a47520c2c
 Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Fri, 20 Jan 2023 16:19:00 -08:00
+AuthorDate:    Fri, 20 Jan 2023 16:18:58 -08:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 22 Mar 2023 13:08:02 -07:00
+CommitterDate: Wed, 22 Mar 2023 13:02:33 -07:00
 
-Documentation/x86: Explain the state component permission for guests
+x86/arch_prctl: Add AMX feature numbers as ABI constants
 
-Commit 980fe2fddcff ("x86/fpu: Extend fpu_xstate_prctl() with guest
-permissions") extends a couple of arch_prctl(2) options for VCPU threads.
-Add description for them.
+Each distinct XSAVE feature has a number assigned to it.  Among other
+things, the number determines the ordering of features in the XSAVE
+buffer and is also used to generate XSAVE bitmasks like the value
+for XCR0.
+
+AMX state is dynamically enabled by the architecture-specific prctl().
+This prctl() takes one XSAVE feature number as an argument.  However, the
+feature numbers are not defined in any readily available userspace headers.
+The means that each userspace app trying to use dynamic feature prctl()s
+will likely end up defining their own constants for each feature.
+
+Since these feature numbers are a part of the uabi, expose them in the
+prctl() uabi header.  Save everyone the trouble of looking them up and
+defining their own.
+
+[ dhansen: expand changelog a bit ]
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-Reviewed-by: Yang Zhong <yang.zhong@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/all/20230121001900.14900-5-chang.seok.bae%40intel.com
+Link: https://lore.kernel.org/all/20230121001900.14900-3-chang.seok.bae%40intel.com
 ---
- Documentation/x86/xstate.rst | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ arch/x86/include/uapi/asm/prctl.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/x86/xstate.rst b/Documentation/x86/xstate.rst
-index 23b1c9f..ae5c69e 100644
---- a/Documentation/x86/xstate.rst
-+++ b/Documentation/x86/xstate.rst
-@@ -143,3 +143,32 @@ entry if the feature is in its initial configuration.  This differs from
- non-dynamic features which are always written regardless of their
- configuration.  Signal handlers can examine the XSAVE buffer's XSTATE_BV
- field to determine if a features was written.
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e..f298c77 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -16,6 +16,9 @@
+ #define ARCH_GET_XCOMP_GUEST_PERM	0x1024
+ #define ARCH_REQ_XCOMP_GUEST_PERM	0x1025
+ 
++#define ARCH_XCOMP_TILECFG		17
++#define ARCH_XCOMP_TILEDATA		18
 +
-+Dynamic features for virtual machines
-+-------------------------------------
-+
-+The permission for the guest state component needs to be managed separately
-+from the host, as they are exclusive to each other. A coupled of options
-+are extended to control the guest permission:
-+
-+-ARCH_GET_XCOMP_GUEST_PERM
-+
-+ arch_prctl(ARCH_GET_XCOMP_GUEST_PERM, &features);
-+
-+ ARCH_GET_XCOMP_GUEST_PERM is a variant of ARCH_GET_XCOMP_PERM. So it
-+ provides the same semantics and functionality but for the guest
-+ components.
-+
-+-ARCH_REQ_XCOMP_GUEST_PERM
-+
-+ arch_prctl(ARCH_REQ_XCOMP_GUEST_PERM, feature_nr);
-+
-+ ARCH_REQ_XCOMP_GUEST_PERM is a variant of ARCH_REQ_XCOMP_PERM. It has the
-+ same semantics for the guest permission. While providing a similar
-+ functionality, this comes with a constraint. Permission is frozen when the
-+ first VCPU is created. Any attempt to change permission after that point
-+ is going to be rejected. So, the permission has to be requested before the
-+ first VCPU creation.
-+
-+Note that some VMMs may have already established a set of supported state
-+components. These options are not presumed to support any particular VMM.
+ #define ARCH_MAP_VDSO_X32		0x2001
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
