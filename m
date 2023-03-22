@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A36C6C45CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85B76C45D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjCVJKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S230274AbjCVJKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjCVJKo (ORCPT
+        with ESMTP id S229762AbjCVJKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:10:44 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE1513DCD;
-        Wed, 22 Mar 2023 02:10:20 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id e11so9495588lji.8;
-        Wed, 22 Mar 2023 02:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679476217;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AF22QWtPbI8hINiApqhTErR3ndgD6Cy9pQ4ZYgJ918g=;
-        b=KOGMrzF069kGvgjRowcJfrvOsfMHK7XdV6sh1GiQ9Zk8X4rAVrlGE46hCRmy348sAx
-         Zoy/6S/Il4cL8z+di7A8QAaJefXlnDx+iIt2yf/UqVJe3wYnsVyuftHwukNn6zVun5zc
-         soDsoUH+QSNoEVpHqYl+b5Y6nLLj8TGfFWLa7woGPuEqw4GHhAfo22xxoku5L47+HBxx
-         hjlmJ0/wBto3LfCPadSNTjPKm/+rP/qxfH9A/4OnXJ1jcR9tCcvikmf3sr+R5M35sq0f
-         mnvpsl23C3H3vaJzW2Y0LD4Us4GdKQzQkjhn846iT16Yk0chJoqOuDBlKH/X6Sv0n30q
-         SvHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679476217;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AF22QWtPbI8hINiApqhTErR3ndgD6Cy9pQ4ZYgJ918g=;
-        b=G3GV508uw+wKiSzlxRKMSTMKZFN18K9jPDCbpvXZujbTM+6a7zx7zX8yiwz4wV0KJe
-         OBnmKBhWhGMPE/6wfuuQ+f7QQ+HrB157/HlvS7VSJEQXlnK+dei7hW8XGDNbfLly3dB7
-         Ae10XITZ9KRkJ/kKKfcS4GnyGK36BOh1XXcntyDNdu1RpjSszH3363uW3oCSi8Gzazb/
-         ydypXQA82HqDxpy7+xYDR+1AO+riJroAXgjBeV2zFBECKvjsMxdkwQuTye/7JThGN1KR
-         gkK41j/gW5NacYp94H4Wxo+VgVHrxgmraRl1AB3WMmJdN4V/GSuEvt3ZvzwMsNDdYVYM
-         vLWQ==
-X-Gm-Message-State: AO0yUKV/7O52DXejpmdtreBGdwDfafNe4neH9cgR3RqamVh9RUyr6MDs
-        jM6Hyhm+BgmzEuhq4DETllY=
-X-Google-Smtp-Source: AK7set+3wn7STykeLRSK/EVhjKe0sVN8+qh/LxMrchI26llUaRCvlhy6QgxhgJwScru1r9jjqwewHg==
-X-Received: by 2002:a2e:7407:0:b0:295:908d:f6c6 with SMTP id p7-20020a2e7407000000b00295908df6c6mr1892656ljc.9.1679476217418;
-        Wed, 22 Mar 2023 02:10:17 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id k7-20020a2e2407000000b0029477417d80sm2517941ljk.85.2023.03.22.02.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 02:10:17 -0700 (PDT)
-Message-ID: <4cbc8d6a-c8e0-68a0-e1a4-a552c3a968d7@gmail.com>
-Date:   Wed, 22 Mar 2023 11:10:16 +0200
+        Wed, 22 Mar 2023 05:10:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CD35D8A5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:10:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F87420BB4;
+        Wed, 22 Mar 2023 09:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679476220; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yzivV4rQ4tpJgyEKlViPjoOOk/O81vR45vccjFWK7Lc=;
+        b=R5hn92jmKEpmSKhiNmMfxR/oE2LWKwjKzwxhKTLPB7PkRt4cjDXD4lf+NynGWLd5dLHprO
+        gUi5APIFKz0n90717DjsYNDk7r7cRJv9UL4ZRPrMjbNlihpK0CyuiPqQDEbNAiBqd8baLa
+        oBmwCArbtfW6FU8FzAR6rGaadiFrKtQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679476220;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yzivV4rQ4tpJgyEKlViPjoOOk/O81vR45vccjFWK7Lc=;
+        b=hQYDFEo2nUeWdfyog5zbuoyjf5c+4g0UiBcLstfSOlvBBSguzXMcrL7/fFD6UIb/9Da/pk
+        blioUT/oZi4lFfBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1978113416;
+        Wed, 22 Mar 2023 09:10:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r/lsBfzFGmSHWQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 09:10:20 +0000
+Message-ID: <04071978-aeec-f39d-7f83-0c38e160ebdf@suse.cz>
+Date:   Wed, 22 Mar 2023 10:10:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v4 4/8] iio: light: Add gain-time-scale helpers
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <cover.1679062529.git.mazziesaccount@gmail.com>
- <e5b93a3d2424b16d842e847c98f05f1a9befb2e1.1679062529.git.mazziesaccount@gmail.com>
- <20230319180828.452a603c@jic23-huawei>
- <5ba4ab3d-90ab-113e-1b95-86118d3a7392@gmail.com>
-Content-Language: en-US, en-GB
-In-Reply-To: <5ba4ab3d-90ab-113e-1b95-86118d3a7392@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/4] mm/mmap/vma_merge: fold curr, next assignment
+ logic
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
+References: <cover.1679468982.git.lstoakes@gmail.com>
+ <36399b6cdc843eb7fe243488ea9b29464f699170.1679468982.git.lstoakes@gmail.com>
+ <bdbb5362-a4bf-a87c-95e6-e94ab28665bd@suse.cz>
+In-Reply-To: <bdbb5362-a4bf-a87c-95e6-e94ab28665bd@suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,73 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/23 14:01, Matti Vaittinen wrote:
-> On 3/19/23 20:08, Jonathan Cameron wrote:
->> On Fri, 17 Mar 2023 16:43:23 +0200
->> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>
->> I think a bit more care is need with storage of time (unsigned) + decide
->> whether to allow for negative gains.
+On 3/22/23 10:06, Vlastimil Babka wrote:
+> On 3/22/23 08:13, Lorenzo Stoakes wrote:
+>> Use find_vma_intersection() and vma_lookup() to both simplify the logic and
+>> to fold the end == next->vm_start condition into one block.
+>> 
+>> This groups all of the simple range checks together and establishes the
+>> invariant that, if prev, curr or next are non-NULL then their positions are
+>> as expected.
+>> 
+>> This has no functional impact.
 > 
-> My approach was just pretty simple "int is big enough for the times" 
-> (2000+ seconds when using usec as time units felt like more than enough 
-> for light sensors) and "gains are always positive".
+> I'm not so sure...
+
+Disregard that, vma_lookup() is not find_vma(). Next cleanup challenge: more
+obvious naming of those two.
+
+>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+>> ---
+>>  mm/mmap.c | 24 +++++++++++-------------
+>>  1 file changed, 11 insertions(+), 13 deletions(-)
+>> 
+>> diff --git a/mm/mmap.c b/mm/mmap.c
+>> index c9834364ac98..dbdbb92493b2 100644
+>> --- a/mm/mmap.c
+>> +++ b/mm/mmap.c
+>> @@ -930,15 +930,14 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>>  	if (vm_flags & VM_SPECIAL)
+>>  		return NULL;
+>> 
+>> -	curr = find_vma(mm, prev ? prev->vm_end : 0);
+>> -	if (curr && curr->vm_end == end)		/* cases 6, 7, 8 */
+>> -		next = find_vma(mm, curr->vm_end);
+>> -	else
+>> -		next = curr;
+>> +	/* Does the input range span an existing VMA? (cases 5 - 8) */
+>> +	curr = find_vma_intersection(mm, prev ? prev->vm_end : 0, end);
+>> 
+>> -	/* In cases 1 - 4 there's no CCCC vma */
+>> -	if (curr && end <= curr->vm_start)
+>> -		curr = NULL;
+>> +	if (!curr ||			/* cases 1 - 4 */
+>> +	    end == curr->vm_end)	/* cases 6 - 8, adjacent VMA */
+>> +		next = vma_lookup(mm, end);
 > 
-> I have not tested the negative gains at all - but I agree this should've 
-> been documented. Currently there is no gts-helper users who need 
-> negative gain (or large times for that matter) - so I was not handling 
-> them.
+> AFAICS if the next vma is not adjacent to CCCC or ****, but there's a gap,
+> this will still give you a non-NULL result?
 > 
-> I'll try to check what it would mean code-wise if we converted times to 
-> unsigned. Negative times make no sense but allowing negative error 
-> values is a simple way to go.
+>> +	else
+>> +		next = NULL;		/* case 5 */
+>> 
+>>  	/* verify some invariant that must be enforced by the caller */
+>>  	VM_WARN_ON(prev && addr <= prev->vm_start);
+>> @@ -959,11 +958,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>>  		}
+>>  	}
+>>  	/* Can we merge the successor? */
+>> -	if (next && end == next->vm_start &&
 > 
-> As for the negative gains - I have no problem of someone adding a 
-> support for those if needed, but I don't currently see much point in 
-> investing time in that...
+> And then without this end == next->vm_start check, merge will be done
+> despite the gap.
 > 
->> Whilst they happen I'm not that bothered
->> if that subtlety becomes a device driver problem when calling this.  
->> I'm not
->> sure I've seen a sensor that does both positive and negative gains for 
->> a single
->> channel.
+>> -			mpol_equal(policy, vma_policy(next)) &&
+>> -			can_vma_merge_before(next, vm_flags,
+>> -					     anon_vma, file, pgoff+pglen,
+>> -					     vm_userfaultfd_ctx, anon_name)) {
+>> +	if (next && mpol_equal(policy, vma_policy(next)) &&
+>> +	    can_vma_merge_before(next, vm_flags,
+>> +				 anon_vma, file, pgoff+pglen,
+>> +				 vm_userfaultfd_ctx, anon_name)) {
+>>  		merge_next = true;
+>>  	}
+>> 
+>> --
+>> 2.39.2
 > 
-> I agree. If driver needs negative gains, then the driver needs to deal 
-> with it. I have no objections if driver authors want to improve these 
-> helpers by adding support for negative gains, but if they don't, then 
-> they have the exactly same problem they would have without these helpers :)
-
-Back at this. I started reworking things to use unsigned times / gains 
-but I am not really happy about how it starts to look like. Using the 
-int values but reserving negative values to denote errors keeps things 
-cleaner. Also, I don't think we need the extra bit for extending the 
-range of supported values - It's hard for me to think we would really 
-need gains or times exceeding the maximum signed int. I think negative 
-gains are actually more likely so keeping int as type may help one who 
-wants to add support for negative gains.
-
-(Although, I assume the integration time multiplying logic with negative 
-gains would not work in a same way as with positive gains - so 
-supporting negative gains would probably require more than that, or work 
-only as a dummy selector <=> gain converter without the time tables).
-
-So, the v5 will likely still use int as type for times and gain but also 
-have a check in initialization enforcing this. I will also document this 
-restriction in the gain/time struct and init function documentation.
-
-I don't think the v5 is final version, especially because it will be the 
-first version looping in the Kunit people. So we can keep iterating this 
-for v6 if you still feel using ints is unacceptable :)
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
 
