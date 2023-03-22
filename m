@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1F26C42F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2A86C4300
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjCVGTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
+        id S229813AbjCVGV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCVGTa (ORCPT
+        with ESMTP id S229452AbjCVGV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:19:30 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF6E59823
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:19:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso22678416pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679465967;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jc51COu0/vb2WtPcXns+ijC7xX+URRIqs+FR67VjlYA=;
-        b=qZtyFC84Al62Sso4KsjHcPRvpZkBY6BavXqrs+ZH4zNQ2woVOYXp2bMeKRP8mADppq
-         lGoZECsOFIfmiDIScrAeY1PXzkOqQLjOWOklE4tyYZ/MH1hQXP5BFj2SDCFPsK21XkIE
-         yaYI7ZYmrTBzrBuPr2Myy6bjpvoNN8Vl6/TdJ443fYwd+s+ObXMDKWFGZuVFwRLip+fU
-         mCaqMLReN07NXdDGuR5DY95n9hrcZfZCB3rGZkViKwgtbJrGPsk+ILA4MAdR5NSbIVfa
-         DcihQfMxzVCW3zTkVtXmPWbCvLpvHNAWzyBL89Hloas1Rav96hDLYGw9W0IZJ/Dpi5dm
-         XXzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679465967;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jc51COu0/vb2WtPcXns+ijC7xX+URRIqs+FR67VjlYA=;
-        b=cULxo/yqH8+LH4Tiwa4Z79nfpSfjkc3HJ1EWRhpLeASJxlAz4I9A0VLxtwJexc1hp4
-         LhatV4BFB1OBEBvwefxlVEuxQzLS8j0qJ3wQFJfQZ8JjjECJkV3R7wM5gFtGxqhihkL6
-         Vui309LYBBm0tScx9VmC356BRJme6xrwvzAKr1KWTGLaOUvifnJEQjfeO4HNxBN8Ddet
-         jOCf4Z7pe+PklVla4SQwKzBYz04KGmC7lxiJqzueUIOdEkKjsjtguQBjDKkD/KTjxJBr
-         FTdWTgaKx4AAW66oWOnhqoi3yMQEelWaaxy/BP5cSkkEvTMMJNhdHfOh359S7xPhLBE7
-         /laA==
-X-Gm-Message-State: AO0yUKWZ9bx4uNrivFMXOK/aLSdEXijParPuBY0Nqmzq3RDlkpC2WSkg
-        nplq9c+GMZxQdrRYQDFosa0=
-X-Google-Smtp-Source: AK7set9aeuGYwThhMZ+VFuX1iBJaOqFLd8r6mEH8v8V8V1hkznxp2niK+mrhEwJycH4r/ihwVIrNZg==
-X-Received: by 2002:a05:6a20:cc5f:b0:db:9a60:a52d with SMTP id hq31-20020a056a20cc5f00b000db9a60a52dmr29000pzb.41.1679465966916;
-        Tue, 21 Mar 2023 23:19:26 -0700 (PDT)
-Received: from localhost.localdomain ([221.226.144.218])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62e918000000b006258dd63a3fsm9232369pfh.56.2023.03.21.23.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 23:19:26 -0700 (PDT)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, conor.dooley@microchip.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [RFC PATCH] riscv: export cpu/freq invariant to scheduler
-Date:   Wed, 22 Mar 2023 14:18:56 +0800
-Message-Id: <20230322061856.2774840-1-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 22 Mar 2023 02:21:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FD4442CA;
+        Tue, 21 Mar 2023 23:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679466085; x=1711002085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sV9yrowQ+RnaJFvNng0mNFOKmQMIaJRRqKuH1yOHxSk=;
+  b=JabRBkoxTUoPkGmhfqbRlA3OSegdz/lXRUwE80rgojBwPyozXbSfmTRP
+   8qlUN5Fnt7lLMbOUYCRpsHp0f7b0H2hI5dIlNQt65AvzF8NbjJMj7jiwf
+   bindiJMbeDlqI9AkmBsFHPRZbYF+ZcrI95aLURDlh0k3OOMLmBpg5pSgL
+   dt+hBK6MOcLO9P2pPlH2M892rbq/X8a2Vzm7CSMSn/kdVJrEsrQ4spH75
+   9GRnjrzMeYNb8WRAS3/wmfV/SYv5INyIxlEm7xFYykKzLP8NYSdcVFYG6
+   6jDTQrie49z0Ogt06TXbilbAK6a44oata+xX89hsj0NMl3X91Wq1cHlh4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339177967"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="339177967"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 23:21:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="770936644"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="770936644"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 23:21:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1perqc-000CyQ-13;
+        Wed, 22 Mar 2023 06:21:22 +0000
+Date:   Wed, 22 Mar 2023 14:20:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tanmay Shah <tanmay.shah@amd.com>, andersson@kernel.org,
+        mathieu.poirier@linaro.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Tarak Reddy <tarak.reddy@amd.com>
+Subject: Re: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
+Message-ID: <202303221441.cuBnpvye-lkp@intel.com>
+References: <20230322040933.924813-3-tanmay.shah@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322040933.924813-3-tanmay.shah@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,44 +68,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RISC-V now manages CPU topology using arch_topology which provides
-CPU capacity and frequency related interfaces to access the cpu/freq
-invariant in possible heterogeneous or DVFS-enabled platforms.
+Hi Tanmay,
 
-Here adds topology.h file to export the arch_topology interfaces for
-replacing the scheduler's constant-based cpu/freq invariant accounting.
+Thank you for the patch! Perhaps something to improve:
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
----
- arch/riscv/include/asm/topology.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 arch/riscv/include/asm/topology.h
+[auto build test WARNING on e19967994d342a5986d950a1bfddf19d7e1191b7]
 
-diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-new file mode 100644
-index 000000000000..14bbd2472af6
---- /dev/null
-+++ b/arch/riscv/include/asm/topology.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_RISCV_TOPOLOGY_H
-+#define __ASM_RISCV_TOPOLOGY_H
-+
-+#include <linux/arch_topology.h>
-+
-+/* Replace task scheduler's default frequency-invariant accounting */
-+#define arch_scale_freq_tick topology_scale_freq_tick
-+#define arch_set_freq_scale topology_set_freq_scale
-+#define arch_scale_freq_capacity topology_get_freq_scale
-+#define arch_scale_freq_invariant topology_scale_freq_invariant
-+
-+/* Replace task scheduler's default cpu-invariant accounting */
-+#define arch_scale_cpu_capacity topology_get_cpu_scale
-+#define arch_update_cpu_topology topology_update_cpu_topology
-+
-+
-+#include <asm-generic/topology.h>
-+#endif /* __ASM_RISCV_TOPOLOGY_H */
+url:    https://github.com/intel-lab-lkp/linux/commits/Tanmay-Shah/remoteproc-Make-rproc_get_by_phandle-work-for-clusters/20230322-121102
+base:   e19967994d342a5986d950a1bfddf19d7e1191b7
+patch link:    https://lore.kernel.org/r/20230322040933.924813-3-tanmay.shah%40amd.com
+patch subject: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
+config: arm-randconfig-r013-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221441.cuBnpvye-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/573d22d13a697097d02d6c29a75fb0fb1ac6d8fe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tanmay-Shah/remoteproc-Make-rproc_get_by_phandle-work-for-clusters/20230322-121102
+        git checkout 573d22d13a697097d02d6c29a75fb0fb1ac6d8fe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303221441.cuBnpvye-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/remoteproc/remoteproc_core.c:2563:26: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           struct platform_device *cluster_pdev;
+                                   ^
+   1 warning generated.
+
+
+vim +2563 drivers/remoteproc/remoteproc_core.c
+
+  2550	
+  2551	/**
+  2552	 * rproc_put() - release rproc reference
+  2553	 * @rproc: the remote processor handle
+  2554	 *
+  2555	 * This function decrements the rproc dev refcount.
+  2556	 *
+  2557	 * If no one holds any reference to rproc anymore, then its refcount would
+  2558	 * now drop to zero, and it would be freed.
+  2559	 */
+  2560	void rproc_put(struct rproc *rproc)
+  2561	{
+  2562		module_put(rproc->dev.parent->driver->owner);
+> 2563		struct platform_device *cluster_pdev;
+  2564	
+  2565		if (rproc->dev.parent) {
+  2566			if (rproc->dev.parent->driver) {
+  2567				module_put(rproc->dev.parent->driver->owner);
+  2568			} else {
+  2569				cluster_pdev = of_find_device_by_node(rproc->dev.parent->of_node->parent);
+  2570				if (cluster_pdev) {
+  2571					module_put(cluster_pdev->dev.driver->owner);
+  2572					put_device(&cluster_pdev->dev);
+  2573				}
+  2574			}
+  2575		}
+  2576		put_device(&rproc->dev);
+  2577	}
+  2578	EXPORT_SYMBOL(rproc_put);
+  2579	
+
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
