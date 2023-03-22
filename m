@@ -2,109 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063D36C58CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B72E16C58D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjCVVbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S229848AbjCVVcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCVVbL (ORCPT
+        with ESMTP id S229487AbjCVVcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:31:11 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44762A99C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:31:10 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3e390e23f83so40831cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:31:10 -0700 (PDT)
+        Wed, 22 Mar 2023 17:32:11 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70222A6C6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:32:09 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ew6so15634695edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:32:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679520670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3wEKZhlQAu726bgeMuDzkySzeNEKVGJce+bxSvYEcNM=;
-        b=jCucsYrWvoPjrhLIENEly2ZisO6krZ+olExBdfyWKJZioLGx2oLkh1bObUsgrUD4Ug
-         u/tuSWDUnZThiSQyRNkiHK8+YDUyGHXuMg+7cNYPAcXwEOZRDPyx4MmuZMGujAG7kvZ8
-         qbkYUMcc9Jxa2768ETZ5OqdPFBrH/XZqKvZtHcUr6L+Zo8/enYX/uPiEifBIDgGHWtfY
-         haa/1lEY9luMNAK8TjL4xdB35wY7NEnUKwoAmZWXdoSFBiXtbuvTdwbmnhpoqfgHjg61
-         wpTYZzODt8nWOqz/8ceegmadmljRHR42k2QFPnCT67iEVpvMY1b25d49mWCMQvrhSpNb
-         FY3g==
+        d=linaro.org; s=google; t=1679520728;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qen8xenv6ibJ1yxc7O8FeAPEdE/IGhe2CAZbDoaA2Yw=;
+        b=pJWBm365G0ucmCXDtomGbsOzkhD6dfIOt8XNOXsVEOdz6Y4VWo8u3NawA5Ah0fdyeF
+         uRSpcpgnKyCLYIqOFebVa33d9Z724INYAjCtzmi8yqxAz7OSoA8cOiMq4KiUfbqexCKh
+         ABYnl38ogwmYHj51zXqjZJ7g6vD2zSb6qvWlc561k4J7rL7GZL5I4BfggBUfdCe2wDOu
+         shFaAgKrRrS6JYWa8FX808m4HbU2XnqXFfR8gxzQFtlQcx8sUocybMvbGy34iaLBKLnr
+         ULHXD1WXnEXjArdF1JRP3d3yauWupC/LBzr6ySskDfIMguEsAk3IN+dEW/CrejyZBeU4
+         5Llw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679520670;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3wEKZhlQAu726bgeMuDzkySzeNEKVGJce+bxSvYEcNM=;
-        b=tqQBlz5RszWYO5xv8N3H37W/Lx6B7J38xHc5pWPVEK/LeFgoXcPrCxY81SQ4eg3NJu
-         soYDWH0ZVjyyXih4VUUHUEK/hjtyb9KgjIlCQWP738HxLTUhSkRS1eSnyyWUgDllO78b
-         UeYbT8BBO85/k8ISAK0DxapjvsN//Lv4aGwDgk1d9+mrp/LEGcLD17dVyB2GxEwqY88a
-         uhfTiYkWapbTZ1FmdT1Yql28jBaTZt13aSidTanDIQTC8VvjymeftjLpd37E1nKA/1Z1
-         l/ocZRDWr1PK64ygJvhvcnnv6DotzCJ1wRChCvz16Fo1cS0wFKIUvb+yGxJWo+b10HeI
-         Wdfg==
-X-Gm-Message-State: AO0yUKVWh7quc5dpFJkoLhiXWYBzb7ojmSmoYs15trfoli2WidVkyGzi
-        xzlAUUVhlwA0fR9dRctpM88b1y64DZqld1ZhrBUfUL281LX7r9aIkWmXTshS
-X-Google-Smtp-Source: AK7set8dAA9X5jZ4SI5t4EGhpF9Z/S8IrtQBBb3s3Aj9WOlWnWvbXjv7wWMrfprsfCBL8Jw6QggtqaxE+q0hlQRygkI=
-X-Received: by 2002:a05:622a:1702:b0:3bc:d1b5:8e31 with SMTP id
- h2-20020a05622a170200b003bcd1b58e31mr470500qtk.19.1679520669697; Wed, 22 Mar
- 2023 14:31:09 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679520728;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qen8xenv6ibJ1yxc7O8FeAPEdE/IGhe2CAZbDoaA2Yw=;
+        b=ak/kkySe/i/+cb6QmOLgNhpQhN7Eh+IY02AKY6ABGBgc+nhj5hUnesPezkLnIzDV93
+         6KcI4yn9pzprgbBUHd9YMojdeo8WewgttOT0xAdAX8KlkHdNyiErS6fkOotWEKJyjJeb
+         0g+fM148+PuCRfeTOyHVDd/GYW/IQegfDA6yNj7lv0oPyOItNQiB4Yo9oEwL82aB/8gb
+         bUVHV5UwOhec4DK4psvWBjhoSTwwpIZytvpwnA6Q4ysjV3rpb3iSVj7aNif+GEQh5xCw
+         //UVqXQPmKDO1Uj8TGcXFmRp7AbIDFw7CON5zyQiuvk13U9yTmSCSPZJB9H4FAPb3bxI
+         nLqQ==
+X-Gm-Message-State: AO0yUKX4LgQFBXP6HGHMwY4npp3bvc2Qfl/5x/67ga0tunYZdPcti+nr
+        eDGSvqdLfyNSzYm0WZ+amveDpVoSgHob6glRCoU=
+X-Google-Smtp-Source: AK7set9EsUaVSM/lV0gHtIylqldE7j/M2EfDBQIekAYutAtxNexPVmBPKPopYckUm1FAXEtVd9mcmQ==
+X-Received: by 2002:a17:907:a042:b0:92f:2c64:9d43 with SMTP id gz2-20020a170907a04200b0092f2c649d43mr8641755ejc.68.1679520728264;
+        Wed, 22 Mar 2023 14:32:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:626d:5729:6e71:4c22? ([2a02:810d:15c0:828:626d:5729:6e71:4c22])
+        by smtp.gmail.com with ESMTPSA id a20-20020a17090680d400b008def483cf79sm7640395ejx.168.2023.03.22.14.32.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 14:32:07 -0700 (PDT)
+Message-ID: <b5d67af0-ed08-e243-2c0c-92f1f002e552@linaro.org>
+Date:   Wed, 22 Mar 2023 22:32:06 +0100
 MIME-Version: 1.0
-References: <0000000000000ece5005eaa8f1d1@google.com> <0000000000007af84a05f77fa920@google.com>
-In-Reply-To: <0000000000007af84a05f77fa920@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Wed, 22 Mar 2023 22:30:58 +0100
-Message-ID: <CANp29Y5825vdNCe1JUmasczU5AkNPKKWBzPUmjbNxKj3EapG4w@mail.gmail.com>
-Subject: Re: [syzbot] [jfs?] UBSAN: shift-out-of-bounds in dbAllocBits
-To:     syzbot <syzbot+b9ba793adebb63e56dba@syzkaller.appspotmail.com>
-Cc:     dave.kleikamp@oracle.com, jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liushixin2@huawei.com, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-13.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
+ imx8qm cdns3 glue bindings
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+References: <20230321151951.2784286-1-Frank.Li@nxp.com>
+ <20230321151951.2784286-2-Frank.Li@nxp.com>
+ <1ce3bf91-6bef-b4c1-1ec9-3a345518efeb@linaro.org>
+ <AM6PR04MB483828FC1083E3C98930DF6488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <AM6PR04MB483828FC1083E3C98930DF6488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 5:29=E2=80=AFPM syzbot
-<syzbot+b9ba793adebb63e56dba@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit fad376fce0af58deebc5075b8539dc05bf639af3
-> Author: Liu Shixin via Jfs-discussion <jfs-discussion@lists.sourceforge.n=
-et>
-> Date:   Thu Nov 3 03:01:59 2022 +0000
->
->     fs/jfs: fix shift exponent db_agl2size negative
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12d90bf6c8=
-0000
-> start commit:   a6afa4199d3d Merge tag 'mailbox-v6.1' of git://git.linaro=
-...
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd19f5d16783f9=
-01
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Db9ba793adebb63e=
-56dba
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1322ae34880=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10403c9488000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: fs/jfs: fix shift exponent db_agl2size negative
->
+On 22/03/2023 15:34, Frank Li wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Wednesday, March 22, 2023 2:32 AM
+>> To: Frank Li <frank.li@nxp.
+>>> +      - const: usb3_aclk
+>>> +      - const: usb3_ipg_clk
+>>> +      - const: usb3_core_pclk
+>>> +
+>>> +  assigned-clocks:
+>>> +    items:
+>>> +      - description: Phandle and clock specifoer of
+>> IMX_SC_PM_CLK_MST_BUS.
+>>
+>> Drop useless pieces so "Phandle and clock specifoer of " and name the
+>> hardware, not the syntax.
+>>
+>>> +
+>>> +  assigned-clock-rates:
+>>> +    items:
+>>> +      - description: Should be in Range 100 - 600 Mhz.
+>>
+>> That's better but I still do not understand why do you need it in the
+>> bindings. You never actually answered this question.
+> 
+> I am not sure 100% sure the reason. 
+> I think difference system target's  axi bus frequency is difference,   
+> And just one time work, needn't software to manage it.
+> Following other driver's code style may be another reason. 
 
+That's the reason of heaving it in DTS. But I am asking about bindings.
+You do understand you define here interface?
 
-Looks reasonable.
+Best regards,
+Krzysztof
 
-#syz fix: fs/jfs: fix shift exponent db_agl2size negative
