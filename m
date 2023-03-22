@@ -2,121 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96B86C51CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA156C51C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCVREj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S231345AbjCVREZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCVREG (ORCPT
+        with ESMTP id S231339AbjCVRDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:04:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CA6274BF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679504561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kti/JzF4VrmbjBlfDUl4YhHuHDPglfNgmyzJ2qiaCg8=;
-        b=APfe+PxHHNSF8JM3GjuuqeNqOEiuvkFtb0xQL9b3jwW819fpJRwT+BtDRpGykBX2Y7y6CX
-        DwS270zudJuaoueCXWOdEdzoCEcM+Mo4yUuCIXvYixDDL6hVj8N+KfNKh7d4qABzKDcaK/
-        sXq+JVuo7+5joIQJbmls5k02JyIrFYw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-gnMLPuvkNXKcYrYogAkQhA-1; Wed, 22 Mar 2023 13:02:39 -0400
-X-MC-Unique: gnMLPuvkNXKcYrYogAkQhA-1
-Received: by mail-wm1-f70.google.com with SMTP id m27-20020a05600c3b1b00b003ee502f1b16so1837617wms.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:02:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504557;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kti/JzF4VrmbjBlfDUl4YhHuHDPglfNgmyzJ2qiaCg8=;
-        b=jL5MLTFLmwLL2DRRbDmK0rp/GaoRnfzeWlNHF3Afl3jbz1HwzlIDpYxD+3foNzEqDC
-         /eUtFwYp42BG1rgNPyUMCfBgl7LDjzoIwKFbQjs3m9JzQ+RtQoGGksdtvypSiQk623i5
-         ZISCVOkVQa87zBdPKVO7ONF82ibCitOW9d8NshKmZ2ppMyRfX+jBhPrNbvnkSt3oZsWJ
-         63rFaoC2+QLhIoHKl8X78C3LIbNFOb0FDFuYN6FLF5aFB1fR+njCyuLI7a/bjpJ9w3nY
-         aQAC9W1YJkYArFj2tWL0rlMorQT2IfNdmuoIMzIWjhf6qP8To250wGUYuAdJmLp/hz0W
-         iN5A==
-X-Gm-Message-State: AO0yUKVtOGkLpdEDaUNNno+f1U79WpWEi9XxiaVZd+3BztYiurhkpwqM
-        eJWpiE3WLpMrwoHAF0WhN0U4v3FndfU8+t6xl8rKF6TdkSS259X7NTOfvlVDFeoyoLYzjbz9ywF
-        7IFLAnGvdYasVP8beDY3jWM/kXAtOKrOC
-X-Received: by 2002:a7b:c3d9:0:b0:3ed:9212:b4fe with SMTP id t25-20020a7bc3d9000000b003ed9212b4femr226871wmj.0.1679504556816;
-        Wed, 22 Mar 2023 10:02:36 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9dJZMsZOALzIB5M3pFL0KeOCwU/SYEhVYAv7bjUiaycrkDQ6K8T+5vVFFkHWfhMUYDnRvCcA==
-X-Received: by 2002:a7b:c3d9:0:b0:3ed:9212:b4fe with SMTP id t25-20020a7bc3d9000000b003ed9212b4femr226838wmj.0.1679504556502;
-        Wed, 22 Mar 2023 10:02:36 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
-        by smtp.gmail.com with ESMTPSA id s11-20020adff80b000000b002d6f285c0a2sm8066858wrp.42.2023.03.22.10.02.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 10:02:36 -0700 (PDT)
-Message-ID: <3e2d1f69-5cd8-8824-0a2e-a1c2c9029f66@redhat.com>
-Date:   Wed, 22 Mar 2023 18:02:34 +0100
+        Wed, 22 Mar 2023 13:03:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD397EF4;
+        Wed, 22 Mar 2023 10:03:24 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 17:03:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679504584;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=oMpc9GjKiKzOfugOngBxJGxql9QSACRvf4WRe2BBm6A=;
+        b=TS6XD55S8eqCToqI2HYTyXG+RtH1536/AxgS+wdhM1sxa63H5PzKrqyZWNXXo0bd3hVUoT
+        KwaDBs9rhznGr1IiQ04/7zEHDjmLBK/l4Sl+JXOPHpnP9g6rv1+H6l6SDUBPkPZ4TOgVnA
+        yMFrSDR9K6m5rwyC9IeqZJVofLrzVRcasQDNjvdfXDpTjzUpTDaj97UyFVsQ7gDgmRCqLg
+        8b2ayxMMNgJGtDHoWQiffgCzbMJLGbb/J4C6gf0iL0mhKokVfhZrmGPMuNNw3c8ObCU85/
+        zwfQ+FETIFthrW3tM62CkaSmXh8dPa5gdzbGmNr3LAN+Y/ndbcPJDm+LnWnN/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679504584;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=oMpc9GjKiKzOfugOngBxJGxql9QSACRvf4WRe2BBm6A=;
+        b=vyTai8vbjRdm3AWvO0Tw3/AgtspWxK0LNutUUvlBV59ryVhov0StvaFNmnwY0fHl21ABdK
+        VAYtGVow+jDsJNDg==
+From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] selftests/x86/lam: Add test cases for LAM vs thread creation
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 4/4] mm: vmalloc: convert vread() to vread_iter()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <cover.1679496827.git.lstoakes@gmail.com>
- <4f1b394f96a4d1368d9a5c3784ebee631fb8d101.1679496827.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <4f1b394f96a4d1368d9a5c3784ebee631fb8d101.1679496827.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <167950458385.5837.2205725754203915953.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.03.23 15:55, Lorenzo Stoakes wrote:
-> Having previously laid the foundation for converting vread() to an iterator
-> function, pull the trigger and do so.
-> 
-> This patch attempts to provide minimal refactoring and to reflect the
-> existing logic as best we can, for example we continue to zero portions of
-> memory not read, as before.
-> 
-> Overall, there should be no functional difference other than a performance
-> improvement in /proc/kcore access to vmalloc regions.
-> 
-> Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
-> we dispense with it, and try to write to user memory optimistically but
-> with faults disabled via copy_page_to_iter_nofault(). We already have
-> preemption disabled by holding a spin lock.
-> 
-> If this fails, we fault in and retry a single time. This is a conservative
-> approach intended to avoid spinning on vread_iter() if we repeatedly
-> encouter issues reading from it.
+The following commit has been merged into the x86/mm branch of tip:
 
-I have to ask again: Can you comment why that is ok? You might end up 
-signaling -EFAULT to user space simply because swapping/page 
-migration/whatever triggered at the wrong time.
+Commit-ID:     dfd7a1569e25996575a24725b64f73162155bcd6
+Gitweb:        https://git.kernel.org/tip/dfd7a1569e25996575a24725b64f73162155bcd6
+Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+AuthorDate:    Sun, 12 Mar 2023 14:26:12 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 16 Mar 2023 13:08:41 -07:00
 
-That could break existing user space or which important part am I missing?
+selftests/x86/lam: Add test cases for LAM vs thread creation
 
--- 
-Thanks,
+LAM enabling is only allowed when the process has single thread.
+LAM mode is inherited into child thread.
 
-David / dhildenb
+Trying to enable LAM after spawning a thread has to fail.
 
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/all/20230312112612.31869-18-kirill.shutemov%40linux.intel.com
+---
+ tools/testing/selftests/x86/lam.c | 92 ++++++++++++++++++++++++++++++-
+ 1 file changed, 92 insertions(+)
+
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+index a8c9182..eb0e469 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -12,6 +13,7 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <inttypes.h>
++#include <sched.h>
+ 
+ #include <sys/uio.h>
+ #include <linux/io_uring.h>
+@@ -50,6 +52,8 @@
+ 
+ #define PAGE_SIZE               (4 << 10)
+ 
++#define STACK_SIZE		65536
++
+ #define barrier() ({						\
+ 		   __asm__ __volatile__("" : : : "memory");	\
+ })
+@@ -731,6 +735,75 @@ static int handle_inheritance(struct testcases *test)
+ 	return 0;
+ }
+ 
++static int thread_fn_get_lam(void *arg)
++{
++	return get_lam();
++}
++
++static int thread_fn_set_lam(void *arg)
++{
++	struct testcases *test = arg;
++
++	return set_lam(test->lam);
++}
++
++static int handle_thread(struct testcases *test)
++{
++	char stack[STACK_SIZE];
++	int ret, child_ret;
++	int lam = 0;
++	pid_t pid;
++
++	/* Set LAM mode in parent process */
++	if (!test->later) {
++		lam = test->lam;
++		if (set_lam(lam) != 0)
++			return 1;
++	}
++
++	pid = clone(thread_fn_get_lam, stack + STACK_SIZE,
++		    SIGCHLD | CLONE_FILES | CLONE_FS | CLONE_VM, NULL);
++	if (pid < 0) {
++		perror("Clone failed.");
++		return 1;
++	}
++
++	waitpid(pid, &child_ret, 0);
++	ret = WEXITSTATUS(child_ret);
++
++	if (lam != ret)
++		return 1;
++
++	if (test->later) {
++		if (set_lam(test->lam) != 0)
++			return 1;
++	}
++
++	return 0;
++}
++
++static int handle_thread_enable(struct testcases *test)
++{
++	char stack[STACK_SIZE];
++	int ret, child_ret;
++	int lam = test->lam;
++	pid_t pid;
++
++	pid = clone(thread_fn_set_lam, stack + STACK_SIZE,
++		    SIGCHLD | CLONE_FILES | CLONE_FS | CLONE_VM, test);
++	if (pid < 0) {
++		perror("Clone failed.");
++		return 1;
++	}
++
++	waitpid(pid, &child_ret, 0);
++	ret = WEXITSTATUS(child_ret);
++
++	if (lam != ret)
++		return 1;
++
++	return 0;
++}
+ static void run_test(struct testcases *test, int count)
+ {
+ 	int i, ret = 0;
+@@ -849,6 +922,25 @@ static struct testcases inheritance_cases[] = {
+ 	{
+ 		.expected = 0,
+ 		.lam = LAM_U57_BITS,
++		.test_func = handle_thread,
++		.msg = "THREAD: LAM_U57, child thread should get LAM mode same as parent\n",
++	},
++	{
++		.expected = 1,
++		.lam = LAM_U57_BITS,
++		.test_func = handle_thread_enable,
++		.msg = "THREAD: [NEGATIVE] Enable LAM in child.\n",
++	},
++	{
++		.expected = 1,
++		.later = 1,
++		.lam = LAM_U57_BITS,
++		.test_func = handle_thread,
++		.msg = "THREAD: [NEGATIVE] Enable LAM in parent after thread created.\n",
++	},
++	{
++		.expected = 0,
++		.lam = LAM_U57_BITS,
+ 		.test_func = handle_execve,
+ 		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
+ 	},
