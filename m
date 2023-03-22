@@ -2,127 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C77B6C5967
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA2C6C596C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCVW0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 18:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S229945AbjCVW1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 18:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjCVW0K (ORCPT
+        with ESMTP id S229487AbjCVW1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 18:26:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2201D23A75;
-        Wed, 22 Mar 2023 15:26:07 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 22:26:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679523965;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lonwx3OOvND6DSGV5w4ARUSC+QoyLxxKYdl6wMg0BrA=;
-        b=DQIPeMyzjf47/vwhpwavHxHkar0zLrxOFRMKGJPOEwFhDeNruyVGMYjYd4nnPUXfzYnjz3
-        DTPLJ3vzx9AvtSSSDo6m4BJZLKzOQod745fmMhuNd9MyBaZfm1VgecwHmY2+uNqDDdLyWm
-        IaMEcD8DJktVBSs9vIajnhiEGi10ajtMkSjSdmpoyh8zaYCqJGhTt1rk9n+UFq4pUbQYaf
-        kvL7yBtYmtN+t/MW7ioeUMkwDwkLGeUNlFDKxfRUaKB/QArMl6vtdhGRpnhhSkZfhq8EnL
-        BZXQUOnN4PuRXLVJewMLTjGMgly7lvmx74seC4uh9AoJeSpptHbVuPA8bT96eQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679523965;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lonwx3OOvND6DSGV5w4ARUSC+QoyLxxKYdl6wMg0BrA=;
-        b=m1uMKNTln/b70+QVaOSRsOkfwH7aZZfkzfGaET+sCGniCdXDicZJ0iYhTD3IFB+Fwkori6
-        aFoNq8VE0x1YbdAw==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/rwbase: Mitigate indefinite writer starvation.
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <877cwbq4cq.ffs@tglx>
-References: <877cwbq4cq.ffs@tglx>
+        Wed, 22 Mar 2023 18:27:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAFC23A50;
+        Wed, 22 Mar 2023 15:27:46 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b20so46137863edd.1;
+        Wed, 22 Mar 2023 15:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679524065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/Wjm0b8Ik7+X2MQf3m3hky1zdDJvNFJ4agRqoB9mA0=;
+        b=JQUJQb9gDALwd6Y7wgUsxJSfzD42gRcFCBl+E45QH5FnfzpRHlivPXbtU6vl/Go/yc
+         z/o6VwbUuEs2rsAmGDsfIRwoKU+G5hvXOOKpjvk8mm9iCZFfAHNkwtfyM+9CuOZ8ZYV1
+         z2ef2J+von7Wvbkr+dMh4qaRJmRq6pXhDiFs/Dyol8PVYRTOR86kWd1gtPPFAfo/JkPd
+         2ug/1DAdmXCXrcsot3W+oG9URJn506AB14fh6d557cKSfBI2lrpeL1CcmC2fuNKhbBcO
+         xkcCKNHzFsfSFqsudAw2cKVs5sNkhqp+gLSQhsmdQXfA7NnfZCPXZ+DZeia6spYkSrFV
+         OKUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679524065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/Wjm0b8Ik7+X2MQf3m3hky1zdDJvNFJ4agRqoB9mA0=;
+        b=aBNdNFfRGByk9hTTMREUP1rj0JCdMvFjiJ77nwlv+VhpNxG7zk0nTtwAtq5lUMnkI3
+         Oyh6o3gj58CPpDJtm27C4NAdWRSRgzqCHbKc1GsE3CpN37MpLrs2uhYqjo2vX7xGdeT0
+         Fi6ZzEpeVlhb/wUt7vTYonnZs0V++GQQ0GeEW8rUxryBLeNlje7zbBQHA+eL7Rggt0Uw
+         ldKaXxtsW++f20lzAfe77kU2z2hHcWIEkRiJGrH6Q3sHYmFdQ6vMmokpR1PnmGcfGbOo
+         k+E3/q0KrbVFLByubSzuVoUbaOFOsHiU2uoVpcXR9cmsT1JdrJlqiKPWS2DKhwkjEcwp
+         PPQw==
+X-Gm-Message-State: AO0yUKVcHMeYqM9Z2WcB3KsJIjrIt//U1jAv7TZQ8luZm/ckRRAT6QmB
+        Plc7fHxZYz/7BUBTuS/OplYvII7MIzM/GP9kzS4=
+X-Google-Smtp-Source: AK7set8gUyy1sCqRru6eNQSGWAYy+Eqil0jvDXyYXA+sgAPfrL/BhDbBOzzjpcL26JACm1NBn4cQczKuSSkzdJN/AzA=
+X-Received: by 2002:a50:c3cf:0:b0:4fb:2593:846 with SMTP id
+ i15-20020a50c3cf000000b004fb25930846mr4193269edf.3.1679524064488; Wed, 22 Mar
+ 2023 15:27:44 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <167952396475.5837.11598351113694705444.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com> <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+In-Reply-To: <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Mar 2023 15:27:33 -0700
+Message-ID: <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On Wed, Mar 22, 2023 at 5:08=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
+> > On Fri, Mar 17, 2023 at 7:53=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (U=
+MH),
+> > > which runs a user space process from a binary blob, and creates a
+> > > bidirectional pipe, so that the kernel can make a request to that pro=
+cess,
+> > > and the latter provides its response. It is currently used by bpfilte=
+r,
+> > > although it does not seem to do any useful work.
+> >
+> > FYI the new home for bpfilter is here:
+> > https://github.com/facebook/bpfilter
+>
+> Thanks. I just ensured that it worked, by doing:
+>
+> getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
+>
+> and accepting IPT_SO_GET_INFO in main.c.
+>
+> > > The problem is, if other users would like to implement a UMD similar =
+to
+> > > bpfilter, they would have to duplicate the code. Instead, make an UMD
+> > > management library and API from the existing bpfilter and sockopt cod=
+e,
+> > > and move it to common kernel code.
+> > >
+> > > Also, define the software architecture and the main components of the
+> > > library: the UMD Manager, running in the kernel, acting as the fronte=
+nd
+> > > interface to any user or kernel-originated request; the UMD Loader, a=
+lso
+> > > running in the kernel, responsible to load the UMD Handler; the UMD
+> > > Handler, running in user space, responsible to handle requests from t=
+he UMD
+> > > Manager and to send to it the response.
+> >
+> > That doesn't look like a generic interface for UMD.
+>
+> What would make it more generic? I made the API message format-
+> independent. It has the capability of starting the user space process
+> as required, when there is a communication.
+>
+> > It was a quick hack to get bpfilter off the ground, but certainly
+> > not a generic one.
+>
+> True, it is not generic in the sense that it can accomodate any
+> possible use case. The main goal is to move something that was running
+> in the kernel to user space, with the same isolation guarantees as if
+> the code was executed in the kernel.
 
-Commit-ID:     9d29d8e36cd6448966d83ab1acf946a2df3c2833
-Gitweb:        https://git.kernel.org/tip/9d29d8e36cd6448966d83ab1acf946a2df3c2833
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Tue, 21 Mar 2023 17:11:40 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 22 Mar 2023 23:17:38 +01:00
+They are not the same guarantees.
+UMD is exactly equivalent to root process running in user space.
+Meaning it can be killed, ptraced, priority inverted, etc
 
-locking/rwbase: Mitigate indefinite writer starvation.
+> > > I have two use cases, but for sake of brevity I will propose one.
+> > >
+> > > I would like to add support for PGP keys and signatures in the kernel=
+, so
+> > > that I can extend secure boot to applications, and allow/deny code
+> > > execution based on the signed file digests included in RPM headers.
+> > >
+> > > While I proposed a patch set a while ago (based on a previous work of=
+ David
+> > > Howells), the main objection was that the PGP packet parser should no=
+t run
+> > > in the kernel.
+> > >
+> > > That makes a perfect example for using a UMD. If the PGP parser is mo=
+ved to
+> > > user space (UMD Handler), and the kernel (UMD Manager) just instantia=
+tes
+> > > the key and verifies the signature on already parsed data, this would
+> > > address the concern.
+> >
+> > I don't think PGP parser belongs to UMD either.
+> > Please do it as a normal user space process and define a proper
+> > protocol for communication between kernel and user space.
+>
+> UMD is better in the sense that it establishes a bidirectional pipe
+> between the kernel and the user space process. With that, there is no
+> need to further restrict the access to a sysfs file, for example.
 
-On PREEMPT_RT rw_semaphore and rwlock_t locks are unfair to writers.
-Readers can indefinitely acquire the lock unless the writer fully acquired
-the lock, which might never happen if there is always a reader in the
-critical section owning the lock.
-
-Mel Gorman reported that since LTP-20220121 the dio_truncate test case
-went from having 1 reader to having 16 readers and that number of readers
-is sufficient to prevent the down_write ever succeeding while readers
-exist. Eventually the test is killed after 30 minutes as a failure.
-
-Mel proposed a timeout to limit how long a writer can be blocked until
-the reader is forced into the slowpath.
-
-Thomas argued that there is no added value by providing this timeout.  From
-a PREEMPT_RT point of view, there are no critical rw_semaphore or rwlock_t
-locks left where the reader must be preferred.
-
-Mitigate indefinite writer starvation by forcing the READER into the
-slowpath once the WRITER attempts to acquire the lock.
-
-Reported-by: Mel Gorman <mgorman@techsingularity.net>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Link: https://lore.kernel.org/877cwbq4cq.ffs@tglx
-Link: https://lore.kernel.org/r/20230321161140.HMcQEhHb@linutronix.de
----
- kernel/locking/rwbase_rt.c |  9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index c201aad..25ec023 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -72,15 +72,6 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
- 	int ret;
- 
- 	raw_spin_lock_irq(&rtm->wait_lock);
--	/*
--	 * Allow readers, as long as the writer has not completely
--	 * acquired the semaphore for write.
--	 */
--	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
--		atomic_inc(&rwb->readers);
--		raw_spin_unlock_irq(&rtm->wait_lock);
--		return 0;
--	}
- 
- 	/*
- 	 * Call into the slow lock path with the rtmutex->wait_lock
+If a simple pipe is good enough then you can have a kernel module
+that creates it and interacts with the user space process.
+Out-of-tree bpftiler can do that, so can you.
+PGP is not suitable for kernel git repo either as kernel code or as UMD.
