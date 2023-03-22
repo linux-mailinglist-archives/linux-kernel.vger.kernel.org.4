@@ -2,111 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6AD6C4778
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6B26C4791
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjCVKVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S230176AbjCVK1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjCVKVj (ORCPT
+        with ESMTP id S229584AbjCVK06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:21:39 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD7B5C9FE;
-        Wed, 22 Mar 2023 03:21:30 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso18653919pjb.2;
-        Wed, 22 Mar 2023 03:21:30 -0700 (PDT)
+        Wed, 22 Mar 2023 06:26:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F388B5DED0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:26:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-544570e6d82so185937677b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679480490;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JHk6WrdRBOaXZfvy3sfCH7b75YTuvdgFdO1JgqgHyhk=;
-        b=ESLIyorCStnd6ZJLdkq6ShlIpDoTi1na7kkDyzFImBmWJXl514bkfA7+NlxO0FBoBj
-         fHOVfb9wP5/XFQ7slclalePoikPRCrD+4uEdKbXmFkxdXuHC1RW827Ka78NvU5iIXgxD
-         3EzrQouxwUi8eSVWiLvDcp3nCjH7Mdc/NLS0emVo9Dl1Nr5FtmMAf/L1IYLukoqBIEOp
-         wRTsGWYkv9CGlXr0iaShOu/mFDt4jKgXKb7sao+rzQSbGvj7fbwpxrch82tSgQAr3SJk
-         j8phLSWEpXcYPLvwslqbq9tbYfi6A1Q6+VH1yWJSEAhz6KptZ0YZhDORctOiDuu6gMyi
-         lqxg==
+        d=google.com; s=20210112; t=1679480808;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MtH1n9QiA63gGMjEpHqesA6wudB34zsYwX818Sy5m4A=;
+        b=lGv1/rRD+5FbA1Y5PSY7SSYcajL+DOt5PFDatW40TMfBdbo9L0x7kjG/PbiS4kuCyQ
+         jASqtZVX6caArqed/337xNw+VyMYGknWzwDT4eR3rlPDHmjmbUT0NlETlHyZ4SN//7nv
+         mC6iasTMkhGk1vDmMzpqsSNWmMy2VTTfXosIcO+/JUPVwcJaHIM27fVwfObXNAZyTfwG
+         5WrzbHXhWF8TcODAs7DPs38d5phDGrtvmVHaVyAggmGwMQv+vixJMCOgCpKi5mEBsWzU
+         Won6p/mArEqYGbjxf1JEqYE8cDVM99sgqivTDQXX9co4I2pkTU0e1jAu34ic1Ty8Wbid
+         GP7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679480490;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JHk6WrdRBOaXZfvy3sfCH7b75YTuvdgFdO1JgqgHyhk=;
-        b=nKMuhdzq60YDvLQWZFGLeyEH+noxU0du1ID8Bs7fbLMekY078uw8pqrKkGxLoomSPS
-         wpT4q48t6dOW3PNjh5rRFT86NmKPFQdTm0EniNLXAVGaKRgn3S1ySsrmzoCxJBrraJbk
-         RhXxz/lKWfKm032XvEM3h1Qex+tReghfvCc0w3OIxAm7WWDUeDQJrlY8of5OnV7K12/3
-         +sfzxczsB4BYxr5swPNCIicrZiRJKh2XbProKUwOA8rzxPpd9Wt/fQoTARi6yKe+YG4K
-         5nQfrXZrB07X3vxkE284zwuD5V/1KQFGBGV1oJPXycDyKEheb+x0ezmXo+RzsGiemkbl
-         DnkQ==
-X-Gm-Message-State: AO0yUKVellQy4vOFLof4W3Vv5iphB+AAdmvcMQFPGOi9eFX576cJ+eGt
-        37wsn3wUJkZ2y7pxOC79sENkk8kDXrWxBKjw10o=
-X-Google-Smtp-Source: AK7set+PZ4mznos49hq2OljDlTJRK/UrXGgXlPBhVsXZJlMLdmy24ZzPCXCYQpg7X+qYkMuhAAwcieb4L4j1EruC/Js=
-X-Received: by 2002:a17:902:e812:b0:1a1:add5:c35b with SMTP id
- u18-20020a170902e81200b001a1add5c35bmr913153plg.10.1679480490265; Wed, 22 Mar
- 2023 03:21:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
- <059bec3f-0c77-fc16-83a3-d78cf82d543f@linaro.org> <bb56bbb7-7b08-79f9-ad1b-a2de63eca5f6@quicinc.com>
-In-Reply-To: <bb56bbb7-7b08-79f9-ad1b-a2de63eca5f6@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 22 Mar 2023 11:21:19 +0100
-Message-ID: <CAOX2RU5H=fmxjAE+Er8n7qzrvUZmOpYwgqFox-RLc2C7BqJyjQ@mail.gmail.com>
-Subject: Re: [PATCH 08/11] remoteproc: qcom: Add Hexagon based multipd rproc driver
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
-        loic.poulain@linaro.org, quic_eberman@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+        d=1e100.net; s=20210112; t=1679480808;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MtH1n9QiA63gGMjEpHqesA6wudB34zsYwX818Sy5m4A=;
+        b=0cQtrgvRvs0XFD4w/Uj/8ZIA2uTvVoklap9vlYdx9vjqgjQskfF/Pl6fPaf1yPDKyN
+         5bUOELq5+86djvca5+CA1Cc/SiYEJugdma2s0nDCO52jj/fBuAtq99QQhzc4uIzsVxPC
+         k18sh7Wpg2MNuCi3DK6k0zap/TcOAwYILvCv8WyELqoG3lWhSRUoK5KfvMAIwzIUCd4o
+         yV6MG5lrDWVY53/1s5ywtPiTMlGNwWtuQPmAGNSHHMs/A0yEjgArqnmyaRcYNkgKyKzE
+         xYExBjJhIBQonXO9xFuP9V8WnjjBYIC5JNqlgPAW/tTe9imK9Dp5VI7JAIB/DRWO0VmI
+         mIaA==
+X-Gm-Message-State: AAQBX9e+wS3Ix57Xj1B7TUTIeQdb+JNjOC/+Hi4jzZesmYoSuqATdSBH
+        eEtuFI2WatY6YtwV2fSTe5qsZ4eiBj0ZxcVv
+X-Google-Smtp-Source: AKy350akULjauXYO0Sq/02BHUZWdetu1cc2nH40DZ94CwYFG+U5GgSeRwyVD+01kGzfjbykadDsxqs82DUwsHk5w
+X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
+ (user=vdonnefort job=sendgmr) by 2002:a05:6902:1503:b0:af7:38fc:f6da with
+ SMTP id q3-20020a056902150300b00af738fcf6damr1104197ybu.2.1679480808284; Wed,
+ 22 Mar 2023 03:26:48 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 10:22:42 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230322102244.3239740-1-vdonnefort@google.com>
+Subject: [PATCH v2 0/2] Introducing trace buffer mapping by user-space
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, Vincent Donnefort <vdonnefort@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 at 11:19, Manikanta Mylavarapu
-<quic_mmanikan@quicinc.com> wrote:
->
->
->
-> On 3/7/2023 9:09 PM, Krzysztof Kozlowski wrote:
-> > Why exactly do you need a new driver for this instead of extending
-> > existing PIL? I feel all this is growing because no one wants to touch
-> > existing code and merge with it...
->
-> Previously we raised patch to add secure-pil to existing rproc driver.
-> Bjorn suggested to introduce a new secure-pil driver.
->
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1611984013-10201-3-git-send-email-gokulsri@codeaurora.org/
->
->
-> Also IPQ5018, IPQ9574 soc's follows multipd model. So we decided to
-> have new driver which consists 'secure-pil + multi pd' in one
-> place.
+The tracing ring-buffers can be stored on disk or sent to network without any
+copy via splice. However the later doesn't allow real time processing of the
+traces. A solution is to give access to userspace to the ring-buffer pages
+directly via a mapping. A piece of software can now become a reader of the
+ring-buffer, and drive a consuming or non-consuming read in a similar fashion to
+what trace and trace_pipe offer.
 
-Would it be possible to have IPQ8074 and IPQ6018 support in it as well?
-Cause, those are supported by ath11k but remoteproc support is missing,
-I have been upstreaming parts for IPQ8074 for years now and it is usable but
-we are still missing remoteproc.
+Attached to this cover letter an example of consuming read for a ring-buffer,
+using libtracefs.
 
-Regards,
-Robert
+Vincent
 
->
-> Thanks & Regards,
-> Manikanta.
+v1 -> v2:
+  * Hide data_pages from the userspace struct
+  * Fix META_PAGE_MAX_PAGES
+  * Support for order > 0 meta-page
+  * Add missing page->mapping.
+
+Vincent Donnefort (2):
+  ring-buffer: Introducing ring-buffer mapping functions
+  tracing: Allow user-space mapping of the ring-buffer
+
+--
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <signal.h>
+#include <errno.h>
+#include <unistd.h>
+#include <tracefs.h>
+#include <kbuffer.h>
+#include <event-parse.h>
+
+#include <asm/types.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+
+#define TRACE_MMAP_IOCTL_GET_READER_PAGE	_IO('T', 0x1)
+
+struct ring_buffer_meta_page_header {
+        __u64   entries;
+        __u64   overrun;
+        __u32   pages_touched;
+        __u32   meta_page_size;
+        __u32   reader_page;    /* ID of the current reader page */
+        __u32   nr_data_pages;  /* doesn't take into account the reader_page */
+        __u32   data_page_head; /* ring-buffer head as an offset from data_start */
+        __u32   data_start;     /* offset within the meta page */
+};
+
+/* Need to access private struct to save counters */
+struct kbuffer {
+	unsigned long long 	timestamp;
+	long long		lost_events;
+	unsigned long		flags;
+	void			*subbuffer;
+	void			*data;
+	unsigned int		index;
+	unsigned int		curr;
+	unsigned int		next;
+	unsigned int		size;
+	unsigned int		start;
+	unsigned int		first;
+
+	unsigned int (*read_4)(void *ptr);
+	unsigned long long (*read_8)(void *ptr);
+	unsigned long long (*read_long)(struct kbuffer *kbuf, void *ptr);
+	int (*next_event)(struct kbuffer *kbuf);
+};
+
+static char *argv0;
+static bool need_exit;
+
+static char *get_this_name(void)
+{
+	static char *this_name;
+	char *arg;
+	char *p;
+
+	if (this_name)
+		return this_name;
+
+	arg = argv0;
+	p = arg+strlen(arg);
+
+	while (p >= arg && *p != '/')
+		p--;
+	p++;
+
+	this_name = p;
+	return p;
+}
+
+static void __vdie(const char *fmt, va_list ap, int err)
+{
+	int ret = errno;
+	char *p = get_this_name();
+
+	if (err && errno)
+		perror(p);
+	else
+		ret = -1;
+
+	fprintf(stderr, "  ");
+	vfprintf(stderr, fmt, ap);
+
+	fprintf(stderr, "\n");
+	exit(ret);
+}
+
+void pdie(const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	__vdie(fmt, ap, 1);
+	va_end(ap);
+}
+
+static void read_page(struct tep_handle *tep, struct kbuffer *kbuf,
+		      void *data, int page)
+{
+	static struct trace_seq seq;
+	struct tep_record record;
+
+	if (seq.buffer)
+		trace_seq_reset(&seq);
+	else
+		trace_seq_init(&seq);
+
+	while ((record.data = kbuffer_read_event(kbuf, &record.ts))) {
+		kbuffer_next_event(kbuf, NULL);
+		tep_print_event(tep, &seq, &record,
+				"%s-%d %9d\t%s\n", TEP_PRINT_COMM,
+				TEP_PRINT_PID, TEP_PRINT_TIME, TEP_PRINT_NAME);
+		trace_seq_do_printf(&seq);
+		trace_seq_reset(&seq);
+	}
+}
+
+static int next_reader_page(int fd, struct ring_buffer_meta_page_header *meta,
+			    struct kbuffer *kbuf)
+{
+	int prev_reader_page = meta->reader_page;
+
+	if (ioctl(fd, TRACE_MMAP_IOCTL_GET_READER_PAGE) < 0)
+		pdie("ioctl");
+
+	return meta->reader_page;
+}
+
+static void signal_handler(int unused)
+{
+	printf("Exit!\n");
+	need_exit = true;
+}
+
+int main(int argc, char **argv)
+{
+	int page_size, meta_len, data_len, page, fd, start = -1;
+	struct ring_buffer_meta_page_header *map;
+	struct kbuffer *kbuf, prev_kbuf;
+	struct tep_handle *tep;
+	__u64 prev_entries;
+	void *meta, *data;
+	char *buf, path[32];
+	int cpu;
+
+	argv0 = argv[0];
+	cpu = atoi(argv[1]);
+	snprintf(path, 32, "per_cpu/cpu%d/trace_pipe_raw", cpu);
+
+	signal(SIGINT, signal_handler);
+	tep = tracefs_local_events(NULL);
+	kbuf = tep_kbuffer(tep);
+	page_size = getpagesize();
+
+	fd = tracefs_instance_file_open(NULL, path, O_RDONLY);
+	if (fd < 0)
+		pdie("raw");
+
+	meta = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
+	if (meta == MAP_FAILED)
+		pdie("mmap");
+	map = meta;
+	meta_len = map->meta_page_size;
+
+        if (meta_len > page_size) {
+                munmap(meta, page_size);
+                meta = mmap(NULL, meta_len, PROT_READ, MAP_SHARED, fd, 0);
+                if (meta == MAP_FAILED)
+                        pdie("mmap");
+                map = meta;
+        }
+
+	printf("entries:	%llu\n", map->entries);
+	printf("overrun:	%llu\n", map->overrun);
+	printf("pages_touched:	%u\n", map->pages_touched);
+	printf("reader_page:	%u\n", map->reader_page);
+	printf("nr_data_pages:	%u\n\n", map->nr_data_pages);
+
+	data_len = page_size * (map->nr_data_pages + 1);
+
+	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED, fd, meta_len);
+	if (data == MAP_FAILED)
+		pdie("mmap data");
+
+	page = ((struct ring_buffer_meta_page_header *)meta)->reader_page;
+again:
+	do {
+		kbuffer_load_subbuffer(kbuf, data + page_size * page);
+
+		if (page != start) {
+			printf("READER PAGE: %d\n", map->reader_page);
+		} else {
+			kbuf->curr = prev_kbuf.curr;
+			kbuf->index = prev_kbuf.index;
+			kbuf->next = prev_kbuf.next;
+			kbuf->timestamp = prev_kbuf.timestamp;
+			kbuffer_next_event(kbuf, NULL);
+		}
+
+		prev_entries = map->entries;
+		start = page;
+
+		read_page(tep, kbuf, data, page);
+	} while ((page = next_reader_page(fd, meta, kbuf)) != start);
+
+	prev_kbuf.curr = kbuf->curr;
+	prev_kbuf.index = kbuf->index;
+	prev_kbuf.next = kbuf->next;
+	prev_kbuf.timestamp = kbuf->timestamp;
+
+	while (prev_entries == *(volatile __u64 *)&map->entries && !need_exit)
+		usleep(100000);
+
+	if (!need_exit)
+		goto again;
+
+	munmap(data, data_len);
+	munmap(meta, page_size);
+	close(fd);
+
+	return 0;
+}
+
+
+ include/linux/ring_buffer.h     |   8 +
+ include/uapi/linux/trace_mmap.h |  28 +++
+ kernel/trace/ring_buffer.c      | 384 +++++++++++++++++++++++++++++++-
+ kernel/trace/trace.c            |  76 ++++++-
+ 4 files changed, 490 insertions(+), 6 deletions(-)
+ create mode 100644 include/uapi/linux/trace_mmap.h
+
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
