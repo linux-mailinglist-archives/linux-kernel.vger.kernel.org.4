@@ -2,291 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFE56C40C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321C96C40CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjCVDIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229843AbjCVDKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCVDIV (ORCPT
+        with ESMTP id S229584AbjCVDKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:08:21 -0400
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CC3B458;
-        Tue, 21 Mar 2023 20:08:19 -0700 (PDT)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        Tue, 21 Mar 2023 23:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822357DB6;
+        Tue, 21 Mar 2023 20:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PhD1t1w3Lz501SY;
-        Wed, 22 Mar 2023 11:08:18 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl1.zte.com.cn with SMTP id 32M384fw094843;
-        Wed, 22 Mar 2023 11:08:04 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 22 Mar 2023 11:08:05 +0800 (CST)
-Date:   Wed, 22 Mar 2023 11:08:05 +0800 (CST)
-X-Zmail-TransId: 2afa641a71157b7-98788
-X-Mailer: Zmail v1.0
-Message-ID: <202303221108054628708@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <mcgrof@kernel.org>
-Cc:     <keescook@chromium.org>, <yzaikin@google.com>,
-        <akpm@linux-foundation.org>, <linmiaohe@huawei.com>,
-        <chi.minghao@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: =?UTF-8?B?W1BBVENIIFY2IDEvMl0gbW06IGNvbXBhY3Rpb246IG1vdmUgY29tcGFjdGlvbiBzeXNjdGwgdG8gaXRzIG93biBmaWxl?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 32M384fw094843
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 641A7122.001/4PhD1t1w3Lz501SY
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18EDA61E10;
+        Wed, 22 Mar 2023 03:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDBFFC433D2;
+        Wed, 22 Mar 2023 03:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679454614;
+        bh=EoRmQVKZda3Kaw+obz4g6ex3TDnd9Bc2t7OczVEjfCQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sbE8F39jhkQF29LF3KT9pV7+ZXD7mEcVIGSKn7k+vtdM9xqsGprUiiImBgUV+iJ0s
+         i7znxBUSzFl8TrRk+NVDXgzUmK9uFL4aBex/0nwyMLnTzIr0PjZZ2y+hGCDlqGs/bg
+         +SHnNvihZQsfwbtOqFG3CcMGl2dF58FC+6386YYQQFuIY6ZVAp+L9myfqTYk0K+0Wj
+         qMmUnTThqDJ7AjAfPpqpG3zljkxpMn3YUuMhFwX3v0n2Y1wM3Iy/ryXEKzzl/X/Mc7
+         ULSyersgA14JPHO4dm8VPI0ZLMgEeALhMhE9biCrYubM+f5KxrTrx2/peuIW7YT8HZ
+         efkJAzJ4/UVog==
+Date:   Tue, 21 Mar 2023 20:10:12 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCHv1 1/2] net: ethernet: stmmac: dwmac-rk: fix optional
+ clock handling
+Message-ID: <20230321201012.74487996@kernel.org>
+In-Reply-To: <20230317174243.61500-2-sebastian.reichel@collabora.com>
+References: <20230317174243.61500-1-sebastian.reichel@collabora.com>
+        <20230317174243.61500-2-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, 17 Mar 2023 18:42:42 +0100 Sebastian Reichel wrote:
+> -	bsp_priv->mac_clk_rx = devm_clk_get(dev, "mac_clk_rx");
+> +	bsp_priv->mac_clk_rx = devm_clk_get_optional(dev, "mac_clk_rx");
+>  	if (IS_ERR(bsp_priv->mac_clk_rx))
+> -		dev_err(dev, "cannot get clock %s\n",
+> -			"mac_clk_rx");
+> +		return dev_err_probe(dev, PTR_ERR(bsp_priv->mac_clk_rx),
+> +				"cannot get clock %s\n", "mac_clk_rx");
+>  
+> -	bsp_priv->mac_clk_tx = devm_clk_get(dev, "mac_clk_tx");
+> +	bsp_priv->mac_clk_tx = devm_clk_get_optional(dev, "mac_clk_tx");
+>  	if (IS_ERR(bsp_priv->mac_clk_tx))
+> -		dev_err(dev, "cannot get clock %s\n",
+> -			"mac_clk_tx");
+> +		return dev_err_probe(dev, PTR_ERR(bsp_priv->mac_clk_tx),
+> +				"cannot get clock %s\n", "mac_clk_tx");
+>  
+> -	bsp_priv->aclk_mac = devm_clk_get(dev, "aclk_mac");
+> +	bsp_priv->aclk_mac = devm_clk_get_optional(dev, "aclk_mac");
+>  	if (IS_ERR(bsp_priv->aclk_mac))
+> -		dev_err(dev, "cannot get clock %s\n",
+> -			"aclk_mac");
+> +		return dev_err_probe(dev, PTR_ERR(bsp_priv->aclk_mac),
+> +				"cannot get clock %s\n", "aclk_mac");
 
-This moves all compaction sysctls to its own file.
+Can we turn this into a loop
 
-Link: https://lore.kernel.org/lkml/9952bbf8-cf59-7bea-ce50-0200d4f4165e@suse.cz/
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- include/linux/compaction.h |  7 ----
- kernel/sysctl.c            | 59 ------------------------------
- mm/compaction.c            | 73 ++++++++++++++++++++++++++++++++++----
- 3 files changed, 67 insertions(+), 72 deletions(-)
+struct {
+	struct whatever **ptr;
+	const char *name;
+} clocks[] = {
+	{ &bsp_priv->mac_clk_rx, "mac_clk_rx" },
+	{ &bsp_priv->mac_clk_tx, "mac_clk_tx" },
+	...
+}
 
-diff --git a/include/linux/compaction.h b/include/linux/compaction.h
-index 52a9ff65faee..a6e512cfb670 100644
---- a/include/linux/compaction.h
-+++ b/include/linux/compaction.h
-@@ -81,13 +81,6 @@ static inline unsigned long compact_gap(unsigned int order)
- }
+for (i=0; i < ARRAY_SIZE...) {
+	*clocks[i]->ptr = devm_clk_get_optional(dev, clocks[i]->name);
+	if (IS_ERR(*clocks[i]->ptr))
+		return dev_err_probe(dev, PTR_ERR(*clocks[i]->ptr),
+				     "cannot get clock %s\n", 
+				     *clocks[i]->name);
+}
 
- #ifdef CONFIG_COMPACTION
--extern unsigned int sysctl_compaction_proactiveness;
--extern int sysctl_compaction_handler(struct ctl_table *table, int write,
--			void *buffer, size_t *length, loff_t *ppos);
--extern int compaction_proactiveness_sysctl_handler(struct ctl_table *table,
--		int write, void *buffer, size_t *length, loff_t *ppos);
--extern int sysctl_extfrag_threshold;
--extern int sysctl_compact_unevictable_allowed;
+?
 
- extern unsigned int extfrag_for_order(struct zone *zone, unsigned int order);
- extern int fragmentation_index(struct zone *zone, unsigned int order);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index ce0297acf97c..e23061f33237 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -42,7 +42,6 @@
- #include <linux/highuid.h>
- #include <linux/writeback.h>
- #include <linux/ratelimit.h>
--#include <linux/compaction.h>
- #include <linux/hugetlb.h>
- #include <linux/initrd.h>
- #include <linux/key.h>
-@@ -746,27 +745,6 @@ int proc_dointvec(struct ctl_table *table, int write, void *buffer,
- 	return do_proc_dointvec(table, write, buffer, lenp, ppos, NULL, NULL);
- }
+Or alternatively inline the name of the clock into the error message?
+Right now the %s format printing looks neither here nor there, and also
+the continuation line is misaligned (should start right under "dev").
 
--#ifdef CONFIG_COMPACTION
--static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
--		int write, void *buffer, size_t *lenp, loff_t *ppos)
--{
--	int ret, old;
--
--	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
--		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
--
--	old = *(int *)table->data;
--	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
--	if (ret)
--		return ret;
--	if (old != *(int *)table->data)
--		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
--			     table->procname, current->comm,
--			     task_pid_nr(current));
--	return ret;
--}
--#endif
--
- /**
-  * proc_douintvec - read a vector of unsigned integers
-  * @table: the sysctl table
-@@ -2157,43 +2135,6 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ONE,
- 		.extra2		= SYSCTL_FOUR,
- 	},
--#ifdef CONFIG_COMPACTION
--	{
--		.procname	= "compact_memory",
--		.data		= NULL,
--		.maxlen		= sizeof(int),
--		.mode		= 0200,
--		.proc_handler	= sysctl_compaction_handler,
--	},
--	{
--		.procname	= "compaction_proactiveness",
--		.data		= &sysctl_compaction_proactiveness,
--		.maxlen		= sizeof(sysctl_compaction_proactiveness),
--		.mode		= 0644,
--		.proc_handler	= compaction_proactiveness_sysctl_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE_HUNDRED,
--	},
--	{
--		.procname	= "extfrag_threshold",
--		.data		= &sysctl_extfrag_threshold,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE_THOUSAND,
--	},
--	{
--		.procname	= "compact_unevictable_allowed",
--		.data		= &sysctl_compact_unevictable_allowed,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--
--#endif /* CONFIG_COMPACTION */
- 	{
- 		.procname	= "min_free_kbytes",
- 		.data		= &min_free_kbytes,
-diff --git a/mm/compaction.c b/mm/compaction.c
-index e689d66cedf4..ec2989f2c5d3 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1728,7 +1728,9 @@ typedef enum {
-  * Allow userspace to control policy on scanning the unevictable LRU for
-  * compactable pages.
-  */
--int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
-+static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
-+unsigned int sysctl_compaction_proactiveness;
-+static int sysctl_extfrag_threshold = 500;
 
- static inline void
- update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
-@@ -2584,8 +2586,6 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
- 	return ret;
- }
-
--int sysctl_extfrag_threshold = 500;
--
- /**
-  * try_to_compact_pages - Direct compact to satisfy a high-order allocation
-  * @gfp_mask: The GFP mask of the current allocation
-@@ -2748,8 +2748,7 @@ static void compact_nodes(void)
-  * background. It takes values in the range [0, 100].
-  */
- unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
--
--int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
-+static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *length, loff_t *ppos)
- {
- 	int rc, nid;
-@@ -2779,7 +2778,7 @@ int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
-  * This is the entry point for compacting all nodes via
-  * /proc/sys/vm/compact_memory
-  */
--int sysctl_compaction_handler(struct ctl_table *table, int write,
-+static int sysctl_compaction_handler(struct ctl_table *table, int write,
- 			void *buffer, size_t *length, loff_t *ppos)
- {
- 	if (write)
-@@ -3075,6 +3074,65 @@ static int kcompactd_cpu_online(unsigned int cpu)
- 	return 0;
- }
-
-+static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
-+		int write, void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret, old;
-+
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
-+		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+
-+	old = *(int *)table->data;
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-+	if (ret)
-+		return ret;
-+	if (old != *(int *)table->data)
-+		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
-+			     table->procname, current->comm,
-+			     task_pid_nr(current));
-+	return ret;
-+}
-+
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table vm_compaction[] = {
-+	{
-+		.procname	= "compact_memory",
-+		.data		= NULL,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0200,
-+		.proc_handler	= sysctl_compaction_handler,
-+	},
-+	{
-+		.procname	= "compaction_proactiveness",
-+		.data		= &sysctl_compaction_proactiveness,
-+		.maxlen		= sizeof(sysctl_compaction_proactiveness),
-+		.mode		= 0644,
-+		.proc_handler	= compaction_proactiveness_sysctl_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE_HUNDRED,
-+	},
-+	{
-+		.procname	= "extfrag_threshold",
-+		.data		= &sysctl_extfrag_threshold,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE_THOUSAND,
-+	},
-+	{
-+		.procname	= "compact_unevictable_allowed",
-+		.data		= &sysctl_compact_unevictable_allowed,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+	{ }
-+};
-+#endif
-+
- static int __init kcompactd_init(void)
- {
- 	int nid;
-@@ -3090,6 +3148,9 @@ static int __init kcompactd_init(void)
-
- 	for_each_node_state(nid, N_MEMORY)
- 		kcompactd_run(nid);
-+#ifdef CONFIG_SYSCTL
-+	register_sysctl_init("vm", vm_compaction);
-+#endif
- 	return 0;
- }
- subsys_initcall(kcompactd_init)
--- 
-2.25.1
+FWIW seems like it should be fine for net-next without the fixes tag.
