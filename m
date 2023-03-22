@@ -2,98 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9DE6C4E66
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787B46C4E67
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjCVOsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S231688AbjCVOsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjCVOrx (ORCPT
+        with ESMTP id S231676AbjCVOr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:47:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42A21E5F3;
-        Wed, 22 Mar 2023 07:46:28 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id cn12so28334510edb.4;
-        Wed, 22 Mar 2023 07:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679496334;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLmkUGsjVKN4NZf9Xwc68SFWMoDmXlx37mUEv+QwNDs=;
-        b=SfTs+c817QkFkmtH//ktryjgBJ3/o2Pj5C9ikp9Le++n2Ykm9Y5EQNgikfOy8eUjk9
-         RkSFSmqvIbvwxyEie+7wkWesrZg/vRENcgAklTF3n98xNsY07sQyR8LLMBnxMZyiLRrk
-         53zYL8EhW/C8FTySSs/JgyJk187s/eaRaxeBy3l0LeHqqHarwNFe5omlsia5W+B4H0Kv
-         P9BvilEYSsxjzbzibSNR/y0ejfGnV084SY8SSHCvRPTaztrKC7w8IvXDl5Zohvv/+ari
-         eekCiWFQqOjDlaww9HEm44n/ifgcTrcSPT0qczEeXFtRD3am2bdWiCQfX0dPy1QdzMd0
-         CGZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679496334;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rLmkUGsjVKN4NZf9Xwc68SFWMoDmXlx37mUEv+QwNDs=;
-        b=LeD0aT8RH6csZHe8xMs+n9Rz2KP8rq9ZdAt3pybg07VwjLiJqPb228PCK/4oWD5h/O
-         X3hzdLqEcQ9FvP8N1ikUCthITwtdWZ5rj++1iAnw+ZhTnj046oMFzV4+zxCgkjCAQIxK
-         RA/M66lgB907IEq68rVjo+hKo/6uUWLvyprjelOMFcsLZEegVudg59KWIl8qvRkaCYbL
-         kGXV74GqLFF9upSxHZvaO4Cbrid0Qq7HW+02yps4l19DsyTga+XOENYhFNAXg5n67X62
-         WzlkugRVLzh6D258+iPqut8PtYSqQyI0JtIpYs3/5viAC9UXi+CxxB0Qef8mchyBx8q3
-         bKSQ==
-X-Gm-Message-State: AO0yUKXCAFFZNd/026g75DWZnwHX9B2JbySNK4249+cAH5Y+FHuJbCqD
-        dPtqyiZdy0j8PSd+XfnqRLM=
-X-Google-Smtp-Source: AK7set/eNEzNh4JcOxymfhGwBqM5daoKmgX/0uSzD/XkdVZ0pb4jAN1GI3sQMn0JGiwqY3Zd5TaEyA==
-X-Received: by 2002:a17:906:209:b0:932:170:e07b with SMTP id 9-20020a170906020900b009320170e07bmr5657820ejd.7.1679496334548;
-        Wed, 22 Mar 2023 07:45:34 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([178.160.196.94])
-        by smtp.gmail.com with ESMTPSA id z26-20020a17090674da00b009310d4dece9sm7298268ejl.62.2023.03.22.07.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 07:45:34 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        dmatlack@google.com, vannapurve@google.com
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] selftests: kvm: Add 'malloc' failure check in vcpu_save_state
-Date:   Wed, 22 Mar 2023 18:45:28 +0400
-Message-Id: <20230322144528.704077-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 22 Mar 2023 10:47:57 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E8F469CCE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:46:32 -0700 (PDT)
+Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id DBE85242DF9;
+        Wed, 22 Mar 2023 15:45:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1679496342;
+        bh=8j2T+ZlX4ZdTrhXu8KGdXO9F9DabmzZ92pCdTRnFhPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=83CfWM2r6ZRSwKy4szm9mVcN5wWE8AHgXjbnvCtozx9kdOxTPpyEyMMDlL/yPJyu2
+         ro4y7rRt+L7Ua53Sf3mzYzPI6B9LIKMBqc7IjTn8TVlwbrRowL2airzwgkw5O/Gd0K
+         qR9baF41TN1EjQu1GrC1t5uGt8vjQjCz8wPDJHiXV0qAc8F25wFLcTqCyHzvjMhQve
+         9lZJSjqj51lOLYeoU/AsNFrIkb/PpsXAJMNK1WVIRC7k1wbApPWTSw9l7+c5kwT5k0
+         QKoKAbmke0KbQhX9/iNWO8+nC8RTQCm4hHyQIoEmdCVtQ/YGJ9FHSnDCLDKdKKVIam
+         +PA+CMMNeRb+g==
+Date:   Wed, 22 Mar 2023 15:45:40 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/6] iommu: Extend changing default domain to normal
+ group
+Message-ID: <ZBsUlHuZ4kLfSGXI@8bytes.org>
+References: <20230322064956.263419-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322064956.263419-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a 'malloc' call in vcpu_save_state function, which can
-be unsuccessful. This patch will add the malloc failure checking
-to avoid possible null dereference and give more information
-about test fail reasons.
+On Wed, Mar 22, 2023 at 02:49:50PM +0800, Lu Baolu wrote:
+> Lu Baolu (6):
+>   iommu/ipmmu-vmsa: Call arm_iommu_release_mapping() in release path
+>   iommu: Split iommu_group_remove_device() into helpers
+>   iommu: Same critical region for device release and removal
+>   iommu: Move lock from iommu_change_dev_def_domain() to its caller
+>   iommu: Replace device_lock() with group->mutex
+>   iommu: Cleanup iommu_change_dev_def_domain()
+> 
+>  drivers/iommu/iommu.c                         | 273 ++++++++----------
+>  drivers/iommu/ipmmu-vmsa.c                    |  14 +-
+>  .../ABI/testing/sysfs-kernel-iommu_groups     |   1 -
+>  3 files changed, 130 insertions(+), 158 deletions(-)
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index c39a4353ba19..827647ff3d41 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -954,6 +954,7 @@ struct kvm_x86_state *vcpu_save_state(struct kvm_vcpu *vcpu)
- 	vcpu_run_complete_io(vcpu);
- 
- 	state = malloc(sizeof(*state) + msr_list->nmsrs * sizeof(state->msrs.entries[0]));
-+	TEST_ASSERT(state, "-ENOMEM when allocating kvm state");
- 
- 	vcpu_events_get(vcpu, &state->events);
- 	vcpu_mp_state_get(vcpu, &state->mp_state);
--- 
-2.34.1
-
+Applied, thanks.
