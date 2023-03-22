@@ -2,102 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F012B6C51C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268D76C51E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjCVRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S231486AbjCVRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjCVRDs (ORCPT
+        with ESMTP id S231445AbjCVRIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:03:48 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7795ADED
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:21 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id m35so11968002wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679504596;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dujRv61zmcVnrqSD4vDmJ5J/GQAubkah0V6OA3TTILA=;
-        b=sKtjJBbDGU0biBN4S1JJo8juFcgpQhRBWIJGAKcjYfqy9mDBkD90dLvyqe3atDMZ7O
-         XTgAUDtnxcwY8iFQsqcSfi35s5ERoHbHgpFJZMZFzCfkkDAQS1EQ7IzcOyVuYFlHjKRk
-         ne1VdqeF7UJMvsWNQ0dSNlR/MGVit0NsFHHwthFZzTqT+af4yQgPFvda/iKJhrFzg64r
-         tuJrYlBhriAgxXqAAEt+D70oT3QTn6kMuGIUrIp2ZdGAl6pKcxqDh3Q1TyOnUM1pQO5P
-         9Sa8iTQAyeCByYSrmtx93sMxXdfx4TSd+ivb69qC5fn145xqbb91EKgJzCsF//6Jz2x0
-         agOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504596;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dujRv61zmcVnrqSD4vDmJ5J/GQAubkah0V6OA3TTILA=;
-        b=R4iv+u4rQJuEwoDtRVf0+s93F+IF+/F688H2ksTuMVSSnvhM5Xl4HUIk2lW2VxS0Oz
-         mIbhJY08omugg+chvl5pNiYuNbU3N3F1PT+FYVR4S8FOn2d2/yKTpUm0Ub3HScKwLOaN
-         M2Zhm0K7W0q4OxuMiVfFayg6wD0Ndy4uC3Wm3zHvIeDTQ3eUUqezhO4QdI70UAi2PcyZ
-         cVWaW8HoQd9hxcsayrA6+KtiatjVvop9uxLzlQiqm7eqktZC/7yKni7Wntyq62hqwPGS
-         zn0d/7stKhVT9dIuynYoRCFgxg9+aK4JSYR2qLuQggVqam0TwBfGJS1F0nJcTns1mMur
-         TPpg==
-X-Gm-Message-State: AO0yUKWLGcFZEJwoZK0z7lXJTJiBKfbpOdRccSrKGCLLECFxEmf5KOMx
-        Hm/gnArRXGP45DrZxYlGbEu5fw==
-X-Google-Smtp-Source: AK7set8xfrpjFFbD6r13fZmKLXi2Ry9Kxeb7eX/Cxlh2km+WD2n0mJl4cS46A1F/aNWPtnFIBzQJ+g==
-X-Received: by 2002:a05:600c:2182:b0:3ee:3d2d:841a with SMTP id e2-20020a05600c218200b003ee3d2d841amr172302wme.24.1679504595885;
-        Wed, 22 Mar 2023 10:03:15 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id n1-20020a7bc5c1000000b003db03725e86sm17553580wmk.8.2023.03.22.10.03.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:03:15 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Adrien Grassein <adrien.grassein@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Francesco Dolcini <francesco@dolcini.it>
-Cc:     Matheus Castello <matheus.castello@toradex.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-In-Reply-To: <20230322143821.109744-1-francesco@dolcini.it>
-References: <20230322143821.109744-1-francesco@dolcini.it>
-Subject: Re: [PATCH v2] drm/bridge: lt8912b: return EPROBE_DEFER if bridge
- is not found
-Message-Id: <167950459507.530086.7266374998941792767.b4-ty@linaro.org>
-Date:   Wed, 22 Mar 2023 18:03:15 +0100
+        Wed, 22 Mar 2023 13:08:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448CE64878;
+        Wed, 22 Mar 2023 10:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679504872; x=1711040872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MgiqpHKxp/iCbsM0LUs1CNRLARbXLFKM0eI7lPgT7Xs=;
+  b=TuH4qMsaFDfO9q83SxpetJZIR0sARJ653fjmTKJh4njCbeyDLaemiFVj
+   OX2TOU3SUR98QmZHsVzgAKNfFr60jJIQXgW+lffxy/c1Eyr9bBs+T84UR
+   umGt7W4rt2PGODbdjbJoGwauhuMrj+uIrYk/kbLPThBFXiGx5JTM5/UX2
+   6g8t++44jZ+8Bqkep/T0lQ3T1q/wRGqxtwX836gXJUAwEdtBlo2GDFOjS
+   6IbDA7Jtx3LkU67TJCRirXNlUJNWcOscHVo+jLL7wDeCf/C1+rKvfIOtA
+   foTIVBHSwTreetv1rhtWXkdSZPEjGbFsSQed03tbaAn/pRgod7EtgekPV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336780793"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="336780793"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 10:05:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="805900791"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="805900791"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2023 10:05:47 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf1uE-000DVq-2p;
+        Wed, 22 Mar 2023 17:05:46 +0000
+Date:   Thu, 23 Mar 2023 01:05:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH 2/2] leds: max597x: Add support for max597x
+Message-ID: <202303230037.O7fPpT2X-lkp@intel.com>
+References: <20230322124316.2147143-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322124316.2147143-2-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Naresh,
 
-On Wed, 22 Mar 2023 15:38:21 +0100, Francesco Dolcini wrote:
-> Returns EPROBE_DEFER when of_drm_find_bridge() fails, this is consistent
-> with what all the other DRM bridge drivers are doing and this is
-> required since the bridge might not be there when the driver is probed
-> and this should not be a fatal failure.
-> 
-> 
+I love your patch! Perhaps something to improve:
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-fixes)
+[auto build test WARNING on 368eb79f738a21e16c2bdbcac2444dfa96b01aaa]
 
-[1/1] drm/bridge: lt8912b: return EPROBE_DEFER if bridge is not found
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1a70ca89d59c7c8af006d29b965a95ede0abb0da
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/leds-max597x-Add-support-for-max597x/20230322-204408
+base:   368eb79f738a21e16c2bdbcac2444dfa96b01aaa
+patch link:    https://lore.kernel.org/r/20230322124316.2147143-2-Naresh.Solanki%409elements.com
+patch subject: [PATCH 2/2] leds: max597x: Add support for max597x
+reproduce:
+        make versioncheck
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230037.O7fPpT2X-lkp@intel.com/
+
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+   ./drivers/iio/adc/max597x-iio.c: 20 linux/version.h not needed.
+>> ./drivers/leds/leds-max597x.c: 20 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
 
 -- 
-Neil
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
