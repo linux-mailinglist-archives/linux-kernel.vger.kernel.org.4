@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1585A6C445C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10CF6C446F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCVHu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S230013AbjCVHxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjCVHuw (ORCPT
+        with ESMTP id S229464AbjCVHx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:50:52 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970CA5BDB5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:50:48 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id o12so69160351edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679471446;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5AdmVjcvz1/yCt2UekFt3nmmLHzuFXFt3bw5QTUpRmg=;
-        b=Ong+tjrl1kElrSo25R80+eYY7gyjS21weUf7Tmo9+I9bCkc1dMGdWHoY/ueZEFJkD7
-         S10DGo34JW0RdUrf2w71ggMb7Pc+Fg12C0vp1cC3EnZ55yJS0fEPYvvNUu7ykcQGlReV
-         XvkggfXPJ8JKFQCyT4O50XI/7tg8NkMELNhJnqRkgT/LBB3AHtG/2VP17jLi1ZD1VCd7
-         LSYXhzpc98c5ud/+Ww2rJ+MARxsc4E0Yn7wAYMdxFCuXOWCkCdCFazPHQEBigQEztEFQ
-         D2cZKrxWskR7sNVGLnA4a7vFiWoiL3k0NDyQ+E54//6MHGNGnmmpurUQ/m9hz58sva0m
-         k1Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679471446;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5AdmVjcvz1/yCt2UekFt3nmmLHzuFXFt3bw5QTUpRmg=;
-        b=L7IufLSi6tG2JVv3u32EBvG3sVMZCmJLETnhfMzb/WHPNQRZZFLXonsVB4wKLt/FRT
-         TdbMMamReyMYca669RYpLNs+GkOl0UK7EzweaWVz6K+sdhMd6HKA+4+uhSn/umsT6NHS
-         X4ognTdrhAdaFWVhFafTMU3SjeR9Fg2M4KXopi5RzrSZCffB5UoOMR3zfitVC/BMQo+o
-         QObySLSULGqTOpBYQn9y0qmJAdpO2nESDmvwM6B8XeFld0F+oIc1RWRL6Yro/kuwx51p
-         jSf8YnfV2reogiqkKnY6ACdzhifW/Id9SGusmt7MPymPi6P4r/Os4/RHOVHhdgTvL+1I
-         FusQ==
-X-Gm-Message-State: AO0yUKV9weR9HjKybkN7YcFvFZMPO8enN97v0JgiPc/VwueTmB+T8L6Y
-        4Yju5hZ/svGaklJg36KOJj8=
-X-Google-Smtp-Source: AK7set944h2QkdgHk0raczdce/k/+S/C6qqg7EsqCHlU2CG8ATrJisTfH2Nl3ExtjzPeRmw/k7+2AA==
-X-Received: by 2002:a17:906:55c9:b0:932:e6d5:bd7c with SMTP id z9-20020a17090655c900b00932e6d5bd7cmr6960071ejp.20.1679471446407;
-        Wed, 22 Mar 2023 00:50:46 -0700 (PDT)
-Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id z17-20020a5096d1000000b004aee4e2a56esm7250886eda.0.2023.03.22.00.50.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 00:50:46 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 08:50:42 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Leonardo Bras Soares Passos <leobras@redhat.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND RFC PATCH v2 1/6] riscv/cmpxchg: Deduplicate cmpxchg()
- asm functions
-Message-ID: <ZBqzUplarOxIXrvN@andrea>
-References: <20230321074249.2221674-1-leobras@redhat.com>
- <20230321074249.2221674-2-leobras@redhat.com>
- <ZBpPms0PGv4sWR1Y@andrea>
- <CAJ6HWG46-an3r3WH+n8mHHge8SjqgMbohjTmmk=_EXVmwKZSeA@mail.gmail.com>
+        Wed, 22 Mar 2023 03:53:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F2B5BC86;
+        Wed, 22 Mar 2023 00:53:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A24261F32;
+        Wed, 22 Mar 2023 07:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16C4C433D2;
+        Wed, 22 Mar 2023 07:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679471606;
+        bh=6us+L/XQm1baJWcqSucEebFsFr6/7LTQQTA45/1sK9w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V4b2fGg2pHM3FPEW87yN8n2hsakjJoVAowHip1XmWw9BlkHBJnQTwMUcrtY/RTApR
+         NBxyBX1jk0AXYSSfcc+SK/cOziReWXUJTz56jIsU3m2LovjxjDOpZDHuLFkrOpr3UR
+         WFAEbz6J6SzyEVvYklOVKrpYcKhYoTDfBwsidTwWX3RWP2rbJKLfG1+0h3fgvxKUDT
+         b9yEnkojuNKFSnSNFfii3Chzy+3S0neYSnNKMDh8lDqOau12JKTdFG9sIQFL9BupPQ
+         HNmBUEECqb+cfaT5yZXOXtXmiyfvk+3QEwSjdu+5BKkGsuyD+vyyurvs4rdJF9Cu1u
+         o5hROj9r5DsBg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1petJ7-0002VJ-38; Wed, 22 Mar 2023 08:54:53 +0100
+Date:   Wed, 22 Mar 2023 08:54:53 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] drm/msm: fix bind error handling
+Message-ID: <ZBq0TaDON8iJ3/Rh@hovoldconsulting.com>
+References: <20230306100722.28485-1-johan+linaro@kernel.org>
+ <ZBmq12uP+TY4EaE3@hovoldconsulting.com>
+ <6b2f4d0d-ba39-dd2b-e41e-b5accb4df1a2@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJ6HWG46-an3r3WH+n8mHHge8SjqgMbohjTmmk=_EXVmwKZSeA@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <6b2f4d0d-ba39-dd2b-e41e-b5accb4df1a2@linaro.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Though I'm not really a fan of macros depending on local variables with
-> > "magic" names, can this be avoided?
+On Tue, Mar 21, 2023 at 05:21:56PM +0200, Dmitry Baryshkov wrote:
+> On 21/03/2023 15:02, Johan Hovold wrote:
+> > On Mon, Mar 06, 2023 at 11:07:12AM +0100, Johan Hovold wrote:
+> >> I had reasons to look closer at the MSM DRM driver error handling and
+> >> realised that it had suffered from a fair amount of bit rot over the
+> >> years.
+> >>
+> >> Unfortunately, I started fixing this in my 6.2 branch and failed to
+> >> notice two partial and, as it turned out, broken attempts to address
+> >> this that are now in 6.3-rc1.
+> >>
+> >> Instead of trying to salvage this incrementally, I'm reverting the two
+> >> broken commits so that clean and backportable fixes can be added in
+> >> their place.
+> >>
+> >> Included are also two related cleanups.
+> > 
+> > Any further comments to these patches (except for 9/10, which should be
+> > dropped)?
+> > 
+> > As the patches being reverted here were first added in 6.3-rc1 there is
+> > still time to get this into 6.3-rc (e.g. before AUTOSEL starts trying to
+> > backport them).
 > 
-> You mean __ret, __rc, __ptr, __old and __new ?
+> I will take a look at the patches. Additional question, as you have been 
+> looking into this area. We have plenty of code which is only called 
+> under the `if (kms)` condition. Could you hopefully move these parts to 
+> separate functions, so that the error handling is also simpler? If not, 
+> I'll put this to my todo list, but it might take some time before I have 
+> time for that.
 
-Indeed, the wording was from coding-style.rst
+There's definitely room for cleaning up the bind/unbind paths further,
+but for this series I focus on correctness while maintaining symmetry
+(e.g. if an allocation was done under if (kms), then the release should
+be done under the same).
 
+I don't think I will have time to look at this further for a few weeks
+either, but I'll add it to my list of future work as well and I'll check
+in with you before actually working on it.
 
-> If so, yes, we could add them to the macro signature, but it would
-> become quite big with not much to gain. To reduce impact it could be
-> something like:
-> 
-> +#define ___cmpxchg(lr_sfx, sc_sfx, prepend, append, ret, r, p, o, n)
-> 
-> Is this a possible fix?
-
-I believe that'll do it, open to other approaches.
-
-  Andrea
+Johan
