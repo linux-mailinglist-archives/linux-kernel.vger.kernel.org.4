@@ -2,139 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D39B6C4FBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D606C4FC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjCVPyt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 11:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S230329AbjCVPze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCVPyq (ORCPT
+        with ESMTP id S230509AbjCVPz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:54:46 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE545CC25
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:54:45 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id t129so8664688iof.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:54:45 -0700 (PDT)
+        Wed, 22 Mar 2023 11:55:27 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9F45B43B;
+        Wed, 22 Mar 2023 08:55:24 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id x33so12947481uaf.12;
+        Wed, 22 Mar 2023 08:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679500523;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QkiGC3KrWLcdVvbKtOD6EuMic290UkYWO3dGkV1DW6M=;
+        b=SfYNzRieiSacBnZzinpD3JwNvgMRa+NXUxjMEV+g91rUok2QRQtIoLw4xVo/WYsRMe
+         g9D7vI8WY2XtxVxbWCXxkv9y91H5aTaAgLBl7lA44o4HynNGSNnfjLs9kwxgQGafnfXs
+         EOGDdaA/9oNYcn55W+6VHiMEfJJ3OEpqjRGYfyjRSfcIecHGyyLm1s0eVFeuc0UYGdZ+
+         h7i2Nms/wr60H9KLZ9k9+Sw/InLSKLEpIz6134u8BLrFbrNf7I28ahX9J40vJNRkcm0R
+         unbVv7pNOkaPV17HMxfiKWTnHLX1tSDw61aG+cGxz1Q52Y05F2ILaQgyhvWS2KNutcsI
+         yQ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679500485;
+        d=1e100.net; s=20210112; t=1679500523;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zg1OgSGuxXP6AQWbcWAEYszqeWEdcbfQ7SIm2fyZ1RU=;
-        b=w0OIQBDM0y2U5wtHAAbqcMyPyM8M4EXuERPpmLo+xi8Q5jXaoMiv7UMcxNGuqBR+21
-         1p2RYmKtaW9n3WhAdBiUdJuW1T3WbbBQNQ5pxmFfH4edotv2IqQAXuIoFjhETs6/yree
-         VAKYiMd8UIyX5rS4acYOfup70ppqyB4xPWecimpTO8fuxqF2+ZcH5w5c9tBVKIAwMffY
-         qUNo/6BCpaziJgH/ifPSiF28aNXJEgOaUpUOFyvfgN0atal4QrScGk1fsQZhCcSWxNUZ
-         IparoIBlM684/CYM29RYkAN3tyMTNDi00T2PwpMbtH1Wo8vJjP9TVz0XODNfE1Ng3oDG
-         ARLg==
-X-Gm-Message-State: AO0yUKUViyEdtYNZmSMOhst10G6PWCPaGF0YEQD0GvIOMbpEKXAsMJCN
-        oKF5S3tArD5xocjzgjWxOihtJfX4xgF+r8AG5ks33y9Q
-X-Google-Smtp-Source: AK7set9xywU3jk2K9kRPUjux+cNLCuo67Mo9r9ndoFpia3wUnm6iRsrogf5dr5kIMiB2xs3ha4NhA5c0ZsxfWcTPeK0=
-X-Received: by 2002:a5d:8055:0:b0:745:4726:b228 with SMTP id
- b21-20020a5d8055000000b007454726b228mr4113618ior.17.1679500484794; Wed, 22
- Mar 2023 08:54:44 -0700 (PDT)
+        bh=QkiGC3KrWLcdVvbKtOD6EuMic290UkYWO3dGkV1DW6M=;
+        b=1zT0+5B26WncEPXGrvqmo93FjmCseEjqA6vRV4/bINN6is7Ti14zg1z5REGo73DhpL
+         s84OOO12X9EMLP1pYaGpPWOXAg72yD/I9edJsPDc4nZO81k4PFHblUTyw9Y1hRROlUtk
+         AZoQ81JV0gvbNoQBSnn548GVEbLZ/OZHlQIStYGgMAm5/09oSxLQ6OID1SDBCI5V5Wt0
+         7g4Al7GfrlzbIKvYdlbv/VqIWo8+zBwXN6ktlXdUOZjqMOs+RjZcex1BL9n0F0ElbmpG
+         5jZYaM8vX65S1zDl1MNCUYEuL/qcTVkGYlF+UQV9vhjCNTXiVZl9zYAKIneA57rT/lmf
+         6r4Q==
+X-Gm-Message-State: AAQBX9dcRTX9RgmpegjJ5ktf1ZlBlHNogswxV4zsufLxVvwYLHfsazCV
+        s8WaKd1Dxr2AnxOLTjbo/tuzMoOra2wVvLt47xE=
+X-Google-Smtp-Source: AKy350b8QTB1s5WselluQQaw7LPVVPPE9gv4ky3yMgOg/05AlNjluBezpFi0dGocghRlqqIGotLucpqmeScJqEgIDMY=
+X-Received: by 2002:a05:6130:424:b0:68b:8665:a73b with SMTP id
+ ba36-20020a056130042400b0068b8665a73bmr3867185uab.1.1679500523106; Wed, 22
+ Mar 2023 08:55:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230311000642.1270971-1-namhyung@kernel.org> <2154046a-2081-606d-a1ea-33fd2d48cce7@amd.com>
-In-Reply-To: <2154046a-2081-606d-a1ea-33fd2d48cce7@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 22 Mar 2023 08:54:33 -0700
-Message-ID: <CAM9d7chDaKn57UT9D+BeZBwAQ3Mo4bVgJpign4O0De=9sFsu=w@mail.gmail.com>
-Subject: Re: [PATCH] perf/x86/ibs: Set data_src.mem_lvl_num as well
-To:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
+References: <20221223-dyndbg-filename-v1-0-cbf8543009a1@weissschuh.net>
+ <20221223-dyndbg-filename-v1-3-cbf8543009a1@weissschuh.net>
+ <04311d93-7cb4-bf0b-dfa7-162a38b42583@akamai.com> <c0b009e8-0b12-4605-83fa-ceb3cb27922f@weissschuh.net>
+In-Reply-To: <c0b009e8-0b12-4605-83fa-ceb3cb27922f@weissschuh.net>
+From:   jim.cromie@gmail.com
+Date:   Wed, 22 Mar 2023 09:54:56 -0600
+Message-ID: <CAJfuBxxkTKKyxKgbk4iv0qDi7-fz=ThtZ8FhUag_GMtjmPHoOA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dyndbg: add source filename to prefix
+To:     linux@weissschuh.net
+Cc:     Jason Baron <jbaron@akamai.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ravi,
+On Sat, Feb 4, 2023 at 7:49=E2=80=AFAM <linux@weissschuh.net> wrote:
+>
+> Hi Jason,
+>
+>
+> Feb 3, 2023 10:45:49 Jason Baron <jbaron@akamai.com>:
+>
+> > Hi Thomas,
+> >
+> > Thanks for this series, this series is fine with me:
+> > Acked-by: Jason Baron <jbaron@akamai.com>
+>
+> Thanks!
+>
+> > Your comment about making the output more relatable to the control file=
+ made me think if we should try and make the logged output look more like t=
+he control file:
+> >
+> > # cat /proc/dynamic_debug/control
+> > # filename:lineno [module]function flags format
+> >
+> > So for your example, I think that would look like:
+> >
+> > [   71.802212] lib/test_dynamic_debug.c:103 do_cats: test_dd: doing cat=
+egories
+> > [   71.802227] lib/test_dynamic_debug.c:123 do_levels: doing levels
+> >
+> > But even if we think it looks better, there maybe too many dependencies=
+ on the current output format...
+>
+> I agree on both points.
+>
+> An alternative could be a new flag that prints the
+> full format from the control file.
+> The control file even has a format header that
+> tools could use to parse out the fields, making it
+> extensible.
+>
+> Not sure it's worth it though.
+> And it should be in addition to this series in my
+> opinion.
 
-On Mon, Mar 20, 2023 at 11:33 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> Hi Namhyung,
->
-> > @@ -748,12 +750,14 @@ static void perf_ibs_get_mem_lvl(union ibs_op_data2 *op_data2,
-> >       if (ibs_caps & IBS_CAPS_ZEN4) {
-> >               if (ibs_data_src == IBS_DATA_SRC_EXT_LOC_CACHE) {
-> >                       data_src->mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_HIT;
-> > +                     data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
-> >                       return;
-> >               }
-> >       } else {
-> >               if (ibs_data_src == IBS_DATA_SRC_LOC_CACHE) {
-> >                       data_src->mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_REM_CCE1 |
-> >                                           PERF_MEM_LVL_HIT;
-> > +                     data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
->
-> mem_lvl_num does not have option to set multiple sources. Setting just
-> PERF_MEM_LVLNUM_L3 is bit misleading here. Documentation (PPR 55898 Rev
-> 0.70 - Oct 14, 2022) says:
->
->  "data returned from shared L3, other L2 on same CCX or other core's
->   cache trough same node."
->
-> As per my knowledge, "shared L3" and "other L2 on same CCX" has similar
-> latency. But request need to go through DF for "other core's cache trough
-> same node" which incurs higher latency. Thus, setting both is important.
-> This was one of the reason to not use mem_lvl_num in IBS code.
+Boy howdy, I was hoping you were gonna do it. :-)
 
-I suspect it's a quality issue for CPUs prior to Zen4 not to identify
-data source precisely.  How about setting LVLNUM_ANY_CACHE then?
+I think we need the 's' flag.
+it displays properly as "$src:$line"
 
->
-> 2nd reason was, perf c2c (c2c_decode_stats()) does not use mem_lvl_num.
+I agree that shuffling the "$src:$line" part before the "$mod:$func"
+part would be ideal
+(reluctantly) its a separate patch
 
-Maybe we can change that.  It'd be easy as long as they provide
-the same information.  IOW mem_lvl = mem_lvl_num + remote + snoop.
+Acked-by: Jim Cromie <jim.cromie@gmail.com>
 
->
-> 3rd reason was, perf mem sorting logic (sort__lvl_cmp()) does not consider
-> mem_lvl_num.
-
-Likewise.
-
->
-> 4th one was, if I set both mem_lvl and mem_lvl_num, like what other archs
-> do, `perf mem report` prints both, which is kind of ugly:
->
->           464029  N/A
->           340728  L1 or L1 hit
->             8312  LFB/MAB or LFB/MAB hit
->             7901  L2 or L2 hit
->              123  L3 or Remote Cache (1 hop) or L3 hit
->
-> Without mem_lvl_num it's much cleaner:
->
->           330057  N/A
->           229646  L1 hit
->             5842  L2 hit
->             5726  LFB/MAB hit
->               78  L3 or Remote Cache (1 hop) hit
-
-Agreed.  It doesn't need to repeat the same information.
+(resisting the urge to hijack this thread for "designing")
 
 >
-> I think we should clean this before applying this patch? Other option is
-> to add bpf filter support for mem_lvl. What do you think?
-
-I still prefer using mem_lvl_num as I think it's the way to go,
-but I'm open for change.
-
-Peter, what do you think?
-
-Thanks,
-Namhyung
+> Thomas
+>
+> > Thanks,
+> >
+> > -Jason
+> >
+> > On 1/29/23 9:01 PM, Thomas Wei=C3=9Fschuh wrote:
+> >> Printing the line number without the file is of limited usefulness.
+> >> Knowing the filename also makes it also easier to relate the logged
+> >> information to the controlfile.
+> >> Example:
+> >>      # modprobe test_dynamic_debug
+> >>      # echo 'file test_dynamic_debug.c =3Dpfsl' > /proc/dynamic_debug/=
+control
+> >>      # echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
+> >>      # dmesg | tail -2
+> >>      [   71.802212] do_cats:lib/test_dynamic_debug.c:103: test_dd: doi=
+ng categories
+> >>      [   71.802227] do_levels:lib/test_dynamic_debug.c:123: test_dd: d=
+oing levels
+> >> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> >> ---
+> >>   Documentation/admin-guide/dynamic-debug-howto.rst | 5 +++--
+> >>   include/linux/dynamic_debug.h                     | 4 +++-
+> >>   lib/dynamic_debug.c                               | 4 ++++
+> >>   3 files changed, 10 insertions(+), 3 deletions(-)
+> >> diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Docum=
+entation/admin-guide/dynamic-debug-howto.rst
+> >> index faa22f77847a..f9fa8163fba6 100644
+> >> --- a/Documentation/admin-guide/dynamic-debug-howto.rst
+> >> +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
+> >> @@ -216,13 +216,14 @@ The flags are::
+> >>     t    Include thread ID, or <intr>
+> >>     m    Include module name
+> >>     f    Include the function name
+> >> +  s    Include the source file name
+> >>     l    Include line number
+> >>     For ``print_hex_dump_debug()`` and ``print_hex_dump_bytes()``, onl=
+y
+> >>   the ``p`` flag has meaning, other flags are ignored.
+> >>   -Note the regexp ``^[-+=3D][flmpt_]+$`` matches a flags specificatio=
+n.
+> >> -To clear all flags at once, use ``=3D_`` or ``-flmpt``.
+> >> +Note the regexp ``^[-+=3D][fslmpt_]+$`` matches a flags specification=
+.
+> >> +To clear all flags at once, use ``=3D_`` or ``-fslmpt``.
+> >>       Debug messages during Boot Process
+> >> diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_deb=
+ug.h
+> >> index 41682278d2e8..0c77105d583c 100644
+> >> --- a/include/linux/dynamic_debug.h
+> >> +++ b/include/linux/dynamic_debug.h
+> >> @@ -37,10 +37,12 @@ struct _ddebug {
+> >>   #define _DPRINTK_FLAGS_INCL_FUNCNAME  (1<<2)
+> >>   #define _DPRINTK_FLAGS_INCL_LINENO    (1<<3)
+> >>   #define _DPRINTK_FLAGS_INCL_TID       (1<<4)
+> >> +#define _DPRINTK_FLAGS_INCL_SOURCENAME (1<<5)
+> >>     #define _DPRINTK_FLAGS_INCL_ANY     \
+> >>     (_DPRINTK_FLAGS_INCL_MODNAME | _DPRINTK_FLAGS_INCL_FUNCNAME |\
+> >> -    _DPRINTK_FLAGS_INCL_LINENO  | _DPRINTK_FLAGS_INCL_TID)
+> >> +    _DPRINTK_FLAGS_INCL_LINENO  | _DPRINTK_FLAGS_INCL_TID |\
+> >> +    _DPRINTK_FLAGS_INCL_SOURCENAME)
+> >>     #if defined DEBUG
+> >>   #define _DPRINTK_FLAGS_DEFAULT _DPRINTK_FLAGS_PRINT
+> >> diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+> >> index e96ea427d8af..fa7418e35197 100644
+> >> --- a/lib/dynamic_debug.c
+> >> +++ b/lib/dynamic_debug.c
+> >> @@ -92,6 +92,7 @@ static const struct { unsigned flag:8; char opt_char=
+; } opt_array[] =3D {
+> >>     { _DPRINTK_FLAGS_PRINT, 'p' },
+> >>     { _DPRINTK_FLAGS_INCL_MODNAME, 'm' },
+> >>     { _DPRINTK_FLAGS_INCL_FUNCNAME, 'f' },
+> >> +   { _DPRINTK_FLAGS_INCL_SOURCENAME, 's' },
+> >>     { _DPRINTK_FLAGS_INCL_LINENO, 'l' },
+> >>     { _DPRINTK_FLAGS_INCL_TID, 't' },
+> >>     { _DPRINTK_FLAGS_NONE, '_' },
+> >> @@ -836,6 +837,9 @@ static char *__dynamic_emit_prefix(const struct _d=
+debug *desc, char *buf)
+> >>     if (desc->flags & _DPRINTK_FLAGS_INCL_FUNCNAME)
+> >>         pos +=3D snprintf(buf + pos, remaining(pos), "%s:",
+> >>                 desc->function);
+> >> +   if (desc->flags & _DPRINTK_FLAGS_INCL_SOURCENAME)
+> >> +       pos +=3D snprintf(buf + pos, remaining(pos), "%s:",
+> >> +               trim_prefix(desc->filename));
+> >>     if (desc->flags & _DPRINTK_FLAGS_INCL_LINENO)
+> >>         pos +=3D snprintf(buf + pos, remaining(pos), "%d:",
+> >>                 desc->lineno);
+> >>
+>
