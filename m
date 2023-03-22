@@ -2,122 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A676C40A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFE56C40C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCVC7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S229782AbjCVDIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCVC7I (ORCPT
+        with ESMTP id S229584AbjCVDIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:59:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F66570B9;
-        Tue, 21 Mar 2023 19:59:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 21 Mar 2023 23:08:21 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CC3B458;
+        Tue, 21 Mar 2023 20:08:19 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C225061F0A;
-        Wed, 22 Mar 2023 02:59:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40105C433D2;
-        Wed, 22 Mar 2023 02:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679453946;
-        bh=hbbRSvW3k2Vdsx6zL8t6kCVT4bupyyrB6lhawAkzPOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rC3XCQ7ZIjJ24wJUytONOtqdk/19S7cAHUzrah6RaVcKeQ2nOKwM1i7WLnnAKH1Jy
-         ekEqCpg2HYn16FNnL2g2qsRs1Rst95TF4QtguJLSvWlOnxw+KwzhHgnHPiE14d7GnV
-         iwMcyrcP8VwEhBAtC8yTOTJQ46kyeScn8uhesixRC3vop1KbrBFLEHrQA1F3Wg0wCe
-         ZL4cpfWe27PXD6nZEVkMsiYp30VFibwprzWn8FFFvl1r54wjCt1DPxfQ0V9vCNm9MH
-         cCPXP2cFTuY87pn2MUMomVtebHM1sSURpnYxDyWwZt2LIS3dys+j5Dz51eO3ItVbje
-         i14FoaYo7Ntlw==
-Date:   Tue, 21 Mar 2023 20:02:18 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
-Subject: Re: [PATCH RFT v2 02/14] clk: qcom: smd-rpm: Add .is_enabled hook
-Message-ID: <20230322030218.7xjrsgt3abqft2y7@ripper>
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <20230303-topic-rpmcc_sleep-v2-2-ae80a325fe94@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303-topic-rpmcc_sleep-v2-2-ae80a325fe94@linaro.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PhD1t1w3Lz501SY;
+        Wed, 22 Mar 2023 11:08:18 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 32M384fw094843;
+        Wed, 22 Mar 2023 11:08:04 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 22 Mar 2023 11:08:05 +0800 (CST)
+Date:   Wed, 22 Mar 2023 11:08:05 +0800 (CST)
+X-Zmail-TransId: 2afa641a71157b7-98788
+X-Mailer: Zmail v1.0
+Message-ID: <202303221108054628708@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <mcgrof@kernel.org>
+Cc:     <keescook@chromium.org>, <yzaikin@google.com>,
+        <akpm@linux-foundation.org>, <linmiaohe@huawei.com>,
+        <chi.minghao@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: =?UTF-8?B?W1BBVENIIFY2IDEvMl0gbW06IGNvbXBhY3Rpb246IG1vdmUgY29tcGFjdGlvbiBzeXNjdGwgdG8gaXRzIG93biBmaWxl?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32M384fw094843
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 641A7122.001/4PhD1t1w3Lz501SY
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 10:35:18PM +0100, Konrad Dybcio wrote:
-> From: Shawn Guo <shawn.guo@linaro.org>
-> 
-> The RPM clock enabling state can be found with 'enabled' in struct
-> clk_smd_rpm.  Add .is_enabled hook so that clk_summary in debugfs can
-> show a correct enabling state for RPM clocks.
-> 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I don't think .is_enabled should be implemented for clocks where the
-actual state can't be queried.
+This moves all compaction sysctls to its own file.
 
-E.g. should a clock which is is_enabled = false be unprepared during
-disable_unused? It's already disabled...
+Link: https://lore.kernel.org/lkml/9952bbf8-cf59-7bea-ce50-0200d4f4165e@suse.cz/
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ include/linux/compaction.h |  7 ----
+ kernel/sysctl.c            | 59 ------------------------------
+ mm/compaction.c            | 73 ++++++++++++++++++++++++++++++++++----
+ 3 files changed, 67 insertions(+), 72 deletions(-)
 
-Regards,
-Bjorn
+diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+index 52a9ff65faee..a6e512cfb670 100644
+--- a/include/linux/compaction.h
++++ b/include/linux/compaction.h
+@@ -81,13 +81,6 @@ static inline unsigned long compact_gap(unsigned int order)
+ }
 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> [Konrad: rebase]
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index 198886c1b6c8..ecacfbc4a16c 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -424,18 +424,27 @@ static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
->  	return 0;
->  }
->  
-> +static int clk_smd_rpm_is_enabled(struct clk_hw *hw)
-> +{
-> +	struct clk_smd_rpm *r = to_clk_smd_rpm(hw);
-> +
-> +	return r->enabled;
-> +}
-> +
->  static const struct clk_ops clk_smd_rpm_ops = {
->  	.prepare	= clk_smd_rpm_prepare,
->  	.unprepare	= clk_smd_rpm_unprepare,
->  	.set_rate	= clk_smd_rpm_set_rate,
->  	.round_rate	= clk_smd_rpm_round_rate,
->  	.recalc_rate	= clk_smd_rpm_recalc_rate,
-> +	.is_enabled	= clk_smd_rpm_is_enabled,
->  };
->  
->  static const struct clk_ops clk_smd_rpm_branch_ops = {
->  	.prepare	= clk_smd_rpm_prepare,
->  	.unprepare	= clk_smd_rpm_unprepare,
->  	.recalc_rate	= clk_smd_rpm_recalc_rate,
-> +	.is_enabled	= clk_smd_rpm_is_enabled,
->  };
->  
->  DEFINE_CLK_SMD_RPM_BRANCH_A(bi_tcxo, QCOM_SMD_RPM_MISC_CLK, 0, 19200000);
-> 
-> -- 
-> 2.39.2
-> 
+ #ifdef CONFIG_COMPACTION
+-extern unsigned int sysctl_compaction_proactiveness;
+-extern int sysctl_compaction_handler(struct ctl_table *table, int write,
+-			void *buffer, size_t *length, loff_t *ppos);
+-extern int compaction_proactiveness_sysctl_handler(struct ctl_table *table,
+-		int write, void *buffer, size_t *length, loff_t *ppos);
+-extern int sysctl_extfrag_threshold;
+-extern int sysctl_compact_unevictable_allowed;
+
+ extern unsigned int extfrag_for_order(struct zone *zone, unsigned int order);
+ extern int fragmentation_index(struct zone *zone, unsigned int order);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index ce0297acf97c..e23061f33237 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -42,7 +42,6 @@
+ #include <linux/highuid.h>
+ #include <linux/writeback.h>
+ #include <linux/ratelimit.h>
+-#include <linux/compaction.h>
+ #include <linux/hugetlb.h>
+ #include <linux/initrd.h>
+ #include <linux/key.h>
+@@ -746,27 +745,6 @@ int proc_dointvec(struct ctl_table *table, int write, void *buffer,
+ 	return do_proc_dointvec(table, write, buffer, lenp, ppos, NULL, NULL);
+ }
+
+-#ifdef CONFIG_COMPACTION
+-static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
+-		int write, void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret, old;
+-
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
+-		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-
+-	old = *(int *)table->data;
+-	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+-	if (ret)
+-		return ret;
+-	if (old != *(int *)table->data)
+-		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
+-			     table->procname, current->comm,
+-			     task_pid_nr(current));
+-	return ret;
+-}
+-#endif
+-
+ /**
+  * proc_douintvec - read a vector of unsigned integers
+  * @table: the sysctl table
+@@ -2157,43 +2135,6 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ONE,
+ 		.extra2		= SYSCTL_FOUR,
+ 	},
+-#ifdef CONFIG_COMPACTION
+-	{
+-		.procname	= "compact_memory",
+-		.data		= NULL,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0200,
+-		.proc_handler	= sysctl_compaction_handler,
+-	},
+-	{
+-		.procname	= "compaction_proactiveness",
+-		.data		= &sysctl_compaction_proactiveness,
+-		.maxlen		= sizeof(sysctl_compaction_proactiveness),
+-		.mode		= 0644,
+-		.proc_handler	= compaction_proactiveness_sysctl_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_HUNDRED,
+-	},
+-	{
+-		.procname	= "extfrag_threshold",
+-		.data		= &sysctl_extfrag_threshold,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE_THOUSAND,
+-	},
+-	{
+-		.procname	= "compact_unevictable_allowed",
+-		.data		= &sysctl_compact_unevictable_allowed,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
+-	},
+-
+-#endif /* CONFIG_COMPACTION */
+ 	{
+ 		.procname	= "min_free_kbytes",
+ 		.data		= &min_free_kbytes,
+diff --git a/mm/compaction.c b/mm/compaction.c
+index e689d66cedf4..ec2989f2c5d3 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1728,7 +1728,9 @@ typedef enum {
+  * Allow userspace to control policy on scanning the unevictable LRU for
+  * compactable pages.
+  */
+-int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++static int sysctl_compact_unevictable_allowed __read_mostly = CONFIG_COMPACT_UNEVICTABLE_DEFAULT;
++unsigned int sysctl_compaction_proactiveness;
++static int sysctl_extfrag_threshold = 500;
+
+ static inline void
+ update_fast_start_pfn(struct compact_control *cc, unsigned long pfn)
+@@ -2584,8 +2586,6 @@ static enum compact_result compact_zone_order(struct zone *zone, int order,
+ 	return ret;
+ }
+
+-int sysctl_extfrag_threshold = 500;
+-
+ /**
+  * try_to_compact_pages - Direct compact to satisfy a high-order allocation
+  * @gfp_mask: The GFP mask of the current allocation
+@@ -2748,8 +2748,7 @@ static void compact_nodes(void)
+  * background. It takes values in the range [0, 100].
+  */
+ unsigned int __read_mostly sysctl_compaction_proactiveness = 20;
+-
+-int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
++static int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+ 		void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	int rc, nid;
+@@ -2779,7 +2778,7 @@ int compaction_proactiveness_sysctl_handler(struct ctl_table *table, int write,
+  * This is the entry point for compacting all nodes via
+  * /proc/sys/vm/compact_memory
+  */
+-int sysctl_compaction_handler(struct ctl_table *table, int write,
++static int sysctl_compaction_handler(struct ctl_table *table, int write,
+ 			void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	if (write)
+@@ -3075,6 +3074,65 @@ static int kcompactd_cpu_online(unsigned int cpu)
+ 	return 0;
+ }
+
++static int proc_dointvec_minmax_warn_RT_change(struct ctl_table *table,
++		int write, void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, old;
++
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT) || !write)
++		return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++
++	old = *(int *)table->data;
++	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
++	if (ret)
++		return ret;
++	if (old != *(int *)table->data)
++		pr_warn_once("sysctl attribute %s changed by %s[%d]\n",
++			     table->procname, current->comm,
++			     task_pid_nr(current));
++	return ret;
++}
++
++#ifdef CONFIG_SYSCTL
++static struct ctl_table vm_compaction[] = {
++	{
++		.procname	= "compact_memory",
++		.data		= NULL,
++		.maxlen		= sizeof(int),
++		.mode		= 0200,
++		.proc_handler	= sysctl_compaction_handler,
++	},
++	{
++		.procname	= "compaction_proactiveness",
++		.data		= &sysctl_compaction_proactiveness,
++		.maxlen		= sizeof(sysctl_compaction_proactiveness),
++		.mode		= 0644,
++		.proc_handler	= compaction_proactiveness_sysctl_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
++	{
++		.procname	= "extfrag_threshold",
++		.data		= &sysctl_extfrag_threshold,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_THOUSAND,
++	},
++	{
++		.procname	= "compact_unevictable_allowed",
++		.data		= &sysctl_compact_unevictable_allowed,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax_warn_RT_change,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
++#endif
++
+ static int __init kcompactd_init(void)
+ {
+ 	int nid;
+@@ -3090,6 +3148,9 @@ static int __init kcompactd_init(void)
+
+ 	for_each_node_state(nid, N_MEMORY)
+ 		kcompactd_run(nid);
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("vm", vm_compaction);
++#endif
+ 	return 0;
+ }
+ subsys_initcall(kcompactd_init)
+-- 
+2.25.1
