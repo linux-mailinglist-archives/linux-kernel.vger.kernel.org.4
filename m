@@ -2,81 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFDE6C4E6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB2C6C4E73
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjCVOsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
+        id S230046AbjCVOtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCVOsI (ORCPT
+        with ESMTP id S231847AbjCVOtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:48:08 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75EA69217
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Jo4szZ4FZcTQ+zI+smakOHqo+Q6smmJ4l5cIPdumn/Y=; b=f0L1C07DEYVBTLW160fPMk8G3J
-        BscFktQ/PN0rta7oVdlKWTvsbPvyADPog47HHmCz5br5qSSjPh6n/VN2BL5zolOUBlNGj2Ak/XxLo
-        74WMK6Kb0hITbNi2MRngKfnW0ni6Fz0vrlPBfDZWK/fBY+yo3nGDjYpoL5j4xK05ukpzvxcKYogdj
-        69wcpfBRTPJfkKZZbxN7HvvwqRYK0s/56cvOB0gKRGDzAVNGhaKkCr+UUZWx+rB1kuCahB9UtaNaX
-        0+2HAxtoHCH265pS9xFh3mbKWE2RmGLGEqOL4U7l9FpGiuYg8INnSD/PpRA6o7+plf6ridGBgno3W
-        EunR2Kkw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pezik-004ZrU-2H;
-        Wed, 22 Mar 2023 14:45:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7207430035F;
-        Wed, 22 Mar 2023 15:45:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4E0F3201FFA49; Wed, 22 Mar 2023 15:45:45 +0100 (CET)
-Date:   Wed, 22 Mar 2023 15:45:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 09/11] static_call: Make NULL static calls consistent
-Message-ID: <20230322144545.GE2357380@hirez.programming.kicks-ass.net>
-References: <cover.1679456900.git.jpoimboe@kernel.org>
- <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
+        Wed, 22 Mar 2023 10:49:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2FF6782F;
+        Wed, 22 Mar 2023 07:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679496473; x=1711032473;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lj2AHpVNlWyegPAy0etEep0QsoP1FICJ6uYFf1nrmTY=;
+  b=dgK7NSMhzqIS2MXR/HXgbMWjU1jtpeEvoXAJKvAs7Yes91BFwDYlJ4oD
+   QOOmxMA+DuTIzS1O/Ghe6twUQjOqSjrnICEZLkbxKb6TxBDDkuX4+GOdc
+   d+MGjPKJuE+tJGtT95rBXa9es6M/KAsRy42SEsUwbr0jfhpXAB1WtN7Jq
+   VQMrNhdj4U/rQtdiOyjg2q/S9hUL/IbF3CvkPlDVn7rDLG40p0F1z5J9R
+   cGdNfYLc7CC3kk9hV/ln1v333vWvlbWEVa8mAizrNQhemxmVOgTCIGnRc
+   6A79MIDSqmC//jMjnRr2A/OPJDBp4fIjq22BpizoEJMJAw54Eo8CtPhQs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="341590174"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="341590174"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 07:45:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="681919224"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="681919224"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2023 07:45:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pezik-007AYA-2e;
+        Wed, 22 Mar 2023 16:45:46 +0200
+Date:   Wed, 22 Mar 2023 16:45:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZBsUmkqKnP/jrNjv@smile.fi.intel.com>
+References: <20230322111255.29827-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322111255.29827-1-tony@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:00:15PM -0700, Josh Poimboeuf wrote:
-> + *   or using static_call_update() with a NULL function pointer. In both cases
-> + *   the HAVE_STATIC_CALL implementation will patch the trampoline with a RET
-> +*    instruction, instead of an immediate tail-call JMP. HAVE_STATIC_CALL_INLINE
-> +*    architectures can patch the trampoline call to a NOP.
->   *
->   *   In all cases, any argument evaluation is unconditional. Unlike a regular
->   *   conditional function pointer call:
+On Wed, Mar 22, 2023 at 01:12:51PM +0200, Tony Lindgren wrote:
+> We want to enable runtime PM for serial port device drivers in a generic
+> way. To do this, we want to have the serial core layer manage the
+> registered physical serial controller devices.
+> 
+> To do this, let's set up a struct bus and struct device for the serial
+> core controller as suggested by Greg and Jiri. The serial core controller
+> devices are children of the physical serial port device. The serial core
+> controller device is needed to support multiple different kind of ports
+> connected to single physical serial port device.
+> 
+> Let's also set up a struct device for the serial core port. The serial
+> core port instances are children of the serial core controller device.
+> 
+> With the serial core port device we can now flush pending TX on the
+> runtime PM resume as suggested by Johan.
 
-you wrecked the indent there ;-)
+With below addressed, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+
+...
+
+> +	device_initialize(&sbd->dev);
+> +	sbd->dev.parent = parent_dev;
+> +	sbd->dev.bus = &serial_base_bus_type;
+> +	sbd->dev.release = &serial_base_release;
+> +
+> +	if (str_has_prefix(name, "ctrl")) {
+> +		id = port->ctrl_id;
+> +	} else {
+> +		id = port->line;
+> +		sbd->port = port;
+> +	}
+> +
+> +	err = dev_set_name(&sbd->dev, "%s.%s.%d", name, dev_name(port->dev), id);
+> +	if (err)
+> +		goto err_free_dev;
+> +
+> +	err = device_add(&sbd->dev);
+> +	if (err)
+> +		goto err_put_device;
+> +
+> +	return &sbd->dev;
+> +
+> +err_put_device:
+> +	put_device(&sbd->dev);
+
+> +	kfree_const(sbd->dev.kobj.name);
+
+This is double free if not const, right?
+At least that's how I read kobject_cleanup() implementation.
+
+Sorry I haven't paid attention to this earlier.
+
+...
+
+> +/*
+> + * Serial core port device driver
+> + */
+
+Put it on one line for now?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
