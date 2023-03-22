@@ -2,139 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEA36C53AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D306C53B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCVSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S230294AbjCVSZH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 14:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCVSYO (ORCPT
+        with ESMTP id S230230AbjCVSZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:24:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13891A6;
-        Wed, 22 Mar 2023 11:24:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C16A62239;
-        Wed, 22 Mar 2023 18:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB04C433EF;
-        Wed, 22 Mar 2023 18:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679509453;
-        bh=aWxeq5HqKialMXYsRI0N48pceUPI3ircbdDb9rBKN6o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EP3QogOAgnu3MpQ9e5iYtVyMW0DX7ZDhR9TE3rGI1LTgnqnULyUFtEQ2cvNJ9xJBZ
-         dpoI/KfM3BOIV+l9P5LXnBqCTnDfcnCyPv5iVfQbOKkhjHd06CEF+oTBEEQ49yTC1j
-         VojDMFy1fp2ae4KouDRckPP7Db91Enf+4fZaBa1aHpEQjWbliff0dEw4mpgc7pDCHk
-         tI0nEbCKgLXL/+CWzwOsQ+IQij+WLJ4yKwVZ58mhYVk07Iuf4fHNwiDApoPFFro9rD
-         IxJmanT58b/nb5GoagwU3A7H5ECR08p/755+Vp7SPs0rviJ1cblPsbz2CX/Uvi1y7K
-         tv/z/rHgXNM4A==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 87978154033A; Wed, 22 Mar 2023 11:24:12 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 11:24:12 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc:     dave@stgolabs.net, frederic@kernel.org, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v4 2/2] rcu/rcuscale: Stop kfree_scale_thread thread(s)
- after unloading rcuscale
-Message-ID: <d5284e08-837e-4ed2-989f-2c62f2cc0f19@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <a4a3e103-78b3-4be3-80b8-bbae7b1bb2f4@paulmck-laptop>
- <20230322114241.88118-1-qiuxu.zhuo@intel.com>
- <20230322114241.88118-3-qiuxu.zhuo@intel.com>
+        Wed, 22 Mar 2023 14:25:04 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C395F2B629;
+        Wed, 22 Mar 2023 11:25:01 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id eg48so76524238edb.13;
+        Wed, 22 Mar 2023 11:25:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679509500;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FKffiRDbjDTeXJ2hTXuTV+MxI1Yz3INi1cXAJiYPuRc=;
+        b=jktupxJB/B3eCyJBQWYPnoTKiO52yFzne1qmiqaPSg2mS5UYY5JCPQBF7MeaWFQk65
+         NDivHrqdFSiKbb+fgTby81o8Aadt9eT82Tnb02ediKD5yyA9InfN5Ofzn1aUI/XenZyj
+         bFruOHdSm0aBMtjRhwtM2YOSWzfSMSwKngIYIEEhLKCi1VjO6YswZgU4gzuJm1YJh3Ez
+         XFtrSH/FPk5mcltLEczmEIKTEVqEj+miScpi4y4YizoEux73qpRNo5+tIEpT/OP5dRsF
+         KuiB/AGFd6lsaA9xXRZ61JKbtmNrsX/khZfKgqXrpMg3TCI8MLwsQP485CrBmIcjtvYq
+         6SHA==
+X-Gm-Message-State: AO0yUKWbwG7geZMWLtAmufRscc3NMIf45Ql33AN3ioSqzoF2qmHX0bHt
+        s0Cz5+EG4czpKRVLxbauRoBCw1q2LhyN5ul8O2TS/2ySCyE=
+X-Google-Smtp-Source: AK7set8RkIt2HWBfp8QlXVvUBaz2eC+3KitJ37RePlr79OOyxMulJ2zRbwMPimuaGjIKkH4FILuAQyoL58SmueIZ3Kc=
+X-Received: by 2002:a50:c3cf:0:b0:4fb:2593:846 with SMTP id
+ i15-20020a50c3cf000000b004fb25930846mr3902985edf.3.1679509500165; Wed, 22 Mar
+ 2023 11:25:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322114241.88118-3-qiuxu.zhuo@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320212012.12704-1-ubizjak@gmail.com>
+In-Reply-To: <20230320212012.12704-1-ubizjak@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 19:24:49 +0100
+Message-ID: <CAJZ5v0jAysMPb180tMMmoGBEewENKn-fW7bwzGyMVv4wUrX=LA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/ACPI/boot: Improve __acpi_acquire_global_lock
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     x86@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 07:42:41PM +0800, Qiuxu Zhuo wrote:
-> When running the 'kfree_rcu_test' test case with commands [1] the call
-> trace [2] was thrown. This was because the kfree_scale_thread thread(s)
-> still run after unloading rcuscale and torture modules. Fix the call
-> trace by invoking kfree_scale_cleanup() from rcu_scale_cleanup() when
-> removing the rcuscale module.
-> 
-> [1] modprobe rcuscale kfree_rcu_test=1
->     // After some time
->     rmmod rcuscale
->     rmmod torture
-> 
-> [2] BUG: unable to handle page fault for address: ffffffffc0601a87
->     #PF: supervisor instruction fetch in kernel mode
->     #PF: error_code(0x0010) - not-present page
->     PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
->     Oops: 0010 [#1] PREEMPT SMP NOPTI
->     CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
->     Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
->     RIP: 0010:0xffffffffc0601a87
->     Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
->     RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
->     RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
->     RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
->     RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
->     R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
->     R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
->     FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
->     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
->     DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->     DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->     Call Trace:
->      <TASK>
->      ? kvfree_call_rcu+0xf0/0x3a0
->      ? kthread+0xf3/0x120
->      ? kthread_complete_and_exit+0x20/0x20
->      ? ret_from_fork+0x1f/0x30
->      </TASK>
->     Modules linked in: rfkill sunrpc ... [last unloaded: torture]
->     CR2: ffffffffc0601a87
->     ---[ end trace 0000000000000000 ]---
-> 
-> Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
-> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+On Mon, Mar 20, 2023 at 10:20 PM Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> Improve __acpi_acquire_global_lock by using a temporary variable.
+> This enables compiler to perform if-conversion and improves generated
+> code from:
+>
+>  ...
+>  72a:   d1 ea                   shr    %edx
+>  72c:   83 e1 fc                and    $0xfffffffc,%ecx
+>  72f:   83 e2 01                and    $0x1,%edx
+>  732:   09 ca                   or     %ecx,%edx
+>  734:   83 c2 02                add    $0x2,%edx
+>  737:   f0 0f b1 17             lock cmpxchg %edx,(%rdi)
+>  73b:   75 e9                   jne    726 <__acpi_acquire_global_lock+0x6>
+>  73d:   83 e2 03                and    $0x3,%edx
+>  740:   31 c0                   xor    %eax,%eax
+>  742:   83 fa 03                cmp    $0x3,%edx
+>  745:   0f 95 c0                setne  %al
+>  748:   f7 d8                   neg    %eax
+>
+> to:
+>
+>  ...
+>  72a:   d1 e9                   shr    %ecx
+>  72c:   83 e2 fc                and    $0xfffffffc,%edx
+>  72f:   83 e1 01                and    $0x1,%ecx
+>  732:   09 ca                   or     %ecx,%edx
+>  734:   83 c2 02                add    $0x2,%edx
+>  737:   f0 0f b1 17             lock cmpxchg %edx,(%rdi)
+>  73b:   75 e9                   jne    726 <__acpi_acquire_global_lock+0x6>
+>  73d:   8d 41 ff                lea    -0x1(%rcx),%eax
+>
+> BTW: the compiler could generate:
+>
+>         lea 0x2(%rcx,%rdx,1),%edx
+>
+> instead of:
+>
+>         or     %ecx,%edx
+>         add    $0x2,%edx
+>
+> but unwated conversion from add to or when bits are known to be zero
+> prevents this improvement. This is GCC PR108477.
+>
+> No functional change intended.
+>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> ---
+> v2: Expand return statement.
 
-Much better, thank you!
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I queued and pushed both of them.
-
-							Thanx, Paul
+or please let me know if you want me to pick this up (in which case it
+will require an ACK from one of the x86 maintainers).
 
 > ---
->  kernel/rcu/rcuscale.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-> index 7e8965b0827a..d1221731c7cf 100644
-> --- a/kernel/rcu/rcuscale.c
-> +++ b/kernel/rcu/rcuscale.c
-> @@ -797,6 +797,11 @@ rcu_scale_cleanup(void)
->  	if (gp_exp && gp_async)
->  		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
->  
-> +	if (kfree_rcu_test) {
-> +		kfree_scale_cleanup();
-> +		return;
-> +	}
+>  arch/x86/kernel/acpi/boot.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 1c38174b5f01..a08a4a7a03f8 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -1853,13 +1853,18 @@ early_param("acpi_sci", setup_acpi_sci);
+>
+>  int __acpi_acquire_global_lock(unsigned int *lock)
+>  {
+> -       unsigned int old, new;
+> +       unsigned int old, new, val;
+>
+>         old = READ_ONCE(*lock);
+>         do {
+> -               new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
+> +               val = (old >> 1) & 0x1;
+> +               new = (old & ~0x3) + 2 + val;
+>         } while (!try_cmpxchg(lock, &old, new));
+> -       return ((new & 0x3) < 3) ? -1 : 0;
 > +
->  	if (torture_cleanup_begin())
->  		return;
->  	if (!cur_ops) {
-> -- 
-> 2.17.1
-> 
+> +       if (val)
+> +               return 0;
+> +
+> +       return -1;
+>  }
+>
+>  int __acpi_release_global_lock(unsigned int *lock)
+> --
+> 2.39.2
+>
