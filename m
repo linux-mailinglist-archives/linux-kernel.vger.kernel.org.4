@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BFC6C4248
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C37306C424C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCVFlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 01:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S229937AbjCVFlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 01:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCVFk6 (ORCPT
+        with ESMTP id S229912AbjCVFlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 01:40:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631FE206A4;
-        Tue, 21 Mar 2023 22:40:57 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id c4so10438586pfl.0;
-        Tue, 21 Mar 2023 22:40:57 -0700 (PDT)
+        Wed, 22 Mar 2023 01:41:49 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5330D3FBBF;
+        Tue, 21 Mar 2023 22:41:46 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id c4so10439242pfl.0;
+        Tue, 21 Mar 2023 22:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679463657;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IbpEc0TShRb+rRNJad+coLk/gTeDzfl9QacMb8n5DBg=;
-        b=Bq4urczeX72wjoD4FS2uQMeJuTD3w253bS8qWgHfD+D+14e94gfR8Hr2Tzg6eg9Mw3
-         lhFWt/LSdZS+xQdNIPuqcaLdZeQZKPyIrEEoi285Mr4tHsjxxbPotYx1sI3aevj2RWp2
-         XopushWam3vNZ3VINzeWPNm8Vl5ZRaFSQiR/sUlrzUEUptZ+RQ/t7bzSGCgMw3NmXMA5
-         fCHo7YlryhO6N2wZlXFekuRtU4aug5bFuM4crzVNOap08XjYuzZ2UvUeKpIcCxEwS+Tm
-         9eFpErG1sYlPN91JaZI7N2907Bzf5p5YvlY90TxQJUrtOC9R3t9YQH2PcadT1HVB+dMH
-         7/jA==
+        d=gmail.com; s=20210112; t=1679463706;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4AvIXzvw3CsklYuLdsWfKiwZldi09EF5IbRCiC4jps=;
+        b=W53WgOijzJdl9bNR6Y5U3IeV+x7LsP7b5DM7BqVukp+H9lsvLycVb8gMuirAKiMQv8
+         8WkPNdUvCCW2lk7SyFGv1kllOHKbBQ+x1JGDLWtJyi9o339XR+ldbOG4EijMlOYPu7rY
+         qrezg49ISozTc/b/zCxrFfhHnrbCVzBKnSK4q4sPT7KNJbwRfdqjwuAHbSWBvKw+FcfD
+         ly6psFiOj7HX/YhkhUTFFACsnaHhu+jvSf88m76P6fedkICdUDVS/gMd7ryOP4Wbcbjy
+         dBFwW2jfSlIrFbtE9JWNNkePvUWX+ctfJmyK7frAOpE8ONsy7Bd+s3d/G1slIM+kj6uN
+         cEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679463657;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IbpEc0TShRb+rRNJad+coLk/gTeDzfl9QacMb8n5DBg=;
-        b=niGhTnElwi/YGD59Yxn5yqbxDaXLZHI4jcD6fLrX+yh5Ijo6ZdXpySBd5fB+q/ck4X
-         Swx/Tl6OblT/ZAuK01xvBqcr81L56zdTSRqbssaAYMe3dnFJVZfjDKDN+U+/P5P+KBSI
-         dT0wXHg4ArDhmV2rsmHnAD7JOgHA19x/jvSZbbWX1X+kjngR7vESZf43DxTXcbZrhApK
-         KBGN3Zfo4YUGjTpcoUOIGpuzqWaiGvmiQQ970ycoowl7P+NFQLPyRslY7ze9BDWPSnpF
-         4bWCbqvDRpD9ldtUNvrxtAA+excT8b3Iv+6ygj4q249KzC5mdAmx4UmaRiBhXoO/90X9
-         nVaw==
-X-Gm-Message-State: AO0yUKVeYBlTIxJ2dowYHueiUCzeRl8NeI8PnJKFcfMpbLrCLLXUDViP
-        peQph9yfT60oIy8MTj9ddgY=
-X-Google-Smtp-Source: AK7set+NN53I6/4s45Kw4p+wbRQgS4uqcbyQ9nRR0hb5eWiEBtElyHIO/HgFB+LK8Hac9T4fmnjgpw==
-X-Received: by 2002:a62:5255:0:b0:625:e728:4c5f with SMTP id g82-20020a625255000000b00625e7284c5fmr2018209pfb.22.1679463656765;
-        Tue, 21 Mar 2023 22:40:56 -0700 (PDT)
-Received: from sumitra.com ([117.245.171.219])
-        by smtp.gmail.com with ESMTPSA id t10-20020a63f34a000000b0050f6530959bsm5905616pgj.64.2023.03.21.22.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 22:40:56 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 22:40:51 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Marc Dietrich <marvin24@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ac100@lists.launchpad.net, linux-tegra@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH v4] Staging: nvec: Remove macro definition to_nvec_led
-Message-ID: <20230322054051.GA150453@sumitra.com>
+        d=1e100.net; s=20210112; t=1679463706;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4AvIXzvw3CsklYuLdsWfKiwZldi09EF5IbRCiC4jps=;
+        b=QuPkFVqSOko8JIXUkvQViEoaYxhjxw5ss4WPg7qLsJGNRTL5jA4UFLJxM/F3yADXWJ
+         7HX0mpMz3etsim8nwdE8d15QFzRDYV7l7JD32CUbto4IRSzL+pwKLVdPiO1/ldOVaYii
+         UVmPY1+0TQCY7rkTu6V0HjStVQcbiSZH6PoKvIU36TXVE86v+FQo/gMp4Kfx7tzNZ+8E
+         HQIJoCEMZABLesc0RlYdssPtY+/tJC7aw+/VGdymOCI41W1oJQId7vc0cgxIns+VHjS3
+         8EcZTAeIUHh7zLqrMGEMmk+7r4TiHRqPrLbWqs/WdxzlsKHJRHwjcCTMDzbHb6FsCf7m
+         Emog==
+X-Gm-Message-State: AO0yUKV8g9w5wYEMQqTuw4URMhRGWV3uVSSLEkGPJJcE4MPZaJUwirmY
+        7tLBjxm8uffNMMUCZRq2bRYRF66sCSfZDFirAHc=
+X-Google-Smtp-Source: AK7set9sjy9O1ZU4ulXRaSJ2vkwJpdnlLEUIA+hL7pQ8pbtoxWVAkmgK7pGt2P70e8sjiZQP7aO6FCNgLqa6US4uCfc=
+X-Received: by 2002:a05:6a00:2d10:b0:625:ccea:1627 with SMTP id
+ fa16-20020a056a002d1000b00625ccea1627mr1196919pfb.5.1679463705542; Tue, 21
+ Mar 2023 22:41:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+References: <00000000000056cdc905f76c0733@google.com>
+In-Reply-To: <00000000000056cdc905f76c0733@google.com>
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+Date:   Wed, 22 Mar 2023 05:41:34 +0000
+Message-ID: <CAA5enKbNWqTp13a6dgkbm+aDY-PBr24x=aGXz6=JUxc0OM1UPg@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] BUG: sleeping function called from invalid
+ context in vm_map_ram
+To:     syzbot <syzbot+6d9043ea38ed2b9ef000@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, djwong@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove definition 'to_nvec_led' because it is only used once.
-Rewrite the code directly in the calling function
-'nvec_led_brightness_set'.
+On Tue, 21 Mar 2023 at 17:03, syzbot
+<syzbot+6d9043ea38ed2b9ef000@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    73f2c2a7e1d2 Add linux-next specific files for 20230320
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=11ad6e1cc80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f22105589e896af1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6d9043ea38ed2b9ef000
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d199bac80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=159c7281c80000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/2e4e105e18cf/disk-73f2c2a7.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/08d761112297/vmlinux-73f2c2a7.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/4b39e3e871ce/bzImage-73f2c2a7.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/662e0db5efdd/mount_0.gz
+>
+> The issue was bisected to:
+>
+> commit 8f4977bdd77ee3dce8af81488231e7535695f889
+> Author: Lorenzo Stoakes <lstoakes@gmail.com>
+> Date:   Sun Mar 19 07:09:31 2023 +0000
+>
+>     mm: vmalloc: use rwsem, mutex for vmap_area_lock and vmap_block->lock
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
+This patch has already been dropped in mm-unstable which will
+eventually reach linux-next. The current revision of this patch set
+retains the spinlocks.
 
-v2: Change patch subject and description, noted by
-Julia Lawall <julia.lawall@inria.fr>
+[snip]
 
-v3: Remove macro definition 'to_nvec_led'
-    Change subject and description,
-    noted by Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-
- drivers/staging/nvec/nvec_paz00.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/staging/nvec/nvec_paz00.c b/drivers/staging/nvec/nvec_paz00.c
-index 8b4da95081c8..55d59840fca4 100644
---- a/drivers/staging/nvec/nvec_paz00.c
-+++ b/drivers/staging/nvec/nvec_paz00.c
-@@ -14,9 +14,6 @@
- #include <linux/platform_device.h>
- #include "nvec.h"
- 
--#define to_nvec_led(led_cdev) \
--	container_of(led_cdev, struct nvec_led, cdev)
--
- #define NVEC_LED_REQ {'\x0d', '\x10', '\x45', '\x10', '\x00'}
- 
- #define NVEC_LED_MAX 8
-@@ -29,7 +26,7 @@ struct nvec_led {
- static void nvec_led_brightness_set(struct led_classdev *led_cdev,
- 				    enum led_brightness value)
- {
--	struct nvec_led *led = to_nvec_led(led_cdev);
-+	struct nvec_led *led = container_of(led_cdev, struct nvec_led, cdev);
- 	unsigned char buf[] = NVEC_LED_REQ;
- 
- 	buf[4] = value;
 -- 
-2.25.1
-
+Lorenzo Stoakes
+https://ljs.io
