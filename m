@@ -2,207 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC816C3F64
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A0F6C3F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjCVA7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 20:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229966AbjCVBFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjCVA7G (ORCPT
+        with ESMTP id S229820AbjCVBFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 20:59:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C357D1E;
-        Tue, 21 Mar 2023 17:59:04 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so66753508edc.3;
-        Tue, 21 Mar 2023 17:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679446743;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8yKs2Hu30YhP0Me3c6fPX37b/EvrU0cmnZmogWkvQI=;
-        b=ntDGzzUmt8XqElY0V5I9cixjIB2WrKcr3ak2vVl7vsITkOG+z3cazrd9YBYBMyGwbm
-         DZpU8sS6yt71vnB1sgHGSjDULOEC+v24D/wFxmBrF9tqyEmtI6ZYFrs/czRWqpn739e+
-         Nvxd0phI8I6kzhBlF/FcWWkYAGS066dfM8Ry3Z19FfFJuEwdjXP6tY8b6U05j1Tzy6nP
-         R/pZrCMekQf7POi4E1vjLFJhXqv2iL4ruKmFTt1nVwSsO0ba5L1PVucyCPsI4xsfRGXN
-         zoOGgjXNrU9VtsjBcufiYl3vcNqj2Bds5mP+EyMFSbT4vKILLbb13UW0T90McISReYle
-         eQJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679446743;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i8yKs2Hu30YhP0Me3c6fPX37b/EvrU0cmnZmogWkvQI=;
-        b=VhtMEIQ1bUW/x5yJd4rHCMxyJUqWcxFfg9lv7+ugkxlaKXGebafZl46cQNQsz35LAu
-         FAXoeFBmEch+K9FeAJ1h8tlottZO/7Iq7mjAU6TH11P/vRjIYiUn/zXjuT6PIZJqFji5
-         Ohqc9KiTxLW2dnGDn9bxk9VZy8tURRsluenb6ZLbVNs8VD7FGk+XPtogshzFBotMYlZx
-         smZX5itXitMZeBNcDCa2+LCNsbfa98BY36uYXUnE6Dgu5pgG+fcxLir/SbGBghJvldPm
-         wk7JuodCPpBVg1wtQ9rb5z2mj99lxg4Qbf1o8GLRHhVZSXqZPXJCzTFPU7QZ5tUd0yRn
-         blzg==
-X-Gm-Message-State: AO0yUKXNZMiuREgffHRQbasXgB+BsVz5QqAO8FLybINjlt/w8CvPN4Lv
-        HYXjrv7d4owFSgiXmldEkwA=
-X-Google-Smtp-Source: AK7set/UAKhbBJvj5SSE7BVnmbEYv9k8efLVjCNR2SsU6FMwTFEyOwvRGQozQVLxn+RfaFG85qqQNw==
-X-Received: by 2002:a17:906:c04c:b0:92b:5c67:c660 with SMTP id bm12-20020a170906c04c00b0092b5c67c660mr4995293ejb.69.1679446743071;
-        Tue, 21 Mar 2023 17:59:03 -0700 (PDT)
-Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id k8-20020a17090627c800b008d1693c212csm6384115ejc.8.2023.03.21.17.59.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 17:59:02 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 01:59:00 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Subject: Re: [PATCH memory-model 2/8] tools/memory-model: Unify UNLOCK+LOCK
- pairings to po-unlock-lock-po
-Message-ID: <ZBpS1H2rufhVoCid@andrea>
-References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
- <20230321010246.50960-2-paulmck@kernel.org>
+        Tue, 21 Mar 2023 21:05:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA650718;
+        Tue, 21 Mar 2023 18:05:32 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ph9GY1Fr1zrW1T;
+        Wed, 22 Mar 2023 09:04:05 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 09:05:05 +0800
+Message-ID: <51651742-8c48-73c7-b283-4465b28fc0a0@huawei.com>
+Date:   Wed, 22 Mar 2023 09:05:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321010246.50960-2-paulmck@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: next-20230321: arm64: Unable to handle kernel paging request at
+ virtual address
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+CC:     Petr Mladek <pmladek@suse.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+References: <CA+G9fYsTk0GPOTEMm1KG2iJvMLG0SqUfG0JSenRYFHuOQTpuxw@mail.gmail.com>
+ <ZBl4Zi03pzURXkD9@alley> <20230321155626.GA3765079@dev-arch.thelio-3990X>
+ <ZBnifM5B/E5weCnF@bombadil.infradead.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <ZBnifM5B/E5weCnF@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:02:40PM -0700, Paul E. McKenney wrote:
-> From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> 
-> LKMM uses two relations for talking about UNLOCK+LOCK pairings:
-> 
-> 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
-> 	   on the same CPU or immediate lock handovers on the same
-> 	   lock variable
-> 
-> 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
-> 	   literally as described in rcupdate.h#L1002, i.e., even
-> 	   after a sequence of handovers on the same lock variable.
-> 
-> The latter relation is used only once, to provide the guarantee
-> defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
-> makes any UNLOCK+LOCK pair followed by the fence behave like a full
-> barrier.
-> 
-> This patch drops this use in favor of using po-unlock-lock-po
-> everywhere, which unifies the way the model talks about UNLOCK+LOCK
-> pairings.  At first glance this seems to weaken the guarantee given
-> by LKMM: When considering a long sequence of lock handovers
-> such as below, where P0 hands the lock to P1, which hands it to P2,
-> which finally executes such an after_unlock_lock fence, the mb
-> relation currently links any stores in the critical section of P0
-> to instructions P2 executes after its fence, but not so after the
-> patch.
-> 
-> P0(int *x, int *y, spinlock_t *mylock)
-> {
->         spin_lock(mylock);
->         WRITE_ONCE(*x, 2);
->         spin_unlock(mylock);
->         WRITE_ONCE(*y, 1);
-> }
-> 
-> P1(int *y, int *z, spinlock_t *mylock)
-> {
->         int r0 = READ_ONCE(*y); // reads 1
->         spin_lock(mylock);
->         spin_unlock(mylock);
->         WRITE_ONCE(*z,1);
-> }
-> 
-> P2(int *z, int *d, spinlock_t *mylock)
-> {
->         int r1 = READ_ONCE(*z); // reads 1
->         spin_lock(mylock);
->         spin_unlock(mylock);
->         smp_mb__after_unlock_lock();
->         WRITE_ONCE(*d,1);
-> }
-> 
-> P3(int *x, int *d)
-> {
->         WRITE_ONCE(*d,2);
->         smp_mb();
->         WRITE_ONCE(*x,1);
-> }
-> 
-> exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
-> 
-> Nevertheless, the ordering guarantee given in rcupdate.h is actually
-> not weakened.  This is because the unlock operations along the
-> sequence of handovers are A-cumulative fences.  They ensure that any
-> stores that propagate to the CPU performing the first unlock
-> operation in the sequence must also propagate to every CPU that
-> performs a subsequent lock operation in the sequence.  Therefore any
-> such stores will also be ordered correctly by the fence even if only
-> the final handover is considered a full barrier.
-> 
-> Indeed this patch does not affect the behaviors allowed by LKMM at
-> all.  The mb relation is used to define ordering through:
-> 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
->    lock-release, rfe, and unlock-acquire orderings each provide hb
-> 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
->    lock-release orderings simply add more fine-grained cumul-fence
->    edges to substitute a single strong-fence edge provided by a long
->    lock handover sequence
-> 3) mb/strong-fence/pb and various similar uses in the definition of
->    data races, where as discussed above any long handover sequence
->    can be turned into a sequence of cumul-fence edges that provide
->    the same ordering.
-> 
-> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-Looks like after-unlock-lock has just won the single fattest inline comment
-in linux-kernel.cat.  :-)
-
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
-
-  Andrea
 
 
-> ---
->  tools/memory-model/linux-kernel.cat | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
+On 2023/3/22 0:59, Luis Chamberlain wrote:
+> On Tue, Mar 21, 2023 at 08:56:26AM -0700, Nathan Chancellor wrote:
+>> On Tue, Mar 21, 2023 at 10:27:02AM +0100, Petr Mladek wrote:
+>>> Hi,
+>>>
+>>> I add Luis into Cc.
+>>>
+>>> On Tue 2023-03-21 11:42:56, Naresh Kamboju wrote:
+>>>> The following kernel crash was noticed on arm64 Juno-r2 and Raspberry Pi 4
+>>>> Model B on Linux next-20230321.
+>>>>
+>>>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>>>
+>>>> log:
+>>>> ----
+>>>> [    3.071500] Unable to handle kernel paging request at virtual
+>>>> address 0000000000001000
+>>>
+>>> I guess that this is exactly PAGE_SIZE (4k).
+>>>
+>>>> [    3.079432] Mem abort info:
+>>>> [    3.082225]   ESR = 0x0000000096000004
+>>>> [    3.085977]   EC = 0x25: DABT (current EL), IL = 32 bits
+>>>> [    3.091295]   SET = 0, FnV = 0
+>>>> [    3.094350]   EA = 0, S1PTW = 0
+>>>> [    3.097491]   FSC = 0x04: level 0 translation fault
+>>>> [    3.102373] Data abort info:
+>>>> [    3.105252]   ISV = 0, ISS = 0x00000004
+>>>> [    3.109089]   CM = 0, WnR = 0
+>>>> [    3.112055] [0000000000001000] user address but active_mm is swapper
+>>>> [    3.114230] usb 1-1: new high-speed USB device number 2 using ehci-platform
+>>>> [    3.118418] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>>>> [    3.118426] Modules linked in:
+>>>> [    3.134717] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+>>>> 6.3.0-rc3-next-20230321 #1
+>>>> [    3.142126] Hardware name: ARM Juno development board (r2) (DT)
+>>>> [    3.148052] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>> [    3.155027] pc : string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+>>>> [    3.158443] lr : vsnprintf (lib/vsprintf.c:2817)
+>>>> [    3.162196] sp : ffff80000b34b8f0
+>>>> [    3.165511] x29: ffff80000b34b8f0 x28: ffff800009d7b1ca x27: ffff80000b34bab0
+>>>> [    3.172666] x26: ffff800009d7b1ca x25: 0000000000000020 x24: 0000000000000008
+>>>> [    3.179820] x23: 00000000ffffffd8 x22: ffff8000099858a0 x21: ffff80000b34bc30
+>>>> [    3.186973] x20: ffff80000b34ba90 x19: ffff80000b34ba98 x18: 000000003c98bfdd
+>>>> [    3.194127] x17: 000000000000001c x16: 00000000eec48da2 x15: 00000000a9dbdd17
+>>>> [    3.201280] x14: ffff80000b0242e8 x13: 0000000057a049ef x12: 00000000cfa47237
+>>>> [    3.208433] x11: 0000000000000001 x10: 00000000bd5b8780 x9 : ffff80000812cbec
+>>>> [    3.215586] x8 : 00000000ffffffff x7 : 0000000000000002 x6 : ffff80000b34ba98
+>>>> [    3.222739] x5 : ffffffffffffffff x4 : 0000000000000000 x3 : ffff0a00ffffff04
+>>>> [    3.229891] x2 : 0000000000001000 x1 : 0000000000000000 x0 : ffff80000b34bab0
+>>>> [    3.237044] Call trace:
+>>>> [    3.239489] string (lib/vsprintf.c:644 lib/vsprintf.c:726)
+>>>
+>>> This is the line where vsprintf() reads a string to be printed:
+>>>
+>>> static char *string_nocheck(char *buf, char *end, const char *s,
+>>> 			    struct printf_spec spec)
+>>> {
+>>> 	int len = 0;
+>>> 	int lim = spec.precision;
+>>>
+>>> 	while (lim--) {
+>>> ---->		char c = *s++;
+>>>
+>>>
+>>>> [    3.242551] vsnprintf (lib/vsprintf.c:2817)
+>>>> [    3.245954] vprintk_store (kernel/printk/printk.c:2200)
+>>>> [    3.249712] vprintk_emit (kernel/printk/printk.c:2297)
+>>>> [    3.253381] vprintk_default (kernel/printk/printk.c:2328)
+>>>> [    3.257137] vprintk (kernel/printk/printk_safe.c:50)
+>>>> [    3.260198] _printk (kernel/printk/printk.c:2341)
+>>>> [    3.263257] sysctl_err (fs/proc/proc_sysctl.c:1109)
+>>>> [    3.266577] __register_sysctl_table (fs/proc/proc_sysctl.c:1140
+>>>> fs/proc/proc_sysctl.c:1383)
+>>>> [    3.271202] __register_sysctl_init (fs/proc/proc_sysctl.c:1462)
+>>>
+>>> The has been done some reractoring/modification of this code
+>>> by the patchset ("[PATCH 00/11] sysctl: deprecate
+>>> register_sysctl_paths()"), see
+>>> https://lore.kernel.org/lkml/20230302202826.776286-1-mcgrof@kernel.org/
+>>>
+>>> Luis, does it trigger any bell, please?
+>>> Do you have an idea where this code could pass a pointer PAGE_SIZE
+>>> as string to printk("%s")?
+>>
+>> My bisect actually landed on commit cfe7e6ea5ee2 ("mm: memory-failure:
+>> Move memory failure sysctls to its own file"). The new sysctl table is
+>> missing a sentinel. The following diff resolves it for me.
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 6367714af61d..b2377f12f062 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -143,6 +143,7 @@ static struct ctl_table memory_failure_table[] = {
+>>   		.extra1		= SYSCTL_ZERO,
+>>   		.extra2		= SYSCTL_ONE,
+>>   	},
+>> +	{ }
+>>   };
 > 
-> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> index 07f884f9b2bf..6e531457bb73 100644
-> --- a/tools/memory-model/linux-kernel.cat
-> +++ b/tools/memory-model/linux-kernel.cat
-> @@ -37,8 +37,19 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
->  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
->  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
->  	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
-> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
-> -		fencerel(After-unlock-lock) ; [M])
-> +(*
-> + * Note: The po-unlock-lock-po relation only passes the lock to the direct
-> + * successor, perhaps giving the impression that the ordering of the
-> + * smp_mb__after_unlock_lock() fence only affects a single lock handover.
-> + * However, in a longer sequence of lock handovers, the implicit
-> + * A-cumulative release fences of lock-release ensure that any stores that
-> + * propagate to one of the involved CPUs before it hands over the lock to
-> + * the next CPU will also propagate to the final CPU handing over the lock
-> + * to the CPU that executes the fence.  Therefore, all those stores are
-> + * also affected by the fence.
-> + *)
-> +	([M] ; po-unlock-lock-po ;
-> +		[After-unlock-lock] ; po ; [M])
->  let gp = po ; [Sync-rcu | Sync-srcu] ; po?
->  let strong-fence = mb | gp
->  
-> -- 
-> 2.40.0.rc2
+
+Sorry, I don't know why this is removed after v1[1] when resend :(
+thanks for your fix.
+
+[1] https://lkml.org/lkml/2023/3/8/1644
+
+> Thanks pushed this fix in to sysctl-next.
 > 
+>    Luis
