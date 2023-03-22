@@ -2,135 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71CF6C4841
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08A86C4843
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjCVKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        id S229832AbjCVKw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCVKw0 (ORCPT
+        with ESMTP id S229790AbjCVKwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:52:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD6E18E;
-        Wed, 22 Mar 2023 03:52:26 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MAf2P0012721;
-        Wed, 22 Mar 2023 10:52:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=60OWNRlXe0ot3c5VCrZO3+DqCLYnw5ggCs4T1AjOR4c=;
- b=X034lWNt0wmToGtCeYtj6BdGtrpxaQxmjROeN70x+2BaCcdla+nSU03MWaGtIWA5WECB
- 6zXS7SBKuxLolX2US57pkDARzbf1fBdh+DYc+Z/QmHaJXUv9biNjOZFQ+aoyElceTyEp
- i88c0/T029HIedIvMyZvfbwpQ+6T2uBA9duRebTdTyHQQg5nuZDvldrtLJtSxgOACXTV
- 0oIdJIphHLp09vYqXdlcs4DUAqs/W3fg+1SSu8F3GFrYXKPEh6DyOrGgq7IYB+ytUXCG
- 4EvrUFmFYcLSr8d3IzqsxvN/59AWLhWwd3/xMi2tf3P0LVZdeupUa1ZMXeHhxR5/Nf9w IA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfrk0s3x5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:52:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MAqKoA027963
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 10:52:20 GMT
-Received: from [10.242.243.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Mar
- 2023 03:52:11 -0700
-Message-ID: <0bad147f-46b6-c52f-536f-92eeba8896ec@quicinc.com>
-Date:   Wed, 22 Mar 2023 16:21:54 +0530
+        Wed, 22 Mar 2023 06:52:55 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C9EFA8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:52:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JaXaHWgcXYm60AW2TOFbMAP4yI1wI5+RP+MhjeH8KoZ4h5nLwjlI+8axjRweOXPS9PaM2m6VGnSyJCgsNoVrqHDC0+0Cgv59kvN217eazkMxVWoZpXXN4rIIfblxjMQTFmBWAyQ8jPCE/JrZ2Qu+znPTvXcCVjCPqOGlq0saqiQ69f9HAqgFPc4dvodvzZ7sHCF9lirBtGeangUIpc/k4lCU64DqAy2FIcZbawFgRLEvYvZv7iJkrzK0MuxclNgCbjuucDvwi0dghhkcihH0rAmZSjKKF+kogWz3HUb1fRH6mAFuViWZ7acPuhga9QT8EV11xuuIEgIgrUbqxaVomQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jqYoFjwJYuabVD8mrE+qA3glvjxf3i486ZbRAnAE2K8=;
+ b=HaED/AWHr2A9ikO5DnqXCfKYTP3SibPk+pCSeBrDZrRExk+ObQU7SECDPjzwXogy9D/PQ63FS8lXqZouogsOEeN1E/kUG98myfdnmZ5WHuT6t9JiqEptCkSFzNYus1vsTmLxOGHMAH5AChgh0RMxvvFduN8HJvroBgnfxQEwgYEfALcImSxlVj7AWGAmbZDHP5wxS52e1wEA7CnQlcpj1i6njIdZkOFBKUwhUHz3A7dhbjp7V3NRR2h+GqKVFPOIae5B39mgFjC1OaztCRJqt7LYyU+2vwTMG4xzO2lQrsC6VW9t+P17QGpjlABtRO8qMC1vDWgKcqPfcCIHHKMXUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jqYoFjwJYuabVD8mrE+qA3glvjxf3i486ZbRAnAE2K8=;
+ b=kW4AtdGkr7U0g+wk3CuQgi9RTs0GbVr4IxSmVpGsjma3KJQFRul1gKnAnnY3wBXMuCSOho02bFkzzNx9CRIUyzwi9J/sOTayaw9G73uabIASHox+OVruPWMe852700GJcomC7GzgIfMvQEO64u9NbFUTbkEVqWFwIhe7qNsktGc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by BY5PR03MB5093.namprd03.prod.outlook.com (2603:10b6:a03:1e8::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 10:52:51 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::96e3:3428:3a5b:5872]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::96e3:3428:3a5b:5872%8]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 10:52:51 +0000
+From:   Hsia-Jun Li <randy.li@synaptics.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     ayaka@soulik.info, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org, tfiga@chromium.org,
+        nicolas@ndufresne.ca, "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+Subject: [PATCH] RFC: drm: Create a alloc helper flags blob
+Date:   Wed, 22 Mar 2023 18:52:26 +0800
+Message-Id: <20230322105226.122467-1-randy.li@synaptics.com>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH0PR07CA0109.namprd07.prod.outlook.com
+ (2603:10b6:510:4::24) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 08/11] remoteproc: qcom: Add Hexagon based multipd rproc
- driver
-To:     Robert Marko <robimarko@gmail.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
- <059bec3f-0c77-fc16-83a3-d78cf82d543f@linaro.org>
- <bb56bbb7-7b08-79f9-ad1b-a2de63eca5f6@quicinc.com>
- <CAOX2RU5H=fmxjAE+Er8n7qzrvUZmOpYwgqFox-RLc2C7BqJyjQ@mail.gmail.com>
-Content-Language: en-US
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <CAOX2RU5H=fmxjAE+Er8n7qzrvUZmOpYwgqFox-RLc2C7BqJyjQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oax87b87NmZ1kh2Zb7s1o8l7ww_iyI7b
-X-Proofpoint-ORIG-GUID: oax87b87NmZ1kh2Zb7s1o8l7ww_iyI7b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_07,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=549 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303220077
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|BY5PR03MB5093:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1a05af8-15a7-41a5-71df-08db2ac394e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cumEBjgEakVpLFyCFdLPSipI4ngnrgn5xafc+/5pIufV+tmLIMp/pia5koi09CaZd1JI2qFqAOR84fEMqbVwLdde9rq+KQAr4+Vc021UZXMlwgNwcoXTRH36lkqGBLLdhVX3ix76DqEAEQi3j/uaqjvwsPiTYkFqEo0oPO0UPpv8EcKn69FoZdlwmMjb5xjoU418Vm6ZPGvdhc00BxeyABHjn7uNRedUbPSdj8j3lDDYo/Wfc7lYjy6Jw1eEhle656A1biJtV5YXfZ5doXyc4yIFlqiHL/RIv47GACr4qR8k+17aqOUA7RW4Rtrga/num7uVBUioUdwWl8Dy75eCi5cq9WBxnMJ6a9+2OJcNf75mjr2BXGFD+j8Ra/EUs3FdmS+64DENnzBDPJa4ef1FypM0ArtQ83tDbmMDnHIwBQcuHFVe5sqYodKlcBbbcZTsp0hXHLBHVtcr39gBlpj2v0MRrixFvadFn+CUGWAWAGEoMcwMnWOoRjKH09ucKAlKJgmI1eAxEWscojWEGuPF4iM4WUms/L7n+FnDO7Z+Gt6ewzLS1PVMiIsQLUJVb/SlS43hwMxnpeQ7DIEQSGD0/GcEGTSQ55Rpr4uXkv/Sum/aHXpLwLtj4Fjt9YD5ut+4W2ssqe6RVSJlhJnhqmEYRfjZzIguzP+b6N+P/8EG0jFLIXY3If7Eu1P208GXVHbxoOyL+CcMdLQQ9mmby3YnRA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(39850400004)(136003)(366004)(346002)(451199018)(66899018)(66946007)(66476007)(5660300002)(8676002)(66556008)(41300700001)(478600001)(4326008)(86362001)(7416002)(6916009)(36756003)(186003)(316002)(6486002)(52116002)(6506007)(26005)(107886003)(38100700002)(2616005)(8936002)(6512007)(6666004)(38350700002)(2906002)(83380400001)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P2vzdlYjidS+gomcqcdMD2niR+vPrKvjPF8XjLpGKpG1fsFEbFUz+HWr4EwK?=
+ =?us-ascii?Q?/5DsBXSH+Urt+CM+j+d+sZcJeoHfbZshKutCcbeGc10WZaDIH8gUptJsUOpI?=
+ =?us-ascii?Q?6ThgTcQwcBpHnUM8ABpvRVYcqpNigQ72JmNqSNfnukMk91ve3Sv1LucnPG4N?=
+ =?us-ascii?Q?wTSB9pWO+fYl3TAAKdz8sErSqDlafL0I6437iOR/wAE2dur4Ka6Cgq49uKUQ?=
+ =?us-ascii?Q?FLa2rBK7Jse5g6khrsBq4PXPtZ6bTnb+LKnasJs0eABRYJKgwRXQoK0Sq0cw?=
+ =?us-ascii?Q?v+oI5mXDdAvF1Yhyn6X9cv+1Tl2Mhy/w3m3bXR+NxPpAJorcWkqlE8W5bV5j?=
+ =?us-ascii?Q?FakxFelkb97mj1Pzw8aH5qplzzj4MtagoxPx8xYcJMdpsOfrpVJ+z5n4AAKy?=
+ =?us-ascii?Q?YJL5hY4i/dZmqKGPl1TxteqsXjNXjMSpu9dxOyY7CiuAxTmwTIDj4yDZSv/o?=
+ =?us-ascii?Q?Hxs2sdDyl676w5/Wg/YmxzIelDiIT8oo25c1LQJkuEZGRfkqYY1OaZkGveso?=
+ =?us-ascii?Q?Q4q4aE822bazN+XbI9+ivCDaDH58xEwKMRFy0xrdPuUwY9BrDoN3JjtRnrGT?=
+ =?us-ascii?Q?egBjKJfmdXjqCfI8R0xlwvz/WtzkAiR1kBHhw5xg+TTtSJumdQO7URqdQqg+?=
+ =?us-ascii?Q?f13k7G2dm0ni4ZykWLFB1vWPYN9bHxIm1yee54GzeJ6agKodYrQ2E6VjSOIJ?=
+ =?us-ascii?Q?a1rRoFjDPUIq9RXjOlTs20/24gIvjnHP/LkFAgbl0Ka9X6Pk9HN+wGlmYfA0?=
+ =?us-ascii?Q?kI/+5PgYnO9XegSqc6oki87VxQW7YyPs5uetPwx/eGLxksPf0P6Mj7MPuwNn?=
+ =?us-ascii?Q?NePKZfsTaG5yIe4qLt0X1x3VFx6fI4I24o78ZOCHe3aMnUFhaVfTJosS1w1L?=
+ =?us-ascii?Q?1LkkAMMt9Cf1Edlt5ClxQw2T+Ygwopj2CpefzR9uH4PGcGKVLobGVYuOneg8?=
+ =?us-ascii?Q?RTSBttHC+tjO9UclsLOc2v4IkbN98wb8B9o2Ys8nJe7eN0grRtK/RWF3e610?=
+ =?us-ascii?Q?13ootBqoN3twutohQx9ttEoDKFskwMyXWrDmcExe6gkbi3VxuiK5zNEyqVK0?=
+ =?us-ascii?Q?RcExO0MIhkH+L5NR6xU9IALRHNU09E98Cx2ovV0/5OtufgaDIhny9oJ/h5w4?=
+ =?us-ascii?Q?s9b5Df3Ndwu8hJF7lEJ5CIukAnE2b3HUQ90CiC+sFe0JL965TkYYKSt+LF6w?=
+ =?us-ascii?Q?px6S+AusRheXm5CcNb/61OWkoJCoPla4rqJSol8B4sre8tkhW5pNQ4UHH5en?=
+ =?us-ascii?Q?mBDrp0AkmZpHrkvEKpKJfP9SH7i7IWfaykCCZC823gtkMMmtglZGX+dpkjz1?=
+ =?us-ascii?Q?YVocKCrlfiPCl0H/LjrMyTiYSziqsJ4dMxWE4g4F7TaQd2F30XOy9Yo0JmVG?=
+ =?us-ascii?Q?FdxTo7PFuFXPILyV9Vdjk6THdYiDft6/IhtdA/hpJg7Hon56BxY5Cv/M18cq?=
+ =?us-ascii?Q?3FkqcHEaN1Nda5t16+vJGiy+VPhYsisHDVSWZU4H1Gh6TeV7OPiZ7GfcUoaz?=
+ =?us-ascii?Q?SjSQNlQ/iIc+sJJBu/4ZJ+z/UCxyBXB3vXImyLP0VW1WBitj1akqGSIFh69U?=
+ =?us-ascii?Q?rzNvOaTnq3rR3o3eLfQw6ziesgoePPX3xTo93E3a?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1a05af8-15a7-41a5-71df-08db2ac394e7
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 10:52:51.1210
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wY5nD6QNlq3I5BFwm93TrjRf/xLQzlLaCaunhCwcJ7XBvIMwGAAjl5ycGllxFThJm0pZcaw7gWx3+F6uKjouPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB5093
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
 
+In Android, we could also call gralloc to allocate a
+graphics buffer for the decoder, display or encoder.
+In the GNU Linux, we don't have such framework, the only
+thing we could have is the GBM.
+Unfortunately, some platforms don't have a GPU may not
+ship the gbm library or the GBM is a part of proprietary
+GPU driver. They may not know the allocation requirement
+for the other display device.
 
-On 3/22/2023 3:51 PM, Robert Marko wrote:
-> On Wed, 22 Mar 2023 at 11:19, Manikanta Mylavarapu
-> <quic_mmanikan@quicinc.com> wrote:
->>
->>
->>
->> On 3/7/2023 9:09 PM, Krzysztof Kozlowski wrote:
->>> Why exactly do you need a new driver for this instead of extending
->>> existing PIL? I feel all this is growing because no one wants to touch
->>> existing code and merge with it...
->>
->> Previously we raised patch to add secure-pil to existing rproc driver.
->> Bjorn suggested to introduce a new secure-pil driver.
->>
->> https://patchwork.kernel.org/project/linux-arm-msm/patch/1611984013-10201-3-git-send-email-gokulsri@codeaurora.org/
->>
->>
->> Also IPQ5018, IPQ9574 soc's follows multipd model. So we decided to
->> have new driver which consists 'secure-pil + multi pd' in one
->> place.
-> 
-> Would it be possible to have IPQ8074 and IPQ6018 support in it as well?
-> Cause, those are supported by ath11k but remoteproc support is missing,
-> I have been upstreaming parts for IPQ8074 for years now and it is usable but
-> we are still missing remoteproc.
-> 
-> Regards,
-> Robert
-> >>
->> Thanks & Regards,
->> Manikanta.
+So it would be better to offer an generic interfaces
+for the application allocating the buffer from the 3rd place,
+likes DMA-heap or DRM dumb.
 
-Yes. It's possible. Currently we added support for IPQ5018, IPQ9574.
-In subsequent patches, we will add IPQ8074, IPQ6018 & IPQ5332 support
-as well.
+The storage of this blob would is different to the modifier
+blob, userspace would likes the format key and modifiers
+data relation. It would be better to let application seek
+the allocation flags they want.
 
-Regards,
-Manikanta.
+Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+---
+ include/uapi/drm/drm_mode.h | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
+index 46becedf5b2f..ee5b4d5aee0a 100644
+--- a/include/uapi/drm/drm_mode.h
++++ b/include/uapi/drm/drm_mode.h
+@@ -218,6 +218,11 @@ extern "C" {
+ #define DRM_MODE_CONTENT_PROTECTION_DESIRED     1
+ #define DRM_MODE_CONTENT_PROTECTION_ENABLED     2
+ 
++/* DRM buffer allocation flags */
++#define DRM_BUF_ALLOC_FLAG_DUMB_IMPORT		(1UL << 63)
++#define DRM_BUF_ALLOC_FLAG_SEPARATE_PLANE	(1UL << 62)
++/* bits 0~31 were reserved for DMA-heap heap_flags */
++
+ /**
+  * struct drm_mode_modeinfo - Display mode information.
+  * @clock: pixel clock in kHz
+@@ -1168,6 +1173,37 @@ struct drm_format_modifier {
+ 	__u64 modifier;
+ };
+ 
++struct drm_buf_alloc_flags_blob {
++#define FORMAT_BLOB_CURRENT 1
++	/* Version of this blob format */
++	__u32 version;
++
++	/* Flags */
++	__u32 flags;
++
++	/* Number of fourcc formats supported */
++	__u32 count_formats;
++
++	/* Where in this blob the formats exist (in bytes) */
++	__u32 formats_offset;
++
++	/* Number of drm_buf_alloc_flags */
++	__u32 count_alloc_flags;
++
++	/* Where in this blob the modifiers exist (in bytes) */
++	__u32 alloc_flags_offset;
++
++	/* __u32 formats[] */
++	/* struct drm_buf_alloc_flags alloc_flags[] */
++};
++
++struct drm_buf_alloc_flags {
++	__u32 format;
++	__u32 pad;
++	__u64 modifier_mask;
++	__u64 flags;
++};
++
+ /**
+  * struct drm_mode_create_blob - Create New blob property
+  *
+-- 
+2.17.1
+
