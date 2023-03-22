@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFFC6C4DFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459A26C4DFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCVOju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        id S231835AbjCVOj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjCVOj0 (ORCPT
+        with ESMTP id S231539AbjCVOj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 10:39:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530D6521ED
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B454C8D
         for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1679495965; x=1711031965;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XodOHskzLqB9GOrDUS/F5Kh8Lt/zUFltWrdOozMmc8c=;
-  b=Tx2pAAeGQgygEUDmpnqScbs3EkjrnpC35XNYuL7aMZBU+771JiNo6G0U
-   2iupDvqhjbsFQ/JWqx8wngkuBQU7LhqkJCDUX9zIOByU3IPN4fyFotEi1
-   nEpPpSfC2v+SgA3BENqc6EjyJ3SeJAI8tfAthvHCN5/RgTIEH9s6w8KpR
-   8uKaicf8XtBM1o3uDo6YgBPQL7XcRTTKl1pUykedYy1yFeL5FrraIRkOQ
-   /xeQoLZsKeyGZu1EFTOJAk2kkMRMolOh+LF560pfOLIazAIxQK0qQItCZ
-   xFwtxsFyPKbQCjGnc4Y1Z3IjpZVLOYEZ0YbRI7IP0qXru+kKbzANoXOQQ
+  bh=hoaAx9Ps+XUntb1eapTod1FMgNK7hAJfzIEXEA74T44=;
+  b=YowXbGbEuwMX3f3a+dXoyeNhKZCY7RyzQ84gWM0B3rFMryNud0dY9XJD
+   enltDkzUTVghWNzucsQ1nZZV9DXJTunY86/LCQAzZrPFssxp34j8BtYSP
+   hprXPEsKev+DVovGO/SlklR0zO/7IcymTWTRbeTsSZvWDAYHM6256Ojf+
+   /mstvdtC3W7Siwh12wClIz8mL1zcldGBrabwD8h6LURdVEkudilGoFmVE
+   ouhNNpuLp5edowb929o/ljdq9PH+4qxgMuod07GjqFQ+Let8X63LznfAe
+   Zr08nYBufeFUct0RFY+usN+7ulDQVaC+YSGYyjGBWpYaPCc9N6yebTsdm
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="327609307"
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319622128"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="327609307"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 07:39:24 -0700
+   d="scan'208";a="319622128"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 07:39:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="792579436"
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="856116428"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="792579436"
+   d="scan'208";a="856116428"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Mar 2023 07:39:23 -0700
+  by orsmga005.jf.intel.com with ESMTP; 22 Mar 2023 07:39:23 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 03630944; Wed, 22 Mar 2023 16:40:07 +0200 (EET)
+        id 11EC0A53; Wed, 22 Mar 2023 16:40:07 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Bumwoo Lee <bw365.lee@samsung.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [PATCH v1 12/14] extcon: Use sizeof(*pointer) instead of sizeof(type)
-Date:   Wed, 22 Mar 2023 16:40:03 +0200
-Message-Id: <20230322144005.40368-13-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 13/14] extcon: Drop unneeded assignments
+Date:   Wed, 22 Mar 2023 16:40:04 +0200
+Message-Id: <20230322144005.40368-14-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
 References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is preferred to use sizeof(*pointer) instead of sizeof(type).
-The type of the variable can change and one needs not change
-the former (unlike the latter). No functional change intended.
+In one case the assignment is duplicative, in the other,
+it's better to move it into the loop — the user of it.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/extcon/extcon.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/extcon/extcon.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index 0e04ea185c26..b3f038639cd6 100644
+index b3f038639cd6..edfa0450e605 100644
 --- a/drivers/extcon/extcon.c
 +++ b/drivers/extcon/extcon.c
-@@ -1099,9 +1099,7 @@ static int extcon_alloc_cables(struct extcon_dev *edev)
- 	if (!edev->max_supported)
+@@ -246,7 +246,7 @@ static DEFINE_MUTEX(extcon_dev_list_lock);
+ 
+ static int check_mutually_exclusive(struct extcon_dev *edev, u32 new_state)
+ {
+-	int i = 0;
++	int i;
+ 
+ 	if (!edev->mutually_exclusive)
  		return 0;
+@@ -1244,7 +1244,7 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+  */
+ int extcon_dev_register(struct extcon_dev *edev)
+ {
+-	int ret, index = 0;
++	int ret, index;
  
--	edev->cables = kcalloc(edev->max_supported,
--			       sizeof(struct extcon_cable),
--			       GFP_KERNEL);
-+	edev->cables = kcalloc(edev->max_supported, sizeof(*edev->cables), GFP_KERNEL);
- 	if (!edev->cables)
- 		return -ENOMEM;
+ 	ret = create_extcon_class();
+ 	if (ret < 0)
+@@ -1253,7 +1253,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 	if (!edev || !edev->supported_cable)
+ 		return -EINVAL;
  
-@@ -1160,14 +1158,12 @@ static int extcon_alloc_muex(struct extcon_dev *edev)
- 	for (index = 0; edev->mutually_exclusive[index]; index++)
- 		;
+-	for (; edev->supported_cable[index] != EXTCON_NONE; index++);
++	for (index = 0; edev->supported_cable[index] != EXTCON_NONE; index++);
  
--	edev->attrs_muex = kcalloc(index + 1,
--				   sizeof(struct attribute *),
-+	edev->attrs_muex = kcalloc(index + 1, sizeof(*edev->attrs_muex),
- 				   GFP_KERNEL);
- 	if (!edev->attrs_muex)
- 		return -ENOMEM;
- 
--	edev->d_attrs_muex = kcalloc(index,
--				     sizeof(struct device_attribute),
-+	edev->d_attrs_muex = kcalloc(index, sizeof(*edev->d_attrs_muex),
- 				     GFP_KERNEL);
- 	if (!edev->d_attrs_muex) {
- 		kfree(edev->attrs_muex);
-@@ -1213,8 +1209,8 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
- 		return 0;
- 
- 	edev->extcon_dev_type.groups = kcalloc(edev->max_supported + 2,
--			sizeof(struct attribute_group *),
--			GFP_KERNEL);
-+					       sizeof(*edev->extcon_dev_type.groups),
-+					       GFP_KERNEL);
- 	if (!edev->extcon_dev_type.groups)
- 		return -ENOMEM;
- 
-@@ -1298,8 +1294,7 @@ int extcon_dev_register(struct extcon_dev *edev)
- 
- 	spin_lock_init(&edev->lock);
- 	if (edev->max_supported) {
--		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh),
--				GFP_KERNEL);
-+		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh), GFP_KERNEL);
- 		if (!edev->nh) {
- 			ret = -ENOMEM;
- 			goto err_alloc_nh;
+ 	edev->max_supported = index;
+ 	if (index > SUPPORTED_CABLE_MAX) {
 -- 
 2.40.0.1.gaa8946217a0b
 
