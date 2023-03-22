@@ -2,124 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA406C45FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C246C4603
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCVJQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S230014AbjCVJQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjCVJP6 (ORCPT
+        with ESMTP id S230040AbjCVJQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:15:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A90E2196D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:15:56 -0700 (PDT)
+        Wed, 22 Mar 2023 05:16:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED6E5BCBC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:16:29 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A096520BC8;
-        Wed, 22 Mar 2023 09:15:55 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EF46E33925;
+        Wed, 22 Mar 2023 09:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679476555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679476587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sSwW1Xo4NB8UgygX86U3Xlb/V7fSDefct5xNdIgZccg=;
-        b=c2CQdvUDKX28KT7eBRzRZoAVuo1EkjyrF7KYxeQQelPVnr+tspPad6b0pIUJQa5nf0SdZM
-        mYVrRZZquwR7BiE1Qa9LfI5AgmQ0Qe+Gd35CNXC58WjBFaIdVGti8KCx1OjlDp6envok8A
-        Akl1hGzE4sLrGXtDsiEXyFLzzPen+RQ=
+        bh=XE710fYEKcswB5J6E1dCWxswIdz0v6nHSjXnchN4Gj8=;
+        b=LrZG1I0XHUtH1qcWUzbG1QDdcWEjVFNOyr2gCFPAmcCl55wKwDpZX2lkum1IXuq/bsMtk0
+        oXohYQakD4TfmAXfwOLWGr0dghGRvesCE0aGuLXS1INIzdJpRpS/vTLbsxxoSqGurPMgk5
+        q7/qli1tIcR4BY5DDCLlRrov+z76jsw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679476555;
+        s=susede2_ed25519; t=1679476587;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sSwW1Xo4NB8UgygX86U3Xlb/V7fSDefct5xNdIgZccg=;
-        b=lYSRVv2lP5Q+hhQwDzQquZVTgjn2jTm4PvR2E2XnWrsH8ZztOh76yTdjv81/g3tPa1Z2M0
-        lTlFHEj8q77BMtBw==
+        bh=XE710fYEKcswB5J6E1dCWxswIdz0v6nHSjXnchN4Gj8=;
+        b=hLNAqJpza2k2pWnvQLRU29P5a9DDqQjlIQTk7qd3mANKiNFpzl9kNHQ2xRx2WGTC6uYhcx
+        l/AnOzewWkfw4DCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9213113416;
-        Wed, 22 Mar 2023 09:15:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C5F8113416;
+        Wed, 22 Mar 2023 09:16:27 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id sZShI0vHGmQ3XgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 22 Mar 2023 09:15:55 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 22F22A071C; Wed, 22 Mar 2023 10:15:55 +0100 (CET)
-Date:   Wed, 22 Mar 2023 10:15:55 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] quota: check for register_sysctl() failure when has
- CONFIG_SYSCTL
-Message-ID: <20230322091555.ncruzminxyxcphxr@quack3>
-References: <20230320174058.72773-1-frank.li@vivo.com>
+        id ugSKL2vHGmRwXgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 09:16:27 +0000
+Message-ID: <08b98b4a-c6cf-b1b7-a4f8-2ebf3c3a0c67@suse.cz>
+Date:   Wed, 22 Mar 2023 10:16:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320174058.72773-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/4] mm/mmap/vma_merge: extend invariants, avoid
+ invalid res, vma
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
+References: <cover.1679431180.git.lstoakes@gmail.com>
+ <17b6fc3edc46c4b33aa93b9ef17a63a3a76f4b5f.1679431180.git.lstoakes@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <17b6fc3edc46c4b33aa93b9ef17a63a3a76f4b5f.1679431180.git.lstoakes@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 21-03-23 01:40:58, Yangtao Li wrote:
-> Print a message that sysctl registration failed if CONFIG_SYSCTL
-> is enabled, and wrap the fs_dqstats_table array with CONFIG_SYSCTL.
+On 3/21/23 21:45, Lorenzo Stoakes wrote:
+> Previously, vma was an uninitialised variable which was only definitely
+> assigned as a result of the logic covering all possible input cases - for
+> it to have remained uninitialised, prev would have to be NULL, and next
+> would _have_ to be mergeable.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> We now reuse vma to assign curr and next, so to be absolutely explicit,
+> ensure this variable is _always_ assigned, and while we're at it remove the
+> redundant assignment of both res and vma (if prev is NULL then we simply
+> assign to NULL).
+> 
+> In addition, we absolutely do rely on addr == curr->vm_start should curr
+> exist, so assert as much.
+> 
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-Thanks! I've added the patch to my tree.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-								Honza
+Nit suggestion below.
 
 > ---
->  fs/quota/dquot.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  mm/mmap.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
 > 
-> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> index 90cb70c82012..a16ddda02612 100644
-> --- a/fs/quota/dquot.c
-> +++ b/fs/quota/dquot.c
-> @@ -2879,6 +2879,7 @@ static int do_proc_dqstats(struct ctl_table *table, int write,
->  	return proc_doulongvec_minmax(table, write, buffer, lenp, ppos);
->  }
->  
-> +#ifdef CONFIG_SYSCTL
->  static struct ctl_table fs_dqstats_table[] = {
->  	{
->  		.procname	= "lookups",
-> @@ -2947,6 +2948,7 @@ static struct ctl_table fs_dqstats_table[] = {
->  #endif
->  	{ },
->  };
-> +#endif
->  
->  static int __init dquot_init(void)
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6361baf75601..7aec49c3bc74 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -911,7 +911,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
 >  {
-> @@ -2955,7 +2957,10 @@ static int __init dquot_init(void)
+>  	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+>  	pgoff_t vma_pgoff;
+> -	struct vm_area_struct *curr, *next, *res = NULL;
+> +	struct vm_area_struct *curr, *next, *res;
+>  	struct vm_area_struct *vma, *adjust, *remove, *remove2;
+>  	int err = -1;
+>  	bool merge_prev = false;
+> @@ -940,14 +940,18 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>  		/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
+>  		next = vma_lookup(mm, end);
 >  
->  	printk(KERN_NOTICE "VFS: Disk quotas %s\n", __DQUOT_VERSION__);
+> -	/* verify some invariant that must be enforced by the caller */
+> +	/*
+> +	 * By default, we return prev. Cases 3, 4, 8 will instead return next
+> +	 * and cases 3, 8 will also update vma to point at next.
+> +	 */
+> +	res = vma = prev;
+
+Later in the function there's a line:
+
+	remove = remove2 = adjust = NULL;
+
+Now it would make sense to move it up here?
+
+> +
+> +	/* Verify some invariant that must be enforced by the caller. */
+>  	VM_WARN_ON(prev && addr <= prev->vm_start);
+> -	VM_WARN_ON(curr && end > curr->vm_end);
+> +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+>  	VM_WARN_ON(addr >= end);
 >  
-> -	register_sysctl("fs/quota", fs_dqstats_table);
-> +#ifdef CONFIG_SYSCTL
-> +	if (!register_sysctl("fs/quota", fs_dqstats_table))
-> +		pr_notice("quota sysctl registration failed!\n");
-> +#endif
->  
->  	dquot_cachep = kmem_cache_create("dquot",
->  			sizeof(struct dquot), sizeof(unsigned long) * 4,
-> -- 
-> 2.35.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  	if (prev) {
+> -		res = prev;
+> -		vma = prev;
+>  		vma_start = prev->vm_start;
+>  		vma_pgoff = prev->vm_pgoff;
+>  		/* Can we merge the predecessor? */
+> @@ -958,6 +962,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>  			vma_prev(vmi);
+>  		}
+>  	}
+> +
+>  	/* Can we merge the successor? */
+>  	if (next && mpol_equal(policy, vma_policy(next)) &&
+>  	    can_vma_merge_before(next, vm_flags,
+> @@ -998,6 +1003,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>  			adj_start = -(prev->vm_end - addr);
+>  			err = dup_anon_vma(next, prev);
+>  		} else {
+> +			/*
+> +			 * Note that cases 3 and 8 are the ONLY ones where prev
+> +			 * is permitted to be (but is not necessarily) NULL.
+> +			 */
+>  			vma = next;			/* case 3 */
+>  			vma_start = addr;
+>  			vma_end = next->vm_end;
+
