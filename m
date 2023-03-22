@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85E56C5294
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAD86C5299
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCVRgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S229997AbjCVRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCVRgB (ORCPT
+        with ESMTP id S229961AbjCVRgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:36:01 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04D15FEA4;
-        Wed, 22 Mar 2023 10:35:46 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id x24-20020a4aca98000000b0053a9bbbe449so2047670ooq.9;
-        Wed, 22 Mar 2023 10:35:46 -0700 (PDT)
+        Wed, 22 Mar 2023 13:36:09 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D3D5A1AA;
+        Wed, 22 Mar 2023 10:35:56 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id f17-20020a9d7b51000000b00697349ab7e7so10774853oto.9;
+        Wed, 22 Mar 2023 10:35:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679506546;
+        d=1e100.net; s=20210112; t=1679506555;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bP1sW3nJE9MVZhrW5r4ts+qmYu6aKy1OmzkcJUxDVNQ=;
-        b=oH8uORHQoFEUMzLNXzbPiA1a/i8Kx+ARu4VDrpakjR/aMFklDnjFE2+bESmm0KOhDi
-         UvpwFyyI75KCiC/KbfjXm4urrf+9Qx4q7ylPPtOTvm++adyhGhP0TbNWZaTlytla8cl9
-         Di5GDgrv69F6G9Kd/Kpj9bJ3/hoP3eEeZPId0vP/8jGtNqB4ukOZnwUcVWrBRwaKY/c1
-         GCymUsUMbuT+dLpW9HRCTbVbrXlYQLArUeafDZgTon3lcU+mqaf2mO2rP9TQ2tAlVw9o
-         xRhORVdGGoGT+dXCda4xmvE5VZkUq7bPuZZxF3SSVJqRRI+p7nngCUFdsTS1RIQzCNAf
-         JXIg==
-X-Gm-Message-State: AO0yUKVsFAsV93TRiiFBplbemaZ+G8PRFfvuUEgByslrg/T8CI6mhNgw
-        HilEqE7Yzk/RQmL5SpF/xw==
-X-Google-Smtp-Source: AK7set/jXbBcjuyv1m10lynYpyrfOghoXTVkbpUws5+s70kRjos9BtEeTkTxF9xl5t/gOkuwVLUEOw==
-X-Received: by 2002:a4a:41ca:0:b0:53b:4b21:2345 with SMTP id x193-20020a4a41ca000000b0053b4b212345mr1650879ooa.2.1679506545888;
-        Wed, 22 Mar 2023 10:35:45 -0700 (PDT)
+        bh=d8pgjNLgTfMWBbJ8AnTbw7pnuGrKkNboaIvf8UVBNTc=;
+        b=dSalATgXk2CI28Ukjq0vQJKNrCtdtLV+ch80ttiHMaV0ZdGOrlRJT+jWWJJDH0PAwr
+         9aGqwTz7HSTYxb5CMv3ngrqVm+G85EhgYdhj//JHBphdVIhQI8ABtZMfOF9d4Jp9GVNT
+         Cv6Lx5I66y4bWIGrIZZL94HqdL2jc1s/+cXkNY3IZYKMFgj2hEglH77whY0aY2Px4iwz
+         wkmR+Yfb5+9B/ZVMRfXmRuHSgUz34rE/PaK2tDehDDviITKrqF7ZDvFAmQlLjdXVjvTr
+         0Dv3YMHVouLZzLBmGr3fWJsdXhAfaloGk8Nt9mqBRm17T3iizVcBfUj6k/K5ro2R8D4L
+         hLfw==
+X-Gm-Message-State: AO0yUKW9ox14FvLI8P13yoDxsgskuAqcqkkNGcYwEcTnSaULMeK6DE+x
+        6cG+AHMsUdBGNVGAjDCaQg==
+X-Google-Smtp-Source: AK7set8rTNt0p0QO6Z1R7F4xwgbwGcsYwzKCKhE8A0gUpCzXX6IigCet2LpUQKbEFE9nwisADJwMcQ==
+X-Received: by 2002:a05:6830:1308:b0:68d:416e:3d9d with SMTP id p8-20020a056830130800b0068d416e3d9dmr2117154otq.7.1679506555322;
+        Wed, 22 Mar 2023 10:35:55 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d18-20020a9d5e12000000b006994465665asm6524891oti.80.2023.03.22.10.35.44
+        by smtp.gmail.com with ESMTPSA id e13-20020a9d63cd000000b0069f9a73a65fsm847319otl.29.2023.03.22.10.35.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:35:45 -0700 (PDT)
-Received: (nullmailer pid 3972017 invoked by uid 1000);
-        Wed, 22 Mar 2023 17:35:44 -0000
+        Wed, 22 Mar 2023 10:35:54 -0700 (PDT)
+Received: (nullmailer pid 3972257 invoked by uid 1000);
+        Wed, 22 Mar 2023 17:35:53 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH] dt-bindings: i2c: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 12:35:29 -0500
-Message-Id: <20230322173530.3971676-1-robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] dt-bindings: clock: Drop unneeded quotes
+Date:   Wed, 22 Mar 2023 12:35:48 -0500
+Message-Id: <20230322173549.3972106-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -84,138 +82,168 @@ checking for this can be enabled in yamllint.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 4 ++--
- Documentation/devicetree/bindings/i2c/apple,i2c.yaml          | 4 ++--
- Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml  | 2 +-
- Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 4 ++--
- Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml       | 4 ++--
- Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++--
- Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
- .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml          | 4 ++--
- 8 files changed, 14 insertions(+), 14 deletions(-)
+ Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml  | 4 ++--
+ .../devicetree/bindings/clock/mediatek,apmixedsys.yaml        | 4 ++--
+ .../devicetree/bindings/clock/mediatek,topckgen.yaml          | 4 ++--
+ Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml | 4 ++--
+ .../bindings/clock/renesas,rcar-usb2-clock-sel.yaml           | 4 ++--
+ .../devicetree/bindings/clock/renesas,rzg2l-cpg.yaml          | 4 ++--
+ .../devicetree/bindings/clock/samsung,exynos850-clock.yaml    | 2 +-
+ Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml | 4 ++--
+ Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml  | 4 ++--
+ .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 4 ++--
+ 10 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-index 199a354ccb97..26bed558c6b8 100644
---- a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-@@ -2,8 +2,8 @@
- # Copyright 2019 BayLibre, SAS
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/i2c/amlogic,meson6-i2c.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/i2c/amlogic,meson6-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+index 90eadf6869b2..b5533f81307c 100644
+--- a/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
++++ b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+@@ -81,11 +81,11 @@ properties:
+     maxItems: 1
  
- title: Amlogic Meson I2C Controller
- 
-diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-index 4ac61fec90e2..243da7003cec 100644
---- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/i2c/apple,i2c.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/i2c/apple,i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Apple/PASemi I2C controller
- 
-diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-index ea2303c0e143..6adedd3ec399 100644
---- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-@@ -75,7 +75,7 @@ required:
-   - clocks
- 
- allOf:
--  - $ref: "i2c-controller.yaml"
-+  - $ref: i2c-controller.yaml
-   - if:
-       properties:
-         compatible:
-diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-index 2e95cda7262a..7a675aa08c44 100644
---- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-+++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: "http://devicetree.org/schemas/i2c/cdns,i2c-r1p10.yaml#"
--$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/i2c/cdns,i2c-r1p10.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: Cadence I2C controller
- 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-index 6e0a5686af04..f34cc7ad5a00 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-@@ -45,7 +45,7 @@ properties:
- 
-   i2c-parent:
-     description: phandle of the I2C bus that this multiplexer's master-side port is connected to
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    $ref: /schemas/types.yaml#/definitions/phandle
- 
-   mux-gpios:
-     description: list of GPIOs used to control the muxer
-@@ -55,7 +55,7 @@ properties:
-   idle-state:
-     description: Value to set the muxer to when idle. When no value is given, it defaults to the
-       last value used.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
+   lock-offset:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
 +    $ref: /schemas/types.yaml#/definitions/uint32
+     description: Offset to the unlocking register for the oscillator
  
- allOf:
-   - $ref: i2c-mux.yaml
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-index 0e88c85985b5..9f66a3bb1f80 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+   vco-offset:
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
++    $ref: /schemas/types.yaml#/definitions/uint32
+     description: Offset to the VCO register for the oscillator
+     deprecated: true
+ 
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
+index dae25dba4ba6..372c1d744bc2 100644
+--- a/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
++++ b/Documentation/devicetree/bindings/clock/mediatek,apmixedsys.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/mediatek,apmixedsys.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/mediatek,apmixedsys.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek AP Mixedsys Controller
+ 
+diff --git a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
+index 0fdf56414833..6d087ded7437 100644
+--- a/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
++++ b/Documentation/devicetree/bindings/clock/mediatek,topckgen.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/mediatek,topckgen.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/mediatek,topckgen.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Top Clock Generator Controller
+ 
+diff --git a/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml b/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
+index e57bc40d307a..9c3dc6c4fa94 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
 @@ -1,8 +1,8 @@
  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  %YAML 1.2
  ---
--$id: "http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#"
+-$id: "http://devicetree.org/schemas/clock/renesas,cpg-mssr.yaml#"
 -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#
++$id: http://devicetree.org/schemas/clock/renesas,cpg-mssr.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
  
- title: Qualcomm Geni based QUP I2C Controller
+ title: Renesas Clock Pulse Generator / Module Standby and Software Reset
  
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index bf396e9466aa..94b75d9f66cd 100644
---- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-@@ -90,7 +90,7 @@ properties:
-   st,syscfg-fmp:
-     description: Use to set Fast Mode Plus bit within SYSCFG when Fast Mode
-       Plus speed is selected by slave.
--    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
-       - items:
-           - description: phandle to syscfg
-diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-index 1b598638d457..658ae92fa86d 100644
---- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-+++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
+diff --git a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
+index 81f09df7147e..c84f29f1810f 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,rcar-usb2-clock-sel.yaml
 @@ -1,8 +1,8 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
  %YAML 1.2
  ---
--$id: "http://devicetree.org/schemas/i2c/xlnx,xps-iic-2.00.a.yaml#"
+-$id: "http://devicetree.org/schemas/clock/renesas,rcar-usb2-clock-sel.yaml#"
 -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+$id: http://devicetree.org/schemas/i2c/xlnx,xps-iic-2.00.a.yaml#
++$id: http://devicetree.org/schemas/clock/renesas,rcar-usb2-clock-sel.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
  
- title: Xilinx IIC controller
+ title: Renesas R-Car USB 2.0 clock selector
+ 
+diff --git a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
+index 487f74cdc749..fe2fba18ae84 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/renesas,rzg2l-cpg.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/renesas,rzg2l-cpg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas RZ/{G2L,V2L,V2M} Clock Pulse Generator / Module Standby Mode
+ 
+diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
+index 141cf173f87d..7737fbec482c 100644
+--- a/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
+@@ -183,7 +183,7 @@ allOf:
+             - description: External RTC clock (32768 Hz)
+             - description: CMU_HSI bus clock (from CMU_TOP)
+             - description: SD card clock (from CMU_TOP)
+-            - description: "USB 2.0 DRD clock (from CMU_TOP)"
++            - description: USB 2.0 DRD clock (from CMU_TOP)
+ 
+         clock-names:
+           items:
+diff --git a/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml b/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+index 785a12797a42..1703e305e6d8 100644
+--- a/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 Unisoc Inc.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/sprd,sc9863a-clk.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/sprd,sc9863a-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: SC9863A Clock Control Unit
+ 
+diff --git a/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+index 5f747b0471cf..43d2b6c31357 100644
+--- a/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2022 Unisoc Inc.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: UMS512 Soc clock controller
+ 
+diff --git a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+index 634b7b964606..c1f04830a832 100644
+--- a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
++++ b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/clock/xlnx,clocking-wizard.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/clock/xlnx,clocking-wizard.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Xilinx clocking wizard
  
 -- 
 2.39.2
