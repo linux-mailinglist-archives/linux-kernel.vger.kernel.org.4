@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8E86C5181
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5794D6C518C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjCVRAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
+        id S229885AbjCVRC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbjCVQ7h (ORCPT
+        with ESMTP id S229863AbjCVRCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:59:37 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D6828D33;
-        Wed, 22 Mar 2023 09:59:27 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 103-20020a9d0870000000b0069f000acf40so8301375oty.1;
-        Wed, 22 Mar 2023 09:59:27 -0700 (PDT)
+        Wed, 22 Mar 2023 13:02:24 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E8334C34
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:01:59 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id e12so8214961uaa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679504515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yS/9N+AwBllIqXlokv2Xx7Y2kyB9tDNA/jGFzKjANCg=;
+        b=mW2WtieZf51QiA7C2qYiyhqafWdEew+rgGMoPwgDiraQIfknm5W23/Zm4uuSjZR8RJ
+         2II8inYioRr6KA5Qe52A1cDUPKGRb16lcZJB/vnY2QHi2o1JKiuDNT8GTy8O4e4UDExT
+         GsNtUoPziCykWHBM5NJxSkTCmF7t+XZLe4YYM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504366;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NWqyrfUQQCISr39NkQZ5Ma1o6AYL1xyxzggPNypbXQk=;
-        b=BVi+xQpifJKFndTzQl02cmq0ksKElOue2GKvfMGiRPqby9NeRNEDVM9Dj0ktA6ziRe
-         HIkXz17ONqxZtNeHRvZI6HMiuqEeOnAt2iejnJd22GA05tN3gjAar18Qf6NFA3KOxxPJ
-         sKQ7AIQYqKgpMpC+3IMJSLS97W6bUUBsqZsbHtEng3jDpCyM1xeW+x/q6XejARZseG+7
-         Qdye8jZfsqgV0H79KPv6gDm5i6s0C1aisFwAIPCoHp+WLAWX/nNu3NqaKHY0fdiUHXd0
-         baHGBUE1sYrSpiqQLqVySiTrC/+NvP6GEuvHNhocdgUcjdfClEUNwfYIwHm3dLt7YtnS
-         PDFA==
-X-Gm-Message-State: AO0yUKVLneZQb3cwHziJ205hV/3KTQVxCXJXijtw7r0poSIz+03xOM/I
-        D9jmwA/v15cs7FxF+XhkqfVBI/W0aw==
-X-Google-Smtp-Source: AK7set9pHTty/88AsdcNbe/96VYXZqDeFXpGdlF3m0B/sOmCD6PE7StmwAMdHsnvOsbVvW2GQIarqg==
-X-Received: by 2002:a9d:7544:0:b0:699:896e:c9e1 with SMTP id b4-20020a9d7544000000b00699896ec9e1mr1605607otl.34.1679504365842;
-        Wed, 22 Mar 2023 09:59:25 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056830008700b0069417e65acasm6669680oto.45.2023.03.22.09.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 09:59:25 -0700 (PDT)
-Received: (nullmailer pid 3916336 invoked by uid 1000);
-        Wed, 22 Mar 2023 16:59:24 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20210112; t=1679504515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yS/9N+AwBllIqXlokv2Xx7Y2kyB9tDNA/jGFzKjANCg=;
+        b=g1xB/mOcigbEzd2t2byFB3jiF5JeJlZkUkUtparsrlmXLaMDP5dnf3q08PmDlpWCy/
+         5PMEdrWCSCqn7YT6yZ1+qGlBrV59ZBzmi4iLH0QHWyN5hdMxV6EHlDf5KCr7zI5K3gCX
+         KBIPBiG68qPigW2OpBKx3RkPaoMs8eIQNuWz7IP3zWMyGeLbabNkcH7gq+K3UpcJAB2O
+         0tnwHpuFjntuOWl6rzVnVG9wgPkN1cV8Y2a0gTFqfgF0D+C2ynL9lDwTrg9ZTt/C0XKv
+         llRjYGtolcmj9o5j8vF3MIsOEtfVhT4RSE0/x3pzBMI4MieXA99zO2B5VuRVYrKty2zL
+         vbIA==
+X-Gm-Message-State: AAQBX9dM/iPd74k68CqtMecziIfn88wiv+U7p3FrKCB4CA2cN/p7n2Uh
+        eqGjOi/Ft7YQ3bsHHDDtUPQ67Ac5DrUHHVJPQyqdDQ==
+X-Google-Smtp-Source: AKy350ZPt124UGqenEATMXxRuvuhLKLkeDtjNRbYNtr/KSNGcur0gxee8ufCHtlRVPN8q9G2RRzfeaGAf+ns/JpCTcU=
+X-Received: by 2002:ab0:3c8c:0:b0:68a:8f33:9567 with SMTP id
+ a12-20020ab03c8c000000b0068a8f339567mr4186778uax.2.1679504515355; Wed, 22 Mar
+ 2023 10:01:55 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Cc:     Mark Brown <broonie@kernel.org>, kernel@sberdevices.ru,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-In-Reply-To: <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
-References: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
- <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
-Message-Id: <167950430158.3915000.3991863797525882649.robh@kernel.org>
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add binding for
- meson-spifc-a1
-Date:   Wed, 22 Mar 2023 11:59:24 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230321212822.5714-1-mario.limonciello@amd.com> <20230321212822.5714-4-mario.limonciello@amd.com>
+In-Reply-To: <20230321212822.5714-4-mario.limonciello@amd.com>
+From:   Mark Hasemeyer <markhas@chromium.org>
+Date:   Wed, 22 Mar 2023 11:01:44 -0600
+Message-ID: <CANg-bXANgkrF4T4X_VgeVejA2wH3GrUiFORyRC4AZfgYrE+7DQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] i2c: designware: Add doorbell support for Mendocino
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Grzegorz Bernacki <gjb@semihalf.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>, Held Felix <Felix.Held@amd.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> +static int psp_send_i2c_req_mendocino(enum psp_i2c_req_type i2c_req_type)
+> +{
+> +       int status, ret;
+> +
+> +       ret = read_poll_timeout(psp_ring_platform_doorbell, status,
+> +                               (status != -EBUSY),
+> +                               PSP_I2C_REQ_RETRY_DELAY_US,
+> +                               PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+> +                               0, i2c_req_type);
+> +       if (ret)
+> +               dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
+> +                       (i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
+> +                       "release" : "acquire");
+> +
+> +       return ret ? ret : status;
+> +}
 
-On Wed, 22 Mar 2023 18:04:57 +0300, Martin Kurbanov wrote:
-> Add YAML devicetree binding for Amlogic Meson A113L (A1 family)
-> SPIFC Driver.
-> 
-> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> ---
->  .../bindings/spi/amlogic,meson-a1-spifc.yaml  | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.yaml
-> 
+I think we need the value of the PSP_CMDRESP_STS field returned to the caller
+and its status checked like in psp_send_i2c_req_cezanne. Otherwise the function
+won't continue to poll when the PSP_I2C_REQ_STS_BUS_BUSY bit is set.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.example.dts:18:18: fatal error: dt-bindings/clock/amlogic,a1-clkc.h: No such file or directory
-   18 |         #include <dt-bindings/clock/amlogic,a1-clkc.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/amlogic,meson-a1-spifc.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230322150458.783901-2-mmkurbanov@sberdevices.ru
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+FYI - there's a test on ChromeOS to stress test I2C bus arbitration:
+https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/hwsec/tpm_contest.go
+I can try to run it assuming the ToT kernel runs on skyrim.
