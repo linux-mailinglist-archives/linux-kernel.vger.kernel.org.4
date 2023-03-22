@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888FE6C44AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766DE6C44AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjCVIMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        id S230063AbjCVIPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCVIMj (ORCPT
+        with ESMTP id S229783AbjCVIPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:12:39 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ED254CA5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:12:38 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id t16-20020a92c0d0000000b00319bb6f4282so9315797ilf.20
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:12:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679472758;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=UC3yJBKDY5vhdGoM6ommm04j870+FOU4f0q4RyTaaI4VoEn2YuhRmvqjjCOet5NTzK
-         xUu0eS/yFO0HR7h+Mp0kYxVaoiUA34y24ASXKRqzAFccrEftHi16Zy//CXh3qRtI1+BW
-         AX1w+MwRdzXjWD7J/3FPiTXuG5UFa7gjtax2sLbmkLkAoWl/d47Wp4seu2WyYp2fSxsY
-         5UBYBl2EARnSm8mbt3HimxJgNdw0+KDfKjiAWeNBZLoa4BgIcXWdLXeA7/L1E2d854BD
-         h2YWrhlGsRXkdWsayRdmYI7J1Aw0akx92RWBLSILdGzdiYPr/4Sjs1Di5gZWgQbY4qM5
-         M7NQ==
-X-Gm-Message-State: AO0yUKXBiGYu+zM5MyxHihuzbOt4EWvQieUWpqiIeVtHNn76PE0ZNEUa
-        HwYZb7eyUg32oUBtMvhjm+TPEb44YWY5bQzFu9tClKL1A/OZ
-X-Google-Smtp-Source: AK7set+OeAVbohPc7fpUZXumhTbjxoLQEP7JyCfjRAlXeHVD1nz99SDwJbphcHiy2E96tJ+2fMwLwaeYs8l51/MGknUjMu6mQ3lk
+        Wed, 22 Mar 2023 04:15:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6604057D03;
+        Wed, 22 Mar 2023 01:15:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC1EE61ED0;
+        Wed, 22 Mar 2023 08:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E366C433EF;
+        Wed, 22 Mar 2023 08:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679472934;
+        bh=8aB9JsR4x+4YOZELTOL8u+ID1lYD3Uivc3LtlNrOVcM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XYRff+A6NWpR1LCJrBdkefih2ejzbGyzba+yQU5u7itfVPhq3JWXY+knlS41jJJ+B
+         8mjAgYA5TKDAxqukGBvSSSLfpkXsH127m42apyHEhbOQFXCH+rmfTxUG8l3FeEglzL
+         Ure0yYnCOS3do8GPI/iyR5VCDazFc16VpprhLWljKe25WnDtsdB5vQJf9AAbPIPqdc
+         Q8BpVGWHIuce5YuZtgPoXRKGrEeyt2H7ivwZ4KtBCvHGYiPZkxacJiL8YAzFGWihxy
+         +F6uqz1CNJqH7Of3g8U0ygKJh6NbfuppbsRvzyEXcQ5OcPylo5xlJAADeDISVlLPcj
+         8H65ie1J0FDSw==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Mike Rapoport <rppt@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-mips@vger.kernel.org
+Subject: [PATCH] mips: drop ranges for definition of ARCH_FORCE_MAX_ORDER
+Date:   Wed, 22 Mar 2023 10:15:20 +0200
+Message-Id: <20230322081520.2516226-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:128f:b0:313:fa72:d9aa with SMTP id
- y15-20020a056e02128f00b00313fa72d9aamr2273525ilq.0.1679472758036; Wed, 22 Mar
- 2023 01:12:38 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 01:12:38 -0700
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000027262305f778b938@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From:   syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, dvyukov@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+MIPS defines insane ranges for ARCH_FORCE_MAX_ORDER allowing MAX_ORDER
+up to 63, which implies maximal contiguous allocation size of 2^63
+pages.
 
-#syz fix: exact-commit-title
+Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
+simple integer with sensible defaults.
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
+will be able to do so but they won't be mislead by the bogus ranges.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
-
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
-[1] I expect the commit to be present in:
+ arch/mips/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 3e8b765b8c7b..a0f6e9d0a561 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2137,13 +2137,9 @@ endchoice
+ 
+ config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+-	range 13 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+ 	default "13" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+-	range 12 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
+ 	default "12" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_32KB
+-	range 11 63 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
+ 	default "11" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_16KB
+-	range 0 63
+ 	default "10"
+ 	help
+ 	  The kernel memory allocator divides physically contiguous memory
+-- 
+2.35.1
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
