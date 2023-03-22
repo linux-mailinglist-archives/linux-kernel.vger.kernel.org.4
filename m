@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3336C57D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216816C57DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjCVUko convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 16:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
+        id S230142AbjCVUmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjCVUk2 (ORCPT
+        with ESMTP id S230182AbjCVUmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:40:28 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8918019F18;
-        Wed, 22 Mar 2023 13:32:39 -0700 (PDT)
-Received: from p508fd58e.dip0.t-ipconnect.de ([80.143.213.142] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pf56y-0004XT-Oa; Wed, 22 Mar 2023 21:31:08 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        Dvorkin Dmitry <dvorkin@tibbo.com>,
-        Wells Lu <wellslutw@gmail.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: pinctrl: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 21:31:06 +0100
-Message-ID: <14697371.uLZWGnKmhe@phil>
-In-Reply-To: <20230317233623.3968172-1-robh@kernel.org>
-References: <20230317233623.3968172-1-robh@kernel.org>
+        Wed, 22 Mar 2023 16:42:05 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB64848DB;
+        Wed, 22 Mar 2023 13:34:28 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id e71so22574429ybc.0;
+        Wed, 22 Mar 2023 13:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679517268;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OiCmR8SN+GLyUIUi6qfPNaqR2nTEBZHOI1Achc59hqY=;
+        b=GYzbYtSRXmK3Ib4jq8P5EgFEy/9nL4KPrIy4QfUsI6ofktsoYPdRWrkN171WmTJiUP
+         iskkjLojIgwXTZcToFnONt83DU8a8UUd9/zfRgChVJ1k4yvmbYK9As+yhGQvYcqSRc7n
+         kuF+kdIuxuKHrLXi9ta2Gn8SBRMOnGeIU/lFZ/rleSjifKLWwaxetRHqHvFfEKrsSEi5
+         b6vmFkHnQyKbzlcgBraFVcqoiYFO4strpoDG0WZVzKcDtclN76oRvLzmTciKzkrHeCFR
+         q18hq7QoHCpGIDfC/xNeplcjJIaJEAT1jUfr3iqK2FWOYnOVGfcMKKO5j7SDubcoHHob
+         eh0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679517268;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OiCmR8SN+GLyUIUi6qfPNaqR2nTEBZHOI1Achc59hqY=;
+        b=drr0N+gcqJ6Nmz7DzLbaozlARjariWO6A2sSB2MZqHLVt97idP6stmkngAGGAjSNK1
+         SN6wTIYwY7dLtLaVzzI1GzEH8uv3y/uutlRsMFE5j4XOOSNNVvfA6WFKJl6Eb41AdJL/
+         oxK7h5k+290vDiYFlDQ/KASw09vHru0G7cpfp0a5gwZeu5t3QDlk2/Utk/lGG/qIin2K
+         TgPQyOg/RISDoHoco/MWUVPX/6cm5O2A4K/OY7blCDVZo8dDQkyaqKb1iFforKcru0FI
+         sDGdQ5+BDXmmSZwmuQNcRRgHDK5vFtFSXi1SM4EgUxbGrqME7vHHsLaqB/CT5z15LLD8
+         Nk6A==
+X-Gm-Message-State: AAQBX9fzq9bQrxvlk9RVxIS5TfEqzt34EwKr+/wmjJpCSktqbAqtik43
+        tGmh6Pd8OIg+ok9qZLxwaC7c2THk7jfi+upge5njMQ4tyEmcrQ==
+X-Google-Smtp-Source: AKy350barmhAn2AE7ZHYIUsODj2m0RDoHWh0vsLit55+EPuL9XTzx/ZG5/S2fMbnhO9vXdsk3BCjKg46pWwSAoCj18U=
+X-Received: by 2002:a25:8712:0:b0:b6a:2590:6c7f with SMTP id
+ a18-20020a258712000000b00b6a25906c7fmr626401ybl.2.1679517267591; Wed, 22 Mar
+ 2023 13:34:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320212012.12704-1-ubizjak@gmail.com> <CAJZ5v0jAysMPb180tMMmoGBEewENKn-fW7bwzGyMVv4wUrX=LA@mail.gmail.com>
+ <18431bad-8595-143b-e8af-14e448af871c@intel.com>
+In-Reply-To: <18431bad-8595-143b-e8af-14e448af871c@intel.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Wed, 22 Mar 2023 21:34:16 +0100
+Message-ID: <CAFULd4YF7L2puma8O9m_hodjRP9tOyBDixpY-=ShPHjdbX8cGA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/ACPI/boot: Improve __acpi_acquire_global_lock
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Samstag, 18. März 2023, 00:36:18 CET schrieb Rob Herring:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, Mar 22, 2023 at 7:34=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 3/22/23 11:24, Rafael J. Wysocki wrote:
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > or please let me know if you want me to pick this up (in which case it
+> > will require an ACK from one of the x86 maintainers).
+>
+> I'll pull it into x86/acpi.  I'm kinda shocked the compiler is so
+> clueless, but this makes the C code more readable anyway.  Win/win, I gue=
+ss.
 
->  .../devicetree/bindings/pinctrl/rockchip,pinctrl.yaml  | 10 +++++-----
+Please note that the return form __acpi_{acquire,release}_global_lock
+is actually used as bool:
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+acenv.h:
 
+int __acpi_acquire_global_lock(unsigned int *lock);
+int __acpi_release_global_lock(unsigned int *lock);
 
+#define ACPI_ACQUIRE_GLOBAL_LOCK(facs, Acq) \
+((Acq) =3D __acpi_acquire_global_lock(&facs->global_lock))
+
+#define ACPI_RELEASE_GLOBAL_LOCK(facs, Acq) \
+((Acq) =3D __acpi_release_global_lock(&facs->global_lock))
+
+evglock.c:
+
+acpi_status acpi_ev_acquire_global_lock(u16 timeout)
+{
+    ...
+    u8 acquired =3D FALSE;
+    ...
+    ACPI_ACQUIRE_GLOBAL_LOCK(acpi_gbl_FACS, acquired);
+    if (acquired) ...
+}
+
+acpi_status acpi_ev_release_global_lock(void)
+{
+    u8 pending =3D FALSE;
+    ...
+   ACPI_RELEASE_GLOBAL_LOCK(acpi_gbl_FACS, pending);
+   if (pending) ...
+}
+
+These functions are also defined for ia64, so I didn't want to change
+the return value. But ia64 is going to be retired, and this opens the
+optimization opportunity.
+
+Uros.
