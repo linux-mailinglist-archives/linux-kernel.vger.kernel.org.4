@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314AB6C5764
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880676C57C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjCVUVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
+        id S231282AbjCVUg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjCVUUj (ORCPT
+        with ESMTP id S230365AbjCVUgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:20:39 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C744664D2;
-        Wed, 22 Mar 2023 13:10:56 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id y19so11311150pgk.5;
-        Wed, 22 Mar 2023 13:10:56 -0700 (PDT)
+        Wed, 22 Mar 2023 16:36:16 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE9044B5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:27:58 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id t14so20268725ljd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679515797;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=googlemail.com; s=20210112; t=1679516876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2WLHEQY3qr/o+G8te336ZMutrRR6CDO4ZScoVVO+SV4=;
-        b=auefz9E1FR6JZgzvalJ+0wMPa2TDyb6NRN2uO/9+eUj3SFrMnbacTAsoA+igzDORqP
-         5I/AyVCOB0c+W6fVEFVG29FJDHwmF85BLfOwM1pNrhEkqlhH4LHQiHbXEzzwQEonO7FG
-         zHqJ8Xzr2Hld8DA7VoXsA1w8bChbRXmYN4rMY9jAhg+ap9ifsxI7MhbTMcKzsnkpHlaE
-         KvS5X0EXG6uvqqnz6IwdEJU3BABtHj6lPTlfScpHFd58POCMIpYMXqKsi1sCBD77lBzs
-         9zHur+jX3CWTf/fhdcOLfqQSGMdN0DBP1NaPtiVozeZT8wBSXrrnZ+2Fx04ok1w1kEd8
-         zeig==
+        bh=KO+RxVHj93oqiOjN3tvlrX0xqusRwNw2CRPttJ0nsbE=;
+        b=ABLAaBlml2CVEbKVXZ6gb2MwAz/+zu5By/LFaNE559Prxj8vk60R4XXSfSdRKCD5nF
+         NN0CBT4LtsdxHmDyPRsdxk9lndq3nVljDC4UHT6vGLPVPNsu1LHMY3Ih5Z72QREpepHH
+         r2NXYsms2/gHfFN9hL3O4ISCteI4itgoPeJvxpGXnHJ53EAF/OsGdq4D183hH5dvHDLk
+         Inf0oXdOw9WEh80ykgiS3SBsSUO/6rzbUM/6Tb8ooM5u+Oqu/mA8IZs6DjtoxMt23pOQ
+         caHO4OI0YnENkFJiGC9Bcwklb7Rk+DUZv8f9UwP4p4drvdMIiQ8ZC2u4qFljy0t+s1wj
+         dC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679515797;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679516876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2WLHEQY3qr/o+G8te336ZMutrRR6CDO4ZScoVVO+SV4=;
-        b=3C5BKRQlebTW3TPbgzxXvPnRGwVVvpiqJqE7AbZBIHJuvepiS640XgmdpITBM7hvI+
-         JnqR9aZwiYmiwSK5GRn5x5WEWrzBhBAs1i9ieFfnNoi/bZkciAADfJYNh6OGqSle4zgv
-         eAml3w2eN/NU1QS9xzXx3U/J6+Fajxe0GTVckepf9xMYYdPvUavhElCpvBu9wu46cm7J
-         GcVH8GXUU8/BKwz/l1LOtCfqSOCgKtPpQcBg8hN8f0pqS+G6weguCfxz2J6OWfWnYG8r
-         2sVlmvEkXmY6PAdb4bFc6fWTtGFxQpZdIie1SJwl/GDbJSVVCzKe/xdS+aRTt79Q9OaZ
-         o76Q==
-X-Gm-Message-State: AO0yUKWwXT/3V80rmMaDd1L7mQISC2dLvGkCH5zaW1EnPYtu9lSyLZ3v
-        /o21JTA0YIPkAyuZl9XNvvg=
-X-Google-Smtp-Source: AK7set/g3mhJQ57vML1TthZqf1YSYb97c0MPrveW4ry4C0r2RMlL2jI18MlVCZ8bu4EIu2FpJbHW4w==
-X-Received: by 2002:a05:6a00:3002:b0:626:2bb0:30d4 with SMTP id ay2-20020a056a00300200b006262bb030d4mr2762060pfb.8.1679515796742;
-        Wed, 22 Mar 2023 13:09:56 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:2146:a9a:3ad4:4b40:d590:7df2])
-        by smtp.gmail.com with ESMTPSA id r1-20020a62e401000000b005e4c3e2022fsm10523059pfh.72.2023.03.22.13.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 13:09:56 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     krzysztof.kozlowski@linaro.org, daniel.baluta@nxp.com
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        danascape@gmail.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-Subject: [PATCH v2] ASoC: dt-bindings: ak5558: Convert to dtschema
-Date:   Thu, 23 Mar 2023 01:39:49 +0530
-Message-Id: <20230322200949.8986-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <d1559192-8f6d-26e0-ef19-d14ac7987a74@linaro.org>
-References: <d1559192-8f6d-26e0-ef19-d14ac7987a74@linaro.org>
+        bh=KO+RxVHj93oqiOjN3tvlrX0xqusRwNw2CRPttJ0nsbE=;
+        b=OKflfdV3pf9F7ZUFU46z1DyEVyC+QJuPS9F9cDHNPF4lETBFW06qQKjhjYuQlSFX/G
+         En5rWWmoKEh3OLb62eAhSzOgnvRpDp0nNj1FQWCmIiWWb7IKsMokBw5z3I+2ZNilrF1Z
+         gQ9nviiwzOPhmxx/jSigMC6hAPk6Z4Igr09ofYdKc5v9STfuTFLCZHjl6N5OJ7kWHSWo
+         5oGOxy2prRNW/od36LCMuq5P+BHNDwKyKVVnpoCWSUmKhQE2YwBKQcKR58DLz5jO/2GB
+         4zrowmc+gYPMWcjRryHAu4jDqQCGeYqBVVz45709ZjqAc+/bWMIcs/mHFiMeMjX8ccAF
+         CBEQ==
+X-Gm-Message-State: AO0yUKXC4cwucRye1HJfVgHtoyN2zcYHLhnNwq5VOcUQb8+kSZL22kPb
+        XBWi4zQFOOS1Pr9WI1mQg8/yZuO6DcUPoWwYLZb3slO0Ey0=
+X-Google-Smtp-Source: AK7set/0TeN0zr8cVu1eyLlBoDyP0EfiM6Qqt0rJeFiCyF/NYwC7cB4mSBs7WoqIFgnDZFFXTgGzjTITMMXf7hXth5w=
+X-Received: by 2002:a17:907:788e:b0:932:4577:6705 with SMTP id
+ ku14-20020a170907788e00b0093245776705mr4082690ejc.6.1679515823192; Wed, 22
+ Mar 2023 13:10:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
+In-Reply-To: <d4338bd5-125c-a9e7-cb46-6f5e1da05cfa@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 22 Mar 2023 21:10:12 +0100
+Message-ID: <CAFBinCB3yuyNJD=7UJ7jzf45Masms_PD4sm42YNjO8M4cr+4wg@mail.gmail.com>
+Subject: Re: [PATCH v1] mtd: rawnand: meson: fix bitmask for length in command word
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -74,100 +80,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the AK5558 ADC audio codec bindings to DT schema.
+Hello Arseniy,
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
- .../devicetree/bindings/sound/ak5558.txt      | 24 ----------
- .../bindings/sound/asahi-kasei,ak5558.yaml    | 48 +++++++++++++++++++
- 2 files changed, 48 insertions(+), 24 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/ak5558.txt
- create mode 100644 Documentation/devicetree/bindings/sound/asahi-kasei,ak5558.yaml
+thank you for submitting this fix!
 
-diff --git a/Documentation/devicetree/bindings/sound/ak5558.txt b/Documentation/devicetree/bindings/sound/ak5558.txt
-deleted file mode 100644
-index e28708db6686..000000000000
---- a/Documentation/devicetree/bindings/sound/ak5558.txt
-+++ /dev/null
-@@ -1,24 +0,0 @@
--AK5558 8 channel differential 32-bit delta-sigma ADC
--
--This device supports I2C mode only.
--
--Required properties:
--
--- compatible : "asahi-kasei,ak5558" or "asahi-kasei,ak5552".
--- reg : The I2C address of the device.
--
--Optional properties:
--
--- reset-gpios: A GPIO specifier for the power down & reset pin.
--- AVDD-supply: Analog power supply
--- DVDD-supply: Digital power supply
--
--Example:
--
--&i2c {
--	ak5558: adc@10 {
--		compatible = "asahi-kasei,ak5558";
--		reg = <0x10>;
--		reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/sound/asahi-kasei,ak5558.yaml b/Documentation/devicetree/bindings/sound/asahi-kasei,ak5558.yaml
-new file mode 100644
-index 000000000000..d3d494ae8abf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/asahi-kasei,ak5558.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/asahi-kasei,ak5558.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AK5558 8 channel differential 32-bit delta-sigma ADC
-+
-+maintainers:
-+  - Junichi Wakasugi <wakasugi.jb@om.asahi-kasei.co.jp>
-+  - Mihai Serban <mihai.serban@nxp.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - asahi-kasei,ak5552
-+      - asahi-kasei,ak5558
-+
-+  reg:
-+    maxItems: 1
-+
-+  avdd-supply:
-+    description: A 1.8V supply that powers up the AVDD pin.
-+
-+  dvdd-supply:
-+    description: A 1.2V supply that powers up the DVDD pin.
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        ak5558: codec@10 {
-+            compatible = "asahi-kasei,ak5558";
-+            reg = <0x10>;
-+            reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
-+        };
-+    };
--- 
-2.34.1
+On Wed, Mar 22, 2023 at 7:45=E2=80=AFPM Arseniy Krasnov
+<avkrasnov@sberdevices.ru> wrote:
+>
+> Valid mask is 0x3FFF, without this patch the following problems were
+> found:
+>
+> 1) [    0.938914] Could not find a valid ONFI parameter page, trying
+>                   bit-wise majority to recover it
+>    [    0.947384] ONFI parameter recovery failed, aborting
+>
+> 2) Read with disabled ECC mode was broken.
+>
+> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND f=
+lash controller")
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+This matches what I can see in the old vendor driver, so:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
+[...]
+> -               cmd =3D (len & GENMASK(5, 0)) | scrambler | DMA_DIR(dir);
+> +               cmd =3D (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir)=
+;
+My understanding of the vendor driver is that this "len" is only used
+for "raw" access (my own words: any access that doesn't use the HW ECC
+engine).
+As a future improvement (no need to update re-send this patch) it
+would be great to have a #define with a meaningful name for
+"GENMASK(13, 0)" (maybe something like NFC_CMD_RAW_LENGTH) as it's
+used in multiple places now
+
+
+Best regards,
+Martin
