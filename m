@@ -2,125 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB806C5327
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782706C532F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCVSB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S230323AbjCVSBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjCVSB0 (ORCPT
+        with ESMTP id S230370AbjCVSBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:01:26 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4795D895
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:01:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z+ZTMaPuZoYnIQ3pnEwXntZFk5f3UupcvB9YpQSPXD9yyTszF36PRrcyo+anA1/zbGc27wakGH6SM/yFdWosNZwCZ1ORL4u4XcprJV0ZxQ6G0ac67Tm0OrI4OZY6GKQa0ha04+2Kkj3u6fHJAJdB9n5GsjwdRzjk5i+0BLUHUKaWOFWH6FtsJwUHvLCTRTD7CP1cc64xUp6NPxIGVp8tN6gOTvg3wd4Hb4wEwM8EPsW8ORWXtXI69AFpDp5mBYkwBXl+73vzeb7zT0tB9FaTf5d8NdCW8ra56/2GnB38l1AX9bnR4oMgXqokjfPf0V7mzZSzMjr886ESCHHi8OkNLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZhV0K9xcGmJt4o468Pc54lLn3F2+Ud9InP4csM8J8l8=;
- b=EILd5N43V1kzPP1czyuL+W5kLmCKvewkD1VvMvCJUzpTqMTSLot50yxDau8PX52bsY9wK+5Y0FT7hqxF8S3RT665cdszZit6RFp/+mjprBxGhQzo/mJ0VIvhYTjLoU0HOSddSD29rvv7Yhck5+lZjuWFfIHc4VGarCnjkI1TanMJcHvA53QLSrwrYu1Dlsi+XIqvn6T54inQ0pkBSMpqnSaG68js4cYyY5Achm9n9oRfdeEN1bTdfNhTbTXDRsa6IJ8k0FQnfd6P4NrI/DUxuzrE5F0MXZd0WARksJoTTqK/26meb/kpVpM0duF22/MweACirHLjjr2Q7DthRVX5KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZhV0K9xcGmJt4o468Pc54lLn3F2+Ud9InP4csM8J8l8=;
- b=lh7R3WbotRfiPBcso3qQ4kAfco/EvejCRXLsIXoheyoicJaDy+I3ssO5mA+3xkHgWLCTxWZMnhvgH/XhbSAYHms1h/wJVcP22/En+br01cIDdC3Wo73LQU16fHTWDt+yugGQCaKY8indkPun9YFua0Sibk9jxrjGPbFlzUS8rvY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CY8PR12MB8362.namprd12.prod.outlook.com (2603:10b6:930:7e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 18:01:23 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 18:01:23 +0000
-Message-ID: <7cf3ae87-9d7e-a846-89c6-d267ca76472a@amd.com>
-Date:   Wed, 22 Mar 2023 14:01:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/display: Add missing OLED Vesa brightnesses
- definitions
-Content-Language: en-US
-To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, Anthony Koo <anthony.koo@amd.com>,
-        Iswara Negulendran <iswara.nagulendran@amd.com>,
-        Felipe Clark <felipe.clark@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230322160513.1438881-1-Rodrigo.Siqueira@amd.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20230322160513.1438881-1-Rodrigo.Siqueira@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0160.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:e::33) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Wed, 22 Mar 2023 14:01:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAC561881;
+        Wed, 22 Mar 2023 11:01:29 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:01:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679508088;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BexXVoRcJd5zje4QT3srhs2vRf3aYNZJMqHysVQnmHg=;
+        b=KzDWczA8CjuhS42907bcK6zZHBJ66Sfe731MJAEp2qF1f0GJvNtEml6CciXX70DiKqDGPn
+        l/vrLDvEJbikcW1hXmWXm5hvyu6IBBe9qFTcgMjDIbNqhjQTc2Yr0t5hvTjz/ZrIBZg7Ax
+        H0djq4eiQPggW2EIXd0N73f1qU1k8VByoMtudCOS5j0UVeuSL1/o9lAwfd9Z0RaR07tD+b
+        9lCf2onkkJE4Ers6jFqAl2UYFuYGj8PP8UX1OcLYjb3pv2gMqXIDLrnq58cP40jIN0BtCq
+        EsvUHEb/qfcYWmVNaxRHM0wsl9T0zXVtHxeXNLbipQc2IuMr9cjgh1QfaEmH0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679508088;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BexXVoRcJd5zje4QT3srhs2vRf3aYNZJMqHysVQnmHg=;
+        b=zyMlx2xl5KWd0GYMFlrBE6lD6fbeUv+IdPUvj4381re0VCS8iDpwwRIhmIY2yynnGDmrr/
+        gPmRmBV9l+JgEECg==
+From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] selftests/x86/amx: Add a ptrace test
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CY8PR12MB8362:EE_
-X-MS-Office365-Filtering-Correlation-Id: b080ea3c-5efb-418b-1399-08db2aff728c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fGENEWHtKvPuw+1IF/1HIE9kQ5i3ntOJzIlhoTqcZH4mkGTVfwSG+v7uVGRNZD32qUyo5nxBAgxg75VmvCYsJ8zXMlaU/QYZ6inxbpiYIDvV/IkiWXhZLiJTqYzHoDVx3KRyLXwhFISATps+O1H0aEysHtNCp21BSXA6gF0a+lK6RhxWN2daK2VKqXOpVM0MPJLdl8kV2+aWreUkes/50luMnN4fcgrRNrlhXU0euXOk7cz2S5fcDIeRRpkOnnq2KKVbwumtuTUrvoKPpWBaLr6BY8FEposokhFJwATgd7Ka89qUN/DBqqKwFp/LEaiiQ61cJ5cs8fPYN0Lo2dYkaVuT/tbxq8RJGK/SauRsry5UAqg3Z1nKipyr67tDX8/vbRfrmjp4YU9/tlvni8UpMC4tsdE5P3XR5/yzHrVCHF5v29WjoSDdQ6NJDRJjZ9C3zgFPZWodYJ3A2uy09dkLoK2M/+xUCqEh/z20tWdVaqSL6fiVx49kzu/oHaVPRRVTmyW+TE4pq41TBEQ9xgngWFfKPDsgt1XsYXVcDv9hKGiomQvByOiIwZwKGjDzdba+mAN/eew389fM2KvxSe8GSKELz5PKN6Sp86TSMHzgsaEHY8GwwSNZLESEimnd5LqMQ5AOJJqGZjINE/ppgisEsA0Sk6APIKdHUcetRYl+c1dSbrih0odsj7sEfcc8ERcINajrpZFvP0WLJln/djCwTsjTfe4cI4M2uCbVPnyAf5E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199018)(6666004)(186003)(478600001)(6486002)(26005)(6506007)(31686004)(83380400001)(8676002)(6512007)(53546011)(2616005)(316002)(66556008)(66476007)(66946007)(54906003)(8936002)(4744005)(5660300002)(41300700001)(4326008)(2906002)(38100700002)(31696002)(86362001)(36756003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1hjL1RGU1h4bm5tWFhsaWlFS2E2VHJGS0k3eVdrb2ZUcHRGbkIyQXZON2ZO?=
- =?utf-8?B?Z1lDTnM1NjNPejNKTDNkZkxPUzR0dFNMdVkyaHY3dVZ3bHRYVTRRQUxSZ1J5?=
- =?utf-8?B?all4aFM1SmJtcFY3SXM1QWcwdDBQaXJwK1QvTEpuL3FXN0JFL2hlYlpNOElO?=
- =?utf-8?B?cjBqOEJWRkI4STJGa2VLeDRFSUdRTmtLY2VsVmRkYndPcjJyY3hmaVB4T09y?=
- =?utf-8?B?c1ozUGhFbUlGVjYvYi9TT2FMSzFGK0dDUU50TEYzd2dPeGFxMlVsUkRmK3JP?=
- =?utf-8?B?VzlqSm1Nb3ZVVXBGYjIwekVhdUlWdEN4aXJZY3JUeTN6ZlJrc1BxbCtIenY1?=
- =?utf-8?B?TU5ENDJ6Si9OaThEeE1hYU9zb1J2dURVbjRJU05pd1RVNllyQkxQeHkxMWpI?=
- =?utf-8?B?YmE4MGxZMjBGQnIvb1RXalBPNTBpeFMwSS8yWWk2SmFaWXhTeStmMGdReVJJ?=
- =?utf-8?B?M1VLWU5xaTdzM2ZTQW9xRUNCZ0NyRHYrQnd4L2pJNWV4SG9PTVNHOXlpSDdQ?=
- =?utf-8?B?Y0NsNDZteFBnNUt2dlN2ZnhYSlpleVRwb1hDNHpxc0krZkxkZzE0a1c3WE5s?=
- =?utf-8?B?SnU2VTRrUEZBWjVpYXRLRTV6T0Nwd0cwV0dZbEU4c2VORENZQWYrcmh5bVVt?=
- =?utf-8?B?NUhhZnp2TU10RUVzMmhmUDQ5V3hrbUdwbllkWEZsTlBZVnZ6eEJQVmJNR0pa?=
- =?utf-8?B?RytEU05QSWt2UjBpOEFkN2dmZTVOMjR4eC9tZ2k4bmVUcHRIRXJhdHhtVkxY?=
- =?utf-8?B?MGg5aGlraHE1Y1RBdmNtS291ZCtlY3A3Zmx1QXVYRklZQzc2cE1Cc0xnSHhS?=
- =?utf-8?B?UEF4ZVl0ejBSV3VETCtXK01qM29PODNXYXhwWHN4ZlUrODJubVJQZStjN2s2?=
- =?utf-8?B?NmZJd2VkajdhOUsvMDU1M3FvUmVrZDBWNytHMU9vMnVYSVZHM0l2OHhNckht?=
- =?utf-8?B?SitXMDl2ODQ3UjZMb2dOZVNsMER6Z1U5TGlGYTgzU3pxejBtbGhqZHpMbHlk?=
- =?utf-8?B?eFhwZlpvN0JCYXBpbTRxaCtFa3g3VTVRUlNmYks0V1N5bmF1ZDZZc05KWlFj?=
- =?utf-8?B?ZHVqSDhYVHJTRlRxZVJxWU04RjVkNDE2bkozeXVnVjlXeno4c1Y5SkMvdEVG?=
- =?utf-8?B?djdmRkhoa21rVFFidXc2eVFMVWsyVm9uaXRYdHJPTXl1RHpQSkJRNTFYZXNO?=
- =?utf-8?B?bytYQTZBUDg2clBrWWZZWWNxMWJkSUx6dzdmQ1IxTWlaaDZOTFd0LzNTR244?=
- =?utf-8?B?by8wZUg0R2ZQM1E1S08zQnlBMi9JUXdweTc5cGc4YkFyV1lrNDdSYWdRdnhO?=
- =?utf-8?B?amRKbG5UZG1ERWhvUnpqUkczM0VRSVhjVlN1RFBaa2xjUjBSckRjeHByYVJV?=
- =?utf-8?B?R25FK0pWZjBSbnl3aUdhNTQ3ZlNnb0RtMDFEUEo5aitnalBVd2JUZzZkRkJk?=
- =?utf-8?B?dzMxRzEyOU92ay9JK3AyWFdmTWZRMDZwaDFDbXlsWkZXWXgvL1Y5K2tNWkZk?=
- =?utf-8?B?Q0g5ajJnRWRJS1J5U0RUUzNUTEtLTUlTTFN0TU4wZ1I5cnNRdFlZdWRQdGpQ?=
- =?utf-8?B?dmlHbGxLcklQMGN6ZGg0T1o1Zko4L1krb3A4bFQrWWo0YThpU3Z3cHFHK1pU?=
- =?utf-8?B?aDRoVU9zMjQ5V0ZydnU1aGdNVWxwODRVb0tZaG5pbmRUWGxNK2JQVk1hVnhB?=
- =?utf-8?B?ZndDSUs1M1RienI5NWFoZ0k2dXBIbjMvZ3c3WVYxV1NoSFNQSkJHRFpoL21l?=
- =?utf-8?B?TGpWb2JYanBqUHk5dDNYMFV0S1ByWVNPSE1WQnMrVldQZ2ZSR2lrK2E3T3VQ?=
- =?utf-8?B?V0pwcFlzb0p1V1kzR3NwTUJtcGR6Sm9EZXI1cGxldDY3Z0JZSFdpSkdrcXkv?=
- =?utf-8?B?aHBna0ZNYjAza0JzaUFNM2h1dzZVSW9xSk5LMHY1SDcxNjdLeVhYUVBIY0dn?=
- =?utf-8?B?MDcrWFpDd1J6NUtTdHk5ZWNha3NTNSt4NzR5WWJaWncxQ1pyR3YvMThjUWpq?=
- =?utf-8?B?T0x3R2N2aVEyQi91UDBGQ1Z6UWwxMi8zTmN6dklGSWVaL0ZkdEYzdjRzaEpz?=
- =?utf-8?B?clM3dkxUd0h0a2xibzNZNlJoeXowWjNjaWxHcmZqNjV4UnhVNXJYTmhmSEov?=
- =?utf-8?Q?ZJI/RC5WT2FbuSDrnljNTvfl9?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b080ea3c-5efb-418b-1399-08db2aff728c
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 18:01:23.2678
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f5AKPlJ2BbAqs5IpYbcDbk93/aDz3hF/VcSfnRyivwxkKwwQz29ys8WVvOSz3iJ2LCsHhJMbIdrCpWc5kcANtQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8362
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+Message-ID: <167950808744.5837.4136774718227344167.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,34 +58,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/urgent branch of tip:
 
+Commit-ID:     eab6469e3e7c5df8ff7bbea353a3a5e237d6fa87
+Gitweb:        https://git.kernel.org/tip/eab6469e3e7c5df8ff7bbea353a3a5e237d6fa87
+Author:        Chang S. Bae <chang.seok.bae@intel.com>
+AuthorDate:    Mon, 27 Feb 2023 13:05:04 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 22 Mar 2023 10:57:30 -07:00
 
-On 3/22/23 12:05, Rodrigo Siqueira wrote:
-> Cc: Anthony Koo <anthony.koo@amd.com>
-> Cc: Iswara Negulendran <iswara.nagulendran@amd.com>
-> Cc: Felipe Clark <felipe.clark@amd.com>
-> Cc: Harry Wentland <Harry.Wentland@amd.com>
-> Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+selftests/x86/amx: Add a ptrace test
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Include a test case to validate the XTILEDATA injection to the target.
 
-Harry
+Also, it ensures the kernel's ability to copy states between different
+XSAVE formats.
 
-> ---
->  include/drm/display/drm_dp.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
-> index 632376c291db..d30a9b2f450c 100644
-> --- a/include/drm/display/drm_dp.h
-> +++ b/include/drm/display/drm_dp.h
-> @@ -977,6 +977,8 @@
->  # define DP_EDP_BACKLIGHT_FREQ_AUX_SET_CAP		(1 << 5)
->  # define DP_EDP_DYNAMIC_BACKLIGHT_CAP			(1 << 6)
->  # define DP_EDP_VBLANK_BACKLIGHT_UPDATE_CAP		(1 << 7)
-> +#define DP_EDP_OLED_VESA_BRIGHTNESS_ON      0x80
-> +# define DP_EDP_OLED_VESA_CAP				(1 << 4)
->  
->  #define DP_EDP_GENERAL_CAP_2		    0x703
->  # define DP_EDP_OVERDRIVE_ENGINE_ENABLED		(1 << 0)
+Refactor the memcmp() code to be usable for the state validation.
 
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20230227210504.18520-3-chang.seok.bae%40intel.com
+---
+ tools/testing/selftests/x86/amx.c | 108 ++++++++++++++++++++++++++++-
+ 1 file changed, 105 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index 625e429..d884fd6 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -14,8 +14,10 @@
+ #include <sys/auxv.h>
+ #include <sys/mman.h>
+ #include <sys/shm.h>
++#include <sys/ptrace.h>
+ #include <sys/syscall.h>
+ #include <sys/wait.h>
++#include <sys/uio.h>
+ 
+ #include "../kselftest.h" /* For __cpuid_count() */
+ 
+@@ -583,6 +585,13 @@ static void test_dynamic_state(void)
+ 	_exit(0);
+ }
+ 
++static inline int __compare_tiledata_state(struct xsave_buffer *xbuf1, struct xsave_buffer *xbuf2)
++{
++	return memcmp(&xbuf1->bytes[xtiledata.xbuf_offset],
++		      &xbuf2->bytes[xtiledata.xbuf_offset],
++		      xtiledata.size);
++}
++
+ /*
+  * Save current register state and compare it to @xbuf1.'
+  *
+@@ -599,9 +608,7 @@ static inline bool __validate_tiledata_regs(struct xsave_buffer *xbuf1)
+ 		fatal_error("failed to allocate XSAVE buffer\n");
+ 
+ 	xsave(xbuf2, XFEATURE_MASK_XTILEDATA);
+-	ret = memcmp(&xbuf1->bytes[xtiledata.xbuf_offset],
+-		     &xbuf2->bytes[xtiledata.xbuf_offset],
+-		     xtiledata.size);
++	ret = __compare_tiledata_state(xbuf1, xbuf2);
+ 
+ 	free(xbuf2);
+ 
+@@ -826,6 +833,99 @@ static void test_context_switch(void)
+ 	free(finfo);
+ }
+ 
++/* Ptrace test */
++
++/*
++ * Make sure the ptracee has the expanded kernel buffer on the first
++ * use. Then, initialize the state before performing the state
++ * injection from the ptracer.
++ */
++static inline void ptracee_firstuse_tiledata(void)
++{
++	load_rand_tiledata(stashed_xsave);
++	init_xtiledata();
++}
++
++/*
++ * Ptracer injects the randomized tile data state. It also reads
++ * before and after that, which will execute the kernel's state copy
++ * functions. So, the tester is advised to double-check any emitted
++ * kernel messages.
++ */
++static void ptracer_inject_tiledata(pid_t target)
++{
++	struct xsave_buffer *xbuf;
++	struct iovec iov;
++
++	xbuf = alloc_xbuf();
++	if (!xbuf)
++		fatal_error("unable to allocate XSAVE buffer");
++
++	printf("\tRead the init'ed tiledata via ptrace().\n");
++
++	iov.iov_base = xbuf;
++	iov.iov_len = xbuf_size;
++
++	memset(stashed_xsave, 0, xbuf_size);
++
++	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
++		fatal_error("PTRACE_GETREGSET");
++
++	if (!__compare_tiledata_state(stashed_xsave, xbuf))
++		printf("[OK]\tThe init'ed tiledata was read from ptracee.\n");
++	else
++		printf("[FAIL]\tThe init'ed tiledata was not read from ptracee.\n");
++
++	printf("\tInject tiledata via ptrace().\n");
++
++	load_rand_tiledata(xbuf);
++
++	memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
++	       &xbuf->bytes[xtiledata.xbuf_offset],
++	       xtiledata.size);
++
++	if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
++		fatal_error("PTRACE_SETREGSET");
++
++	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
++		fatal_error("PTRACE_GETREGSET");
++
++	if (!__compare_tiledata_state(stashed_xsave, xbuf))
++		printf("[OK]\tTiledata was correctly written to ptracee.\n");
++	else
++		printf("[FAIL]\tTiledata was not correctly written to ptracee.\n");
++}
++
++static void test_ptrace(void)
++{
++	pid_t child;
++	int status;
++
++	child = fork();
++	if (child < 0) {
++		err(1, "fork");
++	} else if (!child) {
++		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
++			err(1, "PTRACE_TRACEME");
++
++		ptracee_firstuse_tiledata();
++
++		raise(SIGTRAP);
++		_exit(0);
++	}
++
++	do {
++		wait(&status);
++	} while (WSTOPSIG(status) != SIGTRAP);
++
++	ptracer_inject_tiledata(child);
++
++	ptrace(PTRACE_DETACH, child, NULL, NULL);
++	wait(&status);
++	if (!WIFEXITED(status) || WEXITSTATUS(status))
++		err(1, "ptrace test");
++}
++
+ int main(void)
+ {
+ 	/* Check hardware availability at first */
+@@ -846,6 +946,8 @@ int main(void)
+ 	ctxtswtest_config.num_threads = 5;
+ 	test_context_switch();
+ 
++	test_ptrace();
++
+ 	clearhandler(SIGILL);
+ 	free_stashed_xsave();
+ 
