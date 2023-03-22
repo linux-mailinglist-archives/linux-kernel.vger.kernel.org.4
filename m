@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273266C473F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA58D6C4741
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCVKJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S229847AbjCVKJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCVKJJ (ORCPT
+        with ESMTP id S229664AbjCVKJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:09:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6385AB55;
-        Wed, 22 Mar 2023 03:09:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92C2961291;
-        Wed, 22 Mar 2023 10:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DA9C433EF;
-        Wed, 22 Mar 2023 10:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679479748;
-        bh=zgcC6CFHZEkI+Y2u0uiAz37vl2FpD8zXEz7zQwJ3YgI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mBldOBrrjEJQyxaaZp7OQNB1SSqzEmP3LPBASeMLFq0NxHJmyy8pb62xgPTuT2rrl
-         6K8u9Y1zqQsnpQNjWOjqedrMPvF8Ypo1JOQyHcV3iZmDCTNcgSenm66S3/vV/eZCe5
-         NO8+Sg8q0OXzMRCkokx03NpJ38tNXVfmxv4EyRljot5UFqB3fTTN/zABBuocnmCFUO
-         48I7P+cBAHwLRO0bfnYpe8HnrTETSbOT6/UUrcOQ1MiJgQsljMY/ULuROdwFH/Uy7o
-         f+DA0TznZBkO3xGTPxfNMjQCylCW0GGRUysXlecbKAq2nUlUo0tzBF2nc5vWiaraJ2
-         MBpKTrjx2sUtg==
-Date:   Wed, 22 Mar 2023 12:08:53 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
- from mm_core_init()
-Message-ID: <ZBrTtQKe7SowXSKb@kernel.org>
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-9-rppt@kernel.org>
- <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
+        Wed, 22 Mar 2023 06:09:35 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4DA5AB48;
+        Wed, 22 Mar 2023 03:09:34 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ew6so7559871edb.7;
+        Wed, 22 Mar 2023 03:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679479772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yru+/DJoW0l+gdfnZqzMPZHjYgVuqgrRcLKs3lSPmHE=;
+        b=M6Mosss+BmvxqIkNxh0I9sIkanHXhjuavvFe9xCQtfjpYhR8vRfnbUIfB1WiWGLor0
+         c/+8Fl/ZUbGEUi31LFq6Ju9M/muyfxJUhii3za1e9HG2JZ0NSUuByjdB1tSuPhtGxY8Y
+         Nf+RN5G/XyQYWYi4f2/cdUJNdNAApdiYlS/cIOpbKQI9Q9G++5fMHxHGqGiEylQFB8Fk
+         ps+IrR54AQBnzTytnt1FqW09dLlpJtXn3+jaLBkUxVqNpoIm6DLoIJJlN16lEszwD0Ue
+         epbtZmchK/ZNepS15LuUh/nccrwlGmn/p81tA6SvbT0Z3028m/NtqUrGtWsq5AmZ7Qmc
+         2s2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679479772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yru+/DJoW0l+gdfnZqzMPZHjYgVuqgrRcLKs3lSPmHE=;
+        b=FFlS/12vw4JU5OMUtUSm8VJAyJ1fdpUvkH7TAtMkZLskDnxWimPJ9EZKOXMQTmSkQH
+         +oRFyFY6uUquYMLW/AkW1ji/gxnxc0uKzhjkLgqPX4DGkpJix/7r26gbFuOpClm+SmW9
+         qSow4MxL3/OlIKp/ZXbukJXJG26HEjvB2IctgMS6J/HVI7GkugilGtNvHC9bfuUdlxo1
+         jqhYurgacJJPgv1iNZOTtP0VwfWrQU1ww25XsHToHcXGfqHN9ziGAEcB7mFSqnqxJgbB
+         9vziihnLRZ4LtNhKB4skdmURghICBqGNey3n8GASPH2sVhwZY8f+zgt+ZHiVKTVshhKr
+         ebWQ==
+X-Gm-Message-State: AO0yUKVEHmc6S+/pi5vO16cD1FDmO6x7712DQ121OhG0WLCv57P9Tdf8
+        00WD1y6XtIgtyHT/z38hHlo=
+X-Google-Smtp-Source: AK7set/6uoHR69K90iGRKvBwbgrmpRQ1hfAMzKw4nU5pgrpBEBX/HIBu1pABx8tb83QbDHB/Qtz4nQ==
+X-Received: by 2002:a17:906:1853:b0:92f:fc08:bb0a with SMTP id w19-20020a170906185300b0092ffc08bb0amr5888741eje.37.1679479772557;
+        Wed, 22 Mar 2023 03:09:32 -0700 (PDT)
+Received: from alaa-emad.. ([41.233.203.65])
+        by smtp.gmail.com with ESMTPSA id s9-20020a170906454900b008f89953b761sm6954993ejq.3.2023.03.22.03.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 03:09:32 -0700 (PDT)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        vireshk@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, greybus-dev@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-pwm@vger.kernel.org, eng.mennamahmoud.mm@gmail.com
+Subject: [PATCH] staging: greybus: remove unnecessary blank line
+Date:   Wed, 22 Mar 2023 12:09:27 +0200
+Message-Id: <20230322100927.28351-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:06:18PM +0300, Sergei Shtylyov wrote:
-> On 3/21/23 8:05 PM, Mike Rapoport wrote:
-> 
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > and drop pgtable_init() as it has no real value and it's name is
-> 
->    Its name.
+Remove unnecessary blank line before struct as reported
+by checkpatch:
 
-oops :)
+" CHECK: Please don't use multiple blank lines "
 
-Andrew, can you replace this patch with the updated version, please?
- 
-From 52420723c9bfa84aa48f666330e96f9e5b2f3248 Mon Sep 17 00:00:00 2001
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-Date: Sat, 18 Mar 2023 13:55:28 +0200
-Subject: [PATCH v3] mm: call {ptlock,pgtable}_cache_init() directly from
- mm_core_init()
-
-and drop pgtable_init() as it has no real value and its name is
-misleading.
-
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
 ---
- include/linux/mm.h | 6 ------
- mm/mm_init.c       | 3 ++-
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ drivers/staging/greybus/greybus_authentication.h | 1 -
+ drivers/staging/greybus/pwm.c                    | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2d7f095136fc..c3c67d8bc833 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2782,12 +2782,6 @@ static inline bool ptlock_init(struct page *page) { return true; }
- static inline void ptlock_free(struct page *page) {}
- #endif /* USE_SPLIT_PTE_PTLOCKS */
+diff --git a/drivers/staging/greybus/greybus_authentication.h b/drivers/staging/greybus/greybus_authentication.h
+index 7edc7295b7ab..48b4a9794d3c 100644
+--- a/drivers/staging/greybus/greybus_authentication.h
++++ b/drivers/staging/greybus/greybus_authentication.h
+@@ -41,7 +41,6 @@
+ #define CAP_AUTH_RESULT_CR_NO_KEY	0x03
+ #define CAP_AUTH_RESULT_CR_SIG_FAIL	0x04
  
--static inline void pgtable_init(void)
--{
--	ptlock_cache_init();
--	pgtable_cache_init();
--}
 -
- static inline bool pgtable_pte_page_ctor(struct page *page)
+ /* IOCTL support */
+ struct cap_ioc_get_endpoint_uid {
+ 	__u8			uid[8];
+diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+index 3fda172239d2..26d39e08c3b6 100644
+--- a/drivers/staging/greybus/pwm.c
++++ b/drivers/staging/greybus/pwm.c
+@@ -24,7 +24,6 @@ struct gb_pwm_chip {
+ #define pwm_chip_to_gb_pwm_chip(chip) \
+ 	container_of(chip, struct gb_pwm_chip, chip)
+ 
+-
+ static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
  {
- 	if (!ptlock_init(page))
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index bba73f1fb277..f1475413394d 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -2584,7 +2584,8 @@ void __init mm_core_init(void)
- 	 */
- 	page_ext_init_flatmem_late();
- 	kmemleak_init();
--	pgtable_init();
-+	ptlock_cache_init();
-+	pgtable_cache_init();
- 	debug_objects_mem_init();
- 	vmalloc_init();
- 	/* If no deferred init page_ext now, as vmap is fully initialized */
+ 	struct gb_pwm_count_response response;
 -- 
-2.35.1
+2.34.1
 
--- 
-Sincerely yours,
-Mike.
