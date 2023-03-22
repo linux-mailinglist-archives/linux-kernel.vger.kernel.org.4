@@ -2,256 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9B96C4499
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9476C449C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCVIFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S230017AbjCVIHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCVIFb (ORCPT
+        with ESMTP id S229642AbjCVIHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:05:31 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6466A4C6D7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:05:25 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id t11so22279735lfr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:05:25 -0700 (PDT)
+        Wed, 22 Mar 2023 04:07:18 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683395D243;
+        Wed, 22 Mar 2023 01:07:17 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x3so69261516edb.10;
+        Wed, 22 Mar 2023 01:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679472323;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jyzrL4k/tk1hdwYRkMYQZXDDLGhznLRsEI2TGZxmALg=;
-        b=p6fnLlXWRXuN4NI2/dUIXu4CqtUMZrzkLozQt3wrBQH5luwG0/kDPTcRLjnweQ2gip
-         B8nrlPdiECaEcqUiTvxUhD4Ve+q+WXlVwrLTB5/SSOt8DXqwIKXt9Xj767cs92okz+ee
-         RvrG8D9X1Rron3rR3cYX2/AqorCssE0q0RDTf6Z3yW3wa/24b0Hb0oYhtJQ/huZq4WVn
-         WKAGvI72CdJqr+em/NbfhiCPB9dVJSWzcVm3DAHucLX8axl0Bg5k6OZeV83Gmgxg+MiT
-         0Jg+5ZPWbFLCpTv0BuCi8lwhvxv/9nFwfCkzzl0oJRyPxSF6TAmf9hCjwhoko2p/CMHh
-         tBpg==
+        d=gmail.com; s=20210112; t=1679472436;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uDLy6gXwopARuTlfqgOxRX3tSQF+2gi6u0FbFURqkMs=;
+        b=TbpxK+Kj5hBU/t7V/bNNwtnWIt+6XtX+jmwCZf0otN1AJnWtQEXtFOX9ps1Wy3aOlm
+         99StdSC7NqHD/I1Sa6B9RYrPNVRo4V8PPi2h7MEE5e47svEcr0FC8Tg+9sRaX14+Q/uJ
+         OtJhGLVuz1s5hYuKl+J8vCv2aPf0S+dD9UBdIkI5rSI24Ins5+XhwRqmee3eXH6grZUI
+         CyawVtJzbUECUIwo3rksYgvl0wiISbYa5rq51K5NM8ByInkrCOB+e1YYRxqa5PxqujNH
+         Cnj/A5uVMN1DigvxGgw7th2QCew5OH0Agwvqn6IvKZXySHugzmHbBq5hNwwFyF/UVLnO
+         AdRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679472323;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jyzrL4k/tk1hdwYRkMYQZXDDLGhznLRsEI2TGZxmALg=;
-        b=322KQ9UbBPT88ySySk9EF5XSr4AZl39K9k8SIXCH5vxnQ7u6oaognySrbuKopAeN+z
-         3D8/lC078ZxWD9nUemHTWguymzPAdeSB+P4eA/AIS0YyNYmtYQdOYxD0vw5+abIK1yWw
-         fWHKIuXe4shQFVnCDh4nWxWyCttHZTBTFf+jJEnTSRBcM/IH7ej94aEhv/JpxHr+63yD
-         ihMrMVmHOtzjPkXSjCUXey2Sowfg29q0/mz6jWjwtpQoEn2qlQLDSHTyJDmBNwb55UWe
-         EZ3kVqdvwmabMc1jKyr86JutCJLbz7DOCTgLmm/YfIXoF/1QsyndVUuMZNJQIdhC4Idt
-         V03w==
-X-Gm-Message-State: AO0yUKU0hI2v/ShOOGWfqpXpaozMsYO/rRDGkx2Cmpv5ujKJ0LeYEDSd
-        kpmSVtEzARzE6/0jR+5PmFT/FQ==
-X-Google-Smtp-Source: AK7set/lc0mVMjFlV70JQxo9fEsD0Siv54L0CiaCfzcKXtUwJVpIG8srorElON3TPwY1YgvnILYpZw==
-X-Received: by 2002:ac2:5458:0:b0:4d8:8af4:3b2c with SMTP id d24-20020ac25458000000b004d88af43b2cmr1872059lfn.68.1679472323449;
-        Wed, 22 Mar 2023 01:05:23 -0700 (PDT)
-Received: from [192.168.1.101] (abym238.neoplus.adsl.tpnet.pl. [83.9.32.238])
-        by smtp.gmail.com with ESMTPSA id j19-20020a19f513000000b004e84b79de9bsm2512923lfb.254.2023.03.22.01.05.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 01:05:22 -0700 (PDT)
-Message-ID: <ad7c810a-1915-d112-7d5f-83ebd57a2500@linaro.org>
-Date:   Wed, 22 Mar 2023 09:05:21 +0100
+        d=1e100.net; s=20210112; t=1679472436;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uDLy6gXwopARuTlfqgOxRX3tSQF+2gi6u0FbFURqkMs=;
+        b=k+DVEoJhZpn6vqVM6rkdM2aFA6CyhUdjggtHuxDtwNrw3rvZI29vRq+gRr0uVEYbzR
+         ztr/rzBL+uz9IIQxr82AWneHLzV5CgvAF1d4p5S+cCgSvADBIyzH+eVGgwltOh7PLSZa
+         teDQDfD+I6sg41RzZJmDno0/GQiedortuTdQw36Zzvd3lsy+0Ql5TcpenmrUhiwPr59h
+         bbcZR2GtIWs21i024G+CFX3ZrLVNTWIZUPY6Hc7gBN6F6NTZrzK526dgzMVLSp5SNUZv
+         loQ9zpzG/1tKhdL8k54ONaHQewrJxxrSove/v/oWZ5jo+/vdWjC+TAFkhhGtwo4orLzF
+         3xQA==
+X-Gm-Message-State: AO0yUKUKsakUxip7z210fjNSXyx+0zEWVD0jHnhYuk4KTaIcvMDpogrI
+        89vCatKqhF6ET9pgtbyXLTY=
+X-Google-Smtp-Source: AK7set91PeT1rns8zGWrRzVqfZS5PLsJGVSf/j1OePGS0f7y1hnEHyGgIpr/NupFZ+AmDUGtUMiU1A==
+X-Received: by 2002:aa7:c84e:0:b0:4fa:b302:84d9 with SMTP id g14-20020aa7c84e000000b004fab30284d9mr5948545edt.14.1679472435784;
+        Wed, 22 Mar 2023 01:07:15 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u3-20020a50d503000000b004fcd78d1215sm7371005edi.36.2023.03.22.01.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 01:07:14 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 11:07:10 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal/core: update cooling device during thermal zone
+ unregistration
+Message-ID: <a6d760f9-18a0-4bcd-a3ce-ab2b9db53c7c@kili.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RFT v2 11/14] clk: qcom: smd-rpm: Hook up PCNoC_0
- keep_alive
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <20230303-topic-rpmcc_sleep-v2-11-ae80a325fe94@linaro.org>
- <20230322031928.vugzh4de2yecd5j2@ripper>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230322031928.vugzh4de2yecd5j2@ripper>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321154627.17787-1-rui.zhang@intel.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Zhang,
 
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On 22.03.2023 04:19, Bjorn Andersson wrote:
-> On Wed, Mar 08, 2023 at 10:35:27PM +0100, Konrad Dybcio wrote:
->> 14 [1] of our 18 supported platforms need an active keepalive vote on
->> PCNoC_0 so as not to cause havoc on the entire SoC. Guarantee that.
->>
-> 
-> Given that these are all clocks for peripheral (or peripheral & config)
-> noc clocks, doesn't this just ensure that the running CPU is able to
-> reach something on the peripheral bus?
-> 
-> That is, are you encoding a active-only keep-alive interconnect path?
-> Could we somehow express that using the interconnect driver on top
-> instead?
-Qualcomm downstream has a different notion of "keep_alive" on the msm_bus
-side, which is basically:
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Rui/thermal-core-update-cooling-device-during-thermal-zone-unregistration/20230321-234754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20230321154627.17787-1-rui.zhang%40intel.com
+patch subject: [PATCH] thermal/core: update cooling device during thermal zone unregistration
+config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20230322/202303221159.6cdRxcUo-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-if (bus->keepalive)
-	active_vote_freq = max(19200000, aggregated_rate);
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202303221159.6cdRxcUo-lkp@intel.com/
 
-Considering that they're doing essentially the same thing, I suppose both
-periph/config NoC could be enabled there instead.
+smatch warnings:
+drivers/thermal/thermal_core.c:1436 thermal_zone_device_unregister() warn: iterator used outside loop: 'ti'
 
-Konrad
+vim +/ti +1436 drivers/thermal/thermal_core.c
 
-> 
-> Regards,
-> Bjorn
-> 
->> [1] there are 13 changes to driver data, but 8226 reuses 8974.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c | 27 ++++++++++++++-------------
->>  1 file changed, 14 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index 8e25b3d7d30c..a44b52bd0c83 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -500,6 +500,7 @@ DEFINE_CLK_SMD_RPM(aggre1_noc, QCOM_SMD_RPM_AGGR_CLK, 1);
->>  DEFINE_CLK_SMD_RPM(aggre2_noc, QCOM_SMD_RPM_AGGR_CLK, 2);
->>  
->>  DEFINE_CLK_SMD_RPM_BUS(pcnoc, 0);
->> +DEFINE_CLK_SMD_RPM_BUS_KEEP_ALIVE(pcnoc, 0);
->>  DEFINE_CLK_SMD_RPM_BUS(snoc, 1);
->>  DEFINE_CLK_SMD_RPM_BUS(sysmmnoc, 2);
->>  DEFINE_CLK_SMD_RPM_BUS(cnoc, 2);
->> @@ -558,7 +559,7 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
->>  
->>  static struct clk_smd_rpm *msm8909_clks[] = {
->>  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->> @@ -592,7 +593,7 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8909 = {
->>  
->>  static struct clk_smd_rpm *msm8916_clks[] = {
->>  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->> @@ -626,7 +627,7 @@ static struct clk_smd_rpm *msm8936_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->> @@ -660,7 +661,7 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
->>  
->>  static struct clk_smd_rpm *msm8974_clks[] = {
->>  	[RPM_SMD_PNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_CNOC_CLK]		= &clk_smd_rpm_bus_2_cnoc_clk,
->> @@ -712,7 +713,7 @@ static struct clk_smd_rpm *msm8976_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->> @@ -746,7 +747,7 @@ static struct clk_smd_rpm *msm8992_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_OCMEMGX_CLK] = &clk_smd_rpm_ocmemgx_clk,
->>  	[RPM_SMD_OCMEMGX_A_CLK] = &clk_smd_rpm_ocmemgx_a_clk,
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->> @@ -804,7 +805,7 @@ static struct clk_smd_rpm *msm8994_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_OCMEMGX_CLK] = &clk_smd_rpm_ocmemgx_clk,
->>  	[RPM_SMD_OCMEMGX_A_CLK] = &clk_smd_rpm_ocmemgx_a_clk,
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->> @@ -864,7 +865,7 @@ static struct clk_smd_rpm *msm8996_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC] = &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
->> @@ -918,7 +919,7 @@ static struct clk_smd_rpm *qcs404_clks[] = {
->>  	[RPM_SMD_QDSS_CLK] = &clk_smd_rpm_qdss_clk,
->>  	[RPM_SMD_QDSS_A_CLK] = &clk_smd_rpm_qdss_a_clk,
->>  	[RPM_SMD_PNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->> @@ -948,7 +949,7 @@ static struct clk_smd_rpm *msm8998_clks[] = {
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->>  	[RPM_SMD_BIMC_A_CLK] = &clk_smd_rpm_bimc_a_clk,
->>  	[RPM_SMD_PCNOC_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK] = &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK] = &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
->> @@ -1010,7 +1011,7 @@ static struct clk_smd_rpm *sdm660_clks[] = {
->>  	[RPM_SMD_CNOC_CLK] = &clk_smd_rpm_bus_2_cnoc_clk,
->>  	[RPM_SMD_CNOC_A_CLK] = &clk_smd_rpm_bus_2_cnoc_a_clk,
->>  	[RPM_SMD_CNOC_PERIPH_CLK] = &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_CNOC_PERIPH_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_CNOC_PERIPH_A_CLK] = &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_BIMC_CLK] = &clk_smd_rpm_bimc_clk,
->>  	[RPM_SMD_BIMC_A_CLK] = &clk_smd_rpm_bimc_a_clk,
->>  	[RPM_SMD_MMSSNOC_AXI_CLK] = &clk_smd_rpm_mmssnoc_axi_rpm_clk,
->> @@ -1052,7 +1053,7 @@ static struct clk_smd_rpm *mdm9607_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->>  	[RPM_SMD_BIMC_A_CLK]		= &clk_smd_rpm_bimc_a_clk,
->>  	[RPM_SMD_QPIC_CLK]		= &clk_smd_rpm_qpic_clk,
->> @@ -1074,7 +1075,7 @@ static struct clk_smd_rpm *msm8953_clks[] = {
->>  	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
->>  	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
->>  	[RPM_SMD_PCNOC_CLK]		= &clk_smd_rpm_bus_0_pcnoc_clk,
->> -	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_clk,
->> +	[RPM_SMD_PCNOC_A_CLK]		= &clk_smd_rpm_bus_0_pcnoc_a_keep_alive_clk,
->>  	[RPM_SMD_SNOC_CLK]		= &clk_smd_rpm_bus_1_snoc_clk,
->>  	[RPM_SMD_SNOC_A_CLK]		= &clk_smd_rpm_bus_1_snoc_a_clk,
->>  	[RPM_SMD_BIMC_CLK]		= &clk_smd_rpm_bimc_clk,
->>
->> -- 
->> 2.39.2
->>
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1402  void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1403  {
+a5f785ce608caf drivers/thermal/thermal_core.c Dmitry Osipenko  2020-08-18  1404  	int i, tz_id;
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1405  	const struct thermal_zone_params *tzp;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1406  	struct thermal_cooling_device *cdev;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1407  	struct thermal_zone_device *pos = NULL;
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1408  	struct thermal_instance *ti;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1409  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1410  	if (!tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1411  		return;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1412  
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1413  	tzp = tz->tzp;
+a5f785ce608caf drivers/thermal/thermal_core.c Dmitry Osipenko  2020-08-18  1414  	tz_id = tz->id;
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1415  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1416  	mutex_lock(&thermal_list_lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1417  	list_for_each_entry(pos, &thermal_tz_list, node)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1418  		if (pos == tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1419  			break;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1420  	if (pos != tz) {
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1421  		/* thermal zone device not found */
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1422  		mutex_unlock(&thermal_list_lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1423  		return;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1424  	}
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1425  	list_del(&tz->node);
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1426  
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1427  	/* Unbind all cdevs associated with 'this' thermal zone */
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1428  	list_for_each_entry(cdev, &thermal_cdev_list, node) {
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1429  		mutex_lock(&tz->lock);
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1430  		list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1431  			if (ti->cdev == cdev)
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1432  				break;
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1433  		}
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1434  
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1435  		/* The cooling device is not used by current thermal zone */
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21 @1436  		if (ti->cdev != cdev) {
+
+Here we are testing to see if the loop exited by hitting the break.  If
+the condition is != then "ti" is not a valid pointer and it's kind of an
+out of bounds access.  I used to fix these with:
+
+-	if (ti->cdev != cdev) {
++	if (list_entry_is_head(ti, &tz->thermal_instances, tz_node)) {
+
+But these days we just prefer using a found variable:
+
+	found = false;
+	list_for_each_entry(ti, &tz->thermal_instances, tz_node) {
+		if (ti->cdev == cdev) {
+			found = true;
+			break;
+		}
+	}
+	if (!found) {
+
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1437  			mutex_unlock(&tz->lock);
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1438  			continue;
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1439  		}
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1440  		mutex_unlock(&tz->lock);
+55a1117eebc62b drivers/thermal/thermal_core.c Zhang Rui        2023-03-21  1441  
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R      2012-09-18  1442  		if (tz->ops->unbind) {
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui        2008-01-17  1443  			tz->ops->unbind(tz, cdev);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
