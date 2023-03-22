@@ -2,107 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61F56C47CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25FE6C47CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCVKiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S230350AbjCVKjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjCVKik (ORCPT
+        with ESMTP id S230330AbjCVKiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:38:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEE658495
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:38:22 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PhPxX1xlLznhwj;
-        Wed, 22 Mar 2023 18:35:12 +0800 (CST)
-Received: from [10.67.111.115] (10.67.111.115) by
- dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 22 Mar 2023 18:38:19 +0800
-Message-ID: <ef8051f2-056f-9ea1-e5ba-51339fdb7877@huawei.com>
-Date:   Wed, 22 Mar 2023 18:38:18 +0800
+        Wed, 22 Mar 2023 06:38:54 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5536E95
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:38:49 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id cu36so7100975vsb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679481528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xOiN5G93WrfPsM2Jecc460dR5iDLmqy+gypXlUAZy1I=;
+        b=YgvfzYUFqiy+iTf/4sQOI8uimJZzDdgLb0I+xiSlbKQFvwZQdBd1U9a9mgJLdNcfmn
+         YtUeNoB4MAAteN80DI9FOuSQGcLPpv6nQg5CZCAXGw2gYcjbAH9+QSXKFu78bfPzkULu
+         QL7m2RDBluTSLxLpw8ZA19xh4t7w5U3hE85C0xvQcsv5LfNWxObiEGlqrpMygsO8YkM4
+         pRNaRmxuZ7eOWi40H7zFSBO4000wQaH+u/PM6FheQrqeVfodpn31DCgLT8V+QsUvfzVH
+         5CxR8QEX9p/XxyDwj9LBSVheqrinTKuRmt674zHopPFtYrSAohdh/aIjc0933ohGBEh6
+         pyUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679481528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xOiN5G93WrfPsM2Jecc460dR5iDLmqy+gypXlUAZy1I=;
+        b=p+C9pzeTVn2fuUyo9uAFuG83s9Dz9NRmKsZ0wImoCwipUxkyOQQkiQqLsx4BV+qsY+
+         FNQiNGUugP9fW4JVpmlL43XjE6ZyS7ItEQi30Z8OEDMhHvrs6Zd7ghyuri8RU3Ggs6Ro
+         Sby8ifoHYiADDD90dcmxZCjz2FHfuDMAN3RrjGEdSDeNmCb9YJTK/AoHW8aQ70Eg5UtU
+         1bRikALsVckrvQ2mDxxFFpzFygezp+U3hMWejFaR49aS3kRJDSq7fZIt296RPxrJlvns
+         /fQnO50eFfV9NBX/bQpQJ7t6CxAtrJbZ7/QAD01WQO2tv2m9+rr2xDtbtM4OnuJkYdcr
+         xLow==
+X-Gm-Message-State: AO0yUKXlhudutEqPJrUW4E4AZEUbl98Qu/BoU4O+lCu2wS5I/YVpq5+I
+        KDaN20uuQdVm/1gQZUPMP/NpcQDd52wXi3Sy91Fm6w==
+X-Google-Smtp-Source: AK7set/5W/bqhxB0kdyABAYudu1GFKIqmHXPZv3ZQNcZ8b6LlpKu4UCO7huf6zKH+hNmbM6D0gBh5fEtpcymadeipcE=
+X-Received: by 2002:a67:e00b:0:b0:425:d255:dd38 with SMTP id
+ c11-20020a67e00b000000b00425d255dd38mr3313118vsl.1.1679481528233; Wed, 22 Mar
+ 2023 03:38:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-From:   Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-To:     "Gowans, James" <jgowans@amazon.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>
-CC:     "maz@kernel.org" <maz@kernel.org>,
-        "Raslan, KarimAllah" <karahmed@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
- <f0879a30-6f88-30e0-ce30-e230df8f2936@huawei.com>
- <001d516c1bb6f0b6d2344f1ae160e796d003c24c.camel@amazon.com>
- <6d1859b0-20f3-05a8-d8d6-dfb0c9985985@huawei.com>
- <fd5588e5b0b1b5d21b1c0df7290844907ebcf367.camel@amazon.com>
-Content-Language: en-US
-In-Reply-To: <fd5588e5b0b1b5d21b1c0df7290844907ebcf367.camel@amazon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.115]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230321180749.921141176@linuxfoundation.org>
+In-Reply-To: <20230321180749.921141176@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 22 Mar 2023 16:08:35 +0530
+Message-ID: <CA+G9fYsG6d_A_yGQAixYTA2Wh2cowf-UQJAY=RRWnEzFcLAHCQ@mail.gmail.com>
+Subject: Re: [PATCH 6.2 000/214] 6.2.8-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/3/22 15:48, Gowans, James 写道:
-> On Wed, 2023-03-22 at 14:26 +0800, Yipeng Zou wrote:
->>> 在 2023/3/17 19:49, Gowans, James 写道:
->>> What are your thoughts on this approach compared to your proposal?
->> Hi,
->>
->> I also agree with you, enhance the existing generic handlers is a good
->> way to go.
->>
->> Too many generic handlers really confuse developers.
-> Thomas, would you be open to taking the patch to tweak the handle_fasteoi_irq
-> handler? Or is there a different solution to this problem which you prefer?
-
-Our workaround is generally similar, but the implementation details are 
-somewhat different.
-
-Maybe let us look for some comments from maintainer and other people.
-
->> About CONFIG_GENERIC_PENDING_IRQ is actually some attempts we made
->> before under the suggestion of Thomas.
->>
->> This patch is valid for our problem. However, the current config is only
->> supported on x86, and some code modifications are required on arm.
-> Thanks for the patch! I have been trying out CONFIG_GENERIC_PENDING_IRQ too, but
-> couldn't get it to work; it seems the IRQ never actually moved. I see from your
-> patch that we would need to tweak the callbacks and explicitly do the affinity
-> move in the EOI handler of the chip; the generic code won't do it for us.
+On Tue, 21 Mar 2023 at 23:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->> This has led to some changes in the original behavior of modifying
->> interrupting affinity, from the next interrupt taking effect to the next
->> to the next interrupt taking effect.
-> So this means that even if it's safe to change the affinity right now, the
-> change will actually be delayed until the *next* interrupt? Specifically because
-> interrupt doesn't have the IRQD_MOVE_PCNTXT state flag isn't set hence
-> irq_set_affinity_locked won't call irq_try_set_affinity?
+> This is the start of the stable review cycle for the 6.2.8 release.
+> There are 214 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 23 Mar 2023 18:07:09 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.2.8-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.2.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Yes, modify of the interrupt affinity will be delayed until the *next* 
-interrupt eoi handler(in hard_irq context).
 
-This is the difference from x86, which do irq_move_irq in ack handler, 
-and then transfer the current interrupt to the new CPU without other affect.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> JG
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Regards,
-Yipeng Zou
+## Build
+* kernel: 6.2.8-rc3
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.2.y
+* git commit: d9c239ae1a56ba4b39f4783b8d025cb7a75b2751
+* git describe: v6.2.7-215-gd9c239ae1a56
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.7=
+-215-gd9c239ae1a56
 
+## Test Regressions (compared to v6.2.7)
+
+## Metric Regressions (compared to v6.2.7)
+
+## Test Fixes (compared to v6.2.7)
+
+## Metric Fixes (compared to v6.2.7)
+s
+## Test result summary
+total: 196699, pass: 168689, fail: 4397, skip: 23223, xfail: 390
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 143 passed, 6 failed
+* arm64: 58 total, 55 passed, 3 failed
+* i386: 45 total, 40 passed, 5 failed
+* mips: 34 total, 30 passed, 4 failed
+* parisc: 10 total, 9 passed, 1 failed
+* powerpc: 42 total, 39 passed, 3 failed
+* riscv: 30 total, 28 passed, 2 failed
+* s390: 20 total, 17 passed, 3 failed
+* sh: 16 total, 12 passed, 4 failed
+* sparc: 10 total, 7 passed, 3 failed
+* x86_64: 50 total, 49 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-vm
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
