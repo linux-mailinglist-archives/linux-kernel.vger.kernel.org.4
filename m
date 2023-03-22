@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257336C514D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADED6C5150
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjCVQwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        id S231158AbjCVQxc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 12:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjCVQwr (ORCPT
+        with ESMTP id S231217AbjCVQxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:52:47 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC845D8B3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:52:38 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id x6so1906129ile.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679503958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l3zjB9M2d0SQWHDN6AWzzgIm2jt75ssYc9u25xKl8IE=;
-        b=hZCnPQWdr3tCG5xo0v92lpLk+DAmOiy31UKY1ztRu4DcmVfTcbbEZoBAx/XTFbMhVa
-         z95qnrw654vLf32Me4P1KY8p92d6nBBn+NVuDFzOjUlTq/NXl1GiPQ/mEfIl/Akf9gZ+
-         HyMaQPAUP6VaYutn86OT1tsv9qBvMdyYXXF9oKVG8nXuoDc5I0In0pt+UpiAh5XYPhgL
-         U2DLcpVKUoenwMm6iQx8Toz4D9xWDcqkstJpYVU/Ee2Unm0P59dB06Y/aJ0OPlway83D
-         8uSFduRk16DAZbshMI3ViMcX5wZeIJYP1bRXG7vG1ZVEy+tQs4jLvFxbXiJSgFP+6PQ4
-         KMhw==
+        Wed, 22 Mar 2023 12:53:17 -0400
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CAC37544;
+        Wed, 22 Mar 2023 09:53:06 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id w9so75654274edc.3;
+        Wed, 22 Mar 2023 09:53:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679503958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l3zjB9M2d0SQWHDN6AWzzgIm2jt75ssYc9u25xKl8IE=;
-        b=PRsOXWX6F7PpajK3THQ1wO5TdwZQ2nGm16jIa28b2AN1twC7N8AsdBXnZtCosiVgjO
-         9CewjrHbt63WUvS56IyE8QYbhZA1ivfkMkiY6ldUEyUZTZk6bsr/LlAyyBOHlVe4+CXf
-         6UbX2xSdrF6lkwkMNBD3A+IckAunX8+z5LrB0zVn0tLEeOKZoDjVo+vSU07cjUnzHsqH
-         Jezx7XwKE3I+WGFgyCODnoxhxCRd5iOdyRUzZyiFJtptwsnNyzTAhjpjl/VrgQrrvia+
-         m6GfmppLUhBWwAcCE25PZ6PnN+F5kjxDKrbbIciS6SLDT3rP78qixm+zxL6ODlRteFJR
-         ShTA==
-X-Gm-Message-State: AO0yUKUI9f+rKwHPUhttWujJHJiWdBG+5CZLLw+9aCAZgta6bF3qTBt7
-        S9sFCRIzOVwycuuB3fmCyZmouHO88SwNIGL+Vnba5w==
-X-Google-Smtp-Source: AK7set/iHwdOxGZxb/coQap30EbwOdQq/VzCyxP9uY03QDMRgrI+8cfcaLD/yueaYS+BqRYm395aOQ==
-X-Received: by 2002:a92:db10:0:b0:315:4c1c:f9db with SMTP id b16-20020a92db10000000b003154c1cf9dbmr4947711iln.19.1679503957782;
-        Wed, 22 Mar 2023 09:52:37 -0700 (PDT)
-Received: from google.com ([2620:15c:183:200:7419:4945:3325:dd1e])
-        by smtp.gmail.com with ESMTPSA id t4-20020a025404000000b004061dfd9e23sm5359438jaa.19.2023.03.22.09.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 09:52:37 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 10:52:33 -0600
-From:   Ross Zwisler <zwisler@google.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Ross Zwisler <zwisler@chromium.org>, linux-kernel@vger.kernel.org,
-        "Tobin C. Harding" <me@tobin.cc>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tycho Andersen <tycho@tycho.pizza>, kvm@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2 0/6] use canonical ftrace path whenever possible
-Message-ID: <20230322165233.GA2583234@google.com>
-References: <20230215223350.2658616-1-zwisler@google.com>
- <20230321223139-mutt-send-email-mst@kernel.org>
+        d=1e100.net; s=20210112; t=1679503984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+7yquCZhQA+v+ZfD35IzWGLK6PA2Qn2UgbWOUR3WcIs=;
+        b=sH/zWVez9i1nUFlMRDqDAyWKwb5hO0jAOPMTA0UnJ6pPuxygyxRYorgFxzVd1T99Jb
+         nwfsm3ImHnXqY9f5xZZtTq5FneFfKbgm0P/NQIMvFT1SVM7c3khmqlIdkWi7wxEWAcX8
+         x+1CnGXi+fb11WS3Hg2hIlHeu5dvALcLVt3KdMjQDR9h7pbitGb9LAYZMiU5a2e1j1Eb
+         o8S9ZQ3g9JimxqJKRLO+eVLUSgAy8yrB+tXysjmYEuUyP3wQgZ1afyjBUZIDdV7SF+r1
+         DkY+fxVNo3oVYdVkxLK5oYdbg6f8vcGhl8Pu6aZW+BRPBtfx5tYfKFdYMVQW4iYbJZ7j
+         u8DQ==
+X-Gm-Message-State: AO0yUKVxISqgYzC8DOm0+N0Gy4hLeeM902uLz9sI4Zddyl2qKH6Que5/
+        J/3x4JKK09vJmAN2yos0wkwNSEOKY5k1kEgXgr71dM9W
+X-Google-Smtp-Source: AK7set8/U60E58wa9luxEtwbEFbm4h7J+Ws/lQ2rT0SBr67D3TPjBoIhkbHYwTDOLKSWzmL0nL2s0QhkEqMLOI8IkVU=
+X-Received: by 2002:a17:906:c413:b0:92f:7c42:863d with SMTP id
+ u19-20020a170906c41300b0092f7c42863dmr3408827ejz.2.1679503984146; Wed, 22 Mar
+ 2023 09:53:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321223139-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230317073310.4237-1-xueshuai@linux.alibaba.com> <SJ1PR11MB6083FE558641F0E57FF1F5A4FC869@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6083FE558641F0E57FF1F5A4FC869@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 17:52:53 +0100
+Message-ID: <CAJZ5v0iX8N9G7yMC3f90JDuHXvdDRcwepcusp0bEctGBhGSnCg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
+ explicitly indicated by platform
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "jaylu102@amd.com" <jaylu102@amd.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:32:46PM -0400, Michael S. Tsirkin wrote:
-> On Wed, Feb 15, 2023 at 03:33:44PM -0700, Ross Zwisler wrote:
-> > Changes in v2:
-> >  * Dropped patches which were pulled into maintainer trees.
-> >  * Split BPF patches out into another series targeting bpf-next.
-> >  * trace-agent now falls back to debugfs if tracefs isn't present.
-> >  * Added Acked-by from mst@redhat.com to series.
-> >  * Added a typo fixup for the virtio-trace README.
-> > 
-> > Steven, assuming there are no objections, would you feel comfortable
-> > taking this series through your tree?
-> 
-> for merging up to patch 5 through another tree:
-> 
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> 
-> I'll merge patch 6, no problem.
+On Wed, Mar 22, 2023 at 5:13 PM Luck, Tony <tony.luck@intel.com> wrote:
+>
+> > Fix to return -EINVAL in the __einj_error_inject() error handling case
+> > instead of -EBUSY, when explicitly indicated by the platform in the status
+> > of the completed operation.
+>
+> Needs a bit longer description on the use case based on follow up discussion.
+> Key information is the EINVAL is an indicator to the user that the parameters they
+> supplied cannot be used for injection.
 
-Hey Michael, would you also mind merging patch 5, the other virtio patch?
+Right.
 
-[PATCH v2 5/6] tools/virtio: use canonical ftrace path
+So Shuai, please resend the patch with a more elaborate changelog.
 
-https://lore.kernel.org/all/20230215223350.2658616-6-zwisler@google.com/
+> But for the code:
+>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
 
-I don't think Steven took this one through his tree.  Thanks!
+And add the above tag to it when resending.
