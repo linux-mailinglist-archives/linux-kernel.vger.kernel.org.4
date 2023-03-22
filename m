@@ -2,495 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05B96C4B97
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DECF86C4B9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjCVNV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S230415AbjCVNWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjCVNVY (ORCPT
+        with ESMTP id S230156AbjCVNWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:21:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 072836286A;
-        Wed, 22 Mar 2023 06:20:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E9574B3;
-        Wed, 22 Mar 2023 06:21:40 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BBDD3F6C4;
-        Wed, 22 Mar 2023 06:20:53 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 13:20:51 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>, x86@kernel.org,
-        Wangyang Guo <wangyang.guo@intel.com>,
-        Arjan van De Ven <arjan@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [patch V2 2/4] atomics: Provide atomic_add_and_negative()
- variants
-Message-ID: <ZBsAs8MKbD0o5Xlm@FVFF77S0Q05N>
-References: <20230307125358.772287565@linutronix.de>
- <20230307125538.877037764@linutronix.de>
+        Wed, 22 Mar 2023 09:22:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8B62B46
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679491290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tBcYyBVP35lI8VuEVG7gg0YDcUirlWVb624TvOLVCvM=;
+        b=UjajFx+JKZ0+gBLUulGJ5pDgRQIbyJ5aycYvynfDN+C14Z0qdnQEFvpHUUdda81UhEMVVo
+        xtQZP6XiyPWxiT+hIRio9fpbbCfQ49Ti6AN4xFWLqWeteeHKJDNnLBqDsM2Y4OD40tAf1z
+        IuLXK5ln8Y9GJtpRvYYYVr6TbUNO39k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-527-qsMQBnY7MmKyiZvRoAcjnQ-1; Wed, 22 Mar 2023 09:21:24 -0400
+X-MC-Unique: qsMQBnY7MmKyiZvRoAcjnQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0FE77800B23;
+        Wed, 22 Mar 2023 13:21:24 +0000 (UTC)
+Received: from localhost (ovpn-13-195.pek2.redhat.com [10.72.13.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3917840C6E67;
+        Wed, 22 Mar 2023 13:21:22 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 21:21:19 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v4 3/4] iov_iter: add copy_page_to_iter_atomic()
+Message-ID: <ZBsAz8zPn117IeHk@MiWiFi-R3L-srv>
+References: <cover.1679431886.git.lstoakes@gmail.com>
+ <31482908634cbb68adafedb65f0b21888c194a1b.1679431886.git.lstoakes@gmail.com>
+ <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
+ <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
+ <a9e62a20-13eb-464b-9452-9d7bb2566e85@lucifer.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307125538.877037764@linutronix.de>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a9e62a20-13eb-464b-9452-9d7bb2566e85@lucifer.local>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 01:57:43PM +0100, Thomas Gleixner wrote:
-> atomic_add_and_negative() does not provide the relaxed/acquire/release
-             ^^^^
-
-Spurious 'and_' above.
-
-> variants.
+On 03/22/23 at 11:06am, Lorenzo Stoakes wrote:
+> On Wed, Mar 22, 2023 at 10:32:47AM +0000, Lorenzo Stoakes wrote:
+> > > I am a little confused about the name of this new function. In its
+> > > conterpart, copy_page_from_iter_atomic(), kmap_atomic()/kunmpa_atomic()
+> > > are used. With them, if CONFIG_HIGHMEM=n, it's like below:
+> >
+> > The reason for this is that:-
+> >
+> > 1. kmap_atomic() explicitly states that it is now deprecated and must no longer
+> >    be used, and kmap_local_page() should be used instead:-
+> >
+> >  * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
+> >
+> >  * Do not use in new code. Use kmap_local_page() instead.
+> >
+> > 2. kmap_local_page() explicitly states that it can be used in any context:-
+> >
+> >  * Can be invoked from any context, including interrupts.
+> >
+> > I wanted follow this advice as strictly as I could, hence the change. However,
+> > we do need preemption/pagefaults explicitly disabled in this context (we are
+> > happy to fail if the faulted in pages are unmapped in meantime), and I didn't
+> > check the internals to make sure.
+> >
+> > So I think for safety it is better to use k[un]map_atomic() here, I'll respin
+> > and put that back in, good catch!
+> >
 > 
-> Provide them in preparation for a new scalable reference count algorithm.
+> Actually, given we have preemption disabled due to the held spinlock, I think
+> it'd be better to add a copy_page_to_iter_nofault() that uses
+> copy_to_user_nofault() which will disable pagefaults thus have exactly the
+> equivalent behaviour, more explicitly and without the use of a deprecated
+> function.
+
+Sounds a great idea, that let us be able to avoid using kmap_atomic.
+
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-Other than the typo, this looks reasonable to me, so FWIW:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> ---
-> V2: New patch
-> ---
->  include/linux/atomic/atomic-arch-fallback.h |  200 +++++++++++++++++++++++++++-
->  include/linux/atomic/atomic-instrumented.h  |   68 +++++++++
->  include/linux/atomic/atomic-long.h          |   38 +++++
->  scripts/atomic/atomics.tbl                  |    2 
->  scripts/atomic/fallbacks/add_negative       |    4 
->  5 files changed, 306 insertions(+), 6 deletions(-)
+> > >
+> > > static inline void *kmap_atomic(struct page *page)
+> > > {
+> > >         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> > >                 migrate_disable();
+> > >         else
+> > >                 preempt_disable();
+> > >         pagefault_disable();
+> > >         return page_address(page);
+> > > }
+> > >
+> > > But kmap_local_page() is only having page_address(), the code block
+> > > between kmap_local_page() and kunmap_local() is also atomic, it's a
+> > > little messy in my mind.
+> > >
+> > > static inline void *kmap_local_page(struct page *page)
+> > > {
+> > >         return page_address(page);
+> > > }
+> > >
+> > > > +	char *p = kaddr + offset;
+> > > > +	size_t copied = 0;
+> > > > +
+> > > > +	if (!page_copy_sane(page, offset, bytes) ||
+> > > > +	    WARN_ON_ONCE(i->data_source))
+> > > > +		goto out;
+> > > > +
+> > > > +	if (unlikely(iov_iter_is_pipe(i))) {
+> > > > +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
+> > > > +		goto out;
+> > > > +	}
+> > > > +
+> > > > +	iterate_and_advance(i, bytes, base, len, off,
+> > > > +		copyout(base, p + off, len),
+> > > > +		memcpy(base, p + off, len)
+> > > > +	)
+> > > > +	copied = bytes;
+> > > > +
+> > > > +out:
+> > > > +	kunmap_local(kaddr);
+> > > > +	return copied;
+> > > > +}
+> > > > +EXPORT_SYMBOL(copy_page_to_iter_atomic);
+> > > > +
+> > > >  static void pipe_advance(struct iov_iter *i, size_t size)
+> > > >  {
+> > > >  	struct pipe_inode_info *pipe = i->pipe;
+> > > > --
+> > > > 2.39.2
+> > > >
+> > >
 > 
-> --- a/include/linux/atomic/atomic-arch-fallback.h
-> +++ b/include/linux/atomic/atomic-arch-fallback.h
-> @@ -1208,6 +1208,13 @@ arch_atomic_inc_and_test(atomic_t *v)
->  #define arch_atomic_inc_and_test arch_atomic_inc_and_test
->  #endif
->  
-> +#ifndef arch_atomic_add_negative_relaxed
-> +#ifdef arch_atomic_add_negative
-> +#define arch_atomic_add_negative_acquire arch_atomic_add_negative
-> +#define arch_atomic_add_negative_release arch_atomic_add_negative
-> +#define arch_atomic_add_negative_relaxed arch_atomic_add_negative
-> +#endif /* arch_atomic_add_negative */
-> +
->  #ifndef arch_atomic_add_negative
->  /**
->   * arch_atomic_add_negative - add and test if negative
-> @@ -1226,6 +1233,98 @@ arch_atomic_add_negative(int i, atomic_t
->  #define arch_atomic_add_negative arch_atomic_add_negative
->  #endif
->  
-> +#ifndef arch_atomic_add_negative_acquire
-> +/**
-> + * arch_atomic_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic_add_negative_acquire(int i, atomic_t *v)
-> +{
-> +	return arch_atomic_add_return_acquire(i, v) < 0;
-> +}
-> +#define arch_atomic_add_negative_acquire arch_atomic_add_negative_acquire
-> +#endif
-> +
-> +#ifndef arch_atomic_add_negative_release
-> +/**
-> + * arch_atomic_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic_add_negative_release(int i, atomic_t *v)
-> +{
-> +	return arch_atomic_add_return_release(i, v) < 0;
-> +}
-> +#define arch_atomic_add_negative_release arch_atomic_add_negative_release
-> +#endif
-> +
-> +#ifndef arch_atomic_add_negative_relaxed
-> +/**
-> + * arch_atomic_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic_add_negative_relaxed(int i, atomic_t *v)
-> +{
-> +	return arch_atomic_add_return_relaxed(i, v) < 0;
-> +}
-> +#define arch_atomic_add_negative_relaxed arch_atomic_add_negative_relaxed
-> +#endif
-> +
-> +#else /* arch_atomic_add_negative_relaxed */
-> +
-> +#ifndef arch_atomic_add_negative_acquire
-> +static __always_inline bool
-> +arch_atomic_add_negative_acquire(int i, atomic_t *v)
-> +{
-> +	bool ret = arch_atomic_add_negative_relaxed(i, v);
-> +	__atomic_acquire_fence();
-> +	return ret;
-> +}
-> +#define arch_atomic_add_negative_acquire arch_atomic_add_negative_acquire
-> +#endif
-> +
-> +#ifndef arch_atomic_add_negative_release
-> +static __always_inline bool
-> +arch_atomic_add_negative_release(int i, atomic_t *v)
-> +{
-> +	__atomic_release_fence();
-> +	return arch_atomic_add_negative_relaxed(i, v);
-> +}
-> +#define arch_atomic_add_negative_release arch_atomic_add_negative_release
-> +#endif
-> +
-> +#ifndef arch_atomic_add_negative
-> +static __always_inline bool
-> +arch_atomic_add_negative(int i, atomic_t *v)
-> +{
-> +	bool ret;
-> +	__atomic_pre_full_fence();
-> +	ret = arch_atomic_add_negative_relaxed(i, v);
-> +	__atomic_post_full_fence();
-> +	return ret;
-> +}
-> +#define arch_atomic_add_negative arch_atomic_add_negative
-> +#endif
-> +
-> +#endif /* arch_atomic_add_negative_relaxed */
-> +
->  #ifndef arch_atomic_fetch_add_unless
->  /**
->   * arch_atomic_fetch_add_unless - add unless the number is already a given value
-> @@ -2329,6 +2428,13 @@ arch_atomic64_inc_and_test(atomic64_t *v
->  #define arch_atomic64_inc_and_test arch_atomic64_inc_and_test
->  #endif
->  
-> +#ifndef arch_atomic64_add_negative_relaxed
-> +#ifdef arch_atomic64_add_negative
-> +#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative
-> +#define arch_atomic64_add_negative_release arch_atomic64_add_negative
-> +#define arch_atomic64_add_negative_relaxed arch_atomic64_add_negative
-> +#endif /* arch_atomic64_add_negative */
-> +
->  #ifndef arch_atomic64_add_negative
->  /**
->   * arch_atomic64_add_negative - add and test if negative
-> @@ -2347,6 +2453,98 @@ arch_atomic64_add_negative(s64 i, atomic
->  #define arch_atomic64_add_negative arch_atomic64_add_negative
->  #endif
->  
-> +#ifndef arch_atomic64_add_negative_acquire
-> +/**
-> + * arch_atomic64_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic64_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic64_add_negative_acquire(s64 i, atomic64_t *v)
-> +{
-> +	return arch_atomic64_add_return_acquire(i, v) < 0;
-> +}
-> +#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative_acquire
-> +#endif
-> +
-> +#ifndef arch_atomic64_add_negative_release
-> +/**
-> + * arch_atomic64_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic64_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic64_add_negative_release(s64 i, atomic64_t *v)
-> +{
-> +	return arch_atomic64_add_return_release(i, v) < 0;
-> +}
-> +#define arch_atomic64_add_negative_release arch_atomic64_add_negative_release
-> +#endif
-> +
-> +#ifndef arch_atomic64_add_negative_relaxed
-> +/**
-> + * arch_atomic64_add_negative - add and test if negative
-> + * @i: integer value to add
-> + * @v: pointer of type atomic64_t
-> + *
-> + * Atomically adds @i to @v and returns true
-> + * if the result is negative, or false when
-> + * result is greater than or equal to zero.
-> + */
-> +static __always_inline bool
-> +arch_atomic64_add_negative_relaxed(s64 i, atomic64_t *v)
-> +{
-> +	return arch_atomic64_add_return_relaxed(i, v) < 0;
-> +}
-> +#define arch_atomic64_add_negative_relaxed arch_atomic64_add_negative_relaxed
-> +#endif
-> +
-> +#else /* arch_atomic64_add_negative_relaxed */
-> +
-> +#ifndef arch_atomic64_add_negative_acquire
-> +static __always_inline bool
-> +arch_atomic64_add_negative_acquire(s64 i, atomic64_t *v)
-> +{
-> +	bool ret = arch_atomic64_add_negative_relaxed(i, v);
-> +	__atomic_acquire_fence();
-> +	return ret;
-> +}
-> +#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative_acquire
-> +#endif
-> +
-> +#ifndef arch_atomic64_add_negative_release
-> +static __always_inline bool
-> +arch_atomic64_add_negative_release(s64 i, atomic64_t *v)
-> +{
-> +	__atomic_release_fence();
-> +	return arch_atomic64_add_negative_relaxed(i, v);
-> +}
-> +#define arch_atomic64_add_negative_release arch_atomic64_add_negative_release
-> +#endif
-> +
-> +#ifndef arch_atomic64_add_negative
-> +static __always_inline bool
-> +arch_atomic64_add_negative(s64 i, atomic64_t *v)
-> +{
-> +	bool ret;
-> +	__atomic_pre_full_fence();
-> +	ret = arch_atomic64_add_negative_relaxed(i, v);
-> +	__atomic_post_full_fence();
-> +	return ret;
-> +}
-> +#define arch_atomic64_add_negative arch_atomic64_add_negative
-> +#endif
-> +
-> +#endif /* arch_atomic64_add_negative_relaxed */
-> +
->  #ifndef arch_atomic64_fetch_add_unless
->  /**
->   * arch_atomic64_fetch_add_unless - add unless the number is already a given value
-> @@ -2456,4 +2654,4 @@ arch_atomic64_dec_if_positive(atomic64_t
->  #endif
->  
->  #endif /* _LINUX_ATOMIC_FALLBACK_H */
-> -// b5e87bdd5ede61470c29f7a7e4de781af3770f09
-> +// 63bcc1a53125d4eca5e659892e10615f00f9abf8
-> --- a/include/linux/atomic/atomic-instrumented.h
-> +++ b/include/linux/atomic/atomic-instrumented.h
-> @@ -592,6 +592,28 @@ atomic_add_negative(int i, atomic_t *v)
->  	return arch_atomic_add_negative(i, v);
->  }
->  
-> +static __always_inline bool
-> +atomic_add_negative_acquire(int i, atomic_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_add_negative_acquire(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic_add_negative_release(int i, atomic_t *v)
-> +{
-> +	kcsan_release();
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_add_negative_release(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic_add_negative_relaxed(int i, atomic_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_add_negative_relaxed(i, v);
-> +}
-> +
->  static __always_inline int
->  atomic_fetch_add_unless(atomic_t *v, int a, int u)
->  {
-> @@ -1211,6 +1233,28 @@ atomic64_add_negative(s64 i, atomic64_t
->  	return arch_atomic64_add_negative(i, v);
->  }
->  
-> +static __always_inline bool
-> +atomic64_add_negative_acquire(s64 i, atomic64_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic64_add_negative_acquire(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_add_negative_release(s64 i, atomic64_t *v)
-> +{
-> +	kcsan_release();
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic64_add_negative_release(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic64_add_negative_relaxed(s64 i, atomic64_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic64_add_negative_relaxed(i, v);
-> +}
-> +
->  static __always_inline s64
->  atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
->  {
-> @@ -1830,6 +1874,28 @@ atomic_long_add_negative(long i, atomic_
->  	return arch_atomic_long_add_negative(i, v);
->  }
->  
-> +static __always_inline bool
-> +atomic_long_add_negative_acquire(long i, atomic_long_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_long_add_negative_acquire(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic_long_add_negative_release(long i, atomic_long_t *v)
-> +{
-> +	kcsan_release();
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_long_add_negative_release(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
-> +{
-> +	instrument_atomic_read_write(v, sizeof(*v));
-> +	return arch_atomic_long_add_negative_relaxed(i, v);
-> +}
-> +
->  static __always_inline long
->  atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
->  {
-> @@ -2083,4 +2149,4 @@ atomic_long_dec_if_positive(atomic_long_
->  })
->  
->  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
-> -// 764f741eb77a7ad565dc8d99ce2837d5542e8aee
-> +// 1b485de9cbaa4900de59e14ee2084357eaeb1c3a
-> --- a/include/linux/atomic/atomic-long.h
-> +++ b/include/linux/atomic/atomic-long.h
-> @@ -479,6 +479,24 @@ arch_atomic_long_add_negative(long i, at
->  	return arch_atomic64_add_negative(i, v);
->  }
->  
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_acquire(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic64_add_negative_acquire(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_release(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic64_add_negative_release(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic64_add_negative_relaxed(i, v);
-> +}
-> +
->  static __always_inline long
->  arch_atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
->  {
-> @@ -973,6 +991,24 @@ arch_atomic_long_add_negative(long i, at
->  	return arch_atomic_add_negative(i, v);
->  }
->  
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_acquire(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic_add_negative_acquire(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_release(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic_add_negative_release(i, v);
-> +}
-> +
-> +static __always_inline bool
-> +arch_atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
-> +{
-> +	return arch_atomic_add_negative_relaxed(i, v);
-> +}
-> +
->  static __always_inline long
->  arch_atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
->  {
-> @@ -1011,4 +1047,4 @@ arch_atomic_long_dec_if_positive(atomic_
->  
->  #endif /* CONFIG_64BIT */
->  #endif /* _LINUX_ATOMIC_LONG_H */
-> -// e8f0e08ff072b74d180eabe2ad001282b38c2c88
-> +// a194c07d7d2f4b0e178d3c118c919775d5d65f50
-> --- a/scripts/atomic/atomics.tbl
-> +++ b/scripts/atomic/atomics.tbl
-> @@ -33,7 +33,7 @@ try_cmpxchg		B	v	p:old	i:new
->  sub_and_test		b	i	v
->  dec_and_test		b	v
->  inc_and_test		b	v
-> -add_negative		b	i	v
-> +add_negative		B	i	v
->  add_unless		fb	v	i:a	i:u
->  inc_not_zero		b	v
->  inc_unless_negative	b	v
-> --- a/scripts/atomic/fallbacks/add_negative
-> +++ b/scripts/atomic/fallbacks/add_negative
-> @@ -9,8 +9,8 @@ cat <<EOF
->   * result is greater than or equal to zero.
->   */
->  static __always_inline bool
-> -arch_${atomic}_add_negative(${int} i, ${atomic}_t *v)
-> +arch_${atomic}_add_negative${order}(${int} i, ${atomic}_t *v)
->  {
-> -	return arch_${atomic}_add_return(i, v) < 0;
-> +	return arch_${atomic}_add_return${order}(i, v) < 0;
->  }
->  EOF
-> 
+
