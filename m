@@ -2,211 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AD66C598C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14046C5990
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCVWoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 18:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S229806AbjCVWrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 18:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCVWoR (ORCPT
+        with ESMTP id S229497AbjCVWq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 18:44:17 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC306E90;
-        Wed, 22 Mar 2023 15:44:16 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c18so20628594ple.11;
-        Wed, 22 Mar 2023 15:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679525056;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7IFLnv2wp+6+M4RDOrDXlUdlj/4yQHYPm5exES9iSg=;
-        b=d0r7ofq5hY83b1KFqtk/khmAPHfvgWyeyA3MONIOqMO+HDlgKrSCSYHRBu9oUUxNh0
-         j4EqAQFrGaB9BN7ZmZnfRLFB26ZpAiJMEJnoQxyJHli0iP9bAT/iH7DVxyRFGD+bJPKJ
-         SLBipXnpy6bZPQzbq/pKSi5ySkL0ewxUDi0/JHUXGcSOfS9ASAUCHoG5N3dKZR5lmYBn
-         8pDDQWpd8Og5i0XCV/oMlJ/mbTeh2P7zzsGjJeagqUcCa97pbKfSObAs2UtIl33p5/EE
-         GHfsN5IyZuIzig3G4q4KZLyOfHa48jwasgb2TM9tordUu7H8Qafj78GDSaI4JfkXej/f
-         28qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679525056;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u7IFLnv2wp+6+M4RDOrDXlUdlj/4yQHYPm5exES9iSg=;
-        b=kK4TUdQBl/KLtXYadX8Eh56a2lJAtrdzCrzDDqr4Ikaq5f/ENVRNSzzG4BFuFNoMqW
-         Ya5k0AmLPeunMhob1TBFYQ4d3pwobKsKE7WXv+yp81P33+B+dciykovKCSjEGvHKHnm/
-         BcmRD3uarGx6sC4gs5SOFWDejFGDOgMYZm6KnLix7Zb+2WtUOOVX5/41Olk6zXUMxW3V
-         UN9vm9Xb59R3D5mpoHe6hXh3tQOk/XbnvPH/A4uCQ1yS1qb8UIt20zVjBQCMNwdrxB6f
-         lKsGV4rR+WMgntpRGT9xjJYG4aMORXYEzMbbLv+LWPMlH5b4u+C68p3JuwXn5/0CVRZl
-         z5ZA==
-X-Gm-Message-State: AO0yUKUJg3uZCv6A5iZgrzJcKBpkNxcTr8J+51LPssJzzV3GcCawWJKg
-        nR1a3mGgdoR/CktVzIoOGoI=
-X-Google-Smtp-Source: AK7set/xDVFAvIS+FUJS6LFPnzBnvslEhWBhH930+MmTO6iZlkSX7t7YHlarHpTIx2aAUAoJOtOaRQ==
-X-Received: by 2002:a17:90b:3803:b0:234:a9df:db96 with SMTP id mq3-20020a17090b380300b00234a9dfdb96mr5338431pjb.33.1679525056271;
-        Wed, 22 Mar 2023 15:44:16 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1709026b8500b001a1aeb3a7a9sm9798689plk.137.2023.03.22.15.44.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 15:44:15 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK)
-Subject: [RFC] drm/scheduler: Unwrap job dependencies
-Date:   Wed, 22 Mar 2023 15:44:03 -0700
-Message-Id: <20230322224403.35742-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 22 Mar 2023 18:46:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C32AF2D;
+        Wed, 22 Mar 2023 15:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679525217; x=1711061217;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=HDQsZ+Zd2OeoFbQT7/pK+vspHsprO3oIK582aYdmdL8=;
+  b=lsVkw+q7YSfnu1ao7bte5Hnc/pIPYh+nE6sDpgXA7k4jWj+IdQKUG29q
+   Ep8lMxHQvWuHJjZFQHE2TB0v3diLAMAiQyp+X+0/POfjImugHXspCOUar
+   i2gRep9aVb4WUwEi4dI1QNskA7Wf8ZaoNEbMQ9eU/djCVhrYRYmtm7C1A
+   J3brVQFGDqUxZKhKM+21r+ghqQ6/HSLF1Q5q9v0SVjg/89k0q4FDdhLfw
+   iXg0hXfVT4viRD6tN9tCYkfQBdNdjhrtzqZH/mi7VTbzCsnK8cvhrwQN1
+   oVCOxnw/C8SxTG1Lavf5Rl4iDPzXe+F64qDXx1GSpVxPu3AjNaRRt3Z0z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="341706563"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="341706563"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 15:46:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="928002484"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="928002484"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Mar 2023 15:46:55 -0700
+Received: from anithaha-mobl1.amr.corp.intel.com (unknown [10.209.65.203])
+        by linux.intel.com (Postfix) with ESMTP id AB9AC580CD3;
+        Wed, 22 Mar 2023 15:46:55 -0700 (PDT)
+Message-ID: <ab9bf3032ed46fc0586e089edc5aac6e71b331d8.camel@linux.intel.com>
+Subject: Re: [Intel-gfx] [PATCH] PCI/ASPM: pci_enable_link_state: Add
+ argument to acquire bus lock
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     ville.syrjala@linux.intel.com, nirmal.patel@linux.intel.com,
+        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Wed, 22 Mar 2023 15:46:55 -0700
+In-Reply-To: <20230322205702.GA2493123@bhelgaas>
+References: <20230322205702.GA2493123@bhelgaas>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hi Bjorn,
 
-Container fences have burner contexts, which makes the trick to store at
-most one fence per context somewhat useless if we don't unwrap array or
-chain fences.
+On Wed, 2023-03-22 at 15:57 -0500, Bjorn Helgaas wrote:
+> On Wed, Mar 22, 2023 at 03:45:01PM -0500, Bjorn Helgaas wrote:
+> > Hi David,
+> >=20
+> > On Tue, Mar 21, 2023 at 04:38:49PM -0700, David E. Box wrote:
+> > > The VMD driver calls pci_enabled_link_state as a callback from
+> > > pci_bus_walk. Both will acquire the pci_bus_sem lock leading to a loc=
+kdep
+> > > warning. Add an argument to pci_enable_link_state to set whether the =
+lock
+> > > should be acquired. In the VMD driver, set the argument to false sinc=
+e the
+> > > lock will already be obtained by pci_bus_walk.
+> > >=20
+> > > Reported-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+> > > Fixes: de82f60f9c86 ("PCI/ASPM: Add pci_enable_link_state()")
+> >=20
+> > This means "if your kernel includes de82f60f9c86, you probably want to
+> > backport this fix to it."=C2=A0 But that's not the case here.=C2=A0 Thi=
+s patch
+> > is not fixing an issue with de82f60f9c86, so I don't think there's a
+> > reason to include a "Fixes" line.
+>=20
+> Oops, sorry, forgot to engage brain before hitting "send".
+>=20
+> I think the "Fixes" line should reference f492edb40b54 ("PCI: vmd: Add
+> quirk to configure PCIe ASPM and LTR") instead, since that's where the
+> locking problem started.
+>=20
+> > This patch is adding functionality that is only needed by some other
+> > patch, and it should be part of a series that also includes the patch
+> > that uses it to make sure they go together.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-tbh, I'm not sure why we weren't doing this already, unless there is
-something I'm overlooking
+Yeah this should have been two patches.
 
- drivers/gpu/drm/scheduler/sched_main.c | 43 +++++++++++++++++---------
- 1 file changed, 28 insertions(+), 15 deletions(-)
+>=20
+> And I see that the use *is* included in this patch.=C2=A0 But I don't
+> really like this pattern:
+>=20
+> =C2=A0 vmd_probe
+> =C2=A0=C2=A0=C2=A0 vmd_enable_domain
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vmd->bus =3D pci_create_root_bus(...);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pci_scan_child_bus(vmd->bus);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pci_walk_bus(vmd->bus, vmd_pm_enable_quirk=
+, &features);
+>=20
+> because pci_walk_bus() makes locking complicated (as this issue shows)
+> and it doesn't work for hot-added devices (I don't know if that's an
+> issue for VMD, but the pattern gets copied to places where it *is*).
+>=20
+> Normally vmd_pm_enable_quirk() would be done by making it an actual
+> DECLARE_PCI_FIXUP_HEADER() or DECLARE_PCI_FIXUP_FINAL(), so it would
+> be called automatically by the PCI core when a new device is
+> enumerated.=C2=A0 Would that work here?=C2=A0 If it would, I don't think =
+you'd
+> need to add the extra flag to pci_enable_link_state().
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index c2ee44d6224b..f59e5335afbb 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -41,20 +41,21 @@
-  * 4. Entities themselves maintain a queue of jobs that will be scheduled on
-  *    the hardware.
-  *
-  * The jobs in a entity are always scheduled in the order that they were pushed.
-  */
- 
- #include <linux/kthread.h>
- #include <linux/wait.h>
- #include <linux/sched.h>
- #include <linux/completion.h>
-+#include <linux/dma-fence-unwrap.h>
- #include <linux/dma-resv.h>
- #include <uapi/linux/sched/types.h>
- 
- #include <drm/drm_print.h>
- #include <drm/drm_gem.h>
- #include <drm/gpu_scheduler.h>
- #include <drm/spsc_queue.h>
- 
- #define CREATE_TRACE_POINTS
- #include "gpu_scheduler_trace.h"
-@@ -665,41 +666,27 @@ void drm_sched_job_arm(struct drm_sched_job *job)
- 	sched = entity->rq->sched;
- 
- 	job->sched = sched;
- 	job->s_priority = entity->rq - sched->sched_rq;
- 	job->id = atomic64_inc_return(&sched->job_id_count);
- 
- 	drm_sched_fence_init(job->s_fence, job->entity);
- }
- EXPORT_SYMBOL(drm_sched_job_arm);
- 
--/**
-- * drm_sched_job_add_dependency - adds the fence as a job dependency
-- * @job: scheduler job to add the dependencies to
-- * @fence: the dma_fence to add to the list of dependencies.
-- *
-- * Note that @fence is consumed in both the success and error cases.
-- *
-- * Returns:
-- * 0 on success, or an error on failing to expand the array.
-- */
--int drm_sched_job_add_dependency(struct drm_sched_job *job,
--				 struct dma_fence *fence)
-+static int _add_dependency(struct drm_sched_job *job, struct dma_fence *fence)
- {
- 	struct dma_fence *entry;
- 	unsigned long index;
- 	u32 id = 0;
- 	int ret;
- 
--	if (!fence)
--		return 0;
--
- 	/* Deduplicate if we already depend on a fence from the same context.
- 	 * This lets the size of the array of deps scale with the number of
- 	 * engines involved, rather than the number of BOs.
- 	 */
- 	xa_for_each(&job->dependencies, index, entry) {
- 		if (entry->context != fence->context)
- 			continue;
- 
- 		if (dma_fence_is_later(fence, entry)) {
- 			dma_fence_put(entry);
-@@ -709,20 +696,46 @@ int drm_sched_job_add_dependency(struct drm_sched_job *job,
- 		}
- 		return 0;
- 	}
- 
- 	ret = xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, GFP_KERNEL);
- 	if (ret != 0)
- 		dma_fence_put(fence);
- 
- 	return ret;
- }
-+
-+/**
-+ * drm_sched_job_add_dependency - adds the fence as a job dependency
-+ * @job: scheduler job to add the dependencies to
-+ * @fence: the dma_fence to add to the list of dependencies.
-+ *
-+ * Note that @fence is consumed in both the success and error cases.
-+ *
-+ * Returns:
-+ * 0 on success, or an error on failing to expand the array.
-+ */
-+int drm_sched_job_add_dependency(struct drm_sched_job *job,
-+				 struct dma_fence *fence)
-+{
-+	struct dma_fence_unwrap iter;
-+	struct dma_fence *f;
-+	int ret = 0;
-+
-+	dma_fence_unwrap_for_each (f, &iter, fence) {
-+		ret = _add_dependency(job, f);
-+		if (ret)
-+			break;
-+	}
-+
-+	return ret;
-+}
- EXPORT_SYMBOL(drm_sched_job_add_dependency);
- 
- /**
-  * drm_sched_job_add_resv_dependencies - add all fences from the resv to the job
-  * @job: scheduler job to add the dependencies to
-  * @resv: the dma_resv object to get the fences from
-  * @usage: the dma_resv_usage to use to filter the fences
-  *
-  * This adds all fences matching the given usage from @resv to @job.
-  * Must be called with the @resv lock held.
--- 
-2.39.2
+It should work. I'll test the change.
+
+David
+
+>=20
+> > > Link: https://lore.kernel.org/linux-pci/ZBjko%2FifunIwsK2v@intel.com/
+> > > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> > > ---
+> > > =C2=A0drivers/pci/controller/vmd.c | 2 +-
+> > > =C2=A0drivers/pci/pcie/aspm.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 9 +++++=
++---
+> > > =C2=A0include/linux/pci.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 5 +++--
+> > > =C2=A03 files changed, 10 insertions(+), 6 deletions(-)
+> > >=20
+> > > diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vm=
+d.c
+> > > index 990630ec57c6..45aa35744eae 100644
+> > > --- a/drivers/pci/controller/vmd.c
+> > > +++ b/drivers/pci/controller/vmd.c
+> > > @@ -737,7 +737,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pd=
+ev,
+> > > void *userdata)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!(features & VMD_=
+FEAT_BIOS_PM_QUIRK))
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > =C2=A0
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci_enable_link_state(pdev=
+, PCIE_LINK_STATE_ALL);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pci_enable_link_state(pdev=
+, PCIE_LINK_STATE_ALL, false);
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pos =3D pci_find_ext_=
+capability(pdev, PCI_EXT_CAP_ID_LTR);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!pos)
+> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > index 66d7514ca111..5b5a600bb864 100644
+> > > --- a/drivers/pci/pcie/aspm.c
+> > > +++ b/drivers/pci/pcie/aspm.c
+> > > @@ -1147,8 +1147,9 @@ EXPORT_SYMBOL(pci_disable_link_state);
+> > > =C2=A0 *
+> > > =C2=A0 * @pdev: PCI device
+> > > =C2=A0 * @state: Mask of ASPM link states to enable
+> > > + * @sem: Boolean to acquire/release pci_bus_sem
+> > > =C2=A0 */
+> > > -int pci_enable_link_state(struct pci_dev *pdev, int state)
+> > > +int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
+> > > =C2=A0{
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct pcie_link_stat=
+e *link =3D pcie_aspm_get_link(pdev);
+> > > =C2=A0
+> > > @@ -1165,7 +1166,8 @@ int pci_enable_link_state(struct pci_dev *pdev,=
+ int
+> > > state)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EPERM;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > =C2=A0
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0down_read(&pci_bus_sem);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (sem)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0down_read(&pci_bus_sem);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&aspm_lock=
+);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0link->aspm_default =
+=3D 0;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (state & PCIE_LINK=
+_STATE_L0S)
+> > > @@ -1186,7 +1188,8 @@ int pci_enable_link_state(struct pci_dev *pdev,=
+ int
+> > > state)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0link->clkpm_default =
+=3D (state & PCIE_LINK_STATE_CLKPM) ? 1 : 0;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pcie_set_clkpm(link, =
+policy_to_clkpm_state(link));
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_unlock(&aspm_lo=
+ck);
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0up_read(&pci_bus_sem);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (sem)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0up_read(&pci_bus_sem);
+> > > =C2=A0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > =C2=A0}
+> > > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > > index fafd8020c6d7..a6f9f24b39fd 100644
+> > > --- a/include/linux/pci.h
+> > > +++ b/include/linux/pci.h
+> > > @@ -1707,7 +1707,7 @@ extern bool pcie_ports_native;
+> > > =C2=A0#ifdef CONFIG_PCIEASPM
+> > > =C2=A0int pci_disable_link_state(struct pci_dev *pdev, int state);
+> > > =C2=A0int pci_disable_link_state_locked(struct pci_dev *pdev, int sta=
+te);
+> > > -int pci_enable_link_state(struct pci_dev *pdev, int state);
+> > > +int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)=
+;
+> > > =C2=A0void pcie_no_aspm(void);
+> > > =C2=A0bool pcie_aspm_support_enabled(void);
+> > > =C2=A0bool pcie_aspm_enabled(struct pci_dev *pdev);
+> > > @@ -1716,7 +1716,8 @@ static inline int pci_disable_link_state(struct
+> > > pci_dev *pdev, int state)
+> > > =C2=A0{ return 0; }
+> > > =C2=A0static inline int pci_disable_link_state_locked(struct pci_dev =
+*pdev, int
+> > > state)
+> > > =C2=A0{ return 0; }
+> > > -static inline int pci_enable_link_state(struct pci_dev *pdev, int st=
+ate)
+> > > +static inline int
+> > > +pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
+> > > =C2=A0{ return 0; }
+> > > =C2=A0static inline void pcie_no_aspm(void) { }
+> > > =C2=A0static inline bool pcie_aspm_support_enabled(void) { return fal=
+se; }
+> > > --=20
+> > > 2.34.1
+> > >=20
 
