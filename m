@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DE96C5216
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3A96C5217
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjCVRQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S231408AbjCVRQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjCVRP5 (ORCPT
+        with ESMTP id S231442AbjCVRP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 13:15:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3071562B6E;
-        Wed, 22 Mar 2023 10:15:26 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso922070wmo.0;
-        Wed, 22 Mar 2023 10:15:26 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDB36487D;
+        Wed, 22 Mar 2023 10:15:27 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so6717370wmq.4;
+        Wed, 22 Mar 2023 10:15:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505324;
+        d=gmail.com; s=20210112; t=1679505325;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hxcHrlsE//QuvJuOK3pbjMlstNP3JEw2xAmrcUtcbhs=;
-        b=T5TktDVxzliUxnC99ZrKsAZv2D0J809LAueD3aEEEk+iWS4XwHy5OdozlLiDxpnbTv
-         0Ig5/zisKpN/yV1SwCZGJtGbDYHoi4uSNIHA5I9sQc4TI/YQRNtts8oJwn/zBgrrqrkr
-         Mb6MnBhsuViS0EbvuMzzh9ymoHT1+3OxYBzVfAPn/1dVoXa/5WX2PlBZmaHGFGx7t8Yg
-         juV1bpGZRDqzsyoBrvQOxgi9UiCt7IwdopXxaxJe/sGbnExcNFsKNzmigvTKzDw+pkYr
-         0jLz/AtisVrojL/sSozf3lxR1P7kcqrAtkSyO7+XoLzajCdZaEsXjrLeVR+e0oSeIbsN
-         hBVw==
+        bh=rkv/eZYA1ncHp5FnV2ZWc3hgYnAx28S86QA9vmcXFCY=;
+        b=Y1mva2Bt3sUbKxLgEUS331CJbGxUc4z8kTQW8qiHWGhYlFKtm+d5z4sT40E5BeZAnU
+         zmTbCI7jbroe9NYBxGUmSli6LNVDPjND80ChbhWTqbqMQTmeQFWut9KmeBWK6Oze2lC/
+         XMSOorUzowjcU2xtHNrzoq2KH2pstW573lsB8WnzFVfhMaRkE9DfRr6WNyA7zC8DyxM5
+         ezxlCQtCmgPfCqlyksbIDKrgrRf3GiUR0yUd6xRU+MssyvH1FkYGDCerPctDto6lGHBz
+         8Y15jT3l6OnQMT6dkekgpPF5/XrSUY93u9g0B4U8+0dhNj+K7vmDen+jqdess+tpLnq/
+         gFrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505324;
+        d=1e100.net; s=20210112; t=1679505325;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hxcHrlsE//QuvJuOK3pbjMlstNP3JEw2xAmrcUtcbhs=;
-        b=wbV122JwSeJz+9YZ65mW7+h/91S39TGveo5t4+PlJb906P0LzGjcc7Vsd6Ipb5GHV7
-         eFgzio9CcrJXJXADj9WK19ENKNk4IEpQSi+ZW5hi0JurnZSGqPw+Qlx0Y069+TOUWbR8
-         dVoW6pl7vwFtN1gdG7i8pDHgMMATkS61N5RsGnMc2qK0WJTky8TGbFEI5bDXfdFioSey
-         IWgPsaHwU0GguHuf+9mA6610s3s5SqkPHw1ZuwUjscVswgdmL8Ku63nAsHOEL3HnqjqT
-         H1R/8fQ5Z9sYYvk4hFjpAz+zpReMc7NZwAjxzv11QxKAaWpFHrJMyNA3z48fNg6hBrDX
-         IhUg==
-X-Gm-Message-State: AO0yUKVgO4Wk8A+rKMT7sOnvf0zM0xfwmDw6cHM+jI5ardLobia2cCBo
-        NoBUc+5q8lQXKW69maKmkTA=
-X-Google-Smtp-Source: AK7set/sulvTXWCsaOiQOQtXBYZKorHMy47DIJBhzabtkFvhqbqqYlk62RSr8eHpcbj5qOpj0t1qGA==
-X-Received: by 2002:a7b:c049:0:b0:3ed:e6c8:f11d with SMTP id u9-20020a7bc049000000b003ede6c8f11dmr232940wmc.7.1679505324531;
-        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
+        bh=rkv/eZYA1ncHp5FnV2ZWc3hgYnAx28S86QA9vmcXFCY=;
+        b=Ym4+u8bbTQGNkewUBrLf+89vE0EFJBQp2f1crwUxZFboKTROF9ltZonY1CGepo7b0B
+         fkx3TbWQy5X65g3ScuieqtClCI8WanPeNBJ48+JipJYO3ODVNBxnVaTuW/0FOIcahfqe
+         sG5GvggHhzRz+Yeybsbnupmzxnw8Ez0BpMl3p7zcjHL7BGZDdOOX2Zbw3zfyYa5sg2nX
+         UXYJT36zy2h39gxUsy9QkhQ76CG3w6omniohZpYidpojpiDjbOy0nKFky4kUe+YyA1fF
+         4IBhjAm6mH+uh6wHSG1qj+NAXHs0xDDJps16PbJwAgL7Qt9K5WW+R/UAYPmHFgaRIHOw
+         /seA==
+X-Gm-Message-State: AO0yUKXRtoYO8Nfus6Ca8lhM39P1Xn6TGkhatEfoISd1YNOkTJJN2hW+
+        xRphLgxlzNfCLcVPlpGK9dk=
+X-Google-Smtp-Source: AK7set9VnMEykugk8ZYnkXuqK41bX1dzlvKsAXHEjr8i2NZBld0buKhQLcGYEcwxnBgVTtC7eRGfXw==
+X-Received: by 2002:a1c:7c0b:0:b0:3e2:1dac:b071 with SMTP id x11-20020a1c7c0b000000b003e21dacb071mr178053wmc.13.1679505325582;
+        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
 Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.23
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
+        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -58,10 +58,10 @@ To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         william.zhang@broadcom.com, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 3/4] dt-bindings: clock: Add BCM63268 timer binding
-Date:   Wed, 22 Mar 2023 18:15:14 +0100
-Message-Id: <20230322171515.120353-4-noltari@gmail.com>
+        <noltari@gmail.com>
+Subject: [PATCH v4 4/4] clk: bcm: Add BCM63268 timer clock and reset driver
+Date:   Wed, 22 Mar 2023 18:15:15 +0100
+Message-Id: <20230322171515.120353-5-noltari@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230322171515.120353-1-noltari@gmail.com>
 References: <20230322171515.120353-1-noltari@gmail.com>
@@ -70,73 +70,284 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the Broadcom BCM63268 Clock and Reset controller.
+Add driver for BCM63268 timer clock and reset controller.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- v4: no changes
- v3: no changes
- v2: no changes
+ v4: add changes suggested by Stephen Boyd:
+  - Usage of of_device_get_match_data() isn't needed.
+  - Use devm_clk_hw_register_gate().
+  - Drop clk_hw_unregister_gate().
+ v3: add missing <linux/io.h> include to fix build warning
+ v2: add changes suggested by Stephen Boyd
 
- .../clock/brcm,bcm63268-timer-clocks.yaml     | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml
+ drivers/clk/bcm/Kconfig              |   9 ++
+ drivers/clk/bcm/Makefile             |   1 +
+ drivers/clk/bcm/clk-bcm63268-timer.c | 215 +++++++++++++++++++++++++++
+ 3 files changed, 225 insertions(+)
+ create mode 100644 drivers/clk/bcm/clk-bcm63268-timer.c
 
-diff --git a/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml
+diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
+index 77266afb1c79..a972d763eb77 100644
+--- a/drivers/clk/bcm/Kconfig
++++ b/drivers/clk/bcm/Kconfig
+@@ -37,6 +37,15 @@ config CLK_BCM_63XX_GATE
+ 	  Enable common clock framework support for Broadcom BCM63xx DSL SoCs
+ 	  based on the MIPS architecture
+ 
++config CLK_BCM63268_TIMER
++	bool "Broadcom BCM63268 timer clock and reset support"
++	depends on BMIPS_GENERIC || COMPILE_TEST
++	default BMIPS_GENERIC
++	select RESET_CONTROLLER
++	help
++	  Enable timer clock and reset support for Broadcom BCM63268 DSL SoCs
++	  based on the MIPS architecture.
++
+ config CLK_BCM_KONA
+ 	bool "Broadcom Kona CCU clock support"
+ 	depends on ARCH_BCM_MOBILE || COMPILE_TEST
+diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
+index edb66b44cb27..d0b6f4b1fb08 100644
+--- a/drivers/clk/bcm/Makefile
++++ b/drivers/clk/bcm/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_CLK_BCM_63XX)	+= clk-bcm63xx.o
+ obj-$(CONFIG_CLK_BCM_63XX_GATE)	+= clk-bcm63xx-gate.o
++obj-$(CONFIG_CLK_BCM63268_TIMER) += clk-bcm63268-timer.o
+ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona.o
+ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona-setup.o
+ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm281xx.o
+diff --git a/drivers/clk/bcm/clk-bcm63268-timer.c b/drivers/clk/bcm/clk-bcm63268-timer.c
 new file mode 100644
-index 000000000000..199818b2fb6d
+index 000000000000..3631a343f0a4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/brcm,bcm63268-timer-clocks.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/clk/bcm/clk-bcm63268-timer.c
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * BCM63268 Timer Clock and Reset Controller Driver
++ *
++ * Copyright (C) 2023 Álvaro Fernández Rojas <noltari@gmail.com>
++ */
 +
-+title: Broadcom BCM63268 Timer Clock and Reset Device Tree Bindings
++#include <linux/clk-provider.h>
++#include <linux/delay.h>
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/reset-controller.h>
 +
-+maintainers:
-+  - Álvaro Fernández Rojas <noltari@gmail.com>
++#include <dt-bindings/clock/bcm63268-clock.h>
 +
-+properties:
-+  compatible:
-+    const: brcm,bcm63268-timer-clocks
++#define BCM63268_TIMER_RESET_SLEEP_MIN_US	10000
++#define BCM63268_TIMER_RESET_SLEEP_MAX_US	20000
 +
-+  reg:
-+    maxItems: 1
++struct bcm63268_tclkrst_hw {
++	void __iomem *regs;
++	spinlock_t lock;
 +
-+  "#clock-cells":
-+    const: 1
++	struct reset_controller_dev rcdev;
++	struct clk_hw_onecell_data data;
++};
 +
-+  "#reset-cells":
-+    const: 1
++struct bcm63268_tclk_table_entry {
++	const char * const name;
++	u8 bit;
++};
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - "#reset-cells"
++static const struct bcm63268_tclk_table_entry bcm63268_timer_clocks[] = {
++	{
++		.name = "ephy1",
++		.bit = BCM63268_TCLK_EPHY1,
++	}, {
++		.name = "ephy2",
++		.bit = BCM63268_TCLK_EPHY2,
++	}, {
++		.name = "ephy3",
++		.bit = BCM63268_TCLK_EPHY3,
++	}, {
++		.name = "gphy1",
++		.bit = BCM63268_TCLK_GPHY1,
++	}, {
++		.name = "dsl",
++		.bit = BCM63268_TCLK_DSL,
++	}, {
++		.name = "wakeon_ephy",
++		.bit = BCM63268_TCLK_WAKEON_EPHY,
++	}, {
++		.name = "wakeon_dsl",
++		.bit = BCM63268_TCLK_WAKEON_DSL,
++	}, {
++		.name = "fap1_pll",
++		.bit = BCM63268_TCLK_FAP1,
++	}, {
++		.name = "fap2_pll",
++		.bit = BCM63268_TCLK_FAP2,
++	}, {
++		.name = "uto_50",
++		.bit = BCM63268_TCLK_UTO_50,
++	}, {
++		.name = "uto_extin",
++		.bit = BCM63268_TCLK_UTO_EXTIN,
++	}, {
++		.name = "usb_ref",
++		.bit = BCM63268_TCLK_USB_REF,
++	}, {
++		/* sentinel */
++	}
++};
 +
-+additionalProperties: false
++static inline struct bcm63268_tclkrst_hw *
++to_bcm63268_timer_reset(struct reset_controller_dev *rcdev)
++{
++	return container_of(rcdev, struct bcm63268_tclkrst_hw, rcdev);
++}
 +
-+examples:
-+  - |
-+    timer_clk: clock-controller@100000ac {
-+      compatible = "brcm,bcm63268-timer-clocks";
-+      reg = <0x100000ac 0x4>;
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+    };
++static int bcm63268_timer_reset_update(struct reset_controller_dev *rcdev,
++				unsigned long id, bool assert)
++{
++	struct bcm63268_tclkrst_hw *reset = to_bcm63268_timer_reset(rcdev);
++	unsigned long flags;
++	uint32_t val;
++
++	spin_lock_irqsave(&reset->lock, flags);
++	val = __raw_readl(reset->regs);
++	if (assert)
++		val &= ~BIT(id);
++	else
++		val |= BIT(id);
++	__raw_writel(val, reset->regs);
++	spin_unlock_irqrestore(&reset->lock, flags);
++
++	return 0;
++}
++
++static int bcm63268_timer_reset_assert(struct reset_controller_dev *rcdev,
++				unsigned long id)
++{
++	return bcm63268_timer_reset_update(rcdev, id, true);
++}
++
++static int bcm63268_timer_reset_deassert(struct reset_controller_dev *rcdev,
++				  unsigned long id)
++{
++	return bcm63268_timer_reset_update(rcdev, id, false);
++}
++
++static int bcm63268_timer_reset_reset(struct reset_controller_dev *rcdev,
++			       unsigned long id)
++{
++	bcm63268_timer_reset_update(rcdev, id, true);
++	usleep_range(BCM63268_TIMER_RESET_SLEEP_MIN_US,
++		     BCM63268_TIMER_RESET_SLEEP_MAX_US);
++
++	bcm63268_timer_reset_update(rcdev, id, false);
++	/*
++	 * Ensure component is taken out reset state by sleeping also after
++	 * deasserting the reset. Otherwise, the component may not be ready
++	 * for operation.
++	 */
++	usleep_range(BCM63268_TIMER_RESET_SLEEP_MIN_US,
++		     BCM63268_TIMER_RESET_SLEEP_MAX_US);
++
++	return 0;
++}
++
++static int bcm63268_timer_reset_status(struct reset_controller_dev *rcdev,
++				unsigned long id)
++{
++	struct bcm63268_tclkrst_hw *reset = to_bcm63268_timer_reset(rcdev);
++
++	return !(__raw_readl(reset->regs) & BIT(id));
++}
++
++static struct reset_control_ops bcm63268_timer_reset_ops = {
++	.assert = bcm63268_timer_reset_assert,
++	.deassert = bcm63268_timer_reset_deassert,
++	.reset = bcm63268_timer_reset_reset,
++	.status = bcm63268_timer_reset_status,
++};
++
++static int bcm63268_tclk_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	const struct bcm63268_tclk_table_entry *entry;
++	struct bcm63268_tclkrst_hw *hw;
++	struct clk_hw *clk;
++	u8 maxbit = 0;
++	int i, ret;
++
++	for (entry = bcm63268_timer_clocks; entry->name; entry++)
++		maxbit = max(maxbit, entry->bit);
++	maxbit++;
++
++	hw = devm_kzalloc(&pdev->dev, struct_size(hw, data.hws, maxbit),
++			  GFP_KERNEL);
++	if (!hw)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, hw);
++
++	spin_lock_init(&hw->lock);
++
++	hw->data.num = maxbit;
++	for (i = 0; i < maxbit; i++)
++		hw->data.hws[i] = ERR_PTR(-ENODEV);
++
++	hw->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(hw->regs))
++		return PTR_ERR(hw->regs);
++
++	for (entry = bcm63268_timer_clocks; entry->name; entry++) {
++		clk = devm_clk_hw_register_gate(dev, entry->name, NULL, 0,
++						hw->regs, entry->bit,
++						CLK_GATE_BIG_ENDIAN,
++						&hw->lock);
++		if (IS_ERR(clk))
++			return PTR_ERR(clk);
++
++		hw->data.hws[entry->bit] = clk;
++	}
++
++	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
++					  &hw->data);
++	if (ret)
++		return ret;
++
++	hw->rcdev.of_node = dev->of_node;
++	hw->rcdev.ops = &bcm63268_timer_reset_ops;
++
++	ret = devm_reset_controller_register(dev, &hw->rcdev);
++	if (ret)
++		dev_err(dev, "Failed to register reset controller\n");
++
++	return 0;
++}
++
++static const struct of_device_id bcm63268_tclk_dt_ids[] = {
++	{ .compatible = "brcm,bcm63268-timer-clocks" },
++	{ /* sentinel */ }
++};
++
++static struct platform_driver bcm63268_tclk = {
++	.probe = bcm63268_tclk_probe,
++	.driver = {
++		.name = "bcm63268-timer-clock",
++		.of_match_table = bcm63268_tclk_dt_ids,
++	},
++};
++builtin_platform_driver(bcm63268_tclk);
 -- 
 2.30.2
 
