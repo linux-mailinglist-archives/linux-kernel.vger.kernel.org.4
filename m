@@ -2,68 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8F26C530B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E306C5311
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjCVRwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S230388AbjCVRwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjCVRwE (ORCPT
+        with ESMTP id S230337AbjCVRwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:52:04 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4562065113
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:52:03 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id e36-20020a631e24000000b0050f76fb84b6so3050979pge.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:52:03 -0700 (PDT)
+        Wed, 22 Mar 2023 13:52:21 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770667028
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:52:16 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id r11so76299177edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:52:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679507523;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZTwETswiMkR6MsJjj+d7N8Pb7VPbOvVsKiiVr9TOhM=;
-        b=i5+mifpqoOF/KxF3sUQl2/YU4M7kOnSQCVi7BGq43pujy0oUUBe8hPcWfsLGYLtG2m
-         NSWswmC+HelxhvUeFVi96enYnxro0IrBcV1F8hUHYm6ihUptDyofwPVDeVmWnluPN4HP
-         HRf5b33RDynRy5Y+O3asK9iHxQHDn7pOA9FXeGaGkmvyvvYPcU+Xo0AqeWHb75LvpXHh
-         sEffnSPQ2LbrSDwhGGIpWGHUz6DtdDawZV5p6zKiRZT0zGS0Kv+JN6aMnb3fQ7nqDoyi
-         T9Tu517oJGvpdQBkdLcni99k6uilxYjJokNEdA1jOwVCRoACOawG30Jl92aK1QIYTxQW
-         +Arw==
+        d=linaro.org; s=google; t=1679507534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wh4Z1xlqDztZUH1w7IbXNlkUYB0pflLL3OVprobSnZc=;
+        b=WcgQoZMSV/a0eQ9pzfFJS6PJOkUq4BOxRnUsYi1tODvQhCM6XAVIzZ656d7dRAo45m
+         jkaqVR41zmD3Evi/JdVzZeSvpsycq/g8HfPdXGdmzr9IHdZ4ZYUYgWDA35WIKSb8qs3K
+         4GBwCIqYJvd3cfwJ5x7LEfjiVp+qyWH9wtr6wChbhNsNKvXjgYhh4zcK+vRgLQR26xTM
+         vlUm34N7H5q/KUnatolWI/y9cmvYTiN/H/0GTnQrgx0ot2jx13y5wzrOogaDdd4VVVD4
+         g0zGgYhpbxRwUZOUoELIh4LuhRgOf63m18hB+Av+4hLt4x54//xRNZQqSjygqbRAADne
+         KPpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679507523;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZTwETswiMkR6MsJjj+d7N8Pb7VPbOvVsKiiVr9TOhM=;
-        b=ospSy09kMA+IKSOdVkc938vI4ncuh61DQqlUGCyBvCEq0UubFjW0SmYbkc7BcAwVqQ
-         WCinWtfyAC+GI5+vSiDEvkdLvo+452q5swbSa8DtXhWnQ85cb48ZYJLXSOa7MC732EKB
-         T8IYW8xRi0TwPg2UHxNfmpdEZdXCQ4IdhQtuEuvFbdsgE4bhPRi+PZrQ7j+eua+0tsOc
-         +hCfnUwN7g4hOtcccrSvXDaHv7qxY2vIm/zLKyHrWdndxcD/xpbre1LuVnag8XxAF0de
-         cfJ2wVlt7i3YI9fFLX9sRlM3Mbb3DdQyOALPy6cGR4lhBsZwT5LJh4Ep9FKN4U+02aWQ
-         lQXA==
-X-Gm-Message-State: AO0yUKW9mF1GnAqe6M0FQLGOcyfDQ8IUSF+x79Zy/aOCJNnU42ajtyZH
-        dEuUBWB+cR//R41LtNhMuY9vdEc0xaU=
-X-Google-Smtp-Source: AK7set+RGHNA/eCwuNR2wbBn238UqLumF+xL7hx3F6oNRxE1rmepDqciOMOmxEg+y7rjgstoo1w3iS7S8xg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:22c1:b0:1a0:6b23:7b55 with SMTP id
- y1-20020a17090322c100b001a06b237b55mr1415684plg.4.1679507522821; Wed, 22 Mar
- 2023 10:52:02 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 10:52:01 -0700
-In-Reply-To: <20230307023946.14516-6-xin3.li@intel.com>
-Mime-Version: 1.0
-References: <20230307023946.14516-1-xin3.li@intel.com> <20230307023946.14516-6-xin3.li@intel.com>
-Message-ID: <ZBtAQc8Jz5GWGrJr@google.com>
-Subject: Re: [PATCH v5 05/34] x86/traps: export external_interrupt() for VMX
- IRQ reinjection
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        andrew.cooper3@citrix.com, pbonzini@redhat.com,
-        ravi.v.shankar@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1679507534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wh4Z1xlqDztZUH1w7IbXNlkUYB0pflLL3OVprobSnZc=;
+        b=ZQs+XtjN6SZ0Tzaw2R2c4rcrlMJyREgCLiisoxLdSPtcRDkMWuA12XAdyW2shQwHCP
+         Gky5DmqB8oRaIfeMCeWkvadm1KR7c4bKr1F7h+5Vva2aQZ1nFuF8WECKiA0xZ980IIyP
+         mO++Tr6HVVCR4kROZL97RT/nA0UcvqpbZkC5V5K+Bxsr1CSxevXd7vvt2jCI4b1pucU5
+         TorDwUDvRO+Nhd+JmKStnxpyX4LYB8YpQTx+iiC9yK4mIosDm2K1nJWQ1oEnjtpG1Tdb
+         2uXev9WtdFk6930iLf/y9WCcosqbD8hdo8IZBdyWvbWkq53m4WTor8OqrWN7u5lGdge1
+         jb3w==
+X-Gm-Message-State: AO0yUKXpALp4uHlJxpevYXejW5Y+MyDK8ax7nkMEC3AZwhRpS/gqQLwO
+        QDH55cY6lh38xFsY92Dw7ZuMWw==
+X-Google-Smtp-Source: AK7set/w/Af4r7ZkWY5/EYuLO7gRu4DNAGQ4mEA4NNMEcc/QIJ5nDOUWk6vdiJaM+ZJYjQJK7+8P1Q==
+X-Received: by 2002:aa7:c053:0:b0:4fc:6475:d249 with SMTP id k19-20020aa7c053000000b004fc6475d249mr6466295edo.3.1679507534645;
+        Wed, 22 Mar 2023 10:52:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
+        by smtp.gmail.com with ESMTPSA id t22-20020a50d716000000b004af6163f845sm8115519edi.28.2023.03.22.10.52.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 10:52:14 -0700 (PDT)
+Message-ID: <2087e394-afa6-f1c0-cfc1-df382b2d13d3@linaro.org>
+Date:   Wed, 22 Mar 2023 18:52:12 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] dt-bindings: clock: Drop unneeded quotes
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20230322173549.3972106-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230322173549.3972106-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +93,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023, Xin Li wrote:
-> To eliminate dispatching IRQ through the IDT, export external_interrupt()
-> for VMX IRQ reinjection.
+On 22/03/2023 18:35, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 > 
-> Tested-by: Shan Kang <shan.kang@intel.com>
-> Signed-off-by: Xin Li <xin3.li@intel.com>
-> ---
->  arch/x86/include/asm/traps.h |  2 ++
->  arch/x86/kernel/traps.c      | 14 ++++++++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-> index 46f5e4e2a346..da4c21ed68b4 100644
-> --- a/arch/x86/include/asm/traps.h
-> +++ b/arch/x86/include/asm/traps.h
-> @@ -56,4 +56,6 @@ void __noreturn handle_stack_overflow(struct pt_regs *regs,
->  	void f (struct pt_regs *regs)
->  typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
->  
-> +int external_interrupt(struct pt_regs *regs, unsigned int vector);
-> +
->  #endif /* _ASM_X86_TRAPS_H */
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 31ad645be2fb..cebba1f49e19 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -1540,6 +1540,20 @@ int external_interrupt(struct pt_regs *regs, unsigned int vector)
->  	return 0;
->  }
->  
-> +#if IS_ENABLED(CONFIG_KVM_INTEL)
-> +/*
-> + * KVM VMX reinjects IRQ on its current stack, it's a sync call
-> + * thus the values in the pt_regs structure are not used in
-> + * executing IRQ handlers, except cs.RPL and flags.IF, which
-> + * are both always 0 in the VMX IRQ reinjection context.
-> + *
-> + * However, the pt_regs structure is sometimes used in stack
-> + * dump, e.g., show_regs(). So let the caller, i.e., KVM VMX
-> + * decide how to initialize the input pt_regs structure.
-> + */
-> +EXPORT_SYMBOL_GPL(external_interrupt);
-> +#endif
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-If the x86 maintainers don't object, I would prefer this to be squashed with the
-actual KVM usage, that way discussions on exactly what the exported API should be
-can be contained in a single thread.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
