@@ -2,121 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CFA6C5352
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F4C6C5358
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjCVSJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        id S230184AbjCVSL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjCVSJm (ORCPT
+        with ESMTP id S229501AbjCVSLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:09:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8216C64B38
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:09:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE03062214
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:09:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA23EC433EF;
-        Wed, 22 Mar 2023 18:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679508565;
-        bh=rKyFWBTQcPTAVIuUKruObSLtclAXQDlxYQfje95ORrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TyVFQc7wqlWQGlRcU0TuT1nvKcoMi/ban0h9rLhxT3EKvCQ1mhz1X5YUznVkPmJUw
-         KLLiNmsFC0Jh52oNMVAVrUYpHH0wMP/lDF03hN0Zts6HKnD4hUZOnXjhWzuSUKBK7U
-         //8xvM3ovlHH2+E7B/TX/ZJXjfwv5CqXJKrYAyiKVFd71wxXN6zB3SxEMCY/WvWxMD
-         BXjKp4/WVybJiWfSydGfCuzkgjjKVD/oCgRqi0mH2heL8Nzpjxd5lB6kNCEtloJM1E
-         wtdwUSERRJ+oSpEbk8luVT/bNNTCsTOVhakgGmCT4/uVG5YNj3bIOsLlybiiLc5apq
-         9bLTI8wRLSzeA==
-Date:   Wed, 22 Mar 2023 11:09:22 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 08/11] arm64/static_call: Fix static call CFI
- violations
-Message-ID: <20230322180922.htvb2zau2w7oichy@treble>
-References: <cover.1679456900.git.jpoimboe@kernel.org>
- <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
- <ZBry75KS3F+a0VM0@FVFF77S0Q05N>
+        Wed, 22 Mar 2023 14:11:55 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8499464A81;
+        Wed, 22 Mar 2023 11:11:54 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n19so1833175wms.0;
+        Wed, 22 Mar 2023 11:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679508713;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wH9gz+uMM82vCmnLttArcGg6W9CwxF2l6yihMvMNQwM=;
+        b=YiGAJ1zflo1QS4PsNbTOmua7Q+uSsVMaUMSruW1QNVW1ikgt8HoUCgM8TgXWoAjSBz
+         FkL//ytmdorCrCfmGGMAkpehPWjmBppCxEWT4THazv+EkThGuiQLkkfkTjUfO39bwgcf
+         8XrRTiLW5IIf40t70D9LqOdJhc8+H+WHtZQILMZQuUYIS+6mQMVIeqKlGvbxr5Zh6+f1
+         7wTM69agtP8cuJPg5e3wlINEU5elWzpPHiemwicZ7mX5BHPLlHfwh5i0OQlVmRuPZTiS
+         xbyAj3+1k7ehqU6HQfCtxs1NA2pckKqidsjJgVbkOcG4M+/d2Xa9+ZuIuNRVLp1KvdGu
+         T/Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679508713;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wH9gz+uMM82vCmnLttArcGg6W9CwxF2l6yihMvMNQwM=;
+        b=oKffFLIB3qWrBqQN/kYQO5Kamg8piGwb8tYdPXhlBzz0tAx3+7yijX1TBTQpANb7O0
+         R+7NLO8SahgMDdYT2DG8Ptw1UZJyQoM9a54Wz8xIaL00pzlbg+zktmhszzNmefQO6/jW
+         qszI5HShF6lO8P2o77EbDf4Pf8UgpAr1JHi9nX6Pd/7RoT3f7yM/OLxLMJxa9TvmAlsh
+         b4OEx3HCFt68NFdKwXE+FIEYe7V154mfmC///CvObc0X3F6cyAL0eaMglWaUfkTtS5Yp
+         Pl57cHppdjujXunGAQLnLFBgNln47670Cg9BP/efeFnnPFsm53t57S9kJ7A3oNmcw9/T
+         nOjg==
+X-Gm-Message-State: AO0yUKUT1E4T5h9h2ZMh4c0p5OF3fyozjozt0eUP2aUpNnp5YaK33BMu
+        YL+qXYC/ItyX9YSzg2GYt/thfT2fNVjN+A==
+X-Google-Smtp-Source: AK7set+GDmjksRoXYfoH2H1YV/xncp5rkqdyO6qld78vYYrfz0Lza0R/8Wk31rvQzQmWq2hAM4OjkA==
+X-Received: by 2002:a1c:f709:0:b0:3ed:c763:2765 with SMTP id v9-20020a1cf709000000b003edc7632765mr354755wmh.7.1679508712828;
+        Wed, 22 Mar 2023 11:11:52 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm12070729wmg.33.2023.03.22.11.11.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 11:11:51 -0700 (PDT)
+Message-ID: <bf1c475c-b98c-7381-33c0-602c2ab6349a@gmail.com>
+Date:   Wed, 22 Mar 2023 18:11:50 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZBry75KS3F+a0VM0@FVFF77S0Q05N>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3] stress-module: stress finit_module() and
+ delete_module()
+To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        a.manzanares@samsung.com, fan.ni@samsung.com,
+        vincent.fu@samsung.com
+References: <20230322032350.3439056-1-mcgrof@kernel.org>
+ <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
+Content-Language: en-US
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:22:07PM +0000, Mark Rutland wrote:
-> > The problem is that the __perf_guest_state() static call does an
-> > indirect branch to __static_call_return0(), which isn't CFI-compliant.
+On 22/03/2023 18:04, Luis Chamberlain wrote:
+> On Tue, Mar 21, 2023 at 08:23:50PM -0700, Luis Chamberlain wrote:
+>> Example uses:
+>>
+>> sudo ./stress-ng --module 1 --module-name xfs
+>> sudo ./stress-ng --module 1 --module-name xfs --module-sharedfd
 > 
-> IIUC that'd be broken even with the old CFI mechanism, since commit:
+> The use case with --module 8192 was causing some errors from
+> stress-ng having unexpected bail out messages before ramp up.
 > 
->   87b940a0675e2526 ("perf/core: Use static_call to optimize perf_guest_info_callbacks")
+>> diff --git a/stress-module.c b/stress-module.c
+>> new file mode 100644
+>> index 00000000..cee581bd
+>> --- /dev/null
+>> +++ b/stress-module.c
+>> +			//snprintf(module_path, strlen(module_path), "%s/%s/%s",
+>> +			snprintf(module_path, PATH_MAX*2, "%s/%s/%s",
+>> +				 dirname_default_prefix,
+>> +				 u.release, module);
+>> +			ret = 0;
 > 
-> If so, we probably want a Fixes tag?
+> I forgot to remove this stray comment.
 
-Yeah, it should definitely get a Fixes tag.  I wasn't quite sure if this
-bug started with the above commit or with the CFI_CLANG switch to kcfi.
-And then I forgot to investigate.
+No worries, I can fix that up when I apply the patch.
 
-> > +/* Generate a CFI-compliant static call NOP function */
-> > +#define __ARCH_DEFINE_STATIC_CALL_CFI(name, insns)			\
-> > +	asm(".align 4						\n"	\
-> > +	    ".word __kcfi_typeid_" name "			\n"	\
-> > +	    ".globl " name "					\n"	\
-> > +	    name ":						\n"	\
-> > +	    "bti c						\n"	\
-> > +	    insns "						\n"	\
-> > +	    "ret						\n"	\
-> > +	    ".type " name ", @function				\n"	\
-> > +	    ".size " name ", . - " name "			\n")
-> > +
-> > +#define __ARCH_DEFINE_STATIC_CALL_RET0_CFI(name)			\
-> > +	GEN_CFI_SYM(STATIC_CALL_RET0_CFI(name));			\
-> > +	__ARCH_DEFINE_STATIC_CALL_CFI(STATIC_CALL_RET0_CFI_STR(name), "mov x0, xzr")
 > 
-> This looks correct, but given we're generating a regular functions it's
-> unfortunate we can't have the compiler generate the actual code with something
-> like:
+>> +	/*
+>> +	 * We're not stressing the modules.dep --> module path lookup,
+>> +	 * just the finit_module() calls and so only do the lookup once.
+>> +	 */
+>> +	if (args->instance != 0) {
+>> +		if (!module_path_found)
+>> +			return EXIT_SUCCESS;
+>> +	}
 > 
-> #define __ARCH_DEFINE_STATIC_CALL_RET0_CFI(rettype, name, args...)	\
-> rettype name(args)							\
-> {									\
-> 	return (rettype)0;						\
-> }
+> So here was the reason for the complaints, Although changing this to
+> return just EXIT_NO_RESOURCE cures the warning, I don't think the
+> non instance 0 workers are doing anything then. Is that right Colin?
+
+I'll have a look at that when I test this out later tonight.
+
 > 
-> ... but I guess passing the rettype and args around is painful.
+>    Luis
 
-Hm, I hadn't considered that.  I'll play around with it.
-
-> Regardless, I gave this a spin atop v6.3-rc3 using LLVM 16.0.0 and CFI_CLANG,
-> and it does seem to work, so:
-> 
-> Tested-by: Mark Rutland <mark.rutland@arm.com>
-
-Thanks!
-
--- 
-Josh
