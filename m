@@ -2,222 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5C06C4E0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265756C4E34
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjCVOmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S231815AbjCVOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjCVOlv (ORCPT
+        with ESMTP id S231628AbjCVOnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:41:51 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD46A5FA77
+        Wed, 22 Mar 2023 10:43:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F7365452
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679496084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HLKDxFolV4+rR00GX3j1Ecw4i/HFp0PPyVxu2w/0V7w=;
+        b=X7F8/zkUndeRvWqYmTWbC2l27jN6uvMaYMn5gqWU/1frBmwyQ83JTT1wiDZQFlEAmHLkDQ
+        I1TCDves1A810I78pWXKlrCpFXRmWVasE0jgZAQcrgafGxIOwA1L63HDEAgpWdNx9ya7Zi
+        by/dCf+6QILy0n7ki4ka3VHpskrZsVA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-320-WHH-O9BQOuOXXZWenIQZ5Q-1; Wed, 22 Mar 2023 10:41:21 -0400
+X-MC-Unique: WHH-O9BQOuOXXZWenIQZ5Q-1
+Received: by mail-qv1-f72.google.com with SMTP id dg8-20020a056214084800b005acc280bf19so9370269qvb.22
         for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:41:21 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id b18so2219283ybp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679496072;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dwrWFBfwB9kGIHdKOm9I7XrkyLQMCrqtoZsi4Z0QdbM=;
-        b=F0w5e6ZMX4ejR5QsVQiqxR3dcGhYhLoC0lZNvEZOA0Q7DL2mOy3SrO7dbV15fGayLP
-         OyXmKujQ0zcDkkemYCGNsyf75hLK6LlpbxIh5GVqde2o0sjQo2lRTFwIGGSvLk/nvdTr
-         lkuNFvcuE+FNrR6LuFS5EuCM4/ZRCbnvpW7opbAWoh13a9QP8sFpw36WEdUMsREEIpK1
-         adCs+5hzP7cWPvxU5pwPwkG1I6W24jY2fEoKgMWEPbDVIJVbGAWAbRg3G3t/ua30bcE2
-         Bp3nUoo3S5yMaczrYsbO+6tNLgweA9mdFDVwZwLvJGeb/9kGlJVSb/ZNdehyTelgUAc2
-         gNTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679496072;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dwrWFBfwB9kGIHdKOm9I7XrkyLQMCrqtoZsi4Z0QdbM=;
-        b=Fz3g4fUmKbU45q5Vz5k7pH2G7BvQks8rO0uVw+hy8SGSxcQ4BdVVRw1aRC+r9Iagym
-         J7/fgzjT7DZWuOe97dV9R7FHihjd60faK2e4n1pATTiN2BFHKjjFej3Bfzgqa6csTyuv
-         SxojFjgg+AtHEcP85kMpr1VAf1OFENlF3wkjPwQIBGUlFOX13o+laVCW+LuKg7Q5hfNv
-         hT8XGTJMT0oXie6nabq3FR9pZ0+LjYe0ANaOvWaNL0tO7TuB3a3+45mUmIWOI8pU8lbB
-         ipdTkAQDYiPWHkFZq/0hDDYful2hI6VRIPAuAvvzc+BfYSpkm4HyMMhJ8KYCzJOXOGoF
-         XFDQ==
-X-Gm-Message-State: AAQBX9d851GiDvOU9boT7JosawhJGtQNDt2hSwVH39C3LpvElLQC5B67
-        +NPRocDbDYacpnhaaoeTUX6t4LPUHCq8I8IkeaW0rg==
-X-Google-Smtp-Source: AKy350brfn7Z6o8S2/0vpnavmEx1927OK55K5Jv3TrdYOcq2VC9PIKusWzICyXRr17lUOcIb7jQf8MvaL8LUkwY93es=
-X-Received: by 2002:a25:7456:0:b0:b6b:79a2:8cff with SMTP id
- p83-20020a257456000000b00b6b79a28cffmr12890ybc.9.1679496072367; Wed, 22 Mar
- 2023 07:41:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679496080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HLKDxFolV4+rR00GX3j1Ecw4i/HFp0PPyVxu2w/0V7w=;
+        b=Ts1SsyqHr4e0bY4d/La+5sJzW7oL5I2JYL3QTuv63YcNcoxXbncTB3VLUsyeuTPfYY
+         uZ4QKbsAxDyzyhJj+XMmzkJa1+6wX3jx6fnvRyJSGqMdDJ7EgxETA/Eq5syvWrxVWu/1
+         5DpH8sg7ZlbLDSo+oaXP5MNdxMzqbaGnW6CAH9VsbrClFyrHQMCHEcRzxPHvnI2UTBLn
+         1D+ME3s8O5KtCImiFi1qAwkm0ncGdfolN95If+kZQK19nAcoNotrhbIF1c1/mljvLJD7
+         unvgIOC3mDU8V1yuYKqycQJ3WHibmksjrQvKcYOBxDvRXPCddxiXTp9Zs9ctgpx4hS+i
+         +QqA==
+X-Gm-Message-State: AO0yUKV62Ro3/Z5jfJwsmCUw/gtUJYoltMvEQ4Tq5mLCEfzj92VyOxgQ
+        3qaoDb08aEZnKdm1eAC6CB9e4MjmMA86rpzi5pd5eI2RNokQLpRRriEPpgTvXenip0/NnbspcyB
+        QpfglfMswBTo+ekfEvRd+o9XZ
+X-Received: by 2002:a05:622a:408:b0:3e1:b06d:e9e0 with SMTP id n8-20020a05622a040800b003e1b06de9e0mr6228380qtx.56.1679496080667;
+        Wed, 22 Mar 2023 07:41:20 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8/wgsKLj9GUGG1GRhMhqaCnjl30RufXTIdaJf4Ub159yWBZLYd3EzoSNVPdHZrQ/N36OqnqA==
+X-Received: by 2002:a05:622a:408:b0:3e1:b06d:e9e0 with SMTP id n8-20020a05622a040800b003e1b06de9e0mr6228339qtx.56.1679496080406;
+        Wed, 22 Mar 2023 07:41:20 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id q21-20020ac87355000000b003e387a2fbdfsm2158689qtp.0.2023.03.22.07.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 07:41:19 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 15:41:15 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v4] virtio/vsock: allocate multiple skbuffs on tx
+Message-ID: <20230322144115.sz3icgbnhjgae2fj@sgarzare-redhat>
+References: <0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru>
 MIME-Version: 1.0
-References: <cover.1679479634.git.quic_varada@quicinc.com> <5b7213a4c402ee334ff48f2efe2b920858637ac5.1679479634.git.quic_varada@quicinc.com>
-In-Reply-To: <5b7213a4c402ee334ff48f2efe2b920858637ac5.1679479634.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 22 Mar 2023 16:41:01 +0200
-Message-ID: <CAA8EJppXuaGx4VhZ9fOBUkD8fECngzJ8pubNC4bm_0M9+64ZqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 at 12:46, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
+On Tue, Mar 21, 2023 at 06:03:14PM +0300, Arseniy Krasnov wrote:
+>This adds small optimization for tx path: instead of allocating single
+>skbuff on every call to transport, allocate multiple skbuff's until
+>credit space allows, thus trying to send as much as possible data without
+>return to af_vsock.c.
 >
-> Add USB phy and controller related nodes
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> Link to v1:
+> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
+> Link to v2:
+> https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
+> Link to v3:
+> https://lore.kernel.org/netdev/f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru/
 >
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Changes in v3:
->         - Insert the nodes at proper location
+> Changelog:
+> v1 -> v2:
+> - If sent something, return number of bytes sent (even in
+>   case of error). Return error only if failed to sent first
+>   skbuff.
 >
->  Changes in v2:
->         - Fixed issues flagged by Krzysztof
->         - Fix issues reported by make dtbs_check
->         - Remove NOC related clocks (to be added with proper
->           interconnect support)
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 86 +++++++++++++++++++++++++++++++++++
->  1 file changed, 86 insertions(+)
+> v2 -> v3:
+> - Handle case when transport callback returns unexpected value which
+>   is not equal to 'skb->len'. Break loop.
+> - Don't check for zero value of 'rest_len' before calling
+>   'virtio_transport_put_credit()'. Decided to add this check directly
+>   to 'virtio_transport_put_credit()' in separate patch.
 >
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 2bb4053..0943901 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -215,6 +215,48 @@
->                 #size-cells = <1>;
->                 ranges = <0 0 0 0xffffffff>;
+> v3 -> v4:
+> - Use WARN_ONCE() to handle case when transport callback returns
+>   unexpected value.
+> - Remove useless 'ret = -EFAULT;' assignment for case above.
 >
-> +               qusb_phy_0: phy@7b000 {
-> +                       compatible = "qcom,ipq9574-qusb2-phy";
-> +                       reg = <0x07b000 0x180>;
-
-Please pad addresses to 8 hex digits.
-
-
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                               <&xo_board_clk>;
-> +                       clock-names = "cfg_ahb", "ref";
-> +
-> +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               ssphy_0: phy@7d000 {
-> +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
-> +                       reg = <0x7d000 0x1c4>;
-> +                       #clock-cells = <1>;
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges;
-> +
-> +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
-> +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-
-Could you please check the indentation here? Vertical lists should be aligned
-
-> +                       clock-names = "aux", "cfg_ahb";
-
-One item per line
-
-> +
-> +                       resets =  <&gcc GCC_USB0_PHY_BCR>,
-> +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> +                       reset-names = "phy","common";
-> +                       status = "disabled";
-> +
-> +                       usb0_ssphy: phy@7d200 {
-
-Newer bindings please, without subnodes.
-
-> +                               reg = <0x0007d200 0x130>,       /* tx */
-> +                                     <0x0007d400 0x200>,       /* rx */
-> +                                     <0x0007d800 0x1f8>,       /* pcs  */
-> +                                     <0x0007d600 0x044>;       /* pcs misc */
-> +                               #phy-cells = <0>;
-> +                               clocks = <&gcc GCC_USB0_PIPE_CLK>;
-> +                               clock-names = "pipe0";
-> +                               clock-output-names = "usb0_pipe_clk";
-> +                       };
-> +               };
-> +
->                 pcie0_phy: phy@84000 {
->                         compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->                         reg = <0x00084000 0x1bc>; /* Serdes PLL */
-> @@ -436,6 +478,50 @@
->                         status = "disabled";
->                 };
+> net/vmw_vsock/virtio_transport_common.c | 59 +++++++++++++++++++------
+> 1 file changed, 45 insertions(+), 14 deletions(-)
 >
-> +               usb3: usb3@8a00000 {
-> +                       compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> +                       reg = <0x8af8800 0x400>;
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges;
-> +
-> +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
-> +                                <&gcc GCC_ANOC_USB_AXI_CLK>,
-> +                                <&gcc GCC_USB0_MASTER_CLK>,
-> +                                <&gcc GCC_USB0_SLEEP_CLK>,
-> +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +
-> +                       clock-names = "sys_noc_axi",
-> +                                     "anoc_axi",
-> +                                     "master",
-> +                                     "sleep",
-> +                                     "mock_utmi";
-> +
-> +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                       assigned-clock-rates = <200000000>,
-> +                                              <24000000>;
+>diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>index 6564192e7f20..a300f25749ea 100644
+>--- a/net/vmw_vsock/virtio_transport_common.c
+>+++ b/net/vmw_vsock/virtio_transport_common.c
+>@@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+> 	const struct virtio_transport *t_ops;
+> 	struct virtio_vsock_sock *vvs;
+> 	u32 pkt_len = info->pkt_len;
+>-	struct sk_buff *skb;
+>+	u32 rest_len;
+>+	int ret;
+>
+> 	info->type = virtio_transport_get_type(sk_vsock(vsk));
+>
+>@@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>
+> 	vvs = vsk->trans;
+>
+>-	/* we can send less than pkt_len bytes */
+>-	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+>-		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
+>-
+> 	/* virtio_transport_get_credit might return less than pkt_len credit */
+> 	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
+>
+>@@ -227,17 +224,51 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+> 	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
+> 		return pkt_len;
+>
+>-	skb = virtio_transport_alloc_skb(info, pkt_len,
+>-					 src_cid, src_port,
+>-					 dst_cid, dst_port);
+>-	if (!skb) {
+>-		virtio_transport_put_credit(vvs, pkt_len);
+>-		return -ENOMEM;
+>-	}
+>+	ret = 0;
 
-Indentation?
+nit: this initialization seems superfluous since `ret` is
+overwritten later ...
 
-> +
-> +                       resets = <&gcc GCC_USB_BCR>;
-> +                       status = "disabled";
-> +
-> +                       dwc_0: usb@8a00000 {
-> +                               compatible = "snps,dwc3";
-> +                               reg = <0x8a00000 0xcd00>;
-> +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                               clock-names = "ref";
-> +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> +                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
-> +                               phy-names = "usb2-phy", "usb3-phy";
-> +                               tx-fifo-resize;
-> +                               snps,is-utmi-l1-suspend;
-> +                               snps,hird-threshold = /bits/ 8 <0x0>;
-> +                               snps,dis_u2_susphy_quirk;
-> +                               snps,dis_u3_susphy_quirk;
-> +                               dr_mode = "host";
+>+	rest_len = pkt_len;
+>+
+>+	do {
+>+		struct sk_buff *skb;
+>+		size_t skb_len;
+>+
+>+		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
+>+
+>+		skb = virtio_transport_alloc_skb(info, skb_len,
+>+						 src_cid, src_port,
+>+						 dst_cid, dst_port);
+>+		if (!skb) {
+>+			ret = -ENOMEM;
+>+			break;
+>+		}
+>
+>-	virtio_transport_inc_tx_pkt(vvs, skb);
+>+		virtio_transport_inc_tx_pkt(vvs, skb);
+>
+>-	return t_ops->send_pkt(skb);
+>+		ret = t_ops->send_pkt(skb);
 
-Is dr_mode a property of the host or of the board?
+... here.
 
-> +                       };
-> +               };
-> +
->                 intc: interrupt-controller@b000000 {
->                         compatible = "qcom,msm-qgic2";
->                         reg = <0x0b000000 0x1000>,  /* GICD */
-> --
-> 2.7.4
+>+
+
+nit: we can remove this extra line
+
+>+		if (ret < 0)
+>+			break;
+>+
+>+		/* Both virtio and vhost 'send_pkt()' returns 'skb_len',
+>+		 * but for reliability use 'ret' instead of 'skb_len'.
+>+		 * Also if partial send happens (e.g. 'ret' != 'skb_len')
+>+		 * somehow, we break this loop, but account such returned
+>+		 * value in 'virtio_transport_put_credit()'.
+>+		 */
+>+		rest_len -= ret;
+>+
+>+		if (WARN_ONCE(ret != skb_len,
+>+			      "'send_pkt()' returns %i, but %zu expected\n",
+>+			      ret, skb_len))
+>+			break;
+>+	} while (rest_len);
+>+
+>+	virtio_transport_put_credit(vvs, rest_len);
+>+
+>+	/* Return number of bytes, if any data has been sent. */
+>+	if (rest_len != pkt_len)
+>+		ret = pkt_len - rest_len;
+>+
+>+	return ret;
+> }
+>
+> static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+>-- 2.25.1
 >
 
+The patch LGTM:
 
---
-With best wishes
-Dmitry
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Anyway, feel free to include in the same series or as separate patch
+also the changes to avoid useless lock in virtio_transport_put_credit()
+and virtio_transport_get_credit().
+
+I would include it in this series, because before these changes, we
+used to call virtio_transport_put_credit() only in the error path,
+while now we always call it, even when rest_len is 0.
+
+Thanks,
+Stefano
+
