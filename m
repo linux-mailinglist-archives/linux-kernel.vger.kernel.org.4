@@ -2,166 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71696C5805
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7906C5807
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjCVUpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S230249AbjCVUqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjCVUpY (ORCPT
+        with ESMTP id S231582AbjCVUqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:45:24 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2105.outbound.protection.outlook.com [40.107.244.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377CE1A49C;
-        Wed, 22 Mar 2023 13:40:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zi4NdqGVgKBV9LKtKSQ1V1VFcT4dyQ4PQupvu+DlFsjb13iysxn+a/CnwmGz4oKhrrImIxDmfmqulMWzk78IGlYTBwWo7CHLkDuDD/ORPlqtAYS5GpcYvPrhehHxK9pMi7KF1E+NYmx1K4twm2k8mZZTcH+a0PjXBJ1HZrCfSbENVwXpLy1UWnRnTxCC5/tErTLl51qesqNFzSAYEI74VeCLNMUIvU4Qlm9SXswTNDMZ+1ha2gsUUDyiokCz1a0cgBash0/pZj7zCbHgWA0dpCT43eu47z8IXmjuAZoygDSqFysq7zMgOpCkNa9rTAQFdSIc4xgdvz4gB+G7mD3NIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tgZD2KmchfSEjwnxFRYWSv6wB0c7DH7Rry+jZ2QV8lE=;
- b=YNTsYFCTJCBx1HKClhbIIR2M+vYbfXz3oh1xH8vntJ32wkuqY+QLZ9wT9fYgrI962crjHFj0YTaGUEBAYTjO9BTnVnhLJWM8NVNs0RY+UVWGUDUDr1s/dfkffJEGbpbRsyy96yiqYzrMLLYLjMiDUPog/4RuRfrUWQtBKWn///451xLPfrvyvkGV4hvxdSXYDRxI2xRTYfX+T9qLLkxSpdQ4elfRQqpdjXraDIrPuyOvvMLIHcI9ew4jLTty56n4wzj00k92CnHLp9ZiDx8clRgXssKpCnQo48jVZUvg34NpFugXKgBd0hRRPiSXBY5SvMTGY5QLxH+GLsrEiLOpVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 22 Mar 2023 16:46:15 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F765C9D5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:42:22 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id i19so10544899ila.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tgZD2KmchfSEjwnxFRYWSv6wB0c7DH7Rry+jZ2QV8lE=;
- b=V25RtERJR8TBCvsEgPGZfdASA+bywV1aDRWaAY57Tk9UcAYoGCAPHFnZOlCoK7dFhpVlcPnbhHDlhunH4htHQRGTybe9KEKWWDzN7V7mbvnIk0tLAt12lB8h5iGrL8mXx8HPgB+UwUWdkBS7QMhWiHCFRfvI4pDdjEdJBjJNKjg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA0PR13MB4143.namprd13.prod.outlook.com (2603:10b6:806:94::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 20:40:50 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 20:40:50 +0000
-Date:   Wed, 22 Mar 2023 21:40:43 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
-Message-ID: <ZBtnbgeW9T75ZXfv@corigine.com>
-References: <20230322122855.2570417-1-trix@redhat.com>
+        d=google.com; s=20210112; t=1679517742;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PeLzAkC8ofe4r03oiTnUMuqRyEUnaMbKdmxdI/cMXiM=;
+        b=kqhsjOaIgYeqkmaxknXrou/E9CAWLLXCWtke8nsMd+V+dAl8Ga7iynfXqBHTcRVMLF
+         zLiOHRlLUHVULCL+pKdRDQ2qoJnga+m+BrogLYKkZ7JpHIg4qOwtY8UQR4Fkg1i/Ct4O
+         UlKS3TeJhDOTfy9v1vVyHjn05NVO6hmcPAj/WLe08+vavEqYhAdZ3frgHvAwvHzMa5C7
+         ch1CE72tMkDsQOScDRmZyqj1JaTc1fjB1GyGwOE9Y3QRU0F8SCxgycpIiAgaQAKxPPug
+         xjeGyOIuX8JcCMJ9dpeBdsU5+obmhYIz4If+Vdv4GY5+HmVG+hA3aUq3d03iul6mCcJU
+         PjWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679517742;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PeLzAkC8ofe4r03oiTnUMuqRyEUnaMbKdmxdI/cMXiM=;
+        b=JHp0ohnH9BfcPqEdZTkalRfGMumvZJckxRSGQswuyyxDWC4EpeZcDfmdCE2mwfNd+m
+         98BJ+4DlH0yHISeVxzHSKZ2oCFKVW1bN9Ea/IO2hX5PIWDQmtHxvLXQ/JBs0jkWH6FJY
+         jaWIs7sl8+UzYsF1CtqZRcTOKEQXOUeNpZ3Iub9aJkcrPwsnUGRZAqJz1V4N0vgoMDrz
+         IfS8Vwqp060Rm7OCBrgfMn7VQJik+h1/gyOBDz+5mhOa5ywUDncZ32FYH/PQtOXf4ZzT
+         TpoelyHS/8twoQIhRB+4MJd+JFxly2pulTdEVyGyMXumD7JM3aUQX5FlcUDxd/Kd9aCs
+         VZIg==
+X-Gm-Message-State: AO0yUKWnWpMvKLoLIUdGM+iHOulvx55mdNAmHOqQKEMEhUXoRD27WYzY
+        7ljOH+kpE74AuIujIkt54saW1F3g4EONU2KaO9+d0w==
+X-Google-Smtp-Source: AK7set/06aJHdEyDBbceHYokSH5vndvb5S1yTg7EcEj+8vu430ajLvdUnVHF0SntvV7+l8P8X7HezQ==
+X-Received: by 2002:a92:d102:0:b0:325:bc3f:f760 with SMTP id a2-20020a92d102000000b00325bc3ff760mr2290215ilb.0.1679517741531;
+        Wed, 22 Mar 2023 13:42:21 -0700 (PDT)
+Received: from google.com ([2620:15c:183:200:7419:4945:3325:dd1e])
+        by smtp.gmail.com with ESMTPSA id y16-20020a027310000000b004061d6abcd1sm5274857jab.162.2023.03.22.13.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 13:42:21 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 14:42:17 -0600
+From:   Ross Zwisler <zwisler@google.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>
+Subject: Re: [PATCH v3] kexec: Support purgatories with .text.hot sections
+Message-ID: <20230322204217.GA3076000@google.com>
+References: <20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322122855.2570417-1-trix@redhat.com>
-X-ClientProxiedBy: AM0PR10CA0104.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA0PR13MB4143:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd1eed4f-a8e8-4d17-0bfb-08db2b15b8b3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B2OtgbQ8a/rsryUIIRtCmyT+/CPS002lOkreX+NjaUQvrhdHAeaRPuwBWxhF6diypjj8zU3TP9Gcoe+W2i4zZJm45bhY7Uqa2PShelhi6BGtOsxLsfmpByvgnwcF2BCkSGgAK+5X+xFTaW8LkA3knQhX71rbCjhW4a4YYdrPg6lelNH23mJrJQQi+oJLzC5rLa35Q00Mk3M5JyipEQYuUjGfkTc7ivT9LG1F4uNfy/3vOoSxECnDMZKuBdif6ArfUJX5wvpbYH4QthnI4VMweK7Ku9Rkc6k/psRui/LfolLYhX6naixcSwDtdHeIk845M99a70ZqXJdncQFG11482m810Wh1qQJDa+B3pcnbgCg92xyZIjQeCvVXiaVsOXA7sY/CQLVTXq5WMI4kDvfLcMznRUwzni8u2Ekz+yUeOHfjCcvT7uoAvXw/nSb5ficmy1plNpiO0DVUzHCJesq/9TnfNOvXbEWzfjOl/cnG6nEYM391tblgMrKH4QmKXTL1GkRXjIvbg3zfQKmmtp8mrL+G2gBO0WIRjogdXRCOFOlu77/gP6jNBED3ChsIX+NaW2dQHrOrMHSL7HaPNF4EFzXgCWYa4bcu7ZJqJx/5SPmwxRPXg9kqm1priL++TGlsdblLYKp84NfUYmnbc8vNJCZluYCIlhcgYDguwWU+4VFSRZMepSLpWkoISTiDBcbC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(396003)(136003)(346002)(366004)(376002)(451199018)(6512007)(2616005)(83380400001)(6666004)(6486002)(4326008)(6916009)(6506007)(8676002)(66476007)(8936002)(316002)(66556008)(478600001)(66946007)(7416002)(5660300002)(44832011)(2906002)(41300700001)(186003)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8ABZ7QnnuKdbgg6S1PU4i0rxUmK55EeXll/p6jBGLN8CqumiCAb0YxRD3b4k?=
- =?us-ascii?Q?j/jWntRqOUtuG02yHTJcsl/ILXHpkDmk7ASlFUx5e1BlMFHVMXrsyx1nOLDH?=
- =?us-ascii?Q?6DjsmWdL0WHURTxOdyK+waYzejIAikLUHgYWfdSAWkwohU2ItBe3J5w38Q9E?=
- =?us-ascii?Q?VQRys4doH0caTIO9Eio8wZXsJdpfIdTbae2LoJPWgrzwWjUvql9lpJv+M0RT?=
- =?us-ascii?Q?oVsrpx7czFvlhoi99kdm4/XTt5gFzJ8G2VQPAVq5eoiaD+DN0BeN/RQXQ6FG?=
- =?us-ascii?Q?iID9VvyiJnK8cZ1aFjiImUs700KWwV3yeO/8TYoVkIrlr/ut+CAlyUOuQrC6?=
- =?us-ascii?Q?JIuEJjqE33zG1XU4OZCZ4J2hE3EW8WYPQ7hDy0+ojPElAsJNcnRu/zupEsBt?=
- =?us-ascii?Q?Ub+7rBH+jy5/wfsSy2I6SWvcWL4tOAcXU4FkUsKt96w5FpbRccf2I+jhRthS?=
- =?us-ascii?Q?Wl9R9A37pLGDTZQILauqq9Je+I7GJfrtVh6xWb2NA9sk37ZccbuRe1zD4/Jf?=
- =?us-ascii?Q?OdBRD29pLF5AZkgMfbnhPDDGmE3Tfjpfh+9ddlQeCy3h/xApMKCMgWy3RgU2?=
- =?us-ascii?Q?2fd7x0VeHgeOWe3l9OK5XaSdDsyGOGrw+5RZy3yOD5FNG/PrSn73Sms7B8qg?=
- =?us-ascii?Q?7/ATgXvf7rhQHNFkY05AVizKOoW4FaGeYqsVbHnQPld4bxPOzHClZK0PRtL0?=
- =?us-ascii?Q?IipF6ZExSiaehpAa9CStJdi5XwqhvH1JXMPQ2VYq6V7FGO372IiYmvFezYRA?=
- =?us-ascii?Q?QMoauxV8EZev3TTc0fCxQZP5/0maSiaT/IN3YDLgCDQN2BB7vftpXBZl13ub?=
- =?us-ascii?Q?GLCtr5aFKAWxsO99Mjk7efkqn/fGuVTN4yg6j3eY7jBf+aRJqSqqbAN4c7zT?=
- =?us-ascii?Q?hXftFgfDq25mFS+MbkyF8AvHO9PunWX7XX5nKK4zHp9QyO4O/s6pN/z5Kuen?=
- =?us-ascii?Q?7a0qxpcgzkcqCj5xPiJYXCzNPCpEPaS5XGzOUtSLUaNw1almRuf3f9idQBdS?=
- =?us-ascii?Q?nvo3m16z+CKUMJZhxFQBlBeYxX7llMZ6r34hOdAjCECSqNmptT465bHPnIWI?=
- =?us-ascii?Q?Ta4iLGVjarSrsLJ1cCjY2WoH6XNtsZPxw+/UVuan707Z+MSTU1vuyUyN75Zi?=
- =?us-ascii?Q?nNCJptOdOLCOA/Gan+docdVtJiJz00r/SY80+QHLuiR6glf3PeMkQ8grCKdX?=
- =?us-ascii?Q?Bwxe3ArlwbnACSOLaETV/FvVcrPPCL3mMXeBJXnya1H75WCydBa2Js2okbzN?=
- =?us-ascii?Q?Fhc8VWdifS0D1c/+QKZjtXvxQCrfPfR8YGbHQXE4JIEm0A7V7wJ20fAsh0BO?=
- =?us-ascii?Q?t4r8X0rj6RI4Bkfc2jTR5W1u4fc/xtLkX908gYUOv4E0lS4zb8bYJXGxP3+z?=
- =?us-ascii?Q?BNvOvuVMXnAQG0hhmy05qiGTZ8Q8ZNdwoYMdiGpkeTd/mLaVisVJsnnrAVmM?=
- =?us-ascii?Q?hlYprUs7yGyL2noMOxgwoxLfrUhVQ1rHiMLa02SrF+tG6WLgBWRsgciux2g2?=
- =?us-ascii?Q?oFG5railicQhPHYy7omvFXc3V+77TXtIa9cPsh6iYTdih4P2rj5fJHpnXJ+l?=
- =?us-ascii?Q?DGDENpdgDxhb4bHL5Sn8xUiTzFmMuz4jev/k5tjK0XTzRyMAbQHhpqQbihFM?=
- =?us-ascii?Q?xQAYLKYxQv/6X2eVINh8NFj7ZRVIe4EXs3wT/Cos6vdTcp+9dqkbtfDkoEAE?=
- =?us-ascii?Q?aioZGw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd1eed4f-a8e8-4d17-0bfb-08db2b15b8b3
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 20:40:49.9243
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6qQHIgK1EUB8Vqv1VakVDoX3hhmlNQuaTAt9/C+OvB43mFhSpER7rzNs8tyKF+/lEzxiF+FfDzAzE7MKc6OD8lJ/1sc+gg84HB+2Rpj9Z0k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4143
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 08:28:55AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
->   unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
-> ath10k_get_ring_byte(unsigned int offset,
-> ^
-> This function is not used so remove it.
+On Wed, Mar 22, 2023 at 08:09:21PM +0100, Ricardo Ribalda wrote:
+> Clang16 links the purgatory text in two sections:
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+>   [ 1] .text             PROGBITS         0000000000000000  00000040
+>        00000000000011a1  0000000000000000  AX       0     0     16
+>   [ 2] .rela.text        RELA             0000000000000000  00003498
+>        0000000000000648  0000000000000018   I      24     1     8
+>   ...
+>   [17] .text.hot.        PROGBITS         0000000000000000  00003220
+>        000000000000020b  0000000000000000  AX       0     0     1
+>   [18] .rela.text.hot.   RELA             0000000000000000  00004428
+>        0000000000000078  0000000000000018   I      24    17     8
+> 
+> And both of them have their range [sh_addr ... sh_addr+sh_size] on the
+> area pointed by `e_entry`.
+> 
+> This causes that image->start is calculated twice, once for .text and
+> another time for .text.hot. The second calculation leaves image->start
+> in a random location.
+> 
+> Because of this, the system crashes inmediatly after:
+> 
+> kexec_core: Starting new kernel
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Hi Tom,
-
-this looks good. But this patch applied, and with clang 11.0.2,
-make CC=clang W=1 tells me:
-
-drivers/net/wireless/ath/ath10k/ce.c:80:19: error: unused function 'shadow_dst_wr_ind_addr' [-Werror,-Wunused-function]
-static inline u32 shadow_dst_wr_ind_addr(struct ath10k *ar,
-                  ^
-drivers/net/wireless/ath/ath10k/ce.c:434:20: error: unused function 'ath10k_ce_error_intr_enable' [-Werror,-Wunused-function]
-static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
-                   ^
-Perhaps those functions should be removed too?
+Reviewed-by: Ross Zwisler <zwisler@google.com>
 
 > ---
->  drivers/net/wireless/ath/ath10k/ce.c | 7 -------
->  1 file changed, 7 deletions(-)
+> kexec: Fix kexec_file_load for llvm16
 > 
-> diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
-> index b656cfc03648..c27b8204718a 100644
-> --- a/drivers/net/wireless/ath/ath10k/ce.c
-> +++ b/drivers/net/wireless/ath/ath10k/ce.c
-> @@ -84,13 +84,6 @@ ath10k_set_ring_byte(unsigned int offset,
->  	return ((offset << addr_map->lsb) & addr_map->mask);
->  }
+> When upreving llvm I realised that kexec stopped working on my test
+> platform. This patch fixes it.
+> 
+> To: Eric Biederman <ebiederm@xmission.com>
+> Cc: Baoquan He <bhe@redhat.com>
+> Cc: Philipp Rudo <prudo@redhat.com>
+> Cc: kexec@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v3:
+> - Fix initial value. Thanks Ross!
+> - Link to v2: https://lore.kernel.org/r/20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org
+> 
+> Changes in v2:
+> - Fix if condition. Thanks Steven!.
+> - Update Philipp email. Thanks Baoquan.
+> - Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
+> ---
+>  kernel/kexec_file.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index f1a0e4e3fb5c..25a37d8f113a 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -901,10 +901,21 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
+>  		}
 >  
-> -static inline unsigned int
-> -ath10k_get_ring_byte(unsigned int offset,
-> -		     struct ath10k_hw_ce_regs_addr_map *addr_map)
-> -{
-> -	return ((offset & addr_map->mask) >> (addr_map->lsb));
-> -}
-> -
->  static inline u32 ath10k_ce_read32(struct ath10k *ar, u32 offset)
->  {
->  	struct ath10k_ce *ce = ath10k_ce_priv(ar);
-> -- 
-> 2.27.0
+>  		offset = ALIGN(offset, align);
+> +
+> +		/*
+> +		 * Check if the segment contains the entry point, if so,
+> +		 * calculate the value of image->start based on it.
+> +		 * If the compiler has produced more than one .text sections
+> +		 * (Eg: .text.hot), they are generally after the main .text
+> +		 * section, and they shall not be used to calculate
+> +		 * image->start. So do not re-calculate image->start if it
+> +		 * is not set to the initial value.
+> +		 */
+>  		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
+>  		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
+>  		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
+> -					 + sechdrs[i].sh_size)) {
+> +					 + sechdrs[i].sh_size) &&
+> +		    kbuf->image->start == pi->ehdr->e_entry) {
+>  			kbuf->image->start -= sechdrs[i].sh_addr;
+>  			kbuf->image->start += kbuf->mem + offset;
+>  		}
 > 
+> ---
+> base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
+> change-id: 20230321-kexec_clang16-4510c23d129c
+> 
+> Best regards,
+> -- 
+> Ricardo Ribalda <ribalda@chromium.org>
