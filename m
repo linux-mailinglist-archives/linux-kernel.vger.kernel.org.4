@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70C66C553F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C118D6C55DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCVT4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S230228AbjCVUBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCVT4d (ORCPT
+        with ESMTP id S231315AbjCVUA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:56:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5F5F210;
-        Wed, 22 Mar 2023 12:56:23 -0700 (PDT)
+        Wed, 22 Mar 2023 16:00:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BAF6A1CB;
+        Wed, 22 Mar 2023 12:58:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F67CB81DC8;
-        Wed, 22 Mar 2023 19:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD89C433EF;
-        Wed, 22 Mar 2023 19:56:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66093622B8;
+        Wed, 22 Mar 2023 19:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF78DC4339C;
+        Wed, 22 Mar 2023 19:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679514981;
-        bh=qhgRNOt8Yok2ZXUiPTNUwcAQwbu3UguOEej6KNc66iI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WtCkrXrgQRPaTqEJML0D/SZhatuSNV6YVDfoaqni2eYlJDCzsxDjzf78uLzBG7Kcf
-         JMdYhHGBKgOPuok23rO46aeYhUr7CGgV7NWy3uzMF37FblyWsujxKt6IlHYxu2JR5e
-         DYVw7HHIMRPhgG/WP3KbvZyzSZNc5Uboy1p5GpYKyKDgUg9cvZMQ0zXdm4ZbyXopCX
-         nkKSgnoFnTMbf+ZddsjPr2Qn8BnGHC612Prr0vXmq1Pj5TxdPNyg3yJVQA04IroHHY
-         xy92xXKQXZuyMe+wXU745Em8KlSBSa5EmN8/dX8HdmecUMU9ceTAnFPNoE/YMTyzZe
-         MI8VSc38cdJuQ==
-Date:   Wed, 22 Mar 2023 12:56:19 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Min Li <lnimi@hotmail.com>
-Cc:     richardcochran@gmail.com, lee@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Min Li <min.li.xe@renesas.com>
-Subject: Re: [PATCH mfd 1/1] mfd/ptp: clockmatrix: support 32-bit address
- space
-Message-ID: <20230322125619.731912cf@kernel.org>
-In-Reply-To: <MW5PR03MB69323E281F1360A4F6C92838A0819@MW5PR03MB6932.namprd03.prod.outlook.com>
-References: <MW5PR03MB69323E281F1360A4F6C92838A0819@MW5PR03MB6932.namprd03.prod.outlook.com>
+        s=k20201202; t=1679515111;
+        bh=2sqtOj+1ALMyYEPN/XCPWThb1VdY14/vc//Wws1RtxA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ad5Kpn8XmMNmxeQMCZ7Epl8iLEBw23WEMiafpGKN6/lz/ImUkX3IY3MyMRoIU43Hc
+         pPqBwuGwJCUax8rncXE+uhMRcoEh6Jfq87PJq7UKOXqmUwhfhPY8DLB+ZTx6m81Pzz
+         ZHTrPrMqYu1mctTGEShFM6kzcdzC2iEemPF29hfU0vVk8BxbguDIaik6+e4/awP/dB
+         Z83FfKcq4J5HNUq5ah8Op9hZAKKIY7abdk40Ay32RMH3fteMT1IYRxhcq4jztCTMbd
+         nmD4fTGEBlNmmEeeLfqeLqTrcPdUHFjqnzXVfwcJExXbJguh87hLBs4W0CGnj+i8cu
+         cPV/S1Ewnzw7g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Chia-I Wu <olvaffe@gmail.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.2 25/45] drm/amdkfd: fix a potential double free in pqm_create_queue
+Date:   Wed, 22 Mar 2023 15:56:19 -0400
+Message-Id: <20230322195639.1995821-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230322195639.1995821-1-sashal@kernel.org>
+References: <20230322195639.1995821-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,62 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 15:10:06 -0400 Min Li wrote:
-> -		buf[0] = (u8)(page & 0xff);
-> -		buf[1] = (u8)((page >> 8) & 0xff);
-> +		buf[0] = (u8)(page & 0xFF);
-> +		buf[1] = (u8)((page >> 8) & 0xFF);
+From: Chia-I Wu <olvaffe@gmail.com>
 
-why did you decide to change from 0xff to 0xFF as part of this big
-change? It's unnecessary churn.
+[ Upstream commit b2ca5c5d416b4e72d1e9d0293fc720e2d525fd42 ]
 
-> +		buf[2] = (u8)((page >> 16) & 0xFF);
-> +		buf[3] = (u8)((page >> 24) & 0xFF);
-> +		bytes = 4;
->  		break;
+Set *q to NULL on errors, otherwise pqm_create_queue would free it
+again.
 
->  static inline int idtcm_read(struct idtcm *idtcm,
-> -			     u16 module,
-> +			     u32 module,
->  			     u16 regaddr,
->  			     u8 *buf,
->  			     u16 count)
-> @@ -50,7 +50,7 @@ static inline int idtcm_read(struct idtcm *idtcm,
->  }
->  
->  static inline int idtcm_write(struct idtcm *idtcm,
-> -			      u16 module,
-> +			      u32 module,
->  			      u16 regaddr,
->  			      u8 *buf,
->  			      u16 count)
+Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
+Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_process_queue_manager.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->  	/* PLL5 can have OUT8 as second additional output. */
->  	if (pll == 5 && qn_plus_1 != 0) {
-> -		err = idtcm_read(idtcm, 0, HW_Q8_CTRL_SPARE,
-> +		err = idtcm_read(idtcm, HW_Q8_CTRL_SPARE, 0,
->  				 &temp, sizeof(temp));
->  		if (err)
->  			return err;
->  
->  		temp &= ~(Q9_TO_Q8_SYNC_TRIG);
->  
-> -		err = idtcm_write(idtcm, 0, HW_Q8_CTRL_SPARE,
-> +		err = idtcm_write(idtcm, HW_Q8_CTRL_SPARE, 0,
->  				  &temp, sizeof(temp));
->  		if (err)
->  			return err;
->  
->  		temp |= Q9_TO_Q8_SYNC_TRIG;
->  
-> -		err = idtcm_write(idtcm, 0, HW_Q8_CTRL_SPARE,
-> +		err = idtcm_write(idtcm, HW_Q8_CTRL_SPARE, 0,
->  				  &temp, sizeof(temp));
->  		if (err)
->  			return err;
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_process_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_process_queue_manager.c
+index 5137476ec18e6..4236539d9f932 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_process_queue_manager.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_process_queue_manager.c
+@@ -218,8 +218,8 @@ static int init_user_queue(struct process_queue_manager *pqm,
+ 	return 0;
+ 
+ cleanup:
+-	if (dev->shared_resources.enable_mes)
+-		uninit_queue(*q);
++	uninit_queue(*q);
++	*q = NULL;
+ 	return retval;
+ }
+ 
+-- 
+2.39.2
 
-Why are you flipping all these arguments?
-Isn't HW_Q8_CTRL_SPARE regaddr?
-
-Could you to split your patches into multiple steps to make them easier
-to reivew?
