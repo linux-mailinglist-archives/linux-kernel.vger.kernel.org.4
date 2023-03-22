@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A356C53F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED84F6C53F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbjCVSoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S230430AbjCVSnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCVSnj (ORCPT
+        with ESMTP id S230022AbjCVSnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 14:43:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF19F298D2
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FA9298D6
         for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:43:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5658F6227B
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C8B6227E
         for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2CAC43445;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF96C433A1;
         Wed, 22 Mar 2023 18:43:36 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pf3Qt-000pZf-0P;
+        id 1pf3Qt-000paE-14;
         Wed, 22 Mar 2023 14:43:35 -0400
-Message-ID: <20230322184334.946813393@goodmis.org>
+Message-ID: <20230322184335.149101791@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 22 Mar 2023 14:42:46 -0400
+Date:   Wed, 22 Mar 2023 14:42:47 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        Florent Revest <revest@chromium.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: [for-next][PATCH 07/11] ftrace: selftest: remove broken trace_direct_tramp
+        Uros Bizjak <ubizjak@gmail.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [for-next][PATCH 08/11] ring_buffer: Change some static functions to void
 References: <20230322184239.594953818@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,156 +49,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Uros Bizjak <ubizjak@gmail.com>
 
-The ftrace selftest code has a trace_direct_tramp() function which it
-uses as a direct call trampoline. This happens to work on x86, since the
-direct call's return address is in the usual place, and can be returned
-to via a RET, but in general the calling convention for direct calls is
-different from regular function calls, and requires a trampoline written
-in assembly.
+The results of some static functions are not used. Change the
+type of these function to void and remove unnecessary returns.
 
-On s390, regular function calls place the return address in %r14, and an
-ftrace patch-site in an instrumented function places the trampoline's
-return address (which is within the instrumented function) in %r0,
-preserving the original %r14 value in-place. As a regular C function
-will return to the address in %r14, using a C function as the trampoline
-results in the trampoline returning to the caller of the instrumented
-function, skipping the body of the instrumented function.
+No functional change intended.
 
-Note that the s390 issue is not detcted by the ftrace selftest code, as
-the instrumented function is trivial, and returning back into the caller
-happens to be equivalent.
+Link: https://lkml.kernel.org/r/20230305155532.5549-2-ubizjak@gmail.com
 
-On arm64, regular function calls place the return address in x30, and
-an ftrace patch-site in an instrumented function saves this into r9
-and places the trampoline's return address (within the instrumented
-function) in x30. A regular C function will return to the address in
-x30, but will not restore x9 into x30. Consequently, using a C function
-as the trampoline results in returning to the trampoline's return
-address having corrupted x30, such that when the instrumented function
-returns, it will return back into itself.
-
-To avoid future issues in this area, remove the trace_direct_tramp()
-function, and require that each architecture with direct calls provides
-a stub trampoline, named ftrace_stub_direct_tramp. This can be written
-to handle the architecture's trampoline calling convention, and in
-future could be used elsewhere (e.g. in the ftrace ops sample, to
-measure the overhead of direct calls), so we may as well always build it
-in.
-
-Link: https://lkml.kernel.org/r/20230321140424.345218-8-revest@chromium.org
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Li Huafei <lihuafei1@huawei.com>
-Cc: Xu Kuohai <xukuohai@huawei.com>
-Signed-off-by: Florent Revest <revest@chromium.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/s390/kernel/mcount.S     |  5 +++++
- arch/x86/kernel/ftrace_32.S   |  5 +++++
- arch/x86/kernel/ftrace_64.S   |  4 ++++
- include/linux/ftrace.h        |  2 ++
- kernel/trace/trace_selftest.c | 12 ++----------
- 5 files changed, 18 insertions(+), 10 deletions(-)
+ kernel/trace/ring_buffer.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
-diff --git a/arch/s390/kernel/mcount.S b/arch/s390/kernel/mcount.S
-index 43ff91073d2a..6c10da43b538 100644
---- a/arch/s390/kernel/mcount.S
-+++ b/arch/s390/kernel/mcount.S
-@@ -32,6 +32,11 @@ ENTRY(ftrace_stub)
- 	BR_EX	%r14
- ENDPROC(ftrace_stub)
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index c6f47b6cfd5f..b45915dd67b9 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1565,15 +1565,12 @@ static void rb_tail_page_update(struct ring_buffer_per_cpu *cpu_buffer,
+ 	}
+ }
  
-+SYM_CODE_START(ftrace_stub_direct_tramp)
-+	lgr	%r1, %r0
-+	BR_EX	%r1
-+SYM_CODE_END(ftrace_stub_direct_tramp)
-+
- 	.macro	ftrace_regs_entry, allregs=0
- 	stg	%r14,(__SF_GPRS+8*8)(%r15)	# save traced function caller
+-static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
++static void rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+ 			  struct buffer_page *bpage)
+ {
+ 	unsigned long val = (unsigned long)bpage;
  
-diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-index a0ed0e4a2c0c..0d9a14528176 100644
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -163,6 +163,11 @@ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
- 	jmp	.Lftrace_ret
- SYM_CODE_END(ftrace_regs_caller)
- 
-+SYM_FUNC_START(ftrace_stub_direct_tramp)
-+	CALL_DEPTH_ACCOUNT
-+	RET
-+SYM_FUNC_END(ftrace_stub_direct_tramp)
-+
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
- SYM_CODE_START(ftrace_graph_caller)
- 	pushl	%eax
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index fb4f1e01b64a..970d8445fdc4 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -309,6 +309,10 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
- SYM_FUNC_END(ftrace_regs_caller)
- STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
- 
-+SYM_FUNC_START(ftrace_stub_direct_tramp)
-+	CALL_DEPTH_ACCOUNT
-+	RET
-+SYM_FUNC_END(ftrace_stub_direct_tramp)
- 
- #else /* ! CONFIG_DYNAMIC_FTRACE */
- 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 31f1e1df2af3..931f3d904529 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -413,6 +413,8 @@ int unregister_ftrace_direct(struct ftrace_ops *ops, unsigned long addr,
- int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr);
- int modify_ftrace_direct_nolock(struct ftrace_ops *ops, unsigned long addr);
- 
-+void ftrace_stub_direct_tramp(void);
-+
- #else
- struct ftrace_ops;
- # define ftrace_direct_func_count 0
-diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-index 84cd7ba31d27..a931d9aaea26 100644
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -786,14 +786,6 @@ static struct fgraph_ops fgraph_ops __initdata  = {
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- static struct ftrace_ops direct;
--#ifndef CALL_DEPTH_ACCOUNT
--#define CALL_DEPTH_ACCOUNT ""
--#endif
+-	if (RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK))
+-		return 1;
 -
--noinline __noclone static void trace_direct_tramp(void)
--{
--	asm(CALL_DEPTH_ACCOUNT);
--}
- #endif
+-	return 0;
++	RB_WARN_ON(cpu_buffer, val & RB_FLAG_MASK);
+ }
  
- /*
-@@ -873,7 +865,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
- 	 */
- 	ftrace_set_filter_ip(&direct, (unsigned long)DYN_FTRACE_TEST_NAME, 0, 0);
- 	ret = register_ftrace_direct(&direct,
--				     (unsigned long)trace_direct_tramp);
-+				     (unsigned long)ftrace_stub_direct_tramp);
- 	if (ret)
- 		goto out;
+ /**
+@@ -1583,30 +1580,28 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
+  * As a safety measure we check to make sure the data pages have not
+  * been corrupted.
+  */
+-static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
++static void rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+ 	struct list_head *head = rb_list_head(cpu_buffer->pages);
+ 	struct list_head *tmp;
  
-@@ -894,7 +886,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
- 	unregister_ftrace_graph(&fgraph_ops);
+ 	if (RB_WARN_ON(cpu_buffer,
+ 			rb_list_head(rb_list_head(head->next)->prev) != head))
+-		return -1;
++		return;
  
- 	ret = unregister_ftrace_direct(&direct,
--				       (unsigned long) trace_direct_tramp,
-+				       (unsigned long)ftrace_stub_direct_tramp,
- 				       true);
- 	if (ret)
- 		goto out;
+ 	if (RB_WARN_ON(cpu_buffer,
+ 			rb_list_head(rb_list_head(head->prev)->next) != head))
+-		return -1;
++		return;
+ 
+ 	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
+ 		if (RB_WARN_ON(cpu_buffer,
+ 				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
+-			return -1;
++			return;
+ 
+ 		if (RB_WARN_ON(cpu_buffer,
+ 				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
+-			return -1;
++			return;
+ 	}
+-
+-	return 0;
+ }
+ 
+ static int __rb_allocate_pages(struct ring_buffer_per_cpu *cpu_buffer,
+@@ -4496,7 +4491,6 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 	default:
+ 		RB_WARN_ON(cpu_buffer, 1);
+ 	}
+-	return;
+ }
+ 
+ static void
+@@ -4527,7 +4521,6 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
+ 	default:
+ 		RB_WARN_ON(iter->cpu_buffer, 1);
+ 	}
+-	return;
+ }
+ 
+ static struct buffer_page *
+@@ -4942,7 +4935,6 @@ rb_reader_unlock(struct ring_buffer_per_cpu *cpu_buffer, bool locked)
+ {
+ 	if (likely(locked))
+ 		raw_spin_unlock(&cpu_buffer->reader_lock);
+-	return;
+ }
+ 
+ /**
 -- 
 2.39.1
