@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CE96C43C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AF66C4374
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCVHB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S230199AbjCVGol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCVHB0 (ORCPT
+        with ESMTP id S230155AbjCVGoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:01:26 -0400
+        Wed, 22 Mar 2023 02:44:07 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB9953DAC;
-        Wed, 22 Mar 2023 00:01:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BC81BADE;
+        Tue, 21 Mar 2023 23:43:17 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PhJmp3PvFz4f41GR;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PhJmp5pkrz4f4397;
         Wed, 22 Mar 2023 14:42:18 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiBHoxpkI55qFQ--.38915S9;
-        Wed, 22 Mar 2023 14:42:19 +0800 (CST)
+        by APP3 (Coremail) with SMTP id _Ch0CgC3YiBHoxpkI55qFQ--.38915S10;
+        Wed, 22 Mar 2023 14:42:20 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     guoqing.jiang@linux.dev, logang@deltatee.com,
         pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
@@ -28,32 +28,32 @@ To:     guoqing.jiang@linux.dev, logang@deltatee.com,
 Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next 5/6] md: wake up 'resync_wait' at last in md_reap_sync_thread()
-Date:   Wed, 22 Mar 2023 14:41:21 +0800
-Message-Id: <20230322064122.2384589-6-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 6/6] md: enhance checking in md_check_recovery()
+Date:   Wed, 22 Mar 2023 14:41:22 +0800
+Message-Id: <20230322064122.2384589-7-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
 References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiBHoxpkI55qFQ--.38915S9
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF1rur47Kr1UCw1xAw1kKrg_yoWktFc_WF
-        nrZrWkWry7W39rKr1Yvw1SvrWvqws8Ww1kZFyftFyjyFW5Jw1UJryfuw13Awnxu3yUG3s0
-        9rWj9FWfZrW5GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbq8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-        IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F
-        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTY
-        UUUUU
+X-CM-TRANSID: _Ch0CgC3YiBHoxpkI55qFQ--.38915S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4UXF48Gw1xuFWfJF1kZrb_yoW8Cr4fpF
+        WfWas8GrW8ZFW3ZrZrta4kXay5Aw40q3yjyryfWa4rJF1rta1I9345uF17AFWDJasaq3WY
+        y3W5JFZ3Zry8Cw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUP214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
+        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
+        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
+        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
+        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAF
+        wI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JV
+        WxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbmZ
+        X7UUUUU==
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
@@ -66,35 +66,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-We just replace md_reap_sync_thread() with wait_event(resync_wait, ...)
-from action_store(), this patch just make sure action_store() will still
-wait for everything to be done in md_reap_sync_thread().
+For md_check_recovery():
+
+1) if 'MD_RECOVERY_RUNING' is not set, register new sync_thread.
+2) if 'MD_RECOVERY_RUNING' is set:
+ a) if 'MD_RECOVERY_DONE' is not set, don't do anything, wait for
+   md_do_sync() to be done.
+ b) if 'MD_RECOVERY_DONE' is set, unregister sync_thread. Current code
+   expects that sync_thread is not NULL, otherwise new sync_thread will
+   be registered, which will corrupt raid.
+
+This patch add a WARN_ON_ONCE() in the above corruption, and make sure
+md_check_recovery() won't register new sync_thread if 'MD_RECOVERY_RUNING'
+is still set.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/md.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/md/md.c b/drivers/md/md.c
-index ddf33a11d8de..cabdfd4ec001 100644
+index cabdfd4ec001..048ec21932e9 100644
 --- a/drivers/md/md.c
 +++ b/drivers/md/md.c
-@@ -9511,7 +9511,6 @@ void md_reap_sync_thread(struct mddev *mddev)
- 	if (mddev_is_clustered(mddev) && is_reshaped
- 				      && !test_bit(MD_CLOSING, &mddev->flags))
- 		md_cluster_ops->update_size(mddev, old_dev_sectors);
--	wake_up(&resync_wait);
- 	/* flag recovery needed just to double check */
- 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
- 	sysfs_notify_dirent_safe(mddev->sysfs_completed);
-@@ -9519,6 +9518,7 @@ void md_reap_sync_thread(struct mddev *mddev)
- 	md_new_event();
- 	if (mddev->event_work.func)
- 		queue_work(md_misc_wq, &mddev->event_work);
-+	wake_up(&resync_wait);
- }
- EXPORT_SYMBOL(md_reap_sync_thread);
+@@ -9377,16 +9377,24 @@ void md_check_recovery(struct mddev *mddev)
+ 		if (mddev->sb_flags)
+ 			md_update_sb(mddev, 0);
  
+-		if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
+-		    !test_bit(MD_RECOVERY_DONE, &mddev->recovery)) {
+-			/* resync/recovery still happening */
+-			clear_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
+-			goto unlock;
+-		}
+-		if (mddev->sync_thread) {
++		/*
++		 * Never start a new sync thread if MD_RECOVERY_RUNNING is
++		 * still set.
++		 */
++		if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
++			if (!test_bit(MD_RECOVERY_DONE, &mddev->recovery)) {
++				/* resync/recovery still happening */
++				clear_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
++				goto unlock;
++			}
++
++			if (WARN_ON_ONCE(!mddev->sync_thread))
++				goto unlock;
++
+ 			md_reap_sync_thread(mddev);
+ 			goto unlock;
+ 		}
++
+ 		/* Set RUNNING before clearing NEEDED to avoid
+ 		 * any transients in the value of "sync_action".
+ 		 */
 -- 
 2.31.1
 
