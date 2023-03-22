@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AC46C49EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E906C49F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCVMI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S230081AbjCVMJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCVMIx (ORCPT
+        with ESMTP id S229713AbjCVMJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:08:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0CE1B565;
-        Wed, 22 Mar 2023 05:08:52 -0700 (PDT)
+        Wed, 22 Mar 2023 08:09:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D05D8B9;
+        Wed, 22 Mar 2023 05:09:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA89B81C6C;
-        Wed, 22 Mar 2023 12:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A569DC433D2;
-        Wed, 22 Mar 2023 12:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679486930;
-        bh=sJgqKtzzq3ORWa9DfGXW323DtqlfE2Drg0E8BukAMlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eLjSCToO82eR1amnA3qQHvVMdhrGc2jiFxdfFo85O9HqsaVg5qqg24nywG8tW1PfS
-         iEENAPBQ+K2SzSX6DQRAnhJzUB1m7n5y6N5JFz1mO/2kLffrVgOD5nXpaTkDK1ZbTD
-         zos8rNaRYxgUf8Hlts4Ik9t//juUasJLBG9s3xEY=
-Date:   Wed, 22 Mar 2023 13:08:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <ZBrvzypQoNu7SD27@kroah.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8135B81C6D;
+        Wed, 22 Mar 2023 12:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A80C433D2;
+        Wed, 22 Mar 2023 12:09:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ingdh26u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1679486960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cvY46fd0vZ13Q/NmQURfWfLe6EF0yiYVFhbjH7fFs7M=;
+        b=Ingdh26uTgL+AN1fOvu35JFST2YniG3PTzJicWjc5W9yyYF2h60NUnVJR9UbDD2TPUGlAp
+        u8i7dV2T/DOrIM8ICunWgluYNu4zVTlXuvh19Hgs6mw27Ysq1OCE0mSnSr2G/4YPV193zm
+        jQbSRUFloY7TwDg99rgsNfJ3CCs+oXY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3165d7c0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 22 Mar 2023 12:09:20 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        regressions@leemhuis.info, regressions@lists.linux.dev
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] riscv: require alternatives framework when selecting FPU support
+Date:   Wed, 22 Mar 2023 13:09:07 +0100
+Message-Id: <20230322120907.2968494-1-Jason@zx2c4.com>
+In-Reply-To: <ZBruFRwt3rUVngPu@zx2c4.com>
+References: <ZBruFRwt3rUVngPu@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
-> The creation of a dummy device in order to test managed interfaces is a
-> generally useful test feature. The drm test helpers
-> drm_kunit_helper_alloc_device() and drm_kunit_helper_free_device()
-> are doing exactly this. It makes no sense that each and every component
-> which intends to be testing managed interfaces will create similar
-> helpers so stole these for more generic use.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> ---
-> Changes:
-> v4 => v5:
-> - Add accidentally dropped header and email recipients
-> - do not rename + move helpers from DRM but add temporary dublicates to
->   simplify merging. (This patch does not touch DRM and can be merged
->   separately. DRM patch and IIO test patch still depend on this one).
-> 
-> Please note that there's something similar ongoing in the CCF:
-> https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
-> 
-> I do like the simplicity of these DRM-originated helpers so I think
-> they're worth. I do equally like the Stephen's idea of having the
-> "dummy platform device" related helpers under drivers/base and the
-> header being in include/kunit/platform_device.h which is similar to real
-> platform device under include/linux/platform_device.h
-> ---
->  drivers/base/test/Kconfig             |  5 ++
->  drivers/base/test/Makefile            |  2 +
->  drivers/base/test/test_kunit_device.c | 83 +++++++++++++++++++++++++++
+When moving switch_to's has_fpu() over to using riscv_has_extension_
+likely() rather than static branchs, the FPU code gained a dependency on
+the alternatives framework. If CONFIG_RISCV_ALTERNATIVE isn't selected
+when CONFIG_FPU is, then has_fpu() returns false, and switch_to does not
+work as intended. So select CONFIG_RISCV_ALTERNATIVE when CONFIG_FPU is
+selected.
 
-By putting files in this directory, you are asking me to maintain this
-code, and right now, I can't agree with that, sorry.  See my review
-comments on it for why.
+Fixes: 702e64550b12 ("riscv: fpu: switch has_fpu() to riscv_has_extension_likely()")
+Link: https://lore.kernel.org/all/ZBruFRwt3rUVngPu@zx2c4.com/
+Cc: Jisheng Zhang <jszhang@kernel.org>
+Cc: Andrew Jones <ajones@ventanamicro.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c5e42cc37604..0f59350c699d 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -467,6 +467,7 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+ config FPU
+ 	bool "FPU support"
+ 	default y
++	select RISCV_ALTERNATIVE
+ 	help
+ 	  Say N here if you want to disable all floating-point related procedure
+ 	  in the kernel.
+-- 
+2.40.0
 
-greg k-h
