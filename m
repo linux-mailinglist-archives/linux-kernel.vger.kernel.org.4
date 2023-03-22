@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2A86C4300
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815426C430A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCVGV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S229983AbjCVGWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCVGV0 (ORCPT
+        with ESMTP id S229980AbjCVGWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:21:26 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FD4442CA;
-        Tue, 21 Mar 2023 23:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679466085; x=1711002085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sV9yrowQ+RnaJFvNng0mNFOKmQMIaJRRqKuH1yOHxSk=;
-  b=JabRBkoxTUoPkGmhfqbRlA3OSegdz/lXRUwE80rgojBwPyozXbSfmTRP
-   8qlUN5Fnt7lLMbOUYCRpsHp0f7b0H2hI5dIlNQt65AvzF8NbjJMj7jiwf
-   bindiJMbeDlqI9AkmBsFHPRZbYF+ZcrI95aLURDlh0k3OOMLmBpg5pSgL
-   dt+hBK6MOcLO9P2pPlH2M892rbq/X8a2Vzm7CSMSn/kdVJrEsrQ4spH75
-   9GRnjrzMeYNb8WRAS3/wmfV/SYv5INyIxlEm7xFYykKzLP8NYSdcVFYG6
-   6jDTQrie49z0Ogt06TXbilbAK6a44oata+xX89hsj0NMl3X91Wq1cHlh4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339177967"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="339177967"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 23:21:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="770936644"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="770936644"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2023 23:21:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1perqc-000CyQ-13;
-        Wed, 22 Mar 2023 06:21:22 +0000
-Date:   Wed, 22 Mar 2023 14:20:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tanmay Shah <tanmay.shah@amd.com>, andersson@kernel.org,
-        mathieu.poirier@linaro.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Tarak Reddy <tarak.reddy@amd.com>
-Subject: Re: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
-Message-ID: <202303221441.cuBnpvye-lkp@intel.com>
-References: <20230322040933.924813-3-tanmay.shah@amd.com>
+        Wed, 22 Mar 2023 02:22:32 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607759E4B;
+        Tue, 21 Mar 2023 23:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+GOYCrC/OPRC4w5qRvD7ykYI55KkiEH9qkzVpgPhTz4=; b=jLUkDzq9ukfIUN8XaQn0G7Kzw5
+        KhL9EusDTAO6ovWmukM6ipl/wg+rivKiPco5hkKGPbeLjuCxZRn58DyJTUHWJ6U8l5cPseBNTFLl3
+        U7NWdFpi+KgakmnMn+JKPVPmjBVoVbxFJBeWf6cEXrfFesfpy3xsmXI4VyeFPzGEHGkGCC5/R57lE
+        dHtANALwFXm67fHMtj4N7uaR+IfAseul7hXn/k/b6M+v4ZDw1Nliyix7p5sMWuqfisbOltH9oLELX
+        4vEarGwOJ9NZnBWP7idcE3l9Im/QYJvMztMMEMtubv+og1//PZsD5H5b54qIJl9L+fZmc2IwQL+fe
+        bgCp9kBA==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <carnil@debian.org>)
+        id 1perrF-00FubZ-RT; Wed, 22 Mar 2023 06:22:02 +0000
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id 108CEBE2DE0; Wed, 22 Mar 2023 07:21:59 +0100 (CET)
+Date:   Wed, 22 Mar 2023 07:21:59 +0100
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Aurelien Jarno <aurel32@debian.org>, 1033301@bugs.debian.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Tom Saeger <tom.saeger@oracle.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, kibi@debian.org,
+        vagrant@debian.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: Bug#1033301: linux: arm64 kernel size increased from 31 to 39
+ MB, causing u-boot-rpi to fail
+Message-ID: <ZBqeh6aN4lFsFPb3@eldamar.lan>
+References: <167943667390.3323902.2304413357807812348.reportbug@ohm.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322040933.924813-3-tanmay.shah@amd.com>
+In-Reply-To: <167943667390.3323902.2304413357807812348.reportbug@ohm.local>
+X-Debian-User: carnil
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,77 +62,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tanmay,
+Hi Aurelien,
 
-Thank you for the patch! Perhaps something to improve:
+Thanks for tracking this down. I would like to loop in Masahiro and
+upstream to see if something can/should be done on upstream side.
 
-[auto build test WARNING on e19967994d342a5986d950a1bfddf19d7e1191b7]
+Masahiro, in short, upstream change 994b7ac1697b ("arm64: remove
+special treatment for the link order of head.o") (which got backported
+as well to 6.1.14) caused the vmlinuz size to icrease significantly,
+causing boot failures on Raspberry Pi 3 Model B Plus with u-boot
+parameters previously working. Full quoting the Debian report below
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tanmay-Shah/remoteproc-Make-rproc_get_by_phandle-work-for-clusters/20230322-121102
-base:   e19967994d342a5986d950a1bfddf19d7e1191b7
-patch link:    https://lore.kernel.org/r/20230322040933.924813-3-tanmay.shah%40amd.com
-patch subject: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
-config: arm-randconfig-r013-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221441.cuBnpvye-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/573d22d13a697097d02d6c29a75fb0fb1ac6d8fe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tanmay-Shah/remoteproc-Make-rproc_get_by_phandle-work-for-clusters/20230322-121102
-        git checkout 573d22d13a697097d02d6c29a75fb0fb1ac6d8fe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+On Tue, Mar 21, 2023 at 11:11:13PM +0100, Aurelien Jarno wrote:
+> Source: linux
+> Version: 6.1.15-1
+> Severity: important
+> Tags: upstream
+> X-Debbugs-Cc: vagrant@debian.org
+> Control: affects -1 + u-boot-rpi
+> 
+> Hi,
+> 
+> Following the upgrade of the kernel from 6.1.12-1 to 6.1.15-1 on a
+> Raspberry Pi 3 Model B Plus, u-boot (from the u-boot-rpi package) failed
+> to boot with:
+> 
+> | 40175552 bytes read in 1695 ms (23 MiB/s)
+> | 43794863 bytes read in 1817 ms (23 MiB/s)
+> | Moving Image from 0x80000 to 0x200000, end=2990000
+> | ERROR: RD image overlaps OS image (OS=0x200000..0x2990000)
+> 
+> I tracked the issue to a significant increase of the kernel size between
+> version 6.1.12-1 and 6.15-1:
+> 
+> | 31492   /boot/vmlinuz-6.1.0-5-arm64
+> | 39236   /boot/vmlinuz-6.1.0-6-arm64
+> 
+> This is more than the 36MB that is allowed by u-boot with the default
+> load addresses. A workaround is to shift the load addresses at the
+> u-boot level as in the attached patch.
+> 
+> I have tracked issue on the upstream kernel side to the following commit
+> on the stable tree:
+> 
+> | commit 3e3e4d234d46e48480a7c7c35399fa811182e8ef
+> | Author: Masahiro Yamada <masahiroy@kernel.org>
+> | Date:   Thu Oct 13 08:35:00 2022 +0900
+> | 
+> |     arm64: remove special treatment for the link order of head.o
+> |     
+> |     commit 994b7ac1697b4581b7726d2ac64321e3c840229b upstream.
+> |     
+> |     In the previous discussion (see the Link tag), Ard pointed out that
+> |     arm/arm64/kernel/head.o does not need any special treatment - the only
+> |     piece that must appear right at the start of the binary image is the
+> |     image header which is emitted into .head.text.
+> |     
+> |     The linker script does the right thing to do. The build system does
+> |     not need to manipulate the link order of head.o.
+> |     
+> |     Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> |     Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> |     Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> |     Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> |     Link: https://lore.kernel.org/r/20221012233500.156764-1-masahiroy@kernel.org
+> |     Signed-off-by: Will Deacon <will@kernel.org>
+> |     Signed-off-by: Tom Saeger <tom.saeger@oracle.com>
+> |     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> The problem is still reproducible on Linus' master.
+> 
+> I am reporting the bug to the linux package as I believed there is no
+> real reason for such an increase in the kernel size. In case I missed
+> something and this is actually wanted, the bug can be reassigned to the
+> u-boot package.
+> 
+> Regards
+> Aurelien
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221441.cuBnpvye-lkp@intel.com/
+> --- u-boot-2023.01+dfsg.orig/include/configs/rpi.h
+> +++ u-boot-2023.01+dfsg/include/configs/rpi.h
+> @@ -95,32 +95,32 @@
+>   *   text_offset bytes (specified in the header of the Image) into a 2MB
+>   *   boundary. The 'booti' command relocates the image if necessary. Linux uses
+>   *   a default text_offset of 0x80000.  In summary, loading at 0x80000
+> - *   satisfies all these constraints and reserving memory up to 0x02400000
+> - *   permits fairly large (roughly 36M) kernels.
+> + *   satisfies all these constraints and reserving memory up to 0x02a00000
+> + *   permits fairly large (roughly 42M) kernels.
+>   *
+>   * scriptaddr and pxefile_addr_r can be pretty much anywhere that doesn't
+>   * conflict with something else. Reserving 1M for each of them at
+> - * 0x02400000-0x02500000 and 0x02500000-0x02600000 should be plenty.
+> + * 0x02a00000-0x02b00000 and 0x02c00000-0x02d00000 should be plenty.
+>   *
+>   * On ARM, both the DTB and any possible initrd must be loaded such that they
+>   * fit inside the lowmem mapping in Linux. In practice, this usually means not
+>   * more than ~700M away from the start of the kernel image but this number can
+>   * be larger OR smaller depending on e.g. the 'vmalloc=xxxM' command line
+>   * parameter given to the kernel. So reserving memory from low to high
+> - * satisfies this constraint again. Reserving 1M at 0x02600000-0x02700000 for
+> - * the DTB leaves rest of the free RAM to the initrd starting at 0x02700000.
+> + * satisfies this constraint again. Reserving 1M at 0x02c00000-0x02d00000 for
+> + * the DTB leaves rest of the free RAM to the initrd starting at 0x02d00000.
+>   * Even with the smallest possible CPU-GPU memory split of the CPU getting
+> - * only 64M, the remaining 25M starting at 0x02700000 should allow quite
+> + * only 64M, the remaining 19M starting at 0x02d00000 should allow quite
+>   * large initrds before they start colliding with U-Boot.
+>   */
+>  #define ENV_MEM_LAYOUT_SETTINGS \
+>  	"fdt_high=" FDT_HIGH "\0" \
+>  	"initrd_high=" INITRD_HIGH "\0" \
+>  	"kernel_addr_r=0x00080000\0" \
+> -	"scriptaddr=0x02400000\0" \
+> -	"pxefile_addr_r=0x02500000\0" \
+> -	"fdt_addr_r=0x02600000\0" \
+> -	"ramdisk_addr_r=0x02700000\0"
+> +	"scriptaddr=0x02a00000\0" \
+> +	"pxefile_addr_r=0x02b00000\0" \
+> +	"fdt_addr_r=0x02c00000\0" \
+> +	"ramdisk_addr_r=0x02d00000\0"
+>  
+>  #if CONFIG_IS_ENABLED(CMD_MMC)
+>  	#define BOOT_TARGET_MMC(func) \
 
-All warnings (new ones prefixed by >>):
+Any ideas?
 
->> drivers/remoteproc/remoteproc_core.c:2563:26: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-           struct platform_device *cluster_pdev;
-                                   ^
-   1 warning generated.
-
-
-vim +2563 drivers/remoteproc/remoteproc_core.c
-
-  2550	
-  2551	/**
-  2552	 * rproc_put() - release rproc reference
-  2553	 * @rproc: the remote processor handle
-  2554	 *
-  2555	 * This function decrements the rproc dev refcount.
-  2556	 *
-  2557	 * If no one holds any reference to rproc anymore, then its refcount would
-  2558	 * now drop to zero, and it would be freed.
-  2559	 */
-  2560	void rproc_put(struct rproc *rproc)
-  2561	{
-  2562		module_put(rproc->dev.parent->driver->owner);
-> 2563		struct platform_device *cluster_pdev;
-  2564	
-  2565		if (rproc->dev.parent) {
-  2566			if (rproc->dev.parent->driver) {
-  2567				module_put(rproc->dev.parent->driver->owner);
-  2568			} else {
-  2569				cluster_pdev = of_find_device_by_node(rproc->dev.parent->of_node->parent);
-  2570				if (cluster_pdev) {
-  2571					module_put(cluster_pdev->dev.driver->owner);
-  2572					put_device(&cluster_pdev->dev);
-  2573				}
-  2574			}
-  2575		}
-  2576		put_device(&rproc->dev);
-  2577	}
-  2578	EXPORT_SYMBOL(rproc_put);
-  2579	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Salvatore
