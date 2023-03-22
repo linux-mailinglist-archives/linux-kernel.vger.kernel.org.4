@@ -2,227 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60156C4CFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53E96C4CE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjCVOG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S231237AbjCVOF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbjCVOGO (ORCPT
+        with ESMTP id S231148AbjCVOFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:06:14 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4BA54CA4;
-        Wed, 22 Mar 2023 07:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sOH/P4JrokMCYAgfWwj5ycXuOYqJurQfzeUI9onBv2s=; b=jBjNHOC7qWB4oHhln7lym2SyvG
-        13fiewzNurZdmqlPmM5LTnqVATc7bc7Ck81ekMH2BdQufrQhM/S/cYdNh+nUd/SS8jlISkZJdxng9
-        UGDNfRGIVcLBM0n4Q0WPB/BTCRBw/oZTgxkxh/MFcemdwuVVMfRrzZwT8hleSfze70nwksyC7FdQo
-        URq2nt3wWzTns3K+z/QYKTG28lEJZKPQMPsDVNr07WZ093beJ4RGvPV3dW+CYaEfTPjs2OhVfICrD
-        rnE+0tsqva+jhkqwvNTu6Df6g8GtY/D7ezclkZESxvIP2EapnT7/e9uX8x4F6vTPNIrjB5GOcYvb0
-        GUSRtrjg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pez4w-004ZNU-0e;
-        Wed, 22 Mar 2023 14:04:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFDD830031E;
-        Wed, 22 Mar 2023 15:04:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B8585240C838E; Wed, 22 Mar 2023 15:04:34 +0100 (CET)
-Date:   Wed, 22 Mar 2023 15:04:34 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
-Message-ID: <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-8-vschneid@redhat.com>
- <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
- <xhsmhmt45c703.mognet@vschneid.remote.csb>
+        Wed, 22 Mar 2023 10:05:24 -0400
+Received: from MW2PR02CU001-vft-obe.outbound.protection.outlook.com (mail-westus2azon11012004.outbound.protection.outlook.com [52.101.48.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD72B4AFF4;
+        Wed, 22 Mar 2023 07:04:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IW4rIfn4pG47q7LZ2a+6/ofIEQ5bWG/yf1wkyl++G4H0IAtA/sDsTPY7i2WKvXLC7l6DO1vXp1dNHSoKXy5CZ3Xcqo+7U45Pa4Sr6GtR4qR6Y9cHXHp+k2B2K5Psrx0xyFSM9AwLUnnOtuP6CyhEJVsFPntLXD/6n6qsUgbt1VSy3D7iQOvUo7btEq3KEEASRYgkPrS5nFoNRS9xzRw6yOWBBIyA5tsA1Pxz3U1wy92ShjCPVtMMqEwU+igQgiWwBvKnB/CJ5LRDbV78u/QjhczhPFFXtYAlUGhaX27cCjwNawoTUVCxbg+wGSacugsvK1aeSFqv6umfktXSr5ohKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+yUhGc2kEDGTvSg5ksdXnHj6g26KYzutBixjVJg9V0k=;
+ b=nJkee0mgpU66L/QZpbjLRA8PQjvvH9aktw+YMU0nhIR0YguxQEJQMOiDsqenPXyIDWrj4mAz8G84hb7AGfTeWtORnl9IMN7i+rHTbtAB0a6W5gHhZekQGUkj2KtFVHIwAKJs7vTZTjACnCswCKZUkdOlaT+U8Kn65HTYQi3GTZh+LN8Q8rXrJy3FNwXTUc7IScOWK48LfsKBEz/7WD2F+wx3K039o0OPS0nJ0j03wDO/VQVw0fueWSUewsBzpZXS2JQ3+CjbjqrEhkGdX/AU7qJ33O7XjFEZ2gWAZlN1+NqQ27dDC4X7ossXFsjQp7B0qzP8PDDHqkMd47KwJMzGUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+yUhGc2kEDGTvSg5ksdXnHj6g26KYzutBixjVJg9V0k=;
+ b=aPTa/A01UV++A+iI8wwseRgnhvgYBzZzzM4MUVWuEJf1KkHkWSJEFiwVcmftHp6ks24pEPUnelUROokmtBYqKEZYgG2qwOl4SEuPI/a1/Vo+MC6AFeBzvaAhQaGaYC8O/8sJrzPBWBX3A+P2DTm5CL6HGJs/b/q+FazXutI0f2c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+Received: from BL0PR05MB5409.namprd05.prod.outlook.com (2603:10b6:208:6e::17)
+ by MN2PR05MB6368.namprd05.prod.outlook.com (2603:10b6:208:e2::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 14:04:54 +0000
+Received: from BL0PR05MB5409.namprd05.prod.outlook.com
+ ([fe80::f634:136a:e2b9:a729]) by BL0PR05MB5409.namprd05.prod.outlook.com
+ ([fe80::f634:136a:e2b9:a729%4]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 14:04:54 +0000
+From:   Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+To:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>,
+        srivatsab@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        vsirnapalli@vmware.com, akaher@vmware.com, tkundu@vmware.com,
+        keerthanak@vmware.com
+Subject: [PATCH v2] net/sctp: Make sha1 as default algorithm if fips is enabled
+Date:   Wed, 22 Mar 2023 19:34:40 +0530
+Message-Id: <1679493880-26421-1-git-send-email-kashwindayan@vmware.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR11CA0096.namprd11.prod.outlook.com
+ (2603:10b6:a03:f4::37) To BL0PR05MB5409.namprd05.prod.outlook.com
+ (2603:10b6:208:6e::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhmt45c703.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR05MB5409:EE_|MN2PR05MB6368:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2889f2b8-967b-42a7-7bd2-08db2ade690c
+X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: F0qJVg/jLqWedrKD/yVwCnpjHPOJbhDowTV26NpegHRYRS9rtT3hGqOWgUgBlL+GRuRjiQ9HYnq7+5I4wUbLkGDagvO3xV0An9SismnbDdaZL5GPOZ1NfHGiqLaezsEJBG6iRyR8uIBHPEIEWWDDtn7R4ZgnYBG9tRKDqfF34gxp7Q6dBnDPdtwbtR3qzdLblob41VN73a2t6QiuX6JopassDiWiJvG4wgye2bCu2rP+tauIajaDUqc9P+RoMDz+6cCaYYZpyqOjbF3Z1a/5GgHt08YiAK1QopvnWI7uPJbE/d4rtykTPbAghAyxAL20A2ANK5WAjbVnF5TGH9byLmzTozWIRqF4lTctxs4JFoI1utPlVGrsvEnjrq/ML5pxt8bCh+2jq0QZLu++MX+Lj/6qxYDnKXCxAVG1wzYEkPHuAe5w0genjQGcLpgNkUBXuMkewdix7wf0PipumfdxLZzJfzNt70RlBaPviMli9e6yfDkDhr7QQ7um+c5IX/QcUUEPOlod1KX8eYF/MRh3oaXECF0j/A+lZkARedL1FJjwGlzM68HZc7G4/CxEX7PxgAKsMHJ0vkMn36Nlm3cOply46vYNi8uLK9Fhaqr99r4xQID8jDHx9ntA7GlgEro395yXGDpvpQdvtD1ZKO1HfEgmZGtQEoWCTZjs9EED2eLlCIE4BASC+XrpojR/I9SI/wf6g9gXBZ/QDJ2GKiDdsjvaH225Qb97fXd+UmcFv8g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR05MB5409.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(376002)(39860400002)(136003)(346002)(451199018)(5660300002)(8936002)(7416002)(41300700001)(921005)(86362001)(38100700002)(38350700002)(2906002)(36756003)(83380400001)(6512007)(26005)(478600001)(186003)(6666004)(6506007)(4326008)(6486002)(107886003)(52116002)(66556008)(66476007)(66946007)(2616005)(316002)(110136005)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XaMaf8SUf4u4iGUKBGg8khHOtgr812EB6+eKRH0c/5GjKQMIXbw16PBEDigG?=
+ =?us-ascii?Q?pAERVqgEm2GC1qZak5HVn/s+k9OJ6oda9kFy2ryKs2j0PTQmZ4yGuAQF7q9Z?=
+ =?us-ascii?Q?vpU29B3L2Zg0KEV4E8uSNOKBMivsmdIUg8QDmsKuTsPE8nMAAzzwmSfFJdze?=
+ =?us-ascii?Q?lsOtLvb9tpg6urvCTMdi1iapXJMsNh6qU78IOskctJp9YIyIiGYxSrW8W3zH?=
+ =?us-ascii?Q?gFm3cK8WoVOFDwY51RVJZRQoKubI57v8Cx5LKw2TlnBc+PFZXbeLsaU7s3vn?=
+ =?us-ascii?Q?1vGV+vAKPT7ESv0U0q+OGgLRIKoWdBw4mtU31LvXbePP05s+bO3G6QrmqKiu?=
+ =?us-ascii?Q?oq8gNz0xSl3q95DztvH4zCAJa/faRfA2MagjgU2jKB9kQKDV8lUS+febRAhf?=
+ =?us-ascii?Q?9Bw/e/f2c1Rcf7VshJP8Ef7ghO2eTt/H9LDVFjiM+zVlL6kpk/1Y+R5BwEFh?=
+ =?us-ascii?Q?MN4BOiCcpLBXRzLEKqobpEJEbByoeVAeax04iwy4AXDo4PrbeYKjLT4u7utg?=
+ =?us-ascii?Q?FPDsiyPmC05l5E7eNV55/XrAwY3LXwgi1UomTOrpTTez1YXdEtb68EXXA51l?=
+ =?us-ascii?Q?TwhSNKYkJ8BcoHWNw5vVpNnnSqLHNU+IE2EVKDI4VNVWBXKZHyZCv7hl2l++?=
+ =?us-ascii?Q?Gfp/2tTQp/DKjP7KTVpn8scTUuGcL+Te9vPoU/1iIwipNQMI2M2qKX6EUuJY?=
+ =?us-ascii?Q?O3DK/eA9Cwmur93D7aj8YQp/vC2ZbVhCU5wtZojtY1Ki9ZaiLScu/uCyQ1tF?=
+ =?us-ascii?Q?SAqw55Qo7Rl4MsyrJxpMsRwtv4YQosxmMfUzyiBHwvBlU6b4t/vc07A1Vqsg?=
+ =?us-ascii?Q?WnpniZE/aKtzYNxpIbGXwhVNLGpnO5S7K24lgAnOn/7esSkwriTwlGb7l1Og?=
+ =?us-ascii?Q?3PbhP5fyzBG/SJQnz0ETSzIQJfXIY79xmnyuiB2nX4MCRAmf2M1aMbXcpE3Z?=
+ =?us-ascii?Q?MFXA+/hIzeuFkzKuSqJ8Qv9x3eXPACemJSWJVaAMCyGwqQihEVH9hTLJuw6S?=
+ =?us-ascii?Q?baGeFFkQh4sa6dRO5JNMEwcTTn2pLO5enkZAWMjl8sEpQpg+mXT+ZzFCYxbd?=
+ =?us-ascii?Q?DQ4TmfFEQNSTRbHLWa+QDcpXMjc6iG2DiUW8t7jGRCMnr99DxXqlzNvviVsn?=
+ =?us-ascii?Q?Kd+/WKB0c9DH1RQYaDO4koNwwFkSKw0bmp8JmO2o6sbv3/8t5kO6sAmLGpEd?=
+ =?us-ascii?Q?cYKmoca99LpKeQVXvLVIxOh1Ynz7GuLO5EYsYYq+QQqWnwR3yfUOKziXRNav?=
+ =?us-ascii?Q?uPnmUArnCI4qGccj/GpmCRQm/dspSca29HvtAx6hfA7K1ZeME8ocbf/3Ur8H?=
+ =?us-ascii?Q?EnMhlERCu7gB+sfOtrvhv7HAIrQadNgLn5rKBxLQPri4C6vCdmt5D0AG1I9K?=
+ =?us-ascii?Q?uqSdt/RG66qdNPyQBSgHCEsVjKH0xbYX3p9IHteFXAMEIOxAeZlUduPhUo65?=
+ =?us-ascii?Q?g3F91p+Dy35egnd9EOYO7iJwVK330aqadVohFmZsmFoWm9RlKOweckeueYfK?=
+ =?us-ascii?Q?Bj5U7npl5Nr8TIV2rFzSE8D5pVq8m6+UuUhokKHE28pRDx8sk8rhmKMfGf/c?=
+ =?us-ascii?Q?huUAUFQzuKAPi3HkPutIRAKWvS6NmdCOGEsHMRTjmvN1WXe5cZFLVn7iB3XO?=
+ =?us-ascii?Q?Ig=3D=3D?=
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2889f2b8-967b-42a7-7bd2-08db2ade690c
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR05MB5409.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 14:04:53.8776
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cqSKfsPxsB2QqY8kD5HH+A6RCLX2t/PnMYpqGQoe/pTSN8rv4Fzomx4vF9fDfhR0ZAr/s/NWAx5UpgfVz9CbkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6368
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:20:28PM +0000, Valentin Schneider wrote:
-> On 22/03/23 10:53, Peter Zijlstra wrote:
+MD5 is not FIPS compliant. But still md5 was used as the default
+algorithm for sctp if fips was enabled.
+Due to this, listen() system call in ltp tests was failing for sctp
+in fips environment, with below error message.
 
-> > Hurmph... so we only really consume @func when we IPI. Would it not be
-> > more useful to trace this thing for *every* csd enqeued?
-> 
-> It's true that any CSD enqueued on that CPU's call_single_queue in the
-> [first CSD llist_add()'ed, IPI IRQ hits] timeframe is a potential source of
-> interference.
-> 
-> However, can we be sure that first CSD isn't an indirect cause for the
-> following ones? say the target CPU exits RCU EQS due to the IPI, there's a
-> bit of time before it gets to flush_smp_call_function_queue() where some other CSD
-> could be enqueued *because* of that change in state.
-> 
-> I couldn't find a easy example of that, I might be biased as this is where
-> I'd like to go wrt IPI'ing isolated CPUs in usermode. But regardless, when
-> correlating an IPI IRQ with its source, we'd always have to look at the
-> first CSD in that CSD stack.
+[ 6397.892677] sctp: failed to load transform for md5: -2
 
-So I was thinking something like this:
+Fix is to not assign md5 as default algorithm for sctp
+if fips_enabled is true. Instead make sha1 as default algorithm.
 
+Fixes: ltp testcase failure "cve-2018-5803 sctp_big_chunk"
+Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
 ---
-Subject: trace,smp: Trace all smp_function_call*() invocations
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Wed Mar 22 14:58:36 CET 2023
-
-(Ab)use the trace_ipi_send_cpu*() family to trace all
-smp_function_call*() invocations, not only those that result in an
-actual IPI.
-
-The queued entries log their callback function while the actual IPIs
-are traced on generic_smp_call_function_single_interrupt().
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+v2:
+the listener can still fail if fips mode is enabled after
+that the netns is initialized. So taking action in sctp_listen_start()
+and buming a ratelimited notice the selected hmac is changed due to fips.
 ---
- kernel/smp.c |   58 ++++++++++++++++++++++++++++++----------------------------
- 1 file changed, 30 insertions(+), 28 deletions(-)
+ net/sctp/socket.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -106,18 +106,20 @@ void __init call_function_init(void)
- }
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index b91616f819de..a1107f42869e 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -49,6 +49,7 @@
+ #include <linux/poll.h>
+ #include <linux/init.h>
+ #include <linux/slab.h>
++#include <linux/fips.h>
+ #include <linux/file.h>
+ #include <linux/compat.h>
+ #include <linux/rhashtable.h>
+@@ -8496,6 +8497,15 @@ static int sctp_listen_start(struct sock *sk, int backlog)
+ 	struct crypto_shash *tfm = NULL;
+ 	char alg[32];
  
- static __always_inline void
--send_call_function_single_ipi(int cpu, smp_call_func_t func)
-+send_call_function_single_ipi(int cpu)
- {
- 	if (call_function_single_prep_ipi(cpu)) {
--		trace_ipi_send_cpu(cpu, _RET_IP_, func);
-+		trace_ipi_send_cpu(cpu, _RET_IP_,
-+				   generic_smp_call_function_single_interrupt);
- 		arch_send_call_function_single_ipi(cpu);
- 	}
- }
- 
- static __always_inline void
--send_call_function_ipi_mask(const struct cpumask *mask, smp_call_func_t func)
-+send_call_function_ipi_mask(const struct cpumask *mask)
- {
--	trace_ipi_send_cpumask(mask, _RET_IP_, func);
-+	trace_ipi_send_cpumask(mask, _RET_IP_,
-+			       generic_smp_call_function_single_interrupt);
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-@@ -318,25 +320,6 @@ static __always_inline void csd_unlock(s
- 	smp_store_release(&csd->node.u_flags, 0);
- }
- 
--static __always_inline void
--raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
--{
--	/*
--	 * The list addition should be visible to the target CPU when it pops
--	 * the head of the list to pull the entry off it in the IPI handler
--	 * because of normal cache coherency rules implied by the underlying
--	 * llist ops.
--	 *
--	 * If IPIs can go out of order to the cache coherency protocol
--	 * in an architecture, sufficient synchronisation should be added
--	 * to arch code to make it appear to obey cache coherency WRT
--	 * locking and barrier primitives. Generic code isn't really
--	 * equipped to do the right thing...
--	 */
--	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
--		send_call_function_single_ipi(cpu, func);
--}
--
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
- void __smp_call_single_queue(int cpu, struct llist_node *node)
-@@ -356,10 +339,23 @@ void __smp_call_single_queue(int cpu, st
- 		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
- 			sched_ttwu_pending : csd->func;
- 
--		raw_smp_call_single_queue(cpu, node, func);
--	} else {
--		raw_smp_call_single_queue(cpu, node, NULL);
-+		trace_ipi_send_cpu(cpu, _RET_IP_, func);
- 	}
++	if (fips_enabled && !strcmp(sp->sctp_hmac_alg, "md5")) {
++#if (IS_ENABLED(CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1))
++		sp->sctp_hmac_alg = "sha1";
++#else
++		sp->sctp_hmac_alg = NULL;
++#endif
++		net_info_ratelimited("changing the hmac algorithm, as md5 is not supported when fips is enabled");
++	}
 +
-+	/*
-+	 * The list addition should be visible to the target CPU when it pops
-+	 * the head of the list to pull the entry off it in the IPI handler
-+	 * because of normal cache coherency rules implied by the underlying
-+	 * llist ops.
-+	 *
-+	 * If IPIs can go out of order to the cache coherency protocol
-+	 * in an architecture, sufficient synchronisation should be added
-+	 * to arch code to make it appear to obey cache coherency WRT
-+	 * locking and barrier primitives. Generic code isn't really
-+	 * equipped to do the right thing...
-+	 */
-+	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-+		send_call_function_single_ipi(cpu);
- }
- 
- /*
-@@ -798,14 +794,20 @@ static void smp_call_function_many_cond(
- 		}
- 
- 		/*
-+		 * Trace each smp_function_call_*() as an IPI, actual IPIs
-+		 * will be traced with func==generic_smp_call_function_single_ipi().
-+		 */
-+		trace_ipi_send_cpumask(cfd->cpumask_ipi, _RET_IP_, func);
-+
-+		/*
- 		 * Choose the most efficient way to send an IPI. Note that the
- 		 * number of CPUs might be zero due to concurrent changes to the
- 		 * provided mask.
- 		 */
- 		if (nr_cpus == 1)
--			send_call_function_single_ipi(last_cpu, func);
-+			send_call_function_single_ipi(last_cpu);
- 		else if (likely(nr_cpus > 1))
--			send_call_function_ipi_mask(cfd->cpumask_ipi, func);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi);
- 	}
- 
- 	if (run_local && (!cond_func || cond_func(this_cpu, info))) {
+ 	/* Allocate HMAC for generating cookie. */
+ 	if (!sp->hmac && sp->sctp_hmac_alg) {
+ 		sprintf(alg, "hmac(%s)", sp->sctp_hmac_alg);
+-- 
+2.39.0
+
