@@ -2,201 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6786C5283
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0D06C5288
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjCVRfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S229843AbjCVRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCVRfD (ORCPT
+        with ESMTP id S229676AbjCVRfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:35:03 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B431E43921;
-        Wed, 22 Mar 2023 10:35:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KmRelXte/OhLzkWwD10Ju4u7NNj0Z5Km+PG92qub/Sv10UplP0jfozkWV8fQdYx7foFyIvyiYSh42iTlXGaM/wkplBdWIesqNSedHArTirtkNmaz+pzDlX5Q7NQmLNBHKtqUbwq6ttjlOD33Xo/199yAjpUns5FSJinF+KspqsEHy8ziRZTQBEtR95IRt5CFgbi/7zq/v14S4rn3yH/dNqnNbBCLx2W0T6GqpA+VncNnGTWFmOA8Dwum45wNJGYdyEJckGrAEowQ3/KcxHnmWpc6LvOaBstOFvlzgVXqLjJ5ipgMvz6wu+xmQadrxX5x6+riN0tQvjOYVPT23Q0YXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JMUvq/xx71EDDtxJkL+wdsQNJZl8vmfyJxiOsM6G+eg=;
- b=jXvXPR65PvaU0xSiL6vZ/Hooy6Fw6eXWqYa63+EVNkuCF8QG+Fq9fIgq58f9TVY3On/z0WQ3avbhCHJu5TW7m/m2cJG2JYq74E5qaz0VnYj4ViuC0alUOHyCyxL1Bd7OejiMfnbtjtMfKv58KYWBIKB1HqzNNvZgnqWZdKdphrvjoDGftgeph87up+AieOPbQntTp9qC9sVmiZCbCusY77jH3gRrebkHbeYk9+4yd6QwTh30NSras1Gz5H0i54u3+umNIbge7hFFaEdLzydA/Ejp2z2TVFg4oKCsZIhPnCs6tnKUeJbNXPch/nGoLA5s6sdwC2S675TFExlQhb+YcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JMUvq/xx71EDDtxJkL+wdsQNJZl8vmfyJxiOsM6G+eg=;
- b=Y0MK+sn5bBRC2zVHZx5XZzFUNL7zD+oLnIBq+5xiMC6udGz9GmBxAieuosZmHUEX9c0p2OCdFO9mHuOTZrDGxBsgEz6+7GOL+izfTJe2R6o4bJd+/TNLWqVRV5oP775PmfYnViW4XA3OoI+Wx5jRdp5OxonaGWy3Jq/sjyxd9PI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
- by CH2PR12MB4085.namprd12.prod.outlook.com (2603:10b6:610:79::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 17:34:59 +0000
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::d214:f856:e057:f856]) by BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::d214:f856:e057:f856%7]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 17:34:59 +0000
-Message-ID: <830db03c-ec6e-b4aa-834a-e67622e5a41f@amd.com>
-Date:   Wed, 22 Mar 2023 10:34:57 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:111.0)
- Gecko/20100101 Thunderbird/111.0
-Subject: Re: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     andersson@kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tarak Reddy <tarak.reddy@amd.com>
-References: <20230322040933.924813-1-tanmay.shah@amd.com>
- <20230322040933.924813-3-tanmay.shah@amd.com> <20230322160537.GB2821487@p14s>
-From:   Tanmay Shah <tanmay.shah@amd.com>
-In-Reply-To: <20230322160537.GB2821487@p14s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR06CA0015.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::28) To BY5PR12MB3683.namprd12.prod.outlook.com
- (2603:10b6:a03:1a5::16)
+        Wed, 22 Mar 2023 13:35:15 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028025C104;
+        Wed, 22 Mar 2023 10:35:10 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-177b78067ffso20156949fac.7;
+        Wed, 22 Mar 2023 10:35:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679506510;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oO1r+1wOZPdRmVHFSgMXfniQwXiQpryzfNXnQDmnsok=;
+        b=qk5vxbnSKM3NmOe7EBhOxK3LEUN6utfcr3pUJD0I1ZetiqNTikDUHFLHsWv/AlNj/t
+         lzUKYlDB1wLPXKKGTdLT2z+Y8sUMRkApREMh4w806S1ANmofBSJKo0SIM+6tLm12syen
+         G0ciCsT6KjKHCs80lgS0ezqAmKJDP/1Beu0M9lqe1UVuzItcSZL1QyNvU9QVPBYH2XGK
+         H1vDKyDDspruVDRmsLZ9rhDp4+csmQXBRmS1GMx302i8k5Lm35AAaGkZX7jE911nU0WQ
+         HRsBGQgs8pS9qFnVan5Alt/HOspDJ4A57uLY0m2DY4tWUd/jMBDg+TX+7ianbNw16QRt
+         ipHQ==
+X-Gm-Message-State: AAQBX9e0o78vqymOoz7O2PM2emQ7H7YggVcoQ+byFUkoPbWNnXRUOr9A
+        cG3MmxygyOdtIDK0SD+1kg==
+X-Google-Smtp-Source: AKy350aJQ/zu7y+zv9sL8buQx6HyBBrINb9iplEr6ICsp6AZ6NaLtLRQHTohfmvE7kyL2L6Fqk+mRw==
+X-Received: by 2002:a05:6871:706:b0:177:c72a:a9cd with SMTP id f6-20020a056871070600b00177c72aa9cdmr453896oap.13.1679506509996;
+        Wed, 22 Mar 2023 10:35:09 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ug21-20020a0568714d1500b0017af6149e61sm5437878oab.21.2023.03.22.10.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 10:35:06 -0700 (PDT)
+Received: (nullmailer pid 3971125 invoked by uid 1000);
+        Wed, 22 Mar 2023 17:35:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] dt-bindings: arm/soc: mediatek: Drop unneeded quotes
+Date:   Wed, 22 Mar 2023 12:34:59 -0500
+Message-Id: <20230322173501.3970991-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|CH2PR12MB4085:EE_
-X-MS-Office365-Filtering-Correlation-Id: 432d18c6-0370-4c77-47ff-08db2afbc28c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vei9gaEEaL7RBnQA1AHkSxIz22Xg9LYmvCusnwgyLw28cjehFdPcvc2r5CSZWeYqIxqnkXqm5ttO0aMa/zTLJgfDFRlla2gDT8jU8cvPuFxgPQd4p4ORDZkgn/839ObtpeDxYd6N2WaIqwTAmc5nlpwLHodjsfMkfNeUn29Se2PA9AGPLb4JHuJL9DC8PE4XX5FN0bm8XKnZN3Dekwb7UiaOAv8KRCsnD7thTR3HRdKzd86IR41lAi2bQn7riIBGTuc6+I0pzhqGedh+fBWSHCWgvcJTu73WAJq6jmOQ5sNFHSVdqttPcHEDe3cWAcisb5RMm4ME6whPKcUlcD7dHvtcWGSnQ0XOsVXOTecSBs1MGtCHPXjPLftkCQZkCqz1nmuxD/WLh4h4+gsIRz6E/MAwSS6wT3T3YKhAK/Nm1Jv3rb+CpjjV1FoZEgcZMGDrV6vJRbZJ86t+mQFGtmA3dOJX+YlB1JcqWFEXa14Hid1F5uEOKlt0QpFygYu1L1kMnIE9sXhIRyQ7Yhal++i82jsLWzY3hH4pFgVjlVkGmSNKv0Exd3mCEaO+miKQZQatPWk7IsMHrtBfUWzHib72Au6TJmuqZy8HgDhY9WXGwM2XERU891O0unIprpC/KxVWG3tWlmnHZRqhpIWo/3TTaNeds5SHYoSpOwIcKnqySFv8BqpVYBtg1xkCY6XVK8SDOVgfIuKpritII9DN448w4qBuLLyjgkJGVloq3woYW10=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(451199018)(8936002)(44832011)(5660300002)(31696002)(86362001)(2906002)(38100700002)(36756003)(4326008)(478600001)(2616005)(41300700001)(6512007)(186003)(6486002)(26005)(6506007)(31686004)(53546011)(316002)(8676002)(66556008)(66476007)(66946007)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Skhuc1lsMGJWWWlraVhHS0hTYzlMSjZWWG4rRlpRdGhnS1cvT3Q0bjEzaWpI?=
- =?utf-8?B?ZlhFTCtlcXJxdmxDVnh0YTZGTUQwY0w3TWRhWnZ5VUdqbm9nYkV5cFg3akEy?=
- =?utf-8?B?am9yYXVhUVk3QmxhZW9naTRjbmF0ZTI1VmVCQzROell3eElEYTBqZU94VWhH?=
- =?utf-8?B?aURZT0tYcFc2N0JmZWt5dHp3b0pqdUFzSk9QSTN1Uy9SYXdTQ2VTZDhZbFdT?=
- =?utf-8?B?RWhJQjkyUHVPZzI3NzZrYS9aRjVqU1RGdXVjU2VuODhLUmgwZXA4cG1XRkxJ?=
- =?utf-8?B?eDVKampCbVZBVThtNUZrenFkcXcyMnQxcTJyZEhLckM0SVprVlZSZHVTeDE2?=
- =?utf-8?B?SnV1RG9KSVBBb2wrNFNEVyswWDRSMGZES3B3azVXb2F5REw3ampIY1k1Y25o?=
- =?utf-8?B?b3hHMkdnRHMrdzBmWUpmanFNQWQ2T0Y0cDRBWlZibnNBZldOa3dLRmFBdkEx?=
- =?utf-8?B?bGc2aTIyVEV2ekRDcjhLUTVaUC9XMGpTd3BhYmdudTRyNm5OMHR3dklDTlRq?=
- =?utf-8?B?a2tjM00rbzliRHhydGUxRklnSUdZTjFHZkJCWk9hMU5RTGF0OTlObnhGTGVV?=
- =?utf-8?B?bFhDNXlxTWhiZ2xhK05lRVE4dFkwb3JaMlNPbkZ6aW1iK2pMUHBGb0Q5UTll?=
- =?utf-8?B?LzZiSWZpSk8vR0FBL1h1MUw0ZE5lbkJjT1VodS9kOUlsMW9Qb3hUUUhleCti?=
- =?utf-8?B?KzRZSUdtaTNMZStQcStCemk3QlcwNWFRRUw0eWtqQnBkemswbHlpNW9JZzRj?=
- =?utf-8?B?WXkrUVljNHFTOTZvSG5Pam40SXhaWVhPTkREYUwxNzZtcE9ZV0hSeXBkbXZs?=
- =?utf-8?B?U0RNdWNRM21nL3hMZ2tPOFBlQmhRd1J6SWJPYXhVYzlaV0dsMmFzTmZ3NVNR?=
- =?utf-8?B?NUpvUk1nbWlkckRDSnA1VTRHb0J0d1Q2OHd4OWxVS2JiMldLL01BRHdlYUFu?=
- =?utf-8?B?UTY0YTdTZmhyWTdDT0hhNk8vWkRHaHZiaFVrVnU2NTAzZStteUl0YUtHVk16?=
- =?utf-8?B?ZjVDQ3NPM1VqSi9hekVVcHZ5QVNRZWRzUkx2VWd3QlowSnNWd0pvZVRUNWJj?=
- =?utf-8?B?Uk00RDJNUkRIR2UxaG03N3F6MU5HaXA3b3VybjhyWGtwaGNxTC9pN3FZa2xZ?=
- =?utf-8?B?UVFEOFJ5ZWJhRkovK1Y2cVMvOU53cnpjekdtNDlqL09vUXRWT0NpTnFFZURL?=
- =?utf-8?B?andKN0EyL0RIdDZKNlBVaW9lb0VHM2JTK3RSdjFlMG5LU1BOWVUxeVFHWisw?=
- =?utf-8?B?ZkE3YUZDTmg1L2RWaVdjSEpSdmNodGp6aC90bDdxcFBBdnlwZlV3dWhYK0p0?=
- =?utf-8?B?Q0wxVm5leEJtbi8vNjFBVzZrWGpBR0VhenFHUmFsbnNNYlQ0QWFUZWxQUzA1?=
- =?utf-8?B?WFQxbVlKVk1jeTh1ZmdXWnhHYWRFTjFFMzI1bEwwY21KUTBZcXR4WlUvc0Nu?=
- =?utf-8?B?empiWjhBSFNpVVdhSGxsU1NRRXA5RjlhOWFvL0RjYjYxTUt5cmtKSVBPdExL?=
- =?utf-8?B?N1FRMlUrOWo1T0g0SXRDQ3haTWdZMnJ1SU4wa25PWGtsS3lZTzVpYU1IeFRq?=
- =?utf-8?B?ckJsVWRLeHF3dUE0cUhvcWh6UXhQOVBNSGtGMlF6bGY5TDJDUzZrYXpBbVZR?=
- =?utf-8?B?cllRSGMyN0tId3BySGs1LzdzeFFFT1hKSVIvSktNNldjcHB3Nk1Sc0lsdlYw?=
- =?utf-8?B?N3ZYcktRR2x6MHpveHlqVW5YdURIQlJCL1FRNDhRK0pYaWhsNmUxamdTL2Ey?=
- =?utf-8?B?MzRCamdlUzh0WG9tclY4ei9FTERxa2hRQU5uOGU2V0Z3eDVvaGVOUGh5Uklm?=
- =?utf-8?B?a3ZCdml6QWZ1dlRIcTh1eEpZZ3RYWlJYRU93cGJMNFFBVEQxM0QxWDI3UVBL?=
- =?utf-8?B?aEo4L1gxNGlrM3ZHbXlFZGIvTkRHUGY4OUFvanV6T0ZRNkRjMVVERWVUN2pH?=
- =?utf-8?B?NE80SXE3WGM1eW5oNEZWNlBFdHBHTXVPbjVRaVBYY1FLam9UeURkcXkwbDdj?=
- =?utf-8?B?UzIyZmVjNHN0RUJ5Q1NjdjFjclZQR0JPN2pDYlhqMGR5S0NyTStUcWVMblNm?=
- =?utf-8?B?VWxzSWNkRGM4LzFKOUMwNW9ZWFlBSnowaWptNC9iSis5TGV2cC9Dc3Y4SDNZ?=
- =?utf-8?Q?cLSPv7lAmR8SNDMFQoznuO2NJ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 432d18c6-0370-4c77-47ff-08db2afbc28c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 17:34:59.4219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tPWpFfHAq9Svz7pLpkc7dLLb0FriJz3svCXvIsJVgn/pxVp3BQLAe7qyKd/tXRYS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4085
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-On 3/22/23 9:05 AM, Mathieu Poirier wrote:
-> Hi Tanmay,
->
-> On Tue, Mar 21, 2023 at 09:09:36PM -0700, Tanmay Shah wrote:
->> This patch enhances rproc_put() to support remoteproc clusters
->> with multiple child nodes as in rproc_get_by_phandle().
->>
->> Signed-off-by: Tarak Reddy <tarak.reddy@amd.com>
->> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
->> ---
->>   drivers/remoteproc/remoteproc_core.c | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index a3e7c8798381..e7e451012615 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -2560,6 +2560,19 @@ EXPORT_SYMBOL(rproc_free);
->>   void rproc_put(struct rproc *rproc)
->>   {
->>   	module_put(rproc->dev.parent->driver->owner);
-> There is something wrong here - this should have been removed.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml   | 4 ++--
+ .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml    | 4 ++--
+ .../devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml       | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8186-clock.yaml          | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml      | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml          | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml      | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8195-clock.yaml          | 4 ++--
+ .../bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml      | 4 ++--
+ .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml    | 4 ++--
+ Documentation/devicetree/bindings/soc/mediatek/devapc.yaml    | 4 ++--
+ 13 files changed, 26 insertions(+), 26 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
+index e997635e4fe4..ea98043c6ba3 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,infracfg.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,infracfg.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,infracfg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Infrastructure System Configuration Controller
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+index d1410345ef18..536f5a5ebd24 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mmsys.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mmsys.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek mmsys controller
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+index 9fbeb626ab23..d89848a8f478 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek PCIE Mirror Controller for MT7622
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
+index 5c223cb063d4..efcdc4449416 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-wed.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-wed.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-wed.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Wireless Ethernet Dispatch Controller for MT7622
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml
+index 96221f51c1c3..82f64469a601 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7986-wed-pcie.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7986-wed-pcie.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt7986-wed-pcie.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek PCIE WED Controller for MT7986
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+index cf1002c3efa6..7cd14b163abe 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Functional Clock Controller for MT8186
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+index 661047d26e11..64c769416690 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-sys-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-sys-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek System Clock Controller for MT8186
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
+index b57cc2e69efb..dff4c8e8fd4b 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8192-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8192-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Functional Clock Controller for MT8192
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml
+index 27f79175c678..8d608fddf3f9 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-sys-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8192-sys-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8192-sys-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek System Clock Controller for MT8192
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml
+index d62d60181147..d17164b0b13e 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8195-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8195-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Functional Clock Controller for MT8195
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml
+index 95b6bdf99936..066c9b3d6ac9 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8195-sys-clock.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt8195-sys-clock.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,mt8195-sys-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek System Clock Controller for MT8195
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+index ef62cbb13590..26158d0d72f3 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,pericfg.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,pericfg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Peripheral Configuration Controller
+ 
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml b/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
+index d0a4bc3b03e9..99e2caafeadf 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
++++ b/Documentation/devicetree/bindings/soc/mediatek/devapc.yaml
+@@ -2,8 +2,8 @@
+ # # Copyright 2020 MediaTek Inc.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/mediatek/devapc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/mediatek/devapc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MediaTek Device Access Permission Control driver
+ 
+-- 
+2.39.2
 
-Thanks Mathieu. Sure this needs to be fixed.
-
-This is result of manually picking up patch from my side.
-
-I will try to find better automated way to pick-up patches not available 
-on mailing list.
-
-
->
->> +	struct platform_device *cluster_pdev;
->> +
->> +	if (rproc->dev.parent) {
-> This condition is not needed, please remove.
-Ack.
->
->> +		if (rproc->dev.parent->driver) {
->> +			module_put(rproc->dev.parent->driver->owner);
->> +		} else {
->> +			cluster_pdev = of_find_device_by_node(rproc->dev.parent->of_node->parent);
->> +			if (cluster_pdev) {
->> +				module_put(cluster_pdev->dev.driver->owner);
->> +				put_device(&cluster_pdev->dev);
-
-I am not sure if cluster_pdev->dev should be dropped here.
-
-Should we drop it in platform driver after rproc_free() ?
-
->> +			}
->> +		}
->> +	}
-> Some in-lined documentation, the way I did in patch 1/2 would be appreciated.
-> Otherwize I think the above enhancement make sense.
-Ack I will document in next revision.
->
-> Thanks,
-> Mathieu
->
->>   	put_device(&rproc->dev);
-
-
-Also, if we decide to drop cluster->dev here  then,
-
-should we drop reference of rproc->dev before cluster->dev ?
-
-
->>   }
->>   EXPORT_SYMBOL(rproc_put);
->> -- 
->> 2.25.1
->>
