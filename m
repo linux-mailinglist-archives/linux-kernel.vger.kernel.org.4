@@ -2,82 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F336C54C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290C46C54C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjCVTS7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 15:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S231127AbjCVTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjCVTS4 (ORCPT
+        with ESMTP id S229998AbjCVTT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:18:56 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA16E62317;
-        Wed, 22 Mar 2023 12:18:53 -0700 (PDT)
-Received: from p5b12767e.dip0.t-ipconnect.de ([91.18.118.126] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pf3yd-0003yH-2U; Wed, 22 Mar 2023 20:18:27 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: nvmem: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 20:18:25 +0100
-Message-ID: <3316420.tdWV9SEqCh@phil>
-In-Reply-To: <20230317233640.3968821-1-robh@kernel.org>
-References: <20230317233640.3968821-1-robh@kernel.org>
+        Wed, 22 Mar 2023 15:19:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C8C2D71
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679512795; x=1711048795;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pg5NNlS4ad+LRq/5c7S6MbLvj8O8FQnKakg+GtVdxl4=;
+  b=iFzLDD8BAMF83HMb1g/3T+Ox6IMzgJ4QX0uchiTDUZIg0qyJvZ2lkt8L
+   4/LSEZXB/cqfif/+6WAiqxA17RACEhKvn3QTEidYJHKnMF42bDcPAv6TR
+   wLl8qPBHwOgiy93BpZ+r4F1kiXqbjuhHJWEn6u7V1MZhSBYN0Y/JsRyy6
+   EwoUv8F0xP28dK+XbX613tqgAzxB60/2LmWG2NS2z4VZ7MOkRIFgKU7kH
+   8XJKVgSt4nMkW1f5ioY5NVL0P2oLdII0CEAZH6cQAjtn/dhLb9kAmXEwC
+   cdkxc6CwTWSXWYoDhrrrb3KC3VJ/2kY0c1DjBoeK/fOOnmLcaNXDx+ii2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336822230"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="336822230"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 12:19:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="805969540"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="805969540"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2023 12:19:52 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf3zz-000Dc0-1l;
+        Wed, 22 Mar 2023 19:19:51 +0000
+Date:   Thu, 23 Mar 2023 03:19:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hsia-Jun Li <randy.li@synaptics.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     oe-kbuild-all@lists.linux.dev, tzimmermann@suse.de,
+        ayaka@soulik.info, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, Hsia-Jun Li <randy.li@synaptics.com>,
+        laurent.pinchart@ideasonboard.com, ribalda@chromium.org,
+        nicolas@ndufresne.ca
+Subject: Re: [PATCH v6 2/2] Documentation/gpu: Add Synaptics tiling formats
+ documentation
+Message-ID: <202303230311.mRoFe6oK-lkp@intel.com>
+References: <20230322082910.115371-3-randy.li@synaptics.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322082910.115371-3-randy.li@synaptics.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Samstag, 18. März 2023, 00:36:39 CET schrieb Rob Herring:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+Hi Hsia-Jun,
 
->  Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml     | 2 +-
+Thank you for the patch! Perhaps something to improve:
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Hsia-Jun-Li/drm-fourcc-Add-Synaptics-VideoSmart-tiled-modifiers/20230322-163252
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230322082910.115371-3-randy.li%40synaptics.com
+patch subject: [PATCH v6 2/2] Documentation/gpu: Add Synaptics tiling formats documentation
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/51642395567738204b07b9c48e27d4a5298f1ca9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hsia-Jun-Li/drm-fourcc-Add-Synaptics-VideoSmart-tiled-modifiers/20230322-163252
+        git checkout 51642395567738204b07b9c48e27d4a5298f1ca9
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230311.mRoFe6oK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/gpu/synaptics.rst:47: WARNING: Bullet list ends without a blank line; unexpected unindent.
+>> Documentation/gpu/synaptics.rst:60: WARNING: Block quote ends without a blank line; unexpected unindent.
+>> Documentation/gpu/synaptics.rst:38: WARNING: Error parsing content block for the "flat-table" directive: exactly one bullet list expected.
+
+vim +47 Documentation/gpu/synaptics.rst
+
+    37	
+  > 38	.. flat-table:: Synpatics Image Format Modifiers
+    39	
+    40		* - Identifier
+    41		  - Fourcc
+    42		  - Details
+    43	
+    44		* - DRM_FORMAT_MOD_SYNA_V4H1
+    45		  - DRM_FORMAT_NV12
+    46		  - The plain uncompressed 8 bits tile format. It sounds similar to
+  > 47		Intel's Y-tile. but it won't take any pixel from the next X direction
+    48		in a tile group. The line stride and image height must be aligned to
+    49		a multiple of 16. The height of chrominance plane would plus 8.
+    50	
+    51		* - DRM_FORMAT_MOD_SYNA_V4H3P8
+    52		  - DRM_FORMAT_NV15
+    53		  - The plain uncompressed 10 bits tile format. It stores pixel in 2D
+    54		3x4 tiles with a 8bits padding to each of tile. Then a tile is in a
+    55		128 bits cache line.
+    56	
+    57		* - DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED
+    58		  - DRM_FORMAT_NV12
+    59		  - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H1``.
+  > 60	    A group of tiles would contain 64x4 pixels, where a tile has 1x4
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
