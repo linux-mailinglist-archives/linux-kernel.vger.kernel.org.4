@@ -2,233 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144916C53E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E496C53E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCVSmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S230304AbjCVSkI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 14:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCVSmD (ORCPT
+        with ESMTP id S230090AbjCVSj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:42:03 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD6E46142;
-        Wed, 22 Mar 2023 11:42:01 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C13FF5FD3E;
-        Wed, 22 Mar 2023 21:41:59 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679510519;
-        bh=FW8jr4pUz8iTbODmex7VnHAmCT1DPjH/4GpL+Pk/K5w=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=EMnTNapepoxBw+9De79Jnrf9xt9+Ww5heQcA1F5qDSdockR9CsAEwu66BsQf2iDRz
-         MNHQj7U1ms3SmdGmHdM1wzPXHc5eX9rerFMyi4VyEi+FWISJJXmKY3pLu9vdjJuRDC
-         7aXZqNvcezeBlnfGVHXMbTPm1lWg76sfamAr4sx4ScDzjdmYx/eOBZ/ncZxT1Knw0B
-         eqLekMEigPjBI4I8MQPCeliBtKQdmaYRaoG2qCCr64oLVeJjIFl8wqiAlQnbj244SC
-         aOlmPUfpKzVdygOJ5S6pv2ifzJli8NPRPcCpeJjasFvUmso3zGngbJzivzVaMnCUIC
-         U0t/iUw8QucIQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 21:41:59 +0300 (MSK)
-Message-ID: <5651ac8a-db47-2462-e651-e5c6935847b9@sberdevices.ru>
-Date:   Wed, 22 Mar 2023 21:38:44 +0300
+        Wed, 22 Mar 2023 14:39:59 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDE010F8;
+        Wed, 22 Mar 2023 11:39:55 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id i5so29914333eda.0;
+        Wed, 22 Mar 2023 11:39:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679510394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E7rV+SRpydAcO3aF+tnR91nn7Q5fcg5T3XLPDHeJhik=;
+        b=XfhmPjg+puhMqXTuzmKoK+oXeHJp8WxgJ6jt9516if2MtfJXRPLnIeKzfE9uksHWQA
+         VigJsbN2Hm3t9W+4Bt1AM6rOHOkk+mivHFM8efDX1y5pt3CIoBKfuGIge4+8jKAxAoH9
+         aY1lvRGW2a3ra97swIEbzogHg/1+AfkLZmepitaVnC8pUFNbgOYPXu4iZr5RWcjZ8j2c
+         trmX1cilJ6rNoCX/ZYwX+2Li5dGlroPbX9dx2cuFCMGDg8r6wd4cLILRfjnhhHOBbY2g
+         L+X85Xg+iNkvZqxsbVSjLv+RPy/1b8bOukcp3eEp5OmQxSouajPKSLU1KC0IFw1OHM+f
+         92tg==
+X-Gm-Message-State: AO0yUKXXnCBHef8zbNHDUe1u3M2EUnol4uUVUZM/7SEiRYHsx6TUQvtR
+        quCkJKrlsgDjcKmKgXJn2DAyAiOValh74XpyWVU=
+X-Google-Smtp-Source: AK7set8GTSoMTVUaheMEuVEUivJgOMkcKrAXGDPunim0E7Q4xVL8zvucT3EGhB3/pzUfwesiYc8Tqf8mCVJACUP5OQo=
+X-Received: by 2002:a17:906:ca41:b0:939:a51a:dc30 with SMTP id
+ jx1-20020a170906ca4100b00939a51adc30mr1794905ejb.2.1679510394073; Wed, 22 Mar
+ 2023 11:39:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v4] virtio/vsock: allocate multiple skbuffs on tx
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru>
- <20230322144115.sz3icgbnhjgae2fj@sgarzare-redhat>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230322144115.sz3icgbnhjgae2fj@sgarzare-redhat>
+References: <20230322111330.63651-1-roger.pau@citrix.com>
+In-Reply-To: <20230322111330.63651-1-roger.pau@citrix.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 19:39:43 +0100
+Message-ID: <CAJZ5v0jRNHDsDwXPJa01x2t35vNboVxb4hysE4dfThrJs9kT7Q@mail.gmail.com>
+Subject: Re: [PATCH v6] ACPI: processor: Fix evaluating _PDC method when
+ running as Xen dom0
+To:     Roger Pau Monne <roger.pau@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
+        Alex Chiang <achiang@hp.com>, linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 14:20:00 #20991698
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 22, 2023 at 12:13 PM Roger Pau Monne <roger.pau@citrix.com> wrote:
+>
+> In ACPI systems, the OS can direct power management, as opposed to the
+> firmware.  This OS-directed Power Management is called OSPM.  Part of
+> telling the firmware that the OS going to direct power management is
+> making ACPI "_PDC" (Processor Driver Capabilities) calls.  These _PDC
+> methods must be evaluated for every processor object.  If these _PDC
+> calls are not completed for every processor it can lead to
+> inconsistency and later failures in things like the CPU frequency
+> driver.
+>
+> In a Xen system, the dom0 kernel is responsible for system-wide power
+> management.  The dom0 kernel is in charge of OSPM.  However, the
+> number of CPUs available to dom0 can be different than the number of
+> CPUs physically present on the system.
+>
+> This leads to a problem: the dom0 kernel needs to evaluate _PDC for
+> all the processors, but it can't always see them.
+>
+> In dom0 kernels, ignore the existing ACPI method for determining if a
+> processor is physically present because it might not be accurate.
+> Instead, ask the hypervisor for this information.
+>
+> Fix this by introducing a custom function to use when running as Xen
+> dom0 in order to check whether a processor object matches a CPU that's
+> online.  Such checking is done using the existing information fetched
+> by the Xen pCPU subsystem, extending it to also store the ACPI ID.
+>
+> This ensures that _PDC method gets evaluated for all physically online
+> CPUs, regardless of the number of CPUs made available to dom0.
+>
+> Fixes: 5d554a7bb064 ('ACPI: processor: add internal processor_physically_present()')
+> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+> ---
+> Changes since v5:
+>  - Include bug.h header for the inline dummy helper.
+>  - Constify pcpu local variable in xen_processor_present().
+>
+> Changes since v4:
+>  - Move definition/declaration of xen_processor_present() to different
+>    header.
+>  - Fold subject edit.
+>
+> Changes since v3:
+>  - Protect xen_processor_present() definition with CONFIG_ACPI.
+>
+> Changes since v2:
+>  - Extend and use the existing pcpu functionality.
+>
+> Changes since v1:
+>  - Reword commit message.
+> ---
+>  drivers/acpi/processor_pdc.c | 11 +++++++++++
+>  drivers/xen/pcpu.c           | 20 ++++++++++++++++++++
+>  include/xen/xen.h            | 11 +++++++++++
+>  3 files changed, 42 insertions(+)
+>
+> diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
+> index 8c3f82c9fff3..18fb04523f93 100644
+> --- a/drivers/acpi/processor_pdc.c
+> +++ b/drivers/acpi/processor_pdc.c
+> @@ -14,6 +14,8 @@
+>  #include <linux/acpi.h>
+>  #include <acpi/processor.h>
+>
+> +#include <xen/xen.h>
+> +
+>  #include "internal.h"
+>
+>  static bool __init processor_physically_present(acpi_handle handle)
+> @@ -47,6 +49,15 @@ static bool __init processor_physically_present(acpi_handle handle)
+>                 return false;
+>         }
+>
+> +       if (xen_initial_domain())
+> +               /*
+> +                * When running as a Xen dom0 the number of processors Linux
+> +                * sees can be different from the real number of processors on
+> +                * the system, and we still need to execute _PDC for all of
+> +                * them.
+> +                */
+> +               return xen_processor_present(acpi_id);
+> +
+>         type = (acpi_type == ACPI_TYPE_DEVICE) ? 1 : 0;
+>         cpuid = acpi_get_cpuid(handle, type, acpi_id);
+>
+> diff --git a/drivers/xen/pcpu.c b/drivers/xen/pcpu.c
+> index fd3a644b0855..b3e3d1bb37f3 100644
+> --- a/drivers/xen/pcpu.c
+> +++ b/drivers/xen/pcpu.c
+> @@ -58,6 +58,7 @@ struct pcpu {
+>         struct list_head list;
+>         struct device dev;
+>         uint32_t cpu_id;
+> +       uint32_t acpi_id;
+>         uint32_t flags;
+>  };
+>
+> @@ -249,6 +250,7 @@ static struct pcpu *create_and_register_pcpu(struct xenpf_pcpuinfo *info)
+>
+>         INIT_LIST_HEAD(&pcpu->list);
+>         pcpu->cpu_id = info->xen_cpuid;
+> +       pcpu->acpi_id = info->acpi_id;
+>         pcpu->flags = info->flags;
+>
+>         /* Need hold on xen_pcpu_lock before pcpu list manipulations */
+> @@ -381,3 +383,21 @@ static int __init xen_pcpu_init(void)
+>         return ret;
+>  }
+>  arch_initcall(xen_pcpu_init);
+> +
+> +#ifdef CONFIG_ACPI
+> +bool __init xen_processor_present(uint32_t acpi_id)
+> +{
+> +       const struct pcpu *pcpu;
+> +       bool online = false;
+> +
+> +       mutex_lock(&xen_pcpu_lock);
+> +       list_for_each_entry(pcpu, &xen_pcpus, list)
+> +               if (pcpu->acpi_id == acpi_id) {
+> +                       online = pcpu->flags & XEN_PCPU_FLAGS_ONLINE;
+> +                       break;
+> +               }
+> +       mutex_unlock(&xen_pcpu_lock);
+> +
+> +       return online;
+> +}
+> +#endif
+> diff --git a/include/xen/xen.h b/include/xen/xen.h
+> index 7adf59837c25..0efeb652f9b8 100644
+> --- a/include/xen/xen.h
+> +++ b/include/xen/xen.h
+> @@ -71,4 +71,15 @@ static inline void xen_free_unpopulated_pages(unsigned int nr_pages,
+>  }
+>  #endif
+>
+> +#if defined(CONFIG_XEN_DOM0) && defined(CONFIG_ACPI) && defined(CONFIG_X86)
+> +bool __init xen_processor_present(uint32_t acpi_id);
+> +#else
+> +#include <linux/bug.h>
+> +static inline bool xen_processor_present(uint32_t acpi_id)
+> +{
+> +       BUG();
+> +       return false;
+> +}
+> +#endif
+> +
+>  #endif /* _XEN_XEN_H */
+> --
 
+Applied as 6.4 material.
 
-On 22.03.2023 17:41, Stefano Garzarella wrote:
-> On Tue, Mar 21, 2023 at 06:03:14PM +0300, Arseniy Krasnov wrote:
->> This adds small optimization for tx path: instead of allocating single
->> skbuff on every call to transport, allocate multiple skbuff's until
->> credit space allows, thus trying to send as much as possible data without
->> return to af_vsock.c.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->> Link to v1:
->> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
->> Link to v2:
->> https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
->> Link to v3:
->> https://lore.kernel.org/netdev/f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru/
->>
->> Changelog:
->> v1 -> v2:
->> - If sent something, return number of bytes sent (even in
->>   case of error). Return error only if failed to sent first
->>   skbuff.
->>
->> v2 -> v3:
->> - Handle case when transport callback returns unexpected value which
->>   is not equal to 'skb->len'. Break loop.
->> - Don't check for zero value of 'rest_len' before calling
->>   'virtio_transport_put_credit()'. Decided to add this check directly
->>   to 'virtio_transport_put_credit()' in separate patch.
->>
->> v3 -> v4:
->> - Use WARN_ONCE() to handle case when transport callback returns
->>   unexpected value.
->> - Remove useless 'ret = -EFAULT;' assignment for case above.
->>
->> net/vmw_vsock/virtio_transport_common.c | 59 +++++++++++++++++++------
->> 1 file changed, 45 insertions(+), 14 deletions(-)
->>
->> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->> index 6564192e7f20..a300f25749ea 100644
->> --- a/net/vmw_vsock/virtio_transport_common.c
->> +++ b/net/vmw_vsock/virtio_transport_common.c
->> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>     const struct virtio_transport *t_ops;
->>     struct virtio_vsock_sock *vvs;
->>     u32 pkt_len = info->pkt_len;
->> -    struct sk_buff *skb;
->> +    u32 rest_len;
->> +    int ret;
->>
->>     info->type = virtio_transport_get_type(sk_vsock(vsk));
->>
->> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>
->>     vvs = vsk->trans;
->>
->> -    /* we can send less than pkt_len bytes */
->> -    if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
->> -        pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
->> -
->>     /* virtio_transport_get_credit might return less than pkt_len credit */
->>     pkt_len = virtio_transport_get_credit(vvs, pkt_len);
->>
->> @@ -227,17 +224,51 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->>     if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
->>         return pkt_len;
->>
->> -    skb = virtio_transport_alloc_skb(info, pkt_len,
->> -                     src_cid, src_port,
->> -                     dst_cid, dst_port);
->> -    if (!skb) {
->> -        virtio_transport_put_credit(vvs, pkt_len);
->> -        return -ENOMEM;
->> -    }
->> +    ret = 0;
-> 
-> nit: this initialization seems superfluous since `ret` is
-> overwritten later ...
-> 
->> +    rest_len = pkt_len;
->> +
->> +    do {
->> +        struct sk_buff *skb;
->> +        size_t skb_len;
->> +
->> +        skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
->> +
->> +        skb = virtio_transport_alloc_skb(info, skb_len,
->> +                         src_cid, src_port,
->> +                         dst_cid, dst_port);
->> +        if (!skb) {
->> +            ret = -ENOMEM;
->> +            break;
->> +        }
->>
->> -    virtio_transport_inc_tx_pkt(vvs, skb);
->> +        virtio_transport_inc_tx_pkt(vvs, skb);
->>
->> -    return t_ops->send_pkt(skb);
->> +        ret = t_ops->send_pkt(skb);
-> 
-> ... here.
-> 
->> +
-> 
-> nit: we can remove this extra line
-> 
->> +        if (ret < 0)
->> +            break;
->> +
->> +        /* Both virtio and vhost 'send_pkt()' returns 'skb_len',
->> +         * but for reliability use 'ret' instead of 'skb_len'.
->> +         * Also if partial send happens (e.g. 'ret' != 'skb_len')
->> +         * somehow, we break this loop, but account such returned
->> +         * value in 'virtio_transport_put_credit()'.
->> +         */
->> +        rest_len -= ret;
->> +
->> +        if (WARN_ONCE(ret != skb_len,
->> +                  "'send_pkt()' returns %i, but %zu expected\n",
->> +                  ret, skb_len))
->> +            break;
->> +    } while (rest_len);
->> +
->> +    virtio_transport_put_credit(vvs, rest_len);
->> +
->> +    /* Return number of bytes, if any data has been sent. */
->> +    if (rest_len != pkt_len)
->> +        ret = pkt_len - rest_len;
->> +
->> +    return ret;
->> }
->>
->> static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
->> -- 2.25.1
->>
-> 
-> The patch LGTM:
-> 
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> Anyway, feel free to include in the same series or as separate patch
-> also the changes to avoid useless lock in virtio_transport_put_credit()
-> and virtio_transport_get_credit().
-> 
-> I would include it in this series, because before these changes, we
-> used to call virtio_transport_put_credit() only in the error path,
-> while now we always call it, even when rest_len is 0.
-
-Thanks for review, done!
-https://lore.kernel.org/netdev/f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru/
-Added it as second patch to the series
-
-Thanks, Arseniy
-> 
-> Thanks,
-> Stefano
-> 
+I've added the R-by from Juergen to it, because the difference between
+it and the v4 for which the tag was provided is merely a build fix.
