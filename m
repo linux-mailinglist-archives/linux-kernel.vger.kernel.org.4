@@ -2,194 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DC36C4C2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC006C4C2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjCVNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S230301AbjCVNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVNrF (ORCPT
+        with ESMTP id S230191AbjCVNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:47:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C753574D5;
-        Wed, 22 Mar 2023 06:47:04 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M6O5xd018155;
-        Wed, 22 Mar 2023 13:46:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FR+44d4jP821EvAKO/qXlqfD1vyoOuDuFhxiH8bSo3c=;
- b=YriyVRplDF7kOZD+FH8GNWIsxylNuMxim3qtQdJIhRrQzYH6MdRIhYaIzqTtspB6O2V1
- SDVwd99ZGtqu5KT/tfj+AEAIWJMcFyXAkjkzCEUvTpIUKkTxMZdhDB+heKJ/fZfaBwca
- YqGXj4M2cyKyjdPfAjekDxfFW/eJ6gve083iUtzDpvRqAQM5Ab7/uwKauRXpFKHJUA+l
- fQWhZUIinfskSberuFO5DlHWgR1FmNIYCHOljrh5GlwYaYJtPriQwgGfqiH5t0MtfSPd
- jC7Xf2IQgVaVScdu/YXeKRrrN3NvqTZepRJlZAkLesK1ggGGTjpEari/VTxAsjlZ1Q/p Pw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfbjybjbk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 13:46:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MDkrC1029190
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 13:46:53 GMT
-Received: from [10.50.8.113] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Mar
- 2023 06:46:50 -0700
-Message-ID: <e88d9482-4858-7042-7148-142ed9ebb6ad@quicinc.com>
-Date:   Wed, 22 Mar 2023 19:16:46 +0530
+        Wed, 22 Mar 2023 09:47:12 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7365848B;
+        Wed, 22 Mar 2023 06:47:08 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id B255D20002;
+        Wed, 22 Mar 2023 13:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679492827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T+MhMxWN1EUNsUGAqTUd7ORZBQVY4DIgA/LbY8h2In0=;
+        b=d9eFJ8qIFHG3s/7lo5O1t9AiUIXS/4ZUEyfp+tzQ9976UAktovkfqzEGD8xOn/fzTqL4CG
+        5y3SCAp6cYVxYtVIIefgvvUQreBEwopg5RWMI7l5oFV5068w9x1EMCbrjy6upqRKlMy1Z9
+        ZBFpQmLTkZK8u+ovPmMkl7xFlcad7OjB9r//PoFz2IYHrVF1+5I0LPiYjg56gn5vfALPf1
+        amWGAmOYhCq6IoRW5IKeDorbZIHUCojBhwaqeMRayWjLPQldSnPmx7vzDnVIGMdCJeorqA
+        WTYhOG4JBD2bUGOBMjvqTF9SeDfaQmRkBpDlaAEiMseeQ0MKPN+Q1I4DPvfkpQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v3 0/6] Add the Lantiq PEF2256 audio support
+Date:   Wed, 22 Mar 2023 14:46:48 +0100
+Message-Id: <20230322134654.219957-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V1 2/4] dt-bindings: soc: qcom,mpm-sleep-counter: Add the
- dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <576e53a1d0ef218536da976102b4cc207436ec1d.1679403696.git.quic_schowdhu@quicinc.com>
- <fc46c48d-2de0-ba3a-08b0-a09526bd9e26@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <fc46c48d-2de0-ba3a-08b0-a09526bd9e26@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: o_J6v8kthHVy3OnCoy1tmptE5EPNtjBh
-X-Proofpoint-ORIG-GUID: o_J6v8kthHVy3OnCoy1tmptE5EPNtjBh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_11,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 malwarescore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220101
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+This series adds support for audio using the Lantiq PEF2256 framer.
 
-On 3/21/2023 11:03 PM, Krzysztof Kozlowski wrote:
-> On 21/03/2023 14:51, Souradeep Chowdhury wrote:
->> Add the device tree bindings for the module power manager sleep
->> counter.
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   .../bindings/soc/qcom/qcom,mpm-sleep-counter.yaml  | 40 ++++++++++++++++++++++
->>   1 file changed, 40 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->> new file mode 100644
->> index 0000000..f9f46b7
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->> @@ -0,0 +1,40 @@
->> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/qcom/qcom,mpm-sleep-counter.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MPM Sleep Counter
->> +
->> +maintainers:
->> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> +
->> +description: |
->> +    MPM(Module Power Manager) has a sleep counter which is used to track
-> 
-> Missing space:
-> MPM (Module
-> 
+The Lantiq PEF2256 is a framer and line interface component designed to
+fulfill all required interfacing between an analog E1/T1/J1 line and the
+digital PCM system highway/H.100 bus.
 
-Ack
->> +    various stages of the boot process in Qualcomm.
-> 
-> in Qualcomm SoC. Because you do not track it in the company...
-> 
+The first part of this series (patches 1 to 4) adds the Lantiq PEF2256
+driver core.
+The second part (patches 5 to 7) adds the audio support using the Lantiq
+PEF2256 driver core.
 
-Ack
->> +
->> +properties:
->> +  compatible:
->> +    items:
-> 
-> Drop items.
-> 
+The consumer/provider relation between the codec and the driver core
+allows to use the PEF2256 framer for other purpose than audio support.
 
-Ack
->> +      - const: qcom,mpm2-sleep-counter
-> 
-> SoC specific compatible.
-> 
+Compared to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230316122741.577663-1-herve.codina@bootlin.com/
+This v3 series mainly:
+  - takes into account pef2256.c modifications suggested by Christophe.
+  - fixes binding
+  - Moves to MFD.
+  - Merges MAINTAINERS entries
 
-This is a generic Module Power Manager Sleep Counter which is present in 
-all Qcom Socs, so SoC specific compatible is not given here.
+Best regards,
+Herve Codina
 
->> +
->> +  reg:
->> +    items:
->> +      - description: MPM Sleep Counter Base
-> 
-> just maxItems: 1
-> 
+Changes v2 -> v3
+  - Patch 1
+    Remove unneeded 'allOf' and quotes.
+    Add several 'additionalProperties: false'
+    Fix example (node name, interrupts and reg properties)
+    Replace the lantiq,sysclk-rate-hz property by sclkr and sclkx clocks.
+    Define 'lantiq,frame-format' property in top level.
+    Move to MFD
 
-Ack
->> +
->> +  clock-frequency:
->> +    description: Frequency for the sleep counter
-> 
-> Since this does not have clocks, what frequency you are setting here?
+  - Patch 2
+    Fix some #define.
+    Compact the register accessor helpers.
+    Rework pef2256_get_version().
+    Merge v1.2 and v2.x GCM setup functions into one pef2256_setup_gcm().
+    Update comments, avoid duplicates and change some conditionals.
+    Remove the carrier spinlock and use atomic_t.
+    Make exported symbol consistent and use EXPORT_SYMBOL_GPL.
+    Remove the no more needed pef2256_get_byphandle() and
+    devm_pef2256_get_byphandle().
+    Replace the lantiq,sysclk-rate-hz property by sclkr and sclkx clocks.
+    Move to MFD
 
-Module Power Manager(MPM) Sleep Counter is a clock that starts ticking 
-from Primary Boot Loader(PBL) Stage. This is usually a 32 Khz clock and 
-the frequency for the same is stored here.
+  - Patch 4
+    Remove, merged with patch 7
 
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    mpm2-sleep-counter@c221000{
-> 
-> Node names should be generic.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+  - Patch 4 (patch 5 in v2)
+    Update title and description.
+    Remove incorrect SPI reference.
+    Remove the 'lantiq,pef2256' phandle.
+    Fix commit log
 
-Ack
-> 
->> +       compatible = "qcom,mpm2-sleep-counter";
->> +       reg = <0xc221000 0x1000>;
->> +       clock-frequency = <32768>;
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+  - Patch 5 (patch 6 in v2)
+    Remove devm_pef2256_get_byphandle().
+    Fix commit log
+
+  - Patch 6 (patch 7 in v2)
+    Merge v2 patch 4. One entry only for PEF2256
+
+Changes v1 -> v2
+  - Patch 2
+    Remove duplicate const qualifiers.
+    Add HAS_IOMEM as a dependency
+
+  - Patch 3
+    Fix a "Block quote ends without a blank line; unexpected unindent"
+    syntax issue.
+
+Herve Codina (6):
+  dt-bindings: mfd: Add the Lantiq  PEF2256 E1/T1/J1 framer
+  mfd: Add support for the Lantiq PEF2256 framer
+  Documentation: sysfs: Document the Lantiq PEF2256 sysfs entry
+  dt-bindings: sound: Add support for the Lantiq PEF2256 codec
+  ASoC: codecs: Add support for the Lantiq PEF2256 codec
+  MAINTAINERS: Add the Lantiq PEF2256 driver entry
+
+ .../sysfs-bus-platform-devices-pef2256        |   12 +
+ .../bindings/mfd/lantiq,pef2256.yaml          |  205 +++
+ .../bindings/sound/lantiq,pef2256-codec.yaml  |   54 +
+ MAINTAINERS                                   |   10 +
+ drivers/mfd/Kconfig                           |   16 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/pef2256.c                         | 1355 +++++++++++++++++
+ include/linux/mfd/pef2256.h                   |   28 +
+ sound/soc/codecs/Kconfig                      |   14 +
+ sound/soc/codecs/Makefile                     |    2 +
+ sound/soc/codecs/pef2256-codec.c              |  390 +++++
+ 11 files changed, 2087 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256
+ create mode 100644 Documentation/devicetree/bindings/mfd/lantiq,pef2256.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/lantiq,pef2256-codec.yaml
+ create mode 100644 drivers/mfd/pef2256.c
+ create mode 100644 include/linux/mfd/pef2256.h
+ create mode 100644 sound/soc/codecs/pef2256-codec.c
+
+-- 
+2.39.2
+
