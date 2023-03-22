@@ -2,116 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E3C6C4F31
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F3C6C4F38
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjCVPQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S231538AbjCVPRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjCVPQj (ORCPT
+        with ESMTP id S231483AbjCVPRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:16:39 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351A462DA7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:16:37 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id t9so22985791qtx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1679498196;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HBQCTOq+QqVNkJZ+4QIpkhFmpEgZaWVINrTQNwuq8s=;
-        b=jtA9AxTTQYLWB7g+hH3bMTXf6/+n7o0yqNShap1Y/5kaqMz+ZsQnoWfMK1YEkR6vDv
-         uMbSfqrKL63R8h/d8AAZZxfhib1Yl8fU/pUs0IRRH/JLWeU8RlOS9nlRbvSWA9kYGUip
-         4yJwpCY5y7QdCfczUsHb4aoiMShjYNLlqTJhvKfdjKrkbGAf+Ta21paUjWRmky2YCMrn
-         N3M3oBmgh14x5VM9Z6JOP1a/w38eI60Cx3MmdhFC2PPDKJBJ6mFobV8yTrRjb4CZg6gU
-         HVcsrp6lVMLs1xFPb0KY92STzTZ/CNk7B2shU5ztbNJAK9qBev/T+OqBSPBW+eg5XXr5
-         aUNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679498196;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+HBQCTOq+QqVNkJZ+4QIpkhFmpEgZaWVINrTQNwuq8s=;
-        b=SJ0Yc5zeVt7+DCdok0Bi/oq56p679ytQsH6zkFPvax1nofIslhjsUfpz6cFG98xS5w
-         hb8JQH2luP1ASvrLz+jhlsPbCc0OjvPeju72KKQ/Dh8dsJouCckIMkhCgwL1yt13XI66
-         LlrLCJzPYJNHhXmCqbqjU+F2YQx7rosngYEH4vt0TO0XDMxbeRPKvE+2Tq5tve5+bdtX
-         xVZoT88MGrPd3KvvHYbAOjIHBOF2mP8+ji/PpHfnwdp1+K+gszlSMryi3WVJ6QJ7Uk3k
-         kLKsFdSW8rVTxnrmWW+kBkJvMsocaEax1Ygqe2XkXS4slvnCxdVVyrwWhD0sTLQv9NGm
-         Waqw==
-X-Gm-Message-State: AO0yUKVe8SUi7ghjtPUa2OHjuWKsH0TYOR1N2aYpuZ6RajrapMrlO9Ns
-        MeYGNhIOnH5QPEDncVvJA4lUcQ==
-X-Google-Smtp-Source: AK7set+HNhejSvnBIYwhuwgNNsDv6NGN+2OSNq9lmKgrCuFnU40+7H4+Cr6NnogIE+bN3TKzqj+3nA==
-X-Received: by 2002:a05:622a:cf:b0:3e3:7dff:663e with SMTP id p15-20020a05622a00cf00b003e37dff663emr4344627qtw.27.1679498196355;
-        Wed, 22 Mar 2023 08:16:36 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id t21-20020a37aa15000000b00746b7372d62sm459437qke.27.2023.03.22.08.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 08:16:35 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pf0CZ-000oxC-3N;
-        Wed, 22 Mar 2023 12:16:35 -0300
-Date:   Wed, 22 Mar 2023 12:16:35 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
-Message-ID: <ZBsb01emBJJMZIt0@ziepe.ca>
-References: <20230315164152.333251-1-steven.price@arm.com>
- <ZBnBU9OU4iV6CV0W@ziepe.ca>
- <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
- <ZBr5e6tn1i7EE/16@ziepe.ca>
- <a5b946f0-5be8-a656-a8d5-1cd75399f0c4@arm.com>
+        Wed, 22 Mar 2023 11:17:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACC67728;
+        Wed, 22 Mar 2023 08:17:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 239DBB81D0A;
+        Wed, 22 Mar 2023 15:17:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC84EC433D2;
+        Wed, 22 Mar 2023 15:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679498238;
+        bh=x14uXdcyN6NwgG+IiJ4mbAithUacI0jt05p67YoWCxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vHu19ck37uJ0Noh8bpkiMcCiwaHGbeUk3AoCX1D9/uQoq+m7Jeuc8mcRjW+sjs9Lk
+         fbtSCGNHoVaCLkM+gy9b113QC3L9P3tPRFwAwXVYqne0L6m1WsStAc3vF68MVMmioy
+         DFgwckFmD9AIGERIB82AVK9Ky5AeChx0LNAwp/CFcXL7eda2sw3GF0mPer4I4lyLnp
+         gfkoc0/szZ4DO1Ledjhc2NLZDfgsL8NnB9ScltQ4AeiF9yhWDzy4Ovu7qZvWWgAy/5
+         u3d8cxwwZoaBPfWmkClx6UKw4Dc/iBmHk4ZwkcWBzuibER73j2ug9b6v5sdS8H50su
+         L4dbHUHyU98Zg==
+Date:   Wed, 22 Mar 2023 15:17:13 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        regressions@leemhuis.info, regressions@lists.linux.dev
+Subject: Re: [PATCH] riscv: require alternatives framework when selecting FPU
+ support
+Message-ID: <1884bd96-2783-4556-bc57-8b733758baff@spud>
+References: <ZBruFRwt3rUVngPu@zx2c4.com>
+ <20230322120907.2968494-1-Jason@zx2c4.com>
+ <20230322124631.7p67thzeblrawsqj@orel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="B7v5JtRVPQGXVgO3"
 Content-Disposition: inline
-In-Reply-To: <a5b946f0-5be8-a656-a8d5-1cd75399f0c4@arm.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322124631.7p67thzeblrawsqj@orel>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:08:41PM +0000, Steven Price wrote:
-> @@ -1035,8 +1055,9 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
->  	if (iommu->domain == domain)
->  		return 0;
->  
-> -	if (iommu->domain)
-> -		rk_iommu_detach_device(iommu->domain, dev);
-> +	ret = rk_iommu_identity_attach(&rk_identity_domain, dev);
-> +	if (ret)
-> +		return ret;
 
->  
->  	iommu->domain = domain;
->  
-> @@ -1049,8 +1070,6 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
->  		return 0;
->  
->  	ret = rk_iommu_enable(iommu);
-> -	if (ret)
-> -		rk_iommu_detach_device(iommu->domain, dev);
+--B7v5JtRVPQGXVgO3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think this still needs error handling, it should put it back to the
-identity domain and return an error code if it fails to attach to the
-requested domain.
+On Wed, Mar 22, 2023 at 01:46:31PM +0100, Andrew Jones wrote:
+> On Wed, Mar 22, 2023 at 01:09:07PM +0100, Jason A. Donenfeld wrote:
+> > When moving switch_to's has_fpu() over to using riscv_has_extension_
+> > likely() rather than static branchs, the FPU code gained a dependency on
+> > the alternatives framework. If CONFIG_RISCV_ALTERNATIVE isn't selected
+> > when CONFIG_FPU is, then has_fpu() returns false, and switch_to does not
+> > work as intended. So select CONFIG_RISCV_ALTERNATIVE when CONFIG_FPU is
+> > selected.
+> >=20
+> > Fixes: 702e64550b12 ("riscv: fpu: switch has_fpu() to riscv_has_extensi=
+on_likely()")
+> > Link: https://lore.kernel.org/all/ZBruFRwt3rUVngPu@zx2c4.com/
+> > Cc: Jisheng Zhang <jszhang@kernel.org>
+> > Cc: Andrew Jones <ajones@ventanamicro.com>
+> > Cc: Heiko Stuebner <heiko@sntech.de>
+> > Cc: Conor Dooley <conor.dooley@microchip.com>
 
-It should also initlaize iommu->domain to the identity domain when the
-iommu struct is allocated. The iommu->domain should never be
-NULL. identity domain means the IOMMU is turned off which was
-previously called "detached".
+Thanks for fixing it!
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Otherwise it looks like I would expect, thanks
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  arch/riscv/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index c5e42cc37604..0f59350c699d 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -467,6 +467,7 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+> >  config FPU
+> >  	bool "FPU support"
+> >  	default y
+> > +	select RISCV_ALTERNATIVE
+> >  	help
+> >  	  Say N here if you want to disable all floating-point related proced=
+ure
+> >  	  in the kernel.
+> > --=20
+> > 2.40.0
+> >
+>=20
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>=20
+> I took a look to see if we missed anything else and see that we should
+> do the same patch for KVM. I'll send one.
+>=20
+> (It's tempting to just select RISCV_ALTERNATIVE from RISCV, but maybe we
+>  can defer that wedding a bit longer.)
 
-Jason
+At that point, the config option should just go away entirely, no?
+
+--B7v5JtRVPQGXVgO3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBsb2wAKCRB4tDGHoIJi
+0m+3AQCe8JDweaSMp3gkW9PkqtzV9SdMdFtfRNgo0IR/sPVzowD/brjdaYh5/LCw
+MO5YGP9cVuRb+cGX+RlJV2Skhb0lHgA=
+=pPeQ
+-----END PGP SIGNATURE-----
+
+--B7v5JtRVPQGXVgO3--
