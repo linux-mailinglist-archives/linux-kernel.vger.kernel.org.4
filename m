@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346546C51FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8006C5206
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjCVRPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S231394AbjCVRPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjCVRO6 (ORCPT
+        with ESMTP id S229964AbjCVRPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:14:58 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944C164866
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id cn12so30218190edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505296;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YwlxfJdJWd/C2Uy2mVEIXe3Fs4cv7HuOigtW0ECLJNU=;
-        b=i/1NL3llpeN22VO2qWLkFXGR6pObJ6tWsek5bEwsmDVHmQLn5Bl2gl3f5JOxYQpx9L
-         PzMLlJs45OcXRoVi0YrU9Q7rUAGSrw+XzQS9FeF4ivB4UgR0UheN/NJOeroUlmhrEGs6
-         UTa1TjlPO1vv0eQTdCNgVgyjACRMD1FUmlixrfk2ejtsYiFG35/eqmz1iR5C/eee8ZVe
-         FmrhxRhSNMfWNRUzoDtyJofLnSRSb0e9c5iQ56OtYXDonfMm3XYZ+TfJpCUh42f2DUjV
-         DcgzVNigo5S1YI19l/y7SM8TuD5Dh0iHehCksJrLK4d7NmVZNJH0YFy87ZRTuA0nqYpS
-         mzWA==
+        Wed, 22 Mar 2023 13:15:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D14637F7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679505300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vBppRhOrRBmo4SnTGVUqBOXa70ZawMCQKN6tcvrZ2lw=;
+        b=fD+KPDxT+uy5x0/pA7H1R+LXtLj0kyhipqTbdKUxYRyzI7zqeyKiCoEtyvHSbFVm1Ua8kd
+        /WSFjbyprTgY0c/YySux5F+RpjDAJ/+FFAJs/1CDYEDvD0fUgP7p9QQQdwuBbpddd8PyFg
+        ssYI6b8xSLenHzlYG/EFVrI0tXYsw+4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-f6FIZVpVMXOZM96gjxl3sg-1; Wed, 22 Mar 2023 13:14:59 -0400
+X-MC-Unique: f6FIZVpVMXOZM96gjxl3sg-1
+Received: by mail-wm1-f71.google.com with SMTP id bi27-20020a05600c3d9b00b003e9d0925341so9063427wmb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:14:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505296;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YwlxfJdJWd/C2Uy2mVEIXe3Fs4cv7HuOigtW0ECLJNU=;
-        b=uUUizCqTHcwyJEd487tRHgQgFeGYkHXAa3r072de9jld8raPc3jQ64tv6TWHeV2bWQ
-         1Ngk+9MEts9HHUouvh/qWPIhOonGf+iEOn1cG/BHzPSnpyrc6U9yC4FY+3LnlMHICHTU
-         Os1z8Hty1luYnE7NdDgpmwRcZwQvwer6BKBzxDo1gUuMfa2syZO78NA3F+2DHPZXIvk5
-         ALeRCXIjbuAciK8PQjoSFxaSVfSiqWS1gaqvTAn7IMnTa1bQ7lnEAtEJOXz9ovsLnB2o
-         avjfXt06kFqzNRIiN/nSS1yCe9LMdsCXJeyiQjs+bsyU3NCOS5WQ3jHF69pkRsY+2Wa5
-         mPSQ==
-X-Gm-Message-State: AO0yUKXrTQYjVI3v9xDWzguiTEhyuHlhcUzp3Xr5xdo1jLbczbtFRtDK
-        leKcJD2nhHjqHgvP3zCdTG0=
-X-Google-Smtp-Source: AK7set9/cS06/DZEfO6BPPK1A8WvSG8vShlu49d5pGRPlgSTiBTdrQ73fnb+l0dMwb3YbMfoIHAUDA==
-X-Received: by 2002:a17:906:7485:b0:8b1:2614:dea6 with SMTP id e5-20020a170906748500b008b12614dea6mr7099804ejl.1.1679505296127;
-        Wed, 22 Mar 2023 10:14:56 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170906434300b008d427df3245sm7513015ejm.58.2023.03.22.10.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:14:55 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 18:14:53 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/8] staging: rtl8192e: Replace macro skb_tail_pointer_rsl
- with standard function
-Message-ID: <6885112850b48c0f9ff16655f7d9efe085ccc001.1679504314.git.philipp.g.hortmann@gmail.com>
-References: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
+        d=1e100.net; s=20210112; t=1679505298;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vBppRhOrRBmo4SnTGVUqBOXa70ZawMCQKN6tcvrZ2lw=;
+        b=W75YDi9ZloxpUY8b6QsbEAqhxhkcUqaxJ+0lXmg0x9c3CwK4GOglJNGCORwZXM9laf
+         vTt/gk1xrWpQU4q5GYODU1oDXZP8tJUSVrZh2Exizmy1SXIN+qeBykBUyyO5Obk/a7eK
+         Yi6gn8WV6hoszAC+Pn4P0YW1t9ju0A9mfRxHaKiXwNEyvZCvlKSs9yy3kQZjRa4a5rxa
+         YU2EJNp9NSYQEF8HRG5osED8GqcVX72zz83DD1pf3URySUsGzQLNs3wnVcKCov1yz0G4
+         K35PRyeR3owjkotajZfA7FNKuddh1PoM3YxC1AJsl7YV29sVAEZISQOYoXBpkHRmDios
+         guXA==
+X-Gm-Message-State: AAQBX9cRnnnBZBiCHgf2nYlTS1FNkCO2jhyF7JYCn9PRbnMBsWSNE0vc
+        yZEmMcbK9o8fH5iGgQdnkNkyUP4C0Uy9QmG9XsSZsiAchgCK3h4VUSQtHxBKIW1sEqyPJu7lv1y
+        zOw+RBKeT5AtFHTEfQCkgj6YI
+X-Received: by 2002:adf:eac3:0:b0:2d1:6104:76af with SMTP id o3-20020adfeac3000000b002d1610476afmr435263wrn.28.1679505297940;
+        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YsyeX98944Y42ANtbCd1Si/fvtvfwMtr422hgZd2KEDMQKJqDia4iR2kzSJPSt4GGwSrvF0A==
+X-Received: by 2002:adf:eac3:0:b0:2d1:6104:76af with SMTP id o3-20020adfeac3000000b002d1610476afmr435247wrn.28.1679505297615;
+        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id e13-20020a056000120d00b002d7a75a2c20sm6918238wrx.80.2023.03.22.10.14.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 10:14:57 -0700 (PDT)
+Message-ID: <f2729e78-bb8b-b1b7-7a5e-0e7d5075d33c@redhat.com>
+Date:   Wed, 22 Mar 2023 18:14:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] loongarch: drop ranges for definition of
+ ARCH_FORCE_MAX_ORDER
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org
+References: <20230322081727.2516291-1-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230322081727.2516291-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace macro skb_tail_pointer_rsl with function skb_tail_pointer to
-increase readablility.
+On 22.03.23 09:17, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> LoongArch defines insane ranges for ARCH_FORCE_MAX_ORDER allowing
+> MAX_ORDER up to 63, which implies maximal contiguous allocation size of
+> 2^63 pages.
+> 
+> Drop bogus definitions of ranges for ARCH_FORCE_MAX_ORDER and leave it a
+> simple integer with sensible defaults.
+> 
+> Users that *really* need to change the value of ARCH_FORCE_MAX_ORDER
+> will be able to do so but they won't be mislead by the bogus ranges.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+> 
+> This applies to akpm/mm-unstable tree
+> 
+>   arch/loongarch/Kconfig | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 272a3a12c98d..e1e3a3828962 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -420,11 +420,8 @@ config NODES_SHIFT
+>   
+>   config ARCH_FORCE_MAX_ORDER
+>   	int "Maximum zone order"
+> -	range 13 63 if PAGE_SIZE_64KB
+>   	default "13" if PAGE_SIZE_64KB
+> -	range 11 63 if PAGE_SIZE_16KB
+>   	default "11" if PAGE_SIZE_16KB
+> -	range 10 63
+>   	default "10"
+>   	help
+>   	  The kernel memory allocator divides physically contiguous memory
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
-V1->V2: Changed subject line to be without “f.”
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 4 ++--
- drivers/staging/rtl8192e/rtllib.h            | 2 --
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 47feb4248d25..2ec47c367c5f 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -1653,7 +1653,7 @@ static short _rtl92e_alloc_rx_ring(struct net_device *dev)
- 			priv->rx_buf[rx_queue_idx][i] = skb;
- 			mapping = (dma_addr_t *)skb->cb;
- 			*mapping = dma_map_single(&priv->pdev->dev,
--						  skb_tail_pointer_rsl(skb),
-+						  skb_tail_pointer(skb),
- 						  priv->rxbuffersize, DMA_FROM_DEVICE);
- 			if (dma_mapping_error(&priv->pdev->dev, *mapping)) {
- 				dev_kfree_skb_any(skb);
-@@ -1909,7 +1909,7 @@ static void _rtl92e_rx_normal(struct net_device *dev)
- 		priv->rx_buf[rx_queue_idx][priv->rx_idx[rx_queue_idx]] =
- 								 skb;
- 		*((dma_addr_t *)skb->cb) = dma_map_single(&priv->pdev->dev,
--							  skb_tail_pointer_rsl(skb),
-+							  skb_tail_pointer(skb),
- 							  priv->rxbuffersize, DMA_FROM_DEVICE);
- 		if (dma_mapping_error(&priv->pdev->dev, *((dma_addr_t *)skb->cb))) {
- 			dev_kfree_skb_any(skb);
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 8e5e29ce8f0d..cb904fc4f574 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -62,8 +62,6 @@
- #define IW_CUSTOM_MAX	256	/* In bytes */
- #endif
- 
--#define skb_tail_pointer_rsl(skb) skb_tail_pointer(skb)
--
- #define queue_delayed_work_rsl(x, y, z) queue_delayed_work(x, y, z)
- #define INIT_DELAYED_WORK_RSL(x, y, z) INIT_DELAYED_WORK(x, y)
- 
 -- 
-2.39.2
+Thanks,
+
+David / dhildenb
 
