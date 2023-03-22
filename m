@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27616C4E1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CFD6C4E29
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjCVOnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S231251AbjCVOna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjCVOmu (ORCPT
+        with ESMTP id S231604AbjCVOm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:42:50 -0400
+        Wed, 22 Mar 2023 10:42:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58766D18;
-        Wed, 22 Mar 2023 07:42:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E30C66D31;
+        Wed, 22 Mar 2023 07:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C557EB81D11;
-        Wed, 22 Mar 2023 14:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC3AC433A0;
-        Wed, 22 Mar 2023 14:42:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99AECB81D14;
+        Wed, 22 Mar 2023 14:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE65C4339B;
+        Wed, 22 Mar 2023 14:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679496132;
-        bh=jLSc5FD1EpTFBfRnXzkseAh4ytoAO858HZtAsz8lw6k=;
+        s=k20201202; t=1679496133;
+        bh=+rtArz9QGyfrNHsU+wfHjMys4h4t76CgGRPnARKCF4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZZYx731+I6XY1xXOxzWLO9ikKjgqMEH6/NP2O17vGmAoLGm81ipqD5qLJfRFsAUP7
-         m2XYvFvu6dO3zNrl/hIIr4Yqul+ji5ReMQ8yBJk4rced8AflMmxT35Sr1GDbt0a0Iw
-         YbaUY+3vuUYBBgbdF9sSp2fVgT2tHEEyLoZblifN0GCmzBEpmOKp6/1bzB23o7y7ST
-         LLcv9xNyYKWaM199LOk9K7ogYp69Lu8dUZ1F2yzqswQzPakUZ4LSrlixX3oIMjMyPz
-         48ovY0Z0iiLivS/nmjxzQ0kPgYExEzfQUGWX1dXPicqln6+9v7hQskwmEd90WXwf6Z
-         TkX+PHJm5K16w==
+        b=nV2zvnzg5ZuopZJEnZIM0rjpxTEJBk1rSdNdU0LXkx9kNKTz3p7k27diU3tkXJpKr
+         MWXMzkV2rwf7MfzmhWjg28nAcugOblKFyDM8pkTtlYX/1m7BInKPmDAayz35K7+h4s
+         5jV91cHt+F5RBxpGMoMgArrh0THiWzbMccAqB1Q6vsiru2mEezYYcwwRLVxAaDm7ey
+         WO/1ruu413elq4Dl1q/UfVPOHEkSgriJVbIShGjY1oIYijXoafDc+sTpT/p0x3eaea
+         itmX3O0BUFdhrxfjOjCU5+9rQFPnFGbmjRWWeN+vUEOdWB1VlKGce2QIxa7e805IFS
+         D5rW8pbZKRpDQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org,
+To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Bhupesh Sharma <bhupesh.sharma@linaro.org>
 Cc:     konrad.dybcio@linaro.org, agross@kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        bhupesh.linux@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm6115: Move SDHC node(s)'s 'pinctrl' properties to dts
-Date:   Wed, 22 Mar 2023 07:45:02 -0700
-Message-Id: <167949631651.1081726.3499603994002947569.b4-ty@kernel.org>
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v4 0/2] arm64: dts: sm6115: Perform USB node related cleanups
+Date:   Wed, 22 Mar 2023 07:45:03 -0700
+Message-Id: <167949631650.1081726.14012743385457876144.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230314074001.1873781-1-bhupesh.sharma@linaro.org>
-References: <20230314074001.1873781-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20230314083633.1882214-1-bhupesh.sharma@linaro.org>
+References: <20230314083633.1882214-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,21 +56,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 13:10:01 +0530, Bhupesh Sharma wrote:
-> Normally the 'pinctrl' properties of a SDHC controller and the
-> chip detect pin settings are dependent on the type of the slots
-> (for e.g uSD card slot), regulators and GPIO(s) available on the
-> board(s).
-> 
-> So, move the same from the sm6115 dtsi file to the respective
-> board file(s).
+On Tue, 14 Mar 2023 14:06:31 +0530, Bhupesh Sharma wrote:
+> Changes since v3:
+> -----------------
+> - v3 can be seen here: https://lore.kernel.org/linux-arm-msm/20221215094532.589291-1-bhupesh.sharma@linaro.org/
+> - Split the series into two - this patchset proposes only 'fixes'.
+>   The USB SS qmp phy change will be sent out separately now that we need
+>   a driver change as well.
+> - Also fix the recently added sm6115p lenovo dts.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sm6115: Move SDHC node(s)'s 'pinctrl' properties to dts
-      commit: 27ad7815cb70cbfdcbee4368f41033e83731479f
+[1/2] arm64: dts: qcom: sm6115: Cleanup USB node's label
+      commit: 0ea0edc04a04e3e36fa7d0b3c8463b0440764cf1
+[2/2] arm64: dts: qcom: sm6115: Move USB node's 'maximum-speed' and 'dr_mode' properties to dts
+      commit: 1f1e512288edf0ef99d9ceb9af29e2e004341ced
 
 Best regards,
 -- 
