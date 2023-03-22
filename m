@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F856C47D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420E36C47DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjCVKlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S230350AbjCVKnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjCVKlq (ORCPT
+        with ESMTP id S229842AbjCVKnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:41:46 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5E961304
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:41:45 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id l27so8178637wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:41:45 -0700 (PDT)
+        Wed, 22 Mar 2023 06:43:03 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1254F8A5F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:43:02 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id r7so12281562uaj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679481704;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=skDnyQLe1JXdCg1sNQHqpeJHAlfAsnOpU7qQyP4hHOg=;
-        b=GSamitR5gd+/UzbyXSgYPJV7PmQ5ceiqB2gRsLSYfgDBbvjxo2QYvkSXKnM5bEzeSD
-         B7qXr4fCsv+cghc+QYyE/3ZBGrikeib607wQYkwUA47N5hn21hj8KNbODFSyOaowLCmt
-         HPHZBYlYCXTcUyVZ51+0NsjdpDgw7A/Tw/Y8OL9NlKo6n2sc0ETcGhA3FBmN7xAfKzNU
-         KUllCOt9xplQPWUCSboOZAIt8Hya1qLXR85iWUcCUu5sBpXnug3XV3C3hAgfzRUbLSQj
-         KJlYcQsLqyxICGLivSBKQIgkLAnul/X98QbqzEz7QGxQnLBuY/Vieh5YC+LIVRXfF01E
-         THBA==
+        d=linaro.org; s=google; t=1679481781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zWIfm8SVDkTKI9ViVU3tx16H6A9LBzPzgrDU3mJSn9I=;
+        b=aoud6el4BR9ejtkWiXguKp6tnrawQLb18JKrETfYB9OKoY8aunkiEZ2poeM88qn77v
+         BPEJsbFSUzDg2eulI4WgG7lMKpskFVbu0QqGX0/8snR8Hj/9SDOG5r648sKSM4ncLAui
+         ZdIC4OtyuFONaRPETZI2JTA7Au5c8gN+JaSjuvvygdhOOkRCzeBRweaLKm9i1AT6U/bY
+         xI9I2NRhmJ1ko3BxyqBT6OuLm8PEbKDpFiJJTVqwtBhMgEKEQ83fdEIjuQ4XJjTFtxt2
+         urgAayzSkYL+LJmHshE2TiRCn1GT+0jh4WMcA+q2AjwXA69c6XbzlUgHxpIUb17tniiv
+         7gUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679481704;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=skDnyQLe1JXdCg1sNQHqpeJHAlfAsnOpU7qQyP4hHOg=;
-        b=RLIrozHVidSqrwZouwsHF2EqE9p/M/MjEvQj3khr4FvkS7X3RBEXxMhRTMXKKM3ce0
-         to2tZmEhQna4+9IwORIVNAvYuKU7/aK2Mn5mDwltuHms0+UDHXzJvHP7T/dgsMtirYZ4
-         q5oKN62Wp3hD00sI9C+8NLlq3VMum+8yZbIRmoKVkTdY7rvlToX5QlWrgoCvWv9wpUOH
-         2j5elhOtoqJCapTRwY3ZCCuq8aLF17YtdJBwoNnPXls5B+QuqmXIKuPcPx6yGDsSSBX4
-         /+1uyufTqQOs7HDaG1JpLusSxCpi0HlO3MYzWstYNWTWy0dvF/wB9AtAhfYXE0QF+XJQ
-         jv9Q==
-X-Gm-Message-State: AO0yUKWe1XVA+v8DjGtFZ6H/66b/BDJsgmeqLAcAbD+gKzf7TbNP8Lko
-        H3jozWUifKY4azquGRISfzM/qkKIu+UgiO7JNcaOnVf4JU8sSr+2
-X-Google-Smtp-Source: AK7set8wAPw5tK+KOLu3l95YMhBqfO34Pi6ONEtsWZgiwe84T8NwsFpmq2fBkotWjwqz/Ud4m6hn17Aj50DyVc2GhAM=
-X-Received: by 2002:a5d:6641:0:b0:2d0:58f9:a69 with SMTP id
- f1-20020a5d6641000000b002d058f90a69mr1153282wrw.4.1679481704118; Wed, 22 Mar
- 2023 03:41:44 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679481781;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zWIfm8SVDkTKI9ViVU3tx16H6A9LBzPzgrDU3mJSn9I=;
+        b=rW7LhXKpnMMWFru998K6GenibFaJmBuvq1x9EK2X9JvbYj5d1tTKtiEpOm4/BAGnHI
+         kH/I6cB+Yn9+nfRKbOPcnkyqoMPEWwt38DldBZxGg2G2rzCHIAQdsTXXaXdGCv+pddUf
+         5t5Wb7bEq1gYDCpAncBWyQ9OicWoKiYeJhdDh2xwUcooWwfSDNZAYMStajBxeLfkxeEK
+         +Tbb2MAmEQ7eTIdW/4RA7nTVNakE2VwRfqwJK278qDVo/OL5aroL/hdplBNs/3EnFfw5
+         8If5uR9Eo4SzVQZdsnQ3433Zv2aJhfjKS/hn12XiDKvwNlo+t4ce5xcxBNB3dByGUOXw
+         mMiw==
+X-Gm-Message-State: AAQBX9cKzDlTxuYSFElZKz398Gz5p4lp6nKNsfjhh16zHCb2++ELuTok
+        3cFF92lRx6N9FBouFbOJlzYwP2Qv7KFCsiHa092wFA==
+X-Google-Smtp-Source: AK7set8Pu4zFLx2g7Ys7jY0o+nIVqPLyI6iOmqkGLBZOkHO6gNL/N3MVY2qi6f3tHPfHC7qz3jijZ7e0ra7UIq9NJ+E=
+X-Received: by 2002:a05:6130:c0b:b0:755:9b3:fef8 with SMTP id
+ cg11-20020a0561300c0b00b0075509b3fef8mr2412705uab.2.1679481781023; Wed, 22
+ Mar 2023 03:43:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230321190118.3327360-1-bhupesh.sharma@linaro.org>
- <20230321190118.3327360-3-bhupesh.sharma@linaro.org> <ZBoVzFTr8LBWsmrX@gerhold.net>
-In-Reply-To: <ZBoVzFTr8LBWsmrX@gerhold.net>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 22 Mar 2023 16:11:32 +0530
-Message-ID: <CAH=2NtyJHGcfhWMdUmJ=38kC-CjP7jznQEU7jX+983hdEJs4-A@mail.gmail.com>
-Subject: Re: [PATCH 2/5] arm64: dts: qcom: sm6115: Add Crypto Engine support
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org
+References: <20230321180747.474321236@linuxfoundation.org>
+In-Reply-To: <20230321180747.474321236@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 22 Mar 2023 16:12:49 +0530
+Message-ID: <CA+G9fYv1eB4JuhhSJORopQ2mUkXESuZMdEeYyypPLSKbdjYxgQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/199] 6.1.21-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
@@ -71,54 +72,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 at 02:09, Stephan Gerhold <stephan@gerhold.net> wrote:
+On Tue, 21 Mar 2023 at 23:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Wed, Mar 22, 2023 at 12:31:15AM +0530, Bhupesh Sharma wrote:
-> > Add crypto engine (CE) and CE BAM related nodes and definitions to
-> > 'sm6115.dtsi'.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > index c56738633431..b2d2cdde41fa 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > @@ -664,6 +664,32 @@ usb_1_hsphy: phy@1613000 {
-> >                       status = "disabled";
-> >               };
-> >
-> > +             cryptobam: dma-controller@1b04000 {
-> > +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> > +                     reg = <0x0 0x01b04000 0x0 0x24000>;
-> > +                     interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     #dma-cells = <1>;
-> > +                     qcom,ee = <0>;
-> > +                     qcom,controlled-remotely;
-> > +                     num-channels = <8>;
-> > +                     qcom,num-ees = <2>;
-> > +                     iommus = <&apps_smmu 0x84 0x11>,
-> > +                              <&apps_smmu 0x86 0x11>,
-> > +                              <&apps_smmu 0x94 0x11>,
-> > +                              <&apps_smmu 0x96 0x11>;
-> > +             };
-> > +
-> > +             crypto: crypto@1b3a000 {
-> > +                     compatible = "qcom,sm6115-qce", "qcom,sm8150-qce", "qcom,qce";
-> > +                     reg = <0x0 0x01b3a000 0x0 0x6000>;
-> > +                     dmas = <&cryptobam 6>, <&cryptobam 7>;
-> > +                     dma-names = "rx", "tx";
-> > +                     iommus = <&apps_smmu 0x84 0x11>,
-> > +                              <&apps_smmu 0x86 0x11>,
-> > +                              <&apps_smmu 0x94 0x11>,
-> > +                              <&apps_smmu 0x96 0x11>;
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 199 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> If you apply the 0x11 mask to the stream ID then the last two items here
-> are identical to the first two (0x94 & ~0x11 = 0x84). Why are they
-> needed? They look redundant to me.
+> Responses should be made by Thu, 23 Mar 2023 18:07:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.21-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks, I will check them out and fix them in v2.
 
-Regards.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.1.21-rc3
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 2152cefff654f81f4c754469a07ac3c6105ed4b3
+* git describe: v6.1.20-200-g2152cefff654
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
+0-200-g2152cefff654
+
+## Test Regressions (compared to v6.1.20)
+
+## Metric Regressions (compared to v6.1.20)
+
+## Test Fixes (compared to v6.1.20)
+
+## Metric Fixes (compared to v6.1.20)
+
+## Test result summary
+total: 174778, pass: 151098, fail: 4548, skip: 18729, xfail: 403
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 153 total, 150 passed, 3 failed
+* arm64: 55 total, 51 passed, 4 failed
+* i386: 43 total, 38 passed, 5 failed
+* mips: 34 total, 32 passed, 2 failed
+* parisc: 10 total, 9 passed, 1 failed
+* powerpc: 42 total, 38 passed, 4 failed
+* riscv: 20 total, 17 passed, 3 failed
+* s390: 20 total, 17 passed, 3 failed
+* sh: 16 total, 13 passed, 3 failed
+* sparc: 10 total, 9 passed, 1 failed
+* x86_64: 48 total, 47 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controll-controllers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
