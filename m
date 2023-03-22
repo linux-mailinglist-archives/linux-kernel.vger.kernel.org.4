@@ -2,121 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC09C6C43E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEED6C43EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCVHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S229671AbjCVHTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCVHNK (ORCPT
+        with ESMTP id S229464AbjCVHTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:13:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F48974E;
-        Wed, 22 Mar 2023 00:13:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B2B61F8E;
-        Wed, 22 Mar 2023 07:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC85FC433EF;
-        Wed, 22 Mar 2023 07:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679469188;
-        bh=aNUV68ID9HeuVLNkjfLlfLCc8QamVARcxLvEQ1PZIDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tf1qkvoTjNuq3FPokBSs5onX7nbhpPXfWXeeaByUFyDjPXe3kCQkX/nI/tk6yEyYc
-         Ym1w4pwjEaIaHq0VIhE3dGsv6r1FCVIF7vz3YFnvt/HkshArSxM0yWMyLlZducN2LA
-         9sZQlqkc85SprvpuYZPR3Evz95TEqoyY9KKheYH39OXlFogm1PLJuOzVLdwz73wS3F
-         7gNBTPo9Yz9iz1DO7CAX00HtHgKhGNZQlAYs2EhFko9gyzG+tDjn2CasvTqkJ4a0xp
-         ot/nEErRNQZ6ok88mZgySo6yT+aJnWTQFcEzatyzusoHflqyJj7rkZT2RYQoE0I3hx
-         BIpMgp9vBx/6Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pesg6-0002H7-1V; Wed, 22 Mar 2023 08:14:34 +0100
-Date:   Wed, 22 Mar 2023 08:14:34 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>, devicetree@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: add nvram function
-Message-ID: <ZBqq2sIcjLenI/Az@hovoldconsulting.com>
-References: <20230320135710.1989-1-johan+linaro@kernel.org>
- <20230320135710.1989-4-johan+linaro@kernel.org>
- <167940239018.531701.12929244936825953214.robh@kernel.org>
- <CAL_JsqKvAxvYsuUtkPerp0aVuEQ7xUrCH2twAm42DLcpvjEKqA@mail.gmail.com>
- <ZBmzZBYUFXlTX08i@hovoldconsulting.com>
- <CAL_JsqKOSQJBVAaDVrAze6VZe9XHaY7AMs_pM=f3Pgto6UDDqA@mail.gmail.com>
+        Wed, 22 Mar 2023 03:19:38 -0400
+Received: from out-61.mta1.migadu.com (out-61.mta1.migadu.com [IPv6:2001:41d0:203:375::3d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E852472F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:19:37 -0700 (PDT)
+Message-ID: <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679469571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o53k2p6glaoiDYukHCSRh6Btu1bVKewMBR7QFKWgLkg=;
+        b=wld8e54hz0YaDG0EW96ru7CuSB6m9mtzo96/G6wzVio56T3k/ju2LVrEnz87MG+GLUYoAR
+        Rxn9ezgruV7GBo55cPmDJWD5m4rzZO92t7hLJtep9TjWm8SzUIYO119RRGu+ZQjBZW+uqO
+        LU0os+e5hrT4F+hap7LecbyLbRlhVdA=
+Date:   Wed, 22 Mar 2023 15:19:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
+ sync_thread in action_store"
+To:     Yu Kuai <yukuai1@huaweicloud.com>, logang@deltatee.com,
+        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
+        song@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
+ <20230322064122.2384589-2-yukuai1@huaweicloud.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <20230322064122.2384589-2-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKOSQJBVAaDVrAze6VZe9XHaY7AMs_pM=f3Pgto6UDDqA@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:27:55AM -0500, Rob Herring wrote:
-> On Tue, Mar 21, 2023 at 8:37 AM Johan Hovold <johan@kernel.org> wrote:
-> > On Tue, Mar 21, 2023 at 08:20:55AM -0500, Rob Herring wrote:
-> > > On Tue, Mar 21, 2023 at 8:17 AM Rob Herring <robh@kernel.org> wrote:
-> > > > On Mon, 20 Mar 2023 14:57:10 +0100, Johan Hovold wrote:
-> > > > > Add an 'nvram' pattern property and a reference to the corresponding
-> > > > > SDAM DT schema.
-> > > > >
-> > > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
-> > > > >  1 file changed, 4 insertions(+)
-> > > >
-> > > > Running 'make dtbs_check' with the schema in this patch gives the
-> > > > following warnings. Consider if they are expected or the schema is
-> > > > incorrect. These may not be new warnings.
-> > > >
-> > > > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > > > This will change in the future.
-> > > >
-> > > > Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230320135710.1989-4-johan+linaro@kernel.org
-> > > >
-> > >
-> > > This is a long list of warnings. Can you all fix some of them before
-> > > adding on to this binding.
-> >
-> > Note that this patch is only making the list of warnings shorter so I
-> > don't think addressing the remaining issues should block this one.
-> 
-> How can you tell sorting thru the 100s of warnings? It sounded like a
-> new feature to me, not a fix for something missing. Anyways, I've
-> gotten 2 patches today for this binding and I don't see patches for
-> fixes. Which is a bit surprising because you all generally are fixing
-> warnings on the QCom stuff.
 
-Indeed, it was not obvious and that's why I mentioned it.
 
-The SDAM binding has been there since 2020 and 9664a6b54c57
-("dt-bindings: nvmem: add binding for QTI SPMI SDAM") but updating the
-"parent" pmic binding was apparently overlooked.
+On 3/22/23 14:41, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> This reverts commit 9dfbdafda3b34e262e43e786077bab8e476a89d1.
+>
+> Because it will introduce a defect that sync_thread can be running while
+> MD_RECOVERY_RUNNING is cleared, which will cause some unexpected problems,
+> for example:
+>
+> list_add corruption. prev->next should be next (ffff0001ac1daba0), but was ffff0000ce1a02a0. (prev=ffff0000ce1a02a0).
+> Call trace:
+>   __list_add_valid+0xfc/0x140
+>   insert_work+0x78/0x1a0
+>   __queue_work+0x500/0xcf4
+>   queue_work_on+0xe8/0x12c
+>   md_check_recovery+0xa34/0xf30
+>   raid10d+0xb8/0x900 [raid10]
+>   md_thread+0x16c/0x2cc
+>   kthread+0x1a4/0x1ec
+>   ret_from_fork+0x10/0x18
+>
+> This is because work is requeued while it's still inside workqueue:
 
-I'm generally not cleaning up DT checker warnings, but I want to avoid
-adding new ones as I unknowingly did in this case when enabling the RTC
-on the X13s.
+If the workqueue subsystem can have such problem because of md flag,
+then I have to think workqueue is fragile.
 
-> I didn't really mean to block this one, but I don't really want to see more.
+> t1:			t2:
+> action_store
+>   mddev_lock
+>    if (mddev->sync_thread)
+>     mddev_unlock
+>     md_unregister_thread
+>     // first sync_thread is done
+> 			md_check_recovery
+> 			 mddev_try_lock
+> 			 /*
+> 			  * once MD_RECOVERY_DONE is set, new sync_thread
+> 			  * can start.
+> 			  */
+> 			 set_bit(MD_RECOVERY_RUNNING, &mddev->recovery)
+> 			 INIT_WORK(&mddev->del_work, md_start_sync)
+> 			 queue_work(md_misc_wq, &mddev->del_work)
+> 			  test_and_set_bit(WORK_STRUCT_PENDING_BIT, ...)
 
-Understood.
+Assume you mean below,
 
-Johan
+1551 if(!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+1552                 __queue_work(cpu, wq, work);
+1553                 ret = true;
+1554         }
+
+Could you explain how the same work can be re-queued? Isn't the PENDING_BIT
+is already set in t3? I believe queue_work shouldn't do that per the comment
+but I am not expert ...
+
+Returns %false if @work was already on a queue, %true otherwise.
+
+> 			  // set pending bit
+> 			  insert_work
+> 			   list_add_tail
+> 			 mddev_unlock
+>     mddev_lock_nointr
+>     md_reap_sync_thread
+>     // MD_RECOVERY_RUNNING is cleared
+>   mddev_unlock
+>
+> t3:
+>
+> // before queued work started from t2
+> md_check_recovery
+>   // MD_RECOVERY_RUNNING is not set, a new sync_thread can be started
+>   INIT_WORK(&mddev->del_work, md_start_sync)
+>    work->data = 0
+>    // work pending bit is cleared
+>   queue_work(md_misc_wq, &mddev->del_work)
+>    insert_work
+>     list_add_tail
+>     // list is corrupted
+>
+> This patch revert the commit to fix the problem, the deadlock this
+> commit tries to fix will be fixed in following patches.
+
+Pls cc the previous users who had encounter the problem to test the
+second patch.
+
+And can you share your test which can trigger the re-queued issue?
+I'd like to try with latest mainline such as 6.3-rc3, and your test is
+not only run against 5.10 kernel as you described before, right?
+
+Thanks,
+Guoqing
+
