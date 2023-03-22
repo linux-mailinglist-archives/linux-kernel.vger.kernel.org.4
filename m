@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D936C43E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4966C43E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCVHNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
+        id S229841AbjCVHNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjCVHNN (ORCPT
+        with ESMTP id S229668AbjCVHNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:13:13 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965F974E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:13:11 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so12371083wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:13:11 -0700 (PDT)
+        Wed, 22 Mar 2023 03:13:14 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C68CDCA
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:13:12 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id j24so7046568wrd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679469189;
+        d=gmail.com; s=20210112; t=1679469191;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TzbyGhvLZi9NdvR9qLzRGr9CkBr431wgVaStXlIqo9A=;
-        b=iztqSobcddwbnuUtBHhFE9WjYOulPGHfY2DbngPzSP8ELao2sG7kXGWD4oTEaMVGxw
-         J3TEIypuIQkDidGDCmKMHo7mLEqz9eIf97TUEkPbzrGSd9ZtZJ7PBbjFgJ4/gpXDv1hR
-         85GHppxR57d+bBqJQRAmvms4vGqrLeUCgckhv9sW/s6r/NIh7QCQsrrGCzCiVptZz1tS
-         bcJUGH/TbdL+vYLJm+MzaG3uYb3pJs6MgJpIGhMoZjw+bxvJyzEiZelTUYNjYehNq1oJ
-         5WIv/1H67N7bucq4y6KjIlyNRlnyp8E8pZYbHs0rNWbn1McyKBCkB88UyGnoWuKRe1og
-         Ac5A==
+        bh=E3VXMKh/lkCWPY1Nds8D2UzOeCpT3iiYlHjzEEB942A=;
+        b=GIm+f8mi9fCweTMKzPk05Ys0YPYQIbGyytB0E1s9AR5+K+Ct2WQ0mJk9QUvfse58Ke
+         rhDYYMkdWV8HmemOs3SeLkyrp47xRYkpI7kZsEjAWP/kSJOKRQzKaKBxOh1UDBKDMaKu
+         zjGQK7NHAQBWGDjfYXWqpfXwkmjBviXhjAjKwvNKiJGl4aejpEQNXQ5bwWY6DA/ZP3Ou
+         wxYsSTtHKka7IcCBslj7pMM6+tR6pn6YDide1uess0h+JuyvPLw8lPfszQmfF/EEJXaj
+         Cf8qYi0yEKfpCGjyb7sSLMjDog7fekwpVzaFfbb1a1GsIotHP73gRECeCJlUtWgcv4T1
+         E9/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679469189;
+        d=1e100.net; s=20210112; t=1679469191;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TzbyGhvLZi9NdvR9qLzRGr9CkBr431wgVaStXlIqo9A=;
-        b=6owbyBKyVKgfByk5HcvyqaK/PXkNy84RAcRVpiR+5m1EbbHWw7kgJipvs39Vxd7uF8
-         3cGGoJLcaGyMzIu/DC5D1DpC2sXxVw0KdP5C90+kUAOEVMarZZxhVuPk7T8Jzt7bC1+m
-         H8kgBMTzdNSmRe9BSoGbcTNNhdeOO9KxS8IC3nA2DfufDEHYT6bGZUJ1oq45K2VcvyHg
-         Gio69fdQ0pdl7paeN3Pyjk35yBaC+SYzdE8FqNJr992kYOxDg6Lp4G+gvSFGglQ47p5T
-         DF8N0kbUGP+c2p7O0Nqbnt4C8JAdsp6HjFDF55dYJP8KtdsKJXjUyRoofQFjAejxnzxK
-         mZpQ==
-X-Gm-Message-State: AO0yUKUPhpdzf7ZCMJZVwVmCGy46eDl/KdneA4xxYOb2VgOzWaiSy1XO
-        NOJCg9YYLt6tm5Q6a8L4iG4=
-X-Google-Smtp-Source: AK7set8wLvBkCl/46e1zzwcPlr72JTjzxGtGYyojohBR7ImjPCisXXFah/R8nrkwC/f3egE0wbe6Cw==
-X-Received: by 2002:a1c:740b:0:b0:3ee:126b:4a11 with SMTP id p11-20020a1c740b000000b003ee126b4a11mr4145903wmc.6.1679469189479;
-        Wed, 22 Mar 2023 00:13:09 -0700 (PDT)
+        bh=E3VXMKh/lkCWPY1Nds8D2UzOeCpT3iiYlHjzEEB942A=;
+        b=UywN6bZkyLy9VohFitpjdoSkXERA5eM6UkIJSPh0DqCGLCVYXdnUUnAJJWZZ8IyaMV
+         QNxaDyrK+LGpFYWaGvLWSUiZnPObiiveJV8GoFd+g4td24KX+f3zDENuViw9JQVQcOPi
+         aHGdL3N9NmEDj9D75NZ/sPQlbEEn05d1e642Y93QdXlqos31J3HCA292dYzICdsxDBr9
+         oW56lqox3bhU05qj3Q5buQJtCqm+g8hlrDKlLo/CI8YsOgm4hnYo/KNQBVQ0PZysOIDE
+         cQayMhpdZzKeOPHewC5vnUfkGNMh0MP4GYp2RMxqnJnHRtRt8H7WDQlC8oQ9njmhpfwW
+         dvvQ==
+X-Gm-Message-State: AO0yUKWS9oi02StVZfKEJHUllcr9h1GliNt5CF8M6yyShw7H0KapPrCr
+        tXTXx5A6M/uYUhXjqOzrFwU=
+X-Google-Smtp-Source: AK7set8l06vQUVZgYZZr43xezu2O1WbwUwuF5+5hPlxdDocLJ0+tvB7JHfxQq0H/QQBq80ZfOxmCcw==
+X-Received: by 2002:a05:6000:100f:b0:2d5:b6a9:772a with SMTP id a15-20020a056000100f00b002d5b6a9772amr4821063wrx.17.1679469190963;
+        Wed, 22 Mar 2023 00:13:10 -0700 (PDT)
 Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.googlemail.com with ESMTPSA id u4-20020a5d4344000000b002c5526234d2sm13290279wrr.8.2023.03.22.00.13.08
+        by smtp.googlemail.com with ESMTPSA id u4-20020a5d4344000000b002c5526234d2sm13290279wrr.8.2023.03.22.00.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 00:13:08 -0700 (PDT)
+        Wed, 22 Mar 2023 00:13:10 -0700 (PDT)
 From:   Lorenzo Stoakes <lstoakes@gmail.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>
@@ -59,9 +59,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>,
         Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v3 1/4] mm/mmap/vma_merge: further improve prev/next VMA naming
-Date:   Wed, 22 Mar 2023 07:13:01 +0000
-Message-Id: <f4474a419648fbbef13b29ce00880054da085788.1679468982.git.lstoakes@gmail.com>
+Subject: [PATCH v3 2/4] mm/mmap/vma_merge: fold curr, next assignment logic
+Date:   Wed, 22 Mar 2023 07:13:02 +0000
+Message-Id: <36399b6cdc843eb7fe243488ea9b29464f699170.1679468982.git.lstoakes@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1679468982.git.lstoakes@gmail.com>
 References: <cover.1679468982.git.lstoakes@gmail.com>
@@ -77,178 +77,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously the ASCII diagram above vma_merge() and the accompanying
-variable naming was rather confusing, however recent efforts by Liam
-Howlett and Vlastimil Babka have significantly improved matters.
+Use find_vma_intersection() and vma_lookup() to both simplify the logic and
+to fold the end == next->vm_start condition into one block.
 
-This patch goes a little further - replacing 'X' with 'N', which feels more
-natural as this represents the _next_ VMA and replacing what was 'N' with
-'C' which represents the current VMA.
-
-No word quite describes a VMA that has coincident start as the input span,
-however 'concurrent' (or more simply 'current') abbreviated to 'curr' fits
-intuitions well alongside prev and next.
+This groups all of the simple range checks together and establishes the
+invariant that, if prev, curr or next are non-NULL then their positions are
+as expected.
 
 This has no functional impact.
 
 Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 ---
- mm/mmap.c | 86 +++++++++++++++++++++++++++----------------------------
- 1 file changed, 43 insertions(+), 43 deletions(-)
+ mm/mmap.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 042d22e63528..c9834364ac98 100644
+index c9834364ac98..dbdbb92493b2 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -861,44 +861,44 @@ can_vma_merge_after(struct vm_area_struct *vma, unsigned long vm_flags,
-  * this area are about to be changed to vm_flags - and the no-change
-  * case has already been eliminated.
-  *
-- * The following mprotect cases have to be considered, where AAAA is
-+ * The following mprotect cases have to be considered, where **** is
-  * the area passed down from mprotect_fixup, never extending beyond one
-- * vma, PPPP is the previous vma, NNNN is a vma that starts at the same
-- * address as AAAA and is of the same or larger span, and XXXX the next
-- * vma after AAAA:
-+ * vma, PPPP is the previous vma, CCCC is a concurrent vma that starts
-+ * at the same address as **** and is of the same or larger span, and
-+ * NNNN the next vma after ****:
-  *
-- *     AAAA             AAAA                   AAAA
-- *    PPPPPPXXXXXX    PPPPPPXXXXXX       PPPPPPNNNNNN
-+ *     ****             ****                   ****
-+ *    PPPPPPNNNNNN    PPPPPPNNNNNN       PPPPPPCCCCCC
-  *    cannot merge    might become       might become
-- *                    PPXXXXXXXXXX       PPPPPPPPPPNN
-+ *                    PPNNNNNNNNNN       PPPPPPPPPPCC
-  *    mmap, brk or    case 4 below       case 5 below
-  *    mremap move:
-- *                        AAAA               AAAA
-- *                    PPPP    XXXX       PPPPNNNNXXXX
-+ *                        ****               ****
-+ *                    PPPP    NNNN       PPPPCCCCNNNN
-  *                    might become       might become
-  *                    PPPPPPPPPPPP 1 or  PPPPPPPPPPPP 6 or
-- *                    PPPPPPPPXXXX 2 or  PPPPPPPPXXXX 7 or
-- *                    PPPPXXXXXXXX 3     PPPPXXXXXXXX 8
-+ *                    PPPPPPPPNNNN 2 or  PPPPPPPPNNNN 7 or
-+ *                    PPPPNNNNNNNN 3     PPPPNNNNNNNN 8
-  *
-- * It is important for case 8 that the vma NNNN overlapping the
-- * region AAAA is never going to extended over XXXX. Instead XXXX must
-- * be extended in region AAAA and NNNN must be removed. This way in
-+ * It is important for case 8 that the vma CCCC overlapping the
-+ * region **** is never going to extended over NNNN. Instead NNNN must
-+ * be extended in region **** and CCCC must be removed. This way in
-  * all cases where vma_merge succeeds, the moment vma_merge drops the
-  * rmap_locks, the properties of the merged vma will be already
-  * correct for the whole merged range. Some of those properties like
-  * vm_page_prot/vm_flags may be accessed by rmap_walks and they must
-  * be correct for the whole merged range immediately after the
-- * rmap_locks are released. Otherwise if XXXX would be removed and
-- * NNNN would be extended over the XXXX range, remove_migration_ptes
-+ * rmap_locks are released. Otherwise if NNNN would be removed and
-+ * CCCC would be extended over the NNNN range, remove_migration_ptes
-  * or other rmap walkers (if working on addresses beyond the "end"
-- * parameter) may establish ptes with the wrong permissions of NNNN
-- * instead of the right permissions of XXXX.
-+ * parameter) may establish ptes with the wrong permissions of CCCC
-+ * instead of the right permissions of NNNN.
-  *
-  * In the code below:
-  * PPPP is represented by *prev
-- * NNNN is represented by *mid or not represented at all (NULL)
-- * XXXX is represented by *next or not represented at all (NULL)
-- * AAAA is not represented - it will be merged and the vma containing the
-+ * CCCC is represented by *curr or not represented at all (NULL)
-+ * NNNN is represented by *next or not represented at all (NULL)
-+ * **** is not represented - it will be merged and the vma containing the
-  *      area is returned, or the function will return NULL
-  */
- struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-@@ -911,7 +911,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- {
- 	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
- 	pgoff_t vma_pgoff;
--	struct vm_area_struct *mid, *next, *res = NULL;
-+	struct vm_area_struct *curr, *next, *res = NULL;
- 	struct vm_area_struct *vma, *adjust, *remove, *remove2;
- 	int err = -1;
- 	bool merge_prev = false;
-@@ -930,19 +930,19 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+@@ -930,15 +930,14 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
  	if (vm_flags & VM_SPECIAL)
  		return NULL;
- 
--	mid = find_vma(mm, prev ? prev->vm_end : 0);
--	if (mid && mid->vm_end == end)			/* cases 6, 7, 8 */
--		next = find_vma(mm, mid->vm_end);
-+	curr = find_vma(mm, prev ? prev->vm_end : 0);
-+	if (curr && curr->vm_end == end)		/* cases 6, 7, 8 */
-+		next = find_vma(mm, curr->vm_end);
- 	else
--		next = mid;
-+		next = curr;
- 
--	/* In cases 1 - 4 there's no NNNN vma */
--	if (mid && end <= mid->vm_start)
--		mid = NULL;
-+	/* In cases 1 - 4 there's no CCCC vma */
-+	if (curr && end <= curr->vm_start)
-+		curr = NULL;
- 
+
+-	curr = find_vma(mm, prev ? prev->vm_end : 0);
+-	if (curr && curr->vm_end == end)		/* cases 6, 7, 8 */
+-		next = find_vma(mm, curr->vm_end);
+-	else
+-		next = curr;
++	/* Does the input range span an existing VMA? (cases 5 - 8) */
++	curr = find_vma_intersection(mm, prev ? prev->vm_end : 0, end);
+
+-	/* In cases 1 - 4 there's no CCCC vma */
+-	if (curr && end <= curr->vm_start)
+-		curr = NULL;
++	if (!curr ||			/* cases 1 - 4 */
++	    end == curr->vm_end)	/* cases 6 - 8, adjacent VMA */
++		next = vma_lookup(mm, end);
++	else
++		next = NULL;		/* case 5 */
+
  	/* verify some invariant that must be enforced by the caller */
  	VM_WARN_ON(prev && addr <= prev->vm_start);
--	VM_WARN_ON(mid && end > mid->vm_end);
-+	VM_WARN_ON(curr && end > curr->vm_end);
- 	VM_WARN_ON(addr >= end);
- 
- 	if (prev) {
-@@ -974,21 +974,21 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 		remove = next;				/* case 1 */
- 		vma_end = next->vm_end;
- 		err = dup_anon_vma(prev, next);
--		if (mid) {				/* case 6 */
--			remove = mid;
-+		if (curr) {				/* case 6 */
-+			remove = curr;
- 			remove2 = next;
- 			if (!next->anon_vma)
--				err = dup_anon_vma(prev, mid);
-+				err = dup_anon_vma(prev, curr);
- 		}
- 	} else if (merge_prev) {
- 		err = 0;				/* case 2 */
--		if (mid) {
--			err = dup_anon_vma(prev, mid);
--			if (end == mid->vm_end) {	/* case 7 */
--				remove = mid;
-+		if (curr) {
-+			err = dup_anon_vma(prev, curr);
-+			if (end == curr->vm_end) {	/* case 7 */
-+				remove = curr;
- 			} else {			/* case 5 */
--				adjust = mid;
--				adj_start = (end - mid->vm_start);
-+				adjust = curr;
-+				adj_start = (end - curr->vm_start);
- 			}
- 		}
- 	} else if (merge_next) {
-@@ -1004,10 +1004,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
- 			vma_end = next->vm_end;
- 			vma_pgoff = next->vm_pgoff;
- 			err = 0;
--			if (mid) {			/* case 8 */
--				vma_pgoff = mid->vm_pgoff;
--				remove = mid;
--				err = dup_anon_vma(next, mid);
-+			if (curr) {			/* case 8 */
-+				vma_pgoff = curr->vm_pgoff;
-+				remove = curr;
-+				err = dup_anon_vma(next, curr);
- 			}
+@@ -959,11 +958,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
  		}
  	}
--- 
-2.39.2
+ 	/* Can we merge the successor? */
+-	if (next && end == next->vm_start &&
+-			mpol_equal(policy, vma_policy(next)) &&
+-			can_vma_merge_before(next, vm_flags,
+-					     anon_vma, file, pgoff+pglen,
+-					     vm_userfaultfd_ctx, anon_name)) {
++	if (next && mpol_equal(policy, vma_policy(next)) &&
++	    can_vma_merge_before(next, vm_flags,
++				 anon_vma, file, pgoff+pglen,
++				 vm_userfaultfd_ctx, anon_name)) {
+ 		merge_next = true;
+ 	}
 
+--
+2.39.2
