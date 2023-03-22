@@ -2,120 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268D76C51E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D65E46C520D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjCVRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S230435AbjCVRQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjCVRIG (ORCPT
+        with ESMTP id S229597AbjCVRPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:08:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448CE64878;
-        Wed, 22 Mar 2023 10:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679504872; x=1711040872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MgiqpHKxp/iCbsM0LUs1CNRLARbXLFKM0eI7lPgT7Xs=;
-  b=TuH4qMsaFDfO9q83SxpetJZIR0sARJ653fjmTKJh4njCbeyDLaemiFVj
-   OX2TOU3SUR98QmZHsVzgAKNfFr60jJIQXgW+lffxy/c1Eyr9bBs+T84UR
-   umGt7W4rt2PGODbdjbJoGwauhuMrj+uIrYk/kbLPThBFXiGx5JTM5/UX2
-   6g8t++44jZ+8Bqkep/T0lQ3T1q/wRGqxtwX836gXJUAwEdtBlo2GDFOjS
-   6IbDA7Jtx3LkU67TJCRirXNlUJNWcOscHVo+jLL7wDeCf/C1+rKvfIOtA
-   foTIVBHSwTreetv1rhtWXkdSZPEjGbFsSQed03tbaAn/pRgod7EtgekPV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336780793"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="336780793"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 10:05:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="805900791"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="805900791"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2023 10:05:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pf1uE-000DVq-2p;
-        Wed, 22 Mar 2023 17:05:46 +0000
-Date:   Thu, 23 Mar 2023 01:05:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH 2/2] leds: max597x: Add support for max597x
-Message-ID: <202303230037.O7fPpT2X-lkp@intel.com>
-References: <20230322124316.2147143-2-Naresh.Solanki@9elements.com>
+        Wed, 22 Mar 2023 13:15:53 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9813664C7;
+        Wed, 22 Mar 2023 10:15:23 -0700 (PDT)
+Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 23AAD20FB61D;
+        Wed, 22 Mar 2023 10:07:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 23AAD20FB61D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679504852;
+        bh=wIsk4VwZDr4i8NB881GJXyBcyN6S4COQ4x0IkZr3KZc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mWhRSBZfExqgWD10q75sV5rrToRw+UGv6h02KGIlks+eaU7nU4rVaYg0qmSaKO2PU
+         nyQ0oWcfv5yq/CHy6iU19RDCjBaWjoxtOPkC5vkO8m/+ut0ivy+ENkXWW01zj6usM/
+         lOdNfAQr5LqSgCdPwxzkGr7jgGG04guEUmN4pN+Q=
+Message-ID: <be381bad-3331-495d-d5a5-acf8ae9d6a8e@linux.microsoft.com>
+Date:   Wed, 22 Mar 2023 18:07:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322124316.2147143-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] KVM: SVM: Flush Hyper-V TLB when required
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        kvm@vger.kernel.org, Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>, stable@vger.kernel.org
+References: <20230320185110.1346829-1-jpiotrowski@linux.microsoft.com>
+ <ZBsqxeRDh+iV8qmm@google.com> <87355wralt.fsf@redhat.com>
+ <ZBs0fTo72LjnR22r@google.com>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <ZBs0fTo72LjnR22r@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+On 22/03/2023 18:01, Sean Christopherson wrote:
+> On Wed, Mar 22, 2023, Vitaly Kuznetsov wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>>> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+>>> index cff838f15db5..d91e019fb7da 100644
+>>> --- a/arch/x86/kvm/svm/svm_onhyperv.h
+>>> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
+>>> @@ -15,6 +15,13 @@ static struct kvm_x86_ops svm_x86_ops;
+>>>  
+>>>  int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
+>>>  
+>>> +static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
+>>> +{
+>>> +	struct hv_vmcb_enlightenments *hve = &to_svm(vcpu)->vmcb->control.hv_enlightenments;
+>>> +
+>>> +	return !!hve->hv_enlightenments_control.enlightened_npt_tlb;
+>>
+>> In theory, we should not look at Hyper-V enlightenments in VMCB control
+>> just because our kernel has CONFIG_HYPERV enabled.
+> 
+> Oooh, right, because hv_enlightenments uses software reserved bits, and in theory
+> KVM could be running on a different hypervisor that uses those bits for something
+> completely different.
+> 
+>> I'd suggest we add a
+>> real check that we're running on Hyper-V and we can do it the same way
+>> it is done in svm_hv_hardware_setup()/svm_hv_init_vmcb():
+>>
+>> 	return (ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB)
+>> 		&& !!hve->hv_enlightenments_control.enlightened_npt_tlb;
+> 
+> Jeremi, if you grab this, can you put the && on the previous line?  I.e.
+> 
+> 	return (ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) &&
+> 	       !!hve->hv_enlightenments_control.enlightened_npt_tlb;
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on 368eb79f738a21e16c2bdbcac2444dfa96b01aaa]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/leds-max597x-Add-support-for-max597x/20230322-204408
-base:   368eb79f738a21e16c2bdbcac2444dfa96b01aaa
-patch link:    https://lore.kernel.org/r/20230322124316.2147143-2-Naresh.Solanki%409elements.com
-patch subject: [PATCH 2/2] leds: max597x: Add support for max597x
-reproduce:
-        make versioncheck
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230037.O7fPpT2X-lkp@intel.com/
-
-versioncheck warnings: (new ones prefixed by >>)
-   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
-   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
-   	-name '*.[hcS]' -type f -print | sort \
-   	| xargs perl -w ./scripts/checkversion.pl
-   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
-   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
-   ./drivers/iio/adc/max597x-iio.c: 20 linux/version.h not needed.
->> ./drivers/leds/leds-max597x.c: 20 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
-   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
-   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
-   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
-   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
-   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
-   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
-   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-prologue.c: 49: need linux/version.h
-   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
-   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
-   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
-   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Will do. I'll need to read the replies in more detail tomorrow.
