@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DEF6C52B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5575B6C52BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCVRk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S230193AbjCVRl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCVRkX (ORCPT
+        with ESMTP id S230103AbjCVRlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:40:23 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DE124C88;
-        Wed, 22 Mar 2023 10:40:21 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id cu12so6373741pfb.13;
-        Wed, 22 Mar 2023 10:40:21 -0700 (PDT)
+        Wed, 22 Mar 2023 13:41:55 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0F5F6C5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:41:53 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id eh3so76133129edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679506821;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/g1h+qqzGP0ximTM8vLifW2flklbu34LUXD3lH6yA9E=;
-        b=BAsQNSnbUVjbeyI7cQSPAqV/ee8QmZK/d/w1GXqaKDEv58eWDxDc2pEoQr1zfkHBum
-         4kMFFkxM1hFdV4qG/0Q75+GiUqFd0vw3tNN91hjfJP/d1B5ZZ9CfbFYr3xmfptwibG9p
-         ssT0bt1KQo6IZIA9ine3Uz8zuFt9+Zsb4Ku0zdSL4mFD66HxGqJMwAI7DDaPg+3EX8Gw
-         qa/ZxuTUAG+qeUKCgz73ueAFnXFoZeAEey4glrjatkWIDCThJ99nMMxUKhNF0k8zHh0O
-         o9wYy0BjT8dzikZKtgGR10UsaO0QfrYqTo83+dcKv3NiE8aI7xl37AD3mqHsU7KbdE2Z
-         At2A==
+        d=linaro.org; s=google; t=1679506912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aKlL6nsYofXrtklvN1qI1lejcYycd4GhbbCIaQ5NUPQ=;
+        b=jO9pMLZFmIBx4QiK9NtouToQqQgfCw4psqC40hSYjOYE3v0afiVflW4+5q8b5PqTyB
+         LNhiXumAxIjVigf0g4khe9JFIKSnSxKwj3RWEXeonE+N5+XF+bwW11VQfd6vymNKMCJT
+         3HSCcuiyFLShCuE7DUa05MqdlZ0J+7WOHjBfpvuLyMhD5HpgQh3Waw0PSKYLE0V88WsK
+         PvPYg4lwUJe2OK0whQT54v64W6zGNZcFj4PponDYcLCljLFCKuR8PQPeZwcWbxfuSP2x
+         ThuUFoTX2AmDnrwxNljnYn53thGcs6rTyGwHY38AzFq7D/GXfJ6Xlem5NNTPrZReF0p6
+         DxWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679506821;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/g1h+qqzGP0ximTM8vLifW2flklbu34LUXD3lH6yA9E=;
-        b=nu1NAixfKFKyHGdPTGLp7FEHaDBZdP+Eikng5gpJm4V6Oq3EOoywlZuHrAq3jYNjjh
-         ryGgiPHCQOsKOu5V7mdFDEu87JZ1pCTa+i5kW6rNwNJfRCiefAd6eZYRv5nKNfW9TYe7
-         kSGtR0/o6/EiON8niZ7oqvfID78dZrkHRr69fg0DpzInIdo12s+B2i0i+49NMYCgF30Z
-         8OBLwST85zDEjvum0GxUm6qHjJPmyTw4T2lMWBKup8Fxdx3rXM9HQuXD9n57vusSHFpV
-         Pph3BP73Ot13AJkyEyHVgkoYikHfA61ILpACnQT+rRMQJWq37XIREjE1m6z4Ssh+L1M4
-         mJRQ==
-X-Gm-Message-State: AO0yUKUdPCwuPdLreAraqIyOQzl7nDCx7R1Pib92Wbdcwg1SP5Nrygpv
-        Xx0SyXOxU64oRfNimSoHIWc=
-X-Google-Smtp-Source: AK7set+kNSqLUYN+luuoe+CONYSfbZhP0I9LswkqRYf0oELysG/zkCAFYpjlXjs8Gs6TsQBPHgh00A==
-X-Received: by 2002:a62:7b05:0:b0:625:c7ca:d82f with SMTP id w5-20020a627b05000000b00625c7cad82fmr3785420pfc.18.1679506820823;
-        Wed, 22 Mar 2023 10:40:20 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b1-20020a6567c1000000b005023496e339sm10118407pgs.63.2023.03.22.10.40.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 10:40:20 -0700 (PDT)
-Message-ID: <586ef13d-4ec8-c5e3-25a9-8c5eb350faa7@gmail.com>
-Date:   Wed, 22 Mar 2023 10:40:15 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: reset: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        d=1e100.net; s=20210112; t=1679506912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aKlL6nsYofXrtklvN1qI1lejcYycd4GhbbCIaQ5NUPQ=;
+        b=EPpdGBrIE3pB6ZGHvbG8iYc/c+UaQEQiRke8zSKZU4cqPHLmO5uBpIaPlehVINF9ni
+         0+8S45RHCacemlfu4uZPf+mnkbRNUl/0+jbTLZn6sRPiU86/ic54l0abWUHyRGG282f/
+         RLV1xoBOAOYqStjymsi2feYEFZ8RYv48jALVE1EkpDyHiEq9fgPXc06fh4Lret59miFr
+         3AU5axo22pkJhgnf0bAZ2f/BEMlzZT9/qA8ecKczfkcrvjJFxmVlPzKF26QYKhSteqxJ
+         7gmYhPkbMXwoBET1IMVpDH7CFlQtt+74PMdm7q+H0VjBN57B3/wG7n33J9EAA37VEWdv
+         qt0g==
+X-Gm-Message-State: AO0yUKUPrt4VBTjkV3GT5buJNYmKpsYUoavIN6H4jXlyvgVc2p8cQPgd
+        GDfob1ed+ZAp6hwEivFcUl3Yjw==
+X-Google-Smtp-Source: AK7set9ZqSnoxPTJoYl8rmNhO6mCJvGJiuwW3XY++uRRew01B/OdANi5i7AG+3W5py5YYuxWkdRGiQ==
+X-Received: by 2002:a17:907:8a1a:b0:920:7827:302 with SMTP id sc26-20020a1709078a1a00b0092078270302mr3629263ejc.18.1679506911966;
+        Wed, 22 Mar 2023 10:41:51 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:5050:151b:e755:1c6])
+        by smtp.gmail.com with ESMTPSA id jx3-20020a170907760300b00930876176e2sm7548088ejc.29.2023.03.22.10.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 10:41:51 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Qin Jian <qinjian@cqplus1.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230322173508.3971182-1-robh@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230322173508.3971182-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 00/11] mailbox/arm64/ qcom: rework compatibles for fallback
+Date:   Wed, 22 Mar 2023 18:41:37 +0100
+Message-Id: <20230322174148.810938-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 10:35, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/reset/amlogic,meson-axg-audio-arb.yaml         | 4 ++--
->   .../devicetree/bindings/reset/amlogic,meson-reset.yaml      | 4 ++--
->   .../devicetree/bindings/reset/bitmain,bm1880-reset.yaml     | 4 ++--
->   .../devicetree/bindings/reset/brcm,bcm6345-reset.yaml       | 4 ++--
->   .../devicetree/bindings/reset/brcm,brcmstb-reset.yaml       | 4 ++--
+Hi,
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com> # Broadcom
+Changes since v2
+================
+1. Split fixes to separate patchset which is now dependency:
+   https://lore.kernel.org/linux-arm-msm/20230322173559.809805-1-krzysztof.kozlowski@linaro.org/T/#t
+2. Add Ack
+3. No other changes, as discussion with Dmitry did not reach conclusion on incompatibility.
+
+Changes since v1
+================
+1. Rebase
+2. Make msm8994 fallback for several variants, not msm8953, because the latter
+   actually might take some clocks.
+3. Two new patches for SDX55.
+4. Minor corrections in bindings style.
+v1: https://lore.kernel.org/all/20230202161856.385825-1-krzysztof.kozlowski@linaro.org/
+
+Description
+===========
+
+If entire approach is accepted (and correct), there are no dependencies and
+patches can be picked independently.  Although the best in the same cycle, so
+there will be no new `dtbs_check` warnings.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (11):
+  dt-bindings: mailbox: qcom,apcs-kpss-global: use fallbacks
+  mailbox: qcom-apcs-ipc: do not grow the of_device_id
+  arm64: dts: qcom: ipq8074: add compatible fallback to mailbox
+  arm64: dts: qcom: msm8976: add compatible fallback to mailbox
+  arm64: dts: qcom: msm8998: add compatible fallback to mailbox
+  arm64: dts: qcom: sdm630: add compatible fallback to mailbox
+  arm64: dts: qcom: sm6115: add compatible fallback to mailbox
+  arm64: dts: qcom: sm6125: add compatible fallback to mailbox
+  arm64: dts: qcom: qcs404: add compatible fallback to mailbox
+  arm64: dts: qcom: sc7180: add compatible fallback to mailbox
+  arm64: dts: qcom: sm8150: add compatible fallback to mailbox
+
+ .../mailbox/qcom,apcs-kpss-global.yaml        | 58 ++++++++++---------
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  3 +-
+ arch/arm64/boot/dts/qcom/msm8976.dtsi         |  3 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  3 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/sm6125.dtsi          |  3 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  3 +-
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c       | 11 ++--
+ 11 files changed, 55 insertions(+), 41 deletions(-)
+
 -- 
-Florian
+2.34.1
 
