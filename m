@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592BA6C474B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82C66C474E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjCVKO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S230014AbjCVKP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjCVKOy (ORCPT
+        with ESMTP id S230012AbjCVKP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:14:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426774BE8D;
-        Wed, 22 Mar 2023 03:14:53 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679480091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzDWYvuifBkntk/7g2EEju9mlsbW5oDHVJXRgp0vgaY=;
-        b=kGK9tgftBBwMs6mUTt7D4WFjyS0X+Oq5qIUlEeaR3Gul9kYL6YQE0RlWcv2Tp+0LvfBlja
-        zj0rqRCZL0Ix1b42uML/6FCr1t5cp3PS6E//BsxrMJKhepj7cNRhqWOS8IaJOUxPOWha41
-        3jvLK4dVcYYdRvjgx9zK2AZFOf1SsqPVJPh3auO56nsN/ZzyGKihXAscV32X3Vq8E7q3+J
-        7EqkH+fumPmZYjbuOA4XSOLn1bUCjQ25B+WFGGnGvh7kgZg1gViwa0ag3c94uFNVfOuoIc
-        zQFC0kxp4MwXbduYirGvcvb3Hd3gycV4tb2qjRz9oNVkXi/CIh6Er0PWOij+pA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679480091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzDWYvuifBkntk/7g2EEju9mlsbW5oDHVJXRgp0vgaY=;
-        b=k9OTbLn8rLhDkflMXH5aMQZcgjFV5qNKmFEqVFnSK/4kFoj7cIGya32SvQ5/MmuHe7NoZK
-        ahZvK9Q5iFNsIACw==
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] Documentation: maintainer-tip: Rectify link to
- "Describe your changes" section of submitting-patches.rst
-In-Reply-To: <20230320124327.174881-1-bagasdotme@gmail.com>
-References: <20230320124327.174881-1-bagasdotme@gmail.com>
-Date:   Wed, 22 Mar 2023 11:14:50 +0100
-Message-ID: <874jqd9jol.ffs@tglx>
+        Wed, 22 Mar 2023 06:15:58 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E498754C93
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:15:51 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r29so16387772wra.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679480150;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gm9HBOFg2FeE/gF/2Wf9vf6aafreUYFQgzgGk5L/6e4=;
+        b=LsC1Lb26wFjGXK0ez4T9mqRA7Luemfa5iGUWFheBhFTRpRYRILv+qKkC2GQZWL1fS6
+         /2B6whrFiLBun9/bZ7eoge1Iwl9vPWLJMIIXwfztY+Vw/P7UD9/TUTNw7mRbGPkwFtYd
+         bRd8Ww+5lm//IO8U1lOrGDW8Ba0NVdu/ZpqtJgUKkuQ92JFX29Us/qTrGhmoZyTialpV
+         n8jL+Q8Ghkxfjr9sbUu9JmBuMHK0MLloOR4fwG1SIlqTWFII9brgMsjXnZnezvbzWtE0
+         UwT5R6tG/u88u0qWEzem91+6BNNBX4dW14dWFytaPl7g0NVI7J+Lp1mWe0LDY1F/nLF1
+         8YCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679480150;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gm9HBOFg2FeE/gF/2Wf9vf6aafreUYFQgzgGk5L/6e4=;
+        b=D2cs4NArTOMrtYDmW+EjCkV+Wo8a0qBkYFZGLXAiGh8xuba+fu1hITISjy6jDwX24H
+         3G0KaqAoTUHS8/B2KV4o0OZHaJYA9KvvqeHkj7bP2Ig8m0lWbWoacYnEfIDBOdKVIQq3
+         /MjA3xBchGMrcvDPLBGw54ubKHLQMWY7Ung8O+2CRVBSk8RUou5i1yeWwLGg/9a1T+5C
+         KCJifqxcmD2zt7zZAFG51MN31utf8jcFpY8cgc7H5je+U7+Ffc8kIlIkkXY7XhEbSqcU
+         UEEDw2zTY3DkhZ9pXPpD71noARo+bP+ZmHlMvqBVWtm/wrUykykLrVcGrY/2+/EfKV6d
+         ZWRQ==
+X-Gm-Message-State: AO0yUKVxjt3vfHfTWcM9wYpGq5BcSxdESn3bhlY4IHCbrGzBc4DUjdbu
+        0S49iclzMh2ZDZvR/MbBbNf5+0PFhlbEs/wO+AfT7Q==
+X-Google-Smtp-Source: AK7set91sMpg/DjYNxhi53xj5l50D5U9PRwEL0svQxCY6aJArZydyhMQqIhZTNDf22OlCoHqmVxdg5C4AyhYjuVSlPg=
+X-Received: by 2002:a5d:6641:0:b0:2d0:58f9:a69 with SMTP id
+ f1-20020a5d6641000000b002d058f90a69mr1136893wrw.4.1679480150272; Wed, 22 Mar
+ 2023 03:15:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+References: <20230322-topic-sm8450-upstream-qce-v1-1-b76eaa1824ff@linaro.org>
+In-Reply-To: <20230322-topic-sm8450-upstream-qce-v1-1-b76eaa1824ff@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 22 Mar 2023 15:45:39 +0530
+Message-ID: <CAH=2NtwoLbjNV88DHbS27CwYA_Y-uoKAamKorhaUnany9akNWw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: add crypto nodes
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +71,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20 2023 at 19:43, Bagas Sanjaya wrote:
-> The general changelog rules for the tip tree refers to "Describe your
-> changes" section of submitting patches guide. However, the internal link
-> reference targets to non-existent "submittingpatches" label, which
-> brings reader to the top of the linked doc.
+On Wed, 22 Mar 2023 at 15:34, Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> Correct the target. No changes to submitting-patches.rst since the
-> required label is already there.
+> Add crypto engine (CE) and CE BAM related nodes and definitions
+> for the SM8450 SoC.
 >
-> Fixes: 31c9d7c8297558 ("Documentation/process: Add tip tree handbook")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-In cass Jonathan is picking this up:
-
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  This patch is based on core/urgent branch of tip tree.
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 7c1d1464a1f8..d7e0a1993558 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -4084,6 +4084,34 @@ ufs_mem_phy_lanes: phy@1d87400 {
+>                         };
+>                 };
+>
+> +               cryptobam: dma-controller@1dc4000 {
+> +                       compatible = "qcom,bam-v1.7.0";
 
-Why? Picking a random branch to base patches on is not really
-helpful. It has zero dependencies on that branch.
+This should be "qcom,bam-v1.7.4" instead, as per the HW documentation.
+Please refer to my patch here:
+https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/
+
+So, if you want I can modify this and fold it in my overall dts
+patchset, for which I am about to send a v2:
+https://lore.kernel.org/linux-arm-msm/20230321190118.3327360-1-bhupesh.sharma@linaro.org/
 
 Thanks,
+Bhupesh
 
-        tglx
-
+> +                       reg = <0 0x01dc4000 0 0x28000>;
+> +                       interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
+> +                       #dma-cells = <1>;
+> +                       qcom,ee = <0>;
+> +                       qcom,controlled-remotely;
+> +                       iommus = <&apps_smmu 0x584 0x11>,
+> +                                <&apps_smmu 0x588 0x0>,
+> +                                <&apps_smmu 0x598 0x5>,
+> +                                <&apps_smmu 0x59a 0x0>,
+> +                                <&apps_smmu 0x59f 0x0>;
+> +               };
+> +
+> +               crypto: crypto@1de0000 {
+> +                       compatible = "qcom,sm8450-qce", "qcom,sm8150-qce", "qcom,qce";
+> +                       reg = <0 0x01dfa000 0 0x6000>;
+> +                       dmas = <&cryptobam 4>, <&cryptobam 5>;
+> +                       dma-names = "rx", "tx";
+> +                       iommus = <&apps_smmu 0x584 0x11>,
+> +                                <&apps_smmu 0x588 0x0>,
+> +                                <&apps_smmu 0x598 0x5>,
+> +                                <&apps_smmu 0x59a 0x0>,
+> +                                <&apps_smmu 0x59f 0x0>;
+> +                       interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
+> +                       interconnect-names = "memory";
+> +               };
+> +
+>                 sdhc_2: mmc@8804000 {
+>                         compatible = "qcom,sm8450-sdhci", "qcom,sdhci-msm-v5";
+>                         reg = <0 0x08804000 0 0x1000>;
+>
+> ---
+> base-commit: b12b871ec9079b0baefa69f8a869712682d16020
+> change-id: 20230322-topic-sm8450-upstream-qce-04daf8d81bb1
+>
+> Best regards,
+> --
+> Neil Armstrong <neil.armstrong@linaro.org>
+>
