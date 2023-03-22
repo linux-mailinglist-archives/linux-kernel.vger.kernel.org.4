@@ -2,171 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A136C4104
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBA26C411F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCVD1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S230137AbjCVDgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjCVD1R (ORCPT
+        with ESMTP id S229672AbjCVDgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:27:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75091580D3;
-        Tue, 21 Mar 2023 20:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679455636; x=1710991636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q0WrwoWlpiXHEXP/PcXkjqE6BTl9wSWIbnMlf2EXPKI=;
-  b=MIxSVACGghT1hIuVeW8ArPUnBBenCJKRyUf9pAuBMUznlVbd0JLSFCCr
-   +MmcXGlO1dZFrfUdMuzy6ydOLrJmKjoKuJC7feKb2GW6kIeENkWRaoKu2
-   eeWlDsWSF9ufdCRQ/R8b+RE+mxEzr1ul6OlLG0J79eDtD0tyrXs8td15O
-   3g/q2wBDH9zIvA9BWCXkZJ8NWy8NHqottUgofbAunVM6/K0LirKk71sej
-   mFlAp0a6bNAbzove/SngpNDRfh2wCx3zEE1W+OV2O9IRevi6bGdvewK7s
-   xOd1tI2VB2c+K24hecH0oxFsVLuL42aqD64RaCLLzMI6ZaeABYONdhN8j
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="401686439"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="401686439"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 20:27:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="681753567"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="681753567"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2023 20:27:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pep84-000Cnh-0o;
-        Wed, 22 Mar 2023 03:27:12 +0000
-Date:   Wed, 22 Mar 2023 11:26:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ross Zwisler <zwisler@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
-Message-ID: <202303221148.o4nkqckQ-lkp@intel.com>
-References: <20230321215121.71b339c5@gandalf.local.home>
+        Tue, 21 Mar 2023 23:36:16 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEC657D03;
+        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id le6so18098447plb.12;
+        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679456174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dE6cUqLkWexq10WcTc729+dY2UIxjJT8AIzlQ9w+OHY=;
+        b=aPPB9nEKTvQGYSm3aRvSCyFHLIP5wCvBZYftrgGaFz46U7e72jodASvVx1Zr5Tkph4
+         Asv+m1Myg4jzNZ42PB5UQZ/XCBUPOwkgbNxZRes034U1Kt19dxj7vMu6friN9B+nwawO
+         BcsSQ2P4oPx5wg7i41Wez3oEHgSRsEaxV5MZHdh0aW5XXlsUPNV6g4siQHlKDXAOyIrI
+         i9l9cOJTfORRo++9zK4jfXIEEpWJQLFtKtj3oCEwl+wCs/cwMt3gDaoWSqjUOpwjZNgL
+         k0bGSyyUHHLl0zRspxQNHwKDDFyfmzKdqd7hgRk6av5cy8LecB1NIlxm+AlUQc53GEfk
+         ADBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679456174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dE6cUqLkWexq10WcTc729+dY2UIxjJT8AIzlQ9w+OHY=;
+        b=2vrJuR2+ak4jFHdCrKoZzXMyDlTR0dVAUuuGjn6wbN+dHj2zvZ4JX9Ol828MSd4zEd
+         6iW21IXLett3mW1lmSld1p/N1W/SiQ67IO4XEpDlHge/k5cNZYxjEnmrcxUhH5eonf5P
+         Cr42qwj3l9lG6DpHgfjq43uSxTSwmmf20PBnPDlh0hTtcGlK6SSSe2WghdywnD82z5zL
+         EXx9XOz7OBE/rg9jHu1w9Sj/JjeC8hDtiqPcvqzlqZ3MGCm/yzyhxkgzKQW6afx1XdY0
+         s/0Eus3zMIMimcExTlsnopZoitM/qM5wYxwBQZgBMF04kpHLdzF9YhS5VzhG6iffRhDw
+         cRBg==
+X-Gm-Message-State: AO0yUKXRM7s9aPnudttiMHpb609DwTVS75J+rP5jAPsCc50PocBQ3kvo
+        S6auX78mgyvukH2i7UCf2wI=
+X-Google-Smtp-Source: AK7set/kbWEwOcYxi4SQnjfsHzpzCQ78++mlhj+bdhi3XyBOX4Q47mqN02lmBv79T5Mxlc9U3DlD9Q==
+X-Received: by 2002:a17:90b:1b41:b0:23f:7666:c8a5 with SMTP id nv1-20020a17090b1b4100b0023f7666c8a5mr2015596pjb.29.1679456174411;
+        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
+        by smtp.gmail.com with ESMTPSA id kx15-20020a17090b228f00b00231224439c1sm11589001pjb.27.2023.03.21.20.36.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 20:36:13 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8376E10676A; Wed, 22 Mar 2023 10:26:27 +0700 (WIB)
+Date:   Wed, 22 Mar 2023 10:26:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/199] 6.1.21-rc3 review
+Message-ID: <ZBp1Y+oq7XhSatq9@debian.me>
+References: <20230321180747.474321236@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9GigIbS1uzcWMeqb"
 Content-Disposition: inline
-In-Reply-To: <20230321215121.71b339c5@gandalf.local.home>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321180747.474321236@linuxfoundation.org>
+X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
 
-Thank you for the patch! Yet something to improve:
+--9GigIbS1uzcWMeqb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc3 next-20230321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, Mar 21, 2023 at 07:08:16PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 199 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-patch link:    https://lore.kernel.org/r/20230321215121.71b339c5%40gandalf.local.home
-patch subject: [PATCH] tracing: Trace instrumentation begin and end
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230322/202303221148.o4nkqckQ-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-        git checkout 1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc prepare
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221148.o4nkqckQ-lkp@intel.com/
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-All errors (new ones prefixed by >>):
+--=20
+An old man doll... just what I always wanted! - Clara
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from arch/powerpc/include/asm/page.h:247,
-                    from arch/powerpc/include/asm/thread_info.h:13,
-                    from include/linux/thread_info.h:60,
-                    from arch/powerpc/include/asm/ptrace.h:342,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:755,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/tracepoint-defs.h:11,
-                    from include/linux/instrumentation.h:7,
-                    from include/asm-generic/bug.h:6,
-                    from arch/powerpc/include/asm/bug.h:159,
-                    from include/linux/bug.h:5,
-                    from include/linux/fortify-string.h:5,
-                    from include/linux/string.h:254,
-                    from include/linux/uuid.h:11,
-                    from include/linux/mod_devicetable.h:13,
-                    from scripts/mod/devicetable-offsets.c:3:
-   arch/powerpc/include/asm/page_32.h: In function 'clear_page':
->> arch/powerpc/include/asm/page_32.h:48:9: error: implicit declaration of function 'WARN_ON' [-Werror=implicit-function-declaration]
-      48 |         WARN_ON((unsigned long)addr & (L1_CACHE_BYTES - 1));
-         |         ^~~~~~~
-   include/linux/thread_info.h: In function 'check_copy_size':
->> include/linux/thread_info.h:249:13: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
-     249 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
-   make[2]: Target 'scripts/mod/' not remade because of errors.
-   make[1]: *** [Makefile:1285: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+--9GigIbS1uzcWMeqb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-vim +/WARN_ON +48 arch/powerpc/include/asm/page_32.h
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBp1WwAKCRD2uYlJVVFO
+o1q8AP9Vsj2VJu/ZVALbbhIOwHPd34wj/3bVs1XbEv0lSYC6qQD/Qr5f1hMs3ilS
+21KiRZ7u89iq+uLWJZjP2brra4quaQM=
+=p3oV
+-----END PGP SIGNATURE-----
 
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16  38  
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  39  /*
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  40   * Clear page using the dcbz instruction, which doesn't cause any
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  41   * memory traffic (except to write out any cache lines which get
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  42   * displaced).  This only works on cacheable memory.
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  43   */
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  44  static inline void clear_page(void *addr)
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  45  {
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  46  	unsigned int i;
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  47  
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16 @48  	WARN_ON((unsigned long)addr & (L1_CACHE_BYTES - 1));
-7ab0b7cb8951d4 arch/powerpc/include/asm/page_32.h Christophe Leroy 2019-08-16  49  
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  50  	for (i = 0; i < PAGE_SIZE / L1_CACHE_BYTES; i++, addr += L1_CACHE_BYTES)
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  51  		dcbz(addr);
-5736f96d12dd42 arch/powerpc/include/asm/page_32.h Christophe Leroy 2016-02-09  52  }
-5cd16ee934eafc include/asm-powerpc/page_32.h      Michael Ellerman 2005-11-11  53  extern void copy_page(void *to, void *from);
-5cd16ee934eafc include/asm-powerpc/page_32.h      Michael Ellerman 2005-11-11  54  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--9GigIbS1uzcWMeqb--
