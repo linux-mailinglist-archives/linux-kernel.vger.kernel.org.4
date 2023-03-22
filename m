@@ -2,170 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7AD6C53DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F086C53C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCVSik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S230367AbjCVSfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjCVSii (ORCPT
+        with ESMTP id S229668AbjCVSff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:38:38 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B015149F1;
-        Wed, 22 Mar 2023 11:38:33 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1CEC65FD3E;
-        Wed, 22 Mar 2023 21:38:32 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679510312;
-        bh=ezacvqrTrZ1zK6rRKTaH36dKk0Vzi7emuPTjIZNzoFM=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=WMn0apBNntddj5QS3cJ74Eik7NqqXMh/xKx2hSY77V36ykEshr81eUwq3FP7zD//f
-         bUM7jol15D7eUNYWXDHSBhNLg6M7Dbi0Lnftgs6aExqnKfIlJIcjp6YbqcgAJXOCr0
-         8tGJdrcXjBqwoDWaUQ5ANgMbvW/6LK7a+D2ePLbu9YSEEVpJaLZAojj2KxIwoLvPLf
-         yHgJHyz3XgZ+DulyGMQIF93WikIocu7ooAAMugVJbQMFMKDB18jWggWWWGE4vjfVvo
-         euk7c9A4NVG0pyaFDMLp4RmqdztSLUg81D4m7WOfTO2rXO5spBL3vhx2c1EH8Atgkj
-         xt11pQFK4jADA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 21:38:32 +0300 (MSK)
-Message-ID: <0b841161-1fd2-584e-4920-40644b4b4a7e@sberdevices.ru>
-Date:   Wed, 22 Mar 2023 21:35:22 +0300
+        Wed, 22 Mar 2023 14:35:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528442B28B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:35:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0684DB81D92
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBB1C433D2;
+        Wed, 22 Mar 2023 18:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679510131;
+        bh=Elhv5mKGPuTN9tb82ch7Z8v7l2hA1kpDwRzCbhEVmOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VURV87mcQN39K4QZRsysSH66EvTfDhdd7Ti8NQt+AWT2MFtM5/te7AG7EY+2zqnog
+         kGQs/bDDtPcuuVVTIKy/OsmrheSHm8W7A6FYKXy4QpE7LF48XwZaEYDDrBdptLZYME
+         wbncrahygwrvxOaJOK8ypkZWMyWd3Zh7OPtG/mprf7MdV9GN9DD4pKRLvS1t+WvuoI
+         ao8ALKmRHqXsifFIPEmXbICnfwyfPVbeixb0JhfqCZxe2xj25dmX8lJxW7bVhJHaiv
+         YQ6CPCqr9D1mp+8s6HuK6pitfcNapDwhsIxc0zKZARkorETDXvsrU5o4efrBOao+k7
+         mJnQW4GvGf55g==
+Date:   Wed, 22 Mar 2023 11:35:29 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 09/11] static_call: Make NULL static calls consistent
+Message-ID: <20230322183529.owu33xouz44sv4re@treble>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
+ <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
+ <20230322145918.GF2357380@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-In-Reply-To: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v5 1/2] virtio/vsock: allocate multiple skbuffs on tx
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 14:20:00 #20991698
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230322145918.GF2357380@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds small optimization for tx path: instead of allocating single
-skbuff on every call to transport, allocate multiple skbuff's until
-credit space allows, thus trying to send as much as possible data without
-return to af_vsock.c.
+On Wed, Mar 22, 2023 at 03:59:18PM +0100, Peter Zijlstra wrote:
+> On Tue, Mar 21, 2023 at 09:00:15PM -0700, Josh Poimboeuf wrote:
+> > +void __static_call_nop(void)
+> > +{
+> > +}
+> > +EXPORT_SYMBOL_GPL(__static_call_nop);
+> 
+> Kees, is this a ROP target? The above is basically ENDBR;RET, push
+> something on the stack, jump there and you're in business or so.
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
----
- net/vmw_vsock/virtio_transport_common.c | 57 +++++++++++++++++++------
- 1 file changed, 43 insertions(+), 14 deletions(-)
+I could add __noendbr, except for the !HAVE_STATIC_CALL + !CFI_CLANG
+case which actually needs to indirect call it.
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index 6564192e7f20..9e87c7d4d7cf 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
- 	const struct virtio_transport *t_ops;
- 	struct virtio_vsock_sock *vvs;
- 	u32 pkt_len = info->pkt_len;
--	struct sk_buff *skb;
-+	u32 rest_len;
-+	int ret;
- 
- 	info->type = virtio_transport_get_type(sk_vsock(vsk));
- 
-@@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
- 
- 	vvs = vsk->trans;
- 
--	/* we can send less than pkt_len bytes */
--	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
--		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
--
- 	/* virtio_transport_get_credit might return less than pkt_len credit */
- 	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
- 
-@@ -227,17 +224,49 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
- 	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
- 		return pkt_len;
- 
--	skb = virtio_transport_alloc_skb(info, pkt_len,
--					 src_cid, src_port,
--					 dst_cid, dst_port);
--	if (!skb) {
--		virtio_transport_put_credit(vvs, pkt_len);
--		return -ENOMEM;
--	}
-+	rest_len = pkt_len;
-+
-+	do {
-+		struct sk_buff *skb;
-+		size_t skb_len;
-+
-+		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
-+
-+		skb = virtio_transport_alloc_skb(info, skb_len,
-+						 src_cid, src_port,
-+						 dst_cid, dst_port);
-+		if (!skb) {
-+			ret = -ENOMEM;
-+			break;
-+		}
- 
--	virtio_transport_inc_tx_pkt(vvs, skb);
-+		virtio_transport_inc_tx_pkt(vvs, skb);
- 
--	return t_ops->send_pkt(skb);
-+		ret = t_ops->send_pkt(skb);
-+		if (ret < 0)
-+			break;
-+
-+		/* Both virtio and vhost 'send_pkt()' returns 'skb_len',
-+		 * but for reliability use 'ret' instead of 'skb_len'.
-+		 * Also if partial send happens (e.g. 'ret' != 'skb_len')
-+		 * somehow, we break this loop, but account such returned
-+		 * value in 'virtio_transport_put_credit()'.
-+		 */
-+		rest_len -= ret;
-+
-+		if (WARN_ONCE(ret != skb_len,
-+			      "'send_pkt()' returns %i, but %zu expected\n",
-+			      ret, skb_len))
-+			break;
-+	} while (rest_len);
-+
-+	virtio_transport_put_credit(vvs, rest_len);
-+
-+	/* Return number of bytes, if any data has been sent. */
-+	if (rest_len != pkt_len)
-+		ret = pkt_len - rest_len;
-+
-+	return ret;
- }
- 
- static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
 -- 
-2.25.1
+Josh
