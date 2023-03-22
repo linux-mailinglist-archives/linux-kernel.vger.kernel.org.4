@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E166C54D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2476C54D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjCVTWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S231215AbjCVTWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjCVTWR (ORCPT
+        with ESMTP id S230221AbjCVTWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:22:17 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB3864219;
-        Wed, 22 Mar 2023 12:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=aSIXHVTOX5f3Eh876Sshb43MNFMvCQIWb/uCrCD1+ks=; b=T0qQ0qNqT7QEzcfpPNnIFWnejg
-        rZc6UoFHlRb3slAy8QuY67k08Y4c4QLmEK+FbpDOhEXJEAPIw/5p39kvMVfZLYDdYwroR9pc7JUVY
-        LgRe8qPTNhF+R7htybaNEoyp0aWbjEptC5QGTgaS/d+gH+j8lndbJS5efxl5AzzQDVZMogDDPc48N
-        J2yOYAkF36jmgx37rBaIIaZbprsfO/pgwn3l/p9iz2JOky4YHu2IGa5mcTC0umKL/D7+65rxInBVd
-        jXJMAAgGEMvOH6gelk/55YqvWqqCrlxmq6vVEnRI7fFEhFsdOZUSvybKh2j7hiAld3UXMQ66QH1I5
-        QFkEvvqQ==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pf41s-000Ikf-7L; Wed, 22 Mar 2023 20:21:48 +0100
-Received: from [81.6.34.132] (helo=localhost.localdomain)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pf41r-000XzS-2y; Wed, 22 Mar 2023 20:21:47 +0100
-Subject: Re: [PATCH bpf-next V2] xsk: allow remap of fill and/or completion
- rings
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?Q?Nuno_Gon=c3=a7alves?= <nunog@fr24.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230320203732.222345-1-nunog@fr24.com>
- <CAJ8uoz2N4M+FB-ijzTrVm+91yhtqfKKwmPkxjefJrmSeJOocbg@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <49bb8c3d-5eb0-4593-152c-8f7ea4669b08@iogearbox.net>
-Date:   Wed, 22 Mar 2023 20:21:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 22 Mar 2023 15:22:50 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8459564219
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:22:48 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id eg48so77189289edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679512967;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nTKQ3ZygIopAvL2jDxWoG+gvCLOc1nUSNh2/VIjwflk=;
+        b=J6UrzSOxIfsSAGfarsx/7WV1cN3Zaa1DcTuRkrAgrG0P3yJdRq4UhEaC5Oo89PYqbe
+         Np//+H0K8YyWJ18GHp4Av68Eyr20MgiUMyOxJTjZxBImgvLcqmTFa7JmBTf2BauxGMux
+         Js55BxNFMNSgGHtyXeAB560pXWbksRF2TokLTY/N/HGkCjIzmz7VC4xJO/+h5Dyc1pR4
+         RoaS3Mi+MOhG9fFlqyLZntdPIlBajyujClXSlWZpQbULSEhJhUWtHo9lOz/ReaDuraHn
+         HJ/vAJXts2P0yrtl8khYdLjThO3iPUhASpzXDtODe7Df76ZTE5uvgm/JtzYqXWy4f3K2
+         YRjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679512967;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nTKQ3ZygIopAvL2jDxWoG+gvCLOc1nUSNh2/VIjwflk=;
+        b=WkqTPpFNbgsAB3YP/o1XmW90RUQiSkmYS9STWUMc0M9ksi2Jce/AQG3V8JoNc1BwyU
+         0jsGSNGcXyJq46IkJ2UUrgSOjEbYJXe+r452A9xMpOrXP3ZBErl0VfUsdJ6V311Ee1WN
+         kXtAcrpma+larB3B3tbqo+33Dxa1OiuKFFg2VoV30sH1OlPIcNvfjOEwF2U+IS+cXN2+
+         +PXugumYtsFOBpp+rxN5N8TXU7gaSEfcFbrh5g4YNJ5LCKvfxQo83EgD+thUr/BUVah9
+         YlE+5EDjDc6BNPFnEOeqxwfGAjqVIpG3oULrgVUjzvjHyWzA5TiuwIc4V9HrSMBdeJnd
+         WhXQ==
+X-Gm-Message-State: AO0yUKV8bWsIJYdk3+8FKMtDj1Su/U3pw4wLTpTILz3RI49EQ9ywnxSu
+        eOlqLWGEYTsRYrmstw8G1oDnEDD1UzYy9c/LLWg=
+X-Google-Smtp-Source: AK7set+2geT/YIlyw08nwL32m20e6Y8ea7NV7M3LNBgLzXYsRty6f7SIjxzdEFic/yqzyAWm6zz2fA==
+X-Received: by 2002:a17:906:606:b0:88a:2e57:9813 with SMTP id s6-20020a170906060600b0088a2e579813mr8377898ejb.33.1679512966999;
+        Wed, 22 Mar 2023 12:22:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170906394500b0092fb818127dsm7681645eje.94.2023.03.22.12.22.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 12:22:46 -0700 (PDT)
+Message-ID: <affc7a51-c29f-968e-c15d-ccd13b0c530e@linaro.org>
+Date:   Wed, 22 Mar 2023 20:22:45 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAJ8uoz2N4M+FB-ijzTrVm+91yhtqfKKwmPkxjefJrmSeJOocbg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] arm64: dts: tegra: drop serial clock-names and
+ reset-names
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26851/Wed Mar 22 08:22:49 2023)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230123151543.369724-1-krzysztof.kozlowski@linaro.org>
+ <cd9d9983-3dd5-70dd-8155-1b7d856bf35f@linaro.org>
+In-Reply-To: <cd9d9983-3dd5-70dd-8155-1b7d856bf35f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 12:13 PM, Magnus Karlsson wrote:
-> On Mon, 20 Mar 2023 at 21:54, Nuno Gonçalves <nunog@fr24.com> wrote:
+On 12/03/2023 17:59, Krzysztof Kozlowski wrote:
+> On 23/01/2023 16:15, Krzysztof Kozlowski wrote:
+>> The serial node does not use clock-names and reset-names:
 >>
->> The remap of fill and completion rings was frowned upon as they
->> control the usage of UMEM which does not support concurrent use.
->> At the same time this would disallow the remap of these rings
->> into another process.
+>>   tegra234-sim-vdk.dtb: serial@3100000: Unevaluated properties are not allowed ('clock-names', 'reset-names' were unexpected)
 >>
->> A possible use case is that the user wants to transfer the socket/
->> UMEM ownership to another process (via SYS_pidfd_getfd) and so
->> would need to also remap these rings.
->>
->> This will have no impact on current usages and just relaxes the
->> remap limitation.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> 
->> Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
->> ---
->>   net/xdp/xsk.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
->> index 2ac58b282b5eb..e2571ec067526 100644
->> --- a/net/xdp/xsk.c
->> +++ b/net/xdp/xsk.c
->> @@ -1301,9 +1301,10 @@ static int xsk_mmap(struct file *file, struct socket *sock,
->>          loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
->>          unsigned long size = vma->vm_end - vma->vm_start;
->>          struct xdp_sock *xs = xdp_sk(sock->sk);
->> +       int state = READ_ONCE(xs->state);
->>          struct xsk_queue *q = NULL;
->>
->> -       if (READ_ONCE(xs->state) != XSK_READY)
->> +       if (state != XSK_READY && state != XSK_BOUND)
->>                  return -EBUSY;
->>
->>          if (offset == XDP_PGOFF_RX_RING) {
->> @@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
->>                  /* Matches the smp_wmb() in XDP_UMEM_REG */
->>                  smp_rmb();
->>                  if (offset == XDP_UMEM_PGOFF_FILL_RING)
->> -                       q = READ_ONCE(xs->fq_tmp);
->> +                       q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
->> +                                                          xs->pool->fq);
->>                  else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
->> -                       q = READ_ONCE(xs->cq_tmp);
->> +                       q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
->> +                                                          xs->pool->cq);
+> Thierry, any comments? Can you pick it up?
 
-This triggers a build error:
+Hm, so I guess it is for me?
 
-   [...]
-     CC      drivers/acpi/fan_attr.o
-     CC      net/ipv6/syncookies.o
-   ../net/xdp/xsk.c:1318:8: error: cannot take the address of an rvalue of type 'struct xsk_queue *'
-                           q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
-                               ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   ../include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
-           __READ_ONCE(x);                                                 \
-           ^           ~
-   ../include/asm-generic/rwonce.h:44:70: note: expanded from macro '__READ_ONCE'
-   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-                                                                         ^ ~
-   ../net/xdp/xsk.c:1321:8: error: cannot take the address of an rvalue of type 'struct xsk_queue *'
-                           q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
-                               ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   ../include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
-           __READ_ONCE(x);                                                 \
-           ^           ~
-   ../include/asm-generic/rwonce.h:44:70: note: expanded from macro '__READ_ONCE'
-   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-                                                                         ^ ~
-   2 errors generated.
-   make[4]: *** [../scripts/Makefile.build:252: net/xdp/xsk.o] Error 1
-   make[4]: *** Waiting for unfinished jobs....
-     CC      fs/fs_types.o
-     CC      kernel/bpf/offload.o
-     AR      net/mpls/built-in.a
-     CC      net/mptcp/subflow.o
-   make[3]: *** [../scripts/Makefile.build:494: net/xdp] Error 2
-   make[3]: *** Waiting for unfinished jobs....
+Best regards,
+Krzysztof
+
