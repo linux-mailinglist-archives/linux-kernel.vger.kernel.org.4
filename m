@@ -2,176 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B254F6C4DB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168D26C4DB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCVOay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
+        id S231479AbjCVObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCVOaw (ORCPT
+        with ESMTP id S231464AbjCVObB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:30:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175DC6285F;
-        Wed, 22 Mar 2023 07:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679495451; x=1711031451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YpXIfF5+mJiCxg+eDEG0Br0ZjXo5m0PVri6m2PIOARM=;
-  b=LkqY6WJ69UJBtkxdyOO6T/hlBDk73xFZ+AZU0BTzh5VfYiZr1pLMGLgJ
-   pIWpJhs0AzxDzxA1TYftpn4/7r4DdVqeO9P8otjRkmSq7L3P92+A5oO8E
-   a4yiu7KIntACscMNc9P623qHQ/v9XnALvJfi+iCzQuMKr8sVJLIeXtqa9
-   irphi4o6hSmYOWlmjgJuqz05vZ5FUF2BFZHB7f6NtuLXa2LUKrfpkGBwF
-   pALw8F2SMlExRhsIahv3/35p3fDt+f6lER9pP8sXtnMmrxzCPkJpsn9g/
-   4MV+IjjTs2SpWcNdzicW33jL24pmgiJIVMIskYefg2LS8Jg1jqnT8gBM0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="323070997"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="323070997"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 07:30:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="632010777"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="632010777"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 22 Mar 2023 07:30:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pezTy-007AGy-0O;
-        Wed, 22 Mar 2023 16:30:30 +0200
-Date:   Wed, 22 Mar 2023 16:30:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-acpi@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Stephen Boyd <swboyd@chromium.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
-Subject: Re: [PATCH v14 10/10] drm/bridge: it6505: Register Type C mode
- switches
-Message-ID: <ZBsRBV9dw+mb5ZxZ@smile.fi.intel.com>
-References: <20230322104639.221402-1-treapking@chromium.org>
- <20230322104639.221402-11-treapking@chromium.org>
+        Wed, 22 Mar 2023 10:31:01 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5C99D64B11
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:30:58 -0700 (PDT)
+Received: (qmail 1103384 invoked by uid 1000); 22 Mar 2023 10:30:57 -0400
+Date:   Wed, 22 Mar 2023 10:30:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>
+Subject: Re: [PATCH memory-model 7/8] tools/memory-model: Add documentation
+ about SRCU read-side critical sections
+Message-ID: <4599c0d4-6c2a-431f-8bf3-173855c7ba77@rowland.harvard.edu>
+References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
+ <20230321010246.50960-7-paulmck@kernel.org>
+ <ZBpcpPIq9k2mX7cw@andrea>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322104639.221402-11-treapking@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZBpcpPIq9k2mX7cw@andrea>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 06:46:39PM +0800, Pin-yen Lin wrote:
-> Register USB Type-C mode switches when the "mode-switch" property and
-> relevant port are available in Device Tree. Configure the "lane_swap"
-> state based on the entered alternate mode for a specific Type-C
-> connector, which ends up updating the lane swap registers of the it6505
-> chip.
+On Wed, Mar 22, 2023 at 02:40:52AM +0100, Andrea Parri wrote:
+> On Mon, Mar 20, 2023 at 06:02:45PM -0700, Paul E. McKenney wrote:
+> > From: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > Expand the discussion of SRCU and its read-side critical sections in
+> > the Linux Kernel Memory Model documentation file explanation.txt.  The
+> > new material discusses recent changes to the memory model made in
+> > commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
+> > semantics").
+> 
+> How about squashing the diff below (adjusting subject and changelog):
+> 
+>   Andrea
+> 
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+> index 26554b1c5575e..acac527328a1f 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+>  		additional call_rcu() process to the site of the
+>  		emulated rcu-barrier().
+>  
+> -	e.	Although sleepable RCU (SRCU) is now modeled, there
+> -		are some subtle differences between its semantics and
+> -		those in the Linux kernel.  For example, the kernel
+> -		might interpret the following sequence as two partially
+> -		overlapping SRCU read-side critical sections:
+> -
+> -			 1  r1 = srcu_read_lock(&my_srcu);
+> -			 2  do_something_1();
+> -			 3  r2 = srcu_read_lock(&my_srcu);
+> -			 4  do_something_2();
+> -			 5  srcu_read_unlock(&my_srcu, r1);
+> -			 6  do_something_3();
+> -			 7  srcu_read_unlock(&my_srcu, r2);
+> -
+> -		In contrast, LKMM will interpret this as a nested pair of
+> -		SRCU read-side critical sections, with the outer critical
+> -		section spanning lines 1-7 and the inner critical section
+> -		spanning lines 3-5.
+> -
+> -		This difference would be more of a concern had anyone
+> -		identified a reasonable use case for partially overlapping
+> -		SRCU read-side critical sections.  For more information
+> -		on the trickiness of such overlapping, please see:
+> -		https://paulmck.livejournal.com/40593.html
+> -
+> -	f.	Reader-writer locking is not modeled.  It can be
+> +	e.	Reader-writer locking is not modeled.  It can be
+>  		emulated in litmus tests using atomic read-modify-write
+>  		operations.
 
-...
+Excellent suggestion!
 
-> +	struct device_node *port_node = of_graph_get_port_by_id(dev->of_node, 1);
-> +	struct drm_dp_typec_switch_desc *switch_desc = &it6505->switch_desc;
-> +	int ret;
-> +	u32 dp_lanes[4];
-> +	unsigned int i, num_lanes;
-> +
-> +	ret = drm_dp_register_typec_switches(dev, &port_node->fwnode,
-> +					     &it6505->switch_desc, it6505,
-> +					     it6505_typec_mux_set);
-> +	if (ret)
-> +		return ret;
-> +
-> +	it6505->port_data = devm_kcalloc(dev, switch_desc->num_typec_switches,
-> +					 sizeof(struct it6505_typec_port_data),
-> +					 GFP_KERNEL);
-> +	if (!it6505->port_data) {
-> +		ret = -ENOMEM;
-> +		goto unregister_mux;
-> +	}
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-A couple of the similar comments as per previous similar patch.
-
-...
-
->  	/* get extcon device from DTS */
->  	extcon = extcon_get_edev_by_phandle(dev, 0);
-> -	if (PTR_ERR(extcon) == -EPROBE_DEFER)
-> -		return -EPROBE_DEFER;
-> -	if (IS_ERR(extcon)) {
-> -		dev_err(dev, "can not get extcon device!");
-> -		return PTR_ERR(extcon);
-> +	ret = PTR_ERR_OR_ZERO(extcon);
-> +	if (ret == -EPROBE_DEFER)
-> +		return ret;
-
-> +
-
-Unnecessary blank line.
-
-> +	if (ret) {
-> +		if (ret != -ENODEV)
-> +			dev_warn(dev, "Cannot get extcon device: %d\n", ret);
-> +
-> +		it6505->extcon = NULL;
-> +	} else {
-> +		it6505->extcon = extcon;
-
-...
-
-> +	ret = it6505_register_typec_switches(dev, it6505);
-> +	if (ret != -ENODEV)
-> +		dev_warn(dev, "Didn't register Type-C switches, err: %d\n", ret);
-
-> +
-
-Unnecessary blank line.
-
-> +	if (ret && !it6505->extcon) {
-> +		dev_err(dev, "Both extcon and Type-C switch are not registered.\n");
-> +		return -EINVAL;
-
-Why not return ret here?
-
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Alan
