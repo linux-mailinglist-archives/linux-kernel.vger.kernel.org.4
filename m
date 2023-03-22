@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5126C527B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA19A6C527F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCVRcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S229794AbjCVRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjCVRcb (ORCPT
+        with ESMTP id S229487AbjCVRdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:32:31 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D63A5A1B0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:32:30 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id x2so1759757vss.10
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679506349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZOSOo/wFtyltX/eswYULH+hN/Oi2WaK2A4o5DDLI7c=;
-        b=ksv5HVJQuWJjwP9EGqGCRj0xp2ku2Fdcd1pinrlC5N/yriKKn5LaXTkjL7esHxcQ2C
-         P7NmuR3Z+4WaEc2SWkCvVJjVsZkT5e6qpuinefPUKRjeVVA+AlDglh8goeYBjgESBiYf
-         uKTzK0ypuLrdrbdTdRYzVTNOR9l4NCnda8Roc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679506349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZZOSOo/wFtyltX/eswYULH+hN/Oi2WaK2A4o5DDLI7c=;
-        b=Jp1gTneUjj+7Bmi079aBvrhukyPwzeVeUoDpn5FI2Puaag/Fiq1UbPpe2AVo03j9vu
-         0oTHuBEw3Vp3vT7TuXYYUAdlffQgUuCrKm7bKJKd58l7yrw4CPzBCD2lVApS9c0Bwl8J
-         +zY/h5uZ3viSuJ6cVrpFxbim1AD6GCXPSt2KsSunkEcDQmVLYPOjqcob+F7KYurExjSs
-         NW3v5PZzLz5PJ1XieoatE7S+YkX5bUPAcA+ONH4V3gPRc1qvgQ3RJLqW9CoIfajCxYz9
-         nI6OeZAkTrlU1jleGHBYrnsS7G5UGIDjJ48VtVrIdfC4uJdo12j7T5c3pu7QygwQSWZn
-         fzhw==
-X-Gm-Message-State: AO0yUKUFI5cBtFRIDaV6Z5lmcVVeyvDFrwmY7/W1yIZ0iYer6WP8nisx
-        2O+rn64XzyJbR4rhL48/MympxHReqXILYXf27TUADw==
-X-Google-Smtp-Source: AK7set8wOK9GFMrgIhi2HWlH2N3N14Glxkdpjg7VA4KlNIgfBG4tEza8mrfXsF7sJozXFCS021xanpgz7psDffZl0as=
-X-Received: by 2002:a67:c108:0:b0:416:f1ea:1001 with SMTP id
- d8-20020a67c108000000b00416f1ea1001mr122085vsj.5.1679506349520; Wed, 22 Mar
- 2023 10:32:29 -0700 (PDT)
+        Wed, 22 Mar 2023 13:33:43 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B6AF21950;
+        Wed, 22 Mar 2023 10:33:41 -0700 (PDT)
+Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C619320FB5F9;
+        Wed, 22 Mar 2023 10:33:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C619320FB5F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679506420;
+        bh=YKj8pBxwtU/riqXskTaWyOA0jZcj9AQzuGvPjJCa4XQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BlJF/6Vdj2pLFuNHbcrc6uACppjvORzIZPX3zgVql2+LketMx0Zkvx+2EPq90aGnK
+         1QC2+3/A3+vhY5OkM5FjlJVMyIY8LCcpFxxIDUta0R0ej74sk4LbzSOrXsCIivXGGQ
+         dJhABc9XTKKWM4A/LfSI/bt55TJN39vwMUD912uY=
+Message-ID: <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
+Date:   Wed, 22 Mar 2023 18:33:37 +0100
 MIME-Version: 1.0
-References: <20230321212822.5714-1-mario.limonciello@amd.com>
- <20230321212822.5714-4-mario.limonciello@amd.com> <CANg-bXANgkrF4T4X_VgeVejA2wH3GrUiFORyRC4AZfgYrE+7DQ@mail.gmail.com>
- <a9993ba0-ddfb-5ed3-c997-e9eea797cfc3@amd.com>
-In-Reply-To: <a9993ba0-ddfb-5ed3-c997-e9eea797cfc3@amd.com>
-From:   Mark Hasemeyer <markhas@chromium.org>
-Date:   Wed, 22 Mar 2023 11:32:18 -0600
-Message-ID: <CANg-bXCWTM6EMZ_4=B1Phv3DbR8ctXnak1da64j=yji3F2YU-g@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] i2c: designware: Add doorbell support for Mendocino
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Grzegorz Bernacki <gjb@semihalf.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Held Felix <Felix.Held@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
+ <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> So either psp_send_platform_access_msg should return 0 for that case
-> (expecting caller to investigate more closely) or psp_send_check_i2c_req
-> needs to special case -EIO for more investigation.
->
-> I lean upon the latter unless you have a strong opinion.
+On 22/03/2023 16:46, Borislav Petkov wrote:
+> On Mon, Mar 20, 2023 at 07:19:48PM +0000, Jeremi Piotrowski wrote:
+>> This series is a prerequisite for nested SNP-host support on Hyper-V
+> 
+> I'm curious: what in the *world* is a sensible use case for doing this
+> thing at all?
+> 
 
-I'm ok with either, but if you go with the latter, the documentation
-will need to be updated in psp_send_check_i2c_req as it states that
--EIO is used for basic mailbox comm errors.
+This is actually not as crazy as it sounds.
 
-> I would expect ToT should run fine on Skyrim.  I'll adjust as you suggested
-> if you can please test it.
+What this does is it allows a normal (non-SNP) VM to host confidential (SNP)
+VMs. I say "normal" but not every VM is going to be able to do this, it needs
+to be running on AMD hardware and configured to have access to
+VirtualizationExtensions, a "HardwareIsolation" capability, and given a number
+of "hardware isolated guests" that it is allowed to spawn. In practice this
+will result in the VM seeing a PSP device, SEV-SNP related CPUID leafs, and
+have access to additional memory management instructions (rmpadjust/psmash).
+This allows the rest of the of KVM-SNP support to work.
 
-Sure! I can test the next version you send out.
+So instead of taking a bare-metal AMD server with 128 CPUs to run confidential
+workloads you'll be able to provision an Azure VM with say 8 CPUs and run up to
+8 SNP guests nested inside it.
+
+It's also useful for development, I participate in the kata-containers project
+where we're doing confidential-containers related work, and having access to
+test VMs to run SNP guests is going to make things much easier.
+
+If you're interested, I posted the other half of the patches required some time
+back: https://lore.kernel.org/lkml/20230213103402.1189285-1-jpiotrowski@linux.microsoft.com/#t
+
+Jeremi
