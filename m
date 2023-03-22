@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B096C3FE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D956C3FE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjCVBhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
+        id S230182AbjCVBhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjCVBg7 (ORCPT
+        with ESMTP id S230044AbjCVBg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 21 Mar 2023 21:36:59 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3745A92E;
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDFC5A1AF;
         Tue, 21 Mar 2023 18:36:40 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id h2so4609429iow.0;
-        Tue, 21 Mar 2023 18:36:39 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id d14so4945371ion.9;
+        Tue, 21 Mar 2023 18:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679448993;
+        d=gmail.com; s=20210112; t=1679448994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IAvSDTaQNCs+gy/ESSErpV55nInpY/nvxkb3Bc1Sf+Q=;
-        b=YtkuE4e6GTaL+l4VQm0Go5MDVaO0GXT4CxCeRqw1liR/AdZVkzunI8FJAZEeFn4+t+
-         AOQwLIsaD1NVe3WUoyWnNaqdEPu5hj7Bvji8FtIar4uEdZJ+ypHNwQ9uBmcr8LRuQSqA
-         b//GoOac8z8vWIoqxV7jAyVN5y3OHtjdMaLSyCBiGguQhGCNCQT8O2xG6Q8gk2TGcmWd
-         M9i7REryIqfVB42yQR+OV1lGanWak9kHGk1e/cT6cHvTQp8kiEfF3WXBQAWv++GunfQO
-         GFNhMluh2zYkNtUXkhp0pfdt9jqApl/C940xoSBtJOGr+m/Vhvbdj59WztmiD5os8mn9
-         o2uQ==
+        bh=geHKdXSrTd+j0bEZzl4suSAJY2V13AlXRMEuZwesJq4=;
+        b=Exufr2+FbVYVB3TWRJVhvwsg8XcRWMUuRQptkHRHLVySLmV1zl7ipHgwLV1WPnAtfz
+         9s9W0Bf6jpkzFDFwuH7+Gim+gQsiRVzNT9VxjoEDBZdhBqUTnrYaMd0C7EcM/DicNDBd
+         emCvxY2pqCAD6dF4vX1zHdw9EBswdlp333p46frCDHCIYwYHjogNnFuBgCbqx61+JlY7
+         QF41Rvi1utPIA6WEHJnef5WG91skX+HUGllM4t4nlg2yrTqTfDl68D1LrtQFbT9GXaJB
+         PHWknxafPLiGb1RL6keJqd1kxW/4PkPWLqSX8/TVnUWD4FbBplxsvrmAplcjip3eJtia
+         BYaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679448993;
+        d=1e100.net; s=20210112; t=1679448994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IAvSDTaQNCs+gy/ESSErpV55nInpY/nvxkb3Bc1Sf+Q=;
-        b=DO4gz2pLA9DndVgbAex5E88Rv1SG8q7Upy+bX426xZDxzOGlmRZSODbU8iPGGRIse7
-         ubjKCTwzgJ/KDgvwr1m1gL8E9xx6V3GlYFddu4mLJglpktSyATxeWM7rL4kOjZnzmaCQ
-         EI+ZH8Tu8/LY2yp+jdvqhmqDSxuuzhyloXJcIZh6XBM/IBTHBUH2Z6Cxxg4hO5SYI1LM
-         v2UNaCCVWyVK7WSQxYJuOgDbWWOSXoMjVt7vY3NfIup1XOcNYycY1uWIKT9pSoV73Y/M
-         TSQMAYGTUtA8UJY6iXeoWjdYnwMfaJ5dX8Z8DvD4DFSPZIdRxPksYg8aJQK54pNqXXI7
-         +ZZg==
-X-Gm-Message-State: AO0yUKVNrKjAUS396DzuY9HmlnAEBESnqRnPX4XUSVEienjrUbAIro29
-        vD7BwCEewgNWcDBxybiSDrM=
-X-Google-Smtp-Source: AK7set82++47bpRl1j35mFQOSt2xSoX7hdvw3hNOfmaXbJPdPb9L4B8EtdK9B4Wdn3EvyX+IZuis6A==
-X-Received: by 2002:a6b:e704:0:b0:74c:b686:6227 with SMTP id b4-20020a6be704000000b0074cb6866227mr3355463ioh.14.1679448993133;
-        Tue, 21 Mar 2023 18:36:33 -0700 (PDT)
+        bh=geHKdXSrTd+j0bEZzl4suSAJY2V13AlXRMEuZwesJq4=;
+        b=tblbSf0QcTZsSfhuuOzWSGJzuEnko1YCSuelYXRz95lZQUy+IrnUY3TNNBDDx7TsyK
+         d7qgtrBXHU0k/7tFOydhKcbdooSFRLdnickvE+7i4KG1U2NGkhDcgbZrekiUeCe+4ETD
+         vGxZDuU2Jviev61oBz3gbeU1J3eY0XtEztpsXqFCeyluUR99PfS4aG2PqdIN/Lhy/aqy
+         P2adBIkCPZqZllurKkSpR9VFRn71/LMPg5hlef8FcHfR4IqwRx/FHQZrXcdJWb6dCmvL
+         UAZdcctTJDBNi9B4M5tUFgZsEECxth1zYRVT77C7Uu3RP8UEEIu66RvayNL/drPHUV3y
+         kBuw==
+X-Gm-Message-State: AO0yUKVKWOqvqMjCMOtqcCPI2PFNrrbFgvr9Cvhi8Be8K6+PCoNxozsR
+        D86jYLu68xbCfmFAHDHhcaI=
+X-Google-Smtp-Source: AK7set/ButdII1reoOj79AjhVSnxCvB73puNkd1bHq1GdqNgjFlfAp3flBeK3PvwhlyM6cjFjvmM6g==
+X-Received: by 2002:a5e:d60f:0:b0:74c:bb78:25d7 with SMTP id w15-20020a5ed60f000000b0074cbb7825d7mr3149817iom.19.1679448994193;
+        Tue, 21 Mar 2023 18:36:34 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id a22-20020a6b6616000000b007530bbfa577sm3925058ioc.18.2023.03.21.18.36.32
+        by smtp.googlemail.com with ESMTPSA id a22-20020a6b6616000000b007530bbfa577sm3925058ioc.18.2023.03.21.18.36.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 18:36:32 -0700 (PDT)
+        Tue, 21 Mar 2023 18:36:33 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 1/4] module: in layout_sections, move_module: add the modname
-Date:   Tue, 21 Mar 2023 19:36:20 -0600
-Message-Id: <20230322013623.251401-2-jim.cromie@gmail.com>
+Subject: [PATCH 2/4] module: add symbol-name to pr_debug Absolute symbol
+Date:   Tue, 21 Mar 2023 19:36:21 -0600
+Message-Id: <20230322013623.251401-3-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230322013623.251401-1-jim.cromie@gmail.com>
 References: <20230322013623.251401-1-jim.cromie@gmail.com>
@@ -72,43 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-layout_sections() and move_module() each issue ~50 messages for each
-module loaded.  Add mod-name into their 2 header lines, to help the
-reader find his module.
+The pr_debug("Absolute symbol" ..) reports value, (which is usually
+0), but not the name, which is more informative.  So add it.
 
-no functional changes.
+no functional changes
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- kernel/module/main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/module/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index b4759f1695b7..39f267c40286 100644
+index 39f267c40286..e248a3697ffb 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1523,10 +1523,10 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 	for (i = 0; i < info->hdr->e_shnum; i++)
- 		info->sechdrs[i].sh_entsize = ~0UL;
+@@ -1350,8 +1350,8 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
  
--	pr_debug("Core section allocation order:\n");
-+	pr_debug("Core section allocation order for %s:\n", mod->name);
- 	__layout_sections(mod, info, false);
+ 		case SHN_ABS:
+ 			/* Don't need to do anything */
+-			pr_debug("Absolute symbol: 0x%08lx\n",
+-			       (long)sym[i].st_value);
++			pr_debug("Absolute symbol: 0x%08lx %s\n",
++				 (long)sym[i].st_value, name);
+ 			break;
  
--	pr_debug("Init section allocation order:\n");
-+	pr_debug("Init section allocation order for %s:\n", mod->name);
- 	__layout_sections(mod, info, true);
- }
- 
-@@ -2162,7 +2162,7 @@ static int move_module(struct module *mod, struct load_info *info)
- 	}
- 
- 	/* Transfer each section which specifies SHF_ALLOC */
--	pr_debug("final section addresses:\n");
-+	pr_debug("Final section addresses for %s:\n", mod->name);
- 	for (i = 0; i < info->hdr->e_shnum; i++) {
- 		void *dest;
- 		Elf_Shdr *shdr = &info->sechdrs[i];
+ 		case SHN_LIVEPATCH:
 -- 
 2.39.2
 
