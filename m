@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DB06C4689
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131266C4665
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjCVJfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S229686AbjCVJ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCVJfL (ORCPT
+        with ESMTP id S230481AbjCVJ3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:35:11 -0400
-X-Greylist: delayed 368 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Mar 2023 02:35:08 PDT
-Received: from outbound-smtp17.blacknight.com (outbound-smtp17.blacknight.com [46.22.139.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E8F5B5EB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:35:06 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp17.blacknight.com (Postfix) with ESMTPS id D65281C3A54
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:28:56 +0000 (GMT)
-Received: (qmail 16978 invoked from network); 22 Mar 2023 09:28:56 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 22 Mar 2023 09:28:56 -0000
-Date:   Wed, 22 Mar 2023 09:28:48 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux-RT <linux-rt-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6] locking/rwbase: Mitigate indefinite writer starvation.
-Message-ID: <20230322092848.hjlehutudsoz2hlz@techsingularity.net>
-References: <20230321161140.HMcQEhHb@linutronix.de>
+        Wed, 22 Mar 2023 05:29:37 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19F659E69
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:29:19 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso9314104iob.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:29:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679477359;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VwR4H6MGsoLQxINvSfgEoqaiGeIJXbBfzWUEo9uno3E=;
+        b=Hb7GE0HjNugyR013MKH2yiknVAph+rX54CBuSNe5xZuT/UkGyatT+cq9Pie4bYXMhr
+         GDz/o6OB0SIj83J/ymIQXA+wkh445dc6hU2BM4jngsb743DGo595b/AJgbqXrzFZEL4z
+         DA2jDVXJflJznr6BSOVxcWtQ6RTfvWXXAEKhgBEwq++g94glGXj386PCp2aW65/BbuKK
+         NFCQe7ONMNKFgBzJc69lSuvLWf8biWmhxzqHPAnflH5kUv4xI+jojaXoHXKEIz64Lsl3
+         PtP0IM6mLFbNHoq+D5YYtXifQpx6T1rhcwGj9z1IkWkcKb2gXi6XlkZBeNxfrjUjI/dn
+         5+fQ==
+X-Gm-Message-State: AO0yUKX1msbyFHyNIMNAohG+PIJC3eflKWjOl/IU/vdAKD3I5WWjHFEy
+        067Y2MzlYXMaOUcy93DpvnX543S4LNr5lPWyj8/lgpqgJXsw
+X-Google-Smtp-Source: AK7set9wiXXV8HcfSnBA3WXXQuxKz+LajL6b0bCizutG2gEq/GuJ4PDA4gkD8fLcC7wmG0GimCb5oA7lyiAD8rOGbOyncXzfWO0+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230321161140.HMcQEhHb@linutronix.de>
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:9567:0:b0:3c2:b9ba:72f9 with SMTP id
+ y94-20020a029567000000b003c2b9ba72f9mr2581039jah.5.1679477359313; Wed, 22 Mar
+ 2023 02:29:19 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 02:29:19 -0700
+In-Reply-To: <0000000000006294c805e106db34@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000690cbc05f779cba8@google.com>
+Subject: Re: [syzbot] [bpf?] [trace?] possible deadlock in bpf_trace_printk
+From:   syzbot <syzbot+c49e17557ddb5725583d@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, boqun.feng@gmail.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        fgheet255t@gmail.com, haoluo@google.com, hawk@kernel.org,
+        hdanton@sina.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        longman@redhat.com, martin.lau@linux.dev, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        sdf@google.com, song@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 05:11:40PM +0100, Sebastian Andrzej Siewior wrote:
-> The rw_semaphore and rwlock_t locks are unfair to writers. Readers can
-> indefinitely acquire the lock unless the writer fully acquired the lock.
-> This can never happen if there is always a reader in the critical
-> section owning the lock.
-> 
-> Mel Gorman reported that since LTP-20220121 the dio_truncate test case
-> went from having 1 reader to having 16 reader and the number of readers
-> is sufficient to prevent the down_write ever succeeding while readers
-> exist. Eventually the test is killed after 30 minutes as a failure.
-> 
-> Mel proposed a timeout to limit how long a writer can be blocked until
-> the reader is forced into the slowpath.
-> Thomas argued that there is no added value by providing this timeout.
-> From PREEMPT_RT point of view, there are no critical rw_semaphore or
-> rwlock_t locks left where the reader must be prefer.
-> 
+syzbot suspects this issue was fixed by commit:
 
-s/prefer/preferred/
+commit 05b24ff9b2cfabfcfd951daaa915a036ab53c9e1
+Author: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri Sep 16 07:19:14 2022 +0000
 
-> Mitigate indefinite writer starvation by forcing the READER into the
-> slowpath once the WRITER attempts to acquire the lock.
-> 
-> Reported-by: Mel Gorman <mgorman@techsingularity.net>
-> Link: https://lore.kernel.org/877cwbq4cq.ffs@tglx
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    bpf: Prevent bpf program recursion for raw tracepoint probes
 
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a653d6c80000
+start commit:   a335366bad13 Merge tag 'gpio-fixes-for-v6.0-rc6' of git://..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e66520f224211a2
+dashboard link: https://syzkaller.appspot.com/bug?extid=c49e17557ddb5725583d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e27480880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12737fbf080000
 
-Thanks Sebastian and Thomas!
+If the result looks correct, please mark the issue as fixed by replying with:
 
--- 
-Mel Gorman
-SUSE Labs
+#syz fix: bpf: Prevent bpf program recursion for raw tracepoint probes
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
