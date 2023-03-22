@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70DC6C45E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3986C463A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjCVJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S230502AbjCVJVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCVJNX (ORCPT
+        with ESMTP id S230501AbjCVJVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:13:23 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063B04C3C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:13:23 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z19so8258376plo.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:13:23 -0700 (PDT)
+        Wed, 22 Mar 2023 05:21:35 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4CA5F50F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:20:38 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o11so18706697ple.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=areca-com-tw.20210112.gappssmtp.com; s=20210112; t=1679476402;
+        d=areca-com-tw.20210112.gappssmtp.com; s=20210112; t=1679476837;
         h=content-transfer-encoding:mime-version:date:to:from:subject
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5NbocV/CGU6vo/Jq423AoG+k28z3QYnZrMdtS3Ex8/4=;
-        b=OkZiwJlN7EdOw0wCwLta+QvSYI38sAmKzXJ5O1VagUK/K3AfSI3/Ml3FapA8AyvHBS
-         u3ObomU7CcTou5TYITedY0chuRE47MgzVLpCqDbgz+9Xf0rDBOsm6PrS1CjGgiFt3yE9
-         5qxX4lSeLQg+rPONlEK/mLTWN5aAXfNKDb1W1pvO7EhbQ7VRcdC3kjsIIUPoUmTIcAuU
-         soQF/YHFZKbY5j7gIyXVtdwBkxEjPZv+wZxNgJV60aEegHfd5LeNd4kYBOUrPo3EpOnu
-         AfASMlr2EOYcEdh3LmpjxtIi27flJRX5oIkmCMAWVp3ImnmWWPP2gqU0+ETCJhXLMnpl
-         +T6Q==
+        bh=gk7upXiG6tQnjmAbZAy+2hfQqQURaFjrDuWcXF2d57c=;
+        b=bwVOwT65dBMPO57hdlbzNA8a+HC+4eI5z+X3CqQNXfyDMQqvecrsm/6Ll4T8b4NLzb
+         PFE2sSJh4UwLSnRabI1Nuj4ZPOcBtg6K7RLRZ3/EqCLDKELF+sLmz+5xjNPtijnPs56x
+         4cg0RtbFmfo36Qt7KICrkga4NXCFUN3A5bXnkiRBWeT/hcMZ/tbRt56E8HrCcPYJ6iE2
+         lPX5e27oCLNLo95+pfV9wS6+800zaRVlYo9iRFfXm63v+4yjcdWtIN2EoyGFJZsmRTXP
+         q9mMmwN7mBe3CCR/Qf8Qjqs8wGBldD8F0Z2IDPiSU097+/b+kSyjB4nLyRpyXhphCvwL
+         tTfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679476402;
+        d=1e100.net; s=20210112; t=1679476837;
         h=content-transfer-encoding:mime-version:date:to:from:subject
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5NbocV/CGU6vo/Jq423AoG+k28z3QYnZrMdtS3Ex8/4=;
-        b=CMZaFIZ5kKsmlIt/qh02jq+OOWgCRA1utv0VQ3pFePlV1LkV5iH+d4urcNOmXPLUZb
-         osOAvJGkE7wzskVRUdPsY5bWnYHR90FT2j59f30v95D7YbnEHqh1ENKbJDor4ijGV9mH
-         6siszSEdlx4zGD65CEoqGN23kSZoLvEBrutF1h6G2RCJiChVyIUnuK/38z9rtKOghAtR
-         sK+yqRyMm9ymKsHEszE3Dpf1lo1YAjtjTVCMx9V/QquGHvLE+AnXn+r2SHkGdvDrMLUp
-         33cdy7AcXz2CGP0MUL8/t0eR0ToA3cliJ5V/8wmVSR05euprexHzZpN8mkCRo8qf3Nyj
-         3oeQ==
-X-Gm-Message-State: AO0yUKWSYHobyvBQ913bKg9942AYLmZzvDC6yK9P42Ak+iQViPWGQIx/
-        5KM+BvvU7S5ZfIYtlJyjfKhWBSYBzbCeVnwNvPJTHQ==
-X-Google-Smtp-Source: AK7set909pBC/j4lWAqNDjTzNbAkvQ3Nf/ka8NPlkkT02+PZ5xKi2gOu85q8p6SGKuddKairK/wipA==
-X-Received: by 2002:a17:90b:3149:b0:23f:dd27:169b with SMTP id ip9-20020a17090b314900b0023fdd27169bmr2881569pjb.2.1679476402512;
-        Wed, 22 Mar 2023 02:13:22 -0700 (PDT)
+        bh=gk7upXiG6tQnjmAbZAy+2hfQqQURaFjrDuWcXF2d57c=;
+        b=X0ELyHV3kfYdSsZb+/gwPClSdNa9B9f5Bf1G+g7s2zoKfbJPMBHr8Ks7dbGMPV98T4
+         f/i4IJ216x1G4UELVbr8ZLpKw2Xo8SXtHm7gL7kPZG5w5OdC6vpg3/VfpwPujlTJtPf7
+         c6MYMjw18pOhvL/Ff39+dpMuoDVDASz62ovInHpVtb2uC4ZeMartAMHlfqUjdtbpriLP
+         sjepwWyc/lfaLcSXxyjINQEt/5kl9Rtfr61Oox4syK8h9FF8yT8xvxmdyOveNlNB5blb
+         7N8ZR/5HjCGYcU2ygDoWpsgZ+grSDvEWOWzt/sgLOOxM5xRobq75wk1Wh7MbB/R0lXI/
+         dfsA==
+X-Gm-Message-State: AO0yUKWsxa+9EY0F76OAeXIltJmTylXCXHH3LfaEtTTMq7UWMHgFQPGg
+        BIC16jf/5+DTCW4U/qrJfVzjcw==
+X-Google-Smtp-Source: AK7set9MFydPJqupCVJggyqn3s+4qT8rXRYcfEljHNZyGCEqVhJz/knR7egq9Ufkj8oItyOEMpbNfQ==
+X-Received: by 2002:a17:90b:3852:b0:23d:449a:db70 with SMTP id nl18-20020a17090b385200b0023d449adb70mr2992722pjb.28.1679476836770;
+        Wed, 22 Mar 2023 02:20:36 -0700 (PDT)
 Received: from centos78 (60-248-88-209.hinet-ip.hinet.net. [60.248.88.209])
-        by smtp.googlemail.com with ESMTPSA id z3-20020a17090ad78300b0020b21019086sm983192pju.3.2023.03.22.02.13.21
+        by smtp.googlemail.com with ESMTPSA id cv18-20020a17090afd1200b0022335f1dae2sm9279596pjb.22.2023.03.22.02.20.35
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Mar 2023 02:13:22 -0700 (PDT)
-Message-ID: <81c1f98819dfdfa18ae4d3b854b7733af9d34ea5.camel@areca.com.tw>
-Subject: [PATCH 2/5] scsi: arcmsr: fixed ADAPTER_TYPE_B 64bits dma
- compatibility issue
+        Wed, 22 Mar 2023 02:20:36 -0700 (PDT)
+Message-ID: <4aec4385abc6eab10b575c28130ec615a144492d.camel@areca.com.tw>
+Subject: [PATCH 3/5] scsi: arcmsr: fixed reading buffer empty length error
 From:   ching Huang <ching2048@areca.com.tw>
 To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
         linux-scsi@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Thu, 23 Mar 2023 01:13:20 +0800
+Date:   Thu, 23 Mar 2023 01:20:35 +0800
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
 Mime-Version: 1.0
@@ -72,23 +71,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ching Huang <ching2048@areca.com.tw>
 
-This patch fixed ADAPTER_TYPE_B 64bits dma compatibility issue
-on some mother board.
+This patch fixed reading buffer empty length error
+which cause areca CLI app command timeout.
 
 Signed-off-by: ching Huang <ching2048@areca.com.tw>
 ---
 
 diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
-index e8c12dd..d387a38 100644
+index d387a38..587332e 100644
 --- a/drivers/scsi/arcmsr/arcmsr_hba.c
 +++ b/drivers/scsi/arcmsr/arcmsr_hba.c
-@@ -996,6 +996,8 @@ static int arcmsr_set_dma_mask(struct AdapterControlBlock *acb)
- 		if (((acb->adapter_type == ACB_ADAPTER_TYPE_A) && !dma_mask_64) ||
- 		    dma_set_mask(&pcidev->dev, DMA_BIT_MASK(64)))
- 			goto	dma32;
-+		if (acb->adapter_type <= ACB_ADAPTER_TYPE_B)
-+			return 0;
- 		if (dma_set_coherent_mask(&pcidev->dev, DMA_BIT_MASK(64)) ||
- 		    dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64))) {
- 			printk("arcmsr: set DMA 64 mask failed\n");
+@@ -2254,8 +2254,11 @@ static void arcmsr_iop2drv_data_wrote_handle(struct AdapterControlBlock *acb)
+ 
+ 	spin_lock_irqsave(&acb->rqbuffer_lock, flags);
+ 	prbuffer = arcmsr_get_iop_rqbuffer(acb);
+-	buf_empty_len = (acb->rqbuf_putIndex - acb->rqbuf_getIndex - 1) &
+-		(ARCMSR_MAX_QBUFFER - 1);
++	if (acb->rqbuf_putIndex >= acb->rqbuf_getIndex) {
++		buf_empty_len = (ARCMSR_MAX_QBUFFER - 1) -
++		(acb->rqbuf_putIndex - acb->rqbuf_getIndex);
++	} else
++		buf_empty_len = acb->rqbuf_getIndex - acb->rqbuf_putIndex - 1;
+ 	if (buf_empty_len >= readl(&prbuffer->data_len)) {
+ 		if (arcmsr_Read_iop_rqbuffer_data(acb, prbuffer) == 0)
+ 			acb->acb_flags |= ACB_F_IOPDATA_OVERFLOW;
 
