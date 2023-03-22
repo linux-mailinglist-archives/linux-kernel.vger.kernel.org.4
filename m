@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555136C411E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453A96C4106
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjCVDgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S229778AbjCVDax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCVDgP (ORCPT
+        with ESMTP id S229482AbjCVDat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:36:15 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A1B574F7;
-        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id z10so9810523pgr.8;
-        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679456174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cc5DrnEojv7YzJeakKQDE2SxbRr1LRl34O5JQg2M6PA=;
-        b=awX3m9vefbZpc3RuCHE7jwwzjw8g250qVtMe4fA0XdztKNV3oF4Qz48I2beLUTlx+Z
-         eGFH7EEwbYVEM4Z9x9Lp5BYSqbvMvck1Ql5Y3vhrakrr6vY9qXniDu0uc21psLy6rhaM
-         z9dJo/2lKryXLCAP+jN3J4raQyMmb97/xSVUHtfDGWHZF+engVHAu23KPyzOaSNkCzfe
-         dEvEcwDJO89ueQVR2kIG1A/Ai3BZd/EHJaQK8Whf9ruaYFCCzkKosxS5RaQyPDPaGk68
-         E7zn8A43yoqaO7qJ0G917eUNH40Tgr5hv7uJnyzmAL3Df0gKpX7YADP/oJXWFBLJzQTg
-         MZ8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679456174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cc5DrnEojv7YzJeakKQDE2SxbRr1LRl34O5JQg2M6PA=;
-        b=1X3LHr+OIFhHe9Hg8SdY1qhqi4C49V/fqGQqftUgckU612jT2JOdLcfSmhUXy6uZ22
-         bIxo4If8217wHijyx3nUtrDWYoriND0f4l0p8LyQEYIrR0DjFAd115Zaqi2+NPUbxJ3J
-         dpFAJu6Qg/00Wll1dKmGHRtLwKaYngsMiXjG32HY2UrX/35PGPuhU6cJAzEzOiTPgswx
-         wB+LgDCO+ul5yGs3wNewzSWQOlb7NRZYXNCI+/8sR7gocBCdxFcfSyYjSux+NL9UG1z9
-         YvfBVcGQb02CE6BVW8qZbPFWHqzCCEvnTecjAxyos7cH/Luv1Gq0WUVEKZ+GatPlTz8Q
-         2iBg==
-X-Gm-Message-State: AO0yUKWN8Z5KEae65RnE9CTmtDZQ6c/cIpXj+/daLlWR55lWOyRDDuxF
-        E24GoH3aguDOlDzQlAYF7a4=
-X-Google-Smtp-Source: AK7set9xQymjHsWW4dxuyE68uy9S+v5E3RymCn9aJK+gp2C0qZe4RXxZjI1qHxQBmvGQmfONI3RrlQ==
-X-Received: by 2002:a62:844e:0:b0:622:ece1:35d3 with SMTP id k75-20020a62844e000000b00622ece135d3mr868953pfd.5.1679456174115;
-        Tue, 21 Mar 2023 20:36:14 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
-        by smtp.gmail.com with ESMTPSA id x16-20020aa784d0000000b006280676b8b4sm3653085pfn.220.2023.03.21.20.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 20:36:13 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 43A21106772; Wed, 22 Mar 2023 10:27:15 +0700 (WIB)
-Date:   Wed, 22 Mar 2023 10:27:15 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/214] 6.2.8-rc3 review
-Message-ID: <ZBp1k17eviGPhnnW@debian.me>
-References: <20230321180749.921141176@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IKKBsrAChcI1rFR/"
-Content-Disposition: inline
-In-Reply-To: <20230321180749.921141176@linuxfoundation.org>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Tue, 21 Mar 2023 23:30:49 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7116F1ABF5;
+        Tue, 21 Mar 2023 20:30:48 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PhDWq0SNGz501Sg;
+        Wed, 22 Mar 2023 11:30:47 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 32M3UUgZ015264;
+        Wed, 22 Mar 2023 11:30:30 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 22 Mar 2023 11:30:31 +0800 (CST)
+Date:   Wed, 22 Mar 2023 11:30:31 +0800 (CST)
+X-Zmail-TransId: 2afa641a76574ea-e0473
+X-Mailer: Zmail v1.0
+Message-ID: <202303221130316049449@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <alexandre.belloni@bootlin.com>
+Cc:     <andrew@lunn.ch>, <gregory.clement@bootlin.com>,
+        <sebastian.hesselbarth@gmail.com>, <a.zummo@towertech.it>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBydGM6IGFybWFkYTM4eDogdXNlIGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZV9ieW5hbWUoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32M3UUgZ015264
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 641A7667.000/4PhDWq0SNGz501Sg
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
---IKKBsrAChcI1rFR/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+call to devm_platform_ioremap_resource_byname(), as this is exactly what
+this function does.
 
-On Tue, Mar 21, 2023 at 07:08:32PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.8 release.
-> There are 214 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/rtc/rtc-armada38x.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
+index cc542e6b1d5b..b4139c200676 100644
+--- a/drivers/rtc/rtc-armada38x.c
++++ b/drivers/rtc/rtc-armada38x.c
+@@ -491,7 +491,6 @@ MODULE_DEVICE_TABLE(of, armada38x_rtc_of_match_table);
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+ static __init int armada38x_rtc_probe(struct platform_device *pdev)
+ {
+-	struct resource *res;
+ 	struct armada38x_rtc *rtc;
 
---=20
-An old man doll... just what I always wanted! - Clara
+ 	rtc = devm_kzalloc(&pdev->dev, sizeof(struct armada38x_rtc),
+@@ -508,12 +507,10 @@ static __init int armada38x_rtc_probe(struct platform_device *pdev)
 
---IKKBsrAChcI1rFR/
-Content-Type: application/pgp-signature; name="signature.asc"
+ 	spin_lock_init(&rtc->lock);
 
------BEGIN PGP SIGNATURE-----
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rtc");
+-	rtc->regs = devm_ioremap_resource(&pdev->dev, res);
++	rtc->regs = devm_platform_ioremap_resource_byname(pdev, "rtc");
+ 	if (IS_ERR(rtc->regs))
+ 		return PTR_ERR(rtc->regs);
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rtc-soc");
+-	rtc->regs_soc = devm_ioremap_resource(&pdev->dev, res);
++	rtc->regs_soc = devm_platform_ioremap_resource_byname(pdev, "rtc-soc");
+ 	if (IS_ERR(rtc->regs_soc))
+ 		return PTR_ERR(rtc->regs_soc);
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBp1kgAKCRD2uYlJVVFO
-o+i9AQCnTzbFhfiMLuDyojdMj1c04sIPs6urEuudcbYtprPrPQEAzNZiWhHQNnQl
-99rE/5k5fDZCstp+6458xOgtWWZEHAQ=
-=8Hhb
------END PGP SIGNATURE-----
-
---IKKBsrAChcI1rFR/--
+-- 
+2.25.1
