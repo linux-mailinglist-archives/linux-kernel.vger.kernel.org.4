@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E2D6C541A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2806C541C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCVSur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        id S229713AbjCVSvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCVSup (ORCPT
+        with ESMTP id S229513AbjCVSvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:50:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495E5D76D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:50:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1687EB81DC0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:50:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3390EC433D2;
-        Wed, 22 Mar 2023 18:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679511041;
-        bh=zQDvsghz0LmDmBxSWBS2Kvsa2ABxPjyk3rrZe6mRZCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uqpHxo3dshaTsJE/R0fawh3YJebvXIERECmodzRObOzeqtVPFeA7UF6qL3bS/5umk
-         Z9Q6u6m4iJiJx9gzkDQLMtqDW9PRfR2se7KabHDAkob+nYVzz2ZMb1cDBgvsj7vb99
-         FIvGT+VBGlI7ynidoqAffUXObJVCwKT+CHsHB6nWOp0X54lk/R14ORKno58s9sQ/VP
-         AZmcDtXakOgo7hGKGhkxGPq4XRoYb8qVfGBmCy+VyC/4NQ1sUvUpnrbLkilqhVAgJP
-         MSZM85i7Z8SNu7i/83ujd/MsVvOF+M9HY5wieE5H68ZtVQXwuPTJCQIcmx5qL95Ma3
-         c/aSHEJb0lGDA==
-Date:   Wed, 22 Mar 2023 11:50:39 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 11/11] static_call: Remove DEFINE_STATIC_CALL_RET0()
-Message-ID: <20230322185039.rqwudvaqgotfnrv5@treble>
-References: <cover.1679456900.git.jpoimboe@kernel.org>
- <8aab02492c2bf512c7ffe458e41acc1b930ed2dc.1679456900.git.jpoimboe@kernel.org>
- <692cf38b-4c13-f776-4b96-5161a4cae4ae@csgroup.eu>
+        Wed, 22 Mar 2023 14:51:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183BD5F202;
+        Wed, 22 Mar 2023 11:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=8gnV16b2sLU+6b0caYswgVJPdT7uNZgrISRUOsr2Qe0=; b=QY1O9GHLPhYxeZOf4XKMs57h8Z
+        dNLvlJ9x1di0suXSCfJIc1XWwLqJvYUKlNvFQyVQOZ0utwjxe8gsx0SR5CfQ8QSvMQYaOIn1nAyWS
+        0MoYILoY/O5oYcwqRaV6GNe8mR7C3nXeWM//yvk3w5OoKYQRE6BDAnfJ7SFzn81BRTT/+WVxARyCb
+        PEX8i5RTRSHLv86xVM9OcLQGj30SD+dUb8t+mdCVXKEJe+T3vTVsqPFSpjEef6wCLKoz/Bnw1ZEU4
+        /WWWHrUccUswLIBxnLdAeQCLHvjnx3rj5dkbFApPQ9dr9j0Q3DWCMXYeeL9ZiylUdvP4AcBaBgfms
+        xXo3JjXg==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf3Xy-00H4j9-0w;
+        Wed, 22 Mar 2023 18:50:54 +0000
+Message-ID: <c5db0099-a7fd-8f1c-16ad-8388d3cf6a05@infradead.org>
+Date:   Wed, 22 Mar 2023 11:50:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <692cf38b-4c13-f776-4b96-5161a4cae4ae@csgroup.eu>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] of: fix htmldocs build warnings
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230220163638.04e9d0c4@canb.auug.org.au>
+ <20230310113258.463f836c@canb.auug.org.au>
+ <20230322180032.1badd132@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230322180032.1badd132@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:04:31PM +0000, Christophe Leroy wrote:
-> Le 22/03/2023 à 05:00, Josh Poimboeuf a écrit :
-> > NULL and RET0 static calls are both slightly different ways of nopping a
-> > static call.  A not-insignificant amount of code and complexity is spent
-> > maintaining them separately.  It's also somewhat tricky for the user who
-> > has to try to remember to use the correct one for the given function
-> > type.
-> > 
-> > Simplify things all around by just combining them, such that NULL static
-> > calls always return 0.
-> > 
-> > While it doesn't necessarily make sense for void-return functions to
-> > return 0, it's pretty much harmless.  The return value register is
-> > already callee-clobbered, and an extra "xor %eax, %eax" shouldn't affect
-> > performance (knock on wood).
+
+
+On 3/22/23 00:00, Stephen Rothwell wrote:
+> Fix these htmldoc build warnings:
 > 
-> In the case of powerpc, which implements out-of-line static calls for 
-> now, it is more than just an extra instruction. It requires a jump to 
-> the couple instructions that clear ret reg and rets. For the 8xx it also 
-> means cache miss as the cache lines are 16 bytes. So what was just one 
-> cycle return instruction becomes a 3 cycles + 1 cache miss. It is not a 
-> show-stopper for that change, but I think it was worth mentioning.
-
-Good point.  I should mention that (if we keep the patch).
-
-> > This "do nothing return 0" default should work for the vast majority of
-> > NULL cases.  Otherwise it can be easily overridden with a user-specified
-> > function which panics or returns 0xdeadbeef or does whatever one wants.
-> > 
-> > This simplifies the static call code and also tends to help simplify
-> > users' code as well.
+> include/linux/of.h:115: warning: cannot understand function prototype: 'const struct kobj_type of_node_ktype; '
+> include/linux/of.h:118: warning: Excess function parameter 'phandle_name' description in 'of_node_init'
 > 
-> I'd have expected DEFINE_STATIC_CALL_RET0() to remain, to make it clear 
-> that it returns 0. As you explained, it doesn't matter what NULL 
-> returns, but returning 0 is vital four RET0 cases. So I would have 
-> dropped DEFINE_STATIC_CALL_NULL() and retained DEFINE_STATIC_CALL_RET0().
+> Reported by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 39459ce717b8 ("of: dynamic: add lifecycle docbook info to node creation functions")
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-The issue is static_call_update().  It takes NULL as an input, which
-comes in handy for many static call users.  So it makes sense to have
-NULL mean "nop (and return 0 if needed)".
 
-IMO it becomes more confusing to have two interfaces (NULL and RET0)
-meaning the same thing.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  include/linux/of.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> Replaces "[PATCH] of: fix htmldocs build warning" and additionally
+> fixes the new warning about phandle that Randy reported.
+> 
+> diff --git a/include/linux/of.h b/include/linux/of.h
+> index 9b7a99499ef3..d55dab9ad728 100644
+> --- a/include/linux/of.h
+> +++ b/include/linux/of.h
+> @@ -100,10 +100,12 @@ struct of_reconfig_data {
+>  	struct property		*old_prop;
+>  };
+>  
+> +extern const struct kobj_type of_node_ktype;
+> +extern const struct fwnode_operations of_fwnode_ops;
+> +
+>  /**
+>   * of_node_init - initialize a devicetree node
+>   * @node: Pointer to device node that has been created by kzalloc()
+> - * @phandle_name: Name of property holding a phandle value
+>   *
+>   * On return the device_node refcount is set to one.  Use of_node_put()
+>   * on @node when done to free the memory allocated for it.  If the node
+> @@ -111,9 +113,6 @@ struct of_reconfig_data {
+>   * whether to free the memory will be done by node->release(), which is
+>   * of_node_release().
+>   */
+> -/* initialize a node */
+> -extern const struct kobj_type of_node_ktype;
+> -extern const struct fwnode_operations of_fwnode_ops;
+>  static inline void of_node_init(struct device_node *node)
+>  {
+>  #if defined(CONFIG_OF_KOBJ)
 
 -- 
-Josh
+~Randy
