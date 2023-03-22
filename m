@@ -2,78 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A02A6C488B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E276C488E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCVLGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S230353AbjCVLGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCVLGT (ORCPT
+        with ESMTP id S230343AbjCVLG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:06:19 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD4647403;
-        Wed, 22 Mar 2023 04:06:18 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l12so16570100wrm.10;
-        Wed, 22 Mar 2023 04:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679483176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PtfuFWofT6zWs9wizodfMqROAedt5NIA2iASaJ8aIFA=;
-        b=Xhi37l1CUKKylXAxNFEF0ItUK/OoMdH4RfIpyIabWD0a4ZcN6E04FZ2ZpQBHlhPFv2
-         JAeqFKXy1Q6iQ5P6JDql0qdzM7c4YSdcrImzHFbPn/5Vfc7N5PsYevGG6EqV1YPjCP32
-         bCZCuI14sD2xLjmz+hexrv5KzHyjoDLukO+7iK4VlFLYuxvZFNP+ilKgYs+c7XIWmRh/
-         nz+zqMGYXrv/dRsMfudfmrL0c1wwR0SYsDHXwme3dC5ynIJ5HT4W3GrvZicEhtd1wI07
-         Buu31VCWxztVEbmiwwF3WRA/YmxskzgnbzaZy58Tz0ynv5qw3VdqVXH1pyUN42IJu3W5
-         cYAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679483176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PtfuFWofT6zWs9wizodfMqROAedt5NIA2iASaJ8aIFA=;
-        b=8Q2fAi7/TW6xGMJ3cynahfRnESHhQEZdYr+9eJYA6bhANC19mg6iGjhZZ4sgwSmYAd
-         oLOcu23bsqYeeD2qWvah71PHBJ4KjktOfhbv9xOjqWzc27udWDI8sx2rLndGSBEntbvf
-         ve05MTRNYT2d3jwW6Oy1x4WlKUJ52VY2ndoiKd8CWome1kBTSEqF0ByB+0vXFviwEYsJ
-         785AFsMYXNfX2+bnmaTqKsEa/E+u2uls8TyM95Yb6gzG1iZg6wmZKfS09pcWFgU1p5ea
-         9LgrR9KCpHtn3AIr5b9X7i2hXA9Lh7wPf36r3dWd3+UNtMm65ggafwHnFIAitOqNXkX3
-         0j+Q==
-X-Gm-Message-State: AO0yUKVJICeDyaejBQK1Gl3J+V+oZ+7GzrqPTFsdfhLEaKgbGVfsZ0i1
-        GcWxw5Hcla06mbc/2EMOFLE=
-X-Google-Smtp-Source: AK7set9YJMroCXiENaXXrpyy1UCHF5W2WJbwT4Jgfv9ktjhLsV+ZfC2/POI2lqauld3RPwtSLeB1UQ==
-X-Received: by 2002:a5d:5221:0:b0:2cd:e089:398d with SMTP id i1-20020a5d5221000000b002cde089398dmr1286694wra.5.1679483176335;
-        Wed, 22 Mar 2023 04:06:16 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id m9-20020adffa09000000b002c70d97af78sm13647255wrr.85.2023.03.22.04.06.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 04:06:15 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 11:06:14 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 3/4] iov_iter: add copy_page_to_iter_atomic()
-Message-ID: <a9e62a20-13eb-464b-9452-9d7bb2566e85@lucifer.local>
-References: <cover.1679431886.git.lstoakes@gmail.com>
- <31482908634cbb68adafedb65f0b21888c194a1b.1679431886.git.lstoakes@gmail.com>
- <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
- <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
+        Wed, 22 Mar 2023 07:06:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E1FF61504;
+        Wed, 22 Mar 2023 04:06:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4A8A4B3;
+        Wed, 22 Mar 2023 04:07:09 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.53.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98B983F67D;
+        Wed, 22 Mar 2023 04:06:21 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 11:06:16 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
+        brgerst@gmail.com, piotrgorski@cachyos.org,
+        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [PATCH v16 2/8] cpu/hotplug: Reset task stack state in _cpu_up()
+Message-ID: <ZBrhKERLxvklAhiP@FVFF77S0Q05N>
+References: <20230321194008.785922-1-usama.arif@bytedance.com>
+ <20230321194008.785922-3-usama.arif@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230321194008.785922-3-usama.arif@bytedance.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,89 +52,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:32:47AM +0000, Lorenzo Stoakes wrote:
-> > I am a little confused about the name of this new function. In its
-> > conterpart, copy_page_from_iter_atomic(), kmap_atomic()/kunmpa_atomic()
-> > are used. With them, if CONFIG_HIGHMEM=n, it's like below:
->
-> The reason for this is that:-
->
-> 1. kmap_atomic() explicitly states that it is now deprecated and must no longer
->    be used, and kmap_local_page() should be used instead:-
->
->  * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
->
->  * Do not use in new code. Use kmap_local_page() instead.
->
-> 2. kmap_local_page() explicitly states that it can be used in any context:-
->
->  * Can be invoked from any context, including interrupts.
->
-> I wanted follow this advice as strictly as I could, hence the change. However,
-> we do need preemption/pagefaults explicitly disabled in this context (we are
-> happy to fail if the faulted in pages are unmapped in meantime), and I didn't
-> check the internals to make sure.
->
-> So I think for safety it is better to use k[un]map_atomic() here, I'll respin
-> and put that back in, good catch!
->
+On Tue, Mar 21, 2023 at 07:40:02PM +0000, Usama Arif wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> Commit dce1ca0525bf ("sched/scs: Reset task stack state in bringup_cpu()")
+> ensured that the shadow call stack and KASAN poisoning were removed from
+> a CPU's stack each time that CPU is brought up, not just once.
+> 
+> This is not incorrect. However, with parallel bringup, an architecture
+> may obtain the idle thread for a new CPU from a pre-bringup stage, by
+> calling idle_thread_get() for itself. This would mean that the cleanup
+> in bringup_cpu() would be too late.
+> 
+> Move the SCS/KASAN cleanup to the generic _cpu_up() function instead,
+> which already ensures that the new CPU's stack is available, purely to
+> allow for early failure. This occurs when the CPU to be brought up is
+> in the CPUHP_OFFLINE state, which should correctly do the cleanup any
+> time the CPU has been taken down to the point where such is needed.
+> 
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 
-Actually, given we have preemption disabled due to the held spinlock, I think
-it'd be better to add a copy_page_to_iter_nofault() that uses
-copy_to_user_nofault() which will disable pagefaults thus have exactly the
-equivalent behaviour, more explicitly and without the use of a deprecated
-function.
+This all sounds fine to me, and the patch itself looks good.
 
-Thanks for raising this!!
+I built an arm64 kernel with the first three patches from this series applied
+atop v6.3-rc3, with defconfig + CONFIG_SHADOW_CALL_STACK=y +
+CONFIG_KASAN_INLINE=y + CONFIG_KASAN_STACK=y. I then hotplugged a cpu with:
 
-> >
-> > static inline void *kmap_atomic(struct page *page)
-> > {
-> >         if (IS_ENABLED(CONFIG_PREEMPT_RT))
-> >                 migrate_disable();
-> >         else
-> >                 preempt_disable();
-> >         pagefault_disable();
-> >         return page_address(page);
-> > }
-> >
-> > But kmap_local_page() is only having page_address(), the code block
-> > between kmap_local_page() and kunmap_local() is also atomic, it's a
-> > little messy in my mind.
-> >
-> > static inline void *kmap_local_page(struct page *page)
-> > {
-> >         return page_address(page);
-> > }
-> >
-> > > +	char *p = kaddr + offset;
-> > > +	size_t copied = 0;
-> > > +
-> > > +	if (!page_copy_sane(page, offset, bytes) ||
-> > > +	    WARN_ON_ONCE(i->data_source))
-> > > +		goto out;
-> > > +
-> > > +	if (unlikely(iov_iter_is_pipe(i))) {
-> > > +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	iterate_and_advance(i, bytes, base, len, off,
-> > > +		copyout(base, p + off, len),
-> > > +		memcpy(base, p + off, len)
-> > > +	)
-> > > +	copied = bytes;
-> > > +
-> > > +out:
-> > > +	kunmap_local(kaddr);
-> > > +	return copied;
-> > > +}
-> > > +EXPORT_SYMBOL(copy_page_to_iter_atomic);
-> > > +
-> > >  static void pipe_advance(struct iov_iter *i, size_t size)
-> > >  {
-> > >  	struct pipe_inode_info *pipe = i->pipe;
-> > > --
-> > > 2.39.2
-> > >
-> >
+  while true; do
+    echo 0 > /sys/devices/system/cpu/cpu1/online;
+    echo 1 > /sys/devices/system/cpu/cpu1/online;
+  done
+
+... and that was perfectly happy to run for minutes with no unexpected failures.
+
+To make sure I wasn't avoiding issues by chance, I also tried with each of
+scs_task_reset() and kasan_unpoison_task_stack() commented out. With
+scs_task_reset() commented out, cpu re-onlining fails after a few iterations,
+and with kasan_unpoison_task_stack() commented out I get a KASAN splat upon the
+first re-onlining. So that all looks good.
+
+FWIW, for the first three patches:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
+
+Mark.
+
+> ---
+>  kernel/cpu.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 6c0a92ca6bb5..43e0a77f21e8 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -591,12 +591,6 @@ static int bringup_cpu(unsigned int cpu)
+>  	struct task_struct *idle = idle_thread_get(cpu);
+>  	int ret;
+>  
+> -	/*
+> -	 * Reset stale stack state from the last time this CPU was online.
+> -	 */
+> -	scs_task_reset(idle);
+> -	kasan_unpoison_task_stack(idle);
+> -
+>  	/*
+>  	 * Some architectures have to walk the irq descriptors to
+>  	 * setup the vector space for the cpu which comes online.
+> @@ -1383,6 +1377,12 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+>  			ret = PTR_ERR(idle);
+>  			goto out;
+>  		}
+> +
+> +		/*
+> +		 * Reset stale stack state from the last time this CPU was online.
+> +		 */
+> +		scs_task_reset(idle);
+> +		kasan_unpoison_task_stack(idle);
+>  	}
+>  
+>  	cpuhp_tasks_frozen = tasks_frozen;
+> -- 
+> 2.25.1
+> 
