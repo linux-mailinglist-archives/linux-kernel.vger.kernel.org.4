@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530E16C50AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865856C50B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCVQ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S230093AbjCVQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjCVQ2O (ORCPT
+        with ESMTP id S229990AbjCVQ3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:28:14 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B146284B
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:27:50 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id g9so8554002uam.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679502470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QcBh8LbgiZnRhxN9ZOExXV06VdRnER7GdJGafrPv3AA=;
-        b=lLbOg/bI0Dt7zVFdc55ZLV/hefFjA7ho51BY5gzdLMX6Oyig4MrRdDK9z9blgXY5bO
-         nuxQ0YLJFsW/vCWmqo22bc0rxCbKlPnqOmxyhuuCSjYyKI4Qz4pTH2nCNdDpLUvaqg5s
-         GkeWJJ0gZynt+siiqozduL/YGDbrgyIkiVMLEzSK/KZ1ZsXCyDNH8f5JUNmeGpIE5+4X
-         ROtBj8CelDicuOx9TKlP8rVfW4qCUWByDs1X3vfCz6UQYz6CMVUneVXA4nWQlFRIKIaR
-         pe9EXYZNLwatGCN+mYjBhxl2EpARc3ka7ArZtYZlWC+mtONp0wmC14KjIkvA0TFJ5YEI
-         ESUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679502470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QcBh8LbgiZnRhxN9ZOExXV06VdRnER7GdJGafrPv3AA=;
-        b=Phybs4yCgpOP6gNChKWFVASJEw3NwinNmlcPFJdQZx6eqFTvtH64Y/m/cnxZz/bLsf
-         AcJKuqMpaM7OtM7lTUAWjOWG7hKPir3Fdq35GmnzVOQjaa4zgeB0giE+fsP+dNu0lmPg
-         wVYR/dOFYnhBCQZ21hmgKFhJY7bPsMaTeGwny1xtdVgrkp7JkkbquADDIJDNYcAz0/ra
-         YXIQCQ0QcnEo60mthkFfVByLk5u+Flj8ImFUXNUA947WIpkTuqDHqszLNkZEcFKddoKe
-         54VWyUFh9YGpoKVJ5ApYeeBrUaSsR1Oyl68cCNsvaT0rapf10C0KoAIu0KJDrEs1glDt
-         5sDg==
-X-Gm-Message-State: AO0yUKULDyAfX4LDWvNv4/8phsDJ4sdCygFVVZqrVn/ahPvfb02ySIBd
-        m5g5+2rLpkYh6lwmyRYOFPuCECdLIiBhog2R1qxlwg==
-X-Google-Smtp-Source: AKy350apkN3Ok9m7z9C5n8gXItofIv4O6BGooPA8ZvkwmqTth2C+Qhld0DPukx24/DJ0VdX72givemdT/lEhKYvO67M=
-X-Received: by 2002:a05:6130:228:b0:68b:923a:d6f4 with SMTP id
- s40-20020a056130022800b0068b923ad6f4mr3595319uac.2.1679502469910; Wed, 22 Mar
- 2023 09:27:49 -0700 (PDT)
+        Wed, 22 Mar 2023 12:29:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9782453739;
+        Wed, 22 Mar 2023 09:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679502509; x=1711038509;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=KfUvgiz4DVLzFaYO7oEOLPOOhMl2JyBbYso8oKRbz/4=;
+  b=iBLxbnttfPgbBL+Hn6mJCMQwPWgQpUpPd8Hu1O9g9KJ3fRzidD/eoUsX
+   G1h8DhvoAZZGvVFzc4dLyYtAB1T87PHCnnsKqxkVCSJLHs0hWEJEkIu6b
+   3+YtPCHMfLH6JrboGeoay2c7wzI1E//R9skB6CHyUJ4zFpN+C2wzpnQhd
+   kXeMePv2JwUGsEoz5qvh54z8gevBFFuXb8VN9JKVp6iP64zyH6KqswbrL
+   v2wzPX5hLMAHaxYZwjlSfpZiErMoopSQJNbFdMkxZ4fJHKZUo+chgmWV+
+   QnvxLNVTIJg06YD+HFLMNg/M+F17ShfwMfZYgKLZBh71dlwb+6y5n4e8P
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="339300029"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="339300029"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:28:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="771102926"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="771102926"
+Received: from jprokopo-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.61.221])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:27:59 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-acpi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        =?utf-8?Q?N=C3=ADco?= =?utf-8?Q?las_F_=2E_R_=2E_A_=2E_Prado?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [PATCH v14 03/10] drm/display: Add Type-C switch helpers
+In-Reply-To: <ZBrgD61p/p17IOJL@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230322104639.221402-1-treapking@chromium.org>
+ <20230322104639.221402-4-treapking@chromium.org>
+ <ZBrgD61p/p17IOJL@smile.fi.intel.com>
+Date:   Wed, 22 Mar 2023 18:27:56 +0200
+Message-ID: <87edpg7nub.fsf@intel.com>
 MIME-Version: 1.0
-References: <20230319143640.1704735-1-trix@redhat.com>
-In-Reply-To: <20230319143640.1704735-1-trix@redhat.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 22 Mar 2023 17:27:39 +0100
-Message-ID: <CAMRc=MfMDLC1npyyjGe+Ph6fNwB_Wau7XDPMAnM-wPzec3_rfA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: remove unused gpio_is_pxa_type function
-To:     Tom Rix <trix@redhat.com>
-Cc:     robert.jarzmik@free.fr, linus.walleij@linaro.org,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 3:36=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+On Wed, 22 Mar 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Mar 22, 2023 at 06:46:32PM +0800, Pin-yen Lin wrote:
+>> +#ifdef CONFIG_DRM_DISPLAY_DP_TYPEC_HELPER
 >
-> clang with W=3D1 reports
-> drivers/gpio/gpio-pxa.c:174:19: error: unused function
->   'gpio_is_pxa_type' [-Werror,-Wunused-function]
-> static inline int gpio_is_pxa_type(int type)
->                   ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpio/gpio-pxa.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
-> index 1198ab0305d0..a1630ed4b741 100644
-> --- a/drivers/gpio/gpio-pxa.c
-> +++ b/drivers/gpio/gpio-pxa.c
-> @@ -171,11 +171,6 @@ static inline struct pxa_gpio_bank *gpio_to_pxabank(=
-struct gpio_chip *c,
->         return chip_to_pxachip(c)->banks + gpio / 32;
->  }
->
-> -static inline int gpio_is_pxa_type(int type)
-> -{
-> -       return (type & MMP_GPIO) =3D=3D 0;
-> -}
-> -
->  static inline int gpio_is_mmp_type(int type)
->  {
->         return (type & MMP_GPIO) !=3D 0;
-> --
-> 2.27.0
->
+> Ah, maybe this should use IS_REACHABLE() ?
 
-Applied, thanks!
+Personally, I think IS_REACHABLE() is a build-time band-aid solution to
+a problem that should be solved in Kconfig. :p
 
-Bart
+I think it always means there's a configuration combo that shouldn't
+exist, and it's a surprise to the user when they've configured
+something, Kconfig has deemed it a valid configuration, but they don't
+get the feature they want.
+
+As a user, how would they even debug that case? Double check configs,
+don't see anything wrong.
+
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
