@@ -2,94 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DF36C4879
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0773B6C45C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjCVLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S230346AbjCVJI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCVLDJ (ORCPT
+        with ESMTP id S230272AbjCVJII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:03:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3223619C7E;
-        Wed, 22 Mar 2023 04:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679482988; x=1711018988;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wjvnemr7K7GxTkw8tU1ZW+8hQE4iFHIRWuoX+ttiHQY=;
-  b=DGbqoLjvtO/GhREmaL/15LgxnD4iK8taC5hTB+5Zgzu+j7t4utuhjAjr
-   Ye7KhlULQ5ch4Z2MCPIb1ohore7ceqx63qC/IZPTX1qBLHs3dHB+pZbbI
-   J9RUCvwSA9UPn+OajZmFu7Ydw8zgVKA/vzJt4QHIv49GeAecpzP0wNdKc
-   1MN8hEOhUAWRnP1PieZKJ90Xai27BrTuL48Wzclz2yArCn9OUpMBrYw4G
-   URDg1narBsxBX0Yzq8X9I+1wGA7xwxhngm9VBJDrd3JLSNvBw36zkK6+h
-   AwWgaMXSibs+W6yYpuU7G5tJuC7Y287Y+BqBMt+LrIzmSfI0hk+IK6N9Z
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="327564765"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="327564765"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 04:03:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="681856602"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="681856602"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2023 04:02:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pewF4-0076sm-1u;
-        Wed, 22 Mar 2023 13:02:54 +0200
-Date:   Wed, 22 Mar 2023 13:02:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Gow <davidgow@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Airlie <airlied@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 0/8] Support ROHM BU27034 ALS sensor
-Message-ID: <ZBrgXgJ8AooUSRVW@smile.fi.intel.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <ZBrSCYp+QrHK47dS@smile.fi.intel.com>
- <87edphnkg1.fsf@minerva.mail-host-address-is-not-set>
- <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        Wed, 22 Mar 2023 05:08:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E0D5CC12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:07:50 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id z19so8247803plo.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=areca-com-tw.20210112.gappssmtp.com; s=20210112; t=1679476069;
+        h=content-transfer-encoding:mime-version:date:to:from:subject
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUym5mR2BMTkr5dMZAiyWtrEULkoxuHuyPAHb5cL/yc=;
+        b=6WTISs/T9RsY8/Bu3mDtU8yfUdtdENPdPhsDExlD61pY31Yxcs2eB9gyvSmawcYn+c
+         YS5ZsepJYfsp9k0rFxFjxrVD0Lj3rrXAcgw/fAVbNar8JkXrj2EA0WFfAq8xJY0QWX78
+         mtpuJirtvjZs2hT+3ORXt07Jjl3abRcGsuaeAu8TWj/slSWxnC6uPqoE2/zlYYQDKwNB
+         zlioXgXC/qyGo3IdeCi75jZubWXL+sbPTfqRei4YEfYtI0nT/2/X9Cy+6ERCwW47y5+P
+         IseISXJh+MpzxPe7YPFFqtuDMpzxwrrGEspIXXwtCygiWmU89zAsvtUs+93d34fFVnIb
+         qOSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679476069;
+        h=content-transfer-encoding:mime-version:date:to:from:subject
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OUym5mR2BMTkr5dMZAiyWtrEULkoxuHuyPAHb5cL/yc=;
+        b=1hAA2zvMIhy7NaKgqvxHjI4chFebFM7Tbcoomi6LUZsFIt7grXlKIssJurFUH/nQwY
+         eleo1gpSNaImDwmKJQB98M39Hg/QMIriqrjt5QpxzZH14YFrxew0ZL+IsDh9YLcEw6qh
+         PQtdOfBfcZBNaT10vPXoSk6lFpvlqy6uZqZzN3pliqERcTiRV0poTFwvP2nz32X0/dXE
+         idYzbJU0K9h3BPWse6qBLpa3Bv6kanffn6PjDfWrPItzbYavgeToGgLZN2gelLMewGt0
+         nNrwKjhFcnUPWWSchSSo5k/Eg1IxuiFGnNFCRj2dOwB1ptKGfF/NhA2rzBWTBI5lE6R3
+         wpyQ==
+X-Gm-Message-State: AO0yUKXA/qXK7UOdHXG+TwFbyxkayXzDNOmZXyCvWCG0pppC9pxy20xW
+        wyaxh/UnCOhZzM9mBNBbRrSsxg==
+X-Google-Smtp-Source: AK7set/Co1fFRC5QEGQCvwq/l/XilSzkUx9imltQ8lu0f1lMIJBdoIHjIx+50LcXrVYsmiqYlnUepw==
+X-Received: by 2002:a05:6a20:6ca6:b0:da:1830:328a with SMTP id em38-20020a056a206ca600b000da1830328amr4498373pzb.44.1679476069314;
+        Wed, 22 Mar 2023 02:07:49 -0700 (PDT)
+Received: from centos78 (60-248-88-209.hinet-ip.hinet.net. [60.248.88.209])
+        by smtp.googlemail.com with ESMTPSA id q2-20020a63d602000000b00476dc914262sm9534815pgg.1.2023.03.22.02.07.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Mar 2023 02:07:48 -0700 (PDT)
+Message-ID: <17c235f2fff960aefea33b50039e214f42164130.camel@areca.com.tw>
+Subject: [PATCH 1/5] scsi: arcmsr: deprecated arcmsr_pci_unmap_dma() using
+From:   ching Huang <ching2048@areca.com.tw>
+To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
+        linux-scsi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 23 Mar 2023 01:07:47 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,67 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:59:33PM +0200, Matti Vaittinen wrote:
-> On 3/22/23 12:34, Javier Martinez Canillas wrote:
-> > > On Wed, Mar 22, 2023 at 11:05:23AM +0200, Matti Vaittinen wrote:
+From: ching Huang <ching2048@areca.com.tw>
 
-...
+This patch deprecate arcmsr_pci_unmap_dma(...) using by
+direct calling to scsi_dma_unmap(...).
 
-> > > > - copy code from DRM test helper instead of moving it to simplify
-> > > >    merging
-> > > 
-> > > 1) Why do you think this is a problem?
-> > > 2) How would we avoid spreading more copies of the same code in the future?
-> > > 
-> > > 
-> > > 1) Merge conflicts is not a bad thing. It shows that people tested their code
-> > > in isolation and stabilized it before submitting to the upper maintainer.
-> > > 
-> > > https://yarchive.net/comp/linux/git_merges_from_upstream.html
-> > > 
-> > > 2) Spreading the same code when we _know_ this, should be very well justified.
-> > > Merge conflict is an administrative point, and not a technical obstacle to
-> > > avoid.
-> 
-> I definitely agree. This is also why I did the renaming and not copying in
-> the first version. In this version I did still add the subsequent patch 2/8
-> - which drops the duplicates from DRM tree.
-> 
-> > I believe this was suggested by Maxime and the rationale is that by just
-> > copying the helpers for now, that would make it easier to land instead of
-> > requiring coordination between different subystems.
-> 
-> This is correct.
-> 
-> > Otherwise the IIO tree will need to provide an inmutable branch for the
-> > DRM tree to merge and so on.
-> 
-> Or, if we carry the patch 1/8 via self-test tree, then we get even more
-> players here.
-> 
-> Still, I am not opposing immutable branch because that would allow fast
-> applying of the patch 2/8 as well. Longer that is delayed, more likely we
-> will see more users of the DRM helpers and harder it gets to remove the
-> duplicates later.
-> 
-> > I agree with Maxime that a little bit of duplication (that can be cleaned
-> > up by each subsystem at their own pace) is the path of least resistance.
-> 
-> I'd say this depends. It probably is the path of least resistance for people
-> maintaining the trees. It can also be the path of least resistance in
-> general - but it depends on if there will be no new users for those DRM
-> helpers while waiting the new APIs being merged in DRM tree. More users we
-> see in DRM, more effort the clean-up requires.
-> 
-> I have no strong opinion on this specific case. I'd just be happy to see the
-> IIO tests getting in preferably sooner than later - although 'soon' and
-> 'late' does also depend on other factors besides these helpers...
+Signed-off-by: ching Huang <ching2048@areca.com.tw>
+---
 
-Since I'm not a maintainer of either, and one of them requires something,
-I can't oppose.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index 9d04cb6..e8c12dd 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -1299,20 +1299,13 @@ static uint8_t arcmsr_abort_allcmd(struct AdapterControlBlock *acb)
+ 	return rtnval;
+ }
+ 
+-static void arcmsr_pci_unmap_dma(struct CommandControlBlock *ccb)
+-{
+-	struct scsi_cmnd *pcmd = ccb->pcmd;
+-
+-	scsi_dma_unmap(pcmd);
+-}
+-
+ static void arcmsr_ccb_complete(struct CommandControlBlock *ccb)
+ {
+ 	struct AdapterControlBlock *acb = ccb->acb;
+ 	struct scsi_cmnd *pcmd = ccb->pcmd;
+ 	unsigned long flags;
+ 	atomic_dec(&acb->ccboutstandingcount);
+-	arcmsr_pci_unmap_dma(ccb);
++	scsi_dma_unmap(ccb->pcmd);
+ 	ccb->startdone = ARCMSR_CCB_DONE;
+ 	spin_lock_irqsave(&acb->ccblist_lock, flags);
+ 	list_add_tail(&ccb->list, &acb->ccb_free_list);
+@@ -1596,7 +1589,7 @@ static void arcmsr_remove_scsi_devices(struct AdapterControlBlock *acb)
+ 		ccb = acb->pccb_pool[i];
+ 		if (ccb->startdone == ARCMSR_CCB_START) {
+ 			ccb->pcmd->result = DID_NO_CONNECT << 16;
+-			arcmsr_pci_unmap_dma(ccb);
++			scsi_dma_unmap(ccb->pcmd);
+ 			scsi_done(ccb->pcmd);
+ 		}
+ 	}
 
