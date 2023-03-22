@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637E36C45E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12C06C45E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjCVJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S230331AbjCVJNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjCVJNj (ORCPT
+        with ESMTP id S230323AbjCVJNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:13:39 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986FD252BD;
-        Wed, 22 Mar 2023 02:13:37 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1peuXH-00045z-Jf; Wed, 22 Mar 2023 10:13:35 +0100
-Message-ID: <fc081e0f-2b58-b169-5ac1-f7845f48d1bf@leemhuis.info>
-Date:   Wed, 22 Mar 2023 10:13:35 +0100
+        Wed, 22 Mar 2023 05:13:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CC43CE25
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:13:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89403B81B9F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4311C433D2;
+        Wed, 22 Mar 2023 09:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679476420;
+        bh=uOs3oxeS1GwR5q2hkVL4bYk76jCzRyNx5Oxug1tN4A0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qOd713InPrBtYUGFWU3iZmzpTJbg9Zu8HyxvWH4coFbi/LjeE1rpSdjnAxpw0hEPY
+         +ml7PbRTnw7VN7MZz5RW5+zApTnX61OmcHVIQZp8ueXGvzP+dQjTrYE4allTCeeain
+         Lk+t/fpq1mBPtq0nj+dMZhILhx7mBUs+yvfTX2zI=
+Date:   Wed, 22 Mar 2023 10:13:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Cc:     outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Julia Lawall <julia.lawall@inria.fr>
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+Message-ID: <ZBrGwZK5YA+hMVM4@kroah.com>
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        Hans de Goede <hdegoede@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-To:     Henrique de Moraes Holschuh <hmh@hmh.eng.br>
-Subject: [regression] Bug 217225 - can no longer alter /proc/acpi/ibm/fan
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1679476417;ce60d401;
-X-HE-SMSGID: 1peuXH-00045z-Jf
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developers don't keep an eye on it, I decided to forward it by
-mail (note, the reporter *is not* CCed to this mail, see[1]).
-
-Note, it's a stable regression, so it's a bit unclear who's responsible.
-I decided to forward it nevertheless, as some of you might want to be
-aware of this or might even have an idea what's wrong.
-
-Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217225 :
-
->  runrin 2023-03-21 17:49:34 UTC
->
-> I occasionally manage my fan speed manually by changing the `level' in
-> `/proc/acpi/ibm/fan'. As of upgrading to 6.1.20, I am now getting the
-> following error when attempting to change the fan speed:
+On Tue, Mar 21, 2023 at 08:34:56PM +0200, Menna Mahmoud wrote:
+> Convert `to_gbphy_dev` and `to_gbphy_driver` macros into a
+> static inline function.
 > 
-> $ echo 'level auto' > /proc/acpi/ibm/fan
-> echo: write error: invalid argument
+> It is not great to have macros that use the `container_of` macro,
+> because from looking at the definition one cannot tell what type
+> it applies to.
+
+Note, the compiler will tell you if you get this wrong, so this really
+is not an issue.
+
+The container_of() macro is "special" in that it is very type safe and
+is very commonly used just as a #define to make it simpler and the
+compiler can just do the pointer math automatically without ever needing
+a function call to be involved.
+
+> One can get the same benefit from an efficiency point of view
+> by making an inline function.
+
+It's actually more efficient to be a macro, so this isn't correct.
+
+But all of this is really moot, and I would normally just take this
+patch, but it's not correct:
+
 > 
-> While troubleshooting, I tried double checking that fan_control had been
-> set to 1 as noted in the documentation.
+> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> ---
+> changes in v2:
+> 	-send patch as a single patch.
+> 	-edit the name of struct object.
+> 	-edit commit message.
+> ---
+>  drivers/staging/greybus/gbphy.h | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> I recently upgraded my kernel a few versions at once, so unfortunately i
-> can't be sure when this bug originated. It was working with 6.1.15, and
-> since upgrading to 6.1.20 it is no longer working.
+> diff --git a/drivers/staging/greybus/gbphy.h b/drivers/staging/greybus/gbphy.h
+> index d4a225b76338..e7ba232bada1 100644
+> --- a/drivers/staging/greybus/gbphy.h
+> +++ b/drivers/staging/greybus/gbphy.h
+> @@ -15,7 +15,10 @@ struct gbphy_device {
+>  	struct list_head list;
+>  	struct device dev;
+>  };
+> -#define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
+> +static inline struct gbphy_device *to_gbphy_dev(const struct device *_dev)
+> +{
+> +	return container_of(_dev, struct gbphy_device, dev);
+> +}
 
-See the ticket for more details. The reporter was already asked to
-bisect. I'll ask to consider testing latest mainline.
+You need a newline right before your new function to properly set it
+off.
 
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+>  
+>  static inline void *gb_gbphy_get_data(struct gbphy_device *gdev)
+>  {
+> @@ -43,7 +46,10 @@ struct gbphy_driver {
+>  
+>  	struct device_driver driver;
+>  };
+> -#define to_gbphy_driver(d) container_of(d, struct gbphy_driver, driver)
+> +static inline struct gbphy_driver *to_gbphy_driver(struct device_driver *drv)
+> +{
+> +	return container_of(drv, struct gbphy_driver, driver);
+> +}
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+I'm going to be a stickler here, and say this really should be using the
+new container_of_const() macro instead, and with that, you can NOT turn
+it into an inline function at all due to the fun use of Generic in that
+macro.
 
-#regzbot introduced: v6.1.15..v6.1.20
-https://bugzilla.kernel.org/show_bug.cgi?id=217225
-#regzbot title: platform: thinkpad: can no longer alter /proc/acpi/ibm/fan
-#regzbot ignore-activity
+So I wouldn't recommend changing this macro at this time at all, sorry.
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+thanks,
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-[1] because bugzilla.kernel.org tells users upon registration their
-"email address will never be displayed to logged out users"
+greg k-h
