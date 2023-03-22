@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311056C5A52
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820886C5A54
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjCVX0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S229780AbjCVX17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCVX0n (ORCPT
+        with ESMTP id S229480AbjCVX15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC26B1BEC;
-        Wed, 22 Mar 2023 16:26:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A49D9B81E62;
-        Wed, 22 Mar 2023 23:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B2AC433EF;
-        Wed, 22 Mar 2023 23:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1679527599;
-        bh=PvIEo4Lf1POS3kVtjH8cLfsNhEYtiLJKFfz0aZKzwSM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0PzHbX/kfHRh5+bu7xghczsZa99c+fGo2bnzHhG3i7q13VtDBccPHPNhCatPGTBOO
-         y/4F5/pdgZZHabfcHlKj/aP3569ph+JCKXILDvRLMeg0VsOXuXbLqTBvWCdZWpNEz0
-         IMzfc8n3mBPxPANIMVnt6+Z7/cPNZ4MCbxA+KE+A=
-Date:   Wed, 22 Mar 2023 16:26:38 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: Re: linux-next: manual merge of the block tree with the mm tree
-Message-Id: <20230322162638.d940201434ac3a3a29968979@linux-foundation.org>
-In-Reply-To: <82ade7f2-017e-af6b-2fb3-eb1a3f570505@kernel.dk>
-References: <20230323100204.0917cecf@canb.auug.org.au>
-        <3431084.1679526799@warthog.procyon.org.uk>
-        <82ade7f2-017e-af6b-2fb3-eb1a3f570505@kernel.dk>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 22 Mar 2023 19:27:57 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E6C2D63
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 16:27:56 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id j15-20020a17090a318f00b0023fe33f8825so2017258pjb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 16:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679527676;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=F8gJn/RqHZd9pZyBGjIkjsEpwHztmYNBKyUX9XcX/sw=;
+        b=FxEe+6vQbntvDlAA9NkLZloGQ6PHegmT23ZDI4/wuFQsobb2Hd7xUlVF+lkQgFerOp
+         wDdH8g01ny0Q5nZZ+uJJ/TbvDqi4wtbQq7XVj8JmJhG9dOfKC11pGzUGiZAq0nz89N7F
+         ThqUFa5qa509TFg/ejvn1G76vsbp7JDh4ZocaKSSvM49oY1EMygMACUnSs05wDlyDo+e
+         oiJSRbrm3vjktkOMc5Z/FpU0ZJPCjPkmpE9VQ9jHD1jYfmatfHlTFYZogZkJODh7hOMn
+         CobVaXbhwl08hMvBIghDPhHQoi/E/7AlELCnhLQ32ykTfpGEEE6o/0QJQGROetYwQZcF
+         50xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679527676;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F8gJn/RqHZd9pZyBGjIkjsEpwHztmYNBKyUX9XcX/sw=;
+        b=eqeS8vSQ0plyrlFw1nlWNFOsTBZOnaoSgJqS+kRopW0e/KKt7IiT9iVIOpFsanLtwR
+         pxQxTJs4I88eIrMjPD55aZdCjDPDr5ZoFeO95YBMC0XqkYa5QgZ88FLjpYX7tvx/FPu8
+         6ydVdDSwJo5K+sHcuXXuFAoixaVZONk0/4GM2WQ/P6zWFX//B3PX/Ed+ROml2ux6HkhC
+         WZhigw+DDL6G3A2xUfGY3OwbhNkEw70rVqwpAqJc3cg9QvoLj5PqBzHvQ7sGovY9GWeB
+         26GdbidyE01AQqdSw7wsKzKT1+ZtvNBIxSsCT0sxS562dKZamTpMFf4RWr+6jFJ2BiHa
+         rAZw==
+X-Gm-Message-State: AO0yUKVE5m7eg1c5Usy+/UB6IbZVsa0X8xIKZQJIg3dx3eGrDMXplH4E
+        3og9BHg96I9IVnFrcTbntig2RAu+IAMDq4a0X0cGTN5t+irz+IGL2aGwk7EWQYdVRAltzFo+BRX
+        ELhOwn9cq4IrCeGOwwfxET1SITGXigUre/3u3EdwFYgoSaB+LixYtbFWTTra7RKpKAcQ5v0E=
+X-Google-Smtp-Source: AK7set+7zGlsAeamA5yej9pDQx8hLnsrgYRGJqTaDEPBpeg3Ippo8y+vWYME+sgpRCq9uWCk8WqS0FoyG+Pi
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a05:6a00:2d0c:b0:627:df77:8303 with SMTP
+ id fa12-20020a056a002d0c00b00627df778303mr2627788pfb.5.1679527676079; Wed, 22
+ Mar 2023 16:27:56 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 23:27:53 +0000
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230322232753.2789341-1-jstultz@google.com>
+Subject: [RESEND x3][PATCH v3] trace: Add trace points for tasklet entry/exit
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,139 +71,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 17:15:48 -0600 Jens Axboe <axboe@kernel.dk> wrote:
+From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
 
-> On 3/22/23 5:13 PM, David Howells wrote:
-> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> >>  +	if (unlikely(iov_iter_is_pipe(i))) {
-> >>  +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
-> >>  +		goto out;
-> >>  +	}
-> > 
-> > This bit would need to be removed from copy_page_to_iter_atomic() as the two
-> > functions it calls should be removed by the patch in the block tree.
-> 
-> Maybe it'd be better to consolidate rather than split the changes over
-> two trees?
+Tasklets are supposed to finish their work quickly and
+should not block the current running process, but it is not
+guaranteed that. Currently softirq_entry/exit can be used to
+know total tasklets execution time, but not helpful to track
+individual tasklet's execution time. With that we can't find
+any culprit tasklet function, which is taking more time.
 
-fyi, Lorenzo has sent out v7 of this series.  I'll be pushing this in
-an hour or so.  After which I suggest Stephen removes those (now) two
-lines and sends out one of his "build fix" emails which can be the
-basis for Linus's resolution.
+Add tasklet_entry/exit trace point support to track
+individual tasklet execution.
 
-Or I can just steal "iov_iter: Kill ITER_PIPE"...
+Trivial usage example:
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
+   # cat /sys/kernel/debug/tracing/trace
+ # tracer: nop
+ #
+ # entries-in-buffer/entries-written: 4/4   #P:4
+ #
+ #                                _-----=> irqs-off/BH-disabled
+ #                               / _----=> need-resched
+ #                              | / _---=> hardirq/softirq
+ #                              || / _--=> preempt-depth
+ #                              ||| / _-=> migrate-disable
+ #                              |||| /     delay
+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+ #              | |         |   |||||     |         |
+           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
 
+This patch has been carried in the Android tree for awhile
+so I wanted to submit it for review upstream. Feedback would
+be appreciated!
 
-
-
-
-From: Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: iov_iter: add copy_page_to_iter_nofault()
-Date: Wed, 22 Mar 2023 18:57:03 +0000
-
-Provide a means to copy a page to user space from an iterator, aborting if
-a page fault would occur.  This supports compound pages, but may be passed
-a tail page with an offset extending further into the compound page, so we
-cannot pass a folio.
-
-This allows for this function to be called from atomic context and _try_
-to user pages if they are faulted in, aborting if not.
-
-The function does not use _copy_to_iter() in order to not specify
-might_fault(), this is similar to copy_page_from_iter_atomic().
-
-This is being added in order that an iteratable form of vread() can be
-implemented while holding spinlocks.
-
-Link: https://lkml.kernel.org/r/19734729defb0f498a76bdec1bef3ac48a3af3e8.1679511146.git.lstoakes@gmail.com
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Baoquan He <bhe@redhat.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Liu Shixin <liushixin2@huawei.com>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: kernel-team@android.com
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+[elavila: Port to android-mainline]
+Signed-off-by: J. Avila <elavila@google.com>
+[jstultz: Rebased to upstream, cut unused trace points, added
+ comments for the tracepoints, reworded commit]
+Signed-off-by: John Stultz <jstultz@google.com>
 ---
+v2:
+* Added tasklet pointer to the trace event as suggested by Steven
+v3:
+* Minor tweak to commit to show usage and output example
+---
+ include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
+ kernel/softirq.c           |  9 ++++++--
+ 2 files changed, 54 insertions(+), 2 deletions(-)
 
-
---- a/include/linux/uio.h~iov_iter-add-copy_page_to_iter_nofault
-+++ a/include/linux/uio.h
-@@ -173,6 +173,8 @@ static inline size_t copy_folio_to_iter(
- {
- 	return copy_page_to_iter(&folio->page, offset, bytes, i);
- }
-+size_t copy_page_to_iter_nofault(struct page *page, unsigned offset,
-+				 size_t bytes, struct iov_iter *i);
+diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
+index eeceafaaea4c..a07b4607b663 100644
+--- a/include/trace/events/irq.h
++++ b/include/trace/events/irq.h
+@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
+ 	TP_ARGS(vec_nr)
+ );
  
- static __always_inline __must_check
- size_t copy_to_iter(const void *addr, size_t bytes, struct iov_iter *i)
---- a/lib/iov_iter.c~iov_iter-add-copy_page_to_iter_nofault
-+++ a/lib/iov_iter.c
-@@ -172,6 +172,18 @@ static int copyout(void __user *to, cons
- 	return n;
- }
++DECLARE_EVENT_CLASS(tasklet,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func),
++
++	TP_STRUCT__entry(
++		__field(	void *,	tasklet)
++		__field(	void *,	func)
++	),
++
++	TP_fast_assign(
++		__entry->tasklet = t;
++		__entry->func = func;
++	),
++
++	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
++);
++
++/**
++ * tasklet_entry - called immediately before the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_entry,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
++/**
++ * tasklet_exit - called immediately after the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_exit,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
+ #endif /*  _TRACE_IRQ_H */
  
-+static int copyout_nofault(void __user *to, const void *from, size_t n)
-+{
-+	long res;
-+
-+	if (should_fail_usercopy())
-+		return n;
-+
-+	res = copy_to_user_nofault(to, from, n);
-+
-+	return res < 0 ? n : res;
-+}
-+
- static int copyin(void *to, const void __user *from, size_t n)
- {
- 	size_t res = n;
-@@ -734,6 +746,42 @@ size_t copy_page_to_iter(struct page *pa
- }
- EXPORT_SYMBOL(copy_page_to_iter);
- 
-+size_t copy_page_to_iter_nofault(struct page *page, unsigned offset, size_t bytes,
-+				 struct iov_iter *i)
-+{
-+	size_t res = 0;
-+
-+	if (!page_copy_sane(page, offset, bytes))
-+		return 0;
-+	if (WARN_ON_ONCE(i->data_source))
-+		return 0;
-+	if (unlikely(iov_iter_is_pipe(i)))
-+		return copy_page_to_iter_pipe(page, offset, bytes, i);
-+	page += offset / PAGE_SIZE; // first subpage
-+	offset %= PAGE_SIZE;
-+	while (1) {
-+		void *kaddr = kmap_local_page(page);
-+		size_t n = min(bytes, (size_t)PAGE_SIZE - offset);
-+
-+		iterate_and_advance(i, n, base, len, off,
-+			copyout_nofault(base, kaddr + offset + off, len),
-+			memcpy(base, kaddr + offset + off, len)
-+		)
-+		kunmap_local(kaddr);
-+		res += n;
-+		bytes -= n;
-+		if (!bytes || !n)
-+			break;
-+		offset += n;
-+		if (offset == PAGE_SIZE) {
-+			page++;
-+			offset = 0;
-+		}
-+	}
-+	return res;
-+}
-+EXPORT_SYMBOL(copy_page_to_iter_nofault);
-+
- size_t copy_page_from_iter(struct page *page, size_t offset, size_t bytes,
- 			 struct iov_iter *i)
- {
-_
+ /* This part must be outside protection */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index c8a6913c067d..1b725510dd0f 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
+ 		if (tasklet_trylock(t)) {
+ 			if (!atomic_read(&t->count)) {
+ 				if (tasklet_clear_sched(t)) {
+-					if (t->use_callback)
++					if (t->use_callback) {
++						trace_tasklet_entry(t, t->callback);
+ 						t->callback(t);
+-					else
++						trace_tasklet_exit(t, t->callback);
++					} else {
++						trace_tasklet_entry(t, t->func);
+ 						t->func(t->data);
++						trace_tasklet_exit(t, t->func);
++					}
+ 				}
+ 				tasklet_unlock(t);
+ 				continue;
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
