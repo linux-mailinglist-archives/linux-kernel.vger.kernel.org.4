@@ -2,82 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C956C5488
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2806C548D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCVTJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S230164AbjCVTKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjCVTJa (ORCPT
+        with ESMTP id S229555AbjCVTKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:09:30 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395FA54CA0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:09:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VeRUxgh_1679512164;
-Received: from 30.13.187.145(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VeRUxgh_1679512164)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Mar 2023 03:09:26 +0800
-Message-ID: <287798df-2da6-0158-cbdc-616e587e58bd@linux.alibaba.com>
-Date:   Thu, 23 Mar 2023 03:09:24 +0800
+        Wed, 22 Mar 2023 15:10:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886F558B67;
+        Wed, 22 Mar 2023 12:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zT4Z2FZu+6Ql6/R+LRqO3MtZ3q6XuLAuf5XIiRjZ61Q=; b=m6Drqk5niIKGUNGVcTAFXs/Lgh
+        MqxegHXmu8VXR13ByAoNnd/K6Aa4o+zE6CtCkoxUN8JbAsqBkv8zpJ0jN7SxuPz5yfll+636mVTEw
+        lIyvB9aQMc37vJ1RvfipcZ3jwG8LTIBEu2zTJrnkvWVKjaDD933JGA4mCYPBh2F71e/GtmBmDMi+D
+        oXbk+n6zvMkTf70nRnb4U+NdZEpA3unSz3aRHW/VvAqhl30Betp4MrCvCRwH7YtoBHwQY0gdKTaHI
+        rlYtf4rZ0Kq9MYPv4tkLMkRDNCZVaVtrXrkIk677QYlbS+u90jMM3rek8xsarrZc+DsBUsD5Yjakx
+        AtvvFqKQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pf3qE-003GWB-Fr; Wed, 22 Mar 2023 19:09:46 +0000
+Date:   Wed, 22 Mar 2023 19:09:46 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     senozhatsky@chromium.org, viro@zeniv.linux.org.uk, axboe@kernel.dk,
+        brauner@kernel.org, akpm@linux-foundation.org, minchan@kernel.org,
+        hubcap@omnibond.com, martin@omnibond.com, mcgrof@kernel.org,
+        devel@lists.orangefs.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, gost.dev@samsung.com
+Subject: Re: [RFC v2 0/5] remove page_endio()
+Message-ID: <ZBtSevjWLybE6S07@casper.infradead.org>
+References: <CGME20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c@eucas1p2.samsung.com>
+ <20230322135013.197076-1-p.raghav@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 03/10] erofs: convert to kobject_del_and_put()
-To:     Yangtao Li <frank.li@vivo.com>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230322165905.55389-1-frank.li@vivo.com>
- <20230322165905.55389-2-frank.li@vivo.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230322165905.55389-2-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322135013.197076-1-p.raghav@samsung.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/23 00:58, Yangtao Li wrote:
-> Use kobject_del_and_put() to simplify code.
+On Wed, Mar 22, 2023 at 02:50:08PM +0100, Pankaj Raghav wrote:
+> It was decided to remove the page_endio() as per the previous RFC
+> discussion[1] of this series and move that functionality into the caller
+> itself. One of the side benefit of doing that is the callers have been
+> modified to directly work on folios as page_endio() already worked on
+> folios.
 > 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-
-Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Thanks,
-Gao Xiang
-
-> ---
->   fs/erofs/sysfs.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> mpage changes were tested with a simple boot testing. zram and orangefs is
+> only build tested. No functional changes were introduced as a part of
+> this AFAIK.
 > 
-> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> index 435e515c0792..9ed7d6552155 100644
-> --- a/fs/erofs/sysfs.c
-> +++ b/fs/erofs/sysfs.c
-> @@ -241,8 +241,7 @@ void erofs_unregister_sysfs(struct super_block *sb)
->   	struct erofs_sb_info *sbi = EROFS_SB(sb);
->   
->   	if (sbi->s_kobj.state_in_sysfs) {
-> -		kobject_del(&sbi->s_kobj);
-> -		kobject_put(&sbi->s_kobj);
-> +		kobject_del_and_put(&sbi->s_kobj);
->   		wait_for_completion(&sbi->s_kobj_unregister);
->   	}
->   }
+> Open questions:
+> - Willy pointed out that the calls to folio_set_error() and
+>   folio_clear_uptodate() are not needed anymore in the read path when an
+>   error happens[2]. I still don't understand 100% why they aren't needed
+>   anymore as I see those functions are still called in iomap. It will be
+>   good to put that rationale as a part of the commit message.
+
+page_endio() was generic.  It needed to handle a lot of cases.  When it's
+being inlined into various completion routines, we know which cases we
+need to handle and can omit all the cases which we don't.
+
+We know the uptodate flag is clear.  If the uptodate flag is set,
+we don't call the filesystem's read path.  Since we know it's clear,
+we don't need to clear it.
+
+We don't need to set the error flag.  Only some filesystems still use
+the error flag, and orangefs isn't one of them.  I'd like to get rid
+of the error flag altogether, and I've sent patches in the past which
+get us a lot closer to that desired outcome.  Not sure we're there yet.
+Regardless, generic code doesn't check the error flag.
