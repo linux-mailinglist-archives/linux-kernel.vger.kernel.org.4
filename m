@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810EA6C4E82
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37256C4E80
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjCVOvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S230484AbjCVOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbjCVOvA (ORCPT
+        with ESMTP id S230477AbjCVOvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:51:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F316AD6;
-        Wed, 22 Mar 2023 07:49:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B0F8B20EDA;
-        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679496564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
-        b=keua6vrzqFvD9d24VxKeN+P/9uXoYODOqtrErIG/mFeIbZVehzKEskAJmBFCi0Y8xj7WKJ
-        pmcGiXtk38EgR4HUZMpxbVMjRpbT/7Vrs/+Ks0XGUOUlTjb50+aaMtBeacMHGQzY1kN1mf
-        FM6J86xeBjnsaz6TLcApLK3UK5S0+us=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679496564;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WStsIEd2k7RdaTJPjgss3dQsnOiCKbIVzQh6g0XMjJw=;
-        b=XDCCaVhwYzaOWYZn/gP36NSxpReGq7etaOQhGQ5VLmoob+pUe/n+MnmvWWMlCIgQIM3z77
-        KSRc22i5edVyCsBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 806FB138E9;
-        Wed, 22 Mar 2023 14:49:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OzqNHnQVG2RpNQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:49:24 +0000
-Message-ID: <ed44b114-36f3-1ca6-726d-5187314aea49@suse.cz>
-Date:   Wed, 22 Mar 2023 15:49:24 +0100
+        Wed, 22 Mar 2023 10:51:02 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945EF67709
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:33 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id p34so6699682wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679496572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QgpnOGjVLEuypN3ErDTiOI3NLlX/0j8wRBIzyu6JHTA=;
+        b=X4fwNuM+lvoCT0eDdhrh8qu0d3y8CTVo2fmzUHYgTsVwCWryX5ksmhn3yTXvLSCuAr
+         ZqLivJqI7xfK3Y/fQajsIQapKLatPD2OZA7WnIOmZqMJuX0vmG5fgBgAZAzfEjtFaqqF
+         0ygbTqiK1sWJZIVWPfCzGJ3yY0TtYjm00Tc03VMP5QMq8gsB0HJwcGgCTjAIh2niCs1R
+         iYCu7tcRl135CP8hLfhfwt6i3Ux5cCOqF61Soa/Xii7F7h3ql5RG9mPYNgoR6Ffmnvbl
+         gp0PojSSjNZQm3RnK3A5o2A4IOJH10vJouXGQlA1ZpTf5dW+cJBApJ0lHl2u1onEQiQz
+         YKlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679496572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QgpnOGjVLEuypN3ErDTiOI3NLlX/0j8wRBIzyu6JHTA=;
+        b=1+u+GXWxQdF6LL1JeNLeejVX+K/cdf85Njl//Ly0KdFDyBLrJ74FdIXkUiHPM9z6OF
+         5XoRxpm7rsNHPGRH94YfLco3fGRqaQLaR4ml1iZO8en3v+5ldbGc0TshEYAuZT5wfrmn
+         D/VYBdHiJU+9lHQSG9SdOkRGFWngWgt16ElNaQDnHkzLy8nLkC4ykECW93hL7sHKtmnw
+         prsbhbNiQWL1qaRq9bTaEXYLOD6lEoDsrG63rYIs87r3ogpHbQHp+JAwAUR2VrhrIiMV
+         BDS8PARBSkY5o0F0ci6A4DSVaRYkdJ27aBflIDnlcpUTwEx0q8Qef/GydMZusjA75emX
+         JUyg==
+X-Gm-Message-State: AO0yUKWo1GnGHTGMB/m10sI5tpNeUuIeiyTYMeWdkRnvdnB5g8NUycZf
+        XEBEV/Qx5ORb+7n6xr5TyJy9hA==
+X-Google-Smtp-Source: AK7set+9XZgGgwvM+OLoRVwuVwrg4HkIiNlpgiPve/1U/yoqf+U/sCmAPCSUxB1b4JfefI4G4O7OFQ==
+X-Received: by 2002:a7b:c7c4:0:b0:3ea:ed4d:38f6 with SMTP id z4-20020a7bc7c4000000b003eaed4d38f6mr5600772wmk.4.1679496572162;
+        Wed, 22 Mar 2023 07:49:32 -0700 (PDT)
+Received: from [192.168.30.216] ([81.0.6.76])
+        by smtp.gmail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm8733633wrn.111.2023.03.22.07.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 07:49:31 -0700 (PDT)
+Message-ID: <d7330917-730b-0219-979f-dd770ff0180f@linaro.org>
+Date:   Wed, 22 Mar 2023 15:49:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 04/14] mm: handle hashdist initialization in
- mm/mm_init.c
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2 01/14] mips: fix comment about pgtable_init()
 Content-Language: en-US
 To:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -64,16 +64,15 @@ Cc:     David Hildenbrand <david@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
         Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-5-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230321170513.2401534-5-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org
+References: <20230321144842.2401182-1-rppt@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230321144842.2401182-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,101 +81,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 18:05, Mike Rapoport wrote:
+On 21/3/23 15:48, Mike Rapoport wrote:
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> The hashdist variable must be initialized before the first call to
-> alloc_large_system_hash() and free_area_init() looks like a better place
-> for it than page_alloc_init().
+> Comment about fixrange_init() says that its called from pgtable_init()
+> while the actual caller is pagetabe_init().
 > 
-> Move hashdist handling to mm/mm_init.c
+> Update comment to match the code.
 > 
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Acked-by: David Hildenbrand <david@redhat.com>
-
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-Looks like this will move the fixup_hashdist() call earlier, but can't
-result in seeing less N_MEMORY nodes than before, right?
-I wonder if the whole thing lacks hotplug support anyway, what if system
-boots with one node and more are added later? Hmm.
-
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 > ---
->  mm/mm_init.c    | 22 ++++++++++++++++++++++
->  mm/page_alloc.c | 18 ------------------
->  2 files changed, 22 insertions(+), 18 deletions(-)
+>   arch/mips/include/asm/fixmap.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 68d0187c7886..2e60c7186132 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -607,6 +607,25 @@ int __meminit early_pfn_to_nid(unsigned long pfn)
->  
->  	return nid;
->  }
-> +
-> +int hashdist = HASHDIST_DEFAULT;
-> +
-> +static int __init set_hashdist(char *str)
-> +{
-> +	if (!str)
-> +		return 0;
-> +	hashdist = simple_strtoul(str, &str, 0);
-> +	return 1;
-> +}
-> +__setup("hashdist=", set_hashdist);
-> +
-> +static inline void fixup_hashdist(void)
-> +{
-> +	if (num_node_state(N_MEMORY) == 1)
-> +		hashdist = 0;
-> +}
-> +#else
-> +static inline void fixup_hashdist(void) {}
->  #endif /* CONFIG_NUMA */
->  
->  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> @@ -1855,6 +1874,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
->  	}
->  
->  	memmap_init();
-> +
-> +	/* disable hash distribution for systems with a single node */
-> +	fixup_hashdist();
->  }
->  
->  /**
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c56c147bdf27..ff6a2fff2880 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6383,28 +6383,10 @@ static int page_alloc_cpu_online(unsigned int cpu)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_NUMA
-> -int hashdist = HASHDIST_DEFAULT;
-> -
-> -static int __init set_hashdist(char *str)
-> -{
-> -	if (!str)
-> -		return 0;
-> -	hashdist = simple_strtoul(str, &str, 0);
-> -	return 1;
-> -}
-> -__setup("hashdist=", set_hashdist);
-> -#endif
-> -
->  void __init page_alloc_init(void)
->  {
->  	int ret;
->  
-> -#ifdef CONFIG_NUMA
-> -	if (num_node_state(N_MEMORY) == 1)
-> -		hashdist = 0;
-> -#endif
-> -
->  	ret = cpuhp_setup_state_nocalls(CPUHP_PAGE_ALLOC,
->  					"mm/page_alloc:pcp",
->  					page_alloc_cpu_online,
+> diff --git a/arch/mips/include/asm/fixmap.h b/arch/mips/include/asm/fixmap.h
+> index beea14761cef..b037718d7e8b 100644
+> --- a/arch/mips/include/asm/fixmap.h
+> +++ b/arch/mips/include/asm/fixmap.h
+> @@ -70,7 +70,7 @@ enum fixed_addresses {
+>   #include <asm-generic/fixmap.h>
+>   
+>   /*
+> - * Called from pgtable_init()
+> + * Called from pagetable_init()
+
+I'm not sure about the usefulness of this comment; I suppose it
+predates git-grep. Anyhow,
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+>    */
+>   extern void fixrange_init(unsigned long start, unsigned long end,
+>   	pgd_t *pgd_base);
 
