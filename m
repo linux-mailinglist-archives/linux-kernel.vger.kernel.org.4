@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C84F6C469F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799F76C4699
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjCVJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S230513AbjCVJg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjCVJhM (ORCPT
+        with ESMTP id S230491AbjCVJg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:37:12 -0400
+        Wed, 22 Mar 2023 05:36:57 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65625F202;
-        Wed, 22 Mar 2023 02:37:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7F5FA69;
+        Wed, 22 Mar 2023 02:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1679476887;
+        s=mail; t=1679476888;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jxfNorIALSXTIcdSKIDH829B6vo4dZmRww3AUKQcurM=;
-        b=nY11iy8fR6a2aO+VbjSDeYST0gxDZ1H3hICGOlxr1xoSatxZjWgjvB/vOm6EOOTffEXXW6
-        1HJCf1NwDmxoUNOG207QaX8dJ1ezKV+dUj+GpVSIt6RdmulX3Xauvj2ny0Bs4YqNt5iGil
-        Jx0mM2Oaw+GfvIAXkLkO0opvKA+tTiY=
+        bh=CN+sVrd+5zFw4phF+tfY1VTRoiHERXU6QZdwnYlGtLk=;
+        b=290ybhb/nQSzlWwiqepHlmfRl6bBQAeQpsu2kCX6juwdFufQnTL2q9cWMSt3BFfqDHY8C/
+        YBuHTnA/oFffaBiMc0xDnycFtNmmDF5gB1zoXuIyV3EXGi4mHcg5sJ335CVRlVNFYq5f7t
+        ko18FMhNgLfOeOQTzPqtKDHEyqvOl1o=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -34,9 +34,9 @@ Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 1/3] usb: gadget: Support already-mapped DMA SGs
-Date:   Wed, 22 Mar 2023 10:21:16 +0100
-Message-Id: <20230322092118.9213-2-paul@crapouillou.net>
+Subject: [PATCH v2 2/3] usb: gadget: functionfs: Factorize wait-for-endpoint code
+Date:   Wed, 22 Mar 2023 10:21:17 +0100
+Message-Id: <20230322092118.9213-3-paul@crapouillou.net>
 In-Reply-To: <20230322092118.9213-1-paul@crapouillou.net>
 References: <20230322092118.9213-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -50,62 +50,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new 'sg_was_mapped' field to the struct usb_request. This field
-can be used to indicate that the scatterlist associated to the USB
-transfer has already been mapped into the DMA space, and it does not
-have to be done internally.
+This exact same code was duplicated in two different places.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/usb/gadget/udc/core.c | 7 ++++++-
- include/linux/usb/gadget.h    | 2 ++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_fs.c | 48 +++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 23b0629a8774..5f2c4933769d 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -829,6 +829,11 @@ int usb_gadget_map_request_by_dev(struct device *dev,
- 	if (req->length == 0)
- 		return 0;
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index ddfc537c7526..8da64f0fdef0 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -947,31 +947,44 @@ static ssize_t __ffs_epfile_read_data(struct ffs_epfile *epfile,
+ 	return ret;
+ }
  
-+	if (req->sg_was_mapped) {
-+		req->num_mapped_sgs = req->num_sgs;
-+		return 0;
-+	}
-+
- 	if (req->num_sgs) {
- 		int     mapped;
- 
-@@ -874,7 +879,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_map_request);
- void usb_gadget_unmap_request_by_dev(struct device *dev,
- 		struct usb_request *req, int is_in)
+-static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
++static struct ffs_ep *ffs_epfile_wait_ep(struct file *file)
  {
--	if (req->length == 0)
-+	if (req->length == 0 || req->sg_was_mapped)
- 		return;
+ 	struct ffs_epfile *epfile = file->private_data;
+-	struct usb_request *req;
+ 	struct ffs_ep *ep;
+-	char *data = NULL;
+-	ssize_t ret, data_len = -EINVAL;
+-	int halt;
+-
+-	/* Are we still active? */
+-	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
+-		return -ENODEV;
++	int ret;
  
- 	if (req->num_mapped_sgs) {
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 00750f7020f3..9dd829b8974a 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -52,6 +52,7 @@ struct usb_ep;
-  * @short_not_ok: When reading data, makes short packets be
-  *     treated as errors (queue stops advancing till cleanup).
-  * @dma_mapped: Indicates if request has been mapped to DMA (internal)
-+ * @sg_was_mapped: Set if the scatterlist has been mapped before the request
-  * @complete: Function called when request completes, so this request and
-  *	its buffer may be re-used.  The function will always be called with
-  *	interrupts disabled, and it must not sleep.
-@@ -111,6 +112,7 @@ struct usb_request {
- 	unsigned		zero:1;
- 	unsigned		short_not_ok:1;
- 	unsigned		dma_mapped:1;
-+	unsigned		sg_was_mapped:1;
+ 	/* Wait for endpoint to be enabled */
+ 	ep = epfile->ep;
+ 	if (!ep) {
+ 		if (file->f_flags & O_NONBLOCK)
+-			return -EAGAIN;
++			return ERR_PTR(-EAGAIN);
  
- 	void			(*complete)(struct usb_ep *ep,
- 					struct usb_request *req);
+ 		ret = wait_event_interruptible(
+ 				epfile->ffs->wait, (ep = epfile->ep));
+ 		if (ret)
+-			return -EINTR;
++			return ERR_PTR(-EINTR);
+ 	}
+ 
++	return ep;
++}
++
++static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
++{
++	struct ffs_epfile *epfile = file->private_data;
++	struct usb_request *req;
++	struct ffs_ep *ep;
++	char *data = NULL;
++	ssize_t ret, data_len = -EINVAL;
++	int halt;
++
++	/* Are we still active? */
++	if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
++		return -ENODEV;
++
++	ep = ffs_epfile_wait_ep(file);
++	if (IS_ERR(ep))
++		return PTR_ERR(ep);
++
+ 	/* Do we halt? */
+ 	halt = (!io_data->read == !epfile->in);
+ 	if (halt && epfile->isoc)
+@@ -1305,16 +1318,9 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 		return -ENODEV;
+ 
+ 	/* Wait for endpoint to be enabled */
+-	ep = epfile->ep;
+-	if (!ep) {
+-		if (file->f_flags & O_NONBLOCK)
+-			return -EAGAIN;
+-
+-		ret = wait_event_interruptible(
+-				epfile->ffs->wait, (ep = epfile->ep));
+-		if (ret)
+-			return -EINTR;
+-	}
++	ep = ffs_epfile_wait_ep(file);
++	if (IS_ERR(ep))
++		return PTR_ERR(ep);
+ 
+ 	spin_lock_irq(&epfile->ffs->eps_lock);
+ 
 -- 
 2.39.2
 
