@@ -2,104 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E746C4AD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F116C4AEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCVMkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S230288AbjCVMnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjCVMj5 (ORCPT
+        with ESMTP id S229945AbjCVMna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:39:57 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157274D603
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:39:56 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id k17so8371598iob.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:39:56 -0700 (PDT)
+        Wed, 22 Mar 2023 08:43:30 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFB81C306
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:43:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso11392882wmq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1679488795;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NsXIYR1MPYOgLhgbK7yRoUKgF3p75hv84JR40qJjkL8=;
-        b=St9TR1J8Ta0zC3p+s7hBN1vhvdI1VQ6ESMoIXwhlYPYOse7neLnQHcowzvaP3rJGiR
-         F0AiZaLghrvT/GnDUv+Ck1f39sBWf79WQgtwsCyV8p8TUM8ZoNYhGj3CTvkVoHjUg2B9
-         j1VnJsTTauzuxOBRbc7Px7GUIpOxcDIZy3ZF0=
+        d=9elements.com; s=google; t=1679489007;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gL2q9nK2sCWoMHOPkHjxQjCYyzKcPYLR8xpxNLwvnUw=;
+        b=AmKpP1kIq1wAiLzeGy0jiXwfdhNgXGVu8ljLYUjM7x3KEXSe7QtPo4u2sm+P34YW5I
+         P4YQL4eHrx7loh85gIfwpZGagDbIFtLsZMueyAsU7SmHtHhkYFRiTdk70ab7t8n74W+k
+         sCEmiDL1GD275/5K7yvWceS21vyfM4Y4wHfVfILFo1NedrAw7TkC3Gcy7lbSueSc9GIN
+         BvbVxOyy03nH2vf0I/5LCRj2edug2PcRzAhVbVG6b/Nv0UrsTJckkVUfe44FbXWH4JcK
+         50cARqTwsFLDpqnCbHHfcO7enULY4/v29PZ4ebnZAjqGpRUPoHGRk6oHRKjFXyfeSsG/
+         9TCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679488795;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NsXIYR1MPYOgLhgbK7yRoUKgF3p75hv84JR40qJjkL8=;
-        b=vwT5AGnamyxdqQ9cWR5f3eKEHdRB42BiZySl2aIzpEfIGnh06BpJtEj2sRDcxlEnzQ
-         C6We94wobaCS8o1c8LCvgkcqgH7grmP6Qbl5UHQ8B2MF0zw9P3T1FhA8z1wvf4/YuFBI
-         JfYgByWmyrOS7SqRv2k/e8BcoXsE/9fsgzdA/8iBpZmnaHBnourWr/a7YEXFGRIm2mUH
-         VooWj7x408rfBIQd5SkUAsWtQAl81XcMPSq2XBC84ZlGsAzm8INY89c49kJLKGSEUL1/
-         RH8YVtbcBAR2imbfZlPWOgsvTwTRY9vN5+Nd6N7bcNuyljbW5v7J//8jpoquRL6tdCAI
-         yxAg==
-X-Gm-Message-State: AO0yUKVnHsorS4OeijCguRCw40wYTVLQ8rVFkXs/2nGqQ3Pug/xBqd5V
-        SJ+KPQaGY23SdNNOANSSZbfA6A==
-X-Google-Smtp-Source: AK7set8N+UE/kMHzN6AgpMFOxmDiirXuWiUOOXCMBaWrIsMOL8tS1r5FYkFwyoIiwZOe2WNFF71VMQ==
-X-Received: by 2002:a6b:4406:0:b0:758:b4eb:cec9 with SMTP id r6-20020a6b4406000000b00758b4ebcec9mr773044ioa.2.1679488795164;
-        Wed, 22 Mar 2023 05:39:55 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id c22-20020a5ea916000000b0074c80aa17f0sm4470973iod.0.2023.03.22.05.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 05:39:54 -0700 (PDT)
-Message-ID: <b1427fb9-1ec1-a5b7-8f1d-9751d4d13b77@ieee.org>
-Date:   Wed, 22 Mar 2023 07:39:53 -0500
+        d=1e100.net; s=20210112; t=1679489007;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gL2q9nK2sCWoMHOPkHjxQjCYyzKcPYLR8xpxNLwvnUw=;
+        b=Qow2OsYXB1Jri+w/xdmbwtjMRIplhq5d5WiWQkrD9A6eLK+2eKssNEXM1tx9xAt75s
+         CkSlNuUbVv42X28W6AGXCum8soSWMtlir7DRmOXCq/PIDQjTFmKZrtT/HfvatMT711z6
+         vVi8115wcBJbXfgeuVNfZ3n8AJ/e8ulr3iG50eyEe613NkBVy6qhprVH4DPjvYLn07mG
+         myvty5qF8GUgO41ec3IMNEDG1AM/klpTPeS6/EXOqZvSVNpsSjSEqhAjMt4eyYYhZZJT
+         kupMDevHB4NhsULMvovLYJyRoEGTqwjgJJUKtwCDizhgFQK3yVovXHwlROMrvDPUSomU
+         mR+A==
+X-Gm-Message-State: AO0yUKVrtNP2gdEK5fM3q3Kodpx/5cjVm1RIvgGyFbmacl2l3dAdpl++
+        eTUXW5OgmYXj4Q9BLvBvRAWPyLdI6KuZ5+Fse9ET8A==
+X-Google-Smtp-Source: AK7set/uHO9U604T2CSuRiOjl1lBA0+jDlA7G3i0723BCf2qZ574qwCZKpIBvCcy8YaxjDfgymkZ7Q==
+X-Received: by 2002:a1c:4c13:0:b0:3ee:3d2d:841a with SMTP id z19-20020a1c4c13000000b003ee3d2d841amr4314452wmf.24.1679489007382;
+        Wed, 22 Mar 2023 05:43:27 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id c15-20020adfef4f000000b002c7066a6f77sm13748526wrp.31.2023.03.22.05.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 05:43:27 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     Lee Jones <lee@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: [PATCH 1/2] iio: max597x: Add support for max597x
+Date:   Wed, 22 Mar 2023 13:43:15 +0100
+Message-Id: <20230322124316.2147143-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
-Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        johan@kernel.org, elder@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
- <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
- <alpine.DEB.2.22.394.2303212140480.2919@hadrien>
- <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org>
- <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
- <48674d8f-9753-780c-f37c-f83ea2855ae6@ieee.org>
- <eabacc6f-c7fb-ff33-26d1-271537fb4760@inria.fr>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <eabacc6f-c7fb-ff33-26d1-271537fb4760@inria.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 5:00 AM, Julia Lawall wrote:
-> 
-> Both seem to access the memory directly.  Maybe the example is too simple,
-> and the compiler is more likely to optimize aggressively?
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Yes I think so.  This is a little unrelated but the
-"inline" keyword isn't very useful because the compiler
-(at least when optimizing) already takes liberties of
-inlining code that it "knows" will be better done that
-way.  Same thing here.  This function is so trivial
-that it's almost certainly going to be inlined.
+max597x has 10bit ADC for voltage & current monitoring.
+Use iio framework to expose the same in sysfs.
 
-So the benefit of a little helper function like this over
-a macro is that its types are specified explicitly, and
-there is no chance of macro arguments be duplicated or
-improperly used in the right hand side.  If it's not
-inlined it also would normally generate stuff on the stack.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+---
+ drivers/iio/adc/Kconfig       |  15 ++++
+ drivers/iio/adc/Makefile      |   1 +
+ drivers/iio/adc/max597x-iio.c | 162 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 178 insertions(+)
+ create mode 100644 drivers/iio/adc/max597x-iio.c
 
-The benefit of the macro is you can do things with the
-arguments because they're pass-by-name.  But you can't
-expect there to be any efficiency benefit.
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 45af2302be53..0d1a3dea0b7d 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -735,6 +735,21 @@ config MAX1363
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called max1363.
+ 
++config MAX597X_IIO
++	tristate "Maxim 597x power switch and monitor"
++	depends on I2C && OF
++	select MFD_MAX597X
++	help
++	  This driver enables support for the Maxim 597x smart switch and
++	  voltage/current monitoring interface using the Industrial I/O (IIO)
++	  framework. The Maxim 597x is a power switch and monitor that can
++	  provide voltage and current measurements via the I2C bus. Enabling
++	  this driver will allow user space applications to read the voltage
++	  and current measurements using IIO interfaces.
++
++	  To compile this driver as a module, choose M here: the module will be
++	  called max597x-iio.
++
+ config MAX9611
+ 	tristate "Maxim max9611/max9612 ADC driver"
+ 	depends on I2C
+diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+index 36c18177322a..7ec0c2cf7bbb 100644
+--- a/drivers/iio/adc/Makefile
++++ b/drivers/iio/adc/Makefile
+@@ -67,6 +67,7 @@ obj-$(CONFIG_MAX11205) += max11205.o
+ obj-$(CONFIG_MAX11410) += max11410.o
+ obj-$(CONFIG_MAX1241) += max1241.o
+ obj-$(CONFIG_MAX1363) += max1363.o
++obj-$(CONFIG_MAX597X_IIO) += max597x-iio.o
+ obj-$(CONFIG_MAX9611) += max9611.o
+ obj-$(CONFIG_MCP320X) += mcp320x.o
+ obj-$(CONFIG_MCP3422) += mcp3422.o
+diff --git a/drivers/iio/adc/max597x-iio.c b/drivers/iio/adc/max597x-iio.c
+new file mode 100644
+index 000000000000..a35bab926313
+--- /dev/null
++++ b/drivers/iio/adc/max597x-iio.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device driver for regulators in MAX5970 and MAX5978 IC
++ *
++ * Copyright (c) 2022 9elements GmbH
++ *
++ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
++ */
++
++#include <linux/bitops.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/module.h>
++#include <linux/io.h>
++#include <linux/iio/iio.h>
++#include <linux/of.h>
++#include <linux/i2c.h>
++#include <linux/mfd/max597x.h>
++#include <linux/regmap.h>
++#include <linux/version.h>
++#include <linux/platform_device.h>
++
++struct max597x_iio {
++	struct regmap *regmap;
++	int shunt_micro_ohms[MAX5970_NUM_SWITCHES];
++	unsigned int irng[MAX5970_NUM_SWITCHES];
++	unsigned int mon_rng[MAX5970_NUM_SWITCHES];
++};
++
++#define MAX597X_ADC_CHANNEL(_idx, _type) {			\
++	.type = IIO_ ## _type,					\
++	.indexed = 1,						\
++	.channel = (_idx),					\
++	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |		\
++			      BIT(IIO_CHAN_INFO_SCALE),		\
++	.address = MAX5970_REG_ ## _type ## _L(_idx),		\
++}
++
++static const struct iio_chan_spec max5978_adc_iio_channels[] = {
++	MAX597X_ADC_CHANNEL(0, VOLTAGE),
++	MAX597X_ADC_CHANNEL(0, CURRENT),
++};
++
++static const struct iio_chan_spec max5970_adc_iio_channels[] = {
++	MAX597X_ADC_CHANNEL(0, VOLTAGE),
++	MAX597X_ADC_CHANNEL(0, CURRENT),
++	MAX597X_ADC_CHANNEL(1, VOLTAGE),
++	MAX597X_ADC_CHANNEL(1, CURRENT),
++};
++
++static int max597x_iio_read_raw(struct iio_dev *iio_dev,
++				struct iio_chan_spec const *chan,
++				int *val, int *val2, long info)
++{
++	int ret;
++	struct max597x_iio *data = iio_priv(iio_dev);
++	unsigned int reg_l, reg_h;
++
++	switch (info) {
++	case IIO_CHAN_INFO_RAW:
++		ret = regmap_read(data->regmap, chan->address, &reg_l);
++		if (ret < 0)
++			return ret;
++		ret = regmap_read(data->regmap, chan->address - 1, &reg_h);
++		if (ret < 0)
++			return ret;
++		*val = (reg_h << 2) | (reg_l & 3);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++
++		switch (chan->address) {
++		case MAX5970_REG_CURRENT_L(0):
++			fallthrough;
++		case MAX5970_REG_CURRENT_L(1):
++			/* in A, convert to mA */
++			*val = data->irng[chan->channel] * 1000;
++			*val2 =
++			    data->shunt_micro_ohms[chan->channel] * ADC_MASK;
++			return IIO_VAL_FRACTIONAL;
++
++		case MAX5970_REG_VOLTAGE_L(0):
++			fallthrough;
++		case MAX5970_REG_VOLTAGE_L(1):
++			/* in uV, convert to mV */
++			*val = data->mon_rng[chan->channel];
++			*val2 = ADC_MASK * 1000;
++			return IIO_VAL_FRACTIONAL;
++		}
++
++		break;
++	}
++	return -EINVAL;
++}
++
++static const struct iio_info max597x_adc_iio_info = {
++	.read_raw = &max597x_iio_read_raw,
++};
++
++static int max597x_iio_probe(struct platform_device *pdev)
++{
++	struct max597x_data *max597x = dev_get_drvdata(pdev->dev.parent);
++	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
++	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	struct iio_dev *indio_dev;
++	struct max597x_iio *priv;
++	int ret, i;
++
++	if (!regmap)
++		return -EPROBE_DEFER;
++
++	if (!max597x || !max597x->num_switches)
++		return -EPROBE_DEFER;
++
++	/* registering iio */
++	indio_dev = devm_iio_device_alloc(&i2c->dev, sizeof(*priv));
++	if (!indio_dev) {
++		dev_err(&i2c->dev, "failed allocating iio device\n");
++		return -ENOMEM;
++	}
++	indio_dev->name = dev_name(&i2c->dev);
++	indio_dev->info = &max597x_adc_iio_info;
++	indio_dev->modes = INDIO_DIRECT_MODE;
++
++	switch (max597x->num_switches) {
++	case MAX597x_TYPE_MAX5970:
++		indio_dev->channels = max5970_adc_iio_channels;
++		indio_dev->num_channels = ARRAY_SIZE(max5970_adc_iio_channels);
++		break;
++	case MAX597x_TYPE_MAX5978:
++		indio_dev->channels = max5978_adc_iio_channels;
++		indio_dev->num_channels = ARRAY_SIZE(max5978_adc_iio_channels);
++		break;
++	}
++
++	priv = iio_priv(indio_dev);
++	priv->regmap = regmap;
++	for (i = 0; i < indio_dev->num_channels; i++) {
++		priv->irng[i] = max597x->irng[i];
++		priv->mon_rng[i] = max597x->mon_rng[i];
++		priv->shunt_micro_ohms[i] = max597x->shunt_micro_ohms[i];
++	}
++
++	ret = devm_iio_device_register(&i2c->dev, indio_dev);
++	if (ret)
++		dev_err(&i2c->dev, "could not register iio device");
++
++	return ret;
++}
++
++static struct platform_driver max597x_iio_driver = {
++	.driver = {
++		.name = "max597x-iio",
++	},
++	.probe = max597x_iio_probe,
++};
++
++module_platform_driver(max597x_iio_driver);
++
++MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
++MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
++MODULE_LICENSE("GPL");
 
-					-Alex
+base-commit: 368eb79f738a21e16c2bdbcac2444dfa96b01aaa
+-- 
+2.39.1
+
