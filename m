@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F416C4365
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539666C4366
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjCVGlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S229968AbjCVGlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCVGkq (ORCPT
+        with ESMTP id S229996AbjCVGkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 02:40:46 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10055BC8A
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:40:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id q16so11212936lfe.10
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0719D5BC8D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:40:45 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id h25so10392721lfv.6
         for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679467243;
+        d=linaro.org; s=google; t=1679467244;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DJfZKigBIeChWOChUBeVAQfEZHFms3jVy0ZK/PQ531k=;
-        b=GXOWONJwTRivIy6517fCgO6hyO0N3AxoYQNRie7uPM3oSvUEtTfErM2Ju2Q+JMhwrh
-         02KdBggKf8GXBSQxTATLVlizdGXlaSxSk1nSP8Tk1dU0RQu0gDc5dlLb5Xud1wOVxLfm
-         +05ecDO2Rhnr4cW/nwVFJcBZrtxcYO6gmrqcCHTIPM23CMFDE8QJ04GeT8A6TjZUW4fq
-         vVnkmzNj5CwUGHY2SLY+QSAaudULkkR3Z0Nbm1VrNGgvRmj+wtfmUdW2AfeJ4Ci4Pr8c
-         b216+98OAE3zfra/5eSupJyZ+f5v+4fR7Q1yHw7JoxAlzftJEEXq1By36uUSpgOHLBwg
-         2/Ug==
+        bh=OjibXlExvge37of3uq5kGMqBiMIjX3D2b9DBjXXdAOg=;
+        b=UWFPA1O80E8Yvytt01jq2QIZlVrmn7Jcyha10uK9nvBUeZ9OymTt6B8Z9AX3M1FOVk
+         FAgiDSO/jaNYlZwykZtkM6h8Br2W+Xz3Upj+p1cJ3G9NUWRYMew1DqmVVcxg5s3xhR6W
+         P91VXlrP4QY4cVIZIPaw74N3GzXJs/CWhQEK6vuRWwkKRvwhFYhgMhM2OX/jvg3VuVOM
+         73Z/Q0t2qS9GkaccmEy2b5NdVtlgmhAPox9KqyABqgEIl07lkYOdVCdKoQoS9014wOwR
+         4MuZ77zV2HQU60wNZPhj+9F35cimJ5cg6Prcql48PgTM4ngXq9dDpTVf1swH+/8w6rq1
+         YMVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679467243;
+        d=1e100.net; s=20210112; t=1679467244;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DJfZKigBIeChWOChUBeVAQfEZHFms3jVy0ZK/PQ531k=;
-        b=M8iD/NhXxpkyo9esRnjrVB90p3Hgw+tw1o3vZOW/VpM1kVaB/W2rfqcvQ7es0hF+IU
-         TjLGVdAfi2eppUr1ZotCyL+CQEwLLkGhKiFe910aaRquuC1ETzb46RVCSHWiHKuZKRx9
-         ipipZscJMI1osz+R1qxbkUvcRLS536u/P2J1OCwpijzlzV9YXJu7gZ402OPrtST+gAOz
-         d1Y/Mn0trR7+AXi11T4tikoKl92ytXIkeGHhoTGfEVFJOOCGwZ8Wn+MmsbrjZPK5eYCB
-         Vu449R0hdKko1hcrfjxig6aPG9KLTmvtzbtqGMyzzyWtLxFTeqQJlOHg21ZY/tVokUg8
-         7S1w==
-X-Gm-Message-State: AO0yUKXiMgUVbBmNwXluXEB4j0XKwGR/e2apjNBXfjvZuv7+uI1Zw5dU
-        Om5b6469KZK5t9pTFJPb1xdp9A==
-X-Google-Smtp-Source: AKy350aU6oZfJKOyA5joErp2v+jd3KokKBm3ODOpDtqzLBKBfJpb9+F7caJ9EwuQ56pHTjQbER2k6Q==
-X-Received: by 2002:ac2:428e:0:b0:4ea:c730:aac3 with SMTP id m14-20020ac2428e000000b004eac730aac3mr391733lfh.3.1679467243288;
-        Tue, 21 Mar 2023 23:40:43 -0700 (PDT)
+        bh=OjibXlExvge37of3uq5kGMqBiMIjX3D2b9DBjXXdAOg=;
+        b=fnQ6b6TczLlDXUSMpy+OyNu/5PhHeeeIBhl0NWaLGe4BxUjADIY2AL3iCn2hniZD7I
+         348fJyqSNXtXQYPjYsi5RmLqf00oAGpkSKXEezSYaOjPoq1pyxKrpiv5auK+uyMZ5g8j
+         VLiunWkoaQErpvXb0x1ZRQoEoq9wywiJ/uPSeRPzh/W1BsYID0Sfc+J7i3qfkyG6TeJc
+         lLVut2O+i0o4DhqzJiZU7t9fWki58qXS0fGALGKPFoXmsX23eJhaN/KLOmCSbxkSoZ4x
+         FipUKIUt50R+gbFgd9plaKmft9Vl2F9Wx6lehOJTWsSa8Z+jV1WMavqWbYdMb7Sr18nY
+         RrAQ==
+X-Gm-Message-State: AO0yUKUb1+oeYn/o0xpu2Tn0xMirjsBnxEuzPXwVVCSJdBqUFt3aJTlc
+        NmdzFoyW/gtfJWc62g4HOheJKQ==
+X-Google-Smtp-Source: AK7set8Qi0viAviwjYHM3w8QtxMrW5ArDewIDKji6YiN0pl8h2sw0lxNoFC7eh4swxgCw7JwHCrZQw==
+X-Received: by 2002:ac2:43a4:0:b0:4e8:47cd:b4ba with SMTP id t4-20020ac243a4000000b004e847cdb4bamr1676972lfl.13.1679467244027;
+        Tue, 21 Mar 2023 23:40:44 -0700 (PDT)
 Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id n20-20020ac242d4000000b004dafde0e7b7sm2462255lfl.279.2023.03.21.23.40.42
+        by smtp.gmail.com with ESMTPSA id n20-20020ac242d4000000b004dafde0e7b7sm2462255lfl.279.2023.03.21.23.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 23:40:42 -0700 (PDT)
+        Tue, 21 Mar 2023 23:40:43 -0700 (PDT)
 From:   Tudor Ambarus <tudor.ambarus@linaro.org>
 To:     michael@walle.cc, pratyush@kernel.org
 Cc:     miquel.raynal@bootlin.com, richard@nod.at,
         Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
         linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v4 08/11] mtd: spi-nor: Stop exporting spi_nor_restore()
-Date:   Wed, 22 Mar 2023 06:40:30 +0000
-Message-Id: <20230322064033.2370483-9-tudor.ambarus@linaro.org>
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v4 09/11] mtd: spi-nor: core: Update flash's current address mode when changing address mode
+Date:   Wed, 22 Mar 2023 06:40:31 +0000
+Message-Id: <20230322064033.2370483-10-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322064033.2370483-1-tudor.ambarus@linaro.org>
 References: <20230322064033.2370483-1-tudor.ambarus@linaro.org>
@@ -73,66 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some SPI NOR controllers that used this method were moved to
-drivers/spi/. We don't accept new support for the existing SPI NOR
-controllers drivers under drivers/mtd/spi-nor/controllers/ and we
-encourage their owners to move the drivers under drivers/spi/.
-Make spi_nor_restore() private as we're going to use it just in core.c.
+The bug was obswerved while reading code. There are not many users of
+addr_mode_nbytes. Anyway, we should update the flash's current address
+mode when changing the address mode, fix it. We don't care for now about
+the set_4byte_addr_mode(nor, false) from spi_nor_restore(), as it is
+used at driver remove and shutdown.
 
+Cc: stable@vger.kernel.org
+Fixes: d7931a215063 ("mtd: spi-nor: core: Track flash's internal address mode")
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- Documentation/driver-api/mtd/spi-nor.rst | 3 ---
- drivers/mtd/spi-nor/core.c               | 3 +--
- include/linux/mtd/spi-nor.h              | 6 ------
- 3 files changed, 1 insertion(+), 11 deletions(-)
+ drivers/mtd/spi-nor/core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/mtd/spi-nor.rst b/Documentation/driver-api/mtd/spi-nor.rst
-index 4a3adca417fd..c22f8c0f7950 100644
---- a/Documentation/driver-api/mtd/spi-nor.rst
-+++ b/Documentation/driver-api/mtd/spi-nor.rst
-@@ -63,6 +63,3 @@ The main API is spi_nor_scan(). Before you call the hook, a driver should
- initialize the necessary fields for spi_nor{}. Please see
- drivers/mtd/spi-nor/spi-nor.c for detail. Please also refer to spi-fsl-qspi.c
- when you want to write a new driver for a SPI NOR controller.
--Another API is spi_nor_restore(), this is used to restore the status of SPI
--flash chip such as addressing mode. Call it whenever detach the driver from
--device or reboot the system.
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 2a08f8de97fa..1cf566fed9c6 100644
+index 1cf566fed9c6..868414017399 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -2924,7 +2924,7 @@ static void spi_nor_put_device(struct mtd_info *mtd)
- 	module_put(dev->driver->owner);
- }
+@@ -2769,6 +2769,7 @@ static int spi_nor_quad_enable(struct spi_nor *nor)
  
--void spi_nor_restore(struct spi_nor *nor)
-+static void spi_nor_restore(struct spi_nor *nor)
+ static int spi_nor_init(struct spi_nor *nor)
  {
- 	int ret;
++	struct spi_nor_flash_parameter *params = nor->params;
+ 	int err;
  
-@@ -2944,7 +2944,6 @@ void spi_nor_restore(struct spi_nor *nor)
- 	if (nor->flags & SNOR_F_SOFT_RESET)
- 		spi_nor_soft_reset(nor);
- }
--EXPORT_SYMBOL_GPL(spi_nor_restore);
+ 	err = spi_nor_octal_dtr_enable(nor, true);
+@@ -2810,9 +2811,10 @@ static int spi_nor_init(struct spi_nor *nor)
+ 		 */
+ 		WARN_ONCE(nor->flags & SNOR_F_BROKEN_RESET,
+ 			  "enabling reset hack; may not recover from unexpected reboots\n");
+-		err = nor->params->set_4byte_addr_mode(nor, true);
++		err = params->set_4byte_addr_mode(nor, true);
+ 		if (err && err != -ENOTSUPP)
+ 			return err;
++		params->addr_mode_nbytes = 4;
+ 	}
  
- static const struct flash_info *spi_nor_match_name(struct spi_nor *nor,
- 						   const char *name)
-diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
-index a3f8cdca90c8..8aac4522bf2a 100644
---- a/include/linux/mtd/spi-nor.h
-+++ b/include/linux/mtd/spi-nor.h
-@@ -437,10 +437,4 @@ static inline struct device_node *spi_nor_get_flash_node(struct spi_nor *nor)
- int spi_nor_scan(struct spi_nor *nor, const char *name,
- 		 const struct spi_nor_hwcaps *hwcaps);
- 
--/**
-- * spi_nor_restore_addr_mode() - restore the status of SPI NOR
-- * @nor:	the spi_nor structure
-- */
--void spi_nor_restore(struct spi_nor *nor);
--
- #endif
+ 	return 0;
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
