@@ -2,138 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F3C6C4F38
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FA96C4F30
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjCVPRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S231360AbjCVPQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjCVPRX (ORCPT
+        with ESMTP id S231240AbjCVPQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:17:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ACC67728;
-        Wed, 22 Mar 2023 08:17:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 239DBB81D0A;
-        Wed, 22 Mar 2023 15:17:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC84EC433D2;
-        Wed, 22 Mar 2023 15:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679498238;
-        bh=x14uXdcyN6NwgG+IiJ4mbAithUacI0jt05p67YoWCxo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vHu19ck37uJ0Noh8bpkiMcCiwaHGbeUk3AoCX1D9/uQoq+m7Jeuc8mcRjW+sjs9Lk
-         fbtSCGNHoVaCLkM+gy9b113QC3L9P3tPRFwAwXVYqne0L6m1WsStAc3vF68MVMmioy
-         DFgwckFmD9AIGERIB82AVK9Ky5AeChx0LNAwp/CFcXL7eda2sw3GF0mPer4I4lyLnp
-         gfkoc0/szZ4DO1Ledjhc2NLZDfgsL8NnB9ScltQ4AeiF9yhWDzy4Ovu7qZvWWgAy/5
-         u3d8cxwwZoaBPfWmkClx6UKw4Dc/iBmHk4ZwkcWBzuibER73j2ug9b6v5sdS8H50su
-         L4dbHUHyU98Zg==
-Date:   Wed, 22 Mar 2023 15:17:13 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        regressions@leemhuis.info, regressions@lists.linux.dev
-Subject: Re: [PATCH] riscv: require alternatives framework when selecting FPU
- support
-Message-ID: <1884bd96-2783-4556-bc57-8b733758baff@spud>
-References: <ZBruFRwt3rUVngPu@zx2c4.com>
- <20230322120907.2968494-1-Jason@zx2c4.com>
- <20230322124631.7p67thzeblrawsqj@orel>
+        Wed, 22 Mar 2023 11:16:28 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3803664207
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:16:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B4AarmzafEw6vmrL5yfGsg1zGbNV7IWt14M7XqFd32o1I+Xd0qA2q/ZDS2iNkG0omzDF1sxmVloBHE6WRfBQxSmhiiDI1EgIN/dkXdZG6e0MvMj0nOnQACPx15z60JTWFF3bpEX3WfQHZdDq9VicmEBYekv9T9Sls6ebfo6I3dXwpXxGoA07NOUiffdui4lqAbDeHEraNZz/ZZCFEAIy0DmTTXqPNFgXxWxNLH59PfRhXghYXtJGMxNayqFU2Opqk+A5JE7NVhjxidTpBsjEUlrpxmSIfTje6birnO0REPU7weeCxRY++9yJaGL+njX9As1dQzxkGSJYzGATZOruAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VN0p49hVjY2sANyLdsfWnnYc3OuUqd0S+wk4i08JMQ8=;
+ b=PmRVN359hdvb5SoB8ptHwIDDigstwtDC95PParD3wLfumLo8eoV0rfydS32DsXijfp/+1WLXqMn4KftfVa2mWNKVeiQfSMaZ4Rh42inrppx0c96DoiGv+zZWm7Alxpv6g/LU1+t2e6356ny+UC2mP2jX7sbBsZRWMytfLBGHp96wB4nrgP7s4knK+IMqbjPMYiWY6hoAIn5TikfmB85fq3nqPwDvrMiF/2juZE/IZAqrLgzMrVyU9jvVvuglsdFHuoMteE2aoPT60aUQBUu3egq8y1VOw6vPWrJnhUtOG0q/u1FoOFGFeyuUYa+xZeNB/Q1KHx3gkwyc9gkutGP6jA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VN0p49hVjY2sANyLdsfWnnYc3OuUqd0S+wk4i08JMQ8=;
+ b=Ozk0r5yGDuG4zVZ9jFO2r8s5/p0AgPYNcHD+4n2baHrGaNWUlLwf9d4TSuJmzqJy2YaRAS4qH+5Lw8t2O+UZzm3VBhljMDFDViouHeZynHV0SLBS7Pfv+SqwEFzlyo9XsKFWBJ2KGFhCWPjMnQcwN6tINh+TE60jWBaZeNZs8XA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DM6PR12MB4369.namprd12.prod.outlook.com (2603:10b6:5:2a1::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Wed, 22 Mar 2023 15:16:25 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 15:16:25 +0000
+Message-ID: <135cd1f3-e931-6099-279b-1e5c71bcb373@amd.com>
+Date:   Wed, 22 Mar 2023 11:17:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amd/display: Remove the unused variable
+ dppclk_delay_subtotal
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        alexander.deucher@amd.com
+Cc:     Xinhui.Pan@amd.com, Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        airlied@gmail.com, christian.koenig@amd.com
+References: <20230322015917.118874-1-jiapeng.chong@linux.alibaba.com>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230322015917.118874-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQXPR0101CA0037.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:14::14) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="B7v5JtRVPQGXVgO3"
-Content-Disposition: inline
-In-Reply-To: <20230322124631.7p67thzeblrawsqj@orel>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM6PR12MB4369:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0071a28-bdc8-4bfa-b323-08db2ae866e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RqSmpYlQfG4vM1WejegAHfhZ+Zt3G9x4uqofdnll2++2FuyAjefSYUnz0VJp2aPx4KkhMyW3OUUYBOGLeLfd1H4k5u3BZ7FQfCyzSnyDgQC/gO8HcKzjMhE9htu+cky6hCzgZe/X4DK6iEzig5A+Ibx2W1/eoO99xZ12D3Eb+mx2/o68MARow/xL/gsaDQZmFPF/ZOut2kltTSJPxW0FtsQ+LLpiFzmTz+mhAeykMSXc7UWJZmoBwDlG4rwEoE1/ovqPRa3z2kkM3xeH04+LixR/y0YJ70lV8bUDAaeKvpcL9iqUBALsDAT86DXPyMOyNcthAcHgCmH21jCAMwRFeZvn+f9HEfTeuEq5is6BM1cPlr/s4SV/sRzJ6cp12lqq68JlsbDrsjljMvhb+IR4F14HKlHceGRD5kMNzMLvhcbWR6waV2rliGXnPe8nQZX+SKBlqZ4LQS308eUgUviuFE2wK8GUdBkvuylouIxGJPGL4q/bI5YQJAc3wlxjDM7tjWU2gIEw6lfw46P1fmLigdxyda/0wfpZGFEdqbKwqoCUJG8KNRX4DM3L9ZlEWfmFQufYdClU5oGQLoSuj+60mZrJsoUZqJwX9V5oFNQwuYnnDbYqZ/MgHaoXkFDUMcf54+eTF/Wk7xHpYggzWbadLuseYJpvEoYn8r9K/PmDijl7LSUN5tfrMYTt9J1T0eXEb/UD0IEJ1AlE74G7/LzCXLLWJaYd4b8XoyWmlfdk8Ko=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(396003)(136003)(39860400002)(376002)(451199018)(2616005)(6512007)(6636002)(38100700002)(86362001)(31696002)(8676002)(8936002)(4326008)(66556008)(66476007)(2906002)(66946007)(36756003)(41300700001)(44832011)(53546011)(5660300002)(186003)(6506007)(6486002)(478600001)(966005)(26005)(6666004)(83380400001)(316002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cEs4UTh5ci80aURrMDVWbFRwOTEzSzE5MnNvTC9YamViWVgvVURlb3orUlhO?=
+ =?utf-8?B?VXRFZGxsVWh2d2pNNy81d2JxdmFuaG5kQzlOdm8vd09pa1BQSllrV1dvL01w?=
+ =?utf-8?B?L3dPQ0FlQUtzYUFsN1VsclVCT3VuaUJRM3RwcWtaU1JFbmhsR3ZWYTNXTjhr?=
+ =?utf-8?B?ZG9XY0JVZlptNVdTeG1CL0ZuR1JZWHp3Uy82VFB3YkIzQjY1elhXbGY1Sm9V?=
+ =?utf-8?B?SFJ5dEliV1EzSjRnMDkyY2F4SXFIenc5dlh0QlNJMmdLWDd0SllVT25zdUdh?=
+ =?utf-8?B?Wk0xTjFnenRUUld1QjVEZFYydXB5NU5QYksyMEZJem15OFNUUWxwVEhiOHNV?=
+ =?utf-8?B?aUpJRUI2YzV0bVQzaVBkVVkyRlc3Unc0TG5POTVEM3JhMXdJNjJkbGlkek42?=
+ =?utf-8?B?RlQybjV5YVErL1NYSWdjdzJKa2pNVnZCOUdmampYdGVDMFVqbVBZNmRQUEZ0?=
+ =?utf-8?B?NE41UTdLaktQZW0wdFJYaWpETE5tUXhpKy9QZFFWSDFYOWg4OVd4dDJBeTlv?=
+ =?utf-8?B?UHp1Qm4wSkJNcnNOV0ZLTlpvSHpSbUFIY0tRaDFkK2p0QktvMTFWV1E0K1NL?=
+ =?utf-8?B?VnFXMnJkN0RwVjRvTXc2SVpEMnIxWFF2cXB1N01BeUpQK2tSWUpmT0VsVGxU?=
+ =?utf-8?B?YWNTZVRCNFNmUnpmU0ZCSzVYMFY1cHIzVHl0S2ZBYk9QSzhaZzkzVzh6akVB?=
+ =?utf-8?B?N001LzlpRkRjd095NHNhYmJSclFFZSt0QkZOenRLVlQrWmRYazFpQ3R2YzZt?=
+ =?utf-8?B?R0U3VzVtaDJJM1ZEak9vWVVpTk5YRTdzNkQ3WExWMVdQc2lNR0xpczZYWW1H?=
+ =?utf-8?B?TG9uQm80U0JVOStEQnpPT0hwN1F1QUNaU1QyTDAvMGtuMW03cnRxNFQvYVVj?=
+ =?utf-8?B?QzA4MjJESDdRVUErVmFkVzVBR3NINkhTM2s4OGtTUXR2cEhPMDBoNERUZTdL?=
+ =?utf-8?B?Rm9saEJPVmd5d0NHRjNYaXpXNEorczhIZHZTVUdnZDVrS1V3QlFYUWx2V3pp?=
+ =?utf-8?B?QU5qSWhYWC9MRGZHY0NMV3RQY2JjN3J0dVdoblFGUWZVZ0diUEtONHhEQUI2?=
+ =?utf-8?B?SjVyRURFaDdLT29sQ2Q2Z1l5NUFydWxnbGRaRDhVRUZHVEd2ZGJMZ1N4Nkky?=
+ =?utf-8?B?dVZxemEzeXdLMzh0RlFFWVNic29xMTVIbndyT254R2lDVnJYTU5HbEx3aXhO?=
+ =?utf-8?B?eUdTQ29ndndwKzJoR2pZdDVRZ2Y2WmRGelI3OXN3Tk9rQVNQaloxL2V5OVh6?=
+ =?utf-8?B?UVVodGpBOEw4QVNESlo3Y1ovZzhhVVp0ZTB6N1NBUGZZNGx0bXNFQ0lCd1VV?=
+ =?utf-8?B?c044dXMxeUpaeWtadGJDMldmUWhqa0JxVnUzY0QycFhzamVQUHM4ZUl3b3hs?=
+ =?utf-8?B?UTZzeWg0U0lDM0Y3YldQN3oxQWNjdWl3L2xKQ0ROb2xXbkFISVRSZjViRmF4?=
+ =?utf-8?B?cHVGQ3grWWdmR29kcTRTWmgvdVB2cDQwMnpiN1g3WTF4cG1ySlJoNkZIb0hm?=
+ =?utf-8?B?T2RxYThlMzl3TUdpb21aUS9iMFY1TjlkNzRLSXdoMUdNMER3cjB4N3krM2Nl?=
+ =?utf-8?B?MUY4czdLS3FkeFRJNFpFSFJHRUVVSUxDUTVnUFVCRnVpQ2M2b0FQMCtGWjdz?=
+ =?utf-8?B?VEVISU5FblNZQUxLUG80d0tFa1QyRjJ2enczY281SG85TUVGNXFVNlZhSWE5?=
+ =?utf-8?B?OHQ3Z2MvbXN4d042QW81aXlpMVFUQWQvNjN6RkIzRkd6M0JCOVptMWhJYWNB?=
+ =?utf-8?B?bWhlZTkzN09xM1VuWGRsVlhsazY2bVc3MnFHS3d3ZEFsZ0loRmhON0oxczlK?=
+ =?utf-8?B?L3pGZlZUeFRxZWpoRlkyQWdOQTBsUlFPbEgwclRzaXNBRGpnQ0RtQ1ZSMGQx?=
+ =?utf-8?B?TUQwQWR2aWYxQXl6aTluQy9KdEx4S1hKSm9pZ3RpcXp4MWJnT2JWbnZjbkN2?=
+ =?utf-8?B?NkpBT1ZMM1JTdG11ZitBR2lDZXZtQjc5L2lWd2M5WG5zRHc0aUpFZ21MaFli?=
+ =?utf-8?B?Y25VTDlNUy9BNVJ0VlFyWTVmbEhUMXRiOVBaK3QyWERuQnN6U2puNFZuR0dq?=
+ =?utf-8?B?T2ZVT2xoeVF1SnBydjJMRDdBV2s5dlgyeEQzU1lDbXdBL0x2ZE5xNmIyM0Q1?=
+ =?utf-8?Q?VyBBeVOu2d/SnTpumYfDbNFeM?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0071a28-bdc8-4bfa-b323-08db2ae866e2
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 15:16:25.2156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N0xhrmumsgCeT5GJLQxVMvAdj4n8j4U0ECiz7Qz0RNwrmXGW2RkeFnaiuIefHKQhVnLCZPv1s3GVekT7oklJYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4369
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/21/23 21:59, Jiapeng Chong wrote:
+> Variable dppclk_delay_subtotal is not effectively used, so delete it.
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c:1004:15: warning: variable 'dppclk_delay_subtotal' set but not used.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4584
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
---B7v5JtRVPQGXVgO3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Wed, Mar 22, 2023 at 01:46:31PM +0100, Andrew Jones wrote:
-> On Wed, Mar 22, 2023 at 01:09:07PM +0100, Jason A. Donenfeld wrote:
-> > When moving switch_to's has_fpu() over to using riscv_has_extension_
-> > likely() rather than static branchs, the FPU code gained a dependency on
-> > the alternatives framework. If CONFIG_RISCV_ALTERNATIVE isn't selected
-> > when CONFIG_FPU is, then has_fpu() returns false, and switch_to does not
-> > work as intended. So select CONFIG_RISCV_ALTERNATIVE when CONFIG_FPU is
-> > selected.
-> >=20
-> > Fixes: 702e64550b12 ("riscv: fpu: switch has_fpu() to riscv_has_extensi=
-on_likely()")
-> > Link: https://lore.kernel.org/all/ZBruFRwt3rUVngPu@zx2c4.com/
-> > Cc: Jisheng Zhang <jszhang@kernel.org>
-> > Cc: Andrew Jones <ajones@ventanamicro.com>
-> > Cc: Heiko Stuebner <heiko@sntech.de>
-> > Cc: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>   .../display/dc/dml/dcn314/display_rq_dlg_calc_314.c    | 10 ----------
+>   1 file changed, 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> index 6576b897a512..d1c2693a2e28 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> @@ -1001,7 +1001,6 @@ static void dml_rq_dlg_get_dlg_params(
+>   	unsigned int vupdate_width;
+>   	unsigned int vready_offset;
+>   
+> -	unsigned int dppclk_delay_subtotal;
+>   	unsigned int dispclk_delay_subtotal;
+>   
+>   	unsigned int vstartup_start;
+> @@ -1130,17 +1129,8 @@ static void dml_rq_dlg_get_dlg_params(
+>   	vupdate_offset = dst->vupdate_offset;
+>   	vupdate_width = dst->vupdate_width;
+>   	vready_offset = dst->vready_offset;
+> -
+> -	dppclk_delay_subtotal = mode_lib->ip.dppclk_delay_subtotal;
+>   	dispclk_delay_subtotal = mode_lib->ip.dispclk_delay_subtotal;
+>   
+> -	if (scl_enable)
+> -		dppclk_delay_subtotal += mode_lib->ip.dppclk_delay_scl;
+> -	else
+> -		dppclk_delay_subtotal += mode_lib->ip.dppclk_delay_scl_lb_only;
+> -
+> -	dppclk_delay_subtotal += mode_lib->ip.dppclk_delay_cnvc_formatter + src->num_cursors * mode_lib->ip.dppclk_delay_cnvc_cursor;
+> -
+>   	if (dout->dsc_enable) {
+>   		double dsc_delay = get_dsc_delay(mode_lib, e2e_pipe_param, num_pipes, pipe_idx); // FROM VBA
+>   
 
-Thanks for fixing it!
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+-- 
+Hamza
 
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  arch/riscv/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index c5e42cc37604..0f59350c699d 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -467,6 +467,7 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
-> >  config FPU
-> >  	bool "FPU support"
-> >  	default y
-> > +	select RISCV_ALTERNATIVE
-> >  	help
-> >  	  Say N here if you want to disable all floating-point related proced=
-ure
-> >  	  in the kernel.
-> > --=20
-> > 2.40.0
-> >
->=20
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->=20
-> I took a look to see if we missed anything else and see that we should
-> do the same patch for KVM. I'll send one.
->=20
-> (It's tempting to just select RISCV_ALTERNATIVE from RISCV, but maybe we
->  can defer that wedding a bit longer.)
-
-At that point, the config option should just go away entirely, no?
-
---B7v5JtRVPQGXVgO3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBsb2wAKCRB4tDGHoIJi
-0m+3AQCe8JDweaSMp3gkW9PkqtzV9SdMdFtfRNgo0IR/sPVzowD/brjdaYh5/LCw
-MO5YGP9cVuRb+cGX+RlJV2Skhb0lHgA=
-=pPeQ
------END PGP SIGNATURE-----
-
---B7v5JtRVPQGXVgO3--
