@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6077C6C4B1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B516C4B1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbjCVMvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S230443AbjCVMxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjCVMvn (ORCPT
+        with ESMTP id S230081AbjCVMxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:51:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0D55F21C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h8so72452243ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679489495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
-        b=eQ+8m1BOPPny9D5aNyxbHYGTiCf8Na3k/SMUqrCxaa1Yd6GYecb6qZPcSNejvrGTLh
-         K2tNopHoQ+IXxsJ3Z/xQnfFtL0q0ndPimIrANSMeWDBSrX/roRZA7g4cDspQdSjlTqYO
-         ST0FoVApsvyQx4KLgzGClpGOdlW5k0tRafn6Bi6bY5+mz0yLtL72We2GmJAb5QQ+kYYe
-         IesM6YsnG3KC2VBYu5t3XjhDCr80TdEgGVarrxOWZTFYXfXlzOXXqgB+SxHxbjNmxrcf
-         xvFNepmdn5r+oAq6AWo8ad7eTxr6LF1M25wuqgQgFPKvVkQ0UoqGT+da4ojmX6Z/EwHv
-         B85Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
-        b=7YDEQRsuYJ6xdUYmhj5WbOBCTSSCiOiMWxVIDXU6VCf0+AW7AdsaRYk0Q9v7xXlWqd
-         uZ12pvE4esuNnrzsG+VJzjHgRovMMnSxx/BzUAvWN6SsSrVr4xSUi3ID9gNmWTvYD6ht
-         4PGpCAmaZCsENMgncowxpduhJcmYl2CtsFap6avIS+JRspU+2mwkUISuD8JnR9DWZZJo
-         2eJGkYg3JwEohz6Alf1wrAMegz3GV7EeKZ6VFRgV/35yQ1IPIlrtHBkD7FBf63UxfqHN
-         c1+uKfFibWab5lioGHx3muuFTDgKMVeyYHIgDnQ4NYd988TJM4Jb2WK9Mt7tFcOBevBe
-         /Yng==
-X-Gm-Message-State: AO0yUKV/+FjLBQFEJT4rUTIusAAxGZlNkKu+xPSIe33aJnOT4MJa/K8Y
-        WA3OAnprirRQ45wD6bnJTS68bEhug8FBPcexKZyZ7g==
-X-Google-Smtp-Source: AK7set+H54h9AIkF40JfLtjJco8DQSGdF2j7ywDCKthKg0qqriwpU2mABmcujmqJNtXCow1utP9NeQroR4FDuRCo+94=
-X-Received: by 2002:a05:6402:3496:b0:4ad:739c:b38e with SMTP id
- v22-20020a056402349600b004ad739cb38emr1580205edc.1.1679489494871; Wed, 22 Mar
- 2023 05:51:34 -0700 (PDT)
+        Wed, 22 Mar 2023 08:53:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035C617CFE;
+        Wed, 22 Mar 2023 05:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6BRyU+JbkSdh5FU2QQ8gNeV3eQhFmOfGX6dsLMm751I=; b=Wn4ZgGHpfD6yPJFUT5oLuFN3qw
+        UfwHFLXgWP5rl/xFiyT4EcY81xma2D2cL1/AyfutYWo1Wv25FiR7Kz5v1/C3sJ1SlD/AvnbrWpipp
+        gz3ao5le8asoZrMVWTAiI7VYVeHTSZ+XQVTwYj1bg0NLj6yCkkayJAQNlkiEWqvqtPplz+j9f7taf
+        ErnrrG7r6ryAIf0drZhRYZaCpFt3Mh7YWOoEQfOvNtwNRcBdETtdYKBJhpBSR7//MhcP7QnXweZ/q
+        SKQfFLELiKFR2xJn+5A+D6/HwjVSaO+Ar0niJ59rYCTr5osVIvnHQ2aSynYd/3hZiOfh+lBMV+OOT
+        k49oq18g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pexxc-0031Ii-3q; Wed, 22 Mar 2023 12:53:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E0E0230030F;
+        Wed, 22 Mar 2023 13:52:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4D34D205D08C3; Wed, 22 Mar 2023 13:52:57 +0100 (CET)
+Date:   Wed, 22 Mar 2023 13:52:57 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ross Zwisler <zwisler@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
+Message-ID: <20230322125257.GA2357380@hirez.programming.kicks-ass.net>
+References: <20230321215121.71b339c5@gandalf.local.home>
+ <87y1np824t.ffs@tglx>
+ <20230322084834.37ed755e@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230307154524.118541-1-bchihi@baylibre.com> <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
-In-Reply-To: <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 22 Mar 2023 13:50:58 +0100
-Message-ID: <CAGuA+oqLi-b7YuUVYzCDQWbztPy7WOVEch6dbrbWzdPkRBOwcg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322084834.37ed755e@gandalf.local.home>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 4:22=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Tue, Mar 7, 2023 at 11:45=E2=80=AFPM <bchihi@baylibre.com> wrote:
-> >
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
-> >
-> > This series is a continuation of the original series "Add LVTS Thermal =
-Architecture" v14 :
-> >     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.=
-50294-1-bchihi@baylibre.com/
-> >
-> > Based on top of thermal/linux-next :
-> >     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
-> >
-> > Depends on these patches as they are not yet applyied to thermal/linux-=
-next branch :
-> >     [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already inc=
-luded in linux master branch)
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-4-bchihi@baylibre.com/
-> >     [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and therm=
-al nodes
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-6-bchihi@baylibre.com/
-> >     [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation =
-threshold
-> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
-50294-7-bchihi@baylibre.com/
-> >
-> > Balsam CHIHI (4):
-> >   dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
-> >     controllers for mt8195
-> >   thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
-> >   arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-> >   arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
->
-> Whole series is
->
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->
-> on MT8195 Tomato Chromebook.
+On Wed, Mar 22, 2023 at 08:48:34AM -0400, Steven Rostedt wrote:
+> On Wed, 22 Mar 2023 12:19:14 +0100
+> Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> > Steven!
+> > 
+> > On Tue, Mar 21 2023 at 21:51, Steven Rostedt wrote:
+> > > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> > > produces:
+> > >
+> > >  2)   0.764 us    |  exit_to_user_mode_prepare();
+> > >  2)               |  /* page_fault_user: address=0x7fadaba40fd8 ip=0x7fadaba40fd8 error_code=0x14 */
+> > >  2)   0.581 us    |  down_read_trylock();
+> > >
+> > > The "page_fault_user" event is not encapsulated around any function, which
+> > > means it probably triggered and went back to user space without any trace
+> > > to know how long that page fault took (the down_read_trylock() is likely to
+> > > be part of the page fault function, but that's besides the point).
+> > >
+> > > To help bring back the old functionality, two trace points are added. One
+> > > just after instrumentation begins, and one just before it ends. This way,
+> > > we can see all the time that the kernel can do something meaningful, and we
+> > > will trace it.  
+> > 
+> > Seriously? That's completely insane. Have you actually looked how many
+> > instrumentation_begin()/end() pairs are in the affected code pathes?
+> > 
+> > Obviously not. It's a total of _five_ for every syscall and at least
+> > _four_ for every interrupt/exception from user mode.
+> > 
+> > The number #1 design rule for instrumentation is to be as non-intrusive as
+> > possible and not to be as lazy as possible.
+> 
+> And it still is. It still uses nops when not enabled. I could even add a
+> config to only have this compiled in when the config is set, so that
+> production can disable it if it wants to.
+> 
+> Just in case it's not obvious:
+> 
+> 	if (tracepoint_enabled(instrumentation_begin))
+> 		call_trace_instrumentation_begin(ip, pip);
+> 
+> is equivalent to:
+> 
+> 	if (static_key_false(&__tracepoint_instrumentation_begin.key))
+> 		call_trace_instrumentation_begin(ip, pip);
+> 
 
-Hi Chen-Yu Tsai,
+It is still completely insane.
 
-Thank you very much for testing it!
-
-Best regards,
-Balsam
+NAK.
