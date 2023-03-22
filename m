@@ -2,183 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1909D6C58EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746E36C58EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjCVVmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S229976AbjCVVpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVVmm (ORCPT
+        with ESMTP id S229487AbjCVVpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:42:42 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A192B2FCDA
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:42:41 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id ek18so78732502edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679521360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jg9tSWAP2QBlPFC6Uk7vBpvg/zpu+PHPpGRA2+gIPBw=;
-        b=Bvjsp4F4PvN/4IbBDsDWgF6UZuOr0HIkdC4x31cck7sPEOcrtmoF41x/Vyew2LvjFR
-         wAJ5z5/DijkP1s2QD88CElYS2CkDSWQ2UD1xXNQ9ZuUi0xlw2b14eN/FmQksw2szbQ6j
-         EK3zuG54zn+B0ajBvfkmCOAxs6C3kMtgt/dPGGmQVxn/bjB/L4ir/KlTPBl2Ds0tb21Z
-         8SsqzaInIv5v34pj8zNOBu35SrCNTsLx75w/h465+OX2RUw730ExiuHaNac/DZaXWpAX
-         WiHuLUiucTyCQwLYovkgGVBliwMxv2vROBuWJOZqveqDYWBzR3mPXGiFwMnwa6GulcCA
-         DXEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679521360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jg9tSWAP2QBlPFC6Uk7vBpvg/zpu+PHPpGRA2+gIPBw=;
-        b=Z9+cK603yPC+l0w9/frebuLx8uB7Eput4W8hW5ccBpVre/oF3jDT5IJyZAffZ9u1lk
-         9fVLnxMIDhpYR2AyP0xsHsEqzUbWwPSJeRBgxEEIj8CkBVoqaiywK1D1iHXUVxC9dPoZ
-         vKOL9L5RwLumJi5/A/BFlKovh2wkm7Zn3cYBaBbSF7scKEsufEROElgVHIp+1ORT4IwT
-         z23nd4J8P+5FDaccslrEkoeor196GF4ZxllcTYbCFeqVJ49OsOxX1jljN5m/uE7dPtRF
-         Vp5LmgU5N0cMYcb8e/EGavciuDCfvDYDpaJ7xnWlRUVRxgcFQs8O/kYV6ZCoQdEp5bZw
-         dmdQ==
-X-Gm-Message-State: AO0yUKW6IJ/3vel359U2svj0VfR6VqiIq2Ixn1nW8IamOB8+CHB28qsr
-        JYjvxvqjXHG7XpaUqvi34wrZdg==
-X-Google-Smtp-Source: AK7set9S7vlHaPQk+/iOpvQzXSlZJcMwxUj0BsgSMuA85DY34E9csw8r5UTjJPWpti7s4VnZutaMQQ==
-X-Received: by 2002:a17:906:7102:b0:8b1:806b:7dbb with SMTP id x2-20020a170906710200b008b1806b7dbbmr8817603ejj.51.1679521360161;
-        Wed, 22 Mar 2023 14:42:40 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:626d:5729:6e71:4c22? ([2a02:810d:15c0:828:626d:5729:6e71:4c22])
-        by smtp.gmail.com with ESMTPSA id ja21-20020a170907989500b0093338259b2bsm6211230ejc.207.2023.03.22.14.42.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 14:42:39 -0700 (PDT)
-Message-ID: <24767874-0b26-78c8-43c2-6cc3adb901f8@linaro.org>
-Date:   Wed, 22 Mar 2023 22:42:38 +0100
+        Wed, 22 Mar 2023 17:45:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFC833CEB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:45:15 -0700 (PDT)
+Received: from [192.168.2.179] (unknown [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 12D4F6602083;
+        Wed, 22 Mar 2023 21:45:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679521514;
+        bh=seWGQIGl/GWRMShC0zUqh8cUcoPkOeMdh8a+mR1+vXQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ReCz5boSXxxMwOF861bUZDq51ks4KXye2uB6kG2I6XtEOP2B1LHXW15a83+GGDbbx
+         Q1bAlhreT55dnsb50+CWuhAAESmNsF62Lo+5l5SPqi6m41f99e1UJhKMZQ3L3z9Rzz
+         j403gFvR8slF1QIROSvAiuTR1XeXq06BcHtVE0WJj0HFDGoF+cYFz1q8rjdazUJtiw
+         AMT6HKDzhpCiMqToSGLP5I0wvKfWvMh2pw5cr1Gf0FlgDOvLxdhtavKd4PSTTbEWDb
+         FKAdrWEwpdMaoTdCGeJLZhU3G7k2ztZW11NJ76sFom6kbRZBoB0EYBA9713uRuGO/R
+         01r/UQ6J13Uug==
+Message-ID: <ffdc843c-86ae-4838-9201-9028f2624933@collabora.com>
+Date:   Thu, 23 Mar 2023 00:45:10 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
- imx8qm cdns3 glue bindings
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/2] drm/virtio: Refactor job submission code path
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230319160802.3297643-1-dmitry.osipenko@collabora.com>
+ <20230319160802.3297643-2-dmitry.osipenko@collabora.com>
+ <CAF6AEGu0WNgX+T2sjrA_-sgvO35wNjz39p6hc9zh02goPrkExQ@mail.gmail.com>
 Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-References: <20230321151951.2784286-1-Frank.Li@nxp.com>
- <20230321151951.2784286-2-Frank.Li@nxp.com>
- <1ce3bf91-6bef-b4c1-1ec9-3a345518efeb@linaro.org>
- <AM6PR04MB483828FC1083E3C98930DF6488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <b5d67af0-ed08-e243-2c0c-92f1f002e552@linaro.org>
- <AM6PR04MB483841E17BEEE4F9EC596DBA88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <835cda64-5d42-1ff3-aa8f-0802fe3d705f@linaro.org>
- <AM6PR04MB48383C58EF1D9CFD8F7C401E88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB48383C58EF1D9CFD8F7C401E88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGu0WNgX+T2sjrA_-sgvO35wNjz39p6hc9zh02goPrkExQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 22:40, Frank Li wrote:
+On 3/23/23 00:25, Rob Clark wrote:
+...
+>> +static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
+>> +                                    struct dma_fence *fence)
+>> +{
+>> +       struct dma_fence *itr;
+>> +       int idx, err;
+>> +
+>> +       dma_fence_array_for_each(itr, idx, fence) {
 > 
+> I guess unwrapping is for the later step of host waits?
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Wednesday, March 22, 2023 4:38 PM
->> To: Frank Li <frank.li@nxp.com>
->> Cc: devicetree@vger.kernel.org; festevam@gmail.com; imx@lists.linux.dev;
->> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-arm-
->> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->> kernel@vger.kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
->> shawnguo@kernel.org
->> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
->> imx8qm cdns3 glue bindings
->>
->> Caution: EXT Email
->>
->> On 22/03/2023 22:36, Frank Li wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Wednesday, March 22, 2023 4:32 PM
->>>> To: Frank Li <frank.li@nxp.com>
->>>> Cc: devicetree@vger.kernel.org; festevam@gmail.com;
->> imx@lists.linux.dev;
->>>> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-arm-
->>>> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->>>> kernel@vger.kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
->>>> shawnguo@kernel.org
->>>> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
->>>> imx8qm cdns3 glue bindings
->>>>
->>>> Caution: EXT Email
->>>>
->>>> On 22/03/2023 15:34, Frank Li wrote:
->>>>>
->>>>>
->>>>>> -----Original Message-----
->>>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>> Sent: Wednesday, March 22, 2023 2:32 AM
->>>>>> To: Frank Li <frank.li@nxp.
->>>>>>> +      - const: usb3_aclk
->>>>>>> +      - const: usb3_ipg_clk
->>>>>>> +      - const: usb3_core_pclk
->>>>>>> +
->>>>>>> +  assigned-clocks:
->>>>>>> +    items:
->>>>>>> +      - description: Phandle and clock specifoer of
->>>>>> IMX_SC_PM_CLK_MST_BUS.
->>>>>>
->>>>>> Drop useless pieces so "Phandle and clock specifoer of " and name the
->>>>>> hardware, not the syntax.
->>>>>>
->>>>>>> +
->>>>>>> +  assigned-clock-rates:
->>>>>>> +    items:
->>>>>>> +      - description: Should be in Range 100 - 600 Mhz.
->>>>>>
->>>>>> That's better but I still do not understand why do you need it in the
->>>>>> bindings. You never actually answered this question.
->>>>>
->>>>> I am not sure 100% sure the reason.
->>>>> I think difference system target's  axi bus frequency is difference,
->>>>> And just one time work, needn't software to manage it.
->>>>> Following other driver's code style may be another reason.
->>>>
->>>> That's the reason of heaving it in DTS. But I am asking about bindings.
->>>> You do understand you define here interface?
->>>
->>> I defined here is descript AXI frequency for usb controller. Supposed
->> difference
->>> Platform will have difference working frequency.
->>
->> I don't understand how does this answer my concerns of having it in DT
->> bindings. If you do not add it, you "will have difference working
->> frequency", so what's the point?
-> 
-> For example: imx8qxp, it need set to 250Mhz,  i.MX8QM need set to 200Mhz.
-> Maybe future chip can set to 400Mhz.
+> At any rate, I think you should use dma_fence_unwrap_for_each() to
+> handle the fence-chain case as well?
 
-And? So as you can see you will still have different frequencies, so
-what's the point? What is the benefit? Dunno, maybe we do not understand
-each other, because I don't think you are answering my questions at all.
+Yes, seems so. I actually missed the dma_fence_unwrap, thanks!
 
+...
+>> +static int virtio_gpu_init_submit(struct virtio_gpu_submit *submit,
+>> +                                 struct drm_virtgpu_execbuffer *exbuf,
+>> +                                 struct drm_device *dev,
+>> +                                 struct drm_file *file,
+>> +                                 uint64_t fence_ctx, uint32_t ring_idx)
+>> +{
+>> +       struct virtio_gpu_fpriv *vfpriv = file->driver_priv;
+>> +       struct virtio_gpu_device *vgdev = dev->dev_private;
+>> +       struct virtio_gpu_fence *out_fence;
+>> +       int err;
+>> +
+>> +       memset(submit, 0, sizeof(*submit));
+>> +
+>> +       out_fence = virtio_gpu_fence_alloc(vgdev, fence_ctx, ring_idx);
+>> +       if (!out_fence)
+>> +               return -ENOMEM;
+>> +
+>> +       err = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
+>> +       if (err) {
+>> +               dma_fence_put(&out_fence->f);
+>> +               return err;
+>> +       }
+> 
+> If we fail at any point after here, where is the out_fence referenced dropped?
+
+Good catch, don't see either where it's dropped. Perhaps the drop got
+lost after moving the code around, will fix.
+
+...
+>> +/*
+>> + * Usage of execbuffer:
+>> + * Relocations need to take into account the full VIRTIO_GPUDrawable size.
+>> + * However, the command as passed from user space must *not* contain the initial
+>> + * VIRTIO_GPUReleaseInfo struct (first XXX bytes)
+>> + */
+> 
+> I know this is just getting moved from the old location, but I'm not
+> even sure what this comment means ;-)
+> 
+> At least it doesn't make any sense for non-virgl contexts.. I haven't
+> looked too closely at virgl protocol itself
+
+Had exactly the same thought :) Well, if nobody will clarify, then I'm
+happy with removing it in v3.
+
+-- 
 Best regards,
-Krzysztof
+Dmitry
 
