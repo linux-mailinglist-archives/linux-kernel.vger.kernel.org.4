@@ -2,132 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746E36C58EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA23F6C58F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCVVpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S229864AbjCVVwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVVpR (ORCPT
+        with ESMTP id S229877AbjCVVwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:45:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFC833CEB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:45:15 -0700 (PDT)
-Received: from [192.168.2.179] (unknown [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 12D4F6602083;
-        Wed, 22 Mar 2023 21:45:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679521514;
-        bh=seWGQIGl/GWRMShC0zUqh8cUcoPkOeMdh8a+mR1+vXQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ReCz5boSXxxMwOF861bUZDq51ks4KXye2uB6kG2I6XtEOP2B1LHXW15a83+GGDbbx
-         Q1bAlhreT55dnsb50+CWuhAAESmNsF62Lo+5l5SPqi6m41f99e1UJhKMZQ3L3z9Rzz
-         j403gFvR8slF1QIROSvAiuTR1XeXq06BcHtVE0WJj0HFDGoF+cYFz1q8rjdazUJtiw
-         AMT6HKDzhpCiMqToSGLP5I0wvKfWvMh2pw5cr1Gf0FlgDOvLxdhtavKd4PSTTbEWDb
-         FKAdrWEwpdMaoTdCGeJLZhU3G7k2ztZW11NJ76sFom6kbRZBoB0EYBA9713uRuGO/R
-         01r/UQ6J13Uug==
-Message-ID: <ffdc843c-86ae-4838-9201-9028f2624933@collabora.com>
-Date:   Thu, 23 Mar 2023 00:45:10 +0300
+        Wed, 22 Mar 2023 17:52:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980E18B3F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679521919; x=1711057919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AMEtLMT6hBX2lxRTrrgsFN4px87BZunEca3shlKUTpE=;
+  b=EeJgFJB7TplYseOQcc2guntcf8oxVwEwfw2FuIEiPSTm7fgyX307Q0JI
+   keazYA3zDUMtIDeq0VU2TNwYXRuSFsctV1QABfqhGE02eJvTorZDUHi8d
+   SbOIGc1YrnZUJZiTRubd5nABaTbAV+n+wQdq3wA35wcgDcdhLCGFsMccM
+   zfqhtnbyJkWBJcqyWmD+JdFqRaSaU996Qm1eTM/fpPyQ/DoTS7R++sC0d
+   p35nFc2fYGconBk4twMgiyFakM0wxFr8kNYCTnpxEuMa10nxF9Pf0wz3p
+   byqA2ZRboxVEsbbcUpM3NLHOrX00GH1jSgNKKhiQnMQ3vNraGI+SaQ3xd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338061650"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="338061650"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 14:51:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751232113"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="751232113"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 14:51:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf6N9-000Dh2-30;
+        Wed, 22 Mar 2023 21:51:55 +0000
+Date:   Thu, 23 Mar 2023 05:51:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ye.xingchen@zte.com.cn, laurent.pinchart@ideasonboard.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        hyun.kwon@xilinx.com, airlied@gmail.com, daniel@ffwll.ch,
+        michal.simek@xilinx.com, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
+Message-ID: <202303230551.UxtIjawK-lkp@intel.com>
+References: <202303221625255005719@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] drm/virtio: Refactor job submission code path
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230319160802.3297643-1-dmitry.osipenko@collabora.com>
- <20230319160802.3297643-2-dmitry.osipenko@collabora.com>
- <CAF6AEGu0WNgX+T2sjrA_-sgvO35wNjz39p6hc9zh02goPrkExQ@mail.gmail.com>
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGu0WNgX+T2sjrA_-sgvO35wNjz39p6hc9zh02goPrkExQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303221625255005719@zte.com.cn>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 00:25, Rob Clark wrote:
-...
->> +static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
->> +                                    struct dma_fence *fence)
->> +{
->> +       struct dma_fence *itr;
->> +       int idx, err;
->> +
->> +       dma_fence_array_for_each(itr, idx, fence) {
-> 
-> I guess unwrapping is for the later step of host waits?
-> 
-> At any rate, I think you should use dma_fence_unwrap_for_each() to
-> handle the fence-chain case as well?
+Hi,
 
-Yes, seems so. I actually missed the dma_fence_unwrap, thanks!
+Thank you for the patch! Perhaps something to improve:
 
-...
->> +static int virtio_gpu_init_submit(struct virtio_gpu_submit *submit,
->> +                                 struct drm_virtgpu_execbuffer *exbuf,
->> +                                 struct drm_device *dev,
->> +                                 struct drm_file *file,
->> +                                 uint64_t fence_ctx, uint32_t ring_idx)
->> +{
->> +       struct virtio_gpu_fpriv *vfpriv = file->driver_priv;
->> +       struct virtio_gpu_device *vgdev = dev->dev_private;
->> +       struct virtio_gpu_fence *out_fence;
->> +       int err;
->> +
->> +       memset(submit, 0, sizeof(*submit));
->> +
->> +       out_fence = virtio_gpu_fence_alloc(vgdev, fence_ctx, ring_idx);
->> +       if (!out_fence)
->> +               return -ENOMEM;
->> +
->> +       err = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
->> +       if (err) {
->> +               dma_fence_put(&out_fence->f);
->> +               return err;
->> +       }
-> 
-> If we fail at any point after here, where is the out_fence referenced dropped?
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Good catch, don't see either where it's dropped. Perhaps the drop got
-lost after moving the code around, will fix.
+url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/202303221625255005719%40zte.com.cn
+patch subject: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
+config: arm-randconfig-r014-20230322 (https://download.01.org/0day-ci/archive/20230323/202303230551.UxtIjawK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/68f0f0c914304e81941645b5b2e06ca1424527f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
+        git checkout 68f0f0c914304e81941645b5b2e06ca1424527f9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/xlnx/
 
-...
->> +/*
->> + * Usage of execbuffer:
->> + * Relocations need to take into account the full VIRTIO_GPUDrawable size.
->> + * However, the command as passed from user space must *not* contain the initial
->> + * VIRTIO_GPUReleaseInfo struct (first XXX bytes)
->> + */
-> 
-> I know this is just getting moved from the old location, but I'm not
-> even sure what this comment means ;-)
-> 
-> At least it doesn't make any sense for non-virgl contexts.. I haven't
-> looked too closely at virgl protocol itself
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230551.UxtIjawK-lkp@intel.com/
 
-Had exactly the same thought :) Well, if nobody will clarify, then I'm
-happy with removing it in v3.
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xlnx/zynqmp_dp.c:1704:33: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                                       "failed to get reset: %ld\n");
+                                                             ~~^
+   1 warning generated.
+
+
+vim +1704 drivers/gpu/drm/xlnx/zynqmp_dp.c
+
+  1664	
+  1665	/* -----------------------------------------------------------------------------
+  1666	 * Initialization & Cleanup
+  1667	 */
+  1668	
+  1669	int zynqmp_dp_probe(struct zynqmp_dpsub *dpsub)
+  1670	{
+  1671		struct platform_device *pdev = to_platform_device(dpsub->dev);
+  1672		struct drm_bridge *bridge;
+  1673		struct zynqmp_dp *dp;
+  1674		struct resource *res;
+  1675		int ret;
+  1676	
+  1677		dp = kzalloc(sizeof(*dp), GFP_KERNEL);
+  1678		if (!dp)
+  1679			return -ENOMEM;
+  1680	
+  1681		dp->dev = &pdev->dev;
+  1682		dp->dpsub = dpsub;
+  1683		dp->status = connector_status_disconnected;
+  1684	
+  1685		INIT_DELAYED_WORK(&dp->hpd_work, zynqmp_dp_hpd_work_func);
+  1686	
+  1687		/* Acquire all resources (IOMEM, IRQ and PHYs). */
+  1688		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dp");
+  1689		dp->iomem = devm_ioremap_resource(dp->dev, res);
+  1690		if (IS_ERR(dp->iomem)) {
+  1691			ret = PTR_ERR(dp->iomem);
+  1692			goto err_free;
+  1693		}
+  1694	
+  1695		dp->irq = platform_get_irq(pdev, 0);
+  1696		if (dp->irq < 0) {
+  1697			ret = dp->irq;
+  1698			goto err_free;
+  1699		}
+  1700	
+  1701		dp->reset = devm_reset_control_get(dp->dev, NULL);
+  1702		if (IS_ERR(dp->reset)) {
+  1703			ret = dev_err_probe(dp->dev, PTR_ERR(dp->reset),
+> 1704					    "failed to get reset: %ld\n");
+  1705			goto err_free;
+  1706		}
+  1707	
+  1708		ret = zynqmp_dp_reset(dp, false);
+  1709		if (ret < 0)
+  1710			goto err_free;
+  1711	
+  1712		ret = zynqmp_dp_phy_probe(dp);
+  1713		if (ret)
+  1714			goto err_reset;
+  1715	
+  1716		/* Initialize the bridge. */
+  1717		bridge = &dp->bridge;
+  1718		bridge->funcs = &zynqmp_dp_bridge_funcs;
+  1719		bridge->ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID
+  1720			    | DRM_BRIDGE_OP_HPD;
+  1721		bridge->type = DRM_MODE_CONNECTOR_DisplayPort;
+  1722		dpsub->bridge = bridge;
+  1723	
+  1724		/*
+  1725		 * Acquire the next bridge in the chain. Ignore errors caused by port@5
+  1726		 * not being connected for backward-compatibility with older DTs.
+  1727		 */
+  1728		ret = drm_of_find_panel_or_bridge(dp->dev->of_node, 5, 0, NULL,
+  1729						  &dp->next_bridge);
+  1730		if (ret < 0 && ret != -ENODEV)
+  1731			goto err_reset;
+  1732	
+  1733		/* Initialize the hardware. */
+  1734		dp->config.misc0 &= ~ZYNQMP_DP_MAIN_STREAM_MISC0_SYNC_LOCK;
+  1735		zynqmp_dp_set_format(dp, NULL, ZYNQMP_DPSUB_FORMAT_RGB, 8);
+  1736	
+  1737		zynqmp_dp_write(dp, ZYNQMP_DP_TX_PHY_POWER_DOWN,
+  1738				ZYNQMP_DP_TX_PHY_POWER_DOWN_ALL);
+  1739		zynqmp_dp_set(dp, ZYNQMP_DP_PHY_RESET, ZYNQMP_DP_PHY_RESET_ALL_RESET);
+  1740		zynqmp_dp_write(dp, ZYNQMP_DP_FORCE_SCRAMBLER_RESET, 1);
+  1741		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 0);
+  1742		zynqmp_dp_write(dp, ZYNQMP_DP_INT_DS, 0xffffffff);
+  1743	
+  1744		ret = zynqmp_dp_phy_init(dp);
+  1745		if (ret)
+  1746			goto err_reset;
+  1747	
+  1748		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 1);
+  1749	
+  1750		/*
+  1751		 * Now that the hardware is initialized and won't generate spurious
+  1752		 * interrupts, request the IRQ.
+  1753		 */
+  1754		ret = devm_request_threaded_irq(dp->dev, dp->irq, NULL,
+  1755						zynqmp_dp_irq_handler, IRQF_ONESHOT,
+  1756						dev_name(dp->dev), dp);
+  1757		if (ret < 0)
+  1758			goto err_phy_exit;
+  1759	
+  1760		dpsub->dp = dp;
+  1761	
+  1762		dev_dbg(dp->dev, "ZynqMP DisplayPort Tx probed with %u lanes\n",
+  1763			dp->num_lanes);
+  1764	
+  1765		return 0;
+  1766	
+  1767	err_phy_exit:
+  1768		zynqmp_dp_phy_exit(dp);
+  1769	err_reset:
+  1770		zynqmp_dp_reset(dp, true);
+  1771	err_free:
+  1772		kfree(dp);
+  1773		return ret;
+  1774	}
+  1775	
 
 -- 
-Best regards,
-Dmitry
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
