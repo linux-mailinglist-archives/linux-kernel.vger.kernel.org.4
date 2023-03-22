@@ -2,355 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CA96C5402
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194286C5406
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjCVSrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S231151AbjCVSrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjCVSrF (ORCPT
+        with ESMTP id S231153AbjCVSrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:47:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000133FBBF;
-        Wed, 22 Mar 2023 11:47:03 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 18:47:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679510821;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=orRDZYEpCWusGNjKZyrotkqv81Pm7TZ3tbx3cakZ/vk=;
-        b=M2VE+dbsQiK+UGM6hBpp7Eh7vsnupQA/svxvu1vKKKXdJ4c8j141uxxwhtF9wZspcXuUwo
-        k9QsMgreQuMky+vD9qiElT1hYZy4tBSZp6fUqVtNshqvbLZFsyS+i+qMnRiTXK4iLSRt9N
-        1VeEkRXsTBrtD/1IMqEjaSzWBi4piuRB9EFkLYIHE8kpk/lN+xmNdy/Y+RRtVplvzTfa38
-        90q72PxTTZV7+fgkbqCcuhPcUQllx0sC0yO1yFDBwiiZG1qcwiGju3s6hidtaqvt5PS9LF
-        r/fArEctBJdChHDv4hFSdQaaAzuWRfCpAWioeP5QQgJyhoKi3dy7OVuP/LY/kQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679510821;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=orRDZYEpCWusGNjKZyrotkqv81Pm7TZ3tbx3cakZ/vk=;
-        b=zjSN4xzCQvM74j0fshwSU/uqBVn+fjTG9Vc5bGeHF1pZD2Chr46gumrGjJncomrn/R35nM
-        3xCWaMsRF3B2zwAQ==
-From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Drop flags from __tdx_hypercall()
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 22 Mar 2023 14:47:13 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2138.outbound.protection.outlook.com [40.107.96.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E2666D0B;
+        Wed, 22 Mar 2023 11:47:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oSDgzX4NzxnlGi271+e+MMDwSHksalpRAqrcLw/D6FMzrF0WPpLl1lZVxSJRibXJiaC6bp3Sp45U6EPOha4Ckgx/tt/gGpsgxTXLFJm3+KrdtsXrVVtgnqYnNLiAJDzco7llqaxT18OF9cR/Y9dgd8sIbIbPEVxp5ibZxqTSOGd3Vi7Sfnv14HJmE9X1yCGcydHTHTyN1MPf2yAs/fBJyf6QsZIoUv7U7wqaLbunUkyGm279Hyjypn2gULqJzbDsJHhyyksb+gcv0/uuq/GBoDxXv2yBef08efJosTGSilStPsLKXrCcAo8/wEJesVbsm3kapSywOcZRe9CrrvaLTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YG5744UtzRrKKq7Zaqa79DMygwSS8PQEHsQz4/qpuaU=;
+ b=MReR/pr9lZ0cQEZrt2NAckTfVqbOJ24xcidX8IX+4dm+YQQiPj/EaTIxY+Q5faG1iUKG/p6OpcvwiSR63si+sy8JU0ULoyfrFxj8CLvgcPgWwR1mZ8xOdmvdfHY07peihSCcjhu/cr+MyCvNBx61b3eyIT9wJ4LxGdaiZoWsqpzpf8YKakydDN3FDtZ8FAfdkBJBaEfsVPEKBqAFjhsCdE1L71OKbzP7d1lG+f/zpQr5KhJDgYwnwhJD74w3WR2LqWzK9oEhUnImNen8M2E62LvWmt+IMPIGNZ8U8A2g/geQ8+C9HSg75BbnJt0EHwVupDYjyL9zLfQeGlWG4DrGdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hammerspace.com; dmarc=pass action=none
+ header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YG5744UtzRrKKq7Zaqa79DMygwSS8PQEHsQz4/qpuaU=;
+ b=R6/4xZmHJc/owLVivs9fbVG2stCJnaeRlULZDytvy5VHXdFepL5XXqB59Ou5UHzfseilsy7rlBKq5nUucw1NP4xRK8Epwo3kVsk+I2gsRHBjku1JGYbY2R/sgwjgWvDERmf1CQ8rvPsbbZOug+pU7BOMj0MMeBcWFxhEWg4cHXs=
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
+ by BLAPR13MB4610.namprd13.prod.outlook.com (2603:10b6:208:306::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 18:47:10 +0000
+Received: from CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::d23a:123:3111:e459]) by CH0PR13MB5084.namprd13.prod.outlook.com
+ ([fe80::d23a:123:3111:e459%5]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 18:47:09 +0000
+From:   Trond Myklebust <trondmy@hammerspace.com>
+To:     David Howells <dhowells@redhat.com>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jeffrey Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Anna Schumaker <anna@kernel.org>,
+        Charles Edward Lever <chuck.lever@oracle.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
+Subject: Re: [RFC PATCH] iov_iter: Add an iterator-of-iterators
+Thread-Topic: [RFC PATCH] iov_iter: Add an iterator-of-iterators
+Thread-Index: AQHZXOpZqMZ5cQQWc0+LGrWKGRAzsa8HI4mA
+Date:   Wed, 22 Mar 2023 18:47:09 +0000
+Message-ID: <438D8115-68AE-47C6-B942-485814B77416@hammerspace.com>
+References: <9C741BDB-31B0-460C-8FE7-F1C9B49002D5@hammerspace.com>
+ <8F8B62FD-0F16-4383-BB34-97E850DAA7AF@hammerspace.com>
+ <3DFBF27C-A62B-4AFE-87FD-3DF53FC39E8E@hammerspace.com>
+ <20230316152618.711970-1-dhowells@redhat.com>
+ <20230316152618.711970-28-dhowells@redhat.com>
+ <754534.1678983891@warthog.procyon.org.uk>
+ <809995.1678990010@warthog.procyon.org.uk>
+ <3416400.1679508945@warthog.procyon.org.uk>
+In-Reply-To: <3416400.1679508945@warthog.procyon.org.uk>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.400.51.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hammerspace.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH0PR13MB5084:EE_|BLAPR13MB4610:EE_
+x-ms-office365-filtering-correlation-id: 11d82513-ee7a-4745-bc40-08db2b05d7c9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ikQ3z6x9W4SbcJTg0VK7md25jVfOqWtNnrm/nb3Xn6vWaGlCLz396fQ8PkyAt89Ag0DKZ0r8j6JIuGSNbEmt5o6g2vZSyn0LRlzqJOgJEc2cIy47vEIRejSAg2dqtdWi1QYo5H4Q5Fb9e9MBNJ9oZBd6DztqQ2XCcoUqzF+TYlAPFMhFAvHFKWLwEU5N3IGdIn2IDaSkL3M5dr75UOujR6h1OwuGZk4kwDPok5mbZGyRjy6n8VWZ3ZOAYN4xu3hhc6vXaMM2fPx+HZIG5mocP1MswhEI/JIblQzaA8Lko1iw7lq9WEfeb/NO9ugYrn7/Uwd47+/aSL0CqgYoVWczjRG6iacZMwYp1ekRoEa/hs81lOlZ7dTugBV6/NyOp5J4mBrIaQhG/vPgtpTH2rFwwUI5iqqLSQ4Rj9TmpbAHTDXEotobIm+JOgzTXT/9vzuc/runF2xDGBm4xJS72tIqSoWN1N1pxKiL8pk26xP0J8U4qQDk8NxRLS7Cde7NiOwrm7WnES/SwYFW7ZM9dipGG5UQkWrnDltlcoowe4Rcry7WqkM4S7R17UL/7RuetY0m23MHJMOuF18FMbLvWe1gKiJqYtjcA++onT9MWXf2+g84fWSis5KzUwLy+m1tI/M7qllme4DzrARJvkYrc5bdWDhVCVqlhQ1/iiqmihLrdoE5TCHjMBGpeK4sp65QMvmnNzlDiwFsDMXQVk8CmU7M965XLZ3luaKVFqKOaO/ytpFKM9AHj7DBfUATDhscsfjDRXaUi/us9re/6Ol0Xtr2Vw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(136003)(346002)(39840400004)(366004)(451199018)(38100700002)(71200400001)(66946007)(4744005)(8676002)(66476007)(64756008)(33656002)(316002)(54906003)(36756003)(4326008)(66556008)(76116006)(8936002)(6916009)(41300700001)(66446008)(5660300002)(7416002)(2906002)(478600001)(122000001)(86362001)(2616005)(6506007)(186003)(38070700005)(53546011)(6512007)(6486002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Sau/7v9a5tbEX8S0+rcuqXIX/sQ8juZT9lmC6M4F85apXD3OVVC7oxdCXdX2?=
+ =?us-ascii?Q?S90tC9DCCLcROA7dmc/fd3mI+yx7+y5BuwkQpy+Jtf4j5KdhiqvOYwcgZegn?=
+ =?us-ascii?Q?A3e+PSWovI5QOMmyOQEUQxIF8jkryXstdx89l/IEaXDrSxLxNisIa2aA6TNR?=
+ =?us-ascii?Q?7sbFcrWDMdpFJPK2NBBBgBG8mL5CSI/us0Ujre18UWaDkw4RExjjR+1cD8NW?=
+ =?us-ascii?Q?hVPwHIaN+qJktLJ4/APffvMBpj57HQXqetGvR0S4ql6lnLYbOk/AaxkdwkIW?=
+ =?us-ascii?Q?Kofw9cBuCfuptEXk5Lpa/y6LyvGUT1LC+VtCg5HD5dzpuFle3EDt0yUBs9gp?=
+ =?us-ascii?Q?PoL2XZ+IcSd1qc/2fwLgjqWnokYa2Hog8X91Tq5nrucZmoOobf5lPkHHXEoV?=
+ =?us-ascii?Q?ZpZn2SAlrZRjXlMNI5nxvGrREHjT27bqn0jlQUc3eB7XUOOQZsSHW5OOmBSV?=
+ =?us-ascii?Q?h0JIEkB7MmfaqCFXIo0ul81/Jp5+Iuw/yp/xrQhKnnJBymgT0g6A4Gyfj+eN?=
+ =?us-ascii?Q?5STa8zywTPp67QPbpa3lJ75nl9J+LtDRpXaegoXTGxGWW+/EdB5HBQEUrKe9?=
+ =?us-ascii?Q?FzEuFL0nDW18X6yAak5Wz9vkS8u1wQX1jz5btu33q95qweVKXoqn6xrgZJCG?=
+ =?us-ascii?Q?yvRmOEsUS27zTS/vArmXYDaVUze2cxjlVcO1b0LaAgp0SlVKRhkaRc5Oka2G?=
+ =?us-ascii?Q?SwW2qXJumvbLRqHJTsJT1Gh7kzdm4ILnw4zZK4zHW6y55Wr4AJA0h4AjzzKJ?=
+ =?us-ascii?Q?nMeZSAf9/j5sl9CZrDQeDXVsfadwUECl2TU5UyGw+0Nf8TuZCAbbDfDx8/kT?=
+ =?us-ascii?Q?QvaAASpclDNY3Fwj28wzIrrNrddhs4eK/rJ26J5TMaWgJFC0YsjyezK4rSKr?=
+ =?us-ascii?Q?Bv39iXH8Cd/Ixp5T+Dti1a+aBBeu+nSO8DyFH6XFCYch0QAT418w0Z81eojz?=
+ =?us-ascii?Q?7w0bS+I+MJD3rY9jxWcEMtojA4FITkN+XkmB14Th17ieD+ppL9betUNEAMgB?=
+ =?us-ascii?Q?jYfNFEvhq7slGXhy48T8WvYVQAFpkLPt2HnkxdmYQLCAHu6HCLzXiWf5zN9M?=
+ =?us-ascii?Q?uXPMP4uHFYExY2RyA4t0f7Qr1ifXk0Uslb2Waz5BuAStEfXyrya92ydnqaYq?=
+ =?us-ascii?Q?/SmS+YsiQwKkZ7qPO2es9r4ozYCvIafzZtUD5gOsuQeYKJ/g1hmWbfjFL7V+?=
+ =?us-ascii?Q?GJbAdV+/Ox5yUmYE415E4GcfP3G3YsKyo2j0bBXUIcPVBtXNcAr1xusjqBN3?=
+ =?us-ascii?Q?jiR989JVnJlNl60EdIbU+V8U9UoMb76bgvaXoEXDRcHOPLtRa7qliaQ/OJ4s?=
+ =?us-ascii?Q?EdFwTJHAQbPagepWMRdbjoMKK+j6F9axDX2izqaNTovtotdDxr6iGIPCpfdj?=
+ =?us-ascii?Q?iZ7oOVu3y+CfVi5EazWwPhpFi4HKgP7OdGYKkgR9ONf7YWF0ee1vTSpnQJGW?=
+ =?us-ascii?Q?WreFSDnEUXJPuWeBSc4BmvNtaruM+KX34oKkuSTRjr3YEVZKPMe4K3VPQziE?=
+ =?us-ascii?Q?/scAV6gYNuhIsCi7mCz9sTFzS6qFNVc9sS1icERua8nnPYwxvDccp01BbjjN?=
+ =?us-ascii?Q?9nKB4ITzWoMB0FwUWx26Lbn0jOK3VjGvBjwqfJig4c2MCKqlX1D2qSnIGE2W?=
+ =?us-ascii?Q?XkoerbcCLK/9R+BqLufqiJY3fYRvWVbhsoFYphLGccKUTf/wzOGOzfsJxmja?=
+ =?us-ascii?Q?M3e8xQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6379EBE9A8BDA54E97A1E7F53F97313E@namprd13.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Message-ID: <167951082134.5837.2857157295741501011.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: hammerspace.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11d82513-ee7a-4745-bc40-08db2b05d7c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2023 18:47:09.8054
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xuioWdasXjJngL5UsVGhGvMgrDY6c5UNkN8xJd2f0LJXqZ/uoJ35m55ax0O4xCVGxUvz7I2LYhEQGVR63qL9jw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4610
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     7a3a401874bea02f568aa416ac29170d8cde0dc2
-Gitweb:        https://git.kernel.org/tip/7a3a401874bea02f568aa416ac29170d8cde0dc2
-Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Tue, 21 Mar 2023 03:35:11 +03:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 22 Mar 2023 11:36:05 -07:00
 
-x86/tdx: Drop flags from __tdx_hypercall()
+> On Mar 22, 2023, at 14:15, David Howells <dhowells@redhat.com> wrote:
+>=20
+> Trond Myklebust <trondmy@hammerspace.com> wrote:
+>=20
+>> Add an enum iter_type for ITER_ITER ? :-)
+>=20
+> Well, you asked for it...  It's actually fairly straightforward once
+> ITER_PIPE is removed.
+>=20
+> ---
+> iov_iter: Add an iterator-of-iterators
+>=20
+> Provide an I/O iterator that takes an array of iterators and iterates ove=
+r
+> them in turn.  Then make the sunrpc service code (and thus nfsd) use it.
+>=20
+> In this particular instance, the svc_tcp_sendmsg() sets up an array of
+> three iterators: once for the marker+header, one for the body and one
+> optional one for the tail, then sets msg_iter to be an
+> iterator-of-iterators across them.
 
-After TDX_HCALL_ISSUE_STI got dropped, the only flag left is
-TDX_HCALL_HAS_OUTPUT. The flag indicates if the caller wants to see
-tdx_hypercall_args updated based on the hypercall output.
+Cool! This is something that can be used on the receive side as well, so ve=
+ry useful. I can imagine it might also open up a few more use cases for ITE=
+R_XARRAY.
 
-Drop the flags and provide __tdx_hypercall_ret() that matches
-TDX_HCALL_HAS_OUTPUT semantics.
+Thanks!
+  Trond
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/20230321003511.9469-1-kirill.shutemov%40linux.intel.com
----
- arch/x86/boot/compressed/tdx.c    |  4 +-
- arch/x86/coco/tdx/tdcall.S        | 66 +++++++++++++++++-------------
- arch/x86/coco/tdx/tdx.c           | 18 ++++----
- arch/x86/include/asm/shared/tdx.h |  5 +--
- 4 files changed, 51 insertions(+), 42 deletions(-)
+_________________________________
+Trond Myklebust
+Linux NFS client maintainer, Hammerspace
+trond.myklebust@hammerspace.com
 
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 918a760..2d81d3c 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -26,7 +26,7 @@ static inline unsigned int tdx_io_in(int size, u16 port)
- 		.r14 = port,
- 	};
- 
--	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+	if (__tdx_hypercall_ret(&args))
- 		return UINT_MAX;
- 
- 	return args.r11;
-@@ -43,7 +43,7 @@ static inline void tdx_io_out(int size, u16 port, u32 value)
- 		.r15 = value,
- 	};
- 
--	__tdx_hypercall(&args, 0);
-+	__tdx_hypercall(&args);
- }
- 
- static inline u8 tdx_inb(u16 port)
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index 6a255e6..b193c0a 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -85,12 +85,12 @@ SYM_FUNC_START(__tdx_module_call)
- SYM_FUNC_END(__tdx_module_call)
- 
- /*
-- * __tdx_hypercall() - Make hypercalls to a TDX VMM using TDVMCALL leaf
-- * of TDCALL instruction
-+ * TDX_HYPERCALL - Make hypercalls to a TDX VMM using TDVMCALL leaf of TDCALL
-+ * instruction
-  *
-  * Transforms values in  function call argument struct tdx_hypercall_args @args
-  * into the TDCALL register ABI. After TDCALL operation, VMM output is saved
-- * back in @args.
-+ * back in @args, if \ret is 1.
-  *
-  *-------------------------------------------------------------------------
-  * TD VMCALL ABI:
-@@ -105,26 +105,18 @@ SYM_FUNC_END(__tdx_module_call)
-  *                       specification. Non zero value indicates vendor
-  *                       specific ABI.
-  * R11                 - VMCALL sub function number
-- * RBX, RBP, RDI, RSI  - Used to pass VMCALL sub function specific arguments.
-+ * RBX, RDX, RDI, RSI  - Used to pass VMCALL sub function specific arguments.
-  * R8-R9, R12-R15      - Same as above.
-  *
-  * Output Registers:
-  *
-  * RAX                 - TDCALL instruction status (Not related to hypercall
-  *                        output).
-- * R10                 - Hypercall output error code.
-- * R11-R15             - Hypercall sub function specific output values.
-+ * RBX, RDX, RDI, RSI  - Hypercall sub function specific output values.
-+ * R8-R15              - Same as above.
-  *
-- *-------------------------------------------------------------------------
-- *
-- * __tdx_hypercall() function ABI:
-- *
-- * @args  (RDI)        - struct tdx_hypercall_args for input and output
-- * @flags (RSI)        - TDX_HCALL_* flags
-- *
-- * On successful completion, return the hypercall error code.
-  */
--SYM_FUNC_START(__tdx_hypercall)
-+.macro TDX_HYPERCALL ret:req
- 	FRAME_BEGIN
- 
- 	/* Save callee-saved GPRs as mandated by the x86_64 ABI */
-@@ -134,9 +126,8 @@ SYM_FUNC_START(__tdx_hypercall)
- 	push %r12
- 	push %rbx
- 
--	/* Free RDI and RSI to be used as TDVMCALL arguments */
-+	/* Free RDI to be used as TDVMCALL arguments */
- 	movq %rdi, %rax
--	push %rsi
- 
- 	/* Copy hypercall registers from arg struct: */
- 	movq TDX_HYPERCALL_r8(%rax),  %r8
-@@ -171,14 +162,11 @@ SYM_FUNC_START(__tdx_hypercall)
- 	 * and are handled by callers.
- 	 */
- 	testq %rax, %rax
--	jne .Lpanic
-+	jne .Lpanic\@
- 
- 	pop %rax
- 
--	/* Copy hypercall result registers to arg struct if needed */
--	testq $TDX_HCALL_HAS_OUTPUT, (%rsp)
--	jz .Lout
--
-+	.if \ret
- 	movq %r8,  TDX_HYPERCALL_r8(%rax)
- 	movq %r9,  TDX_HYPERCALL_r9(%rax)
- 	movq %r10, TDX_HYPERCALL_r10(%rax)
-@@ -191,7 +179,8 @@ SYM_FUNC_START(__tdx_hypercall)
- 	movq %rsi, TDX_HYPERCALL_rsi(%rax)
- 	movq %rbx, TDX_HYPERCALL_rbx(%rax)
- 	movq %rdx, TDX_HYPERCALL_rdx(%rax)
--.Lout:
-+	.endif
-+
- 	/* TDVMCALL leaf return code is in R10 */
- 	movq %r10, %rax
- 
-@@ -208,9 +197,6 @@ SYM_FUNC_START(__tdx_hypercall)
- 	xor %rdi,  %rdi
- 	xor %rdx,  %rdx
- 
--	/* Remove TDX_HCALL_* flags from the stack */
--	pop %rsi
--
- 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
- 	pop %rbx
- 	pop %r12
-@@ -221,9 +207,33 @@ SYM_FUNC_START(__tdx_hypercall)
- 	FRAME_END
- 
- 	RET
--.Lpanic:
-+.Lpanic\@:
- 	call __tdx_hypercall_failed
- 	/* __tdx_hypercall_failed never returns */
- 	REACHABLE
--	jmp .Lpanic
-+	jmp .Lpanic\@
-+.endm
-+
-+/*
-+ *
-+ * __tdx_hypercall() function ABI:
-+ *
-+ * @args  (RDI)        - struct tdx_hypercall_args for input
-+ *
-+ * On successful completion, return the hypercall error code.
-+ */
-+SYM_FUNC_START(__tdx_hypercall)
-+	TDX_HYPERCALL ret=0
- SYM_FUNC_END(__tdx_hypercall)
-+
-+/*
-+ *
-+ * __tdx_hypercall_ret() function ABI:
-+ *
-+ * @args  (RDI)        - struct tdx_hypercall_args for input and output
-+ *
-+ * On successful completion, return the hypercall error code.
-+ */
-+SYM_FUNC_START(__tdx_hypercall_ret)
-+	TDX_HYPERCALL ret=1
-+SYM_FUNC_END(__tdx_hypercall_ret)
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 055300e..e146b59 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -66,7 +66,7 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
- 		.r15 = r15,
- 	};
- 
--	return __tdx_hypercall(&args, 0);
-+	return __tdx_hypercall(&args);
- }
- 
- /* Called from __tdx_hypercall() for unrecoverable failure */
-@@ -99,7 +99,7 @@ long tdx_kvm_hypercall(unsigned int nr, unsigned long p1, unsigned long p2,
- 		.r14 = p4,
- 	};
- 
--	return __tdx_hypercall(&args, 0);
-+	return __tdx_hypercall(&args);
- }
- EXPORT_SYMBOL_GPL(tdx_kvm_hypercall);
- #endif
-@@ -179,7 +179,7 @@ static void __noreturn tdx_panic(const char *msg)
- 	 * happens to return.
- 	 */
- 	while (1)
--		__tdx_hypercall(&args, 0);
-+		__tdx_hypercall(&args);
- }
- 
- static void tdx_parse_tdinfo(u64 *cc_mask)
-@@ -289,7 +289,7 @@ static u64 __cpuidle __halt(const bool irq_disabled)
- 	 * can keep the vCPU in virtual HLT, even if an IRQ is
- 	 * pending, without hanging/breaking the guest.
- 	 */
--	return __tdx_hypercall(&args, 0);
-+	return __tdx_hypercall(&args);
- }
- 
- static int handle_halt(struct ve_info *ve)
-@@ -326,7 +326,7 @@ static int read_msr(struct pt_regs *regs, struct ve_info *ve)
- 	 * can be found in TDX Guest-Host-Communication Interface
- 	 * (GHCI), section titled "TDG.VP.VMCALL<Instruction.RDMSR>".
- 	 */
--	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+	if (__tdx_hypercall_ret(&args))
- 		return -EIO;
- 
- 	regs->ax = lower_32_bits(args.r11);
-@@ -348,7 +348,7 @@ static int write_msr(struct pt_regs *regs, struct ve_info *ve)
- 	 * can be found in TDX Guest-Host-Communication Interface
- 	 * (GHCI) section titled "TDG.VP.VMCALL<Instruction.WRMSR>".
- 	 */
--	if (__tdx_hypercall(&args, 0))
-+	if (__tdx_hypercall(&args))
- 		return -EIO;
- 
- 	return ve_instr_len(ve);
-@@ -380,7 +380,7 @@ static int handle_cpuid(struct pt_regs *regs, struct ve_info *ve)
- 	 * ABI can be found in TDX Guest-Host-Communication Interface
- 	 * (GHCI), section titled "VP.VMCALL<Instruction.CPUID>".
- 	 */
--	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+	if (__tdx_hypercall_ret(&args))
- 		return -EIO;
- 
- 	/*
-@@ -407,7 +407,7 @@ static bool mmio_read(int size, unsigned long addr, unsigned long *val)
- 		.r15 = *val,
- 	};
- 
--	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+	if (__tdx_hypercall_ret(&args))
- 		return false;
- 	*val = args.r11;
- 	return true;
-@@ -541,7 +541,7 @@ static bool handle_in(struct pt_regs *regs, int size, int port)
- 	 * in TDX Guest-Host-Communication Interface (GHCI) section titled
- 	 * "TDG.VP.VMCALL<Instruction.IO>".
- 	 */
--	success = !__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
-+	success = !__tdx_hypercall_ret(&args);
- 
- 	/* Update part of the register affected by the emulated instruction */
- 	regs->ax &= ~mask;
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 4a03993..2631e01 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -7,8 +7,6 @@
- 
- #define TDX_HYPERCALL_STANDARD  0
- 
--#define TDX_HCALL_HAS_OUTPUT	BIT(0)
--
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
- 
-@@ -36,7 +34,8 @@ struct tdx_hypercall_args {
- };
- 
- /* Used to request services from the VMM */
--u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
-+u64 __tdx_hypercall(struct tdx_hypercall_args *args);
-+u64 __tdx_hypercall_ret(struct tdx_hypercall_args *args);
- 
- /* Called from __tdx_hypercall() for unrecoverable failure */
- void __tdx_hypercall_failed(void);
