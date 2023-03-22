@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72CA6C50B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78CC6C50BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCVQ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S230194AbjCVQaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCVQ3x (ORCPT
+        with ESMTP id S230266AbjCVQaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:29:53 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FC0559D8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:29:35 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id j4-20020a6b5504000000b00758646159fbso2917379iob.20
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:29:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679502560;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=myMUdX4Td4phlYiYoVFlcuB6n75wqpmUtnUNsWB1v2A=;
-        b=LrhkCOOxyo/Uceidz8+BK5ZSbBwZ95Z7jwIWo7mBgbfYwXjVDRcvH8B4O8/KBSz7o/
-         gqvjInthGGC1Jfy5/VlnhdYHRvsguARnDRH7kMXWiT4svLkXR4UOyrU0tgXJ4/NTaBsl
-         Pd6/8zMAa1hN1hcBHaLU4DszTxvIk+pZzU4FEGphytpyyPW0A/Dxcn6SPNpQaT9lZn3V
-         d8zCk/CsBMVIOGf8qSvypLGPrSj6LZ5CobOMqc+2MpNfVgIPs3ndS+kVrXr96mghbrUl
-         LaxpTbah3xX8wwfJ8xK2sMks4y/fvoh8yEOCAwuAnKT/7RIKY/u/oG9mesj+LKjxzz3H
-         aONA==
-X-Gm-Message-State: AO0yUKWQoC/7NZzhIYF2Pp3cqVkIwWut+WyP8tb2fNwl5pd4rDnIZDh1
-        6Wa/Fby97X7fCQdaEj+2Bey9msm2fjYxMk/7A+/KF5o1LQtD
-X-Google-Smtp-Source: AK7set8UtppURXyjZYz4V6LU8LYms2UD7afjr6Tk9mQTvSHTS04gvIpwMP8pz46U8NsrTOvMsx+hLnb5TJXgArCXYrztGZpxunVg
+        Wed, 22 Mar 2023 12:30:08 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638F31985;
+        Wed, 22 Mar 2023 09:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679502580; x=1711038580;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=p3dnl7fFSNgtYBXeztjh7NbkyVy0Vzk4yZ7yaerGz6A=;
+  b=RDE9d6UZqIzi6srmbsEmc1Ca3GlLnJjQcVjDDIH21d/1F49fee481Mg8
+   YHL1pnybsD6xdVYkJHDgSGm+CcX/FiDZl0AEqfb8DGM5wtXvCzs81AxNe
+   AClSWb9xzNfYc0jwVwri7bhdqmbBuuF1xFwf/vKgoXk1A3Q73MNyTF5Cg
+   VEw520Fh4ulT92PbLUAgNjdTQ3soE71nDAqzKPiMUK7jwsG9cmEgUJSBD
+   liSHs038F+JJxtkhQBVu3hpAEZVvjScHsZmYWl1ekDlH9qbMCOpbQvKre
+   T/wTcXB4p0VLbEmcY2zf4PNppO9aDbWzEvqEd5+/uGsUwXoaf7jL+uOQT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="425551535"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="425551535"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:29:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="927887793"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="927887793"
+Received: from mtfreder-mobl1.amr.corp.intel.com (HELO [10.209.35.23]) ([10.209.35.23])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:29:28 -0700
+Message-ID: <445ca5e5-e793-3b0a-b9b0-0dcefc6725c2@intel.com>
+Date:   Wed, 22 Mar 2023 09:29:28 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a02:9485:0:b0:3be:81d3:5af3 with SMTP id
- x5-20020a029485000000b003be81d35af3mr3321113jah.3.1679502559866; Wed, 22 Mar
- 2023 09:29:19 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 09:29:19 -0700
-In-Reply-To: <0000000000000ece5005eaa8f1d1@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007af84a05f77fa920@google.com>
-Subject: Re: [syzbot] [jfs?] UBSAN: shift-out-of-bounds in dbAllocBits
-From:   syzbot <syzbot+b9ba793adebb63e56dba@syzkaller.appspotmail.com>
-To:     dave.kleikamp@oracle.com, jfs-discussion@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liushixin2@huawei.com, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 22/34] x86/fred: FRED initialization code
+Content-Language: en-US
+To:     "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Li, Xin3" <xin3.li@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+References: <20230307023946.14516-1-xin3.li@intel.com>
+ <20230307023946.14516-23-xin3.li@intel.com>
+ <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
+ <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
+ <CAJhGHyC0_1xJD2R03-NoRVpMXFTHR4v8CdzyJOZe_k0rdv=NfQ@mail.gmail.com>
+ <20230320164950.GR2194297@hirez.programming.kicks-ass.net>
+ <SA1PR11MB67345D935A2368261E584085A8819@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <5f81c066-d82f-b66f-9c6d-a9e6a0d5aa4f@citrix.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <5f81c066-d82f-b66f-9c6d-a9e6a0d5aa4f@citrix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On 3/20/23 18:02, andrew.cooper3@citrix.com wrote:
+> There are fewer cases where a non-IST #VE ends up in a re-entrant fault
+> (IIRC, you can still manage it by unmapping the entry stack), but you're
+> still trusting the outer hypervisor to not e.g. unmap the SYSCALL entry
+> point.
 
-commit fad376fce0af58deebc5075b8539dc05bf639af3
-Author: Liu Shixin via Jfs-discussion <jfs-discussion@lists.sourceforge.net>
-Date:   Thu Nov 3 03:01:59 2022 +0000
+This is a general weakness of #VE.  But, the current Linux TDX guest
+implementation is not vulnerable to it.  If the host unmaps something
+unexpectedly, the guest will just die because of ATTR_SEPT_VE_DISABLE.
+No #VE:
 
-    fs/jfs: fix shift exponent db_agl2size negative
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/coco/tdx/tdx.c#n216
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12d90bf6c80000
-start commit:   a6afa4199d3d Merge tag 'mailbox-v6.1' of git://git.linaro...
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=b9ba793adebb63e56dba
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1322ae34880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10403c94880000
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: fs/jfs: fix shift exponent db_agl2size negative
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
