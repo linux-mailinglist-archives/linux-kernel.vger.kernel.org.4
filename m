@@ -2,92 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA19A6C527F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CAD6C5286
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCVRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S229624AbjCVRfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVRdn (ORCPT
+        with ESMTP id S229691AbjCVRfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:33:43 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B6AF21950;
-        Wed, 22 Mar 2023 10:33:41 -0700 (PDT)
-Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C619320FB5F9;
-        Wed, 22 Mar 2023 10:33:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C619320FB5F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679506420;
-        bh=YKj8pBxwtU/riqXskTaWyOA0jZcj9AQzuGvPjJCa4XQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BlJF/6Vdj2pLFuNHbcrc6uACppjvORzIZPX3zgVql2+LketMx0Zkvx+2EPq90aGnK
-         1QC2+3/A3+vhY5OkM5FjlJVMyIY8LCcpFxxIDUta0R0ej74sk4LbzSOrXsCIivXGGQ
-         dJhABc9XTKKWM4A/LfSI/bt55TJN39vwMUD912uY=
-Message-ID: <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
-Date:   Wed, 22 Mar 2023 18:33:37 +0100
+        Wed, 22 Mar 2023 13:35:05 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA5442F7;
+        Wed, 22 Mar 2023 10:35:03 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id m20-20020a9d6094000000b0069caf591747so10792937otj.2;
+        Wed, 22 Mar 2023 10:35:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679506503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4iBFMrGCXs7aCaesF7jmbgEDqOsWeQiS1SA88xm+gP4=;
+        b=imDww5pmXMMgcLK5+/NoK5x002oQhkFKrWjKCCNDNWkkfA4RFSUSu7LgNAzX6Q3OZa
+         qzpOp4WJmIAiR5NeLQ1JEl4n4KMyZFRn/Lxg/wS40nVdhc1qqjA46XS6lWzo9CzXE+40
+         rkl+ZmIguZOzwdygGeae8CKKvGIJmmaba/L4CFXPMxV55fIJhBGIifzXwnC3L8gBc3Ak
+         KcbrI0iU7WdLonRO/Qszmiw7XumhpuYehDwjAbtl1CiJw9pPx7twloKYlT5RMdnOuzLq
+         PATb5pEOEnDHQ4qObC6f7b5ez/AdejYJxM4YffANtAmPFY3hhCGPGenQl9EATeBtiqx+
+         +n5A==
+X-Gm-Message-State: AO0yUKWZYNtgzwH+fM9mtG0dK4hcKjyFOs3l70Z731nXHX90Q+fuqwAS
+        xzUtK7qpkoLuRA07F9QbQg==
+X-Google-Smtp-Source: AK7set8m4syrOCyuvx0eJfcZmRDih7NX1pwJMSBfADgJk63vKLPYr43ZCbmjV3U24/oNGz5bTTge9g==
+X-Received: by 2002:a05:6830:129a:b0:69f:289:1fe9 with SMTP id z26-20020a056830129a00b0069f02891fe9mr2058230otp.17.1679506502895;
+        Wed, 22 Mar 2023 10:35:02 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l26-20020a0568301d7a00b0069fa776d3c2sm162320oti.18.2023.03.22.10.34.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 10:34:58 -0700 (PDT)
+Received: (nullmailer pid 3970918 invoked by uid 1000);
+        Wed, 22 Mar 2023 17:34:56 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] dt-bindings: mailbox: Drop unneeded quotes
+Date:   Wed, 22 Mar 2023 12:34:48 -0500
+Message-Id: <20230322173449.3970718-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        linux-crypto@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 16:46, Borislav Petkov wrote:
-> On Mon, Mar 20, 2023 at 07:19:48PM +0000, Jeremi Piotrowski wrote:
->> This series is a prerequisite for nested SNP-host support on Hyper-V
-> 
-> I'm curious: what in the *world* is a sensible use case for doing this
-> thing at all?
-> 
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-This is actually not as crazy as it sounds.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml   | 4 ++--
+ .../devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml   | 4 ++--
+ .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml    | 4 ++--
+ Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml   | 4 ++--
+ Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml  | 4 ++--
+ .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
 
-What this does is it allows a normal (non-SNP) VM to host confidential (SNP)
-VMs. I say "normal" but not every VM is going to be able to do this, it needs
-to be running on AMD hardware and configured to have access to
-VirtualizationExtensions, a "HardwareIsolation" capability, and given a number
-of "hardware isolated guests" that it is allowed to spawn. In practice this
-will result in the VM seeing a PSP device, SEV-SNP related CPUID leafs, and
-have access to additional memory management instructions (rmpadjust/psmash).
-This allows the rest of the of KVM-SNP support to work.
+diff --git a/Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml b/Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
+index dfd26b998189..385809ed1569 100644
+--- a/Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
++++ b/Documentation/devicetree/bindings/mailbox/amlogic,meson-gxbb-mhu.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre, SAS
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/amlogic,meson-gxbb-mhu.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/amlogic,meson-gxbb-mhu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Amlogic Meson Message-Handling-Unit Controller
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+index 935937c67133..404477910f02 100644
+--- a/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/microchip,mpfs-mailbox.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/microchip,mpfs-mailbox.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/microchip,mpfs-mailbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Microchip PolarFire SoC (MPFS) MSS (microprocessor subsystem) mailbox controller
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+index d888ead09282..7f18fb10435d 100644
+--- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
++++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/qcom,apcs-kpss-global.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/qcom,apcs-kpss-global.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Qualcomm APCS global block
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml
+index bdfb4a8220c5..b526f9c0c272 100644
+--- a/Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/sprd-mailbox.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/sprd-mailbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Spreadtrum mailbox controller
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+index 0dfe05a04dd0..134fd223a02b 100644
+--- a/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/st,stm32-ipcc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/st,stm32-ipcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: STMicroelectronics STM32 IPC controller
+ 
+diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+index 2193141dd7fd..45df46343f6a 100644
+--- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mailbox/xlnx,zynqmp-ipi-mailbox.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mailbox/xlnx,zynqmp-ipi-mailbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Xilinx IPI(Inter Processor Interrupt) mailbox controller
+ 
+-- 
+2.39.2
 
-So instead of taking a bare-metal AMD server with 128 CPUs to run confidential
-workloads you'll be able to provision an Azure VM with say 8 CPUs and run up to
-8 SNP guests nested inside it.
-
-It's also useful for development, I participate in the kata-containers project
-where we're doing confidential-containers related work, and having access to
-test VMs to run SNP guests is going to make things much easier.
-
-If you're interested, I posted the other half of the patches required some time
-back: https://lore.kernel.org/lkml/20230213103402.1189285-1-jpiotrowski@linux.microsoft.com/#t
-
-Jeremi
