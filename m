@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3A96C5217
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF676C5208
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjCVRQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S230346AbjCVRPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjCVRP5 (ORCPT
+        with ESMTP id S230483AbjCVRPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:15:57 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDB36487D;
-        Wed, 22 Mar 2023 10:15:27 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so6717370wmq.4;
-        Wed, 22 Mar 2023 10:15:27 -0700 (PDT)
+        Wed, 22 Mar 2023 13:15:49 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F282265C6F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:21 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ew6so12882536edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505325;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rkv/eZYA1ncHp5FnV2ZWc3hgYnAx28S86QA9vmcXFCY=;
-        b=Y1mva2Bt3sUbKxLgEUS331CJbGxUc4z8kTQW8qiHWGhYlFKtm+d5z4sT40E5BeZAnU
-         zmTbCI7jbroe9NYBxGUmSli6LNVDPjND80ChbhWTqbqMQTmeQFWut9KmeBWK6Oze2lC/
-         XMSOorUzowjcU2xtHNrzoq2KH2pstW573lsB8WnzFVfhMaRkE9DfRr6WNyA7zC8DyxM5
-         ezxlCQtCmgPfCqlyksbIDKrgrRf3GiUR0yUd6xRU+MssyvH1FkYGDCerPctDto6lGHBz
-         8Y15jT3l6OnQMT6dkekgpPF5/XrSUY93u9g0B4U8+0dhNj+K7vmDen+jqdess+tpLnq/
-         gFrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505325;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20210112; t=1679505320; x=1682097320;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rkv/eZYA1ncHp5FnV2ZWc3hgYnAx28S86QA9vmcXFCY=;
-        b=Ym4+u8bbTQGNkewUBrLf+89vE0EFJBQp2f1crwUxZFboKTROF9ltZonY1CGepo7b0B
-         fkx3TbWQy5X65g3ScuieqtClCI8WanPeNBJ48+JipJYO3ODVNBxnVaTuW/0FOIcahfqe
-         sG5GvggHhzRz+Yeybsbnupmzxnw8Ez0BpMl3p7zcjHL7BGZDdOOX2Zbw3zfyYa5sg2nX
-         UXYJT36zy2h39gxUsy9QkhQ76CG3w6omniohZpYidpojpiDjbOy0nKFky4kUe+YyA1fF
-         4IBhjAm6mH+uh6wHSG1qj+NAXHs0xDDJps16PbJwAgL7Qt9K5WW+R/UAYPmHFgaRIHOw
-         /seA==
-X-Gm-Message-State: AO0yUKXRtoYO8Nfus6Ca8lhM39P1Xn6TGkhatEfoISd1YNOkTJJN2hW+
-        xRphLgxlzNfCLcVPlpGK9dk=
-X-Google-Smtp-Source: AK7set9VnMEykugk8ZYnkXuqK41bX1dzlvKsAXHEjr8i2NZBld0buKhQLcGYEcwxnBgVTtC7eRGfXw==
-X-Received: by 2002:a1c:7c0b:0:b0:3e2:1dac:b071 with SMTP id x11-20020a1c7c0b000000b003e21dacb071mr178053wmc.13.1679505325582;
-        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.24
+        bh=vKKb1zFXQ8RMG4G+1nCtOfg0xwq/cDe7kuYBhG6cOwc=;
+        b=f5pVr567swxunmcxX9IPCt7OG7W4StH1FMpqV8PBgfSgzwBaEtT2VquH0QH3b2rc2G
+         HcU4g4hZtGDdwo7OSvy7CU9dW6atp4QoAXDiskYKvJPoyvO3MQXZDBrKD1V2ed53eTun
+         OPiemkvFstE4aDHf6Hiagtj6yiM284VsRNgrUXU2qKzkybGq2jPZKJ530nVUMIXl/JMr
+         kEWaPNOjfnO3BbZBWxN6NcNAWgsEd6eTY+PIcmloN9gEk/o7B9TZw05yh+EiT86rA7qT
+         GDGK10HIvn5OJqcfJrACrCfbQ6teflsJnNyZaGsA1KtvLxL8+og5VXhHHKjVwxMO7asw
+         n+rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679505320; x=1682097320;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vKKb1zFXQ8RMG4G+1nCtOfg0xwq/cDe7kuYBhG6cOwc=;
+        b=mjhWpHWrqfc3p2TxZCBf+bXjq3HAt3Md+F4ecXduyvpf8q9Ll9KjirL0p2xDzj9wbh
+         XUPESg9VRs5RiBU+wX8GO4ZK9IgAOx3/GmxFZfK0gpTu8xtjQS5rwRUADHB3lf5AbrJ6
+         3nH/uA1jTIYkk9ijDOZXpb7pF4ie1t2H4ZwWgUcy1Q+4zhEqMtS4S1GHg+hvE8bpIaoA
+         ZmZQ/UnqZKQOdjgKkqUSYwDUNZwdGZHMK7Dfv2+BpcOHvc15zmcWKza27LFoX1r6LqU0
+         9Y3TrafKywxrJWaxNejoIMAvqO+wUObvPqx0hL+QUpUG+tqsdwvkWZ85AA/br9Bgaazy
+         s+5Q==
+X-Gm-Message-State: AO0yUKWZ9GKrwlqEkEpyHGxq9Szi6iV5PF2uu0+8eQhn+++qhZ/lnHyZ
+        ei8I+UkQNlPrqy/VjNZgnSA=
+X-Google-Smtp-Source: AK7set9QBuuXm2kHrKsCunaaLNx5vQzG5HCk3cBA72ihKO/OHTD4Cz40inrD/Qs41jPWo6rr9ZG7wQ==
+X-Received: by 2002:a17:906:74ca:b0:933:2e79:4632 with SMTP id z10-20020a17090674ca00b009332e794632mr5874525ejl.1.1679505320524;
+        Wed, 22 Mar 2023 10:15:20 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id zc14-20020a170906988e00b00927f6c799e6sm7544458ejb.132.2023.03.22.10.15.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
-        f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        william.zhang@broadcom.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v4 4/4] clk: bcm: Add BCM63268 timer clock and reset driver
-Date:   Wed, 22 Mar 2023 18:15:15 +0100
-Message-Id: <20230322171515.120353-5-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230322171515.120353-1-noltari@gmail.com>
-References: <20230322171515.120353-1-noltari@gmail.com>
+        Wed, 22 Mar 2023 10:15:20 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:15:18 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 6/8] staging: rtl8192e: Replace macro
+ container_of_work_rsl with standard macro
+Message-ID: <d75688b6f884c526f6046fac522b8ed87db1ca2f.1679504314.git.philipp.g.hortmann@gmail.com>
+References: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -78,276 +73,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for BCM63268 timer clock and reset controller.
+Replace macro container_of_work_rsl with standard macro container_of to
+increase readability.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- v4: add changes suggested by Stephen Boyd:
-  - Usage of of_device_get_match_data() isn't needed.
-  - Use devm_clk_hw_register_gate().
-  - Drop clk_hw_unregister_gate().
- v3: add missing <linux/io.h> include to fix build warning
- v2: add changes suggested by Stephen Boyd
+V1->V2: Changed subject line to be without “f.”
+        Changed description from function to macro
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 9 +++------
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c   | 3 +--
+ drivers/staging/rtl8192e/rtllib.h            | 1 -
+ drivers/staging/rtl8192e/rtllib_softmac.c    | 2 +-
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c | 3 +--
+ 5 files changed, 6 insertions(+), 12 deletions(-)
 
- drivers/clk/bcm/Kconfig              |   9 ++
- drivers/clk/bcm/Makefile             |   1 +
- drivers/clk/bcm/clk-bcm63268-timer.c | 215 +++++++++++++++++++++++++++
- 3 files changed, 225 insertions(+)
- create mode 100644 drivers/clk/bcm/clk-bcm63268-timer.c
-
-diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
-index 77266afb1c79..a972d763eb77 100644
---- a/drivers/clk/bcm/Kconfig
-+++ b/drivers/clk/bcm/Kconfig
-@@ -37,6 +37,15 @@ config CLK_BCM_63XX_GATE
- 	  Enable common clock framework support for Broadcom BCM63xx DSL SoCs
- 	  based on the MIPS architecture
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index ea07b350b62a..3244aef12c05 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -311,8 +311,7 @@ static const struct rtllib_qos_parameters def_qos_parameters = {
  
-+config CLK_BCM63268_TIMER
-+	bool "Broadcom BCM63268 timer clock and reset support"
-+	depends on BMIPS_GENERIC || COMPILE_TEST
-+	default BMIPS_GENERIC
-+	select RESET_CONTROLLER
-+	help
-+	  Enable timer clock and reset support for Broadcom BCM63268 DSL SoCs
-+	  based on the MIPS architecture.
-+
- config CLK_BCM_KONA
- 	bool "Broadcom Kona CCU clock support"
- 	depends on ARCH_BCM_MOBILE || COMPILE_TEST
-diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
-index edb66b44cb27..d0b6f4b1fb08 100644
---- a/drivers/clk/bcm/Makefile
-+++ b/drivers/clk/bcm/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_CLK_BCM_63XX)	+= clk-bcm63xx.o
- obj-$(CONFIG_CLK_BCM_63XX_GATE)	+= clk-bcm63xx-gate.o
-+obj-$(CONFIG_CLK_BCM63268_TIMER) += clk-bcm63268-timer.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona-setup.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm281xx.o
-diff --git a/drivers/clk/bcm/clk-bcm63268-timer.c b/drivers/clk/bcm/clk-bcm63268-timer.c
-new file mode 100644
-index 000000000000..3631a343f0a4
---- /dev/null
-+++ b/drivers/clk/bcm/clk-bcm63268-timer.c
-@@ -0,0 +1,215 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * BCM63268 Timer Clock and Reset Controller Driver
-+ *
-+ * Copyright (C) 2023 Álvaro Fernández Rojas <noltari@gmail.com>
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset-controller.h>
-+
-+#include <dt-bindings/clock/bcm63268-clock.h>
-+
-+#define BCM63268_TIMER_RESET_SLEEP_MIN_US	10000
-+#define BCM63268_TIMER_RESET_SLEEP_MAX_US	20000
-+
-+struct bcm63268_tclkrst_hw {
-+	void __iomem *regs;
-+	spinlock_t lock;
-+
-+	struct reset_controller_dev rcdev;
-+	struct clk_hw_onecell_data data;
-+};
-+
-+struct bcm63268_tclk_table_entry {
-+	const char * const name;
-+	u8 bit;
-+};
-+
-+static const struct bcm63268_tclk_table_entry bcm63268_timer_clocks[] = {
-+	{
-+		.name = "ephy1",
-+		.bit = BCM63268_TCLK_EPHY1,
-+	}, {
-+		.name = "ephy2",
-+		.bit = BCM63268_TCLK_EPHY2,
-+	}, {
-+		.name = "ephy3",
-+		.bit = BCM63268_TCLK_EPHY3,
-+	}, {
-+		.name = "gphy1",
-+		.bit = BCM63268_TCLK_GPHY1,
-+	}, {
-+		.name = "dsl",
-+		.bit = BCM63268_TCLK_DSL,
-+	}, {
-+		.name = "wakeon_ephy",
-+		.bit = BCM63268_TCLK_WAKEON_EPHY,
-+	}, {
-+		.name = "wakeon_dsl",
-+		.bit = BCM63268_TCLK_WAKEON_DSL,
-+	}, {
-+		.name = "fap1_pll",
-+		.bit = BCM63268_TCLK_FAP1,
-+	}, {
-+		.name = "fap2_pll",
-+		.bit = BCM63268_TCLK_FAP2,
-+	}, {
-+		.name = "uto_50",
-+		.bit = BCM63268_TCLK_UTO_50,
-+	}, {
-+		.name = "uto_extin",
-+		.bit = BCM63268_TCLK_UTO_EXTIN,
-+	}, {
-+		.name = "usb_ref",
-+		.bit = BCM63268_TCLK_USB_REF,
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+
-+static inline struct bcm63268_tclkrst_hw *
-+to_bcm63268_timer_reset(struct reset_controller_dev *rcdev)
-+{
-+	return container_of(rcdev, struct bcm63268_tclkrst_hw, rcdev);
-+}
-+
-+static int bcm63268_timer_reset_update(struct reset_controller_dev *rcdev,
-+				unsigned long id, bool assert)
-+{
-+	struct bcm63268_tclkrst_hw *reset = to_bcm63268_timer_reset(rcdev);
-+	unsigned long flags;
-+	uint32_t val;
-+
-+	spin_lock_irqsave(&reset->lock, flags);
-+	val = __raw_readl(reset->regs);
-+	if (assert)
-+		val &= ~BIT(id);
-+	else
-+		val |= BIT(id);
-+	__raw_writel(val, reset->regs);
-+	spin_unlock_irqrestore(&reset->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int bcm63268_timer_reset_assert(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	return bcm63268_timer_reset_update(rcdev, id, true);
-+}
-+
-+static int bcm63268_timer_reset_deassert(struct reset_controller_dev *rcdev,
-+				  unsigned long id)
-+{
-+	return bcm63268_timer_reset_update(rcdev, id, false);
-+}
-+
-+static int bcm63268_timer_reset_reset(struct reset_controller_dev *rcdev,
-+			       unsigned long id)
-+{
-+	bcm63268_timer_reset_update(rcdev, id, true);
-+	usleep_range(BCM63268_TIMER_RESET_SLEEP_MIN_US,
-+		     BCM63268_TIMER_RESET_SLEEP_MAX_US);
-+
-+	bcm63268_timer_reset_update(rcdev, id, false);
-+	/*
-+	 * Ensure component is taken out reset state by sleeping also after
-+	 * deasserting the reset. Otherwise, the component may not be ready
-+	 * for operation.
-+	 */
-+	usleep_range(BCM63268_TIMER_RESET_SLEEP_MIN_US,
-+		     BCM63268_TIMER_RESET_SLEEP_MAX_US);
-+
-+	return 0;
-+}
-+
-+static int bcm63268_timer_reset_status(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct bcm63268_tclkrst_hw *reset = to_bcm63268_timer_reset(rcdev);
-+
-+	return !(__raw_readl(reset->regs) & BIT(id));
-+}
-+
-+static struct reset_control_ops bcm63268_timer_reset_ops = {
-+	.assert = bcm63268_timer_reset_assert,
-+	.deassert = bcm63268_timer_reset_deassert,
-+	.reset = bcm63268_timer_reset_reset,
-+	.status = bcm63268_timer_reset_status,
-+};
-+
-+static int bcm63268_tclk_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	const struct bcm63268_tclk_table_entry *entry;
-+	struct bcm63268_tclkrst_hw *hw;
-+	struct clk_hw *clk;
-+	u8 maxbit = 0;
-+	int i, ret;
-+
-+	for (entry = bcm63268_timer_clocks; entry->name; entry++)
-+		maxbit = max(maxbit, entry->bit);
-+	maxbit++;
-+
-+	hw = devm_kzalloc(&pdev->dev, struct_size(hw, data.hws, maxbit),
-+			  GFP_KERNEL);
-+	if (!hw)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, hw);
-+
-+	spin_lock_init(&hw->lock);
-+
-+	hw->data.num = maxbit;
-+	for (i = 0; i < maxbit; i++)
-+		hw->data.hws[i] = ERR_PTR(-ENODEV);
-+
-+	hw->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(hw->regs))
-+		return PTR_ERR(hw->regs);
-+
-+	for (entry = bcm63268_timer_clocks; entry->name; entry++) {
-+		clk = devm_clk_hw_register_gate(dev, entry->name, NULL, 0,
-+						hw->regs, entry->bit,
-+						CLK_GATE_BIG_ENDIAN,
-+						&hw->lock);
-+		if (IS_ERR(clk))
-+			return PTR_ERR(clk);
-+
-+		hw->data.hws[entry->bit] = clk;
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-+					  &hw->data);
-+	if (ret)
-+		return ret;
-+
-+	hw->rcdev.of_node = dev->of_node;
-+	hw->rcdev.ops = &bcm63268_timer_reset_ops;
-+
-+	ret = devm_reset_controller_register(dev, &hw->rcdev);
-+	if (ret)
-+		dev_err(dev, "Failed to register reset controller\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id bcm63268_tclk_dt_ids[] = {
-+	{ .compatible = "brcm,bcm63268-timer-clocks" },
-+	{ /* sentinel */ }
-+};
-+
-+static struct platform_driver bcm63268_tclk = {
-+	.probe = bcm63268_tclk_probe,
-+	.driver = {
-+		.name = "bcm63268-timer-clock",
-+		.of_match_table = bcm63268_tclk_dt_ids,
-+	},
-+};
-+builtin_platform_driver(bcm63268_tclk);
+ static void _rtl92e_update_beacon(void *data)
+ {
+-	struct r8192_priv *priv = container_of_work_rsl(data, struct r8192_priv,
+-				  update_beacon_wq.work);
++	struct r8192_priv *priv = container_of(data, struct r8192_priv, update_beacon_wq.work);
+ 	struct net_device *dev = priv->rtllib->dev;
+ 	struct rtllib_device *ieee = priv->rtllib;
+ 	struct rtllib_network *net = &ieee->current_network;
+@@ -326,8 +325,7 @@ static void _rtl92e_update_beacon(void *data)
+ 
+ static void _rtl92e_qos_activate(void *data)
+ {
+-	struct r8192_priv *priv = container_of_work_rsl(data, struct r8192_priv,
+-				  qos_activate);
++	struct r8192_priv *priv = container_of(data, struct r8192_priv, qos_activate);
+ 	struct net_device *dev = priv->rtllib->dev;
+ 	int i;
+ 
+@@ -2033,8 +2031,7 @@ void rtl92e_commit(struct net_device *dev)
+ 
+ static void _rtl92e_restart(void *data)
+ {
+-	struct r8192_priv *priv = container_of_work_rsl(data, struct r8192_priv,
+-				  reset_wq);
++	struct r8192_priv *priv = container_of(data, struct r8192_priv, reset_wq);
+ 	struct net_device *dev = priv->rtllib->dev;
+ 
+ 	mutex_lock(&priv->wx_mutex);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+index ef4f736ce325..5a1cd22f5e25 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+@@ -142,8 +142,7 @@ void rtl92e_ips_leave(struct net_device *dev)
+ 
+ void rtl92e_ips_leave_wq(void *data)
+ {
+-	struct rtllib_device *ieee = container_of_work_rsl(data,
+-				     struct rtllib_device, ips_leave_wq);
++	struct rtllib_device *ieee = container_of(data, struct rtllib_device, ips_leave_wq);
+ 	struct net_device *dev = ieee->dev;
+ 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+ 
+diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+index aa39f8b2bf09..669a9d9a5d18 100644
+--- a/drivers/staging/rtl8192e/rtllib.h
++++ b/drivers/staging/rtl8192e/rtllib.h
+@@ -62,7 +62,6 @@
+ #define IW_CUSTOM_MAX	256	/* In bytes */
+ #endif
+ 
+-#define container_of_work_rsl(x, y, z) container_of(x, y, z)
+ #define container_of_dwork_rsl(x, y, z)				\
+ 	container_of(to_delayed_work(x), y, z)
+ 
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index 91fb5f150a00..b9886e83a6dc 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -1498,7 +1498,7 @@ static void rtllib_associate_step2(struct rtllib_device *ieee)
+ static void rtllib_associate_complete_wq(void *data)
+ {
+ 	struct rtllib_device *ieee = (struct rtllib_device *)
+-				     container_of_work_rsl(data,
++				     container_of(data,
+ 				     struct rtllib_device,
+ 				     associate_complete_wq);
+ 	struct rt_pwr_save_ctrl *psc = &ieee->pwr_save_ctrl;
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+index 06f1d6de5cc7..1f2fa711e60b 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+@@ -326,8 +326,7 @@ EXPORT_SYMBOL(rtllib_wx_set_mode);
+ 
+ void rtllib_wx_sync_scan_wq(void *data)
+ {
+-	struct rtllib_device *ieee = container_of_work_rsl(data,
+-				     struct rtllib_device, wx_sync_scan_wq);
++	struct rtllib_device *ieee = container_of(data, struct rtllib_device, wx_sync_scan_wq);
+ 	short chan;
+ 	enum ht_extchnl_offset chan_offset = 0;
+ 	enum ht_channel_width bandwidth = 0;
 -- 
-2.30.2
+2.39.2
 
