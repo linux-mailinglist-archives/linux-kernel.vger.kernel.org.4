@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290C46C54C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53876C54CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjCVTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S229825AbjCVTV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjCVTT4 (ORCPT
+        with ESMTP id S229639AbjCVTV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:19:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C8C2D71
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679512795; x=1711048795;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pg5NNlS4ad+LRq/5c7S6MbLvj8O8FQnKakg+GtVdxl4=;
-  b=iFzLDD8BAMF83HMb1g/3T+Ox6IMzgJ4QX0uchiTDUZIg0qyJvZ2lkt8L
-   4/LSEZXB/cqfif/+6WAiqxA17RACEhKvn3QTEidYJHKnMF42bDcPAv6TR
-   wLl8qPBHwOgiy93BpZ+r4F1kiXqbjuhHJWEn6u7V1MZhSBYN0Y/JsRyy6
-   EwoUv8F0xP28dK+XbX613tqgAzxB60/2LmWG2NS2z4VZ7MOkRIFgKU7kH
-   8XJKVgSt4nMkW1f5ioY5NVL0P2oLdII0CEAZH6cQAjtn/dhLb9kAmXEwC
-   cdkxc6CwTWSXWYoDhrrrb3KC3VJ/2kY0c1DjBoeK/fOOnmLcaNXDx+ii2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336822230"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="336822230"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 12:19:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="805969540"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="805969540"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Mar 2023 12:19:52 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pf3zz-000Dc0-1l;
-        Wed, 22 Mar 2023 19:19:51 +0000
-Date:   Thu, 23 Mar 2023 03:19:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hsia-Jun Li <randy.li@synaptics.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     oe-kbuild-all@lists.linux.dev, tzimmermann@suse.de,
-        ayaka@soulik.info, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, Hsia-Jun Li <randy.li@synaptics.com>,
-        laurent.pinchart@ideasonboard.com, ribalda@chromium.org,
-        nicolas@ndufresne.ca
-Subject: Re: [PATCH v6 2/2] Documentation/gpu: Add Synaptics tiling formats
- documentation
-Message-ID: <202303230311.mRoFe6oK-lkp@intel.com>
-References: <20230322082910.115371-3-randy.li@synaptics.com>
+        Wed, 22 Mar 2023 15:21:28 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B011F637E0;
+        Wed, 22 Mar 2023 12:21:26 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id y14so18216880wrq.4;
+        Wed, 22 Mar 2023 12:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679512885;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mJENhm8ShO0PGzLw3S99cPmiVxD1DZ2HE0JEziChhl8=;
+        b=OeXlljxwgtvGbBkwUfhHaORzvJTxBN3WOP00Do+v7XDi9ICYzhtwrVH8YazkLsL9cq
+         0ejnDRJwhJ/xf0rxcVJE+/ipoIfE03WQFsItUOa77GK21LyUHvT5bMil6uPNxR5m+OTv
+         CE1/Leb7/lId5w3Oa5wJqT3d94QhTvSBApjO2caHbm90kYleVSf/PXro7l75blpCew49
+         e5nMLmCw+vfKuQWMcHrGsVFQJ8vbddqnzyaM14F8tibc+/tqQuQMymZRG9Zdi4NCdTAQ
+         7Z+z+an9viYNOwOGLlSIJ9tmMX9OFCuEFailgMwUxgClacgP9S7z6lvgFsCISIshSOTc
+         dr5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679512885;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJENhm8ShO0PGzLw3S99cPmiVxD1DZ2HE0JEziChhl8=;
+        b=nMXFEXHF2IqyZ7fjcQ4MatV8jxDsGo49hOiuYQL3KHxoFIzN0wBQ3eEKwd7qTlr/rU
+         VEosBI0I4oPdazz546KZbOHIFlQAYyYPZqZ8HY5tf4Qx1HOhXuFNYWEU4lqxfoOALmFC
+         YSAnM3KL4pnZBFOKwCEoNdMBVTwvBi6CS4wM9ME7ev3LOA2CW3Y+gEfIjfjN8A9/USfs
+         4Q36lvm+XpOiZH7D61dM8NourDakYYe7G8IFZMi6yg6NObF+CeP5uqjHOpfSisJC/ohy
+         1JFdno5cY9y5+CJuh23gajT6liir/KFPH5bzVaCxN2rx/KT+if6Ip2fDXj9RfvafyR3M
+         I4rw==
+X-Gm-Message-State: AAQBX9eKy/oKvvj8XO1n5Oj6W3fXFnnvHZCupbIWEuPssK9Q6P4cVJpk
+        S/X1DGLcKFxyd6zaHc0Zry94ziHJPLx4kIjX
+X-Google-Smtp-Source: AKy350bnyPGFwFAGEI3db5guKJe9Ckq4bHVhrNmOKxHrndmmnvcLhbdDU5ftfgrIuVX0lTNfWv6xtQ==
+X-Received: by 2002:a5d:570e:0:b0:2d1:e3b7:26ad with SMTP id a14-20020a5d570e000000b002d1e3b726admr709815wrv.61.1679512884832;
+        Wed, 22 Mar 2023 12:21:24 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id r10-20020adfce8a000000b002cefcac0c62sm14595548wrn.9.2023.03.22.12.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 12:21:24 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 00:21:22 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        Coiby Xu <coiby.xu@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: qlge: avoid multiple assignments
+Message-ID: <ZBtVMs1wHWyyl2A6@khadija-virtual-machine>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322082910.115371-3-randy.li@synaptics.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsia-Jun,
+Linux kernel coding style does not allow multiple assignments on a
+single line.
+Avoid multiple assignments by assigning value to each variable in a
+separate line.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+---
+ drivers/staging/qlge/qlge_main.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hsia-Jun-Li/drm-fourcc-Add-Synaptics-VideoSmart-tiled-modifiers/20230322-163252
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230322082910.115371-3-randy.li%40synaptics.com
-patch subject: [PATCH v6 2/2] Documentation/gpu: Add Synaptics tiling formats documentation
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/51642395567738204b07b9c48e27d4a5298f1ca9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hsia-Jun-Li/drm-fourcc-Add-Synaptics-VideoSmart-tiled-modifiers/20230322-163252
-        git checkout 51642395567738204b07b9c48e27d4a5298f1ca9
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230311.mRoFe6oK-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/gpu/synaptics.rst:47: WARNING: Bullet list ends without a blank line; unexpected unindent.
->> Documentation/gpu/synaptics.rst:60: WARNING: Block quote ends without a blank line; unexpected unindent.
->> Documentation/gpu/synaptics.rst:38: WARNING: Error parsing content block for the "flat-table" directive: exactly one bullet list expected.
-
-vim +47 Documentation/gpu/synaptics.rst
-
-    37	
-  > 38	.. flat-table:: Synpatics Image Format Modifiers
-    39	
-    40		* - Identifier
-    41		  - Fourcc
-    42		  - Details
-    43	
-    44		* - DRM_FORMAT_MOD_SYNA_V4H1
-    45		  - DRM_FORMAT_NV12
-    46		  - The plain uncompressed 8 bits tile format. It sounds similar to
-  > 47		Intel's Y-tile. but it won't take any pixel from the next X direction
-    48		in a tile group. The line stride and image height must be aligned to
-    49		a multiple of 16. The height of chrominance plane would plus 8.
-    50	
-    51		* - DRM_FORMAT_MOD_SYNA_V4H3P8
-    52		  - DRM_FORMAT_NV15
-    53		  - The plain uncompressed 10 bits tile format. It stores pixel in 2D
-    54		3x4 tiles with a 8bits padding to each of tile. Then a tile is in a
-    55		128 bits cache line.
-    56	
-    57		* - DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED
-    58		  - DRM_FORMAT_NV12
-    59		  - Group of tiles and compressed variant of ``DRM_FORMAT_MOD_SYNA_V4H1``.
-  > 60	    A group of tiles would contain 64x4 pixels, where a tile has 1x4
-
+diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
+index 1ead7793062a..b35fb7db2a77 100644
+--- a/drivers/staging/qlge/qlge_main.c
++++ b/drivers/staging/qlge/qlge_main.c
+@@ -4085,7 +4085,11 @@ static struct net_device_stats *qlge_get_stats(struct net_device
+ 	int i;
+ 
+ 	/* Get RX stats. */
+-	pkts = mcast = dropped = errors = bytes = 0;
++	pkts = 0;
++	mcast = 0;
++	dropped = 0;
++	errors = 0;
++	bytes = 0;
+ 	for (i = 0; i < qdev->rss_ring_count; i++, rx_ring++) {
+ 		pkts += rx_ring->rx_packets;
+ 		bytes += rx_ring->rx_bytes;
+@@ -4100,7 +4104,9 @@ static struct net_device_stats *qlge_get_stats(struct net_device
+ 	ndev->stats.multicast = mcast;
+ 
+ 	/* Get TX stats. */
+-	pkts = errors = bytes = 0;
++	pkts = 0;
++	errors = 0;
++	bytes = 0;
+ 	for (i = 0; i < qdev->tx_ring_count; i++, tx_ring++) {
+ 		pkts += tx_ring->tx_packets;
+ 		bytes += tx_ring->tx_bytes;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
