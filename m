@@ -2,183 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE416C5535
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BCB6C5536
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCVTwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229682AbjCVTx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCVTwo (ORCPT
+        with ESMTP id S229936AbjCVTxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:52:44 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2045.outbound.protection.outlook.com [40.107.8.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613D862843;
-        Wed, 22 Mar 2023 12:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/q5e8NKMjlTtL0D+n/yvOpbvNl+BzKt1vnZDtCuPyRM=;
- b=p0GhG6cAKrmpRMUcQgoaDoMs7iifq8vLIzG3iPDttr3HIWcbLkKyUOCCJRX7t4Tn7GpbhxVDWP9Xmgar2cwMgCCxdLa78C7NI2ItHPPGezYK8SGYZmli5Z6noVTNwyH+hUll8nKYxW3UfwNs2WaKPYkgQLSIgmqm9nXJw/oGgXKsoRdRqs5+kEh+WEBktYUAzXmSb+y5ocTgFmteuLHR9C2T/9nIJyzd5ap6PA4BHXbwLArxumc1/CCrzgY992BCr/e2lI1aK84kQU/YiX2ZHLG0V6SN+DSt2wplSNf856h2eSARQygVGcaaTnDMiLfnHIpX65ddpCfW7p5nNKnpzw==
-Received: from DB6PR07CA0094.eurprd07.prod.outlook.com (2603:10a6:6:2b::32) by
- PAVPR03MB9359.eurprd03.prod.outlook.com (2603:10a6:102:30b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 19:52:38 +0000
-Received: from DB8EUR05FT060.eop-eur05.prod.protection.outlook.com
- (2603:10a6:6:2b:cafe::a1) by DB6PR07CA0094.outlook.office365.com
- (2603:10a6:6:2b::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.17 via Frontend
- Transport; Wed, 22 Mar 2023 19:52:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.86)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.86 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.86; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.86) by
- DB8EUR05FT060.mail.protection.outlook.com (10.233.238.218) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.17 via Frontend Transport; Wed, 22 Mar 2023 19:52:37 +0000
-Received: from outmta (unknown [192.168.82.132])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 9992D2008026E;
-        Wed, 22 Mar 2023 19:52:37 +0000 (UTC)
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (unknown [104.47.17.172])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 8435D20080075;
-        Wed, 22 Mar 2023 19:42:49 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bOhW4ENlk37ZQQvxW9+CbYnwZ0deeneYnRsMBFUwme8t1x4dXiy2RU1nyu4ENA6d+9LCBhXdvR+EH8O+rexs4rWakvuiJE/p9T6DsVr+XU0vQ9Rv4zjncHqdk6SwPMjNg4WRAEtbq+GS4eh5R++UXBUa3Qf4KLSZ8QLE9AdL42m6ntj10miS2B61v2tHzmOAKmU+wewQ/BAOF5cdDevNZy4LZtVJfheRaelk0/WUjpMTlW6OwU7LY8a9a4eGBqLWDP4u5R48snPya5Je2Jm8YLGcfcrJVlQQWG6Ux2cuB98NM99Fx1Xse/GgskEqapzgPvKALqJCflxgGPxmRvY6OA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/q5e8NKMjlTtL0D+n/yvOpbvNl+BzKt1vnZDtCuPyRM=;
- b=VQ2ylNS1sElwHE1kD/bymbAqbW027t1zwI/dODOe0roIqYNGVAocIuaTm977O3wuuhPD2bof/PjXlrxZTHCXhPrBDt4dQfBi9F2nA0CznBIaegMJvIbd7E0XVnd6WZ9P8dNVq1uSh/O71Ndgkzy0ZZvrZ+VBxHqQ5F4I2Ve5YK8r9ZmENbHA5hy8Bv1bYSGtIzcaVap3A7pLCRm9r0aM6lCmfXFeJoHgnZ5hwXGUcIwUwIZpkvVW64NakbgBdZzfJpBgyABZGnuWB++Arw3AHkff9U7RdRQuX9HXEMLqYFI//pRkjEtm6meY+HerGifvKs327bMrIv/KMbMOtyXPsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/q5e8NKMjlTtL0D+n/yvOpbvNl+BzKt1vnZDtCuPyRM=;
- b=p0GhG6cAKrmpRMUcQgoaDoMs7iifq8vLIzG3iPDttr3HIWcbLkKyUOCCJRX7t4Tn7GpbhxVDWP9Xmgar2cwMgCCxdLa78C7NI2ItHPPGezYK8SGYZmli5Z6noVTNwyH+hUll8nKYxW3UfwNs2WaKPYkgQLSIgmqm9nXJw/oGgXKsoRdRqs5+kEh+WEBktYUAzXmSb+y5ocTgFmteuLHR9C2T/9nIJyzd5ap6PA4BHXbwLArxumc1/CCrzgY992BCr/e2lI1aK84kQU/YiX2ZHLG0V6SN+DSt2wplSNf856h2eSARQygVGcaaTnDMiLfnHIpX65ddpCfW7p5nNKnpzw==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DU0PR03MB8137.eurprd03.prod.outlook.com (2603:10a6:10:32d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 19:52:28 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e%6]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 19:52:28 +0000
-Message-ID: <e17fd247-181f-ab33-d1d7-aafd18e87684@seco.com>
-Date:   Wed, 22 Mar 2023 15:52:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net v2] net: dpaa2-mac: Get serdes only for backplane
- links
-Content-Language: en-US
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20230304003159.1389573-1-sean.anderson@seco.com>
- <20230306080953.3wbprojol4gs5bel@LXL00007.wbi.nxp.com>
- <4cf5fd5b-cf89-4968-d2ff-f828ca51dd31@seco.com>
-In-Reply-To: <4cf5fd5b-cf89-4968-d2ff-f828ca51dd31@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR15CA0058.namprd15.prod.outlook.com
- (2603:10b6:208:237::27) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Wed, 22 Mar 2023 15:53:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC933588;
+        Wed, 22 Mar 2023 12:53:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF2C2622B0;
+        Wed, 22 Mar 2023 19:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56EAC433EF;
+        Wed, 22 Mar 2023 19:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679514802;
+        bh=EGfL4wE35fMS5oDaoUpz/hYODYp4mxJqoH76jji9RMc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ofPgkeX4sJ9kjTTldjKJui3kiZ1za7IA8Zq3EjhKjPyQhfJcMoGpCmVGoOAqd3Gbi
+         zTAX7t/jbnhnJlApGpEosA9WdhhaJ1ynxb44j/aaGuwkd6C9JLjmWX03TX/nkml8hz
+         LZzZ/KF/zKN8Qv/mrmMolP+MP1ko8sIg46We8B+qHzeFmaQP9igadP6LMo+QEPRp5S
+         g62QolZAHRs1pOdfOO1SejxzhICW5Vu/LM5L60nCvH0t3jEH5liPV3d6g8aNcqpG6b
+         XsmvU5aXystQf3ANqNaGwjoTXGxE7V7xp15rhF7L5TGYAz5tH1BpDD5zObq0vTISyD
+         eQRjck3nyJASA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 125334052D; Wed, 22 Mar 2023 16:53:19 -0300 (-03)
+Date:   Wed, 22 Mar 2023 16:53:19 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Thomas Richter <tmricht@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@redhat.com, svens@linux.ibm.com, gor@linux.ibm.com,
+        sumanthk@linux.ibm.com, hca@linux.ibm.com,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [Ping PATCH] perf/test: Fix wrong size for perf test Setup
+ struct perf_event_attr
+Message-ID: <ZBtcrxcljttJXyhM@kernel.org>
+References: <20230322094731.1768281-1-tmricht@linux.ibm.com>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DU0PR03MB8137:EE_|DB8EUR05FT060:EE_|PAVPR03MB9359:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d8ce1da-1f8d-4f14-ba0e-08db2b0efd23
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: kTHKhRR8EJRo+drE1xx5OPQToMNq5moS5RnFCVkZkWm/DqFhjtNZOCrKpuRoja/hnxROxfhFfvljycLcAYFzYPDM/FhgsODY6Pf8vUnoNUInvOOwtBK/a/WIkqX1/x1CprosJRCbYOQjpTPX5q2yPSjPC1vU8qyx9Ek4e9gb/ywVl8gafIOMwlPlSfXygP8c2ZWuxkKQ+rYBsebcnxhO7kMnrnuIZkir3mKw9F433Qb3bsiO44Hz68ahGZZ2GXrnBV+4l1iLL0azByteF/uhXFc+tDCLe70Id2TN0chZt4mrW2U3kjbbw+oO9WlvfrGr9bIXomryJikN505Tc2l55dVutTwltgF6KrlCh8pTsClwTlxANR6h9ON7XXvda6KvpT8TQZ1mA+O9HuylM7gxrrGksx9c5DvofYPPBDRVZEDomh06gyVjkSJbICpIoBqN1tGtU5Hi+v4zGLmUfhT26PGPfJGhjda/xbJ3bdV8j4c7EvVVmoiKMd3ykNavOIWZjJ1zwdvFc3tD9ZddQ6JHoadu0Sn2J8RSESJHSG/mQAqZiKtKVj79i4p2XGVdtYPBTDeHmT3uNG7dASHOrT6bjczrrm1oJLIvIV3DCHdO1hGSE9o3oeGjuornwqGhHiVmcO81Z/XlineeY3KLD/peRuWGGSuLWNyS0yNKuuGDDb5/PEk55LDd9hwkVHfB+9oGv/b6MRWcNJjKvrZyd7qUpwvxC+fU8L8YLgQZRMLfPM962xBXHM0Bt42uZgPCH+pUSd2M6Qw0b+6TApDDmkGaqA==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(376002)(346002)(39850400004)(366004)(451199018)(31696002)(86362001)(36756003)(52116002)(316002)(4326008)(186003)(66476007)(6916009)(66946007)(478600001)(8676002)(66556008)(53546011)(2616005)(6512007)(31686004)(6486002)(6666004)(26005)(54906003)(83380400001)(6506007)(38350700002)(38100700002)(5660300002)(44832011)(2906002)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB8137
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB8EUR05FT060.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: bce182a9-2f0a-40e0-b4b4-08db2b0ef71e
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6wtvR17Xxe3QJ3c/JS4QOrVeiFj7rBw5oUCeOpte464Jk0szq++M3flq6UIONRqehMeXJgJRKaWRhubE/nci/nPda/Y3Bt3nrfI0hSjU9beQwuAdnkGTnrrI74efX7xPblOIVI9oqXcPoSe30XD8FozzOXnq5S5gzxfarvvbcgoPT3tsZl2Zw/3w/RBSNVxc83ejNEd7FAiOAtXA6toW4xutHRzulhyaBwJI/xd3gvag9TDpCtOhtKkVnPkI/GkDXQOA6VL2rEYfR9tLfnc9/BPhT2WobHuu0uS9qfKHZXwtb2kyuxJ5MHmMhvmzQTZYS/aqL1kmzTekQILQg7/rT02J4ftAOJDafnxRQeQ6G9Iacu7p49rFI+qRkRvTgG/utbJmtWh9tYuSJCYsHifb1zSsWv5FZiORspp0wIdKqkLBS8n4ttbEFQcK8nBUjDkqmP9Ru6nA0gXPx+OHzTvL0Z/+ZoHwlZxfgsqYsqqgwQ+U8xKYyDvCjLA/oWMNWMNk5/Cr9xKJUGZxCzvLTIgCdhBOlAYE2n/84bynZr/SUw7n60O9j4/0d7HEXdaH8dceo0dxnFXy3eJ0Vii5PfRlFWGVAfyqvSXiKa0keTtdGXj9hxm2ro4ZjcyE3HoMxUNVlS3yu3UuSjxWQtQPS91XgwjMjotg5hGcG4XT5frgZWZaniaOrgMFVgxb9yMR+oR2IlCq4kM/T5T8dMej66lRjSnBvYdbL20LibAai4EMg7wLqBs/sBC+bQ5FCQpohUPnRhLXtcjkNNQ5wGYeqvdkrg==
-X-Forefront-Antispam-Report: CIP:20.160.56.86;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(396003)(39850400004)(136003)(376002)(346002)(451199018)(36840700001)(46966006)(40470700004)(36860700001)(356005)(7596003)(86362001)(31696002)(36756003)(82740400003)(4326008)(26005)(44832011)(2906002)(70586007)(7636003)(70206006)(5660300002)(8676002)(8936002)(82310400005)(47076005)(40480700001)(186003)(40460700003)(336012)(2616005)(83380400001)(41300700001)(6486002)(6666004)(478600001)(6506007)(316002)(6512007)(6916009)(54906003)(53546011)(34070700002)(31686004)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 19:52:37.8633
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d8ce1da-1f8d-4f14-ba0e-08db2b0efd23
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.86];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT060.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR03MB9359
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322094731.1768281-1-tmricht@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Em Wed, Mar 22, 2023 at 10:47:31AM +0100, Thomas Richter escreveu:
+> The test case ./perf test 'Setup struct perf_event_attr' fails.
+> On s390 this output is observed:
 
-On 3/6/23 11:13, Sean Anderson wrote:
-> On 3/6/23 03:09, Ioana Ciornei wrote:
->> On Fri, Mar 03, 2023 at 07:31:59PM -0500, Sean Anderson wrote:
->>> When commenting on what would become commit 085f1776fa03 ("net: dpaa2-mac:
->>> add backplane link mode support"), Ioana Ciornei said [1]:
->>> 
->>> > ...DPMACs in TYPE_BACKPLANE can have both their PCS and SerDes managed
->>> > by Linux (since the firmware is not touching these). That being said,
->>> > DPMACs in TYPE_PHY (the type that is already supported in dpaa2-mac) can
->>> > also have their PCS managed by Linux (no interraction from the
->>> > firmware's part with the PCS, just the SerDes).
->>> 
->>> This implies that Linux only manages the SerDes when the link type is
->>> backplane. Modify the condition in dpaa2_mac_connect to reflect this,
->>> moving the existing conditions to more appropriate places.
->> 
->> I am not sure I understand why are you moving the conditions to
->> different places. Could you please explain?
-> 
-> This is not (just) a movement of conditions, but a changing of what they
-> apply to.
-> 
-> There are two things which this patch changes: whether we manage the phy
-> and whether we say we support alternate interfaces. According to your
-> comment above (and roughly in-line with my testing), Linux manages the
-> phy *exactly* when the link type is BACKPLANE. In all other cases, the
-> firmware manages the phy. Similarly, alternate interfaces are supported
-> *exactly* when the firmware supports PROTOCOL_CHANGE. However, currently
-> the conditions do not match this.
-> 
->> Why not just append the existing condition from dpaa2_mac_connect() with
->> "mac->attr.link_type == DPMAC_LINK_TYPE_BACKPLANE"?
->> 
->> This way, the serdes_phy is populated only if all the conditions pass
->> and you don't have to scatter them all around the driver.
-> 
-> If we have link type BACKPLANE, Linux manages the phy, even if the
-> firmware doesn't support changing the interface. Therefore, we need to
-> grab the phy, but not fill in alternate interfaces.
-> 
-> This does not scatter the conditions, but instead moves them to exactly
-> where they are needed. Currently, they are in the wrong places.
-> 
-> --Sean
+Thanks, applied.
 
-I see this is marked as "changes requested" on patchwork. However, as explained
-above, I do not think that the requested changes are necessary. Please review the
-patch status.
+- Arnaldo
 
---Sean
+ 
+>  # ./perf test -Fvvvv 17
+>  17: Setup struct perf_event_attr                                    :
+>  --- start ---
+>  running './tests/attr/test-stat-C0'
+>  Using CPUID IBM,8561,703,T01,3.6,002f
+>  .....
+>  Event event:base-stat
+>       fd = 1
+>       group_fd = -1
+>       flags = 0|8
+>       cpu = *
+>       type = 0
+>       size = 128     <<<--- wrong, specified in file base-stat
+>       config = 0
+>       sample_period = 0
+>       sample_type = 65536
+>       ...
+>  'PERF_TEST_ATTR=/tmp/tmpgw574wvg ./perf stat -o \
+> 	/tmp/tmpgw574wvg/perf.data -e cycles -C 0 kill >/dev/null \
+> 	2>&1 ret '1', expected '1'
+>   loading result events
+>     Event event-0-0-4
+>       fd = 4
+>       group_fd = -1
+>       cpu = 0
+>       pid = -1
+>       flags = 8
+>       type = 0
+>       size = 136     <<<--- actual size used in system call
+>       .....
+>   compare
+>     matching [event-0-0-4]
+>       to [event:base-stat]
+>       [cpu] 0 *
+>       [flags] 8 0|8
+>       [type] 0 0
+>       [size] 136 128
+>     ->FAIL
+>     match: [event-0-0-4] matches []
+>   expected size=136, got 128
+>   FAILED './tests/attr/test-stat-C0' - match failure
+> 
+> This mismatch is caused by
+> commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
+> which enlarges the structure perf_event_attr by 8 bytes.
+> 
+> Fix this by adjusting the expected value of size.
+> 
+> Output after:
+>  # ./perf test -Fvvvv 17
+>  17: Setup struct perf_event_attr                                    :
+>  --- start ---
+>  running './tests/attr/test-stat-C0'
+>  Using CPUID IBM,8561,703,T01,3.6,002f
+>  ...
+>   matched
+>   compare
+>     matching [event-0-0-4]
+>       to [event:base-stat]
+>       [cpu] 0 *
+>       [flags] 8 0|8
+>       [type] 0 0
+>       [size] 136 136
+>       ....
+>    ->OK
+>    match: [event-0-0-4] matches ['event:base-stat']
+>  matched
+> 
+> Fixes: 09519ec3b19e ("perf: Add perf_event_attr::config3")
+> 
+> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/tests/attr/base-record       | 2 +-
+>  tools/perf/tests/attr/base-stat         | 2 +-
+>  tools/perf/tests/attr/system-wide-dummy | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
+> index 3ef07a12aa14..27c21271a16c 100644
+> --- a/tools/perf/tests/attr/base-record
+> +++ b/tools/perf/tests/attr/base-record
+> @@ -5,7 +5,7 @@ group_fd=-1
+>  flags=0|8
+>  cpu=*
+>  type=0|1
+> -size=128
+> +size=136
+>  config=0
+>  sample_period=*
+>  sample_type=263
+> diff --git a/tools/perf/tests/attr/base-stat b/tools/perf/tests/attr/base-stat
+> index 408164456530..a21fb65bc012 100644
+> --- a/tools/perf/tests/attr/base-stat
+> +++ b/tools/perf/tests/attr/base-stat
+> @@ -5,7 +5,7 @@ group_fd=-1
+>  flags=0|8
+>  cpu=*
+>  type=0
+> -size=128
+> +size=136
+>  config=0
+>  sample_period=0
+>  sample_type=65536
+> diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
+> index 8fec06eda5f9..2f3e3eb728eb 100644
+> --- a/tools/perf/tests/attr/system-wide-dummy
+> +++ b/tools/perf/tests/attr/system-wide-dummy
+> @@ -7,7 +7,7 @@ cpu=*
+>  pid=-1
+>  flags=8
+>  type=1
+> -size=128
+> +size=136
+>  config=9
+>  sample_period=4000
+>  sample_type=455
+> -- 
+> 2.39.1
+> 
+
+-- 
+
+- Arnaldo
