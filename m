@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202CF6C53B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAD46C53B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjCVS0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S231134AbjCVS0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjCVS0W (ORCPT
+        with ESMTP id S230496AbjCVS00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:26:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0162D148
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:26:21 -0700 (PDT)
+        Wed, 22 Mar 2023 14:26:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1865C1ACFD;
+        Wed, 22 Mar 2023 11:26:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BE6D62267
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:26:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7423C433D2;
-        Wed, 22 Mar 2023 18:26:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BABD1B81D85;
+        Wed, 22 Mar 2023 18:26:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A43C4339E;
+        Wed, 22 Mar 2023 18:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679509580;
-        bh=CNp6XvgesRx5FTnJf4WjIyqASMOSmavUiGLUcOYLzso=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RvQKIcTFfZK63U9V7DUJe46dhC1GCCLr2F2jPTZzLZY7J0DxnFPRjCPynY75AhixD
-         lH+8Pr4UfvBKblvicGrsVIoXbwfrVAU0s43W1jn+o0AY5gsKxcWjfzuh5Z9CBZwmmw
-         tacWhoRTrfiZYbIFze8TFaN2P2Us4icLJgBUbrWjTWem/Ziw8CEtszTL+XiUYGYJv7
-         BsP+B0oF/Lj1FZwZJqUCmzJBKV1y28cI/R6G6CKVnqIfk4OfQTOLQ5AlXfTDGyXz4/
-         0598mKJlgvN7E5S27seBH/wkMN1+y279EKja7AzCALguGG1fOPGMYTUWz7piz7w5Lt
-         eAjX0Ugz50xMg==
-Date:   Wed, 22 Mar 2023 11:26:17 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 08/11] arm64/static_call: Fix static call CFI
- violations
-Message-ID: <20230322182617.eyfphw4o2tm5yqi2@treble>
-References: <cover.1679456900.git.jpoimboe@kernel.org>
- <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
- <ZBry75KS3F+a0VM0@FVFF77S0Q05N>
- <20230322141933.GD2357380@hirez.programming.kicks-ass.net>
+        s=k20201202; t=1679509582;
+        bh=Gj//SU+GqNJVcAvg1NerL5+h1QTTjvjmzdALEMxq4XE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VSoBQS5iyxCUOUFLpB0RDnus8HHV4Lq8N7ODEhvT0HqT8ClGw3b8RlxNcRZEtvKdh
+         So+6vuad2V0nVQmVgFvnUoGXBwKQXOtACLrjaqsy6ccQSvukwYmZvUwx98aF2xby9M
+         ossP6QBJ5Vc0Eu7XF2f9UBjZ/JBz4AR8nVpWkZtJrdCDxD6V6YAg6rQ4VGWoHYtvsc
+         QLgreyQZgFc3F8AU9Al5sKDSSwWzyU9s/y2lE/7CHsWHdjhCqyX5HAyT8uy4O3Kjng
+         PJzNbFRSQb15jFtjtvdvyZpBKvquMal4eNmUvScyQr34UiNxLXvjPhIBpOxTmXCZfY
+         X1foNftxqlxXA==
+Date:   Wed, 22 Mar 2023 12:26:53 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] wifi: rndis_wlan: Replace fake flex-array with
+ flexible-array member
+Message-ID: <ZBtIbU77L9eXqa4j@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230322141933.GD2357380@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:19:33PM +0100, Peter Zijlstra wrote:
-> On Wed, Mar 22, 2023 at 12:22:07PM +0000, Mark Rutland wrote:
-> > On Tue, Mar 21, 2023 at 09:00:14PM -0700, Josh Poimboeuf wrote:
-> 
-> > > +++ b/arch/arm64/include/asm/static_call.h
-> > > @@ -0,0 +1,29 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef _ASM_ARM64_STATIC_CALL_H
-> > > +#define _ASM_ARM64_STATIC_CALL_H
-> > > +
-> > > +/*
-> > > + * Make a dummy reference to a function pointer in C to force the compiler to
-> > > + * emit a __kcfi_typeid_ symbol for asm to use.
-> > > + */
-> > > +#define GEN_CFI_SYM(func)						\
-> > > +	static typeof(func) __used __section(".discard.cfi") *__UNIQUE_ID(cfi) = func
-> > > +
-> > > +
-> > > +/* Generate a CFI-compliant static call NOP function */
-> > > +#define __ARCH_DEFINE_STATIC_CALL_CFI(name, insns)			\
-> > > +	asm(".align 4						\n"	\
-> 
-> Should this ^ be:
-> 
-> 	__ALIGN_STR "\n" \
+Zero-length arrays as fake flexible arrays are deprecated and we are
+moving towards adopting C99 flexible-array members instead.
 
-Ah right, you did mention that before.  Will do.
+Address the following warning found with GCC-13 and
+-fstrict-flex-array=3 enabled:
+drivers/net/wireless/rndis_wlan.c:2902:23: warning: array subscript 0 is outside array bounds of ‘struct ndis_80211_auth_request[0]’ [-Warray-bounds=]
 
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
+
+Link: https://github.com/KSPP/linux/issues/21
+Link: https://github.com/KSPP/linux/issues/274
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/wireless/legacy/rndis_wlan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/legacy/rndis_wlan.c b/drivers/net/wireless/legacy/rndis_wlan.c
+index bf72e5fd39cf..54c347fa54c4 100644
+--- a/drivers/net/wireless/legacy/rndis_wlan.c
++++ b/drivers/net/wireless/legacy/rndis_wlan.c
+@@ -209,7 +209,7 @@ struct ndis_80211_status_indication {
+ 	union {
+ 		__le32					media_stream_mode;
+ 		__le32					radio_status;
+-		struct ndis_80211_auth_request		auth_request[0];
++		DECLARE_FLEX_ARRAY(struct ndis_80211_auth_request, auth_request);
+ 		struct ndis_80211_pmkid_cand_list	cand_list;
+ 	} u;
+ } __packed;
 -- 
-Josh
+2.34.1
+
