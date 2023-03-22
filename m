@@ -2,119 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F7E6C406F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322906C4074
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCVChq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S230178AbjCVCiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 22:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCVChm (ORCPT
+        with ESMTP id S229922AbjCVCh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:37:42 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8795A6C8;
-        Tue, 21 Mar 2023 19:37:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VeOo7uX_1679452656;
-Received: from 30.240.114.229(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VeOo7uX_1679452656)
-          by smtp.aliyun-inc.com;
-          Wed, 22 Mar 2023 10:37:38 +0800
-Message-ID: <78481cfe-ce74-58c4-20ab-caf6de0c4125@linux.alibaba.com>
-Date:   Wed, 22 Mar 2023 10:37:34 +0800
+        Tue, 21 Mar 2023 22:37:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B7059436;
+        Tue, 21 Mar 2023 19:37:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B51D461F25;
+        Wed, 22 Mar 2023 02:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B62DDC433EF;
+        Wed, 22 Mar 2023 02:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679452671;
+        bh=ahMSQCrkvdtTzmw3vLAN58JOl0U83Mm+lJR6IhMp+pY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MnnyXCLlmTGLJb511gFy7XMUwbkT8RPYP3iaZ5+i+qV2cl2AiULWTUZHu/f9JuHBA
+         zVX0koAWRxjsQggOkbpjK6iOrP05QAOR+uOhXgrqOTucdYja/1wYYBNDxPP7HhTjAC
+         ErltnuvPPketKfZoed+UixkwMfFqXZUynFQM9cCg85R28OkMoeQOcmlemJNOCDqX4a
+         Sr7+hVU+zE1r5tfgmgLddo/db1AMbqamnNnxKnPttMMQacRmjk8Hg3J0du5bdAzwi0
+         Pb0gNa5R1NL2B4GuLBMkOqUvHVVO6n1+2S+CmRk79ATw8+CT7YWL+Gswvq9e538lmx
+         4IPIntVLXG7eg==
+Date:   Tue, 21 Mar 2023 19:41:03 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v7 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
+Message-ID: <20230322024103.fxht7qgaan4m2z5b@ripper>
+References: <20230322011442.34475-1-steev@kali.org>
+ <20230322011442.34475-5-steev@kali.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
- explicitly indicated by platform
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "jaylu102@amd.com" <jaylu102@amd.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
-References: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
- <SJ1PR11MB60836145DD10108B1FE13A4FFCBD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <91796ce2-2f63-4b07-3e44-dc2a2a98615e@linux.alibaba.com>
- <SJ1PR11MB60831F4A66DB77095B4314FDFC809@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <93bbc216-9ae5-c22f-b6a8-f6591aa92c2a@linux.alibaba.com>
- <SJ1PR11MB6083C029A3C014DD5D09A30BFC819@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <SJ1PR11MB6083C029A3C014DD5D09A30BFC819@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322011442.34475-5-steev@kali.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/3/22 AM12:09, Luck, Tony wrote:
->> Actually, firmware will do some platform dependent sanity checks and returns
->> different error codes. In this case, user injects to a invalid device, platform
->> returns "Invalid Access". And user is expected to see:
->>
->> 	# select a invalid core or device to inject
->> 	# echo 1 > error_inject
->> 	echo: write error: Invalid argument
->>
->> Then user is expected to check his injection argument first.
+On Tue, Mar 21, 2023 at 08:14:42PM -0500, Steev Klimaszewski wrote:
+> The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
+> add this.
 > 
-> Thanks. This makes sense. You want EINVAL when the user chose
-> bad arguments, and some other code for problem in BIOS.
+> Signed-off-by: Steev Klimaszewski <steev@kali.org>
 
-Yes, exactly.
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
+Regards,
+Bjorn
+
+> ---
+> Changes since v6:
+>  * Remove allowed-modes as they aren't needed
+>  * Remove regulator-allow-set-load
+>  * Set regulator-always-on because the wifi chip also uses the regulator
+>  * cts pin uses bias-bus-hold
+>  * Alphabetize uart2 pins
 > 
-> If the BIOS has an issue, is it possible, or likely, that it is a temporary
-> problem? If so, EBUSY may be OK. The message " Device or resource busy"
-> might encourage the user to wait and try again.
+> Changes since v5:
+>  * Update patch subject
+>  * Specify initial mode (via guess) for vreg_s1c
+>  * Drop uart17 definition
+>  * Rename bt_en to bt_default because configuring more than one pin
+>  * Correct (maybe) bias configurations
+>  * Correct cts gpio
+>  * Split rts-tx into two nodes
+>  * Drop incorrect link in the commit message
 > 
-> If it is not going to get better by itself, then one of:
+> Changes since v4:
+>  * Address Konrad's review comments.
 > 
-> #define EIO              5      /* I/O error */
-> #define ENXIO            6      /* No such device or address */
+> Changes since v3:
+>  * Add vreg_s1c
+>  * Add regulators and not dead code
+>  * Fix commit message changelog
 > 
-> might be a better choice.
-
-Yes, BIOS may temporarily not complete error injection (ACPI_EINJ_EXECUTE_OPERATION)
-on time, in which case, kernel return EIO.
-
-	for (;;) {
-		rc = apei_exec_run(&ctx, ACPI_EINJ_CHECK_BUSY_STATUS);
-		if (rc)
-			return rc;
-		val = apei_exec_ctx_get_output(&ctx);
-		if (!(val & EINJ_OP_BUSY))
-			break;
-		if (einj_timedout(&timeout))
-			return -EIO;
-
-In summary, you are asking that:
-
-- report -EINVAL for "Invalid Access" case
-- keeps reporting -EBUSY for "Unknown Failure" case unchanged.
-- and keeps EIO for temporarily time out unchanged.
-
-right? (This patch is doing so)
-
+> Changes since v2:
+>  * Remove dead code and add TODO comment
+>  * Make dtbs_check happy with the pin definitions
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
 > 
-> -Tony
-
-Thanks.
-
-Best Regards,
-Shuai
-
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index 92d365519546..05e66505e5cc 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -24,6 +24,7 @@ / {
+>  	aliases {
+>  		i2c4 = &i2c4;
+>  		i2c21 = &i2c21;
+> +		serial1 = &uart2;
+>  	};
+>  
+>  	wcd938x: audio-codec {
+> @@ -431,6 +432,14 @@ regulators-1 {
+>  		qcom,pmic-id = "c";
+>  		vdd-bob-supply = <&vreg_vph_pwr>;
+>  
+> +		vreg_s1c: smps1 {
+> +			regulator-name = "vreg_s1c";
+> +			regulator-min-microvolt = <1880000>;
+> +			regulator-max-microvolt = <1900000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-always-on;
+> +		};
+> +
+>  		vreg_l1c: ldo1 {
+>  			regulator-name = "vreg_l1c";
+>  			regulator-min-microvolt = <1800000>;
+> @@ -918,6 +927,32 @@ &qup0 {
+>  	status = "okay";
+>  };
+>  
+> +&uart2 {
+> +	pinctrl-0 = <&uart2_default>;
+> +	pinctrl-names = "default";
+> +
+> +	status = "okay";
+> +
+> +	bluetooth {
+> +		compatible = "qcom,wcn6855-bt";
+> +
+> +		vddio-supply = <&vreg_s10b>;
+> +		vddbtcxmx-supply = <&vreg_s12b>;
+> +		vddrfacmn-supply = <&vreg_s12b>;
+> +		vddrfa0p8-supply = <&vreg_s12b>;
+> +		vddrfa1p2-supply = <&vreg_s11b>;
+> +		vddrfa1p7-supply = <&vreg_s1c>;
+> +
+> +		max-speed = <3200000>;
+> +
+> +		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
+> +		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
+> +
+> +		pinctrl-0 = <&bt_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +};
+> +
+>  &qup1 {
+>  	status = "okay";
+>  };
+> @@ -1192,6 +1227,21 @@ hastings_reg_en: hastings-reg-en-state {
+>  &tlmm {
+>  	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  
+> +	bt_default: bt-default-state {
+> +		hstp-sw-ctrl-pins {
+> +			pins = "gpio132";
+> +			function = "gpio";
+> +			bias-pull-down;
+> +		};
+> +
+> +		hstp-bt-en-pins {
+> +			pins = "gpio133";
+> +			function = "gpio";
+> +			drive-strength = <16>;
+> +			bias-disable;
+> +		};
+> +	};
+> +
+>  	edp_reg_en: edp-reg-en-state {
+>  		pins = "gpio25";
+>  		function = "gpio";
+> @@ -1213,6 +1263,34 @@ i2c4_default: i2c4-default-state {
+>  		bias-disable;
+>  	};
+>  
+> +	uart2_default: uart2-default-state {
+> +		cts-pins {
+> +			pins = "gpio121";
+> +			function = "qup2";
+> +			bias-bus-hold;
+> +		};
+> +
+> +		rts-pins {
+> +			pins = "gpio122";
+> +			function = "qup2";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +
+> +		rx-pins {
+> +			pins = "gpio124";
+> +			function = "qup2";
+> +			bias-pull-up;
+> +		};
+> +
+> +		tx-pins {
+> +			pins = "gpio123";
+> +			function = "qup2";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +	};
+> +
+>  	i2c21_default: i2c21-default-state {
+>  		pins = "gpio81", "gpio82";
+>  		function = "qup21";
+> -- 
+> 2.39.2
+> 
