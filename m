@@ -2,112 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513526C4A7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3936C4A83
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjCVM3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S229983AbjCVMaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjCVM3t (ORCPT
+        with ESMTP id S230027AbjCVMaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:29:49 -0400
+        Wed, 22 Mar 2023 08:30:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC9734C38
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:29:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5417E4D630
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679488140;
+        s=mimecast20190719; t=1679488167;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/RmaCdFiflknr5F/EzALZWl8EQAEMlohlo+Bq/6n784=;
-        b=IGRiaXY47/CqfQ0HhrV9YXycAt4KYHUdiaYitJlJoN7/+XZUvAlCO1iMkYBinss56kGpGa
-        I4VfKnY1V4KbvSmUIJIRMYVBqB1s6p2S0mASlZ/PXfsonM0pQGzWH+3UHIak4lL0kzT2Ui
-        AQa5juRrC8KEnTtunlpOkaxNBguWy6c=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-119-Bdx8tM68P1OWCdIqpFDIvg-1; Wed, 22 Mar 2023 08:28:58 -0400
-X-MC-Unique: Bdx8tM68P1OWCdIqpFDIvg-1
-Received: by mail-qt1-f197.google.com with SMTP id s4-20020a05622a1a8400b003dbc6fc558aso8446623qtc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679488138;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/RmaCdFiflknr5F/EzALZWl8EQAEMlohlo+Bq/6n784=;
-        b=MT3ei08tWfYKnojRzB4Tzrgj1d2c4tXAIrxQwMDA/D+mXHmb7o5zbkiQzVBPyusj+z
-         68LAd9QTe+qmFXer1Mo9guvz0DKsIkToRUDx8WhwZx8+jMM37SkbuuJRAgr/QhXZsroh
-         961+Abqt4RLRBM+5cv5Qtq2NGb+JdGkIJ2iyT7v0gyesw9zrNKex9DifRqJzteTDGBZo
-         5xtLqetXkbv88QzFOsN00GjxlGNG8V1xdoyOOCQlvvwoHv2mk/6VqkZRuvI0qmrQ3tQj
-         eS50dfZKZyY8WcCMUzU8/j093Shl2X569DrrDvWiOPgsccWt008WKjTWnrNJvK9wfgod
-         RDZA==
-X-Gm-Message-State: AO0yUKX7Rw9OZNHi8OQWBazweFvSe4XxAuW6I3nirSL/Lpje8qKVBR7f
-        vAv2tR+8U6XB9ABzy/ptAbZLUP64QvMbAyOaCHKdgA55kPjw71GLWAdXR0HAzg02XcO0kVuYduY
-        uyl8+/cMydupGME9nvWwS5M5s
-X-Received: by 2002:ac8:7f8e:0:b0:3bf:d9d2:484f with SMTP id z14-20020ac87f8e000000b003bfd9d2484fmr5698836qtj.11.1679488138426;
-        Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8Gcxx8GdV/OeVtTOhHQR7MlyYiQ1UjJcEDEFgxn3029wWSBoOMbr8ofWD/oxpFcUXsweisow==
-X-Received: by 2002:ac8:7f8e:0:b0:3bf:d9d2:484f with SMTP id z14-20020ac87f8e000000b003bfd9d2484fmr5698812qtj.11.1679488138211;
-        Wed, 22 Mar 2023 05:28:58 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j13-20020a37ef0d000000b00729b7d71ac7sm11174245qkk.33.2023.03.22.05.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 05:28:57 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
-Date:   Wed, 22 Mar 2023 08:28:55 -0400
-Message-Id: <20230322122855.2570417-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DDZ81cwjjCLDnbq2gzVynfA+CfCd2gVU17eXqtriDsI=;
+        b=Y4UnSA5yJ2bi8XuAR5EbjQQ9EElRsmy52BEd3H420sCkGZ0YFjgZSV8mOVY0jt6wHIyZl2
+        +xP/UFbVcjAYkOTTt3x4LRQ6YPawHVY0nDtxZItsKswpLoXdW5fO27aorsrsobFtq8pPqW
+        8BZbsF0kgTdTEv9spyQFP/eV6xlZIYA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-389-b_yorsKQMHavVIILlI1VxA-1; Wed, 22 Mar 2023 08:29:24 -0400
+X-MC-Unique: b_yorsKQMHavVIILlI1VxA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E11C93C54277;
+        Wed, 22 Mar 2023 12:29:23 +0000 (UTC)
+Received: from redhat.com (unknown [10.2.16.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E3A4B1731B;
+        Wed, 22 Mar 2023 12:29:22 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 07:29:21 -0500
+From:   Eric Blake <eblake@redhat.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
+        corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] block nbd: send handle in network order
+Message-ID: <20230322122921.ac47tbbkddrb72gq@redhat.com>
+References: <20230317202749.419094-1-eblake@redhat.com>
+ <20230317202749.419094-3-eblake@redhat.com>
+ <ZBjqQckL7d5EJPlh@ovpn-8-29.pek2.redhat.com>
+ <20230321135900.ni4w5ichvjba7s4u@redhat.com>
+ <ZBpQLQtZP3Gj8MdS@ovpn-8-18.pek2.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBpQLQtZP3Gj8MdS@ovpn-8-18.pek2.redhat.com>
+User-Agent: NeoMutt/20220429
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
-  unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
-ath10k_get_ring_byte(unsigned int offset,
-^
-This function is not used so remove it.
+On Wed, Mar 22, 2023 at 08:47:41AM +0800, Ming Lei wrote:
+> On Tue, Mar 21, 2023 at 08:59:00AM -0500, Eric Blake wrote:
+> > On Tue, Mar 21, 2023 at 07:20:33AM +0800, Ming Lei wrote:
+> > > On Fri, Mar 17, 2023 at 03:27:46PM -0500, Eric Blake wrote:
+> > > > The NBD spec says the client handle (or cookie) is opaque on the
+> > > > server, and therefore it really doesn't matter what endianness we use;
+> > > > to date, the use of memcpy() between u64 and a char[8] has exposed
+> > > > native endianness when treating the handle as a 64-bit number.
+> > > 
+> > > No, memcpy() works fine for char[8], which doesn't break endianness.
+> > 
+> > I didn't say memcpy() breaks endianness, I said it preserves it.  By
+> > using memcpy(), you are exposing native endianness over the wire.
+> > Thus, even though a server should not be making any decisions based on
+> > the content of the handle (it is an opaque value handed back to the
+> > client unchanged), the current kernel client code DOES leak through
+> > information about whether the client is big- or little-endian;
+> 
+> How is the client cpu endianness leaked with handle defined as char[8]?
+> 
+> Suppose it is leaked, is it really one issue? Cause most of CPUs in
+> the world is little-endian.
+> 
+> > contrast to the NBD protocol saying that ALL data is
+> > network-byte-order.
+> 
+> That doesn't make sense for any data defined as char[] or byte which
+> needn't to be little or big endian.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/ath/ath10k/ce.c | 7 -------
- 1 file changed, 7 deletions(-)
+The NBD spec defines it as a 64-bit opaque quantity - that does not
+indicate whether it is a single integer or 8 characters, but because
+it is opaque, we don't have to care.  However, if we DO treat it as an
+integer (and the kernel client code DOES do that: internally, it is
+building up a u64 integer), it is wise to consider network endianness.
 
-diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
-index b656cfc03648..c27b8204718a 100644
---- a/drivers/net/wireless/ath/ath10k/ce.c
-+++ b/drivers/net/wireless/ath/ath10k/ce.c
-@@ -84,13 +84,6 @@ ath10k_set_ring_byte(unsigned int offset,
- 	return ((offset << addr_map->lsb) & addr_map->mask);
- }
- 
--static inline unsigned int
--ath10k_get_ring_byte(unsigned int offset,
--		     struct ath10k_hw_ce_regs_addr_map *addr_map)
--{
--	return ((offset & addr_map->mask) >> (addr_map->lsb));
--}
--
- static inline u32 ath10k_ce_read32(struct ath10k *ar, u32 offset)
- {
- 	struct ath10k_ce *ce = ath10k_ce_priv(ar);
+> 
+> > 
+> > > 
+> > > > However, since NBD protocol documents that everything else is in
+> > > > network order, and tools like Wireshark will dump even the contents of
+> > > > the handle as seen over the network, it's worth using a consistent
+> > > > ordering regardless of the native endianness.
+> > > > 
+> > > > Plus, using a consistent endianness now allows an upcoming patch to
+> > > > simplify this to directly use integer assignment instead of memcpy().
+> > > 
+> > > It isn't necessary, given ->handle is actually u64, which is handled by
+> > > nbd client only.
+> > 
+> > No, re-read the whole series.  ->handle is actually char[8].  Later in
+> > the series adds ->cookie as __be64 as an alias to ->handle, precisely
+> > so that we are converting the u64 'handle' in kernel code into a
+> > big-endian value on the wire, regardless of the host type, and making
+> > it impossible for a server to inspect the wire data and learn the
+> > kernel's endianness.
+> 
+> How does server learn the client cpu endianness in this way? Is it really
+> one issue?
+
+Not a security issue, merely a consistency one.  A server that
+inspects the handles being sent by the client, and checks whether they
+are sequential when treated as a big- or little-endian number, can
+infer whether the client is little-endian.  But there is nothing
+useful it can do with that knowledge.  Rather, the consistency factor
+is that if you have a wireshark plugin reading network traffic, and
+are trying to correlate it back to kernel traces, it is NICE if the
+wireshark plugin can display the SAME u64 number as the kernel was
+sticking into the field - and the way to do that is to have a fixed
+endianness of the u64 value over the wire.
+
+> 
+> > 
+> > > 
+> > > > 
+> > > > Signed-off-by: Eric Blake <eblake@redhat.com>
+> > > > 
+> > > > ---
+> > > > v2: new patch
+> > > > ---
+> > > >  drivers/block/nbd.c | 10 +++++++---
+> > > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+> > > > index 592cfa8b765a..8a9487e79f1c 100644
+> > > > --- a/drivers/block/nbd.c
+> > > > +++ b/drivers/block/nbd.c
+> > > > @@ -560,6 +560,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
+> > > >  	unsigned long size = blk_rq_bytes(req);
+> > > >  	struct bio *bio;
+> > > >  	u64 handle;
+> > > > +	__be64 tmp;
+> > > >  	u32 type;
+> > > >  	u32 nbd_cmd_flags = 0;
+> > > >  	int sent = nsock->sent, skip = 0;
+> > > > @@ -606,7 +607,8 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
+> > > >  		request.len = htonl(size);
+> > > >  	}
+> > > >  	handle = nbd_cmd_handle(cmd);
+> > > > -	memcpy(request.handle, &handle, sizeof(handle));
+> > > > +	tmp = cpu_to_be64(handle);
+> > > > +	memcpy(request.handle, &tmp, sizeof(tmp));
+> > > 
+> > > This way copies handle two times, really not fun.
+> > 
+> > Indeed.  And as mentioned in the commit message, it is temporary; the
+> > second copy goes away later in the series once we can use direct
+> > integer assignment.
+> 
+> Then please merge with following patch, given it is hard to review
+> temporary change.
+
+The underlying reason I split this patch out is that in v1 I got
+complaints that I was not taking endianness into account.  The patch
+series DOES cause an observable change (namely, a little-endian client
+now sends a value in big-endian order that it used to send in
+little-endian order) - but the change is harmless.  But if you want me
+to squash this patch back with 4/5 in v3, I'm happy to do that.
+
+Are there any other comments on this series that I should consider
+before spending time putting out a v3?
+
 -- 
-2.27.0
+Eric Blake, Principal Software Engineer
+Red Hat, Inc.           +1-919-301-3266
+Virtualization:  qemu.org | libvirt.org
 
