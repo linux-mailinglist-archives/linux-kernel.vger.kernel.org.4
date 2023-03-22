@@ -2,228 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA23F6C58F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9C26C58FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCVVwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S229997AbjCVVwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCVVwC (ORCPT
+        with ESMTP id S229949AbjCVVwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:52:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980E18B3F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679521919; x=1711057919;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AMEtLMT6hBX2lxRTrrgsFN4px87BZunEca3shlKUTpE=;
-  b=EeJgFJB7TplYseOQcc2guntcf8oxVwEwfw2FuIEiPSTm7fgyX307Q0JI
-   keazYA3zDUMtIDeq0VU2TNwYXRuSFsctV1QABfqhGE02eJvTorZDUHi8d
-   SbOIGc1YrnZUJZiTRubd5nABaTbAV+n+wQdq3wA35wcgDcdhLCGFsMccM
-   zfqhtnbyJkWBJcqyWmD+JdFqRaSaU996Qm1eTM/fpPyQ/DoTS7R++sC0d
-   p35nFc2fYGconBk4twMgiyFakM0wxFr8kNYCTnpxEuMa10nxF9Pf0wz3p
-   byqA2ZRboxVEsbbcUpM3NLHOrX00GH1jSgNKKhiQnMQ3vNraGI+SaQ3xd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338061650"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="338061650"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 14:51:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751232113"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="751232113"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 14:51:56 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pf6N9-000Dh2-30;
-        Wed, 22 Mar 2023 21:51:55 +0000
-Date:   Thu, 23 Mar 2023 05:51:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ye.xingchen@zte.com.cn, laurent.pinchart@ideasonboard.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        hyun.kwon@xilinx.com, airlied@gmail.com, daniel@ffwll.ch,
-        michal.simek@xilinx.com, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
-Message-ID: <202303230551.UxtIjawK-lkp@intel.com>
-References: <202303221625255005719@zte.com.cn>
+        Wed, 22 Mar 2023 17:52:49 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452C1815B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:52:47 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x3so78730521edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679521966;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ae1Fg1XrNO0U2G9oXfkthXql4Cz6bcgr28jd3JL36xQ=;
+        b=MhhTNWacisy6aVXWag8D/bV7u6OA1Z5BweJMma4y2nxaFetFPEd1946+0b+Ylqw2OC
+         Kq0bqlJVqcv+wj/EB+AR89gfXto7MWzPeQ06XW99ZVveKLV0jTKp/y923NdLqvt+vxFR
+         EvC+RZiHhkOoKODsvKtiG7i7dL/7U7Cy4wqFQCYgenxFfihZk8MbQGHtehsL37txDRmP
+         HaI/VNZRWWOE9cYic9BwSguWuef225+VL+y4CLBeK0EhhVQfEJQXazo9fB2vyvC7q+d/
+         M1zftfaWEuHy1y0n+E3dWI9/RF5noB59veAPSGQ8VjOn2dlZtoByfzbsf1UNLONrTLKg
+         Ofqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679521966;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ae1Fg1XrNO0U2G9oXfkthXql4Cz6bcgr28jd3JL36xQ=;
+        b=VbMMjuEE8ys7TyLFvSznP8T7C+3zaPmzIsl9BQUO7nUOz4pcI5UgShgfsQ8h5DiGqO
+         uTUq1crNnocowzBb1Wj2eolg1nbHPgaOObxsgSZd8suVWdFiIIC3Tv3+qOf6qQfFb3N4
+         W0G20OygbWF31P4dILbnpn8c8ZnY5dy0sYLZzhru4QcSG6BqcwfGZ1otJcVslLo3AzMP
+         n77JAc6CSN1sGej2/6Lw/mV9ZZe2/boetMwzoyEhyrZvIKYNRIQOw9nzJc2S9ZUt1v0w
+         WRB5KZqrD+tIU7Pme+vPk7sJQOqn0gcNtrL3ljrielF3iyAJWodyKBXGMCS0BuNqC7RF
+         PQug==
+X-Gm-Message-State: AO0yUKXfnI32HT4Lcfr7BxlNPsGSXm+RMdW3c3m23f8Eb6DY6LrPKO8M
+        MGgjHW+/dkUx3xxzMpzfLm1HZA==
+X-Google-Smtp-Source: AK7set+36xqihcRaSbhw9EZd7MivK51J2wyj0FDKumen87LrblW3ZwyU1x5vO2IU1KXVqvSiIqgKkA==
+X-Received: by 2002:a17:907:1628:b0:878:6477:d7 with SMTP id hb40-20020a170907162800b00878647700d7mr9845624ejc.72.1679521966159;
+        Wed, 22 Mar 2023 14:52:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:626d:5729:6e71:4c22? ([2a02:810d:15c0:828:626d:5729:6e71:4c22])
+        by smtp.gmail.com with ESMTPSA id t25-20020a170906065900b00939a61113d3sm2987235ejb.110.2023.03.22.14.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 14:52:45 -0700 (PDT)
+Message-ID: <c52a329d-8683-de82-9b55-209b99ac36c0@linaro.org>
+Date:   Wed, 22 Mar 2023 22:52:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202303221625255005719@zte.com.cn>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1679479634.git.quic_varada@quicinc.com>
+ <e34d8eddc1dda8bb0ff840a7dd18ca4dd6c62d22.1679479634.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e34d8eddc1dda8bb0ff840a7dd18ca4dd6c62d22.1679479634.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 22/03/2023 11:44, Varadarajan Narayanan wrote:
+> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> 
+> ---
+>  Changes in v2:
+> 	- Updated sections missed in previous patch
+> ---
+>  .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> index e81a382..beae44c 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> @@ -21,6 +21,7 @@ properties:
+>      enum:
+>        - qcom,ipq6018-qmp-usb3-phy
+>        - qcom,ipq8074-qmp-usb3-phy
+> +      - qcom,ipq9574-qmp-usb3-phy
+>        - qcom,msm8996-qmp-usb3-phy
+>        - qcom,msm8998-qmp-usb3-phy
+>        - qcom,qcm2290-qmp-usb3-phy
+> @@ -204,6 +205,27 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> +              - qcom,ipq9574-qmp-usb3-phy
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 2
 
-Thank you for the patch! Perhaps something to improve:
+toplevel defines minItems as 3, so are you sure this works? Did you test it?
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/202303221625255005719%40zte.com.cn
-patch subject: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
-config: arm-randconfig-r014-20230322 (https://download.01.org/0day-ci/archive/20230323/202303230551.UxtIjawK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/68f0f0c914304e81941645b5b2e06ca1424527f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
-        git checkout 68f0f0c914304e81941645b5b2e06ca1424527f9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/xlnx/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230551.UxtIjawK-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/xlnx/zynqmp_dp.c:1704:33: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-                                       "failed to get reset: %ld\n");
-                                                             ~~^
-   1 warning generated.
-
-
-vim +1704 drivers/gpu/drm/xlnx/zynqmp_dp.c
-
-  1664	
-  1665	/* -----------------------------------------------------------------------------
-  1666	 * Initialization & Cleanup
-  1667	 */
-  1668	
-  1669	int zynqmp_dp_probe(struct zynqmp_dpsub *dpsub)
-  1670	{
-  1671		struct platform_device *pdev = to_platform_device(dpsub->dev);
-  1672		struct drm_bridge *bridge;
-  1673		struct zynqmp_dp *dp;
-  1674		struct resource *res;
-  1675		int ret;
-  1676	
-  1677		dp = kzalloc(sizeof(*dp), GFP_KERNEL);
-  1678		if (!dp)
-  1679			return -ENOMEM;
-  1680	
-  1681		dp->dev = &pdev->dev;
-  1682		dp->dpsub = dpsub;
-  1683		dp->status = connector_status_disconnected;
-  1684	
-  1685		INIT_DELAYED_WORK(&dp->hpd_work, zynqmp_dp_hpd_work_func);
-  1686	
-  1687		/* Acquire all resources (IOMEM, IRQ and PHYs). */
-  1688		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dp");
-  1689		dp->iomem = devm_ioremap_resource(dp->dev, res);
-  1690		if (IS_ERR(dp->iomem)) {
-  1691			ret = PTR_ERR(dp->iomem);
-  1692			goto err_free;
-  1693		}
-  1694	
-  1695		dp->irq = platform_get_irq(pdev, 0);
-  1696		if (dp->irq < 0) {
-  1697			ret = dp->irq;
-  1698			goto err_free;
-  1699		}
-  1700	
-  1701		dp->reset = devm_reset_control_get(dp->dev, NULL);
-  1702		if (IS_ERR(dp->reset)) {
-  1703			ret = dev_err_probe(dp->dev, PTR_ERR(dp->reset),
-> 1704					    "failed to get reset: %ld\n");
-  1705			goto err_free;
-  1706		}
-  1707	
-  1708		ret = zynqmp_dp_reset(dp, false);
-  1709		if (ret < 0)
-  1710			goto err_free;
-  1711	
-  1712		ret = zynqmp_dp_phy_probe(dp);
-  1713		if (ret)
-  1714			goto err_reset;
-  1715	
-  1716		/* Initialize the bridge. */
-  1717		bridge = &dp->bridge;
-  1718		bridge->funcs = &zynqmp_dp_bridge_funcs;
-  1719		bridge->ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID
-  1720			    | DRM_BRIDGE_OP_HPD;
-  1721		bridge->type = DRM_MODE_CONNECTOR_DisplayPort;
-  1722		dpsub->bridge = bridge;
-  1723	
-  1724		/*
-  1725		 * Acquire the next bridge in the chain. Ignore errors caused by port@5
-  1726		 * not being connected for backward-compatibility with older DTs.
-  1727		 */
-  1728		ret = drm_of_find_panel_or_bridge(dp->dev->of_node, 5, 0, NULL,
-  1729						  &dp->next_bridge);
-  1730		if (ret < 0 && ret != -ENODEV)
-  1731			goto err_reset;
-  1732	
-  1733		/* Initialize the hardware. */
-  1734		dp->config.misc0 &= ~ZYNQMP_DP_MAIN_STREAM_MISC0_SYNC_LOCK;
-  1735		zynqmp_dp_set_format(dp, NULL, ZYNQMP_DPSUB_FORMAT_RGB, 8);
-  1736	
-  1737		zynqmp_dp_write(dp, ZYNQMP_DP_TX_PHY_POWER_DOWN,
-  1738				ZYNQMP_DP_TX_PHY_POWER_DOWN_ALL);
-  1739		zynqmp_dp_set(dp, ZYNQMP_DP_PHY_RESET, ZYNQMP_DP_PHY_RESET_ALL_RESET);
-  1740		zynqmp_dp_write(dp, ZYNQMP_DP_FORCE_SCRAMBLER_RESET, 1);
-  1741		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 0);
-  1742		zynqmp_dp_write(dp, ZYNQMP_DP_INT_DS, 0xffffffff);
-  1743	
-  1744		ret = zynqmp_dp_phy_init(dp);
-  1745		if (ret)
-  1746			goto err_reset;
-  1747	
-  1748		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 1);
-  1749	
-  1750		/*
-  1751		 * Now that the hardware is initialized and won't generate spurious
-  1752		 * interrupts, request the IRQ.
-  1753		 */
-  1754		ret = devm_request_threaded_irq(dp->dev, dp->irq, NULL,
-  1755						zynqmp_dp_irq_handler, IRQF_ONESHOT,
-  1756						dev_name(dp->dev), dp);
-  1757		if (ret < 0)
-  1758			goto err_phy_exit;
-  1759	
-  1760		dpsub->dp = dp;
-  1761	
-  1762		dev_dbg(dp->dev, "ZynqMP DisplayPort Tx probed with %u lanes\n",
-  1763			dp->num_lanes);
-  1764	
-  1765		return 0;
-  1766	
-  1767	err_phy_exit:
-  1768		zynqmp_dp_phy_exit(dp);
-  1769	err_reset:
-  1770		zynqmp_dp_reset(dp, true);
-  1771	err_free:
-  1772		kfree(dp);
-  1773		return ret;
-  1774	}
-  1775	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
