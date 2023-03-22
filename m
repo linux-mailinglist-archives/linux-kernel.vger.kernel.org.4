@@ -2,166 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624EE6C5814
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334196C581E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCVUs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230256AbjCVUuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbjCVUsT (ORCPT
+        with ESMTP id S231447AbjCVUtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:48:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1961C192;
-        Wed, 22 Mar 2023 13:45:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E72A622D3;
-        Wed, 22 Mar 2023 20:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49587C433D2;
-        Wed, 22 Mar 2023 20:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679517901;
-        bh=ehSjEP8B+CllK16lRcBtwTxSPIcoRjcA+H9GgjHZcW4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mTnMqe4jKC+EBxQ6tmWOGRPLZ3MTxwmiz585PzJddX7hKSbbam9sOEaQPvFa+kf4X
-         kuQdeYAGxhmDp2dltrTW2kaglp1RRvyLyO5/xGfteePWzTT+uF9QEWBoLDPFVdsAiX
-         aqkl9e25AZJSMODAPyPD9jNgCOPHt0RegQPYyI0PVtUoMC3hxxUTAUKIjU+Vxor+UX
-         vVLoOOaZcIfTnoYuEe8XKDQLlyhCInhJGmnJWOQZZPzJSM0QUIrBSuuTLaaM9QrnX0
-         Pu2nqlCNVaCLfMXJiuoroSK6FPTt8buZ5VvAlWML+W36tDAxf+KeUdfP32eqsAYdpD
-         9sDRa9Vz7tzTA==
-Date:   Wed, 22 Mar 2023 15:44:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     ville.syrjala@linux.intel.com, nirmal.patel@linux.intel.com,
-        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
-        hch@infradead.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH] PCI/ASPM: pci_enable_link_state: Add
- argument to acquire bus lock
-Message-ID: <20230322204459.GA2492596@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Wed, 22 Mar 2023 16:49:42 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2106.outbound.protection.outlook.com [40.107.95.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864AF52F5C;
+        Wed, 22 Mar 2023 13:46:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fT7vRo6mtiSDKcjn1ybzi6iARH8cgTIiL1nCJf4qT4GUuf+B076U4ohjviXlRMNiugTrYXWXRj5/2x12TWj4/vB0A+2PNXm9BwTnpiNGOQTBxDisjquw4UFt0eyz/9q0/fBMtODJWpD/Z0vGUBjh6ZgngvJ3T2OzRhhp1U9MkLNJac9ExuF9b92ZWqFr/7MbZOeJn4LV6VFlbUaCKsjvAIGsJ4DLBOiCuBiy3XmB0YnqWzlGIvB5U8xafKAPIq1j5GaPN/SJkNR8q9yoVw57OkWF7OdofzVVgfOfDdW+ARqq3ro+d5Hey3KXujptydBZBQMPwgK25faOidry49Qzkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vsMgamfoEyC0XWkgUEke/qFa5YwyQA4+xJk019e3auo=;
+ b=Q23w7rNV3LMblwUyR/glv0HK+0xdlxQFY6JAk6umskcjbkYyNxPxg9DMpeCiCvZs6sGeaWQgTTxgRYX2jxREddv2/4ueAvxd7gjrsHQfI3dR2aQMJ+OxOTBQe8bkRe65Y6o4Bta+h3+8Or36+jdWgyWT5uLC0bkECBAVRkQsuWxoGymu/73ou8zt0e68th1Tj9nogoiBz5uIRds7vS544TZaJD5A9ymY/1upAlx2k+NAPhkXQwWnDjEVo6rgEWfxacDNa1ouJAgTUbqv4L4f9qO/KSICzAkrgEds05GrKMrqB7Q7dz9g1xcww6chkbrcvcYu/sRiLuNmar0jinvsaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vsMgamfoEyC0XWkgUEke/qFa5YwyQA4+xJk019e3auo=;
+ b=HvoMhLSJQhp3oExO+il80U4UvAedT10WtYA8Ok2rW7Y1FLqVuwYE7QiosdX3GaMAHhBM2YwqUcgv7xv7Lh+htmNSNxnXEGfRFEDc7/VEkEz0YQAJSjc0EovdQ5PN0pZ6h199ygH69Kwh+f08VlkyOAzq+V1JDU8mcu44h/2G5Ko=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BLAPR13MB4706.namprd13.prod.outlook.com (2603:10b6:208:322::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 20:46:36 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 20:46:36 +0000
+Date:   Wed, 22 Mar 2023 21:46:28 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ashwin Dayanand Kamat <kashwindayan@vmware.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srivatsab@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        vsirnapalli@vmware.com, akaher@vmware.com, tkundu@vmware.com,
+        keerthanak@vmware.com
+Subject: Re: [PATCH v2] net/sctp: Make sha1 as default algorithm if fips is
+ enabled
+Message-ID: <ZBtpJO3ycoNHXj0p@corigine.com>
+References: <1679493880-26421-1-git-send-email-kashwindayan@vmware.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230321233849.3408339-1-david.e.box@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1679493880-26421-1-git-send-email-kashwindayan@vmware.com>
+X-ClientProxiedBy: AS4P190CA0038.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d1::17) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4706:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f22b4e3-7297-40cc-ca8a-08db2b168751
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ntmTL63VdDGwlvW16aJfqvAwrooKhA1LZzPriTB5emRwKw4poXqRqVG9VxCd98JoGWZOxOJxq0Cs021XtMcYq5X/Kn5AN8gy8c6T/xfkTEkGB5nvhWnfVGQDEHTwBTW8njixLUAWeKXbvqsqnFv8YJrQzopBahCfuD3t8lLMMyBZ7k6CgXxAYjoSXCtU7aE1M8cVcb2uNqLjg8bk4QXiu9V7AMtc09DZ9vmx53EpNvpNnnSNwrepzU2pFn92uq1I8B6ypz6oRV3PrTy5dy3othWLzmR+JDI7z2xcoXIho/nL0+rTGigeNdGnKjsfxwTVgDaXxS+Nqbji1h7+QHnV2LygB012xsyn2+xTFs8DldNQO2dJ/6ju7tU5p7x2SlXaQh97Qixo/4xzl/fwNbLI7MfDI2KMTXa52gklmR5zVda7M0xN31D7Ur8FpXra6zyYUjj+Cl1ZUnxs+xNeRRxUUd7KzvJ3/1b7gtHeqLc9L2rPBWLXYomqYVisUwbAtxRT2fy48strk5IHfIGgvC3F4vnsaOZOpO7y5C0aQrxEYl/ldN+fT6FUP8Ew69kkEO3FU0rd2JpaT+gQjvtXw1Fx6eAJFCayKQItkwS2V75PuRpRlSku8nkOCzIzNa2W7cqXEF+szcu3vwMmykmJdPbNwuNBdWxWBN/Yck7rnosgdQ9qqcwZSDGFLvpCelMhfhYz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(39840400004)(366004)(136003)(451199018)(38100700002)(86362001)(2906002)(83380400001)(66946007)(8676002)(54906003)(44832011)(316002)(4326008)(8936002)(41300700001)(36756003)(7416002)(6916009)(66556008)(66476007)(5660300002)(478600001)(6666004)(2616005)(6506007)(186003)(6512007)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jmHzQii8f5uG7p0xvUnFgQ0gh9XXpCyCwVrs2uW4+hmrhayhNp6WtDRBwBdX?=
+ =?us-ascii?Q?ZZOmA2RR4Lir+fc2SEfdSWmzXXqcUFaN2AUgPwQsuuIqoiCwCbSlKh2MF3IE?=
+ =?us-ascii?Q?45Kxt8TgfYvR/kpOHbtDcKQcZdDnQJlnyAlgtEkhJ3i4L+R6oj7wz9pldd8L?=
+ =?us-ascii?Q?eIg/2RpxoaI8gx8iiGnYZijt1OrVdGZN2OU3jqGbdjK+/6+b3UW8mpqZQzUd?=
+ =?us-ascii?Q?GrFJdlf8n+8Qfcau5H63ADBDsK/FyPiM3V6NfP4ArI6IoFgnUxyQs3LkKn7r?=
+ =?us-ascii?Q?3SWIyJtjLV19ce3R7zASsblagm3qb4Xn/qnAkD8i3wZJVod8NdulKbwF1Pr9?=
+ =?us-ascii?Q?u0NG8jPf3VvRXBO671/P96BdAt/iYTkADl56KhXBbRnuS113reMpgaK+Z/Xa?=
+ =?us-ascii?Q?RK4Owbw9IhzPrhu3umntTLbyTcGY6JCSNDTdHPzHHhQ2T3Gac9Lvvad4xe4x?=
+ =?us-ascii?Q?9QsMou2t+8h8XteUOpSrqgmUTOgwORAT67xDRTDjDDDjvnsdljbC35phAj93?=
+ =?us-ascii?Q?8PmKlgmrPTOkTKAjoJejDcEvZuTchhyWHdvylUWpDZvNIZG5mr6rr0Avyl5i?=
+ =?us-ascii?Q?nJFoQpTMt7I/UJ5q4qaIUVpdZ2UKmEfgFFtDn1kCeXPlNigYkaAbYo/CsFIe?=
+ =?us-ascii?Q?FXTdmuuvA9yHZFwyvFhUPoQQgavxQAdrBmAUqPfUN4zuhzKdgIi39mu4Td6o?=
+ =?us-ascii?Q?oV54aZ5l0wMKEZ4ifkJgXl/l4QgDDilRJBxZbFWHHPwlsH4K1lAwpML6B3K9?=
+ =?us-ascii?Q?FDj38sCKze78Op+xnAOT2E5WXFCR4FiW4wVb0kfC6uxlQ2HQ5IoA3obEPDZY?=
+ =?us-ascii?Q?dVTfpfNp0S7oEDlDJZeNSTT2G0cgiXby9W8Dfi1Caf7oPelup30Zdd4nc8j2?=
+ =?us-ascii?Q?m5oMVT5VYA/XyDsFTDngnLjX0oTCuOpVw4fqPMu0Q6zC4G+jaFxVP3GAJlHv?=
+ =?us-ascii?Q?vYZSY/+Qebtxq5KQ+zx18CwhuT5DpZMh7x5M0IV/7HhFGgToDNWqmmpbJsuO?=
+ =?us-ascii?Q?BRNir0sz2qvjSxKUAZh+xr3GVjfjWbVwn7jVK1i6/1JVK7dORD+rsv+EJzJ0?=
+ =?us-ascii?Q?vJBEcF793i1Q33Y6ssp4rxnSDVHweNBvNspHw0nTZYH15/R8GHzjn8OHfRw6?=
+ =?us-ascii?Q?5FluTpvQAc04FAi+JYKx+2Rs0UpjII30l2IdBANNTLGm8GDsZ1ASdBP2CjRQ?=
+ =?us-ascii?Q?8nzbtPxJCzsAWEDt0gyf9L0qvsOjx0OkQgaZCWI+XGCp14yTJgsOHCHpJvAQ?=
+ =?us-ascii?Q?iLNbPtJXwP59W4TpLcDO7z9uZxV4ggYzQuGIjJIIzROK/aFEU+aroQPaj7dp?=
+ =?us-ascii?Q?M9A30gSGS4jWJujXQhIwJZbOJc1Xp3m9sqeENHvFtYUvQoLmkybs8aQhZFl7?=
+ =?us-ascii?Q?apVKN75XYk54mIMlopj6AAXFFZi/vGQC7mveHsOQcHzvubsKHa47gILxBaJP?=
+ =?us-ascii?Q?22NOMitBMzaxE7EArTuMkglvy7MAYmybGYDeeZZOJzIMi12U2KZvl1mgvgXI?=
+ =?us-ascii?Q?3mtUlruwc1UcBqaS1G9ddNccjKVpa3dp210B1xWD24NCJOalX537WyJvIcn4?=
+ =?us-ascii?Q?hCNPP5TOnfmYlBqGpfVtoRDmow9gGOLQFu3vR84t9Pvw/rqaBo1SENQ0YtWE?=
+ =?us-ascii?Q?VFz0VmaipKux+/NTAWac0yC4LrrCfQPdqtpoYcxuT4s3/1DhtT1l5vugIany?=
+ =?us-ascii?Q?nEkMKQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f22b4e3-7297-40cc-ca8a-08db2b168751
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 20:46:36.4178
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cK+l69GiqqD+yV/Jlm1EWE54OltK7103VBpwc4a79jWOAq5/bMC2cSlFS9dnxynQEzYwm1Fh6EEz+1nWJocszjIljHvU+4BcmWJaTnbVsWk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4706
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On Tue, Mar 21, 2023 at 04:38:49PM -0700, David E. Box wrote:
-> The VMD driver calls pci_enabled_link_state as a callback from
-> pci_bus_walk. Both will acquire the pci_bus_sem lock leading to a lockdep
-> warning. Add an argument to pci_enable_link_state to set whether the lock
-> should be acquired. In the VMD driver, set the argument to false since the
-> lock will already be obtained by pci_bus_walk.
+On Wed, Mar 22, 2023 at 07:34:40PM +0530, Ashwin Dayanand Kamat wrote:
+> MD5 is not FIPS compliant. But still md5 was used as the default
+> algorithm for sctp if fips was enabled.
+> Due to this, listen() system call in ltp tests was failing for sctp
+> in fips environment, with below error message.
 > 
-> Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Fixes: de82f60f9c86 ("PCI/ASPM: Add pci_enable_link_state()")
-
-This means "if your kernel includes de82f60f9c86, you probably want to
-backport this fix to it."  But that's not the case here.  This patch
-is not fixing an issue with de82f60f9c86, so I don't think there's a
-reason to include a "Fixes" line.
-
-This patch is adding functionality that is only needed by some other
-patch, and it should be part of a series that also includes the patch
-that uses it to make sure they go together.
-
-Nit: I prefer to add "()" after function names in the commit log to
-make it more obvious that they're functions and help distinguish them
-from variables.
-
-> Link: https://lore.kernel.org/linux-pci/ZBjko%2FifunIwsK2v@intel.com/
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> [ 6397.892677] sctp: failed to load transform for md5: -2
+> 
+> Fix is to not assign md5 as default algorithm for sctp
+> if fips_enabled is true. Instead make sha1 as default algorithm.
+> 
+> Fixes: ltp testcase failure "cve-2018-5803 sctp_big_chunk"
+> Signed-off-by: Ashwin Dayanand Kamat <kashwindayan@vmware.com>
 > ---
->  drivers/pci/controller/vmd.c | 2 +-
->  drivers/pci/pcie/aspm.c      | 9 ++++++---
->  include/linux/pci.h          | 5 +++--
->  3 files changed, 10 insertions(+), 6 deletions(-)
+> v2:
+> the listener can still fail if fips mode is enabled after
+> that the netns is initialized. So taking action in sctp_listen_start()
+> and buming a ratelimited notice the selected hmac is changed due to fips.
+> ---
+>  net/sctp/socket.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 990630ec57c6..45aa35744eae 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -737,7 +737,7 @@ static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
->  	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
->  		return 0;
+> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+> index b91616f819de..a1107f42869e 100644
+> --- a/net/sctp/socket.c
+> +++ b/net/sctp/socket.c
+> @@ -49,6 +49,7 @@
+>  #include <linux/poll.h>
+>  #include <linux/init.h>
+>  #include <linux/slab.h>
+> +#include <linux/fips.h>
+>  #include <linux/file.h>
+>  #include <linux/compat.h>
+>  #include <linux/rhashtable.h>
+> @@ -8496,6 +8497,15 @@ static int sctp_listen_start(struct sock *sk, int backlog)
+>  	struct crypto_shash *tfm = NULL;
+>  	char alg[32];
 >  
-> -	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-> +	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL, false);
->  
->  	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
->  	if (!pos)
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 66d7514ca111..5b5a600bb864 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -1147,8 +1147,9 @@ EXPORT_SYMBOL(pci_disable_link_state);
->   *
->   * @pdev: PCI device
->   * @state: Mask of ASPM link states to enable
-> + * @sem: Boolean to acquire/release pci_bus_sem
->   */
-> -int pci_enable_link_state(struct pci_dev *pdev, int state)
-> +int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
->  {
->  	struct pcie_link_state *link = pcie_aspm_get_link(pdev);
->  
-> @@ -1165,7 +1166,8 @@ int pci_enable_link_state(struct pci_dev *pdev, int state)
->  		return -EPERM;
->  	}
->  
-> -	down_read(&pci_bus_sem);
-> +	if (sem)
-> +		down_read(&pci_bus_sem);
->  	mutex_lock(&aspm_lock);
->  	link->aspm_default = 0;
->  	if (state & PCIE_LINK_STATE_L0S)
-> @@ -1186,7 +1188,8 @@ int pci_enable_link_state(struct pci_dev *pdev, int state)
->  	link->clkpm_default = (state & PCIE_LINK_STATE_CLKPM) ? 1 : 0;
->  	pcie_set_clkpm(link, policy_to_clkpm_state(link));
->  	mutex_unlock(&aspm_lock);
-> -	up_read(&pci_bus_sem);
-> +	if (sem)
-> +		up_read(&pci_bus_sem);
->  
->  	return 0;
->  }
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index fafd8020c6d7..a6f9f24b39fd 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1707,7 +1707,7 @@ extern bool pcie_ports_native;
->  #ifdef CONFIG_PCIEASPM
->  int pci_disable_link_state(struct pci_dev *pdev, int state);
->  int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
-> -int pci_enable_link_state(struct pci_dev *pdev, int state);
-> +int pci_enable_link_state(struct pci_dev *pdev, int state, bool sem);
->  void pcie_no_aspm(void);
->  bool pcie_aspm_support_enabled(void);
->  bool pcie_aspm_enabled(struct pci_dev *pdev);
-> @@ -1716,7 +1716,8 @@ static inline int pci_disable_link_state(struct pci_dev *pdev, int state)
->  { return 0; }
->  static inline int pci_disable_link_state_locked(struct pci_dev *pdev, int state)
->  { return 0; }
-> -static inline int pci_enable_link_state(struct pci_dev *pdev, int state)
-> +static inline int
-> +pci_enable_link_state(struct pci_dev *pdev, int state, bool sem)
->  { return 0; }
->  static inline void pcie_no_aspm(void) { }
->  static inline bool pcie_aspm_support_enabled(void) { return false; }
+> +	if (fips_enabled && !strcmp(sp->sctp_hmac_alg, "md5")) {
+> +#if (IS_ENABLED(CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1))
+
+I'm probably misunderstanding things, but would
+IS_ENABLED(CONFIG_SCTP_COOKIE_HMAC_SHA1)
+be more appropriate here?
+
+> +		sp->sctp_hmac_alg = "sha1";
+> +#else
+> +		sp->sctp_hmac_alg = NULL;
+> +#endif
+> +		net_info_ratelimited("changing the hmac algorithm, as md5 is not supported when fips is enabled");
+> +	}
+> +
+>  	/* Allocate HMAC for generating cookie. */
+>  	if (!sp->hmac && sp->sctp_hmac_alg) {
+>  		sprintf(alg, "hmac(%s)", sp->sctp_hmac_alg);
 > -- 
-> 2.34.1
+> 2.39.0
 > 
