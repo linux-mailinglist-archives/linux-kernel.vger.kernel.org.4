@@ -2,246 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420E36C47DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F396C47E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCVKnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S230270AbjCVKpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjCVKnD (ORCPT
+        with ESMTP id S229671AbjCVKpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:43:03 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1254F8A5F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:43:02 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id r7so12281562uaj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679481781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWIfm8SVDkTKI9ViVU3tx16H6A9LBzPzgrDU3mJSn9I=;
-        b=aoud6el4BR9ejtkWiXguKp6tnrawQLb18JKrETfYB9OKoY8aunkiEZ2poeM88qn77v
-         BPEJsbFSUzDg2eulI4WgG7lMKpskFVbu0QqGX0/8snR8Hj/9SDOG5r648sKSM4ncLAui
-         ZdIC4OtyuFONaRPETZI2JTA7Au5c8gN+JaSjuvvygdhOOkRCzeBRweaLKm9i1AT6U/bY
-         xI9I2NRhmJ1ko3BxyqBT6OuLm8PEbKDpFiJJTVqwtBhMgEKEQ83fdEIjuQ4XJjTFtxt2
-         urgAayzSkYL+LJmHshE2TiRCn1GT+0jh4WMcA+q2AjwXA69c6XbzlUgHxpIUb17tniiv
-         7gUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679481781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zWIfm8SVDkTKI9ViVU3tx16H6A9LBzPzgrDU3mJSn9I=;
-        b=rW7LhXKpnMMWFru998K6GenibFaJmBuvq1x9EK2X9JvbYj5d1tTKtiEpOm4/BAGnHI
-         kH/I6cB+Yn9+nfRKbOPcnkyqoMPEWwt38DldBZxGg2G2rzCHIAQdsTXXaXdGCv+pddUf
-         5t5Wb7bEq1gYDCpAncBWyQ9OicWoKiYeJhdDh2xwUcooWwfSDNZAYMStajBxeLfkxeEK
-         +Tbb2MAmEQ7eTIdW/4RA7nTVNakE2VwRfqwJK278qDVo/OL5aroL/hdplBNs/3EnFfw5
-         8If5uR9Eo4SzVQZdsnQ3433Zv2aJhfjKS/hn12XiDKvwNlo+t4ce5xcxBNB3dByGUOXw
-         mMiw==
-X-Gm-Message-State: AAQBX9cKzDlTxuYSFElZKz398Gz5p4lp6nKNsfjhh16zHCb2++ELuTok
-        3cFF92lRx6N9FBouFbOJlzYwP2Qv7KFCsiHa092wFA==
-X-Google-Smtp-Source: AK7set8Pu4zFLx2g7Ys7jY0o+nIVqPLyI6iOmqkGLBZOkHO6gNL/N3MVY2qi6f3tHPfHC7qz3jijZ7e0ra7UIq9NJ+E=
-X-Received: by 2002:a05:6130:c0b:b0:755:9b3:fef8 with SMTP id
- cg11-20020a0561300c0b00b0075509b3fef8mr2412705uab.2.1679481781023; Wed, 22
- Mar 2023 03:43:01 -0700 (PDT)
+        Wed, 22 Mar 2023 06:45:02 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A53B5ADFB;
+        Wed, 22 Mar 2023 03:45:00 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M5UC2J031665;
+        Wed, 22 Mar 2023 10:44:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=2zUsAxusiknHcBSIUqmqdhHVjw9JMqVGq/GGIYaJ+Kk=;
+ b=LpF7V0X+OQeV8LXoEdmLMtiW6hD0m+RZYcGIG1XuQ2CeiGFGQsqLNVfsDHfKcGcI69Ys
+ zys5Ix9j1PhX9UdS10cGcB+KHKcM4wkzL+cwba9NE6Yaqabqm6Qvxa6jfZGmpLNA692Q
+ YVtGMihm8Sgg5iIKtiDLK4o7C3f054MsxDL1rhK5OKICFtUxsBQ8xU9uoeDxRx/7G0Dx
+ OefeX69GbDs6hdeea+Hi7Zkc7JVAsQktInKJkOWD7JUALRHsen7MRrNpn711YI/AQGU1
+ UneKFT9iFgW1dZI6qW9wuBnh4NqkQxpdoATGTzsQkmjAxkV71v0gAR6OvvwJZ7rZYGan Kg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfrk0s3k8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 10:44:50 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MAin0g006366
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 10:44:49 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Mar 2023 03:44:43 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v2 0/8] Enable IPQ9754 USB
+Date:   Wed, 22 Mar 2023 16:14:04 +0530
+Message-ID: <cover.1679479634.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230321180747.474321236@linuxfoundation.org>
-In-Reply-To: <20230321180747.474321236@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 22 Mar 2023 16:12:49 +0530
-Message-ID: <CA+G9fYv1eB4JuhhSJORopQ2mUkXESuZMdEeYyypPLSKbdjYxgQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/199] 6.1.21-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RhcjNpgXQ8k3TkAyRxcTPKbFj8V5kmki
+X-Proofpoint-ORIG-GUID: RhcjNpgXQ8k3TkAyRxcTPKbFj8V5kmki
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_07,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=535 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303220076
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 23:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.21 release.
-> There are 199 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 23 Mar 2023 18:07:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.21-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
+Depends on:
+https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+[v3]:
+        - Incorporated review comments regarding coding style
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[v2]:
+        - Incorporated review comments regarding coding style,
+          maintaining sorted order of entries and unused phy register
+          offsets
+        - Removed NOC clock entries from DT node (will be implemented
+          later with interconnect support)
+        - Fixed 'make dtbs_check' errors/warnings
 
-## Build
-* kernel: 6.1.21-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: 2152cefff654f81f4c754469a07ac3c6105ed4b3
-* git describe: v6.1.20-200-g2152cefff654
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
-0-200-g2152cefff654
+[v1]:
+        https://lore.kernel.org/linux-arm-msm/5dac3aa4-8dc7-f9eb-5cf3-b361efdc9494@linaro.org/T/
 
-## Test Regressions (compared to v6.1.20)
+Varadarajan Narayanan (8):
+  dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3 PHY
+  dt-bindings: usb: dwc3: Add IPQ9574 compatible
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  phy: qcom-qusb2: add QUSB2 support for IPQ9574
+  phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Enable USB
 
-## Metric Regressions (compared to v6.1.20)
+ .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    |  22 ++++
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml    |   3 +-
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts       |  12 +++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  86 +++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  37 +++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c            | 119 +++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c              |   3 +
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 9 files changed, 284 insertions(+), 1 deletion(-)
 
-## Test Fixes (compared to v6.1.20)
+-- 
+2.7.4
 
-## Metric Fixes (compared to v6.1.20)
-
-## Test result summary
-total: 174778, pass: 151098, fail: 4548, skip: 18729, xfail: 403
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 153 total, 150 passed, 3 failed
-* arm64: 55 total, 51 passed, 4 failed
-* i386: 43 total, 38 passed, 5 failed
-* mips: 34 total, 32 passed, 2 failed
-* parisc: 10 total, 9 passed, 1 failed
-* powerpc: 42 total, 38 passed, 4 failed
-* riscv: 20 total, 17 passed, 3 failed
-* s390: 20 total, 17 passed, 3 failed
-* sh: 16 total, 13 passed, 3 failed
-* sparc: 10 total, 9 passed, 1 failed
-* x86_64: 48 total, 47 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controll-controllers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
