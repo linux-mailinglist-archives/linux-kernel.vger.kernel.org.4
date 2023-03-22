@@ -2,318 +2,409 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D386C5AD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97F66C5AD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjCVXtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S230074AbjCVXwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVXtt (ORCPT
+        with ESMTP id S229487AbjCVXwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:49:49 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C530623A41;
-        Wed, 22 Mar 2023 16:49:47 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MJJ20J004434;
-        Wed, 22 Mar 2023 23:49:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=EorIeemTKIm+er0mu6zzCk9XfnCUjMDFG/SVy/l5xiA=;
- b=bx8fh2B6/wsBwyz7WKuoGpDhmkuMx10AxiZsLzFJugNJH+6/pQyQDGpslGejW8296n8b
- OnohwNWtoRaSD0NXvdxFMi+6OVIo7UXB6YvvTx+92+FgBCcK6xE5dJs7RSy3A0OzVQIM
- +gw1TVKEBR9XnyifNT7Kc1H1bkhxqur4MBWPI8HhcnE52l6LzUBTQCQKQgwI4OROyPnV
- LgVJUurP7laV3Jt8kvlHZizkFiH9/uCRREgOFIRQFU5xnskXGq7z02SOrUx7ypUTc38a
- ehpDmwwa+InJtjk9/h03/AZMlPdfmCwaRKnl5sMXIdSJWODuY60AKfBs4iEyB0L3g5j1 EQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pd56b27kd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Mar 2023 23:49:39 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32MNYNxm037682;
-        Wed, 22 Mar 2023 23:49:38 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2041.outbound.protection.outlook.com [104.47.51.41])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pgbfc8de0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Mar 2023 23:49:37 +0000
+        Wed, 22 Mar 2023 19:52:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D565A2886D;
+        Wed, 22 Mar 2023 16:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679529138; x=1711065138;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=oLmiyGZ96tbpe3pnyU9UFYcXUH6HYZ9nr+plIHc3hNE=;
+  b=O7l0x/4lZ4Fj78sHEnxfS+LWBnuN4+x6+AJAYaPDZyjsP4jJm3J916o0
+   mGvrlf3dxC5VKD8Q0i13SbiYVzNoyeWYc6sUbhpRSUEXDlUGayigHmvaC
+   Vd/kFI2qOQi096dR/G2XGZ2WtB5Hnn62/kZ8SpMDlLgExhMGFB8JB/hKL
+   tgafKFAbEq9YQ8S5RXqgEvmAVVFYNzCqMc5RHsuhLAiUI5ZIh/k9xtJBp
+   nIb5LxdAYGpOJzcak0irdiKpu5kQHlFFbJ/rJhc3gEwrssbYaMfn/0xQH
+   Okm1J4rm9SiaCtOgjEQ204I2VC1yErKedRwGqjeEwlVc/zc8LjLIn3XTj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="425645611"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="425645611"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 16:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659368498"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="659368498"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 16:52:18 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 16:52:17 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 22 Mar 2023 16:52:17 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 22 Mar 2023 16:52:17 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K0MpyS2RSicb2zUbQqVfjR3uyjH1faF97FtS8YbvFHfvbb+ndfIa3QThdsOt9AnfxWCjhSckkZpBfcsj10v7jd8C6QwB7WL4ioRPkL3CvTvF3JgqDh3wkPkIgO1X7/eNV7tr4BLNPIByKEliTCHgxuqJ49faFp+SZ/6gY6TPF2f2eGkX8RyveJrNyIIUJk5A0/ChcE02v18UnwkV40rKcRRPnn3e2B8nX6SD5n//6/OU8xqJ+T/mmsTLxOyQU4lQ98yi+F2A1VocSniXaTW1PMEAZbwaXqSuL4/Z50M64Q1xT9/0XfTiPSCMx66jrmef+JlJg61HHj0/Ru50Gca6TQ==
+ b=KO0gPnBEtlNUa0XvdseQead9JJv9hmZ5YpeQe8YRHrlb01n+REPaapiVCzHww2yktk3fFFP4cg8yfIn3HeLRcNEorqRhQX/as1lO6h/fYbH/8Q15BvaOJtwUJiRBJfR6xO2bJxbn934oB3Qci+tE6FCt+uQgR6P+ZiaP+1/qbhnqx9wKBThaviYY4cT3yL+EJgKF/j8/SaWr/ivb1Yx96MAXd8UDy+jCR2nDP/By5M+Wd7X20QAg7s7pBq+SigYBgAhRgsR89FARTeLuqsWOmS0Yr1qEW38FryDH+ATBlFdoJSUp3RFBFZP3UKbqSpGKz2nDKfWyw3uXvxU/gV5D7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EorIeemTKIm+er0mu6zzCk9XfnCUjMDFG/SVy/l5xiA=;
- b=hjaqFzofG0VruRMCpPQXj4SOWi+7j0Eiv2ACR96sAGxUHSQjptWRHGBouGjtg8lDYnvgALtCa0vzc/rpxr4ipd4m2LeNZE11ggWICLchXKSxfqhNFGDRh4xJVZ9sN1fXd0g/RcCgRpiBsewu/+wiPXG9Q7iaslbVc/E5SVDe4VB4juR0nY+FlDRQUgpLeA+MAZ+Jheq43nrkrTE4QfVbzznKUTTf8MbvQ/ZMvnfTUWvgdKpSN14VclCWdm/U3vJJrD1MclU94VMpc2f3MDWZNZ3xsKpSIBhTsiGTFzKQXK14L1q33YiHX3XebDsA3dAbwwdvrlITxGiB5sAXcfhX4Q==
+ bh=1l8Pd/P2AMVgBwy/yHDhihGW4BXzHbE0sRi1iNOk558=;
+ b=dYHcY3wbO8hqYJfA0AUlPjQPpIDKpvhzkzcsKJOD6Kf0X3zdvQZ/4h9FRAB0fIglMnNyMSc9fXU1icgnEPRb+1iYpiWb9pKAqoSflMnjt4kaMCVp/dXROiiBK2G3KZOHn3E+L4TvmyY58/DJZeJ0z88Q/8TdoY/2M+S84tnRW8V6ZQULRx+QMREthgG6VTLaoFSv+PdLRfE7QalQ4aMFQrX1NJiztmf3UV/nM0F6jZb8v0oZ58pcYm+CTxl6Mdw2qFLmYifVoEtv5fxWvyPM/mZ/AYgeX7UF3WoE1Gn622Uw+5uTxAQgNeZDmrzod4nfITK8ltvyOjZWzoeMpt2OmQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EorIeemTKIm+er0mu6zzCk9XfnCUjMDFG/SVy/l5xiA=;
- b=hcLGMdAsdhGuZQPBGqqFRuqcpH/e91F5At7cVL8hK+Ryhq5FOCKnSW0mml5ILyybAo8HNpRjWDZa81WC4aQa7jip6YAnh+lWkiGl6y0cmciCkU15lh6sYB44HryJg+1aB37PQlJqF3dWU/paUfRxc9lKfuvI/MjvfMb31kJW4qk=
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com (2603:10b6:510:148::10)
- by CH2PR10MB4200.namprd10.prod.outlook.com (2603:10b6:610:a5::9) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
+ by DS0PR11MB7558.namprd11.prod.outlook.com (2603:10b6:8:148::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 23:49:36 +0000
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::3eb1:c999:6a64:205c]) by PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::3eb1:c999:6a64:205c%4]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 23:49:35 +0000
-Message-ID: <acee1a74-d554-1bd4-8b77-2dd48c839237@oracle.com>
-Date:   Thu, 23 Mar 2023 07:49:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [linus:master] [btrfs] 5f58d783fd: xfstests.btrfs.172.fail
-From:   Anand Jain <anand.jain@oracle.com>
-To:     kernel test rboot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        Daan De Meyer <daandemeyer@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
-References: <202303170839.fdf23068-oliver.sang@intel.com>
- <1c807f47-70d4-14b3-7a20-8f595edbd99e@oracle.com>
+ 2023 23:52:15 +0000
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::4075:1af2:9fc0:66d0]) by PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::4075:1af2:9fc0:66d0%6]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 23:52:14 +0000
+From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>
+CC:     "frederic@kernel.org" <frederic@kernel.org>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>
+Subject: RE: [PATCH] srcu: Fix flush sup work warning in cleanup_srcu_struct()
+Thread-Topic: [PATCH] srcu: Fix flush sup work warning in
+ cleanup_srcu_struct()
+Thread-Index: AQHZW8x3wcHPlwuNM0Wizzk5AGbgwq8FVToAgAClkaCAADGigIAACIWAgACwsYCAAHV/oIAAFDsAgAAGXDCAAARcQA==
+Date:   Wed, 22 Mar 2023 23:52:13 +0000
+Message-ID: <PH0PR11MB58807A0B060B84C4159A16C0DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+References: <20230321081346.192000-1-qiang1.zhang@intel.com>
+ <e7951c31-4a24-4493-be4b-603fec0730ff@paulmck-laptop>
+ <PH0PR11MB588087645FE02C9F2C113CC8DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <f13e878f-65c3-40cb-aa3f-eb87ae6c9d6b@paulmck-laptop>
+ <PH0PR11MB5880CAE4D4A58BD71AE984CFDA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <dc8b5a44-02ca-4e5a-bd4a-644af3e7c11e@paulmck-laptop>
+ <PH0PR11MB58804435C08AEADF23B095D1DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <4a9525f8-30a3-4ca9-87ec-355cde7f6ed6@paulmck-laptop>
+ <PH0PR11MB588085478B4E13DD48C4B7C1DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB588085478B4E13DD48C4B7C1DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <1c807f47-70d4-14b3-7a20-8f595edbd99e@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR02CA0040.apcprd02.prod.outlook.com
- (2603:1096:3:18::28) To PH0PR10MB5706.namprd10.prod.outlook.com
- (2603:10b6:510:148::10)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5880:EE_|DS0PR11MB7558:EE_
+x-ms-office365-filtering-correlation-id: c48e077d-9525-4951-a330-08db2b3075e0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /zQyP8CvbY6A8YdJTO0ZBFAGgI9YezpH8U/bCSbSNaNC7JlmyGNIWB1vJUCTY637Iu64wDQam6e9umTeJC05b0byuw9Mt7O6FshKpVw0NZyrpeCENS1ibB7Eno83/KpOyVXeC/nVSb0gTdK3td6SN3dIaj3SGCU/OBNZxORoibjhj/tG7blQQSQWM3204AqrfF30aAFq31e/2br8NU8Q1b2j69NfqbbdirpJ1j0r2sIjcXq55DeiJVf+vKRpBj2MtVG0UnqsaSFssbncdVpKL5Jl1vUQuNXSk9Mz9uNZ78qVrw1Zgchf8cygijsA/wcB3OyEBb6GCZnhpEyhjW9ios2d7UEfhh9ingZ9JXOoV2v6VL2qAJkNSjdXwxr80XL3DkDbj6iSuiqkuI9jyPHtU0eZLUANXG064yk+EICkrVDNqsfvvnFfkEFkdd/MGBGZRXr3zT4UD/zR0gDuzkP/AVuYBf2GL/5JKK19TaNFmK5w/9LT5bh/W1qyCKSUFF6xAECPwZOy740Uw8bAjGgGG2Px43CILlFwZ9ANtWu0wPJw0z/y6wSFeArwSNtiMoUoNNAgjBUob33pH0K67Ag0iHTjeG0blDozMPP4ODsyqjrwZxdWtS+7W4JIacY0u5nIeZf1RR2Gby3rIqRCap18Rg04Jz9FFP6+fTg67ZKbn0dCsdRKI6CChtQ1WVDhoORFLF7VFAOoN3eGAUGXsggH/w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(376002)(39860400002)(136003)(366004)(451199018)(38070700005)(41300700001)(66556008)(8676002)(66446008)(64756008)(66476007)(4326008)(38100700002)(82960400001)(52536014)(122000001)(55016003)(2906002)(76116006)(66946007)(8936002)(6506007)(86362001)(5660300002)(26005)(7696005)(71200400001)(2940100002)(33656002)(54906003)(9686003)(478600001)(110136005)(186003)(83380400001)(45080400002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?215jEFu5Fh+gno5p831vBWr/cK+18d9dnUvbOXxKGH6N5jjIvmMTh6SWHer6?=
+ =?us-ascii?Q?vCdfjpYuWu2kNrsp7c/SIvzCd1IqvPm4uDVJKDhCiYAsSNvq3/RoxNTlJZMM?=
+ =?us-ascii?Q?X5zPCbL3waE75zd3xY04RuyM18FbBZz4F7QFDi95HWYovkOltvo/GpjwfRHZ?=
+ =?us-ascii?Q?IVIGxAM5DfNdNhj/mx9XEdKn29bRpocfhACNdvl5XDHA5EcQVAItaj+5mGU9?=
+ =?us-ascii?Q?gdihzpqtGuCaKpoK404Om6dsYMPzQechGgKv4fBSe9h9Rbt+krSEK9zdmpVF?=
+ =?us-ascii?Q?ZHjI5pRKegncZyAUfILVTN4lJlTHXrXTF4f4DHTc6fpMMPw/+hFPv1reCp9W?=
+ =?us-ascii?Q?Lj7gzZQn4ARJLcGxX+te1nZZzA4iMPS8cgjfcVxsFj1YCGgZwxEHJMHC0mZO?=
+ =?us-ascii?Q?bLY9vg0KimDvdLrcZFNr36DJB2ZoK7z02iLQvObARl+oB9vPh68o8q4QwVFh?=
+ =?us-ascii?Q?ZZppDh8H7o7tR9wsnjI4B6EyLeCRRtelPiBYorNiErNLav2LUtNUCvGC6pxK?=
+ =?us-ascii?Q?KiQLpSJVT9tP5ZBlcPgXzC/qmUpLe718SjDzG4fpgD/9oQl5ORWFLtC/aIcn?=
+ =?us-ascii?Q?yiMxrcOzA0b32wGed145Q0rECVdN8OrHhUu5voycXfC2WICmfop7rWA68/uY?=
+ =?us-ascii?Q?4ZVpMuW7T1qffKvBHXp8T13dBm446ye7+yvlchhRlAIIudnLrd2t4T0PqmGG?=
+ =?us-ascii?Q?9MqnL+5uASiN8Hz7UVPFlYAmv55TTdrrx4mGsBWYr/A+bpTFdZ9PHULlC6Cm?=
+ =?us-ascii?Q?4/iTQY4BCuj0HeNaGrs1ZA2LO4oBmhkO9V3aLkYJeC/t2Jho7zSiQVSI6DYc?=
+ =?us-ascii?Q?6Lxpqxg4UXp/HPVbJAREf758UBPdUdarJ+hkTyt/Ko5gk9DV9x6vZrePsraG?=
+ =?us-ascii?Q?uHO7gpt3LuHUY4i7yD9I4NEK0cjJEiBe5bNkMGjHsm8qUmnzZ/+PrfNII1WV?=
+ =?us-ascii?Q?HDJ23rS9tx2Z2UmytRnqBiT2cSWgbS3JuSnSX7VjIqZ7fxlgHwY/Eeojqu+z?=
+ =?us-ascii?Q?y1jRxgCBFQc9x3YYipwpHf+Z4F66qrG3b72A+i4a1TIPrZNSkl42zRfanI0e?=
+ =?us-ascii?Q?xFb1SiXI8n9kUouqZh7kgNKI5sUzeGV7mBY0ETmyC2BCBnP89dtJaM6UBhAq?=
+ =?us-ascii?Q?+TEOX4T9pBN30jnbY49KZ8ODC6ZIk9AxmM86w4TNX1Z/+UgeJ58jey9PZP9w?=
+ =?us-ascii?Q?N9FZh++3LQfFIkU77sFfg7hl7a11sGqf4efOBQlGKb7xjLSLIVZDuuUNezOD?=
+ =?us-ascii?Q?TqQeLf+gxL8A08mlb+InCD9QcmO7D2fGYMVkJ0oSs0di4Y24S+V0mMOzv+l9?=
+ =?us-ascii?Q?8GU9CxVx3M9RmIJd/fGo1tPti3HjCJLGjsKLAJRjjWmuSqFo/6pUdgFds6EU?=
+ =?us-ascii?Q?AAXw2HtljPUfW7O5NPPIIgmg79K0TiuvgKpRktqrmcf/HSciUgBRIzKe4ae2?=
+ =?us-ascii?Q?kTgM3G7Y4hCJp3SUfC/AgJG1ytFV1H77NOPO5LqrUR+zKQwAB4pRf7/kZvV1?=
+ =?us-ascii?Q?szDqLTQpADg2SjVvlvRpVhKlW4GoTo33IfQB4aj/zRbvyxTGqQEmBILd2f8z?=
+ =?us-ascii?Q?2gdM6loh8vEsmolM++U6Nu/82/qXNpkaRkC8fRXw?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5706:EE_|CH2PR10MB4200:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd822047-abba-4b4c-f273-08db2b30176d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dbiI4vNClKi6Wbmh1TvuctZwQAEyDzDuUjj9eYxavec9B5rQruLpBkrXONTxFVTVG4NS4wV8cmz268HS4aqblHyGohLLVfRduYCzJApuOmy1L0Xn4IHCK6rWkeIh1U/t3u3UkV7Pd3K7ZJXMFbwD6r8pXqLoT9eXGBs2oeTjTR4if+YwZ7w8r9sWbLQ7Ezl/98Bx4TTV5NY9It3RxWHUGkbDfMNrt/MNU7IcGNFqNlC7noOCJGZOwpX9kIpFVftCqjZJjqCCUx3l36vNSj/WFWnmThUnOHQMduKWkzRGuVYf3+Suvj3PNhwuMKTT70yjGRwkF61SQqhKSHhzxg7gYk6Djj59YNl9TNghVpOlJgnApLcww+E9YzSR0ySwEYUE06tCv/ZJD0QTOdjgG/hA5/C1plhxOSdPm1mDLf3jlUiMp/oFIxis/Rs2cjRVLEZy02sUnKA4lVmiNXStDq654pLhc882lrEuppszENHoEfgDskgr9D0/mGiyOcaU8ljRIJtZnVNEgLuFbKfZLEIABHAkUoDn1d9SKA4Vcn40O+29XnhNYl24sycJIukuHaSO1/Wa39nZQBgs+VuD8zGJr+37+VrEm3XjfIlk1qgp1tjbwCc/m8klORbg6oFGwrlTzkLi1nI6kr6fIzayncbmfzScpaIKzUC7rrGrBXAuV85w6DWs6JbCpn+LGnmdXGiJzSSsHXZru2cilds6NUMqhEUe4+PQWmC39wzSmKnQHA2tmxZe9CMBbn+E8yX1qWxmnGP5j9wSacG9ldhbPRxbcJFTqpMR+Fhnf/zq/wazyLs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5706.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199018)(36756003)(186003)(38100700002)(6506007)(2616005)(53546011)(26005)(6512007)(83380400001)(8676002)(8936002)(4326008)(6916009)(5660300002)(41300700001)(44832011)(66556008)(66476007)(6666004)(86362001)(6486002)(66946007)(31696002)(966005)(54906003)(316002)(478600001)(2906002)(31686004)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG1zb0VFeXEzNDJsNk82ek5kdU5QZ3ZVMG9Ub3pBNTlXMVY0amZMZUhLbGNJ?=
- =?utf-8?B?bW1ENlViTkRCZTZ0czJ5ZVhwRmNQVDk3dFlEOTY5dDFpcHNxZnB5NURMSnBE?=
- =?utf-8?B?YVpPQk1hVjRiMjdYSHBWbEdlQS8yeW0zZm5rMW5hMjBTNDlvckYrRGlZOW51?=
- =?utf-8?B?UEdlVU5CN3JGVDhHTFAvSnpyQkc5R0RiVDVmZkg3VDdBWjE4QUp4aGJiRDNo?=
- =?utf-8?B?R0VtbGlPelBCRVdoZ3hmaVJxcjNoRUttWENnZG52N0RETmkzaG1PSFBVYW10?=
- =?utf-8?B?ZTRRT243bUw4V1RWUFFFaUdiVGRRSmpvcGoxVTl6NVpUWTR2UWRSL3pVZ21E?=
- =?utf-8?B?WVJYeENmeDVZWTg4a0EwdlVTbE9pejQ5NWk3WStXa0J5eVZkcFhwOWZ0cmRP?=
- =?utf-8?B?dGhjaGdUMUE0dnBLSmRLVmtsTGY2T0ZMdnZMakVTbTZWVmVNNTBQTE1waEdQ?=
- =?utf-8?B?VzRIWGgvM0JZOXFIeHVhRVltczBJcnJUSHYxUWhRbjlyc09ZVGhaRHFQYnBO?=
- =?utf-8?B?dEU5RCtTRENGcVBCUGpYWkhNZXhPYjljaURMYWc2ZC9pYXBhYklmOEdQaHFm?=
- =?utf-8?B?emMvcXZJMkJKWHlHMlo4VU83UHQ2WDhvb3Q5Y051TUJWYW5iUDc2aG9Ra2ZF?=
- =?utf-8?B?dHI4bk1aYlM2WHJPb3A1MUpvdUJhVU9RVmpUcjlNTGVYNEFUSzZZUWVTczBY?=
- =?utf-8?B?NGNLc2VLcGQydi9TSnZndXlWNVJhK0RyRWlzTm1YOXEzMk5uYkQ4SEsxUUNy?=
- =?utf-8?B?LzkzZGVIQWlhTTJyOU1mcEhoc1JSbkhnem12TkdITlVvdnkvcGZOOXZIV2NC?=
- =?utf-8?B?Z2xCYWdvV3JQWUxCQyttSWxvRTE0N1BjQTlwbXBaSDY4WE9zaTN1Y0hLWXg3?=
- =?utf-8?B?M2pDMlplblhlbjMxT0IrelkvMUIvaGt0c1FFU3d4RFc5OHJZb1phNjBHV0JI?=
- =?utf-8?B?R2tTNnpFb0pVQ3g1WU5BczlDeW5hOTFwQ1RheUFMUENLYXJqUHFtc0Fad3pC?=
- =?utf-8?B?TE8xWDhDRk5vV3l0SWhoWDdVVjJjSWNNN25MdDVUanlzYzBucjlzYnFZc3F3?=
- =?utf-8?B?NjZ2Z0ZIMVM5THlYTUdMdVlRYXhjU0VmRno4bkJwelJiT1hkN1M2bGVRZzhG?=
- =?utf-8?B?eWkxeWZ0OHJXTkhlT2tYM3NTQTR2WW5TMS9ITTBjNk5Db3lLcCtSVG1HZWU1?=
- =?utf-8?B?VDhVWGNDejY1cWhFUlJqSmx2YkY2V0s4R0p5Y2kvdC9BTDg2ZFlrNTRHMkVz?=
- =?utf-8?B?eWZ3Qk5FMTZ6TmdHSENBR3dlMk9rL05QU2VadXQ4NXdyZ1pyVHhqRkttVGVj?=
- =?utf-8?B?c28xOUVSb1d5c0czdTdnc05mRENwRDV6emZxVStBdFpNRmFUSGZibjdQQ0Jh?=
- =?utf-8?B?U0FocDhoUVBLWnQxZkM0RGxzTGI5SnVHRzNGc1FDcHg2WkpKV0paRndBQnpO?=
- =?utf-8?B?OW54UmVCdDhDKy8yMExnSnc3Q2xyNkNJOXR5cXdISlh5M2d2RmtWOFRYK0R5?=
- =?utf-8?B?UFl3YWl1Z2l1MXlHL3ZNZmhROHhrMWFVZEpJbTltNFBualVZeTJsRG1oZkZJ?=
- =?utf-8?B?VTdSdWZUaUZhNVVWOVJUSWlJQlFXazVVWjM0NkFWVjVZb0JSaVF1T3FxWFho?=
- =?utf-8?B?SVZvMnA5b01hRUhMRVlJdlBHZ3ZvSUtyYlEzb2hobFRnK05Kcit3RFl3TWNN?=
- =?utf-8?B?ZkRYUGNQSGxMVW5Kc3FVZzRqMVVXK0ZmWmx5OGFXZnJMd0M0cWhYTWRUbXBl?=
- =?utf-8?B?RTlaVk1iNkl6ekRvaWVuclAxZWlFNW5qTWhTNDM1MWcwb2ZxWlRPdWdrVGJK?=
- =?utf-8?B?KzVrd0tONnRTYlBTRVFJWmpCU1hYeEx0QnFTRVBtM0dmNk9qMXduR21ENVJj?=
- =?utf-8?B?NzFUTG9KU2FvQnl2SkdBR3hBVE1jcFM2cXZNaEtuYjBJQ2NXRGlkTGw4VVd4?=
- =?utf-8?B?ZGxtL3RBWDVVOGQzd0NWNjQvcFl0Y1ZUeTBCVWVnNlYxdkhXUVAxdiszM01v?=
- =?utf-8?B?Y1Zhd2lHL1ZOckcvNEtLbkxqRW1IelNtT29LSmVwTVZ0Q3hHZzM2SEpRVWhs?=
- =?utf-8?B?VzgrYXRRSnlFM1g4emxnWmtNQmFhRmh6eTRDbGdTRjZjY0V1YW82MXBVV2Fs?=
- =?utf-8?Q?3AYva8tnvYJCJFhvVsJoMyenV?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: /ZxarycPO8e9QNYzsZrKdpegGlQwbywY/3LIhcA4eu/oFqALmD5D8KF7xwrUolgWoXNl8kIDCcxoKgt3JvGfscICy2nMNdMaOFJivT5/NdC9vkbBs/XvhIQvHsP+RIRacunG7czqebNR6ew/Hr6e/R9itV2F8xlX7PdXY7VTJvt4fFe41eFaYZyPH4LjzjKp9dcnnAikt2pGwndinJfaVq8iamfRsgUHhN3W5/XSj8z6gWmp13ubxmqG2Zzfeu0jLt8R4XQIt8bkglnzQYffaomVZBcflaakZ0gOqwEmdXHQpH2w4W4FXGtcn7vgllRJhnaLfbgAt8l7GpshoI0XpXmZe3TAKOCqB9+4Eur4wmUIicoSSbSPyf47lMt55w1KB9qK5J+SSKV76cFDSNq96LvADtgQUjFap5c6I08VNH4RFtSGhio98FvEjTvDXOyl4CwKbII+I/c0n7EGcZnb/4KMyO00Z+MHQ1i6Y1N5Dt9KvDen1Ne0d7pWbrIlvHrhv3v6nXV0XlVF9nzUDM2C00yrveLnQhrJfUvzJmOOgQzE1f4xL6Z+R7U52zkjADzBD7otO4oQeQgt3AARh8tYNX7f5gFZQY/IufGof9csHOXeQKIQykgvgOrMOeWNB8yNwukdcybgzuOJ4evsDlQ90R8ywJde+x2alJvOgCUt0O8Y5tbZ+w/uiWZiDI1EfXi63ICEWHhKxEGeOVzOfzOuIyPNQEf6hKOLHRfy9mTuslKO22bvdlLqEyH29if/TsfsN+mq2FR5cS+JAFKJxCGcRcPRYvMYamFZygnWVMA6z0X/tjZQV7I3hruMglvcOMlYEFqeNTnNAC1RQPAlg/1G/0AcIpoO0rWbzTBzzr3C3e17bffX7IndJGYG1oDQdGTQhFbYRm6dDXKw/iDtL09GJZPGWdt5slh55ejXnfVi904=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd822047-abba-4b4c-f273-08db2b30176d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5706.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 23:49:35.7999
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c48e077d-9525-4951-a330-08db2b3075e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2023 23:52:13.8982
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V/bo7na7066nvYcWzSoSbl4DYK4BHyd2toQT2D5rvGca/L/R8V/VFKJjEsOk8D3ZCpmPLrQKGia9O2G2bZ/RTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4200
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_18,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220174
-X-Proofpoint-ORIG-GUID: bS7efX1SeLczyEvcObohLkKSr_uYflAr
-X-Proofpoint-GUID: bS7efX1SeLczyEvcObohLkKSr_uYflAr
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QoDZ163Oqi/44zbI+KMBraqYVY0rOA//vhl3nbCVy0rRG5XwtFVEOM1yP5mOBh1j3G/HBuSUpjeqrsjbr7V3Mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7558
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 12:14, Anand Jain wrote:
-> 
-> 
-> On 3/17/23 09:17, kernel test rboot wrote:
->>
->> Greeting,
->>
->> FYI, we noticed xfstests.btrfs.172.fail due to commit (built with 
->> gcc-11):
->>
->> commit: 5f58d783fd7823b2c2d5954d1126e702f94bfc4c ("btrfs: free device 
->> in btrfs_close_devices for a single device filesystem")
->> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->>
->> in testcase: xfstests
->> version: xfstests-i386-5a5e419-1_20220926
->> with following parameters:
->>
->>     disk: 6HDD
->>     fs: btrfs
->>     test: btrfs-logwrites
->>
->> test-description: xfstests is a regression test suite for xfs and 
->> other files ystems.
->> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
->>
->>
->> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4770 CPU @ 
->> 3.40GHz (Haswell) with 8G memory
->>
->> caused below changes (please refer to attached dmesg/kmsg for entire 
->> log/backtrace):
->>
->>
->> we did this test on i386 and we found the issue doesn't always happen,
->> on both this commit and v6.3-rc2, it failed in about half of tests.
->> however, always clean on parent commit 519b7e13b5ae8dd3.
->>
->> 519b7e13b5ae8dd3 5f58d783fd7823b2c2d5954d112                    v6.3-rc2
->> ---------------- --------------------------- ---------------------------
->>         fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
->>             |             |             |             |             |
->>             :14          23%           7:13          33%          
->> 10:19    xfstests.btrfs.172.fail
->>           14:14         -27%           6:13         -17%           
->> 9:19    xfstests.btrfs.172.pass
->>
->>
->>
->> If you fix the issue, kindly add following tag
->> | Reported-by: kernel test robot <oliver.sang@intel.com>
->> | Link: 
->> https://lore.kernel.org/oe-lkp/202303170839.fdf23068-oliver.sang@intel.com
->>
->> 2023-03-08 04:47:50 export TEST_DIR=/fs/sdb1
->> 2023-03-08 04:47:50 export TEST_DEV=/dev/sdb1
->> 2023-03-08 04:47:50 export FSTYP=btrfs
->> 2023-03-08 04:47:50 export SCRATCH_MNT=/fs/scratch
->> 2023-03-08 04:47:50 mkdir /fs/scratch -p
->> 2023-03-08 04:47:50 export SCRATCH_DEV_POOL="/dev/sdb2 /dev/sdb3 
->> /dev/sdb4 /dev/sdb5 /dev/sdb6"
->> 2023-03-08 04:47:50 export LOGWRITES_DEV=/dev/sdb2
->> 2023-03-08 04:47:50 export SCRATCH_DEV=/dev/sdb6
->> 2023-03-08 04:47:50 unset SCRATCH_DEV_POOL
->> 2023-03-08 04:47:50 sed "s:^:btrfs/:" 
->> //lkp/benchmarks/xfstests/tests/btrfs-logwrites
->> 2023-03-08 04:47:50 ./check btrfs/291 btrfs/206 btrfs/196 btrfs/192 
->> btrfs/190 btrfs/172
->> FSTYP         -- btrfs
->> PLATFORM      -- Linux/i686 lkp-hsw-d01 6.1.0-rc8-00284-g5f58d783fd78 
->> #1 SMP Wed Mar  8 11:05:36 CST 2023
->> MKFS_OPTIONS  -- /dev/sdb6
->> MOUNT_OPTIONS -- /dev/sdb6 /fs/scratch
->>
->> btrfs/172       [failed, exit status 1]- output mismatch (see 
->> /lkp/benchmarks/xfstests/results//btrfs/172.out.bad)
->>      --- tests/btrfs/172.out    2022-09-26 09:38:15.000000000 +0000
->>      +++ /lkp/benchmarks/xfstests/results//btrfs/172.out.bad    
->> 2023-03-08 04:47:54.134026209 +0000
->>      @@ -1,3 +1,5 @@
->>       QA output created by 172
->>       wrote 5242880/5242880 bytes at offset 0
->>       XXX Bytes, X ops; XX:XX:XX.X (XXX YYY/sec and XXX ops/sec)
-> 
->>      +_check_btrfs_filesystem: filesystem on /dev/sdb6 is inconsistent
-> 
-> 
-> Thank you for reporting it. I am currently looking into it. It appears
-> that the device is being freed after it's closed, which could indicate
-> that we overlooked something at close, just a hypothesis at this point.
-> 
-> -Anand
-> 
-> 
+>On Wed, Mar 22, 2023 at 10:08:54PM +0000, Zhang, Qiang1 wrote:
+> > > > insmod rcutorture.ko
+> > > > rmmod rcutorture.ko
+> > > >=20
+> > > > [  209.437327] WARNING: CPU: 0 PID: 508 at kernel/workqueue.c:3167=
+=20
+> > > > __flush_work+0x50a/0x540 [  209.437346] Modules linked in:=20
+> > > > rcutorture(-) torture [last unloaded: rcutorture] [  209.437382]=20
+> > > > CPU: 0 PID: 508 Comm: rmmod Tainted: G  W  6.3.0-rc1-yocto-standard=
++=20
+> > > > [  209.437406] RIP: 0010:__flush_work+0x50a/0x540 .....
+> > > > [  209.437758]  flush_delayed_work+0x36/0x90 [  209.437776] =20
+> > > > cleanup_srcu_struct+0x68/0x2e0 [  209.437817] =20
+> > > > srcu_module_notify+0x71/0x140 [  209.437854] =20
+> > > > blocking_notifier_call_chain+0x9d/0xd0
+> > > > [  209.437880]  __x64_sys_delete_module+0x223/0x2e0
+> > > > [  209.438046]  do_syscall_64+0x43/0x90 [  209.438062] =20
+> > > > entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> > > >=20
+> > > > For srcu objects defined with DEFINE_SRCU() or DEFINE_STATIC_SRCU()=
+,=20
+> > > > when compiling and loading as modules, the srcu_module_coming() is=
+=20
+> > > > invoked, allocate memory for srcu structure's->sda and initialize=20
+> > > > sda structure, due to not fully initialize srcu structure's->sup, s=
+o=20
+> > > > at this time the sup structure's->delaywork.func is null, if not=20
+> > > > invoke init_srcu_struct_fields() before unloading modules, in=20
+> > > > srcu_module_going() the __flush_work() find
+> > > > work->func is empty, will raise the warning above.
+> > > >=20
+> > > > This commit add init_srcu_struct_fields() to initialize srcu=20
+> > > > structure's->sup, in srcu_module_coming().
+> > > >=20
+> > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > >
+> > > >Good catch, and thank you for testing the in-module case!
+> > > >
+> > > >One question below...
+> > > >
+> > > >							Thanx, Paul
+> > > >
+> > > > ---
+> > > >  kernel/rcu/srcutree.c | 11 ++++++++---
+> > > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > >=20
+> > > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c index=20
+> > > > 1fb078abbdc9..42d8720e016c 100644
+> > > > --- a/kernel/rcu/srcutree.c
+> > > > +++ b/kernel/rcu/srcutree.c
+> > > > @@ -1921,7 +1921,8 @@ static int srcu_module_coming(struct module *=
+mod)
+> > > >  		ssp->sda =3D alloc_percpu(struct srcu_data);
+> > > >  		if (WARN_ON_ONCE(!ssp->sda))
+> > > >  			return -ENOMEM;
+> > > > -		init_srcu_struct_data(ssp);
+> > > > +		if (WARN_ON_ONCE(init_srcu_struct_fields(ssp, true)))
+> > > > +			return -ENOMEM;
+> > > >
+> > > >Wouldn't it be better to simply delete the init_srcu_struct_data()?
+> > > >
+> > > >Then the first call to check_init_srcu_struct() would take care of=20
+> > > >the initialization, just as for the non-module case.  Or am I missin=
+g=20
+> > > >something subtle?
+> > >=20
+> > > Hi Paul
+> > >=20
+> > > Maybe the check_init_srcu_struct() is always not invoked, for example=
+,
+> > > In rcutorture.c,   here is such a definition DEFINE_STATIC_SRCU(srcu_=
+ctl),
+> > > but we use torture_type=3Drcu to test,  there will not be any interfa=
+ce=20
+> > > calling
+> > > check_init_srcu_struct() to initialize srcu_ctl and set =20
+> > > structure's->delaywork.func is process_srcu().
+> > > when we unload the rcutorture module, invoke cleanup_srcu_struct() to=
+=20
+> > > flush sup structure's->delaywork.func, due to the func pointer is not=
+=20
+> > > initialize, it's null, will trigger warning.
+> > >=20
+> > > About kernel/workqueue.c:3167
+> > >=20
+> > > __flush_work
+> > >      if (WARN_ON(!work->func))   <---------trigger waning
+> > > 	return false;
+> > >=20
+> > >=20
+> > > and  in  init_srcu_struct_fields(ssp, true), wil set=20
+> > > srcu_sup->sda_is_static is true and set srcu_sup-> srcu_gp_seq_needed=
+=20
+> > > is zero,  after that when we call
+> > >  check_init_srcu_struct() again, it not be initialized again.
+> > >
+> > >
+> > >Good point!  In the non-module statically allocated case there is neve=
+r a call to cleanup_srcu_struct().
+> > >
+> > >So suppose the code in srcu_module_coming() only did the alloc_percpu(=
+), and then the
+> > >code in srcu_module_going() only did the the matching
+> > >free_percpu() instead of the current cleanup_srcu_struct()?
+> >=20
+> > But in modules, for srcu objects defined with DEFINE_SRCU() or DEFINE_S=
+TATIC_SRCU(),
+> > when a module is unloaded, we usually don't call cleanup_srcu_struct() =
+in the module
+> > unload function.
+> > If in srcu_module_going() only do free_percpu(), the srcu_sup->node mem=
+ory maybe
+> > can not free and also lost the opportunity to refresh the running work.
+> >
+> >
+> >But in the module case, isn't the srcu_sup->node also statically
+> >allocated via the "static struct srcu_usage" declaration?
+>=20
+> static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_fla=
+gs)
+> {
+> 	sp->srcu_sup->node =3D kcalloc(rcu_num_nodes, sizeof(*ssp->srcu_sup->nod=
+e), gfp_flags);
+> 	...
+> }
+>=20
+> Regardless of whether the srcu object is declared in the module or not, s=
+up->node is dynamically allocated.
+> right?
+>
+>You are absolutely right, thank you!
+>
+>There are a couple of ways to resolve this.  One is to simply add
+>a check_init_srcu_struct() before the call to cleanup_srcu_struct()
+>from srcu_module_going(), as shown below.  This seems a bit silly,
+>potentially initializing fields for no good reason.
+>
+>Another way is to make cleanup_srcu_struct() do the same check
+>that check_init_srcu_struct() does:
+>
+>	rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed))
+>
+>If the value is non-zero, then cleanup_srcu_struct() should skip
+>consistency checks that complain about things that cannot happen if
+>there never was an RCU grace period.  Maybe something as shown after
+>the second line of dashes.
+>
+>Thoughts?
+>
+>							Thanx, Paul
+>
+>------------------------------------------------------------------------
+>
+>
+>/* Initialize any global-scope srcu_struct structures used by this module.=
+ */
+>static int srcu_module_coming(struct module *mod)
+>{
+>	int i;
+>	struct srcu_struct **sspp =3D mod->srcu_struct_ptrs;
+>	struct srcu_struct *ssp;
+>
+>	for (i =3D 0; i < mod->num_srcu_structs; i++) {
+>		ssp =3D *(sspp++);
+>		ssp->sda =3D alloc_percpu(struct srcu_data);
+>		if (WARN_ON_ONCE(!ssp->sda))
+>			return -ENOMEM;
+>		init_srcu_struct_data(ssp);
+>	}
+>	return 0;
+>}
+>
+>/* Clean up any global-scope srcu_struct structures used by this module. *=
+/
+>static void srcu_module_going(struct module *mod)
+>{
+>	int i;
+>	struct srcu_struct *ssp;
+>	struct srcu_struct **sspp =3D mod->srcu_struct_ptrs;
+>
+>	for (i =3D 0; i < mod->num_srcu_structs; i++) {
+>		ssp =3D *(sspp++);
+>		check_init_srcu_struct(ssp);
+>		cleanup_srcu_struct(ssp);
+>	}
+>}
+>
+>------------------------------------------------------------------------
+>
+>void cleanup_srcu_struct(struct srcu_struct *ssp)
+>{
+>	int cpu;
+>	struct srcu_usage *sup =3D ssp->srcu_sup;
+>	bool wasused =3D !rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_=
+seq_needed));
+>
+>	if (WARN_ON(wasused && !srcu_get_delay(ssp)))
+>		return; /* Just leak it! */
+>	if (WARN_ON(srcu_readers_active(ssp)))
+>		return; /* Just leak it! */
+>	flush_delayed_work(&sup->work);
+>	if (wasused) {
 
 
->>      +(see /lkp/benchmarks/xfstests/results//btrfs/172.full for details)
+  If   wasused=3Dfalse  It not need to invoke   flush_delayed_work(&sup->wo=
+rk);
+  this trigger WARN_ON(!work->func)) .
+ =20
+
+>		for_each_possible_cpu(cpu) {
+>			struct srcu_data *sdp =3D per_cpu_ptr(ssp->sda, cpu);
+>
+>			del_timer_sync(&sdp->delay_work);
+>			flush_work(&sdp->work);
+>			if (WARN_ON(rcu_segcblist_n_cbs(&sdp->srcu_cblist)))
+>				return; /* Forgot srcu_barrier(), so just leak it! */
+>		}
+>	}
+>	if (WARN_ON(wasused && rcu_seq_state(READ_ONCE(sup->srcu_gp_seq)) !=3D SR=
+CU_STATE_IDLE) ||
+>	    WARN_ON(wasused && rcu_seq_current(&sup->srcu_gp_seq) !=3D sup->srcu_=
+gp_seq_needed) ||
+>	    WARN_ON(srcu_readers_active(ssp))) {
+>		pr_info("%s: Active srcu_struct %p read state: %d gp state: %lu/%lu\n",
+>			__func__, ssp, rcu_seq_state(READ_ONCE(sup->srcu_gp_seq)),
+>			rcu_seq_current(&sup->srcu_gp_seq), sup->srcu_gp_seq_needed);
+>		return; /* Caller forgot to stop doing call_srcu()? */
+>	}
+>	kfree(sup->node);
+>	sup->node =3D NULL;
+>	sup->srcu_size_state =3D SRCU_SIZE_SMALL;
+>	if (!sup->sda_is_static) {
+>		free_percpu(ssp->sda);
+>		ssp->sda =3D NULL;
+>		kfree(sup);
+>		ssp->srcu_sup =3D NULL;
+>	}
+>}
 
 
-Hmm, I'm unable to reproduce the issue. However, it's possible that the
-O_EXCL open for the 'btrfs check' command failed because 'systemd-udev'
-was scanning the btrfs device at the same time. I noticed from the dmesg
-that the 'systemd-udevd' thread was running [1] at some point. I'm not
-entirely sure if it raced with the 'btrfs check' command to successfully
-acquire the O_EXCL lock. If you could send me the 'testcase.full' and
-'testcase.out.bad' logs from the system, I could verify the issue.
+If we have not invoke check_init_srcu_struct() ,  that means call_srcu(),  =
+synchronize_srcu(), srcu_barrier(), start_poll_synchronize_srcu() are also =
+not invoke, so Is there no need to check
+srcu_readers_active()?
 
-[1]
-[  337.769932][ T6408] BTRFS: device fsid 
-8dcaa8fb-b317-4e13-9e04-e9b63fe91948 devid 1 transid 6 /dev/sdb6 scanned 
-by systemd-udevd (6408)
-
-
-Could you please also attach the full log and out.bad file for
-the test case in the report as shown below?
-
-  /lkp/benchmarks/xfstests/results/btrfs/<test-case-number>.full
-  and
-  /lkp/benchmarks/xfstests/results/btrfs/<test-case-number>.out.bad
-
-
-Thanks, Anand
-
->>      ...
->>      (Run 'diff -u /lkp/benchmarks/xfstests/tests/btrfs/172.out 
->> /lkp/benchmarks/xfstests/results//btrfs/172.out.bad'  to see the 
->> entire diff)
->> btrfs/190        15s
->> btrfs/192        101s
->> btrfs/196        163s
->> btrfs/206        4s
->> btrfs/291       [not run] kernel btrfs isn't configured with verity 
->> support
->> Ran: btrfs/172 btrfs/190 btrfs/192 btrfs/196 btrfs/206 btrfs/291
->> Not run: btrfs/291
->> Failures: btrfs/172
->> Failed 1 of 6 tests
->>
->>
->>
->>
->> To reproduce:
->>
->>          git clone https://github.com/intel/lkp-tests.git
->>          cd lkp-tests
->>          sudo bin/lkp install job.yaml           # job file is 
->> attached in this email
->>          bin/lkp split-job --compatible job.yaml # generate the yaml 
->> file for lkp run
->>          sudo bin/lkp run generated-yaml-file
->>
->>          # if come across any failure that blocks the test,
->>          # please remove ~/.lkp and /lkp dir to run from a clean state.
->>
->>
->>
+Thanks
+Zqiang
 
