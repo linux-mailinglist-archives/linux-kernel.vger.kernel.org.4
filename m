@@ -2,159 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4F06C4BE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1606C4BE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCVNeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S229961AbjCVNf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjCVNer (ORCPT
+        with ESMTP id S229459AbjCVNfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:34:47 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A981F1C7C2;
-        Wed, 22 Mar 2023 06:34:46 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MAqXta016074;
-        Wed, 22 Mar 2023 13:34:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YgVZtbUR9p2k85+G8QC4fqCb8I2QJV0Myy+6LpBaJ1o=;
- b=dtuVHfOXuCuS939os10u+epPm9NBN3oVRXg8tUU5bnZTRZkN0IZ6AuIJrNQB1kpDFKlX
- zq52YVW6F7Cen+xZGb9x0g09FfZU36TRVDbHmxRAlbZ6cNRFN2C0ywPe2V7mhAXQoP81
- ippKpSi3b338N1Fg3gjGPtblmLJHEcDAHqwoy7Jp6upFDWWToNINJOjMAsuwTm7CRLpE
- CiAwaDUMVR3qIvp/iZ+jnXOVxrglFXe0fV4x7z+QdRhR4mJYusnb5bReBtas3TMSx9kM
- 13ImDxDqB/twa6PwvhiyK2K7gyILnjIngaonK5j86RT0ThqCPvf4/jiUvDOX+8k1onrR qA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfhntj7y3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 13:34:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32MDYNOR015936
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 13:34:23 GMT
-Received: from [10.50.8.113] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 22 Mar
- 2023 06:34:19 -0700
-Message-ID: <260cf3ae-1acd-c4ac-a42d-4ca848ec5664@quicinc.com>
-Date:   Wed, 22 Mar 2023 19:04:05 +0530
+        Wed, 22 Mar 2023 09:35:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93371CADF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:35:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 82CAD33B66;
+        Wed, 22 Mar 2023 13:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679492121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0BhUqkihiqoY/S89jX4MrGerxrgdsCByMEWhwt4Uu8w=;
+        b=p2oEIxaFTztjDc1HcQrtLXYozgttFgklgC5TTCWHzK3Oz5wLYOPQ3EnYi5vZqgWH6ygStQ
+        C0nxY46P4GqyJhz0wTpBBO3juB7g20YBpyrd1Gse66IHXNUX0VxH/AXcmZYVYXIQrJTrqL
+        RCgv9gjxlukdv8Indk60FhWSvRE4yIc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 63ED713416;
+        Wed, 22 Mar 2023 13:35:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xvOJFRkEG2QkBQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 22 Mar 2023 13:35:21 +0000
+Date:   Wed, 22 Mar 2023 14:35:20 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZBsEGMEfEI98Wpwq@dhcp22.suse.cz>
+References: <20230320180332.102837832@redhat.com>
+ <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
+ <ZBiu8csaxB/zrOAS@tpad>
+ <ZBrUruIsOjdaqiFv@dhcp22.suse.cz>
+ <ZBrlKeZTsHgRW021@tpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V1 1/4] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <1589f33deda07cb9f9e6c3c26bce6e02e53c168e.1679403696.git.quic_schowdhu@quicinc.com>
- <c0c6c79b-ac77-cdbf-5b08-38b89e4fe481@linaro.org>
-Content-Language: en-US
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <c0c6c79b-ac77-cdbf-5b08-38b89e4fe481@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kGOUVGme2fb9q39K6jMWZNO8b2mzgs2Z
-X-Proofpoint-ORIG-GUID: kGOUVGme2fb9q39K6jMWZNO8b2mzgs2Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_11,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 phishscore=0 mlxlogscore=971 bulkscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220099
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBrlKeZTsHgRW021@tpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed 22-03-23 08:23:21, Marcelo Tosatti wrote:
+> On Wed, Mar 22, 2023 at 11:13:02AM +0100, Michal Hocko wrote:
+> > On Mon 20-03-23 16:07:29, Marcelo Tosatti wrote:
+> > > On Mon, Mar 20, 2023 at 07:25:55PM +0100, Michal Hocko wrote:
+> > > > On Mon 20-03-23 15:03:32, Marcelo Tosatti wrote:
+> > > > > This patch series addresses the following two problems:
+> > > > > 
+> > > > > 1. A customer provided evidence indicating that a process
+> > > > >    was stalled in direct reclaim:
+> > > > > 
+> > > > This is addressed by the trivial patch 1.
+> > > > 
+> > > > [...]
+> > > > >  2. With a task that busy loops on a given CPU,
+> > > > >     the kworker interruption to execute vmstat_update
+> > > > >     is undesired and may exceed latency thresholds
+> > > > >     for certain applications.
+> > > > 
+> > > > Yes it can but why does that matter?
+> > > 
+> > > It matters for the application that is executing and expects
+> > > not to be interrupted.
+> > 
+> > Those workloads shouldn't enter the kernel in the first place, no?
+> 
+> It depends on the latency requirements and individual system calls.
+> 
+> > Otherwise the in kernel execution with all the direct or indirect
+> > dependencies (e.g. via locks) can throw any latency expectations off the
+> > window.
+> > 
+> > > > > By having vmstat_shepherd flush the per-CPU counters to the
+> > > > > global counters from remote CPUs.
+> > > > > 
+> > > > > This is done using cmpxchg to manipulate the counters,
+> > > > > both CPU locally (via the account functions),
+> > > > > and remotely (via cpu_vm_stats_fold).
+> > > > > 
+> > > > > Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+> > > > > the initial patch series.
+> > > > > 
+> > > > > 
+> > > > > Performance details for the kworker interruption:
+> > > > > 
+> > > > > oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
+> > > > > oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
+> > > > > oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
+> > > > > kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
+> > > > >  
+> > > > > The example above shows an additional 7us for the
+> > > > > 
+> > > > >         oslat -> kworker -> oslat
+> > > > > 
+> > > > > switches. In the case of a virtualized CPU, and the vmstat_update
+> > > > > interruption in the host (of a qemu-kvm vcpu), the latency penalty
+> > > > > observed in the guest is higher than 50us, violating the acceptable
+> > > > > latency threshold for certain applications.
+> > > > 
+> > > > I do not think we have ever promissed any specific latency guarantees
+> > > > for vmstat. These are statistics have been mostly used for debugging
+> > > > purposes AFAIK. I am not aware of any specific user space use case that
+> > > > would be latency sensitive. Your changelog doesn't go into details there
+> > > > either.
+> > > 
+> > > There is a class of workloads for which response time can be
+> > > of interest. MAC scheduler is an example:
+> > > 
+> > > https://par.nsf.gov/servlets/purl/10090368
+> > 
+> > Yes, I am not disputing low latency workloads in general. I am just
+> > saying that you haven't really established a very sound justification
+> > here.
+> 
+> The -v7 cover letter was updated with additional details, 
+> as you requested (perhaps you missed it):
+> 
+> "Performance details for the kworker interruption:
+> 
+> oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
+> oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
+> oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
+> kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
+> 
+> The example above shows an additional 7us for the
+> 
+>         oslat -> kworker -> oslat
+> 
+> switches. In the case of a virtualized CPU, and the vmstat_update
+> interruption in the host (of a qemu-kvm vcpu), the latency penalty
+> observed in the guest is higher than 50us, violating the acceptable
+> latency threshold for certain applications."
 
+Yes, I have seen that but it doesn't really give a wider context to
+understand why those numbers matter.
 
-On 3/21/2023 11:01 PM, Krzysztof Kozlowski wrote:
-> On 21/03/2023 14:51, Souradeep Chowdhury wrote:
->> All Qualcomm bootloaders log useful timestamp information related
->> to bootloader stats in the IMEM region. Add the child node within
->> IMEM for the boot stat region containing register address and
->> compatible string.
->>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->> ---
->>   .../devicetree/bindings/sram/qcom,imem.yaml          | 20 ++++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> index 665c06e..c8c3890 100644
->> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->> @@ -48,6 +48,26 @@ patternProperties:
->>       $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->>       description: Peripheral image loader relocation region
->>   
->> +  "^boot-stat@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      node for boot stat.
+> > Of course there are workloads which do not want to conflict with
+> > any in kernel house keeping. Those have to be configured and implemented
+> > very carefully though. Vmstat as such should not collide with those
+> > workloads as long as they do not interact with the kernel in a way
+> > counters are updated. Is this hard or impossible to avoid? 
 > 
-> This basically copies the name of node, so not really helpful. Describe
-> what's this.
+> The practical problem we have been seeing is -RT app initialization.
+> For example:
+> 
+> 1) mlock();
+> 2) enter loop without system calls
 
-Ack
-> 
->> +
-> 
-> additionalProperties: false
-> 
->> +    properties:
->> +      compatible:
->> +        items:
-> 
-> Drop items.
-> 
->> +          - const: qcom,imem-boot_stats
-> 
-> No underscores in compatibles. Why this is not SoC specific compatible?
+OK, that is what I have kinda expected. Would have been better to
+mention it explicitly.
 
-Ack. The boot_stats module is not specific to a device. It is written to
-read some values from this imem region which is present for almost all 
-QCOM SoCs. So SoC specific compatible is not given in this case.
+I expect this to be a very common pattern and vmstat might not be the
+only subsystem that could interfere later on. Would it make more sense
+to address this by a more generic solution? E.g. a syscall to flush all
+per-cpu caches so they won't interfere later unless userspace hits the
+kernel path in some way (e.g. flush_cpu_caches(cpu_set_t cpumask, int flags)?
+The above pattern could then be implemented as
 
-> 
->> +
->> +      reg:
->> +        maxItems: 1
->> +        description:
->> +          The base address of the register region in case of
->> +          imem boot stats.
-> 
-> Drop description, it's obvious.
+	do_initial_setup()
+	sched_setaffinity(getpid(), cpumask);
+	flush_cpu_caches(cpumask, 0);
+	do_userspace_loop()
 
-Ack
->> +
->> +    required:
->> +      - compatible
->> +      - reg
->> +
-> Best regards,
-> Krzysztof
-> 
+-- 
+Michal Hocko
+SUSE Labs
