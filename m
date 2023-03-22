@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB6D6C4B16
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6077C6C4B1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjCVMuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S230428AbjCVMvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCVMuG (ORCPT
+        with ESMTP id S230423AbjCVMvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:50:06 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5B29765
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:50:05 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id o44so9136074qvo.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:50:05 -0700 (PDT)
+        Wed, 22 Mar 2023 08:51:43 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0D55F21C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h8so72452243ede.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:51:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1679489404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w7gE8texmE3DXA6Si9qcI9IbQl6PzfIzMyuDdUR1aGM=;
-        b=Zmsb6zCFzu/kmtgX9pgfKoiphZnKawAnRXfkkAM6tgS4xNN/QcVxADZ/FRRGWXnrab
-         J2f5Eoq2GgYVO/M0SALVmy0xbQZb+iixEPkCyuWoBOPZe5PVSC2wjTV8ZTKnWzTXa2lz
-         gaRUjJsv1G8VfJ8UJbkgyRpko0RTono1j5VeDpU0+C7AMiRrGBNYFMm/M9QoVEfH3BXp
-         oHNqoN4L6EjXEXlE20euDUiPvzvLQAmAMIY4mxt7ztSVV7e7vJchdolzra66iFm4RTOb
-         poH15Jsrv6+Q/QNzzeWqctmZFEF18GsTKFsjRJm7XpHEnZk/x8DO9KzfiaynQJg2oKW3
-         k/dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679489495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w7gE8texmE3DXA6Si9qcI9IbQl6PzfIzMyuDdUR1aGM=;
-        b=3T8iBAN3dM+1lUPxBMYcNaI7ZKega8iyqr8TtdqsyILxhgMXEubCjrelS+fCmeg7hf
-         NmO801PG9yD0YhJNjrIhhLORr4jL1/4v6C+BSDxjRgnajgpUXGyt5VhXOSQF+qqJr7aF
-         q0RRNYuI5sa6D5/YrWt4i/HZll/is5jobXVzVAKIqI2UcSrko7S0DgJYVRvHR8L6rMgj
-         5+SZLtBQau7nUd5/465tVJUgvAyahnTpTQB1O8a8iY5eTXZ+C21B1IoqzvnI24m35MUS
-         FLC3AdvbeMAz7IOXw/e39OS1VRXPxikpOLNmWPb08gvBFdz27A+CfBbZdmWyGsvEI6PB
-         1E2Q==
-X-Gm-Message-State: AO0yUKVlSLNFCt4JFUl82N3y8WTR9iILBy2RN5Whg3fSQB3KUZ3/zWjQ
-        ZKdmKaCLhBM0F0aMM2gtiuDvpg==
-X-Google-Smtp-Source: AK7set+VnGTjKIIgaUl7XLaK5Bz0mAnMGv9q8V5I9Mle27qkRgJWN3VPYUoIH6BqWcnLhci14N1fww==
-X-Received: by 2002:a05:6214:acd:b0:5ac:77ef:f76 with SMTP id g13-20020a0562140acd00b005ac77ef0f76mr5491411qvi.44.1679489404535;
-        Wed, 22 Mar 2023 05:50:04 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id c68-20020a379a47000000b00746aa080eefsm1655211qke.6.2023.03.22.05.50.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 05:50:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pexul-000mfl-Ct;
-        Wed, 22 Mar 2023 09:50:03 -0300
-Date:   Wed, 22 Mar 2023 09:50:03 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
-Message-ID: <ZBr5e6tn1i7EE/16@ziepe.ca>
-References: <20230315164152.333251-1-steven.price@arm.com>
- <ZBnBU9OU4iV6CV0W@ziepe.ca>
- <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
+        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
+        b=eQ+8m1BOPPny9D5aNyxbHYGTiCf8Na3k/SMUqrCxaa1Yd6GYecb6qZPcSNejvrGTLh
+         K2tNopHoQ+IXxsJ3Z/xQnfFtL0q0ndPimIrANSMeWDBSrX/roRZA7g4cDspQdSjlTqYO
+         ST0FoVApsvyQx4KLgzGClpGOdlW5k0tRafn6Bi6bY5+mz0yLtL72We2GmJAb5QQ+kYYe
+         IesM6YsnG3KC2VBYu5t3XjhDCr80TdEgGVarrxOWZTFYXfXlzOXXqgB+SxHxbjNmxrcf
+         xvFNepmdn5r+oAq6AWo8ad7eTxr6LF1M25wuqgQgFPKvVkQ0UoqGT+da4ojmX6Z/EwHv
+         B85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679489495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z7uInAiqpQblW1FuguJKCYpcZGazuZcNpStJm/HJYwE=;
+        b=7YDEQRsuYJ6xdUYmhj5WbOBCTSSCiOiMWxVIDXU6VCf0+AW7AdsaRYk0Q9v7xXlWqd
+         uZ12pvE4esuNnrzsG+VJzjHgRovMMnSxx/BzUAvWN6SsSrVr4xSUi3ID9gNmWTvYD6ht
+         4PGpCAmaZCsENMgncowxpduhJcmYl2CtsFap6avIS+JRspU+2mwkUISuD8JnR9DWZZJo
+         2eJGkYg3JwEohz6Alf1wrAMegz3GV7EeKZ6VFRgV/35yQ1IPIlrtHBkD7FBf63UxfqHN
+         c1+uKfFibWab5lioGHx3muuFTDgKMVeyYHIgDnQ4NYd988TJM4Jb2WK9Mt7tFcOBevBe
+         /Yng==
+X-Gm-Message-State: AO0yUKV/+FjLBQFEJT4rUTIusAAxGZlNkKu+xPSIe33aJnOT4MJa/K8Y
+        WA3OAnprirRQ45wD6bnJTS68bEhug8FBPcexKZyZ7g==
+X-Google-Smtp-Source: AK7set+H54h9AIkF40JfLtjJco8DQSGdF2j7ywDCKthKg0qqriwpU2mABmcujmqJNtXCow1utP9NeQroR4FDuRCo+94=
+X-Received: by 2002:a05:6402:3496:b0:4ad:739c:b38e with SMTP id
+ v22-20020a056402349600b004ad739cb38emr1580205edc.1.1679489494871; Wed, 22 Mar
+ 2023 05:51:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230307154524.118541-1-bchihi@baylibre.com> <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
+In-Reply-To: <CAGXv+5F6yFk+VMUe50YfV11Bx3qnQ=FHymeAM=dgfrqwLGrG7Q@mail.gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 22 Mar 2023 13:50:58 +0100
+Message-ID: <CAGuA+oqLi-b7YuUVYzCDQWbztPy7WOVEch6dbrbWzdPkRBOwcg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:02:41AM +0000, Steven Price wrote:
-> On 21/03/2023 14:38, Jason Gunthorpe wrote:
-> > On Wed, Mar 15, 2023 at 04:41:52PM +0000, Steven Price wrote:
-> >> Similar to exynos, we need a set_platform_dma_ops() callback for proper
-> >> operation on ARM 32 bit after recent changes in the IOMMU framework
-> >> (detach ops removal).
-> >>
-> >> Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
-> >> Signed-off-by: Steven Price <steven.price@arm.com>
-> >> ---
-> >> This fixes a splat I was seeing on a Firefly-RK3288, more details here:
-> >> https://lore.kernel.org/all/26a5d1b8-40b3-b1e4-bc85-740409c26838@arm.com/
-> > 
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> 
-> Thanks for the review.
-> 
-> > Do you know what state the iommu is left in after
-> > rk_iommu_detach_device()? Ie is it blocking DMA or doing identity or
-> > something else?
-> 
-> To be honest I really don't know for sure. But from my small
-> understanding of the code: rk_iommu_detach_device() ends up in
-> rk_iommu_disable_paging() which appears to switch to identity mode
-> ("Disable memory translation").
+On Fri, Mar 10, 2023 at 4:22=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
+rote:
+>
+> On Tue, Mar 7, 2023 at 11:45=E2=80=AFPM <bchihi@baylibre.com> wrote:
+> >
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
+> >
+> > This series is a continuation of the original series "Add LVTS Thermal =
+Architecture" v14 :
+> >     https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.=
+50294-1-bchihi@baylibre.com/
+> >
+> > Based on top of thermal/linux-next :
+> >     base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+> >
+> > Depends on these patches as they are not yet applyied to thermal/linux-=
+next branch :
+> >     [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already inc=
+luded in linux master branch)
+> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
+50294-4-bchihi@baylibre.com/
+> >     [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and therm=
+al nodes
+> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
+50294-6-bchihi@baylibre.com/
+> >     [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation =
+threshold
+> >     https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.=
+50294-7-bchihi@baylibre.com/
+> >
+> > Balsam CHIHI (4):
+> >   dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
+> >     controllers for mt8195
+> >   thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
+> >   arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+> >   arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+>
+> Whole series is
+>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+>
+> on MT8195 Tomato Chromebook.
 
-Can you consider writing this patch like this instead:
+Hi Chen-Yu Tsai,
 
-https://lore.kernel.org/linux-iommu/ZBnef7g7GCxogPNz@ziepe.ca/
+Thank you very much for testing it!
 
-?
-
-I'd much rather we move toward clearly documenting what is going on
-with the HW and remove this undefined "detach" language.
-
-Jason
+Best regards,
+Balsam
