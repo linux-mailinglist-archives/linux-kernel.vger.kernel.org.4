@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DF16C515D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176386C515F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjCVQ6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:58:10 -0400
+        id S231182AbjCVQ6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:58:12 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCVQ6J (ORCPT
+        with ESMTP id S230081AbjCVQ6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:58:09 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AF114EB2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:58:07 -0700 (PDT)
+        Wed, 22 Mar 2023 12:58:10 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE39719C6B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:58:08 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3FD3D20008;
-        Wed, 22 Mar 2023 16:58:05 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5A95120007;
+        Wed, 22 Mar 2023 16:58:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679504286;
+        t=1679504287;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2mFPQR5z9/maQ8tjhD2kQ4haZ/Jx+nECWQFGftrfkyM=;
-        b=FxmdX5Gzu7doM/iqCbCAYGxWUC3t/zjFQv8o35Yi38qfGijA6PkURhwmoX8qe1a838Tie2
-        7AdMSAYqTdVfwklycvWmCJB5wbovPN6cgHzELQt13y70Rb8GfUL2Sl1ocsN8C0D0cSDWDv
-        GMe3p01XSH8Kbu/xXMrf+gBd4fcxP2L+O4Dm24MC1m2FzULx6wCV/Qy0VajwhUyV9N956a
-        a601xecc2il9oFNYFn9CspEOL1IgsHpTLGC3IA/dS8itrXos/a5uBs9bnNIFaD7XzFZC1K
-        YMfBEgq0kzD8c5k9M+q6DSYssBsXzQ0INujzwGXj2boFUJyUAwMu5LoMkeswCQ==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z0DSwTWAElJZIp9DwGFl/1GywW/Rxfgdyjr2ORr+Pfg=;
+        b=Z5TvrXxNV0wxhQzJOnIzKjpE6LYsWW6wTMX9cbWkLhE7diKjrxyRKV5JlleTj+fhND15Du
+        lnKHDCpa4M2lYSvYzyOFkvLVKF9QWScA1heAIWiFyf3IkO4XeHmg+A1i4coeeCrcj06BM0
+        dcLFRHIZ56T4W/KUXQ2gyIFLPtx/uzmJponeFMx7gE41VVaVqK6B+2iGn76bT6UrSmRmnL
+        HkfVcDYGWhDsuG29DNgOk6dYsnxU8TqQovB1bnw3HZUt+5XE0ZQfTEUj7F1otjNR/KdSbE
+        bz6DPNNfDea20ED49KHhE12XmjhYI5cGUNSRlUvlqbYlYOjxdvNNn0gJBLDFXg==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,50 +40,55 @@ Cc:     Robert Marko <robert.marko@sartura.hr>,
         Michael Walle <michael@walle.cc>,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2 0/4] nvmem: layouts: Create a macro to register drivers 
-Date:   Wed, 22 Mar 2023 17:58:00 +0100
-Message-Id: <20230322165804.2240285-1-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 1/4] nvmem: Add macro to register nvmem layout drivers
+Date:   Wed, 22 Mar 2023 17:58:01 +0100
+Message-Id: <20230322165804.2240285-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230322165804.2240285-1-miquel.raynal@bootlin.com>
+References: <20230322165804.2240285-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Srinivas,
+Provide a module_nvmem_layout_driver() macro at the end of the
+nvmem-provider.h header to reduce the boilerplate when registering nvmem
+layout drivers.
 
-Following your former review, here are a few changes creating and using
-a macro to simplify nvmem layout driver registration.
+Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ include/linux/nvmem-provider.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-While doing that I figured out the MODULE_ALIAS() macro in the Onie TLV
-driver was useless and wrong, so there is a patch to drop it, but if you
-wish you can also squash it with:
-"nvmem: layouts: onie-tlv: Add new layout driver".
-
-Thanks!
-Miquèl
-
-Changes in v2:
-* First patch now includes driver.h as reported by Rafal.
-
-Miquel Raynal (4):
-  nvmem: Add macro to register nvmem layout drivers
-  nvmem: layouts: sl28vpd: Use module_nvmem_layout_driver()
-  nvmem: layouts: onie-tlv: Use module_nvmem_layout_driver()
-  nvmem: layouts: onie-tlv: Drop wrong module alias
-
- drivers/nvmem/layouts/onie-tlv.c | 15 +--------------
- drivers/nvmem/layouts/sl28vpd.c  | 14 +-------------
- include/linux/nvmem-provider.h   |  6 ++++++
- 3 files changed, 8 insertions(+), 27 deletions(-)
-
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 0cf9f9490514..3e97c8315c45 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -9,6 +9,7 @@
+ #ifndef _LINUX_NVMEM_PROVIDER_H
+ #define _LINUX_NVMEM_PROVIDER_H
+ 
++#include <linux/device/driver.h>
+ #include <linux/err.h>
+ #include <linux/errno.h>
+ #include <linux/gpio/consumer.h>
+@@ -240,4 +241,9 @@ nvmem_layout_get_match_data(struct nvmem_device *nvmem,
+ }
+ 
+ #endif /* CONFIG_NVMEM */
++
++#define module_nvmem_layout_driver(__layout_driver)		\
++	module_driver(__layout_driver, nvmem_layout_register,	\
++		      nvmem_layout_unregister)
++
+ #endif  /* ifndef _LINUX_NVMEM_PROVIDER_H */
 -- 
 2.34.1
 
