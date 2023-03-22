@@ -2,113 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD916C4CE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB366C4CEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjCVOF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S231269AbjCVOGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjCVOFu (ORCPT
+        with ESMTP id S231288AbjCVOGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:05:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26B17559D1;
-        Wed, 22 Mar 2023 07:05:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C57894B3;
-        Wed, 22 Mar 2023 07:06:24 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 170F93F71E;
-        Wed, 22 Mar 2023 07:05:36 -0700 (PDT)
-Message-ID: <848c4fb3-d3c4-a7f0-9df8-9b25c537f42c@arm.com>
-Date:   Wed, 22 Mar 2023 15:05:25 +0100
+        Wed, 22 Mar 2023 10:06:03 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C41559DC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:05:51 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id i6so21126222ybu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1679493950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tu9ylOLyEEUljLbJanTyH5TjxDHfMP7bFUbUHPkgu20=;
+        b=Ncfhn81yYigZZ5L7fp6Ojm4/iM9hNwnvT2Y3/OR2PMO6MV57bA8wj4uQQHFTlMfQ9b
+         EIxwloVA8tp1uJPGRty+5W4oy3de3PMKEJEwGXOf2u3fu98/EGkkVyzUKMRZBClY973K
+         FE2ssXKyRh85hcp16b69hXcNheDkrhWHXe55nO7u67lKGPY+jOgTBaaede+norCVOKQY
+         3wyj2hhZoRwdagrLh7YiYoCHhLLPvy+teYGRhIxd2XgJ1J21g7l4/I0O2Mbny9LGjdK1
+         BuX5vW2syhgZugPGVUgAdrOyAHAe/s3Ot4w4SDI0QlQM4fxr+nbCerVGWaNy0s9fdE27
+         xpMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679493950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tu9ylOLyEEUljLbJanTyH5TjxDHfMP7bFUbUHPkgu20=;
+        b=hbTn7VNt8JCT2NN6fnxEF9GYyCXnkypE4X+gO6bs34I1lwZUH8NAhcwBblw5m28PUI
+         /G4laqShq6Orc666eApbDin+IWjjOB216syViO3cxV12EKxluEEE6CfdNHWjv/gy4IZd
+         POaofCBYZJ7+eVVYRYTcU8sFcmM/Jn3NCGOn+RDtVV2D7dfa1JV7I2kP8gRCvtVAbBIM
+         C19HqTs36TVG5KWGddvzTr99+KmBkFRkHmtPobMjb0VCBVfz47V6JlgLHNkx2iS+wLFC
+         SmJm/71EnWlOHiCd7n+zTqwqxNhPwrPXwOgVD7bqxrsSyqHoZd4qhZcw6DbEaIR+1I6+
+         43HA==
+X-Gm-Message-State: AAQBX9dMwBiEhGI7I8q+caOHRyQZoYZfilNWWYehZpvB8BhEqp1tBDwM
+        8XMOCJSIzXLwE3KY0AJ8pywU/2aUKBzUwUATTqk5
+X-Google-Smtp-Source: AKy350YWJvvf7gP83H4sr4YJ3tFloH7yuJ9q4GscPsWMfRCZOFosCJVgg6V7XrhMh+WWlY5XAdl8Qa9ox2lEuo3exxY=
+X-Received: by 2002:a05:6902:1890:b0:b72:fff0:2f7f with SMTP id
+ cj16-20020a056902189000b00b72fff02f7fmr1397709ybb.4.1679493950107; Wed, 22
+ Mar 2023 07:05:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
- in cpusets
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230315121812.206079-1-juri.lelli@redhat.com>
- <20230315121812.206079-3-juri.lelli@redhat.com>
- <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
- <ZBH9E7lCEXcFDBG4@localhost.localdomain>
- <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <Yao51m9EXszPsxNN@redhat.com> <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
+ <YapjNRrjpDu2a5qQ@redhat.com> <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
+ <CA+FmFJA-r+JgMqObNCvE_X+L6jxWtDrczM9Jh0L38Fq-6mnbbA@mail.gmail.com>
+ <CAHC9VhRer7UWdZyizWO4VuxrgQDnLCOyj8LO7P6T5BGjd=s9zQ@mail.gmail.com>
+ <CAHC9VhQkLSBGQ-F5Oi9p3G6L7Bf_jQMWAxug_G4bSOJ0_cYXxQ@mail.gmail.com>
+ <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com>
+ <YitWOqzIRjnP1lok@redhat.com> <CAHC9VhQ+x3ko+=oU-P+w4ssqyyskRxaKsBGJLnXtP_NzWNuxHg@mail.gmail.com>
+ <20230322072850.GA18056@suse.de>
+In-Reply-To: <20230322072850.GA18056@suse.de>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 22 Mar 2023 10:05:39 -0400
+Message-ID: <CAHC9VhTgbCUAT914f66p15HXP-91aAfNrkxHpS9fFoyPLhzj8A@mail.gmail.com>
+Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr fix
+To:     Johannes Segitz <jsegitz@suse.com>
+Cc:     Amir Goldstein <amir73il@gmail.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        David Anderson <dvander@google.com>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
+        paulmoore@microsoft.com, luca.boccassi@microsoft.com,
+        brauner@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 19:01, Waiman Long wrote:
-> 
-> On 3/15/23 13:14, Juri Lelli wrote:
->> On 15/03/23 11:46, Waiman Long wrote:
->>> On 3/15/23 08:18, Juri Lelli wrote:
+On Wed, Mar 22, 2023 at 3:28=E2=80=AFAM Johannes Segitz <jsegitz@suse.com> =
+wrote:
+> On Fri, Mar 11, 2022 at 03:52:54PM -0500, Paul Moore wrote:
+> > On Fri, Mar 11, 2022 at 9:01 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+> > > Agreed. After going through the patch set, I was wondering what's the
+> > > overall security model and how to visualize that.
+> > >
+> > > So probably there needs to be a documentation patch which explains
+> > > what's the new security model and how does it work.
+> >
+> > Yes, of course.  I'll be sure to add a section to the existing docs.
+> >
+> > > Also think both in terms of DAC and MAC. (Instead of just focussing t=
+oo
+> > > hard on SELinux).
+> >
+> > Definitely.  Most of what I've been thinking about the past day or so
+> > has been how to properly handle some of the DAC/capability issues; I
+> > have yet to start playing with the code, but for the most part I think
+> > the MAC/SELinux bits are already working properly.
+> >
+> > > My understanding is that in current model, some of the overlayfs
+> > > operations require priviliges. So mounter is supposed to be privilige=
+d
+> > > and does the operation on underlying layers.
+> > >
+> > > Now in this new model, there will be two levels of check. Both overla=
+y
+> > > level and underlying layer checks will happen in the context of task
+> > > which is doing the operation. So first of all, all tasks will need
+> > > to have enough priviliges to be able to perform various operations
+> > > on lower layer.
+> > >
+> > > If we do checks at both the levels in with the creds of calling task,
+> > > I guess that probably is fine. (But will require a closer code inspec=
+tion
+> > > to make sure there is no privilege escalation both for mounter as wel=
+l
+> > > calling task).
+> >
+> > I have thoughts on this, but I don't think I'm yet in a position to
+> > debate this in depth just yet; I still need to finish poking around
+> > the code and playing with a few things :)
+> >
+> > It may take some time before I'm back with patches, but I appreciate
+> > all of the tips and insight - thank you!
+>
+> Let me resurrect this discussion. With
+> https://github.com/fedora-selinux/selinux-policy/commit/1e8688ea694393c9d=
+918939322b72dfb44a01792
+> the Fedora policy changed kernel_t to a confined domain. This means that
+> many overlayfs setups that are created in initrd will now run into issues=
+,
+> as it will have kernel_t as part of the saved credentials.
 
-[...]
+Regardless of any overlayfs cred work, it seems like it would also be
+worth spending some time to see if the kernel_t mounter creds
+situation can also be improved.  I'm guessing this is due to mounts
+happening before the SELinux policy is loaded?  Has anyone looked into
+mounting the SELinux policy even earlier in these cases (may not be
+possible) and/or umount/mount/remounting the affected overlayfs-based
+filesystems after the policy has been loaded?
 
->>>> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct
->>>> cgroup_taskset *tset)
->>>>            ret = security_task_setscheduler(task);
->>>>            if (ret)
->>>>                goto out_unlock;
->>>> +
->>>> +        if (dl_task(task)) {
->>>> +            cs->nr_deadline_tasks++;
->>>> +            cpuset_attach_old_cs->nr_deadline_tasks--;
->>>> +        }
->>>>        }
->>> Any one of the tasks in the cpuset can cause the test to fail and
->>> abort the
->>> attachment. I would suggest that you keep a deadline task transfer
->>> count in
->>> the loop and then update cs and cpouset_attach_old_cs only after all the
->>> tasks have been iterated successfully.
->> Right, Dietmar I think commented pointing out something along these
->> lines. Think though we already have this problem with current
->> task_can_attach -> dl_cpu_busy which reserves bandwidth for each tasks
->> in the destination cs. Will need to look into that. Do you know which
->> sort of operation would move multiple tasks at once?
-> 
-> Actually, what I said previously may not be enough. There can be
-> multiple controllers attached to a cgroup. If any of thier can_attach()
-> calls fails, the whole transaction is aborted and cancel_attach() will
-> be called. My new suggestion is to add a new deadline task transfer
-> count into the cpuset structure and store the information there
-> temporarily. If cpuset_attach() is called, it means all the can_attach
-> calls succeed. You can then update the dl task count accordingly and
-> clear the temporary transfer count.
-> 
-> I guess you may have to do something similar with dl_cpu_busy().
+I can't say I'm the best person to comment on how the Fedora SELinux
+policy is structured, but I do know a *little* about SELinux and I
+think that accepting kernel_t as an overlayfs mounter cred is a
+mistake.
 
-I gave it a shot:
+> So while the
+> original use case that inspired the patch set was probably not very commo=
+n
+> that now changed.
+>
+> It's tricky to work around this. Loading a policy in initrd causes a lot =
+of
+> issues now that kernel_t isn't unconfined anymore. Once the policy is
+> loaded by systemd changing the mounts is tough since we use it for /etc a=
+nd
+> at this time systemd already has open file handles for policy files in
+> /etc.
 
-https://lkml.kernel.org/r/20230322135959.1998790-1-dietmar.eggemann@arm.com
+It's been a while since I worked on this, but I pretty much had to
+give up on the read-write case, the overlayfs copy-up/work-dir
+approach made this impractical, or at least I couldn't think of a sane
+way to handle this without some sort of credential override.  However,
+I did have a quick-and-dirty prototype that appeared to work well in
+the read-only/no-work-dir case; I think I still have it in a
+development branch somewhere, I can dig it back up and get it ported
+to a modern kernel if there is any interest.
+
+However, when discussing the prototype with Christian Brauner off-list
+(added to the CC line) he still objected to the no-cred-override
+approach and said it wasn't something he could support, so I dropped
+it and focused on the other piles of fire lying about my desk (my
+apologies to Christian if I'm mis-remembering/understanding the
+conversation).  I still think there is value in supporting a
+no-creds-override option, and if there is basic support for getting
+this upstream I'm happy to pick the work back up, but I can't invest a
+lot more time in this if there isn't an agreement from the
+overlayfs/VFS maintainers that this is something that would consider.
+
+--
+paul-moore.com
