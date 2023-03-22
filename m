@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CD26C4364
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F416C4365
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjCVGlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S230090AbjCVGlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCVGkp (ORCPT
+        with ESMTP id S229843AbjCVGkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:40:45 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B9C5BC83
+        Wed, 22 Mar 2023 02:40:46 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10055BC8A
         for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:40:44 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y15so22046534lfa.7
+Received: by mail-lf1-x12d.google.com with SMTP id q16so11212936lfe.10
         for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679467242;
+        d=linaro.org; s=google; t=1679467243;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7CqzcpXczhyO/MskUeS2f3sX+qT4MR1so+/9l/YtqFc=;
-        b=FBY/smWUsRVvtCRBAfu8tQadv6JK++O9TapE/YI0DuNHxOCWLhDs9GYPplwqqpsBN5
-         zVkmNEZr7JO0NIFOnoRkM+/kA0/flpg7UlxvUyezgLe69esU9lgSuei0bOORS9cW03t1
-         8O8XnEfpk2qVI3bQiPy4QJnSZXgQ7q7V1jXrcR+WhYuWOVcQLkiKD56DbPzvluSBTO92
-         RHlyaPq42jgfy73Onu8iS27AINcP82/5iYD/pTUwGROob5gLLEgz1EGBXIjz90Z8JoJt
-         yYfsDmgzPJoGKQj6sLskGF4mSscx1fjW8OZHqHrIpN6RDcuSMlS503Hd+hGOEiuI/eL2
-         TutA==
+        bh=DJfZKigBIeChWOChUBeVAQfEZHFms3jVy0ZK/PQ531k=;
+        b=GXOWONJwTRivIy6517fCgO6hyO0N3AxoYQNRie7uPM3oSvUEtTfErM2Ju2Q+JMhwrh
+         02KdBggKf8GXBSQxTATLVlizdGXlaSxSk1nSP8Tk1dU0RQu0gDc5dlLb5Xud1wOVxLfm
+         +05ecDO2Rhnr4cW/nwVFJcBZrtxcYO6gmrqcCHTIPM23CMFDE8QJ04GeT8A6TjZUW4fq
+         vVnkmzNj5CwUGHY2SLY+QSAaudULkkR3Z0Nbm1VrNGgvRmj+wtfmUdW2AfeJ4Ci4Pr8c
+         b216+98OAE3zfra/5eSupJyZ+f5v+4fR7Q1yHw7JoxAlzftJEEXq1By36uUSpgOHLBwg
+         2/Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679467242;
+        d=1e100.net; s=20210112; t=1679467243;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7CqzcpXczhyO/MskUeS2f3sX+qT4MR1so+/9l/YtqFc=;
-        b=si/OrXoYGV6g0JOBdhTN80TEjOCaw1lCEUQ4QowNtGVidtbqKQM1KGw/gE5m0/WR4/
-         P8HrW7yd854SDEo87xUN45RmCjSR1/oGYcryyKZVRESnyP5xPE1vuOL89/1w77Wmjp+u
-         lXOXp+7JueaNeC0lIIlVbB3xe0SOP0Lj0FJGAd8o09TlYNCVRnad4Ts68XN3KE+RPK0m
-         NcGphwX/VqRQJl58BlxyqjFUEIDtZVaQCJ8ZLj4MBKZJFMUx9aa2vpDLVdEOck4yt4X/
-         2jHnew3WdsONppzSxF7ss23hII2XpXSTDIuQnqFtjdCVOvYtl8ykbF3ZQpdD4v3seLtb
-         sogA==
-X-Gm-Message-State: AO0yUKXTo+Nfo4GNjz1M7Ji9f4bYXuDb1WU1gX/eofXiVjYxtqI6cvYe
-        F9571yq2ntGBECiKTKXF/jUNzgzK2Bw95egJBW4D7g==
-X-Google-Smtp-Source: AK7set+T+BKSGh6wjzTT0l/3oupZc6kAm36EV9dKkOOpmKKNSV807apEePn3kBnZaY/cn0m5+R86Lg==
-X-Received: by 2002:a05:6512:3751:b0:4a4:68b9:19e7 with SMTP id a17-20020a056512375100b004a468b919e7mr1642583lfs.15.1679467242589;
-        Tue, 21 Mar 2023 23:40:42 -0700 (PDT)
+        bh=DJfZKigBIeChWOChUBeVAQfEZHFms3jVy0ZK/PQ531k=;
+        b=M8iD/NhXxpkyo9esRnjrVB90p3Hgw+tw1o3vZOW/VpM1kVaB/W2rfqcvQ7es0hF+IU
+         TjLGVdAfi2eppUr1ZotCyL+CQEwLLkGhKiFe910aaRquuC1ETzb46RVCSHWiHKuZKRx9
+         ipipZscJMI1osz+R1qxbkUvcRLS536u/P2J1OCwpijzlzV9YXJu7gZ402OPrtST+gAOz
+         d1Y/Mn0trR7+AXi11T4tikoKl92ytXIkeGHhoTGfEVFJOOCGwZ8Wn+MmsbrjZPK5eYCB
+         Vu449R0hdKko1hcrfjxig6aPG9KLTmvtzbtqGMyzzyWtLxFTeqQJlOHg21ZY/tVokUg8
+         7S1w==
+X-Gm-Message-State: AO0yUKXiMgUVbBmNwXluXEB4j0XKwGR/e2apjNBXfjvZuv7+uI1Zw5dU
+        Om5b6469KZK5t9pTFJPb1xdp9A==
+X-Google-Smtp-Source: AKy350aU6oZfJKOyA5joErp2v+jd3KokKBm3ODOpDtqzLBKBfJpb9+F7caJ9EwuQ56pHTjQbER2k6Q==
+X-Received: by 2002:ac2:428e:0:b0:4ea:c730:aac3 with SMTP id m14-20020ac2428e000000b004eac730aac3mr391733lfh.3.1679467243288;
+        Tue, 21 Mar 2023 23:40:43 -0700 (PDT)
 Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
-        by smtp.gmail.com with ESMTPSA id n20-20020ac242d4000000b004dafde0e7b7sm2462255lfl.279.2023.03.21.23.40.41
+        by smtp.gmail.com with ESMTPSA id n20-20020ac242d4000000b004dafde0e7b7sm2462255lfl.279.2023.03.21.23.40.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 23:40:41 -0700 (PDT)
+        Tue, 21 Mar 2023 23:40:42 -0700 (PDT)
 From:   Tudor Ambarus <tudor.ambarus@linaro.org>
 To:     michael@walle.cc, pratyush@kernel.org
 Cc:     miquel.raynal@bootlin.com, richard@nod.at,
         Takahiro.Kuwano@infineon.com, bacem.daassi@infineon.com,
         linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: [PATCH v4 07/11] mtd: spi-nor: Favor the BFPT-parsed set_4byte_addr_mode method
-Date:   Wed, 22 Mar 2023 06:40:29 +0000
-Message-Id: <20230322064033.2370483-8-tudor.ambarus@linaro.org>
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH v4 08/11] mtd: spi-nor: Stop exporting spi_nor_restore()
+Date:   Wed, 22 Mar 2023 06:40:30 +0000
+Message-Id: <20230322064033.2370483-9-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322064033.2370483-1-tudor.ambarus@linaro.org>
 References: <20230322064033.2370483-1-tudor.ambarus@linaro.org>
@@ -74,101 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JESD216 SFDP defines in the BFPT standard methods to enter and exit the
-4-Byte Address Mode. The flash parameters and settings that are retrieved
-from SFDP have higher precedence than the static initialized ones, because
-they should be more accurate and less error prone than those initialized
-statically. Favor the BFPT-parsed set_4byte_addr_mode method and use the
-generic core methods where possible.
-This patch may introduce regressions in case BFPT contains wrong data. The
-fix is to introduce a post_bfpt() fixup hook and update the wrong BFPT
-data.
+Some SPI NOR controllers that used this method were moved to
+drivers/spi/. We don't accept new support for the existing SPI NOR
+controllers drivers under drivers/mtd/spi-nor/controllers/ and we
+encourage their owners to move the drivers under drivers/spi/.
+Make spi_nor_restore() private as we're going to use it just in core.c.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c      | 7 ++++++-
- drivers/mtd/spi-nor/macronix.c  | 8 +++++++-
- drivers/mtd/spi-nor/micron-st.c | 6 ++++--
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ Documentation/driver-api/mtd/spi-nor.rst | 3 ---
+ drivers/mtd/spi-nor/core.c               | 3 +--
+ include/linux/mtd/spi-nor.h              | 6 ------
+ 3 files changed, 1 insertion(+), 11 deletions(-)
 
+diff --git a/Documentation/driver-api/mtd/spi-nor.rst b/Documentation/driver-api/mtd/spi-nor.rst
+index 4a3adca417fd..c22f8c0f7950 100644
+--- a/Documentation/driver-api/mtd/spi-nor.rst
++++ b/Documentation/driver-api/mtd/spi-nor.rst
+@@ -63,6 +63,3 @@ The main API is spi_nor_scan(). Before you call the hook, a driver should
+ initialize the necessary fields for spi_nor{}. Please see
+ drivers/mtd/spi-nor/spi-nor.c for detail. Please also refer to spi-fsl-qspi.c
+ when you want to write a new driver for a SPI NOR controller.
+-Another API is spi_nor_restore(), this is used to restore the status of SPI
+-flash chip such as addressing mode. Call it whenever detach the driver from
+-device or reboot the system.
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index e212cc3c630d..2a08f8de97fa 100644
+index 2a08f8de97fa..1cf566fed9c6 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -2533,6 +2533,8 @@ static void spi_nor_init_fixup_flags(struct spi_nor *nor)
-  */
- static void spi_nor_late_init_params(struct spi_nor *nor)
- {
-+	struct spi_nor_flash_parameter *params = nor->params;
-+
- 	if (nor->manufacturer && nor->manufacturer->fixups &&
- 	    nor->manufacturer->fixups->late_init)
- 		nor->manufacturer->fixups->late_init(nor);
-@@ -2540,6 +2542,10 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
- 	if (nor->info->fixups && nor->info->fixups->late_init)
- 		nor->info->fixups->late_init(nor);
- 
-+	/* Default method kept for backward compatibility. */
-+	if (!params->set_4byte_addr_mode)
-+		params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
-+
- 	spi_nor_init_flags(nor);
- 	spi_nor_init_fixup_flags(nor);
- 
-@@ -2606,7 +2612,6 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
- 	struct device_node *np = spi_nor_get_flash_node(nor);
- 
- 	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
--	params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
- 	params->otp.org = &info->otp_org;
- 
- 	/* Default to 16-bit Write Status (01h) Command */
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 91a8fa7d4512..075a26945f2d 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -105,11 +105,17 @@ static const struct flash_info macronix_nor_parts[] = {
- static void macronix_nor_default_init(struct spi_nor *nor)
- {
- 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
--	nor->params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_en4b_ex4b;
-+}
-+
-+static void macronix_nor_late_init(struct spi_nor *nor)
-+{
-+	if (!nor->params->set_4byte_addr_mode)
-+		nor->params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_en4b_ex4b;
+@@ -2924,7 +2924,7 @@ static void spi_nor_put_device(struct mtd_info *mtd)
+ 	module_put(dev->driver->owner);
  }
  
- static const struct spi_nor_fixups macronix_nor_fixups = {
- 	.default_init = macronix_nor_default_init,
-+	.late_init = macronix_nor_late_init,
- };
- 
- const struct spi_nor_manufacturer spi_nor_macronix = {
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index a75f0f4e1c38..4d5333b14807 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -425,13 +425,15 @@ static void micron_st_nor_default_init(struct spi_nor *nor)
- 	nor->flags |= SNOR_F_HAS_LOCK;
- 	nor->flags &= ~SNOR_F_HAS_16BIT_SR;
- 	nor->params->quad_enable = NULL;
--	nor->params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- }
- 
- static void micron_st_nor_late_init(struct spi_nor *nor)
+-void spi_nor_restore(struct spi_nor *nor)
++static void spi_nor_restore(struct spi_nor *nor)
  {
-+	struct spi_nor_flash_parameter *params = nor->params;
-+
- 	if (nor->info->mfr_flags & USE_FSR)
--		nor->params->ready = micron_st_nor_ready;
-+		params->ready = micron_st_nor_ready;
-+	params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- }
+ 	int ret;
  
- static const struct spi_nor_fixups micron_st_nor_fixups = {
+@@ -2944,7 +2944,6 @@ void spi_nor_restore(struct spi_nor *nor)
+ 	if (nor->flags & SNOR_F_SOFT_RESET)
+ 		spi_nor_soft_reset(nor);
+ }
+-EXPORT_SYMBOL_GPL(spi_nor_restore);
+ 
+ static const struct flash_info *spi_nor_match_name(struct spi_nor *nor,
+ 						   const char *name)
+diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+index a3f8cdca90c8..8aac4522bf2a 100644
+--- a/include/linux/mtd/spi-nor.h
++++ b/include/linux/mtd/spi-nor.h
+@@ -437,10 +437,4 @@ static inline struct device_node *spi_nor_get_flash_node(struct spi_nor *nor)
+ int spi_nor_scan(struct spi_nor *nor, const char *name,
+ 		 const struct spi_nor_hwcaps *hwcaps);
+ 
+-/**
+- * spi_nor_restore_addr_mode() - restore the status of SPI NOR
+- * @nor:	the spi_nor structure
+- */
+-void spi_nor_restore(struct spi_nor *nor);
+-
+ #endif
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
