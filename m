@@ -2,131 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EF56C4F65
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822766C4F67
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjCVP0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        id S229731AbjCVP2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCVP0B (ORCPT
+        with ESMTP id S229555AbjCVP17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:26:01 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2059.outbound.protection.outlook.com [40.107.104.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF2461333
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:25:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EReBtrL9dWpx0hvGqCDaHbMvvj77vae0kA+y8g3vm33QFq1NdXC76njgddb87eTAw2kRbpR3eNRgngUEEWcNBZaYmcyn0+qR0YnuzIlMZ+Yp7z6MNOHGQeJ2DVjr/j+zfgKaWJopurZW2MkkY+QLMsGpsWbdzfxeaB+Tr1YLpuxOFSycPEgDI7TFPWJex0+45I3ORydBpKInz+Bv4Zb1Nx7WKVT/MQi7ULBNGgCSYJk6U3ujkOO12LJfFhTbGlYxBssRQYI7cPMpUTqoTr9zFZr4NvQP+1LJXvUWq57aDoYeReoadhp8WZTVWPFlJl6mQyIRVIOiFRkGy91hPC/+zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TFJ3YesztHquD0nm5em9+9Nu0IJw5d4pfg/EFpi9D8I=;
- b=AxvsR5oP6LNsSCVBoWbhV6DMhuKzHNSw3NAfRui448eq36P2PIcleA2CevhgZier1r5jRBaokMDkpxCbNXPToa9Hw5SgwWaiOlCQ9KEfzpx1tbvYGRvIJazcL7QVGBQ8lXXaQLc5Pfw/yaBiP5ZJl0iE0ytFvCE/Pd2j/XK8dyCS6WPx50C8akB/tRMp5mQbmX8ySuFG/wG1M1dgrqQp2ZZMIx9vWtSwj1SOxT8CrM68e8AwukdQKuR/YGqGMWtMz1I+99/0bMdmDLegorf1YzTuWige2yACBldPmLZZQTVP0oWOqJIVRHdzHOj6Zn14tNvuyGp/w02S9coNuQozIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TFJ3YesztHquD0nm5em9+9Nu0IJw5d4pfg/EFpi9D8I=;
- b=meMWFjo+iWBM5gqgvD+vYAYMV4qGFb+rvYTTQIKmOe8UzDzz9zUhTa8dlzXhQkAXi+rpoeE46hvGsKZCpQ0q0I97vdFQBUg0n57i3RR8+jinKI8Wc0myshPWaTP1496P/tqnlwwrQmY3XTA/sVc2Om4pyu6ua1CMbF0NqWV+rHE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AS8PR04MB8401.eurprd04.prod.outlook.com (2603:10a6:20b:3f3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 15:25:54 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8%7]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 15:25:54 +0000
-Date:   Wed, 22 Mar 2023 17:25:51 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v1 mfd] mfd: ocelot-spi: fix bulk read
-Message-ID: <20230322152551.q5sjc62yu3ijp4wj@skbuf>
-References: <20230322141130.2531256-1-colin.foster@in-advantage.com>
- <20230322141130.2531256-1-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322141130.2531256-1-colin.foster@in-advantage.com>
- <20230322141130.2531256-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: AS4PR09CA0014.eurprd09.prod.outlook.com
- (2603:10a6:20b:5e0::17) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 22 Mar 2023 11:27:59 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B091
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:27:56 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eg48so74408925edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679498875;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HJ47atBnDcevMrGRcw1g+2ViQEBHvjetn66KKty8N7E=;
+        b=LwbUNHS1XYorMeez09Zc//CbWWBSxXuTpmYLAUEZj5y9HUyyrCYvzXUOOdLEACmXFM
+         fz629nuIjPa0/S+NcZ8KYfCAtyBpQ7P+nlDNI3TgDFekCP+92JRHvnGggXhhmCcz9T1z
+         +fadNuuYB1qnstpnSH3lNCZwFgfpl8CuLztxNP4ErR4uCs0517wG+fNnadFXWl+CigPf
+         gEjlo+aQY6p84Ybu3XmKpCQcxdyGmw3asPvCgKy7jFDDxvdZd6SpSNjeCdR8HE3OkJAP
+         y55QAA/ThlCEgHJp5+VP/d3b9Y5PaBky3aOfFmURVYZNMm1Hq4Th1oqjBn+uqaQ7LMVS
+         hTOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679498875;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJ47atBnDcevMrGRcw1g+2ViQEBHvjetn66KKty8N7E=;
+        b=MvsKhjF9939VV9GhGIC/UheZ+NjfjClbsWEnZ8ID6rsgNPF5bkWy7Jlr6mR1peTvrr
+         v11brQkoYXWRqQJB2sKlDTswWlhrqL9OsaXhTST+mg9QzK70U+dyH+oLZH3pHYJyLNMD
+         gQwSZbUGdPXal9EXd7SkpkydnAoB6077q9KWG20AF0KV7o8b6JFo+jDv5UpTe8ygh2VF
+         yK0+mC/27dLhfOM/mdXh2vMHBxue7LiQE4/emX00Tcv0UHo1YD1Bpt6GHpRNTKVHottW
+         W1yodvNpv2prG3zdHmIAaaNTlptd6JNOBcuuky2h2ZALe7EGpyhIfGzC/HjkrU5i0f7N
+         MG/g==
+X-Gm-Message-State: AO0yUKUiHfUBFQ1lQPJovZ60+dWE5pTE4J/K0KWlX2G9FADmOPwiQs7T
+        rN1/fEkgP1URpIsQvJBJjoA=
+X-Google-Smtp-Source: AK7set8qHxg2ktsv1HU9aTuEOsFLJZ3a4ePGvfomsEXyX5Nr+0ZfBHecAVx51iq390gUmprcop2YUQ==
+X-Received: by 2002:a17:906:7d43:b0:92b:e1ff:be4e with SMTP id l3-20020a1709067d4300b0092be1ffbe4emr6898733ejp.1.1679498874793;
+        Wed, 22 Mar 2023 08:27:54 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id lj24-20020a170906f9d800b00932ba722482sm6494166ejb.149.2023.03.22.08.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 08:27:54 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:27:50 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, ye.xingchen@zte.com.cn,
+        miquel.raynal@bootlin.com
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: =?iso-8859-1?Q?f?=
+ =?iso-8859-1?Q?smc=3A_use=A0devm=5Fplatform=5Fioremap=5Fresource=5Fbyname?=
+ =?iso-8859-1?B?KCk=?=
+Message-ID: <e0254438-9683-4d47-8c4d-a27f2b356f83@kili.mountain>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB8401:EE_
-X-MS-Office365-Filtering-Correlation-Id: ce921e47-4124-441e-4f05-08db2ae9ba6c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1LcyjhlOVaSKwV5eLbrsrBICIayv/1Ymv5LHdFpjNJ6ybMrroRjaKFhYM91ivc/ecwyoORGlRtwn6f97RKbhErDSbTU0W6L7LHLieS+DiNSKYkPUPhbTJ92LvYC1Z4uSMXP0xNNyKAPIcv5FF6m5wbDpp+9gqtjR0VDmUEffJognoyMzv69Kq7ibWWHtIPqLKxlKAr29vML799hQF/C4M+6F/S701ChQJAoLhUCQN9IM3z/AzgftkHuRBGIaWfEfcK1HbvyOp61pBtPpkIO5oHlpOx9VH2c7t//nOzZb5WIY0wzCgNynnyUyFuFObKv/BqbzuQ+Vwhj8KWR/ZPp3aWSBhUjhH067A/M8Nws+lHAjwAlIj3oJq1rxRo7oFwKlsJMNv25kpBaxieiViW950fC9jBecjUv/cJyO3nkWjUeVSv8cQP28pWZlja1l/NnD/CRyfRY55oVy1tq6N9RekUa6CPFgAer0x73MdnjKuLfzXlGlQvslHWMWOTGV4J7D3zndBexnxAzNZE2TAeGiHMxkxg7DyTi25RXC2bjhOsv81CJbAaThrs1DBJELNiQk2fmvzi2Q0DDqCRZV59ScbVUFJoc5PuGQaRXf1D8JnATEvnibsv7ydpjpBAK+06k10DPjfKgEngKt5XSpSfUsDg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199018)(186003)(1076003)(6666004)(6486002)(6506007)(9686003)(26005)(6512007)(33716001)(38100700002)(8936002)(4744005)(2906002)(478600001)(86362001)(83380400001)(316002)(44832011)(8676002)(66476007)(5660300002)(6916009)(4326008)(66556008)(41300700001)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NFj9R5TKEPb5D13b6XgC9wY3QynJffchPFHBPcW96b2ZrjgQX5rFNKY2YGai?=
- =?us-ascii?Q?6wuSSiWTP/vTURBBXlc0n2dO0JRrZYyEh5DeiWOq52vgG0lerrHgvqjcNhdH?=
- =?us-ascii?Q?MBWSYBb9U2oFQ3zF6N2imlg0qS/dyIiXYA4B43d2Hs+cK4O0ZxHC1rIKSxfp?=
- =?us-ascii?Q?9zaKK0eCX2p7qBVoN/coG1OwZdQwdfvUAh0oKC2WONyHVRHyc0cdplBLC8jv?=
- =?us-ascii?Q?merOOBdFeFgrGecJBWHol5xfPvXJbeEdU8UwO16RM2w42wfQcHbcl57M0GG6?=
- =?us-ascii?Q?cP93evonZItbHuY/IQZfpmcc3G51dh77nPxw+1B9qS9rHAHpVkT1qk2HP2Cn?=
- =?us-ascii?Q?ekpxmuOpW6jcs8fzaXPCKlIZ1QmoVjoOsu9lbcyN8TtIPKr1VxpK5Yqia1FO?=
- =?us-ascii?Q?eGlvSKVnOMt3mIgNiAK3+r6EQ4S3eDCYMxThAt/WV/Cy676z0VCCXvata+1I?=
- =?us-ascii?Q?WdKt9he9luStDHgmhGfq4guS/lzQTfcdKD+MOqCgW9hbE2kMLKAb59TZfm2L?=
- =?us-ascii?Q?jmbKGg9mgP/YBxufMfshwo2tNnxk3qicLiM5GuX9D7PUMftRJ4ALoXHESnQd?=
- =?us-ascii?Q?oMdLUXUkyg/7rHmyebtpTU+S68L0Goct45H5QwQ7PpOwE+hAmnV5sF/l+UhU?=
- =?us-ascii?Q?xzqMfRcQLaLtY/o2H/Axk2cC2ve/ewhCFrsWUfstsLkOA8BXy7Uk8cXMle7S?=
- =?us-ascii?Q?FMyqARx/qZx+Q91uzamQ5tOQHPlMJtq93PsXx4ZUhrx/C0kDDNY2KoQD5wiy?=
- =?us-ascii?Q?2RnrSlUYnJJJd0KFUCHGsnQkBNblIO1LTxOZmRzagBN9TsztVfnJgLWpQ7g2?=
- =?us-ascii?Q?JLrP5fKfddiXd1/cQaxxMtYLNcmKBI0O3kPhNwj9DJq75Uplvf/njg3A4JuS?=
- =?us-ascii?Q?7U69EDOW80EdsHEc6ZQt3seKxmqJsXfahFkoKOiO8LRzPUMytifpqkdlh0pt?=
- =?us-ascii?Q?RgKbCD8gAkSDu2Hc5u9lUoFA7rz/c3Yyo98RFV6gTVScV6YX/Sxv0/nuJsgZ?=
- =?us-ascii?Q?dCMYxeJ3cFDQLFHgaIyhaiExx+LNMQ5icbKGKCoAdbgHrQfIblP7GmJ0fj7t?=
- =?us-ascii?Q?SDrZ/bLIKJf99P5mlRdFMxEX6G4g+veyYY3zistu98bmjugGuChDr9/lhtWR?=
- =?us-ascii?Q?M7LZbkCoHiFDXdCCTcI/hsKXKtVUDzXHpHa2jr4ETbcFGUe6BE1T3Dx66KRg?=
- =?us-ascii?Q?PrWqBR/Zq1uWjTBPgyqy8AWjsd8NsA4tIDCOnNMc4drrfbpuCGGpry5KNHr8?=
- =?us-ascii?Q?kidLHhHdLSqFDMfpraSah8MnbnGBnBZ7nKv2FXx+twW8SWsEMllVsb0kJm/i?=
- =?us-ascii?Q?lyuLN26FJZjUqlt2Gw+BEev0q01EsIop2rcO28BD9cGQzGXy9KGgiTSFdllK?=
- =?us-ascii?Q?enZU5busi/wAEyxwexCLJoGPP0OkJ2iW73vJ3UL/DyJkhu/T2j80Cy3GrTV5?=
- =?us-ascii?Q?wZZ8KHRIeVeU69UpI7X/mU5U6KgwAHJWdjj6WzxZInYnsZk3crmkyGYZbQhH?=
- =?us-ascii?Q?egpmMd2fCVZN0bBKQpMdYSbnU3b+n/DFpmEI2Z+uTrlZB+4Ittb9HnepjG4k?=
- =?us-ascii?Q?XKwvXayC5sYIikyNu+i5aCYFGVHiUpbM/f7xR7+I/u3J6BU1StI+FgglOpj6?=
- =?us-ascii?Q?3g=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce921e47-4124-441e-4f05-08db2ae9ba6c
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 15:25:54.8026
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YxzGSWIEeVCZmsGMxDXL2qc3QfG8X3/7izbDP2mQWRi2EEGnElSWenY/HJd/TQjsEfmUqnh12yh0bTJtCj7tDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8401
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202303211954042531445@zte.com.cn>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 07:11:30AM -0700, Colin Foster wrote:
-> Ocelot chips (VSC7511, VSC7512, VSC7513, VSC7514) don't support bulk read
-> operations over SPI.
-> 
-> Many SPI buses have hardware that can optimize consecutive reads.
-> Essentially an address is written to the chip, and if the SPI controller
-> continues to toggle the clock, subsequent register values are reported.
-> This can lead to significant optimizations, because the time between
-> "address is written to the chip" and "chip starts to report data" can often
-> take a fixed amount of time.
-> 
-> When support for Ocelot chips were added in commit f3e893626abe ("mfd:
-> ocelot: Add support for the vsc7512 chip via spi") it was believed that
-> this optimization was supported. However it is not.
+Hi,
 
-Details? What about bulk reads is "not supported", and not supported by whom?
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/mtd-rawnand-fsmc-use-devm_platform_ioremap_resource_byname/20230321-195547
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+patch link:    https://lore.kernel.org/r/202303211954042531445%40zte.com.cn
+patch subject: [PATCH] mtd: rawnand: fsmc: use devm_platform_ioremap_resource_byname()
+config: s390-randconfig-m031-20230321 (https://download.01.org/0day-ci/archive/20230322/202303222207.HGERupOc-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202303222207.HGERupOc-lkp@intel.com/
+
+New smatch warnings:
+drivers/mtd/nand/raw/fsmc_nand.c:1048 fsmc_nand_probe() error: potentially dereferencing uninitialized 'res'.
+
+vim +/res +1048 drivers/mtd/nand/raw/fsmc_nand.c
+
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1021  static int __init fsmc_nand_probe(struct platform_device *pdev)
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1022  {
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1023  	struct fsmc_nand_data *host;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1024  	struct mtd_info *mtd;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1025  	struct nand_chip *nand;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1026  	struct resource *res;
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1027  	void __iomem *base;
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1028  	dma_cap_mask_t mask;
+4ad916bca7c372 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1029  	int ret = 0;
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1030  	u32 pid;
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1031  	int i;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1032  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1033  	/* Allocate memory for the device structure (and zero it) */
+82b9dbe2e0f687 drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1034  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+d9a21ae8e5f3fe drivers/mtd/nand/fsmc_nand.c     Jingoo Han                       2013-12-26  1035  	if (!host)
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1036  		return -ENOMEM;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1037  
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1038  	nand = &host->nand;
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1039  
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1040  	ret = fsmc_nand_probe_config_dt(pdev, host, nand);
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1041  	if (ret)
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1042  		return ret;
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1043  
+21cf7720019aa3 drivers/mtd/nand/raw/fsmc_nand.c Ye Xingchen                      2023-03-21  1044  	host->data_va = devm_platform_ioremap_resource_byname(pdev, "nand_data");
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1045  	if (IS_ERR(host->data_va))
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1046  		return PTR_ERR(host->data_va);
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1047  
+6d7b42a447f92e drivers/mtd/nand/fsmc_nand.c     Jean-Christophe PLAGNIOL-VILLARD 2012-10-04 @1048  	host->data_pa = (dma_addr_t)res->start;
+
+"res" is never initialized.  Part of the commit missing?
+
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1049  
+21cf7720019aa3 drivers/mtd/nand/raw/fsmc_nand.c Ye Xingchen                      2023-03-21  1050  	host->addr_va = devm_platform_ioremap_resource_byname(pdev, "nand_addr");
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1051  	if (IS_ERR(host->addr_va))
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1052  		return PTR_ERR(host->addr_va);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1053  
+21cf7720019aa3 drivers/mtd/nand/raw/fsmc_nand.c Ye Xingchen                      2023-03-21  1054  	host->cmd_va = devm_platform_ioremap_resource_byname(pdev, "nand_cmd");
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1055  	if (IS_ERR(host->cmd_va))
+b0de774c6334dc drivers/mtd/nand/fsmc_nand.c     Thierry Reding                   2013-01-21  1056  		return PTR_ERR(host->cmd_va);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1057  
+21cf7720019aa3 drivers/mtd/nand/raw/fsmc_nand.c Ye Xingchen                      2023-03-21  1058  	base = devm_platform_ioremap_resource_byname(pdev, "fsmc_regs");
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1059  	if (IS_ERR(base))
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1060  		return PTR_ERR(base);
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1061  
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1062  	host->regs_va = base + FSMC_NOR_REG_SIZE +
+4df6ed4f0ac9a1 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1063  		(host->bank * FSMC_NAND_BANK_SZ);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1064  
+fb8ed2ca432443 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1065  	host->clk = devm_clk_get(&pdev->dev, NULL);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1066  	if (IS_ERR(host->clk)) {
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1067  		dev_err(&pdev->dev, "failed to fetch block clock\n");
+82b9dbe2e0f687 drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1068  		return PTR_ERR(host->clk);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1069  	}
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1070  
+e25da1c07dfb31 drivers/mtd/nand/fsmc_nand.c     Viresh Kumar                     2012-04-17  1071  	ret = clk_prepare_enable(host->clk);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1072  	if (ret)
+fb8ed2ca432443 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1073  		return ret;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1074  
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1075  	/*
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1076  	 * This device ID is actually a common AMBA ID as used on the
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1077  	 * AMBA PrimeCell bus. However it is not a PrimeCell.
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1078  	 */
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1079  	for (pid = 0, i = 0; i < 4; i++)
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1080  		pid |= (readl(base + resource_size(res) - 0x20 + 4 * i) &
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1081  			255) << (i * 8);
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1082  
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1083  	host->pid = pid;
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1084  
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1085  	dev_info(&pdev->dev,
+fc43f45ed563f5 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1086  		 "FSMC device partno %03x, manufacturer %02x, revision %02x, config %02x\n",
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1087  		 AMBA_PART_BITS(pid), AMBA_MANF_BITS(pid),
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1088  		 AMBA_REV_BITS(pid), AMBA_CONFIG_BITS(pid));
+593cd8711221c9 drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-11-29  1089  
+712c4add032771 drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1090  	host->dev = &pdev->dev;
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1091  
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1092  	if (host->mode == USE_DMA_ACCESS)
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1093  		init_completion(&host->dma_access_complete);
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1094  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1095  	/* Link all private pointers */
+bdf3a555015260 drivers/mtd/nand/fsmc_nand.c     Boris Brezillon                  2015-12-10  1096  	mtd = nand_to_mtd(&host->nand);
+a1b1e1d5bdfe79 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1097  	nand_set_flash_node(nand, pdev->dev.of_node);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1098  
+bdf3a555015260 drivers/mtd/nand/fsmc_nand.c     Boris Brezillon                  2015-12-10  1099  	mtd->dev.parent = &pdev->dev;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1100  
+467e6e7be2e26f drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1101  	nand->badblockbits = 7;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1102  
+4da712e702941d drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-02-16  1103  	if (host->mode == USE_DMA_ACCESS) {
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1104  		dma_cap_zero(mask);
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1105  		dma_cap_set(DMA_MEMCPY, mask);
+feb1e57ee58350 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1106  		host->read_dma_chan = dma_request_channel(mask, filter, NULL);
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1107  		if (!host->read_dma_chan) {
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1108  			dev_err(&pdev->dev, "Unable to get read dma channel\n");
+e7a97528e3c787 drivers/mtd/nand/raw/fsmc_nand.c Dan Carpenter                    2021-02-15  1109  			ret = -ENODEV;
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1110  			goto disable_clk;
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1111  		}
+feb1e57ee58350 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1112  		host->write_dma_chan = dma_request_channel(mask, filter, NULL);
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1113  		if (!host->write_dma_chan) {
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1114  			dev_err(&pdev->dev, "Unable to get write dma channel\n");
+e7a97528e3c787 drivers/mtd/nand/raw/fsmc_nand.c Dan Carpenter                    2021-02-15  1115  			ret = -ENODEV;
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1116  			goto release_dma_read_chan;
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1117  		}
+604e75444fa82c drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1118  	}
+604e75444fa82c drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1119  
+7a08dbaedd365f drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-11  1120  	if (host->dev_timings) {
+6335b509b2b6fb drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-04-29  1121  		fsmc_nand_setup(host, host->dev_timings);
+7a08dbaedd365f drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-11  1122  		nand->options |= NAND_KEEP_TIMINGS;
+7a08dbaedd365f drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-11  1123  	}
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1124  
+ad71148c1804c3 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1125  	nand_controller_init(&host->base);
+ad71148c1804c3 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1126  	host->base.ops = &fsmc_nand_controller_ops;
+ad71148c1804c3 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1127  	nand->controller = &host->base;
+ad71148c1804c3 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-11-20  1128  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1129  	/*
+25985edcedea63 drivers/mtd/nand/fsmc_nand.c     Lucas De Marchi                  2011-03-30  1130  	 * Scan to find existence of the device
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1131  	 */
+00ad378f304a09 drivers/mtd/nand/raw/fsmc_nand.c Boris Brezillon                  2018-09-06  1132  	ret = nand_scan(nand, 1);
+ad5678ec40764c drivers/mtd/nand/fsmc_nand.c     Masahiro Yamada                  2016-11-04  1133  	if (ret)
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1134  		goto release_dma_write_chan;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1135  
+bdf3a555015260 drivers/mtd/nand/fsmc_nand.c     Boris Brezillon                  2015-12-10  1136  	mtd->name = "nand";
+ede29a020ec3b4 drivers/mtd/nand/fsmc_nand.c     Thomas Petazzoni                 2017-03-21  1137  	ret = mtd_device_register(mtd, NULL, 0);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1138  	if (ret)
+682cae27b1da05 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1139  		goto cleanup_nand;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1140  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1141  	platform_set_drvdata(pdev, host);
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1142  	dev_info(&pdev->dev, "FSMC NAND driver registration successful\n");
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1143  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1144  	return 0;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1145  
+682cae27b1da05 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1146  cleanup_nand:
+682cae27b1da05 drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1147  	nand_cleanup(nand);
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1148  release_dma_write_chan:
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1149  	if (host->mode == USE_DMA_ACCESS)
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1150  		dma_release_channel(host->write_dma_chan);
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1151  release_dma_read_chan:
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1152  	if (host->mode == USE_DMA_ACCESS)
+4774fb0a48aacf drivers/mtd/nand/fsmc_nand.c     Vipin Kumar                      2012-03-14  1153  		dma_release_channel(host->read_dma_chan);
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1154  disable_clk:
+ab3ab7b654ae69 drivers/mtd/nand/raw/fsmc_nand.c Linus Walleij                    2019-01-26  1155  	fsmc_nand_disable(host);
+e25da1c07dfb31 drivers/mtd/nand/fsmc_nand.c     Viresh Kumar                     2012-04-17  1156  	clk_disable_unprepare(host->clk);
+43fab011e93fea drivers/mtd/nand/raw/fsmc_nand.c Miquel Raynal                    2018-04-21  1157  
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1158  	return ret;
+6c009ab89a212b drivers/mtd/nand/fsmc_nand.c     Linus Walleij                    2010-09-13  1159  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
