@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216856C4C11
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C80A6C4C14
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCVNmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S230260AbjCVNme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCVNmW (ORCPT
+        with ESMTP id S230191AbjCVNmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:42:22 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B0E4FA96;
-        Wed, 22 Mar 2023 06:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hgQQgEdJS6js4rXOh+AMl0grnS+OJc3Q2Dmr1Xc1fBs=; b=PUe3gU/38I2DLnDrrIKT6+Es5E
-        J5h3lJp57o6mlM9sHakaq49Shw1CNABY8I7w7PJjrpWvzUBRjYFnvJ7pj7mhbpuhArD/ARdXmXedC
-        Daf02iS6Ic6O4x/B53MFoAY+PsTOpZi7YrBOomOdh636tLi0AfDu3VmwrCk2FERpQ92TRtJzuNJZd
-        s0K645LA+cZDQZAMd33J2eM2sVD1BxRvLP8YxJeBil+Juws8q5Sl2L0Fnl/51SSE35Gh4JIEJmO10
-        ea+HDw0Cz3x7MSCQ36ZPcQ9a6jRlQi/jQ40Vhh2KGSDkdojgODMQ8L5KS3zc9UmnoclqiSxbrg1S9
-        gyq5gl5g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1peyj7-004ZBD-1k;
-        Wed, 22 Mar 2023 13:42:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9A1AA30031E;
-        Wed, 22 Mar 2023 14:42:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 536F1205D08C2; Wed, 22 Mar 2023 14:42:03 +0100 (CET)
-Date:   Wed, 22 Mar 2023 14:42:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, nadav.amit@gmail.com,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        jolsa@kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        mingo@redhat.com, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH] perf/core: Fix the same task check in
- perf_event_set_output
-Message-ID: <20230322134203.GB2357380@hirez.programming.kicks-ass.net>
-References: <20220711180706.3418612-1-kan.liang@linux.intel.com>
- <be7e6a74-4863-d5eb-51ff-26aa2890f2bd@intel.com>
+        Wed, 22 Mar 2023 09:42:32 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93885CEEB;
+        Wed, 22 Mar 2023 06:42:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JVO3p11PWjo6FBCXqRwWfbLPkwYO5WUk0lh7J17/yswabQOv9jbZg6ZaMkCloXYXQZ5lxor2yNoOKB04yrP+glvBaF7AIAyDWXD4ObUTTr51ySvL6OxWy16/+4eKyIr/xub0zkKc/Kv+RptIj8sWc67AjY9IqxS//4YQQOuNAwMn8ySdr4YhMF05dTYIlin4q3xVYDi9Zbn69iNGc7+D/ScLwCWBWS+N1Q+rooE6swx8PXEnmmC2Dxs9BVXFiXpm6UYgM+r2cxRNQA0Dt9ibwtL1Q35IXGh18ChuTgCJgwc3okl2EOmjNCglvZlrZvNao190aFEftkuHncERYSBoFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=velrROyiXlfNuIEr3MELi1EMJNAL03RnpCFMb/i4SUk=;
+ b=B5X+HE8aQ3jWE5PPHHmVjiuF/2qgarWmMtqC0h+ktlzSJlQlbD6C6wNV1TzgGEWFNDnhx1hUaDgzOH2JWPSF9WlVnaHIpf1V1y7IYywwAOiUhHurN99PLTqjiLXLNpprlvGhmNW3Z8deTTKPumPULZiyno6eooEaO+x6h7oXcDmj7W2MuDZykQNOlgyQije84lLS0W6/AMivCsSu//U6pDP5DxCSxjnmADswOIyVRLyiM1OWM9hf1yU3IwHWIbA/lS8/TdHbGmsMqp6PNiy2pppt9x03cuL1XENS2/sxk9K3reZC3sfIQIeayn6T5EkeHjtXQc1qfdqxa5q65oxpLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=velrROyiXlfNuIEr3MELi1EMJNAL03RnpCFMb/i4SUk=;
+ b=IVStetqoE9X7LEqMmnDS4L22Qv+P+LAsQ4uusjXjJ4vGfWHks4fUQHacnBPc4HzdqTHIk7QQstKW+EJpR0kV09gGL0PIIXxZSs6xP8uzBC2JV/IeIn8c+foSnV4BL2dW0W4o7z1YjrHT8q9Aak+PhqamWGS02qbDLAD4NTqXm3DHZ8Qkf8lHdwFpQ/lQAVyr8r9eQmHom9IY6OnmeWHNgplMHfwFFFC3NTZT7S/fEjmWidQndDJGcI39CBMv4HfXnUoIhC8Xqlr+R2XUF9K8t3HAu5YcpWNJQlHvEBqguhz7LvM7F2SwU1U/siuzdI/mQO+jU9FIiaAvH8KFe11P8g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DS7PR12MB8418.namprd12.prod.outlook.com (2603:10b6:8:e9::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Wed, 22 Mar 2023 13:42:28 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 13:42:28 +0000
+Message-ID: <b9235dfc-10dc-1ed0-1510-fd98902491e3@nvidia.com>
+Date:   Wed, 22 Mar 2023 13:42:21 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] i2c: tegra: Share same DMA channel for RX and TX
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "digetx@gmail.com" <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+References: <20230322102413.52886-1-akhilrajeev@nvidia.com>
+ <db870e74-9d97-740a-9829-5fafc0bb0559@nvidia.com>
+ <SJ1PR12MB6339FC0B9BB57D1D2300D46CC0869@SJ1PR12MB6339.namprd12.prod.outlook.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <SJ1PR12MB6339FC0B9BB57D1D2300D46CC0869@SJ1PR12MB6339.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0493.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13a::18) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be7e6a74-4863-d5eb-51ff-26aa2890f2bd@intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DS7PR12MB8418:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3263483-5c32-4d89-cfc4-08db2adb471f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i+Fm8nMlGnPVLL8DduGwjG7a/W32BeoO47vacnoRuzI2JgxWJnwelljmF4CLvrFxaKSRCdbXbMCglc8xMwyfHE1FldjJHMNlQwmMF4DiTlQ6gOZfPZAyrvqqkdZag8UphRUmjst0Bp1o1rwCmv9OrZ8D4Egq4HkWbH5nwCpwfatGNwVbuG238pRMI7i63BHlGBitDB0pClEYCdroLpsT4XseWG+LIgopIr2Ql4VKo9OYaTd1zc3v1fIS5c1D2zVxiEyfvPG+WzzhSk/x5ehmqQF6N5vjE467Ol9Jx8c1eNfOTW/KodkvbQ2H4qovwkv+e7chtKE81F+EiSO83X0aYS96P5QOVB9Tr1QIzc54qlqF5+0j2l2LdyI+mraePrfRAfmuwAMGe+6M5x4Sn/B+o/CfRJ2L9yuarb0I/UfnvO0Dj+04dNxL+48tV8IaXhuIpZOzEhtEIS03K+jP3kRvScZHhNXwK/uvgM53XQpdEA2x8keOHh6t9MPaDnc51xf+Oqi4ArhIayVQeJ7Op/hVlqtENv/MGiztFUfLvayKm3ZBlVm+pyjFQlwiVKuiV9zEAAxCLEv+KL52oY7pOR1gm8DoMVRj4QaCwjBt0ie59y9bcNj/3A49ei783QsvuM2PWDEoTyjRiARaueIa+htEJc82RvG3iB4H0cITC8MRN6j0Hi+zIcozjwyMccKfsVTw3DOj42OrqFKNcjX6qEhPgv/2oz5pg6+1JlCgjXcBT0P9DLn59E0vgUA60vlZjaL+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(451199018)(8676002)(31686004)(66556008)(6512007)(66476007)(66946007)(86362001)(2906002)(8936002)(5660300002)(36756003)(921005)(31696002)(38100700002)(6506007)(6666004)(316002)(478600001)(53546011)(110136005)(83380400001)(6486002)(41300700001)(2616005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0N6T3RNUjJvcDJmUDlUMW96N3lYUG9LUG10TU5XT09rb0kzamYxK3lYTkND?=
+ =?utf-8?B?aXFPODF4Wm1jWml1a25EZnJNa2w2OFhYYnNqY3hhTWZnZnhVYTRFNnJGRUdu?=
+ =?utf-8?B?Y3doS1pJYnhGaG9tQjRoZ283and6S1VUQzFXQWtkdVBEeWdYSGFlSWlmckJU?=
+ =?utf-8?B?V1AvQjlsQTRZekx1VXhxTklWa3hzWWxHS3hJNmdEQXBUaW91MVo3TTRiVzcz?=
+ =?utf-8?B?YzBLU0N5ZitQaGp2UmxNYTE5SEUvcGVkZ2dWOWN2T1hTMi9QZitGMzU4M2Fj?=
+ =?utf-8?B?MWNuRmxzVHhjM0pIai9zQlluRFhheVJ1bGhmYm83eFFweGhQenY5ZkJwT3E4?=
+ =?utf-8?B?SFdjNUEzazhYcDVDUm9zRUhzMkpFdmJQd2pKQ05BZEhVZ1ZoZ2tBTnhTdEpk?=
+ =?utf-8?B?WENkdTlSVmE1dFU4OEV1a014YnBXNkl3emRLNWo4eVA3dGtoenlnc1FpQ0Rl?=
+ =?utf-8?B?THhZK2VkcXZ2MGUrcG4wLy9DamllQzNJWER2U0JDa0RoVXVvRlhvdFFRek9m?=
+ =?utf-8?B?YnJsQWFQMWdNZ0JBdi9jWHltdFZNUm9tbnJrRExONWNTMW96bjFySGZva0FG?=
+ =?utf-8?B?eVVIQ3BEMGtEdHVzd1pVYzViMm9wMXd1VHpSbmVKQ1lxbmNZVTNTM3hTdGEz?=
+ =?utf-8?B?SnNaODZIUGt4ZHdzdUJQbUJBMC8wWnIxcHZnZ0JqRzZha0NNNUNFK0RwT1lp?=
+ =?utf-8?B?SzZPUGgrdnF4M3pGMnpMZmRzd2lTa3N5OURiVDZOYkVRcXQvVlBUUUVwNjBv?=
+ =?utf-8?B?L2hvaGpkZzhCNUMxN0VEdUczM0srZHRKMXI1VUR3d00vaml4VTdWaDZab3Bs?=
+ =?utf-8?B?TTYwN0RNNUptWlBrbFMxbVB4L2doQkl0MUJuNnJPN3NMK0ZWNlRNMW5yT29t?=
+ =?utf-8?B?cFBSZkp1dnhXZ21JN1RQMzhQMjF4Z3lHTyswWVE0OXlmUjVJZ1luY3E3S05t?=
+ =?utf-8?B?UnFhbmlRdkZudmMxaXl4Z1o0bE1yanVmQlpMVWZBeStRNTUydUJjYno1emZT?=
+ =?utf-8?B?WGRMbTFhSTVrd1VxUW9ROFlRSFhFMTJVQ3dnbzZsaEJKMDZZc3hBVjhSYVJi?=
+ =?utf-8?B?TEl0aEFXTW9xankyVTVQRzBIQk5mUUZjQlptcDFjUDVScUJtaU1YSUZYY1p6?=
+ =?utf-8?B?Q3Q4ZGRiRnVQUmZrVzRscFRKNkVlYnVaZlhCL2xtU2hlZUU2TjdkNGZsbXZM?=
+ =?utf-8?B?RkhvTW4vSCsvY1dvVlhoSU11K0drMXY3UW02a0t6bVc3SFpreURob2NiYkxy?=
+ =?utf-8?B?U1REZGUvNmxubnpBc21lYS9tRGJ4d2JtZ0V2aHFvamFEL2pHTnAvK3pKQW9p?=
+ =?utf-8?B?bnJKZnlHUDNyMjNGK3grQnErUnFWU1NDMGQzTmRDcTA4d0xOWXZScW9EeW5K?=
+ =?utf-8?B?aGtTMDJFSlp3eXVXN1JTN3JlMXR0TWFlRStsYzNqY2lxK2FyUDRwWGovZE9v?=
+ =?utf-8?B?KzdOSGwrQjNmRGxVblArc2RmalhsK0xXWEZ5SmhMOG1DcDBHUmw2K01QOWlh?=
+ =?utf-8?B?OVBaQjNRdEVib2ZubGJHam9PZ05aUlU0RVRTclE5enloNy9ZTDlNUnpVRXF0?=
+ =?utf-8?B?U25RQTlqN1k5UlJnMy9sbEkvK2c5MndxMGd0Qm9sZUpYUWZnMnBHdlo2VnYx?=
+ =?utf-8?B?OTFHVVZKZ2RHVVB6Tk1Vam95Z3YxM2Q4T2tiVC9CVWFIaUNuV0I5TnUrM3VR?=
+ =?utf-8?B?Z3MrSHRkckl0c0JqTGFBL0pRQTl1emhsam03ZFNUUHRQL0ZRem00TUxGaVhI?=
+ =?utf-8?B?QmNXUGJEZWtENzVRUnNaS21mVkswMnhFK29pbFkyeWZ3czJKV1o2K28vS2w1?=
+ =?utf-8?B?TTJ1cEUyVytYR2VreGVvRk8rYWtLbVB2Q1E4Mk8rbjNpL0lYZVhQYXFLRGYr?=
+ =?utf-8?B?KzZBMDdBT1lYZmRKTEdpWmoxem9zdUd4TllwbVl5YnRud08rMmNIaVVFOHdN?=
+ =?utf-8?B?cUhWV21vWDVoeHNIT3c5d2NlZTZuc2luSEFiYyt2a2V5NEd2dEVCdnhpUWZx?=
+ =?utf-8?B?Vjk1Yk1KL2pPMExoc0xQWWVXZHd1REFYRDhPU3FQV1hkWlNOTWc0R05obWNO?=
+ =?utf-8?B?eGNmdjBmOXlSb2NGcWFoK044WTJEdUxtTmxxbWRoWkNWQTVXTC96M0daK3Nt?=
+ =?utf-8?B?Zzc0bnNseDNtSlBya2taK1pOYUMwbWUxbDlvR2Nqckxrc2loRVBxeUw5RnEy?=
+ =?utf-8?B?OWFGR0dWeE5SWUEyVXYzbTQ2VEJWZTEwVlhxUDNUcFpoTDZYTk9RRGJrb0dt?=
+ =?utf-8?B?a2RuRFJ6dzEvR0p4Yy9HRldXTG13PT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3263483-5c32-4d89-cfc4-08db2adb471f
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 13:42:28.5341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oZSCr6Sl73HWfZ3sjHxqSZj7r/77Sd7r0zkFUFcjxKQ+6XoJeHfNAN9yHPrMyW9ToJN95a8h+BeP8w1u7xh/gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8418
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:59:28PM +0200, Adrian Hunter wrote:
-> On 11/07/22 21:07, kan.liang@linux.intel.com wrote:
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> > 
-> > With the --per-thread option, perf record errors out when sampling with
-> > a hardware event and a software event as below.
-> > 
-> >  $ perf record -e cycles,dummy --per-thread ls
-> >  failed to mmap with 22 (Invalid argument)
-> > 
-> > The same task is sampled with the two events. The IOC_OUTPUT is invoked
-> > to share the mmap memory of the task between the events. In the
-> > perf_event_set_output(), the event->ctx is used to check whether the
-> > two events are attached to the same task. However, a hardware event and
-> > a software event are from different task context. The check always
-> > fails.
-> > 
-> > The task struct is stored in the event->hw.target for each per-thread
-> > event. It can be used to determine whether two events are attached to
-> > the same task.
-> > 
-> > The patch can also fix another issue reported months ago.
-> > https://lore.kernel.org/all/92645262-D319-4068-9C44-2409EF44888E@gmail.com/
-> > The event->ctx is not ready when the perf_event_set_output() is invoked
-> > in the perf_event_open(), while the event->hw.target has been assigned
-> > at the moment.
-> > 
-> > The problem should be a long time issue since commit c3f00c70276d
-> > ("perf: Separate find_get_context() from event initialization"). The
-> > event->hw.target doesn't exist at that time. Here, the patch which
-> > introduces the event->hw.target is used by the Fixes tag.
-> > 
-> > The problem should still exists between the broken patch and the
-> > event->hw.target patch. This patch does not intend to fix that case.
-> > 
-> > Fixes: 50f16a8bf9d7 ("perf: Remove type specific target pointers")
-> > Reviewed-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> 
-> Did this slip through the cracks, or is there more complexity
-> to this case than just sharing the rb?
 
-Both; I very much missed it, but looking at it now, I'm not at all sure
-it is correct prior to the whole context rewrite we did recently.
+On 22/03/2023 12:00, Akhil R wrote:
+>> On 22/03/2023 10:24, Akhil R wrote:
+>>> Allocate only one DMA channel for I2C and share it for both TX and RX
+>>> instead of using two different DMA hardware channels with the same
+>>> slave ID. Since I2C supports only half duplex, there is no impact on
+>>> perf with this.
+>>>
+>>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+>>
+>> Just to confirm. This impacts all Tegra devices from Tegra20 to the
+>> latest. Does this work for all Tegra and the different DMA controllers
+>> that they have?
+>>
+> Yes, It should. I could see in the APB DMA driver that the same channel
+> could be used for TX and RX and the direction is configured only during
+> dma_prep_*() calls.
+> I did not test it on a Tegra with APB DMA, but since it works very similar
+> to GPC DMA there should not be any impact.
 
-So after the rewrite every cpu/task only has a single
-perf_event_context, and your change below is actually an equivalence.
 
-But prior to that a task could have multiple contexts. Now they got
-co-scheduled most of the times and it will probably work, but I'm not
-entirely sure.
+OK. BTW, this does not apply cleanly on top of -next. It appears that 
+this is based on top "i2c: tegra: Fix PEC support for SMBUS block read" 
+and that one needs to be applied first. This can be avoided if you send 
+as a series.
 
-So how about we change the Fixes tag to something like:
+Jon
 
-Fixes: c3f00c70276d ("perf: Separate find_get_context() from event initialization") # >= v6.2
-
-And anybody that wants to back-port this further gets to either do the
-full audit and/or keep the pieces.
-
-Hmm?
-
-> > ---
-> >  kernel/events/core.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index b4d62210c3e5..22df79d3f19d 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -12080,7 +12080,7 @@ perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
-> >  	/*
-> >  	 * If its not a per-cpu rb, it must be the same task.
-> >  	 */
-> > -	if (output_event->cpu == -1 && output_event->ctx != event->ctx)
-> > +	if (output_event->cpu == -1 && output_event->hw.target != event->hw.target)
-> >  		goto out;
-> >  
-> >  	/*
-> 
+-- 
+nvpublic
