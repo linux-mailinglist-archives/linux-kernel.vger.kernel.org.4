@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877146C5086
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D2B6C5098
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCVQZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S229539AbjCVQ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCVQZh (ORCPT
+        with ESMTP id S229497AbjCVQ1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:25:37 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAC04DBED
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:25:35 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so75176885edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679502334;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Sr/j+3cgxhM/KwgZTgpDYZTgFfI9GXlmQ/zkQE90CIw=;
-        b=DnfWqPzonQ3weXJMufSIJ/VihFVfOy9/L/LsGefrAXYKMpiQSxjIcg3WNspyJtCx5g
-         qOB3MX03pwwXyIorvs6eQ2NUPntoug7U5TqkYrbXLu8vYdp1uw4cCo/vLufkoGb6+UDr
-         qt4AWE33l5Axb5tiRamp1bOexP4LJ057foVO13gQcQnEYOepeusmY+YRktiCTJ+UvMWT
-         iFFmrsabL5S6QtQi6Ng/8kgCzV3FmkvjkmnO81TtzyjbhzbKGikGaKqyr6yUOC388PKy
-         GKWRCABXhpl0rUA2BLzBua147+Vys8ZepByB1w40o37GlR60Q5m/VkKNCgHaAmA3SjJk
-         FHqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679502334;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sr/j+3cgxhM/KwgZTgpDYZTgFfI9GXlmQ/zkQE90CIw=;
-        b=n8Wj9Y6L5TI3w6aDqMFMcKLbcxYQaE+0eYsIDYGKegtZ60KrTQ9JiIERcWBU5LW40/
-         DW/Nsk/EJhuFulYPz/dlcWKKxXH+8QEW8Zyn+eyxrsfiTHAbnbknBkOgj9sRMMAfR83f
-         MDa0juioqlPPYIqA7DK+o2O97K9ebtGMrxQf2UqVkycioZiSwLXc/JgueVAAB8Lmm5Gc
-         YPwpLmqROcnlzyIGclpti1HxwnCzwuCCO4WnQt+cLbuOgZ1SUG7rWcpHbAvyymFCWmak
-         QARHirSYcsUg5H6yLiXrlbrxN1xhqHBUIIpEr5dtbG157limYnLwkYBC/b5CUXCB6noz
-         jniw==
-X-Gm-Message-State: AO0yUKWNg9kstT3TfSOQARlrzCdtnD2HQX9GR9WRyuabKd+le8X3gpRs
-        nnaXkqrXG0dRKp7NQuwSicGIwg==
-X-Google-Smtp-Source: AK7set9wGnyFe5XaKDU4cr/JttOVQwkZpPZ2A7mTqYQgkHG7Gr2iKP4b2JK7K+TnSFBBJB3q9BxgKg==
-X-Received: by 2002:a05:6402:1762:b0:4af:70a5:560b with SMTP id da2-20020a056402176200b004af70a5560bmr3025768edb.9.1679502334017;
-        Wed, 22 Mar 2023 09:25:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
-        by smtp.gmail.com with ESMTPSA id k24-20020a50ce58000000b004fc9e462743sm7924722edj.91.2023.03.22.09.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 09:25:33 -0700 (PDT)
-Message-ID: <21bc1f94-35f8-42b1-f04b-86a5b4c03675@linaro.org>
-Date:   Wed, 22 Mar 2023 17:25:32 +0100
+        Wed, 22 Mar 2023 12:27:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57C84ECD8;
+        Wed, 22 Mar 2023 09:27:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 928B720FDA;
+        Wed, 22 Mar 2023 16:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679502422; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sPf3gy+C+ST6lBwKBIf0DHjU4XxrVv5WH4FZzVHoFDk=;
+        b=c+U/k0zNjArhSJC4nSLOEObzjJsvBepOGZeXLsL9ClGbyB2nIHnKL96CDjQT4E6Jgg50BB
+        PloBLci0Ve21wU9cW9BDRyQBeu7kNuTkzDh2VJ7YbkV8/pzmTQFp9DAZqFX7jr3GLVoFmi
+        IeB9Njluar6A9zouxCzjYjqVDqNvWjc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679502422;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sPf3gy+C+ST6lBwKBIf0DHjU4XxrVv5WH4FZzVHoFDk=;
+        b=miZ1lUmFk0SrifduUnebSgEbatvkjCRDyXQY8tbyBjtLPq+tb+6cXpJwM9bjGfM0P3Q6KI
+        fGCxLsSi8OmYrYAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C51213416;
+        Wed, 22 Mar 2023 16:27:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pFWXFVYsG2TibgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 16:27:02 +0000
+Message-ID: <801211fd-558c-a07d-e84a-aa7f997d8c92@suse.cz>
+Date:   Wed, 22 Mar 2023 17:27:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add binding for meson-spifc-a1
+Subject: Re: [PATCH v2 08/14] mm: call {ptlock,pgtable}_cache_init() directly
+ from mm_core_init()
 Content-Language: en-US
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20230322150458.783901-1-mmkurbanov@sberdevices.ru>
- <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230322150458.783901-2-mmkurbanov@sberdevices.ru>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-9-rppt@kernel.org>
+ <ff403707-a61b-8b87-4d8d-5aecaa574be3@gmail.com>
+ <ZBrTtQKe7SowXSKb@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZBrTtQKe7SowXSKb@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,21 +85,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 16:04, Martin Kurbanov wrote:
-> Add YAML devicetree binding for Amlogic Meson A113L (A1 family)
-> SPIFC Driver.
+On 3/22/23 11:08, Mike Rapoport wrote:
+> On Wed, Mar 22, 2023 at 12:06:18PM +0300, Sergei Shtylyov wrote:
+>> On 3/21/23 8:05 PM, Mike Rapoport wrote:
+>> 
+>> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>> > 
+>> > and drop pgtable_init() as it has no real value and it's name is
+>> 
+>>    Its name.
+> 
+> oops :)
+> 
+> Andrew, can you replace this patch with the updated version, please?
+>  
+> From 52420723c9bfa84aa48f666330e96f9e5b2f3248 Mon Sep 17 00:00:00 2001
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> Date: Sat, 18 Mar 2023 13:55:28 +0200
+> Subject: [PATCH v3] mm: call {ptlock,pgtable}_cache_init() directly from
+>  mm_core_init()
+> 
+> and drop pgtable_init() as it has no real value and its name is
+> misleading.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Subject: drop second/last, redundant "binding for". The "dt-bindings"
-prefix is already stating that these are bindings.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/amlogic,a1-clkc.h>
-> +    spi@fd000400 {
-> +          compatible = "amlogic,meson-a1-spifc";
-
-Use 4 spaces for example indentation.
-
-Best regards,
-Krzysztof
+> ---
+>  include/linux/mm.h | 6 ------
+>  mm/mm_init.c       | 3 ++-
+>  2 files changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 2d7f095136fc..c3c67d8bc833 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2782,12 +2782,6 @@ static inline bool ptlock_init(struct page *page) { return true; }
+>  static inline void ptlock_free(struct page *page) {}
+>  #endif /* USE_SPLIT_PTE_PTLOCKS */
+>  
+> -static inline void pgtable_init(void)
+> -{
+> -	ptlock_cache_init();
+> -	pgtable_cache_init();
+> -}
+> -
+>  static inline bool pgtable_pte_page_ctor(struct page *page)
+>  {
+>  	if (!ptlock_init(page))
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index bba73f1fb277..f1475413394d 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -2584,7 +2584,8 @@ void __init mm_core_init(void)
+>  	 */
+>  	page_ext_init_flatmem_late();
+>  	kmemleak_init();
+> -	pgtable_init();
+> +	ptlock_cache_init();
+> +	pgtable_cache_init();
+>  	debug_objects_mem_init();
+>  	vmalloc_init();
+>  	/* If no deferred init page_ext now, as vmap is fully initialized */
 
