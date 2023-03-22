@@ -2,238 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640A16C522B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885D76C522E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCVRSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S230191AbjCVRSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCVRSF (ORCPT
+        with ESMTP id S229820AbjCVRSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:18:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D4F66D15
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:17:35 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so19854645pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:17:35 -0700 (PDT)
+        Wed, 22 Mar 2023 13:18:22 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6391FED;
+        Wed, 22 Mar 2023 10:17:56 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5447d217bc6so350189147b3.7;
+        Wed, 22 Mar 2023 10:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google; t=1679505444;
+        d=gmail.com; s=20210112; t=1679505474;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UittgdXM3g+Qbt7hZmz9fDwi45VTM0z8aAr7Vg+o+os=;
-        b=CQ2n4+5TduAQlvRuSopwcvMBwx1aMvm0NwYexjQsp/nXY2wMaefj0B1ffmN8DwAkv2
-         IKNoqVGc8o5V77z7pxmAKfmYrJk3fkC+m/B6vR+qyAkOjXZRI91G2B2UQ/ohroF2PhVD
-         HP64OD7bXnzRISmJ9dvNmQj/AjwSSW3Pqvi9s=
+        bh=j5tMxhkK7/onZqHgDaus9SFQGKXbQnfJIdwaT4ESxh4=;
+        b=MadEXjfxnjXCj+JSL/K/pEjoIyPc3C84IfmY8l0vEbdmXFfpbfcptH/luEo+V5puYm
+         eENaGjwre8b1MAnAncA5/Q4N9FcvYng5tMedWCpPhjg0RScj2Cz5OyJuGg2EFuQ72F6e
+         T/mLVpbXxyRG5o2E2qo4PeeW1dD5eyLmUzT3bB9WW4dC6K7v0mgCT8cY9qzJY+SXGL4B
+         bA/nXgTTGa17Bs3dRWlfhJhX6EpC838T+q+lmWsEnUgEEnjtNDuHIgNMJhkerXi8HLgb
+         U73n2lVb3Z/6xHTWJW+iKHMVe/BzNySR904OgAz6JkJOuh/yu9RMWd2sZW+wkiXf77l5
+         8fbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505444;
+        d=1e100.net; s=20210112; t=1679505474;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UittgdXM3g+Qbt7hZmz9fDwi45VTM0z8aAr7Vg+o+os=;
-        b=6M9/KVZlyHJC0S8xN5HT+v1dwVLNnOFkr8aN4CroaqBn9nC3Sw4MIZ8g8TRdIPXOzG
-         YEj0M+qsGemc6Is074oIk7s9mDM4EGcx5EZgXNObwVY+XT5Wfkl7zQUo7fh4IpgxTfLE
-         C0+VO/hH4p+4llahCWMK+JFgcRpfEAQCSEk0yvn3HE6bL/Kx52OnnXkkWc0+4YX7RSXB
-         nEeLQl/kvzC3yrVBVdT5b4HYCp2AcmtN45vpoXx+yX7oYIAHjZu7mqjHo5FlYyrnt9MS
-         /9+YvR9zJynoNN90Dmc0vL9cojYy9WSVCMsBIR6+9Uvetfo6hj41NQnLwon+lArUJDUy
-         DKDA==
-X-Gm-Message-State: AO0yUKUhJyDn/p1Bk0FpYYfIiNsbgUrSU4LoBuMnuyaAfCmKKW+6w9t4
-        bidC1kgONZWEqX/D/Q89s8dMerYdBpWmPzjfPXiHKQ==
-X-Google-Smtp-Source: AK7set/gRfEg9ZkMBG8RvdC24JfXTCE8uD3xzdGBfjruc84EYtVudASDkkG+lq/J5/fnXnQhZxyJt4P4RbTPQS/9SeY=
-X-Received: by 2002:a17:902:6a84:b0:19f:2aa4:b1e5 with SMTP id
- n4-20020a1709026a8400b0019f2aa4b1e5mr1495889plk.2.1679505443863; Wed, 22 Mar
- 2023 10:17:23 -0700 (PDT)
+        bh=j5tMxhkK7/onZqHgDaus9SFQGKXbQnfJIdwaT4ESxh4=;
+        b=RqiMsLUK0lgAUe2fABiee3dEzWN/VKxCthH8hFr1yr+hjHEkKT7Ddwpr3E0R+JN6i6
+         Ofd+u2J/skXM7rNuluJ/3Fe+kFxVaCCmQfW9eomBFejLRN21cX/LAJA4ZEhBWfXoVb5C
+         5TG11SorMMcKT2xakXclWc+PjGQ7QX8qTht8dux0qRuf6xcOdHCZdVp/b/kUWTqJyPtn
+         QgyEwS48Xjfgss8oeeTw4ZvWA5d63SJpIymzB63W3hPBHYlm38JoBY3KiJodo92F4Ln/
+         uWvUZrCZgdi52tEEYpLUJjWkDSuet5eHpDdr84P7QVySl5My0QEC/SAdg4/lQtZMGb0+
+         YPyA==
+X-Gm-Message-State: AAQBX9dcWmHBbo0RTkqHIKz9F4W7Xk3kSGtdhk9BqpauBtXSHpE6LLnA
+        kDf4c4/xyCBDsiy6iKuIAfM8Aq9CKdhMMO9gNxI=
+X-Google-Smtp-Source: AKy350asapBJHu6okwF5wE1Lx7zZX6w7nbBWANZAOOFJv/JFYZEqi84vJXBRugx5gAQAZ0j/4EQItVyOkG5rtSnCAVw=
+X-Received: by 2002:a81:4505:0:b0:545:62c0:621d with SMTP id
+ s5-20020a814505000000b0054562c0621dmr331750ywa.2.1679505474408; Wed, 22 Mar
+ 2023 10:17:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230322102006.780624-1-liushixin2@huawei.com> <20230322102006.780624-3-liushixin2@huawei.com>
-In-Reply-To: <20230322102006.780624-3-liushixin2@huawei.com>
-From:   Vitaly Wool <vitaly.wool@konsulko.com>
-Date:   Wed, 22 Mar 2023 18:17:12 +0100
-Message-ID: <CAM4kBBJT1xSGe7KthBvBLstZ43cPP-PDKE7a-6hC5Fn6TneL0g@mail.gmail.com>
-Subject: Re: [PATCH -next v6 2/2] mm/zswap: delay the initializaton of zswap
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20210315122605.28437-1-noltari@gmail.com> <20230321201022.1052743-1-noltari@gmail.com>
+ <20230321201022.1052743-5-noltari@gmail.com> <3a1d7b271a42324c056d983e1943b386.sboyd@kernel.org>
+ <0071fdc1-fa53-e096-19c7-ecd1a9d56e86@gmail.com> <d06781c905adb23089a85a8d54b94461.sboyd@kernel.org>
+ <302bb0c4-a31e-7025-26d6-21c8d473f370@gmail.com> <896d16997cf3d308eff0cb8ce8596fc3.sboyd@kernel.org>
+In-Reply-To: <896d16997cf3d308eff0cb8ce8596fc3.sboyd@kernel.org>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Wed, 22 Mar 2023 18:17:43 +0100
+Message-ID: <CAKR-sGdwRXTg5Yy6Xy6iSv+f9Ccv=pcfa4LoMSMmgOocWPCa4Q@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] clk: bcm: Add BCM63268 timer clock and reset driver
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, jonas.gorski@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org,
+        william.zhang@broadcom.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:30=E2=80=AFAM Liu Shixin <liushixin2@huawei.com>=
- wrote:
+El mi=C3=A9, 22 mar 2023 a las 0:23, Stephen Boyd (<sboyd@kernel.org>) escr=
+ibi=C3=B3:
 >
-> Since some users may not use zswap, the zswap_pool is wasted. Save memory
-> by delaying the initialization of zswap until enabled.
+> Quoting Florian Fainelli (2023-03-21 16:09:54)
+> > On 3/21/23 16:06, Stephen Boyd wrote:
+> > > Quoting Florian Fainelli (2023-03-21 16:00:29)
+> > >>
+> > >> These SoCs are big-endian, require native endian register access and
+> > >> have no posted writes within their bus logic (UBUS) and require no
+> > >> barriers, hence the use of __raw_readl() and __raw_writel() is adequ=
+ate.
+> > >>
+> > >
+> > > Use ioread32be() then?
+> >
+> > BCM63xx drivers tend to use __raw_{read,write}l for consistency and to
+> > make it clear that no barriers, no endian swapping is necessary, I woul=
+d
+> > prefer to remain consistent with that convention.
+>
+> Ok.
+>
+> Is the clk device big-endian? Or the CPU is big-endian? SoC being
+> big-endian sounds like the devices in the SoC are big-endian. I hope we
+> never plop this device down with a CPU that's litle-endian.
 
-To be honest, I'm not a huge fan of this. Would enabling zswap module
-build instead solve your problem?
+The SoC is big-endian. I've only worked with MIPS big-endian devices
+from Broadcom, so I'm not really sure, but this seems to be very
+BCM63268-specific...
+Other BCM63xx devices I know have separate clock and reset
+controllers, but not this kind of timer, clock and reset controller...
 
-~Vitaly
-
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->  mm/zswap.c | 51 +++++++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 41 insertions(+), 10 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 09fa956920fa..3aed3b26524a 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -81,6 +81,8 @@ static bool zswap_pool_reached_full;
->
->  #define ZSWAP_PARAM_UNSET ""
->
-> +static int zswap_setup(void);
-> +
->  /* Enable/disable zswap */
->  static bool zswap_enabled =3D IS_ENABLED(CONFIG_ZSWAP_DEFAULT_ON);
->  static int zswap_enabled_param_set(const char *,
-> @@ -220,6 +222,9 @@ static bool zswap_init_started;
->  /* fatal error during init */
->  static bool zswap_init_failed;
->
-> +/* used to ensure the integrity of initialization */
-> +static DEFINE_MUTEX(zswap_init_lock);
-> +
->  /* init completed, but couldn't create the initial pool */
->  static bool zswap_has_pool;
->
-> @@ -272,13 +277,13 @@ static void zswap_update_total_size(void)
->  **********************************/
->  static struct kmem_cache *zswap_entry_cache;
->
-> -static int __init zswap_entry_cache_create(void)
-> +static int zswap_entry_cache_create(void)
->  {
->         zswap_entry_cache =3D KMEM_CACHE(zswap_entry, 0);
->         return zswap_entry_cache =3D=3D NULL;
->  }
->
-> -static void __init zswap_entry_cache_destroy(void)
-> +static void zswap_entry_cache_destroy(void)
->  {
->         kmem_cache_destroy(zswap_entry_cache);
->  }
-> @@ -663,7 +668,7 @@ static struct zswap_pool *zswap_pool_create(char *typ=
-e, char *compressor)
->         return NULL;
->  }
->
-> -static __init struct zswap_pool *__zswap_pool_create_fallback(void)
-> +static struct zswap_pool *__zswap_pool_create_fallback(void)
->  {
->         bool has_comp, has_zpool;
->
-> @@ -784,8 +789,15 @@ static int __zswap_param_set(const char *val, const =
-struct kernel_param *kp,
->         /* if this is load-time (pre-init) param setting,
->          * don't create a pool; that's done during init.
->          */
-> -       if (!zswap_init_started)
-> -               return param_set_charp(s, kp);
-> +       if (!zswap_init_started) {
-> +               mutex_lock(&zswap_init_lock);
-> +               if (!zswap_init_started) {
-> +                       ret =3D param_set_charp(s, kp);
-> +                       mutex_unlock(&zswap_init_lock);
-> +                       return ret;
-> +               }
-> +               mutex_unlock(&zswap_init_lock);
-> +       }
->
->         if (!type) {
->                 if (!zpool_has_pool(s)) {
-> @@ -884,6 +896,15 @@ static int zswap_enabled_param_set(const char *val,
->         if (res =3D=3D *(bool *)kp->arg)
->                 return 0;
->
-> +       if (!zswap_init_started && (system_state =3D=3D SYSTEM_RUNNING)) =
-{
-> +               mutex_lock(&zswap_init_lock);
-> +               if (zswap_setup()) {
-> +                       mutex_unlock(&zswap_init_lock);
-> +                       return -ENODEV;
-> +               }
-> +               mutex_unlock(&zswap_init_lock);
-> +       }
-> +
->         if (zswap_init_failed) {
->                 pr_err("can't enable, initialization failed\n");
->                 return -ENODEV;
-> @@ -1451,7 +1472,7 @@ static const struct frontswap_ops zswap_frontswap_o=
-ps =3D {
->
->  static struct dentry *zswap_debugfs_root;
->
-> -static int __init zswap_debugfs_init(void)
-> +static int zswap_debugfs_init(void)
->  {
->         if (!debugfs_initialized())
->                 return -ENODEV;
-> @@ -1482,7 +1503,7 @@ static int __init zswap_debugfs_init(void)
->         return 0;
->  }
->  #else
-> -static int __init zswap_debugfs_init(void)
-> +static int zswap_debugfs_init(void)
->  {
->         return 0;
->  }
-> @@ -1491,12 +1512,13 @@ static int __init zswap_debugfs_init(void)
->  /*********************************
->  * module init and exit
->  **********************************/
-> -static int __init init_zswap(void)
-> +static int zswap_setup(void)
->  {
->         struct zswap_pool *pool;
->         int ret;
->
-> -       zswap_init_started =3D true;
-> +       if (zswap_init_started)
-> +               return 0;
->
->         if (zswap_entry_cache_create()) {
->                 pr_err("entry cache creation failed\n");
-> @@ -1537,6 +1559,7 @@ static int __init init_zswap(void)
->                 goto destroy_wq;
->         if (zswap_debugfs_init())
->                 pr_warn("debugfs initialization failed\n");
-> +       zswap_init_started =3D true;
->         return 0;
->
->  destroy_wq:
-> @@ -1551,11 +1574,19 @@ static int __init init_zswap(void)
->  cache_fail:
->         /* if built-in, we aren't unloaded on failure; don't allow use */
->         zswap_init_failed =3D true;
-> +       zswap_init_started =3D true;
->         zswap_enabled =3D false;
->         return -ENOMEM;
->  }
-> +
-> +static int __init zswap_init(void)
-> +{
-> +       if (!zswap_enabled)
-> +               return 0;
-> +       return zswap_setup();
-> +}
->  /* must be late so crypto has time to come up */
-> -late_initcall(init_zswap);
-> +late_initcall(zswap_init);
->
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Seth Jennings <sjennings@variantweb.net>");
-> --
-> 2.25.1
->
+--
+=C3=81lvaro
