@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45B16C44BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825D66C44C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCVISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S229865AbjCVIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjCVISD (ORCPT
+        with ESMTP id S229672AbjCVIUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:18:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC3A5259
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:18:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 22 Mar 2023 04:20:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFF75941D;
+        Wed, 22 Mar 2023 01:20:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B462920B2D;
-        Wed, 22 Mar 2023 08:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679473078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yaCVa54jTiy0sgc0DeIq+Nm9gEuRnN1h71KkgJKmB4E=;
-        b=dJo2/XNAugQ+AaQYit0oTk7CuTVIeaxtvGeZTEB6kdq8JaGEYVpMvNaqUqTck9T6OTit1C
-        9RUYYtLNzOUByH+AcN1iCnDnsu08jYEn1qZmuVVVhFDMkjrbcy1tQB+6kY/2aGGnMgRMod
-        9poTiAg/NgHvbzsi9Zbqht9jl7LlS5g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679473078;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yaCVa54jTiy0sgc0DeIq+Nm9gEuRnN1h71KkgJKmB4E=;
-        b=wrJhbWHZK7vewa10Gts4vVrvtEjZ24d1g+UpMC05Gra3buqFZ4mZ0DmOo/Kg2v9rHuIz9C
-        ofh4C9Q1FGJ9s1Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 916EA138E9;
-        Wed, 22 Mar 2023 08:17:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0IDYIra5GmQPNgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 08:17:58 +0000
-Message-ID: <55f3b07b-13dd-f7a1-8d3a-bc79ae1b4f50@suse.cz>
-Date:   Wed, 22 Mar 2023 09:17:58 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6787B81B5B;
+        Wed, 22 Mar 2023 08:20:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B5EC433EF;
+        Wed, 22 Mar 2023 08:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679473248;
+        bh=hclSpSAvHMC2NvRtZD9SW20kTIbHxZrtYZ1rX/4B/Pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQtimfNRBpQAgwCX2xh5yhh0iIFgMbqMnDBt81yGUOsTT69OJF1CNyZce90iSnLBV
+         teRbPYVZ5mljc5wCa5cfPRlOCuMq9Og6mjj2XjDiC87z4ZAq5seI+ZA29ZcCM+5lBk
+         +kh8f2hOk3jOk9PGCG+5UdQGGpZgxauHSl9xD6WCKdqxbX6tbpzNQeQ0sMbMHLGS/7
+         /sazMg6Q4LkJvGK3pRrZCNe5x/CcCTgqJo9fj4dYkFtIUUMNczgj8kbNO3bT7UqfgB
+         NCBWt7XSfi5gpej+t8rDj+2vH1b0FXuhUxEZ/34OiveX9cA1ijRPUfSVi3CxTw2xtx
+         usF5f8/AmKnWg==
+Date:   Wed, 22 Mar 2023 09:20:43 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] fs/buffer: Remove redundant assignment to err
+Message-ID: <20230322082043.f3vcu4iucqe533hl@wittgenstein>
+References: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/4] mm/mmap/vma_merge: further improve prev/next VMA
- naming
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
-References: <cover.1679468982.git.lstoakes@gmail.com>
- <f4474a419648fbbef13b29ce00880054da085788.1679468982.git.lstoakes@gmail.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <f4474a419648fbbef13b29ce00880054da085788.1679468982.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 08:13, Lorenzo Stoakes wrote:
-> Previously the ASCII diagram above vma_merge() and the accompanying
-> variable naming was rather confusing, however recent efforts by Liam
-> Howlett and Vlastimil Babka have significantly improved matters.
+On Wed, Mar 22, 2023 at 02:59:49PM +0800, Jiapeng Chong wrote:
+> Variable 'err' set but not used.
 > 
-> This patch goes a little further - replacing 'X' with 'N', which feels more
-> natural as this represents the _next_ VMA and replacing what was 'N' with
-> 'C' which represents the current VMA.
-
-Might have wanted to mention the 'A' to '*' change as well?
-
-> No word quite describes a VMA that has coincident start as the input span,
-> however 'concurrent' (or more simply 'current') abbreviated to 'curr' fits
-> intuitions well alongside prev and next.
-
-'curr' sounds good to me, I concur
-
-> This has no functional impact.
+> fs/buffer.c:2613:2: warning: Value stored to 'err' is never read.
 > 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4589
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  mm/mmap.c | 86 +++++++++++++++++++++++++++----------------------------
->  1 file changed, 43 insertions(+), 43 deletions(-)
+>  fs/buffer.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 042d22e63528..c9834364ac98 100644
+> diff --git a/fs/buffer.c b/fs/buffer.c
+> index d759b105c1e7..c844b5b93a89 100644
+> --- a/fs/buffer.c
+> +++ b/fs/buffer.c
+> @@ -2580,7 +2580,7 @@ int block_truncate_page(struct address_space *mapping,
+>  	struct inode *inode = mapping->host;
+>  	struct page *page;
+>  	struct buffer_head *bh;
+> -	int err;
+> +	int err = 0;
+>  
+>  	blocksize = i_blocksize(inode);
+>  	length = offset & (blocksize - 1);
+> @@ -2593,9 +2593,8 @@ int block_truncate_page(struct address_space *mapping,
+>  	iblock = (sector_t)index << (PAGE_SHIFT - inode->i_blkbits);
+>  	
+>  	page = grab_cache_page(mapping, index);
+> -	err = -ENOMEM;
+>  	if (!page)
+> -		goto out;
+> +		return -ENOMEM;
 
+This change makes the out: label unused.
