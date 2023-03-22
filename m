@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C26F6C54A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C896C54A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjCVTNd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 15:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S230038AbjCVTNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCVTNb (ORCPT
+        with ESMTP id S229529AbjCVTNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:13:31 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F4733CE8;
-        Wed, 22 Mar 2023 12:13:29 -0700 (PDT)
-Received: from p5b12767e.dip0.t-ipconnect.de ([91.18.118.126] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pf3t6-0003qa-2J; Wed, 22 Mar 2023 20:12:44 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joe Tessler <jrt@google.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] media: dt-bindings: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 20:12:42 +0100
-Message-ID: <7127751.DvuYhMxLoT@phil>
-In-Reply-To: <20230320233944.2920964-1-robh@kernel.org>
-References: <20230320233944.2920964-1-robh@kernel.org>
+        Wed, 22 Mar 2023 15:13:53 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D2C4AFF8;
+        Wed, 22 Mar 2023 12:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679512431; x=1711048431;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ptLcWk9srDFCxKrQ2KuZ2G9eHwppFRvlMA0y7UxLp98=;
+  b=d67NLz1KfVVsT4bDqhm9aO6WAzMfZn3W49Q6h0dzRSPDt3GpGy/6YDx+
+   6mCJKA/lwBzyzGH5RWhqTAMfA6gQD7TzXO3dvbx54gwqoIzT1Tnni7ofF
+   x6QdLtZXfcCuG1v35vXc/oY8n0oo74auDub3pXMg8M369+k6ffe+CuvIK
+   J39EdMo61u5rZRs+dYE5szotfMqZQWIIeu5MCo5++8HoJ7/+l9MOAPpsn
+   5d4Ns2mfiQzs8VSGyWwuHeO7/q/Sa8wXdBGQR03DKSTdftUhycF9Uas9/
+   67+9CVUxBSRx47dYB3V1B8Khfahwq712TkS0Hx/Ls1WT4kH00OAqiYC9K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="401881514"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="401881514"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 12:13:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="682025126"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="682025126"
+Received: from rfbarbee-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.1.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 12:13:50 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Rafael J Wysocki <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v3] ACPI: sysfs: Enable ACPI sysfs support for CCEL records
+Date:   Wed, 22 Mar 2023 12:13:13 -0700
+Message-Id: <20230322191313.22804-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 21. März 2023, 00:39:42 CET schrieb Rob Herring:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/media/rockchip,rk3568-vepu.yaml   | 4 ++--
->  Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 4 ++--
+The Confidential Computing Event Log (CCEL) table provides the address
+and length of the CCEL records area in UEFI reserved memory.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+To allow user space access to these records, expose a sysfs interface
+similar to the BERT table.
 
+More details about the CCEL table can be found in the ACPI specification
+r6.5 [1], sec 5.2.34.
+
+Link: https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.html#cc-event-log-acpi-table # [1]
+Co-developed-by: Haibo Xu <haibo1.xu@intel.com>
+Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+
+Changes since v2:
+ * Fixed the commit log as per review suggestion.
+
+Changes since v1:
+ * Removed unnecessary parenthesis as per Rafael's suggestion.
+
+ drivers/acpi/sysfs.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
+index 7f4ff56c9d42..687524b50085 100644
+--- a/drivers/acpi/sysfs.c
++++ b/drivers/acpi/sysfs.c
+@@ -458,11 +458,28 @@ static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
+ 	return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
+ }
+ 
++static int acpi_ccel_data_init(void *th, struct acpi_data_attr *data_attr)
++{
++	struct acpi_table_ccel *ccel = th;
++
++	if (ccel->header.length < sizeof(struct acpi_table_ccel) ||
++	    !ccel->log_area_start_address || !ccel->log_area_minimum_length) {
++		kfree(data_attr);
++		return -EINVAL;
++	}
++	data_attr->addr = ccel->log_area_start_address;
++	data_attr->attr.size = ccel->log_area_minimum_length;
++	data_attr->attr.attr.name = "CCEL";
++
++	return sysfs_create_bin_file(tables_data_kobj, &data_attr->attr);
++}
++
+ static struct acpi_data_obj {
+ 	char *name;
+ 	int (*fn)(void *, struct acpi_data_attr *);
+ } acpi_data_objs[] = {
+ 	{ ACPI_SIG_BERT, acpi_bert_data_init },
++	{ ACPI_SIG_CCEL, acpi_ccel_data_init },
+ };
+ 
+ #define NUM_ACPI_DATA_OBJS ARRAY_SIZE(acpi_data_objs)
+-- 
+2.34.1
 
