@@ -2,87 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DC76C59F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4EB6C59FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCVXAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S229543AbjCVXCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCVXAU (ORCPT
+        with ESMTP id S229497AbjCVXCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:00:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04CF6588;
-        Wed, 22 Mar 2023 16:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Mar 2023 19:02:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB7B6588;
+        Wed, 22 Mar 2023 16:02:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7906B622FF;
-        Wed, 22 Mar 2023 23:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE444C4339B;
-        Wed, 22 Mar 2023 23:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679526018;
-        bh=EB2DTbZFfHdmyXLnaK3jdMbvbLGX7OrJ7RFf0PO0gMo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iTg6OT41QInqtve2alpugcL962zy0p79bxUAarxE5jUjgUCaIQeFtOSouLNBb8ttT
-         jV2euYk6VIdHoPiRbQT91Kjfa0iDKf/FkRk1QU7KZBjpmA+1raix6JhKwot+OwBfj1
-         BeuPTjSPMGQxdnGCVc7Jr2L+hJEIo1Yfv5YLMuJQlSdsmsKpItrR4vhiG3L2q4Sr5i
-         9gkKmmjQnIHvmx1+CKYXYBxaB4wV624JjF1Vl0WSaJYchnmzOyOkBoWhN5C6zLm1kX
-         9xQMvR4V+y/EQkUE+uXv8v2QH7cbXOnnpSeD/9D+bSgzSayvL9J9Ykflkoy7tFkA8h
-         ZLeBQCb62Z/vA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92D38E4F0DA;
-        Wed, 22 Mar 2023 23:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhkWK5Wy0z4wgv;
+        Thu, 23 Mar 2023 10:02:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679526126;
+        bh=rsjvqVJpvHhn9wRdeV5pStst41E897IWLfvCHN97eSk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b/1l+aN6FdtzsGnJeU4vZ6zfMymHuKX1qf4TrxKM93Q1oH0DApKA9+8YbQlCYOcP8
+         XUqBXrZhkanYla8b7fc8hw2YrwE6BQiZImi7723RXJU2SKTCgZplo2koP6LVFL9hqc
+         CfxZxGcuGxXgFqsi2DEyZs88cXLhesPj8hdiqyuPPB5EvM48fIouujekuu+TwjadFc
+         AYWiZ8IlRYLuySQmur8TpFcQ7aOjSzFV5y5NvzHV096sQfWb8c4I/PXPLtIzKI9J/F
+         vCB00TtLdLu8X5hXAQoCyBAHqIYLhtk0xrtd+DhCeWMIRTl5iBVT3fX4gxV7q77N5s
+         bBnFoVxRB0zrw==
+Date:   Thu, 23 Mar 2023 10:02:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: linux-next: manual merge of the block tree with the mm tree
+Message-ID: <20230323100204.0917cecf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: HCI: Fix global-out-of-bounds
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <167952601859.12488.10811735256631144106.git-patchwork-notify@kernel.org>
-Date:   Wed, 22 Mar 2023 23:00:18 +0000
-References: <20230321015018.1759683-1-iam@sung-woo.kim>
-In-Reply-To: <20230321015018.1759683-1-iam@sung-woo.kim>
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
-        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/F_Hox9gVbvq./rE=fe37W1n";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/F_Hox9gVbvq./rE=fe37W1n
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+Hi all,
 
-On Mon, 20 Mar 2023 21:50:18 -0400 you wrote:
-> To loop a variable-length array, hci_init_stage_sync(stage) considers
-> that stage[i] is valid as long as stage[i-1].func is valid.
-> Thus, the last element of stage[].func should be intentionally invalid
-> as hci_init0[], le_init2[], and others did.
-> However, amp_init1[] and amp_init2[] have no invalid element, letting
-> hci_init_stage_sync() keep accessing amp_init1[] over its valid range.
-> This patch fixes this by adding {} in the last of amp_init1[] and
-> amp_init2[].
-> 
-> [...]
+Today's linux-next merge of the block tree got a conflict in:
 
-Here is the summary with links:
-  - Bluetooth: HCI: Fix global-out-of-bounds
-    https://git.kernel.org/bluetooth/bluetooth-next/c/95084403f8c0
+  lib/iov_iter.c
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+between commit:
 
+  c4cf24ce34b7 ("iov_iter: add copy_page_to_iter_atomic()")
 
+from the mm tree and commit:
+
+  a53f5dee3448 ("iov_iter: Kill ITER_PIPE")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc lib/iov_iter.c
+index 48ca1c5dfc04,fad95e4cf372..000000000000
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@@ -821,60 -532,6 +532,34 @@@ size_t copy_page_from_iter_atomic(struc
+  }
+  EXPORT_SYMBOL(copy_page_from_iter_atomic);
+ =20
+ +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset, size_=
+t bytes,
+ +				struct iov_iter *i)
+ +{
+ +	char *kaddr =3D kmap_local_page(page);
+ +	char *p =3D kaddr + offset;
+ +	size_t copied =3D 0;
+ +
+ +	if (!page_copy_sane(page, offset, bytes) ||
+ +	    WARN_ON_ONCE(i->data_source))
+ +		goto out;
+ +
+ +	if (unlikely(iov_iter_is_pipe(i))) {
+ +		copied =3D copy_page_to_iter_pipe(page, offset, bytes, i);
+ +		goto out;
+ +	}
+ +
+ +	iterate_and_advance(i, bytes, base, len, off,
+ +		copyout(base, p + off, len),
+ +		memcpy(base, p + off, len)
+ +	)
+ +	copied =3D bytes;
+ +
+ +out:
+ +	kunmap_local(kaddr);
+ +	return copied;
+ +}
+ +EXPORT_SYMBOL(copy_page_to_iter_atomic);
+ +
+- static void pipe_advance(struct iov_iter *i, size_t size)
+- {
+- 	struct pipe_inode_info *pipe =3D i->pipe;
+- 	int off =3D i->last_offset;
+-=20
+- 	if (!off && !size) {
+- 		pipe_discard_from(pipe, i->start_head); // discard everything
+- 		return;
+- 	}
+- 	i->count -=3D size;
+- 	while (1) {
+- 		struct pipe_buffer *buf =3D pipe_buf(pipe, i->head);
+- 		if (off) /* make it relative to the beginning of buffer */
+- 			size +=3D abs(off) - buf->offset;
+- 		if (size <=3D buf->len) {
+- 			buf->len =3D size;
+- 			i->last_offset =3D last_offset(buf);
+- 			break;
+- 		}
+- 		size -=3D buf->len;
+- 		i->head++;
+- 		off =3D 0;
+- 	}
+- 	pipe_discard_from(pipe, i->head + 1); // discard everything past this one
+- }
+-=20
+  static void iov_iter_bvec_advance(struct iov_iter *i, size_t size)
+  {
+  	const struct bio_vec *bvec, *end;
+
+--Sig_/F_Hox9gVbvq./rE=fe37W1n
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQbiOwACgkQAVBC80lX
+0GyEnQf/adjSrEyVT5xgEmHcYmkA53kR4C6XwCEYlKz0LJsi9EDBenLoQD+UAywd
+TMfEaC46VrVnxytjGdRFaCDOVmNRJ958dzBMhFQyJ8z3pmefRUHN7YEPTUoiLvsB
+HAxklMthx7EdmurBJWxEDnhLyo0I+yhUWT5yTSyRqD6NbRxnCrF292OYF+EvxuVy
+JbGfH2TPmi1gSkQsikDYPcdn9gbCIBVB0OPBOd0qXZSdKAc9FAzw/rB5Z2nxbuw5
+2WlmHjhYd29wIh7hNnMr9PHDIycW7E76b/AXBPgeZVb2H+j+6R6RpJ2zw6WYdQgc
+KVsD9ja8e4NzrHRv5R1zYbtFHr+2vA==
+=O9gB
+-----END PGP SIGNATURE-----
+
+--Sig_/F_Hox9gVbvq./rE=fe37W1n--
