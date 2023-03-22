@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBD56C5105
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 653CB6C50FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjCVQnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S230381AbjCVQmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjCVQnO (ORCPT
+        with ESMTP id S230365AbjCVQme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:43:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2309C62FCE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679503345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cC9A56nYy1+m5j88UXEHoA+LJcmsoLgXsOwYg6hVvpA=;
-        b=ifPGVzlip0YKEZkqFCD9cPSfxWpiEXR0xNNtkQDCA2SfaQJwc/g6J9h7R/r8M9kfzVkeZD
-        Cq3Ad9gcf7pxxf+W22AfH4zqlsrdqiNJI+gx9VgEq8jqXE5QCN3X9gBVGAcYty4WEiyotH
-        Mdwl+0dE/NnuglA7oacoORrQ4bLdrHQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-5HfkHJV8NauG4Jivpvuunw-1; Wed, 22 Mar 2023 12:42:22 -0400
-X-MC-Unique: 5HfkHJV8NauG4Jivpvuunw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56DB02823822;
-        Wed, 22 Mar 2023 16:42:21 +0000 (UTC)
-Received: from localhost (dhcp-192-239.str.redhat.com [10.33.192.239])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1CD47492C13;
-        Wed, 22 Mar 2023 16:42:20 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Viktor Prutyanov <viktor@daynix.com>
-Cc:     jasowang@redhat.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, yan@daynix.com
-Subject: Re: [PATCH v4] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
-In-Reply-To: <20230322123121-mutt-send-email-mst@kernel.org>
-Organization: Red Hat GmbH
-References: <20230322141031.2211141-1-viktor@daynix.com>
- <20230322123121-mutt-send-email-mst@kernel.org>
-User-Agent: Notmuch/0.37 (https://notmuchmail.org)
-Date:   Wed, 22 Mar 2023 17:42:20 +0100
-Message-ID: <87mt44hh5f.fsf@redhat.com>
+        Wed, 22 Mar 2023 12:42:34 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E35637EC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:42:32 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id c10so9583153vsh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679503351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VmnnMMvSLOdA65bN5I8O3X2sjkCjbZFK9esp/HZ4bO0=;
+        b=K1X5LlHD1KTJx0CtsGxmvT1jE0SyIa+A1BAiMv9cuDnLDanH5SXhjPHHh9Xtr5jp6F
+         nVHCZPDozIw3JZGlsg++BV692DK6olE41R2lKzV2VJHsbav2rzbmnS4ippdZ4czCAOTU
+         DsoN4AIA5q2ltgI9R3GWi5nS59j9fC54oVN1ukEXlnsw/ecAq1BTY+b2EhsxT7YaV7+R
+         ACL+wGuTiYlkUacdKR2fB6rtRYC6WAWZAiPoAExnbRgfzDIn+9xmNUmJgO6fMa7JAKY7
+         PVxN0Jpfrrlwu9OCzuEhOwDUqv0CYGtGqFGhUwlCu9h0rCrpK808feWrv8akmGxgohTP
+         oHrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679503351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VmnnMMvSLOdA65bN5I8O3X2sjkCjbZFK9esp/HZ4bO0=;
+        b=px3OrmxFQkYiQlVU0rdpPxmCrqVnBr5MhCOYUmy4oYJbcbxyKImJtTjrMHMMPZKDKT
+         w4DWltCCD3NrbxionBnvfTfKHCuzpIqeKViVbq8EX09fFXNxyN8ALEObB+xVPpeeaj8O
+         xSFoEASBiyI2bPr9PNydr3aPRzzUQgV9mQ7QflIf0Yrje43cmDvJROBMtJXPlx6FR6g2
+         Ci199n3bUTzDQDMbKACag7koDnuhDtve3uHU43xCbE3A37XEwcLa+rVVKOrV813dQlLL
+         d2P05C8Vor09xA6W/5OJCiUsm/2wxVX8NW47Ej+ChV4ghzQ+ghUk86XimV2kkL2nyUg/
+         RVWw==
+X-Gm-Message-State: AO0yUKXCsT1dTAZw9bv2qQBxwZ533sI0sngMAcCUSpROV3kWsX82fEmu
+        9jtLdVjDU2sNQWo4gRYiFRcEztuARmmnD7fhp19amg==
+X-Google-Smtp-Source: AK7set/RWj8MjG2qYfMV5NINsPkCRSFEKkqgR6XZHjCzh22PdBgdXg7kYsGksZ26QMzp8O/PYzJ6qyyWSjXqVS6WxWQ=
+X-Received: by 2002:a05:6102:4751:b0:425:dd2d:1c0 with SMTP id
+ ej17-20020a056102475100b00425dd2d01c0mr75732vsb.0.1679503351764; Wed, 22 Mar
+ 2023 09:42:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230315110650.142577-1-keguang.zhang@gmail.com> <20230315110650.142577-2-keguang.zhang@gmail.com>
+In-Reply-To: <20230315110650.142577-2-keguang.zhang@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 22 Mar 2023 17:42:21 +0100
+Message-ID: <CAMRc=Megxi64KcDsaj+FEtzbLK8ohT9D8g_p-kWrKjXc89t5yQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] gpio: loongson1: Convert to SPDX identifier
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,42 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22 2023, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-
-> On Wed, Mar 22, 2023 at 05:10:31PM +0300, Viktor Prutyanov wrote:
->> According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
->> indicates that the driver passes extra data along with the queue
->> notifications.
->> 
->> In a split queue case, the extra data is 16-bit available index. In a
->> packed queue case, the extra data is 1-bit wrap counter and 15-bit
->> available index.
->> 
->> Add support for this feature for MMIO, channel I/O and modern PCI
->> transports.
->> 
->> Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
->> ---
->>  v4: remove VP_NOTIFY macro and legacy PCI support, add
->>     virtio_ccw_kvm_notify_with_data to virtio_ccw
->>  v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_shadow,
->>     remove byte swap, rename to vring_notification_data
->>  v2: reject the feature in virtio_ccw, replace __le32 with u32
->> 
->>  Tested with disabled VIRTIO_F_NOTIFICATION_DATA on qemu-system-s390x
->>  (virtio-blk-ccw), qemu-system-riscv64 (virtio-blk-device,
->>  virtio-rng-device), qemu-system-x86_64 (virtio-blk-pci, virtio-net-pci)
->>  to make sure nothing is broken.
->>  Tested with enabled VIRTIO_F_NOTIFICATION_DATA on 64-bit RISC-V Linux
->>  and my hardware implementation of virtio-rng.
+On Wed, Mar 15, 2023 at 12:07=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
+.com> wrote:
 >
-> what did you test? virtio pci? mmio? guessing not ccw...
+> Use SPDX-License-Identifier instead of the license text.
 >
-> Cornelia could you hack up something to quickly test ccw?
+> The current author name is unofficial, change it to my real name.
+>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V2 -> V3: Explain the reason for changing the author name in commit messa=
+ge
+> V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> ---
+>  drivers/gpio/gpio-loongson1.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
+c
+> index 5d90b3bc5a25..8862c9ea0d41 100644
+> --- a/drivers/gpio/gpio-loongson1.c
+> +++ b/drivers/gpio/gpio-loongson1.c
+> @@ -1,11 +1,8 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * GPIO Driver for Loongson 1 SoC
+>   *
+> - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
+> - *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+>   */
+>
+>  #include <linux/module.h>
+> @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =3D {
+>
+>  module_platform_driver(ls1x_gpio_driver);
+>
+> -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
+> +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+>  MODULE_DESCRIPTION("Loongson1 GPIO driver");
+>  MODULE_LICENSE("GPL");
+> --
+> 2.34.1
+>
 
-Hm, I'm not entirely sure how notification data is supposed to be used
-in real life -- Viktor, what is your virtio-rng implementation doing;
-can this be hacked into all transports?
+Applied, thanks!
 
-(Also, if the other ccw folks have something handy, please speak up :)
-
+Bart
