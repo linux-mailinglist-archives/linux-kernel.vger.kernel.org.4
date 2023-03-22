@@ -2,203 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0C36C4B52
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDBC6C4B50
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjCVNJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
+        id S229968AbjCVNJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCVNJj (ORCPT
+        with ESMTP id S229871AbjCVNJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:09:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0A567A3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679490534;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sOkHuOKT5TrdMbQ7ausoErRO6DBZAgZjkwk79qxntJo=;
-        b=KnlCVXVvGaNhaN4l8DbWHB7M8DUSr4ebEr608zp6/Dxp9c062gQdE0uIDDIwHiaVXlg+uB
-        K5oPZnjyTikE8ypQcTvr2P0HlwT83DsO95PEyw0P4IOk/4Dc8JeCdGoX7VEvPI8dfC3gb7
-        OYuO3cLPexTrDmUD2/tYpQic8cC03/c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-313-iG2ZqcGGOo2BI97vMjqxrQ-1; Wed, 22 Mar 2023 09:08:51 -0400
-X-MC-Unique: iG2ZqcGGOo2BI97vMjqxrQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 22 Mar 2023 09:09:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0470F28D0A;
+        Wed, 22 Mar 2023 06:09:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD6CE886466;
-        Wed, 22 Mar 2023 13:08:50 +0000 (UTC)
-Received: from localhost (ovpn-13-195.pek2.redhat.com [10.72.13.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B9A01731B;
-        Wed, 22 Mar 2023 13:08:49 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 21:08:46 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 3/4] iov_iter: add copy_page_to_iter_atomic()
-Message-ID: <ZBr93qtCxRXl7o0V@MiWiFi-R3L-srv>
-References: <cover.1679431886.git.lstoakes@gmail.com>
- <31482908634cbb68adafedb65f0b21888c194a1b.1679431886.git.lstoakes@gmail.com>
- <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
- <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F6BE620D5;
+        Wed, 22 Mar 2023 13:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02BEC4339B;
+        Wed, 22 Mar 2023 13:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679490567;
+        bh=TBdGtQ54byUD9JnpnLF1IHWZzgwVmaaUiTmEaB17BNY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GSMN++aLmdcyrK2u1+dw3CaK/7KYUnyl+TnsA5Ie3Ho3bJ5LzwUFD+QY74PVbc8Do
+         aQBr8wgQz1ODhmEnIIjcccHJU9XpWqGrFOez2DfE/UuySeZJtaNGqoIFC6njWt7ukQ
+         tbkKwrYHQLOxV9GEkg8rIhT6ev4FNJ7u5jc6eI6gABSoRU9R+LsonyBZsD+Ms2qtzd
+         ULVusf9VwukWXXTZdxo5OmUWjED5ypHYty17lmpXmX14I11x16wYyKv8zU96dQIVOF
+         8Wx+TCN8VV8C1G5oCHz6aKS+xSVBqy01jT4kqht/qh254RJ0FjKejWr0dz/A/o5MvA
+         2G/+x3H7Y2LQw==
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-541a05e4124so337716177b3.1;
+        Wed, 22 Mar 2023 06:09:26 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eMtTra+xIb2xFgIB6RCGFoNJufq6VrQNk59FCXw22EiynncvMq
+        joLVlrPfBkQdAKTnEpsUw6gaaYJKj300084bkw==
+X-Google-Smtp-Source: AKy350Y7Te5CDRYMafjYeQhsKhCMmgull6VM9Zg3abMGLl1BV+ZjwcQhB/MCo7DW7c1AwmhZchmiOeZYp/sMRLkWwsg=
+X-Received: by 2002:a81:7e4a:0:b0:533:99bb:c296 with SMTP id
+ p10-20020a817e4a000000b0053399bbc296mr3060086ywn.5.1679490565967; Wed, 22 Mar
+ 2023 06:09:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230316122741.577663-1-herve.codina@bootlin.com>
+ <20230316122741.577663-2-herve.codina@bootlin.com> <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+ <167930560089.26.8624952010101991814@mailman-core.alsa-project.org>
+ <20230320185127.GA2233912-robh@kernel.org> <20230322112056.7ffcd503@bootlin.com>
+ <CAL_JsqK-=9BJEbEUji0ac=cXqBz3ijD5m33MBPyms-9O44gvag@mail.gmail.com>
+In-Reply-To: <CAL_JsqK-=9BJEbEUji0ac=cXqBz3ijD5m33MBPyms-9O44gvag@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 22 Mar 2023 08:09:15 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJD+sCFG_QeBo5xP7+K608=GmpJu+qbEaaZPKwMin99ng@mail.gmail.com>
+Message-ID: <CAL_JsqJD+sCFG_QeBo5xP7+K608=GmpJu+qbEaaZPKwMin99ng@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466 E1/T1/J1 framer
+To:     Herve Codina <herve.codina@bootlin.com>,
+        alsa-devel-owner@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/22/23 at 10:32am, Lorenzo Stoakes wrote:
-> On Wed, Mar 22, 2023 at 06:17:25PM +0800, Baoquan He wrote:
-> > On 03/21/23 at 08:54pm, Lorenzo Stoakes wrote:
-> > > Provide an atomic context equivalent for copy_page_to_iter(). This eschews
-> > > the might_fault() check copies memory in the same way that
-> > > copy_page_from_iter_atomic() does.
-> > >
-> > > This functions assumes a non-compound page, however this mimics the
-> > > existing behaviour of copy_page_from_iter_atomic(). I am keeping the
-> > > behaviour consistent between the two, deferring any such change to an
-> > > explicit folio-fication effort.
-> > >
-> > > This is being added in order that an iteratable form of vread() can be
-> > > implemented with known prefaulted pages to avoid the need for mutex
-> > > locking.
-> > >
-> > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > > ---
-> > >  include/linux/uio.h |  2 ++
-> > >  lib/iov_iter.c      | 28 ++++++++++++++++++++++++++++
-> > >  2 files changed, 30 insertions(+)
-> > >
-> > > diff --git a/include/linux/uio.h b/include/linux/uio.h
-> > > index 27e3fd942960..fab07103090f 100644
-> > > --- a/include/linux/uio.h
-> > > +++ b/include/linux/uio.h
-> > > @@ -154,6 +154,8 @@ static inline struct iovec iov_iter_iovec(const struct iov_iter *iter)
-> > >
-> > >  size_t copy_page_from_iter_atomic(struct page *page, unsigned offset,
-> > >  				  size_t bytes, struct iov_iter *i);
-> > > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset,
-> > > +				size_t bytes, struct iov_iter *i);
-> > >  void iov_iter_advance(struct iov_iter *i, size_t bytes);
-> > >  void iov_iter_revert(struct iov_iter *i, size_t bytes);
-> > >  size_t fault_in_iov_iter_readable(const struct iov_iter *i, size_t bytes);
-> > > diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> > > index 274014e4eafe..48ca1c5dfc04 100644
-> > > --- a/lib/iov_iter.c
-> > > +++ b/lib/iov_iter.c
-> > > @@ -821,6 +821,34 @@ size_t copy_page_from_iter_atomic(struct page *page, unsigned offset, size_t byt
-> > >  }
-> > >  EXPORT_SYMBOL(copy_page_from_iter_atomic);
-> > >
-> > > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset, size_t bytes,
-> > > +				struct iov_iter *i)
-> > > +{
-> > > +	char *kaddr = kmap_local_page(page);
+On Wed, Mar 22, 2023 at 7:56=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Wed, Mar 22, 2023 at 5:21=E2=80=AFAM Herve Codina <herve.codina@bootli=
+n.com> wrote:
 > >
-> > I am a little confused about the name of this new function. In its
-> > conterpart, copy_page_from_iter_atomic(), kmap_atomic()/kunmpa_atomic()
-> > are used. With them, if CONFIG_HIGHMEM=n, it's like below:
-> 
-> The reason for this is that:-
-> 
-> 1. kmap_atomic() explicitly states that it is now deprecated and must no longer
->    be used, and kmap_local_page() should be used instead:-
-> 
->  * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
-> 
->  * Do not use in new code. Use kmap_local_page() instead.
-> 
-> 2. kmap_local_page() explicitly states that it can be used in any context:-
-> 
->  * Can be invoked from any context, including interrupts.
+> > Hi Rob,
+> >
+> > On Mon, 20 Mar 2023 13:51:27 -0500
+> > Rob Herring <robh@kernel.org> wrote:
+> >
+> > > On Mon, Mar 20, 2023 at 10:46:19AM +0100, Herve Codina via Alsa-devel=
+ wrote:
+> > > > Received: by alsa1.perex.cz (Postfix, from userid 50401) id 16494F8=
+027B;
+> > > >  Mon, 20 Mar 2023 10:46:37 +0100 (CET)
+> > > > X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on alsa1.pe=
+rex.cz
+> > > > X-Spam-Level:
+> > > > X-Spam-Status: No, score=3D-5.2 required=3D5.0 tests=3DDKIM_SIGNED,=
+DKIM_VALID,
+> > > >  DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PAS=
+S,
+> > > >  URIBL_BLOCKED shortcircuit=3Dno autolearn=3Dham autolearn_force=3D=
+no
+> > > >  version=3D3.4.6
+> > > > Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+> > > >  [217.70.183.198]) (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384
+> > > >  (256/256 bits)) (No client certificate requested) by alsa1.perex.c=
+z
+> > > >  (Postfix) with ESMTPS id 3FF5FF80105 for <alsa-devel@alsa-project.=
+org>;
+> > > >  Mon, 20 Mar 2023 10:46:22 +0100 (CET)
+> > > > DKIM-Filter: OpenDKIM Filter v2.11.0 alsa1.perex.cz 3FF5FF80105
+> > > > Authentication-Results: alsa1.perex.cz; dkim=3Dpass (2048-bit key,
+> > > >  unprotected) header.d=3Dbootlin.com header.i=3D@bootlin.com
+> > > >  header.a=3Drsa-sha256 header.s=3Dgm1 header.b=3Dm4O7nLC1
+> > > > Received: (Authenticated sender: herve.codina@bootlin.com) by
+> > > >  mail.gandi.net (Postfix) with ESMTPSA id 40453C0009; Mon, 20 Mar 2=
+023
+> > > >  09:46:20 +0000 (UTC)
+> > > > DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dboo=
+tlin.com; s=3Dgm1;
+> > > >  t=3D1679305582;
+> > > >  h=3Dfrom:from:reply-to:subject:subject:date:date:message-id:messag=
+e-id:
+> > > >   to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+> > > >   content-transfer-encoding:content-transfer-encoding:
+> > > >   in-reply-to:in-reply-to:references:references;
+> > > >  bh=3DIeu9Fv38se4lD4z/BVXUHLrVJL9Tx5iKWZgvO8X+VoY=3D;
+> > > >  b=3Dm4O7nLC1LPZDOI5eM/hmgqouxdkin2veA6CvJhT9kU9rGQALB3ya2fuybMfDvr=
+kTqqBjEd
+> > > >  j6DAxXMgOKgwuUfEsZsp3BFJpoii00hSaf0r2uIbnnGcUrDGVQqUQVEqv51O6VBqnr=
+ViQk
+> > > >  PstlJM0lcE9R/AFASd5D/HQGoYYyRY+NKT7xt8g1Ax23Yk/tUG59LXku/skn/4faSL=
+odnU
+> > > >  vV2ng3VMUcoLuvSMJtdYY3hrXEWqUrW1ZogxAFHJNiKuyOELmqZGmNo4B4yAFOEcqq=
+yano
+> > > >  /f4m/7BtT7X1wwPvGu29gg+0aOFrGQq5kb4UNrMoriSQyKnxPRha8zL3J2Jckw=3D=
+=3D
+> > > > Date: Mon, 20 Mar 2023 10:46:19 +0100
+> > > > From: Herve Codina <herve.codina@bootlin.com>
+> > > > To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > > Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF24=
+66
+> > > >  E1/T1/J1 framer
+> > > > Message-ID: <20230320104619.468a304b@bootlin.com>
+> > > > In-Reply-To: <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> > > > References: <20230316122741.577663-1-herve.codina@bootlin.com>
+> > > >  <20230316122741.577663-2-herve.codina@bootlin.com>
+> > > >  <96b01241-d57d-a460-4a8b-9e83eaab24ae@linaro.org>
+> > > > Organization: Bootlin
+> > > > X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+> > > > MIME-Version: 1.0
+> > > > Content-Type: text/plain; charset=3DUTF-8
+> > > > Content-Transfer-Encoding: quoted-printable
+> > > > Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> > > > X-Message-ID-Hash: AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB
+> > > > X-MailFrom: herve.codina@bootlin.com
+> > > > X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emer=
+gency;
+> > > >  loop; banned-address; member-moderation;
+> > > >  header-match-alsa-devel.alsa-project.org-0;
+> > > >  header-match-alsa-devel.alsa-project.org-1; nonmember-moderation;
+> > > >  administrivia; implicit-dest; max-recipients; max-size; news-moder=
+ation;
+> > > >  no-subject; digests; suspicious-header
+> > > > CC: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+> > > >  <krzysztof.kozlowski+dt@linaro.org>, Liam Girdwood <lgirdwood@gmai=
+l.com>,
+> > > >  Mark Brown <broonie@kernel.org>, Derek Kiernan <derek.kiernan@xili=
+nx.com>,
+> > > >  Dragan Cvetic <dragan.cvetic@xilinx.com>, Arnd Bergmann <arnd@arnd=
+b.de>,
+> > > >  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Takashi Iwai
+> > > >  <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+> > > >  devicetree@vger.kernel.org, alsa-devel@alsa-project.org, Christoph=
+e Leroy
+> > > >  <christophe.leroy@csgroup.eu>, Thomas Petazzoni
+> > > >  <thomas.petazzoni@bootlin.com>
+> > > > X-Mailman-Version: 3.3.8
+> > > > Precedence: list
+> > > > List-Id: "Alsa-devel mailing list for ALSA developers -
+> > > >  http://www.alsa-project.org" <alsa-devel.alsa-project.org>
+> > > > Archived-At: <https://mailman.alsa-project.org/hyperkitty/list/alsa=
+-devel@alsa-project.org/message/AJZF4VHU24ASVVBCPRMLJCDG4ZDX55LB/>
+> > > > List-Archive: <https://mailman.alsa-project.org/hyperkitty/list/als=
+a-devel@alsa-project.org/>
+> > > > List-Help: <mailto:alsa-devel-request@alsa-project.org?subject=3Dhe=
+lp>
+> > > > List-Owner: <mailto:alsa-devel-owner@alsa-project.org>
+> > > > List-Post: <mailto:alsa-devel@alsa-project.org>
+> > > > List-Subscribe: <mailto:alsa-devel-join@alsa-project.org>
+> > > > List-Unsubscribe: <mailto:alsa-devel-leave@alsa-project.org>
+> > >
+> > > The alsa-devel list doesn't seem to like your emails. The archives
+> > > (lore) has 2 copies with the 2nd having the original headers in the
+> > > body. I'm seeing this recently on other senders too. Best I can tell =
+is
+> > > you sent this as quoted-printable.
+> > >
+> > > Rob
+> >
+> > I don't known what happened with alsa-devel list.
+> >
+> > For this answer, I tried to force '8bit' encoding instead of quoted-pri=
+ntable.
+> > Let me know if it is better.
+>
+> Nope, still the same issue:
+>
+> https://lore.kernel.org/all/167948048307.26.16805930109507404147@mailman-=
+core.alsa-project.org/
+>
+> I added the alsa-devel owner. Maybe they know what's happening.
 
-Yeah, I saw that stated in document too. With my understanding, it's the
-page mapping itself will be guaranteed and can be used in any context
-when kmap_local_page() is taken. However, here kmap_local_page() is used
-to make the code block atomic, it could be not achieved.
+Here's the answer:
 
-> 
-> I wanted follow this advice as strictly as I could, hence the change. However,
-> we do need preemption/pagefaults explicitly disabled in this context (we are
-> happy to fail if the faulted in pages are unmapped in meantime), and I didn't
-> check the internals to make sure.
-> 
-> So I think for safety it is better to use k[un]map_atomic() here, I'll respin
-> and put that back in, good catch!
-> 
-> >
-> > static inline void *kmap_atomic(struct page *page)
-> > {
-> >         if (IS_ENABLED(CONFIG_PREEMPT_RT))
-> >                 migrate_disable();
-> >         else
-> >                 preempt_disable();
-> >         pagefault_disable();
-> >         return page_address(page);
-> > }
-> >
-> > But kmap_local_page() is only having page_address(), the code block
-> > between kmap_local_page() and kunmap_local() is also atomic, it's a
-> > little messy in my mind.
-> >
-> > static inline void *kmap_local_page(struct page *page)
-> > {
-> >         return page_address(page);
-> > }
-> >
-> > > +	char *p = kaddr + offset;
-> > > +	size_t copied = 0;
-> > > +
-> > > +	if (!page_copy_sane(page, offset, bytes) ||
-> > > +	    WARN_ON_ONCE(i->data_source))
-> > > +		goto out;
-> > > +
-> > > +	if (unlikely(iov_iter_is_pipe(i))) {
-> > > +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	iterate_and_advance(i, bytes, base, len, off,
-> > > +		copyout(base, p + off, len),
-> > > +		memcpy(base, p + off, len)
-> > > +	)
-> > > +	copied = bytes;
-> > > +
-> > > +out:
-> > > +	kunmap_local(kaddr);
-> > > +	return copied;
-> > > +}
-> > > +EXPORT_SYMBOL(copy_page_to_iter_atomic);
-> > > +
-> > >  static void pipe_advance(struct iov_iter *i, size_t size)
-> > >  {
-> > >  	struct pipe_inode_info *pipe = i->pipe;
-> > > --
-> > > 2.39.2
-> > >
-> >
-> 
+https://lore.kernel.org/alsa-devel/6f003598-4cae-a521-233f-2c19eb439359@per=
+ex.cz/
 
+Something about DMARC and your domain. But some reason git-send-email
+doesn't have the issue sending.
+
+Rob
