@@ -2,115 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549996C4C88
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA3B6C4C8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjCVN4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S231128AbjCVN5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjCVN4K (ORCPT
+        with ESMTP id S230369AbjCVN5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:56:10 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0224E5C0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:56:01 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso13097915wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679493360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GfK1edIPOkCfn9npIlPg19GtGQUodkHXzekBkWBELqo=;
-        b=7nlprO9IVxDYv+4mhSsg2vF76OfQrW1ZbU9beJXk56XJ9DsXqOsVsktBWrO/c+L40z
-         902uA3n3eJGfAqarQppWUBzzGyabQ52KT2+HxfSxoJ3FBHbrIAPT6HZ4GpxVUfbMdbmI
-         6oQzzK9yWGp/RM9b2TfYuB0RFjA5+qBlBBClxjEkF8VbsU3PTUgRJlyOanl6N9bKox2q
-         vXFgzof8hOObqMOTiKcKytsu203uFooMN8c6i5YUQ7KtpFhqusO0hGAMfr59jf9yj+D5
-         J/crFMM7pT+l+TKGU1y9t0IStjMOp+ahknk2OayU46vrU6sZWC1HtWGzh+tubGn3+ho9
-         3O4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679493360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfK1edIPOkCfn9npIlPg19GtGQUodkHXzekBkWBELqo=;
-        b=gSJZ3jsQealZBC8g7RuPU8FzxP4mbcItNRHNqaJtNCIVX8JTU7gbQqMVB8DjW0mw+T
-         BbgNZHRy1BQ7agHUZZ3AdwdT1muNoI5QZlRWxelz51qPPOLmB+Rt0I/FDQbrqVjnmDRe
-         UcFmjdqkITkE5e7A5NhaMQ27QEIMQAQAh9Y6UXSSNwYXh0bKNf3o39VZXiB5FcnZTJ6n
-         Im4bju/weBuXy7dT5Bk9AC5KgycwmScZ0TZb5Zt8d6JP+PNqoQt5/LYGWtvIFhAHBHam
-         jEP6JDhUolv7rY5vGdXjX1l9hX4dWtTqfq5Cf3NAjcymeWmtB3lO/yQ6F750ASSK4p/e
-         /vAg==
-X-Gm-Message-State: AO0yUKV3wqpHGyDK/hK/up61/ep6eBTskSZxSSFxrofJYnEmBoemUvwq
-        EoWMtDqjke5XXMtHa4ba2KFehA==
-X-Google-Smtp-Source: AK7set/gFr9mRfDWI3gyDUcgYPOIJjmNSqG+lN/9s4FSRwczR9sPTa8fnSXrAxfhAsnBtFbFN1SGLg==
-X-Received: by 2002:a1c:f60a:0:b0:3ed:a2db:dd24 with SMTP id w10-20020a1cf60a000000b003eda2dbdd24mr5780949wmc.32.1679493360165;
-        Wed, 22 Mar 2023 06:56:00 -0700 (PDT)
-Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003eda46d6792sm14619138wmq.32.2023.03.22.06.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 06:55:59 -0700 (PDT)
-Message-ID: <a63d420c-54ad-e7b0-cc10-64bb942b4e6a@baylibre.com>
-Date:   Wed, 22 Mar 2023 14:55:57 +0100
+        Wed, 22 Mar 2023 09:57:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2176F53DB5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679493379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5woec2SKsMOQkbW9YnJmuUdhKTAPEWv+lO7kND+/pB8=;
+        b=O0N/Sk3SH9YQA/XhL4kVBbWUpQLs8IR1eenl8WQNrFioNQ6wqxgYDSc++kxU8xc6UWP+VG
+        94h6t/rh3HJMjQKKQMwkutIBu2R0W4O5jw2g5t3vVi5NGcK25E5EfY6n8HkNlYUqVzYaj1
+        hgXdyCVqkuP0mN538zCj2/MEMW5AS+I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-pqt0UpdMM--DDgtV9lXpLA-1; Wed, 22 Mar 2023 09:56:18 -0400
+X-MC-Unique: pqt0UpdMM--DDgtV9lXpLA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 960C61C02D3C;
+        Wed, 22 Mar 2023 13:56:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B7D542C827;
+        Wed, 22 Mar 2023 13:56:16 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] net: Drop size arg from ->sendmsg() and pass msghdr into __ip{,6}_append_data()
+Date:   Wed, 22 Mar 2023 13:56:09 +0000
+Message-Id: <20230322135612.3265850-1-dhowells@redhat.com>
+In-Reply-To: <6419bda5a2b4d_59e87208ca@willemb.c.googlers.com.notmuch>
+References: <6419bda5a2b4d_59e87208ca@willemb.c.googlers.com.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com
-Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-References: <20230321171020.74736-1-jpanis@baylibre.com>
- <20230321171020.74736-2-jpanis@baylibre.com>
- <88a6856e-c766-d4a5-1882-5350fd0e248a@linaro.org>
- <bffba580-e737-8996-4812-3c76c880acc9@baylibre.com>
- <de3acab7-cf76-3135-9ff8-a0e5537a434b@linaro.org>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <de3acab7-cf76-3135-9ff8-a0e5537a434b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Willem,
 
+Here's another option to passing MSG_SPLICE_PAGES into sendmsg()[1] without
+polluting the flags in msg->msg_flags.  The idea here is to put the flag
+into a new field in msghdr, msg_kflags, that holds internal kernel flags
+that aren't available to userspace.
 
-On 3/22/23 09:16, Krzysztof Kozlowski wrote:
-> On 22/03/2023 09:01, Julien Panis wrote:
->>>> +  ti,multi-phase-id:
->>>> +    description: |
->>>> +      Describes buck multi-phase configuration, if any. For instance, XY id means
->>>> +      that outputs of buck converters X and Y are combined in multi-phase mode.
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>> No improvements here. As Rob pointed out, this looks like coupled
->>> regulators.
->> I used 'oneOf' logic to handle mutual exclusion. But it seems that I did not
->> understand what you and Rob expected.
->> Does some generic property already exist for 'coupled regulators' ?
-> Yes, see regulator.yaml binding.
+What I've done here is:
 
-Krzysztof, I talked with the regulator API/yaml maintainer.
-Actually, our multiphase concept is different than coupled regulators:
-https://lore.kernel.org/all/ZBr+7X3lcFdI8p%2Fo@sirena.org.uk/
+ (1) Pass msg down to __ip_append_data() and __ip6_append_data() so that
+     they can access the extra flags.
 
-We must not use the generic 'coupled regulator' property here.
-So, 'ti,multi-phase-id' can be kept.
+ (2) In order to avoid adding extra arguments to these functions and the
+     functions in their call chains (such as ip_make_skb()), remove the
+     size and flags arguments as these values are redundant if msg is
+     passed in.
 
->
-> Best regards,
-> Krzysztof
->
+ (3) msg is then passed into getfrag().  I would like to get rid of the
+     "from" argument also in favour of using something in msghdr, but I'm
+     not sure how best to do that.
+
+ (4) The size parameter to ->sendmsg() seems to be redundant; indeed
+     sock_sendmsg() doesn't actually take it, but rather gets the count
+     from msg_iter - so remove this parameter.
+
+     kernel_sendmsg() will still take a size, but it sets it on the
+     iterator and then calls sock_sendmsg().
+
+ (5) Protocol sendmsg implementations then extract the length and the flags
+     from the iterator.
+
+ (6) Illustrate the addition of msg_kflags and MSG_SPLICE_PAGES.  I think
+     that, at some point in the future, some of the other flags could be
+     moved from msg_flags to msg_kflags.
+
+David
+
+Link: https://lore.kernel.org/r/20230316152618.711970-1-dhowells@redhat.com/ [1]
+
+David Howells (3):
+  net: Drop the size argument from ->sendmsg()
+  ip: Make __ip{,6}_append_data() and co. take a msghdr*
+  net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
+
+ crypto/af_alg.c                               | 12 +--
+ crypto/algif_aead.c                           |  9 +--
+ crypto/algif_hash.c                           |  8 +-
+ crypto/algif_rng.c                            |  3 +-
+ crypto/algif_skcipher.c                       | 10 +--
+ drivers/isdn/mISDN/socket.c                   |  3 +-
+ .../chelsio/inline_crypto/chtls/chtls.h       |  2 +-
+ .../chelsio/inline_crypto/chtls/chtls_io.c    | 15 ++--
+ drivers/net/ppp/pppoe.c                       |  4 +-
+ drivers/net/tap.c                             |  3 +-
+ drivers/net/tun.c                             |  3 +-
+ drivers/vhost/net.c                           |  6 +-
+ drivers/xen/pvcalls-back.c                    |  2 +-
+ drivers/xen/pvcalls-front.c                   |  4 +-
+ drivers/xen/pvcalls-front.h                   |  3 +-
+ fs/afs/rxrpc.c                                |  8 +-
+ include/crypto/if_alg.h                       |  3 +-
+ include/linux/lsm_hook_defs.h                 |  3 +-
+ include/linux/lsm_hooks.h                     |  1 -
+ include/linux/net.h                           |  6 +-
+ include/linux/security.h                      |  4 +-
+ include/linux/socket.h                        |  3 +
+ include/net/af_rxrpc.h                        |  3 +-
+ include/net/inet_common.h                     |  2 +-
+ include/net/ip.h                              | 24 +++---
+ include/net/ipv6.h                            | 22 +++---
+ include/net/ping.h                            |  7 +-
+ include/net/sock.h                            |  7 +-
+ include/net/tcp.h                             |  8 +-
+ include/net/udp.h                             |  2 +-
+ include/net/udplite.h                         |  4 +-
+ net/appletalk/ddp.c                           |  3 +-
+ net/atm/common.c                              |  3 +-
+ net/atm/common.h                              |  2 +-
+ net/ax25/af_ax25.c                            |  4 +-
+ net/bluetooth/hci_sock.c                      |  4 +-
+ net/bluetooth/iso.c                           |  4 +-
+ net/bluetooth/l2cap_sock.c                    |  5 +-
+ net/bluetooth/rfcomm/sock.c                   |  7 +-
+ net/bluetooth/sco.c                           |  4 +-
+ net/caif/caif_socket.c                        | 13 ++--
+ net/can/bcm.c                                 |  3 +-
+ net/can/isotp.c                               |  3 +-
+ net/can/j1939/socket.c                        |  4 +-
+ net/can/raw.c                                 |  3 +-
+ net/core/sock.c                               |  4 +-
+ net/dccp/dccp.h                               |  2 +-
+ net/dccp/proto.c                              |  3 +-
+ net/ieee802154/socket.c                       | 11 +--
+ net/ipv4/af_inet.c                            |  4 +-
+ net/ipv4/icmp.c                               | 14 ++--
+ net/ipv4/ip_output.c                          | 73 ++++++++++---------
+ net/ipv4/ping.c                               | 18 ++---
+ net/ipv4/raw.c                                | 23 +++---
+ net/ipv4/tcp.c                                | 17 +++--
+ net/ipv4/tcp_bpf.c                            |  5 +-
+ net/ipv4/tcp_input.c                          |  3 +-
+ net/ipv4/udp.c                                | 24 +++---
+ net/ipv6/af_inet6.c                           |  7 +-
+ net/ipv6/icmp.c                               | 21 ++++--
+ net/ipv6/ip6_output.c                         | 57 +++++++--------
+ net/ipv6/ping.c                               | 12 +--
+ net/ipv6/raw.c                                | 25 +++----
+ net/ipv6/udp.c                                | 26 ++++---
+ net/ipv6/udp_impl.h                           |  2 +-
+ net/iucv/af_iucv.c                            |  4 +-
+ net/kcm/kcmsock.c                             |  2 +-
+ net/key/af_key.c                              |  3 +-
+ net/l2tp/l2tp_ip.c                            |  3 +-
+ net/l2tp/l2tp_ip6.c                           |  3 +-
+ net/l2tp/l2tp_ppp.c                           |  4 +-
+ net/llc/af_llc.c                              |  5 +-
+ net/mctp/af_mctp.c                            |  3 +-
+ net/mptcp/protocol.c                          |  8 +-
+ net/netlink/af_netlink.c                      | 11 +--
+ net/netrom/af_netrom.c                        |  3 +-
+ net/nfc/llcp_sock.c                           |  7 +-
+ net/nfc/rawsock.c                             |  3 +-
+ net/packet/af_packet.c                        | 11 +--
+ net/phonet/datagram.c                         |  3 +-
+ net/phonet/pep.c                              |  3 +-
+ net/phonet/socket.c                           |  5 +-
+ net/qrtr/af_qrtr.c                            |  4 +-
+ net/rds/rds.h                                 |  2 +-
+ net/rds/send.c                                |  3 +-
+ net/rose/af_rose.c                            |  3 +-
+ net/rxrpc/af_rxrpc.c                          |  6 +-
+ net/rxrpc/ar-internal.h                       |  2 +-
+ net/rxrpc/output.c                            | 22 +++---
+ net/rxrpc/rxperf.c                            |  4 +-
+ net/rxrpc/sendmsg.c                           | 15 ++--
+ net/sctp/socket.c                             |  3 +-
+ net/smc/af_smc.c                              |  5 +-
+ net/socket.c                                  | 16 ++--
+ net/tipc/socket.c                             | 34 ++++-----
+ net/tls/tls.h                                 |  4 +-
+ net/tls/tls_device.c                          |  5 +-
+ net/tls/tls_sw.c                              |  2 +-
+ net/unix/af_unix.c                            | 19 +++--
+ net/vmw_vsock/af_vsock.c                      | 16 ++--
+ net/x25/af_x25.c                              |  3 +-
+ net/xdp/xsk.c                                 |  6 +-
+ net/xfrm/espintcp.c                           |  8 +-
+ security/apparmor/lsm.c                       |  6 +-
+ security/security.c                           |  4 +-
+ security/selinux/hooks.c                      |  3 +-
+ security/smack/smack_lsm.c                    |  4 +-
+ security/tomoyo/common.h                      |  3 +-
+ security/tomoyo/network.c                     |  4 +-
+ security/tomoyo/tomoyo.c                      |  6 +-
+ 110 files changed, 444 insertions(+), 456 deletions(-)
 
