@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98036C5736
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833776C5742
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbjCVUOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S231559AbjCVUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjCVUOI (ORCPT
+        with ESMTP id S232347AbjCVUO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:14:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E3972B08;
-        Wed, 22 Mar 2023 13:05:18 -0700 (PDT)
+        Wed, 22 Mar 2023 16:14:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1292288892;
+        Wed, 22 Mar 2023 13:05:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1788622C7;
-        Wed, 22 Mar 2023 20:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84910C433EF;
-        Wed, 22 Mar 2023 20:04:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D01BB81DE2;
+        Wed, 22 Mar 2023 20:05:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0523C433EF;
+        Wed, 22 Mar 2023 20:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679515443;
-        bh=EduoB6WhQCnBZmdi72+Bo085S6SfVuPZTIQfw1E868U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S6weGyExbwchFbTtUPjoI1dUU0xq3lTnDj3umKuWU6RIiOEX7MQ7OmEWjQus7Hxsl
-         BsCuOUvl2Ru5eyExWV8OUNbyQ52ZbtXog0TEMAkuFF2rvjDBje322MoC/2RQmf2+XV
-         rdkI9qDzpSz72YKH0xB3b1BfIpaTY50ZGisiGMy0BfiEMZ2Sy6xMHf2K90UxwbySRg
-         lCrek98OkPMEqjK9JWZEogx/94x0JlBZmpYdeztaMnzCILn7yrxMaJeZPe7gjDOQIh
-         e3rhJYL2hjgyZRwwhJzLSavAwt/AE5bXbrR4dwRNEdCaFDGdvoE4Z9F4bfkkfsvPP/
-         VFgI1nPegf0pw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 4.14 9/9] fbdev: au1200fb: Fix potential divide by zero
-Date:   Wed, 22 Mar 2023 16:03:36 -0400
-Message-Id: <20230322200337.1997810-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230322200337.1997810-1-sashal@kernel.org>
-References: <20230322200337.1997810-1-sashal@kernel.org>
+        s=k20201202; t=1679515509;
+        bh=EauZcUtzlD9EeZdsLygkybO3oSxqsW90p055J+MpsuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VECGmG74bccgZ4I4NQN5olkc4X3Grydc/t/WjnZjBGaZumR+zui6b7ry59O/NUDIQ
+         AdGPcGSGykW7A3ls4pSymjJfwKoi3l+lme5WaEQsuxy84gEPUdzA9WezFPAD7/aFdl
+         m8RkBUObMcUErGEE3La5OBaUeo78N/20tIzOPNTeQyuYts/YYjRdd5mXPdg5mkKbJ+
+         7+R3esVcZT0RMoHqu8VYFgS+FhNjwxuMQEyIQc8h9aM2LvabGsHXDobbh6bb1YnvB9
+         GFPoHIc9Vu9866yc0kyqrxjKuYrqToIn0t5gVNjz8+1YiSuXB+7TZsYoUueK/xaYKm
+         v5eSzCYWQzIuA==
+Date:   Wed, 22 Mar 2023 20:05:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        regressions@leemhuis.info, regressions@lists.linux.dev
+Subject: Re: [PATCH] riscv: require alternatives framework when selecting FPU
+ support
+Message-ID: <ad445951-3d13-4644-94d9-e0989cda39c3@spud>
+References: <ZBruFRwt3rUVngPu@zx2c4.com>
+ <20230322120907.2968494-1-Jason@zx2c4.com>
+ <20230322124631.7p67thzeblrawsqj@orel>
+ <1884bd96-2783-4556-bc57-8b733758baff@spud>
+ <20230322192610.sad42xau33ye5ayn@orel>
+ <2a3b08ce-5ab1-41b6-ad58-edbeff7b1acb@spud>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="J4ue+fmAfy7X0A4F"
+Content-Disposition: inline
+In-Reply-To: <2a3b08ce-5ab1-41b6-ad58-edbeff7b1acb@spud>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -56,37 +70,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
 
-[ Upstream commit 44a3b36b42acfc433aaaf526191dd12fbb919fdb ]
+--J4ue+fmAfy7X0A4F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-var->pixclock can be assigned to zero by user. Without
-proper check, divide by zero would occur when invoking
-macro PICOS2KHZ in au1200fb_fb_check_var.
+On Wed, Mar 22, 2023 at 07:44:13PM +0000, Conor Dooley wrote:
+> On Wed, Mar 22, 2023 at 08:26:10PM +0100, Andrew Jones wrote:
+> > On Wed, Mar 22, 2023 at 03:17:13PM +0000, Conor Dooley wrote:
+> > > On Wed, Mar 22, 2023 at 01:46:31PM +0100, Andrew Jones wrote:
+>=20
+> > > > (It's tempting to just select RISCV_ALTERNATIVE from RISCV, but may=
+be we
+> > > >  can defer that wedding a bit longer.)
+> > >=20
+> > > At that point, the config option should just go away entirely, no?
+> >=20
+> > Ah, yes, and that makes the idea even more attractive, as we could remo=
+ve
+> > several ifdefs.
+>=20
+> I went and did the cursory check, it's not compatible with XIP_KERNEL so
+> dropping the option entirely probably isn't a possibility :/
 
-Error out if var->pixclock is zero.
+What I said is only now sinking in. We're now going to be disabling FPU
+support on XIP kernels with this patch.
+Well, technically not this patch since it wouldn't have built without
+Jason's changes, but that doesn't seem like the right thing to do...
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/video/fbdev/au1200fb.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/video/fbdev/au1200fb.c b/drivers/video/fbdev/au1200fb.c
-index 6c542d0ca076e..e17a083f849ad 100644
---- a/drivers/video/fbdev/au1200fb.c
-+++ b/drivers/video/fbdev/au1200fb.c
-@@ -1039,6 +1039,9 @@ static int au1200fb_fb_check_var(struct fb_var_screeninfo *var,
- 	u32 pixclock;
- 	int screen_size, plane;
- 
-+	if (!var->pixclock)
-+		return -EINVAL;
-+
- 	plane = fbdev->plane;
- 
- 	/* Make sure that the mode respect all LCD controller and
--- 
-2.39.2
 
+--J4ue+fmAfy7X0A4F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBtfbwAKCRB4tDGHoIJi
+0pW5AP4sHlVNJzb8DmPK+viV8n2vJxaAVsOvy2tUnwmOz57/gAEAwQTj9bHJRivx
+riPjP0SyuiPaqRz6C2g1689jApajxwY=
+=3YZf
+-----END PGP SIGNATURE-----
+
+--J4ue+fmAfy7X0A4F--
