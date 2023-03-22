@@ -2,98 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7866C4FA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9546C4FA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjCVPo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S231300AbjCVPpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCVPo5 (ORCPT
+        with ESMTP id S231307AbjCVPpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:44:57 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C133121961;
-        Wed, 22 Mar 2023 08:44:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 02261807A;
-        Wed, 22 Mar 2023 15:44:55 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 17:44:54 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v8 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <20230322154454.GN7501@atomide.com>
-References: <20230322111255.29827-1-tony@atomide.com>
- <ZBsUmkqKnP/jrNjv@smile.fi.intel.com>
+        Wed, 22 Mar 2023 11:45:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0E62D94;
+        Wed, 22 Mar 2023 08:45:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AD2FB81D37;
+        Wed, 22 Mar 2023 15:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DB4C433EF;
+        Wed, 22 Mar 2023 15:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679499911;
+        bh=piznudyQ7uqbaBZcF98HpIF4CU1dBOZ+wPLdqX0TKmM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GPTMOF2QYze+8g9op7JZXCl4pxzpbiXWubKMKya6NKMfPPSCGp43Ffx1kefd5rQuo
+         9VFqJAAQ86YK7t4MJT7ii5MQZI6E45Hj5aXg3fFcM+34JVAE9bTrAsbKLA1GJYdO3E
+         GScOT5p3bPBNZtrVCqkEgiljnrgsSeGJWISFVGz3jfgJY7pEh086t5cdx38iyjHN+g
+         KlPygj/UDC31vTBV0TBtTOCYsv5z2VvPQ9utBCNF7EdgoHzNWSli5J5mGyOw4tMVEL
+         3dnojFfiV/VvdOGIChvgg8ax/1pfu530QH3LG7iRqJcfiHsMbkxf/mJpe+qAgtPBnE
+         mrNf2qH8OPv2w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4E5E34052D; Wed, 22 Mar 2023 12:45:08 -0300 (-03)
+Date:   Wed, 22 Mar 2023 12:45:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
+Message-ID: <ZBsihOYrMCILT2cI@kernel.org>
+References: <20230316170149.4106586-1-jolsa@kernel.org>
+ <ZBNTMZjEoETU9d8N@casper.infradead.org>
+ <ZBV3beyxYhKv/kMp@krava>
+ <ZBXV3crf/wX5D9lo@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBsUmkqKnP/jrNjv@smile.fi.intel.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZBXV3crf/wX5D9lo@casper.infradead.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Shevchenko <andriy.shevchenko@intel.com> [230322 14:45]:
-> On Wed, Mar 22, 2023 at 01:12:51PM +0200, Tony Lindgren wrote:
-> > +	device_initialize(&sbd->dev);
-> > +	sbd->dev.parent = parent_dev;
-> > +	sbd->dev.bus = &serial_base_bus_type;
-> > +	sbd->dev.release = &serial_base_release;
-> > +
-> > +	if (str_has_prefix(name, "ctrl")) {
-> > +		id = port->ctrl_id;
-> > +	} else {
-> > +		id = port->line;
-> > +		sbd->port = port;
-> > +	}
-> > +
-> > +	err = dev_set_name(&sbd->dev, "%s.%s.%d", name, dev_name(port->dev), id);
-> > +	if (err)
-> > +		goto err_free_dev;
-> > +
-> > +	err = device_add(&sbd->dev);
-> > +	if (err)
-> > +		goto err_put_device;
-> > +
-> > +	return &sbd->dev;
-> > +
-> > +err_put_device:
-> > +	put_device(&sbd->dev);
+Em Sat, Mar 18, 2023 at 03:16:45PM +0000, Matthew Wilcox escreveu:
+> On Sat, Mar 18, 2023 at 09:33:49AM +0100, Jiri Olsa wrote:
+> > On Thu, Mar 16, 2023 at 05:34:41PM +0000, Matthew Wilcox wrote:
+> > > On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
+> > > > hi,
+> > > > this patchset adds build id object pointer to struct file object.
+> > > > 
+> > > > We have several use cases for build id to be used in BPF programs
+> > > > [2][3].
+> > > 
+> > > Yes, you have use cases, but you never answered the question I asked:
+> > > 
+> > > Is this going to be enabled by every distro kernel, or is it for special
+> > > use-cases where only people doing a very specialised thing who are
+> > > willing to build their own kernels will use it?
+> > 
+> > I hope so, but I guess only time tell.. given the response by Ian and Andrii
+> > there are 3 big users already
 > 
-> > +	kfree_const(sbd->dev.kobj.name);
-> 
-> This is double free if not const, right?
-> At least that's how I read kobject_cleanup() implementation.
-> 
-> Sorry I haven't paid attention to this earlier.
+> So the whole "There's a config option to turn it off" shtick is just a
+> fig-leaf.  I won't ever see it turned off.  You're imposing the cost of
+> this on EVERYONE who runs a distro kernel.  And almost nobody will see
+> any benefits from it.  Thanks for admitting that.
 
-Thanks for spotting that, will drop it. Looks like we have the name
-allocated by kobject_set_name_vargs(), and then kobject_cleanup()
-frees it.
+I agree that build-ids are not useful for all 'struct file' uses, just
+for executable files and for people wanting to have better observability
+capabilities.
 
-> ...
-> 
-> > +/*
-> > + * Serial core port device driver
-> > + */
-> 
-> Put it on one line for now?
+Having said that, it seems there will be no extra memory overhead at
+least for a fedora:36 x86_64 kernel:
 
-Sure, will do.
+void __init files_init(void)
+{
+        filp_cachep = kmem_cache_create("filp", sizeof(struct file), 0,
+                        SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT, NULL);
+        percpu_counter_init(&nr_files, 0, GFP_KERNEL);
+}
 
-Thanks,
+[root@quaco ~]# pahole file | grep size: -A2
+	/* size: 232, cachelines: 4, members: 20 */
+	/* sum members: 228, holes: 1, sum holes: 4 */
+	/* last cacheline: 40 bytes */
+[acme@quaco perf-tools]$ uname -a
+Linux quaco 6.1.11-100.fc36.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Feb  9 20:36:30 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+[root@quaco ~]# head -2 /proc/slabinfo 
+slabinfo - version: 2.1
+# name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
+[root@quaco ~]# grep -w filp /proc/slabinfo 
+filp               12452  13056    256   32    2 : tunables    0    0    0 : slabdata    408    408      0
+[root@quaco ~]#
 
-Tony
+so there are 24 bytes on the 4th cacheline that are not being used,
+right?
+
+One other observation is that maybe we could do it as the 'struct sock'
+hierachy in networking, where we would have a 'struct exec_file' that
+would be:
+
+	struct exec_file {
+		struct file file;
+		char build_id[20];
+	}
+
+say, and then when we create the 'struct file' in __alloc_file() we
+could check some bit in 'flags' like Al Viro suggested and pick a
+different slab than 'filp_cachep', that has that extra space for the
+build_id (and whatever else exec related state we may end up wanting, if
+ever).
+
+No core fs will need to know about that except when we go free it, to
+free from the right slab cache.
+
+In current distro configs, no overhead would take place if I read that
+SLAB_HWCACHE_ALIGN thing right, no?
+
+- Arnaldo
