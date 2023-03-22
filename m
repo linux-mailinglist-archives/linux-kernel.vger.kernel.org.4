@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C626C5231
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268C06C5237
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjCVRTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S230365AbjCVRT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCVRS7 (ORCPT
+        with ESMTP id S230213AbjCVRTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:18:59 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F0D12048;
-        Wed, 22 Mar 2023 10:18:34 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 59so6704688qva.11;
-        Wed, 22 Mar 2023 10:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505506;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GRTvs40VdXDncOuhkXyv5eYNQBnzAzdM6lr9TY/as18=;
-        b=ZUgFFDe0ehLKesB9SUDFEl9uZROHGbPT7Y2FXa/bn3dq6jfDiSD/zCmJRBYY+ApX/N
-         dZNbK+CrjOp7CboTGl22bqzs001lX3iL69gvl7TnF3adZOxV6R3FjpJdGLkerPuTZZZe
-         hSyshBbRFkPJO6rI8sHiVIS/WUIrWIzZf8lnWUiy3Z9TeLBVQUL8zN1uFmN1VkYynJAl
-         o+zzWxojSqQ/4hIB2vXZVBQNvl+ycLg8BYblhp5qZELx2SXKbFNOg5QSvETM75GmijsU
-         PM6k0+AhxtqAj2/XBg/pthPoFUaQ5ZO7qzLDbnYVC+GyKzL4k8GfGqQ/XVf+Eg7Xex2W
-         qB/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505506;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRTvs40VdXDncOuhkXyv5eYNQBnzAzdM6lr9TY/as18=;
-        b=AHUTsVrK+oURQYHawqXXhYVnzN2omsXZrf1PWQmpU7e7WYPENF3U67vzmWZdOjhM+U
-         OVg2vQpj3Hvld3M4wdQKRPMLdtXBg2psIVNS+IU+iei2IsCP4fMKhCxhvtx27XmOM0ju
-         nlCJShDAF+S3GZUnlCPSGfURDFWPxIgHNfl6c8Z5IkhzqDyXF3gD/XbV1P8fHbsQOlVF
-         MBn8Jc0ic3qojHciqjHea2z17JtQ1b8t0wozlmmoveF5+UELGsIwXH1SZ5e2IveLUHj8
-         a+bG/zJ5OjPoOOUeKS9/CusYz1jCLO3gOaa4XN7WLNt8ekg4ctNuIsDviNf7/+sy2SKN
-         ZP9g==
-X-Gm-Message-State: AO0yUKU5WXjfYLzlTctKLdqV8o0qt5xRNKOMeea5khJlewU8N/0CU8Em
-        +CY3cFw+j4gCGs6HY2IfZK8=
-X-Google-Smtp-Source: AK7set8j8oLgm00l5AmFzb6jpLprx4l21D23G4FUkEfNrIT4nqIcuu/yPG+xQnOPkJVC6MOEe4bwvg==
-X-Received: by 2002:a05:6214:2025:b0:5a7:e9e4:5010 with SMTP id 5-20020a056214202500b005a7e9e45010mr9000518qvf.14.1679505505905;
-        Wed, 22 Mar 2023 10:18:25 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id e11-20020a05620a014b00b0074669eddb05sm2982212qkn.68.2023.03.22.10.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 10:18:24 -0700 (PDT)
-Message-ID: <d84a84d7-f065-8ac6-fb21-20a0c9af6c14@gmail.com>
-Date:   Wed, 22 Mar 2023 10:18:18 -0700
+        Wed, 22 Mar 2023 13:19:21 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2107.outbound.protection.outlook.com [40.107.117.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF421C7FE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:19:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hCkOnrnjxWTvZtd5lpGFXZE/s6fQnO+Nuoi+hMwtxlrHHbVWhHtrtTjO43kN9JbAK34/Ws1ZLOLA4LZ5YYl+rjZtcBm/3TSPDJd5kgq1z574RmXhLFPpAADVavdt7wBP4G3LNZYQbhgtBekz1HxrSWB9CO00u7rVHrLj2oAHfqsXwPdBCGrHAGEh2gLoUlbo9UnraWo1VJZsZpIY1DJdZ4iARaCTCNx3X7zQIKMkP8SEf8u2GfNzqnDtEFx5YNm5TqE7G6yP+92ff0wpln9XAdO9gLuUPZ0Hiz/njeAr+W8AsKjXKsh8fMjtJxJ/R3RMB8ao+IrT4sBqIDmUet40bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yRurLv1Ed3kltUm4si+KO32XsTsoEFyabeSF7dJIWPc=;
+ b=nJx7des55Rz4tAp3fmqYWcILw9e98ya4BDxsrbO/ncEGFYBbtJFxqYPRY1o9HbeQaD7yOOQqMFw4G7NwzGcQga3gPGiimZbi6N4i3k4RSf5zZaeYaQchGZmr6kyC8CNQ9KzT/khU4YM1z7Yt65XlLgs316KBfEJtmdE6uqTQtk9+zbuHbNjbJ/LShoXAlTSD2Up9Nw86qNqcsa4y01JMSs8hzI+96Ew0Klwc+6RLryRbkcE/BdbDTaeYYOcxIQIkc3kW6MichyhEXrdphHv4s+DPIoICno9cRLEdlgACY4HtCiauz+mHd1RhBEdom+Vm2T9t3D++Ja9LPPu68vu/Zw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yRurLv1Ed3kltUm4si+KO32XsTsoEFyabeSF7dJIWPc=;
+ b=OxKMyqrFFmDPLoLI7dCiMswsPAYHGWh44hlRlwYN6jQX3MSNxW8G8fJKxNROt7Arl+KHeg9N4KFJPGqfmz9NT5PwcJw6Yttk4ZJBURbTlESEHfxyExbXntk+hKzeVCReu+FjLpa4Yz6/6SelgKaCd9xKKeEaCZH0SdLXa93zBfiNOODf4vsY6okhrIA+CgyS52UAixzJnFzwpxOUNGhmf3uc7tvEpqfPG+cRXznnTe23H/mYWuF1g3f/F+JVzD0XBP4dVnd82A786h0MsmX8i9MV0RUtCA4wdJWMaVUEDxKc9xAXZrDJ3SUhxnOvie5YED5zZLbtRpKgWpl8TaBUWw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB5654.apcprd06.prod.outlook.com (2603:1096:820:b3::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 17:18:30 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 17:18:30 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     gregkh@linuxfoundation.org
+Cc:     frank.li@vivo.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: mark ecryptfs as orphan state
+Date:   Thu, 23 Mar 2023 01:18:22 +0800
+Message-Id: <20230322171822.60275-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <ZBlQT2Os/hB2Rxqh@kroah.com>
+References: <ZBlQT2Os/hB2Rxqh@kroah.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0047.apcprd02.prod.outlook.com
+ (2603:1096:4:196::14) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 4/4] clk: bcm: Add BCM63268 timer clock and reset
- driver
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        jonas.gorski@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, william.zhang@broadcom.com,
-        =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>
-References: <20210315122605.28437-1-noltari@gmail.com>
- <20230321201022.1052743-1-noltari@gmail.com>
- <20230321201022.1052743-5-noltari@gmail.com>
- <3a1d7b271a42324c056d983e1943b386.sboyd@kernel.org>
- <0071fdc1-fa53-e096-19c7-ecd1a9d56e86@gmail.com>
- <d06781c905adb23089a85a8d54b94461.sboyd@kernel.org>
- <302bb0c4-a31e-7025-26d6-21c8d473f370@gmail.com>
- <896d16997cf3d308eff0cb8ce8596fc3.sboyd@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <896d16997cf3d308eff0cb8ce8596fc3.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5654:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4bb099c6-c6d9-46a8-11df-08db2af974d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: auHx2y+7LpzZOY1B03bIatv7Wyz2kl4tUsdzN77iIIsKTbTH3UjbRTl0Q/KI4bzgsZDAHDO2Y3nsebmuu7lBaXHhZu/Iunj4zsbLPGbsimxqIEKVeFgJUM6JNUGf/7IvCTCPWZr4cZH1XQr4M9lX04D6LnOKYolattHaC06VDp3FpfUxm0lSrgHzLuqqypJ2UH3Hsl1xgqgKNnjbumh802C+uSMtEwNeuzGixdItBJYc9CBdXO9rB0CUZYd3YIB0cHPutZYAwrKXEEDT6JjSnLIZWyEyw4LFI+GwXpaIkRIN/6xYRUsZg3HCFprZroU1ScDR0NK98uoxLILgCzLriYLVyaL+EAfnWlMGidl6t2m+KErnAQB/UDcnJu0MZb+B1Rjk1oGM6f8OscrTCdGqRaZv+18Y8aQ7nhVviNmJvjfkHMLP7Y0AsmUvlIqDZ8StFnxmgW2274xMg/IjWaA2Vby61q3HzdELue5K78FB4wCAvzpwl6/a2rMOWElKd7JAImOYVfLTCNVDwz8YewxPsocB+A5XTvhXxPKoPrSN5ThcDPyHbaxHwjmftPkA1Mi4PLi1fHv4Sno3Qguh+MUvp3Iw+Dj++UDpB4Lq3yQbF3rOxjToIR7xsuku9bGen3FRMahtRde17EyH3dxPs2E4PzQAnfGqfkyNnyKFbjdBmELU7tPFWE9LK5ujL63DTkjSszlGWjop9RC2XKjDdbf24g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(376002)(396003)(136003)(39860400002)(451199018)(2616005)(6506007)(6666004)(6486002)(6512007)(1076003)(66556008)(478600001)(316002)(4326008)(26005)(186003)(8676002)(52116002)(66946007)(6916009)(2906002)(8936002)(41300700001)(5660300002)(66476007)(38350700002)(38100700002)(86362001)(36756003)(558084003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7FE0MqKhs7gzLdScZRY7Xrv/qVnE0HbYAZSh1C9wT6Uo1mCgEyqJRj6/6h7r?=
+ =?us-ascii?Q?YIshqpPAwD+C5WHgrtc/9RQ1T3cl1mAs8l/HxZJBnt1L+CpcWgvVBEZJrYOR?=
+ =?us-ascii?Q?7cWIibWc/p2r8IKm0VdVUeKjHgwUJOGCvjv4Pl/Z7afZjirXFQPn7Ld2acNA?=
+ =?us-ascii?Q?LddpJ3XrJI24j9A/bjBmhoj5CGau0NmrkNNS4wb0Y+A6WAaUPd7IzLJV+DzF?=
+ =?us-ascii?Q?8+EvJnC37LRdByedFzzvojAl25wKrC27CBNgAcGdEypt+M95py8icDQbWBOD?=
+ =?us-ascii?Q?UIce6KfxAFuEVNaTQYALqEUGxXDMCXvsWp61hgACmG/blQ0pQ1oHk/TuxiMs?=
+ =?us-ascii?Q?f/fy7xojlybrHvf2E3eSy60SkbX+/M18rKpOuYQ9+Ut2Wr7ao/2L9RLfJezI?=
+ =?us-ascii?Q?uikX09L9hOtslrk9XCEP1vAiil847kJ+ZmuL/yMA4eNI9YdopWt3Bi8Jxq/z?=
+ =?us-ascii?Q?PjUWYNPa/UdVW2OPEgyGnATvpmIBtM/fp/uQ07OBFK4G7nTp0npc6Ifg0ypP?=
+ =?us-ascii?Q?83GGG8dEM0WuvbaxgZyoOJxbOEwUVMBH7qK7Q5tvaECv/kz0kHboEEebi81e?=
+ =?us-ascii?Q?yaTgVs2fWvrLtuE5paT73YqyL5cWchoUppk/1erdhrx/hPUkgZTA4H7UxaTk?=
+ =?us-ascii?Q?L79aJiLEYq8l0a1sHoJxjhSbOyhpFt0TKLDgEM3e6LHgC+35lU8TCMhHBz3K?=
+ =?us-ascii?Q?Ykdm18izKbPel640Hhoi620zQnr/ZoN3JKZbIi++barKwKlRnOJkF9cMHJW3?=
+ =?us-ascii?Q?PtAWX8aRMuPNVjS6OLPEgCDHQJYaZJlp1dlTC3r9idJu4qzMujj4qHTC52WA?=
+ =?us-ascii?Q?F19ekDWnIcEIZI6q/Awygc+/IDNGpUPD4EIZM7W0TFHsOp8fI9qAi36gNgin?=
+ =?us-ascii?Q?V8OD7uGpaz/21wjfhT4H4onOLdf97wCtk/oRhLXb6KrV617BWHQnzClV3WiG?=
+ =?us-ascii?Q?0jPBB6vMduQXUDbY/iIkAtt+eZbuGirKRpi+dq2Y575gA1zzds8PsjWgSv9s?=
+ =?us-ascii?Q?Z1gm/2fVtQ6Xp5RqouuNKDk00AgRMlyRSI3HsK44i4Qu5PrIQHA07+es0IjV?=
+ =?us-ascii?Q?zieYNZDV8NQHu8bOXvonJL6vGHNhipS+fpfWppIvvChv/A0uuLXYAZ3iVrr4?=
+ =?us-ascii?Q?ZFEpKa+pEwySTdhe8ES/u6YM4uB+2kj99U0+EuJAtsKpteSXL+R42obCp1e5?=
+ =?us-ascii?Q?nu0JlQEv2umf+2vdQrxeN+yecw0tvkuIYxpl8UI1s/C+kTVZg3axeRELnT0D?=
+ =?us-ascii?Q?f0oaLNImorjeuxP4kZ4LGeehRQD0aVo79OgXme7W5zb4CnYe0RgW2gQtNMEf?=
+ =?us-ascii?Q?fp7PaaY0oA3ql0ApG80pIS7k85R4SPsLy+AejDkkD0vC8o0Wow8npTi0g4E5?=
+ =?us-ascii?Q?xRi3LL7oXCXfxmghOnuehw4yN0N7w9IuEsE+s1ASAFPGIUT69FeVWRN77Fu8?=
+ =?us-ascii?Q?Q7v9twLS4IFwFALLKSHMf4QJXibDcpv4eQlhoI83tYsfHm62xr/Hez3xmq7d?=
+ =?us-ascii?Q?brsOpvlqA3vkPbpIwQp6ncvij6BXXlNQLUZrP38olIBieoOGPs7dZFV+thK+?=
+ =?us-ascii?Q?1Y/bByhZZNoCALjV8Cc3aiQItSgrFdLpDs4kCvN2?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bb099c6-c6d9-46a8-11df-08db2af974d3
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 17:18:30.1082
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DSO5qGc2eurB386BqRwV7xtNPkMrU9oRV2/Um8nwkg7F4zb1g1zxIvHwEdFKcuBSWIVuF8lkQ3+IRfia05STeQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5654
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,33 +112,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 16:23, Stephen Boyd wrote:
-> Quoting Florian Fainelli (2023-03-21 16:09:54)
->> On 3/21/23 16:06, Stephen Boyd wrote:
->>> Quoting Florian Fainelli (2023-03-21 16:00:29)
->>>>
->>>> These SoCs are big-endian, require native endian register access and
->>>> have no posted writes within their bus logic (UBUS) and require no
->>>> barriers, hence the use of __raw_readl() and __raw_writel() is adequate.
->>>>
->>>
->>> Use ioread32be() then?
->>
->> BCM63xx drivers tend to use __raw_{read,write}l for consistency and to
->> make it clear that no barriers, no endian swapping is necessary, I would
->> prefer to remain consistent with that convention.
-> 
-> Ok.
-> 
-> Is the clk device big-endian? Or the CPU is big-endian? SoC being
-> big-endian sounds like the devices in the SoC are big-endian. I hope we
-> never plop this device down with a CPU that's litle-endian.
++cc code@tyhicks.com, ecryptfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
 
-The CPU is big endian and the peripheral and bus to access the 
-peripheral are native endian, so also big endian in that case.
-
-The newer SoCs are ARM-based and are little endian, but we already have 
-a clock driver for those.
--- 
-Florian
-
+Thx,
+Yangtao
