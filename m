@@ -2,179 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9176C5A40
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41646C5A46
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCVXXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S229738AbjCVXYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCVXXS (ORCPT
+        with ESMTP id S229480AbjCVXYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:23:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE998728D;
-        Wed, 22 Mar 2023 16:23:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k37so12560218lfv.0;
-        Wed, 22 Mar 2023 16:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679527396;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMy1FNiyNC7nH9b0uj1+Mx7vs2yZ0RgzNddRt7P+HAU=;
-        b=Fs7ZHdJsCAajCOduLTKLgiTzmLUvOiKW1QSuUnxK3JiXTbVV9p2Ahwv6D6dDsTwkZR
-         MXAcqVv3XTXIqkz3Xn60tbrHrfMSZIhLoG9keX7qXwgG+bIxPiLitBiCw/PK78bap56D
-         Te4L+hH0a5Sz5L/24uUJpxaKA7o97Pj/GvV/fmUzaajGx1Q02cXxKbC0jclph7Xc2vXe
-         dM10B8zHDniYXfD5fCABpAleuYFytyUm1Mm6AlLXoOGgPJcqfD2eaprW819gTV64v2HY
-         OgZakG+BXrsHfveOjveIEH+uRz9XtSi7AyWJfOgYVEXyZ66zeLTZ7/wrYqsMVcanRX9e
-         3uSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679527396;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dMy1FNiyNC7nH9b0uj1+Mx7vs2yZ0RgzNddRt7P+HAU=;
-        b=XEspVVRT1bv7Xt2LoSFXSwImTubiDl8d53ILaXhaSMjB7/xSH8JyWm9hjqZE79UBhw
-         wJjbYRONP9MHmYM3WPQNZ4/Q3J5c8XtxoV7Bp9z+Zss26BVwNdm5pljdv+4rK9OC4jbh
-         wfydUsi/klH3iMGIb+6yRfASBQaMwpFaIkKBk4J1Ec8SBxT3wuENVx2MGtdTmYBAX9xu
-         N1FZhCaIRThl4WCawR2XQWN0xXf87/sqv8IxhNat2A2W1bwyDpXUfmxPUYeEtdZP9SFV
-         mw6loBSOl9qnnCjU6t+RbXVjz1J6ApYwldZkX5gMY3YgeYJ6YwBqRQS67oEo36B5S3wB
-         FsxQ==
-X-Gm-Message-State: AO0yUKWzXu40SM1CHoicU4DjRRyxLXM3IQmewcWm2q39Lk7jyfiCIT7l
-        nvjlR3Xq7XhddCdgGiLOau0=
-X-Google-Smtp-Source: AK7set8irtP6Ap/MgUUkGWgx7DnC3q4LagvB2NKtgQ2zF4+eNyRMRgU2fKL5luAycwxi1gLEiL2DcA==
-X-Received: by 2002:ac2:554d:0:b0:4b6:fddc:1fcd with SMTP id l13-20020ac2554d000000b004b6fddc1fcdmr1127317lfk.23.1679527395939;
-        Wed, 22 Mar 2023 16:23:15 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056512093100b004db0d26adb4sm2696553lft.182.2023.03.22.16.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 16:23:15 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 02:23:13 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Elad Nachman <enachman@marvell.com>
-Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuval Shaia <yshaia@marvell.com>
-Subject: Re: [PATCH v4 3/8] PCI: armada8k: Add AC5 MSI support
-Message-ID: <20230322232313.zbxhodgfqeoyclbg@mobilestation>
-References: <20230313124016.17102-1-enachman@marvell.com>
- <20230313124016.17102-4-enachman@marvell.com>
+        Wed, 22 Mar 2023 19:24:47 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E581BEC;
+        Wed, 22 Mar 2023 16:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
+        To:From:Reply-To:Content-ID:Content-Description;
+        bh=z950tHfh6EL30Ry68ryUuE9SKuNl3wJnJXXGFZcnt9Q=; b=UFtsNZLqrpJZnIPJsNmouu7sPP
+        BHHKxTqGFj2St8yKQFa9kHJDTZN+YbsXupvmBWsR4HFCDADBO4/6O8hi8MtnhIpSscbw53dGBsX15
+        iPGRkwMr1f8UOY8di2PEqvcW2M+HsLcd8TfLjtRZ8etVPLRdYjd7/i+9WAKfUEmvqwdkS/no4BEzH
+        f3FMNvfwfTMvIgOyNqxO6nLzZ4TTG1G9kVE1zsw7ac7V3nVry62uI9xZ4sV+eVmjeb3ufzSx344sl
+        aRjMjSY1UsMjcIg/vV+fihRMFAWSNn92m2ekPWsnUZZNh6VqCO7F5h3Ir/9QbvuMHfjAqnmhSPKf1
+        wINWkjAw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf7ot-0007fT-26;
+        Wed, 22 Mar 2023 23:24:39 +0000
+From:   Luis Chamberlain <mcgrof@bombadil.infradead.org>
+To:     jason.wessel@windriver.com, joe.lawrence@redhat.com,
+        daniel.thompson@linaro.org, jikos@kernel.org,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, trix@redhat.com, chris@chrisdown.name,
+        linux-kernel@vger.kernel.org, mbenes@suse.cz, terrelln@fb.com,
+        kgdb-bugreport@lists.sourceforge.net,
+        live-patching@vger.kernel.org, fmdefrancesco@gmail.com,
+        dianders@chromium.org, pmladek@suse.com, jpoimboe@kernel.org,
+        ndesaulniers@google.com, bpf@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, ira.weiny@intel.com,
+        dmitry.torokhov@gmail.com, swboyd@chromium.org,
+        piotrgorski@cachyos.org
+Subject: Re: [PATCH] module/decompress: Never use kunmap() for local un-mappings
+Date:   Wed, 22 Mar 2023 16:24:33 -0700
+Message-Id: <167952705567.2263470.18228933182686895553.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313124016.17102-4-enachman@marvell.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 02:40:11PM +0200, Elad Nachman wrote:
-> From: Yuval Shaia <yshaia@marvell.com>
-> 
-> AC5 requires different handling for MSI as with armada8k.
-> Fix it by:
-> 
-> 1. Enabling the relevant bits in init phase
-> 2. Dispatch virtual IRQ handlers when MSI interrupts are received
-> 
-> Also enable/disable PCIE_APP_LTSSM for AC5.
-> 
-> Signed-off-by: Yuval Shaia <yshaia@marvell.com>
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
-> v4:
->    Fix commit subject to be aligned with previous patch in series
-> 
-> v2:
->    1) fix W1 warnings which caused by unused leftover code
-> 
->    2) fix type in "requieres" word in the description
-> 
->  drivers/pci/controller/dwc/pcie-armada8k.c | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-armada8k.c b/drivers/pci/controller/dwc/pcie-armada8k.c
-> index b9fb1375dc58..02481ecadd25 100644
-> --- a/drivers/pci/controller/dwc/pcie-armada8k.c
-> +++ b/drivers/pci/controller/dwc/pcie-armada8k.c
-> @@ -50,6 +50,7 @@ struct armada8k_pcie_of_data {
->  
->  #define PCIE_GLOBAL_CONTROL_REG		(PCIE_VENDOR_REGS_OFFSET + 0x0)
->  #define PCIE_APP_LTSSM_EN		BIT(2)
-> +#define PCIE_APP_LTSSM_EN_AC5		BIT(24)
->  #define PCIE_DEVICE_TYPE_SHIFT		4
->  #define PCIE_DEVICE_TYPE_MASK		0xF
->  #define PCIE_DEVICE_TYPE_RC		0x4 /* Root complex */
-> @@ -69,6 +70,7 @@ struct armada8k_pcie_of_data {
->  #define PCIE_INT_B_ASSERT_MASK_AC5	BIT(13)
->  #define PCIE_INT_C_ASSERT_MASK_AC5	BIT(14)
->  #define PCIE_INT_D_ASSERT_MASK_AC5	BIT(15)
-> +#define PCIE_MSI_MASK_AC5		BIT(11)
->  
->  #define PCIE_ATU_ACCESS_MASK_AC5	GENMASK(21, 20)
->  
-> @@ -184,6 +186,16 @@ static int armada8k_pcie_start_link(struct dw_pcie *pci)
->  	return 0;
->  }
->  
-> +static void ac5_pcie_msi_init(struct dw_pcie *pci)
-> +{
-> +	u32 val;
-> +
-> +	/* Set MSI bit in interrupt mask */
-> +	val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_MASK1_REG);
-> +	val |= PCIE_MSI_MASK_AC5;
-> +	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_MASK1_REG, val);
-> +}
-> +
->  static int armada8k_pcie_host_init(struct dw_pcie_rp *pp)
->  {
->  	u32 reg;
-> @@ -193,7 +205,10 @@ static int armada8k_pcie_host_init(struct dw_pcie_rp *pp)
->  	if (!dw_pcie_link_up(pci)) {
->  		/* Disable LTSSM state machine to enable configuration */
->  		reg = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_CONTROL_REG);
+From: Luis Chamberlain <mcgrof@kernel.org>
 
-> -		reg &= ~(PCIE_APP_LTSSM_EN);
-> +		if (pcie->pcie_type == ARMADA8K_PCIE_TYPE_AC5)
-> +			reg &= ~(PCIE_APP_LTSSM_EN_AC5);
-> +		else
-> +			reg &= ~(PCIE_APP_LTSSM_EN);
-
-This has nothing to do with MSIs.
-
--Serge(y)
-
->  		dw_pcie_writel_dbi(pci, PCIE_GLOBAL_CONTROL_REG, reg);
->  	}
->  
-> @@ -233,6 +248,9 @@ static int armada8k_pcie_host_init(struct dw_pcie_rp *pp)
->  		dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_MASK1_REG, reg);
->  	}
->  
-> +	if (IS_ENABLED(CONFIG_PCI_MSI) && (pcie->pcie_type == ARMADA8K_PCIE_TYPE_AC5))
-> +		ac5_pcie_msi_init(pci);
-> +
->  	return 0;
->  }
->  
-> @@ -249,6 +267,8 @@ static irqreturn_t armada8k_pcie_irq_handler(int irq, void *arg)
->  	 */
->  	val = dw_pcie_readl_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG);
->  	dw_pcie_writel_dbi(pci, PCIE_GLOBAL_INT_CAUSE1_REG, val);
-> +	if ((PCIE_MSI_MASK_AC5 & val) && (pcie->pcie_type == ARMADA8K_PCIE_TYPE_AC5))
-> +		dw_handle_msi_irq(&pci->pp);
->  
->  	return IRQ_HANDLED;
->  }
-> -- 
-> 2.17.1
+On Wed, 15 Mar 2023 13:52:56 +0100, Fabio M. De Francesco wrote:
+> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
 > 
+> kunmap_local() must be called on the kernel virtual address returned by
+> kmap_local_page(), differently from how we use kunmap() which instead
+> expects the mapped page as its argument.
 > 
+> In module_zstd_decompress() we currently map with kmap_local_page() and
+> unmap with kunmap(). This breaks the code and so it should be fixed.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] module/decompress: Never use kunmap() for local un-mappings
+      commit: 3c17655ab13704582fe25e8ea3200a9b2f8bf20a
+
+  Luis
