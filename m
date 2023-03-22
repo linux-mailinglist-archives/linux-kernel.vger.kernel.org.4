@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEA76C3FA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23A86C3FB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjCVBUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S230008AbjCVBYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCVBUp (ORCPT
+        with ESMTP id S229915AbjCVBYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:20:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0F8271F
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:20:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA65B81A3C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:20:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333BBC433D2;
-        Wed, 22 Mar 2023 01:20:41 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 21:20:38 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] context_tracking: Have ct_state() use
- preempt_disable_notrace()
-Message-ID: <20230321212038.40325918@gandalf.local.home>
-In-Reply-To: <20230322005821.oh4pbn4vdf4jrdsh@treble>
-References: <20230321204524.44733a13@gandalf.local.home>
-        <20230322005821.oh4pbn4vdf4jrdsh@treble>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 21 Mar 2023 21:24:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE084C28;
+        Tue, 21 Mar 2023 18:24:37 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ph9gX6Tp3zKsn6;
+        Wed, 22 Mar 2023 09:22:16 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 09:24:33 +0800
+Subject: Re: [PATCH] scsi: fix hung_task when change host from recovery to
+ running via sysfs
+To:     Benjamin Block <bblock@linux.ibm.com>,
+        Ye Bin <yebin@huaweicloud.com>
+References: <20230321084204.1860900-1-yebin@huaweicloud.com>
+ <20230321142237.GC311313@t480-pf1aa2c2.fritz.box>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <641A58D0.1020205@huawei.com>
+Date:   Wed, 22 Mar 2023 09:24:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20230321142237.GC311313@t480-pf1aa2c2.fritz.box>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,42 +52,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 17:58:21 -0700
-Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 
-> On Tue, Mar 21, 2023 at 08:45:24PM -0400, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > One of my tests triggered:
-> > 
-> >  ------------[ cut here ]------------
-> >  WARNING: CPU: 0 PID: 1 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x7c/0x80
-> >  Modules linked in:
-> >  CPU: 0 PID: 1 Comm: init Not tainted 6.3.0-rc3-test-00011-ge11b521a7b69-dirty #31
-> >  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> >  RIP: 0010:trace_preempt_off+0x7c/0x80
-> >  Code: 74 0f 48 8b 78 08 48 89 f2 48 89 de e8 5d f9 ff ff 65 ff 0d 6e d6 ce 68 75 a2 0f 1f 44 00 00 eb 9b e8 28 ea f3 ff 84 c0 75 a5 <0f> 0b eb a1 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f
-> >  RSP: 0000:ffffaf0880013f00 EFLAGS: 00010046
-> >  RAX: 0000000000000000 RBX: ffffffff97fafe59 RCX: 0000000000000001
-> >  RDX: 0000000000000000 RSI: ffffffff986f4b71 RDI: ffffffff986fa0dd
-> >  RBP: ffffffff97fafe59 R08: 0000000000000000 R09: 0000000000000000
-> >  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> >  R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000000
-> >  FS:  0000000000000000(0000) GS:ffff8adf7bc00000(0000) knlGS:0000000000000000
-> >  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >  CR2: 00007f125de099c0 CR3: 000000010498a001 CR4: 0000000000170ef0
-> >  Call Trace:
-> >   <TASK>
-> >   irqentry_enter_from_user_mode+0x39/0x80
-> >   irqentry_enter+0x51/0x60
-> >   exc_page_fault+0x3d/0x200
-> >   asm_exc_page_fault+0x26/0x30  
-> 
-> I think this was just fixed in -tip today:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f87d28673b71b35b248231a2086f9404afbb7f28
-> 
 
-Thanks. Either way, I need a fix to let me pass my tests on my own code ;-)
+On 2023/3/21 22:22, Benjamin Block wrote:
+> On Tue, Mar 21, 2023 at 04:42:04PM +0800, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> When do follow test:
+>> Step1: echo  "recovery" > /sys/class/scsi_host/host0/state
+> Hmm, that make me wonder, what potential use-case this is for? Just
+> testing?
+Thank you for your reply.
+Actually, I'm looking for a way to temporarily stop sending IO to the 
+driver.
+Setting the state of the host to recovery can do this, but I changed the 
+state to
+running and found that the process could not be woken up.
+I don't know what the purpose of designing this sysfs interface was. But 
+this
+modification can solve the effect I want to achieve.
+> For SDEVs we explicitly filter what states can be set from user-space.
+> Only `SDEV_RUNNING` and `SDEV_OFFLINE` can be set in
+> `store_state_field()`.
+>      There is probably quite a few other bad things you can do with this
+> interface by using any of the other states used for device destruction
+> or EH, and then trigger I/O or said destruction/EH otherwise.
+>      Not sure handling this one special case of `SHOST_RECOVERY` is quite
+> enough.
+>
+>
+>> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+>> index ee28f73af4d4..ae6b1476b869 100644
+>> --- a/drivers/scsi/scsi_sysfs.c
+>> +++ b/drivers/scsi/scsi_sysfs.c
+>> @@ -216,6 +216,9 @@ store_shost_state(struct device *dev, struct device_attribute *attr,
+>>
+>>        if (scsi_host_set_state(shost, state))
+>>                return -EINVAL;
+>> +     else
+>> +             wake_up(&shost->host_wait);
+>> +
+>>        return count;
+>>   }
+>>
+>> --
+>> 2.31.1
+>>
 
--- Steve
