@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A000E6C43DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDAB6C43DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjCVHMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S229662AbjCVHM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCVHM2 (ORCPT
+        with ESMTP id S229452AbjCVHMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:12:28 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3355B42D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679469147; x=1711005147;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D310QX447aQ+jVJUFYYiERsxACscwqO2os6J8AHbN8E=;
-  b=hqXu+FIhdPZM2U3QsgmvxdTdZmxN6O3gDd2vtY8TDS86xvFOvqeGkGKQ
-   fEZ01VX84C761fDHOqOywhUlcRhKq3ztQkMs5w4P55mSyx1WisqzVg1Gj
-   h7SwsfDLXrqNj54Rq1fn/UICl5xsseOhGvWDSHHCs9oxPggbtYzTndydt
-   TTHvtWQrZi0SZTlEEcXy5mpLDY8T6lcpmCKq0R+/7GfrmslbJMmrPaTIQ
-   5Of37jmpBGMXtNUAKja64OiNNWSAOW6sdPSqHVdoK1KT3wZmQCgcFp9Fs
-   z24vvwGvbkv3yoktgLxuYOetnwmHFEY6y8zfUGWn4iyZ087uw20HAgDrn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="404028418"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="404028418"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 00:12:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="825278621"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="825278621"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2023 00:12:25 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pese0-000D1g-1v;
-        Wed, 22 Mar 2023 07:12:24 +0000
-Date:   Wed, 22 Mar 2023 15:11:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/sfc/falcon/selftest.c:43:15: warning: field ip
- within 'struct ef4_loopback_payload' is less aligned than 'struct iphdr' and
- is usually due to 'struct ef4_loopback_payload' being packed, which can lead
- to unaligned accesses
-Message-ID: <202303221557.Yc4KdwGu-lkp@intel.com>
+        Wed, 22 Mar 2023 03:12:24 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB4E5A193
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:12:22 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso12388351wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:12:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679469141;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YbxHciLG2pypN9Bl2bjTVAU52GvCboKUaOJHGsOIGts=;
+        b=zoasazBjZzgvLt4ap6poshxPKUrCIafgM2Dht1dSiM9vFqNhUHlXSHmX9Ewy02G+fy
+         jxq8ZpIsKzgJoiqcRWVeZo9OqSm6orx8609a64XASIuAno1k8u+RGolASFD1aMMvGNPE
+         lGAYRWr/oZs4PYS4yrIWLiV1Wn5bAJ5wUvfVBokQ74cw6ZztnPX1rkPAPSANU2u8mTkq
+         M+8QLxcxbsDAaw4cJSltpeRPOCW6kH5tFz0Sx8/UnPdssJUqOCG8mdWeEgvE5NT8jcv+
+         GzRRLFopGNQhxnOY3XHnYwZnb5A6dD2lOmGrldB37VO8BNfiaZ7ukkeJaGIeNUy9zuOD
+         uiUA==
+X-Gm-Message-State: AO0yUKXU1ptCdAWZN16x5RxrYaWqrg14vuzTAHvxKvm59CT5MAnhU9MZ
+        oHbO8aT4brzmZokbwPYQ0Q0=
+X-Google-Smtp-Source: AK7set/xVFyitMqda4JG/F7Z0xoit+LJ1ikInj55ZuaxNfbI68pTdU7MxR5BPW/3soMGBns5GFGg6A==
+X-Received: by 2002:a05:600c:4515:b0:3ed:2eb5:c2e6 with SMTP id t21-20020a05600c451500b003ed2eb5c2e6mr5384776wmo.2.1679469141061;
+        Wed, 22 Mar 2023 00:12:21 -0700 (PDT)
+Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003ede6540190sm9659662wmq.0.2023.03.22.00.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 00:12:20 -0700 (PDT)
+Message-ID: <4ec55800-fe57-11f5-d282-a7e4c58f14ce@grimberg.me>
+Date:   Wed, 22 Mar 2023 09:12:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: =?UTF-8?B?UmU6IOWbnuWkjTogW0V4dGVybmFsXSBSZTogW1BBVENIXSBudm1lOiBm?=
+ =?UTF-8?Q?ix_heap-use-after-free_and_oops_in_bio=5fendio_for_nvme_multipath?=
+To:     Lei Lei2 Yin <yinlei2@lenovo.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cybeyond@foxmail.com" <cybeyond@foxmail.com>
+References: <PS1PR03MB493948DD1ECFAF150EE7B2F688819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+ <042385ef-285e-5179-941b-ab37f490c1d8@grimberg.me>
+ <PS1PR03MB49395AC5BC73DDDA6A79E87488819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+ <56620baf-6195-b987-6067-ae81d23e39c5@grimberg.me>
+ <PS1PR03MB4939A124F814F35E69C7D59B88819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+Content-Language: en-US
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <PS1PR03MB4939A124F814F35E69C7D59B88819@PS1PR03MB4939.apcprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-FYI, the error/warning still remains.
+> 	No, I have not verified this issue with a system larger than 5.10.y(such as 5.15.y and 6.0 or furthor), because some function we need like cgroup in upper version kernel has changed too much, we can't use these upper version kernel.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a1effab7a3a35a837dd9d2b974a1bc4939df1ad5
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   11 months ago
-config: arm-randconfig-r023-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221557.Yc4KdwGu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/sfc/falcon/
+Well, this would be the starting point.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221557.Yc4KdwGu-lkp@intel.com/
+> 	In addition , uptreams have change bi_disk's modify to bio_set_dev(bio, ns->disk->part0), and as you said there is no bi_disk in struct bio anymore. So that is too involving because of code dependencies,  i want to do is what you said, to send an alternative surgical fix.
 
-All warnings (new ones prefixed by >>):
+The correct course of action would be to identify and narrow down the
+fix for this upstream, and then backport it back to stable kernel 5.10.y
 
->> drivers/net/ethernet/sfc/falcon/selftest.c:43:15: warning: field ip within 'struct ef4_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct ef4_loopback_payload' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct iphdr ip;
-                        ^
-   1 warning generated.
+> 	(I will confirm upstream for this problem in the near future, if it have same problem, i will submit this fix.)
 
+Great.
 
-vim +43 drivers/net/ethernet/sfc/falcon/selftest.c
+> 	I'm not sure what evidence is needed to prove this problem and patch. The following is child bio and parent bio struct when heap-use-after-free occur catched by crash(I turn on kasan and panic_on_warn).
+> 
+> 	Please help me confirm if this is enough, thanks.
 
-5a6681e22c1409 Edward Cree 2016-11-28  34  
-5a6681e22c1409 Edward Cree 2016-11-28  35  /*
-5a6681e22c1409 Edward Cree 2016-11-28  36   * Loopback test packet structure
-5a6681e22c1409 Edward Cree 2016-11-28  37   *
-5a6681e22c1409 Edward Cree 2016-11-28  38   * The self-test should stress every RSS vector, and unfortunately
-5a6681e22c1409 Edward Cree 2016-11-28  39   * Falcon only performs RSS on TCP/UDP packets.
-5a6681e22c1409 Edward Cree 2016-11-28  40   */
-5a6681e22c1409 Edward Cree 2016-11-28  41  struct ef4_loopback_payload {
-5a6681e22c1409 Edward Cree 2016-11-28  42  	struct ethhdr header;
-5a6681e22c1409 Edward Cree 2016-11-28 @43  	struct iphdr ip;
-5a6681e22c1409 Edward Cree 2016-11-28  44  	struct udphdr udp;
-5a6681e22c1409 Edward Cree 2016-11-28  45  	__be16 iteration;
-5a6681e22c1409 Edward Cree 2016-11-28  46  	char msg[64];
-5a6681e22c1409 Edward Cree 2016-11-28  47  } __packed;
-5a6681e22c1409 Edward Cree 2016-11-28  48  
+It is clear that there is a bug in 5.10.y, what we are discussing is:
+1. Is this problem relevant to upstream kernel?
+2. If yes, we can debate the correct fix, as your initial patch is not
+    If not, then the upstream fix for this needs to be identified and
+    backported.
 
-:::::: The code at line 43 was first introduced by commit
-:::::: 5a6681e22c1409089132085811857d6da828761b sfc: separate out SFC4000 ("Falcon") support into new sfc-falcon driver
-
-:::::: TO: Edward Cree <ecree@solarflare.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Having stable kernels drift away from the original code-base is a bad
+idea.
