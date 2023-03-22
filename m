@@ -2,153 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A196C5A26
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037276C5A27
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCVXPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S229863AbjCVXPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCVXPu (ORCPT
+        with ESMTP id S229864AbjCVXPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:15:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB061910F;
-        Wed, 22 Mar 2023 16:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hKMA4pE4ZC1WEjwlMS0oahB5WbuLzi761bi+OVXv/X8=; b=k4/hIANBdxC2Z8c++HmkBPk16F
-        hq1n4vi1aFY7d/izKMGpm0/zkTd++0c77IZs+Q5bV257Gjkiy34yMSDd8L7TKq46+CV0zDSHb27H+
-        4KSIRSylcgYZ2OMei78Bb1gC7STjWled8MJkcwhhG29tpOAa6HtPIFWPyA9seeGrRiJr3vWUYPsTp
-        3Vu3FPyPpiLcCMVxhaxuIGSboSf1mmZy7nxDek09nDmg/P6bBJA5M4EMw//9ErW/pvBC1TxeGCDAY
-        4DGmD2DpR96GbtKoxaTV3TYyxFMIuFbNKoIU/LaGvb2xuytoT+Rk3V4s2DX53haN44indyDWk1fXo
-        N1G/mBcw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pf7f5-004hB6-38;
-        Wed, 22 Mar 2023 23:14:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9046D30035F;
-        Thu, 23 Mar 2023 00:14:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 73D47202F7F60; Thu, 23 Mar 2023 00:14:28 +0100 (CET)
-Date:   Thu, 23 Mar 2023 00:14:28 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
-Message-ID: <20230322231428.GV2017917@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-8-vschneid@redhat.com>
- <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
- <xhsmhmt45c703.mognet@vschneid.remote.csb>
- <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
- <xhsmhjzz8d8km.mognet@vschneid.remote.csb>
- <20230322172242.GH2357380@hirez.programming.kicks-ass.net>
- <xhsmhh6ucd4t7.mognet@vschneid.remote.csb>
+        Wed, 22 Mar 2023 19:15:52 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC56719113
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 16:15:50 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so195717pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 16:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679526950; x=1682118950;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tpbXw3o2mt/ZegkaB2EeTIzsx1g0yxGj5GUQC2NHcLg=;
+        b=GSYb4gQPIxrL8LVyWcxnFwU7A0Y1B7dUQCmaw+1Tty0nzPC6nJ4MzNjd6MRcGkBGbN
+         GXP3IneUv+j8IX5V1CyH/qZVdSkRHN5nlwBFKmAHe1dgWrGjkOTpcP7fWPebUDAv8i1S
+         NMOEiYk7PLRClWgYLYeI3Ixk/tR5X1iZHP3KKJxtB8p2u0xylKx+/S5331yINgJFfODh
+         aHM6mRgNXSQE9/w7hRJ4u4i81JiPIvn4ZjtPairaEhMLj4Sat20m930Q5lflhjKIGfpT
+         UjHPtTJKlHQsJMsCXiIcFGTtPnE95Z6YtzEMWsjM6irm+niL2pUWyDeDe0n7kr5hGSmh
+         L7Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679526950; x=1682118950;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpbXw3o2mt/ZegkaB2EeTIzsx1g0yxGj5GUQC2NHcLg=;
+        b=kCGh7mgQij4VW0wj71i1uIkUuKvUx2sVTIwLx08C5Tk8af/Ch20AvIhGDZ3KnluBr3
+         lS45LGiyZ7V1sbFQnHQiBCFql/sEa6jjhVMJgZkrEjuSTFdM2zJivzi7fvFeMp9byWZl
+         4GVB+1q8MprGKSootQORLsR/6ORtadNbzW4NPjK5+h+7kNhFUeSqAlO7dYxLNWZNP+HQ
+         bN0LlHNtmyUeHzHJpoPhWFnn/BHTDjXmAZZpfKsvydrBBSIKMKq+TitkSpR1Q5FQBPDa
+         5HJDq5Xtk7J7+c6vbv4h4GVfd2V9fjenLmo8bzNaW2CZs322dduCgiLRLJmKh5bhgeYW
+         EokA==
+X-Gm-Message-State: AO0yUKU/BypeY7IxZ7poQoLjjb0UdBE9cwKE+dEQzcPI0O/G37eN63LA
+        G5oFzLcSHukpV2BCs5vgd4HdtE6lQzq0RoyEOd5Ebw==
+X-Google-Smtp-Source: AK7set+2uIT+U7UxWDu1J49iNlrzaqzSPp7ovQ3TWTewHT4J0UQVkwIpxHY6CNJfIpQzGGBYwDuOVw==
+X-Received: by 2002:a17:90a:e502:b0:233:a836:15f4 with SMTP id t2-20020a17090ae50200b00233a83615f4mr6390037pjy.1.1679526950407;
+        Wed, 22 Mar 2023 16:15:50 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id s17-20020a17090a5d1100b0023d3845b02bsm39240pji.45.2023.03.22.16.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 16:15:50 -0700 (PDT)
+Message-ID: <82ade7f2-017e-af6b-2fb3-eb1a3f570505@kernel.dk>
+Date:   Wed, 22 Mar 2023 17:15:48 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhh6ucd4t7.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: linux-next: manual merge of the block tree with the mm tree
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+References: <20230323100204.0917cecf@canb.auug.org.au>
+ <3431084.1679526799@warthog.procyon.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <3431084.1679526799@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 06:22:28PM +0000, Valentin Schneider wrote:
-> On 22/03/23 18:22, Peter Zijlstra wrote:
-
-> >>        hackbench-157   [001]    10.894320: ipi_send_cpu:         cpu=3 callsite=check_preempt_curr+0x37 callback=0x0
-> >
-> > Arguably we should be setting callback to scheduler_ipi(), except
-> > ofcourse, that's not an actual function...
-> >
-> > Maybe we can do "extern inline" for the actual users and provide a dummy
-> > function for the symbol when tracing.
-> >
+On 3/22/23 5:13 PM, David Howells wrote:
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
-> Huh, I wasn't aware that was an option, I'll look into that. I did scribble
-> down a comment next to smp_send_reschedule(), but having a decodable
-> function name would be better!
+>>  +	if (unlikely(iov_iter_is_pipe(i))) {
+>>  +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
+>>  +		goto out;
+>>  +	}
+> 
+> This bit would need to be removed from copy_page_to_iter_atomic() as the two
+> functions it calls should be removed by the patch in the block tree.
 
-So clang-15 builds the below (and generates the expected code), but
-gcc-12 vomits nonsense about a non-static inline calling a static inline
-or somesuch bollocks :-/
+Maybe it'd be better to consolidate rather than split the changes over
+two trees?
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1991,7 +1991,7 @@ extern char *__get_task_comm(char *to, s
- })
- 
- #ifdef CONFIG_SMP
--static __always_inline void scheduler_ipi(void)
-+extern __always_inline void scheduler_ipi(void)
- {
- 	/*
- 	 * Fold TIF_NEED_RESCHED into the preempt_count; anybody setting
---- a/include/linux/smp.h
-+++ b/include/linux/smp.h
-@@ -130,9 +130,9 @@ extern void arch_smp_send_reschedule(int
-  * scheduler_ipi() is inline so can't be passed as callback reason, but the
-  * callsite IP should be sufficient for root-causing IPIs sent from here.
-  */
--#define smp_send_reschedule(cpu) ({		  \
--	trace_ipi_send_cpu(cpu, _RET_IP_, NULL);  \
--	arch_smp_send_reschedule(cpu);		  \
-+#define smp_send_reschedule(cpu) ({				\
-+	trace_ipi_send_cpu(cpu, _RET_IP_, &scheduler_ipi);	\
-+	arch_smp_send_reschedule(cpu);				\
- })
- 
- /*
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3790,6 +3790,15 @@ static int ttwu_runnable(struct task_str
- }
- 
- #ifdef CONFIG_SMP
-+void scheduler_ipi(void)
-+{
-+	/*
-+	 * Actual users should end up using the extern inline, this is only
-+	 * here for the symbol.
-+	 */
-+	BUG();
-+}
-+
- void sched_ttwu_pending(void *arg)
- {
- 	struct llist_node *llist = arg;
+-- 
+Jens Axboe
+
+
