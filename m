@@ -2,117 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F226C4A2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0676C4A4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjCVMRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S230169AbjCVMWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjCVMRn (ORCPT
+        with ESMTP id S230078AbjCVMWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:17:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50EA60AA9;
-        Wed, 22 Mar 2023 05:17:42 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 389CE66030ED;
-        Wed, 22 Mar 2023 12:17:39 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679487461;
-        bh=Y/ViFHF+5ivXcB2oIYzIPVmCLMqimwaue47WFt0l5lw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U0BpYf8r5D1sTxdz4HbVYYErfotKO7ueqc1imuNp+BqvyZDaWF8+vpYvHJokG7ljz
-         +3CrIcyBy8Gy1l1Mvu9+8cy3QDyYvIXcnPSKOQ4sJeTqskA6mCp1BjuW4trXxY3Yfi
-         jq9nE7z2GMHpLzrNs/kwLgddTznBTwGtMwoAXm4a+OBE8V3ez8McJzXLpiCe5BnfTB
-         Of4cHHPBMDS5Ix2/Iv2TY/SWSj6tZIMCFtizNF3j+/s0WbgrVucDVRe7nPxIBZhDif
-         AhQZfjji55lsLtf7CF4ksmE9pmxQ7vzGc+tf05UvLEZ4W1IolvsVTjPJ7eYMQmvaru
-         xetIjb87blQWA==
-Message-ID: <4607ead5-66c2-ab43-5053-6dfbbac7feef@collabora.com>
-Date:   Wed, 22 Mar 2023 13:17:36 +0100
+        Wed, 22 Mar 2023 08:22:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39E01BCB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679487637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPXFCTl8qif3OA4s3YNypS2WhS0XvH7qdHBOusQ/gQI=;
+        b=FWhXR4Ok61LhRAT9doiyOaUa66Wdps/iPFe05KaU+Ii16OWGMsiGYQf8HSAiqod3qaeG18
+        pIbSyPRpQyMYhKpzaNG+7pIysgXmysY/Nqmch3ueOXz7TD3rQT+KIoVf3Qq7y3ntBisdtp
+        r+p8FYqQXgwTjRAYuDPDduYHCYlF3LI=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-18-fo76Be4ROzSoTDI59gNyLQ-1; Wed, 22 Mar 2023 08:20:36 -0400
+X-MC-Unique: fo76Be4ROzSoTDI59gNyLQ-1
+Received: by mail-qt1-f200.google.com with SMTP id b11-20020ac87fcb000000b003e37d72d532so4077630qtk.18
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:20:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679487636;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hPXFCTl8qif3OA4s3YNypS2WhS0XvH7qdHBOusQ/gQI=;
+        b=uLEsM9FTnqnkQV0b4UiOVLGCHhVEUYmizZJC75D5YIkImti2kqxqgT+poaUlAbpiOW
+         TBRwT2afKtfq/qINV5hu+mOfeg9MBDArR9gB8+Hx0z01/RjgPt7L++fZzw3Gc/pwqX7y
+         1MTr+l5RRnzqJR1StLQnH/uKi8xc4q6C37J3GenOfiIr8t6n4KeXAc+kcJU9acmvPx0N
+         CpqCdSJPAl45vFncbVcEBD3Aj+mjavArFfQC/QVQ4jhLVewt79ZvIdK/18PGGRZFFluQ
+         tP5h5GuYe/0bEm/y6aJrgGSQ2aCHiOvYNph7Y3lVFeDw1VrOMYPUpVsfMFt9QmNqkjnQ
+         hHGw==
+X-Gm-Message-State: AO0yUKWt0CdJNx4a8oLqDwEaHujZ/ZTYxNj/8ycVjzw8CR7GGLXBY5n/
+        qA23K0zr1yNaLEg4t4DDmyrmPqVvTDWZh+vk4RxIf2pAMN9VA71JbYedKIy5cWmbJPkVWVlEcCx
+        E750eFPHQic/BZAtxd+pTIqDa
+X-Received: by 2002:a05:6214:e6e:b0:5c5:95db:858a with SMTP id jz14-20020a0562140e6e00b005c595db858amr5249109qvb.31.1679487636190;
+        Wed, 22 Mar 2023 05:20:36 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+c4qgqaBQUslatTuVuP/CBQYeSmWHcWFFuVnFTR+yoMggQM+H4NTuj8PmuW7zmUDZ2oj+NWg==
+X-Received: by 2002:a05:6214:e6e:b0:5c5:95db:858a with SMTP id jz14-20020a0562140e6e00b005c595db858amr5249039qvb.31.1679487635822;
+        Wed, 22 Mar 2023 05:20:35 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm11175799qkf.100.2023.03.22.05.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 05:20:35 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+In-Reply-To: <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
+ <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+Date:   Wed, 22 Mar 2023 12:20:28 +0000
+Message-ID: <xhsmhmt45c703.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v14 02/10] platform/chrome: cros_ec_typec: Purge blocking
- switch devlinks
-Content-Language: en-US
-To:     Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-acpi@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Stephen Boyd <swboyd@chromium.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20230322104639.221402-1-treapking@chromium.org>
- <20230322104639.221402-3-treapking@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230322104639.221402-3-treapking@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/03/23 11:46, Pin-yen Lin ha scritto:
-> From: Prashant Malani <pmalani@chromium.org>
-> 
-> When using OF graph, the fw_devlink code will create links between the
-> individual port driver (cros-ec-typec here) and the parent device for
-> a Type-C switch (like mode-switch). Since the mode-switch will in turn
-> have the usb-c-connector (i.e the child of the port driver) as a
-> supplier, fw_devlink will not be able to resolve the cyclic dependency
-> correctly.
-> 
-> As a result, the mode-switch driver probe() never runs, so mode-switches
-> are never registered. Because of that, the port driver probe constantly
-> fails with -EPROBE_DEFER, because the Type-C connector class requires all
-> switch devices to be registered prior to port registration.
-> 
-> To break this deadlock and allow the mode-switch registration to occur,
-> purge all the usb-c-connector nodes' absent suppliers. This eliminates
-> the connector as a supplier for a switch and allows it to be probed.
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On 22/03/23 10:53, Peter Zijlstra wrote:
+> On Tue, Mar 07, 2023 at 02:35:58PM +0000, Valentin Schneider wrote:
+>
+>> @@ -477,6 +490,25 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
+>>      smp_store_release(&csd->node.u_flags, 0);
+>>  }
+>>
+>> +static __always_inline void
+>> +raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
+>> +{
+>> +	/*
+>> +	 * The list addition should be visible to the target CPU when it pops
+>> +	 * the head of the list to pull the entry off it in the IPI handler
+>> +	 * because of normal cache coherency rules implied by the underlying
+>> +	 * llist ops.
+>> +	 *
+>> +	 * If IPIs can go out of order to the cache coherency protocol
+>> +	 * in an architecture, sufficient synchronisation should be added
+>> +	 * to arch code to make it appear to obey cache coherency WRT
+>> +	 * locking and barrier primitives. Generic code isn't really
+>> +	 * equipped to do the right thing...
+>> +	 */
+>> +	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
+>> +		send_call_function_single_ipi(cpu, func);
+>> +}
+>> +
+>>  static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
+>>
+>>  void __smp_call_single_queue(int cpu, struct llist_node *node)
+>> @@ -493,21 +525,25 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+>>              }
+>>      }
+>>  #endif
+>>      /*
+>> +	 * We have to check the type of the CSD before queueing it, because
+>> +	 * once queued it can have its flags cleared by
+>> +	 *   flush_smp_call_function_queue()
+>> +	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
+>> +	 * executes migration_cpu_stop() on the remote CPU).
+>>       */
+>> +	if (trace_ipi_send_cpumask_enabled()) {
+>> +		call_single_data_t *csd;
+>> +		smp_call_func_t func;
+>> +
+>> +		csd = container_of(node, call_single_data_t, node.llist);
+>> +		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
+>> +			sched_ttwu_pending : csd->func;
+>> +
+>> +		raw_smp_call_single_queue(cpu, node, func);
+>> +	} else {
+>> +		raw_smp_call_single_queue(cpu, node, NULL);
+>> +	}
+>>  }
+>
+> Hurmph... so we only really consume @func when we IPI. Would it not be
+> more useful to trace this thing for *every* csd enqeued?
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+It's true that any CSD enqueued on that CPU's call_single_queue in the
+[first CSD llist_add()'ed, IPI IRQ hits] timeframe is a potential source of
+interference.
 
+However, can we be sure that first CSD isn't an indirect cause for the
+following ones? say the target CPU exits RCU EQS due to the IPI, there's a
+bit of time before it gets to flush_smp_call_function_queue() where some other CSD
+could be enqueued *because* of that change in state.
+
+I couldn't find a easy example of that, I might be biased as this is where
+I'd like to go wrt IPI'ing isolated CPUs in usermode. But regardless, when
+correlating an IPI IRQ with its source, we'd always have to look at the
+first CSD in that CSD stack.
 
