@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29186C4E53
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB836C4E46
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjCVOoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S231889AbjCVOoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjCVOn0 (ORCPT
+        with ESMTP id S231755AbjCVOnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:43:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36FF65C71;
-        Wed, 22 Mar 2023 07:42:37 -0700 (PDT)
+        Wed, 22 Mar 2023 10:43:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6D64B27;
+        Wed, 22 Mar 2023 07:42:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C3E62171;
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4466CE1DC9;
+        Wed, 22 Mar 2023 14:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148AAC4339B;
         Wed, 22 Mar 2023 14:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F55CC433D2;
-        Wed, 22 Mar 2023 14:42:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679496146;
-        bh=ZEk6Is/AQpeKoK8s9K0Qw78Ve1+e894VSLCsUZNA1oI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=SF7Z7qjsi8zhnTqqp9TEsLV29TxRvGf8ky10uomJs2Q5KfAkeGnVuXOpcS9WTjEt+
-         VF57zdvkJC7mxbCmRlO6HmpH7zxawwJBGJT/j2prF7+Y4fXDjztiUj9CR4xRCxWpzg
-         y5D4DWvetwEB0U43aqNgLgf0wqGStlgaGtNF7NcQm3P/j2tGI3bnxSESv3chXjr2qG
-         MA+wn4Q3PgAOPji6SuJ4xAFOVjnrc7QV+SlwSe9/J4n8mLCk4PJIWcGZIrJqzrkFh/
-         wz9MVm7ki5juhRsdr6qq4AtpkYNEzTj5VJxsQ7XzAzgC5q6IXSPeN+LElIaAM8ARZW
-         B9ATPF6902T7w==
+        s=k20201202; t=1679496148;
+        bh=xEyKZaa1+RXFhK2lv1wKEyVPh8wrA5Ghs6WICLxgLV0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OY3q2++VOzzMH6fqxfOsljPG6l24QjRnR+9K8/S82zW08s/JAhM3aPbJFXU6uV2hf
+         huK2Nk6a0PSFE4cj9j4GWXhti50cSa7zHrpesi3mr1vgsRo14y7lo1VPWhv2WfIisS
+         I55nklUs0bqiWu2aaPCzQqV51sOKJbPeAeMlmx0a78N9dr/e0yxaUomftRNFMeQUq6
+         +RJrPlS1bgd58ehFfVCuJP1YchvK01AylBSENvV+g2D70hg1yvUYj6g42lvCtEZ5JK
+         WuLtpI+tFKABHJGB338MHO4ELGsRP6sFZfC+Xukep/2qxMm1mUb+ecWVV2NCC6PP3s
+         5t7r362NXxv+g==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Will Deacon <will@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kathiravan T <kathirav@codeaurora.org>,
         Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: soc: qcom: smd-rpm: re-add missing qcom,rpm-msm8994
-Date:   Wed, 22 Mar 2023 07:45:19 -0700
-Message-Id: <167949631652.1081726.4452705235754573255.b4-ty@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 00/12] soc: qcom: add UCSI function to PMIC GLINK
+Date:   Wed, 22 Mar 2023 07:45:20 -0700
+Message-Id: <167949631651.1081726.4846765935793443746.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
-References: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v5-0-552f3b721f9e@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,18 +63,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Mar 2023 13:24:28 +0100, Krzysztof Kozlowski wrote:
-> Re-add the qcom,rpm-msm8994 compatible, dropped during conversion from
-> TXT to DT schema:
+On Tue, 21 Mar 2023 14:21:40 +0100, Neil Armstrong wrote:
+> The PMIC GLINK interface offers an UCSI endpoint for newer
+> SoCs, the UCSI exchange is necessary to configure the USB-C
+> port USB role and altmode on the SM8450 HDK and SM8550 MTP
+> boards.
+> Since the DT description is the same, support for SM8350 HDK
+> is also added.
 > 
->   apq8094-sony-xperia-kitakami-karin_windy.dtb: smd: rpm:rpm-requests:compatible:0: 'qcom,rpm-msm8994' is not one of ['qcom,rpm-apq8084' ...]
-> 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: soc: qcom: smd-rpm: re-add missing qcom,rpm-msm8994
-      commit: 34d84c3b0f63978efcb5136a6fd2e7e9d889da70
+[12/12] arm64: defconfig: add PMIC GLINK modules
+        commit: 4ffd0b0019560a52b46b9ebd8127be3fdc157f16
 
 Best regards,
 -- 
