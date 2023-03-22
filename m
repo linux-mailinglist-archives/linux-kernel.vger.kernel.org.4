@@ -2,164 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED31F6C4432
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527776C4434
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCVHgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S229917AbjCVHgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjCVHgS (ORCPT
+        with ESMTP id S229939AbjCVHg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:36:18 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8045CC3A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:36:13 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id cy23so68972825edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679470572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uV97OTONSxnGEyV7uO8OnMJG0g0QG+ETuEfWA/XgJlc=;
-        b=PGSo4SIkDysijZW+Nb0UtNdfJBM6YH+rR5SG3c21IjzKSh4MGWnrr9YkU/SDC5POk3
-         jQltAPsr2pcOlhSACMu5bVLiitpiqT8JSv2ciEWwUttYxEg5I5m4EmLMmAnctcIlRSPX
-         72qFxluE6ZdM1FBgos9TBMDKEvc4MgyEcS5B4Wlres9EC7nO+4XOM7VtZRSBwlu+fang
-         JqwTwKeRY9hTWzc0vcc67VQUYCih31Q/BNXzsm7Ekene6GpgSIBlJ1mT8tO7+gIZ8MkH
-         PR2aH1kOB5SJuMk2NYb2S0GG7IL1XAi5/tCLpECL2iq2YVyFyHoAJxKvtu2kn1zRJEMk
-         yIkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679470572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uV97OTONSxnGEyV7uO8OnMJG0g0QG+ETuEfWA/XgJlc=;
-        b=5ibA1Yw1k9O5JabdpVANW1iXJ6dZiEZpKlX51uBT0KrrDwRpMifPkxHvIwfiuLMBaX
-         bzeGoSzNCbIQwy77/g09S4bv31yYTzDgU0Lz9GMSGQzfIPksCIQqhLqjrnVfj+FmvDo+
-         r3rPJGq6qk6riOEMUWtgb1kCFFcyTxHwQKYSIioK1jDjDrgU4XBhiVyf3tNdmP6qymHP
-         1J/2fG902FZMdOyZplfPp3WplisMnazJKkMhp9jYAO/qqA9EbThFIiXxUEfadZ9cYGhJ
-         zs/1oRCIRFSEY6Gr6o3ptHGgSkKaBcn+T4fBZbyvx+YGdT4yHA1pIXyQnRTNWK7Mn4Tj
-         rGig==
-X-Gm-Message-State: AO0yUKU/YMhcwYwqKX2rmXaSmPhYFZl+D6Garyk68P+uPEB+LdR1fa5a
-        cdjRMaf+Q3daMtmhzqHlnqUMZw==
-X-Google-Smtp-Source: AK7set9zlFgHEYh7EBKB/Bq2zpzCToe8YappDSA+j6UYFnxOE7JXrPRmTTfy3WKchUJ4BYgi5XUEQA==
-X-Received: by 2002:a17:906:ece4:b0:930:9385:ce51 with SMTP id qt4-20020a170906ece400b009309385ce51mr5666192ejb.68.1679470571686;
-        Wed, 22 Mar 2023 00:36:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5050:151b:e755:1c6? ([2a02:810d:15c0:828:5050:151b:e755:1c6])
-        by smtp.gmail.com with ESMTPSA id qh7-20020a170906eca700b0092bea699124sm6768128ejb.106.2023.03.22.00.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 00:36:11 -0700 (PDT)
-Message-ID: <a4e0a256-4db3-543a-f133-852beb4cf726@linaro.org>
-Date:   Wed, 22 Mar 2023 08:36:10 +0100
+        Wed, 22 Mar 2023 03:36:28 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3475C9C4;
+        Wed, 22 Mar 2023 00:36:25 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PhKvd3Gpbz17KpN;
+        Wed, 22 Mar 2023 15:33:17 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 15:36:23 +0800
+Subject: Re: [PATCH RESEND v3] perf/core: Fix hardlockup failure caused by
+ perf throttle
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <eranian@google.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230227023508.102230-1-yangjihong1@huawei.com>
+ <12782722-103e-88a9-df3e-6815b4734bc3@huawei.com>
+Message-ID: <37d019af-191c-9955-2417-b7cfa5e5efa3@huawei.com>
+Date:   Wed, 22 Mar 2023 15:36:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: ov2685: convert to dtschema
+In-Reply-To: <12782722-103e-88a9-df3e-6815b4734bc3@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230129-ov2685-improvements-v3-0-d9737d0707f6@z3ntu.xyz>
- <20230129-ov2685-improvements-v3-2-d9737d0707f6@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230129-ov2685-improvements-v3-2-d9737d0707f6@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 19:03, Luca Weiss wrote:
-> Convert the text-based dt-bindings to yaml.
+Hello,
+
+PING.
+
+This patch has not been responded.
+Please take time to check whether the fix solution is OK.
+Look forward to reviewing the patch. Thanks :)
+
+Thanks,
+Yang.
+
+On 2023/3/6 9:14, Yang Jihong wrote:
+> Hello,
 > 
-
-Thank you for your patch. There is something to discuss/improve.
-
-> +  - Shunqian Zheng <zhengsq@rock-chips.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov2685
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: XVCLK clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: xvclk
-> +
-> +  dvdd-supply:
-> +    description: Digital Domain Power Supply
-> +
-> +  avdd-supply:
-> +    description: Analog Domain Power Supply
-> +
-> +  dovdd-supply:
-> +    description: I/O Domain Power Supply
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: Reset Pin GPIO Control (active low)
-> +
-> +  port:
-> +    description: MIPI CSI-2 transmitter port
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          data-lanes:
-> +            maxItems: 1
-> +
-> +        required:
-> +          - data-lanes
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - dvdd-supply
-> +  - avdd-supply
-> +  - dovdd-supply
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/rk3399-cru.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    i2c7 {
-
-i2c
-
-With above:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> PING.
+> 
+> Thanks,
+> Yang.
+> 
+> On 2023/2/27 10:35, Yang Jihong wrote:
+>> commit e050e3f0a71bf ("perf: Fix broken interrupt rate throttling")
+>> introduces a change in throttling threshold judgment. Before this,
+>> compare hwc->interrupts and max_samples_per_tick, then increase
+>> hwc->interrupts by 1, but this commit reverses order of these two
+>> behaviors, causing the semantics of max_samples_per_tick to change.
+>> In literal sense of "max_samples_per_tick", if hwc->interrupts ==
+>> max_samples_per_tick, it should not be throttled, therefore, the judgment
+>> condition should be changed to "hwc->interrupts > max_samples_per_tick".
+>>
+>> In fact, this may cause the hardlockup to fail, The minimum value of
+>> max_samples_per_tick may be 1, in this case, the return value of
+>> __perf_event_account_interrupt function is 1.
+>> As a result, nmi_watchdog gets throttled, which would stop PMU (Use x86
+>> architecture as an example, see x86_pmu_handle_irq).
+>>
+>> Fixes: e050e3f0a71b ("perf: Fix broken interrupt rate throttling")
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>
+>> Changes since v2:
+>>    - Add fixed commit.
+>>
+>> Changes since v1:
+>>    - Modify commit title.
+>>
+>>   kernel/events/core.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index f79fd8b87f75..0540a8653906 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
+>> @@ -9434,7 +9434,7 @@ __perf_event_account_interrupt(struct perf_event 
+>> *event, int throttle)
+>>       } else {
+>>           hwc->interrupts++;
+>>           if (unlikely(throttle
+>> -                 && hwc->interrupts >= max_samples_per_tick)) {
+>> +                 && hwc->interrupts > max_samples_per_tick)) {
+>>               __this_cpu_inc(perf_throttled_count);
+>>               tick_dep_set_cpu(smp_processor_id(), 
+>> TICK_DEP_BIT_PERF_EVENTS);
+>>               hwc->interrupts = MAX_INTERRUPTS;
+>>
+> 
+> .
