@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86FE6C49D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8D66C49DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCVMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        id S229945AbjCVMEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCVMBh (ORCPT
+        with ESMTP id S229611AbjCVMEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:01:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09964570A7;
-        Wed, 22 Mar 2023 05:01:34 -0700 (PDT)
+        Wed, 22 Mar 2023 08:04:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0FC2C646;
+        Wed, 22 Mar 2023 05:04:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F2DA61FFF;
-        Wed, 22 Mar 2023 12:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC6DC433EF;
-        Wed, 22 Mar 2023 12:01:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cGXuHR3k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1679486489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=31iz5njnxwIdR1+jjyeAyXciOwOhvxGbyonntQxMoEM=;
-        b=cGXuHR3kuAudxj0LB1/F3WViZ6fW2Iq6KZCkF0vl0bd57zsF5NPpYfkxwx40HRLPSZn4oU
-        sqfL0wsNoiu45GxMgUj5hEIIEj1R1kp193+SqUVJTLqAREnaBjGv2dKO+oOx14GozOEQz0
-        5QkwjzhUJvBDeZXAZAmUePeIoAyuofM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 99a7018e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 22 Mar 2023 12:01:28 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 13:01:25 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        regressions@leemhuis.info, regressions@lists.linux.dev
-Subject: Re: [PATCH v5 06/13] riscv: fpu: switch has_fpu() to
- riscv_has_extension_likely()
-Message-ID: <ZBruFRwt3rUVngPu@zx2c4.com>
-References: <20230128172856.3814-1-jszhang@kernel.org>
- <20230128172856.3814-7-jszhang@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CA68B81C29;
+        Wed, 22 Mar 2023 12:04:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB29EC433EF;
+        Wed, 22 Mar 2023 12:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679486667;
+        bh=8BY+CocL+shpE3CRqBHzJbs8TrkWQc6FVacFEoPl5tw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EMokyUJpGFQXmYE6VEQMDgoiQJSNhgQDO+rLWEmxMcB38aaDFBwFMA9LE0NpIcUUg
+         p/Yubm1RFX9PgowsfOPS52OdTQN0U6avmtSXhg4/+5ZYXetKDHVy6/IYMu9DEV9JS5
+         ae30MTAudgUGW+xHSjIhtMJeCwwbwxAg4oo7updA=
+Date:   Wed, 22 Mar 2023 13:04:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <ZBruyLl8w8+daAoa@kroah.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230128172856.3814-7-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
+> --- /dev/null
+> +++ b/include/kunit/platform_device.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef __KUNIT_PLATFORM_DEVICE__
+> +#define __KUNIT_PLATFORM_DEVICE__
+> +
+> +#include <kunit/test.h>
+> +
+> +struct device;
+> +
+> +struct device *test_kunit_helper_alloc_device(struct kunit *test);
+> +void test_kunit_helper_free_device(struct kunit *test, struct device *dev);
 
-On Sun, Jan 29, 2023 at 01:28:49AM +0800, Jisheng Zhang wrote:
-> Switch has_fpu() from static branch to the new helper
-> riscv_has_extension_likely().
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/include/asm/switch_to.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-> index 11463489fec6..60f8ca01d36e 100644
-> --- a/arch/riscv/include/asm/switch_to.h
-> +++ b/arch/riscv/include/asm/switch_to.h
-> @@ -59,7 +59,8 @@ static inline void __switch_to_aux(struct task_struct *prev,
->  
->  static __always_inline bool has_fpu(void)
->  {
-> -	return static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_FPU]);
-> +	return riscv_has_extension_likely(RISCV_ISA_EXT_f) ||
-> +		riscv_has_extension_likely(RISCV_ISA_EXT_d);
+Why are you calling this a "platform_device" when it isn't a platform
+device at all?
 
-This causes programs to crash on kernels that are compiled with
-CONFIG_RISCV_ALTERNATIVE=n. Since CONFIG_RISCV_ALTERNATIVE isn't
-selectable, this is a problem.
+Why not just say "device.h" here?
 
-You can try this out for yourself using the WireGuard test suite:
+thanks,
 
-    ARCH=riscv64 make -C tools/testing/selftests/wireguard/qemu -j$(nproc)
-
-And you'll see the crash:
-
-[    2.172093] init.sh[45]: unhandled signal 4 code 0x1 at 0x00ffffff945a2170 in libc.so[ffffff94562000+8c000]
-[    2.174306] CPU: 0 PID: 45 Comm: init.sh Not tainted 6.3.0-rc3+ #1
-[    2.174981] Hardware name: riscv-virtio,qemu (DT)
-[    2.175639] epc : 00ffffff945a2170 ra : 00aaaaaae7332820 sp : 00fffffffd3e6c00
-[    2.176287]  gp : 00aaaaaae73aff40 tp : 00ffffff945f1a50 t0 : 0000000000000000
-[    2.176858]  t1 : 00aaaaaae7331f9c t2 : 0000000000000002 s0 : 00fffffffd3e6de0
-[    2.177427]  s1 : 0000000000000002 a0 : 00aaaaaae73b7380 a1 : 00fffffffd3e6dc8
-[    2.177990]  a2 : 00fffffffd3e6de0 a3 : 0000000000000000 a4 : 0000000000000000
-[    2.178524]  a5 : 0000000000000002 a6 : 000000000000008b a7 : 0000000000000010
-[    2.179081]  s2 : 00aaaaaae73327f0 s3 : 00ffffff945ef990 s4 : 00ffffff945f1988
-[    2.179796]  s5 : 00ffffff945f1b48 s6 : 0000000000000000 s7 : 00000000000000e0
-[    2.180366]  s8 : 00ffffff945f1d58 s9 : 00ffffff945ecb88 s10: 00ffffff945f17e0
-[    2.185464]  s11: 0000000000000001 t3 : 00ffffff945a213c t4 : 0000000300000000
-[    2.186106]  t5 : 0000000000000003 t6 : ffffffffffffffff
-[    2.186520] status: 0000000200000020 badaddr: 000000000000b920 cause: 0000000000000002
-
-I bisected it to this commit:
-
-    702e64550b12 ("riscv: fpu: switch has_fpu() to riscv_has_extension_likely()")
-
-Thanks,
-Jason
+greg k-h
