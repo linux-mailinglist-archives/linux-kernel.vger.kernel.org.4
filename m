@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF156C5AC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC406C5ABB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCVXoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S230413AbjCVXnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjCVXnm (ORCPT
+        with ESMTP id S230307AbjCVXnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:43:42 -0400
+        Wed, 22 Mar 2023 19:43:22 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A3830EB0;
-        Wed, 22 Mar 2023 16:43:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2825D31BD8;
+        Wed, 22 Mar 2023 16:42:55 -0700 (PDT)
 Received: from p508fd58e.dip0.t-ipconnect.de ([80.143.213.142] helo=phil.fritz.box)
         by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <heiko@sntech.de>)
-        id 1pf84R-0005ZV-7W; Thu, 23 Mar 2023 00:40:43 +0100
+        id 1pf84R-0005ZV-Td; Thu, 23 Mar 2023 00:40:43 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Powers-Holmes <aholmes@omnom.net>,
-        Andy Yan <andyshrk@163.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Tianling Shen <cnsztl@gmail.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v2 0/5] arm64: dts: rockchip: improve support for NanoPi R5 series
-Date:   Thu, 23 Mar 2023 00:40:39 +0100
-Message-Id: <167952842629.1588125.15840907021514918930.b4-ty@sntech.de>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, dri-devel@lists.freedesktop.org,
+        Robert Foss <rfoss@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, jonas@kwiboo.se,
+        neil.armstrong@linaro.org, alim.akhtar@samsung.com,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        sw0312.kim@samsung.com, philippe.cornu@foss.st.com,
+        linux-rockchip@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, kyungmin.park@samsung.com,
+        hjc@rock-chips.com, jernej.skrabec@gmail.com,
+        linus.walleij@linaro.org, inki.dae@samsung.com, robh+dt@kernel.org,
+        Laurent.pinchart@ideasonboard.com, daniel@ffwll.ch,
+        linux-usb@vger.kernel.org, airlied@gmail.com,
+        andrzej.hajda@intel.com
+Subject: Re: (subset) [PATCH v6 01/17] dt-bindings: display: rockchip: convert rockchip-lvds.txt to YAML
+Date:   Thu, 23 Mar 2023 00:40:40 +0100
+Message-Id: <167952842636.1588125.15379043637737791314.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230318083745.6181-1-cnsztl@gmail.com>
-References: <20230318083745.6181-1-cnsztl@gmail.com>
+In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,31 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 18 Mar 2023 16:37:40 +0800, Tianling Shen wrote:
-> (gmac, i2s1) for the NanoPi R5S.
+On Thu, 22 Dec 2022 15:22:14 +0100, Johan Jonker wrote:
+> Convert rockchip-lvds.txt to YAML.
 > 
-> Changes since v1:
-> - https://lore.kernel.org/linux-rockchip/20230315160228.2362-1-cnsztl@gmail.com/
-> - Added Fixes tag
-> - Collected Acked-by tag
-> - Fixed a typo error in dt-bindings (board -> boards)
-> - Removed non-existent audio node for NanoPi R5 series
-> - Updated my E-mail in NanoPi R5C dts
+> Changed:
+>   Add power-domains property.
+>   Requirements between PX30 and RK3288
+> 
 > 
 > [...]
 
 Applied, thanks!
 
-[1/5] arm64: dts: rockchip: create common dtsi for NanoPi R5 series
-      commit: c8ec73b05a95d9f0969ae0f28dd8799a54fcdfc7
-[2/5] dt-bindings: Add doc for FriendlyARM NanoPi R5C
-      commit: 7d4fc70351d155699fe41949d16ce696885a4ca8
-[3/5] arm64: dts: rockchip: Add FriendlyARM NanoPi R5C
-      commit: 05620031408ac6cfc6d5c048431827e49aa0ade1
-[4/5] arm64: dts: rockchip: fix gmac support for NanoPi R5S
-      commit: 31425b1fadb2040b359e52ffc24c049a78d56c96
-[5/5] arm64: dts: rockchip: remove I2S1 TDM node for the NanoPi R5 series
-      commit: 975e9bbad11950fc8276f1fa260d8bf2c341aa41
+[09/17] ARM: dts: rockchip: rk3288: fix dsi node
+        commit: ea2d16f90629e3158307d0183cad5c40aa55c995
+[10/17] ARM: dts: rockchip: rk3288: fix lvds node
+        commit: 8a19e4c74d17ed8d1e6bc06b32c5b7b7c3b9fcfb
+[11/17] ARM: dts: rockchip: rk3288: fix dp node
+        commit: 95e2ac6ae9f2330557a6aef70bf15173e1dd9714
+[12/17] arm64: dts: rockchip: px30: fix lvds node
+        commit: 0d5e24918976edffffee006e07730434a36d264a
+[13/17] arm64: dts: rockchip: px30: fix dsi node
+        commit: 30322f812d4e0e75e2488c1d45aba94e51dd19bb
+[14/17] arm64: dts: rockchip: rk3399: fix dsi node
+        commit: f82fe7ad31530b38d2f61aa6ae68bd35c33f4ad0
+[15/17] arm64: dts: rockchip: rk3399: fix dp node
+        commit: d94024bd6342c6f3e88c5fac785a685c1974d48e
+[16/17] arm64: dts: rockchip: rename vbus-supply to phy-supply in rk3566-box-demo.dts
+        commit: fc440ea1732abb714150bb8f3d90672ccc679e2d
+[17/17] arm64: dts: rockchip: rk356x: remove hclk from dsi node
+        commit: cadda005961cd6a202ae6f8ff99f2bba35a31dc8
 
 Best regards,
 -- 
