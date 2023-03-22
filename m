@@ -2,126 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA8E6C415F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BCA6C415A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCVEAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 00:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S230267AbjCVEA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 00:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjCVEA0 (ORCPT
+        with ESMTP id S229498AbjCVEAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 00:00:26 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96925474E7;
-        Tue, 21 Mar 2023 21:00:23 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PhF9t5Y8lz4f3mLm;
-        Wed, 22 Mar 2023 12:00:18 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiBSfRpkU+ZjFQ--.28641S4;
-        Wed, 22 Mar 2023 12:00:20 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     ming.lei@redhat.com, jack@suse.cz, hch@infradead.org,
-        axboe@kernel.dk, yukuai3@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH] block: don't set GD_NEED_PART_SCAN if scan partition failed
-Date:   Wed, 22 Mar 2023 11:59:26 +0800
-Message-Id: <20230322035926.1791317-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
-References: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+        Wed, 22 Mar 2023 00:00:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B9B474D4
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 21:00:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF3260BF0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5DAC433D2;
+        Wed, 22 Mar 2023 04:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679457622;
+        bh=i6IhVzT9OpzVoQyspMPLq+3N5zYy9EEMRpCDmXH98t4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DtxPoVGI4mjrJY0/CaMvvbpoAj9zmMGMUVZZkeFvN4b0EDxeUYodHoc+uSAgG7EMg
+         md/SXA60oJPCZ3BM9einpvw9EdzWsAC5hT3eh6QxvfxqWiC+4ZkCgQDnKNI5LbOub6
+         8LhJPx+CL7C8weP3Nx+B6RiTiP5w7gl6ZQrufWyyZo40uw4wJKjEfEUmvjZOsreduk
+         vAfCbhb7zCixqjKMoBMqSEN2hydxpPQqBrS8mLGw0HaDuUX7y2RhvNw+KV8Cy6FV32
+         Y6P+kOPY2///MNOis55LgPXkMeeEYiWo3jNtV61ZTtv5A2CMQevKVWRjwuDjPxf0Yg
+         +5jkKhCtD1wQA==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 00/11] static_call: Improve NULL/ret0 handling
+Date:   Tue, 21 Mar 2023 21:00:06 -0700
+Message-Id: <cover.1679456900.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiBSfRpkU+ZjFQ--.28641S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur48Kw47JF1UWr1Dtw17Awb_yoW8uF4xpF
-        nxJa15KryDWr1fCa4jv3WxXa15Ja9rZryfJrW3G34IvwnxXanIyF92k3yDWF10qr93JrWD
-        ur15W34ruF1furDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Peter pointed out that v1 had CFI violations on arm64 with
+CONFIG_CFI_CLANG.  Then I realized there are already CFI violations
+today in the existing code.
 
-Currently if disk_scan_partitions() failed, GD_NEED_PART_SCAN will still
-set, and partition scan will be proceed again when blkdev_get_by_dev()
-is called. However, this will cause a problem that re-assemble partitioned
-raid device will creat partition for underlying disk.
+So this ended up turning into a complete rewrite of v1.
 
-Test procedure:
+Highlights include:
 
-mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
-sgdisk -n 0:0:+100MiB /dev/md0
-blockdev --rereadpt /dev/sda
-blockdev --rereadpt /dev/sdb
-mdadm -S /dev/md0
-mdadm -A /dev/md0 /dev/sda /dev/sdb
+- Several cleanups
+- Fix arm64 CFI violations
+- Make NULL pointer behavior consistent across configs
+- Merge NULL and RET0 into a single concept
 
-Test result: underlying disk partition and raid partition can be
-observed at the same time
 
-Note that this can still happen in come corner cases that
-GD_NEED_PART_SCAN can be set for underlying disk while re-assemble raid
-device.
+v1 can be found here:
 
-Fixes: e5cfefa97bcc ("block: fix scan partition for exclusively open device again")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/genhd.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+  https://lkml.kernel.org/lkml/cover.1678474914.git.jpoimboe@kernel.org
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 08bb1a9ec22c..a72e27d6779d 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -368,7 +368,6 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
- 	if (disk->open_partitions)
- 		return -EBUSY;
- 
--	set_bit(GD_NEED_PART_SCAN, &disk->state);
- 	/*
- 	 * If the device is opened exclusively by current thread already, it's
- 	 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
-@@ -381,12 +380,19 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
- 			return ret;
- 	}
- 
-+	set_bit(GD_NEED_PART_SCAN, &disk->state);
- 	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL);
- 	if (IS_ERR(bdev))
- 		ret =  PTR_ERR(bdev);
- 	else
- 		blkdev_put(bdev, mode & ~FMODE_EXCL);
- 
-+	/*
-+	 * If blkdev_get_by_dev() failed early, GD_NEED_PART_SCAN is still set,
-+	 * and this will cause that re-assemble partitioned raid device will
-+	 * creat partition for underlying disk.
-+	 */
-+	clear_bit(GD_NEED_PART_SCAN, &disk->state);
- 	if (!(mode & FMODE_EXCL))
- 		bd_abort_claiming(disk->part0, disk_scan_partitions);
- 	return ret;
+Josh Poimboeuf (11):
+  static_call: Improve key type abstraction
+  static_call: Flip key type union bit
+  static_call: Remove static_call_mod_init() declaration
+  static_call: Remove static_call.h dependency on cpu.h
+  static_call: Make ARCH_ADD_TRAMP_KEY() generic
+  static_call: "EXPORT_STATIC_CALL_TRAMP" -> "EXPORT_STATIC_CALL_RO"
+  static_call: Reorganize static call headers
+  arm64/static_call: Fix static call CFI violations
+  static_call: Make NULL static calls consistent
+  static_call: Remove static_call_cond()
+  static_call: Remove DEFINE_STATIC_CALL_RET0()
+
+ arch/Kconfig                              |   4 +
+ arch/arm/include/asm/paravirt.h           |   2 +-
+ arch/arm64/include/asm/paravirt.h         |   2 +-
+ arch/arm64/include/asm/static_call.h      |  29 ++
+ arch/powerpc/include/asm/static_call.h    |   1 -
+ arch/powerpc/kernel/irq.c                 |   2 +-
+ arch/powerpc/kernel/static_call.c         |   6 +-
+ arch/x86/events/amd/brs.c                 |   2 +-
+ arch/x86/events/amd/core.c                |   2 +-
+ arch/x86/events/core.c                    |  29 +-
+ arch/x86/include/asm/kvm-x86-ops.h        |   6 +-
+ arch/x86/include/asm/kvm-x86-pmu-ops.h    |   3 +-
+ arch/x86/include/asm/kvm_host.h           |   4 +-
+ arch/x86/include/asm/paravirt.h           |   2 +-
+ arch/x86/include/asm/perf_event.h         |   2 +-
+ arch/x86/include/asm/preempt.h            |   6 +-
+ arch/x86/include/asm/static_call.h        |  22 +-
+ arch/x86/kernel/alternative.c             |   6 -
+ arch/x86/kernel/paravirt.c                |   1 +
+ arch/x86/kernel/static_call.c             |  89 +-----
+ arch/x86/kvm/irq.c                        |   2 +-
+ arch/x86/kvm/lapic.c                      |  22 +-
+ arch/x86/kvm/pmu.c                        |   4 +-
+ arch/x86/kvm/x86.c                        |  28 +-
+ block/bio.c                               |   1 +
+ include/linux/entry-common.h              |   2 +-
+ include/linux/entry-kvm.h                 |   2 +-
+ include/linux/kernel.h                    |   4 +-
+ include/linux/module.h                    |   2 +-
+ include/linux/sched.h                     |   2 +-
+ include/linux/static_call.h               | 369 ++++++++++------------
+ include/linux/static_call_types.h         |  74 +----
+ kernel/Makefile                           |   2 +-
+ kernel/cgroup/cgroup.c                    |   1 +
+ kernel/events/core.c                      |  15 +-
+ kernel/sched/core.c                       |  18 +-
+ kernel/static_call.c                      |  13 +
+ kernel/static_call_inline.c               |  64 +++-
+ security/keys/trusted-keys/trusted_core.c |   2 +-
+ sound/soc/intel/avs/trace.c               |   1 +
+ tools/include/linux/static_call_types.h   |  74 +----
+ 41 files changed, 369 insertions(+), 553 deletions(-)
+ create mode 100644 arch/arm64/include/asm/static_call.h
+
 -- 
-2.31.1
+2.39.2
 
