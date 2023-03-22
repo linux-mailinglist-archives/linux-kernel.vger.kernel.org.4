@@ -2,130 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F113B6C4997
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3E16C49A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjCVLrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S230507AbjCVLsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjCVLq5 (ORCPT
+        with ESMTP id S230416AbjCVLrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:46:57 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3386D6041D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:46:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id k2so18994360pll.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679485582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dGb3BIQsyUNL1+BgFa8yu/K6OVQSXWMJMp42ClXNo3w=;
-        b=qivrf3cVu8WgCYcV3RRjSXa3JDpbSbJwgsIyAGATk1QVxCl+JdpHhfMVBAsQi/JHbP
-         Gsc38pRrGVopn+W5jf62e6KcU30cTBbra+Z7fdqrcSqf+Hb2l3TY7YMGm3D8L4FmE9NM
-         QM5VUpA0j9LtQJjuLrbtl+iMW9I+pQWgyyRSSfubRfV5rPXxwESd0hYO8IS+uVcucpG9
-         DYeaiXkKuKDlibTuhSXf9Ty0IRbX5yaz2b3A8o3t5qHSmap5SJ6eppyotTxO7/QHnWFo
-         I0BbunXYQyfnyowMIywHHuDp/1/60s343dY+DVmKaSUVu347mTMRNf9RkIABjGLy7B37
-         BGqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679485582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dGb3BIQsyUNL1+BgFa8yu/K6OVQSXWMJMp42ClXNo3w=;
-        b=QfW2FCGXS1NqEuT5ZgRpE0413SBQiiJADXKGNiU/Rg3yQOWsdIWPaGxjexgqeEyR4b
-         fKEaqqzNKZrj936+osBBURR05pZ7fbA2BpULRx9DpUTBF/zQGRsvxgIYoS4D9iHTHM/v
-         MNaUoXGDOCkRUsD3I39xTY88PadEVRKbbZc2h+DNnpPl8CEcbdz3kxp/PUe4d0QzKqJ7
-         jfSVs6/c2ga9qZOmRBMOlSH3SXLj20WKrHt+BEK0iyh+WNmoJ2yNl+kYI+ouAd8byvel
-         WCDw4S5JxwegxLiPPJPwpEoi58WYj7CbjiblYpsB0hDUWkQFYeOGHKyDh43mwMl5BoTw
-         xPjQ==
-X-Gm-Message-State: AO0yUKUEPiBRBtTzLMsYaHvQ3xTpOk9gKBuFjF/S/IIsx20cUNAtSYF6
-        EE03Ssh9xR+tvTThDS2ukinzVw==
-X-Google-Smtp-Source: AK7set9KvFvCmxihb0yEPnk5v2IjyDopshZ1tR4NTJsWxnuXPlvyg5TXwVG6e/KkXEs+jGsHaiOisw==
-X-Received: by 2002:a17:903:27c4:b0:19e:8088:b852 with SMTP id km4-20020a17090327c400b0019e8088b852mr2282952plb.10.1679485582557;
-        Wed, 22 Mar 2023 04:46:22 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:d4c3:8671:83c0:33ae:5a96])
-        by smtp.gmail.com with ESMTPSA id jd1-20020a170903260100b0019b0afc24e8sm10386649plb.250.2023.03.22.04.46.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 04:46:22 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org
-Subject: [PATCH v2 10/10] arm64: dts: qcom: sm8450: add crypto nodes
-Date:   Wed, 22 Mar 2023 17:15:19 +0530
-Message-Id: <20230322114519.3412469-11-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230322114519.3412469-1-bhupesh.sharma@linaro.org>
-References: <20230322114519.3412469-1-bhupesh.sharma@linaro.org>
+        Wed, 22 Mar 2023 07:47:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF975F508;
+        Wed, 22 Mar 2023 04:46:58 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32MAsxwf002959;
+        Wed, 22 Mar 2023 11:46:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dZ+GWmu9cShh4GeksVkeA/F5IobOJwM8aSTseVzsKAk=;
+ b=hAVcabN9HjaoGyza5gkminXPR/atzNCeYCxZF2bICe14DcC4NlIF2Zdy6zC3Vf3ucZj8
+ m/GbJ7TfAsNx3Ar6wVsEu9HSbOfxBBtWCZ/CDktfCfubKo7CKDSTUxJh8IddCjwEuVoo
+ D5IHoAuo3pAGRpfXb6RBf7q9q7YmyBE6YwjSEjSwYMz9O9i+8jaBkdR9Ec4CnhWzg/sJ
+ aW5+QHgsAG9Plzii5qEWlRUpcnUlIIo0a/KILW6ulm96S2HFGKpk/nJaLjr2QUuGvDu8
+ Ia3ZBBguwfqtBpp5VtMx89c5akxUD1DcCi/2spGl1KJLjD4EKkBeu2ieLGdTiQ7rex0x bA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pg0bg18sr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 11:46:32 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32MBcwmr010269;
+        Wed, 22 Mar 2023 11:46:31 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pd4x7dyx3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 11:46:31 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32MBkUV916188062
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Mar 2023 11:46:30 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 203535805C;
+        Wed, 22 Mar 2023 11:46:30 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 112C758051;
+        Wed, 22 Mar 2023 11:46:30 +0000 (GMT)
+Received: from gfwa600.aus.stglabs.ibm.com (unknown [9.3.84.101])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 Mar 2023 11:46:30 +0000 (GMT)
+Received: by gfwa600.aus.stglabs.ibm.com (Postfix, from userid 181152)
+        id C3A5C74A47B; Wed, 22 Mar 2023 06:46:29 -0500 (CDT)
+From:   Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+To:     robh+dt@kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, Lakshmi Yadlapati <lakshmiy@us.ibm.com>
+Subject: [PATCH v4 0/5] hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+Date:   Wed, 22 Mar 2023 06:46:18 -0500
+Message-Id: <20230322114623.2278920-1-lakshmiy@us.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JMldajCU3-wha4aQ2cz1xSUh2i5qvhWS
+X-Proofpoint-ORIG-GUID: JMldajCU3-wha4aQ2cz1xSUh2i5qvhWS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_08,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=648 adultscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303220082
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neil Armstrong <neil.armstrong@linaro.org>
+Adding new acbel,fsg032 driver and documentation updates.
 
-Add crypto engine (CE) and CE BAM related nodes and definitions
-for the SM8450 SoC.
+Changes since V3:
+-Fixed trivial-devices.yaml 
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-[Bhupesh: Corrected the compatible list]
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Lakshmi Yadlapati (5):
+  dt-bindings: vendor-prefixes: Add prefix for acbel
+  dt-bindings: trivial-devices: Add acbel,fsg032
+  hwmon: (pmbus/acbel-fsg032) Add Acbel power supply
+  docs: hwmon: Add documentaion for acbel-fsg032 PSU
+  ARM: dts: aspeed: p10bmc: Change power supply info
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 7c1d1464a1f8..c2b6c163ee6b 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4084,6 +4084,34 @@ ufs_mem_phy_lanes: phy@1d87400 {
- 			};
- 		};
- 
-+		cryptobam: dma-controller@1dc4000 {
-+			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-+			reg = <0 0x01dc4000 0 0x28000>;
-+			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			qcom,controlled-remotely;
-+			iommus = <&apps_smmu 0x584 0x11>,
-+				 <&apps_smmu 0x588 0x0>,
-+				 <&apps_smmu 0x598 0x5>,
-+				 <&apps_smmu 0x59a 0x0>,
-+				 <&apps_smmu 0x59f 0x0>;
-+		};
-+
-+		crypto: crypto@1de0000 {
-+			compatible = "qcom,sm8450-qce", "qcom,sm8150-qce", "qcom,qce";
-+			reg = <0 0x01dfa000 0 0x6000>;
-+			dmas = <&cryptobam 4>, <&cryptobam 5>;
-+			dma-names = "rx", "tx";
-+			iommus = <&apps_smmu 0x584 0x11>,
-+				 <&apps_smmu 0x588 0x0>,
-+				 <&apps_smmu 0x598 0x5>,
-+				 <&apps_smmu 0x59a 0x0>,
-+				 <&apps_smmu 0x59f 0x0>;
-+			interconnects = <&aggre2_noc MASTER_CRYPTO 0 &mc_virt SLAVE_EBI1 0>;
-+			interconnect-names = "memory";
-+		};
-+
- 		sdhc_2: mmc@8804000 {
- 			compatible = "qcom,sm8450-sdhci", "qcom,sdhci-msm-v5";
- 			reg = <0 0x08804000 0 0x1000>;
+ .../devicetree/bindings/trivial-devices.yaml  |  2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ Documentation/hwmon/acbel-fsg032.rst          | 80 ++++++++++++++++
+ Documentation/hwmon/index.rst                 |  1 +
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts  | 12 +--
+ drivers/hwmon/pmbus/Kconfig                   |  9 ++
+ drivers/hwmon/pmbus/Makefile                  |  1 +
+ drivers/hwmon/pmbus/acbel-fsg032.c            | 96 +++++++++++++++++++
+ 8 files changed, 197 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/hwmon/acbel-fsg032.rst
+ create mode 100644 drivers/hwmon/pmbus/acbel-fsg032.c
+
 -- 
-2.38.1
+2.37.2
 
