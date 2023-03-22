@@ -2,149 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2786C59A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FB96C59AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjCVWy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 18:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S229778AbjCVW6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 18:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCVWyu (ORCPT
+        with ESMTP id S229522AbjCVW6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 18:54:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D465F2B9DF;
-        Wed, 22 Mar 2023 15:54:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhkLl5lvLz4x4r;
-        Thu, 23 Mar 2023 09:54:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679525680;
-        bh=Dw9KKHFRKsyBtU+fKJlSyEZzpIz6Kgnh88k47o4lQ3c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VNyHo+YwULsiYliqm+LCt6aT/ZSZV8lwc5+WCq9lmwEsq5jZlmXkyozvOFzr7JxX7
-         DbwWT+8tAGIMsCW4E3KGwcWTBli2yQCsn/ai7P9Ri+OD36QpvfkaBV57XAgvPNUpmz
-         vaZfJvGkHpQpqWoy3NZ2xeugxmbnIulNAVNu1NqOaNXktJmAK2O8vkC/GABxq3nrOi
-         x7HIfmLykDHx6gT/MqaC4H5iE7JMTB4kgtIa0pSzARJYik9c+COTdyxRNSb8jlAKXj
-         lrlCJD8budbcmyXbCxBkgjoHtQQsttQk32+jKxpTjYHW6ncOS79kYCWBtvBRMfv7hg
-         0cxoyci7Ig9Jg==
-Date:   Thu, 23 Mar 2023 09:54:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <20230323095437.1ecccec1@canb.auug.org.au>
-In-Reply-To: <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
-        <20230322083956.5c051777@canb.auug.org.au>
-        <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
+        Wed, 22 Mar 2023 18:58:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236DB728D;
+        Wed, 22 Mar 2023 15:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=OBnYzZy3fC6UWVKQq92ULDzDnysgfAJsQHJA+q0UW60=; b=PR5ae4z8Nwlbw6qbPpu815yY2Z
+        L9XsyXiX681Yi8XCDzqYu5L6u/Gw0xPvcllh2yq615gn/brC44+pLUdv+HF6c+Uz610za9C8wexuA
+        xXAdcrTsPo348ixNijXY2Gfq3okAS0toZW0N7OlphG3Ap3z8gDQ73DmGJPvNGrOof3bZEp+CCLeSM
+        twQ+8wM/lOog+0qyPXGPXv7bccnFLP48v0fBenlb7wWQ0M78xLOiEce5Xb9CtUrtLWD9xr4rKCPf4
+        helE5y+YJm3eUdRZkkOAN5sODPWFcYAXgPg0hk9mNJhoYfcfllGuW7jymCmrtrl4+ejv+2sO1mtox
+        sZgbsOUA==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf7PK-0003a8-3D;
+        Wed, 22 Mar 2023 22:58:15 +0000
+Message-ID: <ccfb7800-41ed-6849-a2fe-4f11573d3162@infradead.org>
+Date:   Wed, 22 Mar 2023 15:58:13 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rQxJ09ZAjJuMdiri0xFiojP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Documentation on IMA for Linux Kernel Documentation
+Content-Language: en-US
+To:     Ken Goldman <kgold@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+References: <7c91820d-0153-e4db-1c60-38b6f650ed20@linux.ibm.com>
+ <60ac4c41-65b8-3c3d-7e31-1a580e728ca5@infradead.org>
+ <a50110ca-843a-7586-ed2a-aca12702dde9@infradead.org>
+ <c03bf464-00c1-9121-fb2f-549ac991a658@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c03bf464-00c1-9121-fb2f-549ac991a658@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rQxJ09ZAjJuMdiri0xFiojP
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Ken,
 
-Hi Ian,
+On 3/22/23 15:02, Ken Goldman wrote:
+> On 3/13/2023 6:34 PM, Randy Dunlap wrote:
+>> On 3/13/23 15:25, Randy Dunlap wrote:
+>>> [add IMA list]
+>>>
+>>> On 3/13/23 14:43, Ken Goldman wrote:
+>>>> I'm writing documentation on IMA targeting users (not kernel developers).  It includes concepts, details on writing policies, the IMA event log format, utilities, and more.  It aggregates existing scattered documentation, but adds much more.  It's maybe 1/2 done.
+>>>>
+>>>> Questions:
+>>>>
+>>>> 1. Are there people who could look at it and see if I'm on the right path?
+>>>>
+>>>> It's a lot of work.  I'd like to know that it has some chance of acceptance.
+>>>>
+>>>> 2. What is the process for getting a block of documentation added to https://www.kernel.org/doc/html?
+>>>
+>>> It should be added to the kernel tree in the Documentation/userspace-api/ subdirectory
+>>> or Documentation/security/ subdirectory.  The kernel.org/doc/ web pages are generated
+>>> from what is in the Linux kernel tree.
+>> Ken, if you are not familiar with in-tree kernel documentation, you should take a look
+>> at the Documentation/doc-guide/ subdirectory for some documentation on the documentation.
+>>
+>> Also you can ask for help with specific issues at linux-doc@vger.kernel.org
+> 
+> I've read the guidelines, coding in rest markdown, using sphinx to test the web pages.  I think it's right.
+> 
+> 1. I was hoping that someone could look at what I'm doing to see if it has a chance of acceptance.
+> 
+> I.e., I don't want to spend months on this only to get a quick 'nack'.
+> 
+> 2. I wonder what the process for submission is.
 
-On Wed, 22 Mar 2023 11:37:31 -0700 Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the perf tree, today's linux-next build (native perf)
-> > > failed like this:
-> > >
-> > > Auto-detecting system features:
-> > > ...                         clang-bpf-co-re: [  [32mon [m  ]
-> > > ...                                    llvm: [  [31mOFF [m ]
-> > > ...                                  libcap: [  [32mon [m  ]
-> > > ...                                  libbfd: [  [32mon [m  ]
-> > >
-> > > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux=
-.h'
-> > > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-po=
-werpc64le
-> > > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No =
-data available
-> > > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/v=
-mlinux.h] Error 195
-> > > make[1]: *** Waiting for unfinished jobs....
-> > > make: *** [Makefile.perf:236: sub-make] Error 2
-> > > Command exited with non-zero status 2
-> > >
-> > > To be clear this is a native build of perf on a PPC64le host using th=
-is
-> > > command line:
-> > >
-> > > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_CFLA=
-GS=3D-Wno-psabi
-> > >
-> > > (I could probably remove the EXTRA_CLFAGS now that I am building with
-> > > gcc 12.2)
-> > >
-> > > I don't know which commit caused this.
-> > >
-> > > I have used the perf tree from next-20230316 for today. =20
-> >
-> > I am still getting this build failure. =20
->=20
-> The build failure is intentional as not having BPF skeleton support in
-> the perf tool will remove features. I've just sent:
-> https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.com/
-> Which will recommend adding NO_BPF_SKEL=3D1 to your build options when
-> this failure occurs. I didn't think a features test was appropriate
-> for this as the feature test would basically replicate the vmlinux.h
-> generation and I didn't want to move that support through the build
-> system.
+It's documented in Documentation/process/submitting-patches.rst,
+but just ask if you have any questions about it.
 
-I was trying to understand why this step fails, but from the error
-messages, it seems to require something to be present in the distro
-supplied kernel image?  Is there something missing from the ppc
-build process?  Or toolchain?  Why is it looking at the installed
-kernel and not the built kernel?  Does the perf build now depend on the
-kernel being built first?
-
-I will add NO_BPF_SKEL=3D1 to my build from tomorrow, but surely that
-means that we miss some perf build testing :-(
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rQxJ09ZAjJuMdiri0xFiojP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQbhy4ACgkQAVBC80lX
-0GzwWAf/UuEFMTTa5jcaleQQeBi0lX8Ewaa8JCUjQXXPj3+i8zzXQCwJPNR1ALTI
-R5w/eWZAa26XrGG+BYEnq0kB/CCLxOj4LNLXwGUDZMvOuELcHuDoUelOoK5M9d9/
-xi+4PuKSGxieXZ5Yu5pEe6zvu3c5I8JlX1njDjirNyNX/xd5qP9VD7Qn7Cfk4j1E
-n3p6Wjm3jp4SaIQLizsME0KbR7DdT3mIEr/E19mcuSFx+J5kIYrmWCtPidUuR21f
-1UbkvXPKtqo9VO84ZWeEp0lICxPaJkSoWOM+EGWW81C8HGXYkuKRC2wDSkDjN26u
-H3kgSW+IRV7xzgQxsyW4SqOGnlowZw==
-=a4HK
------END PGP SIGNATURE-----
-
---Sig_/rQxJ09ZAjJuMdiri0xFiojP--
+-- 
+~Randy
