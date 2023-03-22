@@ -2,165 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A086C5343
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DC86C5344
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjCVSHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S230081AbjCVSIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCVSHH (ORCPT
+        with ESMTP id S229487AbjCVSIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:07:07 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A40561880
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:07:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hSS//oylg9gEZQ0XKUy/Z7LQhIItazC8Kqp/+LJMRjEadnUtvZLF8PcXjIB3VEVBJWDpDy0U12gAk5Hj4ivd4wGGqjHG22+C5lQLj1txo8ytt513P+QXwRT4hnsbK0qbb0SP2F3lpTWkpr+zvcP64WcN59z8j1NGWvnK2mu8PxU2Im7su+LIKXOdr9QNyB5TJu1wQN8YAty/00HHs46H+l+7xm6rkjdXNyU0W/E5uCzgnZVcx/ni/jFMRohDdYYje2pHtybuR7JALBz/Wp6iX0ZdqlK/5wPTMRL1O1nz3aoZrlThtcMV2T2lhFktg5yF3nycDsUGSAHe5LIpT5P4fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sOTb6mNaUws9k/YYz8sgYTKG7V4UtbhIeW2kOwJUOnM=;
- b=aG6dV4iGtsvV4NAnXwfeJO/XXzb9iwdoH8af1aHo7c10ntCskwqWX5DsF+cxX4exQw6t6B+I73qVkiXzLW0jRwatrkIAgeIDpxzTsyvTdhMLawQAZeLRizVfbZYRxfQpjvR9nUmiibM0Gpr/+MeQMnJOxZrJIOtMnqk83KY3bZhya7zF2spKv27k73x9It42anDyziHUyTq/VvqIzteDkmodyqglMMsUl1ejM3d9yeFRA8GFd7Ty/2EjlkM1Dvu1jPAAFDGl0pEYeWd0xR3CLa2NifH1VdwbWoLP83bqVqlV+iZrbkoa7yf2VNloEWHMqyH+00cbD0BIy4kjYY/3cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sOTb6mNaUws9k/YYz8sgYTKG7V4UtbhIeW2kOwJUOnM=;
- b=S21AcRiSJAUe5dKRrV4VpBj0IM3ZSu13ZcxYL3cFO0g/hk14xW0c7xcEk65VHHdD21f3yn4NQCT1hcbzxnxL/ZWfiJzR9B+HChx3r97sBfuwP85Wr0PeBHTPidlYLDYAa72pDtkchJHvb/yVB/e3S5Qbs2HfdkSZINt3c7zwhOPQgb5/Yg3c9/5pKye2U3gDJat5YCFyHSqW6N7TC/8yzVQTEhXHWk6+6Uv0s0/ZS6vEXN7WepxWSdxP9a1crkXhnY8DxBgtLMMOFvVoIa9IIrAejCSSOzxun2IZHvlB03Iy9GTDf6W4vlWkH4tXm4FOnJnXmG9Dvo5gqrrSKje68g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH3PR12MB8536.namprd12.prod.outlook.com (2603:10b6:610:15e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 18:07:03 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 18:07:03 +0000
-Date:   Wed, 22 Mar 2023 15:07:01 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Eric Auger <eric.auger@redhat.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
-Message-ID: <ZBtDxXjtx/juyOXX@nvidia.com>
-References: <ZAtNrFAEHvmM4FOW@nvidia.com>
- <f61ca5693d8845eba0a2139324e52d98@huawei.com>
- <ZAtTNK1NbMJ4iyE0@nvidia.com>
- <b9e850a91c494a5397a0ae154e9ef1da@huawei.com>
- <ZAtY8S53//5P5egd@nvidia.com>
- <ba7f4b9f81264832842a6c7486cb6dd7@huawei.com>
- <ZAti8wy9wXwtIqLT@nvidia.com>
- <b75259e4-94f8-2276-05f8-a0351ea110dd@redhat.com>
- <ZBs0ifAVwWvOt2b5@nvidia.com>
- <bcab0150-bd42-8acf-f0ec-85ce19699a57@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bcab0150-bd42-8acf-f0ec-85ce19699a57@redhat.com>
-X-ClientProxiedBy: MN2PR14CA0004.namprd14.prod.outlook.com
- (2603:10b6:208:23e::9) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 22 Mar 2023 14:08:00 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4FE35B2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:07:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eg48so76340856edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679508477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vLJGX0EKaIlJsuACNrfuO/cWmg0IaxiAqenjCNIMQu4=;
+        b=jRc0LFEPITCXyTrYtjY+Vxc0xOA0oaaarsqE5+prkZNRPaRDgE8LAZgwIgCnNpLX9r
+         XNZdVQxgP4sbnLd6Busbw4b4S0Sgv0LVYd52KIGsS3CrtYUrcLYYoiR9ytckWsItgZrl
+         ZEwldT5V2jDqW3cM8uD2JVocaUHOj7mRYcx1OhU/6j8nq0smegufptLGY7XLX8GliTkK
+         thr6eJOZXejhSM4670XLP2ybgZF1pkYQwajlk5WFPtzNNwnaZ1l6MLCK7KxCn7aJUxsG
+         1zbiasX4jsTOkgYFVJ/rbmCBSpbZehYD8cbzEq35D0S9keOcdYr26ZsoDknYlZ+KgNvm
+         MGUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679508477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vLJGX0EKaIlJsuACNrfuO/cWmg0IaxiAqenjCNIMQu4=;
+        b=3VnVPyfkQv/ZWakJ7y7vLeVCJJ5dLLWMbuiCxv84KR6sefTM65YMWLCy8BPocLyw4b
+         kV/cBTIQ2IKW+9zYW8Oavip/qTB93kfTg597AiQOyiGu7d4Y30FNuAx77WG1brZqXVPj
+         R21/Mgm4GV0sDAgsCKti4FiZ6az0kaHEUsaYl14NsRpA2N9Oa/VB417dwayE2qq4rtwC
+         qHE++CBaZ7wPoR/3GZ8hdmCWVNWHRzmCWkf22EsSKaJBYYHbLgDByKj37AG6weXFqanE
+         OGqump8BcGgBQacFbP+CvxG8ul1oG87HPqGkmNCjRSLadXnbq5Ndf8qyGxXjdGBsfQcD
+         a1Ng==
+X-Gm-Message-State: AO0yUKWeW1z+BhSnzItuM34d3zPeIZ4+rtmkdlBdvYmV6i6jNvaGxn+n
+        LezEi4tkvsJ/YBZ+pQzGm8Gf5I6L1p3OA5jc8O42Nw==
+X-Google-Smtp-Source: AK7set8LI9fhWubF8PlGsr43UU27W0crfQjy6c7y2MVN12s1F9ZSrkanywh1cM640fuS5lWW9uQmH0mxRKFdAFJo5yk=
+X-Received: by 2002:a17:906:3e4b:b0:8dd:70a:3a76 with SMTP id
+ t11-20020a1709063e4b00b008dd070a3a76mr3882882eji.11.1679508477484; Wed, 22
+ Mar 2023 11:07:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH3PR12MB8536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67ae1f0a-06cf-4836-7077-08db2b003d0e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SbpF5VMloUzDkGtRSQRevI5raS6gRZ1IUEvJ+c3hQ9M650udhKu+W0qKBJvBl6T3MLmwnLrDqJgaWWhb90E66AU04Ja2eJGO0eMS9Um81NRKOxBiCq9TUA9AAGcKHlSauBFqPxKpIB88xqlyfZZGRns16HtNarwn98lzK6YbXGvr9/A8jphmbHbnpQw1kC0O7SxN1p4VSFzaQfxoJhQvEPfwA7Ffx3k7fcQc1O7hqik6dvd4gk77SdcIvXCP+0kwZBIiqeLXgXMN15TFO3cXRJvczpQ+g214B7mwl2Wi6RqyOSTlDKsjo1EgJYx6MqKQKGvyHkivqg5cKmmx7Y8YQPcbm1EzRyDpHvZz5nVdGHZlLtzgvv4p0WCMPBC/5JUvBya1DmIySa1l9Ng4+nIsGo2CjTg430EOyBaTZNvQjp4nx7sjBZ6GOcWzYWq7JIg5FzlvRiPvGY6cWuGondQKZAXYCACAL3jyj+eFIgy/PavVduH4j7/wzCUrQ/9+4I+eq83BD8pxlr1bTke2OEcXmFH8r1aykhByAfOMp2JkLF0jurcjKoNqgONf1lmqOjpgizcdA7SEBHwKP3cCAjI05ys6V3qVI+GmRKKiD1KcAR47l0BbV7V4vu0NTILOfTc4/FwpGJPGVeqX4zcHzhcggQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199018)(36756003)(8936002)(5660300002)(7416002)(2616005)(83380400001)(2906002)(316002)(6486002)(478600001)(54906003)(86362001)(26005)(6512007)(38100700002)(6506007)(41300700001)(66946007)(66556008)(66476007)(8676002)(6916009)(4326008)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MGpJJxrg787qA6nXxWAoEED/O+DTNJzAkevvYhfUhfAOsvrlrBpaFvZ45ebM?=
- =?us-ascii?Q?uPhcfKKfrrpS54HlxO8VaHVq2yykjtFae4NgHa5uftVvJXRFd13LazhU7vo6?=
- =?us-ascii?Q?KZy+ox/NjE8LZFqLwqB00i2P9XAzI/ps1d6lzWFlmiEQuPw5urZyxNAPnNpL?=
- =?us-ascii?Q?dAAAkmNFRp9rzP0stIIFOk8qRUT36Hz5MM971Zktdclv1mrWSlzC9sWb3IpT?=
- =?us-ascii?Q?1hIOQ3bdK/L2rgWToaxXka4daLkEjpcEu4cZZZbNG63lmo3O1b9zOTYRBcOY?=
- =?us-ascii?Q?DieSQ3Y0n075YHN2zmn7EjbhpH3doaO535GJSp4QHH95WzZPtvbGCWlQqx48?=
- =?us-ascii?Q?NcjX9GvLnf0QO0HO4A+cmhJaTBUNwoZmyxjZPOdEHObVUsM+bD+WoZNM/7Gc?=
- =?us-ascii?Q?q4W1LsCZgN8298Ho60AlRq3kNqcjGAUuS6jR4i8th/+d2/W6APKkyyLo+uc9?=
- =?us-ascii?Q?p1biyaGfrAsWvROhpciKmoqPEKqIsxLfKmsVSzU68VsAnsxP8uOP2LcJlTt4?=
- =?us-ascii?Q?RbFQmE9ZVYR2/Pf18eMI6U8oHhWbZW0Fi4W2oVwNJ/Zx8srOTc5ZR5JoM/Sk?=
- =?us-ascii?Q?KX3G4WkzVND9RKYODfKjoDGEfsxDRxVAlfYxBCX1e5kOYbKHNWIBCRmFlLHH?=
- =?us-ascii?Q?H/AZ4+MpFU1ktZR2rgLLDHxb61zw/L6ge5LvtQBIW8SMTJtZl9TqZ9GVcN0C?=
- =?us-ascii?Q?ZlBfUTl7q9xB1gxyg2RoPrqa3dzazycFTdzZrk+A5lvsnVIV0o6kMTiDUOCZ?=
- =?us-ascii?Q?uDVoAtUlCbcstzviFCjb3nRlnx8YMmQZjkez1UnnQNcTBJPm10KLD/XET75N?=
- =?us-ascii?Q?m7HA9nv1hm3vxtg+n2+w19OVvDnTqSmi3eg5/Y86BsL+egvH4Zo2dhViBxuk?=
- =?us-ascii?Q?GUvSDeF5vuN4l/RPOUSulouk2Dsf442bB59YDgSA3x3BJtCVJzvT0PDJN6IW?=
- =?us-ascii?Q?oSsWOcms2ryfYxwDpE3PW8geUkg4kEfYksmeyBsanHeWOi7LGBS23EUl33ya?=
- =?us-ascii?Q?jYVtA7tlhOFMlA9hiBN9De3Irqh5s2IrBJTdWLEkcG3ATCwNY+wBAK7PeCVf?=
- =?us-ascii?Q?wGEBiUVGL7X2yhlUOmiDC2Nwh9ZL3Iju2ixU/UoGcvwGdismjsbTdE52Z/Yz?=
- =?us-ascii?Q?RZ46wdncyUWtppSf66qPIRtKq0R8sOPamh4GBg5IwQEdQrlJdwJe3szSh+uD?=
- =?us-ascii?Q?2YJA2g6Mu/p8GRNoMfomiymhTI7y4dhkuQWZnChxFp/aXrPTRxz7d7WDUAOg?=
- =?us-ascii?Q?2ULtqJtNqWw1UOy80I72+v6wCpm5v2DmvVAmMFjoQ1pUzcN2MZr1Fkyz5yV3?=
- =?us-ascii?Q?xh4FI1cEkXewvsPVETHTOk/DBclskLP3+forwkmMago3QVcf3XfXAexMmJxk?=
- =?us-ascii?Q?8V8Q31+dIwVEdua+BRsd/QZgg5lJNBQcUJ8+XnMU7PiyNkOT8zooEifD7mD/?=
- =?us-ascii?Q?GT1I+amWMWuHGT1rbk3y3v+m0etM6Vg5OJfz27oPoM9GhJ0pV2XNtf2kMUGS?=
- =?us-ascii?Q?NPhJEpiw01hSecQAtBXeNN6dBlN9RNLVMouwhs9dyAbatZZpnm5siuIsTR9u?=
- =?us-ascii?Q?lqGDW7BqY3pdvLhu6idTiPZoupMe57x9auUHXj6K?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67ae1f0a-06cf-4836-7077-08db2b003d0e
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 18:07:02.9125
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PwriWFwQoV0t2Rhw3hWbSDdBJS1ZsOEp0wbnQhvjPIjViBA5opWMbqk2u2Cf1zBT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8536
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1679456900.git.jpoimboe@kernel.org> <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
+In-Reply-To: <3d8c9e67a7e29f3bed4e44429d953e1ac9c6d5be.1679456900.git.jpoimboe@kernel.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 22 Mar 2023 11:07:21 -0700
+Message-ID: <CABCJKuf5hsddHpnON5q9LpAXr-8s=5dL0iTpRD-hFzcBynB+Gw@mail.gmail.com>
+Subject: Re: [PATCH v2 08/11] arm64/static_call: Fix static call CFI violations
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 06:41:42PM +0100, Eric Auger wrote:
-> > I would say this spec language is overly broad. If the FW knows the
-> > reserved memory regions it creates are not sensitive to PCI layout
-> > then it should not be forced to set this flag.
-> 
-> But do we have any guarantee the bus numbers can't change. I thought the
-> guest was allowed to re-number at will? While further thinking at it,
-> all RID ID mappings should be affected by this concern, I mean not only
-> RID 2 RMRs? What do I miss?
+On Tue, Mar 21, 2023 at 9:00=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
+>
+> On arm64, with CONFIG_CFI_CLANG, it's trivial to trigger CFI violations
+> by running "perf record -e sched:sched_switch -a":
+>
+>   CFI failure at perf_misc_flags+0x34/0x70 (target: __static_call_return0=
++0x0/0xc; expected type: 0x837de525)
+>   WARNING: CPU: 3 PID: 32 at perf_misc_flags+0x34/0x70
+>   CPU: 3 PID: 32 Comm: ksoftirqd/3 Kdump: loaded Tainted: P              =
+     6.3.0-rc2 #8
+>   Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+>   pstate: 904000c5 (NzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+>   pc : perf_misc_flags+0x34/0x70
+>   lr : perf_event_output_forward+0x74/0xf0
+>   sp : ffff80000a98b970
+>   x29: ffff80000a98b970 x28: ffff00077bd34d00 x27: ffff8000097d2d00
+>   x26: fffffbffeff6a360 x25: ffff800009835a30 x24: ffff0000c2e8dca0
+>   x23: 0000000000000000 x22: 0000000000000080 x21: ffff00077bd31610
+>   x20: ffff0000c2e8dca0 x19: ffff00077bd31610 x18: ffff800008cd52f0
+>   x17: 00000000837de525 x16: 0000000072923c8f x15: 000000000000b67e
+>   x14: 000000000178797d x13: 0000000000000004 x12: 0000000070b5b3a8
+>   x11: 0000000000000015 x10: 0000000000000048 x9 : ffff80000829e2b4
+>   x8 : ffff80000829c6f0 x7 : 0000000000000000 x6 : 0000000000000000
+>   x5 : fffffbffeff6a340 x4 : ffff00077bd31610 x3 : ffff00077bd31610
+>   x2 : ffff800009833400 x1 : 0000000000000000 x0 : ffff00077bd31610
+>   Call trace:
+>    perf_misc_flags+0x34/0x70
+>    perf_event_output_forward+0x74/0xf0
+>    __perf_event_overflow+0x12c/0x1e8
+>    perf_swevent_event+0x98/0x1a0
+>    perf_tp_event+0x140/0x558
+>    perf_trace_run_bpf_submit+0x88/0xc8
+>    perf_trace_sched_switch+0x160/0x19c
+>    __schedule+0xabc/0x153c
+>    dynamic_cond_resched+0x48/0x68
+>    run_ksoftirqd+0x3c/0x138
+>    smpboot_thread_fn+0x26c/0x2f8
+>    kthread+0x108/0x1c4
+>    ret_from_fork+0x10/0x20
+>
+> The problem is that the __perf_guest_state() static call does an
+> indirect branch to __static_call_return0(), which isn't CFI-compliant.
+>
+> Fix that by generating custom CFI-compliant ret0 functions for each
+> defined static key.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/Kconfig                            |  4 ++
+>  arch/arm64/include/asm/static_call.h    | 29 +++++++++++
+>  include/linux/static_call.h             | 64 +++++++++++++++++++++----
+>  include/linux/static_call_types.h       |  4 ++
+>  kernel/Makefile                         |  2 +-
+>  kernel/static_call.c                    |  2 +-
+>  tools/include/linux/static_call_types.h |  4 ++
+>  7 files changed, 97 insertions(+), 12 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/static_call.h
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e3511afbb7f2..8800fe80a0f9 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1348,6 +1348,10 @@ config HAVE_STATIC_CALL_INLINE
+>         depends on HAVE_STATIC_CALL
+>         select OBJTOOL
+>
+> +config CFI_WITHOUT_STATIC_CALL
+> +       def_bool y
+> +       depends on CFI_CLANG && !HAVE_STATIC_CALL
+> +
+>  config HAVE_PREEMPT_DYNAMIC
+>         bool
+>
+> diff --git a/arch/arm64/include/asm/static_call.h b/arch/arm64/include/as=
+m/static_call.h
+> new file mode 100644
+> index 000000000000..b3489cac7742
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/static_call.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_ARM64_STATIC_CALL_H
+> +#define _ASM_ARM64_STATIC_CALL_H
+> +
+> +/*
+> + * Make a dummy reference to a function pointer in C to force the compil=
+er to
+> + * emit a __kcfi_typeid_ symbol for asm to use.
+> + */
+> +#define GEN_CFI_SYM(func)                                              \
+> +       static typeof(func) __used __section(".discard.cfi") *__UNIQUE_ID=
+(cfi) =3D func
 
-Bus number changing is allowed, but qemu should not be sensitive to
-this.
+Couldn't we just use __ADDRESSABLE instead of adding a separate macro?
+The type of the variable shouldn't matter here, as long as we take the
+address of func.
 
-qemu always knows the current guest assigned bus number for the vPCI,
-since it traps the bus number changes like anything else.
-
-Thus when a STE is configured qemu has access to accurate data to
-convert the vSID to the vPCI and vfio_device. Even if the bus numbers
-change since boot.
-
-> > We are forced to use RMR because of the hacky GIC ITS stuff.
-> well we are not obliged to use RMRs. My first revisions did not use it
-> and created a non direct S1 mapping. This is just a commodity that
-> simplifies the integration and was nicely suggested by jean.
-
-I undertand it is ARM's architectural preference..
-
-Personally I would prefer the vGIC model include the ITS page itself
-and that the guest put the ITS page into the S1 mapping in the usual
-way. But we are a long way away from that..
-
-Jason
+Sami
