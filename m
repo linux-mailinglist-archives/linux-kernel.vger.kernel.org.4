@@ -2,246 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32216C42E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE926C42F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjCVGSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S229973AbjCVGTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjCVGSD (ORCPT
+        with ESMTP id S229812AbjCVGTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:18:03 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C64C5B5D5;
-        Tue, 21 Mar 2023 23:17:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YqnvWurwnBREeVQYuNq1HkvJykgQwpn9GntP131VSBs8c/3Z96yI9b3IsEe9but8EjZ1CD/k2uwx83mO7deYWLlULmJbTPeD0KfchW/0dq0shenY+qiJeGTvWWP7pOEbSubYy/q/m3Y2byKpiPUAjY5JxYHGgFj5HOBV+PljHiZ1UqP9MajGIG8pRM5PCxnpkVufMDtECvcvatTgpJ+BqE8Z2IWjoagvfaO6aY5Mn1e5HCR4HincVe2e6qT9C2/2lx/wgEeU3tMEzXq/HYjbos3Yfcf27W9dpSo3yn1hjKsD+o+EBK1vlfMQ4wP6VBi1cjXcHKDXE+5Z/RJ/FngxNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NF1bKVyeEcuJi/jVR47Sr22EeG9tC4DjwTNu69dU1/E=;
- b=j5WaOq2g7hgkDjv6fYvLKF31ktOl/nmWx13iFDqA/Qs2e2DIl5DwGOf5FOyS2cMQUo+X2KArN+qKxfvEeb0rfT10YIDkfAbmQP0chbtHUohkTF78WOHp175fYMJsJV+WPaJwFheLuY2eG+7T/8qj8bfOFWlnLpOKPuasrOa+hEDDIK9kA/IKn4OyDp9zrFuazAM5ujMyD6VUiDGFqvV3jxwNuNK9cgntDoWP9wzn+dMICM4YeQyUSVForiyFSEXK8h1JFaf2Wr2Y6vsflRFVLjZid/1DqkAdi05f9LECey1nlhvoHS9dTIHRMsnS8vKQlUiE+mX1+QIwEVTx5zGckA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NF1bKVyeEcuJi/jVR47Sr22EeG9tC4DjwTNu69dU1/E=;
- b=dw8wlNOB9ngSo7hVWEU3iK4St/IyNX7dzOUY5nXrVBr8hWAEZogRBA0YNYZqlp6mGLg7N2l2YESSGguHq35azNlcD2MrzLYq6B9hm1/8cjDF6N90r7wN6vLJ93lobKC+UwtoUbi/y0wVPmD37icAMXCOn+9HRBaKKDkckG/6iXA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
- by DB8PR04MB7020.eurprd04.prod.outlook.com (2603:10a6:10:126::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 06:17:52 +0000
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e%6]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 06:17:52 +0000
-From:   meenakshi.aggarwal@nxp.com
-To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-Subject: [PATCH v2 2/2] crypto: caam - OP-TEE firmware support
-Date:   Wed, 22 Mar 2023 07:17:16 +0100
-Message-Id: <20230322061716.3195841-3-meenakshi.aggarwal@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230322061716.3195841-1-meenakshi.aggarwal@nxp.com>
-References: <20230302062055.1564514-3-meenakshi.aggarwal@nxp.com>
- <20230322061716.3195841-1-meenakshi.aggarwal@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM6PR04CA0042.eurprd04.prod.outlook.com
- (2603:10a6:20b:f0::19) To DU0PR04MB9563.eurprd04.prod.outlook.com
- (2603:10a6:10:314::7)
+        Wed, 22 Mar 2023 02:19:42 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043FF4C3D;
+        Tue, 21 Mar 2023 23:19:37 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v4-20020a05600c470400b003ee4f06428fso1176442wmo.4;
+        Tue, 21 Mar 2023 23:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679465976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D3iaW2agAbMwqgiEp5WfNoQ6YhOUN3dC7dOrA2kDLxI=;
+        b=J536LDg3b+r0xbOHBtWGz8F4PNLnCkmSpWzIsL1VgPnRn7BJH1iSL0EOxazEyjPQDX
+         fugbc2Ju4igR5eWHIkEB4UUaXq1m6CVI9N75OtVIy78rqk+I4v0tye6ad3blm71xDfaj
+         aGb/tMtJTBNDWM8iUCDYazou0LqQ9EX3F5j+XuS7M24XrJlRFefUMHHENdQ055n7yLkG
+         bjgggzE7CcVcyXEcN8N4SXUjvk7MA21S39YFaFNcJoDlZL8Qfdu3shmxGQearZXmxsCP
+         ZzC50pxa69r1dDSa6qPFwJJ7F6upavkrvkDCLOvXoKhiAP7oZr1O+6MlrCbK9MTRILlC
+         Dwsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679465976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D3iaW2agAbMwqgiEp5WfNoQ6YhOUN3dC7dOrA2kDLxI=;
+        b=bI+H/ui/KUkcKTAcCWcevURORBlDKytg0PyYHs0SdlL+0KNFzYmlWUliMi61pjWv5e
+         Pe2ljhlRoq/ZfkzhW9d5qiMWmuRcxxH9+FLKVrvAk/jqAEHLmjymouPof6QXxDRNYMl3
+         RvLFuu+thDaI+kVMbDTWvIEViJTFAsVoIOlh1Txh/NvMZuzbmRqylmKeGs87BHCCizMH
+         SvR7vw4nONFoPZ0ABjizDg2201hYFHIVqRW0jJ3PIO8k2PcYYqvRFHoehgNZpfZak9d1
+         g34HZg2pcVZm2R+dmfRf00bb/CxNkgNDPsG7Mn4eb2SFyfHCBKs4P5n780ajrBBGHUcH
+         J4Ag==
+X-Gm-Message-State: AO0yUKU6q0ch3Guyv96Dc0mDyqLDQOYM0n4QFJtHL2Sv2L64+PwWX+ge
+        I0vueTd1n4sBJ89Eqmo2mfA=
+X-Google-Smtp-Source: AK7set+8i9OLhKRz91jbznPxQpXJ1YTazeewWapwy9kjoP2FM+6ggA8XMC6wMajezeQB4sERZ1Lqqw==
+X-Received: by 2002:a05:600c:21cc:b0:3ed:e2e6:8ddb with SMTP id x12-20020a05600c21cc00b003ede2e68ddbmr4273593wmj.35.1679465975948;
+        Tue, 21 Mar 2023 23:19:35 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c1d8b00b003daffc2ecdesm21600525wms.13.2023.03.21.23.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 23:19:35 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 06:17:24 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v4 2/4] fs/proc/kcore: convert read_kcore() to
+ read_kcore_iter()
+Message-ID: <070237be-48a2-4a04-bc19-7217b68c8bcf@lucifer.local>
+References: <cover.1679431886.git.lstoakes@gmail.com>
+ <a84da6cc458b44d949058b5f475ed3225008cfd9.1679431886.git.lstoakes@gmail.com>
+ <ZBpWxI+LYiwasnvj@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|DB8PR04MB7020:EE_
-X-MS-Office365-Filtering-Correlation-Id: 341aa3d6-10b3-4c54-35a9-08db2a9d2abc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8nBtsgSkSd5xgBQxK/nkAoPGHweJKTRC49g7LkBss1B3cJJaqG4RTGJEkKN3jlm8RJagDxD/r8wO9rchB6exJHaKtCN7ptXOPKNdK0U7SVLGGKljbiJyvc91GZ33vIGpe0LCcLW7L6fI7mh8YuKbNgEmIEc5ZyWVks6iflgTi6/AATIFfdk2n+V8Tu06TxQqpGOBxFzMteuDWn/xs/YuNiXt0g7DRn1JM6XkVEzA3Ifj7Le45dfovFmzWH2Lf1O1ONJY3BoauYVmC7kOlYn2YWFZSKNy770Hm7JPAlPdox2W049I1ljYSK+nr0gszuK9NiU0clRFg7FXQdXk7A/TvqIK3Yjj3NamWPl8ZJEBAVT3fWFXxQI/5QC/YSbfA91ggxmrsAz+wsikiBgB0cgxArj4AV34mUa0XyNrtea8NU0ULnvykrqFESYO2WpOd5aQ2OfOHLHiBfeakyLf9jr8zaG5YGdpWzblRJfsuLfxXbTKmchPzgu8neX6c9y/VLDGTrU7n3q8MkWUG3+k1nBL5VTM6jxQHULY7VEkv07T29RdHtcw4Z0LHmc3+f/HGPm5ctVMUzYlrAlbmaruwdzz/7QjkoIwMtTp16A2y6CJ8G8w9Qpo6iYbfPgVCTDO5O1X3or/RL+I8SIZxT1gRfw2HSQPLvFCGroDW3lLa7H6Ch59GqXTDfHFwefi4WDOIuYgSX0Cu4IrV8U42rtjraVv2nqf+NRDFcL/zxp+JPbb+dY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199018)(6512007)(2616005)(83380400001)(478600001)(6486002)(26005)(186003)(6506007)(9686003)(1076003)(8936002)(6666004)(316002)(66556008)(52116002)(66476007)(86362001)(38350700002)(38100700002)(2906002)(5660300002)(4326008)(66946007)(8676002)(36756003)(41300700001)(309714004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aQxd6U+WUoWqeB1AVwMjYs4H0QijfeOwrBeEYzpfaO2iaALnwgo1j4Ku8vSO?=
- =?us-ascii?Q?g4mXd4gyO71MKlEpny3+INhbYu4t2oIjWkGejyCyS1H43/819JP0o6FfZayr?=
- =?us-ascii?Q?yRnyj2m0pusu5e073D/nFPh5yQpM5fTzCexl0OEW7j+0ubwM6dvjNB+FBgy0?=
- =?us-ascii?Q?pJseN8wFnhWZ8vm3ZQFNUH0F1hFfn9944SNpCkzTAwdSTt9/gdo2C3ZdIGOp?=
- =?us-ascii?Q?OrGL/Q3A5pgI+dKS2d+IywmpsUC1HJR1qjq3nBmhI3VTlW2oTDb/3F86qv+T?=
- =?us-ascii?Q?SEW+9nPey0/JgfZTCtPQNTDfZtvXcvRVzdm/SqiEgWSM7OX7e1hfvfQThS13?=
- =?us-ascii?Q?E2JbWIYI0uVLNzk6ZJBAQDGevVofvH2l2EsBFmyjVLDCm/R3kCi+fE2588rQ?=
- =?us-ascii?Q?hajJbq4dgOBFix26DYqDL4ElQTwzRsL5lYgWrBIsIyLuPNVQreCmcjZH/6P+?=
- =?us-ascii?Q?GOL87HREaKV1o/DJBpWOHLe8TqM905KLdf8gndHR1prVlLOo5qB+k0O8L50M?=
- =?us-ascii?Q?83sL52+pXnFg+LAAUUxXoSRWlscWuZIgptkmy7kxRuzfty8nImY/EfLHGSqn?=
- =?us-ascii?Q?ohVNPeaus6WZ1iIsqFDxOmnfkmd/MLMKtXBxwKlV/W0ezpLXoAqxQi6KiQTT?=
- =?us-ascii?Q?sL8HT2yJOPlUSCoaSXv8TzNRm8leAgWlk+pWUiHFlsnauG6LMV/wl+o9TJCE?=
- =?us-ascii?Q?4TJGMmpffufmRaTmEWUzPZVzHTc9xRE6U3kR1tsIpkCxsGCbgwCy5BTWcmu0?=
- =?us-ascii?Q?m2rBpSehWtO6M7MPaOK/rgnCDbZJlGiPV9f9KaLbyqEhlwpLqADAbUVs9/r+?=
- =?us-ascii?Q?5FiAefs9XGhujxGGGDWdUIgXzVYQqdijM0RC+5mbcHe2YbJIh2y/PVOkzvVN?=
- =?us-ascii?Q?uRTMHXooURMSOOh6vCI5TBAeXRAkbIMkPyc4V7fOYJxT7drorme3jbfPPGMP?=
- =?us-ascii?Q?xa8iHoz2MPwH9pTWb2B+7DJ9fi1KXkduDjtLrw+xJLjCXGXtqvu2wrgsiCzu?=
- =?us-ascii?Q?nYiwzRVTep0aNSqgtWQMiqSmXqByKDLUOPq8WXWnG2Mjr44xiqNxvx1F97Fq?=
- =?us-ascii?Q?9s/6YVJ+8az3JV6b1Y82ENRT1ys0W+7FXc+/S9IjE8EICN69g8aLkIMoxqiF?=
- =?us-ascii?Q?UW//++79COApvR7s6gfDFnQxtlUmYJBEhzR3HEsshF7qpjJ4utE0/KPboUZB?=
- =?us-ascii?Q?P2itWH+Z2ZltwZd9BXyJyAMArW8axZgSA7tdJalSUrLBG85y+CPDn8iPUp8o?=
- =?us-ascii?Q?SUsN3hhVR1CIDnUXPD8Axgce5WjplmChfPbCguZoHSAR45HOZZgKNvl5dadQ?=
- =?us-ascii?Q?dNnC9Ta7i1sKOIjk1/jBgkf5os/lLoHmR5kkbPbY6mF+xS7xAG3tF8p0uv9l?=
- =?us-ascii?Q?v7jG68OAKf936vucf3QpopXRvViGb2bQiQfxcn5HoZ/4fYXRwMZMoJo1HGAp?=
- =?us-ascii?Q?FGhgbkec7/9d9Y9m3WNA0ggSc9fZlSm9wZ2m47RmUXVYrIEqYMpqvZCwiUSK?=
- =?us-ascii?Q?r64VdAEZMlZhD/6rInXmtg+InqbI/uZY//yBlniS/hxpLri4wySTJ71eWyTp?=
- =?us-ascii?Q?kqs6+dk12Pf0DkAGuZ4yzhDWXrSzJJu8SAQ8vrvWuLtqZynBbq2ZkWSEB4X+?=
- =?us-ascii?Q?fQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 341aa3d6-10b3-4c54-35a9-08db2a9d2abc
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 06:17:52.1078
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LT9d2zTkCXtjKBKf+gMFskFepjlPWfXx8AVXyDk/rHNiE81r8d6oyM5mij7LJglxF5F5OP2+I6Z0dwqvuTL2vKnBf7aLC+G9Hwc8P7sWZ+w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7020
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBpWxI+LYiwasnvj@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horia GeantA <horia.geanta@nxp.com>
+On Wed, Mar 22, 2023 at 09:15:48AM +0800, Baoquan He wrote:
+> Hi Lorenzo,
+>
+> On 03/21/23 at 08:54pm, Lorenzo Stoakes wrote:
+> > Now we have eliminated spinlocks from the vread() case, convert
+> > read_kcore() to read_kcore_iter().
+>
+> Sorry for late comment.
+>
+> Here I could miss something important, I don't get where we have
+> eliminated spinlocks from the vread() case. Do I misunderstand this
+> sentence?
+>
 
-caam driver needs to be aware of OP-TEE f/w presence, since some things
-are done differently:
+Apologies, I didn't update the commit message after the latest revision! We
+can just drop this sentence altogether.
 
-1. there is no access to controller's register page (note however that
-some registers are aliased in job rings' register pages)
+Andrew - could you change the commit message to simply read:-
 
-2 Due to this, MCFGR[PS] cannot be read and driver assumes
-MCFGR[PS] = b'0 - engine using 32-bit address pointers.
+  For the time being we still use a bounce buffer for vread(), however in the
+  next patch we will convert this to interact directly with the iterator and
+  eliminate the bounce buffer altogether.
 
-This is in sync with the fact that:
--all i.MX SoCs currently use MCFGR[PS] = b'0
--only i.MX OP-TEE use cases don't allow access to controller register page
+Thanks!
 
-Signed-off-by: Horia GeantA <horia.geanta@nxp.com>
-Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
----
- drivers/crypto/caam/ctrl.c    | 23 ++++++++++++++++++++++-
- drivers/crypto/caam/debugfs.c |  3 +++
- drivers/crypto/caam/intern.h  |  1 +
- 3 files changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
-index ae07c1e5fd38..d96c81540957 100644
---- a/drivers/crypto/caam/ctrl.c
-+++ b/drivers/crypto/caam/ctrl.c
-@@ -633,6 +633,7 @@ static int caam_probe(struct platform_device *pdev)
- 	int pg_size;
- 	int BLOCK_OFFSET = 0;
- 	bool pr_support = false;
-+	bool reg_access = true;
- 
- 	ctrlpriv = devm_kzalloc(&pdev->dev, sizeof(*ctrlpriv), GFP_KERNEL);
- 	if (!ctrlpriv)
-@@ -646,6 +647,17 @@ static int caam_probe(struct platform_device *pdev)
- 	caam_imx = (bool)imx_soc_match;
- 
- 	if (imx_soc_match) {
-+		/*
-+		 * Until Layerscape and i.MX OP-TEE get in sync,
-+		 * only i.MX OP-TEE use cases disallow access to
-+		 * caam page 0 (controller) registers.
-+		 */
-+		np = of_find_compatible_node(NULL, NULL, "linaro,optee-tz");
-+		ctrlpriv->optee_en = !!np;
-+		of_node_put(np);
-+
-+		reg_access = ctrlpriv->optee_en;
-+
- 		if (!imx_soc_match->data) {
- 			dev_err(dev, "No clock data provided for i.MX SoC");
- 			return -EINVAL;
-@@ -696,7 +708,8 @@ static int caam_probe(struct platform_device *pdev)
- 	caam_little_end = !(bool)(rd_reg32(&perfmon->status) &
- 				  (CSTA_PLEND | CSTA_ALT_PLEND));
- 	comp_params = rd_reg32(&perfmon->comp_parms_ms);
--	if (comp_params & CTPR_MS_PS && rd_reg32(&ctrl->mcr) & MCFGR_LONG_PTR)
-+	if (reg_access && comp_params & CTPR_MS_PS &&
-+	    rd_reg32(&ctrl->mcr) & MCFGR_LONG_PTR)
- 		caam_ptr_sz = sizeof(u64);
- 	else
- 		caam_ptr_sz = sizeof(u32);
-@@ -761,6 +774,9 @@ static int caam_probe(struct platform_device *pdev)
- 	}
- #endif
- 
-+	if (!reg_access)
-+		goto set_dma_mask;
-+
- 	/*
- 	 * Enable DECO watchdogs and, if this is a PHYS_ADDR_T_64BIT kernel,
- 	 * long pointers in master configuration register.
-@@ -800,6 +816,7 @@ static int caam_probe(struct platform_device *pdev)
- 			      JRSTART_JR1_START | JRSTART_JR2_START |
- 			      JRSTART_JR3_START);
- 
-+set_dma_mask:
- 	ret = dma_set_mask_and_coherent(dev, caam_get_dma_mask(dev));
- 	if (ret) {
- 		dev_err(dev, "dma_set_mask_and_coherent failed (%d)\n", ret);
-@@ -842,6 +859,9 @@ static int caam_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
- 
-+	if (!reg_access)
-+		goto report_live;
-+
- 	comp_params = rd_reg32(&perfmon->comp_parms_ls);
- 	ctrlpriv->blob_present = !!(comp_params & CTPR_LS_BLOB);
- 
-@@ -943,6 +963,7 @@ static int caam_probe(struct platform_device *pdev)
- 		clrsetbits_32(&ctrl->scfgr, 0, SCFGR_RDBENABLE);
- 	}
- 
-+report_live:
- 	/* NOTE: RTIC detection ought to go here, around Si time */
- 
- 	caam_id = (u64)rd_reg32(&perfmon->caam_id_ms) << 32 |
-diff --git a/drivers/crypto/caam/debugfs.c b/drivers/crypto/caam/debugfs.c
-index 798ba989a8a0..cec93498836d 100644
---- a/drivers/crypto/caam/debugfs.c
-+++ b/drivers/crypto/caam/debugfs.c
-@@ -77,6 +77,9 @@ void caam_debugfs_init(struct caam_drv_private *ctrlpriv,
- 	debugfs_create_file("fault_status", 0444, ctrlpriv->ctl,
- 			    &perfmon->status, &caam_fops_u32_ro);
- 
-+	if (ctrlpriv->optee_en)
-+		return;
-+
- 	/* Internal covering keys (useful in non-secure mode only) */
- 	ctrlpriv->ctl_kek_wrap.data = (__force void *)&ctrlpriv->ctrl->kek[0];
- 	ctrlpriv->ctl_kek_wrap.size = KEK_KEY_SIZE * sizeof(u32);
-diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h
-index 572cf66c887a..86ed1b91c22d 100644
---- a/drivers/crypto/caam/intern.h
-+++ b/drivers/crypto/caam/intern.h
-@@ -94,6 +94,7 @@ struct caam_drv_private {
- 	u8 qi_present;		/* Nonzero if QI present in device */
- 	u8 blob_present;	/* Nonzero if BLOB support present in device */
- 	u8 mc_en;		/* Nonzero if MC f/w is active */
-+	u8 optee_en;		/* Nonzero if OP-TEE f/w is active */
- 	int secvio_irq;		/* Security violation interrupt number */
- 	int virt_en;		/* Virtualization enabled in CAAM */
- 	int era;		/* CAAM Era (internal HW revision) */
--- 
-2.25.1
-
+> >
+> > For the time being we still use a bounce buffer for vread(), however in the
+> > next patch we will convert this to interact directly with the iterator and
+> > eliminate the bounce buffer altogether.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> >  fs/proc/kcore.c | 58 ++++++++++++++++++++++++-------------------------
+> >  1 file changed, 29 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+> > index 556f310d6aa4..25e0eeb8d498 100644
+> > --- a/fs/proc/kcore.c
+> > +++ b/fs/proc/kcore.c
+> > @@ -24,7 +24,7 @@
+> >  #include <linux/memblock.h>
+> >  #include <linux/init.h>
+> >  #include <linux/slab.h>
+> > -#include <linux/uaccess.h>
+> > +#include <linux/uio.h>
+> >  #include <asm/io.h>
+> >  #include <linux/list.h>
+> >  #include <linux/ioport.h>
+> > @@ -308,9 +308,12 @@ static void append_kcore_note(char *notes, size_t *i, const char *name,
+> >  }
+> >
+> >  static ssize_t
+> > -read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> > +read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
+> >  {
+> > +	struct file *file = iocb->ki_filp;
+> >  	char *buf = file->private_data;
+> > +	loff_t *ppos = &iocb->ki_pos;
+> > +
+> >  	size_t phdrs_offset, notes_offset, data_offset;
+> >  	size_t page_offline_frozen = 1;
+> >  	size_t phdrs_len, notes_len;
+> > @@ -318,6 +321,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  	size_t tsz;
+> >  	int nphdr;
+> >  	unsigned long start;
+> > +	size_t buflen = iov_iter_count(iter);
+> >  	size_t orig_buflen = buflen;
+> >  	int ret = 0;
+> >
+> > @@ -333,7 +337,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  	notes_offset = phdrs_offset + phdrs_len;
+> >
+> >  	/* ELF file header. */
+> > -	if (buflen && *fpos < sizeof(struct elfhdr)) {
+> > +	if (buflen && *ppos < sizeof(struct elfhdr)) {
+> >  		struct elfhdr ehdr = {
+> >  			.e_ident = {
+> >  				[EI_MAG0] = ELFMAG0,
+> > @@ -355,19 +359,18 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  			.e_phnum = nphdr,
+> >  		};
+> >
+> > -		tsz = min_t(size_t, buflen, sizeof(struct elfhdr) - *fpos);
+> > -		if (copy_to_user(buffer, (char *)&ehdr + *fpos, tsz)) {
+> > +		tsz = min_t(size_t, buflen, sizeof(struct elfhdr) - *ppos);
+> > +		if (copy_to_iter((char *)&ehdr + *ppos, tsz, iter) != tsz) {
+> >  			ret = -EFAULT;
+> >  			goto out;
+> >  		}
+> >
+> > -		buffer += tsz;
+> >  		buflen -= tsz;
+> > -		*fpos += tsz;
+> > +		*ppos += tsz;
+> >  	}
+> >
+> >  	/* ELF program headers. */
+> > -	if (buflen && *fpos < phdrs_offset + phdrs_len) {
+> > +	if (buflen && *ppos < phdrs_offset + phdrs_len) {
+> >  		struct elf_phdr *phdrs, *phdr;
+> >
+> >  		phdrs = kzalloc(phdrs_len, GFP_KERNEL);
+> > @@ -397,22 +400,21 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  			phdr++;
+> >  		}
+> >
+> > -		tsz = min_t(size_t, buflen, phdrs_offset + phdrs_len - *fpos);
+> > -		if (copy_to_user(buffer, (char *)phdrs + *fpos - phdrs_offset,
+> > -				 tsz)) {
+> > +		tsz = min_t(size_t, buflen, phdrs_offset + phdrs_len - *ppos);
+> > +		if (copy_to_iter((char *)phdrs + *ppos - phdrs_offset, tsz,
+> > +				 iter) != tsz) {
+> >  			kfree(phdrs);
+> >  			ret = -EFAULT;
+> >  			goto out;
+> >  		}
+> >  		kfree(phdrs);
+> >
+> > -		buffer += tsz;
+> >  		buflen -= tsz;
+> > -		*fpos += tsz;
+> > +		*ppos += tsz;
+> >  	}
+> >
+> >  	/* ELF note segment. */
+> > -	if (buflen && *fpos < notes_offset + notes_len) {
+> > +	if (buflen && *ppos < notes_offset + notes_len) {
+> >  		struct elf_prstatus prstatus = {};
+> >  		struct elf_prpsinfo prpsinfo = {
+> >  			.pr_sname = 'R',
+> > @@ -447,24 +449,23 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  				  vmcoreinfo_data,
+> >  				  min(vmcoreinfo_size, notes_len - i));
+> >
+> > -		tsz = min_t(size_t, buflen, notes_offset + notes_len - *fpos);
+> > -		if (copy_to_user(buffer, notes + *fpos - notes_offset, tsz)) {
+> > +		tsz = min_t(size_t, buflen, notes_offset + notes_len - *ppos);
+> > +		if (copy_to_iter(notes + *ppos - notes_offset, tsz, iter) != tsz) {
+> >  			kfree(notes);
+> >  			ret = -EFAULT;
+> >  			goto out;
+> >  		}
+> >  		kfree(notes);
+> >
+> > -		buffer += tsz;
+> >  		buflen -= tsz;
+> > -		*fpos += tsz;
+> > +		*ppos += tsz;
+> >  	}
+> >
+> >  	/*
+> >  	 * Check to see if our file offset matches with any of
+> >  	 * the addresses in the elf_phdr on our list.
+> >  	 */
+> > -	start = kc_offset_to_vaddr(*fpos - data_offset);
+> > +	start = kc_offset_to_vaddr(*ppos - data_offset);
+> >  	if ((tsz = (PAGE_SIZE - (start & ~PAGE_MASK))) > buflen)
+> >  		tsz = buflen;
+> >
+> > @@ -497,7 +498,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  		}
+> >
+> >  		if (!m) {
+> > -			if (clear_user(buffer, tsz)) {
+> > +			if (iov_iter_zero(tsz, iter) != tsz) {
+> >  				ret = -EFAULT;
+> >  				goto out;
+> >  			}
+> > @@ -508,14 +509,14 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  		case KCORE_VMALLOC:
+> >  			vread(buf, (char *)start, tsz);
+> >  			/* we have to zero-fill user buffer even if no read */
+> > -			if (copy_to_user(buffer, buf, tsz)) {
+> > +			if (copy_to_iter(buf, tsz, iter) != tsz) {
+> >  				ret = -EFAULT;
+> >  				goto out;
+> >  			}
+> >  			break;
+> >  		case KCORE_USER:
+> >  			/* User page is handled prior to normal kernel page: */
+> > -			if (copy_to_user(buffer, (char *)start, tsz)) {
+> > +			if (copy_to_iter((char *)start, tsz, iter) != tsz) {
+> >  				ret = -EFAULT;
+> >  				goto out;
+> >  			}
+> > @@ -531,7 +532,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  			 */
+> >  			if (!page || PageOffline(page) ||
+> >  			    is_page_hwpoison(page) || !pfn_is_ram(pfn)) {
+> > -				if (clear_user(buffer, tsz)) {
+> > +				if (iov_iter_zero(tsz, iter) != tsz) {
+> >  					ret = -EFAULT;
+> >  					goto out;
+> >  				}
+> > @@ -541,25 +542,24 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
+> >  		case KCORE_VMEMMAP:
+> >  		case KCORE_TEXT:
+> >  			/*
+> > -			 * We use _copy_to_user() to bypass usermode hardening
+> > +			 * We use _copy_to_iter() to bypass usermode hardening
+> >  			 * which would otherwise prevent this operation.
+> >  			 */
+> > -			if (_copy_to_user(buffer, (char *)start, tsz)) {
+> > +			if (_copy_to_iter((char *)start, tsz, iter) != tsz) {
+> >  				ret = -EFAULT;
+> >  				goto out;
+> >  			}
+> >  			break;
+> >  		default:
+> >  			pr_warn_once("Unhandled KCORE type: %d\n", m->type);
+> > -			if (clear_user(buffer, tsz)) {
+> > +			if (iov_iter_zero(tsz, iter) != tsz) {
+> >  				ret = -EFAULT;
+> >  				goto out;
+> >  			}
+> >  		}
+> >  skip:
+> >  		buflen -= tsz;
+> > -		*fpos += tsz;
+> > -		buffer += tsz;
+> > +		*ppos += tsz;
+> >  		start += tsz;
+> >  		tsz = (buflen > PAGE_SIZE ? PAGE_SIZE : buflen);
+> >  	}
+> > @@ -603,7 +603,7 @@ static int release_kcore(struct inode *inode, struct file *file)
+> >  }
+> >
+> >  static const struct proc_ops kcore_proc_ops = {
+> > -	.proc_read	= read_kcore,
+> > +	.proc_read_iter	= read_kcore_iter,
+> >  	.proc_open	= open_kcore,
+> >  	.proc_release	= release_kcore,
+> >  	.proc_lseek	= default_llseek,
+> > --
+> > 2.39.2
+> >
+>
