@@ -2,111 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113806C422F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D836C4235
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCVF32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 01:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S229727AbjCVFiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 01:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjCVF3Z (ORCPT
+        with ESMTP id S229629AbjCVFiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 01:29:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C0755505;
-        Tue, 21 Mar 2023 22:29:21 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M3ERmu008519;
-        Wed, 22 Mar 2023 05:29:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=oLRmgruzrs3e57le87DNnVBdMXRtRa3gF7Yf0IKZ+1k=;
- b=OfATGuV1bQlmzTfC9N/NlzriGtZx4erQ/Mm/mwFR61qbWg7+u7EyBjHmYEzGW5ySSbvl
- Z5DGI+/zGbD9ztrTOH+mInELrim5v9S8SpB8/4Rt/b1rvmZKJap5f4vvxKo0SoxPyy3t
- 0nlmRrHy/uKxtmp4W5Aoz3nloqdrai9cLXGX+SB7Ox5lu776YAcDdtUCovIXglY6vfOM
- /eibxpKavFi726kd0Fn3zEa3KiI7XSDo3d+j/WX++lO1dvOgVXBojmIIDQgxrFe2csI4
- UYmmENjn5pHFUcHKDJf0ywDBv/NGP86rEA4Kdlwg7PUoWNaOcdSsivT0EmXYjUN8M6Se oQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pfskk22sj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 05:29:20 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32M2OCcx018610;
-        Wed, 22 Mar 2023 05:29:18 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6defb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Mar 2023 05:29:18 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32M5TFUb29295322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Mar 2023 05:29:15 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A900C2004B;
-        Wed, 22 Mar 2023 05:29:15 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 299CA20040;
-        Wed, 22 Mar 2023 05:29:15 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 05:29:15 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6D4286010A;
-        Wed, 22 Mar 2023 16:29:13 +1100 (AEDT)
-Message-ID: <7582f7bcd123f88d267a26bcd15a94aeeb238474.camel@linux.ibm.com>
-Subject: Re: [PATCH] init/initramfs: Fix argument forwarding to panic() in
- panic_show_mem()
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Benjamin Gray <bgray@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Date:   Wed, 22 Mar 2023 16:29:13 +1100
-In-Reply-To: <20230320230534.50174-1-bgray@linux.ibm.com>
-References: <20230320230534.50174-1-bgray@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 22 Mar 2023 01:38:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4236449A;
+        Tue, 21 Mar 2023 22:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679463479; x=1710999479;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bc8Gp0YccWiyp85CLI6R3d+m+jckZdVWxQUsu4ffot4=;
+  b=KJiSsorGN1Dq4HKbgXYEKhQZC0Avz/qP6R6Tuga8Cs/iOSuCY0D525GW
+   w6MrnOaXXP+D+k+n9ykn0Y3AVhtZ4VUsifiqaUJAQSYGIb/UKWtzU9Zkh
+   n75RnL+6hoZLXkHOg4pdIqMsM7jox8A68DF0uwe1T2vbwjsdKePjnDtQv
+   v5IGB2dhbS5qCkGs4NgRXqEf8WW6tFiTkFKiQbF6bRd6ysS5HWTm9L8h1
+   gc+z4ywqTNftKNVAT3stM/oDtLiMfzEMA1Bjc7y6iyCaOMIJURxF6b/XN
+   cB7AeS+xsllgnSvYxcWxEjTF0kgB/w6BLRk0V+b/noVCPGJNWAmd0S246
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="318776590"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="318776590"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 22:37:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="714292258"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="714292258"
+Received: from xiulinli-mobl2.ccr.corp.intel.com (HELO zwan2-desk1.ccr.corp.intel.com) ([10.254.210.248])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 22:37:56 -0700
+From:   Zhenyu Wang <zhenyuw@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        CodyYao-oc <CodyYao-oc@zhaoxin.com>
+Subject: [PATCH v3] perf/x86: use hexidecimal value for cpuid
+Date:   Wed, 22 Mar 2023 13:37:46 +0800
+Message-Id: <20230322053746.4888-1-zhenyuw@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230312132633.228006-1-zhenyuw@linux.intel.com>
+References: <20230312132633.228006-1-zhenyuw@linux.intel.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0wDMZCZVER0AUUpLCJ1mgSDBUGWFeTrz
-X-Proofpoint-ORIG-GUID: 0wDMZCZVER0AUUpLCJ1mgSDBUGWFeTrz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 clxscore=1015 priorityscore=1501 phishscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303220036
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-21 at 10:05 +1100, Benjamin Gray wrote:
-> Forwarding variadic argument lists can't be done by passing a va_list
-> to a function with signature foo(...) (as panic() has). It ends up
-> interpreting the va_list itself as a single argument instead of
-> iterating it. printf() happily accepts it of course, leading to
-> corrupt
-> output.
->=20
-> Convert panic_show_mem() to a macro to allow forwarding the
-> arguments.
-> The function is trivial enough that it's easier than trying to
-> introduce
-> a vpanic() variant.
->=20
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+It's easier to use hexidecimal value instead of decimal for reading
+and following with SDM doc, also align with other cpuid calls. As new
+cpuid leaf would be added in future, this tries to convert current
+forms and would take it as convention for new leaf definition.
 
-Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
+This changes name for both cpuid type and cpuid calls.
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: CodyYao-oc <CodyYao-oc@zhaoxin.com>
+Signed-off-by: Zhenyu Wang <zhenyuw@linux.intel.com>
+---
+v3:
+- add more explanation in commit message for purpose of this
+- use lowercase number in call to align with current code
+
+v2:
+- rename in cpuid data type as well
+
+ arch/x86/events/intel/core.c      | 10 +++++-----
+ arch/x86/events/intel/lbr.c       |  8 ++++----
+ arch/x86/events/intel/pt.c        |  2 +-
+ arch/x86/events/zhaoxin/core.c    |  8 ++++----
+ arch/x86/include/asm/perf_event.h | 12 ++++++------
+ arch/x86/kvm/cpuid.c              |  4 ++--
+ arch/x86/kvm/vmx/pmu_intel.c      |  4 ++--
+ 7 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index a3fb996a86a1..5487a39d4975 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -5170,7 +5170,7 @@ static __init void intel_arch_events_quirk(void)
+ 
+ static __init void intel_nehalem_quirk(void)
+ {
+-	union cpuid10_ebx ebx;
++	union cpuid_0xa_ebx ebx;
+ 
+ 	ebx.full = x86_pmu.events_maskl;
+ 	if (ebx.split.no_branch_misses_retired) {
+@@ -5878,9 +5878,9 @@ __init int intel_pmu_init(void)
+ 	struct attribute **td_attr    = &empty_attrs;
+ 	struct attribute **mem_attr   = &empty_attrs;
+ 	struct attribute **tsx_attr   = &empty_attrs;
+-	union cpuid10_edx edx;
+-	union cpuid10_eax eax;
+-	union cpuid10_ebx ebx;
++	union cpuid_0xa_edx edx;
++	union cpuid_0xa_eax eax;
++	union cpuid_0xa_ebx ebx;
+ 	unsigned int fixed_mask;
+ 	bool pmem = false;
+ 	int version, i;
+@@ -5903,7 +5903,7 @@ __init int intel_pmu_init(void)
+ 	 * Check whether the Architectural PerfMon supports
+ 	 * Branch Misses Retired hw_event or not.
+ 	 */
+-	cpuid(10, &eax.full, &ebx.full, &fixed_mask, &edx.full);
++	cpuid(0xa, &eax.full, &ebx.full, &fixed_mask, &edx.full);
+ 	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT)
+ 		return -ENODEV;
+ 
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index c3b0d15a9841..616a6904af03 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1497,16 +1497,16 @@ static bool is_arch_lbr_xsave_available(void)
+ void __init intel_pmu_arch_lbr_init(void)
+ {
+ 	struct pmu *pmu = x86_get_pmu(smp_processor_id());
+-	union cpuid28_eax eax;
+-	union cpuid28_ebx ebx;
+-	union cpuid28_ecx ecx;
++	union cpuid_0x1c_eax eax;
++	union cpuid_0x1c_ebx ebx;
++	union cpuid_0x1c_ecx ecx;
+ 	unsigned int unused_edx;
+ 	bool arch_lbr_xsave;
+ 	size_t size;
+ 	u64 lbr_nr;
+ 
+ 	/* Arch LBR Capabilities */
+-	cpuid(28, &eax.full, &ebx.full, &ecx.full, &unused_edx);
++	cpuid(0x1c, &eax.full, &ebx.full, &ecx.full, &unused_edx);
+ 
+ 	lbr_nr = fls(eax.split.lbr_depth_mask) * 8;
+ 	if (!lbr_nr)
+diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+index 42a55794004a..da3c5d748365 100644
+--- a/arch/x86/events/intel/pt.c
++++ b/arch/x86/events/intel/pt.c
+@@ -235,7 +235,7 @@ static int __init pt_pmu_hw_init(void)
+ 	}
+ 
+ 	for (i = 0; i < PT_CPUID_LEAVES; i++) {
+-		cpuid_count(20, i,
++		cpuid_count(0x14, i,
+ 			    &pt_pmu.caps[CPUID_EAX + i*PT_CPUID_REGS_NUM],
+ 			    &pt_pmu.caps[CPUID_EBX + i*PT_CPUID_REGS_NUM],
+ 			    &pt_pmu.caps[CPUID_ECX + i*PT_CPUID_REGS_NUM],
+diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
+index 3e9acdaeed1e..1d071974f4db 100644
+--- a/arch/x86/events/zhaoxin/core.c
++++ b/arch/x86/events/zhaoxin/core.c
+@@ -504,9 +504,9 @@ static __init void zhaoxin_arch_events_quirk(void)
+ 
+ __init int zhaoxin_pmu_init(void)
+ {
+-	union cpuid10_edx edx;
+-	union cpuid10_eax eax;
+-	union cpuid10_ebx ebx;
++	union cpuid_0xa_edx edx;
++	union cpuid_0xa_eax eax;
++	union cpuid_0xa_ebx ebx;
+ 	struct event_constraint *c;
+ 	unsigned int unused;
+ 	int version;
+@@ -517,7 +517,7 @@ __init int zhaoxin_pmu_init(void)
+ 	 * Check whether the Architectural PerfMon supports
+ 	 * hw_event or not.
+ 	 */
+-	cpuid(10, &eax.full, &ebx.full, &unused, &edx.full);
++	cpuid(0xa, &eax.full, &ebx.full, &unused, &edx.full);
+ 
+ 	if (eax.split.mask_length < ARCH_PERFMON_EVENTS_COUNT - 1)
+ 		return -ENODEV;
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 8fc15ed5e60b..0d2d735c8167 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -125,7 +125,7 @@
+  * Intel "Architectural Performance Monitoring" CPUID
+  * detection/enumeration details:
+  */
+-union cpuid10_eax {
++union cpuid_0xa_eax {
+ 	struct {
+ 		unsigned int version_id:8;
+ 		unsigned int num_counters:8;
+@@ -135,7 +135,7 @@ union cpuid10_eax {
+ 	unsigned int full;
+ };
+ 
+-union cpuid10_ebx {
++union cpuid_0xa_ebx {
+ 	struct {
+ 		unsigned int no_unhalted_core_cycles:1;
+ 		unsigned int no_instructions_retired:1;
+@@ -148,7 +148,7 @@ union cpuid10_ebx {
+ 	unsigned int full;
+ };
+ 
+-union cpuid10_edx {
++union cpuid_0xa_edx {
+ 	struct {
+ 		unsigned int num_counters_fixed:5;
+ 		unsigned int bit_width_fixed:8;
+@@ -170,7 +170,7 @@ union cpuid10_edx {
+ /*
+  * Intel Architectural LBR CPUID detection/enumeration details:
+  */
+-union cpuid28_eax {
++union cpuid_0x1c_eax {
+ 	struct {
+ 		/* Supported LBR depth values */
+ 		unsigned int	lbr_depth_mask:8;
+@@ -183,7 +183,7 @@ union cpuid28_eax {
+ 	unsigned int		full;
+ };
+ 
+-union cpuid28_ebx {
++union cpuid_0x1c_ebx {
+ 	struct {
+ 		/* CPL Filtering Supported */
+ 		unsigned int    lbr_cpl:1;
+@@ -195,7 +195,7 @@ union cpuid28_ebx {
+ 	unsigned int            full;
+ };
+ 
+-union cpuid28_ecx {
++union cpuid_0x1c_ecx {
+ 	struct {
+ 		/* Mispredict Bit Supported */
+ 		unsigned int    lbr_mispred:1;
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 599aebec2d52..57f43dc87538 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -967,8 +967,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		}
+ 		break;
+ 	case 0xa: { /* Architectural Performance Monitoring */
+-		union cpuid10_eax eax;
+-		union cpuid10_edx edx;
++		union cpuid_0xa_eax eax;
++		union cpuid_0xa_edx edx;
+ 
+ 		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
+ 			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e8a3be0b9df9..f4b165667ca9 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -512,8 +512,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+ 	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+ 	struct kvm_cpuid_entry2 *entry;
+-	union cpuid10_eax eax;
+-	union cpuid10_edx edx;
++	union cpuid_0xa_eax eax;
++	union cpuid_0xa_edx edx;
+ 	u64 perf_capabilities;
+ 	u64 counter_mask;
+ 	int i;
+-- 
+2.39.2
+
