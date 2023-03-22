@@ -2,121 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C91B6C3F54
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3FE6C3F57
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCVAuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 20:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S229852AbjCVAvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 20:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCVAuX (ORCPT
+        with ESMTP id S229642AbjCVAv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 20:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66793136D3;
-        Tue, 21 Mar 2023 17:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F32EC61EE6;
-        Wed, 22 Mar 2023 00:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5406AC433A0;
-        Wed, 22 Mar 2023 00:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679446221;
-        bh=SJKVK6p4AtYmszF8lugRN21TQIYOoR26Llx9z3PyX8k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tth7EvCATjE3kn4C1Rk1Iw+REgcwOr5xpsQTu7pKPyrEGTwSZAjerPMCqRUAvl8AA
-         f+Gn8BQhqKIEKvpi5JwPHnN0F56beQ8Hff/aaOgOXoRCMV8X+oG0320J+4Z6v2/O2r
-         T/iDIVyXakS0g7zA4oI4bdM6gLGiynzNiT1HMHNN/fcgSxTUxtHkvLwbBssy1hnKfx
-         1nnRaLBAnLl5M3J+HE3j0d/LxwtqIEvSG+m/4/DrECN5iDeAT6JxglUULIgtK6WHKt
-         G7Jpba+BAR3RGIUM5XiwGFKocPJbSPN/2Tacs8uUReSAxXIUFSwCSpTeLdmu058Eht
-         fVUxzlH5JRb8Q==
-Received: by mail-ed1-f43.google.com with SMTP id r11so66677024edd.5;
-        Tue, 21 Mar 2023 17:50:21 -0700 (PDT)
-X-Gm-Message-State: AO0yUKU597s3ADXr57RgG3f5jRPbaJJgAveXbVV174NC8JEtj50XnO5/
-        MjU02p0+RK+vA2kUO2Mbog4cxjWCQzsiYw/Y2Xs=
-X-Google-Smtp-Source: AK7set/zpKc1XeHOstNzTgHRX4aMPo7mIR05JSNxH7VOuJCZyVvpSh/MGnVJcHRxpHLWGq/bW6cm20mvQIFwEMVw0UQ=
-X-Received: by 2002:a50:9ea8:0:b0:4fb:f19:883 with SMTP id a37-20020a509ea8000000b004fb0f190883mr2702940edf.1.1679446219443;
- Tue, 21 Mar 2023 17:50:19 -0700 (PDT)
+        Tue, 21 Mar 2023 20:51:29 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD291136C1;
+        Tue, 21 Mar 2023 17:51:28 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id cn12so21012373edb.4;
+        Tue, 21 Mar 2023 17:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679446287;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/D//vq30gDfSAxNqZwDD5621tlN45WCAw1FWd9BqcCA=;
+        b=TSKcI0tuP2Ju+B6pP9VT5ptFQ8Di1BhckjhFdZ/43FtFsCdpfCdvSvMoTnFnpFXkfw
+         5HH/QGz7nIFIOyoqaTBeGmEemGc9vhBgTPZUs2G70iAWK/Rb0xPT9tT1IkGOiNwKTXH8
+         Q4zT6ud9vvcPOw4/o09Qj7AeMyrR+cVSQeN2aENkoLoPn6ZmhGygaEkiQX0h7a6jP1UO
+         mfVqeYaVqWDe5NZj+w7IgFafcSxAO0EMPsLNhiBu190i2e0Pmg/Vh87Ci+kdY2lfWtf5
+         Eis6tpfbVv9Zbw3EmlBNlb3NeyU0QJFcw1g6+41L6OeJjGyzDku16L2Q/7pPEHWUUVqL
+         /6tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679446287;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/D//vq30gDfSAxNqZwDD5621tlN45WCAw1FWd9BqcCA=;
+        b=IQzIbBbHWGgMaf+oDRWi5WTGgXF/+wxVeWGTK+G60MDeyfMJCbkf3+ahxYkqtBQZdv
+         SYRN5eK4wo03F9ZwYPlW3DSWNsctHjd42yhu7E5uraUK/Fn9dVLaK//xI4rnfYSDqOmV
+         zqBq1v8dtMZuDtxsVHKMUg6cPytqKaQztza0pleYh68izJ0ouTL/yBsBmF8E5NKOYHAE
+         DCBfQiCIBi+djDXXolA4OE8fKbGLhRg+yIfE0h5FRJ5tDJBjAvIsn7aRhBJmUjirSY7a
+         K4KtvS8V6ylF4C6X7XoQ+HesuLJ79xWGhJkzMgTVUdhJ+gMOG1tVN9RfOXs+gQLtX88+
+         vgdQ==
+X-Gm-Message-State: AO0yUKV6+XkT7QEu3kl3GDkIpyM0pAjNJ2hxyT+WwklI4zaBP8DvQbXM
+        qjPx/sSecXD9obAgSX7GJ78=
+X-Google-Smtp-Source: AK7set9dAVfJ7otaBNTbqgHH52y55gibQ0cV8TsPgxrer+dKm3cdqy1ShNxwJXR4t5oCAFDnHodd6A==
+X-Received: by 2002:a17:906:94ce:b0:8aa:875d:9d9a with SMTP id d14-20020a17090694ce00b008aa875d9d9amr4667867ejy.50.1679446287094;
+        Tue, 21 Mar 2023 17:51:27 -0700 (PDT)
+Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906c00800b008e1509dde19sm6364793ejz.205.2023.03.21.17.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 17:51:26 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 01:51:22 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Subject: Re: [PATCH memory-model 1/8] tools/memory-model: Update some warning
+ labels
+Message-ID: <ZBpRCiHuC6LPkFOc@andrea>
+References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
+ <20230321010246.50960-1-paulmck@kernel.org>
 MIME-Version: 1.0
-References: <1679380154-20308-1-git-send-email-yangtiezhu@loongson.cn>
- <253a5dfcb7e41e44d15232e1891e7ea9d39dc953.camel@xry111.site> <f61ac027-0068-40f0-87bd-17f916141884@roeck-us.net>
-In-Reply-To: <f61ac027-0068-40f0-87bd-17f916141884@roeck-us.net>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 22 Mar 2023 08:50:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5kFRt9z0U_TqSQeqX9WuUJ2cg0LOboUXHp-fLR0PoTJg@mail.gmail.com>
-Message-ID: <CAAhV-H5kFRt9z0U_TqSQeqX9WuUJ2cg0LOboUXHp-fLR0PoTJg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Check unwind_error() in arch_stack_walk()
-To:     Guenter Roeck <linux@roeck-us.net>, stable <stable@vger.kernel.org>
-Cc:     Xi Ruoyao <xry111@xry111.site>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321010246.50960-1-paulmck@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:25=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
- wrote:
->
-> On Tue, Mar 21, 2023 at 08:35:34PM +0800, Xi Ruoyao wrote:
-> > On Tue, 2023-03-21 at 14:29 +0800, Tiezhu Yang wrote:
-> > > We can see the following messages with CONFIG_PROVE_LOCKING=3Dy on
-> > > LoongArch:
-> > >
-> > >   BUG: MAX_STACK_TRACE_ENTRIES too low!
-> > >   turning off the locking correctness validator.
-> > >
-> > > This is because stack_trace_save() returns a big value after call
-> > > arch_stack_walk(), here is the call trace:
-> > >
-> > >   save_trace()
-> > >     stack_trace_save()
-> > >       arch_stack_walk()
-> > >         stack_trace_consume_entry()
-> > >
-> > > arch_stack_walk() should return immediately if unwind_next_frame()
-> > > failed, no need to do the useless loops to increase the value of
-> > > c->len in stack_trace_consume_entry(), then we can fix the above
-> > > problem.
-> > >
-> > > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > > Link: https://lore.kernel.org/all/8a44ad71-68d2-4926-892f-72bfc7a67e2=
-a@roeck-us.net/
-> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> >
-> > The fix makes sense, but I'm asking the same question again (sorry if
-> > it's noisy): should we Cc stable@vger.kernel.org and/or make a PR for
-> > 6.3?
-> >
-> > To me a bug fixes should be backported into all stable branches affecte=
-d
-> > by the bug, unless there is some serious difficulty.  As 6.3 release
-> > will work on launched 3A5000 boards out-of-box, people may want to stop
-> > staying on the leading edge and use a LTS/stable release series. We
-> > can't just say (or behave like) "we don't backport, please use latest
-> > mainline" IMO :).
->
-> It is a bug fix, isn't it ? It should be backported to v6.1+. Otherwise,
-> if your policy is to not backport bug fixes, I might as well stop testing
-> loongarch on all but the most recent kernel branch. Let me know if this i=
-s
-> what you want. If so, I think you should let all other regression testers
-> know that they should only test loongarch on mainline and possibly on
-> linux-next.
-This is of course a bug fix, but should Tiezhu resend this patch? Or
-just replying to this message with CC stable@vger.kernel.org is
-enough?
+On Mon, Mar 20, 2023 at 06:02:39PM -0700, Paul E. McKenney wrote:
+> From: Alan Stern <stern@rowland.harvard.edu>
+> 
+> Some of the warning labels used in the LKMM are unfortunately
+> ambiguous.  In particular, the same warning is used for both an
+> unmatched rcu_read_lock() call and for an unmatched rcu_read_unlock()
+> call.  Likewise for the srcu_* equivalents.  Also, the warning about
+> passing a wrong value to srcu_read_unlock() -- i.e., a value different
+> from the one returned by the matching srcu_read_lock() -- talks about
+> bad nesting rather than non-matching values.
+> 
+> Let's update the warning labels to make their meanings more clear.
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Reviewed-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Huacai
->
-> Thanks,
-> Guenter
+Acked-by: Andrea Parri <parri.andrea@gmail.com>
+
+  Andrea
+
+
+> ---
+>  tools/memory-model/linux-kernel.bell | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+> index 70a9073dec3e..dc464854d28a 100644
+> --- a/tools/memory-model/linux-kernel.bell
+> +++ b/tools/memory-model/linux-kernel.bell
+> @@ -53,8 +53,8 @@ let rcu-rscs = let rec
+>  	in matched
+>  
+>  (* Validate nesting *)
+> -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
+> -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
+> +flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
+> +flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
+>  
+>  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+>  let srcu-rscs = let rec
+> @@ -69,14 +69,14 @@ let srcu-rscs = let rec
+>  	in matched
+>  
+>  (* Validate nesting *)
+> -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
+> -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
+> +flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
+> +flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
+>  
+>  (* Check for use of synchronize_srcu() inside an RCU critical section *)
+>  flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
+>  
+>  (* Validate SRCU dynamic match *)
+> -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
+> +flag ~empty different-values(srcu-rscs) as srcu-bad-value-match
+>  
+>  (* Compute marked and plain memory accesses *)
+>  let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+> -- 
+> 2.40.0.rc2
+> 
