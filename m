@@ -2,129 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9526C449E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0018D6C44A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjCVIIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S230109AbjCVILs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVIIo (ORCPT
+        with ESMTP id S229733AbjCVILq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:08:44 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E739DBDFB;
-        Wed, 22 Mar 2023 01:08:42 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ew6so6358120edb.7;
-        Wed, 22 Mar 2023 01:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679472521;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KOS/AQ9Mxky4fQ6rjcr9RElvh14G5SX1SO150d01EVk=;
-        b=k1NSpqSY2Ai+jnahWTFmKmP0dJYXCS29JrRHwmQtyJ+pUPr2a481l1UM+wijV2Mfg3
-         x8pctI8fqa0K7NmHzxIpB9uRuH+tsev4TknN5cc0xh0mEBdn55Dyu+y5/cB+cwps/qgw
-         mOa06INvmc5XgU8XLkdwISoF1jYcnix0X9wkXZkDCqahkOCU9PrprT3y8ijqIZtUuz6P
-         Fo/OcN1Auz4IVkHINGtEymYfOq6QXugwDLdRLZP4fYOJ0tQjoyXTQEE86BaUiTcLmcDc
-         pKhLHw61mxSthSeEurPA8tLQHi5NwFjDv9E4GSubehHe44Fcq3UYbGDa4g7tFcvk32cF
-         00uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679472521;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KOS/AQ9Mxky4fQ6rjcr9RElvh14G5SX1SO150d01EVk=;
-        b=DFN4mcaoWGKbi+MTErX/PUyMgPTjlvPlXkYiw3epU6uT+7mdIlenkHtet2ygpwdVb8
-         op8WbRxxb29KBzxI9CSwPEHBHAqogVt8PvDaC7/ZMRduonDfjUyl+gDrHr7G2x0BySc4
-         sOwuPQ/QB4E6II4+u6rs7FSP0+51XWAW99JY2nPCrKo1hJ6VTTqXx1gnsriDlGDPPphz
-         2UAgDy81hoxDpiqaSO4Gr92aSgP2lZh+UiFugDp8d7T3sraWUwdjafQNWHkQB3wMf4sq
-         n7QEgtETnYMygVhm5RHaLa4h24s8wCdbBf9fI5JpwFjMMtzw+ZWOgzPC2LqWmCcIRiUr
-         Tbvg==
-X-Gm-Message-State: AO0yUKWSQhETx4TZDUJVYp7UU8zClIFH2NmtZ4TLmOpmeXdLceS9YEqQ
-        RvvkSNjTSxCSI3nVIc94ulM=
-X-Google-Smtp-Source: AK7set+JBeg3sdmWOIbqfYUGokDkx//K3duJycIWzBJMP2SHTMm6PvPV/HFnnoPEtzSLX78EEb8/JQ==
-X-Received: by 2002:a17:906:9b8f:b0:8af:22b4:99d2 with SMTP id dd15-20020a1709069b8f00b008af22b499d2mr1592331ejc.5.1679472521466;
-        Wed, 22 Mar 2023 01:08:41 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id ot9-20020a170906ccc900b009331450d04esm5683871ejb.178.2023.03.22.01.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 01:08:41 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 11:08:37 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: Re: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_EXTTS
- for lan8841
-Message-ID: <1e989615-79f9-483c-9229-6f1e22c0fd8c@kili.mountain>
+        Wed, 22 Mar 2023 04:11:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8861B5370B;
+        Wed, 22 Mar 2023 01:11:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 151A361F9C;
+        Wed, 22 Mar 2023 08:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EA9C433D2;
+        Wed, 22 Mar 2023 08:11:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679472704;
+        bh=9wLh6dpUgXrMGk6l11rnJ98E8+m6yKqHIVxTtatyre4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NEKplG+QTZHNWWV8ZbNfjtVcweHCJhPYI3b6n23mmQU8nV4iUU2UMC/42OuPjI4Yx
+         onoZkymauGQp+v/3KN9+TtE0sOQZNcEzlhHHWGneZ1GMM2bbQKvHSihLxC6RTyfc+X
+         KGpTrSljq6OQYCt8/2b07RNebWlNhWDX2uDILhUxRLctbCyStmnit3MhRhSCWcoPM9
+         T3t+OVbPQlSNWyJN3gqmD6UqKmCZuAwMzL9+EP7jpKXQ6qiJPefntCgM+EPMTzCJ18
+         oAOkFaub8QOKAiztH9hlu4RYVu5hNVlIZysnqy4WimTFSzZEiboc+bdn3tnPKJHILc
+         EooIpot448iuA==
+Message-ID: <7db7eb59-68fc-b7b2-5a29-00b698f68cbb@kernel.org>
+Date:   Wed, 22 Mar 2023 10:11:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321115541.4187912-1-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 2/2] usb: dwc3: Support
+ 'snps,gadget-keep-connect-sys-sleep' feature
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "vigneshr@ti.com" <vigneshr@ti.com>, "srk@ti.com" <srk@ti.com>,
+        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230320093447.32105-1-rogerq@kernel.org>
+ <20230320093447.32105-3-rogerq@kernel.org>
+ <20230320185206.a4o4bmhml7rlg6f7@synopsys.com>
+ <48814d21-24d9-3141-68c8-316d071de1a8@kernel.org>
+ <20230321184346.dxmqwq5rcsc2otrj@synopsys.com>
+ <20230321190458.6uqlbtyfh3hc6ilg@synopsys.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230321190458.6uqlbtyfh3hc6ilg@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,
+On 21/03/2023 21:05, Thinh Nguyen wrote:
+> On Tue, Mar 21, 2023, Thinh Nguyen wrote:
+>> On Tue, Mar 21, 2023, Roger Quadros wrote:
+>>> Hi Thinh,
+>>>
+>>> On 20/03/2023 20:52, Thinh Nguyen wrote:
+>>>> Hi,
+>>>>
+>>>> On Mon, Mar 20, 2023, Roger Quadros wrote:
+>>>>> Implement 'snps,gadget-keep-connect-sys-sleep' property.
+>>>>>
+>>>>> Do not stop the gadget controller and disconnect if this
+>>>>> property is present and we are connected to a USB Host.
+>>>>>
+>>>>> Prevent System sleep if Gadget is not in USB suspend.
+>>>>>
+>>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>>>> ---
+>>>>>  drivers/usb/dwc3/core.c   | 25 +++++++++++++++++++------
+>>>>>  drivers/usb/dwc3/core.h   |  2 ++
+>>>>>  drivers/usb/dwc3/gadget.c | 25 +++++++++++++++++++++++--
+>>>>>  3 files changed, 44 insertions(+), 8 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>> index 476b63618511..a47bbaa27302 100644
+>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>> @@ -1575,6 +1575,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>>>>  	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>>>>  				"snps,dis-split-quirk");
+>>>>>  
+>>>>> +	dwc->gadget_keep_connect_sys_sleep = device_property_read_bool(dev,
+>>>>> +				"snps,gadget-keep-connect-sys-sleep");
+>>>>> +
+>>>>>  	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>>>>  	dwc->tx_de_emphasis = tx_de_emphasis;
+>>>>>  
+>>>>> @@ -2027,14 +2030,20 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>  {
+>>>>>  	unsigned long	flags;
+>>>>>  	u32 reg;
+>>>>> +	int ret;
+>>>>>  
+>>>>>  	switch (dwc->current_dr_role) {
+>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>>  		if (pm_runtime_suspended(dwc->dev))
+>>>>>  			break;
+>>>>> -		dwc3_gadget_suspend(dwc);
+>>>>> +		ret = dwc3_gadget_suspend(dwc);
+>>>>> +		if (ret) {
+>>>>> +			dev_err(dwc->dev, "gadget not suspended: %d\n", ret);
+>>>>> +			return ret;
+>>>>> +		}
+>>>>>  		synchronize_irq(dwc->irq_gadget);
+>>>>> -		dwc3_core_exit(dwc);
+>>>>> +		if(!dwc->gadget_keep_connect_sys_sleep)
+>>>>> +			dwc3_core_exit(dwc);
+>>>>>  		break;
+>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
+>>>>>  		if (!PMSG_IS_AUTO(msg) && !device_may_wakeup(dwc->dev)) {
+>>>>> @@ -2088,11 +2097,15 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>  
+>>>>>  	switch (dwc->current_dr_role) {
+>>>>>  	case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>> -		ret = dwc3_core_init_for_resume(dwc);
+>>>>> -		if (ret)
+>>>>> -			return ret;
+>>>>> +		if (!dwc->gadget_keep_connect_sys_sleep)
+>>>>> +		{
+>>>>> +			ret = dwc3_core_init_for_resume(dwc);
+>>>>> +			if (ret)
+>>>>> +				return ret;
+>>>>> +
+>>>>> +			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+>>>>> +		}
+>>>>>  
+>>>>> -		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+>>>>>  		dwc3_gadget_resume(dwc);
+>>>>>  		break;
+>>>>>  	case DWC3_GCTL_PRTCAP_HOST:
+>>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>>>>> index 582ebd9cf9c2..f84bac815bed 100644
+>>>>> --- a/drivers/usb/dwc3/core.h
+>>>>> +++ b/drivers/usb/dwc3/core.h
+>>>>> @@ -1328,6 +1328,8 @@ struct dwc3 {
+>>>>>  	unsigned		dis_split_quirk:1;
+>>>>>  	unsigned		async_callbacks:1;
+>>>>>  
+>>>>> +	unsigned		gadget_keep_connect_sys_sleep:1;
+>>>>> +
+>>>>>  	u16			imod_interval;
+>>>>>  
+>>>>>  	int			max_cfg_eps;
+>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>> index 3c63fa97a680..8062e44f63f6 100644
+>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>> @@ -4572,12 +4572,23 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+>>>>>  int dwc3_gadget_suspend(struct dwc3 *dwc)
+>>>>>  {
+>>>>>  	unsigned long flags;
+>>>>> +	int link_state;
+>>>>>  
+>>>>>  	if (!dwc->gadget_driver)
+>>>>>  		return 0;
+>>>>>  
+>>>>> -	dwc3_gadget_run_stop(dwc, false, false);
+>>>>> +	if (dwc->gadget_keep_connect_sys_sleep && dwc->connected) {
+>>>>> +		link_state = dwc3_gadget_get_link_state(dwc);
+>>>>> +		/* Prevent PM Sleep if not in U3/L2 */
+>>>>> +		if (link_state != DWC3_LINK_STATE_U3)
+>>>>> +			return -EBUSY;
+>>>>> +
+>>>>> +		/* don't stop/disconnect */
+>>>>> +		dwc3_gadget_disable_irq(dwc);
+>>>>
+>>>> We shouldn't disable event interrupt here. What will happen if the
+>>>
+>>> Due to some reason, if I don't disable the event interrupts here then
+>>> after USB resume the USB controller is malfunctioning.
+>>> It no longer responds to any requests from Host.
+>>
+>> You should look into this. These events are important as they can tell
+>> whether the host initiates resume.
+>>
+>>>
+>>>> device is disconnected and reconnect to the host while the device is
+>>>> still in system suspend? The host would not be able to communicate with
+>>>> the device then.
+>>>
+>>> In the TI platform, The system is woken up on any VBUS/linestate change
+>>> and in dwc3_gadget_resume we enable the events again and check for pending
+>>> events. Is it pointless to check for pending events there?
+>>>
+>>
+>> It seems fragile for the implementation to be dependent on platform
+>> specific feature right?
+>>
+>> Also, what will happen in a typical case when the host puts the device
+>> in suspend and initiates resume while the device is in system suspend
+>> (and stay in suspend over a period of time)? There is no VBUS change.
+>> There will be problem if host detects no response from device in time.
+>>
+>> Don't we need these events to wakeup the device?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Horatiu-Vultur/net-phy-micrel-Add-support-for-PTP_PF_EXTTS-for-lan8841/20230321-195743
-patch link:    https://lore.kernel.org/r/20230321115541.4187912-1-horatiu.vultur%40microchip.com
-patch subject: [PATCH net-next] net: phy: micrel: Add support for PTP_PF_EXTTS for lan8841
-config: riscv-randconfig-m031-20230319 (https://download.01.org/0day-ci/archive/20230322/202303221128.KLPNcDLt-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+That's why the TI implementation has line-state change detection to
+detect a USB resume. We are doing a out-of-band wake-up. The wake up
+events are configured in the wrapper driver (dwc3-am62.c).
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303221128.KLPNcDLt-lkp@intel.com/
+Do you know of any dwc3 implementation that uses in-band mechanism
+to wake up the System. i.e. it relies on events enabled in DEVTEN register?
 
-New smatch warnings:
-drivers/net/phy/micrel.c:3480 lan8841_gpio_process_cap() warn: impossible condition '(tmp < 0) => (0-u16max < 0)'
+>>
+> 
+> We may not be able to suspend everything in system suspend for this
+> case. I'm thinking of treating these events as if they are PME to wakeup
+> the device, but they are not the same. It may not be simple to handle
+> this. The lower layers may need to stay awake for the dwc3 to handle
+> these events. Hm... it gets a bit complicated.
 
-Old smatch warnings:
-drivers/net/phy/micrel.c:1683 ksz9x31_cable_test_get_status() error: uninitialized symbol 'ret'.
+As we are going into suspend, we are not really in a position to handle any
+(DEVTEN) events till we have fully resumed.
+So yes, we need to rely on platform specific implementation to wake
+the System on any USB event.
 
-vim +3480 drivers/net/phy/micrel.c
-
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3467  static void lan8841_gpio_process_cap(struct kszphy_ptp_priv *ptp_priv)
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3468  {
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3469  	struct phy_device *phydev = ptp_priv->phydev;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3470  	struct ptp_clock_event ptp_event = {0};
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3471  	s32 sec, nsec;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3472  	int pin, ret;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3473  	u16 tmp;
-                                                        ^^^^^^^
-
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3474  
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3475  	pin = ptp_find_pin_unlocked(ptp_priv->ptp_clock, PTP_PF_EXTTS, 0);
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3476  	if (pin == -1)
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3477  		return;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3478  
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3479  	tmp = phy_read_mmd(phydev, 2, LAN8841_PTP_GPIO_CAP_STS);
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21 @3480  	if (tmp < 0)
-                                                            ^^^^^^^
-u16 can't be negative.
-
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3481  		return;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3482  
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3483  	ret = phy_write_mmd(phydev, 2, LAN8841_PTP_GPIO_SEL,
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3484  			    LAN8841_PTP_GPIO_SEL_GPIO_SEL(pin));
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3485  	if (ret)
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3486  		return;
-25cbf94843ee0b7 Horatiu Vultur 2023-03-21  3487  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
-
+cheers,
+-roger
