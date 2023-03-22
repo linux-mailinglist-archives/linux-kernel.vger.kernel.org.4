@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DC46C5101
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26F16C5104
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjCVQm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S230429AbjCVQnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjCVQmr (ORCPT
+        with ESMTP id S230403AbjCVQnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:42:47 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8758B6424F;
-        Wed, 22 Mar 2023 09:42:41 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id k2so19812090pll.8;
-        Wed, 22 Mar 2023 09:42:41 -0700 (PDT)
+        Wed, 22 Mar 2023 12:43:07 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E186421A;
+        Wed, 22 Mar 2023 09:42:51 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so9193642pjb.4;
+        Wed, 22 Mar 2023 09:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679503360;
+        d=gmail.com; s=20210112; t=1679503371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F3QY51BU06amNE5DXLTj+e6DpKsWv8MVhoGwTNbrWEU=;
-        b=h/Wr/kK/YH1YCGwk0L/Mbp0mVuv3hhGI+H1CszjdCt+BzfyoC8Zp5dbJo6fuD9drwL
-         DsdiGZObjlc1ij4Gd15BmdkdgIQhNZMF0XXPwKOJim1Zm6UZXxOqrHZuibn3dcZeBI0n
-         PTFqzMguyN9TC78ngQiU5Q886XaC73pkUO7U/jbJo4CeRU48+Tr5oelL0CSqwEcPTviL
-         59Vniq9GHYiM//ejhbPHUDZo0oFJoOMC3yUzj4fZti3MfPIPKEytseEUaSDdM18UHRee
-         lpwSf38QdV5Z2nmKuxjf3qjt262iCuhUirW+1cmQww7XPbJ92hsxYvyaUOoRWVJZyj7g
-         7Dog==
+        bh=YFwtRuKKvS08EgPlfHprYiQ7DefepSwO2og+GHcp1kY=;
+        b=Qp1AidbByuDDhxfgwth82wGocS1piUfn9aK7wlw10ZtnYafxvy+fOz1tlfF8hPgB3j
+         ZwutZKbCDgXw30XYsJq793Dz7pdrISLNj0e7pV6Tal93IMbR7PKpWYkWuc1B9tPgZTRo
+         85n9kSiA+dkCqQKG0N0q5s2nJumLnsMhnjE8d2/tL9QsWP91ELvqiRiMGLbLRFtZLnLm
+         SvO78dXJn/44RZ7H8JeiOtLNVpwPKZAd7OEUMlHtcsg3AbaDm9ruWC+9d5fCa+3Jb5LA
+         SPnpOxw6CSPhEo589jkBDfXDC4FnGelc5rMz+mXcHPJ/oW+Mr++LpdNlVbjFsJ/eGDLs
+         egZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679503360;
+        d=1e100.net; s=20210112; t=1679503371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F3QY51BU06amNE5DXLTj+e6DpKsWv8MVhoGwTNbrWEU=;
-        b=0qHgNwVZBzPN58olOnfaV1HS4fg0TvqZC93f6ShrN9/zslUZ+dn6/JyQ9E7y0nRVLx
-         ScT76/s3NNhOpHKJ38uo7DgiL2pb3UnSnms75y3wmnHe3/Ugs4sSGxnxZODpUIkCONHZ
-         l9DaaWK7KyKT//3CEvCS67vcj3yFZHgJQGrNr5NqsRgy+VzV6n4LdEX39HAHUkP0wsf+
-         E8jn1SGsnV/J4pOQMmMNqDT+zy3weMYalsY1kt9nEUTJ/s8D9rk7y6Kf2sfhwrEJ0CJQ
-         UFW92OgdTQEGyP97SBkA+gKLpHh9uEaBWZ2NJAozU3ViE+dkKGWHCHfEZ6quTtv3eG0T
-         fDVw==
-X-Gm-Message-State: AO0yUKUXdi9RB9x+3bVXQK72k+mBfANE+NT2LnOGxkz/qtrZ4vMGhBTn
-        F6BLFXTNqm7V2kVRxM+iHcbWO34TkS5gf1eNunU=
-X-Google-Smtp-Source: AK7set/FPO3B2DNEXzigEIlb2XVreNnIKLTMsjL+5h1Jm2LPlk6cECiTRvvNh9Ea5sO3sS57+ASKnQ==
-X-Received: by 2002:a05:6a20:98a7:b0:d7:47e8:59bd with SMTP id jk39-20020a056a2098a700b000d747e859bdmr112041pzb.60.1679503360551;
-        Wed, 22 Mar 2023 09:42:40 -0700 (PDT)
+        bh=YFwtRuKKvS08EgPlfHprYiQ7DefepSwO2og+GHcp1kY=;
+        b=YyhF+fZpSFB2NqTqZxtvMUuMuLO8Pl6ftwWncqWvGUxtgI8RM2QadWdM34FYAFUeU2
+         WDY/ws0MHZHLditSa6mEiapeWy7oZs2zsRgqqbHJfmsPJH09Ua0aI9L66Em8h0r+brOb
+         eYP2tiDOsyI69mTsGJmjHwz0FHdSUyN1SuUHKiPGPMsjc/0HQhKhqsAk2U7PlZFTxPVL
+         y7SKScUvYtLwwjrtk/rSvHIEwRwuVAL4CPQ0TRTu1PMz0Jjl5gM/lhTM6/cRso/M/1Wz
+         ZXnjaeO9ybFqRJRhsm6/wT91O9eQ8vYl4YLycWN1su2iXEjNbkYYpajcVWM5P0W/CGFQ
+         12mQ==
+X-Gm-Message-State: AO0yUKUOQ5JOxlaf9471ZlJh24uYHo5wFS/ynEwRE1eFRsFRtlPNR9+9
+        0V3sZ6OwKgVpiyZOmt52eeX6v84IpcaPfltQ+Kk=
+X-Google-Smtp-Source: AK7set+ojjwxhelE4d4L78Viq1ZZsNb8i86Wz4U0YMtzoRJRY9PBS11tAwTct6sosGlgorspkhBUlA==
+X-Received: by 2002:a05:6a20:b712:b0:da:267a:d740 with SMTP id fg18-20020a056a20b71200b000da267ad740mr211929pzb.14.1679503370735;
+        Wed, 22 Mar 2023 09:42:50 -0700 (PDT)
 Received: from d.home.yangfl.dn42 ([104.28.213.202])
-        by smtp.gmail.com with ESMTPSA id g6-20020a62e306000000b005a8bf239f5csm10300830pfh.193.2023.03.22.09.42.35
+        by smtp.gmail.com with ESMTPSA id g6-20020a62e306000000b005a8bf239f5csm10300830pfh.193.2023.03.22.09.42.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 09:42:40 -0700 (PDT)
+        Wed, 22 Mar 2023 09:42:50 -0700 (PDT)
 From:   David Yang <mmyangfl@gmail.com>
 To:     linux-clk@vger.kernel.org
 Cc:     David Yang <mmyangfl@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 3/9] clk: hisilicon: Remove hisi_clk_alloc
-Date:   Thu, 23 Mar 2023 00:41:51 +0800
-Message-Id: <20230322164201.2454771-4-mmyangfl@gmail.com>
+Subject: [PATCH v7 4/9] clk: hisilicon: Add helper functions for platform driver
+Date:   Thu, 23 Mar 2023 00:41:52 +0800
+Message-Id: <20230322164201.2454771-5-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230322164201.2454771-1-mmyangfl@gmail.com>
 References: <20230322164201.2454771-1-mmyangfl@gmail.com>
@@ -73,425 +73,438 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During migration to devm APIs, (virtual) fixed-rate clocks were found hard
-on devm APIs, since they often depended by crucial peripherals, thus
-require early initialization before device probing, and cannot use devm
-APIs.
+Helper functions extract common operations on platform drivers.
 
-One solution to this problem is to add a "fixed-clock" node to device tree,
-independent to clock device, and make those peripherals depend on that.
-However, there is also some devices that do use fixed-rate clocks provided
-by drivers, for example clk-hi3660.c .
-
-To simplify codes, we migrate clocks of other types to devm APIs, while
-keep fixed-rate clocks self-managed, alongside with struct hisi_clock_data,
-and remove devm-managed hisi_clock_data.
-
-Patches for devm APIs migration are to follow.
+This patch is part of devm APIs migration.
 
 Signed-off-by: David Yang <mmyangfl@gmail.com>
 ---
- drivers/clk/hisilicon/clk-hi3519.c      | 14 ++++-----
- drivers/clk/hisilicon/clk-hi3559a.c     | 25 ++++++----------
- drivers/clk/hisilicon/clk.c             | 40 +++++--------------------
- drivers/clk/hisilicon/clk.h             |  3 +-
- drivers/clk/hisilicon/crg-hi3516cv300.c | 26 ++++++----------
- drivers/clk/hisilicon/crg-hi3798.c      | 25 ++++++----------
- 6 files changed, 43 insertions(+), 90 deletions(-)
+ drivers/clk/hisilicon/clk-hi6220.c |   6 +-
+ drivers/clk/hisilicon/clk.c        | 132 ++++++++++++++++++++++++++++-
+ drivers/clk/hisilicon/clk.h        |  75 +++++++++++++---
+ drivers/clk/hisilicon/crg.h        |   5 ++
+ drivers/clk/hisilicon/reset.c      |  65 +++++++++++++-
+ 5 files changed, 264 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/clk/hisilicon/clk-hi3519.c b/drivers/clk/hisilicon/clk-hi3519.c
-index ad0c7f350..556c89037 100644
---- a/drivers/clk/hisilicon/clk-hi3519.c
-+++ b/drivers/clk/hisilicon/clk-hi3519.c
-@@ -75,10 +75,12 @@ static const struct hisi_gate_clock hi3519_gate_clks[] = {
+diff --git a/drivers/clk/hisilicon/clk-hi6220.c b/drivers/clk/hisilicon/clk-hi6220.c
+index e7cdf72d4..d9de83a19 100644
+--- a/drivers/clk/hisilicon/clk-hi6220.c
++++ b/drivers/clk/hisilicon/clk-hi6220.c
+@@ -191,7 +191,7 @@ static void __init hi6220_clk_sys_init(struct device_node *np)
+ 	hisi_clk_register_mux(hi6220_mux_clks_sys,
+ 			ARRAY_SIZE(hi6220_mux_clks_sys), clk_data);
  
- static struct hisi_clock_data *hi3519_clk_register(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3519_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3519_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -100,11 +102,6 @@ static struct hisi_clock_data *hi3519_clk_register(struct platform_device *pdev)
- 	if (ret)
- 		goto unregister_mux;
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_fixed_rate:
-@@ -127,8 +124,6 @@ static void hi3519_clk_unregister(struct platform_device *pdev)
- {
- 	struct hi3519_crg_data *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(hi3519_gate_clks,
- 				ARRAY_SIZE(hi3519_mux_clks),
- 				crg->clk_data);
-@@ -164,10 +159,13 @@ static int hi3519_clk_probe(struct platform_device *pdev)
- 
- static int hi3519_clk_remove(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hi3519_crg_data *crg = platform_get_drvdata(pdev);
- 
- 	hisi_reset_exit(crg->rstc);
- 	hi3519_clk_unregister(pdev);
-+	hisi_clk_free(np, crg->clk_data);
- 	return 0;
+-	hi6220_clk_register_divider(hi6220_div_clks_sys,
++	hi6220_clk_register_divider(NULL, hi6220_div_clks_sys,
+ 			ARRAY_SIZE(hi6220_div_clks_sys), clk_data);
  }
+ CLK_OF_DECLARE_DRIVER(hi6220_clk_sys, "hisilicon,hi6220-sysctrl", hi6220_clk_sys_init);
+@@ -248,7 +248,7 @@ static void __init hi6220_clk_media_init(struct device_node *np)
+ 	hisi_clk_register_mux(hi6220_mux_clks_media,
+ 				ARRAY_SIZE(hi6220_mux_clks_media), clk_data);
  
-diff --git a/drivers/clk/hisilicon/clk-hi3559a.c b/drivers/clk/hisilicon/clk-hi3559a.c
-index 8036bd8cb..c3dd018f8 100644
---- a/drivers/clk/hisilicon/clk-hi3559a.c
-+++ b/drivers/clk/hisilicon/clk-hi3559a.c
-@@ -505,10 +505,12 @@ static void hisi_clk_register_pll(struct hi3559av100_pll_clock *clks,
- static struct hisi_clock_data *hi3559av100_clk_register(
- 	struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3559AV100_CRG_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3559AV100_CRG_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -530,11 +532,6 @@ static struct hisi_clock_data *hi3559av100_clk_register(
- 	if (ret)
- 		goto unregister_mux;
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--				  of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_gate:
-@@ -553,8 +550,6 @@ static void hi3559av100_clk_unregister(struct platform_device *pdev)
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(hi3559av100_gate_clks,
- 				 ARRAY_SIZE(hi3559av100_gate_clks), crg->clk_data);
- 	hisi_clk_unregister_mux(hi3559av100_mux_clks_crg,
-@@ -699,12 +694,14 @@ static int hi3559av100_shub_default_clk_set(void)
- static struct hisi_clock_data *hi3559av100_shub_clk_register(
- 	struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data = NULL;
- 	int ret;
- 
- 	hi3559av100_shub_default_clk_set();
- 
--	clk_data = hisi_clk_alloc(pdev, HI3559AV100_SHUB_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3559AV100_SHUB_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -728,11 +725,6 @@ static struct hisi_clock_data *hi3559av100_shub_clk_register(
- 	if (ret)
- 		goto unregister_factor;
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--				  of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_gate:
-@@ -754,8 +746,6 @@ static void hi3559av100_shub_clk_unregister(struct platform_device *pdev)
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(hi3559av100_shub_gate_clks,
- 				 ARRAY_SIZE(hi3559av100_shub_gate_clks), crg->clk_data);
- 	hisi_clk_unregister_divider(hi3559av100_shub_div_clks,
-@@ -812,10 +802,13 @@ static int hi3559av100_crg_probe(struct platform_device *pdev)
- 
- static int hi3559av100_crg_remove(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
- 	hisi_reset_exit(crg->rstc);
- 	crg->funcs->unregister_clks(pdev);
-+	hisi_clk_free(np, crg->clk_data);
- 	return 0;
+-	hi6220_clk_register_divider(hi6220_div_clks_media,
++	hi6220_clk_register_divider(NULL, hi6220_div_clks_media,
+ 				ARRAY_SIZE(hi6220_div_clks_media), clk_data);
  }
+ CLK_OF_DECLARE_DRIVER(hi6220_clk_media, "hisilicon,hi6220-mediactrl", hi6220_clk_media_init);
+@@ -279,7 +279,7 @@ static void __init hi6220_clk_power_init(struct device_node *np)
+ 	hisi_clk_register_gate(hi6220_gate_clks_power,
+ 				ARRAY_SIZE(hi6220_gate_clks_power), clk_data);
  
+-	hi6220_clk_register_divider(hi6220_div_clks_power,
++	hi6220_clk_register_divider(NULL, hi6220_div_clks_power,
+ 				ARRAY_SIZE(hi6220_div_clks_power), clk_data);
+ }
+ CLK_OF_DECLARE(hi6220_clk_power, "hisilicon,hi6220-pmctrl", hi6220_clk_power_init);
 diff --git a/drivers/clk/hisilicon/clk.c b/drivers/clk/hisilicon/clk.c
-index 54d9fdc93..a949be5fa 100644
+index a949be5fa..439fd154b 100644
 --- a/drivers/clk/hisilicon/clk.c
 +++ b/drivers/clk/hisilicon/clk.c
-@@ -23,38 +23,6 @@
+@@ -58,6 +58,13 @@ EXPORT_SYMBOL_GPL(hisi_clk_init);
  
- static DEFINE_SPINLOCK(hisi_clk_lock);
- 
--struct hisi_clock_data *hisi_clk_alloc(struct platform_device *pdev,
--						int nr_clks)
--{
--	struct hisi_clock_data *clk_data;
--	struct resource *res;
--	struct clk **clk_table;
--
--	clk_data = devm_kmalloc(&pdev->dev, sizeof(*clk_data), GFP_KERNEL);
--	if (!clk_data)
--		return NULL;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return NULL;
--	clk_data->base = devm_ioremap(&pdev->dev,
--				res->start, resource_size(res));
--	if (!clk_data->base)
--		return NULL;
--
--	clk_table = devm_kmalloc_array(&pdev->dev, nr_clks,
--				       sizeof(*clk_table),
--				       GFP_KERNEL);
--	if (!clk_table)
--		return NULL;
--
--	clk_data->clk_data.clks = clk_table;
--	clk_data->clk_data.clk_num = nr_clks;
--
--	return clk_data;
--}
--EXPORT_SYMBOL_GPL(hisi_clk_alloc);
--
- struct hisi_clock_data *hisi_clk_init(struct device_node *np,
- 					     int nr_clks)
+ void hisi_clk_free(struct device_node *np, struct hisi_clock_data *data)
  {
-@@ -88,6 +56,14 @@ struct hisi_clock_data *hisi_clk_init(struct device_node *np,
- }
- EXPORT_SYMBOL_GPL(hisi_clk_init);
- 
-+void hisi_clk_free(struct device_node *np, struct hisi_clock_data *data)
-+{
-+	of_clk_del_provider(np);
-+	kfree(data->clk_data.clks);
-+	kfree(data);
-+}
-+EXPORT_SYMBOL_GPL(hisi_clk_free);
++	if (data->clks) {
++		if (data->clks->fixed_rate_clks_num)
++			hisi_clk_unregister_fixed_rate(data);
++		if (data->clks->fixed_factor_clks_num)
++			hisi_clk_unregister_fixed_factor(data);
++	}
 +
- int hisi_clk_register_fixed_rate(const struct hisi_fixed_rate_clock *clks,
- 					 int nums, struct hisi_clock_data *data)
+ 	of_clk_del_provider(np);
+ 	kfree(data->clk_data.clks);
+ 	kfree(data);
+@@ -260,7 +267,7 @@ int hisi_clk_register_gate(const struct hisi_gate_clock *clks,
+ }
+ EXPORT_SYMBOL_GPL(hisi_clk_register_gate);
+ 
+-void hisi_clk_register_gate_sep(const struct hisi_gate_clock *clks,
++int hisi_clk_register_gate_sep(const struct hisi_gate_clock *clks,
+ 				       int nums, struct hisi_clock_data *data)
  {
+ 	struct clk *clk;
+@@ -286,11 +293,14 @@ void hisi_clk_register_gate_sep(const struct hisi_gate_clock *clks,
+ 
+ 		data->clk_data.clks[clks[i].id] = clk;
+ 	}
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(hisi_clk_register_gate_sep);
+ 
+-void __init hi6220_clk_register_divider(const struct hi6220_divider_clock *clks,
+-					int nums, struct hisi_clock_data *data)
++int hi6220_clk_register_divider(struct device *dev,
++				const struct hi6220_divider_clock *clks,
++				int nums, struct hisi_clock_data *data)
+ {
+ 	struct clk *clk;
+ 	void __iomem *base = data->base;
+@@ -308,7 +318,7 @@ void __init hi6220_clk_register_divider(const struct hi6220_divider_clock *clks,
+ 		if (IS_ERR(clk)) {
+ 			pr_err("%s: failed to register clock %s\n",
+ 			       __func__, clks[i].name);
+-			continue;
++			return PTR_ERR(clk);
+ 		}
+ 
+ 		if (clks[i].alias)
+@@ -316,4 +326,118 @@ void __init hi6220_clk_register_divider(const struct hi6220_divider_clock *clks,
+ 
+ 		data->clk_data.clks[clks[i].id] = clk;
+ 	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(hi6220_clk_register_divider);
++
++int hisi_clk_register(struct device *dev, const struct hisi_clocks *clks,
++		      struct hisi_clock_data *data)
++{
++	int ret;
++
++#define do_hisi_clk_register(type) do { \
++	if (clks->type##_clks_num) { \
++		ret = hisi_clk_register_##type(dev, clks->type##_clks, \
++					       clks->type##_clks_num, data); \
++		if (ret) \
++			return ret; \
++	} \
++} while (0)
++
++	do_hisi_clk_register(mux);
++	do_hisi_clk_register(phase);
++	do_hisi_clk_register(divider);
++	do_hisi_clk_register(gate);
++	do_hisi_clk_register(gate_sep);
++
++	if (clks->clk_register_customized && clks->customized_clks_num) {
++		ret = clks->clk_register_customized(dev, clks->customized_clks,
++						    clks->customized_clks_num, data);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(hisi_clk_register);
++
++int hisi_clk_early_init(struct device_node *np, const struct hisi_clocks *clks)
++{
++	struct hisi_clock_data *data;
++	int ret;
++
++	data = hisi_clk_init(np, clks->nr);
++	if (!data)
++		return -ENOMEM;
++	data->clks = clks;
++
++	ret = hisi_clk_register_fixed_rate(clks->fixed_rate_clks,
++					   clks->fixed_rate_clks_num, data);
++	if (ret)
++		goto err;
++
++	ret = hisi_clk_register_fixed_factor(clks->fixed_factor_clks,
++					     clks->fixed_factor_clks_num, data);
++	if (ret)
++		goto err;
++
++	np->data = data;
++	return 0;
++
++err:
++	hisi_clk_free(np, data);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(hisi_clk_early_init);
++
++int hisi_clk_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	const struct hisi_clocks *clks;
++	struct hisi_clock_data *data;
++	int ret;
++
++	clks = of_device_get_match_data(dev);
++	if (!clks)
++		return -ENOENT;
++
++	if (!np->data) {
++		ret = hisi_clk_early_init(np, clks);
++		if (ret)
++			return ret;
++	}
++
++	data = np->data;
++	np->data = NULL;
++
++	if (clks->prologue) {
++		ret = clks->prologue(dev, data);
++		if (ret)
++			goto err;
++	}
++
++	ret = hisi_clk_register(dev, clks, data);
++	if (ret)
++		goto err;
++
++	platform_set_drvdata(pdev, data);
++	return 0;
++
++err:
++	hisi_clk_free(np, data);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(hisi_clk_probe);
++
++int hisi_clk_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	struct hisi_clock_data *data = platform_get_drvdata(pdev);
++
++	hisi_clk_free(np, data);
++	return 0;
+ }
++EXPORT_SYMBOL_GPL(hisi_clk_remove);
 diff --git a/drivers/clk/hisilicon/clk.h b/drivers/clk/hisilicon/clk.h
-index 7a9b42e1b..30b6d4405 100644
+index 30b6d4405..daa85acda 100644
 --- a/drivers/clk/hisilicon/clk.h
 +++ b/drivers/clk/hisilicon/clk.h
-@@ -111,8 +111,9 @@ struct clk *hi6220_register_clkdiv(struct device *dev, const char *name,
- 	const char *parent_name, unsigned long flags, void __iomem *reg,
- 	u8 shift, u8 width, u32 mask_bit, spinlock_t *lock);
+@@ -17,10 +17,22 @@
+ #include <linux/spinlock.h>
  
--struct hisi_clock_data *hisi_clk_alloc(struct platform_device *, int);
- struct hisi_clock_data *hisi_clk_init(struct device_node *, int);
-+void hisi_clk_free(struct device_node *np, struct hisi_clock_data *data);
+ struct platform_device;
++struct hisi_clocks;
+ 
++/*
++ * (Virtual) fixed clocks, often depended by crucial peripherals, require
++ * early initialization before device probing, thus cannot use devm APIs.
++ * Otherwise, kernel will defer those peripherals, causing boot failure.
++ *
++ * fixed_rate and fixed_factor clocks are driver-managed. They are freed by
++ * `hisi_clk_free` altogether.
++ *
++ * Other clocks are devm-managed.
++ */
+ struct hisi_clock_data {
+ 	struct clk_onecell_data	clk_data;
+ 	void __iomem		*base;
++	const struct hisi_clocks	*clks;
+ };
+ 
+ struct hisi_fixed_rate_clock {
+@@ -103,6 +115,38 @@ struct hisi_gate_clock {
+ 	const char		*alias;
+ };
+ 
++struct hisi_clocks {
++	int nr;
 +
- int hisi_clk_register_fixed_rate(const struct hisi_fixed_rate_clock *,
++	int (*prologue)(struct device *dev, struct hisi_clock_data *data);
++
++	const struct hisi_fixed_rate_clock *fixed_rate_clks;
++	int fixed_rate_clks_num;
++
++	const struct hisi_fixed_factor_clock *fixed_factor_clks;
++	int fixed_factor_clks_num;
++
++	const struct hisi_mux_clock *mux_clks;
++	int mux_clks_num;
++
++	const struct hisi_phase_clock *phase_clks;
++	int phase_clks_num;
++
++	const struct hisi_divider_clock *divider_clks;
++	int divider_clks_num;
++
++	const struct hisi_gate_clock *gate_clks;
++	int gate_clks_num;
++
++	const struct hisi_gate_clock *gate_sep_clks;
++	int gate_sep_clks_num;
++
++	const void *customized_clks;
++	int customized_clks_num;
++	int (*clk_register_customized)(struct device *dev, const void *clks,
++				       int num, struct hisi_clock_data *data);
++};
++
+ struct clk *hisi_register_clkgate_sep(struct device *, const char *,
+ 				const char *, unsigned long,
+ 				void __iomem *, u8,
+@@ -118,6 +162,7 @@ int hisi_clk_register_fixed_rate(const struct hisi_fixed_rate_clock *,
  				int, struct hisi_clock_data *);
  int hisi_clk_register_fixed_factor(const struct hisi_fixed_factor_clock *,
-diff --git a/drivers/clk/hisilicon/crg-hi3516cv300.c b/drivers/clk/hisilicon/crg-hi3516cv300.c
-index 5d4e61c7a..6c756680d 100644
---- a/drivers/clk/hisilicon/crg-hi3516cv300.c
-+++ b/drivers/clk/hisilicon/crg-hi3516cv300.c
-@@ -129,10 +129,12 @@ static const struct hisi_gate_clock hi3516cv300_gate_clks[] = {
- static struct hisi_clock_data *hi3516cv300_clk_register(
- 		struct platform_device *pdev)
- {
+ 				int, struct hisi_clock_data *);
++
+ int hisi_clk_register_mux(const struct hisi_mux_clock *, int,
+ 				struct hisi_clock_data *);
+ struct clk *clk_register_hisi_phase(struct device *dev,
+@@ -130,12 +175,22 @@ int hisi_clk_register_divider(const struct hisi_divider_clock *,
+ 				int, struct hisi_clock_data *);
+ int hisi_clk_register_gate(const struct hisi_gate_clock *,
+ 				int, struct hisi_clock_data *);
+-void hisi_clk_register_gate_sep(const struct hisi_gate_clock *,
+-				int, struct hisi_clock_data *);
+-void hi6220_clk_register_divider(const struct hi6220_divider_clock *,
+-				int, struct hisi_clock_data *);
++int hisi_clk_register_gate_sep(const struct hisi_gate_clock *clks,
++			       int nums, struct hisi_clock_data *data);
++int hi6220_clk_register_divider(struct device *dev,
++				const struct hi6220_divider_clock *clks,
++				int nums, struct hisi_clock_data *data);
++
++int hisi_clk_register(struct device *dev, const struct hisi_clocks *clks,
++		      struct hisi_clock_data *data);
++
++/* helper functions for platform driver */
++
++int hisi_clk_early_init(struct device_node *np, const struct hisi_clocks *clks);
++int hisi_clk_probe(struct platform_device *pdev);
++int hisi_clk_remove(struct platform_device *pdev);
+ 
+-#define hisi_clk_unregister(type) \
++#define hisi_clk_unregister_fn(type) \
+ static inline \
+ void hisi_clk_unregister_##type(const struct hisi_##type##_clock *clks, \
+ 				int nums, struct hisi_clock_data *data) \
+@@ -149,10 +204,10 @@ void hisi_clk_unregister_##type(const struct hisi_##type##_clock *clks, \
+ 	} \
+ }
+ 
+-hisi_clk_unregister(fixed_rate)
+-hisi_clk_unregister(fixed_factor)
+-hisi_clk_unregister(mux)
+-hisi_clk_unregister(divider)
+-hisi_clk_unregister(gate)
++hisi_clk_unregister_fn(fixed_rate)
++hisi_clk_unregister_fn(fixed_factor)
++hisi_clk_unregister_fn(mux)
++hisi_clk_unregister_fn(divider)
++hisi_clk_unregister_fn(gate)
+ 
+ #endif	/* __HISI_CLK_H */
+diff --git a/drivers/clk/hisilicon/crg.h b/drivers/clk/hisilicon/crg.h
+index 803f6ba6d..d9544f1f2 100644
+--- a/drivers/clk/hisilicon/crg.h
++++ b/drivers/clk/hisilicon/crg.h
+@@ -22,4 +22,9 @@ struct hisi_crg_dev {
+ 	const struct hisi_crg_funcs *funcs;
+ };
+ 
++/* helper functions for platform driver */
++
++int hisi_crg_probe(struct platform_device *pdev);
++int hisi_crg_remove(struct platform_device *pdev);
++
+ #endif	/* __HISI_CRG_H */
+diff --git a/drivers/clk/hisilicon/reset.c b/drivers/clk/hisilicon/reset.c
+index 93cee17db..471b5670e 100644
+--- a/drivers/clk/hisilicon/reset.c
++++ b/drivers/clk/hisilicon/reset.c
+@@ -5,12 +5,16 @@
+  * Copyright (c) 2015-2016 HiSilicon Technologies Co., Ltd.
+  */
+ 
++#include <linux/device.h>
+ #include <linux/io.h>
++#include <linux/kernel.h>
+ #include <linux/of_address.h>
+-#include <linux/platform_device.h>
++#include <linux/of_device.h>
+ #include <linux/reset-controller.h>
+-#include <linux/slab.h>
+ #include <linux/spinlock.h>
++
++#include "clk.h"
++#include "crg.h"
+ #include "reset.h"
+ 
+ #define	HISI_RESET_BIT_MASK	0x1f
+@@ -116,3 +120,60 @@ void hisi_reset_exit(struct hisi_reset_controller *rstc)
+ 	reset_controller_unregister(&rstc->rcdev);
+ }
+ EXPORT_SYMBOL_GPL(hisi_reset_exit);
++
++int hisi_crg_probe(struct platform_device *pdev)
++{
 +	struct device *dev = &pdev->dev;
 +	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3516CV300_CRG_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3516CV300_CRG_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -151,11 +153,6 @@ static struct hisi_clock_data *hi3516cv300_clk_register(
- 	if (ret)
- 		goto unregister_mux;
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_gate:
-@@ -174,8 +171,6 @@ static void hi3516cv300_clk_unregister(struct platform_device *pdev)
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(hi3516cv300_gate_clks,
- 			ARRAY_SIZE(hi3516cv300_gate_clks), crg->clk_data);
- 	hisi_clk_unregister_mux(hi3516cv300_mux_clks,
-@@ -203,10 +198,12 @@ static const struct hisi_mux_clock hi3516cv300_sysctrl_mux_clks[] = {
- static struct hisi_clock_data *hi3516cv300_sysctrl_clk_register(
- 		struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3516CV300_SYSCTRL_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3516CV300_SYSCTRL_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -215,12 +212,6 @@ static struct hisi_clock_data *hi3516cv300_sysctrl_clk_register(
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_mux;
--
- 	return clk_data;
- 
- unregister_mux:
-@@ -233,8 +224,6 @@ static void hi3516cv300_sysctrl_clk_unregister(struct platform_device *pdev)
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_mux(hi3516cv300_sysctrl_mux_clks,
- 			ARRAY_SIZE(hi3516cv300_sysctrl_mux_clks),
- 			crg->clk_data);
-@@ -286,10 +275,13 @@ static int hi3516cv300_crg_probe(struct platform_device *pdev)
- 
- static int hi3516cv300_crg_remove(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
- 	hisi_reset_exit(crg->rstc);
- 	crg->funcs->unregister_clks(pdev);
++	const struct hisi_clocks *clks;
++	struct hisi_crg_dev *crg;
++	int ret;
++
++	clks = of_device_get_match_data(dev);
++	if (!clks)
++		return -ENOENT;
++
++	crg = devm_kmalloc(dev, sizeof(*crg), GFP_KERNEL);
++	if (!crg)
++		return -ENOMEM;
++
++	if (!np->data) {
++		ret = hisi_clk_early_init(np, clks);
++		if (ret)
++			return ret;
++	}
++
++	crg->clk_data = np->data;
++	np->data = NULL;
++
++	ret = hisi_clk_register(dev, clks, crg->clk_data);
++	if (ret)
++		goto err;
++
++	crg->rstc = hisi_reset_init(pdev);
++	if (!crg->rstc) {
++		ret = -ENOMEM;
++		goto err;
++	}
++
++	platform_set_drvdata(pdev, crg);
++	return 0;
++
++err:
 +	hisi_clk_free(np, crg->clk_data);
- 	return 0;
- }
- 
-diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/crg-hi3798.c
-index 778637131..fad1a2fba 100644
---- a/drivers/clk/hisilicon/crg-hi3798.c
-+++ b/drivers/clk/hisilicon/crg-hi3798.c
-@@ -72,10 +72,12 @@ static struct hisi_clock_data *
- hi3798_clk_register(struct platform_device *pdev,
- 		    const struct hi3798_clks *clks)
- {
++	return ret;
++}
++EXPORT_SYMBOL_GPL(hisi_crg_probe);
++
++int hisi_crg_remove(struct platform_device *pdev)
++{
 +	struct device *dev = &pdev->dev;
 +	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3798_CRG_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3798_CRG_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -99,11 +101,6 @@ hi3798_clk_register(struct platform_device *pdev,
- 	if (ret)
- 		goto unregister_mux;
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_gate:
-@@ -122,8 +119,6 @@ static void hi3798_clk_unregister(struct platform_device *pdev,
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, crg->clk_data);
- 	hisi_clk_unregister_mux(clks->mux_clks, clks->mux_clks_nums, crg->clk_data);
- 	hisi_clk_unregister_fixed_rate(hi3798_fixed_rate_clks,
-@@ -139,10 +134,12 @@ static struct hisi_clock_data *
- hi3798_sysctrl_clk_register(struct platform_device *pdev,
- 			    const struct hi3798_clks *clks)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_clock_data *clk_data;
- 	int ret;
- 
--	clk_data = hisi_clk_alloc(pdev, HI3798_SYSCTRL_NR_CLKS);
-+	clk_data = hisi_clk_init(np, HI3798_SYSCTRL_NR_CLKS);
- 	if (!clk_data)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -150,11 +147,6 @@ hi3798_sysctrl_clk_register(struct platform_device *pdev,
- 	if (ret)
- 		return ERR_PTR(ret);
- 
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
- 	return clk_data;
- 
- unregister_gate:
-@@ -167,8 +159,6 @@ static void hi3798_sysctrl_clk_unregister(struct platform_device *pdev,
- {
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
--	of_clk_del_provider(pdev->dev.of_node);
--
- 	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, crg->clk_data);
- }
- 
-@@ -401,10 +391,13 @@ static int hi3798_crg_probe(struct platform_device *pdev)
- 
- static int hi3798_crg_remove(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
- 	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
- 
- 	hisi_reset_exit(crg->rstc);
- 	crg->funcs->unregister_clks(pdev);
++	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
++
++	hisi_reset_exit(crg->rstc);
++	crg->funcs->unregister_clks(pdev);
 +	hisi_clk_free(np, crg->clk_data);
- 	return 0;
- }
- 
++	return 0;
++}
++EXPORT_SYMBOL_GPL(hisi_crg_remove);
 -- 
 2.39.2
 
