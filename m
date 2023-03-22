@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0B76C4D80
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDE66C4D91
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjCVOX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S231464AbjCVO0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjCVOX0 (ORCPT
+        with ESMTP id S230513AbjCVO0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:23:26 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC57D9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:22:55 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id t15so17259523wrz.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679494974;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7X/sea70dluHDkMLiSPr+5a4l7Uo9ZKTt0hyEIsAVaQ=;
-        b=CFMsmld2enyOg6yWooL32HVlSN8I4gSHSC6f9QaYYDjX03DMpN0XncjRLMbR2oPipt
-         5FCG1CqmyL2X6r9+Y6Xf1XDWcFWOXVzbmqro6ye2ILtfc2HEumap9opV5D9kamWkKYIb
-         sVyG9Up40+/8tGaXG7FBn9zo2RsrN8WuFufim/HRRwIuthwvm6eiKYLJYjUVJzL4EGnj
-         GWjdz/Py2gRJeklfMRvy4fg8+4Pv683VhnZz9QjWwWx8hg1zHhM7W0X+IaexHg8iXCxT
-         B6xUu5IMqSt0v7FuS3qIXI5hrKCNDp2nAkVHfGbLQu+1RXj3ycNe5fsTe+FZvZAarRLJ
-         wMaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679494974;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7X/sea70dluHDkMLiSPr+5a4l7Uo9ZKTt0hyEIsAVaQ=;
-        b=UsWEXqwDP55DBGmPuQ2TNq8xKDEBbIhpODY5XfDNWqL3sGNBUB9lj8Q2T2/4zp9r8/
-         cRXBma/njLfyEzFbP07g+aVFS8cGLgvuApgDOpx8gnSK1U6RTVmJCsBpL+5MWf51dkEX
-         M4TXZ83gJkh1rkS6YkkhbzApSJ/3uznWE2yPWLGxeZ1aD4e/1dEHKZGFOe7CbC1vrIHJ
-         mQ0rk65JAePCUAtNNVxnLFqdgdlR4LOtT33klwQGOJJKFm+cdJzRSEKiRAPhVXQmqbcD
-         ZvMDqM719W/2T3N+QxO+QHpHuT48qjS/9aLk20FiHgmfWATTTDBxDt5kLTbW1/aw9df2
-         tiWQ==
-X-Gm-Message-State: AAQBX9cOXO9HJlrtzj4OV28OUW5NEU4C82coiyy42Kt5sjLmeB6yBgQW
-        mnk43qtPbvHGXlfLn+HTe+Nis5wMv1yOKZZM
-X-Google-Smtp-Source: AKy350ZEGoUrD+C7SMSCbODr+7cMWRowBX3EGFPCLpYLlHEDQrhzowPfhIswpi2gf4T4eGo1469hKQ==
-X-Received: by 2002:a5d:4570:0:b0:2d8:908c:8fa0 with SMTP id a16-20020a5d4570000000b002d8908c8fa0mr20154wrc.9.1679494973614;
-        Wed, 22 Mar 2023 07:22:53 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id s15-20020a5d6a8f000000b002d743eeab39sm7210957wru.58.2023.03.22.07.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 07:22:53 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 19:22:50 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: most: remove extra blank line
-Message-ID: <ZBsPOk3TgQTfNAAK@khadija-virtual-machine>
+        Wed, 22 Mar 2023 10:26:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EE5273E;
+        Wed, 22 Mar 2023 07:26:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 32CEE33BD9;
+        Wed, 22 Mar 2023 14:26:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679495162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1T5hw9qpuG2AOImWSDWD8F5+eu1OUARaI87Jeroo5M=;
+        b=x4MgX53mVKT0FLfchSPpT80TU/Nx9lsedKAL+STO/UH6xpGUjBxZixJ+f3grGw+I142wgD
+        sL5t05agVfFyNEpM/Mt+aN1jCJFp9Ri9a23FRIl3fyv7MttKXbeGci9gcfEGKVrY3dAUa6
+        kDH38przr24unL5Qu7DKBBpg27HqzY8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679495162;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1T5hw9qpuG2AOImWSDWD8F5+eu1OUARaI87Jeroo5M=;
+        b=BJyaCwp7Vc7NTXtN/Ep4eXUEG0u5BFdokqGUPXP6RKChTIaBTw3ZZExPQawzBLDA86LAoA
+        eNaf/L+Q0p+fRXBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08B8813416;
+        Wed, 22 Mar 2023 14:26:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EdCTAfoPG2R6JQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 14:26:02 +0000
+Message-ID: <a116a23a-747c-f0f7-8aa8-1f336254d5f3@suse.cz>
+Date:   Wed, 22 Mar 2023 15:26:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 03/14] mm: move most of core MM initialization to
+ mm/mm_init.c
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230321170513.2401534-1-rppt@kernel.org>
+ <20230321170513.2401534-4-rppt@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230321170513.2401534-4-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove extra blank line reported by checkpatch script.
+On 3/21/23 18:05, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> The bulk of memory management initialization code is spread all over
+> mm/page_alloc.c and makes navigating through page allocator
+> functionality difficult.
+> 
+> Move most of the functions marked __init and __meminit to mm/mm_init.c
+> to make it better localized and allow some more spare room before
+> mm/page_alloc.c reaches 10k lines.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
- drivers/staging/most/dim2/dim2.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-index 21d1c9f24c3d..9fa665c4038f 100644
---- a/drivers/staging/most/dim2/dim2.c
-+++ b/drivers/staging/most/dim2/dim2.c
-@@ -989,7 +989,6 @@ static int rcar_gen2_enable(struct platform_device *pdev)
- 		writel(0x04, dev->io_base + 0x600);
- 	}
-
--
- 	/* BBCR = 0b11 */
- 	writel(0x03, dev->io_base + 0x500);
- 	writel(0x0002FF02, dev->io_base + 0x508);
---
-2.34.1
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
