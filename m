@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303446C4E48
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29186C4E53
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjCVOoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S231679AbjCVOoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjCVOnV (ORCPT
+        with ESMTP id S231550AbjCVOn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:43:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D0565C40;
-        Wed, 22 Mar 2023 07:42:33 -0700 (PDT)
+        Wed, 22 Mar 2023 10:43:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36FF65C71;
+        Wed, 22 Mar 2023 07:42:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36566B81D1B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C3E62171;
         Wed, 22 Mar 2023 14:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A239C4339E;
-        Wed, 22 Mar 2023 14:42:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F55CC433D2;
+        Wed, 22 Mar 2023 14:42:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679496146;
-        bh=ZVHKsJk7ORuGqB8KLWsMcPhustuB6Bf+0GSzPlAPoBM=;
+        bh=ZEk6Is/AQpeKoK8s9K0Qw78Ve1+e894VSLCsUZNA1oI=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=F2u5O2telM+gh+bqBbvOvT5E7EAgoyzXLZVUTHPNp0HVMbtfXD+MAb2JXB2dIUCLs
-         m/vk0OUGf3EC/ZQ78hupnsru34tOMcuYx98FiJmF4rJ4oS6RRA/eiMuQGHJF0CCMkf
-         MQ+i681cLDu6RsiABsV1Cohbtz0EDrfy7wpN0EKKr3ol5ICBEdhGyUa53+fenNTmt8
-         N5RnpxrtK2SveFxiz4All594awgSHbhMeBCIFlZFfd3Awku//O3K6b6h3xxa5xt0sF
-         EoH3sS++afyQLtyOYGzkQeV2a0rW5bdqjOAwYeBQz7uAr/D/41u4H8VIzKnc439MqV
-         4sxQ3s+wAza8Q==
+        b=SF7Z7qjsi8zhnTqqp9TEsLV29TxRvGf8ky10uomJs2Q5KfAkeGnVuXOpcS9WTjEt+
+         VF57zdvkJC7mxbCmRlO6HmpH7zxawwJBGJT/j2prF7+Y4fXDjztiUj9CR4xRCxWpzg
+         y5D4DWvetwEB0U43aqNgLgf0wqGStlgaGtNF7NcQm3P/j2tGI3bnxSESv3chXjr2qG
+         MA+wn4Q3PgAOPji6SuJ4xAFOVjnrc7QV+SlwSe9/J4n8mLCk4PJIWcGZIrJqzrkFh/
+         wz9MVm7ki5juhRsdr6qq4AtpkYNEzTj5VJxsQ7XzAzgC5q6IXSPeN+LElIaAM8ARZW
+         B9ATPF6902T7w==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org,
@@ -39,18 +39,19 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kathiravan T <kathirav@codeaurora.org>,
         Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450-hdk: use recommended drive strength for speaker SD_N
-Date:   Wed, 22 Mar 2023 07:45:18 -0700
-Message-Id: <167949631653.1081726.7744710394696808897.b4-ty@kernel.org>
+Subject: Re: [PATCH] dt-bindings: soc: qcom: smd-rpm: re-add missing qcom,rpm-msm8994
+Date:   Wed, 22 Mar 2023 07:45:19 -0700
+Message-Id: <167949631652.1081726.4452705235754573255.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230308142712.277659-1-krzysztof.kozlowski@linaro.org>
-References: <20230308142712.277659-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
+References: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,18 +59,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Mar 2023 15:27:12 +0100, Krzysztof Kozlowski wrote:
-> Downstream DTS (and sc8280xp-lenovo-thinkpad-x13s with the same
-> speakers) uses 16 mA drive strength for the WSA8835 speaker SD_N
-> reset/shutdown pin.  Use the same for HDK8450, as it is seem the
-> recommended value.
+On Sun, 5 Mar 2023 13:24:28 +0100, Krzysztof Kozlowski wrote:
+> Re-add the qcom,rpm-msm8994 compatible, dropped during conversion from
+> TXT to DT schema:
+> 
+>   apq8094-sony-xperia-kitakami-karin_windy.dtb: smd: rpm:rpm-requests:compatible:0: 'qcom,rpm-msm8994' is not one of ['qcom,rpm-apq8084' ...]
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sm8450-hdk: use recommended drive strength for speaker SD_N
-      commit: 7c2c4c9decf6f4604fe15a1db2da7c1250b3e9e5
+[1/1] dt-bindings: soc: qcom: smd-rpm: re-add missing qcom,rpm-msm8994
+      commit: 34d84c3b0f63978efcb5136a6fd2e7e9d889da70
 
 Best regards,
 -- 
