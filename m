@@ -2,122 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8116C4587
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CB76C458A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjCVJCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S229984AbjCVJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCVJCD (ORCPT
+        with ESMTP id S229635AbjCVJCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:02:03 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D95B42A;
-        Wed, 22 Mar 2023 02:02:01 -0700 (PDT)
-Received: from [10.128.10.193] (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 9E5CB5807BE;
-        Wed, 22 Mar 2023 17:01:55 +0800 (CST)
-Message-ID: <88c2c37b-c221-5c27-9663-7026084adf8d@sangfor.com.cn>
-Date:   Wed, 22 Mar 2023 17:01:54 +0800
+        Wed, 22 Mar 2023 05:02:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA525B5C0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:02:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35B324B3;
+        Wed, 22 Mar 2023 02:03:30 -0700 (PDT)
+Received: from [10.57.53.137] (unknown [10.57.53.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40A923F6C4;
+        Wed, 22 Mar 2023 02:02:44 -0700 (PDT)
+Message-ID: <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
+Date:   Wed, 22 Mar 2023 09:02:41 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing the
- return value of function
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
- <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-In-Reply-To: <ZBnqAYO7rdk4Qikq@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+References: <20230315164152.333251-1-steven.price@arm.com>
+ <ZBnBU9OU4iV6CV0W@ziepe.ca>
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <ZBnBU9OU4iV6CV0W@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTx4eVkwdS0NOT04YGR0eTFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS09ISFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PC46GSo*Kj0OKRRJLRI3QiE2
-        NwNPFA9VSlVKTUxCT0xOTEpMS01MVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFPTU1DNwY+
-X-HM-Tid: 0a87088db1662eb7kusn9e5cb5807be
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/22 1:31, Russell King (Oracle) wrote:
-> On Mon, Mar 20, 2023 at 06:16:49AM -0700, Donglin Peng wrote:
->> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
->> index 3e7bcaca5e07..ba1986e27af8 100644
->> --- a/arch/arm/kernel/entry-ftrace.S
->> +++ b/arch/arm/kernel/entry-ftrace.S
->> @@ -258,7 +258,15 @@ ENDPROC(ftrace_graph_regs_caller)
->>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->>   ENTRY(return_to_handler)
->>   	stmdb	sp!, {r0-r3}
->> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
->> +	/*
->> +	 * Pass both the function return values in the register r0 and r1
->> +	 * to ftrace_return_to_handler
->> +	 */
->> +	add	r2, sp, #16		@ sp at exit of instrumented routine
->> +#else
->>   	add	r0, sp, #16		@ sp at exit of instrumented routine
->> +#endif
->>   	bl	ftrace_return_to_handler
-> ...
->> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
->> +static unsigned long __ftrace_return_to_handler(unsigned long retval_1st,
->> +			unsigned long retval_2nd, unsigned long frame_pointer)
-> ...
->> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
->> +unsigned long ftrace_return_to_handler(unsigned long retval_1st,
->> +			unsigned long retval_2nd, unsigned long frame_pointer)
->> +{
->> +	return __ftrace_return_to_handler(retval_1st, retval_2nd, frame_pointer);
->> +}
->> +#else
->> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
->> +{
->> +	return __ftrace_return_to_handler(0, 0, frame_pointer);
->> +}
->> +#endif
->> +
+On 21/03/2023 14:38, Jason Gunthorpe wrote:
+> On Wed, Mar 15, 2023 at 04:41:52PM +0000, Steven Price wrote:
+>> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+>> operation on ARM 32 bit after recent changes in the IOMMU framework
+>> (detach ops removal).
+>>
+>> Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
+>> Signed-off-by: Steven Price <steven.price@arm.com>
+>> ---
+>> This fixes a splat I was seeing on a Firefly-RK3288, more details here:
+>> https://lore.kernel.org/all/26a5d1b8-40b3-b1e4-bc85-740409c26838@arm.com/
 > 
-> Hi,
-> 
-> To echo Mark's criticism, I also don't like this. I feel it would be
-> better if ftrace_return_to_handler() always took the same arguments
-> irrespective of the setting of CONFIG_FUNCTION_GRAPH_RETVAL.
-> 
-> On 32-bit ARM, we have to stack r0-r3 anyway to prevent the call to
-> ftrace_return_to_handler() corrupting the return value, and these
-> are the registers we need. So we might as well pass a pointer to
-> these stacked registers. Whether that's acceptable on other
-> architectures, I couldn't say.
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Agree, I think we can introduce a new structure called pt_ret_regs for
-each relevant architecture. The pt_ret_regs should only contain the
-return registers and the frame pointer register, for arm, they are r0~r3
-and r11.Then we can pass the pointer to the pt_ret_regs to 
-ftrace_return_to_handler.
+Thanks for the review.
 
-> 
-> Thanks.
-> 
+> Do you know what state the iommu is left in after
+> rk_iommu_detach_device()? Ie is it blocking DMA or doing identity or
+> something else?
 
+To be honest I really don't know for sure. But from my small
+understanding of the code: rk_iommu_detach_device() ends up in
+rk_iommu_disable_paging() which appears to switch to identity mode
+("Disable memory translation").
+
+But I don't actually have any familiarity with the hardware block, so I
+might be missing something.
+
+Steve
