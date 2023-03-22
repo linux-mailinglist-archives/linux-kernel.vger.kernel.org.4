@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C416C3FD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F846C3FEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjCVBev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S229864AbjCVBlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCVBee (ORCPT
+        with ESMTP id S229512AbjCVBk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:34:34 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9410497D7
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:34:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ek18so66974266edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:34:32 -0700 (PDT)
+        Tue, 21 Mar 2023 21:40:58 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5745B1706;
+        Tue, 21 Mar 2023 18:40:57 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eh3so66959081edb.11;
+        Tue, 21 Mar 2023 18:40:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1679448872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=61LlI0wVrzyKbUKk1uZrrjDNEa+G+M4L4TNEr5FBml0=;
-        b=uH52rgmzsnuWeB0VO7aOqkV8sqiJNKbZQAh4B5wn86LpfCG/SHlUKSf/Eae+YYUSq5
-         zyvPtQdQbV2tGzeyNMDnLFslNbRydJ3Qp+O9Hnm8vDktBjV5e49KoZORlHdOO05T6QBi
-         4FVXnALNSY2VDGvUtYgasT1LhDxOO07rXdDdAQLwpidkY6Ez1BWfPPVG6cg3EWIp0ta9
-         JWSSojqVHBgYWBOsFfHaqZ3pe6YxCfqTBwTiE87wsB8NiPcnTseyVaztW+X8FfDuOLK0
-         Bnlm87dMK2bCVHw54utaEFvb1RqMu8na571n10CMPi+IEo6lZXekBCa+ee4allBJtebC
-         MXVw==
+        d=gmail.com; s=20210112; t=1679449256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NDtrmWxNd7ykAwuZ6ssL1W5nZI+T6l4E7ASY8mvq1C4=;
+        b=dtcVIdQQd5o2rj21d/O6qOLOgwcZ7cOTnPmZ4pSwGSXjkhhn7L6oueiwaUosDJ/XlT
+         GnK1SmsgoNqmRmJm9jDmK9A1/eaCOE3P9Y56z7M+49lf6hCTHzlklXp/oWx8BEE5fzog
+         rUIOGcQUVrlEySP7xRRdLF3O7OEz36v6eDpwBMAAnkwjxmGl3sm6kPXpSM72BSjoGcmc
+         br9FirMAREgvewJxwqav1kG+HnY5BSthW8WuzOUs5Zm/gggCL4iCbGs6jnc/nCp6pXVS
+         8Tgb+Oc5wiWADfGJ3iP5BYAqN3OP/KUkdqyxSMBCFqfWpweIvWIoM8BYDDjvXjadQO7U
+         kEow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679448872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=61LlI0wVrzyKbUKk1uZrrjDNEa+G+M4L4TNEr5FBml0=;
-        b=l9sRZd4nGSQAadwUgR0FW02wxqb5ivLjf2JZ5kaEe18hKEJTUKfCfbTCPYLhmW0r10
-         mfSPds2gJeejQj2Z4ss8zJJkFlMVgFRXwKyNvOVtTwJ1S4UhpmT4I46bRncY1w5W/9g/
-         aDwzQ3oQdB3K6sU7lUzCvaIEi/xaNsT/gNdzSzwQtsuzO4NSHYeZTcYPcRrc8yjsw1mc
-         oav4Q7/HmAHo7XQrXngXsCnm0eu8PjLtKsmYgrAdUnCO24Moc4QLPPDrh73OJSAS66ec
-         AgpEVRnYnuiGFMMR3wgStrCINvWsdR1qioAGu1u2fYJn7DiGkqs9Ak4uwFTClaheKds1
-         0FPA==
-X-Gm-Message-State: AO0yUKVLiIYhRUjg7dX3mC86pVsQ1V7qb4piC69OuLRgpn95g5l7ev3C
-        3meREf7CmIFWPX12ue93+1Ix7w==
-X-Google-Smtp-Source: AK7set+dnUf8hf0VCL6Kf3L+V9cFUvDBubdmyWb8DP97ojj1fpAZIQ0UCHlhdYNf8Ry/GDl5UG4HsQ==
-X-Received: by 2002:a17:906:9154:b0:930:bcee:eed with SMTP id y20-20020a170906915400b00930bcee0eedmr5088715ejw.9.1679448872523;
-        Tue, 21 Mar 2023 18:34:32 -0700 (PDT)
-Received: from nuc.fritz.box (p200300f6af344e007f5e5982a136b54e.dip0.t-ipconnect.de. [2003:f6:af34:4e00:7f5e:5982:a136:b54e])
-        by smtp.gmail.com with ESMTPSA id w11-20020a1709067c8b00b009231714b3d4sm6356260ejo.151.2023.03.21.18.34.31
+        d=1e100.net; s=20210112; t=1679449256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NDtrmWxNd7ykAwuZ6ssL1W5nZI+T6l4E7ASY8mvq1C4=;
+        b=Fwc8dkQ/xtDAr1ycPHRq1zcOpVNfb8LaP+Y/Swr04w6ie55ofqmgx7LrvLwLXee9+U
+         8OzJT7iWxaEpII7/VqOFBchedzmGN7/xM7cqzyW+G71taRVD5ZrV03zqdzvEHz0h9v0X
+         BFLYBl4EA9SC8HAjsl/OzzBBpuKQzTaad5MkBJAjeprNmqST1nYFO4MVWMHOAVlIEnu6
+         BZgEDi6VoN0f8xjSyp60BeeuHYzlPEhOFBtzzaeKTJhg2TkQmQXB1LRY9gVjcFltDRrJ
+         9LYkYIOpJbO3K/Jl0EqaesLbnKjD37iTjB18usoHzvGuRCUHvm6q+jsO1IA0dme6bAqX
+         5ccQ==
+X-Gm-Message-State: AO0yUKVSHqGcHlVqYvIdaK5iQ7Izg9fzT7tk9gtlfiPUTBMikd9uyALh
+        vIRAC9EUuxBr0HjamnRsapU=
+X-Google-Smtp-Source: AK7set/whfUVSSRR5XI6XndbcgMiiEtOrkr2bD31H4seY4K3NVknej4zpiVCtQa+lj9EcZCVvEuTEw==
+X-Received: by 2002:a17:906:60c9:b0:931:b2ae:116e with SMTP id f9-20020a17090660c900b00931b2ae116emr4637734ejk.64.1679449255431;
+        Tue, 21 Mar 2023 18:40:55 -0700 (PDT)
+Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170906118f00b0092421bf4927sm6568091eja.95.2023.03.21.18.40.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 18:34:32 -0700 (PDT)
-From:   Mathias Krause <minipli@grsecurity.net>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v4 6/6] KVM: VMX: Make CR0.WP a guest owned bit
-Date:   Wed, 22 Mar 2023 02:37:31 +0100
-Message-Id: <20230322013731.102955-7-minipli@grsecurity.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230322013731.102955-1-minipli@grsecurity.net>
-References: <20230322013731.102955-1-minipli@grsecurity.net>
+        Tue, 21 Mar 2023 18:40:54 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 02:40:52 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>
+Subject: Re: [PATCH memory-model 7/8] tools/memory-model: Add documentation
+ about SRCU read-side critical sections
+Message-ID: <ZBpcpPIq9k2mX7cw@andrea>
+References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
+ <20230321010246.50960-7-paulmck@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321010246.50960-7-paulmck@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,107 +80,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guests like grsecurity that make heavy use of CR0.WP to implement kernel
-level W^X will suffer from the implied VMEXITs.
+On Mon, Mar 20, 2023 at 06:02:45PM -0700, Paul E. McKenney wrote:
+> From: Alan Stern <stern@rowland.harvard.edu>
+> 
+> Expand the discussion of SRCU and its read-side critical sections in
+> the Linux Kernel Memory Model documentation file explanation.txt.  The
+> new material discusses recent changes to the memory model made in
+> commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
+> semantics").
 
-With EPT there is no need to intercept a guest change of CR0.WP, so
-simply make it a guest owned bit if we can do so.
+How about squashing the diff below (adjusting subject and changelog):
 
-This implies that a read of a guest's CR0.WP bit might need a VMREAD.
-However, the only potentially affected user seems to be kvm_init_mmu()
-which is a heavy operation to begin with. But also most callers already
-cache the full value of CR0 anyway, so no additional VMREAD is needed.
-The only exception is nested_vmx_load_cr3().
+  Andrea
 
-This change is VMX-specific, as SVM has no such fine grained control
-register intercept control.
+diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+index 26554b1c5575e..acac527328a1f 100644
+--- a/tools/memory-model/Documentation/litmus-tests.txt
++++ b/tools/memory-model/Documentation/litmus-tests.txt
+@@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+ 		additional call_rcu() process to the site of the
+ 		emulated rcu-barrier().
+ 
+-	e.	Although sleepable RCU (SRCU) is now modeled, there
+-		are some subtle differences between its semantics and
+-		those in the Linux kernel.  For example, the kernel
+-		might interpret the following sequence as two partially
+-		overlapping SRCU read-side critical sections:
+-
+-			 1  r1 = srcu_read_lock(&my_srcu);
+-			 2  do_something_1();
+-			 3  r2 = srcu_read_lock(&my_srcu);
+-			 4  do_something_2();
+-			 5  srcu_read_unlock(&my_srcu, r1);
+-			 6  do_something_3();
+-			 7  srcu_read_unlock(&my_srcu, r2);
+-
+-		In contrast, LKMM will interpret this as a nested pair of
+-		SRCU read-side critical sections, with the outer critical
+-		section spanning lines 1-7 and the inner critical section
+-		spanning lines 3-5.
+-
+-		This difference would be more of a concern had anyone
+-		identified a reasonable use case for partially overlapping
+-		SRCU read-side critical sections.  For more information
+-		on the trickiness of such overlapping, please see:
+-		https://paulmck.livejournal.com/40593.html
+-
+-	f.	Reader-writer locking is not modeled.  It can be
++	e.	Reader-writer locking is not modeled.  It can be
+ 		emulated in litmus tests using atomic read-modify-write
+ 		operations.
+ 
 
-Suggested-and-co-developed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Mathias Krause <minipli@grsecurity.net>
----
- arch/x86/kvm/kvm_cache_regs.h |  2 +-
- arch/x86/kvm/vmx/nested.c     |  4 ++--
- arch/x86/kvm/vmx/vmx.c        |  2 +-
- arch/x86/kvm/vmx/vmx.h        | 18 ++++++++++++++++++
- 4 files changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-index 4c91f626c058..e50d353b5c1c 100644
---- a/arch/x86/kvm/kvm_cache_regs.h
-+++ b/arch/x86/kvm/kvm_cache_regs.h
-@@ -4,7 +4,7 @@
- 
- #include <linux/kvm_host.h>
- 
--#define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
-+#define KVM_POSSIBLE_CR0_GUEST_BITS	(X86_CR0_TS | X86_CR0_WP)
- #define KVM_POSSIBLE_CR4_GUEST_BITS				  \
- 	(X86_CR4_PVI | X86_CR4_DE | X86_CR4_PCE | X86_CR4_OSFXSR  \
- 	 | X86_CR4_OSXMMEXCPT | X86_CR4_PGE | X86_CR4_TSD | X86_CR4_FSGSBASE)
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index f63b28f46a71..61d940fc91ba 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4481,7 +4481,7 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
- 	 * CR0_GUEST_HOST_MASK is already set in the original vmcs01
- 	 * (KVM doesn't change it);
- 	 */
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs12->host_cr0);
- 
- 	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
-@@ -4632,7 +4632,7 @@ static void nested_vmx_restore_host_state(struct kvm_vcpu *vcpu)
- 	 */
- 	vmx_set_efer(vcpu, nested_vmx_get_vmcs01_guest_efer(vmx));
- 
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs_readl(CR0_READ_SHADOW));
- 
- 	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 8fc1a0c7856f..e501f6864a72 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4790,7 +4790,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
- 	/* 22.2.1, 20.8.1 */
- 	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
- 
--	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
- 
- 	set_cr4_guest_host_mask(vmx);
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 2acdc54bc34b..423e9d3c9c40 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -640,6 +640,24 @@ BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
- 				(1 << VCPU_EXREG_EXIT_INFO_1) | \
- 				(1 << VCPU_EXREG_EXIT_INFO_2))
- 
-+static inline unsigned long vmx_l1_guest_owned_cr0_bits(void)
-+{
-+	unsigned long bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+
-+	/*
-+	 * CR0.WP needs to be intercepted when KVM is shadowing legacy paging
-+	 * in order to construct shadow PTEs with the correct protections.
-+	 * Note!  CR0.WP technically can be passed through to the guest if
-+	 * paging is disabled, but checking CR0.PG would generate a cyclical
-+	 * dependency of sorts due to forcing the caller to ensure CR0 holds
-+	 * the correct value prior to determining which CR0 bits can be owned
-+	 * by L1.  Keep it simple and limit the optimization to EPT.
-+	 */
-+	if (!enable_ept)
-+		bits &= ~X86_CR0_WP;
-+	return bits;
-+}
-+
- static __always_inline struct kvm_vmx *to_kvm_vmx(struct kvm *kvm)
- {
- 	return container_of(kvm, struct kvm_vmx, kvm);
--- 
-2.39.2
-
+  Andrea
