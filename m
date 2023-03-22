@@ -2,98 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766926C4D98
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12616C4D9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCVO1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S231509AbjCVO2B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 10:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjCVO1A (ORCPT
+        with ESMTP id S231497AbjCVO17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:27:00 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED359429;
-        Wed, 22 Mar 2023 07:26:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 3A383604EF;
-        Wed, 22 Mar 2023 15:26:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679495215; bh=QntMlCvHSJ7qSQGLQ8fUDyBw+ENjmuXdkBOooLGQVes=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=0q19GV9lX0QR40tfumeFy+6sCXDr7ezNJgdBbsFpPboLun90mRq0Wb0vDcLUaFfLi
-         oS+RajGReKrHdGKvQkZgXuv8KFyyccME9j657jnxLsMwsgqo94xD/n1xDYxnUmiAUL
-         wkpXvzksE248vuSmRXwa5Jj5DJZMk+lT2fyZUWLnpVqbZxMVsJMACCeIgk4CYbjgNe
-         irB1MkgRlho8npcBol4UI4RIX0exdRIjtz1DXLYhtYN5S8b7F/o2yvX5ddG1UwaMOH
-         KmfC690iT4mcRW+b7AyfSt08WzBGXe8Fxktp9Q4mifW6Qiz6YZL1GR4Tt5eYsedcJI
-         pI8cyfZB7oLKw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FMZzsA_Nuq3x; Wed, 22 Mar 2023 15:26:53 +0100 (CET)
-Received: from [193.198.186.200] (PC-MTODOROV.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 29A2A604F0;
-        Wed, 22 Mar 2023 15:26:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1679495213; bh=QntMlCvHSJ7qSQGLQ8fUDyBw+ENjmuXdkBOooLGQVes=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=xB7K0ClyYqzGPwcczXAv0KjkgO3aNHWT66baADIAzBtjYVwa0WU4unx/vh01PFqOQ
-         /roZWMNagnIgUcleRwiwPuEZYju5gp+kDBfqph/F5LtbA8p3U06Ps1dwNSEb4qA8YX
-         8IX2BNqMdf1q1+Ghbi9VlBcrYBgPnqKz9G4A8a0YU+lFq3KY332ZrYyN2WKbysP5kZ
-         dO2sUPj4P5suaQMSCzauGylLHkf59q2oEaKs3DnNKafPcdRe6MoSEGbh2wBrrSw286
-         qhQSsRuEsd/RPqOFd6mBxtAwcSEfQIQcckaIDEXh0ARuW0u80SBigJt5F4myeqvFYQ
-         fOVAzWtE27gFg==
-Message-ID: <2de3724c-9288-9971-52a7-c86039a653d3@alu.unizg.hr>
-Date:   Wed, 22 Mar 2023 15:26:52 +0100
+        Wed, 22 Mar 2023 10:27:59 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AC035B2;
+        Wed, 22 Mar 2023 07:27:58 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id w9so73798140edc.3;
+        Wed, 22 Mar 2023 07:27:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679495276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S3g7V0ZtaYCJ08ekmgYYgxlOXyguJ5wpLG7Fm+NVbfs=;
+        b=Sed+AhcRktJIjBI3KNaQERm67qzRiuw3U2pZuGxxZzq0IzTSST7PWYY3VEsl8qqt1p
+         XjLROe6rN3PQNaD7tIet4Nt2QwxJ5GJndjx01zsTrVyFnq+XzS0DvCpXIl6zoY2pUhl2
+         NrJ8lUBFInppOmkUmM2a0MdzYDg9xdufmhqU+JVoKqfEzhidqF1kWwq93vmk2JQ3Qmmb
+         Na6sxKfedSC8BuBue8clhFq4rT0PcFoKFNhXfqQZvixkNTK5NcSNMKk78PxnKSjoV1KA
+         XjzZwMV37l8MsWaRnALJhsV4ZBsStAr4OpwCTUdt9DyzH4Hg0GT2jOuqkm//mIJlNTlb
+         w/2Q==
+X-Gm-Message-State: AO0yUKVYT5j8KvtxuFljSgG8hbFZjumt0BGWlTs1116QDpzQdusl05ZA
+        D8apfQpsGRdQYjo1FWkCL1e0JboqhRtaXRIlVgE=
+X-Google-Smtp-Source: AK7set99yZ5uGOciVCUzVwWAsJHFIwbKSK27uzSOVjBnuial2wp9366vcARstqlfqHBvumCxVCE47cKMecudCQ5E8O8=
+X-Received: by 2002:a50:8d04:0:b0:4fc:ebe2:2fc9 with SMTP id
+ s4-20020a508d04000000b004fcebe22fc9mr3682902eds.3.1679495276403; Wed, 22 Mar
+ 2023 07:27:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/1] scripts: merge_config: Fix typo in variable name.
-Content-Language: en-US, hr, en-GB, de-DE
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-References: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
- <ZBsAG50+zCe8WFTt@sirena.org.uk>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZBsAG50+zCe8WFTt@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAJZ5v0hRScLjW27k_rHZ1jnLyn7B3O26oP9Jd3AwDL97VSJ8tQ@mail.gmail.com>
+ <20230322090557.2943479-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230322090557.2943479-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 15:27:45 +0100
+Message-ID: <CAJZ5v0h_oTjn5FGuyDvGzewY9VDqo7U0YN1X+XZcsQqLhtNCSg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/19] cpuidle: move to use bus_get_dev_root()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/2023 14:18, Mark Brown wrote:
-> On Wed, Mar 22, 2023 at 09:51:07AM +0100, Mirsad Goran Todorovac wrote:
->> ${WARNOVERRIDE} was misspelled as ${WARNOVVERIDE}, which caused a shell
->> syntax error in certain paths of the script execution.
-> 
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> 
-> Sorry about that.
+On Wed, Mar 22, 2023 at 10:06 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> Direct access to the struct bus_type dev_root pointer is going away soon
+> so replace that with a call to bus_get_dev_root() instead, which is what
+> it is there for.
+>
+> This allows us to clean up the cpuidle_add_interface() call a bit as it
+> was only called in one place, with the same argument so just put that
+> into the function itself.  Note that cpuidle_remove_interface() should
+> also probably be removed in the future as there are no callers of it for
+> some reason.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-You shouldn't be. Errare humanum est.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-I had worse blunders in the last couple of months, i.e.
-setting chattr +a on log files until /var/log filled up (old logs couldn't
-have been rotated).
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
---
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-tel. +385 (0)1 3711 451
-mob. +385 91 57 88 355
+> ---
+> v2: - reworked cpuidle_add_interface() to exit early if dev_root is not
+>       valid based on review from Rafael.
+>
+>  drivers/cpuidle/cpuidle.c |  2 +-
+>  drivers/cpuidle/cpuidle.h |  2 +-
+>  drivers/cpuidle/sysfs.c   | 13 ++++++++++---
+>  3 files changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 0b00f21cefe3..8e929f6602ce 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -808,7 +808,7 @@ static int __init cpuidle_init(void)
+>         if (cpuidle_disabled())
+>                 return -ENODEV;
+>
+> -       return cpuidle_add_interface(cpu_subsys.dev_root);
+> +       return cpuidle_add_interface();
+>  }
+>
+>  module_param(off, int, 0444);
+> diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
+> index 9f336af17fa6..52701d9588f1 100644
+> --- a/drivers/cpuidle/cpuidle.h
+> +++ b/drivers/cpuidle/cpuidle.h
+> @@ -30,7 +30,7 @@ extern int cpuidle_switch_governor(struct cpuidle_governor *gov);
+>
+>  struct device;
+>
+> -extern int cpuidle_add_interface(struct device *dev);
+> +extern int cpuidle_add_interface(void);
+>  extern void cpuidle_remove_interface(struct device *dev);
+>  extern int cpuidle_add_device_sysfs(struct cpuidle_device *device);
+>  extern void cpuidle_remove_device_sysfs(struct cpuidle_device *device);
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 48948b171749..d6f5da61cb7d 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -119,11 +119,18 @@ static struct attribute_group cpuidle_attr_group = {
+>
+>  /**
+>   * cpuidle_add_interface - add CPU global sysfs attributes
+> - * @dev: the target device
+>   */
+> -int cpuidle_add_interface(struct device *dev)
+> +int cpuidle_add_interface(void)
+>  {
+> -       return sysfs_create_group(&dev->kobj, &cpuidle_attr_group);
+> +       struct device *dev_root = bus_get_dev_root(&cpu_subsys);
+> +       int retval;
+> +
+> +       if (!dev_root)
+> +               return -EINVAL;
+> +
+> +       retval = sysfs_create_group(&dev_root->kobj, &cpuidle_attr_group);
+> +       put_device(dev_root);
+> +       return retval;
+>  }
+>
+>  /**
+> --
+> 2.40.0
+>
