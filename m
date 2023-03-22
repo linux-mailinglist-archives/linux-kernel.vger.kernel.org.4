@@ -2,191 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414696C4013
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6C86C4018
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjCVCAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S230076AbjCVCCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 22:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCVCAM (ORCPT
+        with ESMTP id S229541AbjCVCCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:00:12 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234574DBCE;
-        Tue, 21 Mar 2023 19:00:11 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g17so21540104lfv.4;
-        Tue, 21 Mar 2023 19:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679450409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ie5E22uk0w9QlkDqcEPCeQ07zHlCQwhf3VA/3a+3Jkk=;
-        b=UDh7QcadOjbbUNHwDtGEHKr/pp/feNlDjUVoY2E+wZdt/w5CRLlkz5Y5fle1BLtZCk
-         xdFkjBDCY8HtrhZUDLr/D7HSpz3/hyFD2+DUzsKc0mGSk6p18MYQF2j9av4gP2nFgDr/
-         CmgFfY6YnXzWK2yWptkncFlp99GXXe61uqUPBjdJvvaY0rRKGa7b7VrFEp/dC6J+WKpP
-         7L3K3kHd+Gg7IzUMBg00653rBut1H9bdjb1BIuI8gTDRH50/lvDRX/TRWRiLClWQ4yrG
-         jrScyO3Y2Um75mwQb2/0djS8LP5Eo9r44o2A0sP4eNTprjuVr2mUUtXcx1nOJb8XF0C8
-         MC4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679450409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ie5E22uk0w9QlkDqcEPCeQ07zHlCQwhf3VA/3a+3Jkk=;
-        b=L17jmKLh7DYirT+44acdBRNT8rulrwKOh4urDGIC8KCZOWJmSzKRMlLj2kCjsITixO
-         HC0qh92u7mTHuYQn2eh0thwqfDdM/964afirRC1kVNJgmlU81eiyAoIjV1guCEAgSOfr
-         ltTQ3xSdTIlaN/rRaR0Qyq5uvBkZTmZLv22/3wZEO5gLh3YOLZWYHS645XPO2DZq+r17
-         LfZioYW7ZgHP9KDbVnSOr+DuPxaaiEMgl47y0aUDaKAk8Cw1wMNF3B4jXDEGKCJrVbO2
-         gX4QG5NLpUoTQF3XyqmDnvfIjQVa3vUwtZyRJdGiR7/GznPDa0Ml0kiRVaLKaywnKtZJ
-         mz/g==
-X-Gm-Message-State: AO0yUKWAb7PYZm21nhysjFtA67nEXO8JMmHrLqGOghs6GmwAxqVeD5mf
-        jJRqkhoQPT67R1R7pr1XdHm1HIrXqV2f3wC/2Z8=
-X-Google-Smtp-Source: AK7set8j/uN5VQ2o5R7ii7zHSwGtrYpzt7eNS1FPlyYHId/A01NaD2piRg05FtSJuq9TkMvV4ckZv0lPDggbsTkOMxY=
-X-Received: by 2002:ac2:528c:0:b0:4e8:4b7a:6b72 with SMTP id
- q12-20020ac2528c000000b004e84b7a6b72mr1469020lfm.2.1679450409204; Tue, 21 Mar
- 2023 19:00:09 -0700 (PDT)
+        Tue, 21 Mar 2023 22:02:35 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410B259E50;
+        Tue, 21 Mar 2023 19:02:34 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PhBYx5VC5z4f3pCb;
+        Wed, 22 Mar 2023 10:02:29 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+0YRpk1AxfFQ--.465S3;
+        Wed, 22 Mar 2023 10:02:30 +0800 (CST)
+Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
+ device again
+To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        Changhui Zhong <czhong@redhat.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
+ <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+ <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
+ <ZBpbGKxPQcs9NYst@ovpn-8-18.pek2.redhat.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <5facd7c1-fa90-99ff-bd08-cdf67fe6c1ab@huaweicloud.com>
+Date:   Wed, 22 Mar 2023 10:02:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20230216014120.3110-1-k1rh4.lee@gmail.com> <9bfef283-e2ac-b2ba-386c-6833e9cb1283@linaro.org>
-In-Reply-To: <9bfef283-e2ac-b2ba-386c-6833e9cb1283@linaro.org>
-From:   sangsup lee <k1rh4.lee@gmail.com>
-Date:   Wed, 22 Mar 2023 10:59:32 +0900
-Message-ID: <CAJkuJRjKszq75M_QttFSO+zVixqfNjHBeajZFa8r0x+wnE6xiA@mail.gmail.com>
-Subject: Re: [PATCH] misc: fastrpc: Fix a Use after-free-bug by race condition
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZBpbGKxPQcs9NYst@ovpn-8-18.pek2.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCHgR+0YRpk1AxfFQ--.465S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrW3WrWxuF4xJr4DAr4kXrb_yoW8WFykpF
+        Z7JF45tF4DKr9Fk34vv3W7Cw4rKw47XryrWry3Gr1xK34qvryagrZ7tws8WayvqrZ0gw1Y
+        gF45GF93X3yxZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sounds great.
+Hi,
 
-Thank you for your recommendation.
-The patch code that you recommend is clear and simple.
-Please patch this.
+在 2023/03/22 9:34, Ming Lei 写道:
+> On Wed, Mar 22, 2023 at 09:26:07AM +0800, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2023/03/21 19:43, Ming Lei 写道:
+>>> On Fri, Feb 17, 2023 at 10:21:58AM +0800, Yu Kuai wrote:
+>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> Changes from RFC:
+>>>>    - remove the patch to factor out GD_NEED_PART_SCAN
+>>>>
+>>>> Yu Kuai (2):
+>>>>     block: Revert "block: Do not reread partition table on exclusively
+>>>>       open device"
+>>>>     block: fix scan partition for exclusively open device again
+>>>
+>>> Hi Yu kuai,
+>>>
+>>> Looks the original issue starts to re-appear now with the two patches:
+>>>
+>>> https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
+>>>
+>>> And underlying disk partition and raid partition can be observed at the
+>>> same time.
+>>>
+>>> Can you take a look?
+>> Yes, thanks for the report. I realize that sda1 adn sdb1 is created
+>> while raid open sda and sdb excl, and I think this problem should exist
+>> before this patchset.
+> 
+> Looks not reproduced before applying your two patches, that is exactly what Jan
+> tried to fix with 36369f46e917 ("block: Do not reread partition table on exclusively open device").
 
-Signed-off-by: Sangsup lee <k1rh4.lee@gmail.com>
----
- drivers/misc/fastrpc.c | 2 ++
- 1 file changed, 2 insertions(+)
+Hi, Ming
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 93ebd174d848..aa1cf0e9f4ed 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1901,7 +1901,9 @@ static long fastrpc_device_ioctl(struct file
-*file, unsigned int cmd,
-                err =3D fastrpc_req_mmap(fl, argp);
-                break;
-        case FASTRPC_IOCTL_MUNMAP:
-+               mutex_lock(&fl->mutex);
-                err =3D fastrpc_req_munmap(fl, argp);
-+               mutex_unlock(&fl->mutex);
-                break;
-        case FASTRPC_IOCTL_MEM_MAP:
-                err =3D fastrpc_req_mem_map(fl, argp);
---
-2.25.1
+I just tried your test with this patchset reverted, and I can still
+reporduce the problem myself.
 
+raid only open this device excl, and disk_scan_partitions is not called:
 
-2023=EB=85=84 3=EC=9B=94 21=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 6:27, S=
-rinivas Kandagatla
-<srinivas.kandagatla@linaro.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Thanks Sangsup for reporting the issue and sharing the patch,
->
-> Sorry, for some reason I missed this patch.
->
-> On 16/02/2023 01:41, Sangsup Lee wrote:
-> > This patch adds mutex_lock for fixing an Use-after-free bug.
-> > fastrpc_req_munmap_impl can be called concurrently in multi-threded env=
-ironments.
-> > The buf which is allocated by list_for_each_safe can be used after anot=
-her thread frees it.
-> >
-> Commit log can be improved here to something like:
->
-> fastrcp_munmap takes two steps to unmap the memory, first to find a
-> matching fastrpc buf in the list and second is to send request to DSP to
-> unmap it.
-> There is a potentially window of race between these two operations,
-> which can lead to user-after-free.
->
-> Fix this by adding locking around this two operations.
->
-> > Signed-off-by: Sangsup Lee <k1rh4.lee@gmail.com>
-> > ---
-> >   drivers/misc/fastrpc.c | 7 ++++++-
-> >   1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> > index 5310606113fe..c4b5fa4a50a6 100644
-> > --- a/drivers/misc/fastrpc.c
-> > +++ b/drivers/misc/fastrpc.c
-> > @@ -1806,10 +1806,12 @@ static int fastrpc_req_munmap(struct fastrpc_us=
-er *fl, char __user *argp)
-> >       struct fastrpc_buf *buf =3D NULL, *iter, *b;
-> >       struct fastrpc_req_munmap req;
-> >       struct device *dev =3D fl->sctx->dev;
-> > +     int err;
-> >
-> >       if (copy_from_user(&req, argp, sizeof(req)))
-> >               return -EFAULT;
-> >
-> > +     mutex_lock(&fl->mutex);
-> >       spin_lock(&fl->lock);
-> >       list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
-> >               if ((iter->raddr =3D=3D req.vaddrout) && (iter->size =3D=
-=3D req.size)) {
-> > @@ -1822,10 +1824,13 @@ static int fastrpc_req_munmap(struct fastrpc_us=
-er *fl, char __user *argp)
-> >       if (!buf) {
-> >               dev_err(dev, "mmap\t\tpt 0x%09llx [len 0x%08llx] not in l=
-ist\n",
-> >                       req.vaddrout, req.size);
-> > +             mutex_unlock(&fl->mutex);
-> >               return -EINVAL;
-> >       }
-> >
-> > -     return fastrpc_req_munmap_impl(fl, buf);
-> > +     err =3D fastrpc_req_munmap_impl(fl, buf);
-> > +     mutex_unlock(&fl->mutex);
-> > +     return err;
->
-> How about moving the locking to ioctl:
->
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index a701132638cf..2f217071a6c3 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -2087,7 +2087,9 @@ static long fastrpc_device_ioctl(struct file
-> *file, unsigned int cmd,
->                  err =3D fastrpc_req_mmap(fl, argp);
->                  break;
->          case FASTRPC_IOCTL_MUNMAP:
-> +               mutex_lock(&fl->mutex);
->                  err =3D fastrpc_req_munmap(fl, argp);
-> +               mutex_unlock(&fl->mutex);
->                  break;
->          case FASTRPC_IOCTL_MEM_MAP:
->                  err =3D fastrpc_req_mem_map(fl, argp);
->
->
-> thanks,
-> srini
-> >   }
-> >
-> >   static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *arg=
-p)
+md_import_device
+  blkdev_get_by_devo
+
+I need to add some debuginfo to figure out how GD_NEED_PART_SCAN is set
+for sda after raid is stopped. And this should explain why sda1 is
+created.
+
+Thanks,
+Kuai
+> 
+> The issue is reported by Changhui's block regression test.
+> 
+> 
+> Thanks,
+> Ming
+> 
+> 
+> .
+> 
+
