@@ -2,170 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB3A6C4B6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25BA6C4B6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjCVNN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S230362AbjCVNOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCVNN5 (ORCPT
+        with ESMTP id S229656AbjCVNOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:13:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0DD419C73;
-        Wed, 22 Mar 2023 06:13:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65D864B3;
-        Wed, 22 Mar 2023 06:14:39 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 736E03F6C4;
-        Wed, 22 Mar 2023 06:13:54 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 13:13:51 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, zanussi@kernel.org
-Subject: Re: [PATCH 1/2] tracing/hist: simplify contains_operator()
-Message-ID: <ZBr/DzoqOWdFvAOP@FVFF77S0Q05N>
-References: <20230302171755.1821653-1-mark.rutland@arm.com>
- <20230302171755.1821653-2-mark.rutland@arm.com>
- <20230318151208.61d73823@rorschach.local.home>
+        Wed, 22 Mar 2023 09:14:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952E937B46
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:14:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so19632302pjp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679490869;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=baxr/TfV6vb0mZSM+YpIGl9rUZD6xaIa7Gwpdmc5OPs=;
+        b=Wmo5wz+2MsyX9LclYzujPJoSIBAygEI83ePf+HLkFRMJ2RmdHCkE2jQpsncyq6UqsA
+         UzRJGDjb2Qk4E+1OkmnLaz82UOU8UV7/4/Jzcck9glym1w0WxnR+XvuqU3eT5/oK7V9s
+         yQVuL/kcrQX3VjGi67GZ3CbsLdLjuqmJV0XHsQ8TFrcH5QMLo++Z4rCPhS/uUEyxAZio
+         CgHbrRvI/43Yu46gUmsZKUp9dv62y74NWUUje/AsgNRZI9pfqhq86vAFsPn9fGxA1Qdz
+         A2Ul0hszaOwL73L776o2LuZFhCtUXfhS4p4iyt1lQXosmtC13SGGn9U5tdeoz77e8Mc4
+         D32g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679490869;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=baxr/TfV6vb0mZSM+YpIGl9rUZD6xaIa7Gwpdmc5OPs=;
+        b=aMK0ylq/VAmT4zdsKCFL65hGMhNaoObpu1RZ6McLoVOvdOhScvnTD8BuvFjYZ1HRZp
+         tyJTc5aKJLVw/L9MiTHx5tMcWUzGXocYaDaIb/2PVfh2upAP6KiL+zrKsuSXkKbHfVCG
+         IAxmZKFE7qWTAFICD9ckZ8YkAcfv26Bwvlbz34H4cLwpAWyTY9mBgt6jhciQ2GZP2JRH
+         lOmlazIzImpw8cEDACWi/99b3gOEbd+lZFG1c4A57jaXsHXpBtjfDuka7qZzU9RNlAid
+         okjoXO7c0WyvyJ6wHdqVJ0qmx97HLJnMkxAWv9wvgsRjN5TT3ek0Se6pTvOyJmXdmmkv
+         ykaQ==
+X-Gm-Message-State: AO0yUKVt8IakcvlpzvRq5BKT1xFeLeRQs/eshHsxvxmUDK8/utoQGdKw
+        utIrNRjPse599AQnWi+N4kA=
+X-Google-Smtp-Source: AK7set+pi70MjDAx+ZKG581ampyYxjngbxcTO5dJPbA9C1GBChsou4z1lipYiBryJ0Td8UDuEfmABw==
+X-Received: by 2002:a17:90b:1b4b:b0:23f:7666:c8a1 with SMTP id nv11-20020a17090b1b4b00b0023f7666c8a1mr3732804pjb.18.1679490869014;
+        Wed, 22 Mar 2023 06:14:29 -0700 (PDT)
+Received: from DESKTOP-B5TBVBT.localdomain ([175.117.51.71])
+        by smtp.gmail.com with ESMTPSA id u62-20020a17090a51c400b00233afe09177sm13228631pjh.8.2023.03.22.06.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 06:14:28 -0700 (PDT)
+From:   Yohan Joung <jyh429@gmail.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yohan Joung <jyh429@gmail.com>,
+        Yohan Joung <yohan.joung@sk.com>
+Subject: [PATCH] f2fs: fix align check for npo2
+Date:   Wed, 22 Mar 2023 22:14:08 +0900
+Message-Id: <20230322131408.1192-1-jyh429@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318151208.61d73823@rorschach.local.home>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 03:12:08PM -0400, Steven Rostedt wrote:
-> On Thu,  2 Mar 2023 17:17:54 +0000
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> 
-> FYI, we follow Linus's preference that subjects start with a capital
-> letter. Unless of course you are a socialist and dislike capitalism?
-> 
->   tracing/hist: Simplify contains_operator()
-> 
+Fix alignment check to be correct in npo2 as well
 
-Sorry; I always get this wrong since many other trees do everything lower case
-(or support total commit message anarchy). I'll go fix that up.
+Signed-off-by: Yohan Joung <yohan.joung@sk.com>
+---
+ fs/f2fs/segment.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > In a subsequent patch we'll add additional operators for histogram
-> > expressions.
-> 
-> Refrain from using "subsequent patch", instead say:
-> 
->  Simplify contains_operator() in order to support additional operators
->  for histogram expressions.
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 055e70e77aa2..46458085a8d0 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -1858,7 +1858,7 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+ 		sector = SECTOR_FROM_BLOCK(blkstart);
+ 		nr_sects = SECTOR_FROM_BLOCK(blklen);
+ 
+-		if (sector & (bdev_zone_sectors(bdev) - 1) ||
++		if (sector % bdev_zone_sectors(bdev) ||
+ 				nr_sects != bdev_zone_sectors(bdev)) {
+ 			f2fs_err(sbi, "(%d) %s: Unaligned zone reset attempted (block %x + %x)",
+ 				 devi, sbi->s_ndevs ? FDEV(devi).path : "",
+-- 
+2.25.1
 
-Sure.
-
-> 
-> > 
-> > In preparation for adding additional operators, this patch refactors
-> > contains_operator() to consider each operator within a precedence group
-> > independently by using the 'sep' pointer as the current rightmost
-> > operator, and removing the separate op pointers.
-> > 
-> > Within each precedence group, this allows operators to be checked
-> > independently with a consistent pattern:
-> > 
-> > 	op = strrchr(str, $OP_CHAR);
-> > 	if (op > *sep) {
-> > 		*sep = op;
-> > 		field_op = $FIELD_OP_TYPE;
-> > 	}
-> > 
-> > This makes it easy to add new operators of the same precedence without
-> > needing to check multiple pointers, and without needing a final switch
-> > statement to recover the relevant pointer.
-> > 
-> > There should be no functional change as a result of this patch.
-> > 
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Cc: Tom Zanussi <zanussi@kernel.org>
-> > Cc: linux-trace-kernel@vger.kernel.org
-> > ---
-> >  kernel/trace/trace_events_hist.c | 80 ++++++++++++--------------------
-> >  1 file changed, 30 insertions(+), 50 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> > index 10d36f751fcd..a308da2cde2f 100644
-> > --- a/kernel/trace/trace_events_hist.c
-> > +++ b/kernel/trace/trace_events_hist.c
-> > @@ -1813,13 +1813,15 @@ static char *expr_str(struct hist_field *field, unsigned int level)
-> >  static int contains_operator(char *str, char **sep)
-> >  {
-> >  	enum field_op_id field_op = FIELD_OP_NONE;
-> > -	char *minus_op, *plus_op, *div_op, *mult_op;
-> > +	char *op;
-> >  
-> > +	*sep = NULL;
-> 
-> Hmm!
-
-Ugh, sorry, I had completely glossed over the:
-
-	if (sep) {
-		...
-		// assignments to *sep here
-		...
-	}
-
-... in the existing code.
-
-I'll go rework that...
-
-> 
-> >  
-> >  	/*
-> > -	 * Report the last occurrence of the operators first, so that the
-> > -	 * expression is evaluated left to right. This is important since
-> > -	 * subtraction and division are not associative.
-> > +	 * For operators of the same precedence report the last occurrence of
-> > +	 * the operators first, so that the expression is evaluated left to
-> > +	 * right. This is important since subtraction and division are not
-> > +	 * associative.
-> >  	 *
-> >  	 *	e.g
-> >  	 *		64/8/4/2 is 1, i.e 64/8/4/2 = ((64/8)/4)/2
-> > @@ -1830,68 +1832,46 @@ static int contains_operator(char *str, char **sep)
-> >  	 * First, find lower precedence addition and subtraction
-> >  	 * since the expression will be evaluated recursively.
-> >  	 */
-> > -	minus_op = strrchr(str, '-');
-> > -	if (minus_op) {
-> > +	op = strrchr(str, '-');
-> > +	if (op > *sep) {
-> 
-> Why compare to *sep if it is always NULL?
-
-As in the commit message, that was just so that every check for an operator had
-the same shape. I can certainly drop this for the first check and just have:
-
-	op = strrchr(str, '-');
-	if (op) {
-		...
-	}
-
-> 
-> Oh! But later in the code we have:
-> 
-> 	if (contains_operator(field, NULL) || is_var_ref(field))
-> 
-> I wonder how *sep = NULL will handle that?
-
-Yep, I got this wrong. I'll go rejig that.
-
-Thanks,
-Mark.
