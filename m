@@ -2,121 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966CA6C4744
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F6B6C4745
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCVKLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S229939AbjCVKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCVKLb (ORCPT
+        with ESMTP id S229750AbjCVKNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:11:31 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9342C5D25C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:11:30 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id h27so2507850vsa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679479889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IafJreLySfd3MASc8cxT/2Y6WBOvzFufHv4VLDHTTeQ=;
-        b=HFaqUEWqVXW/5CsUbV/OddVkdqh595d7LFT8iwGlZRwvw4TN95d0rEnipMONb24/ry
-         kJgysTThBH8AU23xVymKR2QdVeku98oOEroAtTO/GnUdQ4acuPcKjy7priO0wYQvsg0j
-         uJPb6htPOIJMIQ/2szCA/coE0Q5d3j8h1BE0BsWMTe42GFIy8NuZw5SVHPq9jztFEqww
-         2Qbf7VPRM21xAh1sqLyHLXkigQUAJntiTS1JQ+xeLie6Ehg1AyuetSW0cxKqHSGiIKFV
-         3T5LR2DGSM13YyYvg4fmGGXbVXxT3Z6rABGl20/4Cb7+Ft8MpBjpTtS5RzejsnJvFFBq
-         vmqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679479889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IafJreLySfd3MASc8cxT/2Y6WBOvzFufHv4VLDHTTeQ=;
-        b=b4+ZCK0j9Crw5k29ItL8qin/mOhzbB7jWHiwQPCuHd1eEzvDjr19CGqKybMSTqUo7U
-         LFNcxx3NFRaQt5HDKUfHgBU+esylQs8t1mPx7dlrertdabnboTTDedHlwWMBxWzh2Uj1
-         nczNnGb2gpuX9qDnjiCyO4qm5lFMiYJQkuTCDnHbW7107dycaU9JCGdprkllpIH7tn9u
-         tJ45aSV7sBmzGamichjPswfqcqRnI6ulWPTpRpl13a4jfgMuCWnMfBUBPq4wrYus2cEF
-         Zl8hlzp4OO3TbBmhyDla+/cxS8A+8iyLTWD/VxxY+WTys4JUiLDpldhNQii1nRoqhpEt
-         Onxw==
-X-Gm-Message-State: AO0yUKUW02i/R+aV8OjNg5oKvAUhN4xhdCb/eaadSZoaCFg8CvSagUJ6
-        HubhY5ziu5lSEb9WZNR4G3Ip/t/+xohyzcf4vOIhEQ==
-X-Google-Smtp-Source: AK7set91bQA2qMqsWs4iqweENTZVavI1PGtrRcZD2M6PDz6B24imVqlCPbOuXqYOWZA5xEpqbkVlZKse6AodxFWVOtA=
-X-Received: by 2002:a67:e04a:0:b0:425:f836:59ba with SMTP id
- n10-20020a67e04a000000b00425f83659bamr3629620vsl.7.1679479889494; Wed, 22 Mar
- 2023 03:11:29 -0700 (PDT)
+        Wed, 22 Mar 2023 06:13:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3840072AB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:13:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E1CE121B45;
+        Wed, 22 Mar 2023 10:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679479982; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aqEzHI7CsoF2HtxRsuwP9+5W2QuYHXY8VrSFADFSMLM=;
+        b=nTml06VeJDqK9PEr/pRjJsAJ13bkHpV7QyzOi3MENEr+VHVAZfGLpu7kGmaBJDt56cpijR
+        XFCxNyk/Y+5V0PanR6I9OwVkyv1QVrxosPmUVQVW9B8jXleMxpxNNu3STvpHnpzJoXVLIA
+        +QRg5R4/1vUhgJI0ZuXXbspr/NhFqOE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC5C7138E9;
+        Wed, 22 Mar 2023 10:13:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yuIuKq7UGmT5CQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 22 Mar 2023 10:13:02 +0000
+Date:   Wed, 22 Mar 2023 11:13:02 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZBrUruIsOjdaqiFv@dhcp22.suse.cz>
+References: <20230320180332.102837832@redhat.com>
+ <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
+ <ZBiu8csaxB/zrOAS@tpad>
 MIME-Version: 1.0
-References: <20230320163703.GA27712@debian> <20230320170009.GA27961@debian> <889f2dc5e646992033e0d9b0951d5a42f1907e07.camel@redhat.com>
-In-Reply-To: <889f2dc5e646992033e0d9b0951d5a42f1907e07.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 22 Mar 2023 03:11:18 -0700
-Message-ID: <CANn89iK_bsPoaRVe+FNZ7LF_eLbz2Af6kju4j9TVHtbgkpcn5g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] gro: optimise redundant parsing of packets
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Richard Gobert <richardbgobert@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, dsahern@kernel.org, alexanderduyck@fb.com,
-        lucien.xin@gmail.com, lixiaoyan@google.com, iwienand@redhat.com,
-        leon@kernel.org, ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBiu8csaxB/zrOAS@tpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 2:59=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On Mon, 2023-03-20 at 18:00 +0100, Richard Gobert wrote:
-> > Currently the IPv6 extension headers are parsed twice: first in
-> > ipv6_gro_receive, and then again in ipv6_gro_complete.
-> >
-> > By using the new ->transport_proto field, and also storing the size of =
-the
-> > network header, we can avoid parsing extension headers a second time in
-> > ipv6_gro_complete (which saves multiple memory dereferences and conditi=
-onal
-> > checks inside ipv6_exthdrs_len for a varying amount of extension header=
-s in
-> > IPv6 packets).
-> >
-> > The implementation had to handle both inner and outer layers in case of
-> > encapsulation (as they can't use the same field). I've applied a simila=
-r
-> > optimisation to Ethernet.
-> >
-> > Performance tests for TCP stream over IPv6 with a varying amount of
-> > extension headers demonstrate throughput improvement of ~0.7%.
->
-> I'm surprised that the improvement is measurable: for large aggregate
-> packets a single ipv6_exthdrs_len() call is avoided out of tens calls
-> for the individual pkts. Additionally such figure is comparable to
-> noise level in my tests.
->
-> This adds a couple of additional branches for the common (no extensions
-> header) case.
->
-> while patch 1/2 could be useful, patch 2/2 overall looks not worthy to
-> me.
->
-> I suggest to re-post for inclusion only patch 1, unless others have
-> strong different opinions.
->
+On Mon 20-03-23 16:07:29, Marcelo Tosatti wrote:
+> On Mon, Mar 20, 2023 at 07:25:55PM +0100, Michal Hocko wrote:
+> > On Mon 20-03-23 15:03:32, Marcelo Tosatti wrote:
+> > > This patch series addresses the following two problems:
+> > > 
+> > > 1. A customer provided evidence indicating that a process
+> > >    was stalled in direct reclaim:
+> > > 
+> > This is addressed by the trivial patch 1.
+> > 
+> > [...]
+> > >  2. With a task that busy loops on a given CPU,
+> > >     the kworker interruption to execute vmstat_update
+> > >     is undesired and may exceed latency thresholds
+> > >     for certain applications.
+> > 
+> > Yes it can but why does that matter?
+> 
+> It matters for the application that is executing and expects
+> not to be interrupted.
 
-+2
+Those workloads shouldn't enter the kernel in the first place, no?
+Otherwise the in kernel execution with all the direct or indirect
+dependencies (e.g. via locks) can throw any latency expectations off the
+window.
 
-I have the same feeling/opinion.
+> > > By having vmstat_shepherd flush the per-CPU counters to the
+> > > global counters from remote CPUs.
+> > > 
+> > > This is done using cmpxchg to manipulate the counters,
+> > > both CPU locally (via the account functions),
+> > > and remotely (via cpu_vm_stats_fold).
+> > > 
+> > > Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+> > > the initial patch series.
+> > > 
+> > > 
+> > > Performance details for the kworker interruption:
+> > > 
+> > > oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
+> > > oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
+> > > oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
+> > > kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
+> > >  
+> > > The example above shows an additional 7us for the
+> > > 
+> > >         oslat -> kworker -> oslat
+> > > 
+> > > switches. In the case of a virtualized CPU, and the vmstat_update
+> > > interruption in the host (of a qemu-kvm vcpu), the latency penalty
+> > > observed in the guest is higher than 50us, violating the acceptable
+> > > latency threshold for certain applications.
+> > 
+> > I do not think we have ever promissed any specific latency guarantees
+> > for vmstat. These are statistics have been mostly used for debugging
+> > purposes AFAIK. I am not aware of any specific user space use case that
+> > would be latency sensitive. Your changelog doesn't go into details there
+> > either.
+> 
+> There is a class of workloads for which response time can be
+> of interest. MAC scheduler is an example:
+> 
+> https://par.nsf.gov/servlets/purl/10090368
 
-> Cheers,
->
-> Paolo
->
+Yes, I am not disputing low latency workloads in general. I am just
+saying that you haven't really established a very sound justification
+here. Of course there are workloads which do not want to conflict with
+any in kernel house keeping. Those have to be configured and implemented
+very carefully though. Vmstat as such should not collide with those
+workloads as long as they do not interact with the kernel in a way
+counters are updated. Is this hard or impossible to avoid? 
+
+I can imagine that those workloads have an start up sequence where the
+kernel is involved and counters updated so that deferred flushing could
+interfere with the later and latency sensitive phase. Is that a real
+problem in practice? Please tell us much more why we need to make the
+vmstat code more complex.
+
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs
