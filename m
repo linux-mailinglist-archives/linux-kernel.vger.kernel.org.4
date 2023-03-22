@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F346C53DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B346C53CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCVSji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S230408AbjCVShH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjCVSjh (ORCPT
+        with ESMTP id S229522AbjCVShF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:39:37 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFD810F8;
-        Wed, 22 Mar 2023 11:39:36 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 87DC25FD3E;
-        Wed, 22 Mar 2023 21:39:34 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679510374;
-        bh=2jI7XF69xGSYc6uWoXcTewsdZMSwsHV3zIs6n8EvIlc=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=SZpMU2qEABc12peDtdbirDKGuboITfiDWAirBrD6tS8q1573+ddUDcT40cjQtEPvE
-         v8HUT2EfMlxnzHn3hHhbAjZdf+/roRZcTrSNAdD9hyD9wcfnt1Cqao5CDZ5DRs6BXO
-         tc7mbOPAyo+dj/qBRGCDaPDBdjHfjC8J8vQ2Dbptf3NnUPnN64vdair/N5WgweZ35y
-         eoU+gRWNdp0YKRN5KX0ku2QRugtBV37cSBWkEMUgfBEhkFTD6ApMiyTR09B3Zs+JwI
-         4uhdPb2Qyg0NPKhwQv3QXLKhBwthB0cvfQtfyb7IQxpFm+YrrJiTJsl7eJB5/OooTg
-         dB9e3N1t8nvCg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 22 Mar 2023 21:39:34 +0300 (MSK)
-Message-ID: <50bb0210-1ed7-42fb-b5f6-8d97247209b5@sberdevices.ru>
-Date:   Wed, 22 Mar 2023 21:36:24 +0300
+        Wed, 22 Mar 2023 14:37:05 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3305962D95;
+        Wed, 22 Mar 2023 11:37:03 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so1326584wms.1;
+        Wed, 22 Mar 2023 11:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679510221;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=StzG7MvS76Lz0lBTU33p2jJvbMwPuAHgPRJM3LdxuNs=;
+        b=aU6w9ZbUGKtdWGcoRQ56YUNSi0tRdOA9APCN7zpdjeqKl+bu6dBkgazF9AsWQvEkhE
+         cNXKG7OV+BYiQwDI3dZARsofXPglM5HBiarE/j0Zq+8afO/Xj0a4mOHzL5qZWXUm5tBv
+         gtV00qDhtPOAlEBU9e6bJ6Wdshde/99A9Qp7UkxvIOgRmlEBzspB6I6oU1e0huMHFYVk
+         YsbgMAZV0eNAaEkaKMu10mcHh/Surpwm19K567I2iuGSEiK58cs57V0I6RhHtWs5NUOI
+         NCFqNmm5p34nAipecCiAsCp10lH8Fe7pcgdV/t0xHzpM7yveh6wW+K6hguLsYwJ+vJ+7
+         HWtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679510221;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=StzG7MvS76Lz0lBTU33p2jJvbMwPuAHgPRJM3LdxuNs=;
+        b=qT1CNkXPecENLcZfU1Vkrua/cyerqiAzdCHNCMqnYmYepLn9/CJ7P9TeqStOiSK/Rj
+         43VxGKzQcETIYE4HUFUi7VfHiAG4boHYnWFFrDsDdHLp3NmBcxNt9Gm/HMrCOQewpa+S
+         F2O0HsOaym6dfxo/Pn2+bn0niyXGFdeE1Mn4vsRl9PFF7m9P/Ox8uZK+q96w6X4mu6oM
+         464l5sbQo2ZR34O99dnWw3NRqU66u3khb2wIXQFrbt5p+H1QZbauibPgHSs8tnXSDbY1
+         r8y9vWHT4xesDGG7k89dQvDiLdnuB7clCU1GQmtKBan7pxTywan8nIWkIT1ezJk/GsNF
+         gOVg==
+X-Gm-Message-State: AO0yUKWAmjekTgV/Oe1mnd8Eanwr8IpIQEZrIwQjx0E8fpGK6kMiBc/L
+        rx/ySZYNWPpjPq7CGd+qNMY=
+X-Google-Smtp-Source: AK7set+hKMIITZa3MkGfMXD93+CnbtF/QA2NO2suRtRzNOKQkYMslJNwGhDl52TL2tdQ06VsoWUTSQ==
+X-Received: by 2002:a1c:7c18:0:b0:3ed:8bef:6a04 with SMTP id x24-20020a1c7c18000000b003ed8bef6a04mr393679wmc.27.1679510221426;
+        Wed, 22 Mar 2023 11:37:01 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05600c310e00b003eddf30bab6sm11699959wmo.27.2023.03.22.11.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 11:37:00 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:36:59 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v6 4/4] mm: vmalloc: convert vread() to vread_iter()
+Message-ID: <bad5dc54-f614-430a-a6a2-e96fea6ce1ec@lucifer.local>
+References: <cover.1679496827.git.lstoakes@gmail.com>
+ <4f1b394f96a4d1368d9a5c3784ebee631fb8d101.1679496827.git.lstoakes@gmail.com>
+ <3e2d1f69-5cd8-8824-0a2e-a1c2c9029f66@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-In-Reply-To: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v5 2/2] virtio/vsock: check argument to avoid no effect
- call
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 14:20:00 #20991698
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e2d1f69-5cd8-8824-0a2e-a1c2c9029f66@redhat.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both of these functions have no effect when input argument is 0, so to
-avoid useless spinlock access, check argument before it.
+On Wed, Mar 22, 2023 at 06:02:34PM +0100, David Hildenbrand wrote:
+> On 22.03.23 15:55, Lorenzo Stoakes wrote:
+> > Having previously laid the foundation for converting vread() to an iterator
+> > function, pull the trigger and do so.
+> >
+> > This patch attempts to provide minimal refactoring and to reflect the
+> > existing logic as best we can, for example we continue to zero portions of
+> > memory not read, as before.
+> >
+> > Overall, there should be no functional difference other than a performance
+> > improvement in /proc/kcore access to vmalloc regions.
+> >
+> > Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
+> > we dispense with it, and try to write to user memory optimistically but
+> > with faults disabled via copy_page_to_iter_nofault(). We already have
+> > preemption disabled by holding a spin lock.
+> >
+> > If this fails, we fault in and retry a single time. This is a conservative
+> > approach intended to avoid spinning on vread_iter() if we repeatedly
+> > encouter issues reading from it.
+>
+> I have to ask again: Can you comment why that is ok? You might end up
+> signaling -EFAULT to user space simply because swapping/page
+> migration/whatever triggered at the wrong time.
+>
+> That could break existing user space or which important part am I missing?
+>
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- net/vmw_vsock/virtio_transport_common.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Actually you're right, this is not ok. I was being mistakenly overcautious
+about spinning but in actual fact I don't think this would be an issue
+here.
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index 9e87c7d4d7cf..312658c176bd 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -302,6 +302,9 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 credit)
- {
- 	u32 ret;
- 
-+	if (!credit)
-+		return 0;
-+
- 	spin_lock_bh(&vvs->tx_lock);
- 	ret = vvs->peer_buf_alloc - (vvs->tx_cnt - vvs->peer_fwd_cnt);
- 	if (ret > credit)
-@@ -315,6 +318,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_get_credit);
- 
- void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit)
- {
-+	if (!credit)
-+		return;
-+
- 	spin_lock_bh(&vvs->tx_lock);
- 	vvs->tx_cnt -= credit;
- 	spin_unlock_bh(&vvs->tx_lock);
--- 
-2.25.1
+I will respin with a while loop so under no odd timing circumstance do we
+break userland.
+
+> --
+> Thanks,
+>
+> David / dhildenb
+>
