@@ -2,104 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10CF6C446F
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D09466C4478
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjCVHxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S230039AbjCVHz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCVHx2 (ORCPT
+        with ESMTP id S229927AbjCVHzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:53:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F2B5BC86;
-        Wed, 22 Mar 2023 00:53:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A24261F32;
-        Wed, 22 Mar 2023 07:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16C4C433D2;
-        Wed, 22 Mar 2023 07:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679471606;
-        bh=6us+L/XQm1baJWcqSucEebFsFr6/7LTQQTA45/1sK9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V4b2fGg2pHM3FPEW87yN8n2hsakjJoVAowHip1XmWw9BlkHBJnQTwMUcrtY/RTApR
-         NBxyBX1jk0AXYSSfcc+SK/cOziReWXUJTz56jIsU3m2LovjxjDOpZDHuLFkrOpr3UR
-         WFAEbz6J6SzyEVvYklOVKrpYcKhYoTDfBwsidTwWX3RWP2rbJKLfG1+0h3fgvxKUDT
-         b9yEnkojuNKFSnSNFfii3Chzy+3S0neYSnNKMDh8lDqOau12JKTdFG9sIQFL9BupPQ
-         HNmBUEECqb+cfaT5yZXOXtXmiyfvk+3QEwSjdu+5BKkGsuyD+vyyurvs4rdJF9Cu1u
-         o5hROj9r5DsBg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1petJ7-0002VJ-38; Wed, 22 Mar 2023 08:54:53 +0100
-Date:   Wed, 22 Mar 2023 08:54:53 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] drm/msm: fix bind error handling
-Message-ID: <ZBq0TaDON8iJ3/Rh@hovoldconsulting.com>
-References: <20230306100722.28485-1-johan+linaro@kernel.org>
- <ZBmq12uP+TY4EaE3@hovoldconsulting.com>
- <6b2f4d0d-ba39-dd2b-e41e-b5accb4df1a2@linaro.org>
+        Wed, 22 Mar 2023 03:55:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5C495BC9D;
+        Wed, 22 Mar 2023 00:55:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D7984B3;
+        Wed, 22 Mar 2023 00:56:05 -0700 (PDT)
+Received: from [10.57.65.162] (unknown [10.57.65.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE8C93F766;
+        Wed, 22 Mar 2023 00:55:19 -0700 (PDT)
+Message-ID: <e8352d76-29e4-5e4a-063b-60e279e0b070@arm.com>
+Date:   Wed, 22 Mar 2023 07:55:18 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b2f4d0d-ba39-dd2b-e41e-b5accb4df1a2@linaro.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 3/5] mm: thp: split huge page to any lower order pages.
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230321004829.2012847-1-zi.yan@sent.com>
+ <20230321004829.2012847-4-zi.yan@sent.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230321004829.2012847-4-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 05:21:56PM +0200, Dmitry Baryshkov wrote:
-> On 21/03/2023 15:02, Johan Hovold wrote:
-> > On Mon, Mar 06, 2023 at 11:07:12AM +0100, Johan Hovold wrote:
-> >> I had reasons to look closer at the MSM DRM driver error handling and
-> >> realised that it had suffered from a fair amount of bit rot over the
-> >> years.
-> >>
-> >> Unfortunately, I started fixing this in my 6.2 branch and failed to
-> >> notice two partial and, as it turned out, broken attempts to address
-> >> this that are now in 6.3-rc1.
-> >>
-> >> Instead of trying to salvage this incrementally, I'm reverting the two
-> >> broken commits so that clean and backportable fixes can be added in
-> >> their place.
-> >>
-> >> Included are also two related cleanups.
-> > 
-> > Any further comments to these patches (except for 9/10, which should be
-> > dropped)?
-> > 
-> > As the patches being reverted here were first added in 6.3-rc1 there is
-> > still time to get this into 6.3-rc (e.g. before AUTOSEL starts trying to
-> > backport them).
+Hi,
+
+I'm working to enable large, variable-order folios for anonymous memory (see
+RFC, replete with bugs at [1]). This patch set is going to be very useful to me.
+But I have a few questions that I wonder if you can answer, below? I wonder if
+they might relate to the bugs I'm seeing at [1].
+
+[1] https://lore.kernel.org/linux-mm/20230317105802.2634004-1-ryan.roberts@arm.com/
+
+
+
+On 21/03/2023 00:48, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
 > 
-> I will take a look at the patches. Additional question, as you have been 
-> looking into this area. We have plenty of code which is only called 
-> under the `if (kms)` condition. Could you hopefully move these parts to 
-> separate functions, so that the error handling is also simpler? If not, 
-> I'll put this to my todo list, but it might take some time before I have 
-> time for that.
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+> 
+> It has many uses, like minimizing the number of pages after
+> truncating a huge pagecache page. For anonymous THPs, we can only split
+> them to order-0 like before until we add support for any size anonymous
+> THPs.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/huge_mm.h |  10 ++--
+>  mm/huge_memory.c        | 103 +++++++++++++++++++++++++++++-----------
+>  2 files changed, 82 insertions(+), 31 deletions(-)
+> 
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 20284387b841..32c91e1b59cd 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -147,10 +147,11 @@ void prep_transhuge_page(struct page *page);
+>  void free_transhuge_page(struct page *page);
+>  
+>  bool can_split_folio(struct folio *folio, int *pextra_pins);
+> -int split_huge_page_to_list(struct page *page, struct list_head *list);
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +		unsigned int new_order);
+>  static inline int split_huge_page(struct page *page)
+>  {
+> -	return split_huge_page_to_list(page, NULL);
+> +	return split_huge_page_to_list_to_order(page, NULL, 0);
+>  }
+>  void deferred_split_folio(struct folio *folio);
+>  
+> @@ -297,7 +298,8 @@ can_split_folio(struct folio *folio, int *pextra_pins)
+>  	return false;
+>  }
+>  static inline int
+> -split_huge_page_to_list(struct page *page, struct list_head *list)
+> +split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +		unsigned int new_order)
+>  {
+>  	return 0;
+>  }
+> @@ -397,7 +399,7 @@ static inline bool thp_migration_supported(void)
+>  static inline int split_folio_to_list(struct folio *folio,
+>  		struct list_head *list)
+>  {
+> -	return split_huge_page_to_list(&folio->page, list);
+> +	return split_huge_page_to_list_to_order(&folio->page, list, 0);
+>  }
+>  
+>  static inline int split_folio(struct folio *folio)
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 710189885402..f119b9be33f2 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2359,11 +2359,13 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+>  
+>  static void unmap_folio(struct folio *folio)
+>  {
+> -	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+> -		TTU_SYNC;
+> +	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC;
+>  
+>  	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>  
+> +	if (folio_order(folio) >= HPAGE_PMD_ORDER)
+> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
+> +
 
-There's definitely room for cleaning up the bind/unbind paths further,
-but for this series I focus on correctness while maintaining symmetry
-(e.g. if an allocation was done under if (kms), then the release should
-be done under the same).
+Why have you changed the code so that this flag is added conditionally on the
+folio being large enough? I've previously looked at this in the context of my
+bug, and concluded that the consumer would ignore the flag if the folio wasn't
+PMD mapped. Did I conclude incorrectly?
 
-I don't think I will have time to look at this further for a few weeks
-either, but I'll add it to my list of future work as well and I'll check
-in with you before actually working on it.
 
-Johan
+>  	/*
+>  	 * Anon pages need migration entries to preserve them, but file
+>  	 * pages can simply be left unmapped, then faulted back on demand.
+> @@ -2395,7 +2397,6 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  		struct lruvec *lruvec, struct list_head *list)
+>  {
+>  	VM_BUG_ON_PAGE(!PageHead(head), head);
+> -	VM_BUG_ON_PAGE(PageCompound(tail), head);
+>  	VM_BUG_ON_PAGE(PageLRU(tail), head);
+>  	lockdep_assert_held(&lruvec->lru_lock);
+>  
+> @@ -2416,9 +2417,10 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  }
+>  
+
+[...]
+
+> -int split_huge_page_to_list(struct page *page, struct list_head *list)
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +				     unsigned int new_order)
+>  {
+>  	struct folio *folio = page_folio(page);
+>  	struct deferred_split *ds_queue = get_deferred_split_queue(folio);
+> -	XA_STATE(xas, &folio->mapping->i_pages, folio->index);
+> +	/* reset xarray order to new order after split */
+> +	XA_STATE_ORDER(xas, &folio->mapping->i_pages, folio->index, new_order);
+>  	struct anon_vma *anon_vma = NULL;
+>  	struct address_space *mapping = NULL;
+>  	int extra_pins, ret;
+> @@ -2649,6 +2676,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+>  	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>  
+> +	/* Cannot split THP to order-1 (no order-1 THPs) */
+> +	if (new_order == 1) {
+> +		VM_WARN_ONCE(1, "Cannot split to order-1 folio");
+> +		return -EINVAL;
+> +	}
+
+Why can't you split to order-1? I vaguely understand that some data is kept in
+the first 3 struct pages, but I would naively expect the allocator to fail to
+allocate compound pages of order-1 if it was a problem? My large anon folios
+patch is currently allocating order-1 in some circumstances. Perhaps its related
+to my bug?
+
+
+> +
+> +	/* Split anonymous folio to non-zero order not support */
+> +	if (folio_test_anon(folio) && new_order) {
+> +		VM_WARN_ONCE(1, "Split anon folio to non-0 order not support");
+> +		return -EINVAL;
+> +	}
+
+Why don't you support this? What is special about anon folios that means this
+code doesn't work for them?
+
+
+Thanks,
+Ryan
+
+
+
+> +
+>  	is_hzp = is_huge_zero_page(&folio->page);
+>  	VM_WARN_ON_ONCE_FOLIO(is_hzp, folio);
+>  	if (is_hzp)
+> @@ -2744,7 +2783,13 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  	if (folio_ref_freeze(folio, 1 + extra_pins)) {
+>  		if (!list_empty(&folio->_deferred_list)) {
+>  			ds_queue->split_queue_len--;
+> -			list_del(&folio->_deferred_list);
+> +			/*
+> +			 * Reinitialize page_deferred_list after removing the
+> +			 * page from the split_queue, otherwise a subsequent
+> +			 * split will see list corruption when checking the
+> +			 * page_deferred_list.
+> +			 */
+> +			list_del_init(&folio->_deferred_list);
+>  		}
+>  		spin_unlock(&ds_queue->split_queue_lock);
+>  		if (mapping) {
+> @@ -2754,14 +2799,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  			if (folio_test_swapbacked(folio)) {
+>  				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
+>  							-nr);
+> -			} else {
+> +			} else if (!new_order) {
+> +				/*
+> +				 * Decrease THP stats only if split to normal
+> +				 * pages
+> +				 */
+>  				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
+>  							-nr);
+>  				filemap_nr_thps_dec(mapping);
+>  			}
+>  		}
+>  
+> -		__split_huge_page(page, list, end);
+> +		__split_huge_page(page, list, end, new_order);
+>  		ret = 0;
+>  	} else {
+>  		spin_unlock(&ds_queue->split_queue_lock);
+
