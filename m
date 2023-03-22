@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D536C5186
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918756C4F9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCVRB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S230426AbjCVPnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjCVRBn (ORCPT
+        with ESMTP id S229549AbjCVPnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:01:43 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF85A311FC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:01:13 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id bc5so4483043ilb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679504468;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=tB7XlB2YJnJqA7MgUfO5e04FvkftMYQVsSIu53w/PI4=;
-        b=aU3kYDqMYyobrzou+/GzWJ/hExbXTy5O6vtNx2cjg7CAOI+aHFHlMc4tBc14eLQumg
-         zGqlRB8KNxKwFLyqGY/GqaiolnNvPIoSLBjVZB2pMMczklAM3aBzcrji2crOKpGVYg2S
-         N7ZNrMX5atNWzkf6Rx+H93s7AjcUnmIPrHkCMAfuQTn7/A/6Ia/DaNwyLuK3DxTPH5Sf
-         5Az5yVZupCil1nqjss+IoRS3kUKmiFTH7EPnS9zFNvYqLP4Rq9QH5DSzVvckTbUD+i32
-         5HTYmRiehiuT+sRqehWkBZa30zS16mB4NKdoKRuABUgwdA4FKU7dZrIwK7L1pnGKCT2x
-         1WVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504468;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tB7XlB2YJnJqA7MgUfO5e04FvkftMYQVsSIu53w/PI4=;
-        b=gxrN1zC4AzmPTdLhArspMwUMm1TnQj4Xrw7l/F8NlZ3lTXrlM9K7o7T1T6iLhbT6LB
-         759xFHsCZXOyBSqGNuxlkVkyTFXCiB8zw3hFSF3Df7GL6FdIYCLME05NGq2V0UaKNm93
-         xIauXGLjmwsezE2jeRumXZqYCh/+LlrffZnZ5s2koS5raMcBlSqwwGiLIBRRPTuani4N
-         j11BfSwr6qMyxT2tGRHDn094L/0XxmzYjEBpzRxFmPQ2HOkkw7dgG4nvY9RU1fDxTz3o
-         kCmkrI6dwKO+ohM0X7wizku0O8aMYgznckI+RIkdqByJTIvLcz057AT6zHaddAIvG1ZG
-         4qnQ==
-X-Gm-Message-State: AO0yUKUo8zijnCayfoH/tU+GyEzWe4XubCuUqzmDWJKhGRBrzLX34qiw
-        fOAK5MB8Zz9eYSXyP/MYPGM=
-X-Google-Smtp-Source: AK7set8in6gZ7G/xPJ1qoWOiqSM2mOlh9Ndic78pIG7cYyii8WBEoR9rBiSgxbuFmef0Mkl4bl5lsg==
-X-Received: by 2002:a92:ce06:0:b0:319:2bf:54ad with SMTP id b6-20020a92ce06000000b0031902bf54admr5501739ilo.14.1679504467981;
-        Wed, 22 Mar 2023 10:01:07 -0700 (PDT)
-Received: from ArchLinux ([125.122.223.69])
-        by smtp.gmail.com with ESMTPSA id w4-20020a056e021c8400b003230864f757sm4307150ill.68.2023.03.22.10.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:01:07 -0700 (PDT)
-References: <20230303161906.831686-1-schspa@gmail.com> <87bkl9jt3a.ffs@tglx>
-User-agent: mu4e 1.7.5; emacs 28.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     longman@redhat.com, swboyd@chromium.org, linux@roeck-us.net,
-        wuchi.zero@gmail.com, linux-kernel@vger.kernel.org,
-        syzbot+5093ba19745994288b53@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/2] debugobject: fix concurrency issues with
- is_static_object
-Date:   Wed, 22 Mar 2023 23:40:29 +0800
-In-reply-to: <87bkl9jt3a.ffs@tglx>
-Message-ID: <m2ttycd8kx.fsf@gmail.com>
+        Wed, 22 Mar 2023 11:43:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF142311F;
+        Wed, 22 Mar 2023 08:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679499829; x=1711035829;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3y52vmnpU1zrtrzsFH1G+PtYutUm6m2sFkJR0sAJnPQ=;
+  b=RrOlyLjhVS739Zo5g3i0mZuBtMXDXDoyvVIP1jw9AEdSCLZyAY8w7mL4
+   YrdoNQLdrmB+HbcotPZiahVTftheLdgZcVS8B3AVf4MfNomHbCsGaF6Jg
+   dxNiUkpckV1RKe/LswEF54qUwOcJJW1rQAiNKqcf5HUcwRjstGE8Qjgl7
+   1HVwmgdErH/c8g+8cPc2eV/+eQheOmIfBhvfC4PML07RI/HwfP/pUoxqI
+   f1peLN+h/6Aygn609VHCiae8AMdpnmmu26e9h/FkYvj4Psk2/HHQQjf6R
+   xfQ7ZQ8Ao4cZNYLanjG1hGS6wa9W1js082Z/bcnvVMB9FrEMOqjjS81js
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="339286253"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="339286253"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 08:43:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659216178"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="659216178"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 08:43:44 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf0co-000DRM-2u;
+        Wed, 22 Mar 2023 15:43:42 +0000
+Date:   Wed, 22 Mar 2023 23:43:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Lee Jones <lee@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: max597x: Add support for max597x
+Message-ID: <202303222333.PPnq1J4t-lkp@intel.com>
+References: <20230322124316.2147143-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322124316.2147143-1-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,473 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Naresh,
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+I love your patch! Perhaps something to improve:
 
-> Hi!
->
-> On Sat, Mar 04 2023 at 00:19, Schspa Shi wrote:
->
->> The is_static_object implementation relay on the initial state of the
->> object. If multiple places are accessed concurrently, there is a
->> probability that the debug object has been registered in the system, which
->> will invalidate the judgment of is_static_object.
->>
->> The following is the scenario where the problem occurs:
->>
->> T0                                                   T1
->> =========================================================================
->> mod_timer();
->>   debug_object_assert_init
->> 	db = get_bucket((unsigned long) addr);
->> 	raw_spin_lock_irqsave(&db->lock, flags);
->> 	obj = lookup_object(addr, db);
->>     if (!obj) {
->> 		raw_spin_unlock_irqrestore(&db->lock, flags);
->>         << Context switch >>
->>                                              mod_timer();
->>                                                debug_object_assert_init
->>                                                ...
->>                                                enqueue_timer();
->>         /*
->>          * The initial state changed a static timer object, and
->>          * is_static_object will return false
->>          */
->>
->>         if (descr->is_static_object &&
->> 			descr->is_static_object(addr)) {
->>                 debug_object_init();
->>             } else {
->>                << Hit here for a static object >>
->> 			   debug_print_object(&o, "assert_init");
->> 			   debug_object_fixup(descr->fixup_assert_init, addr,
->> 					   ODEBUG_STATE_NOTAVAILABLE);
->>             }
->>     }
->
-> That analysis is correct.
->
->> diff --git a/lib/debugobjects.c b/lib/debugobjects.c
->> index df86e649d8be0..d1be18158a1f7 100644
->> --- a/lib/debugobjects.c
->> +++ b/lib/debugobjects.c
->> @@ -275,6 +275,8 @@ alloc_object(void *addr, struct debug_bucket *b, const struct debug_obj_descr *d
->>  		obj->descr  = descr;
->>  		obj->state  = ODEBUG_STATE_NONE;
->>  		obj->astate = 0;
->> +		obj->is_static = descr->is_static_object &&
->> +			descr->is_static_object(addr);
->>  		hlist_add_head(&obj->node, &b->list);
->>  	}
->>  	return obj;
->> @@ -581,7 +583,16 @@ __debug_object_init(void *addr, const struct debug_obj_descr *descr, int onstack
->>  			debug_objects_oom();
->>  			return;
->>  		}
->> +
->>  		check_stack = true;
->> +	} else {
->> +		/*
->> +		 * The debug object is inited, and we should check this again
->> +		 */
->> +		if (obj->is_static) {
->> +			raw_spin_unlock_irqrestore(&db->lock, flags);
->> +			return;
->
-> This is broken. If the object is static and already hashed and in active
-> state then this returns and fails to detect the re-initialization of an
-> active object.
->
+[auto build test WARNING on 368eb79f738a21e16c2bdbcac2444dfa96b01aaa]
 
-Yes, it's right, this can be fixed by pass a skip_ifstatic parameters
-from debug_object_activate. then re-initialization of an active object
-can be detected.
+url:    https://github.com/intel-lab-lkp/linux/commits/Naresh-Solanki/leds-max597x-Add-support-for-max597x/20230322-204408
+base:   368eb79f738a21e16c2bdbcac2444dfa96b01aaa
+patch link:    https://lore.kernel.org/r/20230322124316.2147143-1-Naresh.Solanki%409elements.com
+patch subject: [PATCH 1/2] iio: max597x: Add support for max597x
+reproduce:
+        make versioncheck
 
->> +/*
->> + * Check static object.
->> + */
->> +static bool debug_object_check_static(struct debug_bucket *db, void *addr,
->> +			const struct debug_obj_descr *descr)
->> +{
->> +	struct debug_obj *obj;
->> +
->> +	/*
->> +	 * The is_static_object implementation relay on the initial state of the
->> +	 * object. If multiple places are accessed concurrently, there is a
->> +	 * probability that the debug object has been registered in the system,
->> +	 * which will invalidate the judgment of is_static_object.
->> +	 */
->> +	lockdep_assert_held(&db->lock);
->> +
->> +	obj = lookup_object(addr, db);
->
-> What does this lookup solve? See below...
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303222333.PPnq1J4t-lkp@intel.com/
 
-This lookup can be droped by add a extra obj parameter.
-
->> +	if (likely(obj))
->> +		return obj->is_static;
->> +
->> +	return descr->is_static_object && descr->is_static_object(addr);
->> +}
->
->> @@ -696,6 +731,7 @@ int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
->>  		return ret;
->>  	}
->>  
->> +	is_static = debug_object_check_static(db, addr, descr);
->
-> It's already clear that the object is not hashed because activate does:
->
->         lock()
->         lookup()
->         if (ob) {
->            ....
->            unlock();
->         }
->
-> At this point nothing has changed after the lookup because
-> the hash bucket is still locked.
->
-
-Yes, the obj variable should be passed to debug_object_check_static.
-
->>  	raw_spin_unlock_irqrestore(&db->lock, flags);
->  
->>  	/*
->> @@ -705,7 +741,7 @@ int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
->>  	 * static object is tracked in the object tracker. If
->>  	 * not, this must be a bug, so we try to fix it up.
->>  	 */
->> -	if (descr->is_static_object && descr->is_static_object(addr)) {
->> +	if (is_static) {
->>  		/* track this static object */
->>  		debug_object_init(addr, descr);
->
-> This cannot work as the change in debug_object_init() is not correct and
-> there is no way to make it correct.
->
-
-Function debug_object_init() can be fixed as explained above.
-
->> -static __initdata struct self_test obj = { .static_init = 0 };
->> +static struct self_test obj __initdata = { .static_init = 0 };
->> +static struct self_test sobj __initdata = { .static_init = 1 };
->
-> ...
->
->> -	obj.static_init = 1;
->
-> Plus the s/obj/sobj/ which should be equivalent, unless I'm missing
-> something here.
->
-
-We have saved the is_static state when it is used at the first time, so
-the is_static_object function won't be called in this environment.
-
-> But that also changes the actual test:
->
-> -	obj.static_init = 1;
-> -	debug_object_activate(&obj, &descr_type_test);
-> -	if (check_results(&obj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-> +	debug_object_init(&sobj, &descr_type_test);
-> +	debug_object_activate(&sobj, &descr_type_test);
-> +	if (check_results(&sobj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-> 		goto out;
->
-> That's _not_ equivalent.
->
-> The original code checks exactly for the case where the object
-> initialization does not happen before debug_object_activate() is invoked
-> which is perfectly correct for statically initialized
-> objects. Initializing the statically allocated object breaks that
-> test. The changelog is utterly silent about that.
->
-
-This debug_object_init(&sobj, &descr_type_test) can be droped. I'm
-sorry to add this extra change.
-
-> The proper fix for this is obvious from the analysis. The problem
-> happens because the failed lookup drops the hash bucket lock which opens
-> the window for the concurrent caller. So why dropping the hash bucket
-> lock at all?
->
-> Uncompiled and untested fix below.
->
-> Thanks,
->
->         tglx
-> ---
->  lib/debugobjects.c |  127 +++++++++++++++++++++++++++--------------------------
->  1 file changed, 67 insertions(+), 60 deletions(-)
->
-> --- a/lib/debugobjects.c
-> +++ b/lib/debugobjects.c
-> @@ -216,10 +216,6 @@ static struct debug_obj *__alloc_object(
->  	return obj;
->  }
->  
-> -/*
-> - * Allocate a new object. If the pool is empty, switch off the debugger.
-> - * Must be called with interrupts disabled.
-> - */
->  static struct debug_obj *
->  alloc_object(void *addr, struct debug_bucket *b, const struct debug_obj_descr *descr)
->  {
-> @@ -273,7 +269,7 @@ alloc_object(void *addr, struct debug_bu
->  	if (obj) {
->  		obj->object = addr;
->  		obj->descr  = descr;
-> -		obj->state  = ODEBUG_STATE_NONE;
-> +		obj->state  = ODEBUG_STATE_INIT;
-
-This actually droped the ODEBUG_STATE_NONE state. If we active a
-uninitialized object, there will be no error report.
-
-This should be
-
-if (descr->is_static_object && descr->is_static_object(addr))
-	obj->state  = ODEBUG_STATE_INIT;
-else
-	obj->state  = ODEBUG_STATE_NONE;
-
-But this can't resolve the initial state requirement from the
-is_static_object() call.
-
-I think we can report an error when calling debug_object_free() from a
-static object. If don't do so, there is no way to determine it's a
-static object. When its initialization state changes, the
-is_static_object() call will return the wrong value.
-
-Please see the fellowing test case:
-
-	obj.static_init = 1;
-	debug_object_activate(&obj, &descr_type_test);
-	if (check_results(&obj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-		goto out;
-	debug_object_init(&obj, &descr_type_test);
-	if (check_results(&obj, ODEBUG_STATE_INIT, ++fixups, ++warnings))
-		goto out;
-	debug_object_free(&obj, &descr_type_test);
-	if (check_results(&obj, ODEBUG_STATE_NONE, fixups, warnings))
-		goto out;
-
-    /*
-     * for the static debugobject, it's initial value will be changed
-     * once used.
-     */
-	obj.static_init = 2;
-	debug_object_activate(&obj, &descr_type_test);
-	if (check_results(&obj, ODEBUG_STATE_ACTIVE, fixups, warnings))
-		goto out;
-
-    /* This test will fail */
-
->  		obj->astate = 0;
->  		hlist_add_head(&obj->node, &b->list);
->  	}
-> @@ -552,11 +548,49 @@ static void debug_object_is_on_stack(voi
->  	WARN_ON(1);
->  }
->  
-> +static struct debug_obj *lookup_object_or_alloc(void *addr, struct debug_bucket *b,
-> +						const struct debug_obj_descr *descr,
-> +						bool onstack, bool alloc_ifstatic)
-> +{
-> +	struct debug_obj *obj = lookup_object(addr, b);
-> +
-> +	if (likely(obj))
-> +		return obj;
-> +
-> +	/*
-> +	 * debug_object_init() unconditionally allocates untracked
-> +	 * objects. It does not matter whether it is a static object or
-> +	 * not.
-> +	 *
-> +	 * debug_object_assert_init() and debug_object_activate() allow
-> +	 * allocation only if the descriptor callback confirms that the
-> +	 * object is static and considered initialized. For non-static
-> +	 * objects the allocation needs to be done from the fixup callback.
-> +	 */
-> +	if (unlikely(alloc_ifstatic)) {
-> +		if (!descr->is_static_object || !descr->is_static_object(addr))
-> +			return ERR_PTR(-ENOENT);
-> +	}
-> +
-> +	/*
-> +	 * On success the returned object is in INIT state as that's the
-> +	 * correct state for all callers.
-> +	 */
-> +	obj = alloc_object(addr, b, descr);
-> +	if (likely(obj)) {
-> +		debug_object_is_on_stack(addr, onstack);
-> +		return obj;
-> +	}
-> +
-> +	/* Out of memory. Do the cleanup outside of the locked region */
-> +	debug_objects_enabled = 0;
-> +	return NULL;
-> +}
-> +
->  static void
->  __debug_object_init(void *addr, const struct debug_obj_descr *descr, int onstack)
->  {
->  	enum debug_obj_state state;
-> -	bool check_stack = false;
->  	struct debug_bucket *db;
->  	struct debug_obj *obj;
->  	unsigned long flags;
-> @@ -572,16 +606,11 @@ static void
->  
->  	raw_spin_lock_irqsave(&db->lock, flags);
->  
-> -	obj = lookup_object(addr, db);
-> -	if (!obj) {
-> -		obj = alloc_object(addr, db, descr);
-> -		if (!obj) {
-> -			debug_objects_enabled = 0;
-> -			raw_spin_unlock_irqrestore(&db->lock, flags);
-> -			debug_objects_oom();
-> -			return;
-> -		}
-> -		check_stack = true;
-> +	obj = lookup_object_or_alloc(addr, db, descr, onstack, false);
-> +	if (unlikely(!obj)) {
-> +		raw_spin_unlock_irqrestore(&db->lock, flags);
-> +		debug_objects_oom();
-> +		return;
->  	}
->  
->  	switch (obj->state) {
-> @@ -607,8 +636,6 @@ static void
->  	}
->  
->  	raw_spin_unlock_irqrestore(&db->lock, flags);
-> -	if (check_stack)
-> -		debug_object_is_on_stack(addr, onstack);
->  }
->  
->  /**
-> @@ -648,14 +675,12 @@ EXPORT_SYMBOL_GPL(debug_object_init_on_s
->   */
->  int debug_object_activate(void *addr, const struct debug_obj_descr *descr)
->  {
-> +	struct debug_obj o = { .object = addr, .state = ODEBUG_STATE_NOTAVAILABLE, .descr = descr };
->  	enum debug_obj_state state;
->  	struct debug_bucket *db;
->  	struct debug_obj *obj;
->  	unsigned long flags;
->  	int ret;
-> -	struct debug_obj o = { .object = addr,
-> -			       .state = ODEBUG_STATE_NOTAVAILABLE,
-> -			       .descr = descr };
->  
->  	if (!debug_objects_enabled)
->  		return 0;
-> @@ -664,8 +689,8 @@ int debug_object_activate(void *addr, co
->  
->  	raw_spin_lock_irqsave(&db->lock, flags);
->  
-> -	obj = lookup_object(addr, db);
-> -	if (obj) {
-> +	obj = lookup_object_or_alloc(addr, db, descr, false, true);
-> +	if (likely(!IS_ERR_OR_NULL(obj))) {
->  		bool print_object = false;
->  
->  		switch (obj->state) {
-> @@ -698,24 +723,16 @@ int debug_object_activate(void *addr, co
->  
->  	raw_spin_unlock_irqrestore(&db->lock, flags);
->  
-> -	/*
-> -	 * We are here when a static object is activated. We
-> -	 * let the type specific code confirm whether this is
-> -	 * true or not. if true, we just make sure that the
-> -	 * static object is tracked in the object tracker. If
-> -	 * not, this must be a bug, so we try to fix it up.
-> -	 */
-> -	if (descr->is_static_object && descr->is_static_object(addr)) {
-> -		/* track this static object */
-> -		debug_object_init(addr, descr);
-> -		debug_object_activate(addr, descr);
-> -	} else {
-> -		debug_print_object(&o, "activate");
-> -		ret = debug_object_fixup(descr->fixup_activate, addr,
-> -					ODEBUG_STATE_NOTAVAILABLE);
-> -		return ret ? 0 : -EINVAL;
-> +	/* If NULL the allocaction has hit OOM */
-> +	if (!obj) {
-> +		debug_objects_oom();
-> +		return 0;
->  	}
-> -	return 0;
-> +
-> +	/* Object is neither static nor tracked. It's not initialized */
-> +	debug_print_object(&o, "activate");
-> +	ret = debug_object_fixup(descr->fixup_activate, addr, ODEBUG_STATE_NOTAVAILABLE);
-> +	return ret ? 0 : -EINVAL;
->  }
->  EXPORT_SYMBOL_GPL(debug_object_activate);
->  
-> @@ -869,6 +886,7 @@ EXPORT_SYMBOL_GPL(debug_object_free);
->   */
->  void debug_object_assert_init(void *addr, const struct debug_obj_descr *descr)
->  {
-> +	struct debug_obj o = { .object = addr, .state = ODEBUG_STATE_NOTAVAILABLE, .descr = descr };
->  	struct debug_bucket *db;
->  	struct debug_obj *obj;
->  	unsigned long flags;
-> @@ -879,31 +897,20 @@ void debug_object_assert_init(void *addr
->  	db = get_bucket((unsigned long) addr);
->  
->  	raw_spin_lock_irqsave(&db->lock, flags);
-> +	obj = lookup_object_or_alloc(addr, db, descr, false, true);
-> +	raw_spin_unlock_irqrestore(&db->lock, flags);
-> +	if (likely(!IS_ERR_OR_NULL(obj)))
-> +		return;
->  
-> -	obj = lookup_object(addr, db);
-> +	/* If NULL the allocaction has hit OOM */
->  	if (!obj) {
-> -		struct debug_obj o = { .object = addr,
-> -				       .state = ODEBUG_STATE_NOTAVAILABLE,
-> -				       .descr = descr };
-> -
-> -		raw_spin_unlock_irqrestore(&db->lock, flags);
-> -		/*
-> -		 * Maybe the object is static, and we let the type specific
-> -		 * code confirm. Track this static object if true, else invoke
-> -		 * fixup.
-> -		 */
-> -		if (descr->is_static_object && descr->is_static_object(addr)) {
-> -			/* Track this static object */
-> -			debug_object_init(addr, descr);
-> -		} else {
-> -			debug_print_object(&o, "assert_init");
-> -			debug_object_fixup(descr->fixup_assert_init, addr,
-> -					   ODEBUG_STATE_NOTAVAILABLE);
-> -		}
-> +		debug_objects_oom();
->  		return;
->  	}
->  
-> -	raw_spin_unlock_irqrestore(&db->lock, flags);
-> +	/* Object is neither tracked nor static. It's not initialized. */
-> +	debug_print_object(&o, "assert_init");
-> +	debug_object_fixup(descr->fixup_assert_init, addr, ODEBUG_STATE_NOTAVAILABLE);
->  }
->  EXPORT_SYMBOL_GPL(debug_object_assert_init);
->  
-
-I test this patch, with my above change, and it seems to work well, but
-we still need to add extra flags to store its static state. And
-debug_object_free() should report an error for the static object.
-
-I think we should introduce lookup_object_or_alloc and is_static at the
-same time.
-
+versioncheck warnings: (new ones prefixed by >>)
+   INFO PATH=/opt/cross/clang/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   /usr/bin/timeout -k 100 3h /usr/bin/make W=1 --keep-going HOSTCC=gcc-11 CC=gcc-11 -j32 ARCH=x86_64 versioncheck
+   find ./* \( -name SCCS -o -name BitKeeper -o -name .svn -o -name CVS -o -name .pc -o -name .hg -o -name .git \) -prune -o \
+   	-name '*.[hcS]' -type f -print | sort \
+   	| xargs perl -w ./scripts/checkversion.pl
+   ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+   ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+>> ./drivers/iio/adc/max597x-iio.c: 20 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+   ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+   ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
+   ./drivers/staging/media/atomisp/include/linux/atomisp.h: 23 linux/version.h not needed.
+   ./samples/trace_events/trace_custom_sched.c: 11 linux/version.h not needed.
+   ./sound/soc/codecs/cs42l42.c: 14 linux/version.h not needed.
+   ./tools/lib/bpf/bpf_helpers.h: 289: need linux/version.h
+   ./tools/perf/tests/bpf-script-example.c: 60: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-kbuild.c: 21: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-prologue.c: 49: need linux/version.h
+   ./tools/perf/tests/bpf-script-test-relocation.c: 51: need linux/version.h
+   ./tools/testing/selftests/bpf/progs/dev_cgroup.c: 9 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/netcnt_prog.c: 3 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_map_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_send_signal_kern.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_spin_lock.c: 4 linux/version.h not needed.
+   ./tools/testing/selftests/bpf/progs/test_tcp_estats.c: 37 linux/version.h not needed.
+   ./tools/testing/selftests/wireguard/qemu/init.c: 27 linux/version.h not needed.
 
 -- 
-BRs
-Schspa Shi
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
