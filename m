@@ -2,193 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873036C5114
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CE36C5115
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 17:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjCVQqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 12:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S230101AbjCVQqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 12:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjCVQp4 (ORCPT
+        with ESMTP id S230086AbjCVQqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 12:45:56 -0400
+        Wed, 22 Mar 2023 12:46:01 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B2E6A5C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 09:45:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C384491;
+        Wed, 22 Mar 2023 09:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679503549; x=1711039549;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HLEX+TICJUHD+xoUywFhjd9IZevwvDbZuDni1AXm058=;
-  b=OwRMGDJtODvMZpAjHYxzwdvmAAHko+RSTsGyCH3+XopVRfcAFZgFmE12
-   n7F5e0JeP75Cyd50yLSgBYEH40Uhd82sEx+YbXHP97e19cVSWdd+stEr/
-   Hk74UefFyn4Sh1bI3Qp1QXNrDPmOxdzjtXBckGDU+o9J57JckNHdp9Anx
-   0JZJ0z2PMPlmB0lx9BvzUI99wk4qQHLH/ZHH9pJhghWeTkZI8+UqrnSPP
-   NBHmgn7r/fJkZaw41MQJNKxhZBcRgLyd0VypY0kn0P7wMA7B8qfrwohih
-   GO1kuNV8CPlgDyNF4xcixzKObVkC+Z4Tzk7GTSkNp8wuvYFwfIo9hz6AP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="318917423"
+  t=1679503557; x=1711039557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8f7FwvNUieobevaDJ6FwYSHxrE1G7RwHb10tj/oH/6s=;
+  b=EwcB7u54BJo+JCpjwrd8aVF6mubE8E3BdsXl0FK0kE3n/LeMbYM0TdWa
+   N4ZNjS//Sj9kXMy3/JfpA1s7dmepWHMMNL/ETmr6/l/rm9ipR2mNcly+l
+   G53jn3VB/c5E+Vl1vARKb+9IXknH3rD3fzNiIZOB7+rU8fOr6hk1/E5BP
+   uIFBYTOuya10VJG/Y2091aNVgMsxRHhjstKoQ+Q1HXNVvz67W1x7rfQQL
+   Xs5QvJM5QWxSsdsMVshNuv3312sH7VUlPDTjkHf6P8jxt0lhqF9S3FjXR
+   5S995gJGEcQvXei6cKfNdTsQIbV1U2gDT9OXJnVOpzIAG3oDNh099S4z0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="318917430"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="318917423"
+   d="scan'208";a="318917430"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:45:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751117882"
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751117881"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="751117882"
+   d="scan'208";a="751117881"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 09:45:47 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pf1as-000DVM-0k;
+        id 1pf1as-000DVO-0p;
         Wed, 22 Mar 2023 16:45:46 +0000
-Date:   Thu, 23 Mar 2023 00:45:01 +0800
+Date:   Thu, 23 Mar 2023 00:45:02 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Haijun Liu <haijun.liu@mediatek.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: include/asm-generic/io.h:464:31: error: performing pointer
- arithmetic on a null pointer has undefined behavior
-Message-ID: <202303230040.6r3jj0VE-lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Theodore Ts'o <tytso@mit.edu>,
+        Jan Kara <jack@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 1/3] jbd2: Avoid printing out the boundary
+Message-ID: <202303230045.2JeedPWH-lkp@intel.com>
+References: <20230322141206.56347-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230322141206.56347-2-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haijun,
+Hi Andy,
 
-FYI, the error/warning still remains.
+I love your patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a1effab7a3a35a837dd9d2b974a1bc4939df1ad5
-commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
-date:   11 months ago
-config: s390-randconfig-r001-20230322 (https://download.01.org/0day-ci/archive/20230323/202303230040.6r3jj0VE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus kees/for-next/pstore kees/for-next/kspp tytso-ext4/dev linus/master v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/jbd2-Avoid-printing-out-the-boundary/20230322-221425
+patch link:    https://lore.kernel.org/r/20230322141206.56347-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/3] jbd2: Avoid printing out the boundary
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230323/202303230045.2JeedPWH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
+        # https://github.com/intel-lab-lkp/linux/commit/6154f5a987ef2ce0084db0eb245d2c3bcde2a02a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/jbd2-Avoid-printing-out-the-boundary/20230322-221425
+        git checkout 6154f5a987ef2ce0084db0eb245d2c3bcde2a02a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/jbd2/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230040.6r3jj0VE-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230045.2JeedPWH-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
->> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   12 errors generated.
+   fs/jbd2/journal.c: In function 'jbd2_journal_init_inode':
+>> fs/jbd2/journal.c:1491:15: warning: unused variable 'p' [-Wunused-variable]
+    1491 |         char *p;
+         |               ^
 
 
-vim +464 include/asm-generic/io.h
+vim +/p +1491 fs/jbd2/journal.c
 
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
-
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
-
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+470decc613ab20 Dave Kleikamp     2006-10-11  1478  
+470decc613ab20 Dave Kleikamp     2006-10-11  1479  /**
+f7f4bccb729844 Mingming Cao      2006-10-11  1480   *  journal_t * jbd2_journal_init_inode () - creates a journal which maps to a inode.
+470decc613ab20 Dave Kleikamp     2006-10-11  1481   *  @inode: An inode to create the journal in
+470decc613ab20 Dave Kleikamp     2006-10-11  1482   *
+f7f4bccb729844 Mingming Cao      2006-10-11  1483   * jbd2_journal_init_inode creates a journal which maps an on-disk inode as
+470decc613ab20 Dave Kleikamp     2006-10-11  1484   * the journal.  The inode must exist already, must support bmap() and
+470decc613ab20 Dave Kleikamp     2006-10-11  1485   * must have all data blocks preallocated.
+470decc613ab20 Dave Kleikamp     2006-10-11  1486   */
+f7f4bccb729844 Mingming Cao      2006-10-11  1487  journal_t *jbd2_journal_init_inode(struct inode *inode)
+470decc613ab20 Dave Kleikamp     2006-10-11  1488  {
+f0c9fd5458bacf Geliang Tang      2016-09-15  1489  	journal_t *journal;
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1490  	sector_t blocknr;
+05496769e5da83 Theodore Ts'o     2008-09-16 @1491  	char *p;
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1492  	int err = 0;
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1493  
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1494  	blocknr = 0;
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1495  	err = bmap(inode, &blocknr);
+470decc613ab20 Dave Kleikamp     2006-10-11  1496  
+30460e1ea3e62f Carlos Maiolino   2020-01-09  1497  	if (err || !blocknr) {
+f0c9fd5458bacf Geliang Tang      2016-09-15  1498  		pr_err("%s: Cannot locate journal superblock\n",
+f0c9fd5458bacf Geliang Tang      2016-09-15  1499  			__func__);
+f0c9fd5458bacf Geliang Tang      2016-09-15  1500  		return NULL;
+f0c9fd5458bacf Geliang Tang      2016-09-15  1501  	}
+f0c9fd5458bacf Geliang Tang      2016-09-15  1502  
+cb3b3bf22cf337 Jan Kara          2022-06-08  1503  	jbd2_debug(1, "JBD2: inode %s/%ld, size %lld, bits %d, blksize %ld\n",
+f0c9fd5458bacf Geliang Tang      2016-09-15  1504  		  inode->i_sb->s_id, inode->i_ino, (long long) inode->i_size,
+f0c9fd5458bacf Geliang Tang      2016-09-15  1505  		  inode->i_sb->s_blocksize_bits, inode->i_sb->s_blocksize);
+f0c9fd5458bacf Geliang Tang      2016-09-15  1506  
+f0c9fd5458bacf Geliang Tang      2016-09-15  1507  	journal = journal_init_common(inode->i_sb->s_bdev, inode->i_sb->s_bdev,
+f0c9fd5458bacf Geliang Tang      2016-09-15  1508  			blocknr, inode->i_size >> inode->i_sb->s_blocksize_bits,
+f0c9fd5458bacf Geliang Tang      2016-09-15  1509  			inode->i_sb->s_blocksize);
+470decc613ab20 Dave Kleikamp     2006-10-11  1510  	if (!journal)
+470decc613ab20 Dave Kleikamp     2006-10-11  1511  		return NULL;
+470decc613ab20 Dave Kleikamp     2006-10-11  1512  
+470decc613ab20 Dave Kleikamp     2006-10-11  1513  	journal->j_inode = inode;
+900d156bac2bc4 Christoph Hellwig 2022-07-13  1514  	snprintf(journal->j_devname, sizeof(journal->j_devname),
+6154f5a987ef2c Andy Shevchenko   2023-03-22  1515  		 "%pg-%lu", journal->j_dev, journal->j_inode->i_ino);
+6154f5a987ef2c Andy Shevchenko   2023-03-22  1516  	strreplace(journal->j_devname, '/', '!');
+8e85fb3f305b24 Johann Lombardi   2008-01-28  1517  	jbd2_stats_proc_init(journal);
+470decc613ab20 Dave Kleikamp     2006-10-11  1518  
+470decc613ab20 Dave Kleikamp     2006-10-11  1519  	return journal;
+470decc613ab20 Dave Kleikamp     2006-10-11  1520  }
+470decc613ab20 Dave Kleikamp     2006-10-11  1521  
 
 -- 
 0-DAY CI Kernel Test Service
