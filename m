@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978316C5202
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFC66C520E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjCVRPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S231451AbjCVRQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjCVRPi (ORCPT
+        with ESMTP id S231408AbjCVRPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:15:38 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBDE64AB8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:16 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id y4so75948278edo.2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:16 -0700 (PDT)
+        Wed, 22 Mar 2023 13:15:54 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E4C64B28;
+        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id n19so1740892wms.0;
+        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505315; x=1682097315;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JECvJ/K7E4yzQQFzJdiJ4lI6M7UJm3etUVtp/7RJfO0=;
-        b=RaG65SripXOXd4P3RbaRyrmMRcCS9zYqhLN6j/FlAQWC1wRroz9Ff/XrT553zzAXlD
-         7LA6vkW0tDf7AQCHomMUHYm4LS6Do6sLr+AI/00gYo1mxPFFdyFVMgpG/InrtmjAVrlI
-         r70mGV+LG3qkAcPAzEuE4AuEYOrKOKLXXvoBW5+YgkbY8/6Nhj8yOpK274zlL03E9HKe
-         FSt+0xQDGlhF4YUmR0MFm7vgy/OUGs9QJ6VQsJjjPgUC1ydjxfj2CHhTJ+yJIrkOSg4P
-         XqkA/j7jPZxlnlDUlbMrjz3yVJ7NIRmJKVN/qVHZHYbc5Cvr14wO5t4gVtVc9lMR5TtQ
-         +Dkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505315; x=1682097315;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679505322;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JECvJ/K7E4yzQQFzJdiJ4lI6M7UJm3etUVtp/7RJfO0=;
-        b=H6A19GcCqfWE2+lvrpZzScQzP7vdd2NoYQ5nJPrHFnza59MdqfoSwKRGBuIhjL/rIl
-         C/K6GSKZS3j/yO3vKnH8qUXNfkoWKrgjPa8ZMG8sC13Yjo3HvsRgCMj/F085bovHhFTH
-         cws460Ek6CmX2BYHbDvHljaAQh4CIl1TSiDcp4TxeiDvIAYX7/OPKaZenTkQEkjwyc4S
-         9G15jmjHXD1tdLC1OZ6lEVuUPG67xO+OKd9+uiV1NnicqOVpI7zeqjnborlKh4ag8ioc
-         Jxry2tH/NmtsYRsQUhWwdqYpKZU7Q1lobFE8wbI0n0bnCrfdlGXZiovMQxmhW5ZFxsPa
-         0wmQ==
-X-Gm-Message-State: AO0yUKW1X+FvnchapczJ4KZ64CK7I2gVplKAWx8em0ro9Gs6yfJg/Ppn
-        79/8hIoi0F08OkyDc/7l2xTwCN94jVk=
-X-Google-Smtp-Source: AK7set8ffGT/kzRNoSw203vZvPePb4caVvJ5GhXeIIkpX3RqcxMuKVYvyHUI+Lr8bYt8bpsU8IKhgA==
-X-Received: by 2002:a17:906:100a:b0:933:fa42:7e36 with SMTP id 10-20020a170906100a00b00933fa427e36mr6543719ejm.5.1679505314948;
-        Wed, 22 Mar 2023 10:15:14 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id y70-20020a50bb4c000000b004fa380a14e7sm8109199ede.77.2023.03.22.10.15.14
+        bh=dEknM98Izmc8d/crPsoJ+ejZxfl78958Ei6SPYhYDHs=;
+        b=LTOQ75W3s5nYo+nEfiJAKqytSopONB4jCtU3zRygzPMasugVOrYFMsUR+WrpsAjuRT
+         v4HgWpJxEsIWeRXrUN9W21mFXhGgJLJXSxRnrio0CsZZBNMdkebbNOphgKXIWAdm+2iM
+         PzqAdGm5t38wT2mmm6V/9hCy90+12raHM82tNFdhhiezfg2cukVOKP3j/TeOVCwas0gQ
+         iFc+CuZB6y73zYXvMUMUpTsqI5vev4xJsSMHIQJVmUxJAwqhOBhN9JCRo7Ao+wayjn2d
+         Fxo6AV3A8v68nVfoQ0K0I+eWXG48nMCX45iWh/lVvVTOFcR99kn4va7NY1oVnPsh+WQz
+         WcLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679505322;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dEknM98Izmc8d/crPsoJ+ejZxfl78958Ei6SPYhYDHs=;
+        b=wv2NSR1B5RnsdoEE7mgJSHAfSs1JHZbQ1HPMldyaGWAk1dcucqh/uDzM3Flz+ADRi1
+         19NoaB2Ur7QaWZejbuplnIOK/nte3PnmqJ9ZNw8HejmuS4eU8mB1V1aJUSKSPGsfUi4a
+         LYe3HSw87l0jrAC7ptdKvdUtzBoIkX0CeFvfguTQQkDhUTyAFIG144hY6uPXY9Mga96b
+         gnNe2dLCzHQLbEJpaDaavT7FEEcLDxaq7jNcR2xqEEZaIwfcew+Q05t4xL/3i8GAj9Ru
+         6ivQjIbBKfYQF88o7KnOW9o1wjrGsk+Nd4Iy0OLZix3JQasCJGrKV7ib5awI9J39upYV
+         fa4A==
+X-Gm-Message-State: AO0yUKWw75I1M5Vjrd4vXq4GTruQu0H84pycgyi2CT3bczTYRJpWmEWg
+        +bHDhvp1n5IWW85GI9vKWpbclB13a/S0RQ==
+X-Google-Smtp-Source: AK7set9T/2oJsVetUb2L4mPEWu8YqDrnK8EzHK5bJf1ABIa1Et8f7BFJ7AA3j14ITZuf8cH0HqlRtg==
+X-Received: by 2002:a05:600c:2304:b0:3ed:2949:985b with SMTP id 4-20020a05600c230400b003ed2949985bmr206833wmo.23.1679505322457;
+        Wed, 22 Mar 2023 10:15:22 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:15:14 -0700 (PDT)
+        Wed, 22 Mar 2023 10:15:22 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        william.zhang@broadcom.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 1/4] dt-bindings: clk: add BCM63268 timer clock definitions
 Date:   Wed, 22 Mar 2023 18:15:12 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/8] staging: rtl8192e: Replace macro INIT_WORK_RSL with
- standard macro
-Message-ID: <71879ccda54d57078f47c70cdba90ae2234adc91.1679504314.git.philipp.g.hortmann@gmail.com>
-References: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
+Message-Id: <20230322171515.120353-2-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230322171515.120353-1-noltari@gmail.com>
+References: <20230322171515.120353-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -71,71 +78,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace macro INIT_WORK_RSL with standard macro INIT_WORK to increase
-readability.
+Add missing timer clock definitions for BCM63268.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 7 +++----
- drivers/staging/rtl8192e/rtllib.h            | 2 --
- drivers/staging/rtl8192e/rtllib_softmac.c    | 6 ++----
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ v4: no changes
+ v3: no changes
+ v2: change commit title, as suggested by Stephen Boyd
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index a2263c41c6c8..ea07b350b62a 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -890,14 +890,13 @@ static void _rtl92e_init_priv_task(struct net_device *dev)
- {
- 	struct r8192_priv *priv = rtllib_priv(dev);
+ include/dt-bindings/clock/bcm63268-clock.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/include/dt-bindings/clock/bcm63268-clock.h b/include/dt-bindings/clock/bcm63268-clock.h
+index da23e691d359..dea8adc8510e 100644
+--- a/include/dt-bindings/clock/bcm63268-clock.h
++++ b/include/dt-bindings/clock/bcm63268-clock.h
+@@ -27,4 +27,17 @@
+ #define BCM63268_CLK_TBUS	27
+ #define BCM63268_CLK_ROBOSW250	31
  
--	INIT_WORK_RSL(&priv->reset_wq, (void *)_rtl92e_restart, dev);
--	INIT_WORK_RSL(&priv->rtllib->ips_leave_wq, (void *)rtl92e_ips_leave_wq,
--		      dev);
-+	INIT_WORK(&priv->reset_wq, (void *)_rtl92e_restart);
-+	INIT_WORK(&priv->rtllib->ips_leave_wq, (void *)rtl92e_ips_leave_wq);
- 	INIT_DELAYED_WORK(&priv->watch_dog_wq, (void *)_rtl92e_watchdog_wq_cb);
- 	INIT_DELAYED_WORK(&priv->txpower_tracking_wq, (void *)rtl92e_dm_txpower_tracking_wq);
- 	INIT_DELAYED_WORK(&priv->rfpath_check_wq, (void *)rtl92e_dm_rf_pathcheck_wq);
- 	INIT_DELAYED_WORK(&priv->update_beacon_wq, (void *)_rtl92e_update_beacon);
--	INIT_WORK_RSL(&priv->qos_activate, (void *)_rtl92e_qos_activate, dev);
-+	INIT_WORK(&priv->qos_activate, (void *)_rtl92e_qos_activate);
- 	INIT_DELAYED_WORK(&priv->rtllib->hw_wakeup_wq, (void *)rtl92e_hw_wakeup_wq);
- 	INIT_DELAYED_WORK(&priv->rtllib->hw_sleep_wq, (void *)rtl92e_hw_sleep_wq);
- 	tasklet_setup(&priv->irq_rx_tasklet, _rtl92e_irq_rx_tasklet);
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 8cbefa6dfd6e..aa39f8b2bf09 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -62,8 +62,6 @@
- #define IW_CUSTOM_MAX	256	/* In bytes */
- #endif
- 
--#define INIT_WORK_RSL(x, y, z) INIT_WORK(x, y)
--
- #define container_of_work_rsl(x, y, z) container_of(x, y, z)
- #define container_of_dwork_rsl(x, y, z)				\
- 	container_of(to_delayed_work(x), y, z)
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index c442fc98283d..91fb5f150a00 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -2998,13 +2998,11 @@ int rtllib_softmac_init(struct rtllib_device *ieee)
- 
- 	INIT_DELAYED_WORK(&ieee->link_change_wq, (void *)rtllib_link_change_wq);
- 	INIT_DELAYED_WORK(&ieee->start_ibss_wq, (void *)rtllib_start_ibss_wq);
--	INIT_WORK_RSL(&ieee->associate_complete_wq,
--		      (void *)rtllib_associate_complete_wq, ieee);
-+	INIT_WORK(&ieee->associate_complete_wq, (void *)rtllib_associate_complete_wq);
- 	INIT_DELAYED_WORK(&ieee->associate_procedure_wq, (void *)rtllib_associate_procedure_wq);
- 	INIT_DELAYED_WORK(&ieee->softmac_scan_wq, (void *)rtllib_softmac_scan_wq);
- 	INIT_DELAYED_WORK(&ieee->associate_retry_wq, (void *)rtllib_associate_retry_wq);
--	INIT_WORK_RSL(&ieee->wx_sync_scan_wq, (void *)rtllib_wx_sync_scan_wq,
--		      ieee);
-+	INIT_WORK(&ieee->wx_sync_scan_wq, (void *)rtllib_wx_sync_scan_wq);
- 
- 	mutex_init(&ieee->wx_mutex);
- 	mutex_init(&ieee->scan_mutex);
++#define BCM63268_TCLK_EPHY1		0
++#define BCM63268_TCLK_EPHY2		1
++#define BCM63268_TCLK_EPHY3		2
++#define BCM63268_TCLK_GPHY1		3
++#define BCM63268_TCLK_DSL		4
++#define BCM63268_TCLK_WAKEON_EPHY	6
++#define BCM63268_TCLK_WAKEON_DSL	7
++#define BCM63268_TCLK_FAP1		11
++#define BCM63268_TCLK_FAP2		15
++#define BCM63268_TCLK_UTO_50		16
++#define BCM63268_TCLK_UTO_EXTIN		17
++#define BCM63268_TCLK_USB_REF		18
++
+ #endif /* __DT_BINDINGS_CLOCK_BCM63268_H */
 -- 
-2.39.2
+2.30.2
 
