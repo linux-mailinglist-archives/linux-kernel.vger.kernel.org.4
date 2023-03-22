@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948156C5486
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D65E6C5489
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjCVTHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 15:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S230322AbjCVTJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 15:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjCVTHP (ORCPT
+        with ESMTP id S230059AbjCVTJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:07:15 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5772E81D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:07:14 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5416d3a321eso197735427b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:07:14 -0700 (PDT)
+        Wed, 22 Mar 2023 15:09:36 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33967574C9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:09:35 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h8so77130131ede.8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 12:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679512034;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vE+oNa+TksmDQ+JifPl+V3NSuDwc6jEU0q0uXD5y0Js=;
-        b=qd14uz7z38mPa0I9Ef5cO05lpvOf1g4kIecyX7cSN7irBqaJuPCs78IrQVj6IKvcvf
-         dR+eWm6QB9zBcBebDaTf6d4CadaSAMzb0re08z97ZAXFd8eReGD7DHBzAqOlQQkeRL7I
-         Duy38LW/9JbrdaZqqx325SMHTw1adR2ZFv12inqXJrLC6py4MAeXrMs+/u3ruRAY9L36
-         94VClMRfjQV0D2zb/EK8tG1g/5KveeR0yZN3MZZOi3UTrZmYN4S80iHgL1ovpBDAtSRI
-         U78EH57+GAUXuZY9Ppp3Ekerl/B/uzL/rLFBH7ijiuhkAYKWg8FtSU973Vt1qsewRRUU
-         wlHA==
+        d=chromium.org; s=google; t=1679512173;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ySahdxE1L4cd6ksj325R5E2NVmNvOBKF2RFZh+Bg40=;
+        b=UPWEMq3NxXxzE8Wiu8abtvsUinCwPFZ8H9FO2g/NFY4fziUMumJC6irIJ6dv69ZpTQ
+         n21XNFACcI9NsGiNHUOVoAwAE2Fee/eo+JtPd9gQfHg4dOwJC75vcH4W7wbd8iWEA9qK
+         XqW4gf0zm/PELPGeYyejrX2CHeGxrVAhvfSjQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679512034;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vE+oNa+TksmDQ+JifPl+V3NSuDwc6jEU0q0uXD5y0Js=;
-        b=KjQWWK+8c9X8+tTZsB2S+8FR1aDxTwufBy9NBhxvMXn97epdKIa9BqbHBuKI6+yOJA
-         fbaF+EIx+qPKw6fs9K/MGoQBGlm9/PLVrPzpRp3j3uTxjcJ4+8B01BrYdARzgADXr4NQ
-         EG1bP/Iedm6qsXWyRzDVwlvwZ6FRLuDnD6EHNoHBIc+4Yp+MOKPoLJLZdZmFBwXoDQ6a
-         U9pOencEew9Gux7FLLxB6BHHCyxe4bOeaKD8sC4NRaYjvm6e6Y6jQciS90bpv9bS14Y1
-         yTClOasQw9nQuZScS6mNSd+0eAbVwAK7rgzawQYvZB1e8HsNyq28p/s+YbsOGAGvRpht
-         +3cg==
-X-Gm-Message-State: AAQBX9fFV7ueBr1r87uzzNZpYyOsl0a12U+Or9mocP3LluUJqSH0gOMP
-        Uw1UUlnZ9O3l0iyFith8E/5lahJNQl8=
-X-Google-Smtp-Source: AKy350bg7050Eg0NMHpU+BZNbxdIe1GVPBxZ/D+eJNy0YM+8UvAbQaYspLxSJZOrtre3CHCliJV1W/ULMUc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1005:b0:b4a:e062:3576 with SMTP id
- w5-20020a056902100500b00b4ae0623576mr459229ybt.13.1679512033734; Wed, 22 Mar
- 2023 12:07:13 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 12:07:12 -0700
-In-Reply-To: <20230227084016.3368-9-santosh.shukla@amd.com>
-Mime-Version: 1.0
-References: <20230227084016.3368-1-santosh.shukla@amd.com> <20230227084016.3368-9-santosh.shukla@amd.com>
-Message-ID: <ZBtR4C2Dic4i2JRJ@google.com>
-Subject: Re: [PATCHv4 08/11] x86/cpu: Add CPUID feature bit for VNMI
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
-        joro@8bytes.org, linux-kernel@vger.kernel.org,
-        mail@maciej.szmigiero.name, mlevitsk@redhat.com,
-        thomas.lendacky@amd.com, vkuznets@redhat.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        d=1e100.net; s=20210112; t=1679512173;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+ySahdxE1L4cd6ksj325R5E2NVmNvOBKF2RFZh+Bg40=;
+        b=q7Er9q4XqpoQNSumbHkqNwHBxFLcDTQuxyJh8gJbvyITXNFwptpA7eaTuzrif13dSq
+         tMXMO3A5DXlapVPNEkJv8uHhORtGSCXMBglOwAgZUEZJJ9O3B9Iry7+zSu/qaGi95Y9n
+         PO7Ap8sk/i/HIlhgFSduw0I3VcDeQsItSaKU9XpV45IXsiH92WD6Ca18pZy4gWOgZJ4z
+         UiV+b7PrUOd9jX7b4N2Y3UB5NKbARyDpphGamY56NLnrYeTEjC4WKLiVJw+CvHTbkc5y
+         SlNunU/s0GodrG4rF/PConKqRBEH+Jl1Im4Xppy+1ODVXf5nBUv+8aUjEA4/114ANm8n
+         LIlQ==
+X-Gm-Message-State: AO0yUKUqQew9OcrxlGpY6qAtZqo1lp582SvVhAQhl4y7gsKwMgmecKdS
+        gcCscKYInV6b3jhnZHxMO3rAzSfmXLXse4oeiTqhIw==
+X-Google-Smtp-Source: AK7set9bWzvTBQfp8o8NZCDk6+QW+Q+iaLsHjRinXNgkwF5mMn25Kdc/k/pwNG7wlQ43npIAUmacDw==
+X-Received: by 2002:a17:906:7e55:b0:932:cfbc:7613 with SMTP id z21-20020a1709067e5500b00932cfbc7613mr7814672ejr.24.1679512173566;
+        Wed, 22 Mar 2023 12:09:33 -0700 (PDT)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id k24-20020a50ce58000000b004fc9e462743sm8129130edj.91.2023.03.22.12.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 12:09:33 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 22 Mar 2023 20:09:21 +0100
+Subject: [PATCH v3] kexec: Support purgatories with .text.hot sections
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org>
+To:     Eric Biederman <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, Baoquan He <bhe@redhat.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3040; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=zeD7U+0v4JMLtkU5q8C0r0fzM4KdEhcMV9PmfyzIKU0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkG1JkKRERoHv42QrNtVkqYPkq552VERdk/QnsxyEi
+ q0BT2CmJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBtSZAAKCRDRN9E+zzrEiN88D/
+ 4us5k4JkfH+locFVVMElk6flGVX8JQm9dVqN442H5ATser3crdr0Ar8pPlcgcJVHtwby3G+qLJksSm
+ loLsjZoLDrQgTJDJIQJDWmrj1fLTE3IranBC1bgZ4FyFir/I4yhSpiDIONnctM8nNAFZ24rLYABGmv
+ 2VqJU7zbiPbg765ixmxCilQptemctcAL2K4wb1nEPVZhiRWCCRVe6GbYOnOOZzY/PmG0MrdQp/aAhj
+ nghVQ51CpAUd+TvUgbFOBhBfNwVsX6+ujowsxQNl9oXGdkjdbiu4/uV5oWvFfx3VJjsebs1uOFn54Y
+ M/PhxTrEBH3+pKBmtWc2n1pPzcIPU5cLt9j41IJSk39sCdZ7oM9G24801egJoqBL/el62Oaa9wqFCW
+ BRwp09+2qsTGQIJvdGHKuHEOsbjgm0WfUtuxM2kpazmAAx4xXOMImQkGvbpPrdD8zRqNz1JEPs+Kcp
+ kfcmq1tbJhIayWISo6eKAd74xIl2RrGobQo7zGPbcNqFL9QvaJU4mMTv4q4l50xxPyiqAnDYKfXT/p
+ 494vBT80CbrGQqWqWiKjf+sDRSd8Df+KY0qkXOf3mh9ycDvfnSZPEOuKa5rO6jSglNHRVY8Qr0WdHl
+ 79mYgpPR8TRXNH6RHduqRtZaSBJ5syOlt/y6SVivwFK2YWchFDGjZrxBMxMQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,90 +83,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023, Santosh Shukla wrote:
-> VNMI feature allows the hypervisor to inject NMI into the guest w/o
-> using Event injection mechanism, The benefit of using VNMI over the
-> event Injection that does not require tracking the Guest's NMI state and
-> intercepting the IRET for the NMI completion. VNMI achieves that by
-> exposing 3 capability bits in VMCB intr_cntrl which helps with
-> virtualizing NMI injection and NMI_Masking.
-> 
-> The presence of this feature is indicated via the CPUID function
-> 0x8000000A_EDX[25].
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> ---
->  arch/x86/include/asm/cpufeatures.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index cdb7e1492311..b3ae49f36008 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -365,6 +365,7 @@
->  #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
->  #define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
->  #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
-> +#define X86_FEATURE_AMD_VNMI		(15*32+25) /* Virtual NMI */
+Clang16 links the purgatory text in two sections:
 
-Rather than carry VNMI and AMD_VNMI, what if we redefine VNMI to use AMD's real
-CPUID bit?  The synthetic flag exists purely so that the converion to VMX feature
-flags didn't break /proc/cpuinfo.  X86_FEATURE_VNMI isn't consumed by the kernel,
-and if that changes, having a common flag might actually be a good thing, e.g.
-would allow common KVM code to query vNMI support without needing VMX vs. SVM
-hooks.
+  [ 1] .text             PROGBITS         0000000000000000  00000040
+       00000000000011a1  0000000000000000  AX       0     0     16
+  [ 2] .rela.text        RELA             0000000000000000  00003498
+       0000000000000648  0000000000000018   I      24     1     8
+  ...
+  [17] .text.hot.        PROGBITS         0000000000000000  00003220
+       000000000000020b  0000000000000000  AX       0     0     1
+  [18] .rela.text.hot.   RELA             0000000000000000  00004428
+       0000000000000078  0000000000000018   I      24    17     8
 
-I.e. drop this in
+And both of them have their range [sh_addr ... sh_addr+sh_size] on the
+area pointed by `e_entry`.
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 22 Mar 2023 11:33:08 -0700
-Subject: [PATCH] x86/cpufeatures: Redefine synthetic virtual NMI bit as AMD's
- "real" vNMI
+This causes that image->start is calculated twice, once for .text and
+another time for .text.hot. The second calculation leaves image->start
+in a random location.
 
-The existing X86_FEATURE_VNMI is a synthetic feature flag that exists
-purely to maintain /proc/cpuinfo's ABI, the "real" Intel vNMI feature flag
-is tracked as VMX_FEATURE_VIRTUAL_NMIS, as the feature is enumerated
-through VMX MSRs, not CPUID.
+Because of this, the system crashes inmediatly after:
 
-AMD is also gaining virtual NMI support, but in true VMX vs. SVM form,
-enumerates support through CPUID, i.e. wants to add real feature flag for
-vNMI.
+kexec_core: Starting new kernel
 
-Redefine the syntheic X86_FEATURE_VNMI to AMD's real CPUID bit to avoid
-having both X86_FEATURE_VNMI and e.g. X86_FEATURE_AMD_VNMI.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- arch/x86/include/asm/cpufeatures.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+kexec: Fix kexec_file_load for llvm16
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 73c9672c123b..ced9e1832589 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -226,10 +226,9 @@
- 
- /* Virtualization flags: Linux defined, word 8 */
- #define X86_FEATURE_TPR_SHADOW		( 8*32+ 0) /* Intel TPR Shadow */
--#define X86_FEATURE_VNMI		( 8*32+ 1) /* Intel Virtual NMI */
--#define X86_FEATURE_FLEXPRIORITY	( 8*32+ 2) /* Intel FlexPriority */
--#define X86_FEATURE_EPT			( 8*32+ 3) /* Intel Extended Page Table */
--#define X86_FEATURE_VPID		( 8*32+ 4) /* Intel Virtual Processor ID */
-+#define X86_FEATURE_FLEXPRIORITY	( 8*32+ 1) /* Intel FlexPriority */
-+#define X86_FEATURE_EPT			( 8*32+ 2) /* Intel Extended Page Table */
-+#define X86_FEATURE_VPID		( 8*32+ 3) /* Intel Virtual Processor ID */
- 
- #define X86_FEATURE_VMMCALL		( 8*32+15) /* Prefer VMMCALL to VMCALL */
- #define X86_FEATURE_XENPV		( 8*32+16) /* "" Xen paravirtual guest */
-@@ -369,6 +368,7 @@
- #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
- #define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
- #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
-+#define X86_FEATURE_VNMI		(15*32+25) /* Virtual NMI */
- #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
+When upreving llvm I realised that kexec stopped working on my test
+platform. This patch fixes it.
 
-base-commit: a3af52e7c9d801f5d7c1fcf5679aaf48c33b6e88
+To: Eric Biederman <ebiederm@xmission.com>
+Cc: Baoquan He <bhe@redhat.com>
+Cc: Philipp Rudo <prudo@redhat.com>
+Cc: kexec@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v3:
+- Fix initial value. Thanks Ross!
+- Link to v2: https://lore.kernel.org/r/20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org
+
+Changes in v2:
+- Fix if condition. Thanks Steven!.
+- Update Philipp email. Thanks Baoquan.
+- Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
+---
+ kernel/kexec_file.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index f1a0e4e3fb5c..25a37d8f113a 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -901,10 +901,21 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
+ 		}
+ 
+ 		offset = ALIGN(offset, align);
++
++		/*
++		 * Check if the segment contains the entry point, if so,
++		 * calculate the value of image->start based on it.
++		 * If the compiler has produced more than one .text sections
++		 * (Eg: .text.hot), they are generally after the main .text
++		 * section, and they shall not be used to calculate
++		 * image->start. So do not re-calculate image->start if it
++		 * is not set to the initial value.
++		 */
+ 		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
+ 		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
+ 		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
+-					 + sechdrs[i].sh_size)) {
++					 + sechdrs[i].sh_size) &&
++		    kbuf->image->start == pi->ehdr->e_entry) {
+ 			kbuf->image->start -= sechdrs[i].sh_addr;
+ 			kbuf->image->start += kbuf->mem + offset;
+ 		}
+
+---
+base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
+change-id: 20230321-kexec_clang16-4510c23d129c
+
+Best regards,
 -- 
+Ricardo Ribalda <ribalda@chromium.org>
