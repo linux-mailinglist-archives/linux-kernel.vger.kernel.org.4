@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C8E6C445B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1585A6C445C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjCVHuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S230030AbjCVHu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 03:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjCVHui (ORCPT
+        with ESMTP id S229782AbjCVHuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:50:38 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488305B416
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:50:36 -0700 (PDT)
-Received: from [192.168.0.2] (unknown [95.90.235.137])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1F2BA61CC40F9;
-        Wed, 22 Mar 2023 08:50:33 +0100 (CET)
-Message-ID: <59886f87-c277-5917-a521-5893ab75acee@molgen.mpg.de>
-Date:   Wed, 22 Mar 2023 08:50:32 +0100
+        Wed, 22 Mar 2023 03:50:52 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970CA5BDB5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:50:48 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id o12so69160351edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679471446;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AdmVjcvz1/yCt2UekFt3nmmLHzuFXFt3bw5QTUpRmg=;
+        b=Ong+tjrl1kElrSo25R80+eYY7gyjS21weUf7Tmo9+I9bCkc1dMGdWHoY/ueZEFJkD7
+         S10DGo34JW0RdUrf2w71ggMb7Pc+Fg12C0vp1cC3EnZ55yJS0fEPYvvNUu7ykcQGlReV
+         XvkggfXPJ8JKFQCyT4O50XI/7tg8NkMELNhJnqRkgT/LBB3AHtG/2VP17jLi1ZD1VCd7
+         LSYXhzpc98c5ud/+Ww2rJ+MARxsc4E0Yn7wAYMdxFCuXOWCkCdCFazPHQEBigQEztEFQ
+         D2cZKrxWskR7sNVGLnA4a7vFiWoiL3k0NDyQ+E54//6MHGNGnmmpurUQ/m9hz58sva0m
+         k1Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679471446;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5AdmVjcvz1/yCt2UekFt3nmmLHzuFXFt3bw5QTUpRmg=;
+        b=L7IufLSi6tG2JVv3u32EBvG3sVMZCmJLETnhfMzb/WHPNQRZZFLXonsVB4wKLt/FRT
+         TdbMMamReyMYca669RYpLNs+GkOl0UK7EzweaWVz6K+sdhMd6HKA+4+uhSn/umsT6NHS
+         X4ognTdrhAdaFWVhFafTMU3SjeR9Fg2M4KXopi5RzrSZCffB5UoOMR3zfitVC/BMQo+o
+         QObySLSULGqTOpBYQn9y0qmJAdpO2nESDmvwM6B8XeFld0F+oIc1RWRL6Yro/kuwx51p
+         jSf8YnfV2reogiqkKnY6ACdzhifW/Id9SGusmt7MPymPi6P4r/Os4/RHOVHhdgTvL+1I
+         FusQ==
+X-Gm-Message-State: AO0yUKV9weR9HjKybkN7YcFvFZMPO8enN97v0JgiPc/VwueTmB+T8L6Y
+        4Yju5hZ/svGaklJg36KOJj8=
+X-Google-Smtp-Source: AK7set944h2QkdgHk0raczdce/k/+S/C6qqg7EsqCHlU2CG8ATrJisTfH2Nl3ExtjzPeRmw/k7+2AA==
+X-Received: by 2002:a17:906:55c9:b0:932:e6d5:bd7c with SMTP id z9-20020a17090655c900b00932e6d5bd7cmr6960071ejp.20.1679471446407;
+        Wed, 22 Mar 2023 00:50:46 -0700 (PDT)
+Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
+        by smtp.gmail.com with ESMTPSA id z17-20020a5096d1000000b004aee4e2a56esm7250886eda.0.2023.03.22.00.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 00:50:46 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 08:50:42 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Leonardo Bras Soares Passos <leobras@redhat.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND RFC PATCH v2 1/6] riscv/cmpxchg: Deduplicate cmpxchg()
+ asm functions
+Message-ID: <ZBqzUplarOxIXrvN@andrea>
+References: <20230321074249.2221674-1-leobras@redhat.com>
+ <20230321074249.2221674-2-leobras@redhat.com>
+ <ZBpPms0PGv4sWR1Y@andrea>
+ <CAJ6HWG46-an3r3WH+n8mHHge8SjqgMbohjTmmk=_EXVmwKZSeA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: npcm: remove select of non-existant ERRATA
-Content-Language: en-US
-To:     Rouven Czerwinski <r.czerwinski@pengutronix.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Russell King <linux@armlinux.org.uk>, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendan.higgins@linux.dev>
-References: <20230316204749.19902-1-r.czerwinski@pengutronix.de>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230316204749.19902-1-r.czerwinski@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ6HWG46-an3r3WH+n8mHHge8SjqgMbohjTmmk=_EXVmwKZSeA@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Rouven,
-
-
-Thank you for your patch.
-
-Am 16.03.23 um 21:47 schrieb Rouven Czerwinski:
-
-There is a small typo in the commit message summary/title: 
-non-exist*e*nt. Maybe also mention the errata number:
-
-ARM: npcm: Remove select of non-existent ARM_ERRATA_794072
-
-> config ARCH_NPCM7XX selects ARM_ERRATA_794072, however this config
-> option does not exist since the workaround for the errata requires
-> secure mode access which needs to be run by the bootloader or firmware
-> since linux can't determine whether it is running in secure mode.
-
-Please add a Fixes: tag.
-
-> Signed-off-by: Rouven Czerwinski <r.czerwinski@pengutronix.de>
-> ---
->   arch/arm/mach-npcm/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
+> > Though I'm not really a fan of macros depending on local variables with
+> > "magic" names, can this be avoided?
 > 
-> diff --git a/arch/arm/mach-npcm/Kconfig b/arch/arm/mach-npcm/Kconfig
-> index 63b42a19d1b8..d933e8abb50f 100644
-> --- a/arch/arm/mach-npcm/Kconfig
-> +++ b/arch/arm/mach-npcm/Kconfig
-> @@ -30,7 +30,6 @@ config ARCH_NPCM7XX
->   	select ARM_ERRATA_764369 if SMP
->   	select ARM_ERRATA_720789
->   	select ARM_ERRATA_754322
-> -	select ARM_ERRATA_794072
->   	select PL310_ERRATA_588369
->   	select PL310_ERRATA_727915
->   	select MFD_SYSCON
+> You mean __ret, __rc, __ptr, __old and __new ?
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Indeed, the wording was from coding-style.rst
 
 
-Kind regards,
+> If so, yes, we could add them to the macro signature, but it would
+> become quite big with not much to gain. To reduce impact it could be
+> something like:
+> 
+> +#define ___cmpxchg(lr_sfx, sc_sfx, prepend, append, ret, r, p, o, n)
+> 
+> Is this a possible fix?
 
-Paul
+I believe that'll do it, open to other approaches.
+
+  Andrea
