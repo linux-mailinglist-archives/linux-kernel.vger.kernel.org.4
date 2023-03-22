@@ -2,42 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D912E6C3F44
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01736C3F4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 01:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCVAph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 20:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S229823AbjCVAsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 20:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjCVAp3 (ORCPT
+        with ESMTP id S229806AbjCVAsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 20:45:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099BC3E606
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 17:45:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Mar 2023 20:48:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679A8106
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 17:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679446076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/QpOu03OMHxoyPFRrcM3jxdNE487xqKrAW2wGh931kM=;
+        b=H8RBSaQODZWXM9/NYRhEyViZ+rcc7paDveHTxmyGhFd0OV0nd80ZwZXDxsr+V5v+JF8JDJ
+        da2L1pbKVQl0KyTZhG12pb9p70tU5j6OhgLpp0v4Mw0e+LYzNXN3U8AduTHFcOb39ajfmU
+        OSrPiJpIpBMwoQNTma551KFepqti4f4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-574-8upX8vKWM_uqw-iYU6elwA-1; Tue, 21 Mar 2023 20:47:53 -0400
+X-MC-Unique: 8upX8vKWM_uqw-iYU6elwA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A386561EED
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F00C433EF;
-        Wed, 22 Mar 2023 00:45:26 +0000 (UTC)
-Date:   Tue, 21 Mar 2023 20:45:24 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH] context_tracking: Have ct_state() use
- preempt_disable_notrace()
-Message-ID: <20230321204524.44733a13@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DE46185A791;
+        Wed, 22 Mar 2023 00:47:52 +0000 (UTC)
+Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D5242166B29;
+        Wed, 22 Mar 2023 00:47:46 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 08:47:41 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Eric Blake <eblake@redhat.com>
+Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
+        corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ming.lei@redhat.com
+Subject: Re: [PATCH v2 2/5] block nbd: send handle in network order
+Message-ID: <ZBpQLQtZP3Gj8MdS@ovpn-8-18.pek2.redhat.com>
+References: <20230317202749.419094-1-eblake@redhat.com>
+ <20230317202749.419094-3-eblake@redhat.com>
+ <ZBjqQckL7d5EJPlh@ovpn-8-29.pek2.redhat.com>
+ <20230321135900.ni4w5ichvjba7s4u@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321135900.ni4w5ichvjba7s4u@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,73 +66,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Mar 21, 2023 at 08:59:00AM -0500, Eric Blake wrote:
+> On Tue, Mar 21, 2023 at 07:20:33AM +0800, Ming Lei wrote:
+> > On Fri, Mar 17, 2023 at 03:27:46PM -0500, Eric Blake wrote:
+> > > The NBD spec says the client handle (or cookie) is opaque on the
+> > > server, and therefore it really doesn't matter what endianness we use;
+> > > to date, the use of memcpy() between u64 and a char[8] has exposed
+> > > native endianness when treating the handle as a 64-bit number.
+> > 
+> > No, memcpy() works fine for char[8], which doesn't break endianness.
+> 
+> I didn't say memcpy() breaks endianness, I said it preserves it.  By
+> using memcpy(), you are exposing native endianness over the wire.
+> Thus, even though a server should not be making any decisions based on
+> the content of the handle (it is an opaque value handed back to the
+> client unchanged), the current kernel client code DOES leak through
+> information about whether the client is big- or little-endian;
 
-One of my tests triggered:
+How is the client cpu endianness leaked with handle defined as char[8]?
 
- ------------[ cut here ]------------
- WARNING: CPU: 0 PID: 1 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x7c/0x80
- Modules linked in:
- CPU: 0 PID: 1 Comm: init Not tainted 6.3.0-rc3-test-00011-ge11b521a7b69-dirty #31
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
- RIP: 0010:trace_preempt_off+0x7c/0x80
- Code: 74 0f 48 8b 78 08 48 89 f2 48 89 de e8 5d f9 ff ff 65 ff 0d 6e d6 ce 68 75 a2 0f 1f 44 00 00 eb 9b e8 28 ea f3 ff 84 c0 75 a5 <0f> 0b eb a1 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f
- RSP: 0000:ffffaf0880013f00 EFLAGS: 00010046
- RAX: 0000000000000000 RBX: ffffffff97fafe59 RCX: 0000000000000001
- RDX: 0000000000000000 RSI: ffffffff986f4b71 RDI: ffffffff986fa0dd
- RBP: ffffffff97fafe59 R08: 0000000000000000 R09: 0000000000000000
- R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
- R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000000
- FS:  0000000000000000(0000) GS:ffff8adf7bc00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f125de099c0 CR3: 000000010498a001 CR4: 0000000000170ef0
- Call Trace:
-  <TASK>
-  irqentry_enter_from_user_mode+0x39/0x80
-  irqentry_enter+0x51/0x60
-  exc_page_fault+0x3d/0x200
-  asm_exc_page_fault+0x26/0x30
- RIP: 0033:0x7f125de099c0
- Code: Unable to access opcode bytes at 0x7f125de09996.
- RSP: 002b:00007ffd1fdbf220 EFLAGS: 00010202
- RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
- RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
- R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
- R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-  </TASK>
- irq event stamp: 13182054
- hardirqs last  enabled at (13182053): [<ffffffff97002e3f>] ret_from_fork+0x1f/0x50
- hardirqs last disabled at (13182054): [<ffffffff97faff01>] irqentry_enter+0x51/0x60
- softirqs last  enabled at (13181978): [<ffffffff97fc97d2>] __do_softirq+0x322/0x429
- softirqs last disabled at (13181969): [<ffffffff971c2cce>] irq_exit_rcu+0xe/0x30
- ---[ end trace 0000000000000000 ]---
- ------------[ cut here ]------------
+Suppose it is leaked, is it really one issue? Cause most of CPUs in
+the world is little-endian.
 
-It appears that ct_state() can be called in noinst mode. Do not trace the
-disabling of preemption.
+> contrast to the NBD protocol saying that ALL data is
+> network-byte-order.
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/linux/context_tracking_state.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+That doesn't make sense for any data defined as char[] or byte which
+needn't to be little or big endian.
 
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 4a4d56f77180..38e269174a7f 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -130,9 +130,9 @@ static __always_inline int ct_state(void)
- 	if (!context_tracking_enabled())
- 		return CONTEXT_DISABLED;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 	ret = __ct_state();
--	preempt_enable();
-+	preempt_enable_notrace();
- 
- 	return ret;
- }
--- 
-2.39.1
+> 
+> > 
+> > > However, since NBD protocol documents that everything else is in
+> > > network order, and tools like Wireshark will dump even the contents of
+> > > the handle as seen over the network, it's worth using a consistent
+> > > ordering regardless of the native endianness.
+> > > 
+> > > Plus, using a consistent endianness now allows an upcoming patch to
+> > > simplify this to directly use integer assignment instead of memcpy().
+> > 
+> > It isn't necessary, given ->handle is actually u64, which is handled by
+> > nbd client only.
+> 
+> No, re-read the whole series.  ->handle is actually char[8].  Later in
+> the series adds ->cookie as __be64 as an alias to ->handle, precisely
+> so that we are converting the u64 'handle' in kernel code into a
+> big-endian value on the wire, regardless of the host type, and making
+> it impossible for a server to inspect the wire data and learn the
+> kernel's endianness.
+
+How does server learn the client cpu endianness in this way? Is it really
+one issue?
+
+> 
+> > 
+> > > 
+> > > Signed-off-by: Eric Blake <eblake@redhat.com>
+> > > 
+> > > ---
+> > > v2: new patch
+> > > ---
+> > >  drivers/block/nbd.c | 10 +++++++---
+> > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+> > > index 592cfa8b765a..8a9487e79f1c 100644
+> > > --- a/drivers/block/nbd.c
+> > > +++ b/drivers/block/nbd.c
+> > > @@ -560,6 +560,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
+> > >  	unsigned long size = blk_rq_bytes(req);
+> > >  	struct bio *bio;
+> > >  	u64 handle;
+> > > +	__be64 tmp;
+> > >  	u32 type;
+> > >  	u32 nbd_cmd_flags = 0;
+> > >  	int sent = nsock->sent, skip = 0;
+> > > @@ -606,7 +607,8 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
+> > >  		request.len = htonl(size);
+> > >  	}
+> > >  	handle = nbd_cmd_handle(cmd);
+> > > -	memcpy(request.handle, &handle, sizeof(handle));
+> > > +	tmp = cpu_to_be64(handle);
+> > > +	memcpy(request.handle, &tmp, sizeof(tmp));
+> > 
+> > This way copies handle two times, really not fun.
+> 
+> Indeed.  And as mentioned in the commit message, it is temporary; the
+> second copy goes away later in the series once we can use direct
+> integer assignment.
+
+Then please merge with following patch, given it is hard to review
+temporary change.
+
+thanks,
+Ming
 
