@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35286C5878
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B386C5888
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 22:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjCVVIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 17:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
+        id S229670AbjCVVJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 17:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCVVIJ (ORCPT
+        with ESMTP id S229870AbjCVVJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 17:08:09 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C07940E2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:08:03 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id e13so1059439ioc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:08:03 -0700 (PDT)
+        Wed, 22 Mar 2023 17:09:18 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CA521952
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:09:14 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so78430275edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679519282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2NMs74zzuCtt5E+o+ysqW2tmIIs5ug4dARg5jHam9G0=;
-        b=NEfTegf9MNjv8z9211rRLvibighkYaTUQZyTA/djbicnxJjPEp4Y0VAgeIOGnJs+Kz
-         hlY0eEYwAQoEN6oD/a8WDhIFcdW9OaQ9TQd31udqQDfaIKgvbQGpAuHXCe9gmQo9xL4n
-         6wUNapeMfW/A2S79JUY9v32wx5296n6JJOjSdGjIp+nl1WfOO+uFbryqRtQ3DL79BLEA
-         Q9aB94r++4EXz6K4IeS4JN9SzTkhSEbF9o95BAE4wx3hIFVkmMwJ8NQUR8SyJ+nn0VFc
-         757uWDuSsbArvxnfMoYZwucnObeP4lxcvHCkC46KNtEY2KvXeIb+/1sR7qATHE4hLSle
-         7+vQ==
+        d=linux-foundation.org; s=google; t=1679519352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k8BrsbGRfzEHZsIUH0GK10LbjiOfd8SiNUhlgvn39PY=;
+        b=ac3bF1i6lZ2yCIXThe9UBo5QzCMi1BKsuIrTTjlz7+6gBquYeUao4r2IhZSQBzOpTI
+         MSCP3sBwIPBcmPuAoumPQZxlaPx/N3uTVMjdiDV/wy1Zq0Hk4i+O0ZPBEWBxtyMQzWdG
+         AWDurTvA5r2Ralj4EdQkjC1akrpg+XcUONrH8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679519282;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2NMs74zzuCtt5E+o+ysqW2tmIIs5ug4dARg5jHam9G0=;
-        b=5PDDEJLg69rayA4/gUH3vsNaINbfpdXwp+1RiRa/cot+UBIqmPtN08XDN/BezZTyVj
-         k8ptLkOU9H1CSLKh7tnRGC3GguobtnG2cyqTi9+NMd2K/unNs+H+Be5Zac5cGrTXLhLL
-         ZAqnIxdFxhan5Oj416F1vRosGg8lZizqfX8Ev8owozYW74lcrISGL1sOFOmdL7UDb7Zd
-         ovrDAMe/ftj2xRswkGhNNCywLTrBzTMj4cb25Xe+HnrxLiHmSU0zxOy2miSUdFbfZkbU
-         6QggEGGfPLMumnC9SolMnPuG6R1oYxNzCuzIA9QTq3H6T450vw+ihpvYjjXs+yPuCHbJ
-         KvuQ==
-X-Gm-Message-State: AO0yUKVdiEye203bFx2YYRo9ypb+A5KfFcjvHIOawqtMSxZ3VOlp4s5y
-        bSEGhGIuyhiP3TsMZkN6gbqznw==
-X-Google-Smtp-Source: AK7set+Mlgw7Cv/VyLzttEDRzn0iS5chZBzcFn7OZZmh3jRipNXqRvrMTGaTZagW7DoKr31cM7L2mQ==
-X-Received: by 2002:a5e:8b01:0:b0:74c:a578:e3a0 with SMTP id g1-20020a5e8b01000000b0074ca578e3a0mr5306285iok.5.1679519282604;
-        Wed, 22 Mar 2023 14:08:02 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id g8-20020a5edf48000000b00758917bc309sm919372ioq.31.2023.03.22.14.08.01
+        d=1e100.net; s=20210112; t=1679519352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k8BrsbGRfzEHZsIUH0GK10LbjiOfd8SiNUhlgvn39PY=;
+        b=q3adIVENI58FvJJhCSX0nzWlCPDgIGHt1qdCI57LwydTAg6MlBKHHXGfTR3xz8/55v
+         4S3bgBoOFpWqErO7RjBGtYJRpQjnX54kroWVVJei7eC25JJh/hPSM8ThYJSUsKrKTF7T
+         n0CJMFUgmJTcZjvLd7YYtjpKrnAUfmNpnf0/HOIWdJOFAIl25GiQDc3QabxHwtvJe7eK
+         02DW/uih8wFqF3IJsqS3ydt4kStvw/JcfZKob7OnbiWXFLOdhnG4muRHVfcZWyIz6ziD
+         kH7oONnSf9KFiqhvju9cudQ54tQa/JSp+9z/OKwZ2RnKHrJMNB690dvJpXy2lf/mhPbR
+         1OIg==
+X-Gm-Message-State: AO0yUKXk70lvmeX1qxcC518nVHv3OEAj6y6svVoASqodg4FzMeyIwadV
+        29R83cTxpd8idQKtkR9P9s+MJ7oBAmn1e3ZLk8EDqw==
+X-Google-Smtp-Source: AK7set+NslpFufjOWRCi5QYEiXzi+rKXTlroBB1TisV45zeeLDdmzzCckFv6uO1qBuD9gPC/5MbD2Q==
+X-Received: by 2002:a17:906:604a:b0:8f1:949f:37b5 with SMTP id p10-20020a170906604a00b008f1949f37b5mr8791470ejj.32.1679519352204;
+        Wed, 22 Mar 2023 14:09:12 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id r5-20020a1709064d0500b00923f05b2931sm7657237eju.118.2023.03.22.14.09.11
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 14:08:02 -0700 (PDT)
-Message-ID: <a0e5f9e3-403d-3334-9f7c-9d649d794a96@linaro.org>
-Date:   Wed, 22 Mar 2023 16:08:01 -0500
+        Wed, 22 Mar 2023 14:09:11 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id x3so78339720edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:09:11 -0700 (PDT)
+X-Received: by 2002:a17:906:aac9:b0:927:912:6baf with SMTP id
+ kt9-20020a170906aac900b0092709126bafmr3825562ejb.15.1679519351218; Wed, 22
+ Mar 2023 14:09:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] net: ipa: add IPA v5.0 to ipa_version_string()
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230322144742.2203947-1-elder@linaro.org>
- <ZBtrfLOh3EKBKW+F@corigine.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <ZBtrfLOh3EKBKW+F@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230322200309.1997651-1-sashal@kernel.org> <20230322200309.1997651-5-sashal@kernel.org>
+In-Reply-To: <20230322200309.1997651-5-sashal@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Mar 2023 14:08:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whZ8r85GhA=n8=NJCXOnpJ5KNqitV2FK2YnK73+Z7tzUg@mail.gmail.com>
+Message-ID: <CAHk-=whZ8r85GhA=n8=NJCXOnpJ5KNqitV2FK2YnK73+Z7tzUg@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 4.19 5/9] sched_getaffinity: don't assume
+ 'cpumask_size()' is fully initialized
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Yury Norov <yury.norov@gmail.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 3:56 PM, Simon Horman wrote:
-> Should IPA_VERSION_5_1 and IPA_VERSION_5_5 also be added?
+On Wed, Mar 22, 2023 at 1:09=E2=80=AFPM Sasha Levin <sashal@kernel.org> wro=
+te:
+>
+> The getaffinity() system call uses 'cpumask_size()' to decide how big
+> the CPU mask is - so far so good.  It is indeed the allocation size of a
+> cpumask. [...]
 
-They could, since their symbols are defined.
+Same comment as about commit 8ca09d5fa354 - this is a fine cleanup /
+fix and might be worth backporting just for that, but it didn't really
+turn into an actual visible bug until commit 596ff4a09b89.
 
-We expect to support both of those versions pretty
-soon, and we'll certainly add them to this function
-then.  For now, unless someone thinks it's important
-to add this now, I'd rather keep it this way.
-
-					-Alex
+                Linus
