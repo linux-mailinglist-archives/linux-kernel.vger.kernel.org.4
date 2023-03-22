@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2422B6C4706
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A2C6C4711
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCVJzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S230226AbjCVJzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjCVJy0 (ORCPT
+        with ESMTP id S229731AbjCVJys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:54:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F9110CD;
-        Wed, 22 Mar 2023 02:52:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 22 Mar 2023 05:54:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004DE367C8;
+        Wed, 22 Mar 2023 02:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dfqJs0p1KTlCgT/AzQPPoQtSmUdmtzuztLmCgmrMzTI=; b=CzzNDRhr38Kip/OFg6dq3dQ4EV
+        +GktrtbeR8GTSIKCXFNIi+R0Uog/v4u3G/O25UfC/mgZT3ndlGcMabgm6LrFN6fGis9ydvHcppxLT
+        VwY3AmsL8HPpn5zrgxUXGj6CeuAuLVZoJ7UhzkhlIInAFBW3QLRk/B/v7JvwmMujV1bNxp++Hjosy
+        wZt5vtgdBxpEoKGx18nO98pgqPhFFQBy0Pj+s5w9JmrOA97n6Bu/+USPMl8ce2eWJVbxbyQjTP6hs
+        mqyM/HOaIsbNgCi2gGUWk2nA/SAiwaMSIlKMsEneUn3H6IgrNoG7/6DpUd9PIcenBZzlTeCjIrCVD
+        xEhMpymQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pev9u-002tfl-CF; Wed, 22 Mar 2023 09:53:30 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D7253397C;
-        Wed, 22 Mar 2023 09:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679478774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YzMHyOdi3M1oFdxmInUs087qpDgl9pNZ0oaO0+rMEPk=;
-        b=B3dWGc6HiwwJQ4iCU+EMaTIyhtYPcbwEXoQDeJeccjWWWW1kbrQfctel2hnDQTQ4bSK6M2
-        Pq4WdIZ9YWd5HntYhoOPyXdAGb3U+CCkAce31bEMxHUZm5RjdCkKoPAAuXNDNNPOvuqW4h
-        VbAx+flptB2w0V5Bc8hxk/nsJgNoepw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679478774;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YzMHyOdi3M1oFdxmInUs087qpDgl9pNZ0oaO0+rMEPk=;
-        b=bVlKWQlg6j26d7aS7zpSTttD9JVtk7JrnEexCZsgnB90+ErOjWgqkkEtCvqsNg5N1Fredc
-        9uGZ0Pyqp6ovD5DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6CD7113416;
-        Wed, 22 Mar 2023 09:52:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pqKQGvbPGmRifAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 22 Mar 2023 09:52:54 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id EA136A071C; Wed, 22 Mar 2023 10:52:53 +0100 (CET)
-Date:   Wed, 22 Mar 2023 10:52:53 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     ming.lei@redhat.com, jack@suse.cz, hch@infradead.org,
-        axboe@kernel.dk, yukuai3@huawei.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH] block: don't set GD_NEED_PART_SCAN if scan partition
- failed
-Message-ID: <20230322095253.gznm43rees5vpkmh@quack3>
-References: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
- <20230322035926.1791317-1-yukuai1@huaweicloud.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B96773001F7;
+        Wed, 22 Mar 2023 10:53:29 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A09DA205D08C3; Wed, 22 Mar 2023 10:53:29 +0100 (CET)
+Date:   Wed, 22 Mar 2023 10:53:29 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+Message-ID: <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322035926.1791317-1-yukuai1@huaweicloud.com>
+In-Reply-To: <20230307143558.294354-8-vschneid@redhat.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 22-03-23 11:59:26, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Currently if disk_scan_partitions() failed, GD_NEED_PART_SCAN will still
-> set, and partition scan will be proceed again when blkdev_get_by_dev()
-> is called. However, this will cause a problem that re-assemble partitioned
-> raid device will creat partition for underlying disk.
-> 
-> Test procedure:
-> 
-> mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
-> sgdisk -n 0:0:+100MiB /dev/md0
-> blockdev --rereadpt /dev/sda
-> blockdev --rereadpt /dev/sdb
-> mdadm -S /dev/md0
-> mdadm -A /dev/md0 /dev/sda /dev/sdb
-> 
-> Test result: underlying disk partition and raid partition can be
-> observed at the same time
-> 
-> Note that this can still happen in come corner cases that
-> GD_NEED_PART_SCAN can be set for underlying disk while re-assemble raid
-> device.
-> 
-> Fixes: e5cfefa97bcc ("block: fix scan partition for exclusively open device again")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On Tue, Mar 07, 2023 at 02:35:58PM +0000, Valentin Schneider wrote:
 
-This looks good to me. I've actually noticed this problem already when
-looking at the patch resulting in commit e5cfefa97bcc but Jens merged it
-before I got to checking it and then I've convinced myself it's not serious
-enough to redo the patch. Anyway, feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza 
-
-> ---
->  block/genhd.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/block/genhd.c b/block/genhd.c
-> index 08bb1a9ec22c..a72e27d6779d 100644
-> --- a/block/genhd.c
-> +++ b/block/genhd.c
-> @@ -368,7 +368,6 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
->  	if (disk->open_partitions)
->  		return -EBUSY;
+> @@ -477,6 +490,25 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
+>  	smp_store_release(&csd->node.u_flags, 0);
+>  }
 >  
-> -	set_bit(GD_NEED_PART_SCAN, &disk->state);
->  	/*
->  	 * If the device is opened exclusively by current thread already, it's
->  	 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
-> @@ -381,12 +380,19 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
->  			return ret;
->  	}
->  
-> +	set_bit(GD_NEED_PART_SCAN, &disk->state);
->  	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL);
->  	if (IS_ERR(bdev))
->  		ret =  PTR_ERR(bdev);
->  	else
->  		blkdev_put(bdev, mode & ~FMODE_EXCL);
->  
+> +static __always_inline void
+> +raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
+> +{
 > +	/*
-> +	 * If blkdev_get_by_dev() failed early, GD_NEED_PART_SCAN is still set,
-> +	 * and this will cause that re-assemble partitioned raid device will
-> +	 * creat partition for underlying disk.
+> +	 * The list addition should be visible to the target CPU when it pops
+> +	 * the head of the list to pull the entry off it in the IPI handler
+> +	 * because of normal cache coherency rules implied by the underlying
+> +	 * llist ops.
+> +	 *
+> +	 * If IPIs can go out of order to the cache coherency protocol
+> +	 * in an architecture, sufficient synchronisation should be added
+> +	 * to arch code to make it appear to obey cache coherency WRT
+> +	 * locking and barrier primitives. Generic code isn't really
+> +	 * equipped to do the right thing...
 > +	 */
-> +	clear_bit(GD_NEED_PART_SCAN, &disk->state);
->  	if (!(mode & FMODE_EXCL))
->  		bd_abort_claiming(disk->part0, disk_scan_partitions);
->  	return ret;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
+> +		send_call_function_single_ipi(cpu, func);
+> +}
+> +
+>  static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
+>  
+>  void __smp_call_single_queue(int cpu, struct llist_node *node)
+> @@ -493,21 +525,25 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+>  		}
+>  	}
+>  #endif
+>  	/*
+> +	 * We have to check the type of the CSD before queueing it, because
+> +	 * once queued it can have its flags cleared by
+> +	 *   flush_smp_call_function_queue()
+> +	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
+> +	 * executes migration_cpu_stop() on the remote CPU).
+>  	 */
+> +	if (trace_ipi_send_cpumask_enabled()) {
+> +		call_single_data_t *csd;
+> +		smp_call_func_t func;
+> +
+> +		csd = container_of(node, call_single_data_t, node.llist);
+> +		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
+> +			sched_ttwu_pending : csd->func;
+> +
+> +		raw_smp_call_single_queue(cpu, node, func);
+> +	} else {
+> +		raw_smp_call_single_queue(cpu, node, NULL);
+> +	}
+>  }
+
+Hurmph... so we only really consume @func when we IPI. Would it not be
+more useful to trace this thing for *every* csd enqeued?
+
+
+
