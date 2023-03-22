@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CB76C458A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8E36C4577
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCVJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S229796AbjCVI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjCVJCr (ORCPT
+        with ESMTP id S229827AbjCVI5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:02:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA525B5C0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:02:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35B324B3;
-        Wed, 22 Mar 2023 02:03:30 -0700 (PDT)
-Received: from [10.57.53.137] (unknown [10.57.53.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40A923F6C4;
-        Wed, 22 Mar 2023 02:02:44 -0700 (PDT)
-Message-ID: <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
-Date:   Wed, 22 Mar 2023 09:02:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-References: <20230315164152.333251-1-steven.price@arm.com>
- <ZBnBU9OU4iV6CV0W@ziepe.ca>
-Content-Language: en-GB
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <ZBnBU9OU4iV6CV0W@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 22 Mar 2023 04:57:36 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C95F5D740
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id le6so18615268plb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=areca-com-tw.20210112.gappssmtp.com; s=20210112; t=1679475451;
+        h=content-transfer-encoding:mime-version:date:to:from:subject
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Juje1TVQx9Ir6TCrjjYr/9fB6NcAn5fIZLLXlfSDEo=;
+        b=oNQzP0dukP/A7MuNRdlbB7Kqk3Z1UH2gZqPOxBqV5zwD0alq000MNUTJ2tu/wlqNAb
+         /sl+veH6npPUS+889YV+ZzJIAHNtu//H1xFA7WsX8Pj66Sf0Lhd+7zQujOzIBNlZGO/M
+         4C4ipK5jHh1F6Qjpv8rH+WH3d/JhawU3CI9bAkWA1q8Px1JpVt+YhxX1Nzh5A9RqckL1
+         +LU4E0gjJzmVyLG9S/mTHX6SOFNSjPPupOSmwMrgKe52dZB2hpADmN/wUtjjYy/JOK7A
+         aHEMnxgU55bTIM2EzXWAbZKbUuAWeVceYKDVGm5D0VB80h6+HYyrqntlA1pSywrLIkes
+         3KjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679475451;
+        h=content-transfer-encoding:mime-version:date:to:from:subject
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Juje1TVQx9Ir6TCrjjYr/9fB6NcAn5fIZLLXlfSDEo=;
+        b=nyGmJv/L1DB64/cwxQC3E3HCwPW5yMEQSBmF9XGvWdqiK3aUJpsgy7NufaSvl8EPhT
+         MfjmsJGJ62EvUIn5nyDe6uLOyrVM9VdzBlEImmpx2qcA0Ie5/O1vhtMS6iyrm1EjwwbR
+         CvUFzleKgewVUxz4PJe+7HQIiM0rBdOXWOvIMFhM4JLWi1GeGnbEc/3ql1VjJvsCjnen
+         ueVvnZSBF+8zaFn32DjdgY5WJIp2EpM+56Z/FLHDkQEbhI2x2hBeB95QDv0obNnAhqjf
+         oJy4vYy9EJiQagz38MLDk7sEI8Y89+DFSdOzGwu91IzunX7CWjNMj0SplRRVs2yu4MOs
+         dgCg==
+X-Gm-Message-State: AO0yUKXmd5OQT+eiiXlANC+OI+qHHFJguaAyRG+bhZhCzeRQ4Wd30z4q
+        vPI0iMm8B976zPD57hhowhrBJjrJlVrZlbt2plLw4g==
+X-Google-Smtp-Source: AK7set8dI/0YZUWwik1LXJ9k+RGWdA5H1O9HkHJA/yPcJ9IgPwsEWVg+Ga1cCZ90yAwECJuOKN1oqw==
+X-Received: by 2002:a17:903:430f:b0:19e:ecaf:c4b4 with SMTP id jz15-20020a170903430f00b0019eecafc4b4mr1970578plb.4.1679475451445;
+        Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
+Received: from centos78 (60-248-88-209.hinet-ip.hinet.net. [60.248.88.209])
+        by smtp.googlemail.com with ESMTPSA id g5-20020a170902c38500b0019cbec6c17bsm10080147plg.190.2023.03.22.01.57.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 Mar 2023 01:57:31 -0700 (PDT)
+Message-ID: <6f3eb04dbe89d2b9f239600dd2c575227f3c0afc.camel@areca.com.tw>
+Subject: [PATCH 0/5] scsi: arcmsr: fix reading buffer empty length error
+From:   ching Huang <ching2048@areca.com.tw>
+To:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 23 Mar 2023 00:57:29 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 14:38, Jason Gunthorpe wrote:
-> On Wed, Mar 15, 2023 at 04:41:52PM +0000, Steven Price wrote:
->> Similar to exynos, we need a set_platform_dma_ops() callback for proper
->> operation on ARM 32 bit after recent changes in the IOMMU framework
->> (detach ops removal).
->>
->> Fixes: c1fe9119ee70 ("iommu: Add set_platform_dma_ops callbacks")
->> Signed-off-by: Steven Price <steven.price@arm.com>
->> ---
->> This fixes a splat I was seeing on a Firefly-RK3288, more details here:
->> https://lore.kernel.org/all/26a5d1b8-40b3-b1e4-bc85-740409c26838@arm.com/
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+The following patched were made over mkp's 6.4/scsi-staging
 
-Thanks for the review.
+This series comtain some fixes.
+- deprecated arcmsr_pci_unmap_dma()
+- fixed ADAPTER_TYPE_B 64bits dma compatibility issue
+- fixed reading buffer empty length error
+- added driver proc_name
+- updated driver's version to v1.50.00.13-20230206
+---
 
-> Do you know what state the iommu is left in after
-> rk_iommu_detach_device()? Ie is it blocking DMA or doing identity or
-> something else?
-
-To be honest I really don't know for sure. But from my small
-understanding of the code: rk_iommu_detach_device() ends up in
-rk_iommu_disable_paging() which appears to switch to identity mode
-("Disable memory translation").
-
-But I don't actually have any familiarity with the hardware block, so I
-might be missing something.
-
-Steve
