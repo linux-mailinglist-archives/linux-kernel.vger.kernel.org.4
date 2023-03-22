@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BCA6C415A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C45C6C415C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjCVEA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 00:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S230284AbjCVEAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 00:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjCVEAY (ORCPT
+        with ESMTP id S229595AbjCVEAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 00:00:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B9B474D4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B347403
         for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 21:00:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF3260BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5DAC433D2;
-        Wed, 22 Mar 2023 04:00:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 528A961E67
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373A5C433EF;
+        Wed, 22 Mar 2023 04:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679457622;
-        bh=i6IhVzT9OpzVoQyspMPLq+3N5zYy9EEMRpCDmXH98t4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DtxPoVGI4mjrJY0/CaMvvbpoAj9zmMGMUVZZkeFvN4b0EDxeUYodHoc+uSAgG7EMg
-         md/SXA60oJPCZ3BM9einpvw9EdzWsAC5hT3eh6QxvfxqWiC+4ZkCgQDnKNI5LbOub6
-         8LhJPx+CL7C8weP3Nx+B6RiTiP5w7gl6ZQrufWyyZo40uw4wJKjEfEUmvjZOsreduk
-         vAfCbhb7zCixqjKMoBMqSEN2hydxpPQqBrS8mLGw0HaDuUX7y2RhvNw+KV8Cy6FV32
-         Y6P+kOPY2///MNOis55LgPXkMeeEYiWo3jNtV61ZTtv5A2CMQevKVWRjwuDjPxf0Yg
-         +5jkKhCtD1wQA==
+        bh=dXZSCwSD/LB/FwBrcGE2iL96HfH7dZ9DVcvMcF87LjU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oSKzXycDKQNaMvn2h8NBJQs2QZSi0Zh4P76GaPXTPlaXwOJ92MTbFHtmKvLg1fPUO
+         hmAsQ5LTALa0dyq+apNn1KYtEKywnGn6nYoOwd7SxLof57UX6Tw2qFqYWYtIv23Oyj
+         Pvw5wtxTTvbd7UXOIy8hTZsI4eCKXWroqpQZtnuykyOfVpiHBd2F4mbF5HwkoXnyRr
+         o9dIG+laLvTs0VRmKAGWVVk4Wq0ud4oS7pn0wMSbkujqwCZyFpyq3NAv77ZmKM9WTs
+         noCXFq9ny3o+k688pOnpE6y9YJrPQghaP4YW/orbGeAsiu67vsGNg89jAv1bExRo8M
+         FSFlT7TPRcMAA==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -48,10 +48,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Will McVicker <willmcvicker@google.com>,
         Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 00/11] static_call: Improve NULL/ret0 handling
-Date:   Tue, 21 Mar 2023 21:00:06 -0700
-Message-Id: <cover.1679456900.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 01/11] static_call: Improve key type abstraction
+Date:   Tue, 21 Mar 2023 21:00:07 -0700
+Message-Id: <c8bc83b2c70aeaad3ce01d12dc1153981ab693f8.1679456900.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1679456900.git.jpoimboe@kernel.org>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -64,81 +66,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter pointed out that v1 had CFI violations on arm64 with
-CONFIG_CFI_CLANG.  Then I realized there are already CFI violations
-today in the existing code.
+Make the static_call_key union less fragile by abstracting all knowledge
+about the type bit into helper functions.
 
-So this ended up turning into a complete rewrite of v1.
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ include/linux/static_call_types.h       |  4 +-
+ kernel/static_call_inline.c             | 51 +++++++++++++++++--------
+ tools/include/linux/static_call_types.h |  4 +-
+ 3 files changed, 40 insertions(+), 19 deletions(-)
 
-Highlights include:
-
-- Several cleanups
-- Fix arm64 CFI violations
-- Make NULL pointer behavior consistent across configs
-- Merge NULL and RET0 into a single concept
-
-
-v1 can be found here:
-
-  https://lkml.kernel.org/lkml/cover.1678474914.git.jpoimboe@kernel.org
-
-Josh Poimboeuf (11):
-  static_call: Improve key type abstraction
-  static_call: Flip key type union bit
-  static_call: Remove static_call_mod_init() declaration
-  static_call: Remove static_call.h dependency on cpu.h
-  static_call: Make ARCH_ADD_TRAMP_KEY() generic
-  static_call: "EXPORT_STATIC_CALL_TRAMP" -> "EXPORT_STATIC_CALL_RO"
-  static_call: Reorganize static call headers
-  arm64/static_call: Fix static call CFI violations
-  static_call: Make NULL static calls consistent
-  static_call: Remove static_call_cond()
-  static_call: Remove DEFINE_STATIC_CALL_RET0()
-
- arch/Kconfig                              |   4 +
- arch/arm/include/asm/paravirt.h           |   2 +-
- arch/arm64/include/asm/paravirt.h         |   2 +-
- arch/arm64/include/asm/static_call.h      |  29 ++
- arch/powerpc/include/asm/static_call.h    |   1 -
- arch/powerpc/kernel/irq.c                 |   2 +-
- arch/powerpc/kernel/static_call.c         |   6 +-
- arch/x86/events/amd/brs.c                 |   2 +-
- arch/x86/events/amd/core.c                |   2 +-
- arch/x86/events/core.c                    |  29 +-
- arch/x86/include/asm/kvm-x86-ops.h        |   6 +-
- arch/x86/include/asm/kvm-x86-pmu-ops.h    |   3 +-
- arch/x86/include/asm/kvm_host.h           |   4 +-
- arch/x86/include/asm/paravirt.h           |   2 +-
- arch/x86/include/asm/perf_event.h         |   2 +-
- arch/x86/include/asm/preempt.h            |   6 +-
- arch/x86/include/asm/static_call.h        |  22 +-
- arch/x86/kernel/alternative.c             |   6 -
- arch/x86/kernel/paravirt.c                |   1 +
- arch/x86/kernel/static_call.c             |  89 +-----
- arch/x86/kvm/irq.c                        |   2 +-
- arch/x86/kvm/lapic.c                      |  22 +-
- arch/x86/kvm/pmu.c                        |   4 +-
- arch/x86/kvm/x86.c                        |  28 +-
- block/bio.c                               |   1 +
- include/linux/entry-common.h              |   2 +-
- include/linux/entry-kvm.h                 |   2 +-
- include/linux/kernel.h                    |   4 +-
- include/linux/module.h                    |   2 +-
- include/linux/sched.h                     |   2 +-
- include/linux/static_call.h               | 369 ++++++++++------------
- include/linux/static_call_types.h         |  74 +----
- kernel/Makefile                           |   2 +-
- kernel/cgroup/cgroup.c                    |   1 +
- kernel/events/core.c                      |  15 +-
- kernel/sched/core.c                       |  18 +-
- kernel/static_call.c                      |  13 +
- kernel/static_call_inline.c               |  64 +++-
- security/keys/trusted-keys/trusted_core.c |   2 +-
- sound/soc/intel/avs/trace.c               |   1 +
- tools/include/linux/static_call_types.h   |  74 +----
- 41 files changed, 369 insertions(+), 553 deletions(-)
- create mode 100644 arch/arm64/include/asm/static_call.h
-
+diff --git a/include/linux/static_call_types.h b/include/linux/static_call_types.h
+index 5a00b8b2cf9f..87c3598609e8 100644
+--- a/include/linux/static_call_types.h
++++ b/include/linux/static_call_types.h
+@@ -63,8 +63,8 @@ struct static_call_key {
+ 	union {
+ 		/* bit 0: 0 = mods, 1 = sites */
+ 		unsigned long type;
+-		struct static_call_mod *mods;
+-		struct static_call_site *sites;
++		struct static_call_mod *_mods;
++		struct static_call_site *_sites;
+ 	};
+ };
+ 
+diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
+index 639397b5491c..41f6bda6773a 100644
+--- a/kernel/static_call_inline.c
++++ b/kernel/static_call_inline.c
+@@ -112,15 +112,21 @@ static inline void static_call_sort_entries(struct static_call_site *start,
+ 
+ static inline bool static_call_key_has_mods(struct static_call_key *key)
+ {
+-	return !(key->type & 1);
++	return !!(key->type & 1);
+ }
+ 
+-static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
++static inline struct static_call_mod *static_call_key_mods(struct static_call_key *key)
+ {
+ 	if (!static_call_key_has_mods(key))
+ 		return NULL;
+ 
+-	return key->mods;
++	return (struct static_call_mod *)(key->type & ~1);
++}
++
++static inline void static_call_key_set_mods(struct static_call_key *key, struct static_call_mod *mods)
++{
++	key->_mods = mods;
++	key->type |= 1;
+ }
+ 
+ static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
+@@ -128,7 +134,12 @@ static inline struct static_call_site *static_call_key_sites(struct static_call_
+ 	if (static_call_key_has_mods(key))
+ 		return NULL;
+ 
+-	return (struct static_call_site *)(key->type & ~1);
++	return key->_sites;
++}
++
++static inline void static_call_key_set_sites(struct static_call_key *key, struct static_call_site *sites)
++{
++	key->_sites = sites;
+ }
+ 
+ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+@@ -154,7 +165,7 @@ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+ 		goto done;
+ 
+ 	first = (struct static_call_mod){
+-		.next = static_call_key_next(key),
++		.next = static_call_key_mods(key),
+ 		.mod = NULL,
+ 		.sites = static_call_key_sites(key),
+ 	};
+@@ -250,8 +261,7 @@ static int __static_call_init(struct module *mod,
+ 			 * static_call_init() before memory allocation works.
+ 			 */
+ 			if (!mod) {
+-				key->sites = site;
+-				key->type |= 1;
++				static_call_key_set_sites(key, site);
+ 				goto do_transform;
+ 			}
+ 
+@@ -266,10 +276,10 @@ static int __static_call_init(struct module *mod,
+ 			 */
+ 			if (static_call_key_sites(key)) {
+ 				site_mod->mod = NULL;
+-				site_mod->next = NULL;
+ 				site_mod->sites = static_call_key_sites(key);
++				site_mod->next = NULL;
+ 
+-				key->mods = site_mod;
++				static_call_key_set_mods(key, site_mod);
+ 
+ 				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
+ 				if (!site_mod)
+@@ -278,8 +288,9 @@ static int __static_call_init(struct module *mod,
+ 
+ 			site_mod->mod = mod;
+ 			site_mod->sites = site;
+-			site_mod->next = static_call_key_next(key);
+-			key->mods = site_mod;
++			site_mod->next = static_call_key_mods(key);
++
++			static_call_key_set_mods(key, site_mod);
+ 		}
+ 
+ do_transform:
+@@ -406,7 +417,7 @@ static void static_call_del_module(struct module *mod)
+ 	struct static_call_site *stop = mod->static_call_sites +
+ 					mod->num_static_call_sites;
+ 	struct static_call_key *key, *prev_key = NULL;
+-	struct static_call_mod *site_mod, **prev;
++	struct static_call_mod *site_mod, *prev;
+ 	struct static_call_site *site;
+ 
+ 	for (site = start; site < stop; site++) {
+@@ -416,15 +427,25 @@ static void static_call_del_module(struct module *mod)
+ 
+ 		prev_key = key;
+ 
+-		for (prev = &key->mods, site_mod = key->mods;
++		site_mod = static_call_key_mods(key);
++		if (!site_mod)
++			continue;
++
++		if (site_mod->mod == mod) {
++			static_call_key_set_mods(key, site_mod->next);
++			kfree(site_mod);
++			continue;
++		}
++
++		for (prev = site_mod, site_mod = site_mod->next;
+ 		     site_mod && site_mod->mod != mod;
+-		     prev = &site_mod->next, site_mod = site_mod->next)
++		     prev = site_mod, site_mod = site_mod->next)
+ 			;
+ 
+ 		if (!site_mod)
+ 			continue;
+ 
+-		*prev = site_mod->next;
++		prev->next = site_mod->next;
+ 		kfree(site_mod);
+ 	}
+ }
+diff --git a/tools/include/linux/static_call_types.h b/tools/include/linux/static_call_types.h
+index 5a00b8b2cf9f..87c3598609e8 100644
+--- a/tools/include/linux/static_call_types.h
++++ b/tools/include/linux/static_call_types.h
+@@ -63,8 +63,8 @@ struct static_call_key {
+ 	union {
+ 		/* bit 0: 0 = mods, 1 = sites */
+ 		unsigned long type;
+-		struct static_call_mod *mods;
+-		struct static_call_site *sites;
++		struct static_call_mod *_mods;
++		struct static_call_site *_sites;
+ 	};
+ };
+ 
 -- 
 2.39.2
 
