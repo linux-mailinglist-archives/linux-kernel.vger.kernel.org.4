@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B416C4166
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3836B6C4165
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCVEBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 00:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S230409AbjCVEBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 00:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjCVEAe (ORCPT
+        with ESMTP id S230299AbjCVEAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 00:00:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ACF4D421
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 21:00:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58BD4A1FB
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 21:00:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A960EB81B07
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B08AB81B05
         for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D893CC433A7;
-        Wed, 22 Mar 2023 04:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F6C2C433D2;
+        Wed, 22 Mar 2023 04:00:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679457628;
-        bh=qjI5SVHqDJvNpjFb1YqUeFS5pXrdEquAw81GDMiBKA4=;
+        s=k20201202; t=1679457629;
+        bh=cKEMr/rwAC93qko/Kc2EIUi6Z0gQ08sgmjljnkVmJko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=byGUn35/G40su0Sy/SeTCsEwldfAbig96JeRetvJ+HCHwMOcsgv5h8jshTaZ4D+nB
-         eUyBz2SGQ19I0q4oGRIGU220yXOxPEph5PgFiIAh35vncQa6XZg0gLQuqOZQOQwC/w
-         YaBiXZoVv+K6qnoJWEbdbqiEmvtr5+TOMMukhmtMHyQFvXmgicgZ6eRVBQh4KXG6fO
-         rrNxFVHI4cQn45qC9VXvYIGKGTEJosEWGwfPoQL4VWGMj5DElzSQYPMa63PRdArxIC
-         hm3mjFjrHpz4qra27oEXnUcgT4ELjEaQQ7Ug+N+Lypl7MMLVnYuu1sy7mg7IA1u4lP
-         eH8CWVqoF2iSA==
+        b=SDmoYgGFPePMH3I1wvZmhxwKlXk3V0IR/C9prXtdbLu2aKzZszD9iNLmtpwmMjvM5
+         aSZ8rXW97ENAH7Un93qEThoiZpcw8J4zqR4IT8+zhkeXxBXblZkDmFzrbvZgyucueA
+         JHH0td2lO4xaeV+UKqGK9mZLWiXWD3acb0qec/LW8zmlZ9OSdIzUhUREoh5ve2oQi0
+         FVEXVnonqQ01s550JgukrAllKjnFJJND8uCpeXXU+dXxXx95i6exd/JtNMGbKe1YiC
+         Sy/2XqcTodnjmZdcSDSMzJ7dsbLivRpmKz4x3r0UUEfiY64R6TiQHxlXTWYZ0CFyVk
+         fDO3YIel4kbnA==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Will McVicker <willmcvicker@google.com>,
         Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 09/11] static_call: Make NULL static calls consistent
-Date:   Tue, 21 Mar 2023 21:00:15 -0700
-Message-Id: <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 10/11] static_call: Remove static_call_cond()
+Date:   Tue, 21 Mar 2023 21:00:16 -0700
+Message-Id: <3916caa1dcd114301a49beafa5030eca396745c1.1679456900.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1679456900.git.jpoimboe@kernel.org>
 References: <cover.1679456900.git.jpoimboe@kernel.org>
@@ -66,389 +66,433 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NULL static calls have inconsistent behavior.  With HAVE_STATIC_CALL=y
-they're a NOP, but with HAVE_STATIC_CALL=n they go boom.
-
-That's guaranteed to cause subtle bugs.  Make the behavior consistent by
-making NULL static calls a NOP with HAVE_STATIC_CALL=n.
-
-This is probably easier than doing the reverse (making NULL static calls
-panic with HAVE_STATIC_CALL=y).  And it seems to match the current use
-cases better: there are several call sites which rely on the NOP
-behavior, whereas no call sites rely on the crashing behavior.
+A static call to a NULL pointer is now a NOP for all configs.  There's
+no longer a need for an explicit static_call_cond().  Remove it and
+convert its usages to plain static_call().
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/include/asm/static_call.h    |  4 ++
- arch/powerpc/include/asm/static_call.h  |  2 +-
- arch/powerpc/kernel/static_call.c       |  5 +-
- arch/x86/include/asm/static_call.h      |  4 +-
- arch/x86/kernel/static_call.c           | 14 +++--
- include/linux/static_call.h             | 78 +++++++++----------------
- include/linux/static_call_types.h       |  4 ++
- kernel/static_call.c                    |  5 ++
- tools/include/linux/static_call_types.h |  4 ++
- 9 files changed, 57 insertions(+), 63 deletions(-)
+ arch/x86/events/core.c                    | 24 +++++++++++------------
+ arch/x86/include/asm/kvm-x86-ops.h        |  3 +--
+ arch/x86/include/asm/kvm-x86-pmu-ops.h    |  3 +--
+ arch/x86/include/asm/kvm_host.h           |  4 ++--
+ arch/x86/kvm/irq.c                        |  2 +-
+ arch/x86/kvm/lapic.c                      | 22 ++++++++++-----------
+ arch/x86/kvm/pmu.c                        |  4 ++--
+ arch/x86/kvm/x86.c                        | 24 +++++++++++------------
+ include/linux/static_call.h               |  5 +----
+ security/keys/trusted-keys/trusted_core.c |  2 +-
+ 10 files changed, 44 insertions(+), 49 deletions(-)
 
-diff --git a/arch/arm64/include/asm/static_call.h b/arch/arm64/include/asm/static_call.h
-index b3489cac7742..02693b404afc 100644
---- a/arch/arm64/include/asm/static_call.h
-+++ b/arch/arm64/include/asm/static_call.h
-@@ -22,6 +22,10 @@
- 	    ".type " name ", @function				\n"	\
- 	    ".size " name ", . - " name "			\n")
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index d096b04bf80e..c94537501091 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -995,7 +995,7 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 	if (cpuc->txn_flags & PERF_PMU_TXN_ADD)
+ 		n0 -= cpuc->n_txn;
  
-+#define __ARCH_DEFINE_STATIC_CALL_NOP_CFI(name)			\
-+	GEN_CFI_SYM(STATIC_CALL_NOP_CFI(name));			\
-+	__ARCH_DEFINE_STATIC_CALL_CFI(STATIC_CALL_NOP_CFI_STR(name), "")
-+
- #define __ARCH_DEFINE_STATIC_CALL_RET0_CFI(name)			\
- 	GEN_CFI_SYM(STATIC_CALL_RET0_CFI(name));			\
- 	__ARCH_DEFINE_STATIC_CALL_CFI(STATIC_CALL_RET0_CFI_STR(name), "mov x0, xzr")
-diff --git a/arch/powerpc/include/asm/static_call.h b/arch/powerpc/include/asm/static_call.h
-index de1018cc522b..744435127574 100644
---- a/arch/powerpc/include/asm/static_call.h
-+++ b/arch/powerpc/include/asm/static_call.h
-@@ -23,7 +23,7 @@
- #define PPC_SCT_DATA		28		/* Offset of label 2 */
+-	static_call_cond(x86_pmu_start_scheduling)(cpuc);
++	static_call(x86_pmu_start_scheduling)(cpuc);
  
- #define ARCH_DEFINE_STATIC_CALL_TRAMP(name, func)	__PPC_SCT(name, "b " #func)
--#define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)	__PPC_SCT(name, "blr")
-+#define ARCH_DEFINE_STATIC_CALL_NOP_TRAMP(name)		__PPC_SCT(name, "blr")
- #define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)	__PPC_SCT(name, "b .+20")
- 
- #endif /* _ASM_POWERPC_STATIC_CALL_H */
-diff --git a/arch/powerpc/kernel/static_call.c b/arch/powerpc/kernel/static_call.c
-index 863a7aa24650..8bfe46654e01 100644
---- a/arch/powerpc/kernel/static_call.c
-+++ b/arch/powerpc/kernel/static_call.c
-@@ -8,6 +8,7 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
- {
- 	int err;
- 	bool is_ret0 = (func == __static_call_return0);
-+	bool is_nop = (func == __static_call_nop);
- 	unsigned long target = (unsigned long)(is_ret0 ? tramp + PPC_SCT_RET0 : func);
- 	bool is_short = is_offset_in_branch_range((long)target - (long)tramp);
- 
-@@ -16,13 +17,13 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
- 
- 	mutex_lock(&text_mutex);
- 
--	if (func && !is_short) {
-+	if (!is_nop && !is_short) {
- 		err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(target));
- 		if (err)
- 			goto out;
- 	}
- 
--	if (!func)
-+	if (is_nop)
- 		err = patch_instruction(tramp, ppc_inst(PPC_RAW_BLR()));
- 	else if (is_short)
- 		err = patch_branch(tramp, target, 0);
-diff --git a/arch/x86/include/asm/static_call.h b/arch/x86/include/asm/static_call.h
-index 14c6b1862e2e..afea6ceeed23 100644
---- a/arch/x86/include/asm/static_call.h
-+++ b/arch/x86/include/asm/static_call.h
-@@ -48,10 +48,10 @@
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, ".byte 0xe9; .long " #func " - (. + 4)")
- 
- #ifdef CONFIG_RETHUNK
--#define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
-+#define ARCH_DEFINE_STATIC_CALL_NOP_TRAMP(name)				\
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "jmp __x86_return_thunk")
- #else
--#define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
-+#define ARCH_DEFINE_STATIC_CALL_NOP_TRAMP(name)				\
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; int3; nop; nop; nop")
- #endif
- 
-diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
-index b70670a98597..27c095c7fc96 100644
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -89,7 +89,7 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
- 
- 	case JCC:
- 		if (!func) {
--			func = __static_call_return;
-+			func = __static_call_return; //FIXME use __static_call_nop()?
- 			if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
- 				func = x86_return_thunk;
- 		}
-@@ -139,33 +139,35 @@ static void __static_call_validate(u8 *insn, bool tail, bool tramp)
- 	BUG();
- }
- 
--static inline enum insn_type __sc_insn(bool null, bool tail)
-+static inline enum insn_type __sc_insn(bool nop, bool tail)
- {
- 	/*
- 	 * Encode the following table without branches:
- 	 *
--	 *	tail	null	insn
-+	 *	tail	nop	insn
- 	 *	-----+-------+------
- 	 *	  0  |   0   |  CALL
- 	 *	  0  |   1   |  NOP
- 	 *	  1  |   0   |  JMP
- 	 *	  1  |   1   |  RET
+ 	for (i = 0, wmin = X86_PMC_IDX_MAX, wmax = 0; i < n; i++) {
+ 		c = cpuc->event_constraint[i];
+@@ -1094,7 +1094,7 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
  	 */
--	return 2*tail + null;
-+	return 2*tail + nop;
+ 	if (!unsched && assign) {
+ 		for (i = 0; i < n; i++)
+-			static_call_cond(x86_pmu_commit_scheduling)(cpuc, i, assign[i]);
++			static_call(x86_pmu_commit_scheduling)(cpuc, i, assign[i]);
+ 	} else {
+ 		for (i = n0; i < n; i++) {
+ 			e = cpuc->event_list[i];
+@@ -1102,13 +1102,13 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 			/*
+ 			 * release events that failed scheduling
+ 			 */
+-			static_call_cond(x86_pmu_put_event_constraints)(cpuc, e);
++			static_call(x86_pmu_put_event_constraints)(cpuc, e);
+ 
+ 			cpuc->event_constraint[i] = NULL;
+ 		}
+ 	}
+ 
+-	static_call_cond(x86_pmu_stop_scheduling)(cpuc);
++	static_call(x86_pmu_stop_scheduling)(cpuc);
+ 
+ 	return unsched ? -EINVAL : 0;
+ }
+@@ -1221,7 +1221,7 @@ static inline void x86_assign_hw_event(struct perf_event *event,
+ 	hwc->last_cpu = smp_processor_id();
+ 	hwc->last_tag = ++cpuc->tags[i];
+ 
+-	static_call_cond(x86_pmu_assign)(event, idx);
++	static_call(x86_pmu_assign)(event, idx);
+ 
+ 	switch (hwc->idx) {
+ 	case INTEL_PMC_IDX_FIXED_BTS:
+@@ -1399,7 +1399,7 @@ int x86_perf_event_set_period(struct perf_event *event)
+ 	if (left > x86_pmu.max_period)
+ 		left = x86_pmu.max_period;
+ 
+-	static_call_cond(x86_pmu_limit_period)(event, &left);
++	static_call(x86_pmu_limit_period)(event, &left);
+ 
+ 	this_cpu_write(pmc_prev_left[idx], left);
+ 
+@@ -1487,7 +1487,7 @@ static int x86_pmu_add(struct perf_event *event, int flags)
+ 	 * This is before x86_pmu_enable() will call x86_pmu_start(),
+ 	 * so we enable LBRs before an event needs them etc..
+ 	 */
+-	static_call_cond(x86_pmu_add)(event);
++	static_call(x86_pmu_add)(event);
+ 
+ 	ret = 0;
+ out:
+@@ -1640,7 +1640,7 @@ static void x86_pmu_del(struct perf_event *event, int flags)
+ 	if (i >= cpuc->n_events - cpuc->n_added)
+ 		--cpuc->n_added;
+ 
+-	static_call_cond(x86_pmu_put_event_constraints)(cpuc, event);
++	static_call(x86_pmu_put_event_constraints)(cpuc, event);
+ 
+ 	/* Delete the array entry. */
+ 	while (++i < cpuc->n_events) {
+@@ -1660,7 +1660,7 @@ static void x86_pmu_del(struct perf_event *event, int flags)
+ 	 * This is after x86_pmu_stop(); so we disable LBRs after any
+ 	 * event can need them etc..
+ 	 */
+-	static_call_cond(x86_pmu_del)(event);
++	static_call(x86_pmu_del)(event);
  }
  
- void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
+ int x86_pmu_handle_irq(struct pt_regs *regs)
+@@ -2627,13 +2627,13 @@ static const struct attribute_group *x86_pmu_attr_groups[] = {
+ 
+ static void x86_pmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
  {
-+	bool nop = (func == __static_call_nop);
-+
- 	mutex_lock(&text_mutex);
+-	static_call_cond(x86_pmu_sched_task)(pmu_ctx, sched_in);
++	static_call(x86_pmu_sched_task)(pmu_ctx, sched_in);
+ }
  
- 	if (tramp) {
- 		__static_call_validate(tramp, true, true);
--		__static_call_transform(tramp, __sc_insn(!func, true), func, false);
-+		__static_call_transform(tramp, __sc_insn(nop, true), func, false);
+ static void x86_pmu_swap_task_ctx(struct perf_event_pmu_context *prev_epc,
+ 				  struct perf_event_pmu_context *next_epc)
+ {
+-	static_call_cond(x86_pmu_swap_task_ctx)(prev_epc, next_epc);
++	static_call(x86_pmu_swap_task_ctx)(prev_epc, next_epc);
+ }
+ 
+ void perf_check_microcode(void)
+@@ -2672,7 +2672,7 @@ static bool x86_pmu_filter(struct pmu *pmu, int cpu)
+ {
+ 	bool ret = false;
+ 
+-	static_call_cond(x86_pmu_filter)(pmu, cpu, &ret);
++	static_call(x86_pmu_filter)(pmu, cpu, &ret);
+ 
+ 	return ret;
+ }
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index 8dc345cc6318..2f0bfd910637 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -9,8 +9,7 @@ BUILD_BUG_ON(1)
+  * "static_call_update()" calls.
+  *
+  * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
+- * a NULL definition, for example if "static_call_cond()" will be used
+- * at the call sites.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
++ * a NULL definition.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
+  * to make a definition optional, but in this case the default will
+  * be __static_call_return0.
+  */
+diff --git a/arch/x86/include/asm/kvm-x86-pmu-ops.h b/arch/x86/include/asm/kvm-x86-pmu-ops.h
+index c17e3e96fc1d..6815319c4ff3 100644
+--- a/arch/x86/include/asm/kvm-x86-pmu-ops.h
++++ b/arch/x86/include/asm/kvm-x86-pmu-ops.h
+@@ -9,8 +9,7 @@ BUILD_BUG_ON(1)
+  * "static_call_update()" calls.
+  *
+  * KVM_X86_PMU_OP_OPTIONAL() can be used for those functions that can have
+- * a NULL definition, for example if "static_call_cond()" will be used
+- * at the call sites.
++ * a NULL definition.
+  */
+ KVM_X86_PMU_OP(hw_event_available)
+ KVM_X86_PMU_OP(pmc_is_enabled)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 808c292ad3f4..1dfba499d3e5 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -2172,12 +2172,12 @@ static inline bool kvm_irq_is_postable(struct kvm_lapic_irq *irq)
+ 
+ static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
+ {
+-	static_call_cond(kvm_x86_vcpu_blocking)(vcpu);
++	static_call(kvm_x86_vcpu_blocking)(vcpu);
+ }
+ 
+ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
+ {
+-	static_call_cond(kvm_x86_vcpu_unblocking)(vcpu);
++	static_call(kvm_x86_vcpu_unblocking)(vcpu);
+ }
+ 
+ static inline int kvm_cpu_get_apicid(int mps_cpu)
+diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
+index b2c397dd2bc6..4f9e090c9d42 100644
+--- a/arch/x86/kvm/irq.c
++++ b/arch/x86/kvm/irq.c
+@@ -155,7 +155,7 @@ void __kvm_migrate_timers(struct kvm_vcpu *vcpu)
+ {
+ 	__kvm_migrate_apic_timer(vcpu);
+ 	__kvm_migrate_pit_timer(vcpu);
+-	static_call_cond(kvm_x86_migrate_timers)(vcpu);
++	static_call(kvm_x86_migrate_timers)(vcpu);
+ }
+ 
+ bool kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args)
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index e542cf285b51..d5f7e829d975 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -681,8 +681,8 @@ static inline void apic_clear_irr(int vec, struct kvm_lapic *apic)
+ 	if (unlikely(apic->apicv_active)) {
+ 		/* need to update RVI */
+ 		kvm_lapic_clear_vector(vec, apic->regs + APIC_IRR);
+-		static_call_cond(kvm_x86_hwapic_irr_update)(apic->vcpu,
+-							    apic_find_highest_irr(apic));
++		static_call(kvm_x86_hwapic_irr_update)(apic->vcpu,
++						       apic_find_highest_irr(apic));
+ 	} else {
+ 		apic->irr_pending = false;
+ 		kvm_lapic_clear_vector(vec, apic->regs + APIC_IRR);
+@@ -708,7 +708,7 @@ static inline void apic_set_isr(int vec, struct kvm_lapic *apic)
+ 	 * just set SVI.
+ 	 */
+ 	if (unlikely(apic->apicv_active))
+-		static_call_cond(kvm_x86_hwapic_isr_update)(vec);
++		static_call(kvm_x86_hwapic_isr_update)(vec);
+ 	else {
+ 		++apic->isr_count;
+ 		BUG_ON(apic->isr_count > MAX_APIC_VECTOR);
+@@ -753,7 +753,7 @@ static inline void apic_clear_isr(int vec, struct kvm_lapic *apic)
+ 	 * and must be left alone.
+ 	 */
+ 	if (unlikely(apic->apicv_active))
+-		static_call_cond(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
++		static_call(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
+ 	else {
+ 		--apic->isr_count;
+ 		BUG_ON(apic->isr_count < 0);
+@@ -2519,7 +2519,7 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+ 
+ 	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
+ 		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
+-		static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
++		static_call(kvm_x86_set_virtual_apic_mode)(vcpu);
  	}
  
- 	if (IS_ENABLED(CONFIG_HAVE_STATIC_CALL_INLINE) && site) {
- 		__static_call_validate(site, tail, false);
--		__static_call_transform(site, __sc_insn(!func, tail), func, false);
-+		__static_call_transform(site, __sc_insn(nop, tail), func, false);
+ 	apic->base_address = apic->vcpu->arch.apic_base &
+@@ -2682,9 +2682,9 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 	vcpu->arch.pv_eoi.msr_val = 0;
+ 	apic_update_ppr(apic);
+ 	if (apic->apicv_active) {
+-		static_call_cond(kvm_x86_apicv_post_state_restore)(vcpu);
+-		static_call_cond(kvm_x86_hwapic_irr_update)(vcpu, -1);
+-		static_call_cond(kvm_x86_hwapic_isr_update)(-1);
++		static_call(kvm_x86_apicv_post_state_restore)(vcpu);
++		static_call(kvm_x86_hwapic_irr_update)(vcpu, -1);
++		static_call(kvm_x86_hwapic_isr_update)(-1);
  	}
  
- 	mutex_unlock(&text_mutex);
+ 	vcpu->arch.apic_arb_prio = 0;
+@@ -2961,9 +2961,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+ 	kvm_lapic_set_reg(apic, APIC_TMCCT, 0);
+ 	kvm_apic_update_apicv(vcpu);
+ 	if (apic->apicv_active) {
+-		static_call_cond(kvm_x86_apicv_post_state_restore)(vcpu);
+-		static_call_cond(kvm_x86_hwapic_irr_update)(vcpu, apic_find_highest_irr(apic));
+-		static_call_cond(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
++		static_call(kvm_x86_apicv_post_state_restore)(vcpu);
++		static_call(kvm_x86_hwapic_irr_update)(vcpu, apic_find_highest_irr(apic));
++		static_call(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
+ 	}
+ 	kvm_make_request(KVM_REQ_EVENT, vcpu);
+ 	if (ioapic_in_kernel(vcpu->kvm))
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 612e6c70ce2e..6accb46295a3 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -552,7 +552,7 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+ void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
+ {
+ 	if (lapic_in_kernel(vcpu)) {
+-		static_call_cond(kvm_x86_pmu_deliver_pmi)(vcpu);
++		static_call(kvm_x86_pmu_deliver_pmi)(vcpu);
+ 		kvm_apic_local_deliver(vcpu->arch.apic, APIC_LVTPC);
+ 	}
+ }
+@@ -632,7 +632,7 @@ void kvm_pmu_cleanup(struct kvm_vcpu *vcpu)
+ 			pmc_stop_counter(pmc);
+ 	}
+ 
+-	static_call_cond(kvm_x86_pmu_cleanup)(vcpu);
++	static_call(kvm_x86_pmu_cleanup)(vcpu);
+ 
+ 	bitmap_zero(pmu->pmc_in_use, X86_PMC_IDX_MAX);
+ }
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 7713420abab0..fcf845fc5770 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4845,7 +4845,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+ static int kvm_vcpu_ioctl_get_lapic(struct kvm_vcpu *vcpu,
+ 				    struct kvm_lapic_state *s)
+ {
+-	static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
++	static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+ 
+ 	return kvm_apic_get_state(vcpu, s);
+ }
+@@ -8948,7 +8948,7 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 			kvm_rip_write(vcpu, ctxt->eip);
+ 			if (r && (ctxt->tf || (vcpu->guest_debug & KVM_GUESTDBG_SINGLESTEP)))
+ 				r = kvm_vcpu_do_singlestep(vcpu);
+-			static_call_cond(kvm_x86_update_emulated_instruction)(vcpu);
++			static_call(kvm_x86_update_emulated_instruction)(vcpu);
+ 			__kvm_set_rflags(vcpu, ctxt->eflags);
+ 		}
+ 
+@@ -10307,7 +10307,7 @@ static void vcpu_scan_ioapic(struct kvm_vcpu *vcpu)
+ 	if (irqchip_split(vcpu->kvm))
+ 		kvm_scan_ioapic_routes(vcpu, vcpu->arch.ioapic_handled_vectors);
+ 	else {
+-		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
++		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+ 		if (ioapic_in_kernel(vcpu->kvm))
+ 			kvm_ioapic_scan_entry(vcpu, vcpu->arch.ioapic_handled_vectors);
+ 	}
+@@ -10329,11 +10329,11 @@ static void vcpu_load_eoi_exitmap(struct kvm_vcpu *vcpu)
+ 		bitmap_or((ulong *)eoi_exit_bitmap,
+ 			  vcpu->arch.ioapic_handled_vectors,
+ 			  to_hv_synic(vcpu)->vec_bitmap, 256);
+-		static_call_cond(kvm_x86_load_eoi_exitmap)(vcpu, eoi_exit_bitmap);
++		static_call(kvm_x86_load_eoi_exitmap)(vcpu, eoi_exit_bitmap);
+ 		return;
+ 	}
+ 
+-	static_call_cond(kvm_x86_load_eoi_exitmap)(
++	static_call(kvm_x86_load_eoi_exitmap)(
+ 		vcpu, (u64 *)vcpu->arch.ioapic_handled_vectors);
+ }
+ 
+@@ -10353,7 +10353,7 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+ 
+ void kvm_arch_guest_memory_reclaimed(struct kvm *kvm)
+ {
+-	static_call_cond(kvm_x86_guest_memory_reclaimed)(kvm);
++	static_call(kvm_x86_guest_memory_reclaimed)(kvm);
+ }
+ 
+ static void kvm_vcpu_reload_apic_access_page(struct kvm_vcpu *vcpu)
+@@ -10361,7 +10361,7 @@ static void kvm_vcpu_reload_apic_access_page(struct kvm_vcpu *vcpu)
+ 	if (!lapic_in_kernel(vcpu))
+ 		return;
+ 
+-	static_call_cond(kvm_x86_set_apic_access_page_addr)(vcpu);
++	static_call(kvm_x86_set_apic_access_page_addr)(vcpu);
+ }
+ 
+ void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu)
+@@ -10603,7 +10603,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 	 * i.e. they can post interrupts even if APICv is temporarily disabled.
+ 	 */
+ 	if (kvm_lapic_enabled(vcpu))
+-		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
++		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+ 
+ 	if (kvm_vcpu_exit_request(vcpu)) {
+ 		vcpu->mode = OUTSIDE_GUEST_MODE;
+@@ -10654,7 +10654,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 			break;
+ 
+ 		if (kvm_lapic_enabled(vcpu))
+-			static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
++			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+ 
+ 		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
+ 			exit_fastpath = EXIT_FASTPATH_EXIT_HANDLED;
+@@ -11392,7 +11392,7 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+ 	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+ 	vcpu->arch.cr3 = sregs->cr3;
+ 	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
+-	static_call_cond(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
++	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
+ 
+ 	kvm_set_cr8(vcpu, sregs->cr8);
+ 
+@@ -12361,7 +12361,7 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+ 		mutex_unlock(&kvm->slots_lock);
+ 	}
+ 	kvm_unload_vcpu_mmus(kvm);
+-	static_call_cond(kvm_x86_vm_destroy)(kvm);
++	static_call(kvm_x86_vm_destroy)(kvm);
+ 	kvm_free_msr_filter(srcu_dereference_check(kvm->arch.msr_filter, &kvm->srcu, 1));
+ 	kvm_pic_destroy(kvm);
+ 	kvm_ioapic_destroy(kvm);
+@@ -13049,7 +13049,7 @@ bool kvm_arch_can_dequeue_async_page_present(struct kvm_vcpu *vcpu)
+ void kvm_arch_start_assignment(struct kvm *kvm)
+ {
+ 	if (atomic_inc_return(&kvm->arch.assigned_device_count) == 1)
+-		static_call_cond(kvm_x86_pi_start_assignment)(kvm);
++		static_call(kvm_x86_pi_start_assignment)(kvm);
+ }
+ EXPORT_SYMBOL_GPL(kvm_arch_start_assignment);
+ 
 diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 50ad928afeb8..65ac01179993 100644
+index 65ac01179993..d5254107ccf4 100644
 --- a/include/linux/static_call.h
 +++ b/include/linux/static_call.h
-@@ -66,24 +66,16 @@
+@@ -22,7 +22,6 @@
+  *   __static_call_return0;
   *
-  * Notes on NULL function pointers:
+  *   static_call(name)(args...);
+- *   static_call_cond(name)(args...);
+  *   static_call_ro(name)(args...);
+  *   static_call_update(name, func);
+  *   static_call_query(name);
+@@ -92,7 +91,7 @@
   *
-- *   Static_call()s support NULL functions, with many of the caveats that
-- *   regular function pointers have.
-+ *   A static_call() to a NULL function pointer is a NOP.
+  * DEFINE_STATIC_CALL_RET0 / __static_call_return0:
   *
-- *   Clearly calling a NULL function pointer is 'BAD', so too for
-- *   static_call()s (although when HAVE_STATIC_CALL it might not be immediately
-- *   fatal). A NULL static_call can be the result of:
-+ *   A NULL static call can be the result of:
+- *   Just like how DEFINE_STATIC_CALL_NULL() / static_call_cond() optimize the
++ *   Just like how DEFINE_STATIC_CALL_NULL() optimizes the
+  *   conditional void function call, DEFINE_STATIC_CALL_RET0 /
+  *   __static_call_return0 optimize the do nothing return 0 function.
   *
-  *     DECLARE_STATIC_CALL_NULL(my_static_call, void (*)(int));
-  *
-- *   which is equivalent to declaring a NULL function pointer with just a
-- *   typename:
-- *
-- *     void (*my_func_ptr)(int arg1) = NULL;
-- *
-- *   or using static_call_update() with a NULL function. In both cases the
-- *   HAVE_STATIC_CALL implementation will patch the trampoline with a RET
-- *   instruction, instead of an immediate tail-call JMP. HAVE_STATIC_CALL_INLINE
-- *   architectures can patch the trampoline call to a NOP.
-+ *   or using static_call_update() with a NULL function pointer. In both cases
-+ *   the HAVE_STATIC_CALL implementation will patch the trampoline with a RET
-+*    instruction, instead of an immediate tail-call JMP. HAVE_STATIC_CALL_INLINE
-+*    architectures can patch the trampoline call to a NOP.
-  *
-  *   In all cases, any argument evaluation is unconditional. Unlike a regular
-  *   conditional function pointer call:
-@@ -91,14 +83,7 @@
-  *     if (my_func_ptr)
-  *         my_func_ptr(arg1)
-  *
-- *   where the argument evaludation also depends on the pointer value.
-- *
-- *   When calling a static_call that can be NULL, use:
-- *
-- *     static_call_cond(name)(arg1);
-- *
-- *   which will include the required value tests to avoid NULL-pointer
-- *   dereferences.
-+ *   where the argument evaluation also depends on the pointer value.
-  *
-  *   To query which function is currently set to be called, use:
-  *
-@@ -147,6 +132,7 @@ struct static_call_key {
- #endif
- };
- 
-+extern void __static_call_nop(void);
- extern long __static_call_return0(void);
- 
- #define DECLARE_STATIC_CALL(name, func)					\
-@@ -166,8 +152,8 @@ extern long __static_call_return0(void);
- 	__DEFINE_STATIC_CALL_TRAMP(name, func)
- 
- #define DEFINE_STATIC_CALL_NULL(name, type)				\
--	__DEFINE_STATIC_CALL(name, type, NULL);				\
--	__DEFINE_STATIC_CALL_NULL_TRAMP(name)
-+	__DEFINE_STATIC_CALL(name, type, __STATIC_CALL_NOP(name));	\
-+	__DEFINE_STATIC_CALL_NOP_TRAMP(name)
- 
- #define DEFINE_STATIC_CALL_RET0(name, type)				\
- 	__DEFINE_STATIC_CALL(name, type, __STATIC_CALL_RET0(name));	\
-@@ -212,7 +198,7 @@ extern long __static_call_return0(void);
+@@ -198,8 +197,6 @@ extern long __static_call_return0(void);
  	__static_call(name);						\
  })
  
--#define static_call_cond(name)		(void)__static_call_cond(name)
-+#define static_call_cond(name)		(void)static_call(name)
- 
+-#define static_call_cond(name)		(void)static_call(name)
+-
  /* Use static_call_ro() to call a read-only-exported static call. */
  #define static_call_ro(name)		__static_call_ro(name)
-@@ -228,7 +214,9 @@ extern long __static_call_return0(void);
- #define static_call_update(name, func)					\
- ({									\
- 	typeof(&STATIC_CALL_TRAMP(name)) __F = (func);			\
--	if (__F == (void *)__static_call_return0)			\
-+	if (!__F)							\
-+		__F = __STATIC_CALL_NOP(name);				\
-+	else if (__F == (void *)__static_call_return0)			\
- 		__F = __STATIC_CALL_RET0(name);				\
- 	__static_call_update(&STATIC_CALL_KEY(name),			\
- 			     STATIC_CALL_TRAMP_ADDR(name), __F);	\
-@@ -237,7 +225,9 @@ extern long __static_call_return0(void);
- #define static_call_query(name)						\
- ({									\
- 	void *__F = (READ_ONCE(STATIC_CALL_KEY(name).func));		\
--	if (__F == __STATIC_CALL_RET0(name))			\
-+	if (__F == __STATIC_CALL_NOP(name))				\
-+		__F = NULL;						\
-+	else if (__F == __STATIC_CALL_RET0(name))			\
- 		__F = __static_call_return0;				\
- 	__F;								\
- })
-@@ -249,8 +239,8 @@ extern long __static_call_return0(void);
- #define __DEFINE_STATIC_CALL_TRAMP(name, func)				\
- 	ARCH_DEFINE_STATIC_CALL_TRAMP(name, func)
  
--#define __DEFINE_STATIC_CALL_NULL_TRAMP(name)				\
--	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
-+#define __DEFINE_STATIC_CALL_NOP_TRAMP(name)				\
-+	ARCH_DEFINE_STATIC_CALL_NOP_TRAMP(name)
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index c6fc50d67214..b7920482ebcb 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -388,7 +388,7 @@ static int __init init_trusted(void)
  
- #define __DEFINE_STATIC_CALL_RET0_TRAMP(name)				\
- 	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
-@@ -262,7 +252,6 @@ extern long __static_call_return0(void);
- 	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
- 
- #define __static_call(name)		(&STATIC_CALL_TRAMP(name))
--#define __static_call_cond		__static_call
- 
- #define STATIC_CALL_TRAMP_ADDR(name)	&STATIC_CALL_TRAMP(name)
- 
-@@ -276,7 +265,7 @@ extern void arch_static_call_transform(void *site, void *tramp, void *func, bool
- #else /* !CONFIG_HAVE_STATIC_CALL */
- 
- #define __DEFINE_STATIC_CALL_TRAMP(name, func)
--#define __DEFINE_STATIC_CALL_NULL_TRAMP(name)
-+#define __DEFINE_STATIC_CALL_NOP_TRAMP(name)
- #define __DEFINE_STATIC_CALL_RET0_TRAMP(name)
- #define __EXPORT_STATIC_CALL_TRAMP(name)
- #define __EXPORT_STATIC_CALL_TRAMP_GPL(name)
-@@ -284,27 +273,6 @@ extern void arch_static_call_transform(void *site, void *tramp, void *func, bool
- #define __static_call(name)						\
- 	((typeof(STATIC_CALL_TRAMP(name))*)(STATIC_CALL_KEY(name).func))
- 
--static inline void __static_call_nop(void) { }
--/*
-- * This horrific hack takes care of two things:
-- *
-- *  - it ensures the compiler will only load the function pointer ONCE,
-- *    which avoids a reload race.
-- *
-- *  - it ensures the argument evaluation is unconditional, similar
-- *    to the HAVE_STATIC_CALL variant.
-- *
-- * Sadly current GCC/Clang (10 for both) do not optimize this properly
-- * and will emit an indirect call for the NULL case :-(
-- */
--#define __static_call_cond(name)					\
--({									\
--	void *func = READ_ONCE(STATIC_CALL_KEY(name).func);		\
--	if (!func)							\
--		func = &__static_call_nop;				\
--	(typeof(STATIC_CALL_TRAMP(name))*)func;				\
--})
--
- #define STATIC_CALL_TRAMP_ADDR(name)	NULL
- 
- static inline
-@@ -343,22 +311,28 @@ static inline void static_call_force_reinit(void) {}
- 
- #include <asm/static_call.h>
- 
-+#define __STATIC_CALL_NOP(name)		STATIC_CALL_NOP_CFI(name)
- #define __STATIC_CALL_RET0(name)	STATIC_CALL_RET0_CFI(name)
- 
- #define __DECLARE_STATIC_CALL_CFI(name, func)				\
-+	extern typeof(func) STATIC_CALL_NOP_CFI(name);		\
- 	extern typeof(func) STATIC_CALL_RET0_CFI(name)
- 
- #define __DEFINE_STATIC_CALL_CFI(name)					\
-+	__ARCH_DEFINE_STATIC_CALL_NOP_CFI(name);			\
- 	__ARCH_DEFINE_STATIC_CALL_RET0_CFI(name)
- 
- #define __EXPORT_STATIC_CALL_CFI(name)					\
-+	EXPORT_SYMBOL(STATIC_CALL_NOP_CFI(name));			\
- 	EXPORT_SYMBOL(STATIC_CALL_RET0_CFI(name))
- 
- #define __EXPORT_STATIC_CALL_CFI_GPL(name)				\
-+	EXPORT_SYMBOL_GPL(STATIC_CALL_NOP_CFI(name));		\
- 	EXPORT_SYMBOL_GPL(STATIC_CALL_RET0_CFI(name))
- 
- #else /* ! CONFIG_CFI_WITHOUT_STATIC_CALL */
- 
-+#define __STATIC_CALL_NOP(name)		(void *)__static_call_nop
- #define __STATIC_CALL_RET0(name)	(void *)__static_call_return0
- 
- #define __DECLARE_STATIC_CALL_CFI(name, func)
-diff --git a/include/linux/static_call_types.h b/include/linux/static_call_types.h
-index 72732af51cba..2e2481c3f54e 100644
---- a/include/linux/static_call_types.h
-+++ b/include/linux/static_call_types.h
-@@ -22,6 +22,10 @@
- #define STATIC_CALL_TRAMP(name)		__PASTE(STATIC_CALL_TRAMP_PREFIX, name)
- #define STATIC_CALL_TRAMP_STR(name)	__stringify(STATIC_CALL_TRAMP(name))
- 
-+#define STATIC_CALL_NOP_CFI_PREFIX	__SCN__
-+#define STATIC_CALL_NOP_CFI(name)	__PASTE(STATIC_CALL_NOP_CFI_PREFIX, name)
-+#define STATIC_CALL_NOP_CFI_STR(name)	__stringify(STATIC_CALL_NOP_CFI(name))
-+
- #define STATIC_CALL_RET0_CFI_PREFIX	__SCR__
- #define STATIC_CALL_RET0_CFI(name)	__PASTE(STATIC_CALL_RET0_CFI_PREFIX, name)
- #define STATIC_CALL_RET0_CFI_STR(name)	__stringify(STATIC_CALL_RET0_CFI(name))
-diff --git a/kernel/static_call.c b/kernel/static_call.c
-index 090ecf5d34b4..20bf34bc3e2a 100644
---- a/kernel/static_call.c
-+++ b/kernel/static_call.c
-@@ -9,6 +9,11 @@ long __static_call_return0(void)
- }
- EXPORT_SYMBOL_GPL(__static_call_return0);
- 
-+void __static_call_nop(void)
-+{
-+}
-+EXPORT_SYMBOL_GPL(__static_call_nop);
-+
- #if defined(CONFIG_HAVE_STATIC_CALL) && !defined(CONFIG_HAVE_STATIC_CALL_INLINE)
- void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+ static void __exit cleanup_trusted(void)
  {
-diff --git a/tools/include/linux/static_call_types.h b/tools/include/linux/static_call_types.h
-index 72732af51cba..2e2481c3f54e 100644
---- a/tools/include/linux/static_call_types.h
-+++ b/tools/include/linux/static_call_types.h
-@@ -22,6 +22,10 @@
- #define STATIC_CALL_TRAMP(name)		__PASTE(STATIC_CALL_TRAMP_PREFIX, name)
- #define STATIC_CALL_TRAMP_STR(name)	__stringify(STATIC_CALL_TRAMP(name))
+-	static_call_cond(trusted_key_exit)();
++	static_call(trusted_key_exit)();
+ }
  
-+#define STATIC_CALL_NOP_CFI_PREFIX	__SCN__
-+#define STATIC_CALL_NOP_CFI(name)	__PASTE(STATIC_CALL_NOP_CFI_PREFIX, name)
-+#define STATIC_CALL_NOP_CFI_STR(name)	__stringify(STATIC_CALL_NOP_CFI(name))
-+
- #define STATIC_CALL_RET0_CFI_PREFIX	__SCR__
- #define STATIC_CALL_RET0_CFI(name)	__PASTE(STATIC_CALL_RET0_CFI_PREFIX, name)
- #define STATIC_CALL_RET0_CFI_STR(name)	__stringify(STATIC_CALL_RET0_CFI(name))
+ late_initcall(init_trusted);
 -- 
 2.39.2
 
