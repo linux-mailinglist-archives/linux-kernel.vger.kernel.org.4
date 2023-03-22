@@ -2,175 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841376C4320
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08546C4317
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCVGZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
+        id S229987AbjCVGYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCVGZ5 (ORCPT
+        with ESMTP id S229726AbjCVGYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:25:57 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5948153735
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:25:56 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso12339411wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679466355;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9XKHKg28SX/0LVxj0Ew+2k2WgxMDKd2HShHur6TSwk=;
-        b=pPrbd+fFtq6a4QHo3W9HNyj5LySYxI8tUZLf+eGbwSL7lElwFyOnyN5GGONrbUx4Qy
-         9h03XlQWRTpC+p996NXqzVLtXT74Q/ul632DgXkrPyrsAhCiFg/CUKxM8Tk+8twtSLH+
-         qqF+IW4IPtuU0al+bC4/WJlJcKsXIgaVGq1if1EIOcilM2k+7VJWijoei7DiJjraTUGh
-         HP2gnamk4+oWqbyL7iKHPeGpgkeU4KK8m1t1sAdUQfo4ha/zDiZsesRwSt1SMtNjckA3
-         XYOgPDobClf6yDnNCAXBDNF1CMD+D1lLCk7USCFEjsp7ZfnnVTzr835zk039qRoXEF2b
-         mCSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679466355;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z9XKHKg28SX/0LVxj0Ew+2k2WgxMDKd2HShHur6TSwk=;
-        b=prMoAlxgD+VpD52nf8K1YTBQs+ykpj3s2SY5olTLOCa+57ijMMYJAiRjCsuPLjzc/P
-         LUiqcHZe4evmK5zp37W5crTwJ4I1q5d2R5PP1SFbj34jh8ZBjpnSLESseM/75c7HygP9
-         pRIFhQPxOO4ss/fPNmkqU1n0fteTaKUoSIcXPhQ0bAeyFHMxCEg7M5zCkrvFrgwAsSxw
-         i4CxUsU5eQdMkb1kuWPP92wy3chlX98zHqz3bYqcp8SSxPIa849l2XPn7gR89yqvbasb
-         ulvjSutWJzg0XW3NemPM4h8vgRSlTGMqDOK4ivwUmzRGcLK/f7IaZWgTHeZXUJ1rLQlG
-         944A==
-X-Gm-Message-State: AO0yUKV8HmWoMJf3HPD47L/kYboTQa8PeG+4qmWCw3FRc1zv+j3tvS7M
-        9QEUVSh+f+qwUsf4zWZhgMs=
-X-Google-Smtp-Source: AK7set/GgXqF/frcQXZ1HiDYhZtDGcAsnFpYy16NV+2VdNP+1Cb9XKHo9VcdXRSfyCahR33ZNG++dw==
-X-Received: by 2002:a1c:7311:0:b0:3ea:d611:f8 with SMTP id d17-20020a1c7311000000b003ead61100f8mr4670082wmb.38.1679466354645;
-        Tue, 21 Mar 2023 23:25:54 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id m21-20020a7bca55000000b003ee697ecefdsm275772wml.45.2023.03.21.23.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 23:25:53 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 06:23:43 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
-Subject: Re: [PATCH v2 2/4] mm/mmap/vma_merge: set next to NULL if not
- applicable
-Message-ID: <467b6158-5c91-4c95-b05b-ea9331f7f563@lucifer.local>
-References: <cover.1679431180.git.lstoakes@gmail.com>
- <3506997a8146a287ec13ee7a53cf916707537bf8.1679431180.git.lstoakes@gmail.com>
- <20230322014232.4iixbwn5urfo6t2y@revolver>
+        Wed, 22 Mar 2023 02:24:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C644FCFD;
+        Tue, 21 Mar 2023 23:24:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0563B818DC;
+        Wed, 22 Mar 2023 06:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E4BC433D2;
+        Wed, 22 Mar 2023 06:24:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679466244;
+        bh=cQj5ND6NQ+jRWxCbfQwoB4SOr8K6z0BISCctoUKWGVU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P4g55mQ4GpArph+pkS+DQ31CizcD7NV2GqC7nU+0eZFeZsNlVkpLotPVaeLBhc+ZJ
+         t0hji+++80ENIgmcqns5g37vfI9HzF5YEW9X9LvxWCsL3icilIPJHIHHwkLzyG/GnP
+         U34qvhk4vbbvHm50Y/wMjbElLuC0H1bnj3bNVYxbS0zqdm4sxEdzPUeR6gTHwRbGio
+         Au29QAEj9fggf14xN984GN2wQ9la2m+2W3YMVEsuGmZZxhyhFNaJhW0ParEpy5jujz
+         E7qP1r8C0s5SZlPnZ5rJIis+nSZ5Opxv287UZRMNchX9ZeZaXj80SNxAEhnGgt42B/
+         9sqEy/CaHWgzQ==
+Date:   Wed, 22 Mar 2023 08:23:51 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2] mm/page_alloc: Make deferred page init free pages in
+ MAX_ORDER blocks
+Message-ID: <ZBqe97HNpE/gpOX8@kernel.org>
+References: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322014232.4iixbwn5urfo6t2y@revolver>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:42:32PM -0400, Liam R. Howlett wrote:
-> * Lorenzo Stoakes <lstoakes@gmail.com> [230321 16:51]:
-> > We are only interested in next if end == next->vm_start (in which case we
-> > check to see if we can set merge_next), so perform this check alongside
-> > checking whether curr should be set.
-> >
-> > This groups all of the simple range checks together and establishes the
-> > invariant that, if prev, curr or next are non-NULL then their positions are
-> > as expected.
-> >
-> > This has no functional impact.
-> >
-> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > ---
-> >  mm/mmap.c | 25 ++++++++++++-------------
-> >  1 file changed, 12 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index c9834364ac98..6361baf75601 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -930,15 +930,15 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-> >  	if (vm_flags & VM_SPECIAL)
-> >  		return NULL;
-> >
-> > -	curr = find_vma(mm, prev ? prev->vm_end : 0);
-> > -	if (curr && curr->vm_end == end)		/* cases 6, 7, 8 */
-> > -		next = find_vma(mm, curr->vm_end);
-> > -	else
-> > -		next = curr;
-> > +	/* Does the input range span an existing VMA? (cases 5 - 8) */
-> > +	curr = find_vma_intersection(mm, prev ? prev->vm_end : 0, end);
-> >
-> > -	/* In cases 1 - 4 there's no CCCC vma */
-> > -	if (curr && end <= curr->vm_start)
-> > -		curr = NULL;
-> > +	if (curr && end == curr->vm_end)
-> > +		/* Is there is a VMA immediately adjacent (cases 6 - 8)? */
-> > +		next = vma_lookup(mm, curr->vm_end);
->
-> Since end == curr->vm_end, this lookup is the same as below so these two
-> statements can be combined.
+On Tue, Mar 21, 2023 at 03:24:15AM +0300, Kirill A. Shutemov wrote:
+> Normal page init path frees pages during the boot in MAX_ORDER chunks,
+> but deferred page init path does it in pageblock blocks.
+> 
+> Change deferred page init path to work in MAX_ORDER blocks.
+> 
+> For cases when MAX_ORDER is larger than pageblock, set migrate type to
+> MIGRATE_MOVABLE for all pageblocks covered by the page.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-I can't believe I didn't see this :) wood for the trees + a great example as to
-the benefit of code review.
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
->
-> I also think you may need to initialize next to null since it may not be
-> set for the 'cannot merge' case.
+> ---
+> 
+> Note: the patch depends on the new definiton of MAX_ORDER.
+> 
+> v2:
+> 
+>  - Fix commit message;
+> 
+> ---
+>  include/linux/mmzone.h |  2 ++
+>  mm/page_alloc.c        | 19 ++++++++++---------
+>  2 files changed, 12 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 96599cb9eb62..f53fe3a7ca45 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -32,6 +32,8 @@
+>  #endif
+>  #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+>  
+> +#define IS_MAX_ORDER_ALIGNED(pfn) IS_ALIGNED(pfn, MAX_ORDER_NR_PAGES)
+> +
+>  /*
+>   * PAGE_ALLOC_COSTLY_ORDER is the order at which allocations are deemed
+>   * costly to service.  That is between allocation orders which should
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 87d760236dba..fc02a243425d 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1875,9 +1875,10 @@ static void __init deferred_free_range(unsigned long pfn,
+>  	page = pfn_to_page(pfn);
+>  
+>  	/* Free a large naturally-aligned chunk if possible */
+> -	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
+> -		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+> -		__free_pages_core(page, pageblock_order);
+> +	if (nr_pages == MAX_ORDER_NR_PAGES && IS_MAX_ORDER_ALIGNED(pfn)) {
+> +		for (i = 0; i < nr_pages; i += pageblock_nr_pages)
+> +			set_pageblock_migratetype(page + i, MIGRATE_MOVABLE);
+> +		__free_pages_core(page, MAX_ORDER);
+>  		return;
+>  	}
+>  
+> @@ -1901,19 +1902,19 @@ static inline void __init pgdat_init_report_one_done(void)
+>  /*
+>   * Returns true if page needs to be initialized or freed to buddy allocator.
+>   *
+> - * We check if a current large page is valid by only checking the validity
+> + * We check if a current MAX_ORDER block is valid by only checking the validity
+>   * of the head pfn.
+>   */
+>  static inline bool __init deferred_pfn_valid(unsigned long pfn)
+>  {
+> -	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
+> +	if (IS_MAX_ORDER_ALIGNED(pfn) && !pfn_valid(pfn))
+>  		return false;
+>  	return true;
+>  }
+>  
+>  /*
+>   * Free pages to buddy allocator. Try to free aligned pages in
+> - * pageblock_nr_pages sizes.
+> + * MAX_ORDER_NR_PAGES sizes.
+>   */
+>  static void __init deferred_free_pages(unsigned long pfn,
+>  				       unsigned long end_pfn)
+> @@ -1924,7 +1925,7 @@ static void __init deferred_free_pages(unsigned long pfn,
+>  		if (!deferred_pfn_valid(pfn)) {
+>  			deferred_free_range(pfn - nr_free, nr_free);
+>  			nr_free = 0;
+> -		} else if (pageblock_aligned(pfn)) {
+> +		} else if (IS_MAX_ORDER_ALIGNED(pfn)) {
+>  			deferred_free_range(pfn - nr_free, nr_free);
+>  			nr_free = 1;
+>  		} else {
+> @@ -1937,7 +1938,7 @@ static void __init deferred_free_pages(unsigned long pfn,
+>  
+>  /*
+>   * Initialize struct pages.  We minimize pfn page lookups and scheduler checks
+> - * by performing it only once every pageblock_nr_pages.
+> + * by performing it only once every MAX_ORDER_NR_PAGES.
+>   * Return number of pages initialized.
+>   */
+>  static unsigned long  __init deferred_init_pages(struct zone *zone,
+> @@ -1953,7 +1954,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
+>  		if (!deferred_pfn_valid(pfn)) {
+>  			page = NULL;
+>  			continue;
+> -		} else if (!page || pageblock_aligned(pfn)) {
+> +		} else if (!page || IS_MAX_ORDER_ALIGNED(pfn)) {
+>  			page = pfn_to_page(pfn);
+>  		} else {
+>  			page++;
+> -- 
+> 2.39.2
+> 
 
-You're right, will fix.
-
->
-> Something like:
-> 	if ((!curr) ||		    /* case 1-4 */
-> 	     (end == curr->vm_end)) /* Case 6-8, adjacent vma */
-> 		next = vma_lookup(mm, end);
-> 	else
-> 		next = NULL
->
-
-This is really turning out to be quite nicely succinct now I think! Will do.
-
->
-> > +	else if (!curr)
-> > +		/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
-> > +		next = vma_lookup(mm, end);
->
-> Nit, can we have braces for comments that make the if/else look like
-> it's unguarded?
->
-
-Ack will fix in respin.
-
-> >
-> >  	/* verify some invariant that must be enforced by the caller */
-> >  	VM_WARN_ON(prev && addr <= prev->vm_start);
-> > @@ -959,11 +959,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-> >  		}
-> >  	}
-> >  	/* Can we merge the successor? */
-> > -	if (next && end == next->vm_start &&
-> > -			mpol_equal(policy, vma_policy(next)) &&
-> > -			can_vma_merge_before(next, vm_flags,
-> > -					     anon_vma, file, pgoff+pglen,
-> > -					     vm_userfaultfd_ctx, anon_name)) {
-> > +	if (next && mpol_equal(policy, vma_policy(next)) &&
-> > +	    can_vma_merge_before(next, vm_flags,
-> > +				 anon_vma, file, pgoff+pglen,
-> > +				 vm_userfaultfd_ctx, anon_name)) {
-> >  		merge_next = true;
-> >  	}
-> >
-> > --
-> > 2.39.2
-> >
+-- 
+Sincerely yours,
+Mike.
