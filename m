@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33416C5220
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AEF6C5224
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjCVRQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S229802AbjCVRRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjCVRQe (ORCPT
+        with ESMTP id S231531AbjCVRQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:16:34 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0AC637C3;
-        Wed, 22 Mar 2023 10:16:10 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id l14so11547460pfc.11;
-        Wed, 22 Mar 2023 10:16:10 -0700 (PDT)
+        Wed, 22 Mar 2023 13:16:44 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE2A66D3B;
+        Wed, 22 Mar 2023 10:16:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id j13so19137424pjd.1;
+        Wed, 22 Mar 2023 10:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505368;
+        d=gmail.com; s=20210112; t=1679505377;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Du2gZbCSXVQqxOtZS8hq0dQKJr+nACUyNNRAcUml5+k=;
-        b=RgPE0jTp0JRZH8DcWVA5RmODpy2pHSxJtZ7edzKBtuMTf0w1YAOckK/2YFJLY0lL1x
-         3UXgsvBF5DBh7FBHMA7TD1rkLCXvOEf87e+re0H7maYc/M7pvSFp0ZED9e/qBzVoMID1
-         4MXsYE8WStE6Ebig1fjM0g7S1H6inQwcboICRVcA6NueKORXeS2s2Uqkj0dLDybRDkte
-         HHHNvzmG0e0pCXwLIZ5GLNhmhPY5HSe2HAmg1OPguNGKuWYaziFU8ui2a2LQGt71A7h0
-         GpSy4d/Avh8COx9iKtbK8kvhiEcBKpdVFI21HdDzdNB1U6zo5bAL7Zgozgag8PskclWf
-         cfvA==
+        bh=P8/bCbySa6Y+JFGYtvp1Vp3ADJdTcdhTwLsnAC9TgiU=;
+        b=It5mOVay9GTCXNVQ2m5nIdFleNObXvjEHT0+bg9UolMHNwQeh/pxPTboG/gCXhArIR
+         xrOZOQes9jXubxtryfOpSHXMeBky+G5IbmGTpzgnIaF/THG/WSd7kyZnuo03aCSnDAw5
+         QBv4DQ+xXx/pnPynGxXi48crA4MVHfVfm2niLbu2RHXbNfrC61dQT6zE42iPyfaMolLm
+         P6tVSXL4d4wjxbQgTISTKowGytVGi8Z7d12riY+YsM5e6gjfi5gxobKqW5vXvHym/rU5
+         YK6QpwjgfH7X1icZsOIWsmvLhe4H91r6dJlRwzq9FMA0OfqEwnyDI9jtblzbPyjDSmuj
+         cx+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505368;
+        d=1e100.net; s=20210112; t=1679505377;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Du2gZbCSXVQqxOtZS8hq0dQKJr+nACUyNNRAcUml5+k=;
-        b=cC/1bgeuQoUd69W73pkjYcJFu/1vQinjZAsaKEc4I/nYVqhFqhDClEkyopICiCZROn
-         YS0GMk5IPF90hKVbavbE+Ml4bz68cGYBI9/jyDlWDt6Zb5bwGr8/zUBqMx6pvVe/OaRI
-         TiNXTLcrijeCCNqQT5zBaKXkWR0NLE0tOQ/hmicXyrjsEfIxaHBS1v6AgPHZeFEhZw4v
-         /GczYPXTqEIi/uSQ8ZfdCT3BHd86SM7XKElFPvey472npWN6WRgSEUVOdcWKAy9XdOem
-         8/WJYayT5j/mRFTkxMfM94UMIxN+ZcogwcL6gieU/vqk8YypdGRWxIJNMeHzSp+UyhWh
-         lolg==
-X-Gm-Message-State: AO0yUKVBPGBRqONBmNbcFyD1WFuXasFUG66QsTapQXa+FUydIIu2F8X6
-        1rx2ypfeE4Gq2rPurJRqu2Q=
-X-Google-Smtp-Source: AK7set+yVjp7rXBfNZ5QJ3BudfvvnBtue/CnsqKBVotLaCL7qd9dcr+RiYEm3UluY9tViaWgwoJEjA==
-X-Received: by 2002:aa7:958f:0:b0:626:7e73:2f44 with SMTP id z15-20020aa7958f000000b006267e732f44mr3296262pfj.9.1679505368430;
-        Wed, 22 Mar 2023 10:16:08 -0700 (PDT)
+        bh=P8/bCbySa6Y+JFGYtvp1Vp3ADJdTcdhTwLsnAC9TgiU=;
+        b=8Q7H6X+VQ7qov1ZitYLvnYjaVffTBLRqNKV2v+zVBP3pGV2ZzyGCJn/6Ws7sNysVFm
+         HzCzdT/d+jhSTITzrETT10UeHzE6B59R4sdBNYcxHGinFg7kbQPwBajPlolKF4rNP5ja
+         sQO0ZTuuA9R4COWSRBWgFqHvCyKdo3Ttl3JZDk1UG+qSUOSMo+D65DdH4cPiWcOUmIys
+         PAklaMSdHiiq6mcaVvym43hMVpRpQXofydGhnRCa/Jn+aW+uMsBaPHOF4rdF483D4SpD
+         69JAOAVK2c3hsY36S1xBRjPwKZf7SeeDkfefAcP+UYfPWe8wDZ1s/sTSwfmpJmtDmxGk
+         o5Gw==
+X-Gm-Message-State: AO0yUKXkCCbX53OSnJ2tn3cGXTjVRpD1wz2Q8EMlmWZG4yx6jji76lRA
+        1xrYdBkAxaSmOinVkWIHNYVuS3zKlQMBCw==
+X-Google-Smtp-Source: AK7set+3bEktTgqvQm+E4DjNEvKILeBPrbl8cAgaC2Pb/SKuM/UmQuURMwyGE4y3uz7gZMUwD30Zvw==
+X-Received: by 2002:a05:6a20:8b07:b0:d9:e45d:95d6 with SMTP id l7-20020a056a208b0700b000d9e45d95d6mr244831pzh.35.1679505377247;
+        Wed, 22 Mar 2023 10:16:17 -0700 (PDT)
 Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id b1-20020a6567c1000000b005023496e339sm10097353pgs.63.2023.03.22.10.16.04
+        by smtp.gmail.com with ESMTPSA id b1-20020a6567c1000000b005023496e339sm10097353pgs.63.2023.03.22.10.16.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:16:08 -0700 (PDT)
+        Wed, 22 Mar 2023 10:16:16 -0700 (PDT)
 From:   Jianhua Lu <lujianhua000@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v2 2/4] arm64: dts: qcom: sm8250-xiaomi-elish: Add mdss and dsi node
-Date:   Thu, 23 Mar 2023 01:15:53 +0800
-Message-Id: <20230322171555.2154-2-lujianhua000@gmail.com>
+Subject: [PATCH v2 3/4] arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add Xiaomi Mi Pad 5 Pro BOE variant
+Date:   Thu, 23 Mar 2023 01:15:54 +0800
+Message-Id: <20230322171555.2154-3-lujianhua000@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230322171555.2154-1-lujianhua000@gmail.com>
 References: <20230322171555.2154-1-lujianhua000@gmail.com>
@@ -78,114 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xiaomi-elish uses dual dsi mode panel and dsi phy type is cphy.
+Add support for the Xiaomi Mi Pad 5 Pro BOE variant. The BOE variant
+uses BOE Technology panel.
 
 Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 ---
 Changes in v2:
-  - Include missing <dt-bindings/phy/phy.h> for phy-type property.
+  - Get rid of sm8250-xiaomi-elish.dtb
 
- .../dts/qcom/sm8250-xiaomi-elish-common.dtsi  | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ arch/arm64/boot/dts/qcom/Makefile              |  1 +
+ .../boot/dts/qcom/sm8250-xiaomi-elish-boe.dts  | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-index a43d4b73ffca..4ff8454d4abe 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-@@ -5,6 +5,7 @@
- 
- #include <dt-bindings/arm/qcom,ids.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include <dt-bindings/phy/phy.h>
- #include "sm8250.dtsi"
- #include "pm8150.dtsi"
- #include "pm8150b.dtsi"
-@@ -469,6 +470,74 @@ &cdsp {
- 	status = "okay";
- };
- 
-+&dsi0 {
-+	vdda-supply = <&vreg_l9a_1p2>;
-+	qcom,dual-dsi-mode;
-+	qcom,master-dsi;
-+	qcom,sync-dual-dsi;
-+	status = "okay";
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 8d2b3c57a4a8..808f46947661 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -183,6 +183,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-hdk.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish-boe.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+new file mode 100644
+index 000000000000..8b2ae39950ff
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2023 Jianhua Lu <lujianhua000@gmail.com>
++ */
 +
-+	display_panel: panel@0 {
-+		reg = <0>;
-+		vddio-supply = <&vreg_l14a_1p88>;
-+		reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
-+		backlight = <&backlight>;
++/dts-v1/;
 +
-+		status = "disabled";
++#include "sm8250-xiaomi-elish-common.dtsi"
 +
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				panel_in_0: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+
-+			port@1{
-+				reg = <1>;
-+				panel_in_1: endpoint {
-+					remote-endpoint = <&dsi1_out>;
-+				};
-+			};
-+
-+		};
-+	};
++/ {
++	model = "Xiaomi Mi Pad 5 Pro (BOE)";
++	compatible = "xiaomi,elish", "qcom,sm8250";
 +};
 +
-+&dsi0_out {
-+	data-lanes = <0 1 2>;
-+	remote-endpoint = <&panel_in_0>;
-+};
-+
-+&dsi0_phy {
-+	vdds-supply = <&vreg_l5a_0p88>;
-+	phy-type = <PHY_TYPE_CPHY>;
++&display_panel {
++	compatible = "xiaomi,elish-boe-nt36523";
 +	status = "okay";
 +};
-+
-+&dsi1 {
-+	vdda-supply = <&vreg_l9a_1p2>;
-+	qcom,dual-dsi-mode;
-+	qcom,sync-dual-dsi;
-+	/* DSI1 is slave, so use DSI0 clocks */
-+	assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
-+	status = "okay";
-+};
-+
-+&dsi1_out {
-+	data-lanes = <0 1 2>;
-+	remote-endpoint = <&panel_in_1>;
-+};
-+
-+&dsi1_phy {
-+	vdds-supply = <&vreg_l5a_0p88>;
-+	phy-type = <PHY_TYPE_CPHY>;
-+	status = "okay";
-+};
-+
- &gmu {
- 	status = "okay";
- };
-@@ -533,6 +602,10 @@ fuel-gauge@55 {
- 	};
- };
- 
-+&mdss {
-+	status = "okay";
-+};
-+
- &pcie0 {
- 	status = "okay";
- };
 -- 
 2.39.2
 
