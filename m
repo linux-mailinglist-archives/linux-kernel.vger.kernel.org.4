@@ -2,173 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3456C4253
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B1D6C426B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCVFpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 01:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S229717AbjCVFzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 01:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVFpV (ORCPT
+        with ESMTP id S229476AbjCVFza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 01:45:21 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA151C87
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:45:19 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id z19so7898646plo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1679463918;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FUKAUL85Wxi4b4hEHbzNnUHiPyWHwr8K1HugEBDKlCY=;
-        b=7Bt9C3b0x5bzvZmhwOdMEbFaokkffe4BeXZf9spQfTQTV/uGRfGWzxbI/GZf40finz
-         nbuRFRh3BMXJFA4ovpUHWwzAAupSiH1FhEJg/nwoGXRajRt2G0yPnU8hITvBtYJLKBKY
-         izK/ScSuoSAa7JYCAiitB4zEtwwEjrtHf5yi+81KR/BQKw+Ft0qUmn1qB3Eja7xNsv4J
-         JV4g9eJuzou/iGVT6xRrU4NYAQqzvfFh8ILs5YoUzJJE++AM6yhGBryt1Y3JBgYqDBrF
-         CteDpmyE1uoN+P58dQRPiFc+q4A2mvehrJK/G0eHSOkkHqmkhnQVCzAKcROvwN9PgT7a
-         1N9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679463918;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FUKAUL85Wxi4b4hEHbzNnUHiPyWHwr8K1HugEBDKlCY=;
-        b=X7EA6j4tyaisZi+NylGKLli18fLzsxRd/oEFvPttfqVlOaaY0eVOZB6rdtlsL0wLhq
-         Jc8i4/FbSS10n2OUwOzaF68ymwj6lW/68Vsz6IP03xraZu2zDkgeMT+PWSAWRiUZui4Y
-         vBIOOXHJ/gx30KWe/fhb9XrEyhcDuKpifDPabffdZohYRuZOJsIcLWyWNlvMqnytCHfg
-         KmqYPA2jxXvRvFrZZhpK1X1xdyFtgaTFy2mXoIuTH7YGFP8/qrha5n9a4eRAW4JBJKnB
-         R1YBzv9JSuNSPFLlWXoBNtKNo507fwjhC605UzLZ2liVBcePaHaz6M5VNqnkemL+W8L1
-         N1ww==
-X-Gm-Message-State: AO0yUKXozgqexYc/HFS9aUu0gMEemtw/kAg9Ukp+nS6K0xmG3sffJfw0
-        DSud9/HZz02/H8VUjHeAkPWndg==
-X-Google-Smtp-Source: AK7set9hFoIwQ5Kio4YFlSmi5wONLtFpJp7xTQyWo86igN/jztcMv43XvZLZYd2HwBUUV7XaimRunw==
-X-Received: by 2002:a17:902:da8e:b0:19f:3b31:4d3 with SMTP id j14-20020a170902da8e00b0019f3b3104d3mr1666171plx.41.1679463918547;
-        Tue, 21 Mar 2023 22:45:18 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id s21-20020a170902b19500b00183c6784704sm7756487plr.291.2023.03.21.22.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 22:45:17 -0700 (PDT)
-Date:   Tue, 21 Mar 2023 22:45:17 -0700 (PDT)
-X-Google-Original-Date: Tue, 21 Mar 2023 22:45:08 PDT (-0700)
-Subject:     Re: [PATCH v2] riscv: mm: Fix incorrect ASID argument when flushing TLB
-In-Reply-To: <ZBkZnRG4FYqjGiLz@APC323>
-CC:     zongbox@gmail.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, guoren@kernel.org,
-        sergey.matyukevich@syntacore.com, aou@eecs.berkeley.edu,
-        Paul Walmsley <paul.walmsley@sifive.com>, x5710999x@gmail.com,
-        tim609@andestech.com, peterlin@andestech.com,
-        ycliang@andestech.com, Alistair Francis <Alistair.Francis@wdc.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     dylan@andestech.com
-Message-ID: <mhng-41e9d23d-0d17-4b38-ba7c-1f8369f157d7@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 22 Mar 2023 01:55:30 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507F43347B;
+        Tue, 21 Mar 2023 22:55:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VePWA1N_1679464521;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VePWA1N_1679464521)
+          by smtp.aliyun-inc.com;
+          Wed, 22 Mar 2023 13:55:25 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     damien.lemoal@opensource.wdc.com
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] pata_parport: Clean up some inconsistent indenting
+Date:   Wed, 22 Mar 2023 13:55:19 +0800
+Message-Id: <20230322055519.67900-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 19:42:37 PDT (-0700), dylan@andestech.com wrote:
-> On Tue, Mar 14, 2023 at 03:27:30PM +0800, Dylan Jhong wrote:
->> On Tue, Mar 14, 2023 at 10:22:43AM +0800, Zong Li wrote:
->> > Dylan Jhong <dylan@andestech.com> 於 2023年3月13日 週一 下午12:29寫道：
->> > >
->> > > Currently, we pass the CONTEXTID instead of the ASID to the TLB flush
->> > > function. We should only take the ASID field to prevent from touching
->> > > the reserved bit field.
->> > >
->> > > Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
->> > > Signed-off-by: Dylan Jhong <dylan@andestech.com>
->> > > ---
->> >
->> > Hi Dylan,
->> > Thanks for your patch, if I remember correctly, there was a patch from
->> > Alistair Francis did the similar fix. Perhaps we should track that
->> > patch to see why it doesn't be merged. Thanks.
->> >
->> > http://lists.infradead.org/pipermail/linux-riscv/2022-March/013558.html
->> >
->> Hi Zong,
->> Thanks for the reminder, I didn't notice that Alistair had sent the same patch before.
->>
->> Hi Palmer, Alistair
->> http://lists.infradead.org/pipermail/linux-riscv/2022-March/013597.html
->> This patch does not seem to be cherry-picked back to the released linux kernel,
->> and I have not seen the v4 patch. May I ask how is the follow-up progress of this patch?
+No functional modification involved.
 
-Sorry about that, I guess I left it kind of vague as to who was doing 
-what.  It looks like we've ended up with enough includes that v3 
-actually builds now, it's queued up and should end up in fixes tomorrow 
-morning.
+drivers/ata/pata_parport/comm.c:159 comm_write_block() warn: inconsistent indenting.
 
-Thanks!
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4587
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/ata/pata_parport/comm.c | 227 ++++++++++++++++----------------
+ 1 file changed, 116 insertions(+), 111 deletions(-)
 
->>
->> Best,
->> Dylan
->>
->
-> Hi Palmer,
->
-> Ping. Any update on this?
->
-> Best,
-> Dylan
->
->> > > Changes from v2:
->> > > - Remove unsued EXPORT_SYMBOL()
->> > > ---
->> > >  arch/riscv/include/asm/tlbflush.h | 2 ++
->> > >  arch/riscv/mm/context.c           | 2 +-
->> > >  arch/riscv/mm/tlbflush.c          | 2 +-
->> > >  3 files changed, 4 insertions(+), 2 deletions(-)
->> > >
->> > > diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
->> > > index 907b9efd39a8..597d6d8aec28 100644
->> > > --- a/arch/riscv/include/asm/tlbflush.h
->> > > +++ b/arch/riscv/include/asm/tlbflush.h
->> > > @@ -12,6 +12,8 @@
->> > >  #include <asm/errata_list.h>
->> > >
->> > >  #ifdef CONFIG_MMU
->> > > +extern unsigned long asid_mask;
->> > > +
->> > >  static inline void local_flush_tlb_all(void)
->> > >  {
->> > >         __asm__ __volatile__ ("sfence.vma" : : : "memory");
->> > > diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
->> > > index 80ce9caba8d2..6d1aeb063e81 100644
->> > > --- a/arch/riscv/mm/context.c
->> > > +++ b/arch/riscv/mm/context.c
->> > > @@ -22,7 +22,7 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
->> > >
->> > >  static unsigned long asid_bits;
->> > >  static unsigned long num_asids;
->> > > -static unsigned long asid_mask;
->> > > +unsigned long asid_mask;
->> > >
->> > >  static atomic_long_t current_version;
->> > >
->> > > diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
->> > > index ce7dfc81bb3f..ba4c27187c95 100644
->> > > --- a/arch/riscv/mm/tlbflush.c
->> > > +++ b/arch/riscv/mm/tlbflush.c
->> > > @@ -27,7 +27,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
->> > >         /* check if the tlbflush needs to be sent to other CPUs */
->> > >         broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
->> > >         if (static_branch_unlikely(&use_asid_allocator)) {
->> > > -               unsigned long asid = atomic_long_read(&mm->context.id);
->> > > +               unsigned long asid = atomic_long_read(&mm->context.id) & asid_mask;
->> > >
->> > >                 /*
->> > >                  * TLB will be immediately flushed on harts concurrently
->> > > --
->> > > 2.34.1
->> > >
+diff --git a/drivers/ata/pata_parport/comm.c b/drivers/ata/pata_parport/comm.c
+index 4c2f9ad60ad8..b474bda59323 100644
+--- a/drivers/ata/pata_parport/comm.c
++++ b/drivers/ata/pata_parport/comm.c
+@@ -1,12 +1,13 @@
+-/* 
+-        comm.c    (c) 1997-8  Grant R. Guenther <grant@torque.net>
+-                              Under the terms of the GNU General Public License.
+-
+-	comm.c is a low-level protocol driver for some older models
+-	of the DataStor "Commuter" parallel to IDE adapter.  Some of
+-	the parallel port devices marketed by Arista currently
+-	use this adapter.
+-*/
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * comm.c    (c) 1997-8  Grant R. Guenther <grant@torque.net>
++ *			 Under the terms of the GNU General Public License.
++ *
++ * comm.c is a low-level protocol driver for some older models
++ * of the DataStor "Commuter" parallel to IDE adapter.  Some of
++ * the parallel port devices marketed by Arista currently
++ * use this adapter.
++ */
+ 
+ #include <linux/module.h>
+ #include <linux/init.h>
+@@ -18,120 +19,126 @@
+ #include "pata_parport.h"
+ 
+ /* mode codes:  0  nybble reads, 8-bit writes
+-                1  8-bit reads and writes
+-                2  8-bit EPP mode
+-*/
++ *		1  8-bit reads and writes
++ *		2  8-bit EPP mode
++ */
+ 
+-#define j44(a,b)	(((a>>3)&0x0f)|((b<<1)&0xf0))
++#define j44(a, b)	(((a>>3)&0x0f)|((b<<1)&0xf0))
+ 
+-#define P1	w2(5);w2(0xd);w2(0xd);w2(5);w2(4);
+-#define P2	w2(5);w2(7);w2(7);w2(5);w2(4);
++#define P1	w2(5); w2(0xd); w2(0xd); w2(5); w2(4);
++#define P2	w2(5); w2(7); w2(7); w2(5); w2(4);
+ 
+-/* cont = 0 - access the IDE register file 
+-   cont = 1 - access the IDE command set 
+-*/
++/*
++ * cont = 0 - access the IDE register file
++ * cont = 1 - access the IDE command set
++ */
+ 
+ static int  cont_map[2] = { 0x08, 0x10 };
+ 
+ static int comm_read_regr(struct pi_adapter *pi, int cont, int regr)
++{
++	int l, h, r;
+ 
+-{       int     l, h, r;
+-
+-        r = regr + cont_map[cont];
++	r = regr + cont_map[cont];
+ 
+-        switch (pi->mode)  {
++	switch (pi->mode) {
+ 
+-        case 0: w0(r); P1; w0(0);
+-        	w2(6); l = r1(); w0(0x80); h = r1(); w2(4);
+-                return j44(l,h);
++	case 0: w0(r); P1; w0(0);
++		w2(6); l = r1(); w0(0x80); h = r1(); w2(4);
++		return j44(l, h);
+ 
+-        case 1: w0(r+0x20); P1; 
+-        	w0(0); w2(0x26); h = r0(); w2(4);
+-                return h;
++	case 1: w0(r+0x20); P1;
++		w0(0); w2(0x26); h = r0(); w2(4);
++		return h;
+ 
+ 	case 2:
+ 	case 3:
+-        case 4: w3(r+0x20); (void)r1();
+-        	w2(0x24); h = r4(); w2(4);
+-                return h;
++	case 4: w3(r+0x20); (void)r1();
++		w2(0x24); h = r4(); w2(4);
++		return h;
+ 
+-        }
+-        return -1;
+-}       
++	}
+ 
+-static void comm_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
++	return -1;
++}
+ 
+-{       int  r;
++static void comm_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
++{
++	int r;
+ 
+-        r = regr + cont_map[cont];
++	r = regr + cont_map[cont];
+ 
+-        switch (pi->mode)  {
++	switch (pi->mode) {
+ 
+-        case 0:
+-        case 1: w0(r); P1; w0(val); P2;
++	case 0:
++	case 1: w0(r); P1; w0(val); P2;
+ 		break;
+ 
+ 	case 2:
+ 	case 3:
+-        case 4: w3(r); (void)r1(); w4(val);
+-                break;
+-        }
++	case 4: w3(r); (void)r1(); w4(val);
++		break;
++	}
+ }
+ 
+ static void comm_connect(struct pi_adapter *pi)
+-
+-{       pi->saved_r0 = r0();
+-        pi->saved_r2 = r2();
+-        w2(4); w0(0xff); w2(6);
+-        w2(4); w0(0xaa); w2(6);
+-        w2(4); w0(0x00); w2(6);
+-        w2(4); w0(0x87); w2(6);
+-        w2(4); w0(0xe0); w2(0xc); w2(0xc); w2(4);
++{
++	pi->saved_r0 = r0();
++	pi->saved_r2 = r2();
++	w2(4); w0(0xff); w2(6);
++	w2(4); w0(0xaa); w2(6);
++	w2(4); w0(0x00); w2(6);
++	w2(4); w0(0x87); w2(6);
++	w2(4); w0(0xe0); w2(0xc); w2(0xc); w2(4);
+ }
+ 
+ static void comm_disconnect(struct pi_adapter *pi)
+-
+-{       w2(0); w2(0); w2(0); w2(4); 
++{
++	w2(0); w2(0); w2(0); w2(4);
+ 	w0(pi->saved_r0);
+-        w2(pi->saved_r2);
+-} 
++	w2(pi->saved_r2);
++}
+ 
+ static void comm_read_block(struct pi_adapter *pi, char *buf, int count)
+ 
+-{       int     i, l, h;
+-
+-        switch (pi->mode) {
+-        
+-        case 0: w0(0x48); P1;
+-                for(i=0;i<count;i++) {
+-                        w0(0); w2(6); l = r1();
+-                        w0(0x80); h = r1(); w2(4);
+-                        buf[i] = j44(l,h);
+-                }
+-                break;
+-
+-        case 1: w0(0x68); P1; w0(0);
+-                for(i=0;i<count;i++) {
+-                        w2(0x26); buf[i] = r0(); w2(0x24);
+-                }
++{       int i, l, h;
++
++	switch (pi->mode) {
++	case 0: w0(0x48); P1;
++		for (i = 0; i < count; i++) {
++			w0(0); w2(6); l = r1();
++			w0(0x80); h = r1(); w2(4);
++			buf[i] = j44(l, h);
++		}
++
++		break;
++	case 1: w0(0x68); P1; w0(0);
++		for (i = 0; i < count; i++) {
++			w2(0x26);
++			buf[i] = r0();
++			w2(0x24);
++		}
++
+ 		w2(4);
+ 		break;
+-		
+ 	case 2: w3(0x68); (void)r1(); w2(0x24);
+-		for (i=0;i<count;i++) buf[i] = r4();
++		for (i = 0; i < count; i++)
++			buf[i] = r4();
++
+ 		w2(4);
+ 		break;
++	case 3: w3(0x68); (void)r1(); w2(0x24);
++		for (i = 0; i < count/2; i++)
++			((u16 *)buf)[i] = r4w();
+ 
+-        case 3: w3(0x68); (void)r1(); w2(0x24);
+-                for (i=0;i<count/2;i++) ((u16 *)buf)[i] = r4w();
+-                w2(4);
+-                break;
++		w2(4);
++		break;
++	case 4: w3(0x68); (void)r1(); w2(0x24);
++		for (i = 0; i < count/4; i++)
++			((u32 *)buf)[i] = r4l();
+ 
+-        case 4: w3(0x68); (void)r1(); w2(0x24);
+-                for (i=0;i<count/4;i++) ((u32 *)buf)[i] = r4l();
+-                w2(4);
+-                break;
+-		
++		w2(4);
++		break;
+ 	}
+ }
+ 
+@@ -139,43 +146,41 @@ static void comm_read_block(struct pi_adapter *pi, char *buf, int count)
+ 
+ static void comm_write_block(struct pi_adapter *pi, char *buf, int count)
+ 
+-{       int	k;
++{
++	int k;
+ 
+-        switch (pi->mode) {
++	switch (pi->mode) {
++	case 0:
++	case 1: w0(0x68); P1;
++		for (k = 0; k < count; k++) {
++			w2(5);
++			w0(buf[k^1]);
++			w2(7);
++		}
+ 
+-        case 0:
+-        case 1: w0(0x68); P1;
+-        	for (k=0;k<count;k++) {
+-                        w2(5); w0(buf[k^1]); w2(7);
+-                }
+-                w2(5); w2(4);
+-                break;
+-
+-        case 2: w3(0x48); (void)r1();
+-                for (k=0;k<count;k++) w4(buf[k^1]);
+-                break;
+-
+-        case 3: w3(0x48); (void)r1();
+-		for (k = 0; k < count / 2; k++)
++		w2(5); w2(4);
++		break;
++	case 2: w3(0x48); (void)r1();
++		for (k = 0; k < count; k++)
++			w4(buf[k^1]);
++		break;
++	case 3: w3(0x48); (void)r1();
++		for (k = 0; k < count/2; k++)
+ 			w4w(swab16(((u16 *)buf)[k]));
+-                break;
+-
+-        case 4: w3(0x48); (void)r1();
+-		for (k = 0; k < count / 4; k++)
+-			w4l(swab16(((u16 *)buf)[2 * k]) |
+-			    swab16(((u16 *)buf)[2 * k + 1]) << 16);
+-                break;
+-
+-
+-        }
++		break;
++	case 4: w3(0x48); (void)r1();
++		for (k = 0; k < count/4; k++)
++			w4l(swab16(((u16 *)buf)[2 * k]) | swab16(((u16 *)buf)[2 * k + 1]) << 16);
++		break;
++	}
+ }
+ 
+ static void comm_log_adapter(struct pi_adapter *pi)
+-
+-{       char    *mode_string[5] = {"4-bit","8-bit","EPP-8","EPP-16","EPP-32"};
++{
++	char *mode_string[5] = {"4-bit", "8-bit", "EPP-8", "EPP-16", "EPP-32"};
+ 
+ 	dev_info(&pi->dev, "DataStor Commuter at 0x%x, mode %d (%s), delay %d\n",
+-		pi->port, pi->mode, mode_string[pi->mode], pi->delay);
++		 pi->port, pi->mode, mode_string[pi->mode], pi->delay);
+ }
+ 
+ static struct pi_protocol comm = {
+-- 
+2.20.1.7.g153144c
+
