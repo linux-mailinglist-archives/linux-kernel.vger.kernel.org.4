@@ -2,134 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586C16C53D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144916C53E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjCVSh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S229784AbjCVSmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjCVShx (ORCPT
+        with ESMTP id S229436AbjCVSmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:37:53 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BE165054
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:37:48 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3e390e23f83so16181cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 11:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679510267;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qEa8ZQqJY8c5a1eI+uTtPtBep6jdcYziCgq9THKTvCo=;
-        b=iaBltZp9qgru2Qr3xnojKVvwqTNKD1oPtsnZa8t+n6FSRhnJGOH5TcIWXWcKka995w
-         CMBwMzxyQl1qczGtBz+RjE3CvIWwXWJVXMUq2QWAD8+o7RmzsWK8jldL6jNLlrq4DgWG
-         shn0ET5yp2w2CodN/m9HhGBuAeQhBPhB2zS0heDVySNeQcFQn2K3y+C+DhDN1CtnlVd7
-         wHQ/fYSWSbz4XJRmyu/FJ3AQ6TVq3Gz2MS3KkYo8rH0SXQMMGT7uGtHPnPkh/wQX7I7n
-         o6Y9Nn40NoBRSjdBhP21GmzrCvXHZn/93Ujy+Zl4v4EpZF+8PRT2dkMG9xSvqJnlFvtL
-         75YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679510267;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qEa8ZQqJY8c5a1eI+uTtPtBep6jdcYziCgq9THKTvCo=;
-        b=kGkCQrz4tpFDy4CXJU86/Mm4LIjn6rHogR1OwLixFhScTNkLMh9h4nPoqACrg6KfS3
-         Kcd3iddmUqA2gLB8gKQs1QVeJxttWCBkN0oBjS8nO2RAiD5Gp7XYp9CxwVyjDKRd9raJ
-         jaF4gXFi42Pn6vwvWas+Gi8GHHgLJkuLApVsCortr2Wz0iJUEqRuUd7ZT5OOg+0e13cI
-         qadMv6oH+f9fQNb8f793cFverG0mpgseXqNtK98CL08gT021z8RvdXxQ9eGxWZONcmZO
-         8ENmP90FcWN7Za4xQmj/65JK4XiCA/8DHNCNyd/4Y2DqPxdMmQ84vAnJyRKYZKr/dEMU
-         K0OA==
-X-Gm-Message-State: AO0yUKW7pPnDo6ykvSoLHMmonQgMrzHd4WJBVJkty6rA5QURgNcqpMOV
-        4+N4XKVJ597l06BgW7ZQh11CllNNLolDdQTA5KB28kALmXNA+HqzjqDjLg==
-X-Google-Smtp-Source: AK7set8+MTulszs4pATd9dbsaBEA2GjVGj0CpFE+w5e7zQlI3EMpBbPUC3d6xZYXZOaX04NLlz87Jx3DafILCumhHVw=
-X-Received: by 2002:a05:622a:1a16:b0:3e3:7d41:719c with SMTP id
- f22-20020a05622a1a1600b003e37d41719cmr476728qtb.1.1679510267435; Wed, 22 Mar
- 2023 11:37:47 -0700 (PDT)
+        Wed, 22 Mar 2023 14:42:03 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD6E46142;
+        Wed, 22 Mar 2023 11:42:01 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C13FF5FD3E;
+        Wed, 22 Mar 2023 21:41:59 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679510519;
+        bh=FW8jr4pUz8iTbODmex7VnHAmCT1DPjH/4GpL+Pk/K5w=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=EMnTNapepoxBw+9De79Jnrf9xt9+Ww5heQcA1F5qDSdockR9CsAEwu66BsQf2iDRz
+         MNHQj7U1ms3SmdGmHdM1wzPXHc5eX9rerFMyi4VyEi+FWISJJXmKY3pLu9vdjJuRDC
+         7aXZqNvcezeBlnfGVHXMbTPm1lWg76sfamAr4sx4ScDzjdmYx/eOBZ/ncZxT1Knw0B
+         eqLekMEigPjBI4I8MQPCeliBtKQdmaYRaoG2qCCr64oLVeJjIFl8wqiAlQnbj244SC
+         aOlmPUfpKzVdygOJ5S6pv2ifzJli8NPRPcCpeJjasFvUmso3zGngbJzivzVaMnCUIC
+         U0t/iUw8QucIQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 22 Mar 2023 21:41:59 +0300 (MSK)
+Message-ID: <5651ac8a-db47-2462-e651-e5c6935847b9@sberdevices.ru>
+Date:   Wed, 22 Mar 2023 21:38:44 +0300
 MIME-Version: 1.0
-References: <20230317095025.49aa34f9@canb.auug.org.au> <20230322083956.5c051777@canb.auug.org.au>
-In-Reply-To: <20230322083956.5c051777@canb.auug.org.au>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 22 Mar 2023 11:37:31 -0700
-Message-ID: <CAP-5=fUHqrQWPjk7QJB=r2Gzj7z5X3nL4bRuBAKzy2HvdSAr-A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the perf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        namhyung@kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v4] virtio/vsock: allocate multiple skbuffs on tx
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru>
+ <20230322144115.sz3icgbnhjgae2fj@sgarzare-redhat>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230322144115.sz3icgbnhjgae2fj@sgarzare-redhat>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 14:20:00 #20991698
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 2:40=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> On Fri, 17 Mar 2023 09:50:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the perf tree, today's linux-next build (native perf)
-> > failed like this:
-> >
-> > Auto-detecting system features:
-> > ...                         clang-bpf-co-re: [  [32mon [m  ]
-> > ...                                    llvm: [  [31mOFF [m ]
-> > ...                                  libcap: [  [32mon [m  ]
-> > ...                                  libbfd: [  [32mon [m  ]
-> >
-> > make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux.h=
-'
-> > libbpf: failed to find '.BTF' ELF section in /boot/vmlinux-6.0.0-5-powe=
-rpc64le
-> > Error: failed to load BTF from /boot/vmlinux-6.0.0-5-powerpc64le: No da=
-ta available
-> > make[1]: *** [Makefile.perf:1075: /home/sfr/next/perf/util/bpf_skel/vml=
-inux.h] Error 195
-> > make[1]: *** Waiting for unfinished jobs....
-> > make: *** [Makefile.perf:236: sub-make] Error 2
-> > Command exited with non-zero status 2
-> >
-> > To be clear this is a native build of perf on a PPC64le host using this
-> > command line:
-> >
-> > make -C tools/perf -f Makefile.perf -s -O -j60 O=3D../perf EXTRA_CFLAGS=
-=3D-Wno-psabi
-> >
-> > (I could probably remove the EXTRA_CLFAGS now that I am building with
-> > gcc 12.2)
-> >
-> > I don't know which commit caused this.
-> >
-> > I have used the perf tree from next-20230316 for today.
->
-> I am still getting this build failure.
 
-Hi Stephen,
 
-The build failure is intentional as not having BPF skeleton support in
-the perf tool will remove features. I've just sent:
-https://lore.kernel.org/lkml/20230322183108.1380882-1-irogers@google.com/
-Which will recommend adding NO_BPF_SKEL=3D1 to your build options when
-this failure occurs. I didn't think a features test was appropriate
-for this as the feature test would basically replicate the vmlinux.h
-generation and I didn't want to move that support through the build
-system.
+On 22.03.2023 17:41, Stefano Garzarella wrote:
+> On Tue, Mar 21, 2023 at 06:03:14PM +0300, Arseniy Krasnov wrote:
+>> This adds small optimization for tx path: instead of allocating single
+>> skbuff on every call to transport, allocate multiple skbuff's until
+>> credit space allows, thus trying to send as much as possible data without
+>> return to af_vsock.c.
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>> Link to v1:
+>> https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
+>> Link to v2:
+>> https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
+>> Link to v3:
+>> https://lore.kernel.org/netdev/f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru/
+>>
+>> Changelog:
+>> v1 -> v2:
+>> - If sent something, return number of bytes sent (even in
+>>   case of error). Return error only if failed to sent first
+>>   skbuff.
+>>
+>> v2 -> v3:
+>> - Handle case when transport callback returns unexpected value which
+>>   is not equal to 'skb->len'. Break loop.
+>> - Don't check for zero value of 'rest_len' before calling
+>>   'virtio_transport_put_credit()'. Decided to add this check directly
+>>   to 'virtio_transport_put_credit()' in separate patch.
+>>
+>> v3 -> v4:
+>> - Use WARN_ONCE() to handle case when transport callback returns
+>>   unexpected value.
+>> - Remove useless 'ret = -EFAULT;' assignment for case above.
+>>
+>> net/vmw_vsock/virtio_transport_common.c | 59 +++++++++++++++++++------
+>> 1 file changed, 45 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> index 6564192e7f20..a300f25749ea 100644
+>> --- a/net/vmw_vsock/virtio_transport_common.c
+>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>     const struct virtio_transport *t_ops;
+>>     struct virtio_vsock_sock *vvs;
+>>     u32 pkt_len = info->pkt_len;
+>> -    struct sk_buff *skb;
+>> +    u32 rest_len;
+>> +    int ret;
+>>
+>>     info->type = virtio_transport_get_type(sk_vsock(vsk));
+>>
+>> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>
+>>     vvs = vsk->trans;
+>>
+>> -    /* we can send less than pkt_len bytes */
+>> -    if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+>> -        pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
+>> -
+>>     /* virtio_transport_get_credit might return less than pkt_len credit */
+>>     pkt_len = virtio_transport_get_credit(vvs, pkt_len);
+>>
+>> @@ -227,17 +224,51 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>>     if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
+>>         return pkt_len;
+>>
+>> -    skb = virtio_transport_alloc_skb(info, pkt_len,
+>> -                     src_cid, src_port,
+>> -                     dst_cid, dst_port);
+>> -    if (!skb) {
+>> -        virtio_transport_put_credit(vvs, pkt_len);
+>> -        return -ENOMEM;
+>> -    }
+>> +    ret = 0;
+> 
+> nit: this initialization seems superfluous since `ret` is
+> overwritten later ...
+> 
+>> +    rest_len = pkt_len;
+>> +
+>> +    do {
+>> +        struct sk_buff *skb;
+>> +        size_t skb_len;
+>> +
+>> +        skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
+>> +
+>> +        skb = virtio_transport_alloc_skb(info, skb_len,
+>> +                         src_cid, src_port,
+>> +                         dst_cid, dst_port);
+>> +        if (!skb) {
+>> +            ret = -ENOMEM;
+>> +            break;
+>> +        }
+>>
+>> -    virtio_transport_inc_tx_pkt(vvs, skb);
+>> +        virtio_transport_inc_tx_pkt(vvs, skb);
+>>
+>> -    return t_ops->send_pkt(skb);
+>> +        ret = t_ops->send_pkt(skb);
+> 
+> ... here.
+> 
+>> +
+> 
+> nit: we can remove this extra line
+> 
+>> +        if (ret < 0)
+>> +            break;
+>> +
+>> +        /* Both virtio and vhost 'send_pkt()' returns 'skb_len',
+>> +         * but for reliability use 'ret' instead of 'skb_len'.
+>> +         * Also if partial send happens (e.g. 'ret' != 'skb_len')
+>> +         * somehow, we break this loop, but account such returned
+>> +         * value in 'virtio_transport_put_credit()'.
+>> +         */
+>> +        rest_len -= ret;
+>> +
+>> +        if (WARN_ONCE(ret != skb_len,
+>> +                  "'send_pkt()' returns %i, but %zu expected\n",
+>> +                  ret, skb_len))
+>> +            break;
+>> +    } while (rest_len);
+>> +
+>> +    virtio_transport_put_credit(vvs, rest_len);
+>> +
+>> +    /* Return number of bytes, if any data has been sent. */
+>> +    if (rest_len != pkt_len)
+>> +        ret = pkt_len - rest_len;
+>> +
+>> +    return ret;
+>> }
+>>
+>> static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+>> -- 2.25.1
+>>
+> 
+> The patch LGTM:
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> Anyway, feel free to include in the same series or as separate patch
+> also the changes to avoid useless lock in virtio_transport_put_credit()
+> and virtio_transport_get_credit().
+> 
+> I would include it in this series, because before these changes, we
+> used to call virtio_transport_put_credit() only in the error path,
+> while now we always call it, even when rest_len is 0.
 
-Thanks,
-Ian
+Thanks for review, done!
+https://lore.kernel.org/netdev/f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru/
+Added it as second patch to the series
 
-> --
-> Cheers,
-> Stephen Rothwell
+Thanks, Arseniy
+> 
+> Thanks,
+> Stefano
+> 
