@@ -2,154 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EE06C412E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA8E6C415F
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 05:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjCVDkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S230305AbjCVEAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 00:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjCVDkb (ORCPT
+        with ESMTP id S230253AbjCVEA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:40:31 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9C85A6D5
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 20:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679456430; x=1710992430;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7oltbiDa+C99YUXbLVwjWGGyIggLLejPqDsKsg5dlbo=;
-  b=XjKViDN4CdOWF+50GVOpI8p4alll0Rn6ChntFs3dH2wfEwf/VZc8SSk9
-   F+T/2A3VpZlvU3MzYQCLUoTxNXqmlk0hKPJwm5zT2m4gHtBwzpyqhVsdj
-   0bsWn5jsYQK0Vi+fChskXeaSPTX4StGpfLDLBoQJzV0YoBUpOQ1Nnme5x
-   m6XHM5b0pkdjJuDi+G2AR+ApmpwE7AHXz0IfVjRUizqfNgGncXT73Nv51
-   arEyYilq9jzGXtKVqaWSnlJWqRPU9XEB5bfbiZJ7Q+e5kuInDeY2uvjAC
-   dKCq9XTfvM0iZP3z4gMdHPVzQks4xOgLNMDgxgXU+VJHicURj3Qn60K1f
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="404002940"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="404002940"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 20:40:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="792377975"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="792377975"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 20:40:27 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 2/2] soundwire: stream: uniquify dev_err() logs
-Date:   Wed, 22 Mar 2023 11:55:24 +0800
-Message-Id: <20230322035524.1509029-3-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230322035524.1509029-1-yung-chuan.liao@linux.intel.com>
-References: <20230322035524.1509029-1-yung-chuan.liao@linux.intel.com>
+        Wed, 22 Mar 2023 00:00:26 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96925474E7;
+        Tue, 21 Mar 2023 21:00:23 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PhF9t5Y8lz4f3mLm;
+        Wed, 22 Mar 2023 12:00:18 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgC3YiBSfRpkU+ZjFQ--.28641S4;
+        Wed, 22 Mar 2023 12:00:20 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     ming.lei@redhat.com, jack@suse.cz, hch@infradead.org,
+        axboe@kernel.dk, yukuai3@huawei.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH] block: don't set GD_NEED_PART_SCAN if scan partition failed
+Date:   Wed, 22 Mar 2023 11:59:26 +0800
+Message-Id: <20230322035926.1791317-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+References: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgC3YiBSfRpkU+ZjFQ--.28641S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur48Kw47JF1UWr1Dtw17Awb_yoW8uF4xpF
+        nxJa15KryDWr1fCa4jv3WxXa15Ja9rZryfJrW3G34IvwnxXanIyF92k3yDWF10qr93JrWD
+        ur15W34ruF1furDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        UdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-There are a couple of duplicate logs which makes harder than needed to
-follow the error flows. Add __func__ or make the log unique.
+Currently if disk_scan_partitions() failed, GD_NEED_PART_SCAN will still
+set, and partition scan will be proceed again when blkdev_get_by_dev()
+is called. However, this will cause a problem that re-assemble partitioned
+raid device will creat partition for underlying disk.
 
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Test procedure:
+
+mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+sgdisk -n 0:0:+100MiB /dev/md0
+blockdev --rereadpt /dev/sda
+blockdev --rereadpt /dev/sdb
+mdadm -S /dev/md0
+mdadm -A /dev/md0 /dev/sda /dev/sdb
+
+Test result: underlying disk partition and raid partition can be
+observed at the same time
+
+Note that this can still happen in come corner cases that
+GD_NEED_PART_SCAN can be set for underlying disk while re-assemble raid
+device.
+
+Fixes: e5cfefa97bcc ("block: fix scan partition for exclusively open device again")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/soundwire/stream.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ block/genhd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-index f903394ff2cf..c2191c07442b 100644
---- a/drivers/soundwire/stream.c
-+++ b/drivers/soundwire/stream.c
-@@ -1389,7 +1389,7 @@ static int _sdw_prepare_stream(struct sdw_stream_runtime *stream,
+diff --git a/block/genhd.c b/block/genhd.c
+index 08bb1a9ec22c..a72e27d6779d 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -368,7 +368,6 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+ 	if (disk->open_partitions)
+ 		return -EBUSY;
  
- 	ret = do_bank_switch(stream);
- 	if (ret < 0) {
--		pr_err("Bank switch failed: %d\n", ret);
-+		pr_err("%s: do_bank_switch failed: %d\n", __func__, ret);
- 		goto restore_params;
- 	}
- 
-@@ -1477,7 +1477,7 @@ static int _sdw_enable_stream(struct sdw_stream_runtime *stream)
- 		/* Program params */
- 		ret = sdw_program_params(bus, false);
- 		if (ret < 0) {
--			dev_err(bus->dev, "Program params failed: %d\n", ret);
-+			dev_err(bus->dev, "%s: Program params failed: %d\n", __func__, ret);
+-	set_bit(GD_NEED_PART_SCAN, &disk->state);
+ 	/*
+ 	 * If the device is opened exclusively by current thread already, it's
+ 	 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
+@@ -381,12 +380,19 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
  			return ret;
- 		}
- 
-@@ -1497,7 +1497,7 @@ static int _sdw_enable_stream(struct sdw_stream_runtime *stream)
- 
- 	ret = do_bank_switch(stream);
- 	if (ret < 0) {
--		pr_err("Bank switch failed: %d\n", ret);
-+		pr_err("%s: do_bank_switch failed: %d\n", __func__, ret);
- 		return ret;
  	}
  
-@@ -1567,14 +1567,14 @@ static int _sdw_disable_stream(struct sdw_stream_runtime *stream)
- 		/* Program params */
- 		ret = sdw_program_params(bus, false);
- 		if (ret < 0) {
--			dev_err(bus->dev, "Program params failed: %d\n", ret);
-+			dev_err(bus->dev, "%s: Program params failed: %d\n", __func__, ret);
- 			return ret;
- 		}
- 	}
++	set_bit(GD_NEED_PART_SCAN, &disk->state);
+ 	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL);
+ 	if (IS_ERR(bdev))
+ 		ret =  PTR_ERR(bdev);
+ 	else
+ 		blkdev_put(bdev, mode & ~FMODE_EXCL);
  
- 	ret = do_bank_switch(stream);
- 	if (ret < 0) {
--		pr_err("Bank switch failed: %d\n", ret);
-+		pr_err("%s: do_bank_switch failed: %d\n", __func__, ret);
- 		return ret;
- 	}
- 
-@@ -1664,7 +1664,7 @@ static int _sdw_deprepare_stream(struct sdw_stream_runtime *stream)
- 		/* Program params */
- 		ret = sdw_program_params(bus, false);
- 		if (ret < 0) {
--			dev_err(bus->dev, "Program params failed: %d\n", ret);
-+			dev_err(bus->dev, "%s: Program params failed: %d\n", __func__, ret);
- 			return ret;
- 		}
- 	}
-@@ -1893,7 +1893,8 @@ int sdw_stream_add_master(struct sdw_bus *bus,
- 
- 	m_rt = sdw_master_rt_alloc(bus, stream);
- 	if (!m_rt) {
--		dev_err(bus->dev, "Master runtime alloc failed for stream:%s\n", stream->name);
-+		dev_err(bus->dev, "%s: Master runtime alloc failed for stream:%s\n",
-+			__func__, stream->name);
- 		ret = -ENOMEM;
- 		goto unlock;
- 	}
-@@ -2012,7 +2013,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
- 	 */
- 	m_rt = sdw_master_rt_alloc(slave->bus, stream);
- 	if (!m_rt) {
--		dev_err(&slave->dev, "Master runtime alloc failed for stream:%s\n", stream->name);
-+		dev_err(&slave->dev, "%s: Master runtime alloc failed for stream:%s\n",
-+			__func__, stream->name);
- 		ret = -ENOMEM;
- 		goto unlock;
- 	}
++	/*
++	 * If blkdev_get_by_dev() failed early, GD_NEED_PART_SCAN is still set,
++	 * and this will cause that re-assemble partitioned raid device will
++	 * creat partition for underlying disk.
++	 */
++	clear_bit(GD_NEED_PART_SCAN, &disk->state);
+ 	if (!(mode & FMODE_EXCL))
+ 		bd_abort_claiming(disk->part0, disk_scan_partitions);
+ 	return ret;
 -- 
-2.25.1
+2.31.1
 
