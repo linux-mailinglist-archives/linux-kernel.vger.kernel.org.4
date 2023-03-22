@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3896C4D08
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761826C4D0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCVOIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        id S231299AbjCVOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjCVOIC (ORCPT
+        with ESMTP id S231332AbjCVOIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:08:02 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52238BBB1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:00 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5416b0ab0ecso340445157b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:00 -0700 (PDT)
+        Wed, 22 Mar 2023 10:08:18 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37351C83
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:11 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id jl13so12185372qvb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679494079;
+        d=google.com; s=20210112; t=1679494090;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4EakOMVvmjMrpb457OnFfYZClCBACmlWo/Bdwpmz3ho=;
-        b=Bq0nLj0I4jhCoeI2O/FcBp826/00O1M1O0TDmkYE5MBR1Yw2ZzBCSrh+slr/9y6MKk
-         WhLZHaDuSoJCTuKHwMclihwWBvyAwU7M3Z2xjWTSy4cuqGOAB1lJlwCS5qH4dMSxGZba
-         iUW76DCjYQLx7FJvnh0eB9Ie1EWVbMCzK/ke58iKlYlBzg4Zw/hk54ZOC7xPuZn2sLvE
-         IHEniGW2jl979RkJGqZrM6MN+MssrXP2j9d/4rcnilRJ6oGC4EgFNU1ZunF69PI3HMUy
-         h5BZxjPJ7ssMceCccT/j7Awzy//rHe8Nc+AtqZlsxX8tVJapXASBrrhjj7qE4SQ7MLXi
-         glUA==
+        bh=lvCFOq9fKW00r1IpstANHOSKK4Phqzk0S4NhhOp89zc=;
+        b=mu4jN/jQH85RkPCRcT6hRxvGoiz0PFJHwP1g/VQgtDQkTk5wUBxBkXYS3FEDPkjPRB
+         /487N3pC5jXT9Vz42AwictF4U9E0Ek3sVAhM6NiXYnObOR2EzEkda4YTucyO18pa8KYr
+         A82QZOK8rNYF5UW7MoPRg4KqV4xLsMFDzE6w9JEV94iWE43WUp0WNcrlBuM1HZoinmrY
+         ISj3SQFDtbdI1OdxwxMbnJGE3UPpqSjQUQFgL7aL7IYPwDnkDGZs9cKki2DfA0MMEkjL
+         WrHFvkxfcWbnDeRWcFsdkTzAx9qW8kXfhlYXPctOJu+q1XR3jPrTcYjE+UZAklpjl09B
+         8tzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679494079;
+        d=1e100.net; s=20210112; t=1679494090;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4EakOMVvmjMrpb457OnFfYZClCBACmlWo/Bdwpmz3ho=;
-        b=8AzcnuMbQOpIfSIZ4cb30fphr7FwnMXfBdi0lZJ1K3o1JEFbme3DmccCUI7RjjcjRM
-         3L/xBFqJCs/Mcl0XP8y+7cEAVOQRv0NNxvsWWl1Xb3gzb4ifBNEkXBZkpfRdcZzuIVZr
-         npNG7aCjYxr6M3oVKinUEGdQEKHuQrHDm9g/AAnk3IyjlHk8HotYfsETF4PoypvctSZK
-         xnvnme4FglDJxuhfgyRL2Lal1KPGE4MWfahm8ynx5SLiFDkgYlG5xb1Qmp29cIpyOONF
-         sgMG9/X5ymGtv5TAq82tAxvMz3ahJWIrPV87I/jR5D+YoyCYb/xE5cGTFZ/aOD1fWp+D
-         cJQw==
-X-Gm-Message-State: AAQBX9cvSNq4QHP9ZlqVz90SGtVOfl7lHKMyK9QAKcL1/yJT/x2FbF7y
-        B0VQJmQf7fCyneE/CVt0Z4A3ZF6tyjbQWUosaRaN
-X-Google-Smtp-Source: AKy350YJvYPmZdXNUJfmC7kxcMB9gDrOVe3l06Mal5Xkb0cXB7QE+r2GmVHGornORg0Jzt4IPVF/0t2Zye7NOAwla6I=
-X-Received: by 2002:a81:ac62:0:b0:541:7f7b:a2ff with SMTP id
- z34-20020a81ac62000000b005417f7ba2ffmr3075152ywj.8.1679494079305; Wed, 22 Mar
- 2023 07:07:59 -0700 (PDT)
+        bh=lvCFOq9fKW00r1IpstANHOSKK4Phqzk0S4NhhOp89zc=;
+        b=CAveqrIwa+MYg4B6m7E+hgCwCqvt50Zihyf5+0hc9XT8aY7Ge6xooR9anMpJmCbzfs
+         Or7tIsS3EwtjfLbzzbYi5eSA7XGn5CoWe4imV+TgzCJd3Vb2Rxd3PxDghzCNvueamtAY
+         m/L0dw2pH9nEypPbEXCCKj+ublV+Mi/AAmQk99SXB5YVZ9zzYdIMI+XM8ouT54S3b5zW
+         xws/X4wST+k0BHezh2MC00gG/NO/UbRQ6KJgA8e4PLUlvTcmjHDI/N96y1JZ0HZQ8FBi
+         k5xeAVXzLz/EKo7KftOkCAROCf5LU4ihtj+oXioHX3x9lsAmLFtKXvyJ961iSeWbd7NA
+         RhZQ==
+X-Gm-Message-State: AO0yUKUvwsR6kWdCIxLtxsHw9RWZd96AFb344d+syM6VI4fGv81KCrwH
+        UaeQTcNM7oxsI4uPK2hVCIBumvtgS3GMd+1AvYoy8w==
+X-Google-Smtp-Source: AK7set94uO8JOul1kgpX5ATBARFVd9wAjqSi2jIBiBUNgq4sOu1g2uq9mq41BCGoQwQ+YIG4wDLjzjmdW4YAEJNIZJA=
+X-Received: by 2002:a05:6214:5650:b0:56e:ac29:dc16 with SMTP id
+ mh16-20020a056214565000b0056eac29dc16mr739779qvb.9.1679494090188; Wed, 22 Mar
+ 2023 07:08:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yao51m9EXszPsxNN@redhat.com> <CAOQ4uxjk4piLyx67Ena-FfypDVWzRqVN0xmFUXXPYa+SC4Q-vQ@mail.gmail.com>
- <YapjNRrjpDu2a5qQ@redhat.com> <CAHC9VhQTUgBRBEz_wFX8daSA70nGJCJLXj8Yvcqr5+DHcfDmwA@mail.gmail.com>
- <CA+FmFJA-r+JgMqObNCvE_X+L6jxWtDrczM9Jh0L38Fq-6mnbbA@mail.gmail.com>
- <CAHC9VhRer7UWdZyizWO4VuxrgQDnLCOyj8LO7P6T5BGjd=s9zQ@mail.gmail.com>
- <CAHC9VhQkLSBGQ-F5Oi9p3G6L7Bf_jQMWAxug_G4bSOJ0_cYXxQ@mail.gmail.com>
- <CAOQ4uxhfU+LGunL3cweorPPdoCXCZU0xMtF=MekOAe-F-68t_Q@mail.gmail.com>
- <YitWOqzIRjnP1lok@redhat.com> <CAHC9VhQ+x3ko+=oU-P+w4ssqyyskRxaKsBGJLnXtP_NzWNuxHg@mail.gmail.com>
- <20230322072850.GA18056@suse.de> <CAOQ4uxgH905R1dkQy5=tuG4nnB-p2XUWcf91vvYbfu2DyftzPw@mail.gmail.com>
-In-Reply-To: <CAOQ4uxgH905R1dkQy5=tuG4nnB-p2XUWcf91vvYbfu2DyftzPw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 22 Mar 2023 10:07:48 -0400
-Message-ID: <CAHC9VhQMixtPrUmqBKrEWeT-BshyP35By71h-QSXj1zoJBba4A@mail.gmail.com>
-Subject: Re: [PATCH v19 0/4] overlayfs override_creds=off & nested get xattr fix
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Johannes Segitz <jsegitz@suse.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        David Anderson <dvander@google.com>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        John Stultz <john.stultz@linaro.org>,
-        linux-doc@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>, selinux@vger.kernel.org,
-        paulmoore@microsoft.com, luca.boccassi@microsoft.com
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-10-james.morse@arm.com>
+In-Reply-To: <20230320172620.18254-10-james.morse@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Wed, 22 Mar 2023 15:07:59 +0100
+Message-ID: <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
+Subject: Re: [PATCH v3 09/19] x86/resctrl: Queue mon_event_read() instead of
+ sending an IPI
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 8:48=E2=80=AFAM Amir Goldstein <amir73il@gmail.com>=
- wrote:
-> If the security guys are going to be in LSS in Vancouver, perhaps
-> we can have a meetup with overlayfs developers on the overlap
-> day with LSFMM (May 10) to try and figure out a path forward.
+Hi James,
 
-At the very least I currently plan to be at LSS-NA in Vancouver and
-would be very happy to discuss this with anyone who wants to talk
-about it.  I'm also happy to continue to conversation here too, for
-the sake of those who might not be able to travel to LSS-NA and/or
-LSFMM.
+On Mon, Mar 20, 2023 at 6:27=E2=80=AFPM James Morse <james.morse@arm.com> w=
+rote:
+>
+> x86 is blessed with an abundance of monitors, one per RMID, that can be
 
---=20
-paul-moore.com
+As I explained earlier, this is not the case on AMD.
+
+> read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
+> the number implemented is up to the manufacturer. This means when there a=
+re
+> fewer monitors than needed, they need to be allocated and freed.
+>
+> Worse, the domain may be broken up into slices, and the MMIO accesses
+> for each slice may need performing from different CPUs.
+>
+> These two details mean MPAMs monitor code needs to be able to sleep, and
+> IPI another CPU in the domain to read from a resource that has been slice=
+d.
+
+This doesn't sound very convincing. Could mon_event_read() IPI all the
+CPUs in the domain? (after waiting to allocate and install monitors
+when necessary?)
+
+
+>
+> mon_event_read() already invokes mon_event_count() via IPI, which means
+> this isn't possible. On systems using nohz-full, some CPUs need to be
+> interrupted to run kernel work as they otherwise stay in user-space
+> running realtime workloads. Interrupting these CPUs should be avoided,
+> and scheduling work on them may never complete.
+>
+> Change mon_event_read() to pick a housekeeping CPU, (one that is not usin=
+g
+> nohz_full) and schedule mon_event_count() and wait. If all the CPUs
+> in a domain are using nohz-full, then an IPI is used as the fallback.
+>
+> This function is only used in response to a user-space filesystem request
+> (not the timing sensitive overflow code).
+>
+> This allows MPAM to hide the slice behaviour from resctrl, and to keep
+> the monitor-allocation in monitor.c.
+
+This goal sounds more likely.
+
+If it makes the initial enablement smoother, then I'm all for it.
+
+Reviewed-By: Peter Newman <peternewman@google.com>
+
+These changes worked fine for me on tip/master, though there were merge
+conflicts to resolve.
+
+Tested-By: Peter Newman <peternewman@google.com>
+
+Thanks!
+
+-Peter
