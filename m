@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25286C3FE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9F16C3FCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCVBhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S229923AbjCVBef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjCVBhB (ORCPT
+        with ESMTP id S229788AbjCVBea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:37:01 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341EA574D5;
-        Tue, 21 Mar 2023 18:36:44 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id o14so7832781ioa.3;
-        Tue, 21 Mar 2023 18:36:44 -0700 (PDT)
+        Tue, 21 Mar 2023 21:34:30 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C42574C8
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:34:28 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b20so34011382edd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 18:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679448996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xnvFcWzQC9kp0s3Ad9+shbkiRajCq0VM9LtHb2VW5NE=;
-        b=iI/r7oZWPjB8fVKJxHIwCq0lhJMf7Au1DLZTtsnTwKYYgnnl26/qY+0JMi+AuQbLlS
-         qcNb1K+gXIf8FH/7nwdKnRRmsPAPankblFbcVUAo14uPI4ZI/CHZQTyIdsw2tdN0+qlG
-         XqRVcGYkDodvwGOw3dzt2sjHy4IiAgBySyktkFKh6wTMUdKssTdgK1O3H9UP49jnlKTe
-         cLqYrohnCTBpZgnr5QVp5eu0HpNvkbTz2ubxgL7j3nG6O6+mHkH1LDxhxFyylJnc1PEB
-         LvrnXmkuZhSS3LYjX7lXv2zHs51kbyqtBnyr4qpkIS0yxDRBRl1ihzMatJE8ufMQs8uD
-         d0KQ==
+        d=grsecurity.net; s=grsec; t=1679448867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b2CIvia+ysoMzgOq7ln7L4piO+fXsxlfLSknqU78fQ8=;
+        b=gy8eg4eVkf7F9R4PCvXL29F38RM8L3sYXPWVchx8ef7eDJrdvpoXqYzMdvoNa23Rws
+         0BKrz39unk31nMtSekHyuySaA8ClRqgvbBdIdWcFvxYC3l0rrZGrwYOSeKRnRlepXl/8
+         7bLvcV7/0DMNlkTAhv+nKQFcSqkjgNhIAPZfMm35HGLvxDl7yKyJmnhG6pHXD/fIejWQ
+         lEOg2nU90LmiYOisDpHLtdqhMX4uCWkNWIoRMHti1iFNfVEEj2aT4HuGqO/UURvNegJJ
+         3W8DcnNnuyZMFd2gnDbIlg4YZqIVNxRPuXHlrxDwxGmWn4DF27iYwB90D/PqkgaSPqmc
+         r9BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679448996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xnvFcWzQC9kp0s3Ad9+shbkiRajCq0VM9LtHb2VW5NE=;
-        b=Eh1UqV4AcqYp65AGflP/uA0rk0fYtq7JTK9AQjGePaqk3veTP9lgzm0HkT0w8tJjjY
-         Wmq0I4FnAqOIo5TUjfYxfdpSCVsYb1sgZDZPrGeYNvDE0GRebslRsu4tX+H4jZMyzswf
-         a5yP0r0dreA8nrtM6nSEkP6irUNMkB6lT7bnSONebpJ/G3u66VGUlHlUn4yorcPbzkPc
-         9aSHHPZnPRqH3OWAVUMZ9eMMeHy1oXNnIg5+Y7ZxKGw9272ghCQBRxWGwJB4PKR4ld68
-         ysESAxtAcDgaqIFsD9i+9XGmlsDGfe2FP+wMe42F3Kiv1pRWqCqXdFpP7jE48T8fSiMY
-         kx9Q==
-X-Gm-Message-State: AO0yUKX46Porf3xf17OGXedi6P1iA+FRDgJXs1ctrJ+pYOUEkvpZe36z
-        WdBKf6nX5Sc1khyWCL90liM=
-X-Google-Smtp-Source: AK7set8MHRaO4K0z3XF3OnZulVfjEK7FTNO1+bzXEkiNh2U7IlPfqyUOD8mhtVwEFdFvmJmMX4Xp4w==
-X-Received: by 2002:a5e:cb03:0:b0:74e:3d8e:8e1e with SMTP id p3-20020a5ecb03000000b0074e3d8e8e1emr3414250iom.15.1679448995992;
-        Tue, 21 Mar 2023 18:36:35 -0700 (PDT)
-Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id a22-20020a6b6616000000b007530bbfa577sm3925058ioc.18.2023.03.21.18.36.35
+        d=1e100.net; s=20210112; t=1679448867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b2CIvia+ysoMzgOq7ln7L4piO+fXsxlfLSknqU78fQ8=;
+        b=q6tcrEHbrL19jKkRjQLMAKQGgLenKfLon2Mn0ZVise2W6DZOWiSaUjITW2AFMjCTdB
+         s4uCeqi2eOVufBMmV8GcAqnBy3AWutWvfytAH1QESHpQRQCBhdqx0PNDxn8W/BTLAqFi
+         OMOUyuPjeE0cOjSiw5/aNzboqServpjQWPmzjx1cCJG33ayg2SotNF/507iQsZ1Wdt1Z
+         2aRhJ8ZC3vUIn7UqO6uimSVb/JLGIlOA/Oj32zb0v/m0UP4KaMAFIHGs2i3RxE424fWI
+         MTemILAobsoXjyBSc8MMlDaLVcJjLOPi31hAElkmTWNfjLYALlscYo1zxkzRl29Tljv0
+         CmuQ==
+X-Gm-Message-State: AO0yUKXfskLmX75W2b0VWgMHAAMwKHIKecJ/Rt/mg1c6t9l7DH7+ozRA
+        ECmuio2HhkPI0x85N6wNP9N3tigEay4BKYwmJ+s=
+X-Google-Smtp-Source: AK7set8/V0praTwRF4XPrGpz444uJtL4Oc25BCNaTyJpjGPzZ+/bBAMj59Kzk8SbKvodjAuXlrLAdA==
+X-Received: by 2002:a17:906:2cca:b0:93b:46f7:a716 with SMTP id r10-20020a1709062cca00b0093b46f7a716mr707383ejr.50.1679448866926;
+        Tue, 21 Mar 2023 18:34:26 -0700 (PDT)
+Received: from nuc.fritz.box (p200300f6af344e007f5e5982a136b54e.dip0.t-ipconnect.de. [2003:f6:af34:4e00:7f5e:5982:a136:b54e])
+        by smtp.gmail.com with ESMTPSA id w11-20020a1709067c8b00b009231714b3d4sm6356260ejo.151.2023.03.21.18.34.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 18:36:35 -0700 (PDT)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 4/4] module: already_uses() - reduce pr_debug output volume
-Date:   Tue, 21 Mar 2023 19:36:23 -0600
-Message-Id: <20230322013623.251401-5-jim.cromie@gmail.com>
+        Tue, 21 Mar 2023 18:34:26 -0700 (PDT)
+From:   Mathias Krause <minipli@grsecurity.net>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Mathias Krause <minipli@grsecurity.net>
+Subject: [PATCH v4 0/6] KVM: MMU: performance tweaks for heavy CR0.WP users
+Date:   Wed, 22 Mar 2023 02:37:25 +0100
+Message-Id: <20230322013731.102955-1-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230322013623.251401-1-jim.cromie@gmail.com>
-References: <20230322013623.251401-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,63 +71,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-already_uses() is unnecessarily chatty.
+v3: https://lore.kernel.org/kvm/20230201194604.11135-1-minipli@grsecurity.net/
 
-`modprobe i915` yields 491 messages like:
+This series is the fourth iteration of resurrecting the missing pieces of
+Paolo's previous attempt[1] to avoid needless MMU roots unloading.
 
-  [   64.108744] i915 uses drm!
+It's incorporating Sean's feedback to v3 and rebased on top of
+kvm-x86/next, namely commit d8708b80fa0e ("KVM: Change return type of
+kvm_arch_vm_ioctl() to "int"").
 
-This is a normal situation, and isn't worth all the log entries.
+The performance gap between TDP and legacy MMU is still existent,
+especially noticeable under grsecurity which implements kernel W^X by
+toggling CR0.WP, which happens very frequently. This series tries to fix
+this needless performance loss.
 
-NOTE: I've preserved the "does not use %s" messages, which happens
-less often, but does happen.  Its not clear to me what it tells a
-reader, or what info might improve the pr_debug's utility.
+Patch 1 is a v3 of [3], addressing Sean's feedback.
 
-[ 6847.584999] main:already_uses:569: amdgpu does not use ttm!
-[ 6847.585001] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585014] main:already_uses:569: amdgpu does not use drm!
-[ 6847.585016] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585024] main:already_uses:569: amdgpu does not use drm_display_helper!
-[ 6847.585025] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585084] main:already_uses:569: amdgpu does not use drm_kms_helper!
-[ 6847.585086] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585175] main:already_uses:569: amdgpu does not use drm_buddy!
-[ 6847.585176] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585202] main:already_uses:569: amdgpu does not use i2c_algo_bit!
-[ 6847.585204] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585249] main:already_uses:569: amdgpu does not use gpu_sched!
-[ 6847.585250] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585314] main:already_uses:569: amdgpu does not use video!
-[ 6847.585315] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585409] main:already_uses:569: amdgpu does not use iommu_v2!
-[ 6847.585410] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6847.585816] main:already_uses:569: amdgpu does not use drm_ttm_helper!
-[ 6847.585818] main:add_module_usage:584: Allocating new usage for amdgpu.
-[ 6848.762268] dyndbg: add-module: amdgpu.2533 sites
+Patch 2 implements Sean's feedback[2] to Paolo's original approach and
+skips unloading the MMU roots for CR0.WP toggling under TDP.
 
-no functional changes.
+Patch 3 further micro-optimizes this for non-paging guests -- anyone still
+running MS Singularity? ;)
 
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- kernel/module/main.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Sean was suggesting another change on top of v2 of this series (and then
+again a more elaborate version on top of v3), to skip intercepting CR0.WP
+writes completely for VMX[4]. That turned out to be yet another
+performance boost and is implemented in patch 6.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a2a8ed8564ae..0a5583686994 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -563,10 +563,8 @@ static int already_uses(struct module *a, struct module *b)
- 	struct module_use *use;
- 
- 	list_for_each_entry(use, &b->source_list, source_list) {
--		if (use->source == a) {
--			pr_debug("%s uses %s!\n", a->name, b->name);
-+		if (use->source == a)
- 			return 1;
--		}
- 	}
- 	pr_debug("%s does not use %s!\n", a->name, b->name);
- 	return 0;
+Patches 2 and 6 are the most important ones, as they bring the big
+performance gains.
+
+I used 'ssdd 10 50000' from rt-tests[5] as a micro-benchmark, running on a
+grsecurity L1 VM. Below table shows the results (runtime in seconds, lower
+is better):
+
+                              legacy     TDP    shadow
+    kvm-x86/next@d8708b        8.43s    9.45s    70.3s
+    + patches 1-3              5.39s    5.63s    70.2s
+    + patches 4-6              3.51s    3.47s    67.8s
+
+I re-ran the benchmarks (again) and the numbers changed a little from the
+ones in v3. We got a better baseline which is likely caused by the rebase
+to a v6.3-rc2 based tree (was v6.2-rc3 based before).
+
+Patches 1, 4 and 5 didn't change from v3, beside minor changelog tweaks.
+
+Patches 2 and 6 have been rewritten.
+
+Patch 3 is new to this series.
+
+Bonus rant^Wbug report:
+
+Actually re-running the benchmarks took me a while because my VM was
+constantly crashing on me with a #GP during scheduling. Looking a little
+closer, I noticed it was for a IA32_PRED_CMD MSR write which was puzzling,
+as the VM's kernel didn't change for my tests (built it more than a month
+ago!), so the old test runs should have triggered that code path (and #GP)
+too! Digging through some kernel code let me see it's all tied to the x86
+feature flag X86_FEATURE_USE_IBPB which gets set when X86_FEATURE_IBPB is,
+i.e. the CPU supports IBPB.
+
+*head-scratching pause* 
+
+Foolish me probably did a system update of the host and got a microcode
+update that added IBPB support to my CPU. Yayyy... NOT! As this implies
+announcing IBPB support to the VM as well and, in turn, makes the guest
+kernel try to use it, I'm doomed to hit that bug. *bummer*
+
+Something must not be right with KVM / QEMU / the kernel, as this guest
+behaviour clearly shouldn't cause KVM to inject a #GP into the guest.
+
+The bugging call chain in the guest kernel is:
+  -> switch_mm_irqs_off()
+     -> cond_mitigation()
+        -> indirect_branch_prediction_barrier()
+           -> alternative_msr_write(MSR_IA32_PRED_CMD, val, X86_FEATURE_USE_IBPB))
+
+So far I'm working around this by passing 'clearcpuid=ibpb' on the kernel
+commandline. But this should probably be fixed, that's why I'm mentioning
+it. It's just too late here already to debug this further today. Well, for
+some definition of "today."
+
+
+Thanks,
+Mathias
+
+[1] https://lore.kernel.org/kvm/20220217210340.312449-1-pbonzini@redhat.com/
+[2] https://lore.kernel.org/kvm/YhATewkkO%2Fl4P9UN@google.com/
+[3] https://lore.kernel.org/kvm/YhAB1d1%2FnQbx6yvk@google.com/
+[4] https://lore.kernel.org/kvm/Y8cTMnyBzNdO5dY3@google.com/
+[5] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+
+
+Mathias Krause (5):
+  KVM: x86: Do not unload MMU roots when only toggling CR0.WP with TDP
+    enabled
+  KVM: x86: Ignore CR0.WP toggles in non-paging mode
+  KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+  KVM: x86/mmu: Fix comment typo
+  KVM: VMX: Make CR0.WP a guest owned bit
+
+Paolo Bonzini (1):
+  KVM: x86/mmu: Avoid indirect call for get_cr3
+
+ arch/x86/kvm/kvm_cache_regs.h  |  2 +-
+ arch/x86/kvm/mmu/mmu.c         | 31 ++++++++++++++++++++-----------
+ arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+ arch/x86/kvm/mmu/spte.c        |  2 +-
+ arch/x86/kvm/pmu.c             |  4 ++--
+ arch/x86/kvm/vmx/nested.c      |  4 ++--
+ arch/x86/kvm/vmx/vmx.c         |  6 +++---
+ arch/x86/kvm/vmx/vmx.h         | 18 ++++++++++++++++++
+ arch/x86/kvm/x86.c             | 18 ++++++++++++++++++
+ 9 files changed, 66 insertions(+), 21 deletions(-)
+
 -- 
 2.39.2
 
