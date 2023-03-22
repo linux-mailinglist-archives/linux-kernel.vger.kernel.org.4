@@ -2,142 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4076C4954
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9D86C4958
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCVLik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S229762AbjCVLlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCVLij (ORCPT
+        with ESMTP id S229464AbjCVLlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:38:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE22C64F;
-        Wed, 22 Mar 2023 04:38:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E1F2120D14;
-        Wed, 22 Mar 2023 11:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679485116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 22 Mar 2023 07:41:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6554D50721
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679485249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ACmf/e6GIqWgaiPzBNT4x7+Kv9jhlsP3bBI1WXiL5sQ=;
-        b=XkC+hBDP49DG9KapLMUn6yj/98rHMFj5kGMMw0VFNmL5Hz4juw+9zhPhVFrs4DtrkA2aqC
-        Zvunu5IOqgA0eBM25BHbf+C5cozKTb18fzC3ptVp7GDjQX2y3cOiJ371yheex4mMR853zf
-        ZHLJbLLF1hbeG13yisFzfhnWgVEoanE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679485116;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ACmf/e6GIqWgaiPzBNT4x7+Kv9jhlsP3bBI1WXiL5sQ=;
-        b=9S0qNlnP2O19sv9CyAM3LZu7cViiQHMM77jSkLNC6ivxHw9kmUw4glf35QHY2lmYWqKwGr
-        IQ5/FN6/Q/L02sDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B9D2613416;
-        Wed, 22 Mar 2023 11:38:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id leajLLzoGmTfPAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 22 Mar 2023 11:38:36 +0000
-Message-ID: <b142ad8b-36a2-7d96-1fb0-2b1e82634fc5@suse.cz>
-Date:   Wed, 22 Mar 2023 12:38:36 +0100
+        bh=BdHMTiAE+PN3GzSq9FiLR9q3XjL4KWEq8dCyo2zV+tg=;
+        b=KqHANJlE/RV3XSHl4HUsVu9LxEUINSb1qOq0OL1jroQBQr9Og7hpYs7oPPASELEJibo/Qe
+        clNr/qycpFpzLUKHzwkCs70hTS5MY3vq5KGyw/qRicwlVsrbmeK+q5gUbY3AIQoRlK0K/a
+        7TnooQ1IDZy2+Rsv20H0pNhOc/Q7zPE=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-274-k_EhamwEP8O11seIjS7zCQ-1; Wed, 22 Mar 2023 07:40:48 -0400
+X-MC-Unique: k_EhamwEP8O11seIjS7zCQ-1
+Received: by mail-qk1-f198.google.com with SMTP id 206-20020a370cd7000000b007467b5765d2so4667423qkm.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:40:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679485247;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BdHMTiAE+PN3GzSq9FiLR9q3XjL4KWEq8dCyo2zV+tg=;
+        b=p8C+HujQirRU6m9DaHQQzjE7mnND7t0DHorS+E9sULStpAcJFcLLO6wnV/Nq6tveGr
+         NpFd0FPh4kSeItdEayrwWfnFCwfc8InfknXwJWgHakKJ8QadY0FPaUk4LC4Sa9u9HK87
+         fntEWFu/V/gHn4WR7v2vyGQRoDqKizSgTr5GBCHRPBhmc3UCGGtKg/H60x+uI4akDA4G
+         f4ssc9QU6TLnHrMU/o4T2UsL/N97enGy00FpogTHT0cboO9J5IWxDw/Gxo0L8kGkzClz
+         nrvv5tk5c88NEKXE6/gYFpfTDY+HWUGAxxVcrcRraFxPnemFzu/MHH7T7fNaKhiPvNgD
+         nPvQ==
+X-Gm-Message-State: AO0yUKWJAtnz7lu49SJTjzfAPvyxnme8m+Vs8lv8pHVTig92/2+KwLph
+        NbCddlzcrnc1cvtsfbXfRdyP7NRacGETwz4w/7vFKEugacDZQueRH5m1mV2Siz9ifAktKfl5EXh
+        NhM43fbxJ7Rnzb77oqkaSKzeqYLkHMpZM
+X-Received: by 2002:a05:622a:4cd:b0:3e2:4280:bc58 with SMTP id q13-20020a05622a04cd00b003e24280bc58mr9443517qtx.3.1679485247665;
+        Wed, 22 Mar 2023 04:40:47 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9DrP99ENKzleU94Q4isp4reabSKYEQTsQFVNEIkJ4etjYWZyRlL6TV1t67R5vjgnjlysGGXA==
+X-Received: by 2002:a05:622a:4cd:b0:3e2:4280:bc58 with SMTP id q13-20020a05622a04cd00b003e24280bc58mr9443495qtx.3.1679485247366;
+        Wed, 22 Mar 2023 04:40:47 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-244-168.dyn.eolo.it. [146.241.244.168])
+        by smtp.gmail.com with ESMTPSA id r9-20020a37a809000000b007463509f94asm7294844qke.55.2023.03.22.04.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 04:40:46 -0700 (PDT)
+Message-ID: <7755c026ea1f2c5f6d00aa4ba17233eb511ce3dd.camel@redhat.com>
+Subject: Re: [PATCH] net/net_failover: fix queue exceeding warning
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Faicker Mo <faicker.mo@ucloud.cn>
+Cc:     Sridhar Samudrala <sridhar.samudrala@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 22 Mar 2023 12:40:44 +0100
+In-Reply-To: <20230321022952.1118770-1-faicker.mo@ucloud.cn>
+References: <20230321022952.1118770-1-faicker.mo@ucloud.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 02/14] mm/page_alloc: add helper for checking if
- check_pages_enabled
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230321170513.2401534-1-rppt@kernel.org>
- <20230321170513.2401534-3-rppt@kernel.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230321170513.2401534-3-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 18:05, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Instead of duplicating long static_branch_enabled(&check_pages_enabled)
-> wrap it in a helper function is_check_pages_enabled()
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
+On Tue, 2023-03-21 at 10:29 +0800, Faicker Mo wrote:
+> If the primary device queue number is bigger than the default 16,
+> there is a warning about the queue exceeding when tx from the
+> net_failover device.
+>=20
+> Signed-off-by: Faicker Mo <faicker.mo@ucloud.cn>
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+This looks like a fixes, so it should include at least a fixes tag.
 
-> ---
->  mm/page_alloc.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 87d760236dba..e1149d54d738 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -245,6 +245,11 @@ EXPORT_SYMBOL(init_on_free);
->  /* perform sanity checks on struct pages being allocated or freed */
->  static DEFINE_STATIC_KEY_MAYBE(CONFIG_DEBUG_VM, check_pages_enabled);
->  
-> +static inline bool is_check_pages_enabled(void)
-> +{
-> +	return static_branch_unlikely(&check_pages_enabled);
-> +}
-> +
->  static bool _init_on_alloc_enabled_early __read_mostly
->  				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
->  static int __init early_init_on_alloc(char *buf)
-> @@ -1443,7 +1448,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
->  		for (i = 1; i < (1 << order); i++) {
->  			if (compound)
->  				bad += free_tail_pages_check(page, page + i);
-> -			if (static_branch_unlikely(&check_pages_enabled)) {
-> +			if (is_check_pages_enabled()) {
->  				if (unlikely(free_page_is_bad(page + i))) {
->  					bad++;
->  					continue;
-> @@ -1456,7 +1461,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
->  		page->mapping = NULL;
->  	if (memcg_kmem_online() && PageMemcgKmem(page))
->  		__memcg_kmem_uncharge_page(page, order);
-> -	if (static_branch_unlikely(&check_pages_enabled)) {
-> +	if (is_check_pages_enabled()) {
->  		if (free_page_is_bad(page))
->  			bad++;
->  		if (bad)
-> @@ -2366,7 +2371,7 @@ static int check_new_page(struct page *page)
->  
->  static inline bool check_new_pages(struct page *page, unsigned int order)
->  {
-> -	if (static_branch_unlikely(&check_pages_enabled)) {
-> +	if (is_check_pages_enabled()) {
->  		for (int i = 0; i < (1 << order); i++) {
->  			struct page *p = page + i;
->  
+More importantly a longer/clearer description of the issue is needed,
+including the warning backtrace.
+
+I think this warning:
+
+https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L3=
+542
+
+should not be ignored/silenced: it's telling that the running
+configuration is not using a number of the available tx queues, which
+is possibly not the thing you want.
+
+Instead the failover device could use an higher number of tx queues and
+eventually set real_num_tx_queues equal to the primary_dev when the
+latter is enslaved.
+
+Thanks,
+
+Paolo
+
+
 
