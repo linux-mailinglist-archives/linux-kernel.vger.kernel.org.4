@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F636C5218
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497626C5219
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjCVRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S231552AbjCVRQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjCVRQC (ORCPT
+        with ESMTP id S231487AbjCVRQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:16:02 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F95637C4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:28 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h8so75846288ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:28 -0700 (PDT)
+        Wed, 22 Mar 2023 13:16:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13D664EB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:36 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id y4so75951955edo.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505327; x=1682097327;
+        d=gmail.com; s=20210112; t=1679505334;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lUXfjO9MLExMn6IoI9J9KH+mTRK8zfSKTM2CAEavc0Q=;
-        b=StizjcQ7WHtK5C9WkTHZfZVzbgeCBIoZs/U03xKRNTW3g6z5Su1ebLLig/QHnem0Rt
-         lnrt/iGBcYCm9ODYVfIuZz3hkaqMYy+zkrt8/TNCGRugZBy7iV2UgX/GfPSPU4FjBc2E
-         8WuWBprxLSns8Wh6t0G8KUR/OhQn/tX/VKpRs5qGPjPFGcyBIGnGIEA1VEfC8I0Arfcm
-         +DuvzDVrCXa/7bhER7Iy0tAavUW+rERFgg9tiMbQuK4cPMi6+9Hc2Pj3CfA+kAkp0iOi
-         pJwlDQkrIAk4fnY/pJHgPhn7KHkfyhlacr3TOEzKGQPEvIEF5U2dVugi9svrI2epibak
-         D9ww==
+        bh=PgAa8TVR2OX/unZOH2SqxHOaAsu+Q0rJ4jrl6aVUaso=;
+        b=dOIyMCtrgEL4ivGPb4AKDAyxL9kGBzbcDXlkfMZI7sysakRjCTGJ9B3w1kX/4kwGKg
+         MZVjYDKHWjv/zF+dwWBgU3wtOkoZI7ZWZa2bBQW8n06eKM0AIoUaPmKINL7Vmo7YBbrP
+         u62zmbb13pr0lwAFdbQxg+gp5wFnGEgaGP+twreZIr/tFST4PNuqHYlAJJOzXqHciR6B
+         2TNU1MXFY5d2aXmT/lnoeCIlOGOighoUKN8QFLtUnn/Fq5p4/O+nTP7VUghmWtVcAuhU
+         Y4TiFzIzzaDyTT2AkgdgVG3UAOgDhKRAlLrialpeM6+dLjkmwGuarsB9VqfPr3OrAYvW
+         8/8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505327; x=1682097327;
+        d=1e100.net; s=20210112; t=1679505334;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUXfjO9MLExMn6IoI9J9KH+mTRK8zfSKTM2CAEavc0Q=;
-        b=SK0m9b8NVt1C8xK54Smr33wmq7EG69fk5wX+wEo/QdT0EV37ZJidn6/+RDt+jj4wXw
-         mWh3P5k8JwR+FJrrHx3f4i9N8ltoInQUwLrMG2TC+kiHXYeIcyxwgtRNhxNev8WElaQG
-         d7cy/OBXlPAjLAkwlYbwxufDOKdh5cbW78RFyONRgvy0t1k8oNb+VuNIC7Px1+qMjVQl
-         k1l0QTH0biTEYplVeapVorCX6CqwHEixDx6+Rs8GSUj+HhRNFNNA5ShmdW4TqykcQxb/
-         lGIKHj7djBKZbFBZ0iXP5UGnLTRhDiQBSkMMycG1bZT4ru3BpMc9dXd90wVEV1LNJlEb
-         9+Sg==
-X-Gm-Message-State: AO0yUKUcf7Y3BvrcnAZsaaYONQZpv9aVkuqGrHqCC1E2j7LNQKpomZyF
-        XFPlAG4/9gPXjJtcGjfBZAw=
-X-Google-Smtp-Source: AK7set+3A/hNGGINr2P2D/xVNkf3ePrjH6RFD2x2Wdd7V4LJUOVPf8zZcERsfcF423/cyk/JA4Nu/Q==
-X-Received: by 2002:a17:906:224f:b0:92e:f520:7762 with SMTP id 15-20020a170906224f00b0092ef5207762mr6720088ejr.6.1679505326925;
-        Wed, 22 Mar 2023 10:15:26 -0700 (PDT)
+        bh=PgAa8TVR2OX/unZOH2SqxHOaAsu+Q0rJ4jrl6aVUaso=;
+        b=xT7u651VRpo8awaBCIp/W3Me8Jc4cw5mOobhMME/bmKhdbLh1lND0uZnSdQqEC8i51
+         C7gOdkD7Te3nIr3fmIVuDnvrkChqFUJDa7t9PvKXt9VRcOaZPMNyHY9R3ZFOOcIMvwNY
+         EbKoHwPnkiwMJxD7F5ihhYvyRdyii/MFcpMl5GIk38mKkx4Gxz5deEtliErh6U2DKz8q
+         PS7jrXsmVZ4mjbtNAfGzguB6Zox0jbcb3EhNw6cHPCe35tXwAV33nhPgDWk2fgXOsYh4
+         orw21As9uaGaopKo945zHkqlxGsmK/i7DJzhPncUTUjPGz9Y+PGV8NEj+bxkBBlSvj93
+         XRGw==
+X-Gm-Message-State: AO0yUKXTsngDFJsl/kgsBIl+1ieagwaUtV7jKYtdyVCTM0orBiYI0c+k
+        /lmueMaqVtejHGx+z1b1OmxbBISOa1w=
+X-Google-Smtp-Source: AK7set8ACwq2SguntQdO9FmuHbmEO07JY2DEp2AcZ4Hs+yNhFr6efWNtxKY//yiV7rjRFOngmqCXTw==
+X-Received: by 2002:a05:6402:2711:b0:4bb:afe3:e0a with SMTP id y17-20020a056402271100b004bbafe30e0amr8970955edd.3.1679505334307;
+        Wed, 22 Mar 2023 10:15:34 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id lc5-20020a170906dfe500b0092973e209f2sm7451911ejc.109.2023.03.22.10.15.26
+        by smtp.gmail.com with ESMTPSA id a18-20020a50c312000000b004c06f786602sm8054214edb.85.2023.03.22.10.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:15:26 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 18:15:24 +0100
+        Wed, 22 Mar 2023 10:15:33 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:15:32 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/8] staging: rtl8192e: Replace macro
- iwe_stream_add_event_rsl with standard function
-Message-ID: <00a8057acc994c139530a070974694b999a8f96a.1679504314.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 8/8] staging: rtl8192e: Replace macro
+ iwe_stream_add_point_rsl with standard function
+Message-ID: <563af664b3186e73d99f73a6396f8ebcd3c52be2.1679504314.git.philipp.g.hortmann@gmail.com>
 References: <cover.1679504314.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -73,93 +73,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace macro iwe_stream_add_event_rsl with standard function
-iwe_stream_add_event to increase readability.
+Replace macro iwe_stream_add_point_rsl with standard function
+iwe_stream_add_point to increase readability.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
 V1->V2: Changed subject line to be without “f.”
 ---
  drivers/staging/rtl8192e/rtllib.h    |  3 ---
- drivers/staging/rtl8192e/rtllib_wx.c | 16 ++++++----------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ drivers/staging/rtl8192e/rtllib_wx.c | 26 ++++++++++----------------
+ 2 files changed, 10 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 669a9d9a5d18..81d630cf7e52 100644
+index 81d630cf7e52..1ce4c29dab13 100644
 --- a/drivers/staging/rtl8192e/rtllib.h
 +++ b/drivers/staging/rtl8192e/rtllib.h
 @@ -65,9 +65,6 @@
  #define container_of_dwork_rsl(x, y, z)				\
  	container_of(to_delayed_work(x), y, z)
  
--#define iwe_stream_add_event_rsl(info, start, stop, iwe, len)	\
--	iwe_stream_add_event(info, start, stop, iwe, len)
+-#define iwe_stream_add_point_rsl(info, start, stop, iwe, p)	\
+-	iwe_stream_add_point(info, start, stop, iwe, p)
 -
- #define iwe_stream_add_point_rsl(info, start, stop, iwe, p)	\
- 	iwe_stream_add_point(info, start, stop, iwe, p)
- 
+ static inline void *netdev_priv_rsl(struct net_device *dev)
+ {
+ 	return netdev_priv(dev);
 diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
-index 217426ee2e92..e580cd01c201 100644
+index e580cd01c201..d6691f3c7c70 100644
 --- a/drivers/staging/rtl8192e/rtllib_wx.c
 +++ b/drivers/staging/rtl8192e/rtllib_wx.c
-@@ -41,8 +41,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 	iwe.cmd = SIOCGIWAP;
- 	iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
- 	ether_addr_copy(iwe.u.ap_addr.sa_data, network->bssid);
--	start = iwe_stream_add_event_rsl(info, start, stop,
--					 &iwe, IW_EV_ADDR_LEN);
-+	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_ADDR_LEN);
- 	/* Remaining entries will be displayed in the order we provide them */
- 
- 	/* Add the ESSID */
-@@ -71,8 +70,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+@@ -49,16 +49,13 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 	iwe.u.data.flags = 1;
+ 	if (network->ssid_len > 0) {
+ 		iwe.u.data.length = min_t(u8, network->ssid_len, 32);
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe,
+-						 network->ssid);
++		start = iwe_stream_add_point(info, start, stop, &iwe, network->ssid);
+ 	} else if (network->hidden_ssid_len == 0) {
+ 		iwe.u.data.length = sizeof("<hidden>");
+-		start = iwe_stream_add_point_rsl(info, start, stop,
+-						 &iwe, "<hidden>");
++		start = iwe_stream_add_point(info, start, stop, &iwe, "<hidden>");
+ 	} else {
+ 		iwe.u.data.length = min_t(u8, network->hidden_ssid_len, 32);
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe,
+-						 network->hidden_ssid);
++		start = iwe_stream_add_point(info, start, stop, &iwe, network->hidden_ssid);
  	}
- 	*pname = '\0';
- 	snprintf(iwe.u.name, IFNAMSIZ, "IEEE802.11%s", proto_name);
--	start = iwe_stream_add_event_rsl(info, start, stop,
--					 &iwe, IW_EV_CHAR_LEN);
-+	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_CHAR_LEN);
- 	/* Add mode */
- 	iwe.cmd = SIOCGIWMODE;
- 	if (network->capability &
-@@ -81,8 +79,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 			iwe.u.mode = IW_MODE_MASTER;
- 		else
- 			iwe.u.mode = IW_MODE_ADHOC;
--		start = iwe_stream_add_event_rsl(info, start, stop,
--						 &iwe, IW_EV_UINT_LEN);
-+		start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_UINT_LEN);
- 	}
- 
- 	/* Add frequency/channel */
-@@ -90,8 +87,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 	iwe.u.freq.m = network->channel;
- 	iwe.u.freq.e = 0;
- 	iwe.u.freq.i = 0;
--	start = iwe_stream_add_event_rsl(info, start, stop, &iwe,
--					 IW_EV_FREQ_LEN);
-+	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_FREQ_LEN);
- 
- 	/* Add encryption capability */
- 	iwe.cmd = SIOCGIWENCODE;
-@@ -152,7 +148,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 	iwe.u.bitrate.disabled = 0;
- 	iwe.u.bitrate.fixed = 0;
- 	iwe.u.bitrate.value = max_rate * 500000;
--	start = iwe_stream_add_event_rsl(info, start, stop, &iwe, IW_EV_PARAM_LEN);
-+	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_PARAM_LEN);
+ 	/* Add the protocol name */
+ 	iwe.cmd = SIOCGIWNAME;
+@@ -96,8 +93,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 	else
+ 		iwe.u.data.flags = IW_ENCODE_DISABLED;
+ 	iwe.u.data.length = 0;
+-	start = iwe_stream_add_point_rsl(info, start, stop,
+-					 &iwe, network->ssid);
++	start = iwe_stream_add_point(info, start, stop, &iwe, network->ssid);
+ 	/* Add basic and extended rates */
+ 	max_rate = 0;
+ 	p = custom;
+@@ -152,8 +148,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
  	iwe.cmd = IWEVCUSTOM;
  	iwe.u.data.length = p - custom;
  	if (iwe.u.data.length)
-@@ -172,7 +168,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
- 	if (!(network->stats.mask & RTLLIB_STATMASK_SIGNAL))
- 		iwe.u.qual.updated |= IW_QUAL_QUAL_INVALID;
- 	iwe.u.qual.updated = 7;
--	start = iwe_stream_add_event_rsl(info, start, stop, &iwe, IW_EV_QUAL_LEN);
-+	start = iwe_stream_add_event(info, start, stop, &iwe, IW_EV_QUAL_LEN);
- 
- 	iwe.cmd = IWEVCUSTOM;
+-		start = iwe_stream_add_point_rsl(info, start, stop,
+-						 &iwe, custom);
++		start = iwe_stream_add_point(info, start, stop, &iwe, custom);
+ 	/* Add quality statistics */
+ 	/* TODO: Fix these values... */
+ 	iwe.cmd = IWEVQUAL;
+@@ -174,7 +169,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
  	p = custom;
+ 	iwe.u.data.length = p - custom;
+ 	if (iwe.u.data.length)
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe, custom);
++		start = iwe_stream_add_point(info, start, stop, &iwe, custom);
+ 
+ 	memset(&iwe, 0, sizeof(iwe));
+ 	if (network->wpa_ie_len) {
+@@ -183,7 +178,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 		memcpy(buf, network->wpa_ie, network->wpa_ie_len);
+ 		iwe.cmd = IWEVGENIE;
+ 		iwe.u.data.length = network->wpa_ie_len;
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe, buf);
++		start = iwe_stream_add_point(info, start, stop, &iwe, buf);
+ 	}
+ 	memset(&iwe, 0, sizeof(iwe));
+ 	if (network->rsn_ie_len) {
+@@ -192,7 +187,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 		memcpy(buf, network->rsn_ie, network->rsn_ie_len);
+ 		iwe.cmd = IWEVGENIE;
+ 		iwe.u.data.length = network->rsn_ie_len;
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe, buf);
++		start = iwe_stream_add_point(info, start, stop, &iwe, buf);
+ 	}
+ 
+ 	/* add info for WZC */
+@@ -203,7 +198,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 		memcpy(buf, network->wzc_ie, network->wzc_ie_len);
+ 		iwe.cmd = IWEVGENIE;
+ 		iwe.u.data.length = network->wzc_ie_len;
+-		start = iwe_stream_add_point_rsl(info, start, stop, &iwe, buf);
++		start = iwe_stream_add_point(info, start, stop, &iwe, buf);
+ 	}
+ 
+ 	/* Add EXTRA: Age to display seconds since last beacon/probe response
+@@ -216,8 +211,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+ 		      (100 * (jiffies - network->last_scanned)) / HZ);
+ 	iwe.u.data.length = p - custom;
+ 	if (iwe.u.data.length)
+-		start = iwe_stream_add_point_rsl(info, start, stop,
+-						 &iwe, custom);
++		start = iwe_stream_add_point(info, start, stop, &iwe, custom);
+ 
+ 	return start;
+ }
 -- 
 2.39.2
 
