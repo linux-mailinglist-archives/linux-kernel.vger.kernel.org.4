@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665456C457B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A796C457D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCVI7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S229786AbjCVI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCVI7A (ORCPT
+        with ESMTP id S229459AbjCVI7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:59:00 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E54AFE7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:58:54 -0700 (PDT)
-X-UUID: adafd4d116cd41dfb51ecabed6ce9250-20230322
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:6f55a80e-d090-412f-94ec-3ae6d833094b,IP:5,U
-        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:25
-X-CID-INFO: VERSION:1.1.20,REQID:6f55a80e-d090-412f-94ec-3ae6d833094b,IP:5,URL
-        :0,TC:0,Content:0,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:25
-X-CID-META: VersionHash:25b5999,CLOUDID:28df2229-564d-42d9-9875-7c868ee415ec,B
-        ulkID:230322165700VFA7MY6F,BulkQuantity:1,Recheck:0,SF:38|24|17|19|44|102,
-        TC:nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,O
-        SI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: adafd4d116cd41dfb51ecabed6ce9250-20230322
-X-User: zhouzongmin@kylinos.cn
-Received: from thinkpadx13gen2i.. [(116.128.244.169)] by mailgw
-        (envelope-from <zhouzongmin@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 294111190; Wed, 22 Mar 2023 16:58:50 +0800
-From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
-To:     airlied@redhat.com, kraxel@redhat.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [PATCH] drm/qxl: prevent memory leak
-Date:   Wed, 22 Mar 2023 16:58:47 +0800
-Message-Id: <20230322085847.3385930-1-zhouzongmin@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+        Wed, 22 Mar 2023 04:59:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368D84AFE7;
+        Wed, 22 Mar 2023 01:59:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ew6so6798246edb.7;
+        Wed, 22 Mar 2023 01:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679475583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMZAhNKxBafShWjvkXP8mjAoJFEZrRyPKGSB67IZ/W0=;
+        b=pMSH/splwrSv6wUN6+i3TwO4YKPv7JdL9hDPQMaYG5sM5Ew87ocbSH13Zl0fbrAZqn
+         4d5BhHkup6u+kzjEEBzFon2wzhVEVkZN8eJ2Jx50b60Cr+3xxU6rsgVKuoGDix8zxJ5O
+         H1OQHJa0FhVmuPdkQDLf/H2DtAlXHh47w4gmyHgCtSDhLaMxZHrOraZIYBjfuewL0rfD
+         r86qFgDR5Ax356p8B9Fz+gMBMFnGhSrEVQuwER2Vg8ahOb+jm6IpEYuzgLdN+zCQTwjZ
+         HpDz1v1JGW263Y54jiyFKnQkcySFJPC/uyc04zNXZNhHcsECutr1fs7yDyKWIgxl75TQ
+         C/pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679475583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fMZAhNKxBafShWjvkXP8mjAoJFEZrRyPKGSB67IZ/W0=;
+        b=tORwcq7YeqYKkBiIuZLn/cqgw/lpF6D6hGVDIdO4zzX6OFlp4KNZ756HJe3zvSd8GI
+         tF9ucmhqiod5Ucy3BDE9uslhOtOOTQQYmnpPWPbyPI7lZxGMSL0D86dM2scTHTQkcPam
+         tAbCv9u7X9M8f4A0dyKR8WxUkuUOkj2RaFZwOPYryo9VvWK2sdCw79XP/hF19u+Uw1SS
+         UQZKyRCjHPqKrxLjWpJi8IVmXqvB27CkHbK2mLscNoS2P1vsI7NK3Dcq9rjPnKIOlr4O
+         j6IEsw3H7y91Mj+APwAG0wDl8ui3EsA0ojSQySMs0xXWYl1UfkBGHyMzTFHg0nz7uw9f
+         pqvg==
+X-Gm-Message-State: AO0yUKWEwBaMdPLoKJfMouc1twnYor4b9sTZuSFWoqL0nu/UdCF7aL/5
+        kHrmcCOWj+TLOSvU1VPxoBsJpjnwcFj3lx6j
+X-Google-Smtp-Source: AK7set9Urn7PFBX1x9P+a/1n9aK7bGYS/XxjM4AtTKEWqA9Gk5aLosso8dBHHTcdixT45+1epb9bxg==
+X-Received: by 2002:a17:906:2e8e:b0:933:44ef:e5b5 with SMTP id o14-20020a1709062e8e00b0093344efe5b5mr6944534eji.30.1679475583472;
+        Wed, 22 Mar 2023 01:59:43 -0700 (PDT)
+Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
+        by smtp.gmail.com with ESMTPSA id u25-20020a50c2d9000000b004faf34064c8sm7294180edf.62.2023.03.22.01.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 01:59:43 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 09:59:38 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model:  Document
+ locking corner cases
+Message-ID: <ZBrDeoCIs1wmNBeF@andrea>
+References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
+ <20230321010549.51296-1-paulmck@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321010549.51296-1-paulmck@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,34 +76,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allocated memory for qdev->dumb_heads should be released
-in qxl_destroy_monitors_object before qxl suspend.
-otherwise,qxl_create_monitors_object will be called to
-reallocate memory for qdev->dumb_heads after qxl resume,
-it will cause memory leak.
+>  create mode 100644 Documentation/litmus-tests/locking/DCL-broken.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/DCL-fixed.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/RM-broken.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/RM-fixed.litmus
 
-Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
----
- drivers/gpu/drm/qxl/qxl_display.c | 3 +++
- 1 file changed, 3 insertions(+)
+Unfortunately none of them were liked by klitmus7/gcc, the diff below
+works for me but please double check.
 
-diff --git a/drivers/gpu/drm/qxl/qxl_display.c b/drivers/gpu/drm/qxl/qxl_display.c
-index 6492a70e3c39..404b0483bb7c 100644
---- a/drivers/gpu/drm/qxl/qxl_display.c
-+++ b/drivers/gpu/drm/qxl/qxl_display.c
-@@ -1229,6 +1229,9 @@ int qxl_destroy_monitors_object(struct qxl_device *qdev)
- 	if (!qdev->monitors_config_bo)
- 		return 0;
+  Andrea
+
+
+diff --git a/Documentation/litmus-tests/locking/DCL-broken.litmus b/Documentation/litmus-tests/locking/DCL-broken.litmus
+index cfaa25ff82b1e..bfb7ba4316d69 100644
+--- a/Documentation/litmus-tests/locking/DCL-broken.litmus
++++ b/Documentation/litmus-tests/locking/DCL-broken.litmus
+@@ -10,10 +10,9 @@ C DCL-broken
+ {
+ 	int flag;
+ 	int data;
+-	int lck;
+ }
  
-+	kfree(qdev->dumb_heads);
-+	qdev->dumb_heads = NULL;
-+
- 	qdev->monitors_config = NULL;
- 	qdev->ram_header->monitors_config = 0;
+-P0(int *flag, int *data, int *lck)
++P0(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -32,7 +31,7 @@ P0(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
  
--- 
-2.34.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+-P1(int *flag, int *data, int *lck)
++P1(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -51,5 +50,5 @@ P1(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
++locations [flag;data;0:r0;0:r1;1:r0;1:r1]
+ exists (0:r2=0 \/ 1:r2=0)
+diff --git a/Documentation/litmus-tests/locking/DCL-fixed.litmus b/Documentation/litmus-tests/locking/DCL-fixed.litmus
+index 579d6c246f167..d1b60bcb0c8f3 100644
+--- a/Documentation/litmus-tests/locking/DCL-fixed.litmus
++++ b/Documentation/litmus-tests/locking/DCL-fixed.litmus
+@@ -11,10 +11,9 @@ C DCL-fixed
+ {
+ 	int flag;
+ 	int data;
+-	int lck;
+ }
+ 
+-P0(int *flag, int *data, int *lck)
++P0(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -33,7 +32,7 @@ P0(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-P1(int *flag, int *data, int *lck)
++P1(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -52,5 +51,5 @@ P1(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
++locations [flag;data;0:r0;0:r1;1:r0;1:r1]
+ exists (0:r2=0 \/ 1:r2=0)
+diff --git a/Documentation/litmus-tests/locking/RM-broken.litmus b/Documentation/litmus-tests/locking/RM-broken.litmus
+index c586ae4b547de..b7ef30cedfe51 100644
+--- a/Documentation/litmus-tests/locking/RM-broken.litmus
++++ b/Documentation/litmus-tests/locking/RM-broken.litmus
+@@ -9,12 +9,11 @@ C RM-broken
+  *)
+ 
+ {
+-	int lck;
+ 	int x;
+-	int y;
++	atomic_t y;
+ }
+ 
+-P0(int *x, int *y, int *lck)
++P0(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r2;
+ 
+@@ -24,7 +23,7 @@ P0(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-P1(int *x, int *y, int *lck)
++P1(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -37,6 +36,6 @@ P1(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-locations [x;lck;0:r2;1:r0;1:r1;1:r2]
+-filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
++locations [x;0:r2;1:r0;1:r1;1:r2]
++filter (1:r0=0 /\ 1:r1=1)
+ exists (1:r2=1)
+diff --git a/Documentation/litmus-tests/locking/RM-fixed.litmus b/Documentation/litmus-tests/locking/RM-fixed.litmus
+index 672856736b42e..b628175596160 100644
+--- a/Documentation/litmus-tests/locking/RM-fixed.litmus
++++ b/Documentation/litmus-tests/locking/RM-fixed.litmus
+@@ -9,12 +9,11 @@ C RM-fixed
+  *)
+ 
+ {
+-	int lck;
+ 	int x;
+-	int y;
++	atomic_t y;
+ }
+ 
+-P0(int *x, int *y, int *lck)
++P0(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r2;
+ 
+@@ -24,7 +23,7 @@ P0(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-P1(int *x, int *y, int *lck)
++P1(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -37,6 +36,6 @@ P1(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-locations [x;lck;0:r2;1:r0;1:r1;1:r2]
+-filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
++locations [x;0:r2;1:r0;1:r1;1:r2]
++filter (1:r0=0 /\ 1:r1=1)
+ exists (1:r2=1)
