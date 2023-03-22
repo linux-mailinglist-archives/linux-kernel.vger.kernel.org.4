@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6705A6C4A25
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9D36C4A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 13:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjCVMRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 08:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S230242AbjCVMRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 08:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCVMRf (ORCPT
+        with ESMTP id S230182AbjCVMRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:17:35 -0400
+        Wed, 22 Mar 2023 08:17:37 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F651C587;
-        Wed, 22 Mar 2023 05:17:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C6B1C587;
+        Wed, 22 Mar 2023 05:17:36 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D32C66030E7;
-        Wed, 22 Mar 2023 12:17:31 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1276C66030E8;
+        Wed, 22 Mar 2023 12:17:34 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679487452;
-        bh=zyLaVAcmwFmLwUV0plJgDw5kBpsCsQESooHrLa/KQkw=;
+        s=mail; t=1679487455;
+        bh=VAG6FUY3zGW8SQCCkjFoofi11QfIA9Yc4jJfJjx5wh8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RQgdIjoqCOaCT9TlL0M3x86X4voreu+jUiQ0KB1hqMS3iPwsHgaf33b9o9LFTqoD0
-         Bkkgxcs70ra5QYMLUukVO203726fW3BN/o4hsSfXfEPLba69KgJSUtkM0I/ewAQOR/
-         UuFDxXsGKeG4BixFD9CYVJ3OX/Ul1I7c7Dmsy+rGu8K+SJitrObogFTfjpDvTVoPWT
-         hHw2XUHRwBMLzLTU9XAMaFrVtUajlvCMmgi240nQwuHUdO4SrVZDJafXMJBxwE2gd9
-         CCkEBNnrtd1bZqFjXI2CSDcUMZPHra/aurzGmx+RQG4f8dhHc1HMAh8dErevjIvVID
-         lP53YXUQpADpg==
-Message-ID: <18f4da2e-d80b-312b-17a4-824d980e0e82@collabora.com>
-Date:   Wed, 22 Mar 2023 13:17:29 +0100
+        b=Jt2g7cBA/bAYa4/FkjN0yppVj7IbIST2E4YPEJFxOpsdtJh5M9O8W/BwpQ2FxdoHE
+         wmI1ANsM5TIaMnsMEwMXYRD5vSiPiMTegKM14+ILFFUfJ3isbDMbnXNkS2IquZujmu
+         7aIHqakWjBJ2uoF0yXPBGaaZ+uMnEF2U8POENSKg52R8KRQ4Fxcqk5gbis3KWypwb+
+         UMHZrEj0AzHod6kfIL03+F07oGbSxXdSuR3UM7FsO9Veneq3rNpfbYu7TWpU887o9H
+         Tnzsmt+b8xClwxiS+aHuydAqyXuiA0kBwJaEamDsaz4zVcECRlZmqlKjfdfDC7JBQg
+         nL1p6Tc3n+YwA==
+Message-ID: <cb956c2a-1a56-6201-b809-1634cf6f4c36@collabora.com>
+Date:   Wed, 22 Mar 2023 13:17:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v14 06/10] drm/bridge: Remove redundant i2c_client in
- anx7625/it6505
+Subject: Re: [PATCH v14 05/10] drm/bridge: anx7625: Check for Type-C during
+ panel registration
 Content-Language: en-US
 To:     Pin-yen Lin <treapking@chromium.org>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -70,13 +70,12 @@ Cc:     Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
         <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
         dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
         Stephen Boyd <swboyd@chromium.org>,
-        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
 References: <20230322104639.221402-1-treapking@chromium.org>
- <20230322104639.221402-7-treapking@chromium.org>
+ <20230322104639.221402-6-treapking@chromium.org>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230322104639.221402-7-treapking@chromium.org>
+In-Reply-To: <20230322104639.221402-6-treapking@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -89,12 +88,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 22/03/23 11:46, Pin-yen Lin ha scritto:
-> These two drivers embed a i2c_client in their private driver data, but
-> only strict device is actually needed. Replace the i2c_client reference
-> with a struct device one.
+> The output port endpoints can be connected to USB-C connectors.
+> Running drm_of_find_panel_or_bridge() with such endpoints leads to
+> a continuous return value of -EPROBE_DEFER, even though there is
+> no panel present.
+> 
+> To avoid this, check for the existence of a "mode-switch" property in
+> the port endpoint, and skip panel registration completely if so.
 > 
 > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
