@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CD76C5996
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64FF6C599A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCVWsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 18:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S229945AbjCVWtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 18:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCVWsw (ORCPT
+        with ESMTP id S229881AbjCVWsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 18:48:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD9F10D4;
-        Wed, 22 Mar 2023 15:48:52 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 22:48:50 -0000
+        Wed, 22 Mar 2023 18:48:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C6E10D4;
+        Wed, 22 Mar 2023 15:48:53 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 22:48:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679525330;
+        s=2020; t=1679525332;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=opTgGltOQ81osAuycnrX2jYx3YroST+C6v5OaNUDXD0=;
-        b=hZEWOjG5R7lgIaQUwzMTW9ONBcGSB+czQoRbOgxnbL6/xb1M1CFT1A/XTn5wk1mRq+5gjU
-        AAtQxiqJGg/RWuNN1PQDjONfqx+EKULn47XHnBOS04sh+fcud7BQgWQkpFg+voVJGPDMk3
-        SJH8Kv7AEkD1BmPSNzT0a4Bm0W7+My1R86B+kek6dk9itTWSRUvWbLxjZyjER0jDt1ovX6
-        G50jUKNGj8nYTkWbztoN2txvcfhwhl0FqxksCGwJdSZFYg2cueTpQHr+gTEreyxLI89cB3
-        MenSBEkr/ge7xil4K60qaod5v/wsUnD5/7rl21vue2JWA/0P3P96WNwfQ8TunA==
+        bh=94IWON34Zkdpip/3iKIcCWqin5aEhz0xQbr2Iwre6K4=;
+        b=znVzLFVvxK0QXKmCxWwsGvyAuLCqhAi12H3dHGN7dmNkDmSi2VZUFZwHI94sx8b4drrjGB
+        1Va1hHEuzEFTya75TzCiBPS+byl9Kzb38AZsAeC1towF0vSrD5AchwbohRBPsmULSKrXq5
+        Fit4lhvrp6ofGiG7aGGCx+ZD7OyDSyJ5ejWFA8DlhUGPZKGp1w0IU9vYisd0IN4ED8SlvF
+        NavX9gv5ZPc7CT5uVunzzOsdmViisnUgXcire9mGP7L06s7WLOlfuorpW2er3u8oRu9puJ
+        qxZUYNeSdbO4mjWnsb6OlgcMRo67HnIPSPumMZAlP7d3YyhfruXyueox6iAhnQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679525330;
+        s=2020e; t=1679525332;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=opTgGltOQ81osAuycnrX2jYx3YroST+C6v5OaNUDXD0=;
-        b=HwkziF28Rl92ozifWjhJZKRaj58imJyeT5qCUJClRLuBNtn60VjDAiehJJmZ6SfXCoAAe4
-        qY7WrUg7uPavTNCw==
+        bh=94IWON34Zkdpip/3iKIcCWqin5aEhz0xQbr2Iwre6K4=;
+        b=kcB/6idXSj7OcRYvXO4RkBvWsFtNVPfHkpnK2LstwClo9SvOAgsf0/lM5sa0aZfh/RjInr
+        kCuxlst7ioJV5/AQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] vhost: Fix livepatch timeouts in vhost_worker()
-Cc:     "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>, x86@kernel.org,
+Subject: [tip: sched/core] livepatch: Convert stack entries array to percpu
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <509f6ea6fe6505f0a75a66026ba531c765ef922f.1677257135.git.jpoimboe@kernel.org>
-References: <509f6ea6fe6505f0a75a66026ba531c765ef922f.1677257135.git.jpoimboe@kernel.org>
+In-Reply-To: <20230313233346.kayh4t2lpicjkpsv@treble>
+References: <20230313233346.kayh4t2lpicjkpsv@treble>
 MIME-Version: 1.0
-Message-ID: <167952533012.5837.8095153662215148655.tip-bot2@tip-bot2>
+Message-ID: <167952533158.5837.17769419178497550655.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,41 +66,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     05bfb338fa8dd40b008ce443e397fc374f6bd107
-Gitweb:        https://git.kernel.org/tip/05bfb338fa8dd40b008ce443e397fc374f6bd107
+Commit-ID:     e92606fa172f63a26054885b9715be86c643229d
+Gitweb:        https://git.kernel.org/tip/e92606fa172f63a26054885b9715be86c643229d
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Fri, 24 Feb 2023 08:50:01 -08:00
+AuthorDate:    Mon, 13 Mar 2023 16:33:46 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 22 Mar 2023 17:09:29 +01:00
+CommitterDate: Wed, 22 Mar 2023 17:09:28 +01:00
 
-vhost: Fix livepatch timeouts in vhost_worker()
+livepatch: Convert stack entries array to percpu
 
-Livepatch timeouts were reported due to busy vhost_worker() kthreads.
-Now that cond_resched() can do livepatch task switching, use
-cond_resched() in vhost_worker().  That's the better way to
-conditionally call schedule() anyway.
+The entries array in klp_check_stack() is static local because it's too
+big to be reasonably allocated on the stack.  Serialized access is
+enforced by the klp_mutex.
 
-Reported-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+In preparation for calling klp_check_stack() without the mutex (from
+cond_resched), convert it to a percpu variable.
+
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-Link: https://lore.kernel.org/r/509f6ea6fe6505f0a75a66026ba531c765ef922f.1677257135.git.jpoimboe@kernel.org
+Link: https://lkml.kernel.org/r/20230313233346.kayh4t2lpicjkpsv@treble
 ---
- drivers/vhost/vhost.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/livepatch/transition.c |  9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index f11bdbe..822fbdb 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -363,8 +363,7 @@ static int vhost_worker(void *data)
- 			kcov_remote_start_common(dev->kcov_handle);
- 			work->fn(work);
- 			kcov_remote_stop();
--			if (need_resched())
--				schedule();
-+			cond_resched();
- 		}
- 	}
- 	kthread_unuse_mm(dev->mm);
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index f1b25ec..135fc73 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -14,6 +14,8 @@
+ #include "transition.h"
+ 
+ #define MAX_STACK_ENTRIES  100
++DEFINE_PER_CPU(unsigned long[MAX_STACK_ENTRIES], klp_stack_entries);
++
+ #define STACK_ERR_BUF_SIZE 128
+ 
+ #define SIGNALS_TIMEOUT 15
+@@ -240,12 +242,15 @@ static int klp_check_stack_func(struct klp_func *func, unsigned long *entries,
+  */
+ static int klp_check_stack(struct task_struct *task, const char **oldname)
+ {
+-	static unsigned long entries[MAX_STACK_ENTRIES];
++	unsigned long *entries = this_cpu_ptr(klp_stack_entries);
+ 	struct klp_object *obj;
+ 	struct klp_func *func;
+ 	int ret, nr_entries;
+ 
+-	ret = stack_trace_save_tsk_reliable(task, entries, ARRAY_SIZE(entries));
++	/* Protect 'klp_stack_entries' */
++	lockdep_assert_preemption_disabled();
++
++	ret = stack_trace_save_tsk_reliable(task, entries, MAX_STACK_ENTRIES);
+ 	if (ret < 0)
+ 		return -EINVAL;
+ 	nr_entries = ret;
