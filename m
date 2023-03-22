@@ -2,121 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D096C41C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56126C41C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCVFBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 01:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S229782AbjCVFCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 01:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCVFBU (ORCPT
+        with ESMTP id S229452AbjCVFC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 01:01:20 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F313F3B862;
-        Tue, 21 Mar 2023 22:01:17 -0700 (PDT)
-Received: from [10.128.10.193] (unknown [117.133.56.22])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 9A1045802E1;
-        Wed, 22 Mar 2023 13:01:09 +0800 (CST)
-Message-ID: <463601ac-da5f-1616-e531-2bbc3a22fc43@sangfor.com.cn>
-Date:   Wed, 22 Mar 2023 13:01:09 +0800
+        Wed, 22 Mar 2023 01:02:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15903574D5
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 22:02:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB905B81B2D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 05:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15E6C433D2;
+        Wed, 22 Mar 2023 05:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679461344;
+        bh=ndOGmTUiiV++Xj9S+Ph8LJTM9AhKGZq0wDVwNZYO3GM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=apUXCUknJJO20URvMNoq6w9aOAme+DY66QbeX8xiJzq/k+dOnlE0/4cqHUwgt9YPm
+         WaRDf226gcIKEm1DytvFb043CgM/L07ds+zD66ypJHc9IyNv3A++IMMuWg8exV8K96
+         pvDnXQvFpTUdcwGW0X3z5A265MmPzAO/oDjF0FwZoZrpiKOZybpkJ282P8T7PTk/OO
+         Nr1VZlAgzRCistKOInNqn1RNdeFU+fJ+/w3kLXRT6naBGRL5VJX8ye96R8OCV30h+B
+         ymW3pdN7J5Psyv6Y3EWyvbSfna2NO4oIusgnQXvAexS4opKMz09BADcfNpLNk9sJVN
+         KY0mkZcnRwIDA==
+Date:   Tue, 21 Mar 2023 22:02:22 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2.1 01/11] static_call: Improve key type abstraction
+Message-ID: <20230322050222.3okw7d2cd4y3w4ug@treble>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
+ <c8bc83b2c70aeaad3ce01d12dc1153981ab693f8.1679456900.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 1/2] function_graph: Support recording and printing the
- return value of function
-Content-Language: en-US
-To:     Florian Kauer <florian.kauer@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>, mhiramat@kernel.org
-Cc:     linux@armlinux.org.uk, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230320131650.482594-1-pengdonglin@sangfor.com.cn>
- <20230320131650.482594-2-pengdonglin@sangfor.com.cn>
- <2eeef5a3-cbe7-7a01-489a-87c5ac00adf7@linutronix.de>
- <20230321104413.43a81ffb@gandalf.local.home>
- <ac95f1f7-2af3-1461-2ea2-3608d081de3f@linutronix.de>
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-In-Reply-To: <ac95f1f7-2af3-1461-2ea2-3608d081de3f@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQxhOVk4fQ0xKSk9DTR4fQ1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKTFVKSEhVTk1VSUlZV1kWGg8SFR0UWUFZT0tIVUpKS09ISFVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ogw6CCo4Ez0ONRUMIQgdIRZW
-        ExMKFAhVSlVKTUxCT01KSUxLQ05IVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSkpMVUpISFVOTVVJSVlXWQgBWUFOSkhCNwY+
-X-HM-Tid: 0a8707b143a22eb7kusn9a1045802e1
-X-HM-MType: 1
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c8bc83b2c70aeaad3ce01d12dc1153981ab693f8.1679456900.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/21 23:11, Florian Kauer wrote:
-> On 21.03.23 15:44, Steven Rostedt wrote:
->> On Tue, 21 Mar 2023 15:09:40 +0100
->> Florian Kauer <florian.kauer@linutronix.de> wrote:
->>
->>> On 20.03.23 14:16, Donglin Peng wrote:
->>>> When using the function_graph tracer to analyze system call failures,
->>>> it can be time-consuming to analyze the trace logs and locate the kernel
->>>> function that first returns an error. This change aims to simplify the
->>>> process by recording the function return value to the 'retval' member of
->>>> 'ftrace_graph_ent' and printing it when outputing the trace log.
->>>
->>> I just came across your patch by pure luck and it helped me a lot
->>> to trace down a problem I had, thanks!
->>>
->>> So you can have my
->>> Tested-by: Florian Kauer <florian.kauer@linutronix.de>
->>>   
->>>> New trace options are introduced: funcgraph-retval and graph_retval_hex.
->>>
->>> I would personally prefer to have the second option scoped better, so for example
->>> "funcgraph-retval-hex".
->>
->> That could be an ftrace option.
-> 
-> What do you mean? In the current implementation both funcgraph-retval and graph_retval_hex
-> are options for the function_graph tracer, but one is prefixed with "funcgraph-" as nearly
-> all other options for the function_graph tracer and one is not (and is even snake_case, while
-> the others are kebab-case). So it just looks inconsistent for me, but there might be a reason?
+Make the static_call_key union less fragile by abstracting all knowledge
+about the type bit into helper functions.
 
-Agree, I also think "funcgraph-retval-hex" may look better.
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ include/linux/static_call_types.h       |  4 +--
+ kernel/static_call_inline.c             | 47 ++++++++++++++++++-------
+ tools/include/linux/static_call_types.h |  4 +--
+ 3 files changed, 38 insertions(+), 17 deletions(-)
 
-Hi Hiramatsu, what do you think?
-
-> 
-> By the way: The documentation patch also references "function-retval" instead of
-> "funcgraph-retval" in the documentation of the graph_retval_hex option.
-
-Thanks, it has been removed in v6.
-
-> 
->> Anyway, could you tell us your use case, and that could go into the change
->> log of this patch as "one use case that this helped with".
-> 
-> Nothing spectacular. I just wanted to find out why ICMP port unreachable messages
-> sporadically lead to -111 (Connection Refused) for __sys_sendto() when IP_RECVERR is set
-> and the call never fails if IP_RECVERR is not set. (I am still unsure if this is
-> REALLY intended behavior, but at least it makes sense why this occurs when reading
-> the sources).
-> 
-> And with this patch, the -111 is directly popping up in the trace, but I do not think
-> that my missing knowledge about details of the kernel network stack
-> really qualifies as a good argument ;-)
-> 
-> Greetings,
-> Florian
+diff --git a/include/linux/static_call_types.h b/include/linux/static_call_types.h
+index 5a00b8b2cf9f..87c3598609e8 100644
+--- a/include/linux/static_call_types.h
++++ b/include/linux/static_call_types.h
+@@ -63,8 +63,8 @@ struct static_call_key {
+ 	union {
+ 		/* bit 0: 0 = mods, 1 = sites */
+ 		unsigned long type;
+-		struct static_call_mod *mods;
+-		struct static_call_site *sites;
++		struct static_call_mod *_mods;
++		struct static_call_site *_sites;
+ 	};
+ };
+ 
+diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
+index 639397b5491c..1328370d3cf6 100644
+--- a/kernel/static_call_inline.c
++++ b/kernel/static_call_inline.c
+@@ -115,12 +115,17 @@ static inline bool static_call_key_has_mods(struct static_call_key *key)
+ 	return !(key->type & 1);
+ }
+ 
+-static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
++static inline struct static_call_mod *static_call_key_mods(struct static_call_key *key)
+ {
+ 	if (!static_call_key_has_mods(key))
+ 		return NULL;
+ 
+-	return key->mods;
++	return key->_mods;
++}
++
++static inline void static_call_key_set_mods(struct static_call_key *key, struct static_call_mod *mods)
++{
++	key->_mods = mods;
+ }
+ 
+ static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
+@@ -131,6 +136,12 @@ static inline struct static_call_site *static_call_key_sites(struct static_call_
+ 	return (struct static_call_site *)(key->type & ~1);
+ }
+ 
++static inline void static_call_key_set_sites(struct static_call_key *key, struct static_call_site *sites)
++{
++	key->_sites = sites;
++	key->type |= 1;
++}
++
+ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+ {
+ 	struct static_call_site *site, *stop;
+@@ -154,7 +165,7 @@ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+ 		goto done;
+ 
+ 	first = (struct static_call_mod){
+-		.next = static_call_key_next(key),
++		.next = static_call_key_mods(key),
+ 		.mod = NULL,
+ 		.sites = static_call_key_sites(key),
+ 	};
+@@ -250,8 +261,7 @@ static int __static_call_init(struct module *mod,
+ 			 * static_call_init() before memory allocation works.
+ 			 */
+ 			if (!mod) {
+-				key->sites = site;
+-				key->type |= 1;
++				static_call_key_set_sites(key, site);
+ 				goto do_transform;
+ 			}
+ 
+@@ -266,10 +276,10 @@ static int __static_call_init(struct module *mod,
+ 			 */
+ 			if (static_call_key_sites(key)) {
+ 				site_mod->mod = NULL;
+-				site_mod->next = NULL;
+ 				site_mod->sites = static_call_key_sites(key);
++				site_mod->next = NULL;
+ 
+-				key->mods = site_mod;
++				static_call_key_set_mods(key, site_mod);
+ 
+ 				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
+ 				if (!site_mod)
+@@ -278,8 +288,9 @@ static int __static_call_init(struct module *mod,
+ 
+ 			site_mod->mod = mod;
+ 			site_mod->sites = site;
+-			site_mod->next = static_call_key_next(key);
+-			key->mods = site_mod;
++			site_mod->next = static_call_key_mods(key);
++
++			static_call_key_set_mods(key, site_mod);
+ 		}
+ 
+ do_transform:
+@@ -406,7 +417,7 @@ static void static_call_del_module(struct module *mod)
+ 	struct static_call_site *stop = mod->static_call_sites +
+ 					mod->num_static_call_sites;
+ 	struct static_call_key *key, *prev_key = NULL;
+-	struct static_call_mod *site_mod, **prev;
++	struct static_call_mod *site_mod, *prev;
+ 	struct static_call_site *site;
+ 
+ 	for (site = start; site < stop; site++) {
+@@ -416,15 +427,25 @@ static void static_call_del_module(struct module *mod)
+ 
+ 		prev_key = key;
+ 
+-		for (prev = &key->mods, site_mod = key->mods;
++		site_mod = static_call_key_mods(key);
++		if (!site_mod)
++			continue;
++
++		if (site_mod->mod == mod) {
++			static_call_key_set_mods(key, site_mod->next);
++			kfree(site_mod);
++			continue;
++		}
++
++		for (prev = site_mod, site_mod = site_mod->next;
+ 		     site_mod && site_mod->mod != mod;
+-		     prev = &site_mod->next, site_mod = site_mod->next)
++		     prev = site_mod, site_mod = site_mod->next)
+ 			;
+ 
+ 		if (!site_mod)
+ 			continue;
+ 
+-		*prev = site_mod->next;
++		prev->next = site_mod->next;
+ 		kfree(site_mod);
+ 	}
+ }
+diff --git a/tools/include/linux/static_call_types.h b/tools/include/linux/static_call_types.h
+index 5a00b8b2cf9f..87c3598609e8 100644
+--- a/tools/include/linux/static_call_types.h
++++ b/tools/include/linux/static_call_types.h
+@@ -63,8 +63,8 @@ struct static_call_key {
+ 	union {
+ 		/* bit 0: 0 = mods, 1 = sites */
+ 		unsigned long type;
+-		struct static_call_mod *mods;
+-		struct static_call_site *sites;
++		struct static_call_mod *_mods;
++		struct static_call_site *_sites;
+ 	};
+ };
+ 
+-- 
+2.39.2
 
