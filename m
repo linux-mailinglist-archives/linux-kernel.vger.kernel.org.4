@@ -2,125 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AEA6C49B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2FA6C49C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCVLw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S230272AbjCVL7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCVLwy (ORCPT
+        with ESMTP id S230160AbjCVL7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:52:54 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ECD10ABE;
-        Wed, 22 Mar 2023 04:52:53 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y4so71810287edo.2;
-        Wed, 22 Mar 2023 04:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679485971;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ho4jVBmPA9BFJ1NRBlIYYugOjZKS7BAlkcBVP60WOFY=;
-        b=E3Oh+auU0oU56o4Ag9yCvnQ/NujkTP0f/ZvGt/y7CLtux5D3nolsuSjsF/3blUbsfJ
-         eV8kejmE8d95Y+1LNWWto+mgd7RcuFW/gnnl2oipW2ky6GwDEwTAITvLoQwIRCVr1XuF
-         TrpxFzJ2iuDLJPEaATm4qvd+ofG2nx3KYegE/6EmnVs7SxIQfhSr9y3C6/uOqZnWhMhX
-         zuY2iDo1tXjCg3gilbwxs6aj5nBIuOAqJjZx5sgfi0aP0HhadSDasNAGTyOLjgAGY7+J
-         0bl338AYEXDfQgAsGdE0oJ0mikj3pCgQEMIfVKT3kQSNSKFQ1RGdrCXR6Ac1hTNiqRHu
-         ulzQ==
+        Wed, 22 Mar 2023 07:59:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B865B570AC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679486333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=B1IhaCFxKJpjAg+q0LEfIaM0Q2vc1KJxe/aPBLF+J8s=;
+        b=A2TN3gfPRu68J1r/OiRwH+QH53ebOG+OdzukiWcTljnjNQOagjNMoPj3mP+ig4saYniaRR
+        T3I3PSSpULODvGnyBZQD2YaL3Jd12eDkF0aGTIKT4Av1Cen7mi+vfCA/GygGHBDbW5aBi9
+        ZPQi1D0UQ6Ajt0SukJzLuN/5FJrBXfY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-59-NH3O0OfEP92jVpDYFvOfwA-1; Wed, 22 Mar 2023 07:58:50 -0400
+X-MC-Unique: NH3O0OfEP92jVpDYFvOfwA-1
+Received: by mail-qv1-f70.google.com with SMTP id a10-20020a0ccdca000000b005d70160fbb0so1002501qvn.21
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 04:58:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679485971;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679486330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ho4jVBmPA9BFJ1NRBlIYYugOjZKS7BAlkcBVP60WOFY=;
-        b=TVJlhoe251fqTinz498wFrlgzDkAxEM/dzHD98j/CT+EsSYH6/hXyMJJCr7UJ7q5lu
-         BCu7qJFUBLUAQrCTwvkR0vU0+OnvVhNMTdmfDIBRwAWhhB1rK7xXDDsJQCokpEuokpjZ
-         G69wP/UFJQqkd3zRtjmSZRJA/yGtOonWzm7qUfDHnRHNRj7/Mh0Jf8W1GJuRtrAFZUyC
-         9f+d93sbZKluKkehyPT/VyTMZ7JF7bUE1Rg8fCX025CReAzl4lJ1Ty8cBs8tOhSM6u0U
-         kidttPLjCLL+khCPQ8lI3Qq6hjY6lgz4mZUv5F83AicTY3+lHC08oDv2pYWMnjfTVOA7
-         mIZA==
-X-Gm-Message-State: AO0yUKWjM+rO9vqAelC7DBpDGcRbQVF4ZaznRk3BTmHA9toeQN2w7Fe0
-        ysfMYp/BHecTd0dsgITARqo=
-X-Google-Smtp-Source: AK7set8jk6V8+fNpBSGtiZGLG7GpUDRiZlz/urB9685AOQ4i8HnPZa4QlvotQ+Sk+/vEAa04Pr3snQ==
-X-Received: by 2002:a17:906:eb8b:b0:884:930:b017 with SMTP id mh11-20020a170906eb8b00b008840930b017mr7424514ejb.60.1679485971523;
-        Wed, 22 Mar 2023 04:52:51 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170906c20800b0093a2160168esm1984974ejz.35.2023.03.22.04.52.50
+        bh=B1IhaCFxKJpjAg+q0LEfIaM0Q2vc1KJxe/aPBLF+J8s=;
+        b=ZEs8kkRf9J+OPtbi8YkqT2ru3PDbhE4ht3PmI15TOl5iGPNwHjc8ngny45RS/aJPBw
+         C+/STcaevs7yYhFgQ6F4vZq/uGI0ec2BSgsGljGA6uUvw6sZ9AgR4yF9A5rnQJrYPy7W
+         V81GzCdMrNHWpTuUDPxr5D6juelQEqrA2a5WrESsL/I150lB8HKI+9ddl3l6F2CWhZ3l
+         vI1HCaTvUmFLB1R43qL0b3KJNQFQoD2hxzW8tLkl1PoPKd0KzZ4U2CLeEzY/Nf0GiiVi
+         o9TuravTw0gz8TKWSPq4sTUA/pRHWXgPRTNxgsnmW/CTr8CWpENZRwvZGoB7IG9mXLPe
+         fyVg==
+X-Gm-Message-State: AO0yUKXBusSgo0PkNzttu4zFkexaJwAQUoJx9t+XbyCKWxrvTtOdb06O
+        pE+n5SskMGbV03ag+Sm0AcQoolt49+jBTGZpJd1hzBGgQAk8LuVB12aVHBEgGD46DPf4VHYVdF1
+        Jpiz0m4wdjuHO5gskkTM1ER8v
+X-Received: by 2002:a05:622a:103:b0:3d7:3cf4:33f9 with SMTP id u3-20020a05622a010300b003d73cf433f9mr4956980qtw.68.1679486330209;
+        Wed, 22 Mar 2023 04:58:50 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8+LElrkvdjPI0dbh2Q4k8yW/bECWQ3fu0cFt9+TXxvztfQIZdsEIppTbtwkLz4UzzOc60T9Q==
+X-Received: by 2002:a05:622a:103:b0:3d7:3cf4:33f9 with SMTP id u3-20020a05622a010300b003d73cf433f9mr4956958qtw.68.1679486329994;
+        Wed, 22 Mar 2023 04:58:49 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id t10-20020a37aa0a000000b0074683c45f6csm6337273qke.1.2023.03.22.04.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 04:52:51 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 14:52:45 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Tanmay Shah <tanmay.shah@amd.com>,
-        andersson@kernel.org, mathieu.poirier@linaro.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Tarak Reddy <tarak.reddy@amd.com>
-Subject: Re: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
-Message-ID: <82ff071d-cd00-47f8-bc72-4d78bfed731d@kili.mountain>
+        Wed, 22 Mar 2023 04:58:49 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     tony@atomide.com, lee@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] mfd: twl-core: remove unused add_child and add_numbered_child functions
+Date:   Wed, 22 Mar 2023 07:58:38 -0400
+Message-Id: <20230322115838.2569414-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322040933.924813-3-tanmay.shah@amd.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tanmay,
+clang with W=1 reports
+drivers/mfd/twl-core.c:654:30: error: unused function 'add_child' [-Werror,-Wunused-function]
+static inline struct device *add_child(unsigned mod_no, const char *name,
+                             ^
+add_numbered_child and its only caller add_child are not used, so remove them.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tanmay-Shah/remoteproc-Make-rproc_get_by_phandle-work-for-clusters/20230322-121102
-base:   e19967994d342a5986d950a1bfddf19d7e1191b7
-patch link:    https://lore.kernel.org/r/20230322040933.924813-3-tanmay.shah%40amd.com
-patch subject: [PATCH v2 2/2] remoteproc: enhance rproc_put() for clusters
-config: powerpc-randconfig-m041-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221916.LgKkr8Gk-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/mfd/twl-core.c | 65 ------------------------------------------
+ 1 file changed, 65 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Link: https://lore.kernel.org/r/202303221916.LgKkr8Gk-lkp@intel.com/
-
-smatch warnings:
-drivers/remoteproc/remoteproc_core.c:2565 rproc_put() warn: variable dereferenced before check 'rproc->dev.parent' (see line 2562)
-drivers/remoteproc/remoteproc_core.c:2566 rproc_put() warn: variable dereferenced before check 'rproc->dev.parent->driver' (see line 2562)
-
-vim +2565 drivers/remoteproc/remoteproc_core.c
-
-160e7c840fe858 Ohad Ben-Cohen  2012-07-04  2560  void rproc_put(struct rproc *rproc)
-400e64df6b237e Ohad Ben-Cohen  2011-10-20  2561  {
-fbb6aacb078285 Bjorn Andersson 2016-10-02 @2562  	module_put(rproc->dev.parent->driver->owner);
-                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Unchecked dereferences.
-
-573d22d13a6970 Tanmay Shah     2023-03-21  2563  	struct platform_device *cluster_pdev;
-573d22d13a6970 Tanmay Shah     2023-03-21  2564  
-573d22d13a6970 Tanmay Shah     2023-03-21 @2565  	if (rproc->dev.parent) {
-                                                            ^^^^^^^^^^^^^^^^^
-Checked too late.
-
-573d22d13a6970 Tanmay Shah     2023-03-21 @2566  		if (rproc->dev.parent->driver) {
-                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-573d22d13a6970 Tanmay Shah     2023-03-21  2567  			module_put(rproc->dev.parent->driver->owner);
-573d22d13a6970 Tanmay Shah     2023-03-21  2568  		} else {
-573d22d13a6970 Tanmay Shah     2023-03-21  2569  			cluster_pdev = of_find_device_by_node(rproc->dev.parent->of_node->parent);
-573d22d13a6970 Tanmay Shah     2023-03-21  2570  			if (cluster_pdev) {
-573d22d13a6970 Tanmay Shah     2023-03-21  2571  				module_put(cluster_pdev->dev.driver->owner);
-573d22d13a6970 Tanmay Shah     2023-03-21  2572  				put_device(&cluster_pdev->dev);
-573d22d13a6970 Tanmay Shah     2023-03-21  2573  			}
-573d22d13a6970 Tanmay Shah     2023-03-21  2574  		}
-573d22d13a6970 Tanmay Shah     2023-03-21  2575  	}
-b5ab5e24e960b9 Ohad Ben-Cohen  2012-05-30  2576  	put_device(&rproc->dev);
-400e64df6b237e Ohad Ben-Cohen  2011-10-20  2577  }
-
+diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
+index e2d9a93be43b..e801b7ce010f 100644
+--- a/drivers/mfd/twl-core.c
++++ b/drivers/mfd/twl-core.c
+@@ -594,71 +594,6 @@ int twl_get_hfclk_rate(void)
+ }
+ EXPORT_SYMBOL_GPL(twl_get_hfclk_rate);
+ 
+-static struct device *
+-add_numbered_child(unsigned mod_no, const char *name, int num,
+-		void *pdata, unsigned pdata_len,
+-		bool can_wakeup, int irq0, int irq1)
+-{
+-	struct platform_device	*pdev;
+-	struct twl_client	*twl;
+-	int			status, sid;
+-
+-	if (unlikely(mod_no >= twl_get_last_module())) {
+-		pr_err("%s: invalid module number %d\n", DRIVER_NAME, mod_no);
+-		return ERR_PTR(-EPERM);
+-	}
+-	sid = twl_priv->twl_map[mod_no].sid;
+-	twl = &twl_priv->twl_modules[sid];
+-
+-	pdev = platform_device_alloc(name, num);
+-	if (!pdev)
+-		return ERR_PTR(-ENOMEM);
+-
+-	pdev->dev.parent = &twl->client->dev;
+-
+-	if (pdata) {
+-		status = platform_device_add_data(pdev, pdata, pdata_len);
+-		if (status < 0) {
+-			dev_dbg(&pdev->dev, "can't add platform_data\n");
+-			goto put_device;
+-		}
+-	}
+-
+-	if (irq0) {
+-		struct resource r[2] = {
+-			{ .start = irq0, .flags = IORESOURCE_IRQ, },
+-			{ .start = irq1, .flags = IORESOURCE_IRQ, },
+-		};
+-
+-		status = platform_device_add_resources(pdev, r, irq1 ? 2 : 1);
+-		if (status < 0) {
+-			dev_dbg(&pdev->dev, "can't add irqs\n");
+-			goto put_device;
+-		}
+-	}
+-
+-	status = platform_device_add(pdev);
+-	if (status)
+-		goto put_device;
+-
+-	device_init_wakeup(&pdev->dev, can_wakeup);
+-
+-	return &pdev->dev;
+-
+-put_device:
+-	platform_device_put(pdev);
+-	dev_err(&twl->client->dev, "failed to add device %s\n", name);
+-	return ERR_PTR(status);
+-}
+-
+-static inline struct device *add_child(unsigned mod_no, const char *name,
+-		void *pdata, unsigned pdata_len,
+-		bool can_wakeup, int irq0, int irq1)
+-{
+-	return add_numbered_child(mod_no, name, -1, pdata, pdata_len,
+-		can_wakeup, irq0, irq1);
+-}
+-
+ /*----------------------------------------------------------------------*/
+ 
+ /*
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
 
