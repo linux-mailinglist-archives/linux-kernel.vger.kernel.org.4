@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFC66C520E
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071D66C5211
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjCVRQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S231504AbjCVRQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbjCVRPy (ORCPT
+        with ESMTP id S231435AbjCVRP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:15:54 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E4C64B28;
-        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n19so1740892wms.0;
-        Wed, 22 Mar 2023 10:15:24 -0700 (PDT)
+        Wed, 22 Mar 2023 13:15:57 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655064863;
+        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v4-20020a05600c470400b003ee4f06428fso2424553wmo.4;
+        Wed, 22 Mar 2023 10:15:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679505322;
+        d=gmail.com; s=20210112; t=1679505324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dEknM98Izmc8d/crPsoJ+ejZxfl78958Ei6SPYhYDHs=;
-        b=LTOQ75W3s5nYo+nEfiJAKqytSopONB4jCtU3zRygzPMasugVOrYFMsUR+WrpsAjuRT
-         v4HgWpJxEsIWeRXrUN9W21mFXhGgJLJXSxRnrio0CsZZBNMdkebbNOphgKXIWAdm+2iM
-         PzqAdGm5t38wT2mmm6V/9hCy90+12raHM82tNFdhhiezfg2cukVOKP3j/TeOVCwas0gQ
-         iFc+CuZB6y73zYXvMUMUpTsqI5vev4xJsSMHIQJVmUxJAwqhOBhN9JCRo7Ao+wayjn2d
-         Fxo6AV3A8v68nVfoQ0K0I+eWXG48nMCX45iWh/lVvVTOFcR99kn4va7NY1oVnPsh+WQz
-         WcLA==
+        bh=C7ykhArT1dO7P8wtmI92eo4c7KtPZI9w182/5+cB3T0=;
+        b=WRZRU2SM9n1LfUj4SgTPfQczADC2pfvoIrOsNpBLTym2eOfmkTetb/WbGSla5kw2Wb
+         SH5MIC2fFeScJg6T5FFAUOOLmRVW9xvl8Q3T3NKb3z/9wvPHO767nrdIbffRWMJFs7gW
+         wT/kuTpn8GYdfY0sZ/dMTkq41DVusEkxfX6GxtG85O98ZP8xMHQog8aPs9fRfUvI5ZKB
+         eGYcRz/Wn1cHhjey9jtWzQEEmZ/BT3b0HQTF9Tl88oofhiEgbyjFXr91+vRsLbsJpGXH
+         /1FjjaLG5DnonKubV9rmbuCU8KzwH331gi2KuRjvLD2V+OMewqSa5i+GvgVv8x2zC8y+
+         /mLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679505322;
+        d=1e100.net; s=20210112; t=1679505324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dEknM98Izmc8d/crPsoJ+ejZxfl78958Ei6SPYhYDHs=;
-        b=wv2NSR1B5RnsdoEE7mgJSHAfSs1JHZbQ1HPMldyaGWAk1dcucqh/uDzM3Flz+ADRi1
-         19NoaB2Ur7QaWZejbuplnIOK/nte3PnmqJ9ZNw8HejmuS4eU8mB1V1aJUSKSPGsfUi4a
-         LYe3HSw87l0jrAC7ptdKvdUtzBoIkX0CeFvfguTQQkDhUTyAFIG144hY6uPXY9Mga96b
-         gnNe2dLCzHQLbEJpaDaavT7FEEcLDxaq7jNcR2xqEEZaIwfcew+Q05t4xL/3i8GAj9Ru
-         6ivQjIbBKfYQF88o7KnOW9o1wjrGsk+Nd4Iy0OLZix3JQasCJGrKV7ib5awI9J39upYV
-         fa4A==
-X-Gm-Message-State: AO0yUKWw75I1M5Vjrd4vXq4GTruQu0H84pycgyi2CT3bczTYRJpWmEWg
-        +bHDhvp1n5IWW85GI9vKWpbclB13a/S0RQ==
-X-Google-Smtp-Source: AK7set9T/2oJsVetUb2L4mPEWu8YqDrnK8EzHK5bJf1ABIa1Et8f7BFJ7AA3j14ITZuf8cH0HqlRtg==
-X-Received: by 2002:a05:600c:2304:b0:3ed:2949:985b with SMTP id 4-20020a05600c230400b003ed2949985bmr206833wmo.23.1679505322457;
-        Wed, 22 Mar 2023 10:15:22 -0700 (PDT)
+        bh=C7ykhArT1dO7P8wtmI92eo4c7KtPZI9w182/5+cB3T0=;
+        b=bhd0fNh0jDOMlGSC4F+p5igV8AUlGEPj2cXUwgdgqRfSSuUy9z+Li8cT0MbY/aWH5Z
+         qInRVA+R1cWV3ubrDyKag6oEc0LDU234bnMFcP9b7MRlrM8Dpit9TFSyqJU4sDUWNDs5
+         KOe2k/SNIdat6munC9VOuEBDO0eB/UDMN+repKwXNdHChp/Toq9qMvW4Uy8uHxosbQlD
+         8P88GbKFjynb1E8I8croGjfub7+y8PPsWB0xNUcafIv6xs3MnVOP1Mk4KwBCbqS509la
+         mfjsriXtIybO8XFqtn100ungjvbFWdogEplLdSPVdgAqdfF5J8gHxAoApoeYejYkL5/R
+         kOhQ==
+X-Gm-Message-State: AO0yUKWdzr3dMmjKhD8tF+ec4Dfdq9VGZ/WCU4d85npKQvxSwhNPZZ1J
+        5WYRIqivh0suFC1OqEidwenpiJYvXedYjw==
+X-Google-Smtp-Source: AK7set87ew2/mKWeShXTTW/YBbBJNR2zeGFV0CfuqLXhiJEU6tqFuyKcW+vFEoKHIbNUS8wRy1SzLA==
+X-Received: by 2002:a05:600c:290:b0:3ee:6d88:774a with SMTP id 16-20020a05600c029000b003ee6d88774amr160734wmk.14.1679505323514;
+        Wed, 22 Mar 2023 10:15:23 -0700 (PDT)
 Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.21
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b003ee11ac2288sm8414333wmo.21.2023.03.22.10.15.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:15:22 -0700 (PDT)
+        Wed, 22 Mar 2023 10:15:23 -0700 (PDT)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -59,9 +59,9 @@ To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/4] dt-bindings: clk: add BCM63268 timer clock definitions
-Date:   Wed, 22 Mar 2023 18:15:12 +0100
-Message-Id: <20230322171515.120353-2-noltari@gmail.com>
+Subject: [PATCH v4 2/4] dt-bindings: reset: add BCM63268 timer reset definitions
+Date:   Wed, 22 Mar 2023 18:15:13 +0100
+Message-Id: <20230322171515.120353-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230322171515.120353-1-noltari@gmail.com>
 References: <20230322171515.120353-1-noltari@gmail.com>
@@ -78,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing timer clock definitions for BCM63268.
+Add missing timer reset definitions for BCM63268.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 Acked-by: Rob Herring <robh@kernel.org>
@@ -87,31 +87,22 @@ Acked-by: Rob Herring <robh@kernel.org>
  v3: no changes
  v2: change commit title, as suggested by Stephen Boyd
 
- include/dt-bindings/clock/bcm63268-clock.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ include/dt-bindings/reset/bcm63268-reset.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/dt-bindings/clock/bcm63268-clock.h b/include/dt-bindings/clock/bcm63268-clock.h
-index da23e691d359..dea8adc8510e 100644
---- a/include/dt-bindings/clock/bcm63268-clock.h
-+++ b/include/dt-bindings/clock/bcm63268-clock.h
-@@ -27,4 +27,17 @@
- #define BCM63268_CLK_TBUS	27
- #define BCM63268_CLK_ROBOSW250	31
+diff --git a/include/dt-bindings/reset/bcm63268-reset.h b/include/dt-bindings/reset/bcm63268-reset.h
+index 6a6403a4c2d5..d87a7882782a 100644
+--- a/include/dt-bindings/reset/bcm63268-reset.h
++++ b/include/dt-bindings/reset/bcm63268-reset.h
+@@ -23,4 +23,8 @@
+ #define BCM63268_RST_PCIE_HARD	17
+ #define BCM63268_RST_GPHY	18
  
-+#define BCM63268_TCLK_EPHY1		0
-+#define BCM63268_TCLK_EPHY2		1
-+#define BCM63268_TCLK_EPHY3		2
-+#define BCM63268_TCLK_GPHY1		3
-+#define BCM63268_TCLK_DSL		4
-+#define BCM63268_TCLK_WAKEON_EPHY	6
-+#define BCM63268_TCLK_WAKEON_DSL	7
-+#define BCM63268_TCLK_FAP1		11
-+#define BCM63268_TCLK_FAP2		15
-+#define BCM63268_TCLK_UTO_50		16
-+#define BCM63268_TCLK_UTO_EXTIN		17
-+#define BCM63268_TCLK_USB_REF		18
++#define BCM63268_TRST_SW	29
++#define BCM63268_TRST_HW	30
++#define BCM63268_TRST_POR	31
 +
- #endif /* __DT_BINDINGS_CLOCK_BCM63268_H */
+ #endif /* __DT_BINDINGS_RESET_BCM63268_H */
 -- 
 2.30.2
 
