@@ -2,139 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D349D6C4D3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5FC6C4D3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCVOOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S229964AbjCVOO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCVOOU (ORCPT
+        with ESMTP id S231348AbjCVOOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:14:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0451528E64
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679494411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gIhIZ9iTRojGJMYiKTfmFBTTGDFbr5/gvROIxAATKTs=;
-        b=FogJLCkPsP+tdEj2ujUWMYLtqTaR3MPWrXqTeeJpgExbiOrvYzd7MtcS2pZefAtIsoBCrj
-        ZcxT1WELswogxUsbZLsoUhR9YpXKwXaFJKhnjtbzH3HkrAijK+SGIMZ+BFhLabU4zChBku
-        5z75d2/8lyCpxRWDxDcTcfeQMKBEU3I=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-675-U9sdEskKPF-jXBrjeh7tCw-1; Wed, 22 Mar 2023 10:13:25 -0400
-X-MC-Unique: U9sdEskKPF-jXBrjeh7tCw-1
-Received: by mail-wm1-f71.google.com with SMTP id bg13-20020a05600c3c8d00b003ed40f09355so8818219wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:13:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679494404;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIhIZ9iTRojGJMYiKTfmFBTTGDFbr5/gvROIxAATKTs=;
-        b=M2z5fIRN2+Pif3f7CIRvUIf2S9/MhVhsUb7iB2trsTcKQNdtyouCIWdyJBCsFfTvHy
-         NUH8orFRwm09I2h7/N5Cyl6E6bSz2ROMi3l/9B7uAi71DfpZD0PfcvGiQ2y63k642zzZ
-         rIrINdey9QLgfm+qVpFyQr4qj2/maBr2GvaI8N27nUclwQYZFoaVPfOLCoieLcOeR1nG
-         aOl9+qPREBSYytyn2k9VsYfi56kpJEpoW0SqNhuGgiaYDesy80egqGQ72/OUqONsnicb
-         U73fqzkykPtaSCAafK9vT7YeV2TK3w7winIZ5FtR6l7iSp+JukcPv9zh4zrPg0XU/Oot
-         S97g==
-X-Gm-Message-State: AAQBX9diOEwJPxQhrfhVZGc26F+iUx1BENsuODuhF433+5He90mD5gYG
-        O6s2rtL4S9qb+w/kubeXgo5o3wREUHEht459SDzxa4qDxQJ1QbyhhTbH5RN/G33Y+s/IYG7P5gc
-        ipwtgkC5SYSyTNRmRxbnw9qMb
-X-Received: by 2002:a05:6000:1cb:b0:2d3:f610:8410 with SMTP id t11-20020a05600001cb00b002d3f6108410mr48487wrx.0.1679494404216;
-        Wed, 22 Mar 2023 07:13:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bwPM1I+KdwU+k+LnKMhL8L8AvemWt4BBwZWovdn++jO3C4QynGXhNPsmQm5XFePAlaJEWMPA==
-X-Received: by 2002:a05:6000:1cb:b0:2d3:f610:8410 with SMTP id t11-20020a05600001cb00b002d3f6108410mr48464wrx.0.1679494403910;
-        Wed, 22 Mar 2023 07:13:23 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c15-20020adfef4f000000b002c7066a6f77sm13914075wrp.31.2023.03.22.07.13.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 07:13:23 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Jordan Crouse <jorcrous@amazon.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>
-Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-kernel@vger.kernel.org, Albert Esteve <aesteve@redhat.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Sergio Lopez <slp@redhat.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
-In-Reply-To: <87ttyu54wy.fsf@minerva.mail-host-address-is-not-set>
-References: <20230210081835.2054482-1-javierm@redhat.com>
- <20230303220918.qr5ydbin3nye3qtz@amazon.com>
- <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
- <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
- <87sfeh0yjn.fsf@minerva.mail-host-address-is-not-set>
- <CALE0LRvR=DjUp2_DBuPQkEr9jvzGH4Mx4-7=rc6zOw1APQdyeQ@mail.gmail.com>
- <20230308181245.nbnwkdtdnsldd65l@amazon.com>
- <87ttyu54wy.fsf@minerva.mail-host-address-is-not-set>
-Date:   Wed, 22 Mar 2023 15:13:22 +0100
-Message-ID: <87bkkkoovx.fsf@minerva.mail-host-address-is-not-set>
+        Wed, 22 Mar 2023 10:14:54 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C08E04D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:14:50 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C67025FD03;
+        Wed, 22 Mar 2023 17:14:46 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679494486;
+        bh=qj0syStHj7h4B0XAImt7mMexy7tBi48lJGaBNb7+JlY=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=q6sYTwFniqUNHRlfOq8EqSUgww71G+fVT2WNgb+KKOw/wSYpYN2Mze4CpcLqwZjMN
+         xH8dowjQPpdbs46PTFIwsxHv5UkIu+xUeMssyvbCyITg7jAJatxG/PUuxzv0En/oqm
+         pf0tLQojuFKXJlIT89GbHTGvQCOR6K5kK2vJQbHc5ftapAIykWUZ5OuCTGw+c9mHJ3
+         YkdkjlZX+Emdn8jnAgz0XXy1IurKX+MaZT/7Cuu4rvZ4HIuBfK7sbaYx+ZSMWnk5aH
+         EaPegTAHrPxBXL+JSVa6p3JWRnp9NuZzqJB3GvsfJ8jtBZTVYv9JRsAf/ylJdLycZ3
+         MgYiRmNdX1pTw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 22 Mar 2023 17:14:45 +0300 (MSK)
+Date:   Wed, 22 Mar 2023 17:14:44 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     <krzysztof.kozlowski@linaro.org>, <apw@canonical.com>,
+        <joe@perches.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <rockosov@gmail.com>
+Subject: Re: [PATCH v3] checkpatch: add missing bindings license check
+Message-ID: <20230322141444.abwirejgfbeer7lr@CAB-WSD-L081021>
+References: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
+ <20230321215337.GA1656483-robh@kernel.org>
+ <20230322102607.5rac7lmy5w653jen@CAB-WSD-L081021>
+ <CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/22 10:34:00 #20990985
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Javier Martinez Canillas <javierm@redhat.com> writes:
+On Wed, Mar 22, 2023 at 08:40:21AM -0500, Rob Herring wrote:
+> On Wed, Mar 22, 2023 at 5:26 AM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >
+> > Hello Rob, thank you for the comments. Please find my thoughts below.
+> >
+> > On Tue, Mar 21, 2023 at 04:53:37PM -0500, Rob Herring wrote:
+> > > On Mon, Mar 20, 2023 at 11:33:50PM +0300, Dmitry Rokosov wrote:
+> > > > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > > > together with Documentation bindings, because all of them are part of
+> > > > the whole DT bindings system.
+> > > >
+> > > > The requirement is dual licensed and matching pattern:
+> > > >     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+> > >
+> > > This is not correct. The headers can and should be licensed like the dts
+> > > files which are (unfortunately) all over the place and differ from the
+> > > bindings.
+> > >
+> > > Also, GPL-2.0-or-later is neither desired nor encouraged.
+> >
+> > Sorry, I'm little bit confused. Let's discuss correct way.
+> >
+> > We had such discussion in another review.
+> >
+> > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> >
+> > Krzysztof has mentioned that Documentation yaml bindings schemas and
+> > include bindings headers should have the same license by default.
+> 
+> By default is the key. Logically, headers are part of the binding
+> definition. However, they are included by dts files, so IMO their
+> license should align with dts files. If you don't yet have any dts
+> files, then yes, "GPL-2.0-only OR BSD-2-Clause" is what you should
+> use.
+> 
+> > And checkpath must check not only Documentation schema (previous
+> > implementation), but 'include bindings' as well:
+> >
+> > From Krzysztof at https://lore.kernel.org/all/9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org/:
+> 
+> Checkpatch has no way of knowing about the dts file part, so it can't
+> tell you what license.
+> 
+> Even as-is, checkpatch is wrong sometimes. If you convert a binding
+> (that defaulted to GPL-2.0-only) to schema, you can't just relicense
+> it dual licensed.
+> 
+> >
+> > ---
+> > >>>>> @@ -0,0 +1,20 @@
+> > >>>>> +/* SPDX-License-Identifier: GPL-2.0+ */
+> > >>>>
+> > >>>> I found in changelog:
+> > >>>> "fix license issue, it's GPL-2.0+ only in the current version"
+> > >>>> and I do not understand.
+> > >>>>
+> > >>>> The license is wrong, so what did you fix?
+> > >>>>
+> > >>>
+> > >>> Sorry don't get you. Why is it wrong?
+> > >>
+> > >> Run checkpatch - it will tell you why wrong. The license is not correct.
+> > >> This is part of binding and should be the same as binding.
+> > >>
+> > >
+> > > I always run checkpatch before sending the next patch series. Checkpatch
+> > > doesn't highlight this problem:
+> > >
+> > > --------------
+> > > $ rg SPDX a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
+> > > 32:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > 111:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > 188:+/* SPDX-License-Identifier: GPL-2.0+ */
+> > > 294:+/* SPDX-License-Identifier: GPL-2.0+ */
+> > >
+> > > $ ./scripts/checkpatch.pl --strict a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
+> > > total: 0 errors, 0 warnings, 0 checks, 259 lines checked
+> >
+> > Hmm, my bad, that's something to fix/improve in checkpatch.
+> > ---
+> >
+> > Actually, I agree with Krzysztof that checkpatch should verify 'include
+> > bindings', but looks like there is misunderstanding which license pattern
+> > we have to use.
+> >
+> > Rob, could you please share your thoughts if possible? Which one pattern
+> > we have to base on? GPL-2.0-only without 'later' suffix? Or you totally
+> > disagree that checkpatch is responsible for 'include bindings'
+> > verification?
+> 
+> I think we could do this:
+> 
+> Schemas should be: GPL-2.0-only OR BSD-2-Clause
+> Headers should be: GPL-2.0-only OR .*
+> 
+> Perhaps the 2nd term can be constrained to "(MIT|BSD-[23]-Clause)",
+> but I haven't looked at what variations exist in the headers. It may
+> be too varied that we can only check for "OR". We don't want to
+> encourage folks to blindly relicense things because checkpatch says
+> so. If you are copying an existing header and modifying it, then you
+> keep the original license (unless you have rights to change it).
 
-Hello Stanimir and Dikshita,
+Yes, if we are thinking in the such terms, when bindings are part of
+device tree source, it's one option to make the same license for both of
+them. But usually developer creates bindings definition in the first.
+After that, developer or other contributor creates device tree nodes.
+Also different device tree sources (for differnt boards as an example)
+can have different licenses.
 
-> Jordan Crouse <jorcrous@amazon.com> writes:
->
->> On Tue, Mar 07, 2023 at 05:20:18PM +0100, Enric Balletbo i Serra wrote:
->
-> [...]
->
->>> >
->>> > But regardless, I think that it would be better for a driver to
->>> > not change the order of advertised VIDIOC_ENUM_FMT pixel formats.
->>> >
->>> > Because what happens now is that a decoding that was previously
->>> > working by default is not working anymore due a combination of
->>> > the default being changed and S_FMT not working as expected.
->>
->> For my part, I was using the gstreamer v4l2 decoder which for some reason tries
->> to verify it can support whatever format it gets with G_FMT *before*
->> trying a S_FMT. I can't confirm or deny if S_FMT currently works or not.
->>
->> That said, I entirely agree with Javier. While it might be more
->> bandwidth efficient, QC08C is a obscure format. It is far more likely that the
->> average open source user would rather use a well known output format and, as
->> has been mentioned, once S_FMT is fixed those in the know can use the other
->> formats if they are working with other Qualcomm hardware blocks.
->>
->
-> Agreed. The rule is that the kernel shouldn't regress user-space and the
-> patches that changed the default format certainly did that. So from that
-> point of view I think that this patch should land.
->
-> There's also Enric's point that NV12 is a more common format and supported
-> by more user-space programs. That's why think that regardless of the S_FMT
-> situation, makes sense to revert to the previous default behaviour.
->
+Maybe it's better option to make license dependency between dts and
+bindings when bindings have a first priority and dts should have the
+same license or dual license, because bindings are the primary from the
+git history point of view.
 
-Any news on this patch? It would be great to fix this at least for v6.3.
+OR
+
+Make default value of bindings as suggested in the patchset (maybe
+without +/or-later) and show notice log from the checkpatch, like:
+
+'''
+DT binding documents should be licensed (GPL-2.0-only OR BSD-2-Clause)
+For special cases ask 'devicetree@vger.kernel.org' directly
+'''
+
+And handle all exceptions during LKML review, as Krzysztof suggested
+before.
+
+What do you think about above approaches?
+
+Krzysztof, please share your opinion as well.
+
+For sure, current checkpatch behaviour is wrong, it doesn't help to
+understand all mentioned interlacements.
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Thank you,
+Dmitry
