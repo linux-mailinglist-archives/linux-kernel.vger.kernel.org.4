@@ -2,167 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30786C47C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AEE6C47C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjCVKhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S230289AbjCVKhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbjCVKhc (ORCPT
+        with ESMTP id S230215AbjCVKhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:37:32 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADF452F57;
-        Wed, 22 Mar 2023 03:37:31 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p16so11178676wmq.5;
-        Wed, 22 Mar 2023 03:37:31 -0700 (PDT)
+        Wed, 22 Mar 2023 06:37:31 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E7452F57
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:37:30 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so5933576wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679481450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1679481449;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cXY3dtEy0DFSpO9vMF3eqheQ80y59mk1IPKmUUcnHw4=;
-        b=ZvEImXvWLlZnHzB/uPkccpIeQrcbBMzUte9gqqBUQ9+aYAhQ2qUE2ce9TsDqpMKLd5
-         +mQ5+bFPecNmFOmpbQdlSxktsVH6WmLN6ZDqW4PSMSLfFpKFFucTyWauuNf59gY+YFMf
-         uk38VBQ9Q9jYVhPrK+iDkefM7U4YSr7woFga1RQnY/btMY8wHwaMWWzNydqI/+0Gwysh
-         HiYcyUQBDx49My68w4qmEQp4kAh7wUnas5DROGDlXRs0dHgz9OQsonY8EgvlplTTCUbD
-         Xv/8uCDwYciRSmjn/7OaagPTtoQN55L/NYKyLVsDYbaHp/hMn9iGmROCqGFAZM2a8EkK
-         7rnw==
+        bh=KKYLrq+5xwL1z16Mh5XU//Z6+05o9hLc+yFcwb23nzw=;
+        b=nIplk97TeH7s+5D3Rmts/MtAbjzzuACevDUBrI+1Pdu1oDIiCu1a8mnlmYZNS2VOQc
+         Abcg1Pvjf6oLCbxA138GEtQnf7olIWuJWd8gnlK0+E7WWMMZ0a1TPuEEIOvfnG86dEwI
+         dL/W/TJqhn9qlVbYV6hX2Q57FnhlurwWngY2qBZuHYu/kvRmm6TVGqIK2MqGDar1aIRa
+         NSN2bLSz6R/K/3MfDVlnu5q/4RKAOLll1S3+7XFJ6NATqdkY3HnRwCoY6Y6EaMkXWbDr
+         geRakNa2tT0nP1slz+QHeuWYHboy6dznMuBOKrgbUIZDROsJoFCId8wtmRhpzh0oGTI/
+         2xJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679481450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679481449;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cXY3dtEy0DFSpO9vMF3eqheQ80y59mk1IPKmUUcnHw4=;
-        b=K9PFkPz16yTnCgbns/bVe1aQIdQsTiDDPE4Qhcj1ZoxihcxA4+YiVwpX3taH2YK7uS
-         W0daA3gXuFnmlGpvvgsMhtbH3EElK7drCyrtDntvnmxE2UKO7rVZxmy/iQALiihnhLsn
-         WFX4KeYzBHaKnjwYJ0Lg95YD9uMJPqyglE/mQl2DvSQOmp0P+J0NyzJFBJHC+Xt4kfr/
-         3wTNdhys5QszkkLrS07uDPW8srHmeyFED36DvD9cuYBrrJAfYmudU7JJS56nwrxIMBhR
-         tnqok1XXogxEjJM1bcQ1Q7bnYqnEQ0yCi2rwrhYZ2vuG5jEEGyeefJgty7SfJZDeqckL
-         m2yA==
-X-Gm-Message-State: AO0yUKUc3iAyTws0tFM1NvXNZE8fFEv1E/UVMwMAWK0j1f/xrnNg3ZG8
-        Gu99h2PScTQzcthM0oU6epcTY0aDttE=
-X-Google-Smtp-Source: AK7set8wjyAhRAJKpG1wItEV/9Sq5pZ1JXf92nIEtT1nfDZDVi0BjLq3WaWUnFeNRo2qaU1X0sfJgA==
-X-Received: by 2002:a7b:cc95:0:b0:3ed:346d:4534 with SMTP id p21-20020a7bcc95000000b003ed346d4534mr1361845wma.0.1679481450218;
-        Wed, 22 Mar 2023 03:37:30 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm10839725wmg.33.2023.03.22.03.37.28
+        bh=KKYLrq+5xwL1z16Mh5XU//Z6+05o9hLc+yFcwb23nzw=;
+        b=VzRuz+zt1SOg8tJ2gVI31aZMtFA4wyPoRXz5FoQryT3kehU4eoMPAhzG+PzpFfq6SS
+         Q7Q5kvCr1pHqX33dKDmB4OYDa8+YVQDJ5BRFwsiCEIvJ/qJrNdTvE9Tkx7UbCKZhuM8U
+         KiIOjs+CuikD6VN7oNDn7DX2jiI9TbMsQheN1Avtq2wSRHpnTmjAcn4KXfWYBqsMDpjt
+         Fl1aZeAYnRv9CXqHR4wN9joDOHtsG/Wa1Ed+620rzSL7hHy4GhYrZ7wGpayPlF+T9FFL
+         F3sf3qh7BezKGXIbe+s/AA97QLIoUNAuh6lbJR+HKbqMEBAH5iEGZRUeV53KQb+0MQjl
+         cEsg==
+X-Gm-Message-State: AO0yUKUAFfTUeBU0nY2iEm9yucCqz317mYxG8Hcw3ouQQ0GipKzilgZg
+        KZgGcr2lsZAymJs5BW1sVhXQkA==
+X-Google-Smtp-Source: AK7set80COadYMouirUYRTlnim/M4RpQYkRgCOJPyehYwC9cBwlz7KywIEwJcQneN0x0XeiFZfMJnQ==
+X-Received: by 2002:a7b:c845:0:b0:3ed:df74:bac7 with SMTP id c5-20020a7bc845000000b003eddf74bac7mr4640727wml.21.1679481448726;
+        Wed, 22 Mar 2023 03:37:28 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id z23-20020a7bc7d7000000b003ee1b2ab9a0sm6116422wmk.11.2023.03.22.03.37.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 03:37:29 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     virtualization@lists.linux-foundation.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Cc:     stefanha@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>, ira.weiny@intel.com
-Subject: Re: [PATCH v3 3/8] vringh: replace kmap_atomic() with kmap_local_page()
+        Wed, 22 Mar 2023 03:37:28 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     linux-amlogic@lists.infradead.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230321171213.2808460-1-martin.blumenstingl@googlemail.com>
+References: <20230321171213.2808460-1-martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v1 0/3] ARM: dts: Enable WiFi and Bluetooth support on
+ MXIII-Plus
+Message-Id: <167948144797.3811038.2142379553878713661.b4-ty@linaro.org>
 Date:   Wed, 22 Mar 2023 11:37:27 +0100
-Message-ID: <4499457.LvFx2qVVIh@suse>
-In-Reply-To: <20230321154228.182769-4-sgarzare@redhat.com>
-References: <20230321154228.182769-1-sgarzare@redhat.com>
- <20230321154228.182769-4-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=EC 21 marzo 2023 16:42:23 CET Stefano Garzarella wrote:
-> kmap_atomic() is deprecated in favor of kmap_local_page() since commit
-> f3ba3c710ac5 ("mm/highmem: Provide kmap_local*").
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page-faults, and can be called from any context (including interrupts).
-> Furthermore, the tasks can be preempted and, when they are scheduled to
-> run again, the kernel virtual addresses are restored and still valid.
->=20
-> kmap_atomic() is implemented like a kmap_local_page() which also disables
-> page-faults and preemption (the latter only for !PREEMPT_RT kernels,
-> otherwise it only disables migration).
->=20
-> The code within the mappings/un-mappings in getu16_iotlb() and
-> putu16_iotlb() don't depend on the above-mentioned side effects of
-> kmap_atomic(), so that mere replacements of the old API with the new one
-> is all that is required (i.e., there is no need to explicitly add calls
-> to pagefault_disable() and/or preempt_disable()).
->=20
-> This commit reuses a "boiler plate" commit message from Fabio, who has
-> already did this change in several places.
->=20
+Hi,
 
-=46WIW, I can confirm that the conversions here are safe...
+On Tue, 21 Mar 2023 18:12:10 +0100, Martin Blumenstingl wrote:
+> MXIII-Plus comes with a Ampak AP6330 Bluetooth and WiFi combo chip.
+> The 32kHz clock is provided by the SoC and is enabled by simply using
+> the correct pin mux.
+> Also this is the first board which uses the SDXC_A for connecting to
+> the SDIO chip.
+> 
+> Other than the two new pin muxes this is just a matter of describing
+> the hardware in meson8m2-mxiii-plus.dts.
+> 
+> [...]
 
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/arm-dt)
 
-Thanks,
+[1/3] ARM: dts: meson8: add the xtal_32k_out pin
+      https://git.kernel.org/amlogic/c/4ca4a633205fb372882de3e6e93a0a3584298249
+[2/3] ARM: dts: meson8: add the SDXC_A pins
+      https://git.kernel.org/amlogic/c/ef8474d50a37ab5f2f2f60e179d749b4273470de
+[3/3] ARM: dts: meson8m2: mxiii-plus: Enable Bluetooth and WiFi support
+      https://git.kernel.org/amlogic/c/8446b84c894f7441f8bf4410f9638e38dcb29c49
 
-=46abio
+These changes has been applied on the intermediate git tree [1].
 
-P.S.: I had to send this message again because my former contained HTML par=
-ts=20
-and so it was rejected by the mailing lists. I don't yet know how HTML crep=
-t=20
-into my text.
+The v6.4/arm-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
-> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->=20
-> Notes:
->     v3:
->     - credited Fabio for the commit message
->     - added reference to the commit that deprecated kmap_atomic() [Jason]
->     v2:
->     - added this patch since checkpatch.pl complained about deprecation
->       of kmap_atomic() touched by next patch
->=20
->  drivers/vhost/vringh.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> index a1e27da54481..0ba3ef809e48 100644
-> --- a/drivers/vhost/vringh.c
-> +++ b/drivers/vhost/vringh.c
-> @@ -1220,10 +1220,10 @@ static inline int getu16_iotlb(const struct vringh
-> *vrh, if (ret < 0)
->  		return ret;
->=20
-> -	kaddr =3D kmap_atomic(iov.bv_page);
-> +	kaddr =3D kmap_local_page(iov.bv_page);
->  	from =3D kaddr + iov.bv_offset;
->  	*val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
-> -	kunmap_atomic(kaddr);
-> +	kunmap_local(kaddr);
->=20
->  	return 0;
->  }
-> @@ -1241,10 +1241,10 @@ static inline int putu16_iotlb(const struct vringh
-> *vrh, if (ret < 0)
->  		return ret;
->=20
-> -	kaddr =3D kmap_atomic(iov.bv_page);
-> +	kaddr =3D kmap_local_page(iov.bv_page);
->  	to =3D kaddr + iov.bv_offset;
->  	WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
-> -	kunmap_atomic(kaddr);
-> +	kunmap_local(kaddr);
->=20
->  	return 0;
->  }
-> --
-> 2.39.2
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
 
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
 
