@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AB16C41D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F062B6C41DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 06:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCVFNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 01:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S229816AbjCVFNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 01:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCVFNr (ORCPT
+        with ESMTP id S229595AbjCVFNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 01:13:47 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2052.outbound.protection.outlook.com [40.107.20.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472E850712;
-        Tue, 21 Mar 2023 22:13:46 -0700 (PDT)
+        Wed, 22 Mar 2023 01:13:51 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2059.outbound.protection.outlook.com [40.107.20.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B875098D;
+        Tue, 21 Mar 2023 22:13:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d/bZKmhiJMrs8WXJMfp/76PWnh/glgMcIJr6ky6y3lDUtDVC8Yjy2zSY//Uns0K3cPHR8aGlKp1p55CvTxXZu6iZxbRI4hY8JVYSCU/6+kx1Nga7hgSqm+UxwOMSSztqWLo7+t6NtP2v775Kazw6Mqe52WFOBGzyf7hPqJImAVA56F4PIM3POKg462zxfzCqkmT4xbyWPgRHO22a17VDPJFRCY+g2+HYZqv81Yjy8KcZPoiYRxwa56xHW5BSfw/Oh+OmqruQibMLFpPRJB/MjbM8BJLGUW+jWS6BoHMM2Q4UkARWnv8wySeEEG18iiazYSqgefGjarnkn1oserTTCQ==
+ b=SsmaRKjxlBTpVGz4btuHUkLZXPDS3Ysb6lK6ivAOrPeF1zl7b0OtK4XGbo6KM/SQGHXC0ZMD8OtjXOSRsE0JmJ6RYyFz6CTCR31DvJOShMUiaAOPI/+8IuHqJAJVf20PTK/KB5YHhqGhpRclLn0XHugW2r2PGn2Cy+hO/bnvvP5ifhwjqHZI9JQZfiKVQbUUSEGQMC4TSC5NxDcfguvbgqA0Z1H7HjoKDSQJZ7EQtTl5LDullDUEyLQXRuFWZcjB0ONiJvrHoDeMyNOWpifwguIF43hae7tXDFunFxRmr9/SLLiaCv3pN9rZSdgbjlIGtJskXO5xXD2dOZ7x6j0Thw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wDH1mR+VhMofVtQNpd6NYflG2LChnMqq8vRh2iszNHo=;
- b=WXnrfhmGgfR11lZ29u01fTOh2+boh1Q3e3oR8viKxxLPQqGEHFECxEZHX0+CSnZ0EoBKQ2Z/foRSsFNeEnAtaxCL+gV96aiki7R9przRCWLxSHxr+cDxSp3mwWjsD/J+Od+chuQ6cYR1ymEKM7w0/PRXQlZx1nOb45hE14o08laBLUB3PGBhfH84n2LNwrrA9ev6nSWUvRegtHbwsdQLuhhEkLMPJVlsUbw3LESfucvxWNmOsI2HNuun0a+TP89eM1kfIHF9JJjku27etD1sPft5V9jRlBcbMAGyZwqMlEgDgVOn/p6k/FaVJ56hpaKplPEmkbOSPiJo4nyiYEnVEA==
+ bh=Rlj9RD2tTi9bXNFXB378vqR8wVFI1TNqBoqCx6xlqu4=;
+ b=T2UAo5EYO7ySJAJl5CLarjoaeYhcRcN75kFR/q1wHBPI8NGJGWmFn3xxG6CLLmdgrvG5LYSEDspP3QGYU3P/hJqbZkFq1g+0vQ397Xi1tAvZAYphjpdUQocDA+DQwBsydWwANgsmfq7iU2dEhkEiQLZLJqnctcRPgaT1pTQNIs2/w/lipgAOyhQANb7vTrL+A0oZeDr26sK1EXwWyPbJj3V51jjbGeWKcDaP5dq+IzrffeSKbrRANJShvHtKmrNU6P1O4oA5LWPVoOmJfANMW021r0z4zgub4jNOHBbZw75hQmTCcqwx3FTHbEHBNNWKXLQOCKO+zXDkf7h6Be2+mQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wDH1mR+VhMofVtQNpd6NYflG2LChnMqq8vRh2iszNHo=;
- b=Ojm4Gf1grQvqw3pwsTv+A0Tex71NLmpbxY14w1j2ZnN10RJZ0O7ZuL8sT/87J1owkaN0BBMOMiZvxQaFUw4ePULaamOg1bgb+5XDte4QP9QntGYKvaejaOjF4a5A6Rf0L/AiGi7gWyBfnzKdFzlbbmsIQvQrgYTqJhw1wWiEeNY=
+ bh=Rlj9RD2tTi9bXNFXB378vqR8wVFI1TNqBoqCx6xlqu4=;
+ b=ijXrgMDZHyind38sIv3RgVglLvDCxJI3nEhF3IslzZcYEr+bg75RmXdM2c1fcVKarMiDxVYmC6Kzhwe2oe707VyKLnsQZcNUthe1D32Dglrgf9ZrVnzWZ3VAS4pIvXi7l00UKFLuxRhDlK4k0KgwHIcvKC2rjG97myLmtq9nPOE=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by AM9PR04MB8100.eurprd04.prod.outlook.com (2603:10a6:20b:3e3::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 05:13:43 +0000
+ 2023 05:13:46 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b%5]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 05:13:42 +0000
+ 05:13:46 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
         hverkuil-cisco@xs4all.nl
@@ -47,10 +47,12 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 00/10] media: imx-jpeg: Add support for 12 bit extended jpeg
-Date:   Wed, 22 Mar 2023 13:13:03 +0800
-Message-Id: <cover.1679461709.git.ming.qian@nxp.com>
+Subject: [PATCH v5 01/10] media: Add P012 and P012M video format
+Date:   Wed, 22 Mar 2023 13:13:04 +0800
+Message-Id: <475b9d0584bc9360eea277f39c3fee1837ef232b.1679461709.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <cover.1679461709.git.ming.qian@nxp.com>
+References: <cover.1679461709.git.ming.qian@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI1PR02CA0021.apcprd02.prod.outlook.com
@@ -59,105 +61,246 @@ X-ClientProxiedBy: SI1PR02CA0021.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM9PR04MB8100:EE_
-X-MS-Office365-Filtering-Correlation-Id: 717cf8da-5d9d-4f4a-7dde-08db2a943474
+X-MS-Office365-Filtering-Correlation-Id: cbef7621-bd28-4be6-5a6e-08db2a9436c1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yPvFmWlIT8EMpZM1X7Wk6MlDTzRFMucrtwhmbD3gvS2SC/S9QLT+z09BtJYr62otSmtKvfUb/DpA9xnjlq6fVfM2wbRHkYtOWcFiMLZlLp+BbIF7nt2W4CjGHWdlJBEsObf0MveEyPm4XvfR3xlbqFTCTW8Bhv91v9JwTO5HFUJhs2hwX7y8TZB+z96LNQWqA3n3etSEedsuEFt74fC1GY7stY6XlEx3q2O2zHAJ5EQmcj2ncOPVCItIHoxLqJEVPjQMKD1uX8x6zmxAFUWsT4S/JLM5+dUUzvnVyRhTSqKR4MbENR0J184gtKY+Obv5ihvZuY2V0qULW1JptRWWVCiuNl9HxE5IaNY7lsMqE99KqXgYtccwrBgNYN2V5oaPKpTyemby0831LB1SMLfjmLwYAnj7h0UEeHntJPb8P7uPzb0gea2gNgX9jpgNuHD6nMhB7au8ZkSk2S2FfZ0TjkKNhJhRtQblZlrxOYS2WU+YmqIMxo+L7BksRI179NyeFP12VrPoEEP8Txqdvx5r8v/ukpyCypL1F+Z5EtgO/SS/V7xphWhfKQZXCyLit8kYCUomdz49qX1hLhOlmLcfwFxEkLPNSBSIGBx3xAnUoE1Fp9eONJ9FmPnOAI/yzfgUXq/T9UumXcbaCx0FSwpB9vjiwKUCD6Dl4ymY/9tqGw0IrnV+WEsDV28FyhbDLRT90zhM6snJ0V05VewlewDMsA==
+X-Microsoft-Antispam-Message-Info: x4iHTOB0vFv8X7OO1Q4Dlz4nXJ5EAv7pTQVSmjaH2ZVFDX1Sl0ma38vHNgy4cVobUJlVj2WRcYIfb7wPinucKkwVEHxqELVNgwMAevVhqdviHthYnDZiG05i9o5ddFj8RfWbaAA9Zk0cHankTLz6xDFFgwsgitRFOlNnvrwJ7QCfl0As9w9BD4DvgzAfMFnj2jUf7QIYQ6lCITWgvD57aM9l1RTV/ShzVEUGflNY+utluwgujnxv5Vj/ms7HD6AqKMM6XDBfU6ttj1Y3VDPZYdCE3fJ9evfc8NLEBKLcxsIjH4nuDpAc92uCz0FsoRvBNGXiPSetLRAM8o0T2YnQgjnzjzWIVJlBm1JCC6UYbdwYGVrtjEdvcNdcaVjhePJEdIzO62yMe+TJ/V3t7FI/+ZXwPw/q94V4S2hn6QNU890xUYFu+XTw7fdtq+T2SjMeUGX1d5be18DhD/Lj8My87viDXegpsw0IPGVtKUxTh6Smv34vftJAthksrZl2Lh39lIO1ta8BXPt7ZFv0RaVmhEFRkg4aXrg/kMYMTZ64Y9o77CN0vxB/wzqbKW7c97GGVJxOf7AMA2c0q6OHUo3MsZa20SbOu7NlXr7ev7YaVREmY5yXIcdECSl1w9e9SDDg0gcgP2uoDScxUoBOj6Ya9oKziuDjC559RGx/1c+kCHclbWyf5JuxDWT4Y+E4hPis2Ues/kep2LsP8pTewR89PA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199018)(6486002)(66556008)(41300700001)(52116002)(66476007)(7416002)(478600001)(66946007)(5660300002)(8936002)(8676002)(316002)(44832011)(4326008)(36756003)(86362001)(6506007)(6512007)(186003)(26005)(6666004)(2616005)(2906002)(38350700002)(38100700002)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yjj1C8xhzRrXKH6OcZhTSzqtMpDQqkmOqG6FHr9Jy0J+UN+gOSLAJKGyVzAg?=
- =?us-ascii?Q?+pWB3KnFQP2ye59IFcXLSNgvkoWSiz20SFGFVcZ23YbNAINn0SjdC8s/Hdz7?=
- =?us-ascii?Q?IyLGloD72JmfbAppAKGnxFH6QLpRoxEHIe/2GVVpu4vVAUAU/xfLBpazzp9a?=
- =?us-ascii?Q?Tgi6kJWOF1WXndAt6wmCe8s19sUgUKE+hA+CY32A44npBvXoW2JmdOBuPxGU?=
- =?us-ascii?Q?80uZAd248wDWAMd4kZlhN2fDiQY0129YZQe8cPphRKvogOWuOlGB1OGbZxZu?=
- =?us-ascii?Q?8QpVtZW3b/rwH23Om77E8nDITGexQ0wuT4BE5z1nlUGG6jUDqbteeCSLGqkM?=
- =?us-ascii?Q?TSEW1DGFokeTuUqxt8lofJFMcF9TA2ip4l13VpmYcBB7+Kn2UjCWPQwPLX10?=
- =?us-ascii?Q?r6/QoTC49vl9CJIl6TuPypb0qBU1KgwueSO/nDGJEbGDP/TWz4DxFnPkeY0U?=
- =?us-ascii?Q?I82x4te1vVw2tac6Kd8PYzt1uD0+mZLVue5ln/AEjl+Sm9vt6NDkR5n6p0IX?=
- =?us-ascii?Q?7Xer7bTb4RU872xK+VrHk6143zKdERxDpSystsBkOHS+448PpromNrMjdd1r?=
- =?us-ascii?Q?rPvS8sfwbfp27RNQUXQXZxhWxbabVjVAnd4IO7ChR4eg0hfFLYCOH2dxqkUE?=
- =?us-ascii?Q?7YioWH0GFVmfqtYUi/cllmo/aNlk8pEspsbpmAvpKMtu7xjKUdpG6lCmtlKd?=
- =?us-ascii?Q?MuTjaXsvyjZsdA7l8LgPRH+l3xhoawoaCfXQW/wNPZPHOA96ILNiObmKQevH?=
- =?us-ascii?Q?WCn6jqPpktPPU/42EZxKX5cSllz5mTLqDFYxa8sDc8pOi2T63oVXljJ/ETP6?=
- =?us-ascii?Q?DkiB2TediXVuSNNbdIwhJVWkPOA9zvbe0a8/HXCyUMwAkUGSnIfr6kYCW8Vg?=
- =?us-ascii?Q?G8lZAEwMEdbqRN2gqqRUV5OFZZ+6+u9stkzFCR6aPFtikIbxJWMOu8JH1KRF?=
- =?us-ascii?Q?95tJ7Hty6l+9CCeh6LO5AT8ZjaFMjBdMtqe5moLkwCj7R0fosUFQfzToKQuE?=
- =?us-ascii?Q?ZDBF8r5+uvpbHMf/Xeqj4R94ra04AluqUh3jFSeO/3wysdL6JFaM2hwISi1t?=
- =?us-ascii?Q?2MeCG9G5m1HI56Rybua4O9LRp0PetoatOuDfH8UBi6PmoXaWNai4Xjwe1JBr?=
- =?us-ascii?Q?MyirQGfjPaqTH1Of+L3n8fr5TKJGTYnp11dUSmghnpdnZZJGP+2VjY3+Rssq?=
- =?us-ascii?Q?VHSDqw66e1+MPnQXPEd3E6kOB0HYoRwCrs6tYoeoCUTe+MHpGFEdon/pnV6i?=
- =?us-ascii?Q?IgI9envHt3GL4ZDvjVtTrsbnRhh74sRrbaC54JhuLYS+Zy+0/GWNkwY4Olad?=
- =?us-ascii?Q?8bL5WXtEGVMWdAv8/72j05+o5uosCMAWSrBfUD3YUIyCsATU/Cpl3z0qIidK?=
- =?us-ascii?Q?a4J/6wlKiDdOX/rapaWPXt9E3CJn7DWAzTy9uMQOk1gUjqBab21REUfsFNjT?=
- =?us-ascii?Q?dAtbP6rq8OBe4svbEJobqE64/qAy6Z4G3ZS1+c3n2DoOqhZqDhuPv13Aw7T6?=
- =?us-ascii?Q?D8njUeWj1CmD7dk5bl1DPCB5ZiTvXbpkvNC58avJhthCrvAl/+GC1eIkWGOV?=
- =?us-ascii?Q?fvch6ElfqNmiX0ztFKl2QAcUKWQB7OBP4fCw2iff?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3puPMPXUv6/Ez8wNhHSfIsWQ9s/PE7+COw79mXTM1AuMjcNZrVwKD8GoMFAK?=
+ =?us-ascii?Q?rTrKVIzExhFGbndO5Xwe39x3Es7/rGq6gVLtXYpVP2M/PVTFk9uGnjJFBsW/?=
+ =?us-ascii?Q?QZymH2xcwkBLP0WBaWOpdjpFQlQoOTVvPDqfiJnqsZngXPQKa2UvFxAj86MZ?=
+ =?us-ascii?Q?dnBsU8/NVI3ADEIvLo7ZYNChxXCEWfcpAbaLVC0qgr6DHDZqy3R02YD6mTaG?=
+ =?us-ascii?Q?prFK8hhuxn70IL5BIbsfTQIYftl/49Ft2pEvHKVU3+6aKBjg8bmg206VdrLY?=
+ =?us-ascii?Q?oDsmGiN0ONnecYn/cUqtjBHyEOU2cNbMax6KEfV8JEvprjfjjl8Wz8AYnkwO?=
+ =?us-ascii?Q?Ko+I4u638L8Zh8h0aDHJWhCawhiFoxll6FETEwXqQI1kTiDSuhWlAzSFqKZp?=
+ =?us-ascii?Q?qF9Sl23Y0FJREbCCDVSx43QNSq8O0b1O4AsywvGrqIXgxhXnjMxxcBmmkSDJ?=
+ =?us-ascii?Q?c94L8lpxzKlsf3/YT5ytBAyWcZsUBdgD5xQvWMWkgk+PwyAfNduEjp6JgF+o?=
+ =?us-ascii?Q?u29manx508fSCXfsqYCAl2rl3c33oeCHD2nmpmbUWbi0EEkWJGnMZz4CJW20?=
+ =?us-ascii?Q?ybdblZng4rGYRZba7F15XBkhnEBP9rPdwJU3voffER+eOtFyD0ATjW7o3F+e?=
+ =?us-ascii?Q?R9a9ulQITkpnw/Ysv6UBr4KMvHvz7ZrnNhrNImWr3qMLywxtmaRYOuif3llg?=
+ =?us-ascii?Q?j5v3KgyDqz+ub01SBe2BhiwyZ/ocvxN4QgmUBAANu2mqjqs5tBVWgeu7Gk0E?=
+ =?us-ascii?Q?mYXBH9NsHESB9TWet8ozwae095J0612TGDEy+i1rc7kIHn5GOto+b1QFuS9L?=
+ =?us-ascii?Q?Q5rO+faeQbzM3nFhowuDfnkn7LAZkjvZJ9v7mU5Wq+Nbp78OYjkzDnyJjppN?=
+ =?us-ascii?Q?N2B2hpUHe7bOhzLR9IH/dM+pRvmH5EMk9CsQ3a5eKKlsK+rX720y3BraOv6h?=
+ =?us-ascii?Q?DcyX643XIDWsTw7K9gbPTD2zSk/JKlyPbGIcMLLJAJ70PuF5yz2CvgZEVEiw?=
+ =?us-ascii?Q?uOSsFgj2nOL/GcVNr3FCpOBS65IfJLQ8WlYrSHX6TdvocLRaVRlD8KWD27Td?=
+ =?us-ascii?Q?35wyde7C1IXNz95SEzdt5q5JF4Uc7JE0HLcoDDko9hIuxuwjB+sdHM/Wz9vB?=
+ =?us-ascii?Q?ljJvvD4hvb5gyBWV+jXBriHa6Jnn62nK3d2EMOHMnekfZXfeZfpkFXZtymvC?=
+ =?us-ascii?Q?U/x0kSM/AxJmDxXlSg/iq8dmeLuwPfPn81vEMG8OrdzMNP/tlLLD1IEzBCHw?=
+ =?us-ascii?Q?wZQ41bRalBARR1/Y8n4hk5z5Vg0ie3cK1/ZFxmjfUCkFla3/qwgfiypNS34i?=
+ =?us-ascii?Q?1HDtdd7KvmuMc5PjrRz6PlJoJ6i6ztip+ITFKAMVGgxCIYNsZsiyIdIRswie?=
+ =?us-ascii?Q?fi7aUy1NHq34SsMoF7pO92pndYni7NE6KHBmNJAfuQCO7TIXQG2Hglzxb3L4?=
+ =?us-ascii?Q?uvrtSeHSSN+FNfKNCqKvU8GfbxRt/1VExcPa/SMo1pZ17fzIaaph3ZxQZuK5?=
+ =?us-ascii?Q?A0pKOj4oSuQ4CZDB/892wOLFNuFwBKuOavRXbuAiFGE7sNKR9e6zpcdWd8Nr?=
+ =?us-ascii?Q?aKMNy7bPhgcso18ji/52Aol5b16lpYwo0wgQftvY?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 717cf8da-5d9d-4f4a-7dde-08db2a943474
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbef7621-bd28-4be6-5a6e-08db2a9436c1
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 05:13:42.8508
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 05:13:46.6943
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NwxsIm+fvibYCMVJiY7z0K/14S7lL8tufKw9960pAygzpQNTFO2edZH4u/nUB/nf9bXo6KHVLsfq+wyUuECYTw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: sp8/jNe8qYPFR1MT8MMY8YqGY/zYoaamJcq8Fj07D4uDNFWqtizLo3MeLBQ0tmXxzUv5jahN0eYdidcCU6S8+A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8100
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-the imx8 jpeg codec support ISO/IEC 10918-1 Standard Baseline and
-Extended Sequential DCT modes.
-it can support 8-bit and 12-bit per color samples.
-Currently we only enable the 8-bit jpeg,
-and we can enable the 12-bit extended jpeg
-with the new defined 12 bit pixel format.
+P012 is a YUV format with 12-bits per component with interleaved UV,
+like NV12, expanded to 16 bits.
+Data in the 12 high bits, zeros in the 4 low bits,
+arranged in little endian order.
+And P012M has two non contiguous planes.
 
-v5
-- fix some description typo according to Hans's comments
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+---
+ .../media/v4l/pixfmt-yuv-planar.rst           | 94 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-common.c         |  2 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+ include/uapi/linux/videodev2.h                |  2 +
+ 4 files changed, 100 insertions(+)
 
-v4
-- drop format yuyv64_12, use Y212 directly
-
-v3
-- correct the new 12-bit format naming according to Nicolas's comments
-
-v2
-- correct the new 12-bit format naming according to Hans's comments
-
-Ming Qian (10):
-  media: Add P012 and P012M video format
-  media: Add Y012 video format
-  media: Add Y212 v4l2 format info
-  media: Add YUV48_12 video format
-  media: Add BGR48_12 video format
-  media: Add ABGR64_12 video format
-  media: imx-jpeg: Refine the function mxc_jpeg_find_format
-  media: imx-jpeg: Clear slot next desc ptr if config error
-  media: imx-jpeg: Decoder add support for 12bit jpeg
-  media: imx-jpeg: Encoder add support for 12bit jpeg
-
- .../media/v4l/pixfmt-packed-yuv.rst           |  28 ++
- .../userspace-api/media/v4l/pixfmt-rgb.rst    |  42 +++
- .../media/v4l/pixfmt-yuv-luma.rst             |  15 +
- .../media/v4l/pixfmt-yuv-planar.rst           |  94 +++++
- .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c |  19 +-
- .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |   5 +-
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 326 ++++++++++++++++--
- drivers/media/v4l2-core/v4l2-common.c         |   6 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |   6 +
- include/uapi/linux/videodev2.h                |   8 +
- 10 files changed, 523 insertions(+), 26 deletions(-)
-
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index f1d5bb7b806d..72324274f20c 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -123,6 +123,20 @@ All components are stored with the same number of bits per component.
+       - Cb, Cr
+       - Yes
+       - 4x4 tiles
++    * - V4L2_PIX_FMT_P012
++      - 'P012'
++      - 12
++      - 4:2:0
++      - Cb, Cr
++      - Yes
++      - Linear
++    * - V4L2_PIX_FMT_P012M
++      - 'PM12'
++      - 12
++      - 4:2:0
++      - Cb, Cr
++      - No
++      - Linear
+     * - V4L2_PIX_FMT_NV16
+       - 'NV16'
+       - 8
+@@ -586,6 +600,86 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
+       - Cb\ :sub:`11`
+       - Cr\ :sub:`11`
+ 
++.. _V4L2-PIX-FMT-P012:
++.. _V4L2-PIX-FMT-P012M:
++
++P012 and P012M
++--------------
++
++P012 is like NV12 with 12 bits per component, expanded to 16 bits.
++Data in the 12 high bits, zeros in the 4 low bits, arranged in little endian order.
++
++.. flat-table:: Sample 4x4 P012 Image
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start + 0:
++      - Y'\ :sub:`00`
++      - Y'\ :sub:`01`
++      - Y'\ :sub:`02`
++      - Y'\ :sub:`03`
++    * - start + 8:
++      - Y'\ :sub:`10`
++      - Y'\ :sub:`11`
++      - Y'\ :sub:`12`
++      - Y'\ :sub:`13`
++    * - start + 16:
++      - Y'\ :sub:`20`
++      - Y'\ :sub:`21`
++      - Y'\ :sub:`22`
++      - Y'\ :sub:`23`
++    * - start + 24:
++      - Y'\ :sub:`30`
++      - Y'\ :sub:`31`
++      - Y'\ :sub:`32`
++      - Y'\ :sub:`33`
++    * - start + 32:
++      - Cb\ :sub:`00`
++      - Cr\ :sub:`00`
++      - Cb\ :sub:`01`
++      - Cr\ :sub:`01`
++    * - start + 40:
++      - Cb\ :sub:`10`
++      - Cr\ :sub:`10`
++      - Cb\ :sub:`11`
++      - Cr\ :sub:`11`
++
++.. flat-table:: Sample 4x4 P012M Image
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - start0 + 0:
++      - Y'\ :sub:`00`
++      - Y'\ :sub:`01`
++      - Y'\ :sub:`02`
++      - Y'\ :sub:`03`
++    * - start0 + 8:
++      - Y'\ :sub:`10`
++      - Y'\ :sub:`11`
++      - Y'\ :sub:`12`
++      - Y'\ :sub:`13`
++    * - start0 + 16:
++      - Y'\ :sub:`20`
++      - Y'\ :sub:`21`
++      - Y'\ :sub:`22`
++      - Y'\ :sub:`23`
++    * - start0 + 24:
++      - Y'\ :sub:`30`
++      - Y'\ :sub:`31`
++      - Y'\ :sub:`32`
++      - Y'\ :sub:`33`
++    * -
++    * - start1 + 0:
++      - Cb\ :sub:`00`
++      - Cr\ :sub:`00`
++      - Cb\ :sub:`01`
++      - Cr\ :sub:`01`
++    * - start1 + 8:
++      - Cb\ :sub:`10`
++      - Cr\ :sub:`10`
++      - Cb\ :sub:`11`
++      - Cr\ :sub:`11`
++
+ 
+ Fully Planar YUV Formats
+ ========================
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 40f56e044640..a5e8ba370d33 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -267,6 +267,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_P012,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+ 
+ 		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+ 		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+@@ -292,6 +293,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		{ .format = V4L2_PIX_FMT_NV21M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+ 		{ .format = V4L2_PIX_FMT_NV16M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV61M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_P012M,   .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+ 
+ 		/* Bayer RGB formats */
+ 		{ .format = V4L2_PIX_FMT_SBGGR8,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 87f163a89c80..6489b67babfa 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1352,6 +1352,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_NV24:		descr = "Y/UV 4:4:4"; break;
+ 	case V4L2_PIX_FMT_NV42:		descr = "Y/VU 4:4:4"; break;
+ 	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/UV 4:2:0"; break;
++	case V4L2_PIX_FMT_P012:		descr = "12-bit Y/UV 4:2:0"; break;
+ 	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/UV 4:2:0 (4x4 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/UV 4:2:0 (16x16 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/UV 4:2:0 (32x32 Linear)"; break;
+@@ -1362,6 +1363,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_NV61M:	descr = "Y/VU 4:2:2 (N-C)"; break;
+ 	case V4L2_PIX_FMT_NV12MT:	descr = "Y/UV 4:2:0 (64x32 MB, N-C)"; break;
+ 	case V4L2_PIX_FMT_NV12MT_16X16:	descr = "Y/UV 4:2:0 (16x16 MB, N-C)"; break;
++	case V4L2_PIX_FMT_P012M:	descr = "12-bit Y/UV 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_YUV420M:	descr = "Planar YUV 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_YVU420M:	descr = "Planar YVU 4:2:0 (N-C)"; break;
+ 	case V4L2_PIX_FMT_YUV422M:	descr = "Planar YUV 4:2:2 (N-C)"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 17a9b975177a..f83a9d1210fb 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -637,12 +637,14 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+ #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+ #define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
++#define V4L2_PIX_FMT_P012    v4l2_fourcc('P', '0', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
+ 
+ /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+ #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+ #define V4L2_PIX_FMT_NV21M   v4l2_fourcc('N', 'M', '2', '1') /* 21  Y/CrCb 4:2:0  */
+ #define V4L2_PIX_FMT_NV16M   v4l2_fourcc('N', 'M', '1', '6') /* 16  Y/CbCr 4:2:2  */
+ #define V4L2_PIX_FMT_NV61M   v4l2_fourcc('N', 'M', '6', '1') /* 16  Y/CrCb 4:2:2  */
++#define V4L2_PIX_FMT_P012M   v4l2_fourcc('P', 'M', '1', '2') /* 24  Y/CbCr 4:2:0 12-bit per component */
+ 
+ /* three planes - Y Cb, Cr */
+ #define V4L2_PIX_FMT_YUV410  v4l2_fourcc('Y', 'U', 'V', '9') /*  9  YUV 4:1:0     */
 -- 
 2.38.1
 
