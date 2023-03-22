@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550F56C4E31
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A62F6C4E30
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjCVOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
+        id S231796AbjCVOnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjCVOnE (ORCPT
+        with ESMTP id S230471AbjCVOnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 10:43:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BACD67028;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C11065C59;
         Wed, 22 Mar 2023 07:42:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E96FB81D15;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C7EBB81D12;
         Wed, 22 Mar 2023 14:42:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58A59C433EF;
-        Wed, 22 Mar 2023 14:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B580C4339E;
+        Wed, 22 Mar 2023 14:42:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679496135;
-        bh=+XH1Fh5Yv192myI+F/GCaVxnx0Pg26Xcsdf83OUUBqs=;
+        s=k20201202; t=1679496136;
+        bh=aMAns0DThIP0pN0mVF8u71OhI7I3+oIR3SdaciQA7f0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p7tBUu5+WUlTVVj9IijVpSmrYYzg6FANnku4Ew5YrQp2zzGnPUmVj9za6VdqA5XSS
-         mFtHqyodDBidYFMnQJeffpHMWzevV5db8Siinxs9mwYYAObNkz3ujaPA+U1FNm6EN/
-         7aQvD2h8W0yw2bqfxt/fB8MkKrqXwJhxO88fcOuAGjJGVoFYbXuSHG9RgsPmkymdct
-         en3MMl4wiDZmlHZEQITK4QOd1Iv1MvMBEak/9owyvzLoHrSvwEF+OMq/HWEM7Kw1w5
-         IsHscq6hQ7YjQM10pXIfCj9M4Nb+OE+bEjqYZL8NT1OjbGrd5C8sX7P1/HFi0D/p9p
-         qZ/0X+mdQ2DhA==
+        b=uvMBi7bbu7uUXkAnvsd9BqLLyBEmsKwi5Ql0CseS0Mq8h6DS5/B0vQM/LRD7Y+9q5
+         YiS3bWqQEq2kNjPd7zRNCSibiTnyA7dKf2RiPOPlEbZ4Qi9AoA6KM0McAuUlMVTWrs
+         PnwKVlAF+TjEbvPvoncPOI7bgx4m7x0omlF/rf2NSOk1B+bo3ApJpjgcO0T+2u8H6l
+         P5+kCfNgqRWFsxBrWtqbG/S4WUYKq52k5a9IYRigZ9i/Ums2EU4rKCTD/m4qBnHoRh
+         fbNpwaqNLmq/6pwmZa3X2uQfr/Ff1NazQQrIpSwH+CGeFuApnvZbFkA9I0uHvhS0iX
+         8zlvlCMQDKQkw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@linaro.org, abel.vesa@linaro.org, agross@kernel.org,
-        rishabhb@codeaurora.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, Danila Tikhonov <danila@jiaxyga.com>,
-        saiprakash.ranjan@codeaurora.org
+To:     konrad.dybcio@linaro.org, agross@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        Danila Tikhonov <danila@jiaxyga.com>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/2] soc: qcom: llcc: Add support for SM7150
-Date:   Wed, 22 Mar 2023 07:45:05 -0700
-Message-Id: <167949631652.1081726.3077531537243278747.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: pm8150l: add spmi-flash-led node
+Date:   Wed, 22 Mar 2023 07:45:06 -0700
+Message-Id: <167949631651.1081726.16530784335679132025.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230305202627.402386-1-danila@jiaxyga.com>
-References: <20230305202627.402386-1-danila@jiaxyga.com>
+In-Reply-To: <20230321182319.24958-1-danila@jiaxyga.com>
+References: <20230321182319.24958-1-danila@jiaxyga.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,25 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Mar 2023 23:26:25 +0300, Danila Tikhonov wrote:
-> This series adds LLCC support for Qualcomm SM7150 SoC.
+On Tue, 21 Mar 2023 21:23:19 +0300, Danila Tikhonov wrote:
+> Add a node describing the flash block found on pm8150l.
 > 
-> Danila Tikhonov (2):
->   dt-bindings: arm: msm: Add LLCC for SM7150
->   soc: qcom: llcc: Add configuration data for SM7150
 > 
-> .../devicetree/bindings/arm/msm/qcom,llcc.yaml  |  1 +
->  drivers/soc/qcom/llcc-qcom.c                    | 17 +++++++++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: arm: msm: Add LLCC for SM7150
-      commit: 1e0952e7b978eb4a182c4a9c003f9313d30d00df
-[2/2] soc: qcom: llcc: Add configuration data for SM7150
-      commit: 92b9d86252c1d76faf06f155c2a73b0c673bf59d
+[1/1] arm64: dts: qcom: pm8150l: add spmi-flash-led node
+      commit: 4f278f71c79f174c027d07f57837d1ca41b2df37
 
 Best regards,
 -- 
