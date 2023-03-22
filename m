@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C7E6C464D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3B06C4652
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjCVJ1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S229670AbjCVJ2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjCVJ1c (ORCPT
+        with ESMTP id S229836AbjCVJ2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:27:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E91567B6;
-        Wed, 22 Mar 2023 02:27:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 286D566030E5;
-        Wed, 22 Mar 2023 09:27:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679477248;
-        bh=tm5AC8oAxj/BLJH6P7jdDgG/1QqkIQicoTd5DZz6WME=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MgA/2lFUfyd5k/VBWnuu40eTYWS2U1TrrofgOMA0I9jVpdy3eEamqWcf4tagLMjHR
-         EYG/Dt6rR/CXT5QPXB2XGairw7NZ2vJCFTiZN697ZjU9mBhuR+1jIwTZefhoaLWlDK
-         IioRzVI4LUF9Xb0aUoln0A4Wfn4KFUNMQOdmen5CL1mdqaxXlr70en5Rgjk8S++LDi
-         Q0rUGgJJ5+ebU1NWOdfgRTaiSLobW7Zl4UsgTdJ6LMafovrR9E9Y/VTbCenyiGT6Mh
-         rAtqlpa++uhnmOtjEPtFRybdL2w7YOFX7V0OGBtvN5z6PXidEdYSooaBfd+nwFBCUM
-         cDXjooq2zQlDw==
-Message-ID: <7b9b09fe-1049-26b6-7bec-0051e7304b5b@collabora.com>
-Date:   Wed, 22 Mar 2023 10:27:25 +0100
+        Wed, 22 Mar 2023 05:28:14 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E4C4ED8;
+        Wed, 22 Mar 2023 02:28:11 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M9I8Wl020803;
+        Wed, 22 Mar 2023 09:27:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=6avEhP/cuHiS2fHBO2bSzDTAnuIaYByahfm2+cfiACw=;
+ b=Hn9w2fCo5cUaZFcDpDth4aiZB9mUl0Nk+X53mLDsnZni+GOUWn0WOit8tpe9U/OlOqGT
+ mpaQjU/k4sVaEkk6MR8bRVqB3D+QKUQeQEe9OTi6kN6NCxc1+Vg+u/QPgTFVtZNnpB+8
+ iILcgVTpvx8znp1U6QWortIXobQfvdVJOZLAqSREmlWy1qWFe2JViiG3/gjSGKhLI/Df
+ yY+1ShaYq5bZJKqMc+dgxkuGROo90CUPQmzy4i1Fw5hwgk9V16BU7MJOlF+sJ0MMgmKx
+ RTdzX4ppo7tKYrzI4WYuJODfQ6Osg/sWizPvevVwVotdB5jkgv2YZr3uCwAqB0JkAUgg ZQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfbx030e7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 09:27:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32M9RsKs001567
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 09:27:54 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Mar 2023 02:27:50 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sebastian Reichel <sre@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [RFC 0/2] Handle core soft reset during Pullup
+Date:   Wed, 22 Mar 2023 14:57:38 +0530
+Message-ID: <20230322092740.28491-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: reset: mt8188: Add reset control for
- DSI0
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shawn Sung <shawn.sung@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>
-References: <20230322032202.12598-1-shawn.sung@mediatek.com>
- <20230322032202.12598-2-shawn.sung@mediatek.com>
- <83eb4c5c-b4ea-1fee-7212-c88821b90771@linaro.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <83eb4c5c-b4ea-1fee-7212-c88821b90771@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IpvOQi1nJc6AzADBqu2bzmCEfDJW9uXx
+X-Proofpoint-ORIG-GUID: IpvOQi1nJc6AzADBqu2bzmCEfDJW9uXx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_06,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ adultscore=0 impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1011 phishscore=0 lowpriorityscore=0 mlxlogscore=823 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303220069
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/03/23 09:34, Krzysztof Kozlowski ha scritto:
-> On 22/03/2023 04:22, Shawn Sung wrote:
->> Add reset control for DSI0.
->>
->> Signed-off-by: Shawn Sung <shawn.sung@mediatek.com>
->> ---
->>   include/dt-bindings/reset/mt8188-resets.h | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/include/dt-bindings/reset/mt8188-resets.h b/include/dt-bindings/reset/mt8188-resets.h
->> index 377cdfda82a9..5c9e74130ef0 100644
->> --- a/include/dt-bindings/reset/mt8188-resets.h
->> +++ b/include/dt-bindings/reset/mt8188-resets.h
->> @@ -33,4 +33,7 @@
->>
->>   #define MT8188_TOPRGU_SW_RST_NUM               24
->>
->> +/* VDOSYS0 */
->> +#define MT8188_VDO0_RST_DSI0                   21
-> 
-> Why this is not 0? IDs start from 0.
-> 
+When core soft reset timeout happens, pullup doesn't check for the
+return value and proceeds to setup event buffers and starts the
+controller.
 
-Because mtk-mmsys needs to be fixed, bindings IDs are *again* 1:1 with HW bits,
-there's no mapping like the one that was "recently" done in clk/mediatek resets.
+In this scneario, it is observed sometimes that the GEVTADDR LO/HI
+registers read zero while we are setting the run stop bit and we end
+up accessing address 0x00 leading to a crash. This series tries to
+address this issue by handling the timeout and return back appropriate
+error code to configfs for it to retry enumeration if it chooses to.
 
-Since VDO0/1 have got lots of holes in reset bit mapping, it's definitely time
-to fix this situation now.....
+Krishna Kurapati (2):
+  usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens
+  usb: gadget: udc: Handle gadget_connect failure during bind operation
 
-Shawn, please fix.
-For your reference, look at [1] and [2].
+ drivers/usb/dwc3/gadget.c     |  5 ++++-
+ drivers/usb/gadget/udc/core.c | 17 +++++++++++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-[1]: https://lore.kernel.org/all/20220523060056.24396-9-rex-bc.chen@mediatek.com/
-[2]: https://lore.kernel.org/all/20220523060056.24396-15-rex-bc.chen@mediatek.com/
-
-Regards,
-Angelo
-
-
-> 
+-- 
+2.40.0
 
