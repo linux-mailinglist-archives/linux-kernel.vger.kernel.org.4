@@ -2,183 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1707A6C593D
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3F6C5940
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 23:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCVWDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 18:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S229838AbjCVWE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 18:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCVWDj (ORCPT
+        with ESMTP id S229510AbjCVWEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 18:03:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DF2D307;
-        Wed, 22 Mar 2023 15:03:38 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679522617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/M+ljBNIE5oJFKtf6KCEV8v2OTJg2/aQzgbtxFKqFk8=;
-        b=4paOE+N8kusW/YyURznb/FtA4Hi570566Kd4dRgqz/OXXyq7eJ1Jy3guYjqaskuwgmEh93
-        tE8prg9/wO3uKMZ/Epp7/qyjg8ehRDskXHxkoEJwanRhlIOIBVjzbJ38ivLPSaomqvfl6X
-        SCJp+3/Zq0dUrveWCPiW6XMDYQL5UMeEUVmb8DEDPMGmkdGxSKbZmXVFEwLS9URajFh6bz
-        7ttxGtLLb/DeaBNcxlXqljGA4F/tfP3T+H1uYp7IBIdWAoBjbeJFiTbWhMJFUh0mChvAPi
-        JIWWWOBmYdy85jT/qbTHpHBYz+l7erKIL5fFV+9orvEM0rCXbH4M3YN+Hhz4yg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679522617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/M+ljBNIE5oJFKtf6KCEV8v2OTJg2/aQzgbtxFKqFk8=;
-        b=cdoAWXTCmSyhwqHhcPMvx4dvxMb7sZAAcu5puaTuTQNekaMB4HjimU4Y4xcYqryQmdYX9w
-        YE0MAxHg6+vnvWBg==
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ross Zwisler <zwisler@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
-In-Reply-To: <20230322141657.7d00a9bd@gandalf.local.home>
-References: <20230321215121.71b339c5@gandalf.local.home>
- <87y1np824t.ffs@tglx> <20230322084834.37ed755e@gandalf.local.home>
- <87v8is94n6.ffs@tglx> <20230322141657.7d00a9bd@gandalf.local.home>
-Date:   Wed, 22 Mar 2023 23:03:36 +0100
-Message-ID: <87jzz88mvb.ffs@tglx>
+        Wed, 22 Mar 2023 18:04:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865A6F945
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 15:04:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id cn12so33247454edb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 15:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679522662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rrRk+gaJjYLT5/E0PnsUAhp4KDn0wBS9o7C6buEtHBc=;
+        b=yvTFowc16cu1PU/l7kVOfvBxkEFcpqrpWd+oVqsU6zzN3acJq+3HrI4Aufymz5620e
+         SrWDJHzWPth67Ae8o4r4so7Xs65xetVeeWFN8DPafaaFWzcoB7PvkJN+9g8uDmyg6JcB
+         /88lg18inP6h8lYc3aGFbBkTxYaGms403ZWz5T0W4a/BdWS0fiQk5dHW5o4GJ7oT//uZ
+         oOmRNLX2e3fDdG5cnWAcmA/VkoGln4I8gwgAQAFQjih5mwjpLTtKSXeke1/kexURJEak
+         st5m00Yz2ZmADh+4Gb/WOhDHwfpMc7zwB86lG96vccQj27+svMS2+87Q+9YYSvAodCFB
+         OrLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679522662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrRk+gaJjYLT5/E0PnsUAhp4KDn0wBS9o7C6buEtHBc=;
+        b=REvnqW6qAjN0zrP+Z1ISwyk/QXIOTEftsDPy13vYSc2L88M/UmazjNb32FpnkszTrF
+         pOdHamb1Daqwe2NgOuQG69dx9W8RmbZM/gan0TiFQTkrIEL6fxVXk4rQNI9tfxySJWit
+         X4CW3lg0lnF4QnAwXPy//KAMllsRb988xGqYQfEhGVl3njVmPt+L5OKmAV4Zn2iVkoh4
+         uYTDcOcLP2pj+2BQejbmYIbBuBPwhOL/pL74Nx8GVoxLzk7bcfqw5VutGqyNCUPrGdUL
+         QfbRRm6ULwEW2OoIFK63YUEnDrQRDhV6vzbVMTDXTgFMLt/4hpgRdV5lBkQt7ABd+Rw6
+         OC/g==
+X-Gm-Message-State: AO0yUKUYIjPLKGdl4a6VNt8OdSUQJ8OhzZ8lG3Djb/g1YFfxE8Mk30MR
+        dySnXvpnyqACOJsKMvNSsFMS9hXmrp2rzVso2xg=
+X-Google-Smtp-Source: AK7set9DmUAygXVMqWsEQS/8hyYS5W4WJtg8t7pcvflJhNmmgfo0zg1SyiSdx3q14rcGziO/AWr3wQ==
+X-Received: by 2002:a17:907:33c5:b0:878:66bc:2280 with SMTP id zk5-20020a17090733c500b0087866bc2280mr8959235ejb.12.1679522661994;
+        Wed, 22 Mar 2023 15:04:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:626d:5729:6e71:4c22? ([2a02:810d:15c0:828:626d:5729:6e71:4c22])
+        by smtp.gmail.com with ESMTPSA id g17-20020a170906c19100b00921c608b737sm7721409ejz.126.2023.03.22.15.04.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 15:04:21 -0700 (PDT)
+Message-ID: <12e898d4-e83a-3f08-53bd-f4990af97104@linaro.org>
+Date:   Wed, 22 Mar 2023 23:04:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH linux-next V2] dt-bindings: usb: snps,dwc3: correct
+ i.MX8MQ support
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+References: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230322125618.3402577-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven!
+On 22/03/2023 13:56, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The previous i.MX8MQ support breaks rockchip,dwc3 support,
+> so use select to restrict i.MX8MQ support and avoid break others.
+> 
+> Fixes: 3754c41c7686 ("dt-bindings: usb: snps,dwc3: support i.MX8MQ")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  Add a new yaml file for i.MX8MQ DWC3. I am not sure whether this is right,
+>  still meet dtbs error:
+>  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dtb: usb@38100000:
+>  Unevaluated properties are not allowed ('phys', 'phy-names', 'maximum-speed'
+>  were unexpected)
+>  But there is already ref to snps,dwc3.yaml and dwc3 yaml ref to usb-x.yaml
 
-On Wed, Mar 22 2023 at 14:16, Steven Rostedt wrote:
-> On Wed, 22 Mar 2023 16:39:41 +0100
-> Thomas Gleixner <tglx@linutronix.de> wrote:
->
->> But for figuring out how long a syscall, interrupt or exception takes
->> there are exactly TWO tracepoints required, not 10 or 8. And it's bloody
->> obvious where to place them, right?
->
-> Not always, and it's pretty much always architecture dependent. I was
-> looking for an architecture agnostic approach, as I imagine all archs will
-> be eventually using this.
+Because your DTS has invalid properties, like usb3-resume-missing-cas
+and others. Drop all properties which are not allowed by snps,dwc3.yaml.
 
-All architectures, at least those which matter, will eventually use the
-generic entry code, which is completely architecture agnostic.
-
-And again, while instrumentation_begin/end() might be in use on more
-architectures today, it's still the fundamentally wrong place to stick a
-tracepoint into. See below.
-
-> Things could have changed since then. But if adding trace events for the
-> missing syscalls and around exceptions for timing purposes is OK, then I'm
-> happy to go that approach.
-
-If there are tracepoints missing for syscalls then the obvious correct
-thing is to add them so that the syscall coverage is complete instead of
-abusing the lack of tracepoints as an argument for horrible hackery.
-
-If there is a value to have tracepoints around exceptions etc. for
-timing purposes then they definitely make more sense than the abuse of
-instrumentation_begin/end() which just generates noise and adds overhead
-into completely unrelated code pathes.
-
->> > And the more we add noinstr, the more the kernel becomes a black box
->> > again.  
->> 
->> It does not. noinstr is a technical requirement to keep instrumentation
->> out of code pathes which are not able to handle instrumentation. You
->> know that very well, so please stop this theatrical handwaving and come
->> back if you have sensible technical arguments.
->
-> I never said nor implied that it's not important. I'm just concerned that
-> we currently have no way to see when it's happening.
-
-There is no value to see the instrumentation_begin()/end() annotations
-in tracing, really.
-
-They are annotations to enable objtool to validate that the noinstr
-constraints are not violated. We need quite a few of them as the tooling
-operates at function scope. So a function which is invoked from noinstr
-low level code looks like this:
-
-noinstr foo(...)
-{
-        enter();
-
-        instrumentation_begin();        #2
-        do_other_stuff();
-        instrumentation_end();          #2
-
-        exit();
-}
-
-enter()/exit() need to be noinstr functions as well, but as enter()
-might be the function which actually establishes the context,
-e.g. __enter_from_user_mode(), it can contain calls into instrumentable
-code too:
-
-noinstr enter(..)
-{
-        enter_context();
-
-        instrumentation_begin();        #1
-        do_instrumentable_enter();
-        instrumentation_end();          #1
-}
-
-See? So you end up with two pairs of instrumentation_begin()/end() in
-this simple example. Add exit() to the picture:
-
-noinstr exit(..)
-{
-        instrumentation_begin();        #3
-        do_instrumentable_exit();
-        instrumentation_end();          #3
-
-        exit_context();
-}
-
-So you have already three.
-
-In reality it's five pairs per syscall and at least four pairs per
-exception/interrupt.
-
-As you can see above end() #1 and begin() #2 are identical from a
-tracing POV. So are end() #2 and begin() #3.
-
-IOW there is zero value to have tracepoints in them. Especially as
-do_instrumentable_enter()/exit() and do_other_stuff() are subject to
-tracing already unless the compiler decides to inline them.
-
-The only relevant information is begin() #1 and end() #3, right?
-
-And as you cannot piggy-pack that on instrumentation_begin()/end() for
-obvious reasons, you need explicit tracepoints, which are in the very
-end more informative and come with a factor of 4-5 less overhead in both
-the enabled and disabled case.
-
-Contrary to popular believe, disabled tracepoints are not completely
-free of overhead either.
-
-Thanks,
-
-        tglx
-
-
-
+Best regards,
+Krzysztof
 
