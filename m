@@ -2,127 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250DD6C5337
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB8A6C533A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 19:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjCVSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 14:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S229725AbjCVSFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 14:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCVSCY (ORCPT
+        with ESMTP id S229484AbjCVSFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:02:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C3352901;
-        Wed, 22 Mar 2023 11:02:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFA926223D;
-        Wed, 22 Mar 2023 18:02:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314A2C433D2;
-        Wed, 22 Mar 2023 18:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679508138;
-        bh=oqee66un2xpmNmFuh7yyKaMc9gl0yG6mf5pxk2ZHWcc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Lgd/iFBuBjAcnL7lspVaca1JjWKDtXELYoW+hA4KDISRmFgak5RB6DRtwfe4S1rn7
-         U73sVxu9SWiPAbnBTOUe/aK7BD9jGUIKiIi/pyz1zXBcYucJSbV0Pfjm3ahBHllsPK
-         cwIWqtZXI5C+g4+HEpy+2eOwkyuEsHyB6BzxkIuAzQBWCpnicNCC3F7C6ZSPxtzauy
-         3ZtU26PeM4qgNKqQLR/B8Cae0s20R2vlDhIfLKOF6so8/+i9KJiStB6vZ4kvo4pE55
-         JNi3VCeFnvg/+DeXUrjKLMAwMpstZHX2rcl0E9h8EaJYS7ucue2UZXdVYHWiKTaddB
-         MpuV+aWiwUL0g==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BC6F9154033A; Wed, 22 Mar 2023 11:02:17 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 11:02:17 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Subject: Re: [PATCH memory-model 7/8] tools/memory-model: Add documentation
- about SRCU read-side critical sections
-Message-ID: <ee922523-cc65-4254-b735-9e471c0e1c20@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
- <20230321010246.50960-7-paulmck@kernel.org>
- <ZBpcpPIq9k2mX7cw@andrea>
+        Wed, 22 Mar 2023 14:05:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0970392A9;
+        Wed, 22 Mar 2023 11:04:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pneM1iKBldwm07CiyE2tReaQ4kBY/JdcBsq7MfQvOl0=; b=dfhdcJmmA9LPV0Q6VSEifeeuBi
+        3sIu352OsPIwgGuf4hkJ6WqcaRnTDtxGNMr6RiT520TD3OvsNbSknwDkdxufBa31SUmbY1bNKPvbn
+        mNIv4vzGKw/KjJe/FxrAu4MHtYxviDbL0MdvMH9mtk8yzRkGPXUFq7ipnr78DoivZfylCmBpQFM1F
+        czoADtwM3JV/0v4Zf74uSDKnC7/qJ5sI+H6QmbMAe7GcOYLiZ2juJYE9F45FVU3Yw6dG3m0Fzh/lh
+        pHTqn/Ds6EnqglkcZi08kehpIWEz4kX7XSIupFLZo7yK88BFsbjOYXj6lURNY55CtS/qJ6J5BI3TQ
+        CkX3kY8Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pf2pW-00Gx8K-0g;
+        Wed, 22 Mar 2023 18:04:58 +0000
+Date:   Wed, 22 Mar 2023 11:04:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     colin.i.king@gmail.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        a.manzanares@samsung.com, fan.ni@samsung.com,
+        vincent.fu@samsung.com
+Subject: Re: [PATCH v3] stress-module: stress finit_module() and
+ delete_module()
+Message-ID: <ZBtDSh6f+rWqFLtC@bombadil.infradead.org>
+References: <20230322032350.3439056-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBpcpPIq9k2mX7cw@andrea>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230322032350.3439056-1-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 02:40:52AM +0100, Andrea Parri wrote:
-> On Mon, Mar 20, 2023 at 06:02:45PM -0700, Paul E. McKenney wrote:
-> > From: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > Expand the discussion of SRCU and its read-side critical sections in
-> > the Linux Kernel Memory Model documentation file explanation.txt.  The
-> > new material discusses recent changes to the memory model made in
-> > commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
-> > semantics").
+On Tue, Mar 21, 2023 at 08:23:50PM -0700, Luis Chamberlain wrote:
+> Example uses:
 > 
-> How about squashing the diff below (adjusting subject and changelog):
+> sudo ./stress-ng --module 1 --module-name xfs
+> sudo ./stress-ng --module 1 --module-name xfs --module-sharedfd
 
-Looks good to me, thank you!
+The use case with --module 8192 was causing some errors from
+stress-ng having unexpected bail out messages before ramp up.
 
-Please submit an official patch with Joel's and Alan's tags and I
-will be happy to pull it in.
+> diff --git a/stress-module.c b/stress-module.c
+> new file mode 100644
+> index 00000000..cee581bd
+> --- /dev/null
+> +++ b/stress-module.c
+> +			//snprintf(module_path, strlen(module_path), "%s/%s/%s",
+> +			snprintf(module_path, PATH_MAX*2, "%s/%s/%s",
+> +				 dirname_default_prefix,
+> +				 u.release, module);
+> +			ret = 0;
 
-							Thanx, Paul
+I forgot to remove this stray comment.
 
->   Andrea
-> 
-> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
-> index 26554b1c5575e..acac527328a1f 100644
-> --- a/tools/memory-model/Documentation/litmus-tests.txt
-> +++ b/tools/memory-model/Documentation/litmus-tests.txt
-> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
->  		additional call_rcu() process to the site of the
->  		emulated rcu-barrier().
->  
-> -	e.	Although sleepable RCU (SRCU) is now modeled, there
-> -		are some subtle differences between its semantics and
-> -		those in the Linux kernel.  For example, the kernel
-> -		might interpret the following sequence as two partially
-> -		overlapping SRCU read-side critical sections:
-> -
-> -			 1  r1 = srcu_read_lock(&my_srcu);
-> -			 2  do_something_1();
-> -			 3  r2 = srcu_read_lock(&my_srcu);
-> -			 4  do_something_2();
-> -			 5  srcu_read_unlock(&my_srcu, r1);
-> -			 6  do_something_3();
-> -			 7  srcu_read_unlock(&my_srcu, r2);
-> -
-> -		In contrast, LKMM will interpret this as a nested pair of
-> -		SRCU read-side critical sections, with the outer critical
-> -		section spanning lines 1-7 and the inner critical section
-> -		spanning lines 3-5.
-> -
-> -		This difference would be more of a concern had anyone
-> -		identified a reasonable use case for partially overlapping
-> -		SRCU read-side critical sections.  For more information
-> -		on the trickiness of such overlapping, please see:
-> -		https://paulmck.livejournal.com/40593.html
-> -
-> -	f.	Reader-writer locking is not modeled.  It can be
-> +	e.	Reader-writer locking is not modeled.  It can be
->  		emulated in litmus tests using atomic read-modify-write
->  		operations.
->  
-> 
->   Andrea
+> +	/*
+> +	 * We're not stressing the modules.dep --> module path lookup,
+> +	 * just the finit_module() calls and so only do the lookup once.
+> +	 */
+> +	if (args->instance != 0) {
+> +		if (!module_path_found)
+> +			return EXIT_SUCCESS;
+> +	}
+
+So here was the reason for the complaints, Although changing this to
+return just EXIT_NO_RESOURCE cures the warning, I don't think the
+non instance 0 workers are doing anything then. Is that right Collin?
+
+  Luis
