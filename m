@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C3B6C4D36
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D349D6C4D3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjCVONf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        id S230435AbjCVOOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCVONa (ORCPT
+        with ESMTP id S229794AbjCVOOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:13:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D0F20050;
+        Wed, 22 Mar 2023 10:14:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0451528E64
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:13:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679494411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gIhIZ9iTRojGJMYiKTfmFBTTGDFbr5/gvROIxAATKTs=;
+        b=FogJLCkPsP+tdEj2ujUWMYLtqTaR3MPWrXqTeeJpgExbiOrvYzd7MtcS2pZefAtIsoBCrj
+        ZcxT1WELswogxUsbZLsoUhR9YpXKwXaFJKhnjtbzH3HkrAijK+SGIMZ+BFhLabU4zChBku
+        5z75d2/8lyCpxRWDxDcTcfeQMKBEU3I=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-675-U9sdEskKPF-jXBrjeh7tCw-1; Wed, 22 Mar 2023 10:13:25 -0400
+X-MC-Unique: U9sdEskKPF-jXBrjeh7tCw-1
+Received: by mail-wm1-f71.google.com with SMTP id bg13-20020a05600c3c8d00b003ed40f09355so8818219wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:13:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679494404;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gIhIZ9iTRojGJMYiKTfmFBTTGDFbr5/gvROIxAATKTs=;
+        b=M2z5fIRN2+Pif3f7CIRvUIf2S9/MhVhsUb7iB2trsTcKQNdtyouCIWdyJBCsFfTvHy
+         NUH8orFRwm09I2h7/N5Cyl6E6bSz2ROMi3l/9B7uAi71DfpZD0PfcvGiQ2y63k642zzZ
+         rIrINdey9QLgfm+qVpFyQr4qj2/maBr2GvaI8N27nUclwQYZFoaVPfOLCoieLcOeR1nG
+         aOl9+qPREBSYytyn2k9VsYfi56kpJEpoW0SqNhuGgiaYDesy80egqGQ72/OUqONsnicb
+         U73fqzkykPtaSCAafK9vT7YeV2TK3w7winIZ5FtR6l7iSp+JukcPv9zh4zrPg0XU/Oot
+         S97g==
+X-Gm-Message-State: AAQBX9diOEwJPxQhrfhVZGc26F+iUx1BENsuODuhF433+5He90mD5gYG
+        O6s2rtL4S9qb+w/kubeXgo5o3wREUHEht459SDzxa4qDxQJ1QbyhhTbH5RN/G33Y+s/IYG7P5gc
+        ipwtgkC5SYSyTNRmRxbnw9qMb
+X-Received: by 2002:a05:6000:1cb:b0:2d3:f610:8410 with SMTP id t11-20020a05600001cb00b002d3f6108410mr48487wrx.0.1679494404216;
         Wed, 22 Mar 2023 07:13:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07AC9620F9;
-        Wed, 22 Mar 2023 14:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A8DC433D2;
-        Wed, 22 Mar 2023 14:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679494403;
-        bh=7GYtRL6YyPYjncnf9JpknqIQlqvrlk4HFEZjeod2l9g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uk+C7lKt/qBWFBI9Grg8oad+0wbtd0WpsvOpNuFJsdL2uh9GcmaXOKuZJumrsUFU0
-         P/gUERmM8WsesYP1CGhol+YKrv6HgUUfl6Xj7HsFmpJO12hAQlw6JTWr5yzskimY9s
-         vvjcFj13Vn9VfwjkJ5jgCjmDYSCxnCaEtXrtvyzCEEU5BOc/VbZhSwbFMmQT4NOcjH
-         kI8Oo1PvnMtxd9z3Y3X+f1Y2dfUp7EEQVkNWxjmHN2Xpa5CjYG0He4SLXPdTsvYEIj
-         KjYNn16pINRJ+GrwJUY6wJEnzRhfPBEJO7gUsLlBi2k6Y5L9ujouCxfyzUITpLBDoR
-         3dY1SsMvP5wVg==
-Date:   Wed, 22 Mar 2023 15:13:17 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>
-Subject: Re: [PATCH net-next v2 0/3] Add SCM_PIDFD and SO_PEERPIDFD
-Message-ID: <20230322141317.am2j6ml4rvwc5hrx@wittgenstein>
-References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
+X-Google-Smtp-Source: AKy350bwPM1I+KdwU+k+LnKMhL8L8AvemWt4BBwZWovdn++jO3C4QynGXhNPsmQm5XFePAlaJEWMPA==
+X-Received: by 2002:a05:6000:1cb:b0:2d3:f610:8410 with SMTP id t11-20020a05600001cb00b002d3f6108410mr48464wrx.0.1679494403910;
+        Wed, 22 Mar 2023 07:13:23 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c15-20020adfef4f000000b002c7066a6f77sm13914075wrp.31.2023.03.22.07.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 07:13:23 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Jordan Crouse <jorcrous@amazon.com>,
+        Enric Balletbo i Serra <eballetb@redhat.com>
+Cc:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-kernel@vger.kernel.org, Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Sergio Lopez <slp@redhat.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
+In-Reply-To: <87ttyu54wy.fsf@minerva.mail-host-address-is-not-set>
+References: <20230210081835.2054482-1-javierm@redhat.com>
+ <20230303220918.qr5ydbin3nye3qtz@amazon.com>
+ <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
+ <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
+ <87sfeh0yjn.fsf@minerva.mail-host-address-is-not-set>
+ <CALE0LRvR=DjUp2_DBuPQkEr9jvzGH4Mx4-7=rc6zOw1APQdyeQ@mail.gmail.com>
+ <20230308181245.nbnwkdtdnsldd65l@amazon.com>
+ <87ttyu54wy.fsf@minerva.mail-host-address-is-not-set>
+Date:   Wed, 22 Mar 2023 15:13:22 +0100
+Message-ID: <87bkkkoovx.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:33:39PM +0100, Alexander Mikhalitsyn wrote:
-> 1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
-> but it contains pidfd instead of plain pid, which allows programmers not
-> to care about PID reuse problem.
-> 
-> 2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
-> 
-> 3. Add SCM_PIDFD / SO_PEERPIDFD kselftest
-> 
-> Idea comes from UAPI kernel group:
-> https://uapi-group.org/kernel-features/
-> 
-> Big thanks to Christian Brauner and Lennart Poettering for productive
-> discussions about this.
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: Lennart Poettering <mzxreary@0pointer.de>
-> 
-> Alexander Mikhalitsyn (3):
->   scm: add SO_PASSPIDFD and SCM_PIDFD
->   net: core: add getsockopt SO_PEERPIDFD
->   selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
-> 
->  arch/alpha/include/uapi/asm/socket.h          |   3 +
->  arch/mips/include/uapi/asm/socket.h           |   3 +
->  arch/parisc/include/uapi/asm/socket.h         |   3 +
->  arch/sparc/include/uapi/asm/socket.h          |   3 +
->  include/linux/net.h                           |   1 +
->  include/linux/socket.h                        |   1 +
->  include/net/scm.h                             |  14 +-
->  include/uapi/asm-generic/socket.h             |   3 +
->  net/core/sock.c                               |  32 ++
->  net/mptcp/sockopt.c                           |   1 +
->  net/unix/af_unix.c                            |  18 +-
->  tools/include/uapi/asm-generic/socket.h       |   3 +
->  tools/testing/selftests/net/.gitignore        |   1 +
->  tools/testing/selftests/net/af_unix/Makefile  |   3 +-
->  .../testing/selftests/net/af_unix/scm_pidfd.c | 336 ++++++++++++++++++
->  15 files changed, 417 insertions(+), 8 deletions(-)
->  create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-What's the commit for this work? Because this seems to fail to apply
-cleanly on anything from v6.3-rc1 until v6.3-rc3.
+Hello Stanimir and Dikshita,
+
+> Jordan Crouse <jorcrous@amazon.com> writes:
+>
+>> On Tue, Mar 07, 2023 at 05:20:18PM +0100, Enric Balletbo i Serra wrote:
+>
+> [...]
+>
+>>> >
+>>> > But regardless, I think that it would be better for a driver to
+>>> > not change the order of advertised VIDIOC_ENUM_FMT pixel formats.
+>>> >
+>>> > Because what happens now is that a decoding that was previously
+>>> > working by default is not working anymore due a combination of
+>>> > the default being changed and S_FMT not working as expected.
+>>
+>> For my part, I was using the gstreamer v4l2 decoder which for some reason tries
+>> to verify it can support whatever format it gets with G_FMT *before*
+>> trying a S_FMT. I can't confirm or deny if S_FMT currently works or not.
+>>
+>> That said, I entirely agree with Javier. While it might be more
+>> bandwidth efficient, QC08C is a obscure format. It is far more likely that the
+>> average open source user would rather use a well known output format and, as
+>> has been mentioned, once S_FMT is fixed those in the know can use the other
+>> formats if they are working with other Qualcomm hardware blocks.
+>>
+>
+> Agreed. The rule is that the kernel shouldn't regress user-space and the
+> patches that changed the default format certainly did that. So from that
+> point of view I think that this patch should land.
+>
+> There's also Enric's point that NV12 is a more common format and supported
+> by more user-space programs. That's why think that regardless of the S_FMT
+> situation, makes sense to revert to the previous default behaviour.
+>
+
+Any news on this patch? It would be great to fix this at least for v6.3.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
