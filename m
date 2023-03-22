@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA736C4F8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DB66C4F8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjCVPf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S231613AbjCVPgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbjCVPfz (ORCPT
+        with ESMTP id S231607AbjCVPgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:35:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B75E3B0C7;
-        Wed, 22 Mar 2023 08:35:53 -0700 (PDT)
+        Wed, 22 Mar 2023 11:36:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A65E515CD;
+        Wed, 22 Mar 2023 08:36:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 496E7B81D21;
-        Wed, 22 Mar 2023 15:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11C4C433D2;
-        Wed, 22 Mar 2023 15:35:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26C9C621A0;
+        Wed, 22 Mar 2023 15:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEB5C4339B;
+        Wed, 22 Mar 2023 15:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679499351;
-        bh=WVV/H80+zuLPMgmWWvz0wCM8BiYBexz+Nk2HHh9NVAM=;
+        s=k20201202; t=1679499365;
+        bh=DZy9l2qyDKre9adLwkTIGVd6PoEOrq5ypuDZNWHxbJU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BvgGxD2hLC0s4kB+sGkNES8gUWeJsKFGUdzYIvpWQnEAxyw7aoDYglaH2Jlntv64z
-         Zl6TjXUh7CTlS4gDKjae1ZZ8UUsnGbogyPRpzzlEifpWYL02rztCs+gWedcCCdKlc5
-         6IJvp2KRCLEHB8jJTQ69yMr3WpM4CCHjYaSf5MtxydiCl4cUEP/8uiq4mZMsPLq4QP
-         cH0BlanMPmYN3dQx/wsbuNWz1RonkO8hBn4yg5j1hWlpbuwTK8vY1vVR7QloEzpvcJ
-         sqIN5ADEdxhkppgC1AW33t4BDnAgisjqsim4LGVy9VrU930J2oS9lpaGES86xasWZE
-         xvUnp8Zd/YGaA==
-Date:   Wed, 22 Mar 2023 16:35:44 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/3] net: core: add getsockopt SO_PEERPIDFD
-Message-ID: <20230322153544.u7rfjijcpuheda6m@wittgenstein>
-References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
- <20230321183342.617114-3-aleksandr.mikhalitsyn@canonical.com>
+        b=uWqGKRZENH6xhp47Uo6JUmbc8rMcVyCGI1wIWS9Ycu1PR1v0i/Lz6WE6+ITRbtQWP
+         KAnd/amMvGloOOH7kvjSXNEUHUkGA1gaJqAMqsveJtnl/L2r+/wOKA/YOupxvhpISe
+         P3FgL3ojHPObXM2v0pgehfxYKLrp39ovS8Ar51V52vhsmGInrbpfA4Mrw4C/S1FFTA
+         DuFz4tYaXZxzg234CCAJ1GVEhXEQhPTgYATpEzg3nAgPu9x9So32+zEkijfb7Br4SN
+         tkUOZaFPXlyyZwFHfh4HFM89T11cJdwBtYwAxhUy9nBxJT+LzAxHv3YCLVfdDX6RzX
+         lx0Mz43ukmzFg==
+Date:   Wed, 22 Mar 2023 15:35:59 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, slewis@rivosinc.com,
+        heiko@sntech.de, vineetg@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Guo Ren <guoren@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 3/6] RISC-V: hwprobe: Add support for
+ RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+Message-ID: <8e132bed-c85a-4bfd-bff8-5147db1cec32@spud>
+References: <20230314183220.513101-1-evan@rivosinc.com>
+ <20230314183220.513101-4-evan@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r+TYFFM1/Jo8CP9z"
 Content-Disposition: inline
-In-Reply-To: <20230321183342.617114-3-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230314183220.513101-4-evan@rivosinc.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -63,379 +65,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:33:41PM +0100, Alexander Mikhalitsyn wrote:
-> Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: Lennart Poettering <mzxreary@0pointer.de>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
-> v2:
-> 	According to review comments from Kuniyuki Iwashima and Christian Brauner:
-> 	- use pidfd_create(..) retval as a result
-> 	- whitespace change
-> ---
->  arch/alpha/include/uapi/asm/socket.h    |  1 +
->  arch/mips/include/uapi/asm/socket.h     |  1 +
->  arch/parisc/include/uapi/asm/socket.h   |  1 +
->  arch/sparc/include/uapi/asm/socket.h    |  1 +
->  include/uapi/asm-generic/socket.h       |  1 +
->  net/core/sock.c                         | 21 +++++++++++++++++++++
->  tools/include/uapi/asm-generic/socket.h |  1 +
->  7 files changed, 27 insertions(+)
-> 
-> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-> index ff310613ae64..e94f621903fe 100644
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
-> @@ -138,6 +138,7 @@
->  #define SO_RCVMARK		75
->  
->  #define SO_PASSPIDFD		76
-> +#define SO_PEERPIDFD		77
->  
->  #if !defined(__KERNEL__)
->  
-> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-> index 762dcb80e4ec..60ebaed28a4c 100644
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
-> @@ -149,6 +149,7 @@
->  #define SO_RCVMARK		75
->  
->  #define SO_PASSPIDFD		76
-> +#define SO_PEERPIDFD		77
->  
->  #if !defined(__KERNEL__)
->  
-> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-> index df16a3e16d64..be264c2b1a11 100644
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
-> @@ -130,6 +130,7 @@
->  #define SO_RCVMARK		0x4049
->  
->  #define SO_PASSPIDFD		0x404A
-> +#define SO_PEERPIDFD		0x404B
->  
->  #if !defined(__KERNEL__)
->  
-> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-> index 6e2847804fea..682da3714686 100644
-> --- a/arch/sparc/include/uapi/asm/socket.h
-> +++ b/arch/sparc/include/uapi/asm/socket.h
-> @@ -131,6 +131,7 @@
->  #define SO_RCVMARK               0x0054
->  
->  #define SO_PASSPIDFD             0x0055
-> +#define SO_PEERPIDFD             0x0056
->  
->  #if !defined(__KERNEL__)
->  
-> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-> index b76169fdb80b..8ce8a39a1e5f 100644
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -133,6 +133,7 @@
->  #define SO_RCVMARK		75
->  
->  #define SO_PASSPIDFD		76
-> +#define SO_PEERPIDFD		77
->  
->  #if !defined(__KERNEL__)
->  
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 3f974246ba3e..85c269ca9d8a 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1763,6 +1763,27 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
->  		goto lenout;
->  	}
->  
-> +	case SO_PEERPIDFD:
-> +	{
-> +		struct pid *peer_pid;
-> +		int pidfd;
+
+--r+TYFFM1/Jo8CP9z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Mar 14, 2023 at 11:32:17AM -0700, Evan Green wrote:
+> We have an implicit set of base behaviors that userspace depends on,
+> which are mostly defined in various ISA specifications.
+>=20
+> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Evan Green <evan@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+> @@ -125,6 +126,25 @@ static void hwprobe_one_pair(struct riscv_hwprobe *p=
+air,
+>  	case RISCV_HWPROBE_KEY_MIMPID:
+>  		hwprobe_arch_id(pair, cpus);
+>  		break;
+> +	/*
+> +	 * The kernel already assumes that the base single-letter ISA
+> +	 * extensions are supported on all harts, and only supports the
+> +	 * IMA base, so just cheat a bit here and tell that to
+> +	 * userspace.
+> +	 */
+> +	case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
+> +		pair->value =3D RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
+> +		break;
 > +
-> +		if (len > sizeof(pidfd))
-> +			len = sizeof(pidfd);
+> +	case RISCV_HWPROBE_KEY_IMA_EXT_0:
+> +		pair->value =3D 0;
+> +		if (has_fpu())
+> +			pair->value |=3D RISCV_HWPROBE_IMA_FD;
 > +
-> +		spin_lock(&sk->sk_peer_lock);
-> +		peer_pid = get_pid(sk->sk_peer_pid);
-> +		spin_unlock(&sk->sk_peer_lock);
+> +		if (elf_hwcap & RISCV_ISA_EXT_c)
+
+Random thought while reviewing another patch, and I kinda felt a bit
+stupid following the existing code to try and make sure, but should this
+become a call to riscv_isa_extension_available(NULL, c)?
+It may be nice to propagate that helper, if it works, than check the bit
+directly.
+
+Cheers,
+Conor.
+
+> +			pair->value |=3D RISCV_HWPROBE_IMA_C;
 > +
-> +		pidfd = pidfd_create(peer_pid, 0);
-> +
-> +		put_pid(peer_pid);
-> +
-> +		if (copy_to_sockptr(optval, &pidfd, len))
-> +			return -EFAULT;
+> +		break;
+> =20
+>  	/*
+>  	 * For forward compatibility, unknown keys don't fail the whole
+> --=20
+> 2.25.1
+>=20
 
-This leaks the pidfd. We could do:
+--r+TYFFM1/Jo8CP9z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	if (copy_to_sockptr(optval, &pidfd, len)) {
-		close_fd(pidfd);
-		return -EFAULT;
-	}
+-----BEGIN PGP SIGNATURE-----
 
-but it's a nasty anti-pattern to install the fd in the caller's fdtable
-and then close it again. So let's avoid it if we can. Since you can only
-set one socket option per setsockopt() sycall we should be able to
-reserve an fd and pidfd_file, do the stuff that might fail, and then
-call fd_install. So that would roughly be:
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBsgXwAKCRB4tDGHoIJi
+0uXwAPwO6vaB4a7jTfh6cwcjIbakPGbW2KoWTWyZNWCElUCFGgEA/czXfGY7/Z9G
+0R/BZly3E44aKfHbp8z2S2DhkztM8QU=
+=2y2o
+-----END PGP SIGNATURE-----
 
-	peer_pid = get_pid(sk->sk_peer_pid);
-	pidfd_file = pidfd_file_create(peer_pid, 0, &pidfd);
-	f (copy_to_sockptr(optval, &pidfd, len))
-	       return -EFAULT;
-	goto lenout:
-	
-	.
-	.
-	.
-
-lenout:
-	if (copy_to_sockptr(optlen, &len, sizeof(int)))
-		return -EFAULT;
-
-	// Made it safely, install pidfd now.
-	fd_install(pidfd, pidfd_file)
-
-(See below for the associated api I'm going to publish independent of
-this as kernel/fork.c and fanotify both could use it.)
-
-But now, let's look at net/socket.c there's another wrinkle. So let's say you
-have successfully installed the pidfd then it seems you can still fail later:
-
-        if (level == SOL_SOCKET)
-                err = sock_getsockopt(sock, level, optname, optval, optlen);
-        else if (unlikely(!sock->ops->getsockopt))
-                err = -EOPNOTSUPP;
-        else
-                err = sock->ops->getsockopt(sock, level, optname, optval,
-                                            optlen);
-
-        if (!in_compat_syscall())
-                err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
-                                                     optval, optlen, max_optlen,
-                                                     err);
-
-out_put:
-	fput_light(sock->file, fput_needed);
-	return err;
-
-If the bpf hook returns an error we've placed an fd into the caller's sockopt
-buffer without their knowledge.
-
-From 4fee16f0920308bee2531fd3b08484f607eb5830 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Mar 2023 15:59:02 +0100
-Subject: [PATCH 1/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] pid: add
- pidfd_file_create()
-
-Reserve and fd and pidfile, do stuff that might fail, install fd when
-point of no return.
-
-[HERE BE DRAGONS - DRAFT - __UNTESTED__] pid: add pidfd_file_create()
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- include/linux/pid.h |  1 +
- kernel/pid.c        | 45 +++++++++++++++++++++++++++++++++------------
- 2 files changed, 34 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/pid.h b/include/linux/pid.h
-index 343abf22092e..c486dbc4d7b6 100644
---- a/include/linux/pid.h
-+++ b/include/linux/pid.h
-@@ -80,6 +80,7 @@ extern struct pid *pidfd_pid(const struct file *file);
- struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags);
- struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags);
- int pidfd_create(struct pid *pid, unsigned int flags);
-+struct file *pidfd_file_create(struct pid *pid, unsigned int flags, int *pidfd);
- 
- static inline struct pid *get_pid(struct pid *pid)
- {
-diff --git a/kernel/pid.c b/kernel/pid.c
-index 3fbc5e46b721..8d0924f1dbf6 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -576,6 +576,32 @@ struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags)
- 	return task;
- }
- 
-+struct file *pidfd_file_create(struct pid *pid, unsigned int flags, int *pidfd)
-+{
-+	int fd;
-+	struct file *pidfile;
-+
-+	if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
-+		return ERR_PTR(-EINVAL);
-+
-+	fd = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
-+	if (fd < 0)
-+		return ERR_PTR(fd);
-+
-+	pidfile = anon_inode_getfile("[pidfd]", &pidfd_fops, pid,
-+				     flags | O_RDWR | O_CLOEXEC);
-+	if (IS_ERR(pidfile)) {
-+		put_unused_fd(fd);
-+		return pidfile;
-+	}
-+	get_pid(pid); /* held by pidfile now */
-+	*pidfd = fd;
-+	return pidfile;
-+}
-+
- /**
-  * pidfd_create() - Create a new pid file descriptor.
-  *
-@@ -594,20 +620,15 @@ struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags)
-  */
- int pidfd_create(struct pid *pid, unsigned int flags)
- {
--	int fd;
-+	int pidfd;
-+	struct file *pidfile;
- 
--	if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
--		return -EINVAL;
-+	pidfile = pidfd_file_create(pid, flags, &pidfd);
-+	if (IS_ERR(pidfile))
-+		return PTR_ERR(pidfile);
- 
--	if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
--		return -EINVAL;
--
--	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
--			      flags | O_RDWR | O_CLOEXEC);
--	if (fd < 0)
--		put_pid(pid);
--
--	return fd;
-+	fd_install(pidfd, pidfile);
-+	return pidfd;
- }
- 
- /**
--- 
-2.34.1
-
-From c336f1c6cc39faa5aef4fbedd3c4f8eca51d8436 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Mar 2023 15:59:54 +0100
-Subject: [PATCH 2/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] fork: use
- pidfd_file_create()
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- kernel/fork.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
-
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f68954d05e89..c8dc78ee0a74 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2296,20 +2296,11 @@ static __latent_entropy struct task_struct *copy_process(
- 	 * if the fd table isn't shared).
- 	 */
- 	if (clone_flags & CLONE_PIDFD) {
--		retval = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
--		if (retval < 0)
--			goto bad_fork_free_pid;
--
--		pidfd = retval;
--
--		pidfile = anon_inode_getfile("[pidfd]", &pidfd_fops, pid,
--					      O_RDWR | O_CLOEXEC);
-+		pidfile = pidfd_file_create(pid, O_RDWR | O_CLOEXEC, &pidfd);
- 		if (IS_ERR(pidfile)) {
--			put_unused_fd(pidfd);
- 			retval = PTR_ERR(pidfile);
- 			goto bad_fork_free_pid;
- 		}
--		get_pid(pid);	/* held by pidfile now */
- 
- 		retval = put_user(pidfd, args->pidfd);
- 		if (retval)
--- 
-2.34.1
-
-From 0897f68fe06a8777d8ec600fdc719143f76095b1 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <brauner@kernel.org>
-Date: Wed, 22 Mar 2023 16:02:50 +0100
-Subject: [PATCH 3/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] fanotify: use
- pidfd_file_create()
-
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- fs/notify/fanotify/fanotify_user.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-index 8f430bfad487..4a8db6b5f690 100644
---- a/fs/notify/fanotify/fanotify_user.c
-+++ b/fs/notify/fanotify/fanotify_user.c
-@@ -665,6 +665,7 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 	unsigned int pidfd_mode = info_mode & FAN_REPORT_PIDFD;
- 	struct file *f = NULL;
- 	int ret, pidfd = FAN_NOPIDFD, fd = FAN_NOFD;
-+	struct file *pidfd_file = NULL;
- 
- 	pr_debug("%s: group=%p event=%p\n", __func__, group, event);
- 
-@@ -718,9 +719,11 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 		    !pid_has_task(event->pid, PIDTYPE_TGID)) {
- 			pidfd = FAN_NOPIDFD;
- 		} else {
--			pidfd = pidfd_create(event->pid, 0);
--			if (pidfd < 0)
-+			pidfd_file = pidfd_file_create(event->pid, 0, &pidfd);
-+			if (IS_ERR(pidfd_file)) {
- 				pidfd = FAN_EPIDFD;
-+				pidfd_file = NULL;
-+			}
- 		}
- 	}
- 
-@@ -750,6 +753,8 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 
- 	if (f)
- 		fd_install(fd, f);
-+	if (pidfd_file)
-+		fd_install(pidfd, pidfd_file);
- 
- 	return metadata.event_len;
- 
-@@ -759,8 +764,10 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
- 		fput(f);
- 	}
- 
--	if (pidfd >= 0)
--		close_fd(pidfd);
-+	if (pidfd >= 0) {
-+		put_unused_fd(pidfd);
-+		fput(pidfd_file);
-+	}
- 
- 	return ret;
- }
--- 
-2.34.1
-
+--r+TYFFM1/Jo8CP9z--
