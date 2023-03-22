@@ -2,66 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9351E6C4F27
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A986C4F23
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 16:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjCVPPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 11:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S231193AbjCVPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 11:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCVPPv (ORCPT
+        with ESMTP id S230233AbjCVPOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 11:15:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938995FA7E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 08:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Oo95ksNo438JOehySiTYm2xvtjpxki70aoJy1x654ic=; b=AmZ2yrsZzD4hIqyo5kv7jGnakK
-        Xp5HymcULYHKiPmU0NelZiXniuv5bFpGR4XawrJ9sicQHGWK8yJCFBqUzgBSY/VQtud4N1DN87+KC
-        c7pFK8A2II1Hy5hc2crVFOA5N7MCOp5rAIYa90s0SQ7AY8EXjL0hhDQc/gXoq9tiv/K9baikGBPuv
-        tdWmywNXyOa5NgV+l9hSZzN+DLj+qPo6+FCxVGRHhNucOHc+/gY86qQAlEH8bmbuJkIW+4qve6g/o
-        iIO3PraeOxVCPa+EqiGS2TzqFHBGsT2QddsWck3WlnOr5TUuy1ZDh5l3SATp28cz6IY8w6zsEqqEg
-        VX7N1KXA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pf0Bb-0036gM-8p; Wed, 22 Mar 2023 15:15:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D005300379;
-        Wed, 22 Mar 2023 16:15:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 33289201FFA49; Wed, 22 Mar 2023 16:15:32 +0100 (CET)
-Date:   Wed, 22 Mar 2023 16:15:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 11/11] static_call: Remove DEFINE_STATIC_CALL_RET0()
-Message-ID: <20230322151532.GG2357380@hirez.programming.kicks-ass.net>
-References: <cover.1679456900.git.jpoimboe@kernel.org>
- <8aab02492c2bf512c7ffe458e41acc1b930ed2dc.1679456900.git.jpoimboe@kernel.org>
+        Wed, 22 Mar 2023 11:14:35 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2079.outbound.protection.outlook.com [40.107.101.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53C81E1C1;
+        Wed, 22 Mar 2023 08:14:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WeN2CN2XLAAUf7MuX8HzU22cCAQpw4tpsUADB2XDZBegMuFPVEYyD4D+9VaGEUaNmTcdTdK937NLWNtNfDQQfHanrbioDV+wz6P8zvu5e/01jQiKZq+SrnTtKGoQOxVXBlAIEqSk0FXBMHXQIyBHkqAVVdulV5c8k1389BK6bIJw6HjYou7PvGJeWtPsYZv08AkkX9n2Uv7h4ZcqfRgwF9dEA74pDYcwfFg1/H57yo3U5+gLE12h0YqFiwK3PRUn5fal6FZVREFGcshqXniJgWAzM2J0rv5E7DMPsBT4XEiQF495XiGbJ1Ao+q4v2VZeQlgOTqJrxXIMT1RJ3UIr3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JZXsEuX0cCOW5oVUDIvRe16T0Z/s1mj1ALP5wCx7aas=;
+ b=U+wrVPsiyxPitT0BVr9tPJZvFRkmxC7n1aTJYZSOUcw0uyUx48xTyO+T9MORmYjbbaqTAALCM5H++7lu/OfrGH8Ph8fpgUIfykFwlvCW77Vp8+FmCo12FJsxirTyHMcqmIBITXWQP4kY0T8NtVb0ct+D6Rlk3jPsuwznko6vhKLMkm5SmxdUOlF5wzH9FhjGtHs3smpDRvgtrr1osUXdZLeZOjbUszEwWwNnEqu/AZBcA9oVvnm3xzima3yRWzkRF+0qWbdlo9sca0FCnZDkAY6RNIcpNZfxJpxCxL8Biv1yeMPj4dE3cRa0hoTTEtqVWYXtpHlE4gTfyzBA6yDF2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JZXsEuX0cCOW5oVUDIvRe16T0Z/s1mj1ALP5wCx7aas=;
+ b=sBwr481xHYb39Gxy/uzhdoRcWsrsCPf54uAosLYWv2NLjazqc0mkjKdFIuIXL1KRKxk5Rw1qAfmOmkK7W3VHFvwnwnoblAWTXLBZLD8AggpjsntRtUuadCglwdb5VCkl1UClyYytgh85ThMT576i2A8ddrRiO4/NNzsngnI3KbI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DM4PR12MB7646.namprd12.prod.outlook.com (2603:10b6:8:106::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Wed, 22 Mar 2023 15:14:31 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 15:14:31 +0000
+Message-ID: <a7e45c16-cfc7-691c-8bf9-c187f85b7679@amd.com>
+Date:   Wed, 22 Mar 2023 11:15:47 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amd/display: Slightly optimize
+ dm_dmub_outbox1_low_irq()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, aurabindo.pillai@amd.com, roman.li@amd.com,
+        hersenxs.wu@amd.com, stylon.wang@amd.com
+Cc:     kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <b7cff2c1976308c64951d466fd627989ef6e46fb.1679421347.git.christophe.jaillet@wanadoo.fr>
+Content-Language: en-US
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <b7cff2c1976308c64951d466fd627989ef6e46fb.1679421347.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQXPR0101CA0056.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:14::33) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8aab02492c2bf512c7ffe458e41acc1b930ed2dc.1679456900.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM4PR12MB7646:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7ef6c1c-bcae-4fe8-9368-08db2ae822a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +zSzXiuIxMxxQzqL7LELXvIRBRw5WWrW+VlrOcw471DeyQ9yZq5iC+KTdIgOum+BDYkK+JL0YRvYcqZXLQT1ITM5EnGrNztRsg0eqPl80BxKyS16NxApE4Wqj3tpf0J1zIQ48X5WddOu6PV8AIefzGZJCnmQsFWn3E6S46XhIXiGtlVN1XxvP/lT0sDmkh9lhGxdEW+2a3+XrKBU/LnjzvPoeTo5gcKr3DSPIQIILtGcPlflkgtppspslgkp99FbvZ2D+2KYZGyuooT5D3/rxuv2kyJQiD+MTDL3dQhsqHjLH0Vr6yH+1D4CA+rYRNpjy3Em5Ppl+d4/pYpSj9CZ9J3A4E5wRHu42SK3TqimAxNeoxfx30dUoKx5I3a/2TAksUdBaV7Mzm4xD6jhdqdKvtdArfFy3s9v2UO3wQhEG+jiwRBxW/Uow96L1sMPL8hbrYGpyc/2cy/5m3ig6nSOKdR9g3SCfljtL/14/ecukhL84M+Ony9be9YPS0Hj+3V/aca76kQ2ibfqyqfFel4NbvjNXIxyEbdX80WTC6gQYHUNhl/TUU2zw+mPGqEP8kPLMkkFq5eB9zUIUxYzDtt6kDJeePM7odylmLP1+n+BqXlnjNuzoWE1+xLbmWY0cuGRD9x0AOwC5d0UeNGPnvN52rz6RDueI76R892AhbbS/Vn0VH/NmPsaSMgyuXYFGysQCtVNvC4SOWC744MFaqIfolooSLkO+KOvw0dt8bAwrA5GxwPGk0SCr1zJppn+/B5k
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(39860400002)(346002)(396003)(451199018)(86362001)(31696002)(36756003)(83380400001)(66556008)(316002)(4326008)(478600001)(8676002)(6636002)(66476007)(66946007)(6512007)(186003)(26005)(2616005)(53546011)(31686004)(6506007)(6666004)(921005)(6486002)(38100700002)(5660300002)(8936002)(41300700001)(44832011)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T1NERUgxUGpRcXJ4U016N1M3NXRHeW1iN0ZiSm9PSzdEUjEzZGZlTkoxR3R6?=
+ =?utf-8?B?WUdDK0dvNEo1a3R1VExkQjlNZDdGUlFYOUJLcWVDN3pIUWh3WldBaUhCeHc1?=
+ =?utf-8?B?ZEFpUlphNWprSmVCczMzc0ozUnNDK1l3L3pEQmM5REYycXhrai9RbGdOVzky?=
+ =?utf-8?B?ZmhhZlliYjUzTkZCaWtIdUlxOTI3TDZCVEJHYlZIbHp6azcrNnBINlYrU1dN?=
+ =?utf-8?B?bllYZE1aVkRzU3pLSFhIYUg5WTEyYVYwc1Fmakc2V2x0ZlpuZTBvZ0Z6aHkv?=
+ =?utf-8?B?MGp5ampnUi9LendLclJ3djNXcklWU0FBTGpTZ2VYKzQ4K0V1Mm8wY2NDR3BL?=
+ =?utf-8?B?c1R4MGhBTWgreXVaWWV3OEJLZDVyeHltMTFTa2lBSDhGWHlPZndKN0hRMFdO?=
+ =?utf-8?B?ZWZ4Tk1pdG5lWkVuVzF0WFcwUTlqbjAyZ0wyTG1vcm5sRHZpbURJbm9naSs4?=
+ =?utf-8?B?dWFzejlvdWltSW12QU50MllxZlZKdHBreGltOXdRQWVFK0diRm1FMTRaa0xQ?=
+ =?utf-8?B?ZW5DQVp6Q3lFeTFXZ3A2dDlEcTBCV2MxdHFJaEk1SFpTaUtFNy9xWVp2blBT?=
+ =?utf-8?B?L1ZqUi96OW1NYlJRSFlicytFaGNJb3NWUktTcG5DVDZiSlZteE05bG1Vc3RD?=
+ =?utf-8?B?YmJaVUd4Qy9GRzBCa00rQ053TlZaV0llRm8zd3Y0WWxNaXp1bUFaa1EvYmVC?=
+ =?utf-8?B?OVJXTTNXKzRWMzZ3blhYWnJhTnJYdHRJVnFpeEhBNTJYeDBjb1FKdEtnM3BZ?=
+ =?utf-8?B?QUU0Skx0WEJOeDNwZ1JNMmhBUGVsS0VDcFVzWGY0Sm1YRmhhUXBkVDVvRnZ3?=
+ =?utf-8?B?a1VZK0RLakh5ZytkcUdHYVUvVWdTTFZsSy93UzhUYUU4Q3J5MEpiaE0rNFZu?=
+ =?utf-8?B?ZEtLK2tucnBqcS92ckowMFJxbnBiR1A0MDdqT2JDY1h3MDZFZE1sQXVWdkJq?=
+ =?utf-8?B?M3lWcHF4ekZnTlFCZGpCSm5kSXRYUURkZDk2ZFdJOXhYU3FkRk5JSllEb29z?=
+ =?utf-8?B?MTBQZzh6a2dxTGo4OGwzTWhKUW5laC9YN0R4Sng3UmY0cnY2eFpDbC9YYkhr?=
+ =?utf-8?B?bFppSTlwNUl1RFJUWWRCajVCQXNIbHptY01hZi83T0FOUVNTSlNvV2VDeFJj?=
+ =?utf-8?B?MU9YL1BwNDgwSjZzdm1lcnRtU0JTeDRnNy9Ham1lUlVMNjd1MnNJZFkvckVT?=
+ =?utf-8?B?OGNiN2hhbjZLN3FsWTRLNk9jTUEwUVBud08yRmdZQVBwQ29ySHo2SG9tVzhz?=
+ =?utf-8?B?cldrRHpvM3lwcys2eklZd1dXa3hRSWt0eXN5LzBDSE5vbUFnZ0VRNjJoZCtj?=
+ =?utf-8?B?OVluekNZSTdtbHl0dVpuKy9EZzRHUW9idzVjcEIwMnEvT1NmMXR1aUNMcWVj?=
+ =?utf-8?B?bExzOENMWTdvNThsUjdmZEhla3ljSHIvNkJJVkNmMEVrMzlicjJNWUVwdCtu?=
+ =?utf-8?B?MUJTRTgvL3pWU09iTlVISWZMUGlSNml0cTZlNGpyTDh1L1RLeXh3Y1A2aEZD?=
+ =?utf-8?B?bHZsWGNvWU0wbS8xVW8vK2lKQjJUeHRVeHFqQVdBd0JoMlNWeldRazhGOVpC?=
+ =?utf-8?B?M2JzWjZrUHA0N2xqRFBaanM4VEV3NFQxNXN3WGdrdXRrZWtOT2tlb1BVSnN1?=
+ =?utf-8?B?S0JWWG1GTGZQbHpnZXJSRlpDVmljckpiVU53SThGSGNzSjRzNnR0N0QxTXpy?=
+ =?utf-8?B?SUx1VzQzL3BndytiRmtQaWpJTUtPQ3FuRFBIQzlzcWRSYzJGRDB3Nk9zcWVj?=
+ =?utf-8?B?YjltLzNMRHNGdytCVWRLNGlkSzcxTk9wWGsyWFNPcTgzNHdXL1FEb0xtWGNF?=
+ =?utf-8?B?MmFOSG53ZVlBVCtqVGN6MjJwT0FUdURnV0x5UFM4dWQrUlF0SE5GS0dRVWZX?=
+ =?utf-8?B?WjIveWY2VjhRTUZMV045WGh2SEZhZ21naXVSRGQ2L3NaaWc0ZC9jVWlPYkRk?=
+ =?utf-8?B?ZzRaRlJFcktrR3VURGpNTHphd1dNNksrWVQ0dW9DWGowQ1U0QTNyTUVEa21s?=
+ =?utf-8?B?bmh4NXFmY2YzUjB2Z3FicTJEOUdNS3VjWUJmSUhPYjAwL3ZQMm9ESU9PM1ph?=
+ =?utf-8?B?L2g0eUhFL3E1RkJvcEtEd3VYeUM4TEVMZk9DRnJ3NFVnbW9sNFBoYWR4Ti9x?=
+ =?utf-8?Q?2uSB96BCK+Zxr6+LaWGZUQYYN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7ef6c1c-bcae-4fe8-9368-08db2ae822a9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 15:14:30.8044
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fm1AsHV5ckNOmcEVHQtDouN35Tybi8t3WGdVl3eKMcImVjYrdXja0Elw26H2OUCJYms5ZWw4kRSMfSx1jJ28Yw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7646
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +129,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 09:00:17PM -0700, Josh Poimboeuf wrote:
-> NULL and RET0 static calls are both slightly different ways of nopping a
-> static call.  A not-insignificant amount of code and complexity is spent
-> maintaining them separately.  It's also somewhat tricky for the user who
-> has to try to remember to use the correct one for the given function
-> type.
-
-Well, I have very little sympathy for that argument. The return type
-should be a big frigging clue.
-
-> Simplify things all around by just combining them, such that NULL static
-> calls always return 0.
+On 3/21/23 13:58, Christophe JAILLET wrote:
+> A kzalloc()+memcpy() can be optimized in a single kmemdup().
+> This saves a few cycles because some memory doesn't need to be zeroed.
 > 
-> While it doesn't necessarily make sense for void-return functions to
-> return 0, it's pretty much harmless.  The return value register is
-> already callee-clobbered, and an extra "xor %eax, %eax" shouldn't affect
-> performance (knock on wood).
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Urgh.. OTOH I do like the lines removes.
+Applied, thanks!
 
-> This "do nothing return 0" default should work for the vast majority of
-> NULL cases.  Otherwise it can be easily overridden with a user-specified
-> function which panics or returns 0xdeadbeef or does whatever one wants.
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> This simplifies the static call code and also tends to help simplify
-> users' code as well.
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 5bac5781a06b..57a5fbdab890 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -820,15 +820,14 @@ static void dm_dmub_outbox1_low_irq(void *interrupt_params)
+>   					DRM_ERROR("Failed to allocate dmub_hpd_wrk");
+>   					return;
+>   				}
+> -				dmub_hpd_wrk->dmub_notify = kzalloc(sizeof(struct dmub_notification), GFP_ATOMIC);
+> +				dmub_hpd_wrk->dmub_notify = kmemdup(&notify, sizeof(struct dmub_notification),
+> +								    GFP_ATOMIC);
+>   				if (!dmub_hpd_wrk->dmub_notify) {
+>   					kfree(dmub_hpd_wrk);
+>   					DRM_ERROR("Failed to allocate dmub_hpd_wrk->dmub_notify");
+>   					return;
+>   				}
+>   				INIT_WORK(&dmub_hpd_wrk->handle_hpd_work, dm_handle_hpd_work);
+> -				if (dmub_hpd_wrk->dmub_notify)
+> -					memcpy(dmub_hpd_wrk->dmub_notify, &notify, sizeof(struct dmub_notification));
+>   				dmub_hpd_wrk->adev = adev;
+>   				if (notify.type == DMUB_NOTIFICATION_HPD) {
+>   					plink = adev->dm.dc->links[notify.link_index];
 
-Can we at least keep the DEFINE_STATIC_CALL_RET0() and
-__static_call_return0 as aliases? It reads really daft to use _NULL or
-__static_call_nop for non-void functions.
+-- 
+Hamza
 
