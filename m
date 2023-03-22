@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506AB6C4041
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0686C4043
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 03:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCVCR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 22:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S230193AbjCVCTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 22:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCVCR1 (ORCPT
+        with ESMTP id S229541AbjCVCTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:17:27 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE6F59E7C
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:17:26 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-544f7c176easo169540187b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:17:26 -0700 (PDT)
+        Tue, 21 Mar 2023 22:19:09 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A17158A1
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:19:08 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53d277c1834so313881347b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 19:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679451445;
+        d=joelfernandes.org; s=google; t=1679451548;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FXmlWsfpHidjnzMMfJhnUbznIcU3qDUMNvteO7VcB5A=;
-        b=RMxoO7oSwkzKqjHaV+Bo8mIUTpsxaztVLZ4vz6mi4hzfQV+R4NSRXWMnLKwnWuzeaY
-         JmkfT/dycDTyyiKWbg0P3TgHiZQupruPxfbCvxByU09HATYSU0aCQBOCUp7QaHy++Udh
-         HNS4ONj7SQnAe6xqeFHklnV6a2NgfdulJS+gM=
+        bh=LsGzDD7N3xIQioCZ8vaIzqIq9YbJo7VI7CSEkK+5Bjk=;
+        b=iccskpPGlSypcpFSCe6ACliA/LfvS8jKKHNiTJqYMKauomRuO3KAqRJY51xakk1cRn
+         2X8dbM0kBrIM1OqZCP9OeAxe9OdH+2J4fUr5ydrF1SWtl8hzduUuwHEwhKHtYv0PmkjQ
+         eooelkFcDKR8YQ8XUmxpWMdFQVjqQuoYlkGTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679451445;
+        d=1e100.net; s=20210112; t=1679451548;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FXmlWsfpHidjnzMMfJhnUbznIcU3qDUMNvteO7VcB5A=;
-        b=SEzq+rL9jVUI8rxWQSewCFioR1hMZUnAKnaXXmA8TNxCRNFPTho87ZjUMgx9FV8qfg
-         cCoy8dJARwRBFdbY0AFCnmHneuQXGd7Bv8r8sGKJwy8Zo0nH6N41anDygSwAreab9Qju
-         /fE4i5Nf3NLmNIdw0wHuf9kBby6HpBS03W47FlwdgR906vIv/VxNXoGDJfb1XImMOY3H
-         oRJ+lPhZN7uC4PVkf96B8GZECQ5KWpvi6TSGhuXpEDRZhamNtGCZPC8rr+sXvOHeEUez
-         MrrhQpBJvtRgwM6wXKm4GM1UBAU/3U4xesm9gyzK2IOFYaZTLYzgTuCkZ28B4JyC22Ez
-         3LOQ==
-X-Gm-Message-State: AAQBX9cflrap93wNL2bOtHhkfU/E4p3Tor6XFXcu8fwNwNSfgDEgZ1PD
-        7xx+7AAK/HLVSQWFXmQPDAoGnHqVgB4naoYZk2QBdg==
-X-Google-Smtp-Source: AKy350ZtKDIxbb00+fn9TcSFKm6hNLq8rMsMzKMCKahHS5r8rYYO9fLhPjUB1VsTQddlq/zRIfz83Ckc8/IoElRP3fE=
-X-Received: by 2002:a81:ad53:0:b0:541:693f:cdd1 with SMTP id
- l19-20020a81ad53000000b00541693fcdd1mr2386512ywk.9.1679451445522; Tue, 21 Mar
- 2023 19:17:25 -0700 (PDT)
+        bh=LsGzDD7N3xIQioCZ8vaIzqIq9YbJo7VI7CSEkK+5Bjk=;
+        b=AoK70BNf8pjFVgIjRA3j+x/YPodG4nbnNIamIsB8XJZwdk3NBnVC8iYKdF9PxDWsSs
+         J6lyjeye8Z/W9Fv095ZfVsBbP14xBJ6IAgY+rtTtsh4yui5BqSQJUzjwkUynjygFHMtu
+         4LeqZrqD2ClcEEiUf/MPhLYab6NOqMK858lxs+vrjYT51xyc/vuNOIGhvu6ARAKirPE+
+         ucSiy+M2sHsLmrwbZQ/YFvxU89n/1esyC8sa9seuMl61843or389nxnAkIEEnX+fZpzh
+         f/dPh63EYCsZwvDfWt0x7H/9ATu7IrUgMZAIdiYUuX/alLT+7pzd7/cdmHANWPtxZr9s
+         4lag==
+X-Gm-Message-State: AAQBX9ciyxNMt5SFiVUaEZzNktW4DwFb/JiwGYCzCZEGi2X56Tm8TzxE
+        /YuQv+TYIRiCwoG1cG6tfbuyFWb309ghyDr/do5Afg==
+X-Google-Smtp-Source: AKy350Zx/zVrikbH2Sze2FBliqyAFfVtV5zQypq84Ibep+cu7qoQ+4M54ZZiLEbmGH04pC5+f7pl6MKK/5RGMVX034s=
+X-Received: by 2002:a81:b346:0:b0:530:b21f:d604 with SMTP id
+ r67-20020a81b346000000b00530b21fd604mr2211123ywh.9.1679451547791; Tue, 21 Mar
+ 2023 19:19:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
- <20230321010246.50960-7-paulmck@kernel.org> <ZBpcpPIq9k2mX7cw@andrea>
-In-Reply-To: <ZBpcpPIq9k2mX7cw@andrea>
+References: <72ba8619-88cb-4bf4-8232-18d8a1b6b5bf@paulmck-laptop>
+ <20230321052337.26553-1-qiuxu.zhuo@intel.com> <20230321052337.26553-2-qiuxu.zhuo@intel.com>
+ <20230321154751.hgeppd5v327juc36@offworld> <a4a3e103-78b3-4be3-80b8-bbae7b1bb2f4@paulmck-laptop>
+ <SJ1PR11MB61797170867CD7B98CC68BEE89869@SJ1PR11MB6179.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB61797170867CD7B98CC68BEE89869@SJ1PR11MB6179.namprd11.prod.outlook.com>
 From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 21 Mar 2023 22:17:14 -0400
-Message-ID: <CAEXW_YTTFa7mC_1v-oDbFWPxHyfx58CvcCyNu+53MWNNo8d+NA@mail.gmail.com>
-Subject: Re: [PATCH memory-model 7/8] tools/memory-model: Add documentation
- about SRCU read-side critical sections
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>
+Date:   Tue, 21 Mar 2023 22:18:56 -0400
+Message-ID: <CAEXW_YS_=qCkpKBPfc3o9dnTW2RKNwByZFBDun-KKEDhPy1z3Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] rcu/rcuscale: Stop kfree_scale_thread thread(s)
+ after unloading rcuscale
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -74,72 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 9:40=E2=80=AFPM Andrea Parri <parri.andrea@gmail.co=
-m> wrote:
+On Tue, Mar 21, 2023 at 9:26=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
 >
-> On Mon, Mar 20, 2023 at 06:02:45PM -0700, Paul E. McKenney wrote:
-> > From: Alan Stern <stern@rowland.harvard.edu>
+> > From: Paul E. McKenney <paulmck@kernel.org>
+> > [...]
+> > > > Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
+> > > > Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > >
+> > > Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
 > >
-> > Expand the discussion of SRCU and its read-side critical sections in
-> > the Linux Kernel Memory Model documentation file explanation.txt.  The
-> > new material discusses recent changes to the memory model made in
-> > commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
-> > semantics").
+> > Much better, thank you both!
+> >
+> > But unfortunately, these patches do not apply cleanly.  Qiuxu Zhuo, cou=
+ld
+> > you please forward port these to the -rcu "dev" branch [1]?
+> >
 >
-> How about squashing the diff below (adjusting subject and changelog):
+> Hi Paul,
 >
->   Andrea
+> OK.
+> I'll be making v4 patches rebased on the top of the -rcu "dev" branch.
+> Thanks for letting me know more about the RCU patch workflow.
 >
-> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/me=
-mory-model/Documentation/litmus-tests.txt
-> index 26554b1c5575e..acac527328a1f 100644
-> --- a/tools/memory-model/Documentation/litmus-tests.txt
-> +++ b/tools/memory-model/Documentation/litmus-tests.txt
-> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM=
-) include:
->                 additional call_rcu() process to the site of the
->                 emulated rcu-barrier().
->
-> -       e.      Although sleepable RCU (SRCU) is now modeled, there
-> -               are some subtle differences between its semantics and
-> -               those in the Linux kernel.  For example, the kernel
-> -               might interpret the following sequence as two partially
-> -               overlapping SRCU read-side critical sections:
-> -
-> -                        1  r1 =3D srcu_read_lock(&my_srcu);
-> -                        2  do_something_1();
-> -                        3  r2 =3D srcu_read_lock(&my_srcu);
-> -                        4  do_something_2();
-> -                        5  srcu_read_unlock(&my_srcu, r1);
-> -                        6  do_something_3();
-> -                        7  srcu_read_unlock(&my_srcu, r2);
-> -
-> -               In contrast, LKMM will interpret this as a nested pair of
-> -               SRCU read-side critical sections, with the outer critical
-> -               section spanning lines 1-7 and the inner critical section
-> -               spanning lines 3-5.
-> -
-> -               This difference would be more of a concern had anyone
-> -               identified a reasonable use case for partially overlappin=
-g
-> -               SRCU read-side critical sections.  For more information
-> -               on the trickiness of such overlapping, please see:
-> -               https://paulmck.livejournal.com/40593.html
-> -
-> -       f.      Reader-writer locking is not modeled.  It can be
-> +       e.      Reader-writer locking is not modeled.  It can be
->                 emulated in litmus tests using atomic read-modify-write
+> Also thank you Davidlohr Bueso and Joel for reviewing the patches.
 
-Good point! And for the diff:
+You're welcome and thanks for your interactions on the mailing list
+and RCU interest. :-)
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
-thanks,
 
  - Joel
-
-
->                 operations.
->
->
->   Andrea
