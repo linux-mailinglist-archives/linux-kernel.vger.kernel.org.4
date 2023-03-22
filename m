@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D3A6C5AE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3B16C5AE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCVX5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S229864AbjCVX7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjCVX5e (ORCPT
+        with ESMTP id S229484AbjCVX7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:57:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552F305DE;
-        Wed, 22 Mar 2023 16:57:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Mar 2023 19:59:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5E119114;
+        Wed, 22 Mar 2023 16:59:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAB0462351;
-        Wed, 22 Mar 2023 23:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30014C433EF;
-        Wed, 22 Mar 2023 23:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679529451;
-        bh=y9U/5hZyFfh0oQkHVBhuHaZSSNPer4aXYq7GpolG5rU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=hlTMsxwsdHEPbcZ0FHd0U3HCMN+5KMbB4GdzyMoynPPZs7M3Qulola3FMclIzMBGy
-         MA7IFAqYndlH8nBQt2vxK/XtVd/DEocK2WNMBtztWjrQrEjTcaf6mKYAaLYklXaw2Y
-         ccaJGUBIm0ZGvP+2ZkucdrrfK0BsWLYn+hV1JDOU2MkkKVEq4lBB3SYKqS55TF9w8K
-         g73lN0U5uwtbmEX7W6uySdtlT0wnOrAoWPGY88DPUrYN4Bj2pgcF9sJo6QorusZx4s
-         0pnDosayty3cjQPJ1PXT23JXZKQmywKg0PkvASpPD/i+jZLydr4DxMcWmW1qVJkh+b
-         8aJmkhStClcSw==
-Message-ID: <ce3e64bedd449e6c782e243c28cf4945.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Phlnf1wD5z4x80;
+        Thu, 23 Mar 2023 10:59:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679529574;
+        bh=KIke8oEsNLt3y5zFOoJ6KgGQKeAub2/Zlsgqf1VHrR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RBgodTKPmofTfkDjaWyfeThFYUD/UXjjeJVpVyCMJaJa83XY3NGI9sZYBY0PGF+OH
+         r6Pg27ABBqPGiI7+9SpcrbH+qa1zAWTGrUaKwJG6FOBMbaGkVVn7IiBdGYJM4EamWb
+         fKvBaN8f+9rG7gtVS2NV4JbC3IvTwjFUBaWILh288dTf7VFCQJX4QohJri3lUjgNhy
+         MefqundI5e+5J5vn6aCC/oiVN98036uAFUMblZeUXFTUVZA2BF53SIx4bD4XJegk7v
+         9+cimx9dX3uL0owDNYltuUteUXHIOE3Rg8lY+jmfBC320LYlXvnLMD5yS3g6a0nkk5
+         eObEHhcOnZv3A==
+Date:   Thu, 23 Mar 2023 10:59:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the block tree
+Message-ID: <20230323105933.13a0297a@canb.auug.org.au>
+In-Reply-To: <20230323103324.222dbdbc@canb.auug.org.au>
+References: <20230323103324.222dbdbc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b4beb457-8581-4b2f-8655-2e3f82a94f75@spud>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com> <20230320103750.60295-12-hal.feng@starfivetech.com> <b4beb457-8581-4b2f-8655-2e3f82a94f75@spud>
-Subject: Re: [PATCH v6 11/21] dt-bindings: clock: Add StarFive JH7110 system clock and reset generator
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-To:     Conor Dooley <conor@kernel.org>,
-        Hal Feng <hal.feng@starfivetech.com>
-Date:   Wed, 22 Mar 2023 16:57:29 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ED1RWZz0zVB5Us_eWv2dxvL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Conor Dooley (2023-03-22 14:53:37)
->=20
-> This leaves me wondering which clocks are *actually* required for a
-> functioning system - is it actually just osc and one of gmac1_rmii_refin
-> or gmac1_rgmii_rxin.
->=20
-> I really don't want you to have to go and spell out every combination of
-> clocks to have some sort of validation here.
->=20
-> Stephen, Rob or Krzysztof, do you have any guidance on this situation
-> (assuming I've not made a fool of myself)? There's probably something
-> "obvious" that I'm missing, as I am sure this is not a unique problem.
->=20
+--Sig_/ED1RWZz0zVB5Us_eWv2dxvL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You can always use '<0>' if the pad isn't connected for that clk input.
-It's not great, but it works, so there's an escape hatch if you need it.
+Hi all,
+
+On Thu, 23 Mar 2023 10:33:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the block tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>=20
+> In file included from arch/powerpc/include/asm/cmpxchg.h:6,
+>                  from arch/powerpc/include/asm/atomic.h:11,
+>                  from include/linux/atomic.h:7,
+>                  from include/crypto/hash.h:11,
+>                  from lib/iov_iter.c:2:
+> lib/iov_iter.c: In function 'copy_page_to_iter_atomic':
+> lib/iov_iter.c:546:22: error: implicit declaration of function 'iov_iter_=
+is_pipe'; did you mean 'iov_iter_is_bvec'? [-Werror=3Dimplicit-function-dec=
+laration]
+>   546 |         if (unlikely(iov_iter_is_pipe(i))) {
+>       |                      ^~~~~~~~~~~~~~~~
+> include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+>    78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>       |                                             ^
+> lib/iov_iter.c:547:26: error: implicit declaration of function 'copy_page=
+_to_iter_pipe'; did you mean 'copy_page_to_iter'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+>   547 |                 copied =3D copy_page_to_iter_pipe(page, offset, b=
+ytes, i);
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~
+>       |                          copy_page_to_iter
+>=20
+> Caused by commit
+>=20
+>   a53f5dee3448 ("iov_iter: Kill ITER_PIPE")
+>=20
+> interacting with commit
+>=20
+>   c4cf24ce34b7 ("iov_iter: add copy_page_to_iter_atomic()")
+>=20
+> from the mm tree.
+>=20
+> I have reverted that mm tree commit (and the following two commits)
+> for today.
+
+Having now read the followup messages to the merge conflict report, I
+have gone back and fixed it up as suggested (see my other reply).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ED1RWZz0zVB5Us_eWv2dxvL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQblmUACgkQAVBC80lX
+0GwjSwgAkbGag85HRogYTAhTPX19tOyvN5E92zUVFi6ZGj8Lt6JT8WSoVDxAQWv+
+xDCw3hQCvVUemDr37J95QGyx3Q29jsCVsoOqx7dwx1Yw0G+ItpaeQR4E0Majd5FP
+2kW3JdncegJL0YV+Dbb+6R9UbmeakdXh8BDkn9GhIXGJMl8GJU6KGvQKcDzyUpwv
+coMQkepmTT/AjSZU7R1LV2y0bt+B7eUpxDOwLLe4CELOL6RQjDV8sy9BSZue0BL6
+meakPoFhcORd9UbrJk6ZhLgYjqaVZ67YbUUnIJuALAfhjV1B/jawL7xyX6psJ9Nn
+/oiPNqdJwMFFXmVu/wf8ltf8rpoHDg==
+=cQ+/
+-----END PGP SIGNATURE-----
+
+--Sig_/ED1RWZz0zVB5Us_eWv2dxvL--
