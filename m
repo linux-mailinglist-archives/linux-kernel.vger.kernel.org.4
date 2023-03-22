@@ -2,182 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044CB6C47AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E286C47B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCVKa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
+        id S230215AbjCVKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjCVKav (ORCPT
+        with ESMTP id S229671AbjCVKcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:30:51 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C5A5FE80
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:30:46 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id m2so16466132wrh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:30:46 -0700 (PDT)
+        Wed, 22 Mar 2023 06:32:53 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524804A1D5;
+        Wed, 22 Mar 2023 03:32:51 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id m2so16473048wrh.6;
+        Wed, 22 Mar 2023 03:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679481045;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HS1TthkA1D783Zl2TDLfV0qjKb5jmiXmhJ6n2zgO/b0=;
-        b=U0i1asBOZxJ6VioQ2kAaKVDljpLZYtdcXc8Qtpw0mFrPut11p+GGz293JmHGHT4yXl
-         GdITAje81Q5pblvWTczmf205lakcLLGb0WYiyScp73RML8M46JgjmqZO4yNzyxnKecod
-         v9Gzee/X/nvRBEnEnXTEqdFfs0EW4UAV7cx3MXT/ri/THcjeaqpYlfiOX1fpoA0MlPzQ
-         pJHED/HiF0OLLC4trsX6ZpiY+MjtQ8DkUy03/Ng3GoKp2ulV4MQtj9w5aIr87pTBSzHv
-         ZEVXXIXrlxHPxxjsI/1b+DsmHHy8tRjaHXcusXV72eC5DGzNSwvyvWpPy0d36BIHajqb
-         nu8g==
+        d=gmail.com; s=20210112; t=1679481170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a1CeLNOWnRlqe1bR3xMhj6/4uAXJ9YfiUxVG0ziEESs=;
+        b=M5p9FntqrNraUn/1fryCXq6NzFVy+lQsgH7lt2dwu/DakfDB+h8t3YtR/D9zADE97D
+         mwTEhubIVJBVEXK4mjYpYPFbKGliQt9/jjJX4ODWOVLVbcD7rl6opRH2GIbQ+9Ir31go
+         ynnd5v6PdiHrFQSFE04Z5fEwmhDNZCmX+ybnjW69kHzU1wBjQc/NIG4MoDkNUxM3hQ5P
+         iq40Tjochukfgt/Sp1MMhvquA7l9G/tfwrrvGg1MfSChQE/gUy79uzfedJdRqH9VH8Lq
+         Wq4lEHKUy+GyM6DYvW+J5jOvVseJFAgy6gQtHkaW8OMkGJrGzpi8yuD8kyiao6ld3g52
+         tVCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679481045;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HS1TthkA1D783Zl2TDLfV0qjKb5jmiXmhJ6n2zgO/b0=;
-        b=uvxRE38WotjmmwOwZLkXF8hzUF4KHmz0s/iwv1BMeJz2dWYZViOuRvC6qKl7G6Vwn1
-         99jUv7xf2ayYqaZsU1prOiS/nGoGBND+J5j0vOGv9t2R2yzFjjr+zaBj6hZI0R3q+DvG
-         7TqpoM4VWIIFxGH3rRwdie33eWQXN5QKWdCgEvYYCSyc6GHOPyaa0Id08bhxsNYLv9WC
-         8U8GJqHOuMwHP8+mbEkRiGAtI5ioUmBKcZb6kXdFnR62EQVZtAfYJYreItStk/PGQYnc
-         orym5woAGL/K19P64qPBY+KH0o2xupG0WtnDYnza3hm8CbjCEkzk7m9VPrPGoe8RSxhX
-         8NCQ==
-X-Gm-Message-State: AO0yUKW1QLAS5cRb8Ob0Tn1M81ikduqD2QGaHtIBq+/7+WTykHJOZpP6
-        49SGxXglpuV3NlKVE5E0wrJShw==
-X-Google-Smtp-Source: AK7set+SptPdFQRECxHi/SgpJ/cDbVBTk06DRTZBqXUJZ4lwFD0Oy7fakaIxrUXhCUUC38GcSeFuyw==
-X-Received: by 2002:a5d:48c5:0:b0:2cf:e7d5:8fcb with SMTP id p5-20020a5d48c5000000b002cfe7d58fcbmr4648685wrs.49.1679481045491;
-        Wed, 22 Mar 2023 03:30:45 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:3606:a601:f273:994a? ([2a01:e0a:982:cbb0:3606:a601:f273:994a])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6082000000b002c6d0462163sm13437081wrt.100.2023.03.22.03.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 03:30:45 -0700 (PDT)
-Message-ID: <c16cfd67-d8b7-87a6-1b59-2ab351174513@linaro.org>
-Date:   Wed, 22 Mar 2023 11:30:44 +0100
+        d=1e100.net; s=20210112; t=1679481170;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a1CeLNOWnRlqe1bR3xMhj6/4uAXJ9YfiUxVG0ziEESs=;
+        b=eYfmtfCGdrbAvfHs52Jk44QYnmAeGRISrPnkVTjtQdzXwtXSIyjTTXwY/nm3PmJOu5
+         6+3ZUb0T9mEx2QXIS0Qx3UrzpN20A3BTFUvLWbox5k+IlRGT+NMglIrwD+SiLo7cOxJb
+         syEbeJgxbfvID3pZScAuWhXCmenYnKxoS7CvvL+IedJvq26mlV/snK3T6PF1nXjo37Kk
+         rBwiida+BixqDaQP1WKbh3v5EMG9Vs3fSv3e0QJcgMt+DaGVhBDbSvijdBbtzmFsn0Za
+         kaPwC9EOdmQV5wabMrOTIjp0oZUsF1kMIPgRs1mDM1Q8P8TnV5P7LB3wL3StQSbxKDDm
+         zkoA==
+X-Gm-Message-State: AO0yUKV9OwppT0LaEQu7iY1sxFTvAs1N0KDzzrmBBx6EK80IsoROj69B
+        NXIODM/XN6uZeuet/TubgZc=
+X-Google-Smtp-Source: AK7set/53fxO++ICPo9CDCI6k2GRYpLxmnmZZ+pCn6q2L+UDEhM2Lva/0vi7LOq/h8NTmOccPbVvfw==
+X-Received: by 2002:a5d:6245:0:b0:2c5:4ca3:d56c with SMTP id m5-20020a5d6245000000b002c54ca3d56cmr1406977wrv.0.1679481169582;
+        Wed, 22 Mar 2023 03:32:49 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id h5-20020a5d4305000000b002c3f81c51b6sm13440307wrq.90.2023.03.22.03.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 03:32:48 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 10:32:47 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v4 3/4] iov_iter: add copy_page_to_iter_atomic()
+Message-ID: <a961ab9c-1ced-4db4-a76f-d886bd01c715@lucifer.local>
+References: <cover.1679431886.git.lstoakes@gmail.com>
+ <31482908634cbb68adafedb65f0b21888c194a1b.1679431886.git.lstoakes@gmail.com>
+ <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 3/3] ARM: dts: meson8m2: mxiii-plus: Enable Bluetooth
- and WiFi support
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230321171213.2808460-1-martin.blumenstingl@googlemail.com>
- <20230321171213.2808460-4-martin.blumenstingl@googlemail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230321171213.2808460-4-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBrVtcqATRybF/hW@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 18:12, Martin Blumenstingl wrote:
-> The MXIII Plus uses an Ampak AP6330 Bluetooth and WiFi combo chip.
-> Bluetooth is connected to &uart_A and requires toggling GPIOX_20.
-> WiFi can be routed to either &sdhc or &sdio. Route WiFi to &sdhc
-> since  &sdio is already connected to the SD card. Additionally WiFi
-> requires toggling GPIOX_11 and GPIOAO_6 as well as enabling the 32kHz
-> clock signal.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->   arch/arm/boot/dts/meson8m2-mxiii-plus.dts | 48 ++++++++++++++++++++++-
->   1 file changed, 47 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/meson8m2-mxiii-plus.dts b/arch/arm/boot/dts/meson8m2-mxiii-plus.dts
-> index fa6d55f1cfb9..aa4d4bf70629 100644
-> --- a/arch/arm/boot/dts/meson8m2-mxiii-plus.dts
-> +++ b/arch/arm/boot/dts/meson8m2-mxiii-plus.dts
-> @@ -19,7 +19,6 @@ aliases {
->   		ethernet0 = &ethmac;
->   		i2c0 = &i2c_AO;
->   		serial0 = &uart_AO;
-> -		serial1 = &uart_A;
->   		mmc0 = &sd_card_slot;
->   	};
->   
-> @@ -45,12 +44,32 @@ button-function {
->   		};
->   	};
->   
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +
-> +		pinctrl-0 = <&xtal_32k_out_pins>;
-> +		pinctrl-names = "default";
-> +
-> +		reset-gpios = <&gpio GPIOX_11 GPIO_ACTIVE_LOW>,
-> +			      <&gpio_ao GPIOAO_6 GPIO_ACTIVE_LOW>;
-> +
-> +		clocks = <&xtal_32k_out>;
-> +		clock-names = "ext_clock";
-> +	};
-> +
->   	vcc_3v3: regulator-vcc3v3 {
->   		compatible = "regulator-fixed";
->   		regulator-name = "VCC3V3";
->   		regulator-min-microvolt = <3300000>;
->   		regulator-max-microvolt = <3300000>;
->   	};
-> +
-> +	xtal_32k_out: xtal-32k-out-clk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <32768>;
-> +		clock-output-names = "xtal_32k_out";
-> +	};
->   };
->   
->   &cpu0 {
-> @@ -192,6 +211,27 @@ &saradc {
->   	vref-supply = <&vddio_ao1v8>;
->   };
->   
-> +/* SDIO wifi */
-> +&sdhc {
-> +	status = "okay";
-> +
-> +	pinctrl-0 = <&sdxc_a_pins>;
-> +	pinctrl-names = "default";
-> +
-> +	bus-width = <4>;
-> +	max-frequency = <50000000>;
-> +
-> +	disable-wp;
-> +	non-removable;
-> +	cap-mmc-highspeed;
-> +	cap-sd-highspeed;
-> +
-> +	mmc-pwrseq = <&sdio_pwrseq>;
-> +
-> +	vmmc-supply = <&vcc_3v3>;
-> +	vqmmc-supply = <&vcc_3v3>;
-> +};
-> +
->   &sdio {
->   	status = "okay";
->   
-> @@ -222,6 +262,12 @@ &uart_A {
->   	pinctrl-0 = <&uart_a1_pins>, <&uart_a1_cts_rts_pins>;
->   	pinctrl-names = "default";
->   	uart-has-rtscts;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm20702a1";
-> +		shutdown-gpios = <&gpio GPIOX_20 GPIO_ACTIVE_HIGH>;
-> +		max-speed = <2000000>;
-> +	};
->   };
->   
->   &uart_AO {
+On Wed, Mar 22, 2023 at 06:17:25PM +0800, Baoquan He wrote:
+> On 03/21/23 at 08:54pm, Lorenzo Stoakes wrote:
+> > Provide an atomic context equivalent for copy_page_to_iter(). This eschews
+> > the might_fault() check copies memory in the same way that
+> > copy_page_from_iter_atomic() does.
+> >
+> > This functions assumes a non-compound page, however this mimics the
+> > existing behaviour of copy_page_from_iter_atomic(). I am keeping the
+> > behaviour consistent between the two, deferring any such change to an
+> > explicit folio-fication effort.
+> >
+> > This is being added in order that an iteratable form of vread() can be
+> > implemented with known prefaulted pages to avoid the need for mutex
+> > locking.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> >  include/linux/uio.h |  2 ++
+> >  lib/iov_iter.c      | 28 ++++++++++++++++++++++++++++
+> >  2 files changed, 30 insertions(+)
+> >
+> > diff --git a/include/linux/uio.h b/include/linux/uio.h
+> > index 27e3fd942960..fab07103090f 100644
+> > --- a/include/linux/uio.h
+> > +++ b/include/linux/uio.h
+> > @@ -154,6 +154,8 @@ static inline struct iovec iov_iter_iovec(const struct iov_iter *iter)
+> >
+> >  size_t copy_page_from_iter_atomic(struct page *page, unsigned offset,
+> >  				  size_t bytes, struct iov_iter *i);
+> > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset,
+> > +				size_t bytes, struct iov_iter *i);
+> >  void iov_iter_advance(struct iov_iter *i, size_t bytes);
+> >  void iov_iter_revert(struct iov_iter *i, size_t bytes);
+> >  size_t fault_in_iov_iter_readable(const struct iov_iter *i, size_t bytes);
+> > diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> > index 274014e4eafe..48ca1c5dfc04 100644
+> > --- a/lib/iov_iter.c
+> > +++ b/lib/iov_iter.c
+> > @@ -821,6 +821,34 @@ size_t copy_page_from_iter_atomic(struct page *page, unsigned offset, size_t byt
+> >  }
+> >  EXPORT_SYMBOL(copy_page_from_iter_atomic);
+> >
+> > +size_t copy_page_to_iter_atomic(struct page *page, unsigned offset, size_t bytes,
+> > +				struct iov_iter *i)
+> > +{
+> > +	char *kaddr = kmap_local_page(page);
+>
+> I am a little confused about the name of this new function. In its
+> conterpart, copy_page_from_iter_atomic(), kmap_atomic()/kunmpa_atomic()
+> are used. With them, if CONFIG_HIGHMEM=n, it's like below:
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+The reason for this is that:-
+
+1. kmap_atomic() explicitly states that it is now deprecated and must no longer
+   be used, and kmap_local_page() should be used instead:-
+
+ * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
+
+ * Do not use in new code. Use kmap_local_page() instead.
+
+2. kmap_local_page() explicitly states that it can be used in any context:-
+
+ * Can be invoked from any context, including interrupts.
+
+I wanted follow this advice as strictly as I could, hence the change. However,
+we do need preemption/pagefaults explicitly disabled in this context (we are
+happy to fail if the faulted in pages are unmapped in meantime), and I didn't
+check the internals to make sure.
+
+So I think for safety it is better to use k[un]map_atomic() here, I'll respin
+and put that back in, good catch!
+
+>
+> static inline void *kmap_atomic(struct page *page)
+> {
+>         if (IS_ENABLED(CONFIG_PREEMPT_RT))
+>                 migrate_disable();
+>         else
+>                 preempt_disable();
+>         pagefault_disable();
+>         return page_address(page);
+> }
+>
+> But kmap_local_page() is only having page_address(), the code block
+> between kmap_local_page() and kunmap_local() is also atomic, it's a
+> little messy in my mind.
+>
+> static inline void *kmap_local_page(struct page *page)
+> {
+>         return page_address(page);
+> }
+>
+> > +	char *p = kaddr + offset;
+> > +	size_t copied = 0;
+> > +
+> > +	if (!page_copy_sane(page, offset, bytes) ||
+> > +	    WARN_ON_ONCE(i->data_source))
+> > +		goto out;
+> > +
+> > +	if (unlikely(iov_iter_is_pipe(i))) {
+> > +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
+> > +		goto out;
+> > +	}
+> > +
+> > +	iterate_and_advance(i, bytes, base, len, off,
+> > +		copyout(base, p + off, len),
+> > +		memcpy(base, p + off, len)
+> > +	)
+> > +	copied = bytes;
+> > +
+> > +out:
+> > +	kunmap_local(kaddr);
+> > +	return copied;
+> > +}
+> > +EXPORT_SYMBOL(copy_page_to_iter_atomic);
+> > +
+> >  static void pipe_advance(struct iov_iter *i, size_t size)
+> >  {
+> >  	struct pipe_inode_info *pipe = i->pipe;
+> > --
+> > 2.39.2
+> >
+>
