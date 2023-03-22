@@ -2,392 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5A16C46EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AE76C46FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 10:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjCVJtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 05:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S230508AbjCVJti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 05:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjCVJsg (ORCPT
+        with ESMTP id S229928AbjCVJtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:48:36 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C647E057
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:48:08 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id dw14so5299442pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 02:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1679478487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dZEyT76Ylx2LDLESLuMJ9Z9uXe1CrK9nrJ2/iOxcF3k=;
-        b=cUpYMCgv693QwatWKzixshCxoQSXuGYbKMfagpOIe2xjTr527/GRXi5Y3k7LYnU/G0
-         YAL+P3mh6cy0Rzf1ZsnNGpzJvqqVzN6MnL+SykExahAlwBUIZxEQCCH+2TQaEwZK516J
-         q+96h+khT2gmMTR6VndB9edDUPJlyExOxdW3Q63h8eVGqhsnat+KpIHMMmPyMp/y3+FD
-         sw5GxIIwIdTnL34J8ntohBTu9RFZnwyIwnF3KrBIcSRo35Cci8yvIZHxYfpvsR9ZWXoB
-         mbtCnfOB2WOhDmEmDZ3B3bdeZe3HU/SwKVprnfk2Lno5JrVZO65m5wCkDfGygKJwCI5I
-         b8fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679478487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dZEyT76Ylx2LDLESLuMJ9Z9uXe1CrK9nrJ2/iOxcF3k=;
-        b=CfDuTWnL7g/XaVa22Fgz1Yr/PTn7XPpXKZUQvbNC37kCs7vmdUkSQwiF5580Ue05U6
-         VulHRtcO17bY9DDZhCrVi8uZl94bgf1grEYYEKJ55O21WL5hhmwwDLorOB4tCr2bF8hm
-         iWj4cXK397z99/gUZ5U5hdneS8yYFluTPq/M+nU+shx/IrkykFNQ48x5Fu2rtq/XLhii
-         tfOagYD1rTLSYeQgeqlVbrb+L9kTkWuibPnK5TU+tB8H6/TknKBU9+9ZyzGyjnGUmei/
-         zdxrJzrzsVRk1e79B3gG3Al9Ir8hNU5PviquOvJt+/z7Xq/YUWZOk9ibnA0JU+nGa2on
-         dquA==
-X-Gm-Message-State: AO0yUKUMFrgVmWowdNE6VUySlJMUx1gUvmUjmpGvt0JJ+aYMmyYPSZaP
-        xpXDYmOZllkSeTtpnyKKL8brIsd3Vm9B2C06Rl2skQ==
-X-Google-Smtp-Source: AK7set8rmLxVv8cvbcKDum0lwgAjtZhOiGkHbf48mP790E8TYykdbByLbiDDHOYVKTO8PvitCOxUUTo9s28a2/+2L5Y=
-X-Received: by 2002:a65:50c5:0:b0:503:3747:cea3 with SMTP id
- s5-20020a6550c5000000b005033747cea3mr602429pgp.10.1679478487341; Wed, 22 Mar
- 2023 02:48:07 -0700 (PDT)
+        Wed, 22 Mar 2023 05:49:05 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C64017159;
+        Wed, 22 Mar 2023 02:48:35 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 4651724E3CC;
+        Wed, 22 Mar 2023 17:48:32 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Mar
+ 2023 17:48:32 +0800
+Received: from localhost.localdomain (183.27.97.64) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Mar
+ 2023 17:48:31 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v6 0/4] Add DMA driver for StarFive JH7110 SoC
+Date:   Wed, 22 Mar 2023 17:48:16 +0800
+Message-ID: <20230322094820.24738-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230307220553.631069-1-jaz@semihalf.com> <20230307164158.4b41e32f.alex.williamson@redhat.com>
- <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
- <20230308104944.578d503c.alex.williamson@redhat.com> <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
- <20230308130619.3736cf18.alex.williamson@redhat.com> <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
- <20230308163803.6bfc2922.alex.williamson@redhat.com> <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
-In-Reply-To: <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Wed, 22 Mar 2023 10:47:56 +0100
-Message-ID: <CAH76GKMVquX7eLoGYtwMo06ar0dE9J3LtJEnYJKY0-3X5XFwow@mail.gmail.com>
-Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the user-space
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Dominik Behr <dbehr@google.com>, Dominik Behr <dbehr@chromium.org>,
-        linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
-        upstream@semihalf.com, dtor@google.com, jgg@ziepe.ca,
-        kevin.tian@intel.com, cohuck@redhat.com, abhsahu@nvidia.com,
-        yishaih@nvidia.com, yi.l.liu@intel.com, kvm@vger.kernel.org,
-        libvir-list@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex
+Hello,
 
-Could you please refer to my previous message?
+This patch series adds dma support for the StarFive JH7110 RISC-V
+SoC. The first patch adds device tree binding. The second patch includes
+dma driver. The last patch adds device node of dma to JH7110 dts.
 
-Thank you in advance,
-Grzegorz
+The series has been tested on the VisionFive 2 board which equip with
+JH7110 SoC and works normally.
 
-czw., 9 mar 2023 o 14:41 Grzegorz Jaszczyk <jaz@semihalf.com> napisa=C5=82(=
-a):
->
-> czw., 9 mar 2023 o 00:38 Alex Williamson <alex.williamson@redhat.com>
-> napisa=C5=82(a):
-> >
-> > On Wed, 8 Mar 2023 14:44:28 -0800
-> > Dominik Behr <dbehr@google.com> wrote:
-> >
-> > > On Wed, Mar 8, 2023 at 12:06=E2=80=AFPM Alex Williamson
-> > > <alex.williamson@redhat.com> wrote:
-> > > >
-> > > > On Wed, 8 Mar 2023 10:45:51 -0800
-> > > > Dominik Behr <dbehr@chromium.org> wrote:
-> > > >
-> > > > > It is the same interface as other ACPI events like AC adapter LID=
- etc
-> > > > > are forwarded to user-space.
-> > > > >  ACPI events are not particularly high frequency like interrupts.
-> > > >
-> > > > I'm not sure that's relevant, these interfaces don't proclaim to
-> > > > provide isolation among host processes which manage behavior relati=
-ve
-> > > > to accessories.  These are effectively system level services.  It's=
- only
-> > > > a very, very specialized use case that places a VMM as peers among =
-these
-> > > > processes.  Generally we don't want to grant a VMM any privileges b=
-eyond
-> > > > what it absolutely needs, so letting a VMM managing an assigned NIC
-> > > > really ought not to be able to snoop host events related to anythin=
-g
-> > > > other than the NIC.
-> > > How is that related to the fact that we are forwarding VFIO-PCI event=
-s
-> > > to netlink? Kernel does not grant any privileges to VMM.
-> > > There are already other ACPI events on netlink. The implementer of th=
-e
-> > > VMM can choose to allow VMM to snoop them or not.
-> > > In our case our VMM (crosvm) does already snoop LID, battery and AC
-> > > adapter events so the guest can adjust its behavior accordingly.
-> > > This change just adds another class of ACPI events that are forwarded
-> > > to netlink.
-> >
-> > That's true, it is the VMM choice whether to allow snooping netlink,
-> > but this is being proposed as THE solution to allow VMMs to receive
-> > ACPI events related to vfio assigned devices.  If the solution
-> > inherently requires escalating the VMM privileges to see all netlink
-> > events, that's a weakness in the proposal.  As noted previously,
-> > there's also no introspection here, the VMM can't know whether it
-> > should listen to netlink for ACPI events or include AML related to a
-> > GPE for the device.  It cannot determine if either the kernel supports
-> > this feature or if the device has an ACPI companion that can generate
-> > these events.
->
-> To be precise the VMM doesn't listen to all netlink events: it listens
-> only to "acpi_event" family and acpi related multicast group, which
-> means it listens to all events generated through
-> acpi_bus_generate_netlink_event.
->
-> Before sending this patch I thought about using eventfd instead
-> netalink which will actually provide a channel associated with a given
-> device and therefore such notifications will be received only by the
-> VMM associated with such a device. Nevertheless, it seems like eventfd
-> will allow to signalize events happening (notify on a given device)
-> but is not capable of sending any payload so in our case there is no
-> room for propagating notification value via eventfd. Maybe there is
-> other mechanism eventfd-like which will allow to achieve above?
->
-> If there is no such mechanism, maybe instead of using existing acpi
-> netlink events, which are associated with "acpi_event" netlink family
-> and acpi multicast group, we could create per vfio-pci a different
-> netlink family or probably reuse "acpi_event" family but use different
-> multicast group, so each device will have dedicated netlink family.
-> Does it seem reasonable?
->
-> >
-> > > >
-> > > > > > > > What sort of ACPI events are we expecting to see here and w=
-hat does user space do with them?
-> > > > > The use we are looking at right now are D-notifier events about t=
-he
-> > > > > GPU power available to mobile discrete GPUs.
-> > > > > The firmware notifies the GPU driver and resource daemon to
-> > > > > dynamically adjust the amount of power that can be used by the GP=
-U.
-> > > > >
-> > > > > > The proposed interface really has no introspection, how does th=
-e VMM
-> > > > > > know which devices need ACPI tables added "upfront"?  How do th=
-ese
-> > > > > > events factor into hotplug device support, where we may not be =
-able to
-> > > > > > dynamically inject ACPI code into the VM?
-> > > > >
-> > > > > The VMM can examine PCI IDs and the associated firmware node of t=
-he
-> > > > > PCI device to figure out what events to expect and what ACPI tabl=
-e to
-> > > > > generate to support it but that should not be necessary.
-> > > >
-> > > > I'm not entirely sure where your VMM is drawing the line between th=
-e VM
-> > > > and management tools, but I think this is another case where the
-> > > > hypervisor itself should not have privileges to examine the host
-> > > > firmware tables to build its own.  Something like libvirt would be
-> > > > responsible for that.
-> > > Yes, but that depends on the design of hypervisor and VMM and is not
-> > > related to this patch.
-> >
-> > It is very much related to this patch if it proposes an interface to
-> > solve a problem which is likely not compatible with the security model
-> > of other VMMs.  We need a single solution to support all VMMs.
-> >
-> > > >
-> > > > > A generic GPE based ACPI event forwarder as Grzegorz proposed can=
- be
-> > > > > injected at VM init time and handle any notification that comes l=
-ater,
-> > > > > even from hotplug devices.
-> > > >
-> > > > It appears that forwarder is sending the notify to a specific ACPI
-> > > > device node, so it's unclear to me how that becomes boilerplate AML
-> > > > added to all VMs.  We'll need to notify different devices based on
-> > > > different events, right?
-> > > Valid point. The notifications have a "scope" ACPI path.
-> > > In my experience these events are consumed without looking where they
-> > > came from but I believe the patch can be extended to
-> > > provide ACPI path, in your example "_SB.PCI0.GPP0.PEGP" instead of
-> > > generic vfio_pci which VMM could use to translate an equivalent ACPI
-> > > path in the guest and pass it to a generic ACPI GPE based notifier vi=
-a
-> > > shared memory. Grzegorz could you chime in whether that would be
-> > > possible?
-> >
-> > So effectively we're imposing the host ACPI namespace on the VM, or at
-> > least a mapping between the host and VM namespace?  The generality of
-> > this is not improving.
->
-> Yes, in the example VMM implementation we have mapping between the
-> host pci device address and guest pci device. Therefore VMM knows,
-> based on device name (BDF) sent via netlink, to which guest device
-> this notification should be propagated. The boilerplate AML is added
-> to each vfio-pci device which belongs to VMM and each vfio-pci device
-> has associated pre-allocated GPE so the VMM knows which GPE should be
-> triggered to replicate notification for a given device. BTW this is
-> only current WIP VMM implementation - this could probably be optimized
-> if needed.
->
-> Handling hotplug devices is more problematic. I see that the kernel
-> provides some runtime ACPI patching mechanism:
-> https://www.kernel.org/doc/html/latest/firmware-guide/acpi/method-customi=
-zing.html
-> (which I never tried) but not even sure how VMM could take advantage
-> of it. BTW this realized me that the same problem with hotplug applies
-> to other vfio-pci use-cases e.g. runtime PM, which relies on guest
-> virtual ACPI method:
-> https://patchwork.kernel.org/project/linux-pm/patch/20220829114850.4341-5=
--abhsahu@nvidia.com/.
-> Generating virtual ACPI content for hotplug devices seems like a more
-> generic issue.
->
-> >
-> > > > > > The acpi_bus_generate_netlink_event() below really only seems t=
-o form a
-> > > > > > u8 event type from the u32 event.  Is this something that could=
- be
-> > > > > > provided directly from the vfio device uAPI with an ioeventfd, =
-thus
-> > > > > > providing introspection that a device supports ACPI event notif=
-ications
-> > > > > > and the ability for the VMM to exclusively monitor those events=
-, and
-> > > > > > only those events for the device, without additional privileges=
-?
-> > > > >
-> > > > > From what I can see these events are 8 bit as they come from ACPI=
-.
-> > > > > They also do not carry any payload and it is up to the receiving
-> > > > > driver to query any additional context/state from the device.
-> > > > > This will work the same in the VM where driver can query the same
-> > > > > information from the passed through PCI device.
-> > > > > There are multiple other netflink based ACPI events forwarders wh=
-ich
-> > > > > do exactly the same thing for other devices like AC adapter, lid/=
-power
-> > > > > button, ACPI thermal notifications, etc.
-> > > > > They all use the same mechanism and can be received by user-space
-> > > > > programs whether VMMs or others.
-> > > >
-> > > > But again, those other receivers are potentially system services, n=
-ot
-> > > > an isolated VM instance operating in a limited privilege environmen=
-t.
-> > > > IMO, it's very different if the host display server has access to l=
-id
-> > > > or power events than it is to allow some arbitrary VM that happens =
-to
-> > > > have an unrelated assigned device that same privilege.
-> > > Therefore these VFIO related ACPI events could be received by a syste=
-m
-> > > service via this netlink event and selectively forwarded to VMM if
-> > > such is a desire of whoever implements the userspace.
-> > > This is outside the scope of this patch. In our case our VMM does
-> > > receive these LID, AC or battery events.
-> >
-> > But this is backwards, we're presupposing the choice to use netlink
-> > based on the convenience of one VMM, which potentially creates
-> > obstacles, maybe even security isolation issues for other VMMs.  The
-> > method of delivering ACPI events to a VMM is very much within the scope
-> > of this proposal.  Thanks,
-> >
-> > Alex
-> >
->
-> regarding:
-> > > > On my laptop, I see multiple _GPE scopes, each apparently very uniq=
-ue
-> > > > to the devices:
-> > > >
-> > > >    Scope (_GPE)
-> > > >    {
-> > > >        Method (_L0C, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
-xx=3D0x00-0xFF
-> > > >        {
-> > > >            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
-> > > >        }
-> > > >
-> > > >        Method (_L0D, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
-xx=3D0x00-0xFF
-> > > >        {
-> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Chang=
-e
-> > > >        }
-> > > >
-> > > >        Method (_L0F, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
-xx=3D0x00-0xFF
-> > > >        {
-> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Chang=
-e
-> > > >         }
-> > > >     }
-> > > >
-> > > >     Scope (_GPE)
-> > > >     {
-> > > >         Method (_L19, 0, NotSerialized)  // _Lxx: Level-Triggered G=
-PE, xx=3D0x00-0xFF
-> > > >         {
-> > > >             Notify (\_SB.PCI0.GP17, 0x02) // Device Wake
-> > > >             Notify (\_SB.PCI0.GP17.XHC0, 0x02) // Device Wake
-> > > >             Notify (\_SB.PCI0.GP17.XHC1, 0x02) // Device Wake
-> > > >             Notify (\_SB.PWRB, 0x02) // Device Wake
-> > > >         }
-> > > >
-> > > >         Method (_L08, 0, NotSerialized)  // _Lxx: Level-Triggered G=
-PE, xx=3D0x00-0xFF
-> > > >         {
-> > > >            Notify (\_SB.PCI0.GP18, 0x02) // Device Wake
-> > > >             Notify (\_SB.PCI0.GPP0, 0x02) // Device Wake
-> > > >             Notify (\_SB.PCI0.GPP1, 0x02) // Device Wake
-> > > >             Notify (\_SB.PCI0.GPP5, 0x02) // Device Wake
-> > > >         }
-> > > >     }
-> > > >
-> > > > At least one more even significantly more extensive, calling method=
-s
-> > > > that interact with OpRegions.  So how does a simple stub of a
-> > > > GPE block replicate this sort of behavior in the host AML?  Thanks,
->
-> The simple stub of GPE block will work to replicate the ACPI
-> notification only: as mentioned earlier GPE handler will be generated
-> per-vfio device so in your example if let assume that only:
-> - \_SB.PCI0.GPP0.PEGP
-> - \_SB.PCI0.GP17.XHC1
-> will be pass-through to the guest, the generated AML code for VM will
-> look more-less like below:
->
->         Scope (_GPE)
->         {
->             Method (_E00, 0, NotSerialized)
->             {
->                 Local0 =3D  \_SB.PCI0.GPP0.PEGP.NOTY
->                 Notify ( \_SB.PCI0.GPP0.PEGP, Local0)
->             }
->         }
->         Scope (_GPE)
->         {
->             Method (_E01, 0, NotSerialized)
->             {
->                 Local0 =3D\_SB.PCI0.GP17.XHC1.NOTY
->                 Notify (\_SB.PCI0.GP17.XHC1, Local0)
->             }
->         }
->
-> So each pass-through device will have associated GPE (0 for
-> \_SB.PCI0.GPP0.PEGP and 1 for \_SB.PCI0.GP17.XHC1). The path in Notify
-> could actually be different and related to guest pci hierarchy (but
-> associated to those host devices). Please also note that in this case
-> we use GPE in order to "inform" guest about notification coming and we
-> do not try to replicate host GPE scope description.
->
-> Above we assumed that other devices (like \_SB.PCI0.GPP0/1) are not
-> pass-through to the guest and notification are handled in host as
-> usual (they are not binded to pci-vfio) and there is no need to
-> generate AML code, allocate GPE for them and so on.
->
-> Thank you,
-> Grzegorz
+The last patch should be applied after the following patchset:
+https://lore.kernel.org/all/20230314124404.117592-1-xingyu.wu@starfivetech.com/
+
+Changes since v5:
+- Modified polling time to DMA transmission completion status. Submit a
+  separate patch for this change.
+
+Changes since v4:
+- Rebased on Linux 6.3-rc1.
+- Added description for reset items in the dt-binding.
+- Simplified the usage of match data.
+
+Changes since v3:
+- Constrain the minItems of resets to 2 for jh7110 dma in the
+  dt-binding.
+- Replaced all uses of of_device_is_compatible with of_device_get_match_data.
+- Moved the definition of struct axi_dma_chip_config to dw-axi-dmac-platform.c
+
+Changes since v2:
+- Added minItems with value 1 and changed the maxItems' value to 2 about
+  resets properties in the dt-binding.
+- Added match data for jh7110-axi-dma and executed reset call to match
+  data.
+- Dropped reset-names from dma node of device tree.
+
+Changes since v1:
+- Rebased on Linux 6.2.
+- Changed the compatible string to SoC specific and dropped '-rst' from
+  reset-names in the dt-binding.
+- Dropped 'snps,num-hs-if' in the dt-binding.
+- Use different configuration on CH_CFG registers according to the compatible string.
+
+---
+v5: https://lore.kernel.org/all/20230314083537.22571-1-walker.chen@starfivetech.com/
+v4: https://lore.kernel.org/all/20230306140430.28951-1-walker.chen@starfivetech.com/
+v3: https://lore.kernel.org/all/20230227131042.16125-1-walker.chen@starfivetech.com/
+v2: https://lore.kernel.org/all/20230221140424.719-1-walker.chen@starfivetech.com/
+v1: https://lore.kernel.org/all/20230206113811.23133-1-walker.chen@starfivetech.com/
+
+Walker Chen (4):
+  dt-bindings: dma: snps,dw-axi-dmac: constrain the items of resets for
+    JH7110 dma
+  dmaengine: dw-axi-dmac: Add support for StarFive JH7110 DMA
+  dmaengine: dw-axi-dmac: Increase polling time to DMA transmission
+    completion status
+  riscv: dts: starfive: add dma controller node
+
+ .../bindings/dma/snps,dw-axi-dmac.yaml        | 23 ++++++++++-
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++
+ .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 40 ++++++++++++++++---
+ drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  1 +
+ 4 files changed, 75 insertions(+), 7 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+prerequisite-patch-id: c3a6b87df79b338fc97766406d010fedb79ab428
+prerequisite-patch-id: b49509523cf7c098f684647bdc4fdaece48b61bc
+prerequisite-patch-id: 46cc850aa0e9e03ccf5ed23d8458babfca3d71af
+prerequisite-patch-id: a6975e61ee5803fbd74b1c21ab925fd81c3c0eab
+prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
+prerequisite-patch-id: 044263ef2fb9f1e5a586edbf85d5f67814a28430
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 9f3dbc9073eee89134e68977e941e457593c2757
+prerequisite-patch-id: 8600b156a235be2b3db53be3f834e7a370e2cfb9
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4c12d958e3a3d629d86dddb1e4f099d8909393e0
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8f5c66dfb14403424044192f6fa05b347ad356a7
+prerequisite-patch-id: fd93763b95469912bde9bdfa4cd827c8d5dba9c6
+prerequisite-patch-id: 6987950c2eb4b3773b2df8f7934eff434244aeab
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+prerequisite-patch-id: 398744c61913c76a35754de867c4f820ca7a8d99
+prerequisite-patch-id: be3d7a6a13098884ec26cd5e543cc95c39045e35
+prerequisite-patch-id: b3ce7955a80d90d992b7d1bca3409f465810b2bb
+prerequisite-patch-id: db2f66860cc5b2fd2f71747c4428287b6e3153fb
+prerequisite-patch-id: 9da71dcd3af4c68da9d855b43aab6927103e7525
+prerequisite-patch-id: 2d9e4f185631549094b6136cf8717a507b68c5bb
+prerequisite-patch-id: bb8e071ed43998874b9d98292c0dcdeedc0760ca
+prerequisite-patch-id: cd0b464336aabfbfad96c1a3595c0f9ce9401638
+prerequisite-patch-id: 24eab3d30274700c2be4727bece743c76d2618bd
+prerequisite-patch-id: 584c256c9acb52ee2773d0c81c3f4977fc18155a
+prerequisite-patch-id: 2bc43b375b470f7e8bbe937b78678ba3856e3b8f
+-- 
+2.17.1
+
