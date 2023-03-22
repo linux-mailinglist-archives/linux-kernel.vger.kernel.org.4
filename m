@@ -2,171 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08546C4317
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490286C4321
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCVGYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S229968AbjCVG0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCVGYI (ORCPT
+        with ESMTP id S229629AbjCVG0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:24:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C644FCFD;
-        Tue, 21 Mar 2023 23:24:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0563B818DC;
-        Wed, 22 Mar 2023 06:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E4BC433D2;
-        Wed, 22 Mar 2023 06:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679466244;
-        bh=cQj5ND6NQ+jRWxCbfQwoB4SOr8K6z0BISCctoUKWGVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P4g55mQ4GpArph+pkS+DQ31CizcD7NV2GqC7nU+0eZFeZsNlVkpLotPVaeLBhc+ZJ
-         t0hji+++80ENIgmcqns5g37vfI9HzF5YEW9X9LvxWCsL3icilIPJHIHHwkLzyG/GnP
-         U34qvhk4vbbvHm50Y/wMjbElLuC0H1bnj3bNVYxbS0zqdm4sxEdzPUeR6gTHwRbGio
-         Au29QAEj9fggf14xN984GN2wQ9la2m+2W3YMVEsuGmZZxhyhFNaJhW0ParEpy5jujz
-         E7qP1r8C0s5SZlPnZ5rJIis+nSZ5Opxv287UZRMNchX9ZeZaXj80SNxAEhnGgt42B/
-         9sqEy/CaHWgzQ==
-Date:   Wed, 22 Mar 2023 08:23:51 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2] mm/page_alloc: Make deferred page init free pages in
- MAX_ORDER blocks
-Message-ID: <ZBqe97HNpE/gpOX8@kernel.org>
-References: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
+        Wed, 22 Mar 2023 02:26:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79C95A19D
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 23:26:51 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PhJM05jlKzSnX0;
+        Wed, 22 Mar 2023 14:23:24 +0800 (CST)
+Received: from [10.67.111.115] (10.67.111.115) by
+ dggpemm500016.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 22 Mar 2023 14:26:48 +0800
+Message-ID: <6d1859b0-20f3-05a8-d8d6-dfb0c9985985@huawei.com>
+Date:   Wed, 22 Mar 2023 14:26:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+From:   Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
+To:     "Gowans, James" <jgowans@amazon.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>
+CC:     "maz@kernel.org" <maz@kernel.org>,
+        "Raslan, KarimAllah" <karahmed@amazon.com>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230317095300.4076497-1-jgowans@amazon.com>
+ <f0879a30-6f88-30e0-ce30-e230df8f2936@huawei.com>
+ <001d516c1bb6f0b6d2344f1ae160e796d003c24c.camel@amazon.com>
+Content-Language: en-US
+In-Reply-To: <001d516c1bb6f0b6d2344f1ae160e796d003c24c.camel@amazon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.115]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 03:24:15AM +0300, Kirill A. Shutemov wrote:
-> Normal page init path frees pages during the boot in MAX_ORDER chunks,
-> but deferred page init path does it in pageblock blocks.
-> 
-> Change deferred page init path to work in MAX_ORDER blocks.
-> 
-> For cases when MAX_ORDER is larger than pageblock, set migrate type to
-> MIGRATE_MOVABLE for all pageblocks covered by the page.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+在 2023/3/17 19:49, Gowans, James 写道:
+> On Fri, 2023-03-17 at 18:12 +0800, Yipeng Zou wrote:
+>> It seems that we have the same solution.
+> That's a good sign! :D
+>
+>> (I introduced a new flow handler).
+> I considered this, but IMO a new handler isn't the way to go: we already have a
+> bit of handler proliferation going on here. As mentioned in my commit message
+> there this is starting to get closer to handle_edge_eoi_irq, and adding a new
+> generic handler which is a mix of the two existing seems to just add more
+> confusion: which one should a driver owner use? I think it'll be great if we can
+> enhance the existing generic handlers to cater for the various edge cases and
+> perhaps even merge these generic handlers in future.
+>
+> What are your thoughts on this approach compared to your proposal?
 
-> ---
-> 
-> Note: the patch depends on the new definiton of MAX_ORDER.
-> 
-> v2:
-> 
->  - Fix commit message;
-> 
-> ---
->  include/linux/mmzone.h |  2 ++
->  mm/page_alloc.c        | 19 ++++++++++---------
->  2 files changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 96599cb9eb62..f53fe3a7ca45 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -32,6 +32,8 @@
->  #endif
->  #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
->  
-> +#define IS_MAX_ORDER_ALIGNED(pfn) IS_ALIGNED(pfn, MAX_ORDER_NR_PAGES)
-> +
->  /*
->   * PAGE_ALLOC_COSTLY_ORDER is the order at which allocations are deemed
->   * costly to service.  That is between allocation orders which should
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 87d760236dba..fc02a243425d 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1875,9 +1875,10 @@ static void __init deferred_free_range(unsigned long pfn,
->  	page = pfn_to_page(pfn);
->  
->  	/* Free a large naturally-aligned chunk if possible */
-> -	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
-> -		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-> -		__free_pages_core(page, pageblock_order);
-> +	if (nr_pages == MAX_ORDER_NR_PAGES && IS_MAX_ORDER_ALIGNED(pfn)) {
-> +		for (i = 0; i < nr_pages; i += pageblock_nr_pages)
-> +			set_pageblock_migratetype(page + i, MIGRATE_MOVABLE);
-> +		__free_pages_core(page, MAX_ORDER);
->  		return;
->  	}
->  
-> @@ -1901,19 +1902,19 @@ static inline void __init pgdat_init_report_one_done(void)
->  /*
->   * Returns true if page needs to be initialized or freed to buddy allocator.
->   *
-> - * We check if a current large page is valid by only checking the validity
-> + * We check if a current MAX_ORDER block is valid by only checking the validity
->   * of the head pfn.
->   */
->  static inline bool __init deferred_pfn_valid(unsigned long pfn)
->  {
-> -	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
-> +	if (IS_MAX_ORDER_ALIGNED(pfn) && !pfn_valid(pfn))
->  		return false;
->  	return true;
->  }
->  
->  /*
->   * Free pages to buddy allocator. Try to free aligned pages in
-> - * pageblock_nr_pages sizes.
-> + * MAX_ORDER_NR_PAGES sizes.
->   */
->  static void __init deferred_free_pages(unsigned long pfn,
->  				       unsigned long end_pfn)
-> @@ -1924,7 +1925,7 @@ static void __init deferred_free_pages(unsigned long pfn,
->  		if (!deferred_pfn_valid(pfn)) {
->  			deferred_free_range(pfn - nr_free, nr_free);
->  			nr_free = 0;
-> -		} else if (pageblock_aligned(pfn)) {
-> +		} else if (IS_MAX_ORDER_ALIGNED(pfn)) {
->  			deferred_free_range(pfn - nr_free, nr_free);
->  			nr_free = 1;
->  		} else {
-> @@ -1937,7 +1938,7 @@ static void __init deferred_free_pages(unsigned long pfn,
->  
->  /*
->   * Initialize struct pages.  We minimize pfn page lookups and scheduler checks
-> - * by performing it only once every pageblock_nr_pages.
-> + * by performing it only once every MAX_ORDER_NR_PAGES.
->   * Return number of pages initialized.
->   */
->  static unsigned long  __init deferred_init_pages(struct zone *zone,
-> @@ -1953,7 +1954,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
->  		if (!deferred_pfn_valid(pfn)) {
->  			page = NULL;
->  			continue;
-> -		} else if (!page || pageblock_aligned(pfn)) {
-> +		} else if (!page || IS_MAX_ORDER_ALIGNED(pfn)) {
->  			page = pfn_to_page(pfn);
->  		} else {
->  			page++;
-> -- 
-> 2.39.2
-> 
+Hi,
+
+I also agree with you, enhance the existing generic handlers is a good 
+way to go.
+
+Too many generic handlers really confuse developers.
+
+> There is also the "delay the affinity change of LPI until the next interrupt
+> acknowledge" option described in the previous thread [0]. I also considered that
+> but seeing as the handle_edge_irq does the approach implemented here of setting
+> the PENDING flag and then re-running it, it seemed like good prior art to draw
+> on. Is that option of enabling CONFIG_GENERIC_PENDING_IRQ a viable? IMO the
+> generic handlers should be resilient to this so I would prefer this fix than
+> depending on the user to know to set this config option.
+
+
+About CONFIG_GENERIC_PENDING_IRQ is actually some attempts we made 
+before under the suggestion of Thomas.
+
+This patch is valid for our problem. However, the current config is only 
+supported on x86, and some code modifications are required on arm.
+
+In our patch, the config cannot be perfectly supported on arm like x86. 
+Refer to the patch below.
+
+This has led to some changes in the original behavior of modifying 
+interrupting affinity, from the next interrupt taking effect to the next 
+to the next interrupt taking effect.
+
+So, in general, I also prefer the fix which make generic handlers be 
+resilient than introduce an CONFIG_GENERIC_PENDING_IRQ for gic.
+
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c 
+b/drivers/irqchip/irq-gic-v3-its.c
+index 1cb392fb16d0..64cfa5e38d89 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -1678,6 +1678,12 @@ static int its_select_cpu_other(const struct 
+cpumask *mask_val)
+  }
+  #endif
+
++static void its_irq_chip_eoi(struct irq_data *d)
++{
++       irq_move_irq(d);
++       irq_chip_eoi_parent(d);
++}
++
+  static int its_set_affinity(struct irq_data *d, const struct cpumask 
+*mask_val,
+                             bool force)
+  {
+@@ -2026,7 +2032,7 @@ static struct irq_chip its_irq_chip = {
+         .name                   = "ITS",
+         .irq_mask               = its_mask_irq,
+         .irq_unmask             = its_unmask_irq,
+-       .irq_eoi                = irq_chip_eoi_parent,
++       .irq_eoi                = its_irq_chip_eoi,
+         .irq_set_affinity       = its_set_affinity,
+         .irq_compose_msi_msg    = its_irq_compose_msi_msg,
+         .irq_set_irqchip_state  = its_irq_set_irqchip_state,
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index ab5505d8caf1..3c829bb4f649 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -33,7 +33,9 @@ config GENERIC_IRQ_LEGACY_ALLOC_HWIRQ
+
+  # Support for delayed migration from interrupt context
+  config GENERIC_PENDING_IRQ
+-       bool
++       bool "Support for delayed migration from interrupt context"
++       depends on SMP
++       default n
+
+  # Support for generic irq migrating off cpu before the cpu is offline.
+  config GENERIC_IRQ_MIGRATION
+diff --git a/kernel/irq/migration.c b/kernel/irq/migration.c
+index def48589ea48..bcb61ee69c20 100644
+--- a/kernel/irq/migration.c
++++ b/kernel/irq/migration.c
+@@ -117,3 +117,5 @@ void __irq_move_irq(struct irq_data *idata)
+         if (!masked)
+                 idata->chip->irq_unmask(idata);
+  }
++
++void __weak irq_force_complete_move(struct irq_desc *desc) { }
+
+> JG
+>
+> [0]https://lore.kernel.org/all/b0f2623b-ec70-d57e-b744-26c62b1ce523@huawei.com/
 
 -- 
-Sincerely yours,
-Mike.
+Regards,
+Yipeng Zou
+
