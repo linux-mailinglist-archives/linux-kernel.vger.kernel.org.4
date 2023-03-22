@@ -2,228 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70AF6C47CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30786C47C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCVKhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        id S230331AbjCVKhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjCVKhi (ORCPT
+        with ESMTP id S230310AbjCVKhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:37:38 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADE26130A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679481457; x=1711017457;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XkGOVyRSy98gXhWpcna0uMh4W2jt4i6i1uaI3PcxGiU=;
-  b=ivjFww4765t2imuXrvf0Q2+m0Zx5Krv21EB+BvigX2ROIfPvVy19n0VD
-   VliBgLx7quKILsDmvy0zJSpA18ICJjAsxlMQiFDl9/NJylbsRSakrl3J0
-   oA6yZhBxn/3WxRSh7rmJSFWuTwMtsWLpEp+jiiRdUrE21QmXNxxFWfKYx
-   +oaY/wSIQ4+8b+G+3YV4GP3TtWzBqG+UxVZW9MRJMgNfV8VUiVjn+6RUA
-   2Am0LXTZUeCnU2prvOqtTwdWqz654BEma63OchPfy8C2UtpucTZoeeMKo
-   Rd/iY8anf3XHLg1CLNKaXykTipA3dcpeBGJSB4Q7U17hgM2VNasPAxONY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="318824511"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="318824511"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 03:37:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="631951833"
-X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="631951833"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Mar 2023 03:37:33 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pevqW-000DBJ-1n;
-        Wed, 22 Mar 2023 10:37:32 +0000
-Date:   Wed, 22 Mar 2023 18:36:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ye.xingchen@zte.com.cn, laurent.pinchart@ideasonboard.com
-Cc:     oe-kbuild-all@lists.linux.dev, hyun.kwon@xilinx.com,
-        airlied@gmail.com, daniel@ffwll.ch, michal.simek@xilinx.com,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
-Message-ID: <202303221848.iqaTMWyX-lkp@intel.com>
-References: <202303221625255005719@zte.com.cn>
+        Wed, 22 Mar 2023 06:37:32 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADF452F57;
+        Wed, 22 Mar 2023 03:37:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id p16so11178676wmq.5;
+        Wed, 22 Mar 2023 03:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679481450;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cXY3dtEy0DFSpO9vMF3eqheQ80y59mk1IPKmUUcnHw4=;
+        b=ZvEImXvWLlZnHzB/uPkccpIeQrcbBMzUte9gqqBUQ9+aYAhQ2qUE2ce9TsDqpMKLd5
+         +mQ5+bFPecNmFOmpbQdlSxktsVH6WmLN6ZDqW4PSMSLfFpKFFucTyWauuNf59gY+YFMf
+         uk38VBQ9Q9jYVhPrK+iDkefM7U4YSr7woFga1RQnY/btMY8wHwaMWWzNydqI/+0Gwysh
+         HiYcyUQBDx49My68w4qmEQp4kAh7wUnas5DROGDlXRs0dHgz9OQsonY8EgvlplTTCUbD
+         Xv/8uCDwYciRSmjn/7OaagPTtoQN55L/NYKyLVsDYbaHp/hMn9iGmROCqGFAZM2a8EkK
+         7rnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679481450;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cXY3dtEy0DFSpO9vMF3eqheQ80y59mk1IPKmUUcnHw4=;
+        b=K9PFkPz16yTnCgbns/bVe1aQIdQsTiDDPE4Qhcj1ZoxihcxA4+YiVwpX3taH2YK7uS
+         W0daA3gXuFnmlGpvvgsMhtbH3EElK7drCyrtDntvnmxE2UKO7rVZxmy/iQALiihnhLsn
+         WFX4KeYzBHaKnjwYJ0Lg95YD9uMJPqyglE/mQl2DvSQOmp0P+J0NyzJFBJHC+Xt4kfr/
+         3wTNdhys5QszkkLrS07uDPW8srHmeyFED36DvD9cuYBrrJAfYmudU7JJS56nwrxIMBhR
+         tnqok1XXogxEjJM1bcQ1Q7bnYqnEQ0yCi2rwrhYZ2vuG5jEEGyeefJgty7SfJZDeqckL
+         m2yA==
+X-Gm-Message-State: AO0yUKUc3iAyTws0tFM1NvXNZE8fFEv1E/UVMwMAWK0j1f/xrnNg3ZG8
+        Gu99h2PScTQzcthM0oU6epcTY0aDttE=
+X-Google-Smtp-Source: AK7set8wjyAhRAJKpG1wItEV/9Sq5pZ1JXf92nIEtT1nfDZDVi0BjLq3WaWUnFeNRo2qaU1X0sfJgA==
+X-Received: by 2002:a7b:cc95:0:b0:3ed:346d:4534 with SMTP id p21-20020a7bcc95000000b003ed346d4534mr1361845wma.0.1679481450218;
+        Wed, 22 Mar 2023 03:37:30 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c154900b003ede03e4369sm10839725wmg.33.2023.03.22.03.37.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 03:37:29 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     virtualization@lists.linux-foundation.org,
+        Stefano Garzarella <sgarzare@redhat.com>
+Cc:     stefanha@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>, ira.weiny@intel.com
+Subject: Re: [PATCH v3 3/8] vringh: replace kmap_atomic() with kmap_local_page()
+Date:   Wed, 22 Mar 2023 11:37:27 +0100
+Message-ID: <4499457.LvFx2qVVIh@suse>
+In-Reply-To: <20230321154228.182769-4-sgarzare@redhat.com>
+References: <20230321154228.182769-1-sgarzare@redhat.com>
+ <20230321154228.182769-4-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202303221625255005719@zte.com.cn>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On marted=EC 21 marzo 2023 16:42:23 CET Stefano Garzarella wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_page() since commit
+> f3ba3c710ac5 ("mm/highmem: Provide kmap_local*").
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page-faults, and can be called from any context (including interrupts).
+> Furthermore, the tasks can be preempted and, when they are scheduled to
+> run again, the kernel virtual addresses are restored and still valid.
+>=20
+> kmap_atomic() is implemented like a kmap_local_page() which also disables
+> page-faults and preemption (the latter only for !PREEMPT_RT kernels,
+> otherwise it only disables migration).
+>=20
+> The code within the mappings/un-mappings in getu16_iotlb() and
+> putu16_iotlb() don't depend on the above-mentioned side effects of
+> kmap_atomic(), so that mere replacements of the old API with the new one
+> is all that is required (i.e., there is no need to explicitly add calls
+> to pagefault_disable() and/or preempt_disable()).
+>=20
+> This commit reuses a "boiler plate" commit message from Fabio, who has
+> already did this change in several places.
+>=20
 
-Thank you for the patch! Perhaps something to improve:
+=46WIW, I can confirm that the conversions here are safe...
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/202303221625255005719%40zte.com.cn
-patch subject: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230322/202303221848.iqaTMWyX-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/68f0f0c914304e81941645b5b2e06ca1424527f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/drm-xlnx-zynqmp-Use-dev_err_probe/20230322-162628
-        git checkout 68f0f0c914304e81941645b5b2e06ca1424527f9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/
+Thanks,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221848.iqaTMWyX-lkp@intel.com/
+=46abio
 
-All warnings (new ones prefixed by >>):
+P.S.: I had to send this message again because my former contained HTML par=
+ts=20
+and so it was rejected by the mailing lists. I don't yet know how HTML crep=
+t=20
+into my text.
 
-   drivers/gpu/drm/xlnx/zynqmp_dp.c: In function 'zynqmp_dp_probe':
->> drivers/gpu/drm/xlnx/zynqmp_dp.c:1704:61: warning: format '%ld' expects a matching 'long int' argument [-Wformat=]
-    1704 |                                     "failed to get reset: %ld\n");
-         |                                                           ~~^
-         |                                                             |
-         |                                                             long int
+> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>=20
+> Notes:
+>     v3:
+>     - credited Fabio for the commit message
+>     - added reference to the commit that deprecated kmap_atomic() [Jason]
+>     v2:
+>     - added this patch since checkpatch.pl complained about deprecation
+>       of kmap_atomic() touched by next patch
+>=20
+>  drivers/vhost/vringh.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index a1e27da54481..0ba3ef809e48 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1220,10 +1220,10 @@ static inline int getu16_iotlb(const struct vringh
+> *vrh, if (ret < 0)
+>  		return ret;
+>=20
+> -	kaddr =3D kmap_atomic(iov.bv_page);
+> +	kaddr =3D kmap_local_page(iov.bv_page);
+>  	from =3D kaddr + iov.bv_offset;
+>  	*val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>=20
+>  	return 0;
+>  }
+> @@ -1241,10 +1241,10 @@ static inline int putu16_iotlb(const struct vringh
+> *vrh, if (ret < 0)
+>  		return ret;
+>=20
+> -	kaddr =3D kmap_atomic(iov.bv_page);
+> +	kaddr =3D kmap_local_page(iov.bv_page);
+>  	to =3D kaddr + iov.bv_offset;
+>  	WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>=20
+>  	return 0;
+>  }
+> --
+> 2.39.2
 
 
-vim +1704 drivers/gpu/drm/xlnx/zynqmp_dp.c
 
-  1664	
-  1665	/* -----------------------------------------------------------------------------
-  1666	 * Initialization & Cleanup
-  1667	 */
-  1668	
-  1669	int zynqmp_dp_probe(struct zynqmp_dpsub *dpsub)
-  1670	{
-  1671		struct platform_device *pdev = to_platform_device(dpsub->dev);
-  1672		struct drm_bridge *bridge;
-  1673		struct zynqmp_dp *dp;
-  1674		struct resource *res;
-  1675		int ret;
-  1676	
-  1677		dp = kzalloc(sizeof(*dp), GFP_KERNEL);
-  1678		if (!dp)
-  1679			return -ENOMEM;
-  1680	
-  1681		dp->dev = &pdev->dev;
-  1682		dp->dpsub = dpsub;
-  1683		dp->status = connector_status_disconnected;
-  1684	
-  1685		INIT_DELAYED_WORK(&dp->hpd_work, zynqmp_dp_hpd_work_func);
-  1686	
-  1687		/* Acquire all resources (IOMEM, IRQ and PHYs). */
-  1688		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dp");
-  1689		dp->iomem = devm_ioremap_resource(dp->dev, res);
-  1690		if (IS_ERR(dp->iomem)) {
-  1691			ret = PTR_ERR(dp->iomem);
-  1692			goto err_free;
-  1693		}
-  1694	
-  1695		dp->irq = platform_get_irq(pdev, 0);
-  1696		if (dp->irq < 0) {
-  1697			ret = dp->irq;
-  1698			goto err_free;
-  1699		}
-  1700	
-  1701		dp->reset = devm_reset_control_get(dp->dev, NULL);
-  1702		if (IS_ERR(dp->reset)) {
-  1703			ret = dev_err_probe(dp->dev, PTR_ERR(dp->reset),
-> 1704					    "failed to get reset: %ld\n");
-  1705			goto err_free;
-  1706		}
-  1707	
-  1708		ret = zynqmp_dp_reset(dp, false);
-  1709		if (ret < 0)
-  1710			goto err_free;
-  1711	
-  1712		ret = zynqmp_dp_phy_probe(dp);
-  1713		if (ret)
-  1714			goto err_reset;
-  1715	
-  1716		/* Initialize the bridge. */
-  1717		bridge = &dp->bridge;
-  1718		bridge->funcs = &zynqmp_dp_bridge_funcs;
-  1719		bridge->ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID
-  1720			    | DRM_BRIDGE_OP_HPD;
-  1721		bridge->type = DRM_MODE_CONNECTOR_DisplayPort;
-  1722		dpsub->bridge = bridge;
-  1723	
-  1724		/*
-  1725		 * Acquire the next bridge in the chain. Ignore errors caused by port@5
-  1726		 * not being connected for backward-compatibility with older DTs.
-  1727		 */
-  1728		ret = drm_of_find_panel_or_bridge(dp->dev->of_node, 5, 0, NULL,
-  1729						  &dp->next_bridge);
-  1730		if (ret < 0 && ret != -ENODEV)
-  1731			goto err_reset;
-  1732	
-  1733		/* Initialize the hardware. */
-  1734		dp->config.misc0 &= ~ZYNQMP_DP_MAIN_STREAM_MISC0_SYNC_LOCK;
-  1735		zynqmp_dp_set_format(dp, NULL, ZYNQMP_DPSUB_FORMAT_RGB, 8);
-  1736	
-  1737		zynqmp_dp_write(dp, ZYNQMP_DP_TX_PHY_POWER_DOWN,
-  1738				ZYNQMP_DP_TX_PHY_POWER_DOWN_ALL);
-  1739		zynqmp_dp_set(dp, ZYNQMP_DP_PHY_RESET, ZYNQMP_DP_PHY_RESET_ALL_RESET);
-  1740		zynqmp_dp_write(dp, ZYNQMP_DP_FORCE_SCRAMBLER_RESET, 1);
-  1741		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 0);
-  1742		zynqmp_dp_write(dp, ZYNQMP_DP_INT_DS, 0xffffffff);
-  1743	
-  1744		ret = zynqmp_dp_phy_init(dp);
-  1745		if (ret)
-  1746			goto err_reset;
-  1747	
-  1748		zynqmp_dp_write(dp, ZYNQMP_DP_TRANSMITTER_ENABLE, 1);
-  1749	
-  1750		/*
-  1751		 * Now that the hardware is initialized and won't generate spurious
-  1752		 * interrupts, request the IRQ.
-  1753		 */
-  1754		ret = devm_request_threaded_irq(dp->dev, dp->irq, NULL,
-  1755						zynqmp_dp_irq_handler, IRQF_ONESHOT,
-  1756						dev_name(dp->dev), dp);
-  1757		if (ret < 0)
-  1758			goto err_phy_exit;
-  1759	
-  1760		dpsub->dp = dp;
-  1761	
-  1762		dev_dbg(dp->dev, "ZynqMP DisplayPort Tx probed with %u lanes\n",
-  1763			dp->num_lanes);
-  1764	
-  1765		return 0;
-  1766	
-  1767	err_phy_exit:
-  1768		zynqmp_dp_phy_exit(dp);
-  1769	err_reset:
-  1770		zynqmp_dp_reset(dp, true);
-  1771	err_free:
-  1772		kfree(dp);
-  1773		return ret;
-  1774	}
-  1775	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
