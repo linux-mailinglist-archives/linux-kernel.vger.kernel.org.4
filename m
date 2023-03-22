@@ -2,102 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2A96C48C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3076C48D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCVLOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S230185AbjCVLQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjCVLOk (ORCPT
+        with ESMTP id S229620AbjCVLQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:14:40 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A1A4C6F2;
-        Wed, 22 Mar 2023 04:14:39 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eh3so71273185edb.11;
-        Wed, 22 Mar 2023 04:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679483678;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNQMPrXeAiv4ATfaNwsUCZoGnla70bhGZgF/+CvtNnY=;
-        b=leR6cYRJoRYPMxJsQhkSc+xnpejhTD209af42m9+kFja/4+30O6K1Nsvq3a8Gxh5wj
-         WVk/7FVhDN04q4mMOob9+apU9EYplmUOEUiY6vBJ0HukucA74fwIlLVaBsVzw6P58RYk
-         FI4zaoMMKwGtj3abvTlbWkl6h61rixvz5UX++HmyqLE3a6K7hWVhDVz4jrvocDKfUpaP
-         ygJiV4YnKPHk22gwG3ZSary/PoCFZX77ubbGqoJ8EmAB7sQTRsNVO2I35GFMqVLLo6jD
-         8q6szOxy/3cEbO4+wafZeIFgPqsuMGdivXqUBEgAoMkCnj2ED+KfWMfkPH+3CHx1LdV7
-         gyDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679483678;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wNQMPrXeAiv4ATfaNwsUCZoGnla70bhGZgF/+CvtNnY=;
-        b=GVtClTB+CeC1ibYFPGGO6I80dP5s6pnUqbN4OB9ELx5DH6C64Fo3vjIJgsJOxxvirf
-         elevPo/rafRgS3yxoXSN9BATA3ic4bxCUmLdWA0WTTxu/3ORgfKs5wU68OjJpDTRQV7r
-         tpyTQDZGJYHzRvz5mmUL4/PPhUSaYe4/s0WvefeKnszQFuf6G6TC8KbEJv1XkkepURR9
-         Iz1ut0AF7Lp7a5hyi4T62px/9P7szGyutPe0yKGA2qQFaC3nOKjf+O1cniOsbYIekjWI
-         779yl+qdhWaFBdxGGA1F/Elc4bwMJ6Yp3Y5SEvZAqnpvIWTLl0HwGFZWScemPzXgLaz6
-         QvIg==
-X-Gm-Message-State: AO0yUKVtrmCAYq6uCpJ/t57pFNNWKZ9I4EXUqM8emXsO9ynXttCMFRi6
-        JeDbiJxMXNA/haPJpJ4+b09oG4io1dlmSOxF1ehWa2Vz
-X-Google-Smtp-Source: AK7set/vzRkpZMD3B/M4QL5rTBBvj3PbxXlggp07G+keSkvrHFE/5iOVPQ1EDTrw6B7Brkrom2QDqG4MLwq9BwtHWaE=
-X-Received: by 2002:a50:f683:0:b0:4fc:7014:f91c with SMTP id
- d3-20020a50f683000000b004fc7014f91cmr3281812edn.5.1679483677879; Wed, 22 Mar
- 2023 04:14:37 -0700 (PDT)
+        Wed, 22 Mar 2023 07:16:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCA2457C5;
+        Wed, 22 Mar 2023 04:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679483763; x=1711019763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wzqzOip5nRM30jduumeE01e2CiTZUbRO+8j67GEvMOk=;
+  b=Qc1t9qTRfTDSqdGJQ5SXNPY7+4iu9tHHYIy0ZNJxn19DXp/fqO677Dv4
+   WFkwg8MiSH/cDEgHIkXUy0wudxGW8aAg1fMAWICZRUHgr4RWPr6+djVWE
+   RdKiC5A7Q9+ppwjZ1DgPlsiwv/eHbtNUb1SPyEiPUs42w6qBPyt5Ao/hR
+   O59DLqx4x3pEkGUlvRZqUvEnh7YX5XOCwxddQxgTuXaqt8gAT1HCoIhyb
+   cu3pg7zbShXRgtfnkO2XXGrUndX/vSR4+kihs8oUjRz/L8iHknmEm5nl7
+   Zo2sf/LtpmfAiPoZH1bkabtU6Tlas1qJbDEMHkNj5sLDgfiAhWySkjTzB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="337908532"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="337908532"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 04:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="675226677"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="675226677"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 22 Mar 2023 04:15:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pewRa-007752-29;
+        Wed, 22 Mar 2023 13:15:50 +0200
+Date:   Wed, 22 Mar 2023 13:15:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-acpi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org
+Subject: Re: [PATCH v14 07/10] drm/bridge: anx7625: Register Type C mode
+ switches
+Message-ID: <ZBrjZj0VL20y1MUC@smile.fi.intel.com>
+References: <20230322104639.221402-1-treapking@chromium.org>
+ <20230322104639.221402-8-treapking@chromium.org>
 MIME-Version: 1.0
-References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
- <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com> <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com> <20230213175006.GA310433@p14s> <343571ba-faed-35d7-2859-2668391dadb2@oss.nxp.com>
-In-Reply-To: <343571ba-faed-35d7-2859-2668391dadb2@oss.nxp.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Wed, 22 Mar 2023 13:14:25 +0200
-Message-ID: <CAEnQRZC5t=qmo+OJLW+dqZg4gH9cAN=paWDSGbrJb2AvkKBqxg@mail.gmail.com>
-Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322104639.221402-8-treapking@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Second, there should always be a segment that adds the right information to the
-> > TMCL.  That segment doesn't need a name, it simply have to be part of the
-> > segments that are copied to memory (any kind of memory) so that function
-> > rproc_elf_load_segments() can do its job.
-> >
-> > That pushes the complexity to the tool that generates the firmware image,
-> > exactly where it should be.
->
-> For i.MX8M, yes. For i.MX93, the M33 ROM needs address of storing stack/pc.
-> >
-> > This is how I think we should solve this problem based on the very limited
-> > information provided with this patchset.  Please let me know if I missed
-> > something and we'll go from there.
->
-> I am not sure how to proceed on supporting the current firmware. what
-> should I continue with current patchset?
+On Wed, Mar 22, 2023 at 06:46:36PM +0800, Pin-yen Lin wrote:
+> Register USB Type-C mode switches when the "mode-switch" property and
+> relevant ports are available in Device Tree. Configure the crosspoint
+> switch based on the entered alternate mode for a specific Type-C
+> connector.
+> 
+> Crosspoint switch can also be used for switching the output signal for
+> different orientations of a single USB Type-C connector, but the
+> orientation switch is not implemented yet. A TODO is added for this.
 
-I'm in favor of merging this patch as it is. Already gave my
-reviewed-by tag above.
+...
+
+> +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> +				 struct typec_mux_state *state)
+> +{
+> +	struct drm_dp_typec_port_data *port = typec_mux_get_drvdata(mux);
+> +	struct anx7625_data *ctx = port->data;
+> +	struct device *dev = ctx->dev;
+> +	struct drm_dp_typec_switch_desc switch_desc = ctx->switch_desc;
+> +	bool new_dp_connected, old_dp_connected;
+> +
+> +	if (switch_desc.num_typec_switches == 1)
+> +		return 0;
+
+> +	wait_for_completion(&ctx->mux_register);
+
+How do we guarantee this won't become an infinite waiting?
+Perhaps a comment explaining that?
+
+> +	old_dp_connected = ctx->port_data[0].dp_connected ||
+> +			   ctx->port_data[1].dp_connected;
+> +
+> +	ctx->port_data[port->port_num].dp_connected =
+> +		state->alt &&
+> +		state->alt->svid == USB_TYPEC_DP_SID &&
+> +		state->alt->mode == USB_TYPEC_DP_MODE;
+> +
+> +	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
+> +		ctx->port_data[0].dp_connected, ctx->port_data[1].dp_connected);
+> +
+> +	new_dp_connected = ctx->port_data[0].dp_connected ||
+> +			   ctx->port_data[1].dp_connected;
+> +
+> +	/* DP on, power on first */
+> +	if (!old_dp_connected && new_dp_connected)
+> +		pm_runtime_get_sync(dev);
+> +
+> +	anx7625_typec_two_ports_update(ctx);
+> +
+> +	/* DP off, power off last */
+> +	if (old_dp_connected && !new_dp_connected)
+> +		pm_runtime_put_sync(dev);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +	struct device_node *port_node = of_graph_get_port_by_id(dev->of_node, 1);
+
+You use fwnode below, so why not fwnode_graph_...(dev_fwnode(dev), ...) ?
+
+> +	struct drm_dp_typec_switch_desc *switch_desc = &ctx->switch_desc;
+> +	int ret;
+> +	u32 dp_lanes[4];
+> +	unsigned int i, num_lanes;
+> +
+> +	/*
+> +	 * Currently, only mode switch is implemented.
+> +	 * TODO: Implement Type-C orientation switch for anx7625.
+> +	 */
+> +	ret = drm_dp_register_typec_switches(dev, &port_node->fwnode,
+> +					     &ctx->switch_desc, ctx,
+> +					     anx7625_typec_mux_set);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ctx->port_data = devm_kcalloc(dev, switch_desc->num_typec_switches,
+> +				      sizeof(struct anx7625_typec_port_data),
+
+				      sizeof(*ctx->port_data),
+
+?
+
+> +				      GFP_KERNEL);
+> +	if (!ctx->port_data) {
+> +		ret = -ENOMEM;
+> +		goto unregister_mux;
+> +	}
+
+...
+
+> +struct anx7625_typec_port_data {
+> +	bool dp_connected;
+> +	enum typec_orientation orientation;
+
+Most likely enum will be 32-bit and bool 8-bit. Which means that the data type
+size become 8 bytes for no reason. Can you swap the lines and perhaps check this
+with `pahole` tool?
+
+> +};
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
