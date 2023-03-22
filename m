@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25FE6C47CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F856C47D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 11:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCVKjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 06:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S230339AbjCVKlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 06:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjCVKiy (ORCPT
+        with ESMTP id S230298AbjCVKlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 06:38:54 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5536E95
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:38:49 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id cu36so7100975vsb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:38:49 -0700 (PDT)
+        Wed, 22 Mar 2023 06:41:46 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5E961304
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:41:45 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id l27so8178637wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 03:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679481528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xOiN5G93WrfPsM2Jecc460dR5iDLmqy+gypXlUAZy1I=;
-        b=YgvfzYUFqiy+iTf/4sQOI8uimJZzDdgLb0I+xiSlbKQFvwZQdBd1U9a9mgJLdNcfmn
-         YtUeNoB4MAAteN80DI9FOuSQGcLPpv6nQg5CZCAXGw2gYcjbAH9+QSXKFu78bfPzkULu
-         QL7m2RDBluTSLxLpw8ZA19xh4t7w5U3hE85C0xvQcsv5LfNWxObiEGlqrpMygsO8YkM4
-         pRNaRmxuZ7eOWi40H7zFSBO4000wQaH+u/PM6FheQrqeVfodpn31DCgLT8V+QsUvfzVH
-         5CxR8QEX9p/XxyDwj9LBSVheqrinTKuRmt674zHopPFtYrSAohdh/aIjc0933ohGBEh6
-         pyUQ==
+        d=linaro.org; s=google; t=1679481704;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=skDnyQLe1JXdCg1sNQHqpeJHAlfAsnOpU7qQyP4hHOg=;
+        b=GSamitR5gd+/UzbyXSgYPJV7PmQ5ceiqB2gRsLSYfgDBbvjxo2QYvkSXKnM5bEzeSD
+         B7qXr4fCsv+cghc+QYyE/3ZBGrikeib607wQYkwUA47N5hn21hj8KNbODFSyOaowLCmt
+         HPHZBYlYCXTcUyVZ51+0NsjdpDgw7A/Tw/Y8OL9NlKo6n2sc0ETcGhA3FBmN7xAfKzNU
+         KUllCOt9xplQPWUCSboOZAIt8Hya1qLXR85iWUcCUu5sBpXnug3XV3C3hAgfzRUbLSQj
+         KJlYcQsLqyxICGLivSBKQIgkLAnul/X98QbqzEz7QGxQnLBuY/Vieh5YC+LIVRXfF01E
+         THBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679481528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xOiN5G93WrfPsM2Jecc460dR5iDLmqy+gypXlUAZy1I=;
-        b=p+C9pzeTVn2fuUyo9uAFuG83s9Dz9NRmKsZ0wImoCwipUxkyOQQkiQqLsx4BV+qsY+
-         FNQiNGUugP9fW4JVpmlL43XjE6ZyS7ItEQi30Z8OEDMhHvrs6Zd7ghyuri8RU3Ggs6Ro
-         Sby8ifoHYiADDD90dcmxZCjz2FHfuDMAN3RrjGEdSDeNmCb9YJTK/AoHW8aQ70Eg5UtU
-         1bRikALsVckrvQ2mDxxFFpzFygezp+U3hMWejFaR49aS3kRJDSq7fZIt296RPxrJlvns
-         /fQnO50eFfV9NBX/bQpQJ7t6CxAtrJbZ7/QAD01WQO2tv2m9+rr2xDtbtM4OnuJkYdcr
-         xLow==
-X-Gm-Message-State: AO0yUKXlhudutEqPJrUW4E4AZEUbl98Qu/BoU4O+lCu2wS5I/YVpq5+I
-        KDaN20uuQdVm/1gQZUPMP/NpcQDd52wXi3Sy91Fm6w==
-X-Google-Smtp-Source: AK7set/5W/bqhxB0kdyABAYudu1GFKIqmHXPZv3ZQNcZ8b6LlpKu4UCO7huf6zKH+hNmbM6D0gBh5fEtpcymadeipcE=
-X-Received: by 2002:a67:e00b:0:b0:425:d255:dd38 with SMTP id
- c11-20020a67e00b000000b00425d255dd38mr3313118vsl.1.1679481528233; Wed, 22 Mar
- 2023 03:38:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679481704;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=skDnyQLe1JXdCg1sNQHqpeJHAlfAsnOpU7qQyP4hHOg=;
+        b=RLIrozHVidSqrwZouwsHF2EqE9p/M/MjEvQj3khr4FvkS7X3RBEXxMhRTMXKKM3ce0
+         to2tZmEhQna4+9IwORIVNAvYuKU7/aK2Mn5mDwltuHms0+UDHXzJvHP7T/dgsMtirYZ4
+         q5oKN62Wp3hD00sI9C+8NLlq3VMum+8yZbIRmoKVkTdY7rvlToX5QlWrgoCvWv9wpUOH
+         2j5elhOtoqJCapTRwY3ZCCuq8aLF17YtdJBwoNnPXls5B+QuqmXIKuPcPx6yGDsSSBX4
+         /+1uyufTqQOs7HDaG1JpLusSxCpi0HlO3MYzWstYNWTWy0dvF/wB9AtAhfYXE0QF+XJQ
+         jv9Q==
+X-Gm-Message-State: AO0yUKWe1XVA+v8DjGtFZ6H/66b/BDJsgmeqLAcAbD+gKzf7TbNP8Lko
+        H3jozWUifKY4azquGRISfzM/qkKIu+UgiO7JNcaOnVf4JU8sSr+2
+X-Google-Smtp-Source: AK7set8wAPw5tK+KOLu3l95YMhBqfO34Pi6ONEtsWZgiwe84T8NwsFpmq2fBkotWjwqz/Ud4m6hn17Aj50DyVc2GhAM=
+X-Received: by 2002:a5d:6641:0:b0:2d0:58f9:a69 with SMTP id
+ f1-20020a5d6641000000b002d058f90a69mr1153282wrw.4.1679481704118; Wed, 22 Mar
+ 2023 03:41:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230321180749.921141176@linuxfoundation.org>
-In-Reply-To: <20230321180749.921141176@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 22 Mar 2023 16:08:35 +0530
-Message-ID: <CA+G9fYsG6d_A_yGQAixYTA2Wh2cowf-UQJAY=RRWnEzFcLAHCQ@mail.gmail.com>
-Subject: Re: [PATCH 6.2 000/214] 6.2.8-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230321190118.3327360-1-bhupesh.sharma@linaro.org>
+ <20230321190118.3327360-3-bhupesh.sharma@linaro.org> <ZBoVzFTr8LBWsmrX@gerhold.net>
+In-Reply-To: <ZBoVzFTr8LBWsmrX@gerhold.net>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 22 Mar 2023 16:11:32 +0530
+Message-ID: <CAH=2NtyJHGcfhWMdUmJ=38kC-CjP7jznQEU7jX+983hdEJs4-A@mail.gmail.com>
+Subject: Re: [PATCH 2/5] arm64: dts: qcom: sm6115: Add Crypto Engine support
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
@@ -72,178 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 23:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, 22 Mar 2023 at 02:09, Stephan Gerhold <stephan@gerhold.net> wrote:
 >
-> This is the start of the stable review cycle for the 6.2.8 release.
-> There are 214 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On Wed, Mar 22, 2023 at 12:31:15AM +0530, Bhupesh Sharma wrote:
+> > Add crypto engine (CE) and CE BAM related nodes and definitions to
+> > 'sm6115.dtsi'.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 26 ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > index c56738633431..b2d2cdde41fa 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > @@ -664,6 +664,32 @@ usb_1_hsphy: phy@1613000 {
+> >                       status = "disabled";
+> >               };
+> >
+> > +             cryptobam: dma-controller@1b04000 {
+> > +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
+> > +                     reg = <0x0 0x01b04000 0x0 0x24000>;
+> > +                     interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     #dma-cells = <1>;
+> > +                     qcom,ee = <0>;
+> > +                     qcom,controlled-remotely;
+> > +                     num-channels = <8>;
+> > +                     qcom,num-ees = <2>;
+> > +                     iommus = <&apps_smmu 0x84 0x11>,
+> > +                              <&apps_smmu 0x86 0x11>,
+> > +                              <&apps_smmu 0x94 0x11>,
+> > +                              <&apps_smmu 0x96 0x11>;
+> > +             };
+> > +
+> > +             crypto: crypto@1b3a000 {
+> > +                     compatible = "qcom,sm6115-qce", "qcom,sm8150-qce", "qcom,qce";
+> > +                     reg = <0x0 0x01b3a000 0x0 0x6000>;
+> > +                     dmas = <&cryptobam 6>, <&cryptobam 7>;
+> > +                     dma-names = "rx", "tx";
+> > +                     iommus = <&apps_smmu 0x84 0x11>,
+> > +                              <&apps_smmu 0x86 0x11>,
+> > +                              <&apps_smmu 0x94 0x11>,
+> > +                              <&apps_smmu 0x96 0x11>;
 >
-> Responses should be made by Thu, 23 Mar 2023 18:07:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.2.8-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> If you apply the 0x11 mask to the stream ID then the last two items here
+> are identical to the first two (0x94 & ~0x11 = 0x84). Why are they
+> needed? They look redundant to me.
 
+Thanks, I will check them out and fix them in v2.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.2.8-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.2.y
-* git commit: d9c239ae1a56ba4b39f4783b8d025cb7a75b2751
-* git describe: v6.2.7-215-gd9c239ae1a56
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.7=
--215-gd9c239ae1a56
-
-## Test Regressions (compared to v6.2.7)
-
-## Metric Regressions (compared to v6.2.7)
-
-## Test Fixes (compared to v6.2.7)
-
-## Metric Fixes (compared to v6.2.7)
-s
-## Test result summary
-total: 196699, pass: 168689, fail: 4397, skip: 23223, xfail: 390
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 143 passed, 6 failed
-* arm64: 58 total, 55 passed, 3 failed
-* i386: 45 total, 40 passed, 5 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 10 total, 9 passed, 1 failed
-* powerpc: 42 total, 39 passed, 3 failed
-* riscv: 30 total, 28 passed, 2 failed
-* s390: 20 total, 17 passed, 3 failed
-* sh: 16 total, 12 passed, 4 failed
-* sparc: 10 total, 7 passed, 3 failed
-* x86_64: 50 total, 49 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-vm
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Regards.
