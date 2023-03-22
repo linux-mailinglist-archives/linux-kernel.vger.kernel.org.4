@@ -2,100 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23A86C3FB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76DD6C3FB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 02:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjCVBYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 21:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S229835AbjCVB0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 21:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjCVBYk (ORCPT
+        with ESMTP id S229464AbjCVB0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 21:24:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE084C28;
-        Tue, 21 Mar 2023 18:24:37 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ph9gX6Tp3zKsn6;
-        Wed, 22 Mar 2023 09:22:16 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 22 Mar 2023 09:24:33 +0800
-Subject: Re: [PATCH] scsi: fix hung_task when change host from recovery to
- running via sysfs
-To:     Benjamin Block <bblock@linux.ibm.com>,
-        Ye Bin <yebin@huaweicloud.com>
-References: <20230321084204.1860900-1-yebin@huaweicloud.com>
- <20230321142237.GC311313@t480-pf1aa2c2.fritz.box>
-CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   "yebin (H)" <yebin10@huawei.com>
-Message-ID: <641A58D0.1020205@huawei.com>
-Date:   Wed, 22 Mar 2023 09:24:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Tue, 21 Mar 2023 21:26:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C66830289;
+        Tue, 21 Mar 2023 18:26:13 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ph9m12s6sz4f3wYK;
+        Wed, 22 Mar 2023 09:26:09 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgBnFCIvWRpkXohdFQ--.57798S3;
+        Wed, 22 Mar 2023 09:26:08 +0800 (CST)
+Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
+ device again
+To:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
+ <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
+Date:   Wed, 22 Mar 2023 09:26:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20230321142237.GC311313@t480-pf1aa2c2.fritz.box>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500010.china.huawei.com (7.192.105.118)
+In-Reply-To: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBnFCIvWRpkXohdFQ--.57798S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr43tr1fCw18ZF13tF4rGrg_yoW8Xw1xpF
+        Z7XFs8Xr4DCw17Ca4UJ3Z7G3W5J3s7ZrWrGr13WryIka98Wr1YgFWkt39xXa92qrZ0kr1q
+        9r1kJrWxZFyfCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+在 2023/03/21 19:43, Ming Lei 写道:
+> On Fri, Feb 17, 2023 at 10:21:58AM +0800, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Changes from RFC:
+>>   - remove the patch to factor out GD_NEED_PART_SCAN
+>>
+>> Yu Kuai (2):
+>>    block: Revert "block: Do not reread partition table on exclusively
+>>      open device"
+>>    block: fix scan partition for exclusively open device again
+> 
+> Hi Yu kuai,
+> 
+> Looks the original issue starts to re-appear now with the two patches:
+> 
+> https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
+> 
+> And underlying disk partition and raid partition can be observed at the
+> same time.
+> 
+> Can you take a look?
+Yes, thanks for the report. I realize that sda1 adn sdb1 is created
+while raid open sda and sdb excl, and I think this problem should exist
+before this patchset.
 
-On 2023/3/21 22:22, Benjamin Block wrote:
-> On Tue, Mar 21, 2023 at 04:42:04PM +0800, Ye Bin wrote:
->> From: Ye Bin <yebin10@huawei.com>
->>
->> When do follow test:
->> Step1: echo  "recovery" > /sys/class/scsi_host/host0/state
-> Hmm, that make me wonder, what potential use-case this is for? Just
-> testing?
-Thank you for your reply.
-Actually, I'm looking for a way to temporarily stop sending IO to the 
-driver.
-Setting the state of the host to recovery can do this, but I changed the 
-state to
-running and found that the process could not be woken up.
-I don't know what the purpose of designing this sysfs interface was. But 
-this
-modification can solve the effect I want to achieve.
-> For SDEVs we explicitly filter what states can be set from user-space.
-> Only `SDEV_RUNNING` and `SDEV_OFFLINE` can be set in
-> `store_state_field()`.
->      There is probably quite a few other bad things you can do with this
-> interface by using any of the other states used for device destruction
-> or EH, and then trigger I/O or said destruction/EH otherwise.
->      Not sure handling this one special case of `SHOST_RECOVERY` is quite
-> enough.
->
->
->> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
->> index ee28f73af4d4..ae6b1476b869 100644
->> --- a/drivers/scsi/scsi_sysfs.c
->> +++ b/drivers/scsi/scsi_sysfs.c
->> @@ -216,6 +216,9 @@ store_shost_state(struct device *dev, struct device_attribute *attr,
->>
->>        if (scsi_host_set_state(shost, state))
->>                return -EINVAL;
->> +     else
->> +             wake_up(&shost->host_wait);
->> +
->>        return count;
->>   }
->>
->> --
->> 2.31.1
->>
+And I verify this with following test:
+
+1) mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+2) sgdisk -n 0:0:+100MiB /dev/md0
+3) mdadm -S /dev/md0
+# scan partitions of sda
+4) blockdev --rereadpt /dev/sda
+
+Then sda1 is created.
+
+I'm not sure how to fix this yet😂
+
+Thanks,
+Kuai
+> 
+> Follows the script, which isn't 100% triggered, but still easy.
+> 
+> #create level 1 with 2 devices, meta 1.0
+> mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+> 
+> #create partition 0, start from 0 sector, size 100MiB
+> sgdisk -n 0:0:+100MiB /dev/md0
+> 
+> #observe partitions
+> cat /proc/partitions
+> 
+> #stop the array
+> mdadm -S /dev/md0
+> 
+> #re-assemble
+> mdadm -A /dev/md0 /dev/sda /dev/sdb
+> cat /proc/partitions
+> 
+> 
+> Thanks,
+> Ming
+> 
+> .
+> 
 
