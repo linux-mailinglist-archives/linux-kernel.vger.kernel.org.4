@@ -2,144 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE4A6C412A
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500426C4132
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCVDjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
+        id S229639AbjCVDlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCVDjp (ORCPT
+        with ESMTP id S230296AbjCVDk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:39:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEC726C22
-        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 20:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679456338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=acAVed8CDBREmL9QLjhE79J05nR0HTJkM0a3n25AtZk=;
-        b=TV+ryhYil6/VVOTFMXtRmg9rMIWPvK3EWOLLiTdfUdt8xC5P7vRHimAyp3tBSDe8dochOg
-        JXOEhUpihVdl7Zae1USD7Kf53naE6FHK7+f7ZChHLb7W1Ck5VP2XixAvHEu2TvMnpCmguQ
-        Y0Em0v64T3phutn5+8O6F939NNtCU1o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-387-sP62k0_iM_Gk_8g6MhmQQA-1; Tue, 21 Mar 2023 23:38:54 -0400
-X-MC-Unique: sP62k0_iM_Gk_8g6MhmQQA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 21 Mar 2023 23:40:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203405ADE9;
+        Tue, 21 Mar 2023 20:40:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44C0C101A54F;
-        Wed, 22 Mar 2023 03:38:54 +0000 (UTC)
-Received: from ovpn-8-17.pek2.redhat.com (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C60CA2027047;
-        Wed, 22 Mar 2023 03:38:47 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 11:38:42 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, hare@suse.de, hch@infradead.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Changhui Zhong <czhong@redhat.com>,
-        "yukuai (C)" <yukuai3@huawei.com>, ming.lei@redhat.com
-Subject: Re: [PATCH -next 0/2] block: fix scan partition for exclusively open
- device again
-Message-ID: <ZBp4Ql08g5YvTDAA@ovpn-8-17.pek2.redhat.com>
-References: <20230217022200.3092987-1-yukuai1@huaweicloud.com>
- <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
- <dc7d28bf-35ca-7cde-ffdf-9490177dfdb9@huaweicloud.com>
- <ZBpbGKxPQcs9NYst@ovpn-8-18.pek2.redhat.com>
- <5facd7c1-fa90-99ff-bd08-cdf67fe6c1ab@huaweicloud.com>
- <a8505ded-dadd-9096-4b13-31512a2c703e@huaweicloud.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4F5CB81AF8;
+        Wed, 22 Mar 2023 03:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF54C433D2;
+        Wed, 22 Mar 2023 03:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679456441;
+        bh=UwtGB3rw8LcXqubG8rIlvKuhQG9IX5FWTqplcKL6hK0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=U7jCJpuKkrasEsm1skJSHc6swKBYv4/pNOlnQvmohxWo08F1XCzPqEgu4gwrajeUK
+         t5QKkI31bcg5vZXfOHPysPRZAWgStgDHnkuMcz1hsGFnwOCXeDvlj8F/MQIjvwgz61
+         ZvPBUJX2sHwM4jjjomcfRGoVvhNrSmwT/TLPDFHD96UMvGDhPfW9SSqJP1Fil8LvmQ
+         +SM6kUNQ03hEr+AQSkWtU/hdEilGb+isfc98ubB2BYDTSnO4mjhMkohY/rSbdP5zzX
+         /eqR4e8jw2tNvQM3aTp+bf/5+INygqldmexgZrHMtUQQbhLJf6A/7ZOxZKH6NWbT5q
+         TxBkIGcsLge9w==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-177ca271cb8so18319550fac.2;
+        Tue, 21 Mar 2023 20:40:41 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dCN6s/sd4vphjAgwK/D3RL9toqM/W5xIdhGTtYUu9NBMmCPv83
+        32LImRhp9zqGvLKhzq3BxcoNkpAMF2dsZAm5RjU=
+X-Google-Smtp-Source: AKy350ZdFjUh7xYHJcDwY34s1k2AaCtlnVnxko/Zv/Om7WBQQv5KFArj63B6aim3QjfklaTTG0DbfsyBlMhvRU2di7k=
+X-Received: by 2002:a05:6871:f8c:b0:17b:1895:a637 with SMTP id
+ vn12-20020a0568710f8c00b0017b1895a637mr28224oab.11.1679456440624; Tue, 21 Mar
+ 2023 20:40:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a8505ded-dadd-9096-4b13-31512a2c703e@huaweicloud.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <17ab5a21-5512-5388-f9fa-c462b2ebd351@alu.unizg.hr> <7349a16f-6e7e-51d4-4686-ec7e688d891b@alu.unizg.hr>
+In-Reply-To: <7349a16f-6e7e-51d4-4686-ec7e688d891b@alu.unizg.hr>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Mar 2023 12:40:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARxu0hjOp6N7jnLWvqWb0h3LPPSAgF7+7+c-eB7Fmc9dA@mail.gmail.com>
+Message-ID: <CAK7LNARxu0hjOp6N7jnLWvqWb0h3LPPSAgF7+7+c-eB7Fmc9dA@mail.gmail.com>
+Subject: Re: BUG: scripts/kconfig/merge_config.sh: typo in variable name
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kbuild@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:15:30AM +0800, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2023/03/22 10:02, Yu Kuai 写道:
-> > Hi,
-> > 
-> > 在 2023/03/22 9:34, Ming Lei 写道:
-> > > On Wed, Mar 22, 2023 at 09:26:07AM +0800, Yu Kuai wrote:
-> > > > Hi,
-> > > > 
-> > > > 在 2023/03/21 19:43, Ming Lei 写道:
-> > > > > On Fri, Feb 17, 2023 at 10:21:58AM +0800, Yu Kuai wrote:
-> > > > > > From: Yu Kuai <yukuai3@huawei.com>
-> > > > > > 
-> > > > > > Changes from RFC:
-> > > > > >    - remove the patch to factor out GD_NEED_PART_SCAN
-> > > > > > 
-> > > > > > Yu Kuai (2):
-> > > > > >     block: Revert "block: Do not reread partition table on exclusively
-> > > > > >       open device"
-> > > > > >     block: fix scan partition for exclusively open device again
-> > > > > 
-> > > > > Hi Yu kuai,
-> > > > > 
-> > > > > Looks the original issue starts to re-appear now with the two patches:
-> > > > > 
-> > > > > https://lore.kernel.org/linux-block/20221130135344.2ul4cyfstfs3znxg@quack3/
-> > > > > 
-> > > > > 
-> > > > > And underlying disk partition and raid partition can be observed at the
-> > > > > same time.
-> > > > > 
-> > > > > Can you take a look?
-> > > > Yes, thanks for the report. I realize that sda1 adn sdb1 is created
-> > > > while raid open sda and sdb excl, and I think this problem should exist
-> > > > before this patchset.
-> > > 
-> > > Looks not reproduced before applying your two patches, that is
-> > > exactly what Jan
-> > > tried to fix with 36369f46e917 ("block: Do not reread partition
-> > > table on exclusively open device").
-> > 
-> > Hi, Ming
-> > 
-> > I just tried your test with this patchset reverted, and I can still
-> > reporduce the problem myself.
-> 
-> Oops, I forgot to revert the first patch. It's right the problem can't
-> be reporduced.
-> > 
-> > raid only open this device excl, and disk_scan_partitions is not called:
-> > 
-> > md_import_device
-> >   blkdev_get_by_devo
-> > 
-> > I need to add some debuginfo to figure out how GD_NEED_PART_SCAN is set
-> > for sda after raid is stopped. And this should explain why sda1 is
-> > created.
-> 
-> I found how GD_NEED_PART_SCAN is set now, in patch 2, this is set before
-> bd_prepare_to_claim, so preciously faild part scan will still set this
-> bit, and following patch shold fix this problem:
+On Wed, Mar 22, 2023 at 5:14=E2=80=AFAM Mirsad Goran Todorovac
+<mirsad.todorovac@alu.unizg.hr> wrote:
+>
+> On 3/21/2023 2:04 PM, Mirsad Goran Todorovac wrote:
+> > Hi all,
+> >
+> > There is a typo in variable name in scripts/kconfig/merge_config.sh, wi=
+th the
+> > script returning:
+> >
+> > $ ./scripts/kconfig/merge_config.sh -y -m ../.config tools/testing/self=
+tests/net/config
+> > ./scripts/kconfig/merge_config.sh: 148: ./scripts/kconfig/merge_config.=
+sh: Previous: not found
+> >
+> > Problem is probably best explained by this diff:
+> >
+> > ---
+> > diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_co=
+nfig.sh
+> > index 32620de473ad..902eb429b9db 100755
+> > --- a/scripts/kconfig/merge_config.sh
+> > +++ b/scripts/kconfig/merge_config.sh
+> > @@ -145,7 +145,7 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
+> >                  NEW_VAL=3D$(grep -w $CFG $MERGE_FILE)
+> >                  BUILTIN_FLAG=3Dfalse
+> >                  if [ "$BUILTIN" =3D "true" ] && [ "${NEW_VAL#CONFIG_*=
+=3D}" =3D "m" ] && [ "${PREV_VAL#CONFIG_*=3D}" =3D "y" ]; then
+> > -                       ${WARNOVVERIDE} Previous  value: $PREV_VAL
+> > +                       ${WARNOVERRIDE} Previous  value: $PREV_VAL
+> >                          ${WARNOVERRIDE} New value:       $NEW_VAL
+> >                          ${WARNOVERRIDE} -y passed, will not demote y t=
+o m
+> >                          ${WARNOVERRIDE}
+> >
+> > Hope this helps.
+>
+> P.S.
+>
+> Later I thought of searching the committer of the patch that introduced t=
+he change,
+> so I Cc:ed Mark.
+>
+> Best regards,
+> Mirsad
 
-Just run quick test, the issue won't be reproduced with your patch, and
-the change looks rational too,
+Good catch.
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Will you please send a patch with your signed-off?
 
 
-Thanks,
-Ming
 
+
+
+
+
+> --
+> Mirsad Todorovac
+> Sistem in=C5=BEenjer
+> Grafi=C4=8Dki fakultet | Akademija likovnih umjetnosti
+> Sveu=C4=8Dili=C5=A1te u Zagrebu
+>
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> tel. +385 (0)1 3711 451
+> mob. +385 91 57 88 355
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
