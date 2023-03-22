@@ -2,164 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C806C4EB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3D06C4EB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjCVO6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S231166AbjCVO6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjCVO57 (ORCPT
+        with ESMTP id S230233AbjCVO6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:57:59 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0777B22C91
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:57:16 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id r11so74147561edd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679497032;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGYOqDadhmsseDC0wX50qpITbuUEp1N4J0vaATobCLA=;
-        b=G/l1XPwfAmpfc0zYBfc2PYxi5tOYq6n46qHEAus+GTjiRtmsEdqv+dK/6PcCUBJDLJ
-         hbip3YmDaE6mXLNsGjTYq8q0g4yXh6gfNTKraQqo92KDvpsNQ4kFc6ZqLH8ExhcBRiCZ
-         dYdho9HU6l7AMN+yE/wqmxMkeT6ZH0nDPozDc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679497032;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cGYOqDadhmsseDC0wX50qpITbuUEp1N4J0vaATobCLA=;
-        b=KXtDGIcN9DH9qk4JtANW7p8RItQezXXqKPxxK1DseTeUYmXpiipyTXfGSnNZ7kD3zp
-         IOC6wciJGDYxE+w2Zvdic69rHal2HUZZXPIJqACLPJcCGyKGESkqmQMAyDOGAKR4f4V4
-         A+rhkr56mnwEPdW/mKg8GsYbKaV4+JvwuVOwWMCzv5trlQSWB0UhmquakY4fR6CzotM4
-         BtUEcWSVHmQr6T6YPIatQ0yOX+G5EAEDs2s7riNREgmcUmX18klYK+Ds/gOIbQjLkuMZ
-         QHrDl0H9jtbTFDhocJMr59NYfohFdDFMq93UPdY6eH4K4y4jIM6XBWq2sHejN9QZdM59
-         fMPQ==
-X-Gm-Message-State: AO0yUKUpFR73owBw/5mrALzPEuSIbhE34DVnLRZfxOuMGuwtUYB403zG
-        0R22c4qsDbMUqgLxoa26126dFtIYyD0g825IVqqOww==
-X-Google-Smtp-Source: AK7set+PXmlCPVawaFWyPYo9kOHc3dNlpQMXGtbT4rULP0P5Nfil6epT/P9Ft0E42xmHrAYBEhv8Dw==
-X-Received: by 2002:a05:6402:44f:b0:500:4062:99f7 with SMTP id p15-20020a056402044f00b00500406299f7mr7464988edw.32.1679497032667;
-        Wed, 22 Mar 2023 07:57:12 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:5f6a:82a1:e22a:94f1])
-        by smtp.gmail.com with ESMTPSA id q30-20020a50aa9e000000b004fadc041e13sm7886755edc.42.2023.03.22.07.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 07:57:12 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 22 Mar 2023 15:57:03 +0100
-Subject: [PATCH v2] kexec: Support purgatories with .text.hot sections
+        Wed, 22 Mar 2023 10:58:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B3E3430F;
+        Wed, 22 Mar 2023 07:57:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93E45B81D11;
+        Wed, 22 Mar 2023 14:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E6FC433D2;
+        Wed, 22 Mar 2023 14:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679497048;
+        bh=Y3HtKtckdIyVycaNg7jC2DNyivhIui6yCz3yQioPQdk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iKuInfSMVIkMoiqTwiz5b6AWyGjTKHqgKQ8VkmkEMyhp8Znvf5dODRrMldam2G4Mc
+         hkWWVAHCDcObQTQtyFTuagctIXDgHzFC8o8HDNeuV3/EtRFI+mBVFllOxDMBeIa5o6
+         EGDyb31rmWq7d+Qc08kf2H6jYjAQgMAoFOtmX91kPvf08zbJX87A62nz4L1qeP2weJ
+         qUQy/fJfuBKVKrxgBp6XDmUe3Eh8WvlJVDhDRClqZ0VH6AV0VGYfzJTnWpYxa4AxBy
+         rAAtTPsynSr0h//GwMJyIzrn4fif7nK+rgFVNaMRI6pEsEyu7dvAfhysz2I4e14bBw
+         QCByONW/dUTBg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C7577154033A; Wed, 22 Mar 2023 07:57:27 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 07:57:27 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] srcu: Fix flush sup work warning in cleanup_srcu_struct()
+Message-ID: <dc8b5a44-02ca-4e5a-bd4a-644af3e7c11e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230321081346.192000-1-qiang1.zhang@intel.com>
+ <e7951c31-4a24-4493-be4b-603fec0730ff@paulmck-laptop>
+ <PH0PR11MB588087645FE02C9F2C113CC8DA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <f13e878f-65c3-40cb-aa3f-eb87ae6c9d6b@paulmck-laptop>
+ <PH0PR11MB5880CAE4D4A58BD71AE984CFDA869@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org>
-To:     Eric Biederman <ebiederm@xmission.com>
-Cc:     Philipp Rudo <prudo@redhat.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Baoquan He <bhe@redhat.com>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2892; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=fnrLcVQ1AvJdACOA7Q5fvzBkJ12XpQAOmvFAOWWoit0=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkGxdB8KVcnWWA0yHB3Vo3OsDbKZYjZaWTwqtOoMlg
- u9oJd/qJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZBsXQQAKCRDRN9E+zzrEiIBjD/
- 9s92XhCh2L80pc0Mj6fm7p1vIC6K/nmBsfzkvlM1sLeSbHf6NuQdLPHn0QZS83rBYVMX/V2WZSm4dx
- C/ApyOM7ltyd5Ltr8memqr6SrP7mSl+1U9Yw5ZaSQqAY6NZGoZ/6aDFTCbaDbTAScnRgtDXz6hHLJ2
- GE5x2lu5RTyU5a5NekCilvoypGfFwHaLINDfSArgI9q+oP2f4bhd4BBNLfzBpv857Mo2gqjKhm+9xt
- E2Y0zYMbjGFclSXk0w7dsTd3AMQQ6tEMmhvdxLDjnpVE02PJpV9VZ/ElQmINt+YECOgrfZM9ayN/8H
- XVx+zquSCdZ1pp1CitBwxUnswJePK6x5ik2f1iGh5A5TPsB6fobSOt+iSroM5vV/OEtKGzXaeuQA2D
- MlSb3O47DiFgmMKyQyYZoGQvIKTKm0//y0qrirUsRi4BGEsaBmD65AdqopChGDQ7KSmpw8nJG99ozV
- Js1gHNTg+Ne/fJXZ+qoW8jENnFTrS6j2nw2EY7B1H4Zzntgi6ouQszaroQgUqvsaEBHsqaR/ZS2cKF
- Q68UkswH88KBtsodAJJFm9VGDkptYxpfCfJbvegERNNjUjHrq7xaqqdbLomI4cw4z7lhrwwu4q7LwT
- VoxGrrwqZFaBbys112SnZ6veat7mpQwzQEq5MH0anO3PjCV4S9huvjImJs0g==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880CAE4D4A58BD71AE984CFDA869@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang16 links the purgatory text in two sections:
+On Wed, Mar 22, 2023 at 04:38:29AM +0000, Zhang, Qiang1 wrote:
+> > > insmod rcutorture.ko
+> > > rmmod rcutorture.ko
+> > > 
+> > > [  209.437327] WARNING: CPU: 0 PID: 508 at kernel/workqueue.c:3167 
+> > > __flush_work+0x50a/0x540 [  209.437346] Modules linked in: 
+> > > rcutorture(-) torture [last unloaded: rcutorture] [  209.437382] 
+> > > CPU: 0 PID: 508 Comm: rmmod Tainted: G  W  6.3.0-rc1-yocto-standard+ 
+> > > [  209.437406] RIP: 0010:__flush_work+0x50a/0x540 .....
+> > > [  209.437758]  flush_delayed_work+0x36/0x90 [  209.437776]  
+> > > cleanup_srcu_struct+0x68/0x2e0 [  209.437817]  
+> > > srcu_module_notify+0x71/0x140 [  209.437854]  
+> > > blocking_notifier_call_chain+0x9d/0xd0
+> > > [  209.437880]  __x64_sys_delete_module+0x223/0x2e0
+> > > [  209.438046]  do_syscall_64+0x43/0x90 [  209.438062]  
+> > > entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> > > 
+> > > For srcu objects defined with DEFINE_SRCU() or DEFINE_STATIC_SRCU(), 
+> > > when compiling and loading as modules, the srcu_module_coming() is 
+> > > invoked, allocate memory for srcu structure's->sda and initialize 
+> > > sda structure, due to not fully initialize srcu structure's->sup, so 
+> > > at this time the sup structure's->delaywork.func is null, if not 
+> > > invoke init_srcu_struct_fields() before unloading modules, in 
+> > > srcu_module_going() the __flush_work() find
+> > > work->func is empty, will raise the warning above.
+> > > 
+> > > This commit add init_srcu_struct_fields() to initialize srcu 
+> > > structure's->sup, in srcu_module_coming().
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > >
+> > >Good catch, and thank you for testing the in-module case!
+> > >
+> > >One question below...
+> > >
+> > >							Thanx, Paul
+> > >
+> > > ---
+> > >  kernel/rcu/srcutree.c | 11 ++++++++---
+> > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c index 
+> > > 1fb078abbdc9..42d8720e016c 100644
+> > > --- a/kernel/rcu/srcutree.c
+> > > +++ b/kernel/rcu/srcutree.c
+> > > @@ -1921,7 +1921,8 @@ static int srcu_module_coming(struct module *mod)
+> > >  		ssp->sda = alloc_percpu(struct srcu_data);
+> > >  		if (WARN_ON_ONCE(!ssp->sda))
+> > >  			return -ENOMEM;
+> > > -		init_srcu_struct_data(ssp);
+> > > +		if (WARN_ON_ONCE(init_srcu_struct_fields(ssp, true)))
+> > > +			return -ENOMEM;
+> > >
+> > >Wouldn't it be better to simply delete the init_srcu_struct_data()?
+> > >
+> > >Then the first call to check_init_srcu_struct() would take care of 
+> > >the initialization, just as for the non-module case.  Or am I missing 
+> > >something subtle?
+> > 
+> > Hi Paul
+> > 
+> > Maybe the check_init_srcu_struct() is always not invoked, for example,
+> > In rcutorture.c,   here is such a definition DEFINE_STATIC_SRCU(srcu_ctl),
+> > but we use torture_type=rcu to test,  there will not be any interface 
+> > calling
+> > check_init_srcu_struct() to initialize srcu_ctl and set  
+> > structure's->delaywork.func is process_srcu().
+> > when we unload the rcutorture module, invoke cleanup_srcu_struct() to 
+> > flush sup structure's->delaywork.func, due to the func pointer is not 
+> > initialize, it's null, will trigger warning.
+> > 
+> > About kernel/workqueue.c:3167
+> > 
+> > __flush_work
+> >      if (WARN_ON(!work->func))   <---------trigger waning
+> > 	return false;
+> > 
+> > 
+> > and  in  init_srcu_struct_fields(ssp, true), wil set 
+> > srcu_sup->sda_is_static is true and set srcu_sup-> srcu_gp_seq_needed 
+> > is zero,  after that when we call
+> >  check_init_srcu_struct() again, it not be initialized again.
+> >
+> >
+> >Good point!  In the non-module statically allocated case there is never a call to cleanup_srcu_struct().
+> >
+> >So suppose the code in srcu_module_coming() only did the alloc_percpu(), and then the
+> >code in srcu_module_going() only did the the matching
+> >free_percpu() instead of the current cleanup_srcu_struct()?
+> 
+> But in modules, for srcu objects defined with DEFINE_SRCU() or DEFINE_STATIC_SRCU(),
+> when a module is unloaded, we usually don't call cleanup_srcu_struct() in the module
+> unload function.
+> If in srcu_module_going() only do free_percpu(), the srcu_sup->node memory maybe
+> can not free and also lost the opportunity to refresh the running work.
 
-  [ 1] .text             PROGBITS         0000000000000000  00000040
-       00000000000011a1  0000000000000000  AX       0     0     16
-  [ 2] .rela.text        RELA             0000000000000000  00003498
-       0000000000000648  0000000000000018   I      24     1     8
-  ...
-  [17] .text.hot.        PROGBITS         0000000000000000  00003220
-       000000000000020b  0000000000000000  AX       0     0     1
-  [18] .rela.text.hot.   RELA             0000000000000000  00004428
-       0000000000000078  0000000000000018   I      24    17     8
+But in the module case, isn't the srcu_sup->node also statically
+allocated via the "static struct srcu_usage" declaration?
 
-And both of them have their range [sh_addr ... sh_addr+sh_size] on the
-area pointed by `e_entry`.
+							Thanx, Paul
 
-This causes that image->start is calculated twice, once for .text and
-another time for .text.hot. The second calculation leaves image->start
-in a random location.
+------------------------------------------------------------------------
 
-Because of this, the system crashes inmediatly after:
+#ifdef MODULE
+# define __DEFINE_SRCU(name, is_static)								\
+	static struct srcu_usage name##_srcu_usage = __SRCU_USAGE_INIT(name##_srcu_usage);	\
+	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
+	extern struct srcu_struct * const __srcu_struct_##name;					\
+	struct srcu_struct * const __srcu_struct_##name						\
+		__section("___srcu_struct_ptrs") = &name
+#else
+# define __DEFINE_SRCU(name, is_static)								\
+	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
+	static struct srcu_usage name##_srcu_usage = __SRCU_USAGE_INIT(name##_srcu_usage);	\
+	is_static struct srcu_struct name =							\
+		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
+#endif
 
-kexec_core: Starting new kernel
-
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-kexec: Fix kexec_file_load for llvm16
-
-When upreving llvm I realised that kexec stopped working on my test
-platform. This patch fixes it.
-
-To: Eric Biederman <ebiederm@xmission.com>
-Cc: Baoquan He <bhe@redhat.com>
-Cc: Philipp Rudo <prudo@redhat.com>
-Cc: kexec@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v2:
-- Fix if condition. Thanks Steven!.
-- Update Philipp email. Thanks Baoquan.
-- Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
----
- kernel/kexec_file.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index f1a0e4e3fb5c..975f2e969a45 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -901,10 +901,21 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
- 		}
- 
- 		offset = ALIGN(offset, align);
-+
-+		/*
-+		 * Check if the segment contains the entry point, if so,
-+		 * calculate the value of image->start based on it.
-+		 * If the compiler has produced more than one .text sections
-+		 * (Eg: .text.hot), they are generally after the main .text
-+		 * section, and they shall not be used to calculate
-+		 * image->start. So do not re-calculate image->start if it
-+		 * is not set to the initial value.
-+		 */
- 		if (sechdrs[i].sh_flags & SHF_EXECINSTR &&
- 		    pi->ehdr->e_entry >= sechdrs[i].sh_addr &&
- 		    pi->ehdr->e_entry < (sechdrs[i].sh_addr
--					 + sechdrs[i].sh_size)) {
-+					 + sechdrs[i].sh_size) &&
-+		    kbuf->image->start == pi->ehdr->e_shnum) {
- 			kbuf->image->start -= sechdrs[i].sh_addr;
- 			kbuf->image->start += kbuf->mem + offset;
- 		}
-
----
-base-commit: 17214b70a159c6547df9ae204a6275d983146f6b
-change-id: 20230321-kexec_clang16-4510c23d129c
-
-Best regards,
--- 
-Ricardo Ribalda <ribalda@chromium.org>
+> Thanks
+> Zqiang
+> 
+> 
+> >
+> >							Thanx, Paul
+> >
+> > Thanks
+> > Zqiang
+> > 
+> > >
+> > >It should also be possible to eliminate duplicate code between the 
+> > >in-module and non-module statically allocated initialization cases, 
+> > >come to think of it.
+> > >
+> > >  	}
+> > >  	return 0;
+> > >  }
+> > > @@ -1931,9 +1932,13 @@ static void srcu_module_going(struct module 
+> > > *mod)  {
+> > >  	int i;
+> > >  	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
+> > > +	struct srcu_struct *ssp;
+> > >  
+> > > -	for (i = 0; i < mod->num_srcu_structs; i++)
+> > > -		cleanup_srcu_struct(*(sspp++));
+> > > +	for (i = 0; i < mod->num_srcu_structs; i++) {
+> > > +		ssp = *(sspp++);
+> > > +		cleanup_srcu_struct(ssp);
+> > > +		free_percpu(ssp->sda);
+> > > +	}
+> > >
+> > >And good catch on another memory leak with this one, looks proper to 
+> > >me.
+> > >
+> > >  }
+> > >  
+> > >  /* Handle one module, either coming or going. */
+> > > --
+> > > 2.25.1
+> > > 
