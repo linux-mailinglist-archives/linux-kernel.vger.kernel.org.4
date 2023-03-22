@@ -2,105 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89856C4B82
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791616C4B93
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjCVNTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S230075AbjCVNUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjCVNTJ (ORCPT
+        with ESMTP id S229688AbjCVNUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:19:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FC1127497;
-        Wed, 22 Mar 2023 06:19:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6F5A4B3;
-        Wed, 22 Mar 2023 06:19:43 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65D3E3F6C4;
-        Wed, 22 Mar 2023 06:18:56 -0700 (PDT)
-Message-ID: <c77bc281-b6e1-1653-6bed-0249f85b7e94@arm.com>
-Date:   Wed, 22 Mar 2023 14:18:47 +0100
+        Wed, 22 Mar 2023 09:20:44 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10D545FEAB
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:20:15 -0700 (PDT)
+Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id C0D7B242DA5;
+        Wed, 22 Mar 2023 14:20:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1679491213;
+        bh=6dZRE9ZGIH+WkYFPa9eqo+NZ3SRbZms9Pu5996vBO0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sNR+pcCXMp1e//rqE+AecQ0a3hUMlNOp8/N39tCxLLcFAAmv1xJLg9ObgzRj9SbNT
+         soOoBzqM5JcbJE0aliv4YQubPc3HIX+xTL5eFuQZV+RpG0y8KdnDVtGDuS6Zti/uHO
+         Ch9EJ0FtsdmGysUTAJGYPj9H9VPDrSTzmWL/psJU0PyafKIDlGkyORFVzOkcs4cReW
+         ewamyd+O8bm2mRSTEsG7BXDhI1WJuRncEaXDDvIvnfpXwPrURqLZQRJRXoC4b0Ccon
+         Qa2T7AqzFh70JJUzkkn8qY/ytpD7Lwsi7CzUmJZ64eH5mHjH7qn45gfewba7BoSpq1
+         tN4i66hEgXJlA==
+Date:   Wed, 22 Mar 2023 14:20:12 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu: make kobj_type structure constant
+Message-ID: <ZBsAjPxV8bu7jjEd@8bytes.org>
+References: <20230214-kobj_type-iommu-v1-1-e7392834b9d0@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
- in cpusets
-Content-Language: en-US
-To:     Juri Lelli <juri.lelli@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230315121812.206079-1-juri.lelli@redhat.com>
- <20230315121812.206079-3-juri.lelli@redhat.com>
- <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
- <ZBH9E7lCEXcFDBG4@localhost.localdomain>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <ZBH9E7lCEXcFDBG4@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230214-kobj_type-iommu-v1-1-e7392834b9d0@weissschuh.net>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 18:14, Juri Lelli wrote:
-> On 15/03/23 11:46, Waiman Long wrote:
->>
->> On 3/15/23 08:18, Juri Lelli wrote:
-
-[...]
-
->>> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->>>   		ret = security_task_setscheduler(task);
->>>   		if (ret)
->>>   			goto out_unlock;
->>> +
->>> +		if (dl_task(task)) {
->>> +			cs->nr_deadline_tasks++;
->>> +			cpuset_attach_old_cs->nr_deadline_tasks--;
->>> +		}
->>>   	}
->>
->> Any one of the tasks in the cpuset can cause the test to fail and abort the
->> attachment. I would suggest that you keep a deadline task transfer count in
->> the loop and then update cs and cpouset_attach_old_cs only after all the
->> tasks have been iterated successfully.
+On Tue, Feb 14, 2023 at 03:25:53AM +0000, Thomas Weiﬂschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
 > 
-> Right, Dietmar I think commented pointing out something along these
-> lines. Think though we already have this problem with current
-> task_can_attach -> dl_cpu_busy which reserves bandwidth for each tasks
-> in the destination cs. Will need to look into that. Do you know which
-> sort of operation would move multiple tasks at once?
+> Take advantage of this to constify the structure definition to prevent
+> modification at runtime.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
 
-Moving the process instead of the individual tasks makes
-cpuset_can_attach() have to deal with multiple tasks.
+Applied, thanks.
 
-# ps2 | grep DLN
- 1614  1615 140      0   - DLN thread0-0
- 1614  1616 140      0   - DLN thread0-1
- 1614  1617 140      0   - DLN thread0-2
+Btw, b4 reported DKIM errors checking your patch submission. Can you
+check the DKIM setup on you email domain, please?
 
-# echo 1614 > /sys/fs/cgroup/cpuset/cs2/cgroup.procs
