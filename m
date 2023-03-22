@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493F46C4C82
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549996C4C88
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 14:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCVNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 09:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S230513AbjCVN4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 09:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjCVNzQ (ORCPT
+        with ESMTP id S230451AbjCVN4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 09:55:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 106AF59E4B;
-        Wed, 22 Mar 2023 06:55:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87F004B3;
-        Wed, 22 Mar 2023 06:55:57 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B32103F71E;
-        Wed, 22 Mar 2023 06:55:10 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 13:55:08 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
-        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, davem@davemloft.net,
-        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, will@kernel.org
-Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
-Message-ID: <ZBsIvLUBNwYAjNUK@FVFF77S0Q05N>
-References: <20230321122514.1743889-1-mark.rutland@arm.com>
- <20230321122514.1743889-2-mark.rutland@arm.com>
- <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+        Wed, 22 Mar 2023 09:56:10 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0224E5C0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:56:01 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso13097915wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 06:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679493360;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GfK1edIPOkCfn9npIlPg19GtGQUodkHXzekBkWBELqo=;
+        b=7nlprO9IVxDYv+4mhSsg2vF76OfQrW1ZbU9beJXk56XJ9DsXqOsVsktBWrO/c+L40z
+         902uA3n3eJGfAqarQppWUBzzGyabQ52KT2+HxfSxoJ3FBHbrIAPT6HZ4GpxVUfbMdbmI
+         6oQzzK9yWGp/RM9b2TfYuB0RFjA5+qBlBBClxjEkF8VbsU3PTUgRJlyOanl6N9bKox2q
+         vXFgzof8hOObqMOTiKcKytsu203uFooMN8c6i5YUQ7KtpFhqusO0hGAMfr59jf9yj+D5
+         J/crFMM7pT+l+TKGU1y9t0IStjMOp+ahknk2OayU46vrU6sZWC1HtWGzh+tubGn3+ho9
+         3O4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679493360;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfK1edIPOkCfn9npIlPg19GtGQUodkHXzekBkWBELqo=;
+        b=gSJZ3jsQealZBC8g7RuPU8FzxP4mbcItNRHNqaJtNCIVX8JTU7gbQqMVB8DjW0mw+T
+         BbgNZHRy1BQ7agHUZZ3AdwdT1muNoI5QZlRWxelz51qPPOLmB+Rt0I/FDQbrqVjnmDRe
+         UcFmjdqkITkE5e7A5NhaMQ27QEIMQAQAh9Y6UXSSNwYXh0bKNf3o39VZXiB5FcnZTJ6n
+         Im4bju/weBuXy7dT5Bk9AC5KgycwmScZ0TZb5Zt8d6JP+PNqoQt5/LYGWtvIFhAHBHam
+         jEP6JDhUolv7rY5vGdXjX1l9hX4dWtTqfq5Cf3NAjcymeWmtB3lO/yQ6F750ASSK4p/e
+         /vAg==
+X-Gm-Message-State: AO0yUKV3wqpHGyDK/hK/up61/ep6eBTskSZxSSFxrofJYnEmBoemUvwq
+        EoWMtDqjke5XXMtHa4ba2KFehA==
+X-Google-Smtp-Source: AK7set/gFr9mRfDWI3gyDUcgYPOIJjmNSqG+lN/9s4FSRwczR9sPTa8fnSXrAxfhAsnBtFbFN1SGLg==
+X-Received: by 2002:a1c:f60a:0:b0:3ed:a2db:dd24 with SMTP id w10-20020a1cf60a000000b003eda2dbdd24mr5780949wmc.32.1679493360165;
+        Wed, 22 Mar 2023 06:56:00 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003eda46d6792sm14619138wmq.32.2023.03.22.06.55.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 06:55:59 -0700 (PDT)
+Message-ID: <a63d420c-54ad-e7b0-cc10-64bb942b4e6a@baylibre.com>
+Date:   Wed, 22 Mar 2023 14:55:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: Add TI TPS6594 PMIC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
+        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com
+Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230321171020.74736-1-jpanis@baylibre.com>
+ <20230321171020.74736-2-jpanis@baylibre.com>
+ <88a6856e-c766-d4a5-1882-5350fd0e248a@linaro.org>
+ <bffba580-e737-8996-4812-3c76c880acc9@baylibre.com>
+ <de3acab7-cf76-3135-9ff8-a0e5537a434b@linaro.org>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <de3acab7-cf76-3135-9ff8-a0e5537a434b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:04:26AM -0700, Linus Torvalds wrote:
-> On Tue, Mar 21, 2023 at 5:25 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > * arm64's copy_to_user() under-reports the number of bytes copied in
-> >   some cases, e.g.
-> 
-> So I think this is the ok case.
-> 
-> > * arm's copy_to_user() under-reports the number of bytes copied in some
-> >   cases, and both copy_to_user() and copy_from_user() don't guarantee
-> >   that at least a single byte is copied when a partial copy is possible,
-> 
-> Again, this is ok historically.
-> 
-> > * i386's copy_from_user does not guarantee that at least a single byte
-> >   is copied when a partial copit is possible, e.g.
-> >
-> >   | too few bytes consumed (offset=4093, size=8, ret=8)
-> 
-> And here's the real example of "we've always done this optimization".
-> The exact details have differed, but the i386 case is the really
-> really traditional one: it does word-at-a-time copies, and does *not*
-> try to fall back to byte-wise copies. Never has.
 
-Sure; I understand that. The reason for pointing this out is that Al was very
-specific that implementations *must* guarantee this back in:
 
-  https://lore.kernel.org/all/YNSyZaZtPTmTa5P8@zeniv-ca.linux.org.uk/
+On 3/22/23 09:16, Krzysztof Kozlowski wrote:
+> On 22/03/2023 09:01, Julien Panis wrote:
+>>>> +  ti,multi-phase-id:
+>>>> +    description: |
+>>>> +      Describes buck multi-phase configuration, if any. For instance, XY id means
+>>>> +      that outputs of buck converters X and Y are combined in multi-phase mode.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> No improvements here. As Rob pointed out, this looks like coupled
+>>> regulators.
+>> I used 'oneOf' logic to handle mutual exclusion. But it seems that I did not
+>> understand what you and Rob expected.
+>> Does some generic property already exist for 'coupled regulators' ?
+> Yes, see regulator.yaml binding.
 
-... and that this could be done by having the fixup handler try to copy a byte.
+Krzysztof, I talked with the regulator API/yaml maintainer.
+Actually, our multiphase concept is different than coupled regulators:
+https://lore.kernel.org/all/ZBr+7X3lcFdI8p%2Fo@sirena.org.uk/
 
-I had assumed that *something* depended upon that, but I don't know what that
-something actually is.
+We must not use the generic 'coupled regulator' property here.
+So, 'ti,multi-phase-id' can be kept.
 
-I'm not wedded to the semantic either way; if that's not required I can drop it
-from the tests.
+>
+> Best regards,
+> Krzysztof
+>
 
-> > * s390 passes all tests
-> >
-> > * sparc's copy_from_user() over-reports the number of bbytes copied in
-> >   some caes, e.g.
-> 
-> So this case I think this is wrong, and an outright bug. That can
-> cause people to think that uninitialized data is initialized, and leak
-> sensitive information.
-
-Agreed.
-
-> > * x86_64 passes all tests
-> 
-> I suspect your testing is flawed due to being too limited, and x86-64
-> having multiple different copying routines.
-
-Sorry; I should've called that out explicitly. I'm aware I'm not testing all
-the variants (I'd be happy to); I just wanted to check that I wasn't going off
-into the weeds with the semantics first.
-
-I probably should've sent this as an RFC...
-
-> Yes, at some point we made everything be quite careful with
-> "handle_tail" etc, but we end up still having things that fail early,
-> and fail hard.
-> 
-> At a minimum, at least unsafe_copy_to_user() will fault and not do the
-> "fill to the very last byte" case. Of course, that doesn't return a
-> partial length (it only has a "fail" case), but it's an example of
-> this whole thing where we haven't really been byte-exact when doing
-> copies.
-
-Sure; that does seem to be different structurally too, so it'd need to be
-plumbed into the harness differently.
-
-I'll note that's more like {get,put}_user() which similarly just have a fail
-case (and a put_user() could do a parital write then fault).
-
-> So again, I get the feeling that these rules may make sense from a
-> validation standpoint, but I'm not 100% sure we should generally have
-> to be this careful.
-
-I'm more than happy to relax the tests (and the docs); I just need to know
-where the boundary is between what we must guarantee and what's a nice-to-have.
-
-Thanks,
-Mark.
