@@ -2,161 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDBD6C4474
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 08:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3176C4482
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCVHys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 03:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S229996AbjCVIAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjCVHyp (ORCPT
+        with ESMTP id S229522AbjCVIAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 03:54:45 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2054.outbound.protection.outlook.com [40.107.20.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4525BC9D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 00:54:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kq8OVOuVOhjl+TTzvJGvz7qvbS3QE4e5WRlZ9yvoFnZdYBH+62JiCtbmy8zuM2IeDw86EA9x+rmjWvXlo6AlRDqET/CLMHVZAGLKU8nZyUAvjKbhfE2nb8A1t6dmnBPCJFNRh/7pVVI+k+IHo4ELx6mGbauXgEmbGp5zQoNhuX8XS4aP0rTzcx8p0cwuVcUz/fvRQ1QhoCovVR8EvNXk9PBBTnYtIkYK/M9o3lXP2hHzM8eyTSVHb8Q2XceTHdQFMZEePIztPDT1WRMJTCm7bvYKlT+IlXKdvxB1qVb/inDbDuNKJQVUlWRoOqde5/4EjPSdz6OyXZmiF5VTCdo4/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6F52oO60OJpupNrKM4yEvkwlc9JHH1AadywSqV6+do4=;
- b=lzX3D7KM6sOpvHQ/NIok68R62NWWlNMevJHizuW715VFzTXog4yTXXzvTBuOmGJSxhveIVgQ6khPEKtlWIzTGmGovVoYO7M/jhRfFFg07CkVEOj9oh33hXtUgVMq8e3504XumSHP44u4eY9Phl5JQG4hSl1OoCShH2BCPo43UYXxJSqKsymTXvxkyqErULQHz2np7ziKoHEm2XYaO7dAhamw1jaT7d9yXzledO4HMaQzxALPVsOwa1tK4vlmTEVwUinixj+2yJrNRBbLvmjw1R9h1EClQUVnK7hgOqOtkHnCnfgaiOfXO0JMGb+NJMCYQ/6oK0FMtEFIXeRHQldVvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6F52oO60OJpupNrKM4yEvkwlc9JHH1AadywSqV6+do4=;
- b=Q3v2bn5e8yL655G3mS8WE0jNneTRL3iVni9U3kvlQT4vqwUG09PQJ4ejQdUgtAIwJ16Ut8PdRAX2QMJ/RsI7l5PWKkI/YesDEvVK7aQu1Uy2iCNnhMS7NRrZjUO2GgwNTQgumySzgkhrzZRhbHbZjvoZNky1BNuD9IX65siWmyI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
- by PAXPR04MB8525.eurprd04.prod.outlook.com (2603:10a6:102:210::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 07:54:41 +0000
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf]) by PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf%6]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 07:54:40 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     mst@redhat.com, jasowang@redhat.com, mie@igel.co.jp,
-        virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] tools/virtio: fix build break for aarch64
-Date:   Wed, 22 Mar 2023 15:59:45 +0800
-Message-Id: <20230322075945.3039857-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0060.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::17) To PA4PR04MB9416.eurprd04.prod.outlook.com
- (2603:10a6:102:2ab::21)
+        Wed, 22 Mar 2023 04:00:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB1F20577;
+        Wed, 22 Mar 2023 01:00:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E093E61F9A;
+        Wed, 22 Mar 2023 08:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5A8C433EF;
+        Wed, 22 Mar 2023 08:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679472045;
+        bh=OPBzJ3ESn40XjiD47ERlPzCtyE6tmr23jVFGgtzDlzQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cFB92XFWfMe9jdN3oEbs9KjCEF4JTb3tuoL2wgVN9oNmOgIhGQZgmXf7cJAVgeLkp
+         S6J4XAY5Mf9A7zY2t0Up/hIxNjuBrUe4RVrEvzhaS371c+HGRAGdGAzS77CL2aNHGj
+         +mZK2Ylyv8vxjN/vVJRIgzCO69Iv1kj8HeVekHu+i+/xkGRv4f0LBH8LQGDkOJOkjl
+         NsDueagEQtTiPPkY0PDYCA5E6Aq53PE/RbUJAWU6eWP21wuyAfyZe43ignONksLl2D
+         S89RGNUNLmv8scPcERlG60sGMpN5siKy/i1CVyHgrmuvqB262vbmSROkxqyOTn47TG
+         nGr/vuhhwaxgA==
+Message-ID: <c3d32c0c-43e0-ee62-d372-27cb09feb82e@kernel.org>
+Date:   Wed, 22 Mar 2023 10:00:38 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9416:EE_|PAXPR04MB8525:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99568957-63b5-4006-6706-08db2aaab009
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: otxP17bhcZt+BfAgEc1MdoMc6tS4Y3yf8VH+H1fgu46PsDMfCszxItzDkZUYQaOz5QPmldcOgaEl/aqI5scpCaUeR8U+mLXMLkV1V7wL58brl3xFz7eoM8X1pJV4taUmB+Mo9TFpNaR/pXMVKxpdf6Iy0O1yyBUVDfcsgIkDYKAMZpI0zLfgM6kbFycAXy2452rwlEngEcoi0FDcAp2YWdeYvAUjXEBvZSyEjfRCGp2uk9XvoNcs0HMMu+uHUiTol3/knIWw1nzIcY7FrzgeipMmr1FvK3fKQwuh4O2A8Np1kWxsH41UsdbmGsBojnfT0rqxlvKb3VJbp9iGr2AvVSgy4u0oQXe2FtUJoQ0uj3K2rOj7ogzq0UzMOP3io+h37usIqitCZkI6llPWuah1AA89AzDO1kb5KGTuRbD6Hy6qLbBM0QpQJUgeV0NoTn1JKATmUU8zLux2l9RA+NsifrT7RhmEKPNyK0hOAP/OnN3NYtnM0PdctmAbTlopyvmYE3fYLYjgBNSIUoGCvdsJwweHWdxZyf8v+SJ/Tos4dleAtD9Izgl/J+5j8WbFfQdNKAuOmlTs8ABtldYi7mXaDcC6TWIVQdrXNhmlZg0BqiKsvTK7n8+e67ITLkn/9bD8tGKz/g4iorTOMWgxoKPVhLuibl2olbP2PMPXpakRUxX/yGzPf3lCCB/gJvdJZ8pvQNVap4gw5RHrwKqdNOnBaw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(39860400002)(396003)(376002)(366004)(451199018)(2616005)(186003)(1076003)(6512007)(26005)(6486002)(4326008)(6506007)(8676002)(52116002)(66946007)(83380400001)(316002)(478600001)(66476007)(66556008)(5660300002)(41300700001)(8936002)(2906002)(38350700002)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RWz//H2exwWgjZ2UtW4TePbYmPUwVSdLiT+dugdBGf9yC8X+0kA2yuh03uTE?=
- =?us-ascii?Q?2rKELEI1fvMF0uuXIxYEJm0aCa3lbIMbLmYttFNTnLlD8TDcm1yHa8UZRwOm?=
- =?us-ascii?Q?iGqHVjrCRx0niKLExnHb1/RWrwMB8Baqb+qX1kHYqDMGv7tv0TmOw3hFTNnU?=
- =?us-ascii?Q?KON0zy02KvuF6xmYDJo+cj+flA3GViqN32+Fe1rZsaCZ1tMhyDaOIeP/i1w6?=
- =?us-ascii?Q?EaOkfSRQPthdxM+MB3RKtmxDuAVTKBalMZGdJ6r8kSGIskuTma9ZcmOothmm?=
- =?us-ascii?Q?vpwLpQN6oBLPC4emzD86AefVDlqFuX+jF5iBELOSHPIK2V+bknVFhbWLOpzv?=
- =?us-ascii?Q?TpYG1BuMoFcmPF1swjuvae5pxuWYKTfPedQaFv5VKuhY4CKe8jAux5YB3aop?=
- =?us-ascii?Q?fpMFbhFdSaL0dYG88m4Tdgnar9+X24QN694T2Hwb7Qhl+aY0+qq1JJE7CVMV?=
- =?us-ascii?Q?LlsRblOr2JsXpENoTSr2fvMxZbB0tRqqc5EQxTKWprms1U6TVqMpHjkFZ7RV?=
- =?us-ascii?Q?aNdG/mAGbAkitdzKny2kxTo+cgpa98EMXy+8noLCs4TYn7P1nDVvcO/z+lpg?=
- =?us-ascii?Q?Xi8IE3RoZPfnMqP9CWJiMnM7KH7va6NnEaM+79WHcgPECXeLs0QnxsHkbGtZ?=
- =?us-ascii?Q?XqF9XdhOXovG13cHfkEw1yIQuDqwFCVjtT6/OtnH8kzQ6eAx/X1n5+XxXRSb?=
- =?us-ascii?Q?CDkqihNA0uFz9ZlFbkcjo9+qs3Q+Pr7EZa/EPftBjLy8US5Pa3JAgV7cJzds?=
- =?us-ascii?Q?0TR1ZhksmE7kZ23YG8CmXsYOh+KJoLkZcHirbYZkByAxUyoLDG9svHkQF3oh?=
- =?us-ascii?Q?DL2jUVzV7lSIhQMWQ6xEZ/UFN6r08tm9tv33zWYIHMe0qyLUPYrn0ABg7R3R?=
- =?us-ascii?Q?c4wYTVdOBnAtEjSNCXo34+jNYXfqHbth96+09aUqO2obpCuAHYaXx0Udhjhl?=
- =?us-ascii?Q?SCL7z3X1ARZenBF6Wou5BXaEp0Qe1p5vnsBxDI0Bs8G506eG3Ip/7s15YRd4?=
- =?us-ascii?Q?QzJKgQBQXQjYbNN3cCpSOl3/6Q0Nlg8cQaq9dABO3EE2FRGIoV2doHt7mKYF?=
- =?us-ascii?Q?foR8czV4ugs1TYPiNI1pJlPm1eFvf6P2oVleywm55TFlxeqglrMptZsaHjIi?=
- =?us-ascii?Q?XWBze+VqnlXbP3Wndb0C7IilB4knRKzcreCAkF2dT+Hfs/8v8gB+WG+roF43?=
- =?us-ascii?Q?qHedmd8CdAln8CFBlICi60xHZCHTLTBuPtwyBhLRnEheBN0xcPGpSi6cLS0Y?=
- =?us-ascii?Q?B5bghCnuXPs6ggEJNDgWfNiza7xhIn8uI28JwSLgtI2QeM8afiT5Ut+IEaJR?=
- =?us-ascii?Q?B+fMY24v4LdxeO8RyTT2zXXfPD3L0tXmpUDMqOIPdEJCKnVpBCuSWaGL7GgX?=
- =?us-ascii?Q?Y5JrJau1QCoRkBLwEgAvQ8iSkB39Y2unCxSEBSb1Wl6mHuG/FLXQ672kUdEa?=
- =?us-ascii?Q?jx9AjLN0X12+YDvbqWyXOw2YTcjHJLG3OQhXIUuQ1yuJSJsKBsLI0XYIYKAz?=
- =?us-ascii?Q?40+Uqf83BU1k1QZ4t1vCzplsMdRqQcmziKReARbZ2CQpCpsZXg9etz52LovH?=
- =?us-ascii?Q?cQUROvV/OPKpc7yFzbUr40FoN8B9nbKqsOkgVRru?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99568957-63b5-4006-6706-08db2aaab009
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 07:54:40.2136
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XTnl5YXfXumwMFM3WiYs+B/6NS7/t0A69DtkMQqoYx7hPyxcgz8SMft+sfilwk2aX6uEWvEmZ0yTC8mesICUUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8525
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
+ configuration.
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Rob Herring <robh@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-6-minda.chen@starfivetech.com>
+ <20230320153419.GB1713196-robh@kernel.org>
+ <2311a888-8861-ade6-d46f-caff4fc3ec73@starfivetech.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <2311a888-8861-ade6-d46f-caff4fc3ec73@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi Minda,
 
-"-mfunction-return=thunk -mindirect-branch-register" are only valid
-for x86. So introduce compiler operation check to avoid such issues
+On 21/03/2023 14:35, Minda Chen wrote:
+> 
+> 
+> On 2023/3/20 23:34, Rob Herring wrote:
+>> On Wed, Mar 15, 2023 at 06:44:11PM +0800, Minda Chen wrote:
+>>> USB Glue layer and Cadence USB subnode configuration,
+>>> also includes USB and PCIe phy dts configuration.
+>>>
+>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>>> ---
+>>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
+>>>  2 files changed, 61 insertions(+)
+>>>
+>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> index a132debb9b53..c64476aebc1a 100644
+>>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>>> @@ -236,3 +236,10 @@
+>>>  	pinctrl-0 = <&uart0_pins>;
+>>>  	status = "okay";
+>>>  };
+>>> +
+>>> +&usb0 {
+>>> +	status = "okay";
+>>> +	usbdrd_cdns3: usb@0 {
+>>> +		dr_mode = "peripheral";
+>>> +	};
+>>> +};
+>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> index f70a4ed47eb4..17722fd1be62 100644
+>>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>> @@ -362,6 +362,60 @@
+>>>  			status = "disabled";
+>>>  		};
+>>>  
+>>> +		usb0: usb@10100000 {
+>>> +			compatible = "starfive,jh7110-usb";
+>>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>>> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>>> +			starfive,sys-syscon = <&sys_syscon 0x18>;
+>>> +			status = "disabled";
+>>> +			#address-cells = <1>;
+>>> +			#size-cells = <1>;
+>>> +			ranges = <0x0 0x0 0x10100000 0x100000>;
+>>> +
+>>> +			usbdrd_cdns3: usb@0 {
+>>> +				compatible = "cdns,usb3";
+>>
+>> This pattern of USB wrapper and then a "generic" IP node is discouraged 
+>> if it is just clocks, resets, power-domains, etc. IOW, unless there's an 
+>> actual wrapper h/w block with its own registers, then don't do this 
+>> split. Merge it all into a single node.
+>>
+> I am afraid it is difficult to merge in one single node. 
+> 
+> 1.If cadence3 usb device is still the sub device. All the dts setting are in
+> StarFive node. This can not work.
+> StarFive driver code Using platform_device_add generate cadenc3 usb platform device. 
+> Even IO memory space setting can be passed to cadence3 USB, PHY setting can not be passed.
+> For the PHY driver using dts now. But in this case, Cadence3 USB no dts configure.
+> 
+> 2. Just one USB Cadence platform device.
+> Maybe this can work. But Cadence USB driver code cdns3-plat.c required to changed.
+> 
+> Hi Peter Pawel and Roger
+>    There is a "platform_suspend" function pointer in "struct cdns3_platform_data"，
+>    Add "platform_init" and "platform_exit" for our JH7110 platform. Maybe it can work.
+>    Is it OK?   
 
-Fixes: 0d0ed4006127 ("tools/virtio: enable to build with retpoline")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- tools/virtio/Makefile | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+Once you move all the syscon register modifications from your wrapper driver
+to your PHY driver, only clock and reset control are left in your wrapper driver.
+This is generic enough to be done in the cdns3,usb driver itself so you don't need a
+wrapper node.
 
-diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
-index 7b7139d97d74..1a9e1be52e4f 100644
---- a/tools/virtio/Makefile
-+++ b/tools/virtio/Makefile
-@@ -4,7 +4,26 @@ test: virtio_test vringh_test
- virtio_test: virtio_ring.o virtio_test.o
- vringh_test: vringh_test.o vringh.o virtio_ring.o
+Pawel, do you agree?
  
--CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h -mfunction-return=thunk -fcf-protection=none -mindirect-branch-register
-+TMPOUT = .tmp_$$$$
-+try-run = $(shell set -e;		\
-+	TMP=$(TMPOUT)/tmp;		\
-+	trap "rm -rf $(TMPOUT)" EXIT;	\
-+	mkdir -p $(TMPOUT);		\
-+	if ($(1)) >/dev/null 2>&1;	\
-+	then echo "$(2)";		\
-+	else echo "$(3)";		\
-+	fi)
-+
-+__cc-option = $(call try-run,\
-+	$(1) -Werror $(2) -c -x c /dev/null -o "$$TMP",$(2),)
-+cc-option = $(call __cc-option, $(CC),$(1))
-+
-+CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h
-+
-+CFLAGS += $(call cc-option,-mfunction-return=thunk)
-+CFLAGS += $(call cc-option,-fcf-protection=none)
-+CFLAGS += $(call cc-option,-mindirect-branch-register)
-+
- CFLAGS += -pthread
- LDFLAGS += -pthread
- vpath %.c ../../drivers/virtio ../../drivers/vhost
--- 
-2.37.1
+>>> +				reg = <0x0 0x10000>,
+>>> +				      <0x10000 0x10000>,
+>>> +				      <0x20000 0x10000>;
+>>> +				reg-names = "otg", "xhci", "dev";
+>>> +				interrupts = <100>, <108>, <110>;
+>>> +				interrupt-names = "host", "peripheral", "otg";
+>>> +				phys = <&usbphy0>;
+>>> +				phy-names = "cdns3,usb2-phy";
+>>
+>> No need for *-names when there is only 1 entry. Names are local to the 
+>> device and only to distinguish entries, so 'usb2' would be sufficient 
+>> here.
+>>
+> The PHY name 'cdns3,usb2-phy'  is defined in cadence3 usb driver code.
+> Cadence USB3 driver code using this name to get PHY instance.
+> And all the PHY ops used in Cadence3 USB sub device. 
+>>> +				maximum-speed = "super-speed";
+>>> +			};
+>>> +		};
+>>> +
+>>> +		usbphy0: phy@10200000 {
+>>> +			compatible = "starfive,jh7110-usb-phy";
+>>> +			reg = <0x0 0x10200000 0x0 0x10000>;
+>>> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>>> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
+>>> +			clock-names = "125m", "app_125";
+>>> +			#phy-cells = <0>;
+>>> +		};
+>>> +
+>>> +		pciephy0: phy@10210000 {
+>>> +			compatible = "starfive,jh7110-pcie-phy";
+>>> +			reg = <0x0 0x10210000 0x0 0x10000>;
+>>> +			#phy-cells = <0>;
+>>> +		};
+>>> +
+>>> +		pciephy1: phy@10220000 {
+>>> +			compatible = "starfive,jh7110-pcie-phy";
+>>> +			reg = <0x0 0x10220000 0x0 0x10000>;
+>>> +			#phy-cells = <0>;
+>>> +		};
+>>> +
+>>>  		stgcrg: clock-controller@10230000 {
+>>>  			compatible = "starfive,jh7110-stgcrg";
+>>>  			reg = <0x0 0x10230000 0x0 0x10000>;
+>>> -- 
+>>> 2.17.1
+>>>
 
+cheers,
+-roger
