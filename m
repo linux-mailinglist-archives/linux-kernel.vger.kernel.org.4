@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E7E6C4558
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1656C455C
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 09:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCVItp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 04:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S230202AbjCVIun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 04:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjCVItn (ORCPT
+        with ESMTP id S230109AbjCVIul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 04:49:43 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0BB53DB1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 01:49:41 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 068E9A58;
-        Wed, 22 Mar 2023 09:49:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1679474980;
-        bh=6QZ1PsOMp+7W6iDxFRNuFgWGUQvAt/eYqNCv/Wjo14I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mzvCulRemaeNYC8FQXQhe6QvMW4vt/EtlPbKoN9ruDFQINnftCqvEZHq65a/cyc/t
-         JvZaoW1BgyPT0S0IM2OjcT9CeM+wDOopSjbIs+2xMzMTGWvtTPo0qtF41ku6nVNka7
-         bnNa3fEkkXVRaL+Akxm0kbscBLJWvbLHqO5T+uR8=
-Date:   Wed, 22 Mar 2023 10:49:46 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     hyun.kwon@xilinx.com, airlied@gmail.com, daniel@ffwll.ch,
-        michal.simek@xilinx.com, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: xlnx: zynqmp: Use dev_err_probe()
-Message-ID: <20230322084946.GI20234@pendragon.ideasonboard.com>
-References: <202303221625255005719@zte.com.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202303221625255005719@zte.com.cn>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 22 Mar 2023 04:50:41 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EADB591CF;
+        Wed, 22 Mar 2023 01:50:39 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PhMck0XqTz501Sl;
+        Wed, 22 Mar 2023 16:50:30 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 32M8oGQu010729;
+        Wed, 22 Mar 2023 16:50:16 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 22 Mar 2023 16:50:19 +0800 (CST)
+Date:   Wed, 22 Mar 2023 16:50:19 +0800 (CST)
+X-Zmail-TransId: 2afa641ac14b729-e53b0
+X-Mailer: Zmail v1.0
+Message-ID: <202303221650190306634@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <hdegoede@redhat.com>
+Cc:     <dmitry.torokhov@gmail.com>, <linux-input@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogc2lsZWFkIC0gVXNlIGRldl9lcnJfcHJvYmUoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32M8oGQu010729
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 641AC154.001/4PhMck0XqTz501Sl
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Thank you for the patch.
+Replace the open-code with dev_err_probe() to simplify the code.
 
-On Wed, Mar 22, 2023 at 04:25:25PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Replace the open-code with dev_err_probe() to simplify the code.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/gpu/drm/xlnx/zynqmp_dp.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/xlnx/zynqmp_dp.c b/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> index 0a7b466446fb..c6c2cb4626b9 100644
-> --- a/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> +++ b/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> @@ -1700,10 +1700,8 @@ int zynqmp_dp_probe(struct zynqmp_dpsub *dpsub)
-> 
->  	dp->reset = devm_reset_control_get(dp->dev, NULL);
->  	if (IS_ERR(dp->reset)) {
-> -		if (PTR_ERR(dp->reset) != -EPROBE_DEFER)
-> -			dev_err(dp->dev, "failed to get reset: %ld\n",
-> -				PTR_ERR(dp->reset));
-> -		ret = PTR_ERR(dp->reset);
-> +		ret = dev_err_probe(dp->dev, PTR_ERR(dp->reset),
-> +				    "failed to get reset: %ld\n");
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/input/touchscreen/silead.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-There's no format string argument anymore, so you should drop the
-": %ld". Didn't the compiler warn about this ?
+diff --git a/drivers/input/touchscreen/silead.c b/drivers/input/touchscreen/silead.c
+index a37fac089010..f464155aed65 100644
+--- a/drivers/input/touchscreen/silead.c
++++ b/drivers/input/touchscreen/silead.c
+@@ -706,11 +706,9 @@ static int silead_ts_probe(struct i2c_client *client)
 
->  		goto err_free;
->  	}
-> 
+ 	/* Power GPIO pin */
+ 	data->gpio_power = devm_gpiod_get_optional(dev, "power", GPIOD_OUT_LOW);
+-	if (IS_ERR(data->gpio_power)) {
+-		if (PTR_ERR(data->gpio_power) != -EPROBE_DEFER)
+-			dev_err(dev, "Shutdown GPIO request failed\n");
+-		return PTR_ERR(data->gpio_power);
+-	}
++	if (IS_ERR(data->gpio_power))
++		return dev_err_probe(dev, PTR_ERR(data->gpio_power),
++				     "Shutdown GPIO request failed\n");
 
+ 	error = silead_ts_setup(client);
+ 	if (error)
 -- 
-Regards,
-
-Laurent Pinchart
+2.25.1
