@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787B46C4E67
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFDE6C4E6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjCVOsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S230322AbjCVOsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjCVOr5 (ORCPT
+        with ESMTP id S229656AbjCVOsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:47:57 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E8F469CCE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:46:32 -0700 (PDT)
-Received: from 8bytes.org (p200300c27714bc0086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:7714:bc00:86ad:4f9d:2505:dd0d])
+        Wed, 22 Mar 2023 10:48:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75EA69217
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Jo4szZ4FZcTQ+zI+smakOHqo+Q6smmJ4l5cIPdumn/Y=; b=f0L1C07DEYVBTLW160fPMk8G3J
+        BscFktQ/PN0rta7oVdlKWTvsbPvyADPog47HHmCz5br5qSSjPh6n/VN2BL5zolOUBlNGj2Ak/XxLo
+        74WMK6Kb0hITbNi2MRngKfnW0ni6Fz0vrlPBfDZWK/fBY+yo3nGDjYpoL5j4xK05ukpzvxcKYogdj
+        69wcpfBRTPJfkKZZbxN7HvvwqRYK0s/56cvOB0gKRGDzAVNGhaKkCr+UUZWx+rB1kuCahB9UtaNaX
+        0+2HAxtoHCH265pS9xFh3mbKWE2RmGLGEqOL4U7l9FpGiuYg8INnSD/PpRA6o7+plf6ridGBgno3W
+        EunR2Kkw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pezik-004ZrU-2H;
+        Wed, 22 Mar 2023 14:45:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id DBE85242DF9;
-        Wed, 22 Mar 2023 15:45:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1679496342;
-        bh=8j2T+ZlX4ZdTrhXu8KGdXO9F9DabmzZ92pCdTRnFhPE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=83CfWM2r6ZRSwKy4szm9mVcN5wWE8AHgXjbnvCtozx9kdOxTPpyEyMMDlL/yPJyu2
-         ro4y7rRt+L7Ua53Sf3mzYzPI6B9LIKMBqc7IjTn8TVlwbrRowL2airzwgkw5O/Gd0K
-         qR9baF41TN1EjQu1GrC1t5uGt8vjQjCz8wPDJHiXV0qAc8F25wFLcTqCyHzvjMhQve
-         9lZJSjqj51lOLYeoU/AsNFrIkb/PpsXAJMNK1WVIRC7k1wbApPWTSw9l7+c5kwT5k0
-         QKoKAbmke0KbQhX9/iNWO8+nC8RTQCm4hHyQIoEmdCVtQ/YGJ9FHSnDCLDKdKKVIam
-         +PA+CMMNeRb+g==
-Date:   Wed, 22 Mar 2023 15:45:40 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/6] iommu: Extend changing default domain to normal
- group
-Message-ID: <ZBsUlHuZ4kLfSGXI@8bytes.org>
-References: <20230322064956.263419-1-baolu.lu@linux.intel.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7207430035F;
+        Wed, 22 Mar 2023 15:45:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4E0F3201FFA49; Wed, 22 Mar 2023 15:45:45 +0100 (CET)
+Date:   Wed, 22 Mar 2023 15:45:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 09/11] static_call: Make NULL static calls consistent
+Message-ID: <20230322144545.GE2357380@hirez.programming.kicks-ass.net>
+References: <cover.1679456900.git.jpoimboe@kernel.org>
+ <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322064956.263419-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <7638861ae89606b1277ad4235654bba2b880f313.1679456900.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 02:49:50PM +0800, Lu Baolu wrote:
-> Lu Baolu (6):
->   iommu/ipmmu-vmsa: Call arm_iommu_release_mapping() in release path
->   iommu: Split iommu_group_remove_device() into helpers
->   iommu: Same critical region for device release and removal
->   iommu: Move lock from iommu_change_dev_def_domain() to its caller
->   iommu: Replace device_lock() with group->mutex
->   iommu: Cleanup iommu_change_dev_def_domain()
-> 
->  drivers/iommu/iommu.c                         | 273 ++++++++----------
->  drivers/iommu/ipmmu-vmsa.c                    |  14 +-
->  .../ABI/testing/sysfs-kernel-iommu_groups     |   1 -
->  3 files changed, 130 insertions(+), 158 deletions(-)
+On Tue, Mar 21, 2023 at 09:00:15PM -0700, Josh Poimboeuf wrote:
+> + *   or using static_call_update() with a NULL function pointer. In both cases
+> + *   the HAVE_STATIC_CALL implementation will patch the trampoline with a RET
+> +*    instruction, instead of an immediate tail-call JMP. HAVE_STATIC_CALL_INLINE
+> +*    architectures can patch the trampoline call to a NOP.
+>   *
+>   *   In all cases, any argument evaluation is unconditional. Unlike a regular
+>   *   conditional function pointer call:
 
-Applied, thanks.
+you wrecked the indent there ;-)
