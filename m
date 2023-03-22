@@ -2,249 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763AC6C4143
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844AD6C414A
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 04:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCVDra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 21 Mar 2023 23:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S230080AbjCVDuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 21 Mar 2023 23:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjCVDrV (ORCPT
+        with ESMTP id S229751AbjCVDut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 21 Mar 2023 23:47:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538FC2F7B7;
-        Tue, 21 Mar 2023 20:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679456840; x=1710992840;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4Qx8FlvzNHHlgWRW4V7LLgEkErNpSgGrzQJdEa45mTk=;
-  b=M+p9qe0SWSf9Flakv86O7FG7Q61VueZ+igdEIk4m7A8o0rcyEZuUy1v7
-   HTh4ho4WpCo0/fJhOL5pMqxwB9aHLhwg908cq/KaiiuhnFtJGD8ASxOTp
-   KfEmSa6oz8r04786Kiuka+NJRFS/q4O0ppExeuQYvzBLAvL300igD8mdq
-   cWda//dvinj21OrWz9fhy70CJqdaZO1DvXGkIUeNNscwhDgdVtAhetQsW
-   wQ5mgWLlEEsiSCTzHvunOj851L0zR6TCGhwyqq4WHfUGHDpoFAOpMnGFc
-   ju2iXzXnL2iQACid4+cBMGA5XAny1PwExmFLWEw7B4qpQrt4pVm0pD5AV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="340655853"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="340655853"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 20:47:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="825227596"
-X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
-   d="scan'208";a="825227596"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2023 20:47:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pepRS-000Cpy-2M;
-        Wed, 22 Mar 2023 03:47:14 +0000
-Date:   Wed, 22 Mar 2023 11:47:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ross Zwisler <zwisler@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
-Message-ID: <202303221157.uDnuxtAh-lkp@intel.com>
-References: <20230321215121.71b339c5@gandalf.local.home>
+        Tue, 21 Mar 2023 23:50:49 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210F1366BD
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 20:50:48 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id z83so19641986ybb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 21 Mar 2023 20:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679457047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G0VhsPPpparLUNdAbe0j6h80lVgFzUm7YaynPl05M0Y=;
+        b=nKYq8dWuPfnWtGwtat/C+wgBZTbS19b8glC8jBbV0VqStowtRRf+QEWssa96OamjmH
+         hTNuozEcTYFz+0SlnnEUTCPdZYRnwfporxdPl55CvAI5td2Bwv52J+XxmFDSX44hyVy/
+         ddUs2jswSP6ztRzIojmxKA6Gbd12DoJ4dmetX6++rEmOQJP7DlBmFfUImddgoj4fpupS
+         l13pir9HtjvOcjHxM7R1UltJbPZQ6oVQgMYuyqXGN/hgsA1+8Y0o7PMItv3iDosTRytP
+         I+u/QFrLedODJvoqsDFgVYLCgSsOhXUkFfNli/1uSweBK5MTcXfvyPGMvGNa1CzMwh54
+         BMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679457047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G0VhsPPpparLUNdAbe0j6h80lVgFzUm7YaynPl05M0Y=;
+        b=o5pnTUMGLA3Rnk0oQtUhevdnmOUXZVZmZyWxaet7cy3XleF6fAFzbblgslbmLFCAyV
+         TwYVt1zn1BUP0bWMVHbOzRNK4Z2576R8+FELfG0++eMpeIhDChl9q/obrINFDLlHGLIL
+         Thl8nuKQm7dC7wXzA5kaLJQ7hHmq2qfy8fzV24MxzbaiHCLJj6mFh1kngng33necflnO
+         XAN6uR/Hv0JosQK4K/DKmmVSGCfblDTW06cpx4thfHBa15unAG9aQiBoWsm+SIWUQQe5
+         bAmf0QMGb/hutKyvACCa2UPj/6zF8U/9qdjddPRwXpRAIqZ6jPwD7cVsEcT1lcKjpF+a
+         VaLA==
+X-Gm-Message-State: AAQBX9cH35ceee5MdDxheVRC433aMPrsMXS8Viq1NDa2zkK5LGB1puxA
+        R9hR/2MMsUOfvo6irMwcFwitlTcwtTfDDnziiIvsSD4MmA24C7fcBmS2
+X-Google-Smtp-Source: AKy350b53zG/5QAQ5I/YqLKtRbtkfqZAKp748OqC6MN+2F+jWaJOYucp9LrzLrPeTgTMflajIql700MYWPpyzuqRfgg=
+X-Received: by 2002:a25:e90f:0:b0:b3d:c59:4d26 with SMTP id
+ n15-20020a25e90f000000b00b3d0c594d26mr3091540ybd.5.1679457047185; Tue, 21 Mar
+ 2023 20:50:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321215121.71b339c5@gandalf.local.home>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320233720.3488453-8-jstultz@google.com> <202303211827.IXnKJ5rO-lkp@intel.com>
+In-Reply-To: <202303211827.IXnKJ5rO-lkp@intel.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 21 Mar 2023 20:50:36 -0700
+Message-ID: <CANDhNConSPK78JXv5=Jok6T7y7F8APERYsCFD6h7J+ULRjzasA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] sched: Replace rq->curr access w/ rq_curr(rq)
+To:     kernel test robot <lkp@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, oe-kbuild-all@lists.linux.dev,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qyousef@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Zimuzo Ezeozue <zezeozue@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc3 next-20230321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-patch link:    https://lore.kernel.org/r/20230321215121.71b339c5%40gandalf.local.home
-patch subject: [PATCH] tracing: Trace instrumentation begin and end
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230322/202303221157.uDnuxtAh-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-        git checkout 1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k prepare
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221157.uDnuxtAh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from include/asm-generic/bug.h:6,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/rcupdate.h:25,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from arch/m68k/kernel/asm-offsets.c:15:
-   include/linux/thread_info.h: In function 'check_copy_size':
->> include/linux/instrumentation.h:87:65: error: '_THIS_IP_' undeclared (first use in this function)
-      87 | # define instrumentation_begin() do_trace_instrumentation_begin(_THIS_IP_, _RET_IP_);
-         |                                                                 ^~~~~~~~~
-   include/asm-generic/bug.h:96:17: note: in expansion of macro 'instrumentation_begin'
-      96 |                 instrumentation_begin();                                \
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:94:33: note: in expansion of macro '__WARN_printf'
-      94 | #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
-         |                                 ^~~~~~~~~~~~~
-   include/asm-generic/bug.h:124:17: note: in expansion of macro '__WARN'
-     124 |                 __WARN();                                               \
-         |                 ^~~~~~
-   include/linux/once_lite.h:31:25: note: in expansion of macro 'WARN_ON'
-      31 |                         func(__VA_ARGS__);                              \
-         |                         ^~~~
-   include/asm-generic/bug.h:147:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-     147 |         DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/thread_info.h:249:13: note: in expansion of macro 'WARN_ON_ONCE'
-     249 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^~~~~~~~~~~~
-   include/linux/instrumentation.h:87:65: note: each undeclared identifier is reported only once for each function it appears in
-      87 | # define instrumentation_begin() do_trace_instrumentation_begin(_THIS_IP_, _RET_IP_);
-         |                                                                 ^~~~~~~~~
-   include/asm-generic/bug.h:96:17: note: in expansion of macro 'instrumentation_begin'
-      96 |                 instrumentation_begin();                                \
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:94:33: note: in expansion of macro '__WARN_printf'
-      94 | #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
-         |                                 ^~~~~~~~~~~~~
-   include/asm-generic/bug.h:124:17: note: in expansion of macro '__WARN'
-     124 |                 __WARN();                                               \
-         |                 ^~~~~~
-   include/linux/once_lite.h:31:25: note: in expansion of macro 'WARN_ON'
-      31 |                         func(__VA_ARGS__);                              \
-         |                         ^~~~
-   include/asm-generic/bug.h:147:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-     147 |         DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/thread_info.h:249:13: note: in expansion of macro 'WARN_ON_ONCE'
-     249 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^~~~~~~~~~~~
->> include/linux/instrumentation.h:87:76: error: '_RET_IP_' undeclared (first use in this function)
-      87 | # define instrumentation_begin() do_trace_instrumentation_begin(_THIS_IP_, _RET_IP_);
-         |                                                                            ^~~~~~~~
-   include/asm-generic/bug.h:96:17: note: in expansion of macro 'instrumentation_begin'
-      96 |                 instrumentation_begin();                                \
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:94:33: note: in expansion of macro '__WARN_printf'
-      94 | #define __WARN()                __WARN_printf(TAINT_WARN, NULL)
-         |                                 ^~~~~~~~~~~~~
-   include/asm-generic/bug.h:124:17: note: in expansion of macro '__WARN'
-     124 |                 __WARN();                                               \
-         |                 ^~~~~~
-   include/linux/once_lite.h:31:25: note: in expansion of macro 'WARN_ON'
-      31 |                         func(__VA_ARGS__);                              \
-         |                         ^~~~
-   include/asm-generic/bug.h:147:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-     147 |         DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/thread_info.h:249:13: note: in expansion of macro 'WARN_ON_ONCE'
-     249 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:114: arch/m68k/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+On Tue, Mar 21, 2023 at 4:12=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi John,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on tip/sched/core]
+> [also build test ERROR on tip/locking/core tip/master tip/auto-latest lin=
+us/master v6.3-rc3 next-20230321]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/John-Stultz/lockin=
+g-ww_mutex-Remove-wakeups-from-under-mutex-wait_lock/20230321-074149
+> patch link:    https://lore.kernel.org/r/20230320233720.3488453-8-jstultz=
+%40google.com
+> patch subject: [PATCH v2 07/12] sched: Replace rq->curr access w/ rq_curr=
+(rq)
+> config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20230321=
+/202303211827.IXnKJ5rO-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce (this is a W=3D1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/77507c3a77e09cdc6=
+27a73364246f252d918de41
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review John-Stultz/locking-ww_mutex-Rem=
+ove-wakeups-from-under-mutex-wait_lock/20230321-074149
+>         git checkout 77507c3a77e09cdc627a73364246f252d918de41
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
+>         make W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303211827.IXnKJ5rO-lkp@i=
+ntel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from include/linux/rculist.h:11,
+>                     from include/linux/sched/signal.h:5,
+>                     from include/linux/sched/cputime.h:5,
+>                     from kernel/sched/build_policy.c:17:
+>    kernel/sched/cputime.c: In function 'kcpustat_field':
+> >> kernel/sched/cputime.c:997:42: error: 'struct rq' has no member named =
+'curr'
+>      997 |                 curr =3D rcu_dereference(rq->curr);
+>          |                                          ^~
 
 
-vim +/_THIS_IP_ +87 include/linux/instrumentation.h
-
-    46	
-    47	/*
-    48	 * Because instrumentation_{begin,end}() can nest, objtool validation considers
-    49	 * _begin() a +1 and _end() a -1 and computes a sum over the instructions.
-    50	 * When the value is greater than 0, we consider instrumentation allowed.
-    51	 *
-    52	 * There is a problem with code like:
-    53	 *
-    54	 * noinstr void foo()
-    55	 * {
-    56	 *	instrumentation_begin();
-    57	 *	...
-    58	 *	if (cond) {
-    59	 *		instrumentation_begin();
-    60	 *		...
-    61	 *		instrumentation_end();
-    62	 *	}
-    63	 *	bar();
-    64	 *	instrumentation_end();
-    65	 * }
-    66	 *
-    67	 * If instrumentation_end() would be an empty label, like all the other
-    68	 * annotations, the inner _end(), which is at the end of a conditional block,
-    69	 * would land on the instruction after the block.
-    70	 *
-    71	 * If we then consider the sum of the !cond path, we'll see that the call to
-    72	 * bar() is with a 0-value, even though, we meant it to happen with a positive
-    73	 * value.
-    74	 *
-    75	 * To avoid this, have _end() be a NOP instruction, this ensures it will be
-    76	 * part of the condition block and does not escape.
-    77	 */
-    78	#define __instrumentation_end(c) ({					\
-    79		do_trace_instrumentation_end(_THIS_IP_, _RET_IP_);		\
-    80		asm volatile(__stringify(c) ": nop\n\t"				\
-    81			     ".pushsection .discard.instr_end\n\t"		\
-    82			     ".long " __stringify(c) "b - .\n\t"		\
-    83			     ".popsection\n\t" : : "i" (c));			\
-    84	})
-    85	#define instrumentation_end() __instrumentation_end(__COUNTER__)
-    86	#else /* !CONFIG_NOINSTR_VALIDATION */
-  > 87	# define instrumentation_begin() do_trace_instrumentation_begin(_THIS_IP_, _RET_IP_);
-    88	# define instrumentation_end()	 do_trace_instrumentation_end(_THIS_IP_, _RET_IP_);
-    89	#endif /* CONFIG_NOINSTR_VALIDATION */
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Ah! Thanks for catching this. I've fixed it up for the next revision.
+-john
