@@ -2,136 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E396C5821
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7200E6C5823
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 21:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjCVUuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 16:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S230393AbjCVUv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 16:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjCVUuf (ORCPT
+        with ESMTP id S229670AbjCVUvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:50:35 -0400
-Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B2D5ADD7
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 13:48:34 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 6BD4616C0008;
-        Wed, 22 Mar 2023 22:48:32 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5D_69F_8jHUO; Wed, 22 Mar 2023 22:48:31 +0200 (EET)
-From:   Marian Postevca <posteuca@mutex.one>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1679518111; bh=UGI4wuqk28si00gqCk+pXZy1oVhNUVal257IJk22lcA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NMckDuv5o61W0GTAMnDxZYomYSjRDvNjw2n9tfnDDAipdtO80UIWbF8O6iq+58nl5
-         fCy4eAxEWvy3bgxhjzzyZIE4/SKKpQ6F1XvSAHs2/wVoORoUGR/XK+vYiA65Igati2
-         XR3es+DN0t0kKnjmLkUiDN+OBObA4KNmfyoe8BPI=
-To:     Mark Brown <broonie@kernel.org>,
-        =?utf-8?B?5rKI5LiA6LaF?= <zhuning0077@gmail.com>,
-        yangxiaohua <yangxiaohua@everest-semi.com>,
-        Zhu Ning <zhuning@everest-semi.com>
-Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 3/4] ASoC: amd: acp: Add machine driver that enables
- sound for systems with a ES8336 codec
-In-Reply-To: <ZBr9rJn50ovG1w9W@sirena.org.uk>
-References: <20230320203519.20137-1-posteuca@mutex.one>
- <20230320203519.20137-4-posteuca@mutex.one>
- <141a3320-ff65-459f-9d00-c8bed691dcfc@sirena.org.uk>
- <87lejpwxzf.fsf@mutex.one> <ZBr9rJn50ovG1w9W@sirena.org.uk>
-Date:   Wed, 22 Mar 2023 22:48:28 +0200
-Message-ID: <87ttycjyw3.fsf@mutex.one>
+        Wed, 22 Mar 2023 16:51:01 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E5912BC4;
+        Wed, 22 Mar 2023 13:48:57 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bj20so5216946oib.3;
+        Wed, 22 Mar 2023 13:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679518136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MPANpQo2pbBjv7bN+m6aSZeybQN0T9mXhbFUpa61TPQ=;
+        b=fx9hdW6p0dQdtSIlZNZVy26SYG5ERPukARJpRq4EZ12B/ilaMyklpkLz3p7498u1ZP
+         zkKaBNEiOwxxqaHEn0DdRQQwxjYO8fSCzYCpT1Q4hn26Ps1v4J55dK2f4sPtW61yf8Eo
+         OLliIc20a9ml5L+Z6oQiuhKfLNvBmTpq51k+8V9lL/i64RxIutVo/LOaogcjkgNJYIZX
+         kk60XrmYuDM/OimXwdTNdasE8+NlQAAhO9M9VU8QHJGL7nXcaKpXDrcaeHXEatPnDqKQ
+         Z1btLvtCIdHOOk4yEmoY67WSIhz22y/Xm49IztnbYrLMkExi9Btd593xkfo+GFFOKTUJ
+         9lTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679518136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MPANpQo2pbBjv7bN+m6aSZeybQN0T9mXhbFUpa61TPQ=;
+        b=23qK7scEi9kd2mx6M0FM2LPdbpXps+3ufP0jVSss00or8i9CtZmWv5KBLWCdK/R6OY
+         xeYi2jpvwdO9BDO17sCMtLfX3QSaziPvzDL/RFQO4uZyJe0YTULz7sw9z30iWAqVhSRJ
+         D3JjL5ANtaMEkHXbUp6LT9B0caGsv2aJPKSzvqLWM7sjV5aDCX1cT8bdUxMCXD1fEBFV
+         BwcbIAyGi57QxGiMOgVK9kOUnQXotTdEqwWThYXJZZ5E7unUdbRQ3yWJ8w32+uMwzMWU
+         mxJHAwnGeTBblNAIZa2Vtdy34LdELl3ik5JVPYPcTSgo+ZZ29rC7LIrMUnfVuniI24yF
+         EWgQ==
+X-Gm-Message-State: AO0yUKVNouzjFdTiKxHai7iTjgoRTEIkBGJkrUTNrBT6n+9tHjaLn6Ew
+        S3j6qrtfUEhWg8dacudmXAL4pcyahAwS2JVakLQ=
+X-Google-Smtp-Source: AK7set/ZbUQNbAR4aFIk7VnLqx7B6Seh+3ogULmXSVniL38EBZndSAX2MDpf7tdc0/FahMyfyYS6l4wNzt57YdsP8lY=
+X-Received: by 2002:aca:1010:0:b0:384:6d14:c707 with SMTP id
+ 16-20020aca1010000000b003846d14c707mr1304761oiq.5.1679518136556; Wed, 22 Mar
+ 2023 13:48:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20230306090633.65918-1-geert+renesas@glider.be> <f2ac0d80-fab1-8211-1dfe-cea078929e91@infradead.org>
+In-Reply-To: <f2ac0d80-fab1-8211-1dfe-cea078929e91@infradead.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 22 Mar 2023 13:48:45 -0700
+Message-ID: <CAF6AEGvxOdqeK65fWOqqOvTO4fHS83U4orMG6GdQyx1tcSiK_Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dpu: Fix bit-shifting UB in DPU_HW_VER() macro
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Brown <broonie@kernel.org> writes:
-
-> On Wed, Mar 22, 2023 at 12:17:24AM +0200, Marian Postevca wrote:
->> Mark Brown <broonie@kernel.org> writes:
+On Tue, Mar 21, 2023 at 8:08=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
 >
->> >> +	if (SND_SOC_DAPM_EVENT_ON(event))
->> >> +		acp3x_es83xx_set_gpios_values(priv, 1, 0);
->> >> +	else
->> >> +		acp3x_es83xx_set_gpios_values(priv, 0, 1);
 >
->> > Why are these two GPIOs tied together like this?
 >
->> These GPIOs represent the speaker and the headphone switches. When
->> activating the speaker GPIO you have to deactivate the headphone GPIO
->> and vice versa. The logic is taken from the discussion on the sofproject
->> pull request:
->> https://github.com/thesofproject/linux/pull/4112/commits/810d03e0aecdf0caf580a5179ee6873fb33485ab
->> and
->> https://github.com/thesofproject/linux/pull/4066
+> On 3/6/23 01:06, Geert Uytterhoeven wrote:
+> > With gcc-5 and CONFIG_UBSAN_SHIFT=3Dy:
+> >
+> >     drivers/gpu/drm/msm/msm_mdss.c: In function 'msm_mdss_enable':
+> >     drivers/gpu/drm/msm/msm_mdss.c:296:2: error: case label does not re=
+duce to an integer constant
+> >       case DPU_HW_VER_800:
+> >       ^
+> >     drivers/gpu/drm/msm/msm_mdss.c:299:2: error: case label does not re=
+duce to an integer constant
+> >       case DPU_HW_VER_810:
+> >       ^
+> >     drivers/gpu/drm/msm/msm_mdss.c:300:2: error: case label does not re=
+duce to an integer constant
+> >       case DPU_HW_VER_900:
+> >       ^
+> >
+> > This happens because for major revisions 8 or greather, the non-sign bi=
+t
+> > of the major revision number is shifted into bit 31 of a signed integer=
+,
+> > which is undefined behavior.
+> >
+> > Fix this by casting the major revision number to unsigned int.
+> >
+> > Fixes: efcd0107727c4f04 ("drm/msm/dpu: add support for SM8550")
+> > Fixes: 4a352c2fc15aec1e ("drm/msm/dpu: Introduce SC8280XP")
+> > Fixes: 100d7ef6995d1f86 ("drm/msm/dpu: add support for SM8450")
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 >
-> Sure, but that doesn't answer the question.  What is the reason
-> they're tied together - what if someone wants to play back from
-> both speaker and headphones simultaneously?
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Reviewed-by: Rob Clark <robdclark@gmail.com>
+
 >
-
-The GPIO handling is not documented in the codec datasheet, so I
-constructed this logic by looking at the existing implementations of
-machine drivers for this codec (sof_es8336.c, bytcht_es8316.c) and
-comments of Everest Semiconductor engineers on the sofproject
-pull requests. I'm saying all of this because I don't know the reasons
-why these GPIOs work the way they do.
-
-According to the Everest Semiconductor engineers this is the recommended
-way to switch these GPIOs:
-
-+--------------+--------------+----------------+
-|              | Speaker GPIO | Headphone GPIO |
-+--------------+--------------+----------------+
-| Speaker on   | active       | inactive       |
-| Headphone on | inactive     | active         |
-| Suspended    | inactive     | inactive       |
-+--------------+--------------+----------------+
-(https://github.com/thesofproject/linux/pull/4066/commits/b7f12e46a36b74a9992920154a65cd55f5b0cdb4#r1041693056)
-
-This lockstep between these two GPIOs can be seen in sof_es8336.c in
-pcm_pop_work_events() too.
-
-Regarding playing the speaker and headphone simultaneously, is not
-something I took into account. Is this even a valid usecase? The intel driver
-for es8336 doesn't seem to support it.
-
-Maybe someone from Everest Semiconductor can comment on this GPIO handling?
-
->> >> +static int acp3x_es83xx_suspend_pre(struct snd_soc_card *card)
->> >> +{
->> >> +	struct acp3x_es83xx_private *priv = get_mach_priv(card);
->> >> +
->> >> +	dev_dbg(priv->codec_dev, "card suspend\n");
->> >> +	snd_soc_component_set_jack(priv->codec, NULL, NULL);
->> >> +	return 0;
->> >> +}
+> Thanks.
 >
->> > That's weird, why do that?
+> > ---
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/g=
+pu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > index ddab9caebb18c40d..bbd3cbdd77956c5d 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> > @@ -19,8 +19,9 @@
+> >   */
+> >  #define MAX_BLOCKS    12
+> >
+> > -#define DPU_HW_VER(MAJOR, MINOR, STEP) (((MAJOR & 0xF) << 28)    |\
+> > -             ((MINOR & 0xFFF) << 16)  |\
+> > +#define DPU_HW_VER(MAJOR, MINOR, STEP)                       \
+> > +             ((((unsigned int)MAJOR & 0xF) << 28) |  \
+> > +             ((MINOR & 0xFFF) << 16) |               \
+> >               (STEP & 0xFFFF))
+> >
+> >  #define DPU_HW_MAJOR(rev)            ((rev) >> 28)
 >
->> This is needed because if suspending the laptop with the headphones
->> inserted, when resuming, the sound is not working anymore. Sound stops
->> working on speakers and headphones. Reinsertion and removals of the
->> headphone doesn't solve the problem.
->
->> This seems to be caused by the fact
->> that the GPIO IRQ stops working in es8316_irq() after resume.
->
-> That's a bug that should be fixed.
-
-Agreed, but I don't know how easy it is to fix, and I would like to
-first offer users of these laptops a working sound driver.
-Afterwards this issue can be analyzed and properly fixed.
-
-
+> --
+> ~Randy
