@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC6A6C51C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F012B6C51C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 18:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjCVREO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 13:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S231426AbjCVRET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 13:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjCVRDr (ORCPT
+        with ESMTP id S231133AbjCVRDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 13:03:47 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08945DC92
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:18 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l15-20020a05600c4f0f00b003ed58a9a15eso11934330wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:18 -0700 (PDT)
+        Wed, 22 Mar 2023 13:03:48 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7795ADED
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:21 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id m35so11968002wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 10:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679504595;
+        d=linaro.org; s=google; t=1679504596;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fF0kXha0iC7DXFpAivYe8iA4rI1+YTj1bu366LSCxxk=;
-        b=CODHf0ARi+ZAQwKJquFfTZVE8GcbNBB35tiLrdZgRYIyaxVhmUezxMFGMCvTfztcTb
-         zBY391pL+wcccrmfHqacIkJ0YwfRwFpDfuCK+Q9mDDiiYUqxSVdqaFsm4UhJtdgAcOk/
-         F6LAVGKFmL2U0VXmZXkuJANw/xDh74CEr1oqlpBHvEkF7uwCOz8mHJqBtcndkweTZu84
-         EWxQDoQICuRUaPaLZel4wmpg8X6v3kZxBzpnge4qiQbhvPObr36dnM6Ec00/y5F17gEs
-         WA6uVF72nkfgiZpQBflwbEFO/Re4i7Fk8rbofwYctPmB9ebZDYXgHUX0vTBFV7d3NVPO
-         81zQ==
+        bh=dujRv61zmcVnrqSD4vDmJ5J/GQAubkah0V6OA3TTILA=;
+        b=sKtjJBbDGU0biBN4S1JJo8juFcgpQhRBWIJGAKcjYfqy9mDBkD90dLvyqe3atDMZ7O
+         XTgAUDtnxcwY8iFQsqcSfi35s5ERoHbHgpFJZMZFzCfkkDAQS1EQ7IzcOyVuYFlHjKRk
+         ne1VdqeF7UJMvsWNQ0dSNlR/MGVit0NsFHHwthFZzTqT+af4yQgPFvda/iKJhrFzg64r
+         tuJrYlBhriAgxXqAAEt+D70oT3QTn6kMuGIUrIp2ZdGAl6pKcxqDh3Q1TyOnUM1pQO5P
+         9Sa8iTQAyeCByYSrmtx93sMxXdfx4TSd+ivb69qC5fn145xqbb91EKgJzCsF//6Jz2x0
+         agOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679504595;
+        d=1e100.net; s=20210112; t=1679504596;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fF0kXha0iC7DXFpAivYe8iA4rI1+YTj1bu366LSCxxk=;
-        b=Hq06LhmeKlh8A0mQ5tOBxmfgS3jDFQi8qFE9ZGSafMrGYwN3O4uCBH3oceklFBSPRn
-         or9p1P5qDxGpBEbKGQvyLG1yObv4MLsRD9GrN207Lby9I0kvLPQ/EcbMxHuOE4fW5s/+
-         ygN6lWk8M1550G3DcBn41U2TQ2R+4ubaL1KZNM9xH9iNvxgSOVTH8as4ZVGvs6Oq2Y13
-         /eNhotfZEpBBUmWytt8f6luVOCMcQf0JZX6LqTZB4leKs8P1xTftyYVc6vFWtD5xrCAD
-         JvOklK9LJplJLPGUq2wC4YAhq8nZSUYOBODa6dj+CM0zYe431OT0ya2XZmnRqy1gdjqM
-         HVYw==
-X-Gm-Message-State: AO0yUKW07ufqw2p1RmlJcw9LQwqo8ttYo65qM+Uvptjfoj39b+fxNO9o
-        pXWiU3tS0BRSOhdQ46Uuk8yiJQ==
-X-Google-Smtp-Source: AK7set+XVsENvidhTYRl8NHap3p+RLXPJj7q9BKTdTDgxFMbLPVmRCtz/DO/KEbqCzBtozbr/f27Rw==
-X-Received: by 2002:a05:600c:2c48:b0:3eb:39e0:3530 with SMTP id r8-20020a05600c2c4800b003eb39e03530mr125002wmg.41.1679504595001;
+        bh=dujRv61zmcVnrqSD4vDmJ5J/GQAubkah0V6OA3TTILA=;
+        b=R4iv+u4rQJuEwoDtRVf0+s93F+IF+/F688H2ksTuMVSSnvhM5Xl4HUIk2lW2VxS0Oz
+         mIbhJY08omugg+chvl5pNiYuNbU3N3F1PT+FYVR4S8FOn2d2/yKTpUm0Ub3HScKwLOaN
+         M2Zhm0K7W0q4OxuMiVfFayg6wD0Ndy4uC3Wm3zHvIeDTQ3eUUqezhO4QdI70UAi2PcyZ
+         cVWaW8HoQd9hxcsayrA6+KtiatjVvop9uxLzlQiqm7eqktZC/7yKni7Wntyq62hqwPGS
+         zn0d/7stKhVT9dIuynYoRCFgxg9+aK4JSYR2qLuQggVqam0TwBfGJS1F0nJcTns1mMur
+         TPpg==
+X-Gm-Message-State: AO0yUKWLGcFZEJwoZK0z7lXJTJiBKfbpOdRccSrKGCLLECFxEmf5KOMx
+        Hm/gnArRXGP45DrZxYlGbEu5fw==
+X-Google-Smtp-Source: AK7set8xfrpjFFbD6r13fZmKLXi2Ry9Kxeb7eX/Cxlh2km+WD2n0mJl4cS46A1F/aNWPtnFIBzQJ+g==
+X-Received: by 2002:a05:600c:2182:b0:3ee:3d2d:841a with SMTP id e2-20020a05600c218200b003ee3d2d841amr172302wme.24.1679504595885;
         Wed, 22 Mar 2023 10:03:15 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id n1-20020a7bc5c1000000b003db03725e86sm17553580wmk.8.2023.03.22.10.03.14
+        by smtp.gmail.com with ESMTPSA id n1-20020a7bc5c1000000b003db03725e86sm17553580wmk.8.2023.03.22.10.03.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 10:03:14 -0700 (PDT)
+        Wed, 22 Mar 2023 10:03:15 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-In-Reply-To: <20230306103533.4915-1-johan+linaro@kernel.org>
-References: <20230306103533.4915-1-johan+linaro@kernel.org>
-Subject: Re: [PATCH] drm/meson: fix missing component unbind on bind errors
-Message-Id: <167950459423.530086.3154658002025345243.b4-ty@linaro.org>
-Date:   Wed, 22 Mar 2023 18:03:14 +0100
+To:     Adrien Grassein <adrien.grassein@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     Matheus Castello <matheus.castello@toradex.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+In-Reply-To: <20230322143821.109744-1-francesco@dolcini.it>
+References: <20230322143821.109744-1-francesco@dolcini.it>
+Subject: Re: [PATCH v2] drm/bridge: lt8912b: return EPROBE_DEFER if bridge
+ is not found
+Message-Id: <167950459507.530086.7266374998941792767.b4-ty@linaro.org>
+Date:   Wed, 22 Mar 2023 18:03:15 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -79,16 +85,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Mon, 06 Mar 2023 11:35:33 +0100, Johan Hovold wrote:
-> Make sure to unbind all subcomponents when binding the aggregate device
-> fails.
+On Wed, 22 Mar 2023 15:38:21 +0100, Francesco Dolcini wrote:
+> Returns EPROBE_DEFER when of_drm_find_bridge() fails, this is consistent
+> with what all the other DRM bridge drivers are doing and this is
+> required since the bridge might not be there when the driver is probed
+> and this should not be a fatal failure.
 > 
 > 
 
 Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-fixes)
 
-[1/1] drm/meson: fix missing component unbind on bind errors
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=ba98413bf45edbf33672e2539e321b851b2cfbd1
+[1/1] drm/bridge: lt8912b: return EPROBE_DEFER if bridge is not found
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1a70ca89d59c7c8af006d29b965a95ede0abb0da
 
 -- 
 Neil
