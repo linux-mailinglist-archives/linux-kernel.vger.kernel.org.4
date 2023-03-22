@@ -2,247 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFF66C4DE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C46C6C4DEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 15:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjCVOhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 10:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S230471AbjCVOhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 10:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjCVOg4 (ORCPT
+        with ESMTP id S229732AbjCVOhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 10:36:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E70B2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:36:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD3FBB81CF3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:36:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90697C4339C
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 14:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679495812;
-        bh=4PtAlV0x6TV4oDMDVLLN8Bty/SGvzqWo6EIQ9zFORa4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SsJbvdPLTB07Hg0NBOV6upPbFsPrwlFIA80dBzu5PDKnDoj36cDW3ugN7PL+wxGb3
-         zgGaBQKCCEeZXJPD0o1r7Kz+ZVrpFZYWn7ryf9VVbpCM4dqbBfvGaUoMrconOBWsbw
-         MupiZeQH10b9jQFe8PpH7t3hnYIgAfsMYKB0Fub64cNwd3DZ6IT7ij68pH7J859zAW
-         RH+KMK+DQfklOSouCgqXbr2YkkYplZn0xxoivtPflqcchVBPoryqk4nZljf6h8e6TL
-         QDb4ZzXhSAXtEyEwaPLIsxECeT+oAJpakXnzs4PZr8zXV0vv1eOEoISTbB91kf2wJO
-         XIpLeLRSQ8s1Q==
-Received: by mail-yb1-f181.google.com with SMTP id e71so21295040ybc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:36:52 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eZ2gSsTbyJB1+l/kqYNEB5tbpunqPFoRteOaFecPtUvtlqHIgn
-        DSfjlodWlu8LsVWTgzGph6WLBqJPGQUtQyH33Q==
-X-Google-Smtp-Source: AKy350aWnQ2P3jpoeLgqzexPjNVchvN1x7nw6kp4bXREpb2oUEW3doYAG76NmskkHSan8r77fctFk65AGvnqcl74VRU=
-X-Received: by 2002:a05:6902:70f:b0:b6a:2590:6c63 with SMTP id
- k15-20020a056902070f00b00b6a25906c63mr2098482ybt.2.1679495811430; Wed, 22 Mar
- 2023 07:36:51 -0700 (PDT)
+        Wed, 22 Mar 2023 10:37:33 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA31113F2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:37:32 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id u8so3292537ilb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 07:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1679495851;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z497ruJqlVfegWF8NRtzXXhznR1xFw36jEr9lMNWtW8=;
+        b=ZYK26V2g092icbcstQePXB1TRFPbPQZe1CBwJf7P9Teq6XfzVNhFnnBH7vjC27DghI
+         Flp2kk3ZGV9n26FTjrkwHXGuPVJxjMw3X7k33h8nZHDZcl9JirgmckGzyOU79bP1IWG2
+         BtLGzrA+Zqqlag+cXqezUxGhi2O8weCKIweq0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679495851;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z497ruJqlVfegWF8NRtzXXhznR1xFw36jEr9lMNWtW8=;
+        b=I2SJCy5rjHuoW2S3EGETbDuRekyMGozasmwYYinYN5VUszq6x0DKDMghSCupVSsRYX
+         3fPxdHII50lBKEoOkpNpf7eaOkRnd+WxfNaK/1WJBho8AEySnAz8gLd+sQOxvwJQzhLW
+         BBQy1VKiSOCYkvbRoQXJOSDOOghZr02F5axMIgHsWMDAcoYADjzuVY/q2DB8+4TYtWIh
+         DVI773trEzu+lmgI3UlxALEF3okmebA/ILEVzGIfjOwy1jKTIOrwPvPfcjHGGPl4jFEm
+         OEGmUsxL8wfHKbyf9EnPVujT5g5/qnhqDtkLmw/fcsqbRXdLZulIalFJ84BrepC24+SY
+         pfwQ==
+X-Gm-Message-State: AO0yUKXP9CpZx8X8ixhF2TgVQ/eTsNp/KnZTcs4iQDNQ4HL7n8xNNaXI
+        x1UKPw94KrfM+7W7pwbrI9ILig==
+X-Google-Smtp-Source: AK7set+IMm0d5HOLmep773OFIQkwLF0SEBX/p2vVLMkBm0RJzPPIpQ2XRR7IV1iJ7KXHFwUF7dxoTw==
+X-Received: by 2002:a05:6e02:1354:b0:323:504:cff6 with SMTP id k20-20020a056e02135400b003230504cff6mr3702500ilr.3.1679495851552;
+        Wed, 22 Mar 2023 07:37:31 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id f102-20020a0284ef000000b0040631e8bf89sm5063538jai.38.2023.03.22.07.37.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 07:37:31 -0700 (PDT)
+Message-ID: <f8a8890b-7a02-6824-b5aa-957008ebda53@linuxfoundation.org>
+Date:   Wed, 22 Mar 2023 08:37:30 -0600
 MIME-Version: 1.0
-References: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
- <20230321215337.GA1656483-robh@kernel.org> <20230322102607.5rac7lmy5w653jen@CAB-WSD-L081021>
- <CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com> <20230322141444.abwirejgfbeer7lr@CAB-WSD-L081021>
-In-Reply-To: <20230322141444.abwirejgfbeer7lr@CAB-WSD-L081021>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 22 Mar 2023 09:36:40 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJa-McFEorLr6ZWNqaEtjG8Oi2rNJ3hGwb2Xk3jvqMZgQ@mail.gmail.com>
-Message-ID: <CAL_JsqJa-McFEorLr6ZWNqaEtjG8Oi2rNJ3hGwb2Xk3jvqMZgQ@mail.gmail.com>
-Subject: Re: [PATCH v3] checkpatch: add missing bindings license check
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     krzysztof.kozlowski@linaro.org, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
-        rockosov@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] docs: add system-state document to admin-guide
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, corbet@lwn.net
+Cc:     kstewart@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230321231816.31131-1-skhan@linuxfoundation.org>
+ <ZBrKcwoFMAhmIn1f@debian.me>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZBrKcwoFMAhmIn1f@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 9:15=E2=80=AFAM Dmitry Rokosov <ddrokosov@sberdevic=
-es.ru> wrote:
->
-> On Wed, Mar 22, 2023 at 08:40:21AM -0500, Rob Herring wrote:
-> > On Wed, Mar 22, 2023 at 5:26=E2=80=AFAM Dmitry Rokosov <ddrokosov@sberd=
-evices.ru> wrote:
-> > >
-> > > Hello Rob, thank you for the comments. Please find my thoughts below.
-> > >
-> > > On Tue, Mar 21, 2023 at 04:53:37PM -0500, Rob Herring wrote:
-> > > > On Mon, Mar 20, 2023 at 11:33:50PM +0300, Dmitry Rokosov wrote:
-> > > > > All headers from 'include/dt-bindings/' must be verified by check=
-patch
-> > > > > together with Documentation bindings, because all of them are par=
-t of
-> > > > > the whole DT bindings system.
-> > > > >
-> > > > > The requirement is dual licensed and matching pattern:
-> > > > >     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
-> > > >
-> > > > This is not correct. The headers can and should be licensed like th=
-e dts
-> > > > files which are (unfortunately) all over the place and differ from =
-the
-> > > > bindings.
-> > > >
-> > > > Also, GPL-2.0-or-later is neither desired nor encouraged.
-> > >
-> > > Sorry, I'm little bit confused. Let's discuss correct way.
-> > >
-> > > We had such discussion in another review.
-> > >
-> > > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevi=
-ces.ru/
-> > >
-> > > Krzysztof has mentioned that Documentation yaml bindings schemas and
-> > > include bindings headers should have the same license by default.
-> >
-> > By default is the key. Logically, headers are part of the binding
-> > definition. However, they are included by dts files, so IMO their
-> > license should align with dts files. If you don't yet have any dts
-> > files, then yes, "GPL-2.0-only OR BSD-2-Clause" is what you should
-> > use.
-> >
-> > > And checkpath must check not only Documentation schema (previous
-> > > implementation), but 'include bindings' as well:
-> > >
-> > > From Krzysztof at https://lore.kernel.org/all/9d176288-cd7c-7107-e180=
--761e372a2b6e@linaro.org/:
-> >
-> > Checkpatch has no way of knowing about the dts file part, so it can't
-> > tell you what license.
-> >
-> > Even as-is, checkpatch is wrong sometimes. If you convert a binding
-> > (that defaulted to GPL-2.0-only) to schema, you can't just relicense
-> > it dual licensed.
-> >
-> > >
-> > > ---
-> > > >>>>> @@ -0,0 +1,20 @@
-> > > >>>>> +/* SPDX-License-Identifier: GPL-2.0+ */
-> > > >>>>
-> > > >>>> I found in changelog:
-> > > >>>> "fix license issue, it's GPL-2.0+ only in the current version"
-> > > >>>> and I do not understand.
-> > > >>>>
-> > > >>>> The license is wrong, so what did you fix?
-> > > >>>>
-> > > >>>
-> > > >>> Sorry don't get you. Why is it wrong?
-> > > >>
-> > > >> Run checkpatch - it will tell you why wrong. The license is not co=
-rrect.
-> > > >> This is part of binding and should be the same as binding.
-> > > >>
-> > > >
-> > > > I always run checkpatch before sending the next patch series. Check=
-patch
-> > > > doesn't highlight this problem:
-> > > >
-> > > > --------------
-> > > > $ rg SPDX a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-a=
-nd-Periphera.patch
-> > > > 32:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > > 111:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > > 188:+/* SPDX-License-Identifier: GPL-2.0+ */
-> > > > 294:+/* SPDX-License-Identifier: GPL-2.0+ */
-> > > >
-> > > > $ ./scripts/checkpatch.pl --strict a1_clkc_v10/v10-0003-dt-bindings=
--clock-meson-add-A1-PLL-and-Periphera.patch
-> > > > total: 0 errors, 0 warnings, 0 checks, 259 lines checked
-> > >
-> > > Hmm, my bad, that's something to fix/improve in checkpatch.
-> > > ---
-> > >
-> > > Actually, I agree with Krzysztof that checkpatch should verify 'inclu=
-de
-> > > bindings', but looks like there is misunderstanding which license pat=
-tern
-> > > we have to use.
-> > >
-> > > Rob, could you please share your thoughts if possible? Which one patt=
-ern
-> > > we have to base on? GPL-2.0-only without 'later' suffix? Or you total=
-ly
-> > > disagree that checkpatch is responsible for 'include bindings'
-> > > verification?
-> >
-> > I think we could do this:
-> >
-> > Schemas should be: GPL-2.0-only OR BSD-2-Clause
-> > Headers should be: GPL-2.0-only OR .*
-> >
-> > Perhaps the 2nd term can be constrained to "(MIT|BSD-[23]-Clause)",
-> > but I haven't looked at what variations exist in the headers. It may
-> > be too varied that we can only check for "OR". We don't want to
-> > encourage folks to blindly relicense things because checkpatch says
-> > so. If you are copying an existing header and modifying it, then you
-> > keep the original license (unless you have rights to change it).
->
-> Yes, if we are thinking in the such terms, when bindings are part of
-> device tree source, it's one option to make the same license for both of
-> them. But usually developer creates bindings definition in the first.
+On 3/22/23 03:29, Bagas Sanjaya wrote:
+> On Tue, Mar 21, 2023 at 05:18:16PM -0600, Shuah Khan wrote:
+>> +scripts/checksyscalls.sh can be used to check if current architecture is
+>> +missing any function calls compared to i386.
+> 
+> i386 is the reference architecture for comparing syscalls, right?
+> 
 
-No, most often they are copied from something else. Any tool can't
-know what the source (and its license) is and actively telling users
-to do something different is bad.
+Correct. If you are askig about "function calls" wording, this is coming
+right from the checksyscalls.sh
 
-I imagine writing the schema is the last thing because upstream
-requires it and downstream doesn't.
+>> +This scripts parses Documentation/features to find the support status
+>> +information. It can be used to validate the contents of the files under
+>> +Documentation/features or simply list.::
+> 
+> "... to validate contents of Documentation/features files or simply list
+> them::"
+> 
+>> +Let's do one last sanity check on the system to see if the following two
+>> +command outputs match. If they don't examine your system closely. kernel
+>> +rootkits install their own ps, find, etc. utilities to mask their activity.
+>> +The outputs match on my system. Do they on yours?
+>> +
+>> +ps ax | wc -l
+>> +ls -d /proc/* | grep [0-9]|wc -l
+> 
 
-> After that, developer or other contributor creates device tree nodes.
-> Also different device tree sources (for differnt boards as an example)
-> can have different licenses.
+Thanks for catching this.
 
-I'm sure there are combinations of dts files and headers with
-incompatible licenses. A tool to check that would be nice. Just need
-to generate a list of all input files perhaps with the preprocessor
-dependency generation and then get the licenses for all the files.
+> The shell snippet above should be in a code block for consistency
+> with other snippets.
+> 
+>> +Linux kernel supports several hardening options to make system secure.
+>> +kconfig-hardened-check tool sanity checks kernel configuration for
+>> +security. You can checkout the latest::
+> 
+> "... If you don't have the tool handy, you can clone the repository::"
 
-> Maybe it's better option to make license dependency between dts and
-> bindings when bindings have a first priority and dts should have the
-> same license or dual license, because bindings are the primary from the
-> git history point of view.
+I can fix it to say "clone the latest"
 
-dts files are too far gone to define any rule in checkpatch. Binding
-files are not because there's really only 2 variations since all the
-existing bindings are just kernel default license (GPL-2.0-only).
+> 
+>> + * https://docs.kernel.org/trace/index.html
+> 
+> Shouldn't the last ref be internal link (Documentation/trace/index.rst)?
+> 
 
-> OR
->
-> Make default value of bindings as suggested in the patchset (maybe
-> without +/or-later) and show notice log from the checkpatch, like:
->
-> '''
-> DT binding documents should be licensed (GPL-2.0-only OR BSD-2-Clause)
-> For special cases ask 'devicetree@vger.kernel.org' directly
+This docs.kernel.org link intentional and it is better to this rendered
+version.
 
-For special cases, ask your lawyer...
+thanks,
+-- Shuah
 
-> '''
->
-> And handle all exceptions during LKML review, as Krzysztof suggested
-> before.
->
-> What do you think about above approaches?
-
-I laid out what the options are already.
-
->
-> Krzysztof, please share your opinion as well.
->
-> For sure, current checkpatch behaviour is wrong, it doesn't help to
-> understand all mentioned interlacements.
-
-checkpatch is suggestions or possible issues in many cases. It's not
-absolute nor completely accurate to begin with.
-
-Rob
