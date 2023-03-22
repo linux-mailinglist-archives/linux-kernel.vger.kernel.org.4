@@ -2,111 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BC26C54B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADED36C54B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 20:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjCVTQb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 15:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S230038AbjCVTQl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 15:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCVTQ1 (ORCPT
+        with ESMTP id S230250AbjCVTQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 15:16:27 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601215DC95;
-        Wed, 22 Mar 2023 12:16:25 -0700 (PDT)
-Received: from p5b12767e.dip0.t-ipconnect.de ([91.18.118.126] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pf3w2-0003vB-AH; Wed, 22 Mar 2023 20:15:46 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-can@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] dt-bindings: net: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 20:15:44 +0100
-Message-ID: <3745510.ElGaqSPkdT@phil>
-In-Reply-To: <20230320233758.2918972-1-robh@kernel.org>
-References: <20230320233758.2918972-1-robh@kernel.org>
+        Wed, 22 Mar 2023 15:16:38 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCEE61320;
+        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id ek18so77262549edb.6;
+        Wed, 22 Mar 2023 12:16:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679512594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LzwFY37hLcbFrp/171eLlZheyW72j6O2ewbOp7Pv5N4=;
+        b=F2Fnp95GRCish/MkF3fuXKejpIWk1BzlX84r52xAOYX/ucwCC2crOR49Vv/WcEecK5
+         azFXfgyZnJiScNtTyECM6v43RRL/w7ICndoLea7w/5SuAAgN8j2flL79dVR3oxvstV+K
+         ssy+21PggrlZRgZlRio0kzlRz3AcMa24ctlwEPGuTxkX2rmEoiia4Ki4xwAAMQTPcpa7
+         uhVxWVpJJlwY/OfJKacBnKTt5znm65g/DEMvjLT8iA2gEglQaRWx2LV5n5xGyaohZKUs
+         hSikRjCbwlkHOLkePtscMDuElU+hFu8H7gBP/94WdkQUD56B39Zo7pjojaHLtYNlLkvL
+         JjEQ==
+X-Gm-Message-State: AO0yUKVThmTA4M+L4PQ8dy8e1MFnynadbIGdsTBTs8lvjoNB4tEmzCUe
+        qZnlyJGAeFf7xXkaBeFvZYL97RSDokE1ButDZkwNSlTC
+X-Google-Smtp-Source: AK7set8zLikabLWIv5bjuJ/++HNk28bJ+CiLNXX7FIk6lb/GSxlaB3sBkFq4z9Qp96SExJ3kx4JRHGgxtJbq6JjGhRA=
+X-Received: by 2002:a17:906:614a:b0:8d7:edbc:a7b6 with SMTP id
+ p10-20020a170906614a00b008d7edbca7b6mr1818011ejl.2.1679512593795; Wed, 22 Mar
+ 2023 12:16:33 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230308122830.166728-1-jingyuwang_vip@163.com>
+In-Reply-To: <20230308122830.166728-1-jingyuwang_vip@163.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Mar 2023 20:16:22 +0100
+Message-ID: <CAJZ5v0jfWoWvvUk6h-L0h5FRL8EdBmiHKFEmfgd3HOOj=PjrKQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix repeated words in comments
+To:     Jingyu Wang <jingyuwang_vip@163.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 21. März 2023, 00:37:54 CET schrieb Rob Herring:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for bindings/net/can
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> Reviewed-by: Steen Hegelund <Steen.Hegelund@microchip.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, Mar 8, 2023 at 1:30â€¯PM Jingyu Wang <jingyuwang_vip@163.com> wrote:
+>
+> Delete the redundant word 'to'.
+>
+> Signed-off-by: Jingyu Wang <jingyuwang_vip@163.com>
 > ---
-> v2:
->  - Also drop quotes on URLs
+>  drivers/cpufreq/Kconfig.arm | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 97acaa2136fd..123b4bbfcfee 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -95,7 +95,7 @@ config ARM_BRCMSTB_AVS_CPUFREQ
+>         help
+>           Some Broadcom STB SoCs use a co-processor running proprietary firmware
+>           ("AVS") to handle voltage and frequency scaling. This driver provides
+> -         a standard CPUfreq interface to to the firmware.
+> +         a standard CPUfreq interface to the firmware.
+>
+>           Say Y, if you have a Broadcom SoC with AVS support for DFS or DVFS.
+>
+> --
 
->  .../devicetree/bindings/net/rockchip,emac.yaml |  2 +-
->  .../bindings/net/rockchip-dwmac.yaml           |  4 ++--
+Applied as 6.4 material under a modified subject and with some edits
+in the changelog.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
-
-
+Thanks!
