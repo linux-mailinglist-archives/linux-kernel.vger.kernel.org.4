@@ -2,168 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92CA6C5ADF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7476C5AE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 00:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjCVX5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 19:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S230164AbjCVX6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 19:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCVX5W (ORCPT
+        with ESMTP id S229752AbjCVX6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:57:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCDD28D17;
-        Wed, 22 Mar 2023 16:57:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5089162342;
-        Wed, 22 Mar 2023 23:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E1EC433EF;
-        Wed, 22 Mar 2023 23:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679529439;
-        bh=XkmYsPosw0qTmGT8GUHir49i+HbispJddG1Pr0QKMNw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eMHzhiFi+1mFIkoQFvTsAxp96b99sSfc5/V+HpXBbi7EvaSCIbEJ3D/d0ZHCOyVsM
-         /XdtQfF3b2IVkKE2jNbDs0CDJ+LM77sbIcuf8dR1bgt7aOye7gbkc/spNQk2n/jGkn
-         zHysWMaG8cXyzSI1thQLmZxl5E3MD7OAonbTjcpbbhZoO55sGYgnP0dn4gt5bcHKL8
-         eIs3rjagEfSbYlDoqE8l/ZzpOneFyTL6CQoxtlIRBne3tmS6A79Xpja9Sw4otprHoQ
-         aLh+Lq58p1+pUwPxRgF7Xe0ErI/iy0fct4sfDytqovB7eoalrK38Gxx5DmIB14hPYE
-         0i0iCje93/2ZQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3C14F1540398; Wed, 22 Mar 2023 16:57:19 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 16:57:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] doc/rcutorture: Add description of
- rcutorture.stall_cpu_block
-Message-ID: <5e13d24b-f812-46ad-a614-53b73340e4d8@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230321021234.51431-1-qiang1.zhang@intel.com>
+        Wed, 22 Mar 2023 19:58:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7098A4C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 16:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679529488; x=1711065488;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ksbPQmfMw+2raYTxi+85XRExQ9+/LpYutE8zh6XfVss=;
+  b=H0xoXyz9LS7mrsCzkY2JL4jMWdY0HYNcGyXvUV7D1WmsW2DkleLiGMr6
+   fVFYmKxOVPMcsjuzdVikt6jcl2bHojgthUwbyTMcGZHxNwecmiGHkeSL1
+   4E5mtnLfCiBVPrcGRMiG3R4mXki29AB52gBoNAX4blV6Q7KwScN2gxXhL
+   Ck3WDpUJypWo8ol7DQttmgkS3wb4MeT2oGUQvO0pnUkSSb+gdGHknPqRi
+   2oXbnpFedqZuAS5HFXgsFQRcPmaVAJy8n140ysIWxp2XVPHdl7rtk5Ylz
+   yRkMqhRTdCemk59WCtn2YxaL/5uM+toqNKlYvoUl1Yq7JIpQNdCUtiGhQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="340897202"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="340897202"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 16:58:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="1011555678"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="1011555678"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2023 16:58:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pf8LA-000DlU-2k;
+        Wed, 22 Mar 2023 23:58:00 +0000
+Date:   Thu, 23 Mar 2023 07:57:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 5a62cd8ed813bdad8e32c9a1dfaa2ebf1a94f280
+Message-ID: <641b95e8.5xSHpyDLaTQAJmt4%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321021234.51431-1-qiang1.zhang@intel.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:12:34AM +0800, Zqiang wrote:
-> For kernels built with CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y,
-> run the RCU stall tests.
-> 
-> runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
-> bootparams="console=ttyS0 rcutorture.stall_cpu=30
-> rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_block=1" -d
-> 
-> [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
-> [   10.841073] rcu_torture_stall start on CPU 3.
-> [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
-> ....
-> [   10.841108] Call Trace:
-> [   10.841110]  <TASK>
-> [   10.841112]  dump_stack_lvl+0x64/0xb0
-> [   10.841118]  dump_stack+0x10/0x20
-> [   10.841121]  __schedule_bug+0x8b/0xb0
-> [   10.841126]  __schedule+0x2172/0x2940
-> [   10.841157]  schedule+0x9b/0x150
-> [   10.841160]  schedule_timeout+0x2e8/0x4f0
-> [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
-> [   10.841195]  rcu_torture_stall+0x2e8/0x300
-> [   10.841199]  kthread+0x175/0x1a0
-> [   10.841206]  ret_from_fork+0x2c/0x50
-> 
-> Due to invoke schedule_timeout() forces the CPU to go through a
-> quiescent state, cause RCU stall not appear and also cause scheduling
-> while atomic complaints. so this commit add description of
-> rcutorture.stall_cpu_block, it should not to be set in CONFIG_PREEMPTION=n
-> kernels.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 5a62cd8ed813bdad8e32c9a1dfaa2ebf1a94f280  Merge branch into tip/master: 'x86/sev'
 
-Very good, thank you!
+elapsed time: 725m
 
-I did the usual wordsmithing, so please check for any errors that I may
-have introduced.
+configs tested: 100
+configs skipped: 6
 
-							Thanx, Paul
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-------------------------------------------------------------------------
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r026-20230322   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230322   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r004-20230322   clang
+arm64                randconfig-r005-20230322   clang
+arm64                randconfig-r011-20230322   gcc  
+arm64                randconfig-r022-20230322   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r006-20230322   clang
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r045-20230322   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r015-20230322   gcc  
+ia64                 randconfig-r033-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r021-20230322   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230322   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230322   gcc  
+m68k                 randconfig-r023-20230322   gcc  
+microblaze   buildonly-randconfig-r004-20230322   gcc  
+microblaze   buildonly-randconfig-r006-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r034-20230322   gcc  
+nios2        buildonly-randconfig-r005-20230322   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230322   gcc  
+openrisc             randconfig-r012-20230322   gcc  
+openrisc             randconfig-r032-20230322   gcc  
+openrisc             randconfig-r036-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r031-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r003-20230322   gcc  
+powerpc              randconfig-r025-20230322   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230322   clang
+riscv                randconfig-r024-20230322   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230322   gcc  
+sparc64      buildonly-randconfig-r002-20230322   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
 
-commit 1e7cded7383986d788cb2020bd4e56b298518de2
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Tue Mar 21 10:12:34 2023 +0800
-
-    doc/rcutorture: Add description of rcutorture.stall_cpu_block
-    
-    If you build a kernel with CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y,
-    then run the rcutorture tests specifying stalls as follows:
-    
-    runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" \
-            bootparams="console=ttyS0 rcutorture.stall_cpu=30 \
-            rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_block=1" -d
-    
-    The tests will produce the following splat:
-    
-    [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
-    [   10.841073] rcu_torture_stall start on CPU 3.
-    [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
-    ....
-    [   10.841108] Call Trace:
-    [   10.841110]  <TASK>
-    [   10.841112]  dump_stack_lvl+0x64/0xb0
-    [   10.841118]  dump_stack+0x10/0x20
-    [   10.841121]  __schedule_bug+0x8b/0xb0
-    [   10.841126]  __schedule+0x2172/0x2940
-    [   10.841157]  schedule+0x9b/0x150
-    [   10.841160]  schedule_timeout+0x2e8/0x4f0
-    [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
-    [   10.841195]  rcu_torture_stall+0x2e8/0x300
-    [   10.841199]  kthread+0x175/0x1a0
-    [   10.841206]  ret_from_fork+0x2c/0x50
-    
-    This is because the rcutorture.stall_cpu_block=1 module parameter causes
-    rcu_torture_stall() to invoke schedule_timeout_uninterruptible() within
-    an RCU read-side critical section.  This in turn results in a quiescent
-    state (which prevents the stall) and a sleep in an atomic context (which
-    produces the above splat).
-    
-    Although this code is operating as designed, the design has proven to
-    be counterintuitive to many.  This commit therefore updates the description
-    in kernel-parameters.txt accordingly.
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 51067903af84..b39a4ab56b95 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5058,8 +5058,16 @@
- 
- 	rcutorture.stall_cpu_block= [KNL]
- 			Sleep while stalling if set.  This will result
--			in warnings from preemptible RCU in addition
--			to any other stall-related activity.
-+			in warnings from preemptible RCU in addition to
-+			any other stall-related activity.  Note that
-+			in kernels built with CONFIG_PREEMPTION=n and
-+			CONFIG_PREEMPT_COUNT=y, this parameter will
-+			cause the CPU to pass through a quiescent state.
-+			Any such quiescent states will suppress RCU CPU
-+			stall warnings, but the time-based sleep will
-+			also result in scheduling-while-atomic splats.
-+			Which might or might not be what you want.
-+
- 
- 	rcutorture.stall_cpu_holdoff= [KNL]
- 			Time to wait (s) after boot before inducing stall.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
