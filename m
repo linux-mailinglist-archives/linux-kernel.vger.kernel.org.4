@@ -2,84 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE3F6C42AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A1C6C42BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 07:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCVGLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 02:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S229886AbjCVGN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 02:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCVGL3 (ORCPT
+        with ESMTP id S229676AbjCVGN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 02:11:29 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA21933CFD;
-        Tue, 21 Mar 2023 23:11:27 -0700 (PDT)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PhJ5B1HQ6z8R042;
-        Wed, 22 Mar 2023 14:11:26 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl1.zte.com.cn with SMTP id 32M6B9v6018112;
-        Wed, 22 Mar 2023 14:11:09 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 22 Mar 2023 14:11:11 +0800 (CST)
-Date:   Wed, 22 Mar 2023 14:11:11 +0800 (CST)
-X-Zmail-TransId: 2afa641a9bffffffffffe8b-27ccf
-X-Mailer: Zmail v1.0
-Message-ID: <202303221411117451283@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <broonie@kernel.org>
-Cc:     <peter.ujfalusi@gmail.com>, <jarkko.nikula@bitmer.com>,
-        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <alsa-devel@alsa-project.org>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBBU29DOiB0aTogb21hcC1tY3BkbTogdXNlwqBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2VfYnluYW1lKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 32M6B9v6018112
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 641A9C0E.000 by FangMail milter!
-X-FangMail-Envelope: 1679465486/4PhJ5B1HQ6z8R042/641A9C0E.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 641A9C0E.000/4PhJ5B1HQ6z8R042
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 22 Mar 2023 02:13:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA082B61E;
+        Tue, 21 Mar 2023 23:13:56 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32M4g94D007513;
+        Wed, 22 Mar 2023 06:13:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=hHAfzpcHF2GEhMuQgofbcWV7RtabrQqEYW56Lla2qMc=;
+ b=nhyS4LGbEPddSqVpG3cnXQZ8lT6ngzaelhuM0F+Q+IrOq+dYHDxpxe/fogzajudiXREJ
+ ZFmcu5GJDTxksRqsJe+Z6hGPqNdcFPUWf8pgVYydxp5KHS26TgoKPxxIHu+I/xXK4b6d
+ 1mGo0ZGFgISG3eSHHrj1Gcugw1tQOnPFXMTyMUxrawbRY5ut3MtjMKzcLD39zVNbnmop
+ 7mK/ng2vF0RJwS7z42L3DljEsXv73ONmjbcrCXUzqejvpUnWu44i2G4sEXEP+76f7eFj
+ HfDg72jGALqzaQvkZFTfvLulJz3oFBBhCYhHXBMdivwyCfB6CvEroBUqlsIcQ1KlmkT5 cA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pfpfgrqhb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 06:13:48 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32M6Dm0O013886
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Mar 2023 06:13:48 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Tue, 21 Mar 2023 23:13:42 -0700
+Date:   Wed, 22 Mar 2023 11:43:38 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 1/8] dt-bindings: phy: qcom,qusb2: Document IPQ9574
+ compatible
+Message-ID: <20230322061337.GA12808@varda-linux.qualcomm.com>
+References: <cover.1677749625.git.quic_varada@quicinc.com>
+ <cover.1679388632.git.quic_varada@quicinc.com>
+ <ef5af2e581203e2101773863aa7e1667b4d1b705.1679388632.git.quic_varada@quicinc.com>
+ <69120CDC-19C5-4087-BF71-0ECAB87D018B@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <69120CDC-19C5-4087-BF71-0ECAB87D018B@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1Fj7nyTG_scV7NoXTOnXufnv9wBUKIGf
+X-Proofpoint-ORIG-GUID: 1Fj7nyTG_scV7NoXTOnXufnv9wBUKIGf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303220044
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Tue, Mar 21, 2023 at 02:17:13PM +0300, Dmitry Baryshkov wrote:
+>
+>
+> On 21 March 2023 11:54:19 GMT+03:00, Varadarajan Narayanan <quic_varada@quicinc.com> wrote:
+> >Document the compatible string used for the qusb2 phy in IPQ9574.
+> >
+> >Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >
+> >---
+> > Changes in v2:
+> >	- Moved ipq6018 to the proper place and placed ipq9574
+> >	  next to it as suggested by Dmitry
+> >---
+> > Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 3 ++-
+> > 1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+> >index 7f403e7..eaecf9b 100644
+> >--- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+> >+++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
+> >@@ -19,12 +19,13 @@ properties:
+> >       - items:
+> >           - enum:
+> >               - qcom,ipq8074-qusb2-phy
+> >+              - qcom,ipq6018-qusb2-phy
+> >+              - qcom,ipq9574-qusb2-phy
+>
+> This still isn't sorted
 
-Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
-call to devm_platform_ioremap_resource_byname(), as this is exactly what
-this function does.
+Sorry. Will fix this.
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- sound/soc/ti/omap-mcpdm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks
+Varada
 
-diff --git a/sound/soc/ti/omap-mcpdm.c b/sound/soc/ti/omap-mcpdm.c
-index 0b18a7bfd3fd..35deceb73427 100644
---- a/sound/soc/ti/omap-mcpdm.c
-+++ b/sound/soc/ti/omap-mcpdm.c
-@@ -563,8 +563,7 @@ static int asoc_mcpdm_probe(struct platform_device *pdev)
- 	mcpdm->dma_data[0].filter_data = "dn_link";
- 	mcpdm->dma_data[1].filter_data = "up_link";
-
--	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpu");
--	mcpdm->io_base = devm_ioremap_resource(&pdev->dev, res);
-+	mcpdm->io_base = devm_platform_ioremap_resource_byname(pdev, "mpu");
- 	if (IS_ERR(mcpdm->io_base))
- 		return PTR_ERR(mcpdm->io_base);
-
--- 
-2.25.1
+>
+> >               - qcom,msm8953-qusb2-phy
+> >               - qcom,msm8996-qusb2-phy
+> >               - qcom,msm8998-qusb2-phy
+> >               - qcom,qcm2290-qusb2-phy
+> >               - qcom,sdm660-qusb2-phy
+> >-              - qcom,ipq6018-qusb2-phy
+> >               - qcom,sm4250-qusb2-phy
+> >               - qcom,sm6115-qusb2-phy
+> >       - items:
+>
+> --
+> With best wishes
+> Dmitry
