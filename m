@@ -2,148 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95416C4894
-	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2DA6C4899
+	for <lists+linux-kernel@lfdr.de>; Wed, 22 Mar 2023 12:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCVLHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 07:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S230400AbjCVLHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 07:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCVLH2 (ORCPT
+        with ESMTP id S230161AbjCVLHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 07:07:28 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2045.outbound.protection.outlook.com [40.107.96.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972D34742F;
-        Wed, 22 Mar 2023 04:07:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XKcNC4cXcqjVx0foPQelOpb6dQaQtz7SgFxxXYs1FeB2EOQXMEn9NaHKUqRw669uo5pO0uEyBIRGFvuNViSt1fVovyFTRHi0YLkXvduZhoOJYm0KysQvLJ/FsGcRsMESHQIvzdmcJSovaUAnMmNDZQrcck8aYH9pRufzPKVr1fkKJa/jzvVlp4TDpTjFOug+rdGjacZrEV7NFe6qv7i/TGol2MIx0McSU0H4d+zgonuXhFhkwaqbzG+ZbfTGqhP1EGpNKlkAA0uObR5o36F27eJ6M61zGkbXuNwpoJ99H9iuYa5FC60Yh+Rdc3x0PePc+nt8etDl+wmL/n/fyTCC5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IViB8kY3yLpDe2GE2RIvUshWOfxWBQMMwHSR99bBijA=;
- b=SFwdHNFDcYzeePYSbebrJY2rc7p1iTaJC3s7gpAEGM6Lqa5T5tNDwNYCqrikkqDv/D1dSxSWVA7NciIFj/RYbbnKvEgpyk1X8hSaYrcB0Xlzv7g/uw5nrkq138KsnHh8PctHOl9RJCBsC/V2kGLkDU8fmb82bvYQyWJ55azqCx1SDj4+Gw9QTN/1Wr2I/fBwhcWOHFEs2v5x00DGrVYEKeIjCbHeiYowytUJPJWXJSckoisyfpthfoAvv0/8L18Z63cJWT/BXkdXFsQFWIuEOpqVnVRGHOkLnv7M5DeAEbvqfxBFniG2tbJjULpkHA7sIEt4Yioen1XzlBsvGC3MMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IViB8kY3yLpDe2GE2RIvUshWOfxWBQMMwHSR99bBijA=;
- b=DEikCKhHNrCz8UBzc7kdr11knRfJ9t6ci9NeyJu3r7cMNKNAmWRcyXcJ7SGM6zebsaD0aBGPGTtJ2X+zT+qlCUeoN3+AXVSlmnTUiBy1vMhIu04W3q1TMNl7a6YLZKP97N2nrlCdjPw1qSEMuq0TZB9VweyTK4PLo5DetJvzpgdoHQIJzNE42wTt8ko+C8dgDAtuQc3nJMU4Q/PB6MOrZwgoYsstqwNyqt5oCQi+NraYee8+Voy0ocW8FBdPipDKF82TLXBFcAUdBfMuWYnd5GsR+N9BJg2l34M98JamBcw4CLJY6feRWocbtC/S5kXh42IFH/Tk9Cm/Mt5+EADBDQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- SA1PR12MB7296.namprd12.prod.outlook.com (2603:10b6:806:2ba::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 11:07:23 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 11:07:23 +0000
-Message-ID: <db870e74-9d97-740a-9829-5fafc0bb0559@nvidia.com>
-Date:   Wed, 22 Mar 2023 11:07:15 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] i2c: tegra: Share same DMA channel for RX and TX
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        digetx@gmail.com, ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com, wsa@kernel.org
-References: <20230322102413.52886-1-akhilrajeev@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230322102413.52886-1-akhilrajeev@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0119.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:c::35) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Wed, 22 Mar 2023 07:07:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C026231D;
+        Wed, 22 Mar 2023 04:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679483259; x=1711019259;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P2mPW/WRUDwJB8jKQQeQja24bidu3yN8jymHDJ02YSM=;
+  b=JsncLSxclOu8LbEkWhdStJ5fFjlGn5DcK6aVO9S42DLVo0/ZD3yLxSJc
+   zIt8/xkTUElMkofnFoEzXK6kYToyyF9cs7Af8OpVZhHGfsewB3+nEjR14
+   nOup+RKknlfAViE8c/EM9WaXbPNHBP2vs2wYDOnQAUWQxSls8QCjgj91o
+   BSlDKetfabmpo8QHSBSJiva6GraSuUtUlVnURtP5d2zhch3NfoMh1ugzb
+   EkwJ4qzUuPlKKnoOItxbQ24U70GnHfEBA8cbrAKfOn84boIsFHLe/vsZ8
+   w9oqFOfOI+0hQv0XLd5LPiKXwdqkK0albmGlGb9gSp4Hyhasrt+F//h2Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339224441"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="339224441"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 04:07:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="750992316"
+X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
+   d="scan'208";a="750992316"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 04:07:34 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pewJZ-000DDQ-27;
+        Wed, 22 Mar 2023 11:07:33 +0000
+Date:   Wed, 22 Mar 2023 19:07:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        viro@zeniv.linux.org.uk
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] fs/buffer: Remove redundant assignment to err
+Message-ID: <202303221812.QiRW1CXX-lkp@intel.com>
+References: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|SA1PR12MB7296:EE_
-X-MS-Office365-Filtering-Correlation-Id: c548b475-cc08-427e-9445-08db2ac59ceb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zu0CzMX+kVGi/npNjGxAOfpk8EZ6u+MIXGjDuxwgLhYNPHOnqbAc0hAksGTrtZmI50ZV+cKy9rlN30Orb6GD7evkwW/mr6ypOgqEkSRXYdFknPJAG/LQN/K8x/qIjVkJ/1KRUnp30AMxqw6eKP6/ry/34opkqOSYO1A+LHuBXOOQkqHMr0u+AJsMs/vDBCYvCjK6H/68iZULApaPxjVuNCl8k9YXV43aR094TYR8f9e/COwDecc2ZVNm12b68YpMPriY+vItItaPWwERT/8vg3bzX9h9ruka5pA6Q2KHWj11SrRAQRsbGyQGJXCFjn+6lDpdrDiic/XT9TYauDdHScn9NdRRR8T5k+DlyXgEyhBlfL+5Z1E2jyNMypm/qaWReuhacEPGybuPtyv3SPoIG+PAf9CUl2UxIfpsCi49OGcyy2xhMDyXe/evigj8axxcTEbnaaPxGuwc3D2xIrmDcodajP2/f61uf5oeTn2Px78Ft6zdDAYYygiLKJ8LPFESnAprVU9SRxzJxZa3z3kC7kFptVnKlbAO2lkwCTR2V/u30vCjRFDIHmaXV17+O6xt7qFmRO9UBdCBqwuLau9xoF09eGNcEg9bWK6yZV+eTtzKh3hMLAbTGto2EGBjK9RoEHirsqHFfMBk/q0dRpDMVzqmX6GJi5uFjaBQKpQAwWmVpkFYOa8DtDvg4uAmLa8/hKtRiSFcz6CRR3o2/25p4IT83juzx1DO+PNGBYPlBGFRRqLjggFVawxC6XHPMV9w
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(366004)(451199018)(316002)(6666004)(38100700002)(66946007)(8676002)(478600001)(66556008)(66476007)(31686004)(6486002)(2906002)(186003)(2616005)(86362001)(41300700001)(6512007)(5660300002)(8936002)(921005)(6506007)(83380400001)(31696002)(53546011)(36756003)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U3ZXYWtJM2FWUnpid05IbHJjckxQYzN5SzZVeFo4c1dEdUNPa0hvK3REMmN0?=
- =?utf-8?B?bFdIQ0hxMjVjLzZJSzllYzdnZ1J5UUVPVXBuUGVkMGF4eWJ4N0FaanNiUHdm?=
- =?utf-8?B?MThtYWhvUmsveXJ2R1A4WUU2NHJYRWZ1Qnp3eFZ6NDl4Z0lvYnBtN0ltMUw3?=
- =?utf-8?B?dmpCNzFXNHlXd3ErMzRjQmRoK2Znd1JCaGNLZkdWc0ttcTkzbXY2ME0rT3Bn?=
- =?utf-8?B?NUszRXZFcUlobFhUbFF3RFdtWlhHNzd5SkNUK01zTElzR3FxMjV1UlNIR0I3?=
- =?utf-8?B?Zmh6K096WkRCWGx2aVNaeVFsak5tQlE5NjBFbDdEV1lzQmxYSlpqSS9hM3lm?=
- =?utf-8?B?aC9nbWxJZTU5WEsrdEN3NFVpZlVkaDhxMjVBamJ1STQ5R0tNamphY2twdVRB?=
- =?utf-8?B?MUZvVWE2V0QxUGNCeXRLdDE2R2hJVThqVmc0VUdxK3JSb3dlYTgzZVZoOTlv?=
- =?utf-8?B?cEVWMUpMZUowcUtMci8xazVZTmtUSWFqZHU4L1pMTWtPYU9QQjdxVm5NbFVX?=
- =?utf-8?B?QmY1TE5TOFk4VEpZcWFSajFEM1diTjcrcDkzZ1pJY1VzVk9KMlpWT2Nyc25s?=
- =?utf-8?B?MFJTRlUyMEJCRlViV0Jud1NHVEl6eTRzMkE0QkFNNzVSVHY0bHdiM2xKOGYv?=
- =?utf-8?B?Y1IzV1hubHlNbWNWd1NMblpMVnpZT2RBTWZ6bU9zTFZXR3dnRnlERllvNkxq?=
- =?utf-8?B?aFpUdFF3a0xWamNVTEdudzhFcmxaa0VpckNRYWVvY2JOZkhSSlJ6WVFhWURh?=
- =?utf-8?B?YlAwTnByMGtVS1ByMEF0MnUxcTRVWmxoTlZTREdpUHcxSXhTMW9VanFhV3BG?=
- =?utf-8?B?bzd3VStMSUk1MWt5Y0V4VENkZm1UM2xvdnAzTURxY0VqMUJiUHpjR2p4WnRz?=
- =?utf-8?B?all6STlCT2xRdUMvY3NRRjE5VnBDeTErNXJCdlRxRndHVVNSeFlIZjE3NThQ?=
- =?utf-8?B?cHhwV3M1VU1TamdYMDBqWWtwcG9RUm1qNlRnSjRiUXpaaVFEL094SVRWR3c3?=
- =?utf-8?B?UTl1d1piOG9tbWtHZG5iQUdnanlyOXEwNm1ZVzhZZEJXMXZMWXZZUDlhZUQ1?=
- =?utf-8?B?M2huKzFhR3Vwa1JEV3NZY2pPaDJ3RHdxM0FPRFZtRE9UQVlTUWxwK0dIQ3kx?=
- =?utf-8?B?UXI1M2UvSERBOExBQW4xZkNSWC9sbXlNT2ZzNEFDTzVtWFdSQ2UwSmlvS0Fp?=
- =?utf-8?B?UjZzc1FUT3BjakptRmpVWWJIYTBWUWNsOEVtUk9PdFlINWZFblNDUUZIZGdm?=
- =?utf-8?B?NHpUZFRqa2JnTzU2QmNzMldVd3lzNXFIRSs4UFJsRnFveFhUbllYcWYwcTcx?=
- =?utf-8?B?S0FLODk2OUg2MDdFNlpJazVOVlNjRFBEbGViR1dwVnFJajFhRVlKNWNUNGEr?=
- =?utf-8?B?UjhxYzdJOURnOFhIQnRVYXNJdnRieGNLdmhCb2FsVENHOVFVYlZzZ3VTTDNY?=
- =?utf-8?B?VXVLRVAzaUpSNzFmZmhDbHQyeE9XWEJVcjZWYkNNVXQzU21NaU95QXlQdGdm?=
- =?utf-8?B?Q2Q1MEJkRUlNZkNuLzdDM0tyZDhOYTNxamVnbVNOVDNtSERKcWpPS2twYVAr?=
- =?utf-8?B?RGJHc1dvU0JNeGZxM3lRb3IwZWMvcUxCbzUvcjRSd0pUS0dMaWtqdnpGUlpP?=
- =?utf-8?B?Q3cyUnk1Qit1WUU1K2JmYnYvT1V3Q2hpcExJdlFLNUtjejdBOE9ZS1Z1a0JJ?=
- =?utf-8?B?SlFOTisyaExjclRCRExpTzZ4ZGxoU3ZCY0l3MUpuWXdua1krcG02VEU4Wm9L?=
- =?utf-8?B?eWZlRUJFYUlNOEFpa1ByRmw2WHQyU1JhelBjOVI5cjhYRzMxU0tWS0N2T3hJ?=
- =?utf-8?B?ZVNtSU9TRDhiOFhGb3VFL2Y4eHlNVFpEaUwxTVZGZmJzN3Nib3VxQncyR3Ja?=
- =?utf-8?B?VXYrWDdOblRIMUZla2VkTlFERVlQUGt4VnI4QUE0SllXbStrNjhsN3RNU1hn?=
- =?utf-8?B?Y2hPSzkxRExGZHg4blBEdjB6TmVnWmsxNUszbWNXbkpJY1VGR0dxb25KSno2?=
- =?utf-8?B?YWNjM1J3VEl1NzNSMUF5MEZEUitOWmR3OEdQUHFvQVhyc3E2ZURSRThUSUpt?=
- =?utf-8?B?aGNzY1dHb0I4VGJMMkt3NDhvWno4c1VEYWlFSUVXeGNNaGJLZzZ6VEx2bDRT?=
- =?utf-8?B?ZkxkMW9LbGVvaklhUnFSRHladzNnQk5XNU9nZTg1MzlYNjcreDRsaGwvV0M4?=
- =?utf-8?B?UW44Nm5LT01CZndxK0k2Y0NUa2trd1NlL1NtVW9WVUdLODJMN1BVb3d3WklE?=
- =?utf-8?B?ZFdIVW41MlNLSHArc1dCQk53Y0FnPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c548b475-cc08-427e-9445-08db2ac59ceb
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 11:07:23.5789
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Fl5stidFamiQXchXz7DfxBv+K7eVSsclQsrQnq2TNkaXJp3dh7W9QeHyZ2r3RZqfQztkcynCMF9Bj4fr9e8pzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7296
-X-Spam-Status: No, score=2.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jiapeng,
 
-On 22/03/2023 10:24, Akhil R wrote:
-> Allocate only one DMA channel for I2C and share it for both TX and RX
-> instead of using two different DMA hardware channels with the same
-> slave ID. Since I2C supports only half duplex, there is no impact on
-> perf with this.
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Thank you for the patch! Perhaps something to improve:
 
-Just to confirm. This impacts all Tegra devices from Tegra20 to the 
-latest. Does this work for all Tegra and the different DMA controllers 
-that they have?
+[auto build test WARNING on vfs-idmapping/for-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks
-Jon
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/fs-buffer-Remove-redundant-assignment-to-err/20230322-150022
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git for-next
+patch link:    https://lore.kernel.org/r/20230322065949.29223-1-jiapeng.chong%40linux.alibaba.com
+patch subject: [PATCH] fs/buffer: Remove redundant assignment to err
+config: hexagon-randconfig-r036-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221812.QiRW1CXX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3e00c2b4797c228b1939a15506c9ab807d0fa809
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiapeng-Chong/fs-buffer-Remove-redundant-assignment-to-err/20230322-150022
+        git checkout 3e00c2b4797c228b1939a15506c9ab807d0fa809
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303221812.QiRW1CXX-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/buffer.c:24:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/buffer.c:24:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/buffer.c:24:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> fs/buffer.c:2639:1: warning: unused label 'out' [-Wunused-label]
+   out:
+   ^~~~
+   fs/buffer.c:2282:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
+   int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+       ^
+   79/2144 (3.68%) spills, 2065/2144 (96.32%) variables
+   8 warnings generated.
+
+
+vim +/out +2639 fs/buffer.c
+
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2572  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2573  int block_truncate_page(struct address_space *mapping,
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2574  			loff_t from, get_block_t *get_block)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2575  {
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2576  	pgoff_t index = from >> PAGE_SHIFT;
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2577  	unsigned offset = from & (PAGE_SIZE-1);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2578  	unsigned blocksize;
+54b21a7992a31d Andrew Morton      2006-01-08  2579  	sector_t iblock;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2580  	unsigned length, pos;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2581  	struct inode *inode = mapping->host;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2582  	struct page *page;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2583  	struct buffer_head *bh;
+3e00c2b4797c22 Jiapeng Chong      2023-03-22  2584  	int err = 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2585  
+93407472a21b82 Fabian Frederick   2017-02-27  2586  	blocksize = i_blocksize(inode);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2587  	length = offset & (blocksize - 1);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2588  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2589  	/* Block boundary? Nothing to do */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2590  	if (!length)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2591  		return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2592  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2593  	length = blocksize - length;
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2594  	iblock = (sector_t)index << (PAGE_SHIFT - inode->i_blkbits);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2595  	
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2596  	page = grab_cache_page(mapping, index);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2597  	if (!page)
+3e00c2b4797c22 Jiapeng Chong      2023-03-22  2598  		return -ENOMEM;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2599  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2600  	if (!page_has_buffers(page))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2601  		create_empty_buffers(page, blocksize, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2602  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2603  	/* Find the buffer that contains "offset" */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2604  	bh = page_buffers(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2605  	pos = blocksize;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2606  	while (offset >= pos) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2607  		bh = bh->b_this_page;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2608  		iblock++;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2609  		pos += blocksize;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2610  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2611  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2612  	if (!buffer_mapped(bh)) {
+b0cf2321c65991 Badari Pulavarty   2006-03-26  2613  		WARN_ON(bh->b_size != blocksize);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2614  		err = get_block(inode, iblock, bh, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2615  		if (err)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2616  			goto unlock;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2617  		/* unmapped? It's a hole - nothing to do */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2618  		if (!buffer_mapped(bh))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2619  			goto unlock;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2620  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2621  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2622  	/* Ok, it's mapped. Make sure it's up-to-date */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2623  	if (PageUptodate(page))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2624  		set_buffer_uptodate(bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2625  
+33a266dda9fbbe David Chinner      2007-02-12  2626  	if (!buffer_uptodate(bh) && !buffer_delay(bh) && !buffer_unwritten(bh)) {
+e7ea1129afab0e Zhang Yi           2022-09-01  2627  		err = bh_read(bh, 0);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2628  		/* Uhhuh. Read error. Complain and punt. */
+e7ea1129afab0e Zhang Yi           2022-09-01  2629  		if (err < 0)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2630  			goto unlock;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2631  	}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2632  
+eebd2aa355692a Christoph Lameter  2008-02-04  2633  	zero_user(page, offset, length);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2634  	mark_buffer_dirty(bh);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2635  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2636  unlock:
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2637  	unlock_page(page);
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2638  	put_page(page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @2639  out:
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2640  	return err;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2641  }
+1fe72eaa0f46a0 H Hartley Sweeten  2009-09-22  2642  EXPORT_SYMBOL(block_truncate_page);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  2643  
 
 -- 
-nvpublic
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
