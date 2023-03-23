@@ -2,280 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A596C5D5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9B06C5D5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCWDlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 23:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S229830AbjCWDnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 23:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjCWDlI (ORCPT
+        with ESMTP id S229489AbjCWDnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 23:41:08 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1684F35A6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 20:41:07 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id le6so21111122plb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 20:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679542866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoyT5WlWMHPRnswjhmL4+i1o/+q9y1wOVS+eAYJgyU8=;
-        b=iG23NtLktGlCuK8yLrt2HgdI2u9Xjrn1xIHRMMQ3pBMV1xVKNHeNmgZxutv9V593Kh
-         BcqktDsp/tktwDAfdnh9Lt32isrrQCH1uKy6X2AtUa6g11DsaHb0nrSrhphqQqfr/EAZ
-         BD7TgkX9/OdcfUKsCCV1+bNNIFnRBXts4MDszZdP8Mfj/h4qB1jB97D9f5f6zS6Pato1
-         /ptfVhFtBq4viZfKfa7ULtZKK1LSNrmzL+nzXB4MYMm9i3Z++7wQ6f4ubqg8ihpk+sk5
-         TaR4/zWVHzJ1KB2MQL+f5UPnE2DFWBX1qoKi1ZvxKuh38OjWbwHS/zx8OwemuEGtO/qy
-         LU4Q==
+        Wed, 22 Mar 2023 23:43:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95776279A1
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 20:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679542940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XUIZFR6eucu+OIs0TWLjII9inPt9aJzgG/Q5lo//Jeo=;
+        b=cdx+cZejmslYW+pfO9xza4BuR4GbUf9CVjZl3vBaoi8QCWRZmrBwExSg1Wi9W+p5S7tCeS
+        0xu8N5/M1/qjyf8vK3LX2oVykUcfIlv2ZnFLeCI9JYVDxgnR1QiqfphX9DhFEhL2y6iSYX
+        b3zEL9UFhe6vNL37jd2BaSO5uFiES8U=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-278-il9YjyGGOkad34zVAzpKrg-1; Wed, 22 Mar 2023 23:42:19 -0400
+X-MC-Unique: il9YjyGGOkad34zVAzpKrg-1
+Received: by mail-oo1-f72.google.com with SMTP id e2-20020a4a5502000000b0053b50daeaf9so3237082oob.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 20:42:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679542866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yoyT5WlWMHPRnswjhmL4+i1o/+q9y1wOVS+eAYJgyU8=;
-        b=rRqwEbuZapQBD9QLoBzUKQVygcVgCqEIIFLydeBUXMtsS6iGaWjJVtOoslkVK35n0v
-         ULddSLSmW0oNcC/Kdx2N5TxEvvQF45S3J72z4ctBlsuGYgypURI4yD/KG6XHH8n17KyJ
-         rbkVrudaHGvdBKCRRtvAfNicdRyyFXGTzt7B9V57MNHEdR45SHU3qCIyuNEE5dGGXxWv
-         LFBibrUp70plZso3Vti+Da2S4nJKuchgdrbyBbLtWAKZC75eTdxkWrCAifASSPRcYJnG
-         tdkcNKvjEmGtYG82Gyi8guu706G24a1VULXheI1vtQlWCcRV4jS4OnLi7H+T6X7o9+ek
-         +r8g==
-X-Gm-Message-State: AO0yUKWiWcimd/M2VFnw2o5BKloDjZsy0/LcCht9EfPRrimGegpzB4wH
-        /PwB1EdyWbcJkRF2oXueYA==
-X-Google-Smtp-Source: AK7set+QUfnUhnpJEqKH7UfWBlBlehf/TeZPU8cuBJxgygXSi8hJBqupZKgwu+4OSJFCj0Tc/ZBVww==
-X-Received: by 2002:a17:90b:3b4f:b0:23f:86c2:54e2 with SMTP id ot15-20020a17090b3b4f00b0023f86c254e2mr6077157pjb.16.1679542866516;
-        Wed, 22 Mar 2023 20:41:06 -0700 (PDT)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id fu2-20020a17090ad18200b002376d85844dsm254024pjb.51.2023.03.22.20.41.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 20:41:05 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:40:58 +0800
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     Dave Young <dyoung@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kexec@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH 0/6] arm64: make kexec_file able to load zboot image
-Message-ID: <ZBvKSis+dfnqa+Vz@piliu.users.ipa.redhat.com>
-References: <20230306030305.15595-1-kernelfans@gmail.com>
- <CAMj1kXGmjVvNXk6QJON_Tb+ya6WAm6GrHm6=GD0K23rm+7uDNA@mail.gmail.com>
- <ZAbxF+4ekAfSmoUE@piliu.users.ipa.redhat.com>
- <ZAqvTyv3C+Hvl9cR@piliu.users.ipa.redhat.com>
- <CALu+AoS86mKmeeTxSQyaA70=-5bCC3g3iO4i=A6HTZ-ewdHh=w@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1679542939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XUIZFR6eucu+OIs0TWLjII9inPt9aJzgG/Q5lo//Jeo=;
+        b=JVeU27YMqWsST9f6QJWnHgrMIagiiEW58MKBmqtJmHJe/HtvHKnjiKgKTei2/cepA+
+         mFGc00Xc6U6sgt6417kEnvgJ0n0xcsidQlG5mlfA6pCrphBA5UGeg7fXQovThBzm+wsV
+         yuNE/AWmbP5YyelGyZcIDXBfhc1/MAzi6bjvrxBarSbf5rBLT2UNWAYGmG/LzPSQT3FA
+         3XMzvK1yuqi/X+je/aWqKo4NrtXAfqFpEXffTlIPATRtwe7Qsx41FfoUpLJ4BwmOuWL+
+         c/r8U0MyxkuVXQlelpSuWFZm7v3eojGj9giHzSxd3CJ7SEVy6WULLUmLGzYtpuCc7Em9
+         /moA==
+X-Gm-Message-State: AO0yUKXVBsHWZGO3UkyY2z1D8X5ekEyqVyx5a3/WaefmqJInW95XpuTF
+        j0QpBJ/4bKLMXIL+//h8Ebn+Jnl1CG0sZvKkpmi6nnh1s910ZWTcIFPBoVugJEXW+56My6eaJgB
+        zmvYx4Ta1AnQPibjN1sUrFf9I0rI2VdfDE3KkQjnX
+X-Received: by 2002:a05:6808:1a1d:b0:383:fef9:6cac with SMTP id bk29-20020a0568081a1d00b00383fef96cacmr1819911oib.9.1679542938861;
+        Wed, 22 Mar 2023 20:42:18 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/mXp63nDLW0b7iGBzyRXlYGsaP/rHpglo4tTf5G/0Ar5AWw4s9TVxEiIat3siEObH+eUeSB9APmekJJ290fu0=
+X-Received: by 2002:a05:6808:1a1d:b0:383:fef9:6cac with SMTP id
+ bk29-20020a0568081a1d00b00383fef96cacmr1819900oib.9.1679542938572; Wed, 22
+ Mar 2023 20:42:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALu+AoS86mKmeeTxSQyaA70=-5bCC3g3iO4i=A6HTZ-ewdHh=w@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230321154228.182769-1-sgarzare@redhat.com> <20230321154804.184577-1-sgarzare@redhat.com>
+ <20230321154804.184577-4-sgarzare@redhat.com>
+In-Reply-To: <20230321154804.184577-4-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 23 Mar 2023 11:42:07 +0800
+Message-ID: <CACGkMEtbrt3zuqy9YdhNyE90HHUT1R=HF-YRAQ6b4KnW_SdZ-w@mail.gmail.com>
+Subject: Re: [PATCH v3 8/8] vdpa_sim: add support for user VA
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        stefanha@redhat.com, linux-kernel@vger.kernel.org,
+        eperezma@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Tue, Mar 21, 2023 at 11:48=E2=80=AFPM Stefano Garzarella <sgarzare@redha=
+t.com> wrote:
+>
+> The new "use_va" module parameter (default: true) is used in
+> vdpa_alloc_device() to inform the vDPA framework that the device
+> supports VA.
+>
+> vringh is initialized to use VA only when "use_va" is true and the
+> user's mm has been bound. So, only when the bus supports user VA
+> (e.g. vhost-vdpa).
+>
+> vdpasim_mm_work_fn work is used to serialize the binding to a new
+> address space when the .bind_mm callback is invoked, and unbinding
+> when the .unbind_mm callback is invoked.
+>
+> Call mmget_not_zero()/kthread_use_mm() inside the worker function
+> to pin the address space only as long as needed, following the
+> documentation of mmget() in include/linux/sched/mm.h:
+>
+>   * Never use this function to pin this address space for an
+>   * unbounded/indefinite amount of time.
 
-Thanks for your suggestion. Please see the comment inlined.
+I wonder if everything would be simplified if we just allow the parent
+to advertise whether or not it requires the address space.
 
-On Wed, Mar 22, 2023 at 11:44:52AM +0800, Dave Young wrote:
-> On Fri, 10 Mar 2023 at 12:18, Pingfan Liu <kernelfans@gmail.com> wrote:
-> >
-> > On Tue, Mar 07, 2023 at 04:08:55PM +0800, Pingfan Liu wrote:
-> > > Hi Ard,
-> > >
-> > > Thanks for sharing your idea. Please see the comment.
-> > >
-> > > On Mon, Mar 06, 2023 at 09:08:03AM +0100, Ard Biesheuvel wrote:
-> > > > (cc Mark)
-> > > >
-> > > > Hello Pingfan,
-> > > >
-> > > > Thanks for working on this.
-> > > >
-> > > > On Mon, 6 Mar 2023 at 04:03, Pingfan Liu <kernelfans@gmail.com> wrote:
-> > > > >
-> > > > > After introducing zboot image, kexec_file can not load and jump to the
-> > > > > new style image. Hence it demands a method to load the new kernel.
-> > > > >
-> > > > > The crux of the problem lies in when and how to decompress the Image.gz.
-> > > > > There are three possible courses to take: -1. in user space, but hard to
-> > > > > achieve due to the signature verification inside the kernel.
-> > > >
-> > > > That depends. The EFI zboot image encapsulates another PE/COFF image,
-> > > > which could be signed as well.
-> > > >
-> > > > So there are at least three other options here:
-> > > > - sign the encapsulated image with the same key as the zboot image
-> > > > - sign the encapsulated image with a key that is only valid for kexec boot
-> > > > - sign the encapsulated image with an ephemeral key that is only valid
-> > > > for a kexec'ing an image that was produced by the same kernel build
-> > > >
-> > > > >  -2. at the
-> > > > > boot time, let the efi_zboot_entry() handles it, which means a simulated
-> > > > > EFI service should be provided to that entry, especially about how to be
-> > > > > aware of the memory layout.
-> > > >
-> > > > This is actually an idea I intend to explore: with the EFI runtime
-> > > > services regions mapped 1:1, it wouldn't be too hard to implement a
-> > > > minimal environment that can run the zboot image under the previous
-> > >
-> > > The idea of the minimal environment lools amazing. After digging
-> > > more deeply into it, I think it means to implement most of the function
-> > > members in efi_boot_services, besides that, some UEFI protocols due to
-> > > the reference of efi_call_proto(). So a clear boundary between zboot and
-> > > its dependent EFI service is demanded before the work.
-> > >
-> >
-> > Looking deeper into it. This approach may be splitted into the following
-> > chunks:
-> > -1. Estimation the memory demanded by the decompression of zboot, which
-> > roughly includes the size of Image, the size of the emulated service and
-> > the stack used by zboot. Finally we need a kexec_add_buffer() for this
-> > range.
-> >
-> > -2. The emulated EFI services and some initial data such as the physical
-> > address of dtb, the usable memory start address and size should be set
-> > by kexec_purgatory_get_set_symbol()
-> >
-> > -3. Set up an identity mapping of the usable memory by zboot, prepare
-> > stack and turn on MMU at the last point just before 'br efi_zboot_entry'
-> > in relocate_kernel.S, which means relocate_kernel.S should support two
-> > kinds of payload.
-> >
-> > -4. For efi_zboot_entry(), if jumping from kexec, limit its requirement
-> > to only a few boot services: e.g. allocate_pages, allocate_pool. So the
-> > emulated services can be deduced.
-> 
-> Hi Pingfan,
-> 
-> I'm not sure how hard it will be although Ard thinks it could be
-> doable.  If it is not easy I suspect it is not worth the effort.
-> 
+Then when vhost-vDPA probes the device it can simply advertise
+use_work as true so vhost core can use get_task_mm() in this case?
 
-Yes, it is a little hard comparing to the original patch. But I am also
-trying in that direction.
+Thanks
 
-> For your current series,  my suggestion is you can try to move the
-> major code in the generic code path in kernel/kexec_file.c and keep
-> the arch code minimum so that in the future other arches can avoid
-> redundant code.
-> 
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>
+> Notes:
+>     v3:
+>     - called mmget_not_zero() before kthread_use_mm() [Jason]
+>       As the documentation of mmget() in include/linux/sched/mm.h says:
+>
+>       * Never use this function to pin this address space for an
+>       * unbounded/indefinite amount of time.
+>
+>       I moved mmget_not_zero/kthread_use_mm inside the worker function,
+>       this way we pin the address space only as long as needed.
+>       This is similar to what vfio_iommu_type1_dma_rw_chunk() does in
+>       drivers/vfio/vfio_iommu_type1.c
+>     - simplified the mm bind/unbind [Jason]
+>     - renamed vdpasim_worker_change_mm_sync() [Jason]
+>     - fix commit message (s/default: false/default: true)
+>     v2:
+>     - `use_va` set to true by default [Eugenio]
+>     - supported the new unbind_mm callback [Jason]
+>     - removed the unbind_mm call in vdpasim_do_reset() [Jason]
+>     - avoided to release the lock while call kthread_flush_work() since w=
+e
+>       are now using a mutex to protect the device state
+>
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 80 +++++++++++++++++++++++++++++++-
+>  2 files changed, 79 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.h
+> index 4774292fba8c..3a42887d05d9 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -59,6 +59,7 @@ struct vdpasim {
+>         struct vdpasim_virtqueue *vqs;
+>         struct kthread_worker *worker;
+>         struct kthread_work work;
+> +       struct mm_struct *mm_bound;
+>         struct vdpasim_dev_attr dev_attr;
+>         /* mutex to synchronize virtqueue state */
+>         struct mutex mutex;
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.c
+> index ab4cfb82c237..23c891cdcd54 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -35,10 +35,44 @@ module_param(max_iotlb_entries, int, 0444);
+>  MODULE_PARM_DESC(max_iotlb_entries,
+>                  "Maximum number of iotlb entries for each address space.=
+ 0 means unlimited. (default: 2048)");
+>
+> +static bool use_va =3D true;
+> +module_param(use_va, bool, 0444);
+> +MODULE_PARM_DESC(use_va, "Enable/disable the device's ability to use VA"=
+);
+> +
+>  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+>  #define VDPASIM_QUEUE_MAX 256
+>  #define VDPASIM_VENDOR_ID 0
+>
+> +struct vdpasim_mm_work {
+> +       struct kthread_work work;
+> +       struct vdpasim *vdpasim;
+> +       struct mm_struct *mm_to_bind;
+> +       int ret;
+> +};
+> +
+> +static void vdpasim_mm_work_fn(struct kthread_work *work)
+> +{
+> +       struct vdpasim_mm_work *mm_work =3D
+> +               container_of(work, struct vdpasim_mm_work, work);
+> +       struct vdpasim *vdpasim =3D mm_work->vdpasim;
+> +
+> +       mm_work->ret =3D 0;
+> +
+> +       //TODO: should we attach the cgroup of the mm owner?
+> +       vdpasim->mm_bound =3D mm_work->mm_to_bind;
+> +}
+> +
+> +static void vdpasim_worker_change_mm_sync(struct vdpasim *vdpasim,
+> +                                         struct vdpasim_mm_work *mm_work=
+)
+> +{
+> +       struct kthread_work *work =3D &mm_work->work;
+> +
+> +       kthread_init_work(work, vdpasim_mm_work_fn);
+> +       kthread_queue_work(vdpasim->worker, work);
+> +
+> +       kthread_flush_work(work);
+> +}
+> +
+>  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+>  {
+>         return container_of(vdpa, struct vdpasim, vdpa);
+> @@ -59,8 +93,10 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasi=
+m, unsigned int idx)
+>  {
+>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
+>         uint16_t last_avail_idx =3D vq->vring.last_avail_idx;
+> +       bool va_enabled =3D use_va && vdpasim->mm_bound;
+>
+> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, f=
+alse,
+> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
+> +                         va_enabled,
+>                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
+>                           (struct vring_avail *)
+>                           (uintptr_t)vq->driver_addr,
+> @@ -130,8 +166,20 @@ static const struct vdpa_config_ops vdpasim_batch_co=
+nfig_ops;
+>  static void vdpasim_work_fn(struct kthread_work *work)
+>  {
+>         struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
+rk);
+> +       struct mm_struct *mm =3D vdpasim->mm_bound;
+> +
+> +       if (mm) {
+> +               if (!mmget_not_zero(mm))
+> +                       return;
+> +               kthread_use_mm(mm);
+> +       }
+>
+>         vdpasim->dev_attr.work_fn(vdpasim);
+> +
+> +       if (mm) {
+> +               kthread_unuse_mm(mm);
+> +               mmput(mm);
+> +       }
+>  }
+>
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+> @@ -162,7 +210,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
+r *dev_attr,
+>         vdpa =3D __vdpa_alloc_device(NULL, ops,
+>                                    dev_attr->ngroups, dev_attr->nas,
+>                                    dev_attr->alloc_size,
+> -                                  dev_attr->name, false);
+> +                                  dev_attr->name, use_va);
+>         if (IS_ERR(vdpa)) {
+>                 ret =3D PTR_ERR(vdpa);
+>                 goto err_alloc;
+> @@ -582,6 +630,30 @@ static int vdpasim_set_map(struct vdpa_device *vdpa,=
+ unsigned int asid,
+>         return ret;
+>  }
+>
+> +static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *m=
+m)
+> +{
+> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> +       struct vdpasim_mm_work mm_work;
+> +
+> +       mm_work.vdpasim =3D vdpasim;
+> +       mm_work.mm_to_bind =3D mm;
+> +
+> +       vdpasim_worker_change_mm_sync(vdpasim, &mm_work);
+> +
+> +       return mm_work.ret;
+> +}
+> +
+> +static void vdpasim_unbind_mm(struct vdpa_device *vdpa)
+> +{
+> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> +       struct vdpasim_mm_work mm_work;
+> +
+> +       mm_work.vdpasim =3D vdpasim;
+> +       mm_work.mm_to_bind =3D NULL;
+> +
+> +       vdpasim_worker_change_mm_sync(vdpasim, &mm_work);
+> +}
+> +
+>  static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
+>                            u64 iova, u64 size,
+>                            u64 pa, u32 perm, void *opaque)
+> @@ -678,6 +750,8 @@ static const struct vdpa_config_ops vdpasim_config_op=
+s =3D {
+>         .set_group_asid         =3D vdpasim_set_group_asid,
+>         .dma_map                =3D vdpasim_dma_map,
+>         .dma_unmap              =3D vdpasim_dma_unmap,
+> +       .bind_mm                =3D vdpasim_bind_mm,
+> +       .unbind_mm              =3D vdpasim_unbind_mm,
+>         .free                   =3D vdpasim_free,
+>  };
+>
+> @@ -712,6 +786,8 @@ static const struct vdpa_config_ops vdpasim_batch_con=
+fig_ops =3D {
+>         .get_iova_range         =3D vdpasim_get_iova_range,
+>         .set_group_asid         =3D vdpasim_set_group_asid,
+>         .set_map                =3D vdpasim_set_map,
+> +       .bind_mm                =3D vdpasim_bind_mm,
+> +       .unbind_mm              =3D vdpasim_unbind_mm,
+>         .free                   =3D vdpasim_free,
+>  };
+>
+> --
+> 2.39.2
+>
 
-OK. I will do it.
-
-> Otherwise a fallback solution could be using the same key to sign both
-> the zboot image and the internal kernel image like below:
-> 1. sign the kernel with the same key twice (kernel image and zboot
-> image) in distro kernel
-> 2. introduce a kconfig in mainline to sign the kernel image with an
-> ephemeral key same to kernel modules.  Distro can disable the config
-> option. (in this way kexec can only load the same kernel, it is not
-> useful if people want to load older/newer kernels)
-> 3. patch kexec-tools to decompress the zboot image and load the kernel image
-> 
-
-Yes, this is also a doable way. I will try it if more votes for it.
-
-Thanks,
-
-	Pingfan
-> >
-> > > > kernel up to the point where it call ExitBootServices(), after which
-> > > > kexec() would take over.
-> > > >
-> > >
-> > > IIUC, after kexec switches to efi_zboot_entry(), it will not return,
-> > > right?
-> > >
-> >
-> > I have this assumption because letting the control path switch between
-> > kernel and non-kernel code is not a good idea.
-> >
-> >
-> > Thanks,
-> >
-> > Pingfan
-> >
-> > > > >  -3. in kernel space, during the file load
-> > > > > of the zboot image. At that point, the kernel masters the whole memory
-> > > > > information, and easily allocates a suitable memory for the decompressed
-> > > > > kernel image. (I think this is similar to what grub does today).
-> > > > >
-> > > >
-> > > > GRUB just calls LoadImage(), and the decompression code runs in the EFI context.
-> > > >
-> > >
-> > > Ah, thanks for the correcting. I had made an wrong assumption of grub
-> > > based on [1], from which, I thought that grub is the case "For
-> > > compatibility with non-EFI loaders, the payload can be decompressed and
-> > > executed by the loader as well, provided that the loader implements the
-> > > decompression algorithm and that non-EFI boot is supported by the
-> > > encapsulated image"
-> > >
-> > >
-> > > [1]: https://www.phoronix.com/news/Linux-6.1-Generic-EFI-Zboot
-> > >
-> > >
-> > > Eager to find a solution to kexec a zboot image. Hope it will come soon.
-> > >
-> > >
-> > > Thanks,
-> > >
-> > >       Pingfan
-> > > > > The core of this series is [5/6].  [3,6/6] handles the config option.
-> > > > > The assumption of [3/6] is kexec_file_load is independent of zboot,
-> > > > > especially it can load kernel images compressed with different
-> > > > > compression method.  [6/6] is if EFI_ZBOOT, the corresponding
-> > > > > decompression method should be included.
-> > > > >
-> > > > >
-> > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > > > Cc: Will Deacon <will@kernel.org>
-> > > > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > > > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > > > > Cc: kexec@lists.infradead.org
-> > > > > To: linux-arm-kernel@lists.infradead.org
-> > > > > To: linux-kernel@vger.kernel.org
-> > > > >
-> > > > > Pingfan Liu (6):
-> > > > >   arm64: kexec: Rename kexec_image.c to kexec_raw_image.c
-> > > > >   lib/decompress: Introduce decompress_method_by_name()
-> > > > >   arm64: Kconfig: Pick decompressing method for kexec file load
-> > > > >   lib/decompress: Keep decompress routines based on selection
-> > > > >   arm64: kexec: Introduce zboot image loader
-> > > > >   init/Kconfig: Select decompressing method if compressing kernel
-> > > > >
-> > > > >  arch/arm64/Kconfig                            |  59 ++++++
-> > > > >  arch/arm64/include/asm/kexec.h                |   4 +-
-> > > > >  arch/arm64/kernel/Makefile                    |   2 +-
-> > > > >  .../{kexec_image.c => kexec_raw_image.c}      |   2 +-
-> > > > >  arch/arm64/kernel/kexec_zboot_image.c         | 186 ++++++++++++++++++
-> > > > >  arch/arm64/kernel/machine_kexec.c             |   1 +
-> > > > >  arch/arm64/kernel/machine_kexec_file.c        |   3 +-
-> > > > >  include/linux/decompress/generic.h            |   2 +
-> > > > >  include/linux/decompress/mm.h                 |   9 +-
-> > > > >  include/linux/zboot.h                         |  26 +++
-> > > > >  init/Kconfig                                  |   7 +
-> > > > >  lib/Kconfig                                   |   3 +
-> > > > >  lib/decompress.c                              |  17 +-
-> > > > >  13 files changed, 314 insertions(+), 7 deletions(-)
-> > > > >  rename arch/arm64/kernel/{kexec_image.c => kexec_raw_image.c} (98%)
-> > > > >  create mode 100644 arch/arm64/kernel/kexec_zboot_image.c
-> > > > >  create mode 100644 include/linux/zboot.h
-> > > > >
-> > > > > --
-> > > > > 2.31.1
-> > > > >
-> >
-> > _______________________________________________
-> > kexec mailing list
-> > kexec@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/kexec
-> >
-> 
