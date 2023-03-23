@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0A46C67ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F3C6C6872
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjCWMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
+        id S231635AbjCWMf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjCWMPk (ORCPT
+        with ESMTP id S230078AbjCWMf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:15:40 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB00279A4;
-        Thu, 23 Mar 2023 05:14:44 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id ew6so22560609edb.7;
-        Thu, 23 Mar 2023 05:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679573683;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QtfyA5+0e27PBCjZwhJRtSv2XkdtikGY1iiyI1Ysvsc=;
-        b=CsTdLDaM4ckiOneovfOqYSr+RapnYsg0Em1LH78jxOaP8J8VJR/OlcupAihouHCkNk
-         uzr7h7GEN5zUAuqehdtnNOkxyi4A86b1qa+3Dagw1r4saZkPbGehuQOr+7k4MMZ3++SE
-         5oubKdfoYCPeM//ZXBsQ7l/4HBLgey5isd6A8mug/WyP+kM250QMYUKIZ5qVuKxMjvsE
-         aF84KmkCvBupLdx2IWP9uvUxYdOZfbQYV0vFj6zGbsXX6gHNxfegFmB24vvtjKbgeHx5
-         OOvqlUtB6t98UJzkuGD3gC9+FuhvYYw4zYdAjDvbc6xfBmGVWrMljb7LCrVhWWUTMj17
-         ulng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573683;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QtfyA5+0e27PBCjZwhJRtSv2XkdtikGY1iiyI1Ysvsc=;
-        b=gAzaS4Ay/Iy9K3SFkbOtuVzcqA5gFHW2i2yFetTOrzkiI5QP65741E9rKiXv3VPxH7
-         QpjKGWgrN8GnMf2gCPNl7g0WEREvLRMrGoAbijrlWEO5XwbYNE0iGSt+h02DyEoNzuPU
-         qp0VXRk7Kinp6HTCBXZPrmLpkSGfmew83zbPMz5ypulOiXk9ClA2Yfc7Dwvz5VuJxHge
-         tsmHIGqYNxz+bKkAuwrDRMcqmR28o/JAP9ejXR9O4qs993hFZXZrcPGKoOrN9Kg5/kIK
-         8WZjSkQlz4ZYih7qedW5CxhvjSIwbFaxMw3Mr+xS+ciPmic3GTENr0DICWAiMWuxDSBQ
-         RoSQ==
-X-Gm-Message-State: AO0yUKW0mhJqO4vhnH2yyIXD/1n5qoLSmG0X3FCy6UGkhkBGrpBEd8hc
-        kYoqVCSS7qEkpQWtbnKx/WHmTPq2t+f2zA==
-X-Google-Smtp-Source: AK7set+HmNtTcwTYVRADBqYt9gkrEw4spWc+kfydjtrvRIb2Z0PVz5ZIdmiiy6REIw4t61dQidpwHQ==
-X-Received: by 2002:a17:907:1def:b0:8b2:d30:e722 with SMTP id og47-20020a1709071def00b008b20d30e722mr10074299ejc.3.1679573682628;
-        Thu, 23 Mar 2023 05:14:42 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:d509:cbf0:f579:76f0])
-        by smtp.gmail.com with ESMTPSA id z21-20020a1709064e1500b00930de1da701sm8772930eju.10.2023.03.23.05.14.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 05:14:42 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: remove obsolete file entry in MIPS/LOONGSON1 ARCHITECTURE
-Date:   Thu, 23 Mar 2023 13:14:37 +0100
-Message-Id: <20230323121437.28239-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Mar 2023 08:35:28 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D0C1B2F8;
+        Thu, 23 Mar 2023 05:35:27 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pj46f6NSwzKmj9;
+        Thu, 23 Mar 2023 20:15:22 +0800 (CST)
+Received: from [10.174.179.79] (10.174.179.79) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 20:15:44 +0800
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <wangrong68@huawei.com>,
+        Cindy Lu <lulu@redhat.com>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
+ <Y+7G+tiBCjKYnxcZ@nvidia.com> <20230217051158-mutt-send-email-mst@kernel.org>
+ <Y+92c9us3HVjO2Zq@nvidia.com>
+ <CACGkMEsVBhxtpUFs7TrQzAecO8kK_NR+b1EvD2H7MjJ+2aEKJw@mail.gmail.com>
+ <20230310034101-mutt-send-email-mst@kernel.org>
+ <CACGkMEsr3xSa=1WtU35CepWSJ8CK9g4nGXgmHS_9D09LHi7H8g@mail.gmail.com>
+ <20230310045100-mutt-send-email-mst@kernel.org> <ZAskNjP3d9ipki4k@nvidia.com>
+ <c6e60ed9-6de2-2f4a-7bd1-52c53ed57a28@huawei.com>
+ <ZBw4hGj8oGARaKhW@nvidia.com>
+From:   Nanyong Sun <sunnanyong@huawei.com>
+Message-ID: <b2c24e31-a708-8556-0029-93c0aa22a6ef@huawei.com>
+Date:   Thu, 23 Mar 2023 20:15:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <ZBw4hGj8oGARaKhW@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.79]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c46496119ed0 ("clk: loongson1: Remove the outdated driver") removes
-all files matching the pattern drivers/*/*/*loongson1*, but misses to
-adjust the file entry for MIPS/LOONGSON1 ARCHITECTURE in MAINTAINERS.
+On 2023/3/23 19:31, Jason Gunthorpe wrote:
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+> On Thu, Mar 23, 2023 at 05:22:36PM +0800, Nanyong Sun wrote:
+>>> A patch to export that function is alread posted:
+>>>
+>>> https://lore.kernel.org/linux-iommu/BN9PR11MB52760E9705F2985EACCD5C4A8CBA9@BN9PR11MB5276.namprd11.prod.outlook.com/T/#u
+>>>
+>>> But I do not want VDPA to mis-use it unless it also implements all the
+>>> ownership stuff properly.
+>>>
+>> I want to confirm if we need to introduce iommu group logic to vdpa, as "all
+>> the ownership stuff" ?
+> You have to call iommu_device_claim_dma_owner()
+>
+> But again, this is all pointless, iommufd takes are of all of this and
+> VDPA should switch to it instead of more hacking.
+>
+> Jason
+> .
+Yeah,  thanks for your suggestion，but as Michael and Jason Wang said, 
+before iommufd is ready, we may need to make vDPA work well on software 
+managed MSI platforms.
+To achieve that, basically we have two ways:
 
-Remove this file entry in MIPS/LOONGSON1 ARCHITECTURE.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Keguang, please ack.
-Stephen, please pick this minor fix-up on the top of the commit above.
-
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8f8e846fc453..4aac18b5d5c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14047,7 +14047,6 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/include/asm/mach-loongson32/
- F:	arch/mips/loongson32/
--F:	drivers/*/*/*loongson1*
- F:	drivers/*/*loongson1*
- 
- MIPS/LOONGSON2EF ARCHITECTURE
--- 
-2.17.1
-
+1. export iommu_get_resv_regions, and get regions device by device.
+2. introduce iommu group, get regions by iommu_get_group_resv_regions, 
+which already exported.
