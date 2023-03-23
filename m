@@ -2,186 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B336C6C7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207B26C6C83
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjCWPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S231307AbjCWPql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjCWPnw (ORCPT
+        with ESMTP id S231439AbjCWPqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:43:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A420576;
-        Thu, 23 Mar 2023 08:43:49 -0700 (PDT)
-Received: from [192.168.10.28] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1255366030F9;
-        Thu, 23 Mar 2023 15:43:40 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679586227;
-        bh=fqcMKt1oBSR5L6Q8opsI63fwItnsnZyiV5drCHsNuLI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=eNbPAtfwrGZFe7FIs6NljH+Y1y7/jks83wQi/OH9fQ0zixOK+wI9UClTwQVKgnOGr
-         19s+YgE9ZDx1bwb/p6VvFqAJ6+9pmfSO9CaE5q6VXmA0bA91I1S1c7EwTkNvDiUsk2
-         nNd22mJ30PPDaPc3iO+aBQxrgpIpCwI5rVZV2z8+2wccfYlXzhop17Rrxf0FyUUtuP
-         qQ3nrOkV8K53MEiJGKaDU4YjuO9Ejv5ic9Yzdwi+7RZss6u97Mc+Sgpj2qVh7Akp8x
-         m0RAN3N7TOqFKofqXaGy8nTgauWoeZKf5ABJ/GURFa9ahLP4PpXOO3s7PjE6LWpvQg
-         HWq1+QR76EXzQ==
-Message-ID: <996c14d4-6dcc-7d14-cf76-d8fbea0a9040@collabora.com>
-Date:   Thu, 23 Mar 2023 20:43:36 +0500
+        Thu, 23 Mar 2023 11:46:38 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8621BAF1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:46:36 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eh3so88572621edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679586395;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TIHMsdmfle7NugjLuFYQiNRPSMKIKN1rr5aYwFC8Kug=;
+        b=NnpqzKnhqFnJAt8X+CKmsaMihz2+x72k0iSwes0Z93hrQCCmnIjykaTSGPeNQ5pFhH
+         Ihrt+7xKrvcJ83OWSpM9YB5TzbUiwKAKedqLBMpOYu7VudORQSNlTrZ/sZVIouVytrmh
+         8mRFg85soOgbowRyhrnI2fxNMftE7L06F70jdiEbEkgPyZZb1Gx9QEk58YI9QSl27zs1
+         8nh6biODhrdfptWo85kOkztlCfF4i/Ih+hkxxrH/M9QQ9WDY2JEdbRrI10oZ7tKOl1RJ
+         gthE+6pN8lZAyXxGbsbBwRN8FPh2O5R7OTCAdHVZyHYMghuAo6HWsZtEhTNsg344Cx3N
+         ML3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679586395;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TIHMsdmfle7NugjLuFYQiNRPSMKIKN1rr5aYwFC8Kug=;
+        b=E8IJnyV+CKcrTSdS/RM/ESXXAwN6wmYcwO8pISL6ZO249akT8tncFMpbIvht8kuAj0
+         8pQqiXd/jdV3xgzPpAvPSBaWYdjO69rmq1q/G2ks3bXypGpsnyMMt8iS6WxS2Gxq6y4s
+         U8Yp1IdDvwxPX7qS/GXFedd9/JlNATD3ebg16tqxE+3MLwN6S6089+HdPSpq95Y05J+y
+         JjmxNMBbtn7XFDJ8alarTauJDhIXFYB03/xn8089AvAaA4WXDg8bjgZXp7yJWqpkpoiw
+         I+V+pnW8WCnXkk1v4WA5Ey/+vnmCEgv+iqQQQLJOHWA2EH7BPsbtwXPQAEKALvbltjbk
+         eXVg==
+X-Gm-Message-State: AO0yUKW1P0w+8G+xmfOrk4wf+D5oWSBWHLszGcQg7Jslo+WYwnuDPT6F
+        DeHpnmv1JYnCzz0pcK+O2x7u3xL3qlntIrd+5aTIxA==
+X-Google-Smtp-Source: AK7set9qvSPeDiywcKEkQlyr4PFl7U28fHGlCYplhrVevp0yQUPR3vcb0VJD03YLXfnBSRIguQiNqhK55JgXWj1sgmw=
+X-Received: by 2002:a17:906:34cd:b0:8e5:411d:4d09 with SMTP id
+ h13-20020a17090634cd00b008e5411d4d09mr5178971ejb.15.1679586394636; Thu, 23
+ Mar 2023 08:46:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-4-yosryahmed@google.com> <20230323154304.GA739026@cmpxchg.org>
+In-Reply-To: <20230323154304.GA739026@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Mar 2023 08:45:58 -0700
+Message-ID: <CAJD7tkYkVp31J-NRsJw2Hg0EPveyfr9KcA0OSEaMea0VchjqHw@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/7] cgroup: rstat: remove cgroup_rstat_flush_irqsafe()
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 1/7] userfaultfd: Add UFFD WP Async support
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-2-usama.anjum@collabora.com> <ZBNr4nohj/Tw4Zhw@x1n>
- <1b78ee32-003d-5645-c223-619b66d41733@collabora.com> <ZBoEpkq66ZxHFr8A@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBoEpkq66ZxHFr8A@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 12:25 AM, Peter Xu wrote:
-> Hi, Muhammad,
-> 
-> On Tue, Mar 21, 2023 at 05:21:15PM +0500, Muhammad Usama Anjum wrote:
->> Thank you so much for the patch. I've tested hugetlb mem. This patch is
->> working fine for hugetlb shmem:
->> *shmid = shmget(2, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
->> mem = shmat(*shmid, 0, 0);
->>
->> I've found slight issue with hugetlb mem which has been mmaped:
->> mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
->> 	   MAP_ANONYMOUS | MAP_HUGETLB | MAP_PRIVATE, -1, 0);
->> The issue is that even after witting to this memory, the wp flag is still
->> present there and memory doesn't appear to be dirty when it should have
->> been dirty. The temporary fix is to write to memory and write protect the
->> memory one extra time.
-> 
-> I looked into this today and found it's an existing bug that can trigger
-> with sync mode too.. as long as protection applied to unpopulated hugetlb
-> private mappings, then write to it.
-> 
-> I've sent a fix for it here and have you copied:
-> 
-> https://lore.kernel.org/linux-mm/20230321191840.1897940-1-peterx@redhat.com/T/#u
-> 
-> Please have a look and see whether it also fixes your issue.
-Thanks for sending the patch. I've replied on the sent patch.
+On Thu, Mar 23, 2023 at 8:43=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
+> wrote:
+>
+> On Thu, Mar 23, 2023 at 04:00:33AM +0000, Yosry Ahmed wrote:
+> > The naming of cgroup_rstat_flush_irqsafe() can be confusing.
+> > It can read like "irqsave", which means that it disables
+> > interrupts throughout, but it actually doesn't. It is just "safe" to
+> > call from contexts with interrupts disabled.
+> >
+> > Furthermore, this is only used today by mem_cgroup_flush_stats(), which
+> > will be changed by a later patch to optionally allow sleeping. Simplify
+> > the code and make it easier to reason about by instead passing in an
+> > explicit @may_sleep argument to cgroup_rstat_flush(), which gets passed
+> > directly to cgroup_rstat_flush_locked().
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  block/blk-cgroup.c     |  2 +-
+> >  include/linux/cgroup.h |  3 +--
+> >  kernel/cgroup/cgroup.c |  4 ++--
+> >  kernel/cgroup/rstat.c  | 24 +++++-------------------
+> >  mm/memcontrol.c        |  6 +++---
+> >  5 files changed, 12 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> > index bd50b55bdb61..3fe313ce5e6b 100644
+> > --- a/block/blk-cgroup.c
+> > +++ b/block/blk-cgroup.c
+> > @@ -1043,7 +1043,7 @@ static int blkcg_print_stat(struct seq_file *sf, =
+void *v)
+> >       if (!seq_css(sf)->parent)
+> >               blkcg_fill_root_iostats();
+> >       else
+> > -             cgroup_rstat_flush(blkcg->css.cgroup);
+> > +             cgroup_rstat_flush(blkcg->css.cgroup, true);
+> >
+> >       rcu_read_lock();
+> >       hlist_for_each_entry_rcu(blkg, &blkcg->blkg_list, blkcg_node) {
+> > diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+> > index 3410aecffdb4..743c345b6a3f 100644
+> > --- a/include/linux/cgroup.h
+> > +++ b/include/linux/cgroup.h
+> > @@ -691,8 +691,7 @@ static inline void cgroup_path_from_kernfs_id(u64 i=
+d, char *buf, size_t buflen)
+> >   * cgroup scalable recursive statistics.
+> >   */
+> >  void cgroup_rstat_updated(struct cgroup *cgrp, int cpu);
+> > -void cgroup_rstat_flush(struct cgroup *cgrp);
+> > -void cgroup_rstat_flush_irqsafe(struct cgroup *cgrp);
+> > +void cgroup_rstat_flush(struct cgroup *cgrp, bool may_sleep);
+> >  void cgroup_rstat_flush_hold(struct cgroup *cgrp);
+> >  void cgroup_rstat_flush_release(void);
+> >
+> > diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> > index 935e8121b21e..58df0fc379f6 100644
+> > --- a/kernel/cgroup/cgroup.c
+> > +++ b/kernel/cgroup/cgroup.c
+> > @@ -5393,7 +5393,7 @@ static void css_release_work_fn(struct work_struc=
+t *work)
+> >       if (ss) {
+> >               /* css release path */
+> >               if (!list_empty(&css->rstat_css_node)) {
+> > -                     cgroup_rstat_flush(cgrp);
+> > +                     cgroup_rstat_flush(cgrp, true);
+> >                       list_del_rcu(&css->rstat_css_node);
+> >               }
+> >
+> > @@ -5406,7 +5406,7 @@ static void css_release_work_fn(struct work_struc=
+t *work)
+> >               /* cgroup release path */
+> >               TRACE_CGROUP_PATH(release, cgrp);
+> >
+> > -             cgroup_rstat_flush(cgrp);
+> > +             cgroup_rstat_flush(cgrp, true);
+>
+> This is an anti-pattern, please don't do this. Naked bool arguments
+> are a pain to comprehend at the callsite and an easy vector for bugs.
+>
+> cgroup_rstat_flush_atomic() would be a better name for, well, atomic
+> callsites.
 
-> 
-> PS: recently I added a warning in commit c2da319c2e2789 and that can indeed
-> capture this one when verifying using pagemap.  I'd guess your dmesg should
-> also contain something dumped.
-I didn't had debug_vm config enabled. I've enabled it now. I'm getting only
-the following stack trace in failure scenario:
+Thanks for pointing this out. I will rename it to
+cgroup_rstat_flush_atomic() in upcoming versions instead. I will also
+do the same for mem_cgroup_flush_stats() as I introduce a similar
+boolean argument for it in the following patch.
 
-ok 1 Hugetlb shmem testing: all new pages must not be written (dirty) 0
-ok 2 Hugetlb shmem testing: all pages must be written (dirty) 1 512 0 512
-ok 3 Hugetlb mem testing: all new pages must not be written (dirty) 0
-[   10.086540] ------------[ cut here ]------------
-[   10.087758] WARNING: CPU: 0 PID: 175 at
-arch/x86/include/asm/pgtable.h:313 pagemap_scan_hugetlb_entry+0x19c/0x230
-[   10.090208] Modules linked in:
-[   10.091059] CPU: 0 PID: 175 Comm: pagemap_ioctl Not tainted
-6.3.0-rc3-next-20230320-00010-gdc395ccf1882 #88
-[   10.093224] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.16.0-debian-1.16.0-5 04/01/2014
-[   10.095879] RIP: 0010:pagemap_scan_hugetlb_entry+0x19c/0x230
-[   10.097497] Code: 89 ca 41 89 c2 29 c8 4c 01 c2 49 39 d2 41 0f 43 c0 e9
-53 ff ff ff 48 83 e2 9f 89 c7 31 ed 49 89 d1 83 e7 02 0f 84 30 ff ff ff
-<0f> 0b 31 ff e9 27 ff ff ff 48 83 e2 9f 44 89 c0 bf 01 00 00 00 bd
-[   10.102528] RSP: 0018:ffffb6cd80303d10 EFLAGS: 00010202
-[   10.104002] RAX: 8000000000000ce7 RBX: 00007fcc84000000 RCX:
-0000000000200000
-[   10.105989] RDX: 80000002f7c00c87 RSI: 0000000000000001 RDI:
-0000000000000002
-[   10.108043] RBP: 0000000000000000 R08: 0000000000000200 R09:
-80000002f7c00c87
-[   10.110004] R10: ffffa08541e3220c R11: 0000000000000000 R12:
-ffffa08541562420
-[   10.112335] R13: ffffb6cd80303e70 R14: 00007fcc84000000 R15:
-ffffffff8eae1520
-[   10.114688] FS:  00007fcc8454b740(0000) GS:ffffa0886fc00000(0000)
-knlGS:0000000000000000
-[   10.116960] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   10.118187] CR2: 00007fcc84000000 CR3: 0000000102838000 CR4:
-0000000000750ef0
-[   10.119628] PKRU: 55555554
-[   10.120184] Call Trace:
-[   10.120730]  <TASK>
-[   10.121206]  __walk_page_range+0xbe/0x1b0
-[   10.122048]  walk_page_range+0x15f/0x1a0
-[   10.122869]  do_pagemap_cmd+0x239/0x390
-[   10.123672]  __x64_sys_ioctl+0x8b/0xc0
-[   10.124462]  do_syscall_64+0x3a/0x90
-[   10.125227]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   10.126326] RIP: 0033:0x7fcc8464bbab
-[   10.127066] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00
-00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05
-<89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
-[   10.130868] RSP: 002b:00007fff9b864240 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[   10.132412] RAX: ffffffffffffffda RBX: 0000000000001000 RCX:
-00007fcc8464bbab
-[   10.133880] RDX: 00007fff9b8642c0 RSI: 00000000c0586610 RDI:
-0000000000000003
-[   10.135328] RBP: 00007fff9b864320 R08: 0000000000000001 R09:
-0000000000000000
-[   10.136790] R10: 00007fff9b864217 R11: 0000000000000246 R12:
-0000000000000000
-[   10.138285] R13: 00007fff9b8644f8 R14: 0000000000409df0 R15:
-00007fcc84862020
-[   10.139729]  </TASK>
-[   10.140197] ---[ end trace 0000000000000000 ]---
-not ok 4 Hugetlb mem testing: all pages must be written (dirty) 0
--2072900416 0 512
+>
+> > diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+> > index af11e28bd055..fe8690bb1e1c 100644
+> > --- a/kernel/cgroup/rstat.c
+> > +++ b/kernel/cgroup/rstat.c
+> > @@ -243,30 +243,16 @@ static bool should_skip_flush(void)
+> >   * This function is safe to call from contexts that disable interrupts=
+, but
+> >   * @may_sleep must be set to false, otherwise the function may block.
+> >   */
+> > -__bpf_kfunc void cgroup_rstat_flush(struct cgroup *cgrp)
+> > +__bpf_kfunc void cgroup_rstat_flush(struct cgroup *cgrp, bool may_slee=
+p)
+> >  {
+> >       if (should_skip_flush())
+> >               return;
+> >
+> > -     might_sleep();
+> > -     spin_lock(&cgroup_rstat_lock);
+> > -     cgroup_rstat_flush_locked(cgrp, true);
+> > -     spin_unlock(&cgroup_rstat_lock);
+> > -}
+> > -
+> > -/**
+> > - * cgroup_rstat_flush_irqsafe - irqsafe version of cgroup_rstat_flush(=
+)
+> > - * @cgrp: target cgroup
+> > - *
+> > - * This function can be called from any context.
+> > - */
+> > -void cgroup_rstat_flush_irqsafe(struct cgroup *cgrp)
+> > -{
+> > -     if (should_skip_flush())
+> > -             return;
+> > +     if (may_sleep)
+> > +             might_sleep();
+>
+> might_sleep_if()
 
-> 
-> Thanks,
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
+Thanks for pointing this out. I don't think it will be needed if we
+keep cgroup_rstat_flush_irqsafe() and only rename it to
+cgroup_rstat_flush_atomic(), but it is useful to know that it exists
+for future reference.
