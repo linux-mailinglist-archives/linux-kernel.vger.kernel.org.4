@@ -2,203 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8D36C6BA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8936C6BA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjCWOzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
+        id S231964AbjCWO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjCWOzn (ORCPT
+        with ESMTP id S231949AbjCWO4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:55:43 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91E81B320
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:42 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id h15so7933442vsh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1679583342;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+oTlLkGu4XBg7D9GQLxh6VnC+XUJIJTBF8fUhsoTP8=;
-        b=LTBfqwlf/M9rJPjcbZEXH/wbqe1ZOqjIzjST3UXornybx+R7J7pGQpUrAHtHTzDGvu
-         cL7EpEXBe23GlAZa7FOxq38BNNXRVgmUXNdIQBCuStekUCBhCTybk3WfGhWfZTKSChWD
-         JnbCIa60L1xcSOqFe1o8B9d3fnK5bQT7zYWnp6T2+O+g66fM53F/t0PL2q+FzqlKML8O
-         fTgKD2u4V0j+0KxM4ylNAg8sWdHs65ZORGm4UfB01kqzI9HXoSclY2mcKnpT1xLnQFlM
-         nXCDrYU7AiJ4IL73YeAi0M4yLsQmhK2hvdB662T2PEHkxhthJAZ+8H9Iy13bi3HAzPEL
-         IAQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679583342;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+oTlLkGu4XBg7D9GQLxh6VnC+XUJIJTBF8fUhsoTP8=;
-        b=sUuBdHdUGp03RpCRctLFD7+GpTfNfz23VqvGPcyY2EhfUnvEFfGRxLdbzkGuKhq8+3
-         SGoKr/Ds6VhDY1Xvac8cg3ZLNRnx9JIeEpSXwGPOoLwjePKLYJZkmqVLeDWH4G8DVP9X
-         GIv88GLMplULoQnwRYWMIivgknhj1uBdLtddM99LCXgrIcyGvhN1PJPfYcSuNAnhUhWc
-         ZyDPPBV1jEvV8soNFjYAgSYfvCoRmppN17zEH1MG6pNr3XDEfX/2wz9YHste65zYjHge
-         epzA9QYE8btmR1cNC0E+Bnp1jzjBfEDGAKQuH3qjtP4S1UpHQ1ZCzvaDzBBF/bVy8KFt
-         T1+Q==
-X-Gm-Message-State: AO0yUKXyh6Cvyu+yTsSCgl6rLYZIGxpz1mBzbz8Awfhz9xgTwKtWO9aH
-        XmfW8dDsM90+4pWXqnl+pnMol3p9Wv5pf81Ui7faGA==
-X-Google-Smtp-Source: AK7set9i+OocmGY8L3enlKAK0g0CHDPShP25dec9yB6zEMC739pzT/6c96zssGZJJoRlEi9hIXGwiBLNEQySgGEkvRo=
-X-Received: by 2002:a67:d71d:0:b0:425:dd21:acc8 with SMTP id
- p29-20020a67d71d000000b00425dd21acc8mr2013668vsj.7.1679583341611; Thu, 23 Mar
- 2023 07:55:41 -0700 (PDT)
+        Thu, 23 Mar 2023 10:56:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20D371EFE7;
+        Thu, 23 Mar 2023 07:55:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D87404B3;
+        Thu, 23 Mar 2023 07:56:38 -0700 (PDT)
+Received: from [10.57.53.151] (unknown [10.57.53.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B33B53F6C4;
+        Thu, 23 Mar 2023 07:55:51 -0700 (PDT)
+Message-ID: <ab840019-a44c-3d72-1dd5-5ef3071f139a@arm.com>
+Date:   Thu, 23 Mar 2023 14:55:50 +0000
 MIME-Version: 1.0
-References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
- <CAK9=C2XJtSG2d_nsyDv7kU1v7Jj0chdevqrMc0MpJswukcEABA@mail.gmail.com> <CAHVXubhhxpzHDM-n91V_rceY5t_VqLvrwZj3RP_tNL2=F9mqjQ@mail.gmail.com>
-In-Reply-To: <CAHVXubhhxpzHDM-n91V_rceY5t_VqLvrwZj3RP_tNL2=F9mqjQ@mail.gmail.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 23 Mar 2023 20:25:29 +0530
-Message-ID: <CAK9=C2WVOpSqtt8r1U4hnzSZ=cc1PocpukgQjNyahP2XuPhozw@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 06/11] coresight-tpdm: Add node to set dsb programming
+ mode
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-7-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1679551448-19160-7-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 6:24=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> Hi Anup,
->
-> On Thu, Mar 23, 2023 at 1:18=E2=80=AFPM Anup Patel <apatel@ventanamicro.c=
-om> wrote:
-> >
-> > Hi Alex,
-> >
-> > On Thu, Mar 16, 2023 at 6:48=E2=80=AFPM Alexandre Ghiti <alexghiti@rivo=
-sinc.com> wrote:
-> > >
-> > > This patchset intends to improve tlb utilization by using hugepages f=
-or
-> > > the linear mapping.
-> > >
-> > > As reported by Anup in v6, when STRICT_KERNEL_RWX is enabled, we must
-> > > take care of isolating the kernel text and rodata so that they are no=
-t
-> > > mapped with a PUD mapping which would then assign wrong permissions t=
-o
-> > > the whole region: it is achieved by introducing a new memblock API.
-> > >
-> > > Another patch makes use of this new API in arm64 which used some sort=
- of
-> > > hack to solve this issue: it was built/boot tested successfully.
-> > >
-> > > base-commit-tag: v6.3-rc1
-> > >
-> > > v8:
-> > > - Fix rv32, as reported by Anup
-> > > - Do not modify memblock_isolate_range and fixes comment, as suggeste=
-d by Mike
-> > > - Use the new memblock API for crash kernel too in arm64, as suggeste=
-d by Andrew
-> > > - Fix arm64 double mapping (which to me did not work in v7), but ends=
- up not
-> > >   being pretty at all, will wait for comments from arm64 reviewers, b=
-ut
-> > >   this patch can easily be dropped if they do not want it.
-> > >
-> > > v7:
-> > > - Fix Anup bug report by introducing memblock_isolate_memory which
-> > >   allows us to split the memblock mappings and then avoid to map the
-> > >   the PUD which contains the kernel as read only
-> > > - Add a patch to arm64 to use this newly introduced API
-> > >
-> > > v6:
-> > > - quiet LLVM warning by casting phys_ram_base into an unsigned long
-> > >
-> > > v5:
-> > > - Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thank=
-s
-> > >   Conor
-> > > - Add RB from Andrew
-> > >
-> > > v4:
-> > > - Rebase on top of v6.2-rc3, as noted by Conor
-> > > - Add Acked-by Rob
-> > >
-> > > v3:
-> > > - Change the comment about initrd_start VA conversion so that it fits
-> > >   ARM64 and RISCV64 (and others in the future if needed), as suggeste=
-d
-> > >   by Rob
-> > >
-> > > v2:
-> > > - Add a comment on why RISCV64 does not need to set initrd_start/end =
-that
-> > >   early in the boot process, as asked by Rob
-> > >
-> > > Alexandre Ghiti (4):
-> > >   riscv: Get rid of riscv_pfn_base variable
-> > >   mm: Introduce memblock_isolate_memory
-> > >   arm64: Make use of memblock_isolate_memory for the linear mapping
-> > >   riscv: Use PUD/P4D/PGD pages for the linear mapping
-> >
-> > Kernel boot fine on RV64 but there is a failure which is still not
-> > addressed. You can see this failure as following message in
-> > kernel boot log:
-> >     0.000000] Failed to add a System RAM resource at 80200000
->
-> Hmmm I don't get that in any of my test configs, would you mind
-> sharing yours and your qemu command line?
+On 23/03/2023 06:04, Tao Zhang wrote:
+> Add node to set and show programming mode for TPDM DSB subunit.
+> Once the DSB programming mode is set, it will be written to the
+> register DSB_CR. Bit[10:9] of the DSB_CR register is used to set
+> the DSB test mode.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 10 ++++
+>   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 ++++++++++++++++++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.h       | 13 +++++
+>   3 files changed, 85 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> index 27ce681..f13e282 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -35,3 +35,13 @@ Description:
+>   		Accepts only one of the 2 values -  0 or 1.
+>   		0 : Set the DSB trigger type to false
+>   		1 : Set the DSB trigger type to true
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_mode
+> +Date:		March 2023
+> +KernelVersion	6.3
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the mode of DSB tpdm. Read the mode of DSB
+> +		tpdm.
+> +
+> +		Accepts the value needs to be greater than 0.
 
-Try alexghiti_test branch at
-https://github.com/avpatel/linux.git
+Please could you document the values ?
 
-I am building the kernel using defconfig and my rootfs is
-based on busybox.
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index e28cf10..8cd822f 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -4,6 +4,7 @@
+>    */
+>   
+>   #include <linux/amba/bus.h>
+> +#include <linux/bitfield.h>
+>   #include <linux/bitmap.h>
+>   #include <linux/coresight.h>
+>   #include <linux/coresight-pmu.h>
+> @@ -51,6 +52,32 @@ static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
+>   	return 0;
+>   }
+>   
+> +static void set_dsb_cycacc_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	u32 mode;
+> +
+> +	mode = TPDM_DSB_MODE_CYCACC(drvdata->dsb->mode);
+> +	*val &= ~TPDM_DSB_TEST_MODE;
+> +	*val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
+> +}
+> +
+> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	u32 mode;
+> +
+> +	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
+> +	*val &= ~TPDM_DSB_HPSEL;
+> +	*val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
+> +}
+> +
+> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
+> +		*val |= TPDM_DSB_CR_MODE;
+> +	else
+> +		*val &= ~TPDM_DSB_CR_MODE;
+> +}
+> +
+>   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+>   {
+>   	if (drvdata->dsb->trig_type)
+> @@ -72,6 +99,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>   	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+>   
+>   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+> +	/* Set the cycle accurate mode */
+> +	set_dsb_cycacc_mode(drvdata, &val);
+> +	/* Set the byte lane for high-performance mode */
+> +	set_dsb_hpsel_mode(drvdata, &val);
+> +	/* Set the performance mode */
+> +	set_dsb_perf_mode(drvdata, &val);
+>   	/* Set trigger type */
+>   	set_trigger_type(drvdata, &val);
+>   	/* Set the enable bit of DSB control register to 1 */
+> @@ -250,6 +283,34 @@ static struct attribute_group tpdm_attr_grp = {
+>   	.attrs = tpdm_attrs,
+>   };
+>   
+> +static ssize_t dsb_mode_show(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%lx\n",
+> +			 (unsigned long)drvdata->dsb->mode);
+> +}
+> +
+> +static ssize_t dsb_mode_store(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   const char *buf,
+> +				   size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || val < 0)
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	drvdata->dsb->mode = val & TPDM_MODE_ALL;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_mode);
+> +
+>   static ssize_t dsb_trig_type_show(struct device *dev,
+>   				     struct device_attribute *attr,
+>   				     char *buf)
+> @@ -321,6 +382,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
+>   static DEVICE_ATTR_RW(dsb_trig_ts);
+>   
+>   static struct attribute *tpdm_dsb_attrs[] = {
+> +	&dev_attr_dsb_mode.attr,
+>   	&dev_attr_dsb_trig_ts.attr,
+>   	&dev_attr_dsb_trig_type.attr,
+>   	NULL,
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> index 68f33bd..8fee562 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> @@ -15,11 +15,22 @@
+>   
+>   /* Enable bit for DSB subunit */
+>   #define TPDM_DSB_CR_ENA		BIT(0)
+> +/* Enable bit for DSB subunit perfmance mode */
+> +#define TPDM_DSB_CR_MODE		BIT(1)
+>   /* Enable bit for DSB subunit trigger type */
+>   #define TPDM_DSB_CR_TRIG_TYPE		BIT(12)
+> +
+>   /* Enable bit for DSB subunit trigger timestamp */
+>   #define TPDM_DSB_TIER_XTRIG_TSENAB		BIT(1)
+>   
+> +/* DSB programming modes */
+> +#define TPDM_DSB_MODE_CYCACC(val)	(val & GENMASK(2, 0))
 
-My QEMU command is:
-qemu-system-riscv64 -M virt -m 512M -nographic -bios
-opensbi/build/platform/generic/firmware/fw_dynamic.bin -kernel
-./build-riscv64/arch/riscv/boot/Image -append "root=3D/dev/ram rw
-console=3DttyS0 earlycon" -initrd ./rootfs_riscv64.img -smp 4
+What do the values for the CYCACC mode mean ?
 
-Regards,
-Anup
+> +#define TPDM_DSB_MODE_PERF		BIT(3)
+> +#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
+> +#define TPDM_MODE_ALL			(0xFFFFFFF)
+> +#define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
+> +#define TPDM_DSB_HPSEL		GENMASK(6, 2)
 
->
-> Thanks
->
-> >
-> > Regards,
-> > Anup
-> >
-> > >
-> > >  arch/arm64/mm/mmu.c           | 25 +++++++++++------
-> > >  arch/riscv/include/asm/page.h | 19 +++++++++++--
-> > >  arch/riscv/mm/init.c          | 53 ++++++++++++++++++++++++++++-----=
---
-> > >  arch/riscv/mm/physaddr.c      | 16 +++++++++++
-> > >  drivers/of/fdt.c              | 11 ++++----
-> > >  include/linux/memblock.h      |  1 +
-> > >  mm/memblock.c                 | 20 +++++++++++++
-> > >  7 files changed, 119 insertions(+), 26 deletions(-)
-> > >
-> > > --
-> > > 2.37.2
-> > >
+Again what do the values mean ? Even if the kernel doesn't use them
+it would be good to document it.
+
+Suzuki
+
+> +
+>   /* TPDM integration test registers */
+>   #define TPDM_ITATBCNTRL		(0xEF0)
+>   #define TPDM_ITCNTRL		(0xF00)
+> @@ -48,10 +59,12 @@
+>   
+>   /**
+>    * struct dsb_dataset - specifics associated to dsb dataset
+> + * @mode:             DSB programming mode
+>    * @trig_ts:          Enable/Disable trigger timestamp.
+>    * @trig_type:        Enable/Disable trigger type.
+>    */
+>   struct dsb_dataset {
+> +	u32				mode;
+>   	bool			trig_ts;
+>   	bool			trig_type;
+>   };
+
