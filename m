@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407E76C5CB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172AC6C5CB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjCWCdf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 22:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S230010AbjCWCiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjCWCdd (ORCPT
+        with ESMTP id S229517AbjCWCiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:33:33 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4580A2CC5B;
-        Wed, 22 Mar 2023 19:33:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32N2X2Tt8010162, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32N2X2Tt8010162
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 23 Mar 2023 10:33:02 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 23 Mar 2023 10:33:17 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 23 Mar 2023 10:33:17 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 23 Mar 2023 10:33:17 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: RE: [PATCH v3 9/9] wifi: rtw88: Add support for the SDIO based RTL8821CS chipset
-Thread-Topic: [PATCH v3 9/9] wifi: rtw88: Add support for the SDIO based
- RTL8821CS chipset
-Thread-Index: AQHZW3Po1pa1IAEt/E2D0CBscuX2k68HqBtQ
-Date:   Thu, 23 Mar 2023 02:33:16 +0000
-Message-ID: <32f57abb6b6b4215af807407b7d9452a@realtek.com>
-References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
- <20230320213508.2358213-10-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230320213508.2358213-10-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 22 Mar 2023 22:38:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C897A3590
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679539087; x=1711075087;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NVzhAprKO7gzBk6TU2LvPqa0tyYsN5S2OZgjE9c3DBU=;
+  b=RgHonZSU76p60iz1b3M+NAewSR0DwNRwpAzKzA7meynMgyOUbCMyLF/s
+   ViB7DyCM5s3bNxFq14q7nVvr8vf8lkH1FdnDC8KBgAxJrU+TBnpUAy3+4
+   mspOpvIdbtlEphjyRcOEZ2RZ1AlVJP8UYwDIbVfC7oYo9sfCkl1VtiY62
+   tpmsG/eaaKWdQCg+0kb/Q33D1wDp2I4B4L6uqGLWSe/wdoXDOhoBGlUJ8
+   AgplqdeTnMNh+LCJPmY7Dzlrn0rOmKx/t/wmb3yz2KxTpCghmt7GrzzuD
+   IEIYkkq1J6/O/df13zQQl6Ejv02/mXjRxFb1b1k013THMPmks9pU3Yaui
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338099618"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="338099618"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 19:38:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="712490028"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="712490028"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2023 19:38:05 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfAq5-000Dry-0L;
+        Thu, 23 Mar 2023 02:38:05 +0000
+Date:   Thu, 23 Mar 2023 10:37:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yohan Joung <jyh429@gmail.com>, jaegeuk@kernel.org, chao@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yohan Joung <jyh429@gmail.com>
+Subject: Re: [PATCH] f2fs: fix align check for npo2
+Message-ID: <202303231039.GKLRE8O5-lkp@intel.com>
+References: <20230322131408.1192-1-jyh429@gmail.com>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322131408.1192-1-jyh429@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yohan,
 
+Thank you for the patch! Yet something to improve:
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Tuesday, March 21, 2023 5:35 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Larry Finger <Larry.Finger@lwfinger.net>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v3 9/9] wifi: rtw88: Add support for the SDIO based RTL8821CS chipset
-> 
-> Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8821C chipset code.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on jaegeuk-f2fs/dev]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Yohan-Joung/f2fs-fix-align-check-for-npo2/20230322-211529
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20230322131408.1192-1-jyh429%40gmail.com
+patch subject: [PATCH] f2fs: fix align check for npo2
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230323/202303231039.GKLRE8O5-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3531dd5850533df89bd45af9fd59ed4693d6d5aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yohan-Joung/f2fs-fix-align-check-for-npo2/20230322-211529
+        git checkout 3531dd5850533df89bd45af9fd59ed4693d6d5aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-In next patchset, please add my Reviewed-by if you don't have change.
-Thanks for your work.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303231039.GKLRE8O5-lkp@intel.com/
 
-> ---
-> Changes since v2:
-> - sort includes alphabetically as suggested by Ping-Ke
-> - add missing #include "main.h" (after it has been removed from sdio.h
->   in patch 2 from this series)
-> 
-> Changes since v1:
-> - use /* ... */ style for copyright comments
-> 
-> 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+>> ERROR: modpost: "__umoddi3" [fs/f2fs/f2fs.ko] undefined!
+>> ERROR: modpost: "__moddi3" [fs/f2fs/f2fs.ko] undefined!
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
