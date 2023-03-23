@@ -2,86 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A54F6C5C3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF956C5C65
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCWBmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S230035AbjCWBye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCWBmP (ORCPT
+        with ESMTP id S230039AbjCWByc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:42:15 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F0D1A679;
-        Wed, 22 Mar 2023 18:42:14 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so80380097edb.12;
-        Wed, 22 Mar 2023 18:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679535733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=APnkk0vS4YfXoLRqdd/gk0V790AzJyWB3pGNJrKGTFE=;
-        b=Apxcp2PUp4GczRR9T+xHNUos9lzvmvvtk9Mu66I6rVmMe95ukA/q4Yr4g39iREOLw+
-         hGisw5/dq56ni3djYBzyRupWOFk1akJoLwAsM6pJHgUx1JuaPD0XmLrUkB0nRchP/UOI
-         TwFJUtptYA4BgvuOYFNvfjiWchVj1jFWHCX+Zp1VO/unTSVjUR9syk+LsMpesme6gV4x
-         kcTnaFS3yPUeerdn0KVSNMge3L7QD69ES7ODpqAR6HBNCPezIN+WqPWrUTmDF3y/v0GB
-         l4+3g5IBtKvkb63WlCtWGiNKcZhoABSVj8LR/G2HXH7GaclDpm0E6bS3yQfyzzMuPKQm
-         L/Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679535733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APnkk0vS4YfXoLRqdd/gk0V790AzJyWB3pGNJrKGTFE=;
-        b=YgAxnwweov+NfPfb9niUvGq3EFx/BPXKA1d73akP3fT0KEuRPsGSHcpZgn+slg82Rb
-         2kKR7hVACCjpdHBhunnTD/Y2lMZp33umhgw/hEOK37DJeoMUfvx76v2yKFyEkq8LDviq
-         9vQ5ISfDciovs/ibbDd1zLDiWB5wfg8YBDVQpmURQTqFLWnStmY3qngVXziyA1m9Sgb3
-         BktCIP+ss3ZZvv4TZoIR8U1VMMsGJkSNI33W7V0axDo3y2GOTlRYrrDP6fy03cKFBYh3
-         qbn8CNlkULkffnCXF/MG0Jm+RlH2XRBs/TZgSI0TgJ4TKwL6p/FPx+a7htpOvbKK+cBj
-         leaQ==
-X-Gm-Message-State: AO0yUKVx45/+rPfVaSSo4AYyIk7imcOePJTrmZTnx+SBSHrF86HD8GKf
-        9d5QvDH3FbTL22nF9NHl4uE=
-X-Google-Smtp-Source: AK7set+V+di6Y6D471B7Dego3A4SUKy4fZrBovS2fMyxyUDnFHLEqRS4iBM+DvVWd/IeSPntcJwUng==
-X-Received: by 2002:aa7:c557:0:b0:4fd:29e6:7018 with SMTP id s23-20020aa7c557000000b004fd29e67018mr8577809edr.20.1679535732925;
-        Wed, 22 Mar 2023 18:42:12 -0700 (PDT)
-Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id g25-20020a50d0d9000000b00501c2a9e16dsm5555853edf.74.2023.03.22.18.42.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 18:42:12 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 02:42:08 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model:  Document
- locking corner cases
-Message-ID: <ZBuucIhuVuoJHljI@andrea>
-References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
- <20230321010549.51296-1-paulmck@kernel.org>
- <ZBrDeoCIs1wmNBeF@andrea>
- <5a32a825-70b3-49d2-9a17-9e5be38e4b72@paulmck-laptop>
+        Wed, 22 Mar 2023 21:54:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AE6868B
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679536470; x=1711072470;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=CwS67PYYqH0PatMp8p449KP+I7kSWUyHQOcV0z+jSpk=;
+  b=HfzeWcDGlnh4+oUG6ZhmCSQTn+6Y8d/f9V7ZHCC7bE7sP/6ti/AwtuAl
+   LuIC8o7z0HJ3/sE2P5/L9PyObU2E599rAle6Zl7z5eHFYeCYIXNURmcg6
+   vx7KDX7JxqkdR2gGnZZrl0EajHa9yCFdyBkEWvC6g9J4Km4zLLG52GEHe
+   z4xyHyVtSxfffCYoxMkgkoMumfF9UsMCSCMFeoylcsYNhzMyjcyFQQIfP
+   PuD5a6dcwFeTdMpZE1N43YjKcmfdO4a3WMQGjVv7h/lc4/0yqnJ/Kgtjj
+   BoQyMy9A8zHx2ouyyVLWt0XC2nCUBfzBLHd1QVM9P0VvWhwSJJjuHj0UG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="339410413"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="339410413"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:54:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="714618278"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="714618278"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:54:25 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Liu, Yujie" <yujie.liu@intel.com>
+Cc:     lkp <lkp@intel.com>, "bharata@amd.com" <bharata@amd.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
+        "Tang, Feng" <feng.tang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        "ziy@nvidia.com" <ziy@nvidia.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>
+Subject: Re: [linus:master] [migrate_pages] 7e12beb8ca:
+ vm-scalability.throughput -3.4% regression
+References: <202303192325.ecbaf968-yujie.liu@intel.com>
+        <87o7onua4t.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <ab92aaddf1b52ede15e2c608696c36765a2602c1.camel@intel.com>
+        <87h6ueu0ae.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <ce5e09c3a2eceb40048afbad5e6b6856f62d815a.camel@intel.com>
+Date:   Thu, 23 Mar 2023 09:53:23 +0800
+In-Reply-To: <ce5e09c3a2eceb40048afbad5e6b6856f62d815a.camel@intel.com> (Yujie
+        Liu's message of "Wed, 22 Mar 2023 13:17:54 +0800")
+Message-ID: <87zg84s06k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a32a825-70b3-49d2-9a17-9e5be38e4b72@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I was surprised by the need to change the "locations" clauses, but
-> applied that change anyway.  Ah, I take it that klitmus prints that,
-> but doesn't know how to print out a spinlock_t?
+"Liu, Yujie" <yujie.liu@intel.com> writes:
 
-Yep, this aligns with my understanding.
+> On Tue, 2023-03-21 at 13:43 +0800, Huang, Ying wrote:
+>> "Liu, Yujie" <yujie.liu@intel.com> writes:
+>>
+>> > Hi Ying,
+>> >
+>> > On Mon, 2023-03-20 at 15:58 +0800, Huang, Ying wrote:
+>> > > Hi, Yujie,
+>> > >
+>> > > kernel test robot <yujie.liu@intel.com> writes:
+>> > >
+>> > > > Hello,
+>> > > >
+>> > > > FYI, we noticed a -3.4% regression of vm-scalability.throughput du=
+e to commit:
+>> > > >
+>> > > > commit: 7e12beb8ca2ac98b2ec42e0ea4b76cdc93b58654 ("migrate_pages: =
+batch flushing TLB")
+>> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git ma=
+ster
+>> > > >
+>> > > > in testcase: vm-scalability
+>> > > > on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Platinum 82=
+60L CPU @ 2.40GHz (Cascade Lake) with 128G memory
+>> > > > with following parameters:
+>> > > >
+>> > > >         runtime: 300s
+>> > > >         size: 512G
+>> > > >         test: anon-cow-rand-mt
+>> > > >         cpufreq_governor: performance
+>> > > >
+>> > > > test-description: The motivation behind this suite is to exercise =
+functions and regions of the mm/ of the Linux kernel which are of interest =
+to us.
+>> > > > test-url: https://git.kernel.org/cgit/linux/kernel/git/wfg/vm-scal=
+ability.git/
+>> > > >
+>> > > >
+>> > > > If you fix the issue, kindly add following tag
+>> > > > > Reported-by: kernel test robot <yujie.liu@intel.com>
+>> > > > > Link: https://lore.kernel.org/oe-lkp/202303192325.ecbaf968-yujie=
+.liu@intel.com
+>> > > >
+>> > >
+>> > > Thanks a lot for report!  Can you try whether the debug patch as
+>> > > below can restore the regression?
+>> >
+>> > We've tested the patch and found the throughput score was partially
+>> > restored from -3.6% to -1.4%, still with a slight performance drop.
+>> > Please check the detailed data as follows:
+>>
+>> Good!  Thanks for your detailed data!
+>>
+>> >       0.09 =C2=B1 17%      +1.2        1.32 =C2=B1  7%      +0.4      =
+  0.45 =C2=B1 21%  perf-profile.children.cycles-pp.flush_tlb_func
+>>
+>> It appears that we can reduce the unnecessary TLB flushing effectively
+>> with the previous debug patch.  But the batched flush (full flush) is
+>> still slower than the non-batched flush (flush one page).
+>>
+>> Can you try the debug patch as below to check whether it can restore the
+>> regression completely?  The new debug patch can be applied on top of the
+>> previous debug patch.
+>
+> The second debug patch got a -0.7% performance change. The data have
+> some fluctuations from test to test, and the standard deviation is even
+> a bit larger than 0.7%, which make the performance score not very
+> convincing. Please check other metrics to see if the regression is
+> fully restored. Thanks.
 
-  Andrea
+Thanks for testing!
+
+>       0.09 =C2=B1 17%      +0.4        0.45 =C2=B1 21%      +0.0        0=
+.09 =C2=B1 12%  perf-profile.children.cycles-pp.flush_tlb_func
+
+From the profiling data, the TLB flushing overhead has been restored.
+So I think the remaining 0.7% regression should be at noise level.  I
+will prepare the fixing patch based on the test results.
+
+Best Regards,
+Huang, Ying
