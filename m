@@ -2,127 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA156C66C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742A96C66C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjCWLiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S231179AbjCWLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCWLiJ (ORCPT
+        with ESMTP id S229563AbjCWLhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:38:09 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D77193F0;
-        Thu, 23 Mar 2023 04:38:04 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 277F75FD0A;
-        Thu, 23 Mar 2023 14:38:02 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679571482;
-        bh=7lZi752yaidVYn1I7MsqCySIdC2Vy7xBMR/W3J+6ogU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=c8GcqIsVoN/ou8o+y4TgdM7++0urDlRBiw8kOscr5GSl8eIYcuk5nFyEA9a4uChQ2
-         FV6LBxYoJp0c4J0hBBJgOzc+/rbMpNV+3rrSleFjPtE5BEt6mdctkRspkHXqSPlDqZ
-         0G7gEOqGr/RagIdwUCaKkrforW/YpRAQtE7l+EYmy9y2la1h1SJBzLjn5QoZ41LoAl
-         75VNB+glS1T8kknmxsEJ3uqNb4lgnERFwBH2GjXt25lltEGSm1v63T2JxU9cBWZNPN
-         kPUpn0RQTMjfFb/xSTKLvXiTycNGO6kTgmMeQ3r9W1JWh6WPfQcZDVAzafYjGr6mCv
-         n2xbMCeU/374w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 23 Mar 2023 14:37:56 +0300 (MSK)
-Message-ID: <11b36ca2-4f0a-5fe4-bd84-d93eb0fa34c5@sberdevices.ru>
-Date:   Thu, 23 Mar 2023 14:34:44 +0300
+        Thu, 23 Mar 2023 07:37:18 -0400
+Received: from out-53.mta1.migadu.com (out-53.mta1.migadu.com [IPv6:2001:41d0:203:375::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE17126EF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:37:17 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1679571435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kZ7HVhRYzHGpfdqvyY+rJRqbLy8aj+vQEUBvMBADCEQ=;
+        b=eNKOJfxKmV59e1dfEBvaSpjVcGuskviaA9i1EIttR9DARw1+RW9lKRPhaLg3U8fWHAZhVX
+        l8SN3SoLlCUkKRa5WyfSDa88u2qaOQHs76pPbH0sypcfkHS7euc/3Hgim1HP2rDUgsQO+5
+        eZTWHLABR2D/2d0Hl2zcYHPBBCgv0Yg=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     cai.huoqing@linux.dev
+Cc:     Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rapidio/tsi721: Remove redundant pci_clear_master
+Date:   Thu, 23 Mar 2023 19:37:09 +0800
+Message-Id: <20230323113711.10523-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 0/2] allocate multiple skbuffs on tx
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
- <2e06387d-036b-dde2-5ddc-734c65a2f50d@sberdevices.ru>
- <20230323104800.odrkkiuxi3o2l37q@sgarzare-redhat>
- <15e9ac56-bedc-b444-6d9a-8a1355e32eaf@sberdevices.ru>
- <20230323111110.gb4vlaqaf7icymv3@sgarzare-redhat>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230323111110.gb4vlaqaf7icymv3@sgarzare-redhat>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/23 09:00:00 #20997914
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove pci_clear_master to simplify the code,
+the bus-mastering is also cleared in do_pci_disable_device,
+like this:
+./drivers/pci/pci.c:2197
+static void do_pci_disable_device(struct pci_dev *dev)
+{
+	u16 pci_command;
 
+	pci_read_config_word(dev, PCI_COMMAND, &pci_command);
+	if (pci_command & PCI_COMMAND_MASTER) {
+		pci_command &= ~PCI_COMMAND_MASTER;
+		pci_write_config_word(dev, PCI_COMMAND, pci_command);
+	}
 
-On 23.03.2023 14:11, Stefano Garzarella wrote:
-> On Thu, Mar 23, 2023 at 01:53:40PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 23.03.2023 13:48, Stefano Garzarella wrote:
->>> On Thu, Mar 23, 2023 at 01:01:40PM +0300, Arseniy Krasnov wrote:
->>>> Hello Stefano,
->>>>
->>>> thanks for review!
->>>
->>> You're welcome!
->>>
->>>>
->>>> Since both patches are R-b, i can wait for a few days, then send this
->>>> as 'net-next'?
->>>
->>> Yep, maybe even this series could have been directly without RFC ;-)
->>
->> "directly", You mean 'net' tag? Of just without RFC, like [PATCH v5]. In this case
->> it will be merged to 'net' right?
-> 
-> Sorry for the confusion. I meant without RFC but with net-next.
-> 
-> Being enhancements and not fixes this is definitely net-next material,
-> so even in RFCs you can already use the net-next tag, so the reviewer
-> knows which branch to apply them to. (It's not super important since
-> being RFCs it's expected that it's not complete, but it's definitely an
-> help for the reviewer).
-> 
-> Speaking of the RFC, we usually use it for patches that we don't think
-> are ready to be merged. But when they reach a good state (like this
-> series for example), we can start publishing them already without the
-> RFC tag.
-> 
-> Anyway, if you are not sure, use RFC and then when a maintainer has
-> reviewed them all, surely you can remove the RFC tag.
-> 
-> Hope this helps, at least that's what I usually do, so don't take that
-> as a strict rule ;-)
+	pcibios_disable_device(dev);
+}.
+And dev->is_busmaster is set to 0 in pci_disable_device.
 
-Ah ok, I see now, thanks for details
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+ drivers/rapidio/devices/tsi721.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thanks, Arseniy
+diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
+index 0a42d6a2af24..83323c3d10af 100644
+--- a/drivers/rapidio/devices/tsi721.c
++++ b/drivers/rapidio/devices/tsi721.c
+@@ -2924,7 +2924,6 @@ static int tsi721_probe(struct pci_dev *pdev,
+ 		iounmap(priv->odb_base);
+ err_free_res:
+ 	pci_release_regions(pdev);
+-	pci_clear_master(pdev);
+ err_disable_pdev:
+ 	pci_disable_device(pdev);
+ err_clean:
+@@ -2962,7 +2961,6 @@ static void tsi721_remove(struct pci_dev *pdev)
+ 		pci_disable_msi(priv->pdev);
+ #endif
+ 	pci_release_regions(pdev);
+-	pci_clear_master(pdev);
+ 	pci_disable_device(pdev);
+ 	pci_set_drvdata(pdev, NULL);
+ 	kfree(priv);
+@@ -2977,7 +2975,6 @@ static void tsi721_shutdown(struct pci_dev *pdev)
+ 
+ 	tsi721_disable_ints(priv);
+ 	tsi721_dma_stop_all(priv);
+-	pci_clear_master(pdev);
+ 	pci_disable_device(pdev);
+ }
+ 
+-- 
+2.34.1
 
-> 
-> Thanks,
-> Stefano
-> 
