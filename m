@@ -2,95 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705DE6C5FC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 751B56C5FC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjCWGdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S229972AbjCWGeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWGdt (ORCPT
+        with ESMTP id S229881AbjCWGeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:33:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D721A1F4BE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:45 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id ek18so82221911edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:45 -0700 (PDT)
+        Thu, 23 Mar 2023 02:34:01 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8D71F4BE
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:58 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54184571389so379223857b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679553224;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eCemMeqwjMVzDE8wLEMLT09xBhWQ5v22MwjMcsbx1sU=;
-        b=PsqyKTLDetNlpt0ioowCO9i1kC460cyNFfDcJTUVpuwT/+woKSaTewkqDytEoVu3t1
-         NRXN5BEvRzQispLKUSgWLybXw5kJOtVT/2baPm0pRYWUoHx2crNLiZ4J6GK1vSeCadTu
-         X5N6agYVbG2niSiDwsC8B6TY0jt1qJn7VAKJwTtNkWQ0A1hOL1fQsEq6C22uZBrxf8EZ
-         TbYCJ8aJTD403hfPGa6dvjMie+bXVbz7D5TbdP6mpol/YawKl9PPMQUvgEuTg75YbvIz
-         1dCY1t2uicaWCSDWDeJrw8wWnWZUkX1GivJ1SRsJOOATyEFsEGX+491sD18+K4DUN5oD
-         xm4Q==
+        d=google.com; s=20210112; t=1679553238;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4npRT0ZBm4ONH6zdpwhBbu8AXu0dsqmRu8iUAcRhwn4=;
+        b=Jz1+PRu0n2E15Vf/qVjLQyMAiMh0wcsZxyHdXjjLSylh8kOTYeud4m+r7TyiYDDIwY
+         AxsoBwLqHysKwhK8ZhCrxd++CTHeifnZx2H/a7f6897A8184FcTnA8nkSly0zpDgPi8l
+         TKdXhZ2aJZmAatpzBOs+lBb7LUlbNYb+axNHN1pnyDXlerc97Ur9a03S8UXOF+Zd74k4
+         gqkj6iLTsEnSJQbd2l4qo+JewrHaebREOudXM1ZFKVj+/O7sw5rZ7K4qyVJ/GRsIz6X7
+         YYb2KoWhc8MlSNAC5BHhIQEHo2dus1NCcP6Sq5RMpw3G+MhaBbrd5GDjSKW2etMYFYuA
+         FiEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679553224;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eCemMeqwjMVzDE8wLEMLT09xBhWQ5v22MwjMcsbx1sU=;
-        b=Fif+kq+iaD3VxwT96qdOToeAAaIVIX5RsritW0D3jMJwW8TTFW85EaON+wiwiGJ3KO
-         DLgTqjGl8OhfUWdCG5STaFJ2UH6JQAB5qzMMsgz8ixCN3G+ZKDmOPGq01XZ/RR+Nbig4
-         Z8c2MYaRYUauYV33TcoOR9k52iGkfrHKpMNzV34hvVg76Zee3E+cxohGIjo2J6FfNuhb
-         FEApS8E49miS8KHAdZPVrV87dqG8EMlz2vZ96I1kpeHGr1tl0zIdFaTxVHrwREvpY2yx
-         waIhlXwedYzEU/d5TXaPpoCuTNwzk/dGwlpEEYv9C402+R6hEEDOvLHLA0RoUAsfl1mf
-         WkJQ==
-X-Gm-Message-State: AO0yUKV/kcxT2apMw63fn+N+CVDXc9/anmKbPs+woeR+lgN9q/D/VgWr
-        uVbR3q6QcyfzOAQ61rfRJJjUtA==
-X-Google-Smtp-Source: AK7set8RJB+DTjcD2EokLbHqFm7mMwV6VlW000RW9DWaB/UvoxAV3HiuakfE6JeUhHOVeryNXcJddg==
-X-Received: by 2002:a17:906:f6d9:b0:930:1391:da7c with SMTP id jo25-20020a170906f6d900b009301391da7cmr8831790ejb.60.1679553224138;
-        Wed, 22 Mar 2023 23:33:44 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170906250600b009306be6bed7sm8146661ejb.190.2023.03.22.23.33.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 23:33:43 -0700 (PDT)
-Message-ID: <10d3e045-9aba-6ceb-273c-4f23afec3b92@linaro.org>
-Date:   Thu, 23 Mar 2023 07:33:42 +0100
+        d=1e100.net; s=20210112; t=1679553238;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4npRT0ZBm4ONH6zdpwhBbu8AXu0dsqmRu8iUAcRhwn4=;
+        b=WYXB80RL4mhBveLXZV8ApzyA0oUs2JTSgZpVjXA880ieIXpvmC1yTdtdsgkS33NemH
+         xCWJJ/VJiK549oamMDcK2cRB5f7/egHrcBnMLopVSP5yEURk2T0bYmpB02uq+oZpFPf8
+         Ad8Y681hih0DyQ7V7WxTK77yuDT/nfm95PeavO1Bd5r4hg5woYV45FyToMFwTvWuEDvT
+         zzFV5JrIBiwD0kXDgIsPaw3qFs2RDKmxigWHPQjz2m0jjCX2mgGDeF0bLmayr8zZJUl5
+         C0yjBCBPy1K8GxDtFnOK2wgdcU0IZenyU70U2Nsp8Dhb3GTUOSwe4V9PlIQq4Typ8VJj
+         Nepg==
+X-Gm-Message-State: AAQBX9fGmWFPzOw2UUYGhoYTfYO3/5O8iZ886Ba6AzA4zBpUYGLDyAYF
+        3mFdncGh6iZ77Q8wm698pKvGW8t2+dKLYrd+8toVVA==
+X-Google-Smtp-Source: AKy350aHHQKdZp4F3yh5LRMUAbDOYYx+U8YW/TWmS88VUzuhypP1degkbjLzws2GkQD3eUT2N+VpjDY6LDIYMpAhu5A=
+X-Received: by 2002:a81:ae1c:0:b0:52e:e095:d840 with SMTP id
+ m28-20020a81ae1c000000b0052ee095d840mr1330885ywh.0.1679553237698; Wed, 22 Mar
+ 2023 23:33:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
- imx8qm cdns3 glue bindings
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-References: <20230321151951.2784286-1-Frank.Li@nxp.com>
- <20230321151951.2784286-2-Frank.Li@nxp.com>
- <1ce3bf91-6bef-b4c1-1ec9-3a345518efeb@linaro.org>
- <AM6PR04MB483828FC1083E3C98930DF6488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <b5d67af0-ed08-e243-2c0c-92f1f002e552@linaro.org>
- <AM6PR04MB483841E17BEEE4F9EC596DBA88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <835cda64-5d42-1ff3-aa8f-0802fe3d705f@linaro.org>
- <AM6PR04MB48383C58EF1D9CFD8F7C401E88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <24767874-0b26-78c8-43c2-6cc3adb901f8@linaro.org>
- <AM6PR04MB4838ECE2917EF132943830EA88869@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <6cf27e09-af76-34a5-1913-77165866480b@linaro.org>
- <AM6PR04MB483887C7F652AD96F92D002488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB483887C7F652AD96F92D002488869@AM6PR04MB4838.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+ <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+In-Reply-To: <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 22 Mar 2023 23:33:46 -0700
+Message-ID: <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,178 +83,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 23:15, Frank Li wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Wednesday, March 22, 2023 5:09 PM
->> To: Frank Li <frank.li@nxp.com>
->> Cc: devicetree@vger.kernel.org; festevam@gmail.com; imx@lists.linux.dev;
->> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-arm-
->> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->> kernel@vger.kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
->> shawnguo@kernel.org
->> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
->> imx8qm cdns3 glue bindings
->>
->> Caution: EXT Email
->>
->> On 22/03/2023 22:57, Frank Li wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Wednesday, March 22, 2023 4:43 PM
->>>> To: Frank Li <frank.li@nxp.com>
->>>> Cc: devicetree@vger.kernel.org; festevam@gmail.com;
->> imx@lists.linux.dev;
->>>> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-arm-
->>>> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->>>> kernel@vger.kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de;
->>>> shawnguo@kernel.org
->>>> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm: add
->>>> imx8qm cdns3 glue bindings
->>>>
->>>> Caution: EXT Email
->>>>
->>>> On 22/03/2023 22:40, Frank Li wrote:
->>>>>
->>>>>
->>>>>> -----Original Message-----
->>>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>> Sent: Wednesday, March 22, 2023 4:38 PM
->>>>>> To: Frank Li <frank.li@nxp.com>
->>>>>> Cc: devicetree@vger.kernel.org; festevam@gmail.com;
->>>> imx@lists.linux.dev;
->>>>>> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-arm-
->>>>>> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
->>>>>> kernel@vger.kernel.org; robh+dt@kernel.org;
->> s.hauer@pengutronix.de;
->>>>>> shawnguo@kernel.org
->>>>>> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm:
->> add
->>>>>> imx8qm cdns3 glue bindings
->>>>>>
->>>>>> Caution: EXT Email
->>>>>>
->>>>>> On 22/03/2023 22:36, Frank Li wrote:
->>>>>>>
->>>>>>>
->>>>>>>> -----Original Message-----
->>>>>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>>>> Sent: Wednesday, March 22, 2023 4:32 PM
->>>>>>>> To: Frank Li <frank.li@nxp.com>
->>>>>>>> Cc: devicetree@vger.kernel.org; festevam@gmail.com;
->>>>>> imx@lists.linux.dev;
->>>>>>>> kernel@pengutronix.de; krzysztof.kozlowski+dt@linaro.org; linux-
->> arm-
->>>>>>>> kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>;
->> linux-
->>>>>>>> kernel@vger.kernel.org; robh+dt@kernel.org;
->>>> s.hauer@pengutronix.de;
->>>>>>>> shawnguo@kernel.org
->>>>>>>> Subject: Re: [EXT] Re: [PATCH v3 1/3] dt-bindings: usb: cdns-imx8qm:
->>>> add
->>>>>>>> imx8qm cdns3 glue bindings
->>>>>>>>
->>>>>>>> Caution: EXT Email
->>>>>>>>
->>>>>>>> On 22/03/2023 15:34, Frank Li wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>> -----Original Message-----
->>>>>>>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>>>>>> Sent: Wednesday, March 22, 2023 2:32 AM
->>>>>>>>>> To: Frank Li <frank.li@nxp.
->>>>>>>>>>> +      - const: usb3_aclk
->>>>>>>>>>> +      - const: usb3_ipg_clk
->>>>>>>>>>> +      - const: usb3_core_pclk
->>>>>>>>>>> +
->>>>>>>>>>> +  assigned-clocks:
->>>>>>>>>>> +    items:
->>>>>>>>>>> +      - description: Phandle and clock specifoer of
->>>>>>>>>> IMX_SC_PM_CLK_MST_BUS.
->>>>>>>>>>
->>>>>>>>>> Drop useless pieces so "Phandle and clock specifoer of " and
->> name
->>>> the
->>>>>>>>>> hardware, not the syntax.
->>>>>>>>>>
->>>>>>>>>>> +
->>>>>>>>>>> +  assigned-clock-rates:
->>>>>>>>>>> +    items:
->>>>>>>>>>> +      - description: Should be in Range 100 - 600 Mhz.
->>>>>>>>>>
->>>>>>>>>> That's better but I still do not understand why do you need it in
->> the
->>>>>>>>>> bindings. You never actually answered this question.
->>>>>>>>>
->>>>>>>>> I am not sure 100% sure the reason.
->>>>>>>>> I think difference system target's  axi bus frequency is difference,
->>>>>>>>> And just one time work, needn't software to manage it.
->>>>>>>>> Following other driver's code style may be another reason.
->>>>>>>>
->>>>>>>> That's the reason of heaving it in DTS. But I am asking about bindings.
->>>>>>>> You do understand you define here interface?
->>>>>>>
->>>>>>> I defined here is descript AXI frequency for usb controller. Supposed
->>>>>> difference
->>>>>>> Platform will have difference working frequency.
->>>>>>
->>>>>> I don't understand how does this answer my concerns of having it in DT
->>>>>> bindings. If you do not add it, you "will have difference working
->>>>>> frequency", so what's the point?
->>>>>
->>>>> For example: imx8qxp, it need set to 250Mhz,  i.MX8QM need set to
->>>> 200Mhz.
->>>>> Maybe future chip can set to 400Mhz.
->>>>
->>>> And? So as you can see you will still have different frequencies, so
->>>> what's the point? What is the benefit? Dunno, maybe we do not
->> understand
->>>> each other, because I don't think you are answering my questions at all.
->>>
->>> Benefit: New chip just need change dts file for the same IP, like change
->> base
->>> Reg address and irq number.
->>
->> To remind - the question was:
->> "That's better but I still do not understand why do you need it in the
->> bindings."
->> If you drop it from the bindings the benefit is still there, so what do
->> you want to prove?
->>
->>>
->>> Your question is:  "why need this assigned-clock-rates
->> IMX_SC_PM_CLK_MST_BUS property?"
->>
->> This was the previous thread. Now, related but slightly different, why
->> do you still need it in the bindings?
->>
->>
->>> My answer: it is one of hardware property, like reg base address and irq
->> number.
->>
->> Sure, it is, I know, and bindings already allow it. Just look at many
->> DTS and their bindings. Do you see the bindings defining this property?
->> No. So why do you think it is needed here? I am asking this since like 6
->> emails and your answers are not related to bindings at all.
->>
->>>
->>> If can't match your expectation, can you change another words or provide
->> me an example?
->>
->> Yeah, just open several DTS and look for assigned-clock, then open their
->> bindings and answer - why do you need to add it to the binding but all
->> other bindings did not have to? If you have the answer, sure, bring
->> these parts of bindings.
-> 
-> Do you means, Needn't add assigned-clock in binding *document* yaml file?
-> And dts file still can use assigned-clock property. 
+On Wed, Mar 22, 2023 at 10:15=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
+> wrote:
+>
+[...]
+> > Couple of questions:
+> >
+> > 1. What exactly is cgroup_rstat_lock protecting? Can we just remove it
+> > altogether?
+>
+> I believe it protects the global state variables that we flush into.
+> For example, for memcg, it protects mem_cgroup->vmstats.
+>
+> I tried removing the lock and allowing concurrent flushing on
+> different cpus, by changing mem_cgroup->vmstats to use atomics
+> instead, but that turned out to be a little expensive. Also,
+> cgroup_rstat_lock is already contended by different flushers
+> (mitigated by stats_flush_lock on the memcg side). If we remove it,
+> concurrent flushers contend on every single percpu lock instead, which
+> also seems to be expensive.
 
-Yes, I said it many times already...
+We should add a comment on what it is protecting. I think block rstat
+are fine but memcg and bpf would need this.
 
-Best regards,
-Krzysztof
+>
+> > 2. Are we really calling rstat flush in irq context?
+>
+> I think it is possible through the charge/uncharge path:
+> memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage(). I
+> added the protection against flushing in an interrupt context for
+> future callers as well, as it may cause a deadlock if we don't disable
+> interrupts when acquiring cgroup_rstat_lock.
+>
+> > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() is only
+> > done for root memcg. Why is mem_cgroup_threshold() interested in root
+> > memcg usage? Why not ignore root memcg in mem_cgroup_threshold() ?
+>
+> I am not sure, but the code looks like event notifications may be set
+> up on root memcg, which is why we need to check thresholds.
 
+This is something we should deprecate as root memcg's usage is ill defined.
+
+>
+> Even if mem_cgroup_threshold() does not flush memcg stats, the purpose
+> of this patch is to make sure the rstat flushing code itself is not
+> disabling interrupts; which it currently does for any unsleepable
+> context, even if it is interruptible.
+
+Basically I am saying we should aim for VM_BUG_ON(!in_task()) in the
+flush function rather than adding should_skip_flush() which does not
+stop potential new irq flushers.
