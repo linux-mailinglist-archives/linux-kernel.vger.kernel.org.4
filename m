@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275E16C65E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D916C65EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCWK5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S229953AbjCWK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjCWK5J (ORCPT
+        with ESMTP id S231552AbjCWK5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:57:09 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3315543
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:56:50 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id i5so37685917eda.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679569008;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6+PtX2uAhZSqkwPYfEsl+TAxiQ67+WZc+Q3dIOuMcE=;
-        b=QF4wyHEiRl6KTQlDrBxHTuc6zD+l1XJy36k0jCRJcisHJMysi95BCcxghDI7ienVF4
-         BAEKND3VKq8+GSUllrtcaWuZDNXV0rGoY0IqjiLgRHSkPxsB7u+Xf++DTaBcGAYUQLYz
-         kjEIHUjgUpYMM0Q98E50IXWFIWhUwewgcWvrq5wVTxBirQejr7KnBmoZJMLeMjqZ7sfo
-         U/WWyzEPvK32ireuXnw37q0HhoPfpqAUQLMBkS6Yxx8LsdrvcLfr3k20plquW3iRFgCu
-         b/oVclZ0R16z0dTwU7saEwa0pubJpafm+pyx/GUeq9sy45ScR8Wc4gtYfpLbOrIB1vJb
-         WwIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679569008;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6+PtX2uAhZSqkwPYfEsl+TAxiQ67+WZc+Q3dIOuMcE=;
-        b=gtvKbAml4202GcnNNdteSHDMHVu+R2L0+3tg1hDbYVPKiJXROk1f/T4Cpgh3PnTjny
-         kZepBvVpRZns8IEM1J4sGwAQwpUhIiX9sIO+dz3Fq3PXrtvNH83uCjidUDlGSrSMygQa
-         QUJrm7D/ol09tyCT1se2dOJRsTylKnZ18zgG3Eb3qqgs253yyJfTOdUN4mNHAnb4dFOv
-         pc4TV0VJSpBJzAKEx5uNjT3vsb0kqi+YnAOY3OrzsMKoCBJ8b44V6XvmZRkuH/caWuJe
-         t1/PK4kpemMx1IqMtSD3vIZBM7uDrSowiZ0E8MIkoh1I39uxyMc8F0Bt78UHKpGS4bOd
-         g7qg==
-X-Gm-Message-State: AO0yUKUV5zfi2ULwCeUYIfcFFIOwgQaa35w9VQvMxIdEe+uPgJnHrQy9
-        f6+4aeiWaXj0nsAfhkkOVdm6eA==
-X-Google-Smtp-Source: AK7set/mMtMtX2/IfUIgWtPTy/0NZHA5/5OfRAjpSqAKYNcqEPYo/cIqYY26nGF46BVIjlQl/PeqOA==
-X-Received: by 2002:a17:906:d057:b0:932:e141:29be with SMTP id bo23-20020a170906d05700b00932e14129bemr10221290ejb.75.1679569008614;
-        Thu, 23 Mar 2023 03:56:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id v19-20020a1709067d9300b008cff300cf47sm8473200ejo.72.2023.03.23.03.56.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 03:56:48 -0700 (PDT)
-Message-ID: <3b2e7b07-7598-45af-0dce-a60310aa5d60@linaro.org>
-Date:   Thu, 23 Mar 2023 11:56:47 +0100
+        Thu, 23 Mar 2023 06:57:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68508211F3;
+        Thu, 23 Mar 2023 03:57:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5F20E1FD91;
+        Thu, 23 Mar 2023 10:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679569031; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TvurBpsiIzqWG/nAqLntTGjrhV3SzoNwAZafzGBmxck=;
+        b=X1tecy4IxjxJzYzg/QoDKuQ0BOg44rPkOqUkS/spndV8Qp83qy+BXikquaYCEtVaz+XNU7
+        S1+3djxCvubvSBpjivXSFZ3ph2J4XTvKNpKdKCTCGiBfMbbHFm38wadm6ZPsx3oVUn4Kvc
+        DrY/5zHbE8wHh4VVIlA+t/rE9feIuD8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679569031;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TvurBpsiIzqWG/nAqLntTGjrhV3SzoNwAZafzGBmxck=;
+        b=2ToYUX+LlsSoZ18d4vzutPUmD/P0QZV7CzVhAC7fYshG79IHaYhx5xBaeX6QqftD50YpFW
+        Ko/48jelYiYHdUAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6BC0D13596;
+        Thu, 23 Mar 2023 10:57:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V5VGGocwHGR2ewAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 23 Mar 2023 10:57:11 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DE03DA071C; Thu, 23 Mar 2023 11:57:10 +0100 (CET)
+Date:   Thu, 23 Mar 2023 11:57:10 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Andreas Dilger <adilger@dilger.ca>
+Subject: Re: [RFC 08/11] ext4: Don't skip prefetching BLOCK_UNINIT groups
+Message-ID: <20230323105710.mdhamc3hza4223cb@quack3>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
+ <20230309141422.b2nbl554ngna327k@quack3>
+ <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V2 2/2] arm64: dts: qcom: ipq5332: add support for the
- RDP468 variant
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230323093120.20558-1-quic_kathirav@quicinc.com>
- <20230323093120.20558-3-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323093120.20558-3-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 10:31, Kathiravan T wrote:
-> Add the initial device tree support for the Reference Design
-> Platform(RDP) 468 based on IPQ5332 family of SoCs. This patch carries the
-> support for Console UART, SPI NOR, eMMC.
+On Fri 17-03-23 16:25:04, Ojaswin Mujoo wrote:
+> On Thu, Mar 09, 2023 at 03:14:22PM +0100, Jan Kara wrote:
+> > On Fri 27-01-23 18:07:35, Ojaswin Mujoo wrote:
+> > > Currently, ext4_mb_prefetch() and ext4_mb_prefetch_fini() skip
+> > > BLOCK_UNINIT groups since fetching their bitmaps doesn't need disk IO.
+> > > As a consequence, we end not initializing the buddy structures and CR0/1
+> > > lists for these BGs, even though it can be done without any disk IO
+> > > overhead. Hence, don't skip such BGs during prefetch and prefetch_fini.
+> > > 
+> > > This improves the accuracy of CR0/1 allocation as earlier, we could have
+> > > essentially empty BLOCK_UNINIT groups being ignored by CR0/1 due to their buddy
+> > > not being initialized, leading to slower CR2 allocations. With this patch CR0/1
+> > > will be able to discover these groups as well, thus improving performance.
+> > > 
+> > > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> > > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> > 
+> > The patch looks good. I just somewhat wonder - this change may result in
+> > uninitialized groups being initialized and used earlier (previously we'd
+> > rather search in other already initialized groups) which may spread
+> > allocations more. But I suppose that's fine and uninit groups are not
+> > really a feature meant to limit fragmentation and as the filesystem ages
+> > the differences should be minimal. So feel free to add:
+> > 
+> > Reviewed-by: Jan Kara <jack@suse.cz>
+> > 
+> > 								Honza
+> Thanks for the review. As for the allocation spread, I agree that it
+> should be something our goal determination logic should take care of
+> rather than limiting the BGs available to the allocator.
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
-> Changes in V2:
-> 	- Moved the 'reg' property after 'compatible'
+> Another point I wanted to discuss wrt this patch series was why were the
+> BLOCK_UNINIT groups not being prefetched earlier. One point I can think
+> of is that this might lead to memory pressure when we have too many
+> empty BGs in a very large (say terabytes) disk.
 > 
->  arch/arm64/boot/dts/qcom/Makefile           |   1 +
->  arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 103 ++++++++++++++++++++
->  2 files changed, 104 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
+> But i'd still like to know if there's some history behind not
+> prefetching block uninit.
 
-Hi,
+Hum, I don't remember anything. Maybe Ted will. You can ask him today on a
+call.
 
-Your v1 was reported that it does not build. Does this patch build fine?
-
-Best regards,
-Krzysztof
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
