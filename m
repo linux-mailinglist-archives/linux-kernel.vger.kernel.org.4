@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB4F6C7355
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663556C7364
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjCWWvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S229997AbjCWWxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjCWWvh (ORCPT
+        with ESMTP id S231738AbjCWWxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:51:37 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D043F2CC6C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:36 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id pt5-20020a17090b3d0500b0023d3ffe542fso2466836pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:36 -0700 (PDT)
+        Thu, 23 Mar 2023 18:53:19 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D440F2ED62
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:03 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5458dde029bso752397b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679611896;
+        d=google.com; s=20210112; t=1679611982;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQKo9HpZj3ZEv4kIrjCBob838arhh4bkeXrq4uWEKDo=;
-        b=LNY/QzxbzbhyA9VmS9kiylWseefOzWJ9qsPVn7rINA7YwhtfLzrh6Sup2s9HzqfUSo
-         4u88dHMQ4PSjnZAeaRilx1hRj/znb+o86P/TkL2p+BzCNbwIzhPhGmkIraJsutwCECHQ
-         27+Ly3TJ8jbU03ffDHowXnUhqb5wzPqCfcTkzkjgoMECmBSwArn7f/cOapY6DmaEEsQe
-         wiivMiOukrysbzpOWTVLtjhTYvsAzITxWsRtSWJGFiTq1RV/1m8MSeRmWnhMOJFqJH7I
-         BtYeKZfTSK/xI+qiGMgwDsjRt/2JY92HxnZOgaLjmgk/qS9Dz85HTTCVDGGmFP9mx0pl
-         KThg==
+        bh=W6+Qn6EJMHI+3I/L2O6DcxdAJ0N7a/1zdIIWx5jxJMI=;
+        b=lPRzXXsmxANtqW5g73lEWfTE9t87KJhwBulJ2jb4CXk1fhH834elw1IMt+G2RURXet
+         uS2wvECcsZveg4IYcaPYOJKetzv9Figak4PRmehi0PaUJ8oFmgOi3kylQRF0ELdh/GKi
+         xmAsx0GT54177CJ1ns9ILiUH+rowuFK+5N8+l3XEoO7xDB006uypOuUYK0qFKP1d0qyi
+         nP7pFMSVzP68WM1fuLgJmJlePpq+r4YABvtBxXg+UlVFHJLmsWGlgrqft3CZO2gsXznf
+         DrREFzhQte4JrGxlovC6qHX0nLzs4RtFEsANSt/CKLgnHgLcnydvfTSE78QgKaojbTM+
+         PFVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679611896;
+        d=1e100.net; s=20210112; t=1679611982;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQKo9HpZj3ZEv4kIrjCBob838arhh4bkeXrq4uWEKDo=;
-        b=xG62fPE+zxRBygbMzgPlxpHxiGohmD5kunSMlTBWwxbWRWxJC6ZLH6yC8YkD4WW9iV
-         h6ATLi5Ip0rcP12NiGhBhBJ2L4bCA4e4HFxBNCx45+pJWywKrTbyN4TDbmKU22mr5E6T
-         aZQaeh4Naa28wkrnCGJP6DWg7S8TsZatTNXd+SJJpjuiXq9TYRdDyHrj9hAbTmEKPTVZ
-         xefzB5lsYODQtrHqqBtnm8eZ+j/hLzRLHSJl0mYTHJQHRzWwG3KBnDl7o2qW+n+4i/GN
-         kuAncLF7jChWe1jjp66fYBPJvOt+RM64+iWDHvnH9PVns0RRDVNBuQtMQXzyadvR6UGu
-         quRw==
-X-Gm-Message-State: AAQBX9e7MsDtBkuiGBxL7QvYSaj0hR1ORftL4e6+q3/wIv+CDpJzMfjg
-        Mx++CBRMGrIyGryoAfqqQmySkwYD/04=
-X-Google-Smtp-Source: AKy350biacHclZnR/BQV5O2gN4h5yzyjyMmEX82IyWmLOcoi5b+AfSuce/MmgedjoZHNDsnfiShsJ5iLUZU=
+        bh=W6+Qn6EJMHI+3I/L2O6DcxdAJ0N7a/1zdIIWx5jxJMI=;
+        b=BF5odyYT5Q5PuLpSjrQm8U1q8st/wv9W0cG+b0nVPRqf0RBl0IQdsJDKr3wOxvwntF
+         GfKK7L5IX8tTDXle1Sy2WNyVEiLs4MBJmHVes9pAznLxwaE5uH69f4H5VYnOFCvhzL5j
+         Lzdm+ZkRfK7cXTIXihyxQi4xTQJzyPlniSiGllbP+qwJexLdRcZX6SJ4Zlk0bCp9Bv++
+         Szw9t/TwDbt7qpfLXt2Qq9QcKAkV0uvWlHxN8TyKZPsiDWT+aat1frhXCisK6f2S1lHc
+         dsSjSXJAZusdoP7RvNnZ/rFbPQatO+vIR+HSak5MtuPUiEkYgW4NZ5u+I+PDjNIZv6hV
+         4lxg==
+X-Gm-Message-State: AAQBX9frMV2wjPtFmmtsvih6Jtww/AC2XGmGNOrgZidTG0jsA8eGRnIO
+        ON2OsihoHsI3hwVEneZkPD1fxkEdc5Y=
+X-Google-Smtp-Source: AKy350aD3v+u24+02eF93jNscPBMXl81ZfnIUCEHD8aAAK+EKBKMkSSJWX59LqWYUu8CYTMAdDRJuuk3J2A=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:5141:b0:23d:50d0:4ba4 with SMTP id
- k1-20020a17090a514100b0023d50d04ba4mr213723pjm.3.1679611896176; Thu, 23 Mar
- 2023 15:51:36 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 15:50:32 -0700
-In-Reply-To: <20230216154115.710033-1-jiangshanlai@gmail.com>
+ (user=seanjc job=sendgmr) by 2002:a81:af5d:0:b0:541:8285:b25 with SMTP id
+ x29-20020a81af5d000000b0054182850b25mr78379ywj.10.1679611981974; Thu, 23 Mar
+ 2023 15:53:01 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 15:50:34 -0700
+In-Reply-To: <20230322013731.102955-1-minipli@grsecurity.net>
 Mime-Version: 1.0
-References: <20230216154115.710033-1-jiangshanlai@gmail.com>
+References: <20230322013731.102955-1-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <167934171585.1941509.10365014118525996265.b4-ty@google.com>
-Subject: Re: [PATCH V3 00/14] kvm: x86/mmu: Share the same code to invalidate
- each vTLB entry
+Message-ID: <167949641597.2215962.13042575709754610384.b4-ty@google.com>
+Subject: Re: [PATCH v4 0/6] KVM: MMU: performance tweaks for heavy CR0.WP users
 From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        Mathias Krause <minipli@grsecurity.net>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
 Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,47 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Feb 2023 23:41:06 +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Wed, 22 Mar 2023 02:37:25 +0100, Mathias Krause wrote:
+> v3: https://lore.kernel.org/kvm/20230201194604.11135-1-minipli@grsecurity.net/
 > 
-> FNAME(invlpg) and FNAME(sync_page) invalidate vTLB entries but in
-> slightly different methods.
+> This series is the fourth iteration of resurrecting the missing pieces of
+> Paolo's previous attempt[1] to avoid needless MMU roots unloading.
 > 
-> Make them use the same method and share the same code.
+> It's incorporating Sean's feedback to v3 and rebased on top of
+> kvm-x86/next, namely commit d8708b80fa0e ("KVM: Change return type of
+> kvm_arch_vm_ioctl() to "int"").
 > 
 > [...]
 
-Applied to kvm-x86 mmu, thanks!  Made a few tweaks, I'll respond to invididual
-patches (if I haven't already; and if I forget, I apologize in advance).
+Applied 1 and 5 to kvm-x86 mmu, and the rest to kvm-x86 misc, thanks!
 
-[01/14] KVM: x86/mmu: Use 64-bit address to invalidate to fix a subtle bug
-        https://github.com/kvm-x86/linux/commit/753b43c9d1b7
-[02/14] kvm: x86/mmu: Move the check in FNAME(sync_page) as kvm_sync_page_check()
-        https://github.com/kvm-x86/linux/commit/90e444702a7c
-[03/14] kvm: x86/mmu: Check mmu->sync_page pointer in kvm_sync_page_check()
-        https://github.com/kvm-x86/linux/commit/51dddf6c49b9
-[04/14] kvm: x86/mmu: Set mmu->sync_page as NULL for direct paging
-        https://github.com/kvm-x86/linux/commit/8ef228c20cae
-[05/14] kvm: x86/mmu: Move the code out of FNAME(sync_page)'s loop body into mmu.c
-        https://github.com/kvm-x86/linux/commit/c3c6c9fc5d24
-[06/14] kvm: x86/mmu: Reduce the update to the spte in FNAME(sync_spte)
-        https://github.com/kvm-x86/linux/commit/e6722d9211b2
-[07/14] KVM: x86/mmu: Sanity check input to kvm_mmu_free_roots()
-        https://github.com/kvm-x86/linux/commit/f94db0c8b9fa
-[08/14] kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for kvm_mmu_invalidate_addr()
-        https://github.com/kvm-x86/linux/commit/cd42853e9530
-[09/14] kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in kvm_mmu_invpcid_gva()
-        https://github.com/kvm-x86/linux/commit/9ebc3f51da6f
-[10/14] kvm: x86/mmu: Use kvm_mmu_invalidate_addr() in nested_ept_invalidate_addr()
-        https://github.com/kvm-x86/linux/commit/2c86c444e275
-[11/14] kvm: x86/mmu: Allow the roots to be invalid in FNAME(invlpg)
-        https://github.com/kvm-x86/linux/commit/ed335278bd12
-[12/14] kvm: x86/mmu: Remove FNAME(invlpg) and use FNAME(sync_spte) to update vTLB instead.
-        https://github.com/kvm-x86/linux/commit/9fd4a4e3a3d9
-[13/14] kvm: x86/mmu: Remove @no_dirty_log from FNAME(prefetch_gpte)
-        https://github.com/kvm-x86/linux/commit/91ca7672dc73
-[14/14] kvm: x86/mmu: Skip calling mmu->sync_spte() when the spte is 0
-        https://github.com/kvm-x86/linux/commit/19ace7d6ca15
+[1/6] KVM: x86/mmu: Avoid indirect call for get_cr3
+      https://github.com/kvm-x86/linux/commit/2fdcc1b32418
+[2/6] KVM: x86: Do not unload MMU roots when only toggling CR0.WP with TDP enabled
+      https://github.com/kvm-x86/linux/commit/01b31714bd90
+[3/6] KVM: x86: Ignore CR0.WP toggles in non-paging mode
+      https://github.com/kvm-x86/linux/commit/e40bcf9f3a18
+[4/6] KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+      https://github.com/kvm-x86/linux/commit/74cdc836919b
+[5/6] KVM: x86/mmu: Fix comment typo
+      https://github.com/kvm-x86/linux/commit/50f13998451e
+[6/6] KVM: VMX: Make CR0.WP a guest owned bit
+      https://github.com/kvm-x86/linux/commit/fb509f76acc8
 
 --
 https://github.com/kvm-x86/linux/tree/next
