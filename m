@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3136C62C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF816C62C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjCWJGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S229893AbjCWJGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjCWJGa (ORCPT
+        with ESMTP id S231628AbjCWJGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:06:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784B722103;
-        Thu, 23 Mar 2023 02:05:43 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0E43866030B7;
-        Thu, 23 Mar 2023 09:05:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679562333;
-        bh=wwINqe29kiBtmq4po2HZOBPJxJovHBx9wl35mDz0eHA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UEZnifG9ZX7v5DHzmaog9mbNJaM9MNnXyW5cYBM1yhc20gaYpj95pjQglnTVLKPkN
-         H7dr5DbBuw3EOBUP6hOvhMkd4sGhN7gSWRu/dh1ilMxGUyPwbR7dTJJzoZ2pWEJ5bv
-         OpJ89TPNAzNQDT2GvaDBqL4BW/6nRXrjMicFjFDjS0Ow3fb7i+WUrnzp9Bvl7alNuq
-         PeygCLTgOod7dR/hk2Hf2UTTJnapZ5aEuGvyAIt/DDKHYqhr8rmeOUgVwZMxdRk7iP
-         Tw2AZA3mV8+D40ZP+4evhb9q2xSchBLcAyZv4NA47rvzAx5wr6Jq4JLLXmFF8ZKKQ2
-         5UjCLVLIDCL7w==
-Message-ID: <99e1d5b2-509f-3291-f327-2050f1bd9aa3@collabora.com>
-Date:   Thu, 23 Mar 2023 10:05:30 +0100
+        Thu, 23 Mar 2023 05:06:23 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1D821950;
+        Thu, 23 Mar 2023 02:05:35 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id l12so19611937wrm.10;
+        Thu, 23 Mar 2023 02:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679562332;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZtM1/6aT9Hs8L0/Z5EjLhrB2E2q0vn+Gu2UY/Kc0m8I=;
+        b=ZaQXzTUjeJuWR7nWdtwf4QSQSdcp3+kIhkGEgjk4f9tZsWJ+yaUavlgvydHIWxalI3
+         HvEEDOq4X7xCsTnh3p7f8o/6hsJvrzNP/yqFTDT5Eoq1mY2RqO5Ul1b0qyxW3DGycnKS
+         1rGttUrCkEzU4rRdc9roM5Xx4ENsPKbfZx84SWouYOB55n1GhB19aBnzrn0eqyHvAd+R
+         AspCR5MEgXgrp+UN78HUpy9xIt3Dd3bfRXImxDWkM8Xvu8S41n6gyoV3Iz60PY+u+wMQ
+         aHvIVQaZOFa7t4AcojFK5rlrVKej1wFVLTIdmTeOBIaJP0JHbzavD/fzd5MO+nTPaCVc
+         8YEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679562332;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZtM1/6aT9Hs8L0/Z5EjLhrB2E2q0vn+Gu2UY/Kc0m8I=;
+        b=XID468YdrvNPh7yDqlY+xK/JQOmiGwMSY+WoYbO2n5bWtVdLmeh34L5cfhAJKjayVr
+         FrGtQ+SRHaQ91zvqsD7dhX9urCVN9ztThkXc5IjQ2XjJXFgdqynIDjUuWUZi3QaMMP0E
+         6d/tiNEOdzaKb/4+cU49AfX/eYQ0gS8mUXMhC5YxIDEZMpaaus0JbSSd+O5TDWv5HgZY
+         Q7xzkUQ/qGWiRjQFQGI5KUCEo1N36CYCQNRS+DeM4lOB+6XfZ56qZ5vgOC9Nuz6elz4t
+         GLWWklvtp++17oBtLmIjUXKbTpft6IDmIdpIWA12oWtqwdYubkAJ/bPQIo/C+6jHBBlp
+         A1gA==
+X-Gm-Message-State: AAQBX9cWIkTjBLUtnU0EuD8dog0ih+iX9yc13IbwbecJTQ3sMTYAwHgX
+        Ekp0TpFZI6PkB5iSR+LT+tY=
+X-Google-Smtp-Source: AKy350Z9vPGF5pLhiKFKopvx4kjzoGNumrNcki7pJup/RNEkcWBlS3eBt8/YiZoRHJr9f0BLq0yB7Q==
+X-Received: by 2002:adf:dc12:0:b0:2ce:a85d:5319 with SMTP id t18-20020adfdc12000000b002cea85d5319mr1793247wri.39.1679562332546;
+        Thu, 23 Mar 2023 02:05:32 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id o10-20020a5d684a000000b002d89e113691sm6623425wrw.52.2023.03.23.02.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:05:32 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ASoC: SOF: ipc4/intel: Fix spelling mistake "schduler" -> "scheduler"
+Date:   Thu, 23 Mar 2023 09:05:31 +0000
+Message-Id: <20230323090531.67679-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        singo.chang@mediatek.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux@googlegroups.com,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230321121859.2355-1-nancy.lin@mediatek.com>
- <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
- <CAGXv+5F82Ctz0pit4LsR5mQizPq-v2k3OVfiRhsGnG0a2J=Dyg@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5F82Ctz0pit4LsR5mQizPq-v2k3OVfiRhsGnG0a2J=Dyg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/03/23 10:04, Chen-Yu Tsai ha scritto:
-> On Thu, Mar 23, 2023 at 4:58 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 21/03/23 13:18, Nancy.Lin ha scritto:
->>> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
->>>
->>> Add DRM and these modules support by the patches below:
->>>
->>
->> I've tested v30 again on MT8173, MT8192 and MT8195 based Chromebooks.
->> Green light from me.
->>
->> Chun-Kuang, can you please pick it?
-> 
-> It was picked up a few hours ago.
-> 
-> ChenYu
+There are two spelling mistakes in dev_warn messages. Fix them.
 
-Sorry, I didn't receive that email. Perfect!
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ sound/soc/sof/ipc4-topology.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
-Angelo
+diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+index 12775fcb6b54..de7213237b27 100644
+--- a/sound/soc/sof/ipc4-topology.c
++++ b/sound/soc/sof/ipc4-topology.c
+@@ -1990,7 +1990,7 @@ static int sof_ipc4_widget_setup(struct snd_sof_dev *sdev, struct snd_sof_widget
+ 		pipeline = swidget->private;
+ 
+ 		if (pipeline->use_chain_dma) {
+-			dev_warn(sdev->dev, "use_chain_dma set for schduler %s",
++			dev_warn(sdev->dev, "use_chain_dma set for scheduler %s",
+ 				 swidget->widget->name);
+ 			return 0;
+ 		}
+@@ -2149,7 +2149,7 @@ static int sof_ipc4_widget_free(struct snd_sof_dev *sdev, struct snd_sof_widget
+ 		u32 header;
+ 
+ 		if (pipeline->use_chain_dma) {
+-			dev_warn(sdev->dev, "use_chain_dma set for schduler %s",
++			dev_warn(sdev->dev, "use_chain_dma set for scheduler %s",
+ 				 swidget->widget->name);
+ 			mutex_unlock(&ipc4_data->pipeline_state_mutex);
+ 			return 0;
+-- 
+2.30.2
+
