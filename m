@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1F26C71AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3F86C71AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjCWU3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 16:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S231436AbjCWUbc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 16:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCWU3x (ORCPT
+        with ESMTP id S229499AbjCWUb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 16:29:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB586A69;
-        Thu, 23 Mar 2023 13:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679603392; x=1711139392;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=3Be8DLFhUiGz0Q4pewR0vmSEASkcf3SAtExbAdhW4qY=;
-  b=GfnqPAGSlkwybbhAk4S1U1xxSpMU0JhM0tyLYOKokf+v6MYe5qgtIwKk
-   SxPIkFc4wfjt3ZK+Hr+K2bF1Bk1r74UnbG+tx9O7tkY8/PBxlkMuZ1LYd
-   ts83k8lUKEkJQ7FmaU5G70mu7kdwSDUEaawRFPKuRp0u/2BRmhFeLJNnT
-   MPQXI5sXghrqKCNJur4GomYMWkCNku0F+Lo6oKTWCD3ur7bVrb5Z03jQ2
-   npCdWyeqaZAT8IKt5W3iuFUr8uc/N63rhAwdFAqHVwxu2shFJaFngjQaJ
-   sPE2T2T5fmGvxpi1mVl5qckon3uviV4Z1QPh99JX/hecp43hbO0yMvbNe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="341173788"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="341173788"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 13:29:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="825965412"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="825965412"
-Received: from jball6-mobl.amr.corp.intel.com (HELO [10.209.105.116]) ([10.209.105.116])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 13:29:51 -0700
-Message-ID: <7d9679e9-6d1a-bb08-dbcc-acb833bd5fd8@intel.com>
-Date:   Thu, 23 Mar 2023 13:29:50 -0700
+        Thu, 23 Mar 2023 16:31:29 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE86B6A69;
+        Thu, 23 Mar 2023 13:31:24 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id x3so91822298edb.10;
+        Thu, 23 Mar 2023 13:31:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679603483;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5taPSzEjjbZ4ws8Fl8wTQBMvT7J3MXVU2z5jLI0tXRs=;
+        b=NgujQfsJ3BGlfRrFyZcewiZOme6+6ISx+wkGTTKfc/FHSIuT7M0yICQ78PH8lJn5mN
+         nsRRsl6D91aZvvGHQYBdPbNESEFbPYf7wkVWstfOaOOoAwN0k670deaxDx3vHGsZkZpg
+         jglKN3rTE5NEIaR5sNKTLYtaOsoHolsXLGlHuoKHGRRe3JNYp/XmB2jr6GJM/XFY+8kh
+         7SOwcyrYBUqMd7tsR04giuwdbB4cJq+Wbl6WsRd6ezYPsz+LND5sEjEyt4GSuy0j7Cu0
+         d22O2jJxmvnNHWy23YgJ9ELQdWRS4jdI/w73mLlgM/KcrNRbGqfnrSRQsa0tqowuDbld
+         f3Gg==
+X-Gm-Message-State: AAQBX9cOE+C49QD0TJs3vDWRcv44R+g60enxXzQvAk+PC37aI9H3xLeO
+        XBOy+z0Q9+wfFjfbr2xx7Zs+0PaLl99dZt/bCqy09smR
+X-Google-Smtp-Source: AKy350bqz+EgJnCNKZclFsQr22LptAC+q1U6CeACFZpYEvdrSniQIUGpINGYhGuLBUkM9s0X3b3mXkG+EswPCwpO7N8=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr181188ejc.2.1679603483238; Thu, 23 Mar
+ 2023 13:31:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] RAS/CEC: Move non-debug attributes out of debugfs
-Content-Language: en-US
-To:     kyle-meyer <kyle.meyer@hpe.com>, dimitri.sivanich@hpe.com,
-        steve.wahl@hpe.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
-        yazen.ghannam@amd.com, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org
-References: <20230323202158.37937-1-kyle.meyer@hpe.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230323202158.37937-1-kyle.meyer@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230322102258.27390-1-andriy.shevchenko@linux.intel.com>
+ <20230322102258.27390-2-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0imGNb8pETxdJmjJ9cSJQedeb=w2dcG6huDB=SpL-ufqA@mail.gmail.com> <ZBxFC6prEE5p4Wu1@smile.fi.intel.com>
+In-Reply-To: <ZBxFC6prEE5p4Wu1@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 23 Mar 2023 21:31:11 +0100
+Message-ID: <CAJZ5v0g3iJ+QL=mL0a8cfoN9qT_FgM_j803ZWgcYn2AOpCN6AQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] ACPI: SPCR: Amend indentation
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 13:22, kyle-meyer wrote:
-> From: Kyle Meyer <kyle.meyer@hpe.com>
-> 
-> When kernel lockdown is in effect, use of debugfs is not permitted. Move
-> decay_interval and action_threshold out of debugfs, from debugfs/ras/cec
-> to sysfs/system/devices/machinecheck/cec.
+On Thu, Mar 23, 2023 at 1:24 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Mar 22, 2023 at 07:50:55PM +0100, Rafael J. Wysocki wrote:
+> > On Wed, Mar 22, 2023 at 11:26 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+> > > 2) Remove double spaces for consistency.
+> >
+> > I don't quite agree with this.
+> >
+> > Double spaces after a period are recognized as end-of-sentence markers
+> > by some editors (notably vi), so if they have been used intentionally,
+> > I see no reason to replace them.
+>
+> For the sake of consistency. There places in very same file which do not
+> follow this. I can invert and add a space to the rest. Do you prefer that?
 
-You forgot to attach the patch that you wrote that updates
-Documentation/ABI/. ;)
+Not really.  I just don't think that this is worth the churn.
 
-Also, why *should* these be part of the stable sysfs ABI?  What app is
-using them?  Why does it need them?  Why these two and only these two?
-What's left in debugfs?
+> The reasoning will be kept the same, though.
+
+Is the lack of consistency in this particular respect really an issue?
+
+I guess you can argue that if there are mixed sentence ending styles
+in one and the same comment, it is better to make them consistent,
+which I can agree with.  Otherwise I'm not convinced.
