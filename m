@@ -2,163 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0006C5D6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533186C5D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCWDqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 23:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
+        id S229820AbjCWDrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 23:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWDqo (ORCPT
+        with ESMTP id S229729AbjCWDrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 23:46:44 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A122D148;
-        Wed, 22 Mar 2023 20:46:38 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Mar 2023 23:47:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA002CFD4;
+        Wed, 22 Mar 2023 20:47:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Phrqd1dPRz6FK2Q;
-        Thu, 23 Mar 2023 11:46:37 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl2.zte.com.cn with SMTP id 32N3kTto059217;
-        Thu, 23 Mar 2023 11:46:30 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 23 Mar 2023 11:46:31 +0800 (CST)
-Date:   Thu, 23 Mar 2023 11:46:31 +0800 (CST)
-X-Zmail-TransId: 2afa641bcb97ffffffffcff-6a10a
-X-Mailer: Zmail v1.0
-Message-ID: <202303231146312337844@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <shawn.lin@rock-chips.com>
-Cc:     <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
-        <bhelgaas@google.com>, <heiko@sntech.de>,
-        <linux-pci@vger.kernel.org>, <linux-rockchip@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBQQ0k6IHJvY2tjaGlwOiBVc2UgZGV2X2Vycl9wcm9iZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 32N3kTto059217
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 641BCB9D.000/4Phrqd1dPRz6FK2Q
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhrrP6pj2z4whr;
+        Thu, 23 Mar 2023 14:47:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679543238;
+        bh=/oflFH8u0+y3EDIAa+W0ZJ3fJxp0x2wW6jB5mSBm3Ow=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FXL4NT5tn7GakfxMSUzZk88+F2PwFb+bD9thFm6M7pbHNlUhcqVCCePwRq98zAkgO
+         7rc3EEG8QcpxQeukG0+gKDT6X068480BpdBG5psiW6XP11lpgtGS0MATkSuyyuf3rW
+         wrNFB1wCGkmjicCyZevdxf6mSqt2A6IDRdet9JtLzMw6XbvnabY86wCyFuCGUzSpJf
+         itYbUWt8kLS7UJ3xv5IOqxXp+kDv3MoR9grEUbPtXnuCeQOgxHpGDR3YLaQ0bA4ez2
+         Uo1cbnN6mEtR4VZpC6DgIDT4OWb3tcZ+Afuz/a3j3Cv+RljA9unNJPk/nLMbigPBww
+         t9tu6dAsc63xw==
+Date:   Thu, 23 Mar 2023 14:47:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the rcu tree
+Message-ID: <20230323144717.6346fdab@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=336hLObrJMP10vgGOJ4oA3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+--Sig_/=336hLObrJMP10vgGOJ4oA3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Replace the open-code with dev_err_probe() to simplify the code.
+Hi all,
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/pci/controller/pcie-rockchip.c | 65 ++++++++++----------------
- 1 file changed, 24 insertions(+), 41 deletions(-)
+The following commit is also in the tip tree as a different commit
+(but the same patch):
 
-diff --git a/drivers/pci/controller/pcie-rockchip.c b/drivers/pci/controller/pcie-rockchip.c
-index 990a00e08bc5..e80fde73700c 100644
---- a/drivers/pci/controller/pcie-rockchip.c
-+++ b/drivers/pci/controller/pcie-rockchip.c
-@@ -68,54 +68,40 @@ int rockchip_pcie_parse_dt(struct rockchip_pcie *rockchip)
- 		rockchip->link_gen = 2;
+  f339c76cfe29 ("entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up")
 
- 	rockchip->core_rst = devm_reset_control_get_exclusive(dev, "core");
--	if (IS_ERR(rockchip->core_rst)) {
--		if (PTR_ERR(rockchip->core_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing core reset property in node\n");
--		return PTR_ERR(rockchip->core_rst);
--	}
-+	if (IS_ERR(rockchip->core_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->core_rst),
-+				     "missing core reset property in node\n");
+This is commit
 
- 	rockchip->mgmt_rst = devm_reset_control_get_exclusive(dev, "mgmt");
--	if (IS_ERR(rockchip->mgmt_rst)) {
--		if (PTR_ERR(rockchip->mgmt_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing mgmt reset property in node\n");
--		return PTR_ERR(rockchip->mgmt_rst);
--	}
-+	if (IS_ERR(rockchip->mgmt_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->mgmt_rst),
-+				     "missing mgmt reset property in node\n");
+  b41651405481 ("entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up")
 
- 	rockchip->mgmt_sticky_rst = devm_reset_control_get_exclusive(dev,
- 								"mgmt-sticky");
--	if (IS_ERR(rockchip->mgmt_sticky_rst)) {
--		if (PTR_ERR(rockchip->mgmt_sticky_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing mgmt-sticky reset property in node\n");
--		return PTR_ERR(rockchip->mgmt_sticky_rst);
--	}
-+	if (IS_ERR(rockchip->mgmt_sticky_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->mgmt_sticky_rst),
-+				     "missing mgmt-sticky reset property in node\n");
+in the tip tree.
 
- 	rockchip->pipe_rst = devm_reset_control_get_exclusive(dev, "pipe");
--	if (IS_ERR(rockchip->pipe_rst)) {
--		if (PTR_ERR(rockchip->pipe_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing pipe reset property in node\n");
--		return PTR_ERR(rockchip->pipe_rst);
--	}
-+	if (IS_ERR(rockchip->pipe_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->pipe_rst),
-+				     "missing pipe reset property in node\n");
+--=20
+Cheers,
+Stephen Rothwell
 
- 	rockchip->pm_rst = devm_reset_control_get_exclusive(dev, "pm");
--	if (IS_ERR(rockchip->pm_rst)) {
--		if (PTR_ERR(rockchip->pm_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing pm reset property in node\n");
--		return PTR_ERR(rockchip->pm_rst);
--	}
-+	if (IS_ERR(rockchip->pm_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->pm_rst),
-+				     "missing pm reset property in node\n");
+--Sig_/=336hLObrJMP10vgGOJ4oA3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
- 	rockchip->pclk_rst = devm_reset_control_get_exclusive(dev, "pclk");
--	if (IS_ERR(rockchip->pclk_rst)) {
--		if (PTR_ERR(rockchip->pclk_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing pclk reset property in node\n");
--		return PTR_ERR(rockchip->pclk_rst);
--	}
-+	if (IS_ERR(rockchip->pclk_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->pclk_rst),
-+				     "missing pclk reset property in node\n");
+-----BEGIN PGP SIGNATURE-----
 
- 	rockchip->aclk_rst = devm_reset_control_get_exclusive(dev, "aclk");
--	if (IS_ERR(rockchip->aclk_rst)) {
--		if (PTR_ERR(rockchip->aclk_rst) != -EPROBE_DEFER)
--			dev_err(dev, "missing aclk reset property in node\n");
--		return PTR_ERR(rockchip->aclk_rst);
--	}
-+	if (IS_ERR(rockchip->aclk_rst))
-+		return dev_err_probe(dev, PTR_ERR(rockchip->aclk_rst),
-+				     "missing aclk reset property in node\n");
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQby8UACgkQAVBC80lX
+0GzCRgf+OLtQOPpY9kROnqISn5or+NWyxWuBmXhNq810Uv6rxI6USxqnQWPjBagl
+8Msfu84mn/9s6olF6d0yJHJh1FQ9iwlqdKLtwLZTify4jNJmyvE0VC48ZPK22+l2
+p7ZYauf2MTzTWG/1SqVlHPx+qNw59vFEgnf8ab98JJZCi8rNBiAgBTT0j20rNMLz
+IyF3uSlSpzSCdUzsI0fd2KAc89hT89pKGnvZ19QUCZ/mXAbQuZ+J3Gx42x/DsTZh
+2sEbQfVKL0umtN5HKwV3NwrbzfALSO1DSv9MvTp2sj4Ib34s9wd7KrbeDsWIJFwt
+p2IUtl7OhwjLzrOxY1nsarEZsFHOdg==
+=UT0q
+-----END PGP SIGNATURE-----
 
- 	if (rockchip->is_rc) {
- 		rockchip->ep_gpio = devm_gpiod_get_optional(dev, "ep",
-@@ -322,12 +308,9 @@ int rockchip_pcie_get_phys(struct rockchip_pcie *rockchip)
- 		phy = devm_of_phy_get(dev, dev->of_node, name);
- 		kfree(name);
-
--		if (IS_ERR(phy)) {
--			if (PTR_ERR(phy) != -EPROBE_DEFER)
--				dev_err(dev, "missing phy for lane %d: %ld\n",
--					i, PTR_ERR(phy));
--			return PTR_ERR(phy);
--		}
-+		if (IS_ERR(phy))
-+			return dev_err_probe(dev, PTR_ERR(phy),
-+					     "missing phy for lane %d: %ld\n", i);
-
- 		rockchip->phys[i] = phy;
- 	}
--- 
-2.25.1
+--Sig_/=336hLObrJMP10vgGOJ4oA3--
