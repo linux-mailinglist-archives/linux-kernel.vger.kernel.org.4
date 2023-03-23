@@ -2,184 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA8A6C72AC
+	by mail.lfdr.de (Postfix) with ESMTP id F34EF6C72AE
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjCWV74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S231305AbjCWV76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjCWV7w (ORCPT
+        with ESMTP id S229681AbjCWV7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:59:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1E18ABC;
-        Thu, 23 Mar 2023 14:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679608791; x=1711144791;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MIYwnVhINEUPfIqisXDzCHTh2MVhn+l+clvK/i9lXUw=;
-  b=Va+NTwX4xQo/3kYiDIl8LtbATMbPoSj6UL5Ab0O169pKbgxZJDdi/UxB
-   C1RRl5WtZkWA9XPQUBk0sg24maFx/KodP0c+CWxUouUmNlyyjJzBYhpsE
-   hSp2StRKfM47VMtsHjmghCISBBau+PBlODZFBCsuIhM2zsD0xgpk+nUOz
-   Xz+xqTB5cI5rdHjCD/M98/GcOdvELFDak4ot10HWeiWzcGlgIebVzgFdX
-   T0TOwGarvIp2v9AgIZ75nWoxLjJfmpJwI6CuZednTEHVLrKtsFDghrVf5
-   4IIqqde7c42LfABrfIH/qxoPCzlv2vt5ngzo5QXswTGh1nEevXqeXVKPn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="402216027"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="402216027"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 14:59:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682452314"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="682452314"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Mar 2023 14:59:45 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfSyH-000Ejc-0q;
-        Thu, 23 Mar 2023 21:59:45 +0000
-Date:   Fri, 24 Mar 2023 05:59:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ye Xiang <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, srinivas.pandruvada@intel.com,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-        wentong.wu@intel.com, lixu.zhang@intel.com,
-        Ye Xiang <xiang.ye@intel.com>
-Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
-Message-ID: <202303240545.fhNNvhZt-lkp@intel.com>
-References: <20230323172113.1231050-2-xiang.ye@intel.com>
+        Thu, 23 Mar 2023 17:59:55 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E266218ABC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so3511433pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679608793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kBrPAsOPLA5SHIhVYbiPO9xPAXdatozqf1Me6tgID0s=;
+        b=K78rBeJU2xxEG+YystW3iiMULXg1fV6+fr73nqJbl1TNP1j6ur4vBJujIeqq8892AT
+         GIzt8YbORoR8k9CrFSlMV0QSvTYrs71zpuh87dSGeybHnxBcvOA10FX0U5GqIkToee5O
+         jZAy1tb/rofMRZDXlJsYNu30wy9lIWCdMBoONqcMldXhdBjuyoy+7B91W1BWuU15/StE
+         zwyaRcf8EYol9sOhMT59zP5il5iWFKQVMDVu9kj+csmKea74+PoM54gF/DayV9USQ8uj
+         KMzdKbVePN5/w2QOaQnWdYq95bdh/9w31/l/5GChT5iztIBXW6ZpzFiohBJJqqngARbj
+         xsVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679608793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kBrPAsOPLA5SHIhVYbiPO9xPAXdatozqf1Me6tgID0s=;
+        b=iJYr99lq1JMMTwBMgcd1SjbV/ozaazcibeqi444pOKHqeiC6YoJ9hVfIP7odcxc53k
+         4lC78lTf2Ayk7Py1sHzWoI336hmqxicLkbSNT0I2P8v+q+X0LsWQ1Hka7fdW1DRjPOrR
+         VR6cyKyGOa99mGx38rEV2R9vEVUGD71Uf7MvbK4RlCUTr6/l6SARg6+SmNVLP5HsGCay
+         Y+GKqIP3098s8elkTi5aBJSZDNPILayFz8psIl+PttTYkhbx3WJDDJok5MejbR2kVtz4
+         yzfW+B1r0p9h5YNDkleWxqoeTmdlzHw/e/R+cXVzze5CA3dOpi1rJv65m/r+VAEtoFNM
+         LiOg==
+X-Gm-Message-State: AAQBX9fN8uZwk/6qBim3+mse3tiT4Bcf2HNfX1oByaVn7NGLRpLfmAU8
+        iibR9dnxG1xRo/20Sv26PvzzTA==
+X-Google-Smtp-Source: AKy350YzVRVvcpp8D3CuzT1j94gNIfxCDTvQ6bNJTpCyd7aDek9aQq3yYiNBLy7HqI6QK3JfdK2nKQ==
+X-Received: by 2002:a17:902:e80f:b0:19d:af20:3fe8 with SMTP id u15-20020a170902e80f00b0019daf203fe8mr501695plg.21.1679608793077;
+        Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019fea4bb887sm12868896plb.157.2023.03.23.14.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 14:59:52 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 14:59:48 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
+        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v4 11/18] KVM: x86/mmu: Add documentation of NUMA aware
+ page table capability
+Message-ID: <ZBzL1Awe7S00dPUP@google.com>
+References: <20230306224127.1689967-1-vipinsh@google.com>
+ <20230306224127.1689967-12-vipinsh@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323172113.1231050-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230306224127.1689967-12-vipinsh@google.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+On Mon, Mar 06, 2023 at 02:41:20PM -0800, Vipin Sharma wrote:
+> Add documentation for KVM_CAP_NUMA_AWARE_PAGE_TABLE capability and
+> explain why it is needed.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 62de0768d6aa..7e3a1299ca8e 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -7669,6 +7669,35 @@ This capability is aimed to mitigate the threat that malicious VMs can
+>  cause CPU stuck (due to event windows don't open up) and make the CPU
+>  unavailable to host or other VMs.
+>  
+> +7.34 KVM_CAP_NUMA_AWARE_PAGE_TABLE
+> +------------------------------
+> +
+> +:Architectures: x86
+> +:Target: VM
+> +:Returns: 0 on success, -EINVAL if vCPUs are already created.
+> +
+> +This capability allows userspace to enable NUMA aware page tables allocations.
 
-Thank you for the patch! Yet something to improve:
+Call out that this capability overrides task mempolicies. e.g.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus brgl/gpio/for-next wsa/i2c/for-next broonie-spi/for-next linus/master v6.3-rc3 next-20230323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  This capability causes KVM to use a custom NUMA memory policy when
+  allocating page tables. Specifically, KVM will attempt to co-locate
+  page tables pages with the memory that they map, rather than following
+  the mempolicy of the current task.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Xiang/usb-Add-support-for-Intel-LJCA-device/20230324-012303
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230323172113.1231050-2-xiang.ye%40intel.com
-patch subject: [PATCH v6 1/6] usb: Add support for Intel LJCA device
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20230324/202303240545.fhNNvhZt-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/606c371c73fa37d233b47bd34d4789a1a157a9e4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ye-Xiang/usb-Add-support-for-Intel-LJCA-device/20230324-012303
-        git checkout 606c371c73fa37d233b47bd34d4789a1a157a9e4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/misc/
+> +NUMA aware page tables are disabled by default. Once enabled, prior to vCPU
+> +creation, any page table allocated during the life of a VM will be allocated
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303240545.fhNNvhZt-lkp@intel.com/
+The "prior to vCPU creation" part here is confusing because it sounds
+like you're talking about any page tables allocated before vCPU
+creation. Just delete that part and put it in a separate paragraph.
 
-All error/warnings (new ones prefixed by >>):
+ KVM_CAP_NUMA_AWARE_PAGE_TABLE must be enabled before any vCPU is
+ created, otherwise KVM will return -EINVAL.
 
-   drivers/usb/misc/ljca.c:133:9: error: unknown type name 'ljca_event_cb_t'
-     133 |         ljca_event_cb_t notify;
-         |         ^~~~~~~~~~~~~~~
-   drivers/usb/misc/ljca.c: In function 'ljca_stub_notify':
-   drivers/usb/misc/ljca.c:252:17: error: called object is not a function or function pointer
-     252 |                 stub->event_entry.notify(stub->event_entry.context, cmd, evt_data, len);
-         |                 ^~~~
-   drivers/usb/misc/ljca.c: In function 'ljca_add_aux_dev':
->> drivers/usb/misc/ljca.c:498:16: error: implicit declaration of function 'acpi_find_child_device'; did you mean 'acpi_match_device'? [-Werror=implicit-function-declaration]
-     498 |         adev = acpi_find_child_device(parent, adr, false);
-         |                ^~~~~~~~~~~~~~~~~~~~~~
-         |                acpi_match_device
->> drivers/usb/misc/ljca.c:498:14: warning: assignment to 'struct acpi_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     498 |         adev = acpi_find_child_device(parent, adr, false);
-         |              ^
->> drivers/usb/misc/ljca.c:479:29: warning: variable 'adev' set but not used [-Wunused-but-set-variable]
-     479 |         struct acpi_device *adev = NULL;
-         |                             ^~~~
-   drivers/usb/misc/ljca.c: At top level:
-   drivers/usb/misc/ljca.c:369:12: warning: 'ljca_transfer_internal' defined but not used [-Wunused-function]
-     369 | static int ljca_transfer_internal(struct ljca *ljca, u8 cmd, const void *obuf,
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+> +preferably from the NUMA node of the leaf page.
+> +
+> +Without this capability, default feature is to use current thread mempolicy and
 
+s/default feature is to/KVM will/
 
-vim +498 drivers/usb/misc/ljca.c
+> +allocate page table based on that.
 
-   473	
-   474	static int ljca_add_aux_dev(struct ljca_dev *dev, char *name, unsigned int id, unsigned int adr,
-   475				    void *data)
-   476	{
-   477		struct auxiliary_device *auxdev;
-   478		struct acpi_device *parent;
- > 479		struct acpi_device *adev = NULL;
-   480		int ret;
-   481	
-   482		if (dev->auxdev_count >= ARRAY_SIZE(dev->auxdevs))
-   483			return -EINVAL;
-   484	
-   485		auxdev = &dev->auxdevs[dev->auxdev_count];
-   486		auxdev->name = name;
-   487		auxdev->id = id;
-   488		auxdev->dev.platform_data = data;
-   489		auxdev->dev.parent = &dev->intf->dev;
-   490		auxdev->dev.release = ljca_aux_release;
-   491	
-   492		ret = auxiliary_device_init(auxdev);
-   493		if (ret)
-   494			return ret;
-   495	
-   496		/* new auxiliary device bind to acpi device */
-   497		parent = ACPI_COMPANION(&dev->intf->dev);
- > 498		adev = acpi_find_child_device(parent, adr, false);
-   499		ACPI_COMPANION_SET(&auxdev->dev, adev ?: parent);
-   500	
-   501		ret = auxiliary_device_add(auxdev);
-   502		if (ret) {
-   503			dev_err(&dev->intf->dev, "failed to add auxiliary dev %s.%d\n", name, id);
-   504			auxiliary_device_uninit(auxdev);
-   505			return ret;
-   506		}
-   507	
-   508		dev->auxdev_count++;
-   509	
-   510		return 0;
-   511	}
-   512	
+s/and allocate page table based on that./to allocate page tables./
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +
+> +This capability is useful to improve page accesses by a guest. For example, an
+
+nit: Be more specific about how.
+
+ This capability aims to minimize the cost of TLB misses when a vCPU is
+ accessing NUMA-local memory, by reducing the number of remote memory
+ accesses needed to walk KVM's page tables.
+
+> +initialization thread which access lots of remote memory and ends up creating
+> +page tables on local NUMA node, or some service thread allocates memory on
+> +remote NUMA nodes and later worker/background threads accessing that memory
+> +will end up accessing remote NUMA node page tables.
+
+It's not clear if these examples are talking about what happens when
+KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled or disabled.
+
+Also it's important to distinguish virtual NUMA nodes from physical NUMA
+nodes and where these "threads" are running. How about this:
+
+ For example, when KVM_CAP_NUMA_AWARE_PAGE_TABLE is disabled and a vCPU
+ accesses memory on a remote NUMA node and triggers a KVM page fault,
+ KVM will allocate page tables to handle that fault on the node where
+ the vCPU is running rather than the node where the memory is allocated.
+ When KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled, KVM will allocate the
+ page tables on the node where the memory is located.
+
+ This is intended to be used in VM configurations that properly
+ virtualize NUMA. i.e. VMs with one or more virtual NUMA nodes, each of
+ which is mapped to a physical NUMA node. With this capability enabled
+ on such VMs, any guest memory access to virtually-local memory will be
+ translated through mostly[*] physically-local page tables, regardless
+ of how the memory was faulted in.
+
+ [*] KVM will fallback to allocating from remote NUMA nodes if the
+ preferred node is out of memory. Also, in VMs with 2 or more NUMA
+ nodes, higher level page tables will necessarily map memory across
+ multiple physical nodes.
+
+> So, a multi NUMA node
+> +guest, can with high confidence access local memory faster instead of going
+> +through remote page tables first.
+> +
+> +This capability is also helpful for host to reduce live migration impact when
+> +splitting huge pages during dirty log operations. If the thread splitting huge
+> +page is on remote NUMA node it will create page tables on remote node. Even if
+> +guest is careful in making sure that it only access local memory they will end
+> +up accessing remote page tables.
+
+Please also cover the limitations of this feature:
+
+ - Impact on remote memory accesses (more expensive).
+ - How KVM handles NUMA node exhaustion.
+ - How high-level page tables can span multiple nodes.
+ - What KVM does if it can't determine the NUMA node of the pfn.
+ - What KVM does for faults on GPAs that aren't backed by a pfn.
+
+> +
+>  8. Other capabilities.
+>  ======================
+>  
+> -- 
+> 2.40.0.rc0.216.gc4246ad0f0-goog
+> 
