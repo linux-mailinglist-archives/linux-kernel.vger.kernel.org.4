@@ -2,119 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386196C5F93
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD776C5F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCWGXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S230009AbjCWGZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCWGXk (ORCPT
+        with ESMTP id S229518AbjCWGZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:23:40 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301B1B33E;
-        Wed, 22 Mar 2023 23:23:39 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id p11-20020a9d454b000000b0069d8eb419f9so11196392oti.4;
-        Wed, 22 Mar 2023 23:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679552619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ht5I7OIX/IrJ6V0jccO0TzKRfXwvIOrcze/Fv6KOhG0=;
-        b=dljZfMgzRnrEjH6xjxk9nSZDm/ZDZFj4GDRIuvgxwuS/Qxsp3tHXJ+/FLf+k13dhhN
-         WQxTj5ZQlS+3do9MBtCaXGXOPoWyoyVGNCuyqZkYFGcWpSj0+0AS5Sjh+9GLV0i8ET0a
-         NZgmgsiOqAoskQxVGBsGOy4BOKstvPX0Uwg2byzerzqsv1/yXAL0TPpc/9BAtYTj77En
-         EAcO90gnPTDeZHKSuiEnC336/FkXr4b8tYLEdHTJQgYUBxEw6DvznDVh8MLQcI4waxtF
-         joC1rFEruYUCYNtuwEqz1/BIy1gfz4wIOPCqMuMKM5sY+Nt3ngID2OuS/XySBjX2BWTT
-         T+qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679552619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ht5I7OIX/IrJ6V0jccO0TzKRfXwvIOrcze/Fv6KOhG0=;
-        b=3bAdk3ayOYhQiLxqxI/CQVBMvfW2S0QaWOCmgUy6c0H4HUOFKO0EpwgL/O5Fmwlzow
-         quKO8NWZPL6Vo9sQ80v5OWH6IJG6Pe/qXem/8At2G8kOQ5kCS/vs9upXXXPn2MgrF/rS
-         R89RfUQ1cQ43MPCX1h39MMUv8U7rKZhDmqBCyLSY4JGdchH8hT5rrKcnR8LO047Defew
-         Ajz1rxbHOvAezhuvEvzgZSj1dtopctB41kcjH67evJdRCaDkL6QQoQAaFMU5zRr8S740
-         bMh2i7oyKiruqEPGlBel4m4uB0DZd4cxfqm+tZV6d7Ywpm21sgEdELfEXN8Mt89n9RvF
-         YkiQ==
-X-Gm-Message-State: AO0yUKXmlDcxfbqVdzURrZjftZEjxsJiLEd1Qs4llKEpwanaH/HQ2i09
-        8RZrSLXwbnQayujm+EH5d6J3vEMvYyTMiHPPwWNSbYSnjBIFDw==
-X-Google-Smtp-Source: AK7set/a3UdlvsYh0TlqcxTfXISjWC5Ygh/aCw/RURJS4SK3uhj3OzfAYD24wotJyRXS0LXuZMb2G+tzh0Gj2hn54cM=
-X-Received: by 2002:a9d:7387:0:b0:69e:aa7:6b71 with SMTP id
- j7-20020a9d7387000000b0069e0aa76b71mr1892196otk.3.1679552619210; Wed, 22 Mar
- 2023 23:23:39 -0700 (PDT)
+        Thu, 23 Mar 2023 02:25:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E381ADFA;
+        Wed, 22 Mar 2023 23:24:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4EB62474;
+        Thu, 23 Mar 2023 06:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BD2C4339B;
+        Thu, 23 Mar 2023 06:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679552698;
+        bh=w9Ao7cH0pGPsEfJbtTzl3sq2ipsj2D5zZKW+SIl5uYE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SVAigotbftAI3PjqBv+vwwwbemPq/dqLgueuXaypEFFzqVxyTl0U+GhMdQI1Iu8t8
+         ALc6SLEFkFEulBp15Qv1nvSikWvsZI+SQIS9SuAb0GGGuNAML9fTbXWAVhKZj306bM
+         YrHstZpx6qWsYCDVnXn5OGOd37KCX1OIsedB5H8VqlnNwIkGooQIjbK8r4uEmhdhkS
+         iU6HIqVrARsdwJR8R5oFfpkhqh7y45/l7cj9kcHcn/i71CbCYN/xnNwSAwCFEIb7UO
+         j8fcPY+OUbKYsL7kNaXB7M/5E+vrrRJb8VdfJo74cLHSWLe3m2N9a7TRT1gJM2iX3i
+         c2PmBQf1RfX4A==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso21742077fac.4;
+        Wed, 22 Mar 2023 23:24:58 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXOWEgBIJLuT1RF4vQ14pV+WEkUvHRWYTnCu6c2DvU2P89f5Rz7
+        lgE337nWDzCr80hlk0GqFKa5ro3jzK16xd8+6G8=
+X-Google-Smtp-Source: AKy350bUdkj7ZUbSk/lzBDCm+OuMdsZGjDqrN7Jo4LFIes+c0qHpmCIpgQYfswkEDwHj0mg68CXJ+bDPmAggHg3Ojno=
+X-Received: by 2002:a05:6870:ea86:b0:17e:2e88:40dc with SMTP id
+ s6-20020a056870ea8600b0017e2e8840dcmr629978oap.11.1679552697824; Wed, 22 Mar
+ 2023 23:24:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <202303231145121987818@zte.com.cn>
-In-Reply-To: <202303231145121987818@zte.com.cn>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 23 Mar 2023 07:23:26 +0100
-Message-ID: <CAMhs-H_-kQ0FGP3L1xJ=ec_xJ59a2OztMLLjEQmQfYFOEa4DfA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: mt7621: Use dev_err_probe()
-To:     ye.xingchen@zte.com.cn
-Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+References: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
+ <c93723aa-f01c-9f1e-c9c7-aa79f38390c1@infradead.org> <cb386732-7509-497d-8641-473ad853c9ed@alu.unizg.hr>
+In-Reply-To: <cb386732-7509-497d-8641-473ad853c9ed@alu.unizg.hr>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 23 Mar 2023 15:24:21 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARAS7DEtpS2HMK=a7egwRdj-uD9JhxsOcKpfpstiiFLhQ@mail.gmail.com>
+Message-ID: <CAK7LNARAS7DEtpS2HMK=a7egwRdj-uD9JhxsOcKpfpstiiFLhQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] scripts: merge_config: Fix typo in variable name.
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mark Brown <broonie@kernel.org>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 23, 2023 at 3:15=E2=80=AFAM Mirsad Goran Todorovac
+<mirsad.todorovac@alu.unizg.hr> wrote:
+>
+> On 22. 03. 2023. 16:20, Randy Dunlap wrote:
+> >
+> >
+> > On 3/22/23 01:51, Mirsad Goran Todorovac wrote:
+> >> ${WARNOVERRIDE} was misspelled as ${WARNOVVERIDE}, which caused a shel=
+l
+> >> syntax error in certain paths of the script execution.
+> >>
+> >
+> > Fixes: 46dff8d7e381e ("scripts: merge_config: Add option to suppress wa=
+rning on overrides")
+> >
+> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> >
+> > Thanks.
+>
+> Hi, Randy,
+>
+> I think this time thanks go to the Heavens, for preserving my physical in=
+tegrity.
+>
+> Though I don't know of a bike with ABS.
 
-On Thu, Mar 23, 2023 at 4:45=E2=80=AFAM <ye.xingchen@zte.com.cn> wrote:
->
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> Replace the open-code with dev_err_probe() to simplify the code.
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/pci/controller/pcie-mt7621.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controlle=
-r/pcie-mt7621.c
-> index 63a5f4463a9f..964de0e8c6a0 100644
-> --- a/drivers/pci/controller/pcie-mt7621.c
-> +++ b/drivers/pci/controller/pcie-mt7621.c
-> @@ -220,10 +220,9 @@ static int mt7621_pcie_parse_port(struct mt7621_pcie=
- *pcie,
->         }
->
->         port->pcie_rst =3D of_reset_control_get_exclusive(node, NULL);
-> -       if (PTR_ERR(port->pcie_rst) =3D=3D -EPROBE_DEFER) {
-> -               dev_err(dev, "failed to get pcie%d reset control\n", slot=
-);
-> -               return PTR_ERR(port->pcie_rst);
-> -       }
-> +
-> +       return dev_err_probe(dev, PTR_ERR(port->pcie_rst),
-> +                            "failed to get pcie%d reset control\n", slot=
-);
->
->         snprintf(name, sizeof(name), "pcie-phy%d", slot);
->         port->phy =3D devm_of_phy_get(dev, node, name);
 
-So this code is unreachable now. Please fix your tools.
 
+
+Applied to linux-kbuild/fixes,
+fixing another typo "Signed-of-by".
+
+
+You do not need to spell it out by yourself.
+
+"git commit -s" will insert the Signed-off-by tag.
+
+
+
+
+
+
+
+> >> Cc: Mark Brown <broonie@kernel.org>
+> >> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> >> Cc: linux-kbuild@vger.kernel.org
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Signed-of-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> >> ---
+> >>  scripts/kconfig/merge_config.sh | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_c=
+onfig.sh
+> >> index 32620de473ad..902eb429b9db 100755
+> >> --- a/scripts/kconfig/merge_config.sh
+> >> +++ b/scripts/kconfig/merge_config.sh
+> >> @@ -145,7 +145,7 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
+> >>              NEW_VAL=3D$(grep -w $CFG $MERGE_FILE)
+> >>              BUILTIN_FLAG=3Dfalse
+> >>              if [ "$BUILTIN" =3D "true" ] && [ "${NEW_VAL#CONFIG_*=3D}=
+" =3D "m" ] && [ "${PREV_VAL#CONFIG_*=3D}" =3D "y" ]; then
+> >> -                    ${WARNOVVERIDE} Previous  value: $PREV_VAL
+> >> +                    ${WARNOVERRIDE} Previous  value: $PREV_VAL
+> >>                      ${WARNOVERRIDE} New value:       $NEW_VAL
+> >>                      ${WARNOVERRIDE} -y passed, will not demote y to m
+> >>                      ${WARNOVERRIDE}
+>
+> Best regards,
+> Mirsad
+>
 > --
-> 2.25.1
+> Mirsad Goran Todorovac
+> Sistem in=C5=BEenjer
+> Grafi=C4=8Dki fakultet | Akademija likovnih umjetnosti
+> Sveu=C4=8Dili=C5=A1te u Zagrebu
+>
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> The European Union
+>
 
-Also, this is not a probe(), so I don't see a point of using
-dev_err_probe() here.
 
-Thanks,
-    Sergio Paracuellos
+--=20
+Best Regards
+Masahiro Yamada
