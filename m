@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F916C68A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C126C68B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbjCWMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S231183AbjCWMoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjCWMl7 (ORCPT
+        with ESMTP id S229734AbjCWMoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:41:59 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A1726CCC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:41:57 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id h8so85923899ede.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:41:57 -0700 (PDT)
+        Thu, 23 Mar 2023 08:44:22 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993B9F5;
+        Thu, 23 Mar 2023 05:44:21 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id s8so12988942pfk.5;
+        Thu, 23 Mar 2023 05:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679575316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679575461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jRIhiCMIYhlzOxpqNUvBzZ/DfwkIA0+Cejq18uIa0y0=;
-        b=YsRResv+/EI11pFUKv28iYf87fPzodJ7FzZRpMbbtBK9NxRuWP97dVWS2trAsAWjq3
-         JKX36XXrg9hwR+RiPd5fEwCl6zW2Wh642ctovQP4owleX4n3EiOd94c2eWef+qhVZ4fz
-         hJMpTs5Kv3JMpN/2vyK5XJ5QIHcI6NrT6uJL96NZM2hyPY50HUuRr4fUf+1u6ngdzldn
-         sfVObj6QZVDCZ8+HtaPWfSLagsO0hpebwPKTFtJ8xMnY/WLlZN/zNiXx4who+c0WDwsm
-         8bpp1FYVcYYdWoi6Tydjr4lx07UNGQUxmVKo6UmEnan/qyrdY8fkuZ0YQNpE+wHqkHQW
-         58lA==
+        bh=WXmlvLRJ51Nle/Ky2eOAKThFkxJdMZbTvZ2YQbmyQz8=;
+        b=SeyHkP0Cn/bQrStFgTFC2vHqvc601yVmm66VWV1gIpdTaIhV9QvrVxdOmjYVdqRJ8g
+         GsUrO/AgBwaqBE6+cKNoggFxH61sGleodXOS2XFkipMsSnq/ri5cv20AdYc6STd8tI3E
+         Y7siJY8+Ct8OP5pJaUZMmRXsdPzDwc0URaMfH5wcYkPdAsuWX/kBONeR5iil+c+wvqtY
+         6Do1gAjUAAT5gPxUKRIizM6FuEL/kqmNeGme7U0Bw8+wAK8muZ8eC6/IxbV/QsahQqAg
+         3lTi0G8MIoh5k17CWlvucqBpEEE1/QXnBFx9itVJwrW0/yobAZxefLDyXsyeTt1owhI5
+         4ccA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679575316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679575461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jRIhiCMIYhlzOxpqNUvBzZ/DfwkIA0+Cejq18uIa0y0=;
-        b=tmU1U2UOOpfjmpMTJlLkVAQ0DNJhyNFigjNVe5rea07pCqBHRetc0uYnQXAMv5ErW8
-         y8hsC94enX2K31f+gIOjpYGE1m3pSTMNwXew6S5ZzjScbhYX3ZigDkQNdUkNFUzazc8J
-         AHGmYJ8skyNJp7bKbHekEQT2pdBrlGtY1U60D255QFYlFVJS0DDPC+GCUKLCh5xaWyx0
-         DUpG9aDuc/eRUJQkn6jCwHiHwoZRowOZcW/TTPWki2cJL5OO0RzY+X0YrfT0JMdjxcxs
-         +z9FvMn9mOL4q+A165Cf1wXQsNq8g2u8i0IECG4ylVu1HgrJrMEanUlBLJV1+DI0zLKt
-         Q63g==
-X-Gm-Message-State: AO0yUKVHpuY/Fo+6mYW4LgMFA2jVzyIem8vq2etEoA+bniRJRYCPwR2Z
-        lT9+2wTrwFY8ebkoQHFggbg=
-X-Google-Smtp-Source: AK7set/9vMbuObGoSNbL668Qv2c/PorTp83sSbtHafwYghf4PLlj07ix/seWf8uFUxGjwSCMfqRz9g==
-X-Received: by 2002:a17:907:7666:b0:931:dcd4:4ff0 with SMTP id kk6-20020a170907766600b00931dcd44ff0mr10644366ejc.75.1679575316304;
-        Thu, 23 Mar 2023 05:41:56 -0700 (PDT)
-Received: from khadija-virtual-machine.localdomain ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id g1-20020a1709061c8100b0092669fb4ba1sm8597116ejh.130.2023.03.23.05.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 05:41:56 -0700 (PDT)
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH 4/4] staging: rtl8192e: remove blank lines after '{'
-Date:   Thu, 23 Mar 2023 17:41:45 +0500
-Message-Id: <303a41480220a6c31cee91d40ece40b3fae3bddf.1679573474.git.kamrankhadijadj@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1679573474.git.kamrankhadijadj@gmail.com>
-References: <cover.1679573474.git.kamrankhadijadj@gmail.com>
+        bh=WXmlvLRJ51Nle/Ky2eOAKThFkxJdMZbTvZ2YQbmyQz8=;
+        b=X8xLJw6VQJ8799rcz32XuXBT8+uStXfezBXqY5/iI/oIpRc3EEKDLoWMMKN9WExq0g
+         Cxl3hEuS+NBISxuQcAJXE/LUE8WSyIPYHnkmMAqQRrr8bI5Qz2KqJ1Hv++duDA2YZONw
+         xtcRMmxybobh7Pmo9TAD8y1tK3UYaXMAHphgU1TSzTvkPTSxe063QK+zD/FQhKhd3t20
+         9EsKSa+emEOQpEktpogLvbsqkoSxNkrn+eUEeFIX6GSpjzfJkmLlVhxS/B3R0EQnrkuD
+         MCKECP4qY2LyXrz57uykEuumQ99Eux6XWQxTDjd3wrboq+yaMBXgdZN5CkLStAuWRmEs
+         8fHQ==
+X-Gm-Message-State: AO0yUKX9byZa6NkUH5UKPzlV1FO4fSOLi3bqD1uHqlkJW25nw3mKF9Yw
+        wceqN2M2bht6pcTRqNj+lOoIfQtJiig1o1wXSUs=
+X-Google-Smtp-Source: AK7set8U+DV6iePDNSCo7WZl7ClEPMTiCN56f3lUNNeKuIRHlLOKAKYh+bmi5nnLMW4QiYH3cSgfjHnAnoeD4pUcSZo=
+X-Received: by 2002:a05:6a00:2b1:b0:626:23a1:7b8a with SMTP id
+ q17-20020a056a0002b100b0062623a17b8amr3590611pfs.3.1679575461080; Thu, 23 Mar
+ 2023 05:44:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230323123807.11882-1-cnsztl@gmail.com> <20230323123807.11882-2-cnsztl@gmail.com>
+In-Reply-To: <20230323123807.11882-2-cnsztl@gmail.com>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Thu, 23 Mar 2023 13:41:50 +0100
+Message-ID: <CAEwRq=pwWrXAuHMBaWzZE7cxmVMGuX=eqi5Esjxpe-jPXWF+0w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: Add doc for FriendlyARM NanoPi R2C
+To:     Tianling Shen <cnsztl@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andy Yan <andyshrk@163.com>, Peter Geis <pgwipeout@gmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -72,52 +79,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary blank lines after an open brace as reported by
-checkpatch.pl
+Hello,
 
-"CHECK: Blank lines aren't necessary after an open brace '{'"
+On Thu, Mar 23, 2023 at 1:38=E2=80=AFPM Tianling Shen <cnsztl@gmail.com> wr=
+ote:
+> -      - description: FriendlyElec NanoPi R2S
+> +      - description: FriendlyElec NanoPi R2C/S
 
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
- drivers/staging/rtl8192e/rtllib_rx.c | 4 ----
- 1 file changed, 4 deletions(-)
+Maybe do like for the following one:
 
-diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-index f627dfe66d90..b649d02dc5c8 100644
---- a/drivers/staging/rtl8192e/rtllib_rx.c
-+++ b/drivers/staging/rtl8192e/rtllib_rx.c
-@@ -1167,7 +1167,6 @@ static int rtllib_rx_decrypt(struct rtllib_device *ieee, struct sk_buff *skb,
- 	if (crypt && !(fc & RTLLIB_FCTL_WEP) && !ieee->open_wep) {
- 		if (/*ieee->ieee802_1x &&*/
- 		    rtllib_is_eapol_frame(ieee, skb, hdrlen)) {
--
- 			/* pass unencrypted EAPOL frames even if encryption is
- 			 * configured
- 			 */
-@@ -1207,7 +1206,6 @@ static void rtllib_rx_check_leave_lps(struct rtllib_device *ieee, u8 unicast,
- 				      u8 nr_subframes)
- {
- 	if (unicast) {
--
- 		if (ieee->state == RTLLIB_LINKED) {
- 			if (((ieee->link_detect_info.NumRxUnicastOkInPeriod +
- 			    ieee->link_detect_info.NumTxOkInPeriod) > 8) ||
-@@ -1552,7 +1550,6 @@ static u8 qos_oui[QOS_OUI_LEN] = { 0x00, 0x50, 0xF2 };
- static int rtllib_verify_qos_info(struct rtllib_qos_information_element
- 				     *info_element, int sub_type)
- {
--
- 	if (info_element->elementID != QOS_ELEMENT_ID)
- 		return -1;
- 	if (info_element->qui_subtype != sub_type)
-@@ -2696,7 +2693,6 @@ static void rtllib_rx_mgt(struct rtllib_device *ieee,
- 		ieee->last_rx_ps_time = jiffies;
+>        - description: FriendlyElec NanoPi4 series boards
 
- 	switch (WLAN_FC_GET_STYPE(le16_to_cpu(header->frame_ctl))) {
--
- 	case RTLLIB_STYPE_BEACON:
- 		netdev_dbg(ieee->dev, "received BEACON (%d)\n",
- 			   WLAN_FC_GET_STYPE(le16_to_cpu(header->frame_ctl)));
---
-2.34.1
+- description: FriendlyElec NanoPi R2 series boards
 
+Regards
+
+--=20
+Vincent Legoll
