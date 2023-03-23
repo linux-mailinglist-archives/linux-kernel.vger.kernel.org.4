@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFF16C70F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00CB6C70FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjCWTVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S230342AbjCWTV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjCWTV3 (ORCPT
+        with ESMTP id S231490AbjCWTVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:21:29 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD671024E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:12 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54352648c1eso227427717b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:12 -0700 (PDT)
+        Thu, 23 Mar 2023 15:21:36 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CABB12CDE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:20 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id j11-20020a25230b000000b00b6871c296bdso16182344ybj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679599271;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVcqhyYrDTRhmMXr68BgAEpfijkgy4ZxPrTLjnvUojY=;
-        b=XFOhAfS9VOOJ/P1Hmyz1Q9lOX5xIy57eEfr8i+67ELdkZaIh/2T8tftEVxeqQO1jP+
-         Nc4RLtFkMDym0w1BJdSmTr9/MukfuUDiMnbxU+4XtDVvK39a4mKE5q3bBh2qrQWb5+B7
-         4YzBpLRUSAa6q9J5p+GC6HxJ10szy4/y5DcBJOJ6LnoEEB+gkGIAVKtnOtpPyDwlPtFk
-         1I/sYoidgAlkk5iVL2J2NRrzSREB7aMwsIAH5GqA8RFdu32O9e3Ql3xo8CZzNg2+mSek
-         q49YtHt2qp1jP9pIMdWwKKRYuS2wjWgBkRw/KZTzPVqC9zLuOhrDE/b/ITKkQ22REjSw
-         /gmw==
+        d=google.com; s=20210112; t=1679599279;
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uih42a7geLUhVXca3hZ+/zz/xw+NyUuKTbPaxBF4q7k=;
+        b=Ynh6jCGoKZT+li3+u1mwZXjGs3n91CPqS38oeRIQG+blW16kmzIMtWjqNP8iZvtDL8
+         PZfz2rKxnO4ihjzGmiLR/VQnItZ8FD+vbfKepA3NpSkOG9f5xCdiepLsTIi+JpwJ2PoH
+         oQRDLvCiHq/F0YNRcJcX57GKs8kK0Tl8uI7elCnV2scPglreyj7N5eSWdfmdfbHeLvsj
+         tK0Qy33mmngCDRcJ0lNX9fiFGY9sOK6+X19yTMk9m59G3pDL/EBQVlYm9QbGYgPnqX3a
+         lg1F3c9xBAVoGTBW30Z42xtQcZ+mVvdn6JH5yA05+uSYhyPEBBnd+J0QPN5z9h8oohD+
+         HHrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679599271;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVcqhyYrDTRhmMXr68BgAEpfijkgy4ZxPrTLjnvUojY=;
-        b=CBuLbcUiRvYEtUSFiH874rHce5Hr3vvyz3o4IrCZr7xrVASemfsJLWNG770BMyAKBj
-         rCAo38WQjPcXvOoJy+hUvtpKND49JuqKZB8w36tHIyK9AC2nCXZheyLthkLomA7sFi3o
-         ZfhGvgnrl+uMT/xNtxNEUSdVyojgSZFo1vbXNgXUozefL4THOsKgZWkA/vnCM9k0xtzX
-         xie5wWVbTMKdx+NAWvYsd+/JnzTDHhFzy7txxmysiN/Ce5+8sygN8qz2xR3FbjLdOOAD
-         AbOKKtIeSPzbsbbNcaWhE+9CvftlG+PkJdK56w8BDTmoQsR7NtedH3x3md4M2/RSfM8g
-         +spw==
-X-Gm-Message-State: AAQBX9e44hHfB3D9a2DmF6Yr+WTXzcP16jT640k80zcUlq2vsQBhTbf6
-        aLql83/+4bGkdUcg/fuCrg2zpxHnCq/t
-X-Google-Smtp-Source: AKy350aeXPQzzGJfov0xmHXf/Y5BBHa1U7E2qa6Lo55RT6fWG6uJJtyUFxau35DdmjW9K2pauBDg0TdakFqs
+        d=1e100.net; s=20210112; t=1679599279;
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Uih42a7geLUhVXca3hZ+/zz/xw+NyUuKTbPaxBF4q7k=;
+        b=aNXmv59MNET0i99oI50dVrWNoktdwF2H2i8ATm6dR2agDKT4E+ccJ6FHxdpgHM+Y4o
+         rmVagyYfc74pWDHGo9qPWjFAMkNH0s4v0CXbtz7rPp0sHkF4XzelBi8rsDo5K0hVsjGr
+         an0vXkLXFFkmEbqP0472z5aW1fCz3Ta1oLCZqcOgw1FXNw8UZts6sPLSgLrDTTFcMb7l
+         ZYz7rbmM8y/CTQRG9xTZOndBWQ7zC+QIybZBCMUSQh/E873n833HlYrU7P1Gqm4XaZeU
+         7tpArsu1ewd+e0YdcUljsufSQWYEY5nKz7U7tNfmnPWic0p4rjvUI/Azuqzh7r6AiJ0+
+         D+oQ==
+X-Gm-Message-State: AAQBX9d94nvh4Z3AwO2e8OtrOnKGN6Y4wwCTfmFHCv2HIR4b0pJ0J/Xf
+        coreho72d1z2fSEO6qSk+prX7PPogKnj
+X-Google-Smtp-Source: AKy350YggGaNwlCiD44A9fbZNxJ9fiMPPjkEibtO9jlaqdKe41qSgM6COfug3Ijk1CVuzPPiqZRrxlXOyJRa
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e705:3a3d:46e5:fb50])
- (user=irogers job=sendgmr) by 2002:a05:6902:1008:b0:b1d:5061:98e3 with SMTP
- id w8-20020a056902100800b00b1d506198e3mr2923171ybt.6.1679599271741; Thu, 23
- Mar 2023 12:21:11 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 12:20:23 -0700
+ (user=irogers job=sendgmr) by 2002:a81:af02:0:b0:544:8bc1:a179 with SMTP id
+ n2-20020a81af02000000b005448bc1a179mr2383526ywh.4.1679599279347; Thu, 23 Mar
+ 2023 12:21:19 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 12:20:24 -0700
 In-Reply-To: <20230323192028.135759-1-irogers@google.com>
-Message-Id: <20230323192028.135759-5-irogers@google.com>
+Message-Id: <20230323192028.135759-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20230323192028.135759-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v2 4/9] perf vendor events: Haswell v33 events
+Subject: [PATCH v2 5/9] perf vendor events: Haswellx v27 events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -70,6 +72,7 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         samantha.alt@intel.com, weilin.wang@intel.com
 Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -84,366 +87,34 @@ Updates descriptions and encodings. Adds BR_MISP_EXEC.INDIRECT events.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../pmu-events/arch/x86/haswell/cache.json    | 38 +++++++++----------
- .../pmu-events/arch/x86/haswell/memory.json   | 38 +++++++++----------
- .../pmu-events/arch/x86/haswell/pipeline.json |  8 ++++
- tools/perf/pmu-events/arch/x86/mapfile.csv    |  2 +-
- 4 files changed, 47 insertions(+), 39 deletions(-)
+ .../perf/pmu-events/arch/x86/haswellx/cache.json |  2 +-
+ .../pmu-events/arch/x86/haswellx/pipeline.json   |  8 ++++++++
+ .../arch/x86/haswellx/uncore-cache.json          | 16 ++++++++--------
+ .../arch/x86/haswellx/uncore-other.json          |  6 +++---
+ tools/perf/pmu-events/arch/x86/mapfile.csv       |  2 +-
+ 5 files changed, 21 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/cache.json b/tools/perf/pmu-events/arch/x86/haswell/cache.json
-index 5a1489e79859..0831f14b3cc6 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/cache.json
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/cache.json b/tools/per=
+f/pmu-events/arch/x86/haswellx/cache.json
+index 1836ed62694e..a6c81010b394 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/cache.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/cache.json
 @@ -8,7 +8,7 @@
          "UMask": "0x1"
      },
      {
--        "BriefDescription": "Cycles a demand request was blocked due to Fill Buffers inavailability.",
-+        "BriefDescription": "Cycles a demand request was blocked due to Fill Buffers unavailability.",
+-        "BriefDescription": "Cycles a demand request was blocked due to Fi=
+ll Buffers inavailability.",
++        "BriefDescription": "Cycles a demand request was blocked due to Fi=
+ll Buffers unavailability.",
          "CounterMask": "1",
          "EventCode": "0x48",
          "EventName": "L1D_PEND_MISS.FB_FULL",
-@@ -643,7 +643,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code readshit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch code reads hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_CODE_RD.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -652,7 +652,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data readshit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-+        "BriefDescription": "Counts all demand & prefetch data reads hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_HIT.HITM_OTHER_CORE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -661,7 +661,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data readshit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch data reads hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -688,7 +688,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all requestshit in the L3",
-+        "BriefDescription": "Counts all requests hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_REQUESTS.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -697,7 +697,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOshit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-+        "BriefDescription": "Counts all demand & prefetch RFOs hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_HIT.HITM_OTHER_CORE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -706,7 +706,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOshit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts all demand & prefetch RFOs hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -715,7 +715,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code readshit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-+        "BriefDescription": "Counts all demand code reads hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_HIT.HITM_OTHER_CORE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -724,7 +724,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code readshit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts all demand code reads hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -733,7 +733,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data readshit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-+        "BriefDescription": "Counts demand data reads hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_HIT.HITM_OTHER_CORE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -742,7 +742,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data readshit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts demand data reads hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -751,7 +751,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs)hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-+        "BriefDescription": "Counts all demand data writes (RFOs) hit in the L3 and the snoop to one of the sibling cores hits the line in M state and the line is forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_HIT.HITM_OTHER_CORE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -760,7 +760,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs)hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-+        "BriefDescription": "Counts all demand data writes (RFOs) hit in the L3 and the snoops to sibling cores hit in either E/S state and the line is not forwarded",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_HIT.HIT_OTHER_CORE_NO_FWD",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -769,7 +769,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) code readshit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) code reads hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_CODE_RD.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -778,7 +778,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to L2) data readshit in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to L2) data reads hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_DATA_RD.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -787,7 +787,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to L2) RFOshit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to L2) RFOs hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_RFO.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -796,7 +796,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to LLC only) code readshit in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to LLC only) code reads hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_CODE_RD.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -805,7 +805,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) data readshit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) data reads hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_DATA_RD.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -814,7 +814,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) RFOshit in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) RFOs hit in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_RFO.L3_HIT.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/memory.json b/tools/perf/pmu-events/arch/x86/haswell/memory.json
-index 9fb63e1dab08..2fc25e22a42a 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/memory.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/memory.json
-@@ -179,7 +179,7 @@
-         "UMask": "0x2"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code readsmiss in the L3",
-+        "BriefDescription": "Counts all demand & prefetch code reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_CODE_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -188,7 +188,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch code readsmiss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch code reads miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_CODE_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -197,7 +197,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data readsmiss in the L3",
-+        "BriefDescription": "Counts all demand & prefetch data reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -206,7 +206,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch data readsmiss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch data reads miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_DATA_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -233,7 +233,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all requestsmiss in the L3",
-+        "BriefDescription": "Counts all requests miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_REQUESTS.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -242,7 +242,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOsmiss in the L3",
-+        "BriefDescription": "Counts all demand & prefetch RFOs miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -251,7 +251,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand & prefetch RFOsmiss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand & prefetch RFOs miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.ALL_RFO.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -260,7 +260,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code readsmiss in the L3",
-+        "BriefDescription": "Counts all demand code reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -269,7 +269,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand code readsmiss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand code reads miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_CODE_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -278,7 +278,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data readsmiss in the L3",
-+        "BriefDescription": "Counts demand data reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -287,7 +287,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts demand data readsmiss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts demand data reads miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_DATA_RD.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -296,7 +296,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs)miss in the L3",
-+        "BriefDescription": "Counts all demand data writes (RFOs) miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -305,7 +305,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all demand data writes (RFOs)miss the L3 and the data is returned from local dram",
-+        "BriefDescription": "Counts all demand data writes (RFOs) miss the L3 and the data is returned from local dram",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.DEMAND_RFO.L3_MISS.LOCAL_DRAM",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -314,7 +314,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) code readsmiss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) code reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_CODE_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -323,7 +323,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to L2) data readsmiss in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to L2) data reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_DATA_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -332,7 +332,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to L2) RFOsmiss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to L2) RFOs miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L2_RFO.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -341,7 +341,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts prefetch (that bring data to LLC only) code readsmiss in the L3",
-+        "BriefDescription": "Counts prefetch (that bring data to LLC only) code reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_CODE_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -350,7 +350,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) data readsmiss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) data reads miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_DATA_RD.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-@@ -359,7 +359,7 @@
-         "UMask": "0x1"
-     },
-     {
--        "BriefDescription": "Counts all prefetch (that bring data to LLC only) RFOsmiss in the L3",
-+        "BriefDescription": "Counts all prefetch (that bring data to LLC only) RFOs miss in the L3",
-         "EventCode": "0xB7, 0xBB",
-         "EventName": "OFFCORE_RESPONSE.PF_L3_RFO.L3_MISS.ANY_RESPONSE",
-         "MSRIndex": "0x1a6,0x1a7",
-diff --git a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json b/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json b/tools/=
+perf/pmu-events/arch/x86/haswellx/pipeline.json
 index 9ac36c1c24b6..540f4372623c 100644
---- a/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/haswell/pipeline.json
+--- a/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/pipeline.json
 @@ -194,6 +194,14 @@
          "SampleAfterValue": "200003",
          "UMask": "0xc4"
@@ -452,26 +123,205 @@ index 9ac36c1c24b6..540f4372623c 100644
 +        "BriefDescription": "Speculative mispredicted indirect branches",
 +        "EventCode": "0x89",
 +        "EventName": "BR_MISP_EXEC.INDIRECT",
-+        "PublicDescription": "Counts speculatively miss-predicted indirect branches at execution time. Counts for indirect near CALL or JMP instructions (RET excluded).",
++        "PublicDescription": "Counts speculatively miss-predicted indirect=
+ branches at execution time. Counts for indirect near CALL or JMP instructi=
+ons (RET excluded).",
 +        "SampleAfterValue": "200003",
 +        "UMask": "0xe4"
 +    },
      {
-         "BriefDescription": "Not taken speculative and retired mispredicted macro conditional branches.",
+         "BriefDescription": "Not taken speculative and retired mispredicte=
+d macro conditional branches.",
          "EventCode": "0x89",
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-index dfed265c95ab..927e60f3417d 100644
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json b/to=
+ols/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
+index 183bcac99642..e969dc71bea1 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/uncore-cache.json
+@@ -3114,7 +3114,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Local InvItoE R=
+equests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Local InvItoE =
+Requests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.INVITOE_LOCAL",
+         "PerPkg": "1",
+@@ -3123,7 +3123,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Remote InvItoE =
+Requests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Remote InvItoE=
+ Requests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.INVITOE_REMOTE",
+         "PerPkg": "1",
+@@ -3132,7 +3132,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Local Read Requ=
+ests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Local Read Req=
+uests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.READS_LOCAL",
+         "PerPkg": "1",
+@@ -3141,7 +3141,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Remote Read Req=
+uests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Remote Read Re=
+quests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.READS_REMOTE",
+         "PerPkg": "1",
+@@ -3150,7 +3150,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Local Write Req=
+uests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Local Write Re=
+quests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.WRITES_LOCAL",
+         "PerPkg": "1",
+@@ -3159,7 +3159,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Tracker Occupancy Accumultor; Remote Write Re=
+quests",
++        "BriefDescription": "Tracker Occupancy Accumulator; Remote Write R=
+equests",
+         "EventCode": "0x4",
+         "EventName": "UNC_H_TRACKER_OCCUPANCY.WRITES_REMOTE",
+         "PerPkg": "1",
+@@ -3168,7 +3168,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Data Pending Occupancy Accumultor; Local Requ=
+ests",
++        "BriefDescription": "Data Pending Occupancy Accumulator; Local Req=
+uests",
+         "EventCode": "0x5",
+         "EventName": "UNC_H_TRACKER_PENDING_OCCUPANCY.LOCAL",
+         "PerPkg": "1",
+@@ -3177,7 +3177,7 @@
+         "Unit": "HA"
+     },
+     {
+-        "BriefDescription": "Data Pending Occupancy Accumultor; Remote Req=
+uests",
++        "BriefDescription": "Data Pending Occupancy Accumulator; Remote Re=
+quests",
+         "EventCode": "0x5",
+         "EventName": "UNC_H_TRACKER_PENDING_OCCUPANCY.REMOTE",
+         "PerPkg": "1",
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/uncore-other.json b/to=
+ols/perf/pmu-events/arch/x86/haswellx/uncore-other.json
+index 4c3e2a794117..d30e3b16c1af 100644
+--- a/tools/perf/pmu-events/arch/x86/haswellx/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/haswellx/uncore-other.json
+@@ -474,7 +474,7 @@
+         "EventCode": "0xD",
+         "EventName": "UNC_I_TxR_REQUEST_OCCUPANCY",
+         "PerPkg": "1",
+-        "PublicDescription": "Accumultes the number of outstanding outboun=
+d requests from the IRP to the switch (towards the devices).  This can be u=
+sed in conjuection with the allocations event in order to calculate average=
+ latency of outbound requests.",
++        "PublicDescription": "Accumulates the number of outstanding outbou=
+nd requests from the IRP to the switch (towards the devices).  This can be =
+used in conjunction with the allocations event in order to calculate averag=
+e latency of outbound requests.",
+         "Unit": "IRP"
+     },
+     {
+@@ -2256,7 +2256,7 @@
+         "EventCode": "0x33",
+         "EventName": "UNC_R3_VNA_CREDITS_ACQUIRED.AD",
+         "PerPkg": "1",
+-        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credts from the VN0 pool.  N=
+ote that a single packet may require multiple flit buffers (i.e. when data =
+is being transferred).  Therefore, this event will increment by the number =
+of credits acquired in each cycle.  Filtering based on message class is not=
+ provided.  One can count the number of packets transferred in a given mess=
+age class using an qfclk event.; Filter for the Home (HOM) message class.  =
+HOM is generally used to send requests, request responses, and snoop respon=
+ses.",
++        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credits from the VN0 pool.  =
+Note that a single packet may require multiple flit buffers (i.e. when data=
+ is being transferred).  Therefore, this event will increment by the number=
+ of credits acquired in each cycle.  Filtering based on message class is no=
+t provided.  One can count the number of packets transferred in a given mes=
+sage class using an qfclk event.; Filter for the Home (HOM) message class. =
+ HOM is generally used to send requests, request responses, and snoop respo=
+nses.",
+         "UMask": "0x1",
+         "Unit": "R3QPI"
+     },
+@@ -2265,7 +2265,7 @@
+         "EventCode": "0x33",
+         "EventName": "UNC_R3_VNA_CREDITS_ACQUIRED.BL",
+         "PerPkg": "1",
+-        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credts from the VN0 pool.  N=
+ote that a single packet may require multiple flit buffers (i.e. when data =
+is being transferred).  Therefore, this event will increment by the number =
+of credits acquired in each cycle.  Filtering based on message class is not=
+ provided.  One can count the number of packets transferred in a given mess=
+age class using an qfclk event.; Filter for the Home (HOM) message class.  =
+HOM is generally used to send requests, request responses, and snoop respon=
+ses.",
++        "PublicDescription": "Number of QPI VNA Credit acquisitions.  This=
+ event can be used in conjunction with the VNA In-Use Accumulator to calcul=
+ate the average lifetime of a credit holder.  VNA credits are used by all m=
+essage classes in order to communicate across QPI.  If a packet is unable t=
+o acquire credits, it will then attempt to use credits from the VN0 pool.  =
+Note that a single packet may require multiple flit buffers (i.e. when data=
+ is being transferred).  Therefore, this event will increment by the number=
+ of credits acquired in each cycle.  Filtering based on message class is no=
+t provided.  One can count the number of packets transferred in a given mes=
+sage class using an qfclk event.; Filter for the Home (HOM) message class. =
+ HOM is generally used to send requests, request responses, and snoop respo=
+nses.",
+         "UMask": "0x4",
+         "Unit": "R3QPI"
+     },
+diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
+ents/arch/x86/mapfile.csv
+index 927e60f3417d..e1a609401fff 100644
 --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
 +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -10,7 +10,7 @@ GenuineIntel-6-9[6C],v1.03,elkhartlake,core
- GenuineIntel-6-5[CF],v13,goldmont,core
+@@ -11,7 +11,7 @@ GenuineIntel-6-5[CF],v13,goldmont,core
  GenuineIntel-6-7A,v1.01,goldmontplus,core
  GenuineIntel-6-A[DE],v1.01,graniterapids,core
--GenuineIntel-6-(3C|45|46),v32,haswell,core
-+GenuineIntel-6-(3C|45|46),v33,haswell,core
- GenuineIntel-6-3F,v26,haswellx,core
+ GenuineIntel-6-(3C|45|46),v33,haswell,core
+-GenuineIntel-6-3F,v26,haswellx,core
++GenuineIntel-6-3F,v27,haswellx,core
  GenuineIntel-6-(7D|7E|A7),v1.17,icelake,core
  GenuineIntel-6-6[AC],v1.19,icelakex,core
--- 
+ GenuineIntel-6-3A,v23,ivybridge,core
+--=20
 2.40.0.348.gf938b09366-goog
 
