@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E691F6C5B2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469726C5B2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjCWAKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S230387AbjCWAKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCWAKd (ORCPT
+        with ESMTP id S229877AbjCWAKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 20:10:33 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C8231BD2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:10:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VeRymBp_1679530191;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VeRymBp_1679530191)
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A5332CD8
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:10:03 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VeS2z75_1679530192;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VeS2z75_1679530192)
           by smtp.aliyun-inc.com;
-          Thu, 23 Mar 2023 08:09:52 +0800
+          Thu, 23 Mar 2023 08:09:53 +0800
 From:   Jingbo Xu <jefflexu@linux.alibaba.com>
 To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
         linux-erofs@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 2/8] erofs: rename init_inode_xattrs with erofs_ prefix
-Date:   Thu, 23 Mar 2023 08:09:43 +0800
-Message-Id: <20230323000949.57608-3-jefflexu@linux.alibaba.com>
+Subject: [PATCH 3/8] erofs: simplify erofs_xattr_generic_get()
+Date:   Thu, 23 Mar 2023 08:09:44 +0800
+Message-Id: <20230323000949.57608-4-jefflexu@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
 References: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
@@ -41,45 +41,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename init_inode_xattrs() to erofs_init_inode_xattrs() without logic
-change.
+erofs_xattr_generic_get() won't be called from xattr handlers other than
+user/trusted/security xattr handler, and thus there's no need of extra
+checking.
 
 Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 ---
- fs/erofs/xattr.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/erofs/xattr.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
 diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 760ec864a39c..ab4517e5ec84 100644
+index ab4517e5ec84..b83331a694f3 100644
 --- a/fs/erofs/xattr.c
 +++ b/fs/erofs/xattr.c
-@@ -29,7 +29,7 @@ struct xattr_iter {
- 	unsigned int ofs;
- };
- 
--static int init_inode_xattrs(struct inode *inode)
-+static int erofs_init_inode_xattrs(struct inode *inode)
+@@ -431,20 +431,9 @@ static int erofs_xattr_generic_get(const struct xattr_handler *handler,
+ 				   struct dentry *unused, struct inode *inode,
+ 				   const char *name, void *buffer, size_t size)
  {
- 	struct erofs_inode *const vi = EROFS_I(inode);
- 	struct xattr_iter it;
-@@ -404,7 +404,7 @@ static int erofs_getxattr(struct inode *inode, int index, const char *name,
- 	if (!name)
- 		return -EINVAL;
+-	struct erofs_sb_info *const sbi = EROFS_I_SB(inode);
+-
+-	switch (handler->flags) {
+-	case EROFS_XATTR_INDEX_USER:
+-		if (!test_opt(&sbi->opt, XATTR_USER))
+-			return -EOPNOTSUPP;
+-		break;
+-	case EROFS_XATTR_INDEX_TRUSTED:
+-		break;
+-	case EROFS_XATTR_INDEX_SECURITY:
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
++	if (handler->flags == EROFS_XATTR_INDEX_USER &&
++	    !test_opt(&EROFS_I_SB(inode)->opt, XATTR_USER))
++		return -EOPNOTSUPP;
  
--	ret = init_inode_xattrs(inode);
-+	ret = erofs_init_inode_xattrs(inode);
- 	if (ret)
- 		return ret;
- 
-@@ -619,7 +619,7 @@ ssize_t erofs_listxattr(struct dentry *dentry,
- 	int ret;
- 	struct listxattr_iter it;
- 
--	ret = init_inode_xattrs(d_inode(dentry));
-+	ret = erofs_init_inode_xattrs(d_inode(dentry));
- 	if (ret == -ENOATTR)
- 		return 0;
- 	if (ret)
+ 	return erofs_getxattr(inode, handler->flags, name, buffer, size);
+ }
 -- 
 2.19.1.6.gb485710b
 
