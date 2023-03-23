@@ -2,113 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048BB6C5B64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705BD6C5B6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjCWAfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S230051AbjCWAj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjCWAfH (ORCPT
+        with ESMTP id S229644AbjCWAj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:35:07 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7E84ED5;
-        Wed, 22 Mar 2023 17:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679531705; x=1711067705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wp4vyR2Y2dOx4yjIT2WaC+9FkZoxRrFcxxrBaYARJOI=;
-  b=RjHDcvOyuYC60laji9YoVk4gML/oUoaArp5iEEM/IiNvvK9kav+4WbHF
-   b3EE7ps51t6U356XwwAjZx0fnlJ0BSMWKShpBdP48RVOv0QVRXOSpOmtE
-   YLSQRKaYHMFz5zxJ/ZvNsXgXUG9qJRkqC+dDTZ9UbbpirBoxSuuIjr/JF
-   JeQk73kQV8CBJ2McRXBBN4iPFWDL9EmyFcvUKk3/dlX+BU2vPUiVuYwqq
-   1eNQKeiqO2Q8ZHx5o+jdHoXRPcsuRjyzyhhYhKO33KMenu0lq737HUyBO
-   dtbhqd3Etf518A0I6vLpBN3iszSzJy96CP0OcCc6D/JKsw5Jwkaj24LCg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319756228"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="319756228"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 17:35:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="928031581"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="928031581"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Mar 2023 17:35:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pf8uz-000Dma-2A;
-        Thu, 23 Mar 2023 00:35:01 +0000
-Date:   Thu, 23 Mar 2023 08:34:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add
- Xiaomi Mi Pad 5 Pro BOE variant
-Message-ID: <202303230827.w5y3UTfE-lkp@intel.com>
-References: <20230322150320.31787-3-lujianhua000@gmail.com>
+        Wed, 22 Mar 2023 20:39:56 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CFE6A58
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:54 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i22-20020a056e021d1600b0031f64ecb112so11220668ila.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679531993;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8NiIyltKxDJdFrINjX75BJjnuGiPstgqlqzvrWa9wCg=;
+        b=HnvRCOzkrw2/gQKRRmt2LtweMw6qrZPURnIYi/BrSWcl5Oat08zMpJVyPWWpPCXAUQ
+         EgGgZUiGCZyEAy2ukfkkB5cJvryIuQCbsSO7wYuB7tzc2O2vONyl+R3sAKuiQ3e8xkqD
+         Nxm8d/ZIITWmrHptbIkYIoTFIhhjXMeWfm6wsVQGmkEi2z67Khlo0Zvq5fE881eu/2Di
+         bJ7wgQLFstv2v94SvaT7TVD6K3TTFKW/aVAYgmskc8I3b5DcokLgQYkvMt/Xz7cFrTF9
+         Pzp3gvYobd5ErKod6rO/S5LNHTBjHeZOy3XXEcOYEIQuISq+rsr24NkCOYB2NQYA8lL/
+         CzkA==
+X-Gm-Message-State: AO0yUKV1y8lDfQH+iXp96ajhYXDgkHsxEr93Qc+HYjQKP5CsXEIhDT+P
+        CLNc4SBECXjRdD0UT0kdEQcFe4pt7NjyPUGfwbVrIMvSjddb
+X-Google-Smtp-Source: AK7set/r2bjv2gut2DmPb/OiOdE6rFWol8dZ6yO9KmoyMdYpYo/Kw3qrwV0I1KCLokNOAifW2P8hAQsLKIegzDdh+VirQ3lR4qPA
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322150320.31787-3-lujianhua000@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:2612:0:b0:313:cc98:7eee with SMTP id
+ n18-20020a922612000000b00313cc987eeemr3738082ile.1.1679531993740; Wed, 22 Mar
+ 2023 17:39:53 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 17:39:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e03bc805f78683cd@google.com>
+Subject: [syzbot] [sctp?] general protection fault in sctp_outq_tail
+From:   syzbot <syzbot+47c24ca20a2fa01f082e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
+        lucien.xin@gmail.com, marcelo.leitner@gmail.com,
+        netdev@vger.kernel.org, nhorman@tuxdriver.com, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianhua,
+Hello,
 
-I love your patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    cdd28833100c net: microchip: sparx5: fix deletion of exist..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1588fe92c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
+dashboard link: https://syzkaller.appspot.com/bug?extid=47c24ca20a2fa01f082e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d80ff4c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f6e90ac80000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianhua-Lu/arm64-dts-qcom-sm8250-xiaomi-elish-add-mdss-and-dsi-node/20230322-230551
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230322150320.31787-3-lujianhua000%40gmail.com
-patch subject: [PATCH 3/4] arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add Xiaomi Mi Pad 5 Pro BOE variant
-config: arm64-randconfig-r011-20230322 (https://download.01.org/0day-ci/archive/20230323/202303230827.w5y3UTfE-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/14b429402cdaeb77734646a64f00653841d703a7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianhua-Lu/arm64-dts-qcom-sm8250-xiaomi-elish-add-mdss-and-dsi-node/20230322-230551
-        git checkout 14b429402cdaeb77734646a64f00653841d703a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2fb6257d1131/disk-cdd28833.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a3025d79117c/vmlinux-cdd28833.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8e6d670a5fed/bzImage-cdd28833.xz
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230827.w5y3UTfE-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+47c24ca20a2fa01f082e@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+general protection fault, probably for non-canonical address 0xdffffc0000000007: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000038-0x000000000000003f]
+CPU: 1 PID: 5783 Comm: syz-executor825 Not tainted 6.2.0-syzkaller-12889-gcdd28833100c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:list_add_tail include/linux/list.h:102 [inline]
+RIP: 0010:sctp_outq_tail_data net/sctp/outqueue.c:91 [inline]
+RIP: 0010:sctp_outq_tail+0x4ab/0xbf0 net/sctp/outqueue.c:299
+Code: 8b 48 08 4c 8d 6b 18 48 8d 41 30 48 89 44 24 08 48 8d 41 38 48 89 c2 48 89 44 24 20 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 0a 06 00 00 4c 8b 79 38 4c 89 ef 48 89 4c 24 28
+RSP: 0018:ffffc90005257568 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888072779140 RCX: 0000000000000000
+RDX: 0000000000000007 RSI: ffffffff841d7ef0 RDI: ffff888071fbb0c8
+RBP: ffff8880787a47e0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000a4aeb3
+R13: ffff888072779158 R14: ffff8880787c0000 R15: ffff888071ad7c80
+FS:  00007f5801104700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f58011b0740 CR3: 000000002a37e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ sctp_cmd_send_msg net/sctp/sm_sideeffect.c:1114 [inline]
+ sctp_cmd_interpreter net/sctp/sm_sideeffect.c:1777 [inline]
+ sctp_side_effects net/sctp/sm_sideeffect.c:1199 [inline]
+ sctp_do_sm+0x197d/0x5310 net/sctp/sm_sideeffect.c:1170
+ sctp_primitive_SEND+0x9f/0xc0 net/sctp/primitive.c:163
+ sctp_sendmsg_to_asoc+0x10eb/0x1a30 net/sctp/socket.c:1868
+ sctp_sendmsg+0x8d4/0x1d90 net/sctp/socket.c:2026
+ inet_sendmsg+0x9d/0xe0 net/ipv4/af_inet.c:825
+ sock_sendmsg_nosec net/socket.c:722 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:745
+ __sys_sendto+0x23a/0x340 net/socket.c:2145
+ __do_sys_sendto net/socket.c:2157 [inline]
+ __se_sys_sendto net/socket.c:2153 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2153
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5801177ce9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f58011042f8 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f58012004b8 RCX: 00007f5801177ce9
+RDX: 0000000000034000 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 00007f58012004b0 R08: 00000000200005c0 R09: 000000000000001c
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f58012004bc
+R13: 00007f58011cd600 R14: 0100000000000000 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:list_add_tail include/linux/list.h:102 [inline]
+RIP: 0010:sctp_outq_tail_data net/sctp/outqueue.c:91 [inline]
+RIP: 0010:sctp_outq_tail+0x4ab/0xbf0 net/sctp/outqueue.c:299
+Code: 8b 48 08 4c 8d 6b 18 48 8d 41 30 48 89 44 24 08 48 8d 41 38 48 89 c2 48 89 44 24 20 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 0a 06 00 00 4c 8b 79 38 4c 89 ef 48 89 4c 24 28
+RSP: 0018:ffffc90005257568 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff888072779140 RCX: 0000000000000000
+RDX: 0000000000000007 RSI: ffffffff841d7ef0 RDI: ffff888071fbb0c8
+RBP: ffff8880787a47e0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 1ffff92000a4aeb3
+R13: ffff888072779158 R14: ffff8880787c0000 R15: ffff888071ad7c80
+FS:  00007f5801104700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffd458c9960 CR3: 000000002a37e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	8b 48 08             	mov    0x8(%rax),%ecx
+   3:	4c 8d 6b 18          	lea    0x18(%rbx),%r13
+   7:	48 8d 41 30          	lea    0x30(%rcx),%rax
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	48 8d 41 38          	lea    0x38(%rcx),%rax
+  14:	48 89 c2             	mov    %rax,%rdx
+  17:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  23:	fc ff df
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 0a 06 00 00    	jne    0x63e
+  34:	4c 8b 79 38          	mov    0x38(%rcx),%r15
+  38:	4c 89 ef             	mov    %r13,%rdi
+  3b:	48 89 4c 24 28       	mov    %rcx,0x28(%rsp)
 
->> Error: arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi:516.14-15 syntax error
-   FATAL ERROR: Unable to parse input tree
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
