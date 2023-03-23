@@ -2,216 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D776C711B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C679E6C711C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjCWTfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S231564AbjCWTgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjCWTff (ORCPT
+        with ESMTP id S231190AbjCWTgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:35:35 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3AE1A65E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:35:33 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-544b959a971so378236777b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:35:33 -0700 (PDT)
+        Thu, 23 Mar 2023 15:36:01 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043771B2D9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:35:53 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id l37so1320745wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679600133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7VcmchQqt9DaMxSLZ78hVIFyFO9YofibofDFlcn/C/A=;
-        b=qcmPuY4UNpBr+P2ZKeYHu1R051ec4TvA2Clkq4ip2880X7aXBn2kafw99H0CzcQE8Y
-         55btBqMovU8tiALDLxofgtxE/bZ0HgUAqQ7/uL9ivj3gfCrk6Yuh0oGKI0h3hhLcEY7P
-         dflHLX+NDoqrZpncNEKvk51KUcHVmknk2JEAaqvkhAXJHpK54fIOZMMCA7hah18AZ/bd
-         JkZhELoYu+zcuogS32m/qQmFm811rpAtxS23YU+81bGhLBg7rvz3YmoDRQyp8dCCDNhb
-         lUPfwH5qF/cf+E5RouEWAGBRgF9zRDRmzCb9ikWcAdK0VJGHDe0vWwWNlwRMGXpXzXAs
-         LaXw==
+        d=gmail.com; s=20210112; t=1679600152; x=1682192152;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=voH3eMjhhyaut+22MPGFHGPMcDal/7FwDZOTpsj04SI=;
+        b=OUB2ED/FwjUpQ0e0blSs+/H7lKEKtqqbnLJ86iWyLHz86f5U0RSyENZMyncuKfDh+h
+         ovzTvUI3T4g7FdwnEdKSceZ1sUYlUIzud4ehFNidstPI89Sghu+/1DD6zPiP68lSlJM+
+         z1ctCQjtmFiPg7iA0KpG+IloiBWsyE2crvqIwWgKr4aR0+DFRWdfGxM4XuozquJQ7GFY
+         UKM+8GLxj+b1ecKGC4kYbNKQ++x2Z/yEd1Q/GvdtPGfVDqeB77IC2AX8ycu5llTL7TeP
+         yq60cxIf7VU2GWx9YTohmx9rQ4QUTfZc6Dc+9iZKvVGhV5rDpQH1SPFfWRZ7kZu+/1zJ
+         ZNDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679600133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7VcmchQqt9DaMxSLZ78hVIFyFO9YofibofDFlcn/C/A=;
-        b=KNcaIR4XlMU9TIyNso4bJzeZtnQS/ecStSYbw+fAgRPG/fw4+RXDITXg9dz6BQnKYT
-         YxSge9W0mJBAwIqhbpmrqyyttlKiZjAAIYSlZkcgWpKazHsDd2uXnwdd4jxSPO9PPCEY
-         CarP0sPKvS0RrMdlcqzoBlWJGUbZELB9zYi0Fc/LJKk44piT+/Qg0yEjGOZiIHS8WdHK
-         KKq831UE0WAOhEBGBZw+1UNQ1vAEFFFRzAwUXRcyD1zyKugAnvQJHcjYf9R72g1wJCl7
-         2wRloAJwvoSPMrKjCbWQoeoRZqqNBIZM/xBTYrN/6GXtTDJWJSlD5HqV7R6D1MBRq76K
-         D2AA==
-X-Gm-Message-State: AAQBX9edMJ6rZKMZ7RlQaH/Nk66HP1isCoeZd5tnPh9cLeApZ7oupI5g
-        4BIRfrCOFo8T2Cn+RSBIjJWp+ZzNBBkHvYlbOXzShw==
-X-Google-Smtp-Source: AKy350ZXwVmW+8wxag0P4Y079RwZrC59m2sOfutsdJVuOG7wMxgYoQ6G9rfVZpnKi1K8J8jngBYLKTgqhGctfMls/iw=
-X-Received: by 2002:a81:ef08:0:b0:545:883a:542c with SMTP id
- o8-20020a81ef08000000b00545883a542cmr1610295ywm.0.1679600131909; Thu, 23 Mar
- 2023 12:35:31 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679600152; x=1682192152;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=voH3eMjhhyaut+22MPGFHGPMcDal/7FwDZOTpsj04SI=;
+        b=DfH9EOzTHJNRORB/uYhvBdDYQSs1bFZswEsug2PVL+3+oSUwfYHXy9KwhTY+uQVy+B
+         wtK9CroQzhZk7nHznwzkVoNBWXQd8i0N+tbvRXb4NTl9fP4EoWRKthIRFub9ImHhz2Pe
+         eVFp7y9egzkMB8V3TJyAFJYWkuMpjqKWcI4cAitAm6BbLQx64gAXlyw6NkVD1f0KaB9o
+         L5b1zE1dIPSVoluotXdAMk44sC/F2LgQaYwk09KGHb5MUX+zrNlTIroAtEiPQRejtd0O
+         dgwTRjFWjaUW4/sYL1rR9jSjXJ1epsCm/TtFjGRXxGJV0o3D06hwcDrkYK07RW575oN+
+         sERA==
+X-Gm-Message-State: AO0yUKWJTadzNltQGxBQDpcd8Ov7pw5f4qUWk0HKT8Ai+56cZNHal69K
+        Uc+b1YfFpdNf1SEmzXtZZIk=
+X-Google-Smtp-Source: AK7set9sUQp9ktBvPWcuSNp0GfPFC5fxoLwxzfiIdqzt5xrlt9Gl/CH1kOJou/mwlbViWbzxd5lPYA==
+X-Received: by 2002:a05:600c:1c18:b0:3ee:52fb:6dd9 with SMTP id j24-20020a05600c1c1800b003ee52fb6dd9mr687433wms.4.1679600151878;
+        Thu, 23 Mar 2023 12:35:51 -0700 (PDT)
+Received: from [192.168.0.104] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05600c1d0f00b003eb2e33f327sm7633360wms.2.2023.03.23.12.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 12:35:51 -0700 (PDT)
+Message-ID: <c8ada96d-a7da-f149-3fda-64abd7e21064@gmail.com>
+Date:   Thu, 23 Mar 2023 20:35:50 +0100
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-5-yosryahmed@google.com> <20230323155613.GC739026@cmpxchg.org>
- <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com>
- <20230323172732.GE739026@cmpxchg.org> <CAJD7tkbtHhzOytu3hfN8tjdAyNq0BZXYN8TEipS4NTApUzkL7w@mail.gmail.com>
-In-Reply-To: <CAJD7tkbtHhzOytu3hfN8tjdAyNq0BZXYN8TEipS4NTApUzkL7w@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 23 Mar 2023 12:35:20 -0700
-Message-ID: <CALvZod4z6F2Rr3prKdLqBuWUjippOBoLFw3QFFY7Bk=czm5iHg@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe contexts
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/4] staging: rtl8192e: code cleanup patches
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        outreachy@lists.linux.dev
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1679598576.git.kamrankhadijadj@gmail.com>
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1679598576.git.kamrankhadijadj@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:08=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
->
-> On Thu, Mar 23, 2023 at 10:27=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.=
-org> wrote:
-> >
-> > On Thu, Mar 23, 2023 at 09:01:12AM -0700, Yosry Ahmed wrote:
-> > > On Thu, Mar 23, 2023 at 8:56=E2=80=AFAM Johannes Weiner <hannes@cmpxc=
-hg.org> wrote:
-> > > >
-> > > > On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
-> > > > > @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
-> > > > >               return;
-> > > > >
-> > > > >       flush_next_time =3D jiffies_64 + 2*FLUSH_TIME;
-> > > > > -     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
-> > > > > +     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
-> > > >
-> > > > How is it safe to call this with may_sleep=3Dtrue when it's holding=
- the
-> > > > stats_flush_lock?
-> > >
-> > > stats_flush_lock is always called with trylock, it is only used today
-> > > so that we can skip flushing if another cpu is already doing a flush
-> > > (which is not 100% correct as they may have not finished flushing yet=
-,
-> > > but that's orthogonal here). So I think it should be safe to sleep as
-> > > no one can be blocked waiting for this spinlock.
-> >
-> > I see. It still cannot sleep while the lock is held, though, because
-> > preemption is disabled. Make sure you have all lock debugging on while
-> > testing this.
->
-> Thanks for pointing this out, will do.
->
-> >
-> > > Perhaps it would be better semantically to replace the spinlock with
-> > > an atomic test and set, instead of having a lock that can only be use=
-d
-> > > with trylock?
-> >
-> > It could be helpful to clarify what stats_flush_lock is protecting
-> > first. Keep in mind that locks should protect data, not code paths.
-> >
-> > Right now it's doing multiple things:
-> >
-> > 1. It protects updates to stats_flush_threshold
-> > 2. It protects updates to flush_next_time
-> > 3. It serializes calls to cgroup_rstat_flush() based on those ratelimit=
-s
-> >
-> > However,
-> >
-> > 1. stats_flush_threshold is already an atomic
-> >
-> > 2. flush_next_time is not atomic. The writer is locked, but the reader
-> >    is lockless. If the reader races with a flush, you could see this:
-> >
-> >                                         if (time_after(jiffies, flush_n=
-ext_time))
-> >         spin_trylock()
-> >         flush_next_time =3D now + delay
-> >         flush()
-> >         spin_unlock()
-> >                                         spin_trylock()
-> >                                         flush_next_time =3D now + delay
-> >                                         flush()
-> >                                         spin_unlock()
-> >
-> >    which means we already can get flushes at a higher frequency than
-> >    FLUSH_TIME during races. But it isn't really a problem.
-> >
-> >    The reader could also see garbled partial updates, so it needs at
-> >    least READ_ONCE and WRITE_ONCE protection.
-> >
-> > 3. Serializing cgroup_rstat_flush() calls against the ratelimit
-> >    factors is currently broken because of the race in 2. But the race
-> >    is actually harmless, all we might get is the occasional earlier
-> >    flush. If there is no delta, the flush won't do much. And if there
-> >    is, the flush is justified.
-> >
-> > In summary, it seems to me the lock can be ditched altogether. All the
-> > code needs is READ_ONCE/WRITE_ONCE around flush_next_time.
->
-> Thanks a lot for this analysis. I agree that the lock can be removed
-> with proper READ_ONCE/WRITE_ONCE, but I think there is another purpose
-> of the lock that we are missing here.
->
-> I think one other purpose of the lock is avoiding a thundering herd
-> problem on cgroup_rstat_lock, particularly from reclaim context, as
-> mentioned by the log of  commit aa48e47e3906 ("memcg: infrastructure
-> to flush memcg stats").
->
-> While testing, I did notice that removing this lock indeed causes a
-> thundering herd problem if we have a lot of concurrent reclaimers. The
-> trylock makes sure we abort immediately if someone else is flushing --
-> which is not ideal because that flusher might have just started, and
-> we may end up reading stale data anyway.
->
-> This is why I suggested replacing the lock by an atomic, and do
-> something like this if we want to maintain the current behavior:
->
-> static void __mem_cgroup_flush_stats(void)
-> {
->     ...
->     if (atomic_xchg(&ongoing_flush, 1))
->         return;
->     ...
->     atomic_set(&ongoing_flush, 0)
-> }
->
-> Alternatively, if we want to change the behavior and wait for the
-> concurrent flusher to finish flushing, we can maybe spin until
-> ongoing_flush goes back to 0 and then return:
->
-> static void __mem_cgroup_flush_stats(void)
-> {
->     ...
->     if (atomic_xchg(&ongoing_flush, 1)) {
->         /* wait until the ongoing flusher finishes to get updated stats *=
-/
->         while (atomic_read(&ongoing_flush) {};
->         return;
->     }
->     /* flush the stats ourselves */
->     ...
->     atomic_set(&ongoing_flush, 0)
-> }
->
-> WDYT?
+On 3/23/23 20:19, Khadija Kamran wrote:
+> Fix several cleanup issues reported by checkpatch.pl in module
+> staging/rtl8192e in file rtllib_rx.c
+> 
+> Changes in v2:
+>   - Resent patchset with the correct email address
+> 
+> Khadija Kamran (4):
+>    staging: rtl8192e: remove extra blank lines
+>    staging: rtl8192e: add blank lines after declarations
+>    staging: rtl8192e: add spaces around binary operators
+>    staging: rtl8192e: remove blank lines after '{'
+> 
+>   drivers/staging/rtl8192e/rtllib_rx.c | 73 +++++++++++-----------------
+>   1 file changed, 29 insertions(+), 44 deletions(-)
+> 
 
-I would go with your first approach i.e. no spinning.
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
