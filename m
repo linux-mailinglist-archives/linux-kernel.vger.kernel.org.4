@@ -2,228 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EE56C641C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CD46C642B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjCWJxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S230489AbjCWJ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjCWJxB (ORCPT
+        with ESMTP id S229976AbjCWJzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:53:01 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3123166CF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=7C4N7pzqpOU5qbTYS9u7Db3EY7Oi7m72SrUzYIss0A8=;
-  b=WMQBevmug2c9SA/rC1jTHNzQSGZsWBweFGNBRv30Id9UA25e25kWNOKK
-   cgJrGiYWKekrU1eRV6ERzGBikupg2vXLHD6LZQ2fbXBhuTadW18nQrTdj
-   MAD0TVfJDxasUnpiPTfw/V59Md5K1IyhxcMw+MLZpfeNfOUpefpNWXqGy
-   U=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,283,1673910000"; 
-   d="scan'208";a="51015617"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 10:52:36 +0100
-Date:   Thu, 23 Mar 2023 10:52:35 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Alex Elder <elder@ieee.org>,
-        Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
-In-Reply-To: <ZBvcWkpMJnxea78L@kroah.com>
-Message-ID: <alpine.DEB.2.22.394.2303230807130.2866@hadrien>
-References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com> <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org> <alpine.DEB.2.22.394.2303212140480.2919@hadrien> <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org> <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
- <48674d8f-9753-780c-f37c-f83ea2855ae6@ieee.org> <eabacc6f-c7fb-ff33-26d1-271537fb4760@inria.fr> <ZBvcWkpMJnxea78L@kroah.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 23 Mar 2023 05:55:31 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A429614215;
+        Thu, 23 Mar 2023 02:54:06 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=mx_xiang@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32N9rDdw000357-32N9rDdx000357
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 23 Mar 2023 17:53:17 +0800
+From:   Mingxuan Xiang <mx_xiang@hust.edu.cn>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
+Date:   Thu, 23 Mar 2023 17:53:10 +0800
+Message-Id: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: mx_xiang@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+platform_get_irq() no longer returns 0, so there is no
+need to check whether the return value is 0.
 
+Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
+---
+v1->v2: remove redundant goto
+ drivers/usb/dwc3/host.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-On Thu, 23 Mar 2023, Greg KH wrote:
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index f6f13e7f1ba1..ca1e8294e835 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -54,12 +54,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+ 	irq = platform_get_irq(dwc3_pdev, 0);
+ 	if (irq > 0) {
+ 		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+-		goto out;
+ 	}
+ 
+-	if (!irq)
+-		irq = -EINVAL;
+-
+ out:
+ 	return irq;
+ }
+-- 
+2.39.2
 
-> On Wed, Mar 22, 2023 at 11:00:41AM +0100, Julia Lawall wrote:
-> > Greg raised the question of whether the inline function is really as
-> > efficient as a macro.
-> >
-> > I tried the following definitions:
-> >
-> > #define to_gbphy_dev(d) container_of(d, struct gbphy_device, dev)
-> >
-> > static inline struct gbphy_device *extra_to_gbphy_dev(const struct device *_dev)
-> > {
-> >        return container_of(_dev, struct gbphy_device, dev);
-> > }
-> >
-> > And the following uses:
-> >
-> > ssize_t macro_protocol_id_show(struct device *dev,
-> >                                 struct device_attribute *attr, char *buf)
-> > {
-> >         struct gbphy_device *gbphy_dev = to_gbphy_dev(dev);
-> >
-> >         return sprintf(buf, "%c macro 0x%02x\n", *buf, gbphy_dev->cport_desc->protocol_id);
-> > }
-> > ssize_t extra_protocol_id_show(struct device *dev,
-> > 				struct device_attribute *attr, char *buf)
-> > {
-> >         struct gbphy_device *gbphy_dev = extra_to_gbphy_dev(dev);
-> >
-> >         return sprintf(buf, "extra 0x%02x %c\n", gbphy_dev->cport_desc->protocol_id, *buf);
-> > }
-> >
-> > They are a little bit different to avoid too much compiler optimization.
-> >
-> > After doing make drivers/staging/greybus/gbphy.s, I get similar looking
-> > code in both cases:
-> >
-> > Macro version:
-> >
-> >         .type   macro_protocol_id_show, @function
-> > macro_protocol_id_show:
-> >         endbr64
-> > 1:      call    __fentry__
-> >         .section __mcount_loc, "a",@progbits
-> >         .quad 1b
-> >         .previous
-> >         pushq   %rbp    #
-> >         movq    %rdx, %rbp      # tmp96, buf
-> >         pushq   %rbx    #
-> > # drivers/staging/greybus/gbphy.c:40: {
-> >         movq    %rdi, %rbx      # tmp95, dev
-> > # drivers/staging/greybus/gbphy.c:43:   return sprintf(buf, "%c macro 0x%02x\n", *buf, gbphy_dev->cport_desc->protocol_id);
-> >         call    __sanitizer_cov_trace_pc        #
-> > # drivers/staging/greybus/gbphy.c:43:   return sprintf(buf, "%c macro 0x%02x\n", *buf, gbphy_dev->cport_desc->protocol_id);
-> >         movq    -32(%rbx), %rax # MEM[(struct gbphy_device *)dev_7(D) + -40B].cport_desc, MEM[(struct gbphy_device *)dev_7(D) + -40B].cport_desc
-> > # drivers/staging/greybus/gbphy.c:43:   return sprintf(buf, "%c macro 0x%02x\n", *buf, gbphy_dev->cport_desc->protocol_id);
-> >         movzbl  0(%rbp), %edx   # *buf_9(D), *buf_9(D)
-> >         movq    %rbp, %rdi      # buf,
-> >         movq    $.LC18, %rsi    #,
-> >         movzbl  3(%rax), %ecx   # _1->protocol_id, _1->protocol_id
-> >         call    sprintf #
-> > # drivers/staging/greybus/gbphy.c:44: }
-> >         movl    $13, %eax       #,
-> >         popq    %rbx    #
-> >         popq    %rbp    #
-> >         jmp     __x86_return_thunk
-> >         .size   macro_protocol_id_show, .-macro_protocol_id_show
-> >
-> > Function version:
-> >
-> >         .type   extra_protocol_id_show, @function
-> > extra_protocol_id_show:
-> >         endbr64
-> > 1:      call    __fentry__
-> >         .section __mcount_loc, "a",@progbits
-> >         .quad 1b
-> >         .previous
-> >         pushq   %rbp    #
-> >         movq    %rdx, %rbp      # tmp96, buf
-> >         pushq   %rbx    #
-> > # drivers/staging/greybus/gbphy.c:47: {
-> >         movq    %rdi, %rbx      # tmp95, dev
-> > # drivers/staging/greybus/gbphy.c:50:   return sprintf(buf, "extra 0x%02x %c\n", gbphy_dev->cport_desc->protocol_id, *buf);
-> >         call    __sanitizer_cov_trace_pc        #
-> > # drivers/staging/greybus/gbphy.c:50:   return sprintf(buf, "extra 0x%02x %c\n", gbphy_dev->cport_desc->protocol_id, *buf);
-> >         movq    -32(%rbx), %rax # MEM[(struct gbphy_device *)dev_8(D) + -40B].cport_desc, MEM[(struct gbphy_device *)dev_8(D) + -40B].cport_desc
-> > # drivers/staging/greybus/gbphy.c:50:   return sprintf(buf, "extra 0x%02x %c\n", gbphy_dev->cport_desc->protocol_id, *buf);
-> >         movzbl  0(%rbp), %ecx   # *buf_9(D), *buf_9(D)
-> >         movq    %rbp, %rdi      # buf,
-> >         movq    $.LC19, %rsi    #,
-> >         movzbl  3(%rax), %edx   # _3->protocol_id, _3->protocol_id
-> >         call    sprintf #
-> > # drivers/staging/greybus/gbphy.c:51: }
-> >         movl    $13, %eax       #,
-> >         popq    %rbx    #
-> >         popq    %rbp    #
-> >         jmp     __x86_return_thunk
-> >         .size   extra_protocol_id_show, .-extra_protocol_id_show
-> >
-> > Both seem to access the memory directly.  Maybe the example is too simple,
-> > and the compiler is more likely to optimize aggressively?
->
-> Nice, that shows that it is the same both ways as the compiler version
-> you are using is smart enough
->
-> Which compiler and version is this?  Does it work the same for all of
-> the supported versions we have to support (i.e. really old gcc?)
-
-gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-
-I got a similar result for gcc-5:
-
-macro_protocol_id_show:
-1:      call    __fentry__
-        .section __mcount_loc, "a",@progbits
-        .quad 1b
-        .previous
-        movq    %rdx, %rax      # buf, buf
-        movq    -32(%rdi), %rdx # MEM[(struct gbphy_device *)dev_1(D) + -40B].cport_desc, MEM[(struct gbphy_device *)dev_1(D) + -40B].cport_desc
-        movq    $.LC19, %rsi    #,
-        movq    %rax, %rdi      # buf,
-        movzbl  3(%rdx), %ecx   # _3->protocol_id, D.44996
-        movzbl  (%rax), %edx    # *buf_6(D), D.44996
-        call    sprintf #
-        cltq
-        jmp     __x86_return_thunk
-        .size   macro_protocol_id_show, .-macro_protocol_id_show
-        .section        .text.unlikely
-.LCOLDE20:
-        .text
-.LHOTE20:
-        .section        .rodata.str1.1
-.LC21:
-        .string "extra 0x%02x %c\n"
-        .section        .text.unlikely
-.LCOLDB22:
-        .text
-.LHOTB22:
-        .p2align 6,,63
-        .globl  extra_protocol_id_show
-        .type   extra_protocol_id_show, @function
-extra_protocol_id_show:
-1:      call    __fentry__
-        .section __mcount_loc, "a",@progbits
-        .quad 1b
-        .previous
-        movq    %rdx, %rax      # buf, buf
-        movzbl  (%rdx), %ecx    # *buf_3(D), D.45003
-        movq    -32(%rdi), %rdx # MEM[(struct gbphy_device *)dev_2(D) + -40B].cport_desc, MEM[(struct gbphy_device *)dev_2(D) + -40B].cport_desc
-        movq    $.LC21, %rsi    #,
-        movq    %rax, %rdi      # buf,
-        movzbl  3(%rdx), %edx   # _6->protocol_id, D.45003
-        call    sprintf #
-        cltq
-        jmp     __x86_return_thunk
-        .size   extra_protocol_id_show, .-extra_protocol_id_show
-        .section        .text.unlikely
-
-
-
->
-> For the most part, sysfs files are not on any sort of "fast path" so a
-> function call is fine, but as I mentioned before, sometimes we are
-> forced to move calls to container_of() to container_of_const() and that
-> can not be an inline function, but must remain a macro :(
-
-It seems that this is because there is not a unique return type, but not a
-performance issue?
-
-julia
