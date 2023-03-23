@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157A86C7246
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B556C721B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbjCWVZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S231161AbjCWVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCWVZy (ORCPT
+        with ESMTP id S229644AbjCWVEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:25:54 -0400
-X-Greylist: delayed 3754 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Mar 2023 14:25:50 PDT
-Received: from symantec.comsats.net.pk (symantec.comsats.net.pk [210.56.11.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429AE27980
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:25:49 -0700 (PDT)
-X-AuditID: d2380b23-20fff70000007bb6-44-641ca6333210
-Received: from iesco.comsatshosting.com (iesco.comsatshosting.com [210.56.28.11])
-        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        by symantec.comsats.net.pk (Symantec Messaging Gateway) with SMTP id 5A.E5.31670.336AC146; Fri, 24 Mar 2023 00:19:15 +0500 (PKT)
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns;
-        d=iesco.com.pk; s=default;
-        h=received:content-type:mime-version:content-transfer-encoding
-          :content-description:subject:to:from:date:reply-to;
-        b=DsPNZxr99QisNuMt+BVycUQc2+sWE5drIknSNqeIUGWoX+BQsNQ//yHbHi2+B8s0o
-          M0GUI2H7UB5jwfDVhpvkx/8khK9R8kN0Gof04n7B9PyZtrPQ4GCperVfnIKeOKOCc
-          i8ET6fBNGUE8jGg9K03WUbujMt50lmiDQg0fn5KcE=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iesco.com.pk; s=default;
-        h=reply-to:date:from:to:subject:content-description
-          :content-transfer-encoding:mime-version:content-type;
-        bh=GMzYzcyTxDsE6wX/XHG6MHqAdAiHrhqbmmLQ/TZ1QnQ=;
-        b=Itfook3eFdnCA07V/BXRoZa7udW6dLZPW/uhwmxiEnq9zJSkfDD4UiXCk5fgZEQEM
-          FgI9xQRU6Hj9LxNn4Vyp85Ev7PM2Z8ASYbq44vDfd3CiI0wOilR3enBm0Sqb5GwAM
-          eSkqJDdYHHdnxIRERk5fPcMu7h83WMrzotqRnEA1M=
-Received: from [194.55.224.249] (UnknownHost [194.55.224.249]) by iesco.comsatshosting.com with SMTP;
-   Thu, 23 Mar 2023 23:54:46 +0500
-Message-ID: <5A.E5.31670.336AC146@symantec.comsats.net.pk>
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 23 Mar 2023 17:04:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C55E9;
+        Thu, 23 Mar 2023 14:04:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13C04B82251;
+        Thu, 23 Mar 2023 21:03:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB18EC433D2;
+        Thu, 23 Mar 2023 21:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679605437;
+        bh=s0qiIm7I/VHyfumO8JsVX4FErKUCS+Lp4X/oi6opOuE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=M3HQSnF7t4/k+nTTuYK8e2v1DO/iO5RUEspNscbBCzluzfa94KuFUwqUjwj2ci4L9
+         IX45/FlqfKseDjnACN4L3Hoj5GZI/4M5qvgIemLvt+jwtrgbMlsi/0bfPkUFtZM6QZ
+         vEDliWzk/8bcMrJ5o+pn84mqoO9D6mDFW6gyNxKO3Tnlgl1wlhdl0IoeX+oUTUACsj
+         bHXm/+0LwQj4BYn+DBudd9xxaPf4RvpTUzAllZPzvB//OKSx1H9/W4hUo8JLXFAhtk
+         gTJe+AP0Fvu/A+IwnIt851ZzZWAaNdoM+UIlHsa5N/cjYwzKIBx1ajlVYdGEIjT+V5
+         KjhFccwq9DISA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 322961540398; Thu, 23 Mar 2023 14:03:57 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 14:03:57 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Message-ID: <e448fcdb-56ba-4c58-8562-059409c1716d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230323144411.0edde523@canb.auug.org.au>
+ <43b7534f-15ee-4cd7-a205-fa16fdb1ab14@paulmck-laptop>
+ <20230323124135.a3c436d8b29dec5bddf47f34@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re; Interest!
-To:     linux-kernel@vger.kernel.org
-From:   "Chen Yun" <sa3_ami@iesco.com.pk>
-Date:   Thu, 23 Mar 2023 12:27:55 -0700
-Reply-To: cchycnn@gmail.com
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUxbVRjGc3ov5a70sttbBu9KR8x1YnSzkwUNm18zRoLDKfEj0cUFbts7
-        WikFewsOYxyKga4yBhvdWIfyNVgExh+wdeCkM51L6KJuYsVOGRsZ3YRFMFswSyTouaWl/efk
-        5Pe8532fc557KYL9mdJQZqtdsFl5CydXkOM52qQnnu7RGp/82puZ88s3rfIdKO/+YEYB2q14
-        1ihYzJWCbcvzRQrTyYGrZPl5Yl/toU6yGt2SOdEaCphs+PHO0UQnUlAsc14GPc2uREkgmT4C
-        hv1qSSCZaQJ+n38QqTqA4PLA2QSpima2Q41/Ti7tCUYHQVezfIWrwH98hlzhm6Cn4y7hRBTe
-        Z8Ki0y5hNZMKE9cd4WEpzEMwdPB2glQiZx6F1r/zVjw8AiHXdLgjy6TD4Qu1iY1orTtumDtu
-        mDtumDs2rB2RvShNrCrl8aMZdIayUpG3izqrYNeVlwyi8AsmPTyMuhoLfYihEKekoVhrZBP4
-        SnzIh/IpGbeOhrfTjWyyvsxYZeJFU6GtwiKIXApdcApX0qtYX2Ep4TR0QSem6lVqFT4ULYId
-        R+ZDQBH4WC4B+JiRr/pIsJWtNPOhdIrk0mht5m0DyxTzdqFEEMoFW1R9i6I4oLd24c4qm1As
-        7NtrttijMj5X0YoVJl4Jm9lAq3KwkBovxPuRUWt8KI9SYlOF3dJdxHK+VDQXR/qq6a+OYaqM
-        0nDP9bROuiAbhbF+l5GZuhG4OkpQix7ndwRLWsusgiaN3nxcMifVmyqsq641qXSuCwtr4wRp
-        gEZLTx3BfF0cj82IfvNzaAnhtNQ0J/lW4l8iZpulGTeGSREYdg30M5JrVYTFGm49g/sw/TLw
-        /unPgC7PYgY0LLdz8OvID1kQCF3PhrFznm0QvDS7DfrHpl6BgOvmLrgUGn0Dxk/XvAuT907s
-        gcF/A0WwfCWoh5Zax17o++NwKVw4GPgAAgsthxCMjyy5EPSNtx5DcP8/L16vDTtaEJxpm2lD
-        sHjyRDuCbzsmOhA4OpsuImh2D3+PYOlc0ySCB/VN0wjaPhtbwDWf38RrcPnuPTSHY5Ph2F76
-        OBybnbfHx+apC8cWoZHYhurCsUVg7AU01UjwTFQqldUveidSd6U0v1+1cOtUgeZGQ3c2OTmq
-        3zib2dke2rn+zhe5rz13JWvDOwOfdOe/OrTH0NC4fTMB+qx89YE3k2vakh/78nX/lN670fXX
-        TzO9O0/3e997qm7LtZD37Min80HqH5Xr5ReObtrB5dVnXJz/bfesx1Dv2B8qKdrfq+BI0cRn
-        PU7YRP5/l9PlQuQEAAA=
-X-Spam-Status: No, score=4.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323124135.a3c436d8b29dec5bddf47f34@linux-foundation.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re; Interest,
+On Thu, Mar 23, 2023 at 12:41:35PM -0700, Andrew Morton wrote:
+> On Wed, 22 Mar 2023 22:11:12 -0700 "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> 
+> > >   ce5e77e7b2cc ("instrumented.h: fix all kernel-doc format warnings")
+> > > 
+> > > in the mm tree)
+> > 
+> > Andrew, do you want to keep this one, or would you rather that I carry it?
+> 
+> I dropped my copy, thanks.
 
-I am interested in discussing the Investment proposal as I explained
-in my previous mail. May you let me know your interest and the
-possibility of a cooperation aimed for mutual interest.
+Thank you!
 
-Looking forward to your mail for further discussion.
-
-Regards
-
-------
-Chen Yun - Chairman of CREC
-China Railway Engineering Corporation - CRECG
-China Railway Plaza, No.69 Fuxing Road, Haidian District, Beijing, P.R.
-China
-
+							Thanx, Paul
