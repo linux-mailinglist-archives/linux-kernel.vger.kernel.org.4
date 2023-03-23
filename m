@@ -2,229 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434146C6463
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77936C6468
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCWKEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S230329AbjCWKG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWKEN (ORCPT
+        with ESMTP id S229642AbjCWKGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:04:13 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFBB1B9;
-        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id u10so96583plz.7;
-        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679565851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ltpiSqcH+iENGFwSc+EzcVWVTeVgKDyd1o+HaYuNOcU=;
-        b=FIioC87Qgiv41rTGncN6kO8GPo+zjlTucRfuJRVKL+d58lS8UPqiQ7sBQgx85CXvX/
-         xDpTrJ53x8grD8W5hyIaOcGxhjybW21yHhNdkvRxdXvvtGREri8VqmL5BAlYA+NPnaXJ
-         KeIxrd+bx0P5r43rNLosr8wP/8fbSyWLKgAD1r2QE1Hhw28duNWEb77VMeux6ZN0yp9s
-         0hjQbL5WO0/vHhw5VFm71JU7pR6XbPNo/vcyg8JEfIYteiR68oF+v/lNZWT6qQl7Hqg4
-         rmqk40vzLpb7RbSL2PdOixfn6jDBnG3lqP0jPsSLzWeOH5m+4CPQUo5nhlYXZh8U9Amr
-         Ksrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679565851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ltpiSqcH+iENGFwSc+EzcVWVTeVgKDyd1o+HaYuNOcU=;
-        b=WceDks7056NqRpLNHLD2O1WAmequOJEnOHbGjlAZJSnEL2YIdbKej3cVl7LziSucKy
-         V0Nj408gszWwA6500ZLkO1MJtUNkRCS8GsA4jN7uH0WnY5RGs0hcsChv7iGooLLK8GRn
-         I7VddpVK77w3BANUrPNsDV8e0mUcL2kqZD0PKE3WT94pBDb5pcBRC6KHC6yxzNQUC4WJ
-         AbxTfn+5G4kaekTSCMoZDWSIEad7aRNL8I2TFIn6UNBt77Foh22MgT7Je07PgF7SLUkZ
-         WdPCHRyQYV/jMoJNW8jMlUpGdlTbZt7QgV6G8HLqBZPsVgYBHr6vw9vulZM5W//UyCn+
-         l/0Q==
-X-Gm-Message-State: AO0yUKXYyz2H9dc/PGLcF/ffTrEZt3SovTV+9zeoCKjblKjD2UStaLsM
-        ypleJdD/uz6kmisf3pPjM6g=
-X-Google-Smtp-Source: AK7set/Mj1KVx0fqxVGFpU3U+yREvqKy9bhqip47WBXgC2C1U+mkNZenaUb7bC6dl12PyGp6QC9udQ==
-X-Received: by 2002:a17:90b:1bcc:b0:23f:b35a:534e with SMTP id oa12-20020a17090b1bcc00b0023fb35a534emr7136143pjb.29.1679565851047;
-        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090a7f8200b0023efa52d2b6sm930234pjl.34.2023.03.23.03.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:04:10 -0700 (PDT)
-From:   xu xin <xu.xin.sc@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     linyunsheng@huawei.com, kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn,
-        zhang.yunkai@zte.com.cn
-Subject: Re: [PATCH] rps: process the skb directly if rps cpu not changed
-Date:   Thu, 23 Mar 2023 10:04:06 +0000
-Message-Id: <20230323100406.36858-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ef94a525-c5f3-fa9f-d66d-d9dc62533e78@huawei.com>
-References: <ef94a525-c5f3-fa9f-d66d-d9dc62533e78@huawei.com>
+        Thu, 23 Mar 2023 06:06:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088B311A;
+        Thu, 23 Mar 2023 03:06:25 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9KsHO030295;
+        Thu, 23 Mar 2023 10:06:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=YMCzFX0wFvPyV9Du8i5juA6LlfSqGiBnejH4z9vM26A=;
+ b=ibl/rwpDu6CHODKSAFVcT2MfOqNGisHHhJE1m7uF1+94dVgblqq8J3qeAogmbXq2deYk
+ yPofq+xwTY9dKbe6kcAS4FpiWjdFBthz4Bfi3n5NTRWhXoAT7l1rZXWc4l1n0rxbK1fh
+ c7XvUK4+plTSekS/vuKKxeIU26GbkaEJ37Ir+Pg9fE1+nIFcpL2Aj40XMxJTuOWwLG0I
+ 5HFLnTTwe4sKNCSq4rqnuVyk2taX60ykgbjvjxfaqiDLKskuk8Wcum1LSDnxqHLGVGKs
+ 7NUP2ZqzcBHzQBOo6ohHRGw68PxpI0wSbgVwA0F816eWzLssuayOIQzDP0hUr0leHaun bQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgm2b91y7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 10:06:22 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32N9q9kc024217;
+        Thu, 23 Mar 2023 10:06:21 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgm2b91xd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 10:06:21 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N8kn84022299;
+        Thu, 23 Mar 2023 10:06:19 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6f6rq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 10:06:19 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NA6FeA45941404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 10:06:15 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE3F320065;
+        Thu, 23 Mar 2023 10:06:15 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B1FE20071;
+        Thu, 23 Mar 2023 10:06:15 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.90])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 23 Mar 2023 10:06:15 +0000 (GMT)
+Date:   Thu, 23 Mar 2023 11:06:15 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Thomas Richter <tmricht@linux.ibm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        svens@linux.ibm.com, gor@linux.ibm.com
+Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
+Message-ID: <ZBwkl77/I31AQk12@osiris>
+References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
+ <20230313080201.2440201-2-tmricht@linux.ibm.com>
+ <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
+ <ZA9sYL/re/aNVpo+@kernel.org>
+ <1ee6884a-2d92-68d9-0917-3ae4f5390714@linux.ibm.com>
+ <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
+ <ZBDo2GiuUTrHhd2L@kernel.org>
+ <ZBtsNTt6Fbp1Lg3t@kernel.org>
+ <9632bc6c-276e-d0d6-b6d9-efe91fe3a1e2@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9632bc6c-276e-d0d6-b6d9-efe91fe3a1e2@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xkflmBt1FXyCFrLF4_WeGFxEVgEOtcLF
+X-Proofpoint-ORIG-GUID: 4pggtU434zgXYtdwaBcUmSDNu2tDufoA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ phishscore=0 spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 mlxlogscore=773
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230075
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 2023/3/22 15:24, xu xin wrote:
->> [So sorry, I made a mistake in the reply title]
->> 
->> On 2023/3/21 20:12, yang.yang29@zte.com.cn wrote:
->>>> From: xu xin <xu.xin16@zte.com.cn>
->>>>
->>>> In the RPS procedure of NAPI receiving, regardless of whether the
->>>> rps-calculated CPU of the skb equals to the currently processing CPU, RPS
->>>> will always use enqueue_to_backlog to enqueue the skb to per-cpu backlog,
->>>> which will trigger a new NET_RX softirq.
->>>
->>> Does bypassing the backlog cause out of order problem for packet handling?
->>> It seems currently the RPS/RFS will ensure order delivery,such as:
->>> https://elixir.bootlin.com/linux/v6.3-rc3/source/net/core/dev.c#L4485
->>>
->>> Also, this is an optimization, it should target the net-next branch:
->>> [PATCH net-next] rps: process the skb directly if rps cpu not changed
->>>
->> 
->> Well, I thought the patch would't break the effort RFS tried to avoid "Out of
->> Order" packets. But thanks for your reminder, I rethink it again, bypassing the
->> backlog from "netif_receive_skb_list" will mislead RFS's judging if all
->> previous packets for the flow have been dequeued, where RFS thought all packets
->> have been dealed with, but actually they are still in skb lists. Fortunately,
->> bypassing the backlog from "netif_receive_skb" for a single skb is okay and won't
->> cause OOO packets because every skb is processed serially by RPS and sent to the
->> protocol stack as soon as possible.
->
->Suppose a lot of skbs have been queued to the backlog waiting to
->processed and passed to the stack when current_cpu is not the same
->as the target cpu,
+On Thu, Mar 23, 2023 at 10:51:16AM +0100, Thomas Richter wrote:
+> On 3/22/23 21:59, Arnaldo Carvalho de Melo wrote:
+> > While trying to cross build to s390 on:
+> > 
+> > ubuntu:18.04
+> > 
+> > using python3
+> >  
+> > 
+> >    CC      /tmp/build/perf/tests/parse-events.o
+> > Exception processing pmu-events/arch/s390/cf_z16/extended.json
+> > Traceback (most recent call last):
+> >   File "pmu-events/jevents.py", line 997, in <module>
+> >     main()
+> >   File "pmu-events/jevents.py", line 979, in main
+> >     ftw(arch_path, [], preprocess_one_file)
+> >   File "pmu-events/jevents.py", line 935, in ftw
+> >     ftw(item.path, parents + [item.name], action)
+> >   File "pmu-events/jevents.py", line 933, in ftw
+> >     action(parents, item)
+> >   File "pmu-events/jevents.py", line 514, in preprocess_one_file
+> >     for event in read_json_events(item.path, topic):
+> >   File "pmu-events/jevents.py", line 388, in read_json_events
+> >     events = json.load(open(path), object_hook=JsonEvent)
+> >   File "/usr/lib/python3.6/json/__init__.py", line 296, in load
+> >     return loads(fp.read(),
+> >   File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
+> >     return codecs.ascii_decode(input, self.errors)[0]
+> > UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 4271: ordinal not in range(128)
+> > 
+> >
+> 
+> Hmmm, this is very strange. After reading this mail I installed Ubuntu 18.04
+> on my s390 system. The build works fine, no errors at all.
+> 
+> 
+> # pmu-events/jevents.py s390 all pmu-events/arch pmu-events/pmu-events.c
+> # ll pmu-events/pmu-events.c
+> -rw-r--r-- 1 root root 317284 Mar 23 10:46 pmu-events/pmu-events.c
+> #
+> 
+> The file has the correct contents and the build works fine too.
+> # make 
 
-Well.  I'm afraid that what we mean by current_cpu may be different. The
-"current_cpu" in my patch refers to the cpu NAPI poll is running on (Or
-the cpu that the skb origins from).
-
->then current_cpu is changed to be the same as the
->target cpu, with your patch, new skb will be processed and passed to
->the stack immediately, which may bypass the old skb in the backlog.
->
-I think Nop, RFS procedure won't let target cpu switch into a new cpu
-if there are still old skbs in the backlog of last recorded cpu. So the
-target cpu of the new skb will never equal to current_cpu if old skb in the
-backlog.
-==========================================================================
-Let me draw the situation you described: At the time of T1, the app runs
-on cpu-0, so there are many packets queueing into the rxqueue-0 by RFS from
-CPU-1(suppose NAPI poll processing on cpu-1). Then, suddenly at the time of
-T2, the app tranfers to cpu-1, RFS know there are still old skb in rxqueue-0,
-so get_rps_cpu will not return a value of cpu-1, but cpu-0 instead.
-
-========================================================
-When T1, app runs on cpu-0:
-  APP
------------------------------
-|      |        |      |
-|cpu-0 |        |cpu-1 |
-|stack |        |stack |
-|      |        |      |
-   ^
-  |=|
-  |=|             | |
-  |=|             | |
-(rxqueue-0)      (rxqueue-1,empty)
-   ^<--
-       <--
-         <--
-	     <-- packet(poll on cpu1)
-			
-===========================================================
-When T2, app tranfer to cpu-1, target cpu is still on cpu-0:
-                  APP
-----------------------------
-|      |        |      |
-|cpu-0 |        |cpu-1 |
-|stack |        |stack |
-|      |        |      |
-   ^
-   |
-  |=|             | |
-  |=|             | |
-(rxqueue-0)      (rxqueue-2,empty)
-   ^<--
-       <--
-         <--
-            <-- packet(poll on cpu1)
-
-===================================
-
-Thanks for your reply.
-
->> 
->> If I'm correct, the code as follws can fix this.
->> 
->> --- a/net/core/dev.c
->> +++ b/net/core/dev.c
->> @@ -5666,8 +5666,9 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
->>         if (static_branch_unlikely(&rps_needed)) {
->>                 struct rps_dev_flow voidflow, *rflow = &voidflow;
->>                 int cpu = get_rps_cpu(skb->dev, skb, &rflow);
->> +               int current_cpu = smp_processor_id();
->>  
->> -               if (cpu >= 0) {
->> +               if (cpu >= 0 && cpu != current_cpu) {
->>                         ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
->>                         rcu_read_unlock();
->>                         return ret;
->> @@ -5699,11 +5700,15 @@ void netif_receive_skb_list_internal(struct list_head *head)
->>                 list_for_each_entry_safe(skb, next, head, list) {
->>                         struct rps_dev_flow voidflow, *rflow = &voidflow;
->>                         int cpu = get_rps_cpu(skb->dev, skb, &rflow);
->> +                       int current_cpu = smp_processor_id();
->>  
->>                         if (cpu >= 0) {
->>                                 /* Will be handled, remove from list */
->>                                 skb_list_del_init(skb);
->> -                               enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
->> +                               if (cpu != current_cpu)
->> +                                       enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
->> +                               else
->> +                                       __netif_receive_skb(skb);
->>                         }
->>                 }
->> 
->> 
->> Thanks.
->> 
->>>>
->>>> Actually, it's not necessary to enqueue it to backlog when rps-calculated
->>>> CPU id equals to the current processing CPU, and we can call
->>>> __netif_receive_skb or __netif_receive_skb_list to process the skb directly.
->>>> The benefit is that it can reduce the number of softirqs of NET_RX and reduce
->>>> the processing delay of skb.
->>>>
->>>> The measured result shows the patch brings 50% reduction of NET_RX softirqs.
->>>> The test was done on the QEMU environment with two-core CPU by iperf3.
->>>> taskset 01 iperf3 -c 192.168.2.250 -t 3 -u -R;
->>>> taskset 02 iperf3 -c 192.168.2.250 -t 3 -u -R;
->>>>
->>>> Previous RPS:
->>>> 		    	CPU0       CPU1
->>>> NET_RX:         45          0    (before iperf3 testing)
->>>> NET_RX:        1095         241   (after iperf3 testing)
->>>>
->>>> Patched RPS:
->>>>                 CPU0       CPU1
->>>> NET_RX:         28          4    (before iperf3 testing)
->>>> NET_RX:         573         32   (after iperf3 testing)
->>>
->>> Sincerely.
->>> Xu Xin
->> .
->> 
+The file contains UTF-8 characters, which were already present before
+your patch. Guess you need to provide an addon patch which converts to
+plain ASCII.
