@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F976C6585
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D3E6C6586
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjCWKpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S231664AbjCWKp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbjCWKp3 (ORCPT
+        with ESMTP id S231183AbjCWKpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:45:29 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2BB38B61;
-        Thu, 23 Mar 2023 03:42:40 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id de37so1122024qkb.7;
-        Thu, 23 Mar 2023 03:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679568158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1ukCKsDgFcPZFfnc9+1Y2+3qjOHKCSVpyoQBHH5dIk=;
-        b=PNLBOXAIEpdTB9+nVFw/kZ23WIhkGOIWW8FJzIbg3k/L7zUP3/kCBsgDpHJBrvYDoM
-         J1K8dMZOUQohJ8wCutBv6HvLEmsIXb6SP7v4nmSXaXOPSQnM8mmEic9WacVDV/ca5ZmD
-         Iw64nUdxlR0DHPpGyO63E7iZ52nVvTuEaCZWQEtaGmAfO/fzVuBMx4y0c6EskmhzlXrr
-         HEqQqN57t7omtH5xvDih+ooGHG1DV4awMJElYvVtC5goUF+zfGMR/aqihx2C83bVsWjl
-         K6XjKp6qZfhbd76Ahx9umRr5IjQiCEwqhcj3Q0E52/sBZblGGinckBMS9qjowO6zkNHA
-         psIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679568158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1ukCKsDgFcPZFfnc9+1Y2+3qjOHKCSVpyoQBHH5dIk=;
-        b=MtQXl8uuxcxgEXXrFiCnModpINRqXsx5EKDgChsZDj0etqrDawFUvn3FBoOASQKYwx
-         7zDMCerxtBC5SE4WAOBESGIkfqv+tHbQG01DIy10YP0JQthJpiMpE0nDezg531TegSsb
-         ID1XUe2DTHpjhdKTVW0m3lzmD1OAyCkAsSCIBtxJYdzw6wFbEhAVZok0L8p644xO1I17
-         BGsLTwIKSI0dCvtIA5b0bZhF+CXUvpXq29uqeJf1+s3LJkr35AvXzaNafiTpNLytf1nY
-         dEj4uzHEpl4Jv7QZRL0mzfspxfKdJRPiXHGO3J+hLurmtLnOAWK9fWFulTKs41r+1AFB
-         AQ+g==
-X-Gm-Message-State: AO0yUKXJeCFXWWKKY4i5cBn0L1KDkCVmo9JUWj9d9kXydiXbNMZYshrb
-        zSFeWZ94Bwq1qYP3BnLqeV5H2TQnqWjwR5sY8rE=
-X-Google-Smtp-Source: AK7set/uZCTBlSBdj0bNaxo/NWlc3GzK+9sX4uUPNBStnSnEqu0bsF9ELXNisHDidQhcGE23OETguUN4F+LqRkXaiHY=
-X-Received: by 2002:a37:a9d0:0:b0:743:9b78:d97e with SMTP id
- s199-20020a37a9d0000000b007439b78d97emr1439983qke.14.1679568158542; Thu, 23
- Mar 2023 03:42:38 -0700 (PDT)
+        Thu, 23 Mar 2023 06:45:38 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D711F5CC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:42:49 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32NAgEYn056822;
+        Thu, 23 Mar 2023 05:42:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679568134;
+        bh=E4rdywlZLd6OFW6mRF/hSG9kVG8nUo2k7DasmHV0LFU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Ps8dkDvl5BfUWks1wKS4knzNhY7h56Ie7FuWDAGZd7wqQgGETSwLEQnZMJ4flQvyz
+         8vwq13y1CAOSLq83a91NzCF1QEuzIOH3wF0qaFiQ82VeqSCvOfpZFMGT/pq+DZF5DL
+         6gXoueLRpOIa0xp5qJV71am2wabPWp9251MPVjEM=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32NAgDbT113874
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Mar 2023 05:42:13 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
+ Mar 2023 05:42:13 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 23 Mar 2023 05:42:13 -0500
+Received: from [172.24.145.83] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32NAg9Je063582;
+        Thu, 23 Mar 2023 05:42:10 -0500
+Message-ID: <9879d72c-18af-5687-7ad6-56146009274b@ti.com>
+Date:   Thu, 23 Mar 2023 16:12:09 +0530
 MIME-Version: 1.0
-References: <20230323000657.28664-1-blarson@amd.com> <20230323000657.28664-14-blarson@amd.com>
-In-Reply-To: <20230323000657.28664-14-blarson@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Mar 2023 12:42:02 +0200
-Message-ID: <CAHp75VfRr_O2=vr4-5dG0nUpkCXPHtxD2z7tP-ryMM8N+RNv_g@mail.gmail.com>
-Subject: Re: [PATCH v12 13/15] mmc: sdhci-cadence: Add AMD Pensando Elba SoC support
-To:     Brad Larson <blarson@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: Enable CAN PHY
+ transceiver driver
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <quic_bjorande@quicinc.com>,
+        <dmitry.baryshkov@linaro.org>, <arnd@arndb.de>,
+        <krzysztof.kozlowski@linaro.org>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <rafal@milecki.pl>
+References: <20230323100624.337354-1-b-kapoor@ti.com>
+ <CAMuHMdWF0yGwM5hk=o+te2fPw-G8XhGZ6TGfF-KvnVnasPjKNQ@mail.gmail.com>
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+In-Reply-To: <CAMuHMdWF0yGwM5hk=o+te2fPw-G8XhGZ6TGfF-KvnVnasPjKNQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,55 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 2:10=E2=80=AFAM Brad Larson <blarson@amd.com> wrote=
-:
+
+On 23/03/23 15:44, Geert Uytterhoeven wrote:
+> Hi Bhavya,
 >
-> Add support for AMD Pensando Elba SoC which explicitly
-> controls byte-lane enables on writes.
+> On Thu, Mar 23, 2023 at 11:06 AM Bhavya Kapoor <b-kapoor@ti.com> wrote:
+>> Enable CAN PHY transceiver driver to be built as a module.
+>>
+>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> Thanks for your patch!
+> (I wanted to send a similar patch soon ;-)
 >
-> Select MMC_SDHCI_IO_ACCESSORS for MMC_SDHCI_CADENCE which
-> allows Elba SoC sdhci_elba_ops to overwrite the SDHCI
-> IO memory accessors
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -368,6 +368,7 @@ CONFIG_REALTEK_PHY=y
+>>   CONFIG_ROCKCHIP_PHY=y
+>>   CONFIG_DP83867_PHY=y
+>>   CONFIG_VITESSE_PHY=y
+>> +CONFIG_PHY_CAN_TRANSCEIVER=m
+> This doesn't look like the right spot to insert this?
+>
+> Based on "make savedefconfig", I'd say:
+>
+>       CONFIG_PHY_XGENE=y
+>     +CONFIG_PHY_CAN_TRANSCEIVER=m
+>       CONFIG_PHY_SUN4I_USB=y
 
+Yeah . Thanks Geert. I will send a v2 ensuring its in correct spot,
 
-> +/* Elba control register bits [6:3] are byte-lane enables */
-> +#define ELBA_BYTE_ENABLE_MASK(x)       ((x) << 3)
-
-
-> +static void elba_priv_writel(struct sdhci_cdns_priv *priv, u32 val,
-> +                            void __iomem *reg)
-> +{
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&priv->wrlock, flags);
-> +       writel(ELBA_BYTE_ENABLE_MASK(0xf), priv->ctl_addr);
-
-GENMASK(3, 0) ?
-
-> +       writel(val, reg);
-> +       spin_unlock_irqrestore(&priv->wrlock, flags);
-> +}
-
-...
-
-> +       byte_enables =3D GENMASK(1, 0) << (reg & 0x3);
-
-   unsigned u32 shift =3D reg & GENMASK(1, 0);
-
-   byte_enables =3D GENMASK(1, 0) << shift;
-
-?
-
-...
-
-> +       byte_enables =3D BIT(0) << (reg & 0x3);
-
-In a similar way?
-
-   unsigned u32 shift =3D reg & GENMASK(1, 0);
-
-   byte_enables =3D BIT(0) << shift;
-
---=20
-With Best Regards,
-Andy Shevchenko
+>>   CONFIG_CAN_FLEXCAN=m
+>>   CONFIG_CAN_RCAR=m
+>>   CONFIG_CAN_RCAR_CANFD=m
+>> --
+>> 2.34.1
+> Gr{oetje,eeting}s,
+>
+>                          Geert
+>
