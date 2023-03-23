@@ -2,167 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A891F6C63DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5AC6C63D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjCWJk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S229801AbjCWJkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjCWJjj (ORCPT
+        with ESMTP id S231375AbjCWJjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:39:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE118ABD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679564326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wv8z0Oa+BNXMxQvoR0WkvQh5FJ+53xDgUpA+wdsZMxA=;
-        b=iRZY6bgbzK3d4bFz9j4jYJgF6Ik/180i0pXZNSK7lNXWsveannAbqUpWgIEbKk70H8xRVH
-        KyLILTHfsOTR1Qin0LXCF5NAMh4wFxfP3Bvj38zaajcS8KprdWElBY5jpH7iMdAYVTyqyp
-        GiYyQFc6s3jUuKWiV5s5pu2ABAcSySw=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-14-debJF5AxNEaLQqdaKy18yQ-1; Thu, 23 Mar 2023 05:38:43 -0400
-X-MC-Unique: debJF5AxNEaLQqdaKy18yQ-1
-Received: by mail-qv1-f71.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so10546101qvb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
+        Thu, 23 Mar 2023 05:39:47 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B336E9E;
+        Thu, 23 Mar 2023 02:39:46 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id ja10so21763075plb.5;
+        Thu, 23 Mar 2023 02:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679564386;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zx1cWbW8skW+J91S4nIUH2+PrWy6/cJUo3hRxlmG+G4=;
+        b=pCQdPrCYjY2EZyqDFB6ur/y+zD7pfxrqPKXJ6qROgn8YzstnagOQ80gua0e1yJf5be
+         Iio59oXde7Wup+LLoxrsV6D9TeOXDdjIwSR0uzeN8xXXiJrpqDFsl3PPA9Bn/1zF3BIo
+         YLwOlu/RQCnP/HzzbsPc80+gLMzoDTJiFBHeGDoqzkTbPeTcgvhX6vrX/IYCDMIOQ+lF
+         oU3W9kqDe16PxbF7PpEZ1wobldylApgBPHSg1aCrJv/TSvboroNCYTId4WKXpZR8qvGg
+         BPHyb212ZPe8k9S2ggTMwGgiVnV72nO1xLe9xzULnDLsdD1LalTMpJY686VYZd+oZ85l
+         A86A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679564323;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wv8z0Oa+BNXMxQvoR0WkvQh5FJ+53xDgUpA+wdsZMxA=;
-        b=N8xmZHTj9XR85Lm6CkIac2aj+kpNDME7BS0Se083/XoJVTYgd8Btg9EH1dvDk5pE4c
-         sFccyrig4kP+jnQu+iG/53zNw2sCGiRZF0pitloMEgbalOMkWENUdTdHOMBCz9Lq2VTs
-         y8XOLtBLwrGpXt48tZpw4LVr3rUP2tS+SfVjYC/Db/ctbWjfBYbg5HasrVcPGnEZ3rD7
-         v7nyyL8sW+g5lk398zbX5C5OzOMo4VaN4lKn2Hq3hcU8DnOlNap8U2fbFHrwUyBKqJfi
-         k6te9BIolnUaoCFbT19gv+Nt6GCDk9GS3TtwHPDryfDZiC0LnR7F6gqd7GlRcInSnxaH
-         OQMA==
-X-Gm-Message-State: AO0yUKWn3xfDTaTqsqqoXL5CsueXGWMulJNGehUXfDtC1GlHOVrEyBVP
-        WW/wXA25W5NX4mGGiyIVNtXxqOJMA9RHf7beMURAiznlflyzO7c+g1QUHp1U7Wq8Z3MMDwIj0BC
-        yp+1Ixf1C2p0W1eLYn0/bFIiz
-X-Received: by 2002:a05:622a:284:b0:3bf:d238:6ca with SMTP id z4-20020a05622a028400b003bfd23806camr8824074qtw.68.1679564323363;
-        Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
-X-Google-Smtp-Source: AK7set99g4T9mj3o49CpahBOOAtxidRMSqg1u94nbjZpIXaZjWImk48PhBoKMemZZJq1z4EVJUoSbQ==
-X-Received: by 2002:a05:622a:284:b0:3bf:d238:6ca with SMTP id z4-20020a05622a028400b003bfd23806camr8824056qtw.68.1679564323068;
-        Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id b21-20020ac85415000000b003995f6513b9sm11310043qtq.95.2023.03.23.02.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 02:38:42 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 10:38:37 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, stefanha@redhat.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/8] vhost-vdpa: use bind_mm/unbind_mm device callbacks
-Message-ID: <20230323093837.xdv7wkhzizgnihcy@sgarzare-redhat>
-References: <20230321154228.182769-1-sgarzare@redhat.com>
- <20230321154228.182769-3-sgarzare@redhat.com>
- <CACGkMEtq8PWL01WBL2Ve-Yr=ZO+su73tKuOh1EBLagkrLdiCaQ@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1679564386;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zx1cWbW8skW+J91S4nIUH2+PrWy6/cJUo3hRxlmG+G4=;
+        b=01Z6A2u3tRgTUhDxrhIZy6Fk3M24es8sOC/vb2QlpUU3YYd6nZJv/o3pl3bH+cyBmS
+         E3Lx8Eqx6P/HsAraN65FAgI0WfbXbXh3ItQbtpp97GYqGO4dsBqKUmyVOpUKOx7dqnes
+         w/zV8J3B0XuFzAg3kZh8zf+55tRRH2Vt0f4wiXPKP/Ug1lnq93saYaa4/xvYLKgZbz8q
+         SeCIovxWhMYQNWIxn8Fh2YRgKFU14tElIR92QjXWlhSCJme3eoJqei+bQEcaUYNO21ad
+         By67qTAqmecGM8sm++CVGStGXiElQwyQ8jFyCFRAj695qWXg/H9jJNvsAXttZ8mRayzl
+         VVMw==
+X-Gm-Message-State: AAQBX9dpK3GyeHvYnf6UsqhbyknCosthKN6Zly1f3FzqPQ9Z9K5mvSq7
+        09rblEsHTU66A02exX84XCfCS7/yAPTGqf6dv5M=
+X-Google-Smtp-Source: AKy350bCAexRMlOcrYwrCk12cMPtsoPYJWZ/XiHrtIhAZ4B6tk5Hhx8gC4VdgE3XYHEjClHtI+16JTGrwgF9+BfNLfM=
+X-Received: by 2002:a17:902:b687:b0:1a1:ffc5:1e8d with SMTP id
+ c7-20020a170902b68700b001a1ffc51e8dmr942230pls.3.1679564386271; Thu, 23 Mar
+ 2023 02:39:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtq8PWL01WBL2Ve-Yr=ZO+su73tKuOh1EBLagkrLdiCaQ@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230323092156.2545741-1-rppt@kernel.org> <20230323092156.2545741-15-rppt@kernel.org>
+In-Reply-To: <20230323092156.2545741-15-rppt@kernel.org>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Thu, 23 Mar 2023 02:39:34 -0700
+Message-ID: <CAMo8BfJtCgak4mbeZ2R61EEWz+HYYhK-KOz+XJ+fhLY+zFgajA@mail.gmail.com>
+Subject: Re: [PATCH 14/14] xtensa: reword ARCH_FORCE_MAX_ORDER prompt and help text
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mm@kvack.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:01:39AM +0800, Jason Wang wrote:
->On Tue, Mar 21, 2023 at 11:42 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>
->> When the user call VHOST_SET_OWNER ioctl and the vDPA device
->> has `use_va` set to true, let's call the bind_mm callback.
->> In this way we can bind the device to the user address space
->> and directly use the user VA.
->>
->> The unbind_mm callback is called during the release after
->> stopping the device.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>
->> Notes:
->>     v3:
->>     - added `case VHOST_SET_OWNER` in vhost_vdpa_unlocked_ioctl() [Jason]
->>     v2:
->>     - call the new unbind_mm callback during the release [Jason]
->>     - avoid to call bind_mm callback after the reset, since the device
->>       is not detaching it now during the reset
->>
->>  drivers/vhost/vdpa.c | 31 +++++++++++++++++++++++++++++++
->>  1 file changed, 31 insertions(+)
->>
->> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->> index 7be9d9d8f01c..20250c3418b2 100644
->> --- a/drivers/vhost/vdpa.c
->> +++ b/drivers/vhost/vdpa.c
->> @@ -219,6 +219,28 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
->>         return vdpa_reset(vdpa);
->>  }
->>
->> +static long vhost_vdpa_bind_mm(struct vhost_vdpa *v)
->> +{
->> +       struct vdpa_device *vdpa = v->vdpa;
->> +       const struct vdpa_config_ops *ops = vdpa->config;
->> +
->> +       if (!vdpa->use_va || !ops->bind_mm)
->> +               return 0;
->> +
->> +       return ops->bind_mm(vdpa, v->vdev.mm);
->> +}
->> +
->> +static void vhost_vdpa_unbind_mm(struct vhost_vdpa *v)
->> +{
->> +       struct vdpa_device *vdpa = v->vdpa;
->> +       const struct vdpa_config_ops *ops = vdpa->config;
->> +
->> +       if (!vdpa->use_va || !ops->unbind_mm)
->> +               return;
->> +
->> +       ops->unbind_mm(vdpa);
->> +}
->> +
->>  static long vhost_vdpa_get_device_id(struct vhost_vdpa *v, u8 __user *argp)
->>  {
->>         struct vdpa_device *vdpa = v->vdpa;
->> @@ -709,6 +731,14 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->>         case VHOST_VDPA_RESUME:
->>                 r = vhost_vdpa_resume(v);
->>                 break;
->> +       case VHOST_SET_OWNER:
->> +               r = vhost_dev_set_owner(d);
+On Thu, Mar 23, 2023 at 2:24=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
 >
->Nit:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 >
->I'd stick to the current way of passing the cmd, argp to
->vhost_dev_ioctl() and introduce a new switch after the
->vhost_dev_ioctl().
+> The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
+> describe this configuration option.
 >
->In this way, we are immune to any possible changes of dealing with
->VHOST_SET_OWNER in vhost core.
-
-Good point, I'll change in v4.
-
+> Update both to actually describe what this option does.
 >
->Others look good.
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>  arch/xtensa/Kconfig | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 
-Thanks,
-Stefano
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
 
+--=20
+Thanks.
+-- Max
