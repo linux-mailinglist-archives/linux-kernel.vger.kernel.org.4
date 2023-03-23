@@ -2,96 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA38B6C6A57
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC816C6A5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjCWOBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S229682AbjCWODv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbjCWOBL (ORCPT
+        with ESMTP id S229680AbjCWODt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:01:11 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC20738664;
-        Thu, 23 Mar 2023 07:00:30 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Mar 2023 10:03:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D687718A81;
+        Thu, 23 Mar 2023 07:02:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id C05C2420CF;
-        Thu, 23 Mar 2023 14:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1679580025;
-        bh=pyc0cPcoQuoGHqD2F1DqtYF/Nqt56WT0AaYfiPSX8UI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=JSXvSaYwT1LMH3sZ6lGpRKg5J7UhlRfFVca97FNzFtb8lRl4Gw4AP7ISYExqBgKLu
-         YnVgR2at604jbjV/gaj63fx8H8zZrUkZvlFqxJSPHLWAzZxGrYCk9R+rPq99VBsvEJ
-         pZSSlECO2fxeF4MXyfMWT/EbilcDFVi/DPiV1skvWD9j8B2sONJaEwSw+zpLYAzaVf
-         YbSLPzmWVuLHhEpeaYfM/VzPlQXH9/yOF0rPF2UPnAi89yUW0WcKs7k6j3FAHW+iCR
-         EngCFfaOtDEocXoS7yia1fkj+jaQCiSwms8uGB3lP+HeVEbH6p8aXk8H9PNL99dbi6
-         xIatmpAduZAWQ==
-Message-ID: <be81649f-ff58-8c0a-8594-94ea1bd2ee4a@asahilina.net>
-Date:   Thu, 23 Mar 2023 23:00:20 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CD486267C;
+        Thu, 23 Mar 2023 14:02:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6EBC433EF;
+        Thu, 23 Mar 2023 14:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679580137;
+        bh=4BlmXMRr26YZCeH8C6Q4S+NzUoEcZ7BqkJlz8QeKf7E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=p8EJy2mB1R7yx87veUnHtbAshdKvVmlfCwVAP4SUX4YqsIQzsPhl/f2ngog2ZBj8M
+         bTG2yI9c6c2NHrzFIThlvt1W8OY2VjuGpv39xNEVrvuTVHMAaXroFXdMtmMcwG8pOw
+         uhDjDXMPrHGk19+JzMXwpL3U23HC2CedoJwgXSc3xVJNF7zqIEO5liafzYRduWkskf
+         DmRUcOXJriLXqifnTGt4AdDlyvFWnmQMY8MChaqCNA5hybHJj1mTJJYCQZy1rD+xRp
+         LfFeMa8vWzpDG/PCeQKSmSuri7upewGTh7ymoHYTrrTEryRNZdU0k+dFFZJhjrmz3q
+         LtbHkdo7vRWPw==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 078391540398; Thu, 23 Mar 2023 07:02:17 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 07:02:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: Re: [next-20230322] Kernel WARN at kernel/workqueue.c:3182
+ (rcutorture)
+Message-ID: <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] rust: ioctl: Add ioctl number manipulation functions
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
-        linux-arch@vger.kernel.org
-References: <20230224-rust-ioctl-v3-1-3c5f7a6954b5@asahilina.net>
- <CANiq72nk+KSz6X0Lxg4kc_Bui=17XhboJ6q6j8gRg7Nsshziug@mail.gmail.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <CANiq72nk+KSz6X0Lxg4kc_Bui=17XhboJ6q6j8gRg7Nsshziug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 22.05, Miguel Ojeda wrote:
-> On Thu, Mar 23, 2023 at 1:34 PM Asahi Lina <lina@asahilina.net> wrote:
->>
->> Changes in v3:
->> - Actually made the change intended in v2.
->> - Link to v2: https://lore.kernel.org/r/20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net
->>
->> Changes in v2:
->> - Changed from assert!() to build_assert!() (static_assert!() can't work
->>    here)
->> - Link to v1: https://lore.kernel.org/r/20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net
+On Thu, Mar 23, 2023 at 04:55:54PM +0530, Sachin Sant wrote:
+> While running rcutorture tests from LTP on an IBM Power10 server booted with
+> 6.3.0-rc3-next-20230322 following warning is observed:
 > 
-> It seems `#[inline(always)]` got added to a few of those, right? (The
-> addition looks fine to me, but just to understand if is it an omission
-> in the changelog, or an unintended change, or intended for another
-> reason).
-
-Ah yes, I should've mentioned that! build_assert!() only works for stuff 
-that can be const-optimized at build time, which requires inlining. 
-Otherwise this change immediately causes build failures since generic 
-variants of the functions get compiled (and since they're public 
-functions, cannot be optimized out at link time).
-
+> [ 3629.242831] ------------[ cut here ]------------
+> [ 3629.242835] WARNING: CPU: 8 PID: 614614 at kernel/workqueue.c:3182 __flush_work.isra.44+0x44/0x370
+> [ 3629.242845] Modules linked in: rcutorture(-) torture vmac poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse [last unloaded: ltp_uaccess(O)]
+> [ 3629.242911] CPU: 8 PID: 614614 Comm: modprobe Tainted: G O 6.3.0-rc3-next-20230322 #1
+> [ 3629.242917] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+> [ 3629.242923] NIP: c00000000018c204 LR: c00000000022306c CTR: c0000000002233c0
+> [ 3629.242927] REGS: c0000005c14e3880 TRAP: 0700 Tainted: G O (6.3.0-rc3-next-20230322)
+> [ 3629.242932] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: 48002222 XER: 0000000a
+> [ 3629.242943] CFAR: c00000000018c5b0 IRQMASK: 0 
+> [ 3629.242943] GPR00: c00000000022306c c0000005c14e3b20 c000000001401200 c00800000c4419e8 
+> [ 3629.242943] GPR04: 0000000000000001 0000000000000001 0000000000000011 fffffffffffe0000 
+> [ 3629.242943] GPR08: c000000efe9a8300 0000000000000001 0000000000000000 c00800000c42afe0 
+> [ 3629.242943] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 0000000000000000 
+> [ 3629.242943] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.242943] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.242943] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 c000000002abb368 
+> [ 3629.242943] GPR28: c00800000c440f58 0000000000000000 c00800000c4419e8 c00800000c443400 
+> [ 3629.242987] NIP [c00000000018c204] __flush_work.isra.44+0x44/0x370
+> [ 3629.242993] LR [c00000000022306c] cleanup_srcu_struct+0x6c/0x1e0
+> [ 3629.242998] Call Trace:
+> [ 3629.243000] [c0000005c14e3b20] [c00800000c440f58] srcu9+0x0/0xfffffffffffef0a8 [rcutorture] (unreliable)
+> [ 3629.243009] [c0000005c14e3bb0] [c00000000022306c] cleanup_srcu_struct+0x6c/0x1e0
+> [ 3629.243015] [c0000005c14e3c50] [c000000000223428] srcu_module_notify+0x68/0x180
+> [ 3629.243021] [c0000005c14e3c90] [c00000000019a1e0] notifier_call_chain+0xc0/0x1b0
+> [ 3629.243027] [c0000005c14e3cf0] [c00000000019ad24] blocking_notifier_call_chain+0x64/0xa0
+> [ 3629.243033] [c0000005c14e3d30] [c00000000024a4c8] sys_delete_module+0x1f8/0x3c0
+> [ 3629.243039] [c0000005c14e3e10] [c000000000037480] system_call_exception+0x140/0x350
+> [ 3629.243044] [c0000005c14e3e50] [c00000000000d6a0] system_call_common+0x160/0x2e4
+> [ 3629.243050] --- interrupt: c00 at 0x7fff8cd39558
+> [ 3629.243054] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: 0000000000000000
+> [ 3629.243057] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G O (6.3.0-rc3-next-20230322)
+> [ 3629.243062] MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+> [ 3629.243072] IRQMASK: 0 
+> [ 3629.243072] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 000000013df30ec8 
+> [ 3629.243072] GPR04: 0000000000000800 000000000000000a 1999999999999999 0000000000000000 
+> [ 3629.243072] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.243072] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 000000010d80a648 
+> [ 3629.243072] GPR16: 0000000000000000 0000000000000001 0000000000000000 000000010d80a428 
+> [ 3629.243072] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 000000013df304f0 
+> [ 3629.243072] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 0000000000000000 
+> [ 3629.243072] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 000000013df30e60 
+> [ 3629.243115] NIP [00007fff8cd39558] 0x7fff8cd39558
+> [ 3629.243118] LR [000000010d800398] 0x10d800398
+> [ 3629.243121] --- interrupt: c00
+> [ 3629.243123] Code: 89292e39 f821ff71 e94d0c78 f9410068 39400000 69290001 0b090000 fbc10080 7c7e1b78 e9230018 7d290074 7929d182 <0b090000> 7c0802a6 fb810070 f80100a0 
+> [ 3629.243138] ---[ end trace 0000000000000000 ]—
 > 
-> Thanks!
+> Followed by following traces:
 > 
-> Cheers,
-> Miguel
+> [ 3629.243149] ------------[ cut here ]------------
+> [ 3629.243152] WARNING: CPU: 8 PID: 614614 at kernel/rcu/srcutree.c:663 cleanup_srcu_struct+0x11c/0x1e0
+> [ 3629.243159] Modules linked in: rcutorture(-) torture vmac poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse [last unloaded: ltp_uaccess(O)]
+> [ 3629.243217] CPU: 8 PID: 614614 Comm: modprobe Tainted: G W O 6.3.0-rc3-next-20230322 #1
+> [ 3629.243222] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+> [ 3629.243227] NIP: c00000000022311c LR: c0000000002230d8 CTR: c0000000002233c0
+> [ 3629.243230] REGS: c0000005c14e3910 TRAP: 0700 Tainted: G W O (6.3.0-rc3-next-20230322)
+> [ 3629.243235] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: 28002228 XER: 0000000a
+> [ 3629.243245] CFAR: c0000000008040c0 IRQMASK: 0 
+> [ 3629.243245] GPR00: c0000000002230b8 c0000005c14e3bb0 c000000001401200 0000000000000040 
+> [ 3629.243245] GPR04: 0000000000000040 0000000000000040 0000000000000011 fffffffffffe0000 
+> [ 3629.243245] GPR08: ffffffffffffffff 0000000000000001 0000000000000000 c00800000c42afe0 
+> [ 3629.243245] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 0000000000000000 
+> [ 3629.243245] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.243245] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.243245] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 c000000002bdabe0 
+> [ 3629.243245] GPR28: c00800000c440f58 c000000002bdbe00 0000000000000040 c009fffffeb8c500 
+> [ 3629.243288] NIP [c00000000022311c] cleanup_srcu_struct+0x11c/0x1e0
+> [ 3629.243293] LR [c0000000002230d8] cleanup_srcu_struct+0xd8/0x1e0
+> [ 3629.243298] Call Trace:
+> [ 3629.243300] [c0000005c14e3bb0] [c0000000002230b8] cleanup_srcu_struct+0xb8/0x1e0 (unreliable)
+> [ 3629.243306] [c0000005c14e3c50] [c000000000223428] srcu_module_notify+0x68/0x180
+> [ 3629.243312] [c0000005c14e3c90] [c00000000019a1e0] notifier_call_chain+0xc0/0x1b0
+> [ 3629.243318] [c0000005c14e3cf0] [c00000000019ad24] blocking_notifier_call_chain+0x64/0xa0
+> [ 3629.243324] [c0000005c14e3d30] [c00000000024a4c8] sys_delete_module+0x1f8/0x3c0
+> [ 3629.243329] [c0000005c14e3e10] [c000000000037480] system_call_exception+0x140/0x350
+> [ 3629.243335] [c0000005c14e3e50] [c00000000000d6a0] system_call_common+0x160/0x2e4
+> [ 3629.243341] --- interrupt: c00 at 0x7fff8cd39558
+> [ 3629.243344] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: 0000000000000000
+> [ 3629.243348] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G W O (6.3.0-rc3-next-20230322)
+> [ 3629.243353] MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+> [ 3629.243363] IRQMASK: 0 
+> [ 3629.243363] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 000000013df30ec8 
+> [ 3629.243363] GPR04: 0000000000000800 000000000000000a 1999999999999999 0000000000000000 
+> [ 3629.243363] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 0000000000000000 
+> [ 3629.243363] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 000000010d80a648 
+> [ 3629.243363] GPR16: 0000000000000000 0000000000000001 0000000000000000 000000010d80a428 
+> [ 3629.243363] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 000000013df304f0 
+> [ 3629.243363] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 0000000000000000 
+> [ 3629.243363] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 000000013df30e60 
+> [ 3629.243407] NIP [00007fff8cd39558] 0x7fff8cd39558
+> [ 3629.243410] LR [000000010d800398] 0x10d800398
+> [ 3629.243413] --- interrupt: c00
+> [ 3629.243415] Code: 419dffa4 e93a0078 39400001 552907be 2f890000 7d20579e 0b090000 e95a0078 e91a0080 39200001 7fa85000 7d204f9e <0b090000> 7f23cb78 4bfffd65 0b030000 
+> [ 3629.243430] ---[ end trace 0000000000000000 ]—
 > 
+> These warnings are repeated few times. The LTP test is marked as PASS.
+> 
+> Git bisect point to the following patch
+> commit f46a5170e6e7d5f836f2199fe82cdb0b4363427f
+>     srcu: Use static init for statically allocated in-module srcu_struct
 
-~~ Lina
+Hello, Sachin, and it looks like you hit something that Zqiang and I
+have been tracking down.  I am guessing that you were using modprobe
+and rmmod to make this happen, and that this happened at rmmod time.
 
+Whatever the reproducer, does the following patch help?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 1fb078abbdc9..06f8ed1ce272 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -1921,7 +1921,6 @@ static int srcu_module_coming(struct module *mod)
+ 		ssp->sda = alloc_percpu(struct srcu_data);
+ 		if (WARN_ON_ONCE(!ssp->sda))
+ 			return -ENOMEM;
+-		init_srcu_struct_data(ssp);
+ 	}
+ 	return 0;
+ }
+@@ -1930,10 +1929,17 @@ static int srcu_module_coming(struct module *mod)
+ static void srcu_module_going(struct module *mod)
+ {
+ 	int i;
++	struct srcu_data __percpu *sda;
++	struct srcu_struct *ssp;
+ 	struct srcu_struct **sspp = mod->srcu_struct_ptrs;
+ 
+-	for (i = 0; i < mod->num_srcu_structs; i++)
+-		cleanup_srcu_struct(*(sspp++));
++	for (i = 0; i < mod->num_srcu_structs; i++) {
++		ssp = *(sspp++);
++		sda = ssp->sda;
++		if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_sup->srcu_gp_seq_needed)))
++			cleanup_srcu_struct(ssp);
++		free_percpu(sda);
++	}
+ }
+ 
+ /* Handle one module, either coming or going. */
