@@ -2,108 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C204A6C6AD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69C76C6AD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjCWOXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S230482AbjCWOXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCWOXQ (ORCPT
+        with ESMTP id S229563AbjCWOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:23:16 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51080524F;
-        Thu, 23 Mar 2023 07:23:14 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54184571389so397938497b3.4;
-        Thu, 23 Mar 2023 07:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679581393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l4v4CTT2r/FIXiskPxjJpRa5eGFyYIof0wcvwjvkOs4=;
-        b=AJ9mUGZB57tkkNP5vPLcFkQaGpGRpxHceoJ5mv/RHO1hdT51GHJENYRouoPUEojYNX
-         AukZLeaiD9OQjVUDOomqaOFVRKUTURXwn2JymqtdG2erXoO6NgwPU8UPXGQst4jhkiYN
-         pFA6KXNANHkbLw4ggmRB10ydXMQGPDorEAegEqONV5Wj4UeZOGF6XD80J1ra4ieHyV+U
-         LPBk8ypQ41TpzUbLlWIFhBk1xJuYS25HE6lNBZpXZyVG/q2wIQNb32dGRNGBZk4I0kpf
-         bm7KBH3lVGbuCjagkjNRkRSlacw15mJcpQZm5GID5Woc4ssUCWNn+L7T07kTKaGlNOjt
-         Ni0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679581393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l4v4CTT2r/FIXiskPxjJpRa5eGFyYIof0wcvwjvkOs4=;
-        b=UY7lsuEuHbFPDfNyb+lLNlNf9uxRSB8LwVYMsFEcP8P9n/5mVbZddE9UWgjwoUeMfl
-         lGFhav3CIpldEGPM805NgpA2RcljsFgSEuto3lmKpyy8RJVZh+x2x50L4lGSTp6dlIsl
-         MFQojMFNXqq4PRkgOlqwcowoeeRcdILZzysSTDQPYK0o3OT3D8e868gjjGp7Mm/GT3Xh
-         UT9cgz7uSMyay9sxCzh9GO5HhTGcYzIYcHeG5YRnDoBuHcW+CSoKIF94LzCYXi0l93CA
-         yj7xkt2CKjgro0zuoTY15WWiKh1kE0uYy1TT7fCsOqv2k4Xb9wGmarv9i6H+vvov9A+D
-         f6QQ==
-X-Gm-Message-State: AAQBX9ereTaHNYePz/PeMEQw4Tim1yb1koeLd0APPinPwck1XLQODUeP
-        KvteEtXzazjSOdYazSr/ChetkK8fT+KZAxtTww==
-X-Google-Smtp-Source: AKy350ZYdN3NgKICo87hsztPejD84SAYDNMPP4jUqK38jUAeKu59vxvoX++VzH4xCHXNMTtkOwzL+l94JdeUdmITAzs=
-X-Received: by 2002:a81:ed14:0:b0:545:62d1:4a86 with SMTP id
- k20-20020a81ed14000000b0054562d14a86mr1898405ywm.1.1679581393509; Thu, 23 Mar
- 2023 07:23:13 -0700 (PDT)
+        Thu, 23 Mar 2023 10:23:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C34561727;
+        Thu, 23 Mar 2023 07:23:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8830C4B3;
+        Thu, 23 Mar 2023 07:24:16 -0700 (PDT)
+Received: from [10.57.53.151] (unknown [10.57.53.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 605463F6C4;
+        Thu, 23 Mar 2023 07:23:29 -0700 (PDT)
+Message-ID: <65bb7624-9d57-1056-61fd-ae840728ecd6@arm.com>
+Date:   Thu, 23 Mar 2023 14:23:27 +0000
 MIME-Version: 1.0
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
- <20230321194008.785922-9-usama.arif@bytedance.com> <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local>
- <70628793e6777d07f27f43152df497e780925d18.camel@infradead.org>
- <20230323085138.GAZBwTGly7iOlvxrD4@fat_crate.local> <4dbdd277c4b26ae4b971a910209a3279f79f6837.camel@infradead.org>
-In-Reply-To: <4dbdd277c4b26ae4b971a910209a3279f79f6837.camel@infradead.org>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Thu, 23 Mar 2023 10:23:02 -0400
-Message-ID: <CAMzpN2guz4HTQ8uir9Q=xrUpCYyBfuG2zGSJsakaqY7_OvxCPQ@mail.gmail.com>
-Subject: Re: [PATCH v16 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de,
-        kim.phillips@amd.com, piotrgorski@cachyos.org,
-        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, Sabin Rapan <sabrapan@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 03/11] coresight-tpdm: Initialize DSB subunit
+ configuration
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-4-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1679551448-19160-4-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 5:04=E2=80=AFAM David Woodhouse <dwmw2@infradead.or=
-g> wrote:
->
-> On Thu, 2023-03-23 at 09:51 +0100, Borislav Petkov wrote:
-> > On Thu, Mar 23, 2023 at 08:32:49AM +0000, David Woodhouse wrote:
-> > > and maybe find some other stuff to cargo-cult to make it safe to run
-> > > C code that early...
-> >
-> > I'm trying to have less shit asm, not more if possible. We've been
-> > aiming to convert stuff to C for years.
->
-> Absolutely, I understand. There are a few hoops we have to jump through
-> to be able to run C code this early, but it's worth it.
->
-> > WTF are you calling cargo-cult?
->
-> Off the top of my head, I don't actually *remember* all the hoops we
-> have to jump through to run C code this early.
+On 23/03/2023 06:04, Tao Zhang wrote:
+> DSB is used for monitoring “events”. Events are something that
+> occurs at some point in time. It could be a state decode, the
+> act of writing/reading a particular address, a FIFO being empty,
+> etc. This decoding of the event desired is done outside TPDM.
+> DSB subunit need to be configured in enablement and disablement.
+> A struct that specifics associated to dsb dataset is needed. It
+> saves the configuration and parameters of the dsb datasets. This
+> change is to add this struct and initialize the configuration of
+> DSB subunit.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-tpdm.c | 58 +++++++++++++++++++++++++---
+>   drivers/hwtracing/coresight/coresight-tpdm.h | 17 ++++++++
+>   2 files changed, 70 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index f4854af..5e1e2ba 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -20,17 +20,59 @@
+>   
+>   DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>   
+> +static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
 
-Making sure that the stack protector is either disabled or properly
-set up, and disabling any instrumentation/profiling/debug crap that
-isn't initialized yet.
 
---
-Brian Gerst
+> +{
+> +	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
+> +		if (!drvdata->dsb) {
+> +			drvdata->dsb = devm_kzalloc(drvdata->dev,
+> +						    sizeof(*drvdata->dsb), GFP_KERNEL);
+> +			if (!drvdata->dsb)
+> +				return -ENOMEM;
+
+Please do not club init/allocation of datasets to "resetting" the
+datasets. Why don't we move the allocation to tpmd_datasets_setup() ?
+And this function could simply be called :
+
+tpdm_reset_datasets()
+
+and can be called from the tpdm_datasets_setup() too.
+
+
+> +		} else
+> +			memset(drvdata->dsb, 0, sizeof(struct dsb_dataset));
+> +
+> +		drvdata->dsb->trig_ts = true;
+> +		drvdata->dsb->trig_type = false;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	if (drvdata->dsb->trig_type)
+> +		*val |= TPDM_DSB_CR_TRIG_TYPE;
+> +	else
+> +		*val &= ~TPDM_DSB_CR_TRIG_TYPE;
+> +}
+> +
+
+Do we really need a function for this ? How is it different from trig_ts ?
+
+>   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>   {
+>   	u32 val;
+>   
+> -	/* Set the enable bit of DSB control register to 1 */
+> +	val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
+> +	/* Set trigger timestamp */
+> +	if (drvdata->dsb->trig_ts)
+> +		val |= TPDM_DSB_TIER_XTRIG_TSENAB;
+> +	else
+> +		val &= ~TPDM_DSB_TIER_XTRIG_TSENAB;
+> +	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+> +
+>   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+> +	/* Set trigger type */
+> +	set_trigger_type(drvdata, &val);
+> +	/* Set the enable bit of DSB control register to 1 */
+>   	val |= TPDM_DSB_CR_ENA;
+>   	writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
+>   }
+>   
+>   /* TPDM enable operations */
+> +/* The TPDM or Monitor serves as data collection component for various
+> + * dataset types. It covers Basic Counts(BC), Tenure Counts(TC),
+> + * Continuous Multi-Bit(CMB), Multi-lane CMB(MCMB) and Discrete Single
+> + * Bit(DSB). This function will initialize the configuration according
+> + * to the dataset type supported by the TPDM.
+> + */
+>   static void __tpdm_enable(struct tpdm_drvdata *drvdata)
+>   {
+>   	CS_UNLOCK(drvdata->base);
+> @@ -110,15 +152,13 @@ static const struct coresight_ops tpdm_cs_ops = {
+>   	.source_ops	= &tpdm_source_ops,
+>   };
+>   
+> -static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+> +static void tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
+>   {
+>   	u32 pidr;
+>   
+> -	CS_UNLOCK(drvdata->base);
+
+Why is this removed ?
+
+>   	/*  Get the datasets present on the TPDM. */
+>   	pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
+>   	drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
+> -	CS_LOCK(drvdata->base);
+>   }
+>   
+>   /*
+> @@ -181,6 +221,7 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+>   	struct coresight_platform_data *pdata;
+>   	struct tpdm_drvdata *drvdata;
+>   	struct coresight_desc desc = { 0 };
+> +	int ret;
+>   
+>   	pdata = coresight_get_platform_data(dev);
+>   	if (IS_ERR(pdata))
+> @@ -200,6 +241,8 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+>   
+>   	drvdata->base = base;
+>   
+> +	tpdm_datasets_setup(drvdata);
+> +
+>   	/* Set up coresight component description */
+>   	desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+>   	if (!desc.name)
+> @@ -216,7 +259,12 @@ static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+>   		return PTR_ERR(drvdata->csdev);
+>   
+>   	spin_lock_init(&drvdata->spinlock);
+> -	tpdm_init_default_data(drvdata);
+> +	ret = tpdm_init_datasets(drvdata);
+
+Couldn't this be done before the coresight_register() ? As such
+I don't see any dependency on having a csdev ?
+
+Suzuki
