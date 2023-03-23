@@ -2,176 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F726C6DE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CFE6C6DEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjCWQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S232384AbjCWQli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjCWQjL (ORCPT
+        with ESMTP id S232353AbjCWQlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:39:11 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EF835EF8;
-        Thu, 23 Mar 2023 09:37:23 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id EDCF75C00BA;
-        Thu, 23 Mar 2023 12:36:41 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 23 Mar 2023 12:36:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679589401; x=1679675801; bh=E4
-        if9a3f9X77bOqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=g6/3/dAPpfW7mZxRyV
-        jPOpRzoyHXVPTKrALp/6Zwe9xO10hFRBcAvyZBM2dEjgYOK6hbiHF9bjSYJnWIT1
-        wylR3m+93h12OQAGpv5Lf9/gNEFez2Ptzd3HIC3pDoU1s8GC31LpE0CfmszvhIv0
-        3OklsofQDnBz3CGwMygcgs2lBOiGnJP1PJYGbkxemSIEP43Cx+YTeYD0rS3reD1k
-        rWyJfDhqc3JllW5a4/Lpe16UFPI2P0qEWXgH/niYJG8NKDsm0FLs7nBSEM7OLiO7
-        UQ9BGLry/ceQugSHSnjRSQ7Zd/QFs6mso1RWbMSe06G4yAXWripOvAWfCPI1W0KW
-        /1Ng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679589401; x=1679675801; bh=E4if9a3f9X77b
-        OqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=f7pdvdHCS5EL5R+baqKkwkuQa5f8G
-        UOzxn6XsttwT0bX91cNI16WTUD787PcZ9N+MZW8lmNjSpExH/MG1c5aT0BfV8bFY
-        76kmdLfLewjpc8fBRmVWsCZKmpUXC7Oor0co5mTlQh8slQdyE3EaMQMlB9RYC0iC
-        qoiCAa4PxGNmLjPFP7PqGarH+xJufg8s3kAg9DD4EzD4XxRaCSnz6J3iSH7iXp46
-        hPuSmcarS7w7EHjMzgMpdRlfGZ42A7IHEMcD91M9rHJJdmIZzvcNI/NdsLOIcCd7
-        gQ07OG+n6yDvxH8zhK1a5HAY9tFk22A21HB5YJFC4kPoPN+bFEuKAeU/w==
-X-ME-Sender: <xms:GYAcZHvRlh92ce2nlDK0uguK8ZvXANlPy5NmN5XVfxPIA0zCxeI8mQ>
-    <xme:GYAcZIfPxQKW2_xqbBciptLp86l3JI4Ynzf8TCd4QBAqdK7bjEEe_a6zIlxmpBJep
-    cMIvgYFfz_6ZcRK0cE>
-X-ME-Received: <xmr:GYAcZKz-gEDOXL1E_Za4TxYfMWnklLV1yHT2dpRtjl9Lyd0IH7WQDlN4YI9RfPpO2I60B6_K2ZrYQKDVvR3SpeOmBM9KIug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:GYAcZGNjLo9mhGVw_9lWJto-Wf-giSOmya4wa_v8DmRdrG1QdnpXBA>
-    <xmx:GYAcZH8Hk1nukBpZy9jJv0BsViw9_scgz8WFJvDIi3GB32EGrGhGUQ>
-    <xmx:GYAcZGXnUMjfr3ZrNmfcYsbzQCldaNTfXKlHc4J5Nfet_9nAACwjtQ>
-    <xmx:GYAcZLQWr1de6_fr9of5v4tTBxCm-YoY7V_mgoCHwc5kZ3NR8y1TlA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 12:36:41 -0400 (EDT)
-Date:   Thu, 23 Mar 2023 17:36:39 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230323163639.xtwpid2uunwnzai4@houat>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
- <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="siftfz462ycziuwe"
-Content-Disposition: inline
-In-Reply-To: <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 12:41:13 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF53D39B8A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:39:11 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54161af1984so223843997b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679589543;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMDeQk5W8bWVLr99LDZ65KEOIjRuVjx2NV9NCNVytV0=;
+        b=dKIqE29TCIqkXyZ2R0Ym+XZjJzyR6FoGiLUvXfVBgS90+qYgIWwCd/D0T6CiOwY17l
+         1zaopVitBBJBfJW1TaqlY4J1s8hwi11GPKMKnyUMHct9V3j6c61SgUEiG2AoX2EmGJOQ
+         5HKWewSRRu5F1Yhs962cVQbrTW71d5OgcAB6dmH1kq+2dZslHvBe5c8Vp0q9HbsRFZTN
+         XsXpdrtRyfPfbBd9rqPsRJEdpCmbcq2H04nJDKfRUG2MGSl8ekCHmhQ1uV7J5W8qtOIs
+         SZK9hwIEo77SRpVDaZAWW/M+tDGbARJb+1BhTiWDjjR1lNidDCEIKNSiQzCdV6+QVu4n
+         g5mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679589543;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMDeQk5W8bWVLr99LDZ65KEOIjRuVjx2NV9NCNVytV0=;
+        b=QTRVtscR4mjHT/mV0pYXx/ZsuW+EfdQwZmTHi0oQfSaaauHMaf2QSbdHdFWM7GLwtJ
+         I6HkuNf+PQRhdQyDhAk2500kJcHnM+2UoShOEMleaUZn3qhi3C1b9mZb4spItAgWevP2
+         T97lk5V5l9qN6tY9Y8GdPGfDITbavwFn+pPbHHdddmJnQFipoGOido2vb28JHPpRDyxf
+         qJsrCTdW2btcql3nOc1L2DHhh2CMk4AUMoVt3668X8rjUyZH/4IKXluClYOaFEHkyJF+
+         SGcAgaq/zLtLhZP554qHGiojgnlPLA+VzKEA2FhEOMupClHQZSQ/xPIL7IwlasYacZe+
+         AjZA==
+X-Gm-Message-State: AAQBX9eCfUUwlWSVJ7kD7tEpk+2QYePf40Mys0SwMIk9VwwnaUiaAhtN
+        FjgQL+0bFCakHvEGQdzUl1GcwyNgQ08=
+X-Google-Smtp-Source: AKy350YhFvlX0ioOFgsAp70+MxQCivy/XMWeY+Go2PaiF2Ynhk6lYUQmwlsbYihK9T3FrUMTnI73XW5E/fw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:a782:0:b0:541:a17f:c77d with SMTP id
+ e124-20020a81a782000000b00541a17fc77dmr2136221ywh.10.1679589543734; Thu, 23
+ Mar 2023 09:39:03 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 09:39:02 -0700
+In-Reply-To: <3b3a9ebc-b02e-a365-7f68-3da9189d062a@amd.com>
+Mime-Version: 1.0
+References: <20230120031047.628097-1-aik@amd.com> <20230120031047.628097-3-aik@amd.com>
+ <Y9nL8iqhiL5+ALa2@google.com> <3b3a9ebc-b02e-a365-7f68-3da9189d062a@amd.com>
+Message-ID: <ZByAptUXE+VMpn2x@google.com>
+Subject: Re: [PATCH kernel v3 2/3] KVM: SEV: Enable data breakpoints in SEV-ES
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Juergen Gross <jgross@suse.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 03, 2023, Alexey Kardashevskiy wrote:
+> > Follow-up question: does KVM _have_ to wait until KVM_SEV_LAUNCH_UPDATE_VMSA to
+> > set the flag?
+> 
+> Nope. Will repost soon as a reply to this mail.
 
---siftfz462ycziuwe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please, please do not post new versions In-Reply-To the previous version, and
+especially not In-Reply-To a random mail buried deep in the thread.  b4, which
+is imperfect but makes my life sooo much easier, gets confused by all the threading
+and partial rerolls.  The next version also buries _this_ reply, which is partly
+why I haven't responded until now.  I simply missed this the below questions because
+I saw v4 and assumed all my feedback was addressed, i.e. that I could handle this
+in the context of 6.4 and not earlier.
 
-On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
-> On 3/23/23 14:29, Maxime Ripard wrote:
-> > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-> >=20
-> > This is the description of what was happening:
-> > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
->
-> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
-> when root_device_register() is used is not because root_device_unregister=
-()
-> would not trigger the unwinding - but rather because DRM code on top of t=
-his
-> device keeps the refcount increased?
+Continuing on that topic, please do not post a new version until open questions
+from the previous version are resolved.  Posting a new version when there are
+unresolved questions might feel like it helps things move faster, but more often
+than not it has the comlete opposite effect.
 
-There's a difference of behaviour between a root_device and any device
-with a bus: the root_device will only release the devm resources when
-it's freed (in device_release), but a bus device will also do it in
-device_del (through bus_remove_device() -> device_release_driver() ->
-device_release_driver_internal() -> __device_release_driver() ->
-device_unbind_cleanup(), which are skipped (in multiple places) if
-there's no bus and no driver attached to the device).
+> > > +/* enable/disable SEV-ES DebugSwap support */
+> > > +static bool sev_es_debug_swap_enabled = true;
+> > > +module_param_named(debug_swap, sev_es_debug_swap_enabled, bool, 0644);
+> > 
+> > Module param needs 0444 permissions, i.e. shouldn't be writable after KVM is
+> > loaded.  Though I don't know that providing a module param is warranted in this
+> > case.
+> > KVM provides module params for SEV and SEV-ES because there are legitimate
+> > reasons to turn them off, but at a glance, I don't see why we'd want that for this
+> > feature.
+> 
+> 
+> /me confused. You suggested this in the first place for (I think) for the
+> case if the feature is found to be broken later on so admins can disable it.
 
-It does affect DRM, but I'm pretty sure it will affect any framework
-that deals with device hotplugging by deferring the framework structure
-until the last (userspace) user closes its file descriptor. So I'd
-assume that v4l2 and cec at least are also affected, and most likely
-others.
+Hrm, so I did.  Right, IIUC, this has guest visible effects, i.e. guest can
+read/write DRs, and so the admin might want the ability to disable the feature.
 
-> If this is the case, then it sounds like a DRM specific issue to me.
+Speaking of past me, no one answered my question about how this will interact
+with SNP, where the VM can maniuplate the VMSA.
 
-I mean, I guess. One could also argue that it's because IIO doesn't
-properly deal with hotplugging. I'm not sure how that helps. Those are
-common helpers which should accommodate every framework, and your second
-patch breaks the kunit tests for DRM anyway.
+  : > @@ -604,6 +607,9 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
+  : >       save->xss  = svm->vcpu.arch.ia32_xss;
+  : >       save->dr6  = svm->vcpu.arch.dr6;
+  : > 
+  : > +     if (sev->debug_swap)
+  : > +             save->sev_features |= SVM_SEV_FEAT_DEBUG_SWAP;
+  : 
+  : Resurrecting my objection to "AP Creation NAE event"[*], what happens if a hypervisor
+  : supports GHCB_HV_FT_SNP_AP_CREATION but not DebugSwap?  IIUC, a guest can corrupt
+  : host DRs by enabling DebugSwap in the VMSA of an AP vCPU, e.g. the CPU will load
+  : zeros on VM-Exit if the host hasn't stuffed the host save area fields.
+  : 
+  : KVM can obviously just make sure to save its DRs if hardware supports DebugSwap,
+  : but what if DebugSwap is buggy and needs to be disabled?  And what about the next
+  : feature that can apparently be enabled by the guest?
+  : 
+  : [*] https://lore.kernel.org/all/YWnbfCet84Vup6q9@google.com
 
-> Whether it is a feature or bug is beyond my knowledge. Still, I would
-> not say using the root_device_[un]register() in generic code is not
-> feasible - unless all other subsytems have similar refcount handling.
->=20
-> Sure thing using root_device_register() root_device_unregister() in DRM d=
-oes
-> not work as such. This, however, does not mean the generic kunit helpers
-> should use platform_devices to force unwinding?
+> And I was using it to verify "x86/debug: Fix stack recursion caused by DR7
+> accesses" which is convenient but it is a minor thing.
 
-platform_devices were a quick way to get a device that would have a bus
-and a driver bound to fall into the right patch above. We probably
-shouldn't use platform_devices and a kunit_device sounds like the best
-idea, but the test linked in the original mail I pointed you to should
-work with whatever we come up with. It works with multiple (platform,
-PCI, USB, etc) buses, so the mock we create should behave like their
-real world equivalents.
+...
 
-Maxime
+> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > index 60c7c880266b..6c54a3c9d442 100644
+> > > --- a/arch/x86/kvm/svm/svm.c
+> > > +++ b/arch/x86/kvm/svm/svm.c
+> > > @@ -1190,7 +1190,8 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+> > >   	set_exception_intercept(svm, UD_VECTOR);
+> > >   	set_exception_intercept(svm, MC_VECTOR);
+> > >   	set_exception_intercept(svm, AC_VECTOR);
+> > > -	set_exception_intercept(svm, DB_VECTOR);
+> > > +	if (!sev_es_is_debug_swap_enabled())
+> > > +		set_exception_intercept(svm, DB_VECTOR);
+> > 
+> > This is wrong.  KVM needs to intercept #DBs when debugging non-SEV-ES VMs.
+> 
+> Sorry, not following. The #DB intercept for non-SEV-ES is enabled here.
 
---siftfz462ycziuwe
-Content-Type: application/pgp-signature; name="signature.asc"
+The helper in this version (v3) just queries whether or not the feature is enabled,
+it doesn't differentiate between SEV-ES and other VM types.  I.e. loading KVM with
+SEV-ES and DebugSwap enabled would break non-SEV-ES VMs running on the same host.
 
------BEGIN PGP SIGNATURE-----
+ +bool sev_es_is_debug_swap_enabled(void)
+ +{
+ +     return sev_es_debug_swap_enabled;
+ +}
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZByAFwAKCRDj7w1vZxhR
-xZYoAQD0EfI8ZCSq1KpU73P+V49HUzeC9ingQ95MQn3oUWcu3wD9HQRLsSfxvM7A
-K3Xa8SyESe39WCse9VZjO2fd9YvqoQM=
-=9U43
------END PGP SIGNATURE-----
+Looks like this was fixed in v4.
 
---siftfz462ycziuwe--
+> > This _could_ be tied to X86_FEATURE_NO_NESTED_DATA_BP, but the KVM would need to
+> > toggle the intercept depending on whether or not userspace wants to debug the
+> > guest.
+> > 
+> > Similar to the DR7 interception, can this check sev_features directly?
