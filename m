@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14616C6110
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BF46C610F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjCWHqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 03:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S230393AbjCWHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjCWHqX (ORCPT
+        with ESMTP id S231215AbjCWHqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 03:46:23 -0400
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6602A6D7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 00:46:01 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4Phy7q58x9z501Sn;
-        Thu, 23 Mar 2023 15:45:59 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 32N7joU5090489;
-        Thu, 23 Mar 2023 15:45:50 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 23 Mar 2023 15:45:52 +0800 (CST)
-Date:   Thu, 23 Mar 2023 15:45:52 +0800 (CST)
-X-Zmail-TransId: 2afa641c03b012f-8631f
-X-Mailer: Zmail v1.0
-Message-ID: <202303231545522162256@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <vkoul@kernel.org>
-Cc:     <kishon@kernel.org>, <u.kleine-koenig@pengutronix.de>,
-        <linmq006@gmail.com>, <linux-phy@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBwaHk6IG9tYXAtdXNiMi1waHk6IFVzZSBkZXZfZXJyX3Byb2JlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 32N7joU5090489
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 641C03B7.001/4Phy7q58x9z501Sn
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Mar 2023 03:46:22 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA041ADDE;
+        Thu, 23 Mar 2023 00:45:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VeTWy0P_1679557554;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VeTWy0P_1679557554)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Mar 2023 15:45:55 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     hongxing.zhu@nxp.com
+Cc:     l.stach@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, lpieralisi@kernel.org, kw@linux.com,
+        robh@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] PCI: imx6: Use devm_platform_get_and_ioremap_resource()
+Date:   Thu, 23 Mar 2023 15:45:53 +0800
+Message-Id: <20230323074553.90372-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Replace the open-code with dev_err_probe() to simplify the code.
-
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/phy/ti/phy-omap-usb2.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/pci/controller/dwc/pci-imx6.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/phy/ti/phy-omap-usb2.c b/drivers/phy/ti/phy-omap-usb2.c
-index bbe5d25b0351..762d3de8b3c5 100644
---- a/drivers/phy/ti/phy-omap-usb2.c
-+++ b/drivers/phy/ti/phy-omap-usb2.c
-@@ -445,11 +445,9 @@ static int omap_usb2_probe(struct platform_device *pdev)
- 			 PTR_ERR(phy->wkupclk));
- 		phy->wkupclk = devm_clk_get(phy->dev, "usb_phy_cm_clk32k");
-
--		if (IS_ERR(phy->wkupclk)) {
--			if (PTR_ERR(phy->wkupclk) != -EPROBE_DEFER)
--				dev_err(&pdev->dev, "unable to get usb_phy_cm_clk32k\n");
--			return PTR_ERR(phy->wkupclk);
--		}
-+		if (IS_ERR(phy->wkupclk))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(phy->wkupclk),
-+					     "unable to get usb_phy_cm_clk32k\n");
-
- 		dev_warn(&pdev->dev,
- 			 "found usb_phy_cm_clk32k, please fix DTS\n");
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 55a0405b921d..c61c85e09c4b 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -1259,8 +1259,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 			return PTR_ERR(imx6_pcie->phy_base);
+ 	}
+ 
+-	dbi_base = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	pci->dbi_base = devm_ioremap_resource(dev, dbi_base);
++	pci->dbi_base = devm_platform_get_and_ioremap_resource(pdev, 0, &dbi_base);
+ 	if (IS_ERR(pci->dbi_base))
+ 		return PTR_ERR(pci->dbi_base);
+ 
 -- 
-2.25.1
+2.20.1.7.g153144c
+
