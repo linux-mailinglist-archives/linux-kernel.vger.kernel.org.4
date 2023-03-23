@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB146C70C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0E06C70CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjCWTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S231571AbjCWTKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCWTJH (ORCPT
+        with ESMTP id S231827AbjCWTKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:09:07 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F676F75F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:08:39 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id r11so91103429edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:08:39 -0700 (PDT)
+        Thu, 23 Mar 2023 15:10:04 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA1B14494
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:09:49 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id s67so9268103ybi.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679598515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wlaSHC/GZ40AJ+I7acfZOLrawxc/It03kMRHOBlNclw=;
-        b=XnCm8WzKPM6Z6XZq/Mgt1Yud70FHTvqpahg/keuOmzj7l3gAcX86bv6wdM7oRtuu5b
-         UxVqK299RuSTq4ZftJODgjJWyZz2h6apTDq5DCiZ3Dvv/TZvl8tkWuPGryeLbWsaxjsM
-         Xux7xyjvi870jVpfe6rInnmT8JaZ6Fab7hHDxk7ms7pvvkqCYclVYsFz/iPovhjGrBaH
-         dCYorRYY3iyTJnSiX7KJHn1+mrrlj6t8kP1DPOLfuTes/eRqL5FRZ7ll0DPYj+3q0Xuj
-         fyouncGtyozVprZgwYuRsi4ew3DTwXkjyfPh19uASDBp/KT7OykCk+RaXIfgl9YnGFk4
-         7irQ==
+        d=google.com; s=20210112; t=1679598585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vLtQVw9Q3r/EIfGHaHQqJXqtgGhueRqlggc/xqxY+5U=;
+        b=iWmN5qdQNSjpgISH3j2kib5cc+h8AoBaK9c2AaVVVURUW5rI9o8n06FvmV1M+bBFfX
+         YNubq65NBM6w9TNZeohFGxGQHBSYpmJ2MVCGqXlkjI0pG66JFFF6zyIvXaCtVFAsMNFh
+         hXEcIALahsRpm5ULADGvB6dWEK8Cco4UeMk/PeV198/yaHKWNMbjOkpRw/jOeaVEUa88
+         WYew6Gts30zeIuE6WLRNasfDpPaC4wq9Q+TgniIJZLVp7q+T9A9NqwNBf4mhube6dHtB
+         lKvNpdpZCmdXI0XAsx+tbsEVIpm8bgaFMld59t1NK22AG0oMOtTQgmguJ9Zy1dAlKVSJ
+         vknQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679598515;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wlaSHC/GZ40AJ+I7acfZOLrawxc/It03kMRHOBlNclw=;
-        b=G66NrQvZMraEH3BveR1evSMC+s74HEqX+Owu+3Emn/eZMY3e39HMGnkaUBj5iVHtlG
-         XtSByCmkDXV//fGBbCxHDoBEBV3RNDbWTyK/kZm8JkTNHMaZQSp3y7jq6Cz2MUDskG/n
-         wqP7bvgTrAumA+zxtxbV6/yGmtIWFeHDTf3MrsaJgkfv7tJPLOx+OMVtVYWXHdw6pOGQ
-         J8QoCjAiolJ4PAy1VgRqVNKz5cg+G4gH3FeApwOra1YFCM5q4EQ631/2Pq1oFrMmpPwq
-         BON1aKXjNQkM0ulQ/u1Nsz6pfkvUZSLt1Llte4OSVoGNnpichGtiqQZg3RdLST9thKqP
-         /Jyg==
-X-Gm-Message-State: AAQBX9eITV9OyIgTPcul5Kkcfop39Bxhxfx4XOqm39Lm2mdD7OFV2ozs
-        2XmaM0IPxwsurwbkG+Tv6IamxA==
-X-Google-Smtp-Source: AKy350ZkZxvsbKP4lr6Lm1syHYK4RwLTk/Fdc2KC/QE9jWsDL8boYFCHwOoH+RD52hzOd1U6dNPluA==
-X-Received: by 2002:a17:906:8486:b0:92b:2389:46bd with SMTP id m6-20020a170906848600b0092b238946bdmr115800ejx.21.1679598514822;
-        Thu, 23 Mar 2023 12:08:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d350:23b1:cb94:f39d? ([2a02:810d:15c0:828:d350:23b1:cb94:f39d])
-        by smtp.gmail.com with ESMTPSA id i11-20020a170906264b00b009255b14e91dsm9044614ejc.46.2023.03.23.12.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 12:08:34 -0700 (PDT)
-Message-ID: <5e0ca610-70b2-90fd-45b8-6b0da089eb4c@linaro.org>
-Date:   Thu, 23 Mar 2023 20:08:33 +0100
+        d=1e100.net; s=20210112; t=1679598585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vLtQVw9Q3r/EIfGHaHQqJXqtgGhueRqlggc/xqxY+5U=;
+        b=CZ0d3Ii1UZFr8v0edoekumU5ijC/5uyT+0Rtsm4tMWx/sBmyKWGD9kQbQPVtTs/jZS
+         R3w+UafTjzEOQiSzf7w5+NO2cv9EChqlkOw/hc1iLM9AKXw08ayjxwxGOA3dd1FwM8xw
+         MgltAgBPalgTTY1r0KZQlzVyUmDeiD3KozBDUW4YSWNbM/5nr94Kkqk9AGaH6irQuNRS
+         ei9vqMC/+TqahyCxmycVyFDflz8vDkTYj++T+rdbJFT71HPMrfK9BDo6Rowj0KDd0SSI
+         L6tA/0bZy8Kdl29rXV3VC1u96ZCsTq6S9FxcacnR7XRIEAn/lLCVjvtZAPSsE9NS1NE3
+         W2og==
+X-Gm-Message-State: AAQBX9dtyXNACu7DMt5Phs/C7WYCz05Q6A2Ked7xJUt62WWRhmwZON1a
+        rgrKyBwIKijNgoyP5EdW4emRdrgmmQSkNFfkGkBu+g==
+X-Google-Smtp-Source: AKy350akUM/9iIf8a3thcZVFCFca2DEXgqBqR2kjsnCDm5WKBJDwjnFCzpyD3JyTXxOLuZxXO5ARoUIWjEn4MKy8lr8=
+X-Received: by 2002:a25:a28f:0:b0:a99:de9d:d504 with SMTP id
+ c15-20020a25a28f000000b00a99de9dd504mr2809088ybi.12.1679598584842; Thu, 23
+ Mar 2023 12:09:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ASoC: dt-bindings: alc5632: Convert to dtschema
-Content-Language: en-US
-To:     Saalim Quadri <danascape@gmail.com>
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        daniel.baluta@nxp.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-References: <1a2e0f7a-771f-5590-fc54-b9dbf059a925@linaro.org>
- <20230323171111.17393-1-danascape@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323171111.17393-1-danascape@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+ <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+ <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+ <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
+ <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
+ <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
+ <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com>
+ <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
+ <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com>
+ <CALvZod7saq910u4JxnuY4C7EwiK5vgNF=-Bv+236RprUOQdkjw@mail.gmail.com>
+ <CAJD7tkb8oHoK5RW96tEXjY9iyJpMXfGAvnFw1rG-5Sr+Mpubdg@mail.gmail.com>
+ <CALvZod5USCtNtnPuYRbRv_psBCNytQWWQ592TFsJLfrLpyLJmw@mail.gmail.com> <CAJD7tkad5NbqjXZ1qLaNx1g-FYsrv-BVLcNinycFStG_Bu0_zw@mail.gmail.com>
+In-Reply-To: <CAJD7tkad5NbqjXZ1qLaNx1g-FYsrv-BVLcNinycFStG_Bu0_zw@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 23 Mar 2023 12:09:33 -0700
+Message-ID: <CALvZod4n+_zo7fkn=NfRSKeShHbarUPWL3D=uScZmg9aiKkP-w@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +93,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 18:11, Saalim Quadri wrote:
-> Hello,
-> 
-> This is my first time using the Linux Kernel Mailing List. I apologise if I commit any mistakes.
-> 
->> This should not be subsystem maintainer but someone related to the
->> device. It's maintainer or interested contributor. Unless that's the
->> case here?
-> 
-> yes it is wrong, he is not the subsystem maintainer. I will send the updated patch.
-> 
-> I have a doubt, for the maintainers list, is it required to include all the names of the subsystem maintainer
-> in the yaml too? As for this codec, there are 4, shall I include the names of all of them or the one to whom the
-> module is authored to?
+On Thu, Mar 23, 2023 at 9:52=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+[...]
+>
+> Sure, I can do that in the next version. I will include a patch that
+> adds an in_task() check to mem_cgroup_usage() before this one. Since
+> BUG_ON() is discouraged and VM_BUG_ON() is mm specific, I guess we are
+> left with WARN_ON_ONCE() for the rstat core code, right?
+>
+> Thanks Shakeel. Any other thoughts I should address for the next version?
 
-Depends, choose one or two names, maybe the most active.
-
-Best regards,
-Krzysztof
-
+This is all for now (at least for this patch).
