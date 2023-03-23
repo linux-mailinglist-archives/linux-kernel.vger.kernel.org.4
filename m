@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8062A6C6BA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8D36C6BA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjCWOzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S231946AbjCWOzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjCWOzN (ORCPT
+        with ESMTP id S229976AbjCWOzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:55:13 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A5D1A95A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:12 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id z83so25152866ybb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:12 -0700 (PDT)
+        Thu, 23 Mar 2023 10:55:43 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91E81B320
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:42 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id h15so7933442vsh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1679583312;
+        d=ventanamicro.com; s=google; t=1679583342;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gy7FFNSqm+7qYrseWG2QC5VYof+XLe7436xAkIcWYeQ=;
-        b=M40xzl8c+0MhuyYwNiU0o2bU6jntsFNDRQ9QAyLcljW/DYOysaJEYllZYOw5l1FuI7
-         2S+SDEYNza+/tLyZPAyZ6mdHPyz0WELslxJFRivKSE8ybZQCE0Fz6tLKX9lxZT8ult7G
-         Px98EB6t+qFNyxNXi8LbrBDpOr7CCUHO0raw2W+Po86WeAErVdRUlwCZ91SNtLjnHuQK
-         aHQ0hOHi9gmjHLCtTznYUTMZ5doiVVOyXitUDRn6+Gq6r/WHz4dinjpkf658JmOmjVys
-         gbUrxBGkHYHuG390a3tTxy7xnmXcjNf41sb3EcHqbzjQX5ov9aObcq62bcvIBcQg0S8K
-         rHoQ==
+        bh=N+oTlLkGu4XBg7D9GQLxh6VnC+XUJIJTBF8fUhsoTP8=;
+        b=LTBfqwlf/M9rJPjcbZEXH/wbqe1ZOqjIzjST3UXornybx+R7J7pGQpUrAHtHTzDGvu
+         cL7EpEXBe23GlAZa7FOxq38BNNXRVgmUXNdIQBCuStekUCBhCTybk3WfGhWfZTKSChWD
+         JnbCIa60L1xcSOqFe1o8B9d3fnK5bQT7zYWnp6T2+O+g66fM53F/t0PL2q+FzqlKML8O
+         fTgKD2u4V0j+0KxM4ylNAg8sWdHs65ZORGm4UfB01kqzI9HXoSclY2mcKnpT1xLnQFlM
+         nXCDrYU7AiJ4IL73YeAi0M4yLsQmhK2hvdB662T2PEHkxhthJAZ+8H9Iy13bi3HAzPEL
+         IAQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679583312;
+        d=1e100.net; s=20210112; t=1679583342;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gy7FFNSqm+7qYrseWG2QC5VYof+XLe7436xAkIcWYeQ=;
-        b=X2io8+PJWEGJeS0yTffo/r3ON6nVZXti7SGrXeiogrjmcSVofXFxOoVeIdZQ2f4jl2
-         WW+8iCUQXWYNey0zo7GqrnOxoMxxusmINzP5yeH1DNaLsEMsFu2VCEN5/4VYNxpiLKn6
-         32/Qhy+HDCmElt56ukMctQX9gVZxoHjViElq1CUVUU08VujB35KpiGNFWQjIQ7k2DjZ/
-         nzVD1nEBM+lejWK2557d3Ax5LGReCxABoXwW+E/8jP6bqM8Ab2HXSedNWUToJ7c/d9MV
-         TU0lZibBvZ7q7gBxmrSNAAsm7Ul31B12zD7hXysfgUxU6Xp+309gHRkWzYqoGLaJeZ7W
-         9sPQ==
-X-Gm-Message-State: AAQBX9eoHp817qpU2Ez3JqrYw1faZyhder5bUcaOppSstceLs9194lo+
-        zcV6rxU+8xL+r49pJ4o4C3UOcA2d8Q2ob2uINrrl
-X-Google-Smtp-Source: AKy350bJt5bMNPC0Xm+1IPMpOTEb2k1V4CfVzwTo1AvCxyUv7/kT2W5I1z7yBE+7demo9K6RS3MhizAampSlgqdSnww=
-X-Received: by 2002:a05:6902:1895:b0:b69:bf76:2243 with SMTP id
- cj21-20020a056902189500b00b69bf762243mr2423097ybb.3.1679583311921; Thu, 23
- Mar 2023 07:55:11 -0700 (PDT)
+        bh=N+oTlLkGu4XBg7D9GQLxh6VnC+XUJIJTBF8fUhsoTP8=;
+        b=sUuBdHdUGp03RpCRctLFD7+GpTfNfz23VqvGPcyY2EhfUnvEFfGRxLdbzkGuKhq8+3
+         SGoKr/Ds6VhDY1Xvac8cg3ZLNRnx9JIeEpSXwGPOoLwjePKLYJZkmqVLeDWH4G8DVP9X
+         GIv88GLMplULoQnwRYWMIivgknhj1uBdLtddM99LCXgrIcyGvhN1PJPfYcSuNAnhUhWc
+         ZyDPPBV1jEvV8soNFjYAgSYfvCoRmppN17zEH1MG6pNr3XDEfX/2wz9YHste65zYjHge
+         epzA9QYE8btmR1cNC0E+Bnp1jzjBfEDGAKQuH3qjtP4S1UpHQ1ZCzvaDzBBF/bVy8KFt
+         T1+Q==
+X-Gm-Message-State: AO0yUKXyh6Cvyu+yTsSCgl6rLYZIGxpz1mBzbz8Awfhz9xgTwKtWO9aH
+        XmfW8dDsM90+4pWXqnl+pnMol3p9Wv5pf81Ui7faGA==
+X-Google-Smtp-Source: AK7set9i+OocmGY8L3enlKAK0g0CHDPShP25dec9yB6zEMC739pzT/6c96zssGZJJoRlEi9hIXGwiBLNEQySgGEkvRo=
+X-Received: by 2002:a67:d71d:0:b0:425:dd21:acc8 with SMTP id
+ p29-20020a67d71d000000b00425dd21acc8mr2013668vsj.7.1679583341611; Thu, 23 Mar
+ 2023 07:55:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230323051241.24841-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20230323051241.24841-1-lukas.bulwahn@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 23 Mar 2023 10:55:01 -0400
-Message-ID: <CAHC9VhQ7O-qSb18HeG3wjeYC97sQNd1dSYHqTncAcZK3mSPGrQ@mail.gmail.com>
-Subject: Re: [PATCH] selinux: clean up dead code after removing runtime disable
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+ <CAK9=C2XJtSG2d_nsyDv7kU1v7Jj0chdevqrMc0MpJswukcEABA@mail.gmail.com> <CAHVXubhhxpzHDM-n91V_rceY5t_VqLvrwZj3RP_tNL2=F9mqjQ@mail.gmail.com>
+In-Reply-To: <CAHVXubhhxpzHDM-n91V_rceY5t_VqLvrwZj3RP_tNL2=F9mqjQ@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 23 Mar 2023 20:25:29 +0530
+Message-ID: <CAK9=C2WVOpSqtt8r1U4hnzSZ=cc1PocpukgQjNyahP2XuPhozw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -69,61 +80,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 1:12=E2=80=AFAM Lukas Bulwahn <lukas.bulwahn@gmail.=
-com> wrote:
+On Thu, Mar 23, 2023 at 6:24=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
 >
-> Commit f22f9aaf6c3d ("selinux: remove the runtime disable functionality")
-> removes the config SECURITY_SELINUX_DISABLE. This results in some dead co=
-de
-> in lsm_hooks.h and a reference in the ABI documentation leading nowhere a=
+> Hi Anup,
+>
+> On Thu, Mar 23, 2023 at 1:18=E2=80=AFPM Anup Patel <apatel@ventanamicro.c=
+om> wrote:
+> >
+> > Hi Alex,
+> >
+> > On Thu, Mar 16, 2023 at 6:48=E2=80=AFPM Alexandre Ghiti <alexghiti@rivo=
+sinc.com> wrote:
+> > >
+> > > This patchset intends to improve tlb utilization by using hugepages f=
+or
+> > > the linear mapping.
+> > >
+> > > As reported by Anup in v6, when STRICT_KERNEL_RWX is enabled, we must
+> > > take care of isolating the kernel text and rodata so that they are no=
+t
+> > > mapped with a PUD mapping which would then assign wrong permissions t=
+o
+> > > the whole region: it is achieved by introducing a new memblock API.
+> > >
+> > > Another patch makes use of this new API in arm64 which used some sort=
+ of
+> > > hack to solve this issue: it was built/boot tested successfully.
+> > >
+> > > base-commit-tag: v6.3-rc1
+> > >
+> > > v8:
+> > > - Fix rv32, as reported by Anup
+> > > - Do not modify memblock_isolate_range and fixes comment, as suggeste=
+d by Mike
+> > > - Use the new memblock API for crash kernel too in arm64, as suggeste=
+d by Andrew
+> > > - Fix arm64 double mapping (which to me did not work in v7), but ends=
+ up not
+> > >   being pretty at all, will wait for comments from arm64 reviewers, b=
+ut
+> > >   this patch can easily be dropped if they do not want it.
+> > >
+> > > v7:
+> > > - Fix Anup bug report by introducing memblock_isolate_memory which
+> > >   allows us to split the memblock mappings and then avoid to map the
+> > >   the PUD which contains the kernel as read only
+> > > - Add a patch to arm64 to use this newly introduced API
+> > >
+> > > v6:
+> > > - quiet LLVM warning by casting phys_ram_base into an unsigned long
+> > >
+> > > v5:
+> > > - Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thank=
 s
-> the help text is simply gone.
+> > >   Conor
+> > > - Add RB from Andrew
+> > >
+> > > v4:
+> > > - Rebase on top of v6.2-rc3, as noted by Conor
+> > > - Add Acked-by Rob
+> > >
+> > > v3:
+> > > - Change the comment about initrd_start VA conversion so that it fits
+> > >   ARM64 and RISCV64 (and others in the future if needed), as suggeste=
+d
+> > >   by Rob
+> > >
+> > > v2:
+> > > - Add a comment on why RISCV64 does not need to set initrd_start/end =
+that
+> > >   early in the boot process, as asked by Rob
+> > >
+> > > Alexandre Ghiti (4):
+> > >   riscv: Get rid of riscv_pfn_base variable
+> > >   mm: Introduce memblock_isolate_memory
+> > >   arm64: Make use of memblock_isolate_memory for the linear mapping
+> > >   riscv: Use PUD/P4D/PGD pages for the linear mapping
+> >
+> > Kernel boot fine on RV64 but there is a failure which is still not
+> > addressed. You can see this failure as following message in
+> > kernel boot log:
+> >     0.000000] Failed to add a System RAM resource at 80200000
 >
-> Remove the dead code and dead reference.
+> Hmmm I don't get that in any of my test configs, would you mind
+> sharing yours and your qemu command line?
+
+Try alexghiti_test branch at
+https://github.com/avpatel/linux.git
+
+I am building the kernel using defconfig and my rootfs is
+based on busybox.
+
+My QEMU command is:
+qemu-system-riscv64 -M virt -m 512M -nographic -bios
+opensbi/build/platform/generic/firmware/fw_dynamic.bin -kernel
+./build-riscv64/arch/riscv/boot/Image -append "root=3D/dev/ram rw
+console=3DttyS0 earlycon" -initrd ./rootfs_riscv64.img -smp 4
+
+Regards,
+Anup
+
 >
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Paul, please pick this minor cleanup patch on top of your commit above.
-
-Hi Lukas, thanks for catching this and sending a patch!  For future
-reference, you don't need to add a note asking me to pick up this
-patch, as long as you send it to the right mailing list - you did -
-I'll see it and you'll either get a quick reply when I merge it or a
-longer reply with comments/feedback.
-
-One comment below ...
-
-> diff --git a/Documentation/ABI/removed/sysfs-selinux-disable b/Documentat=
-ion/ABI/removed/sysfs-selinux-disable
-> index cb783c64cab3..1ae9587231e1 100644
-> --- a/Documentation/ABI/removed/sysfs-selinux-disable
-> +++ b/Documentation/ABI/removed/sysfs-selinux-disable
-> @@ -24,6 +24,3 @@ Description:
->         SELinux at runtime.  Fedora is in the process of removing the
->         selinuxfs "disable" node and once that is complete we will start =
-the
->         slow process of removing this code from the kernel.
-> -
-> -       More information on /sys/fs/selinux/disable can be found under th=
-e
-> -       CONFIG_SECURITY_SELINUX_DISABLE Kconfig option.
-
-When I moved the deprecation notice from the "obsolete" to the
-"removed" directory I added a note at the top which read:
-
-  "REMOVAL UPDATE: The SELinux checkreqprot functionality was
-   removed in March 2023, the original deprecation notice is
-   shown below."
-
-My goal was to preserve the original notice as much as possible,
-including the references to the now defunct Kconfig option, to help
-people who are trying to understand how things worked prior to the
-removal.
-
-If you can remove this part of your patch and resubmit I'll happily
-merge it into the selinux/next tree.
-
-Thanks!
-
---=20
-paul-moore.com
+> Thanks
+>
+> >
+> > Regards,
+> > Anup
+> >
+> > >
+> > >  arch/arm64/mm/mmu.c           | 25 +++++++++++------
+> > >  arch/riscv/include/asm/page.h | 19 +++++++++++--
+> > >  arch/riscv/mm/init.c          | 53 ++++++++++++++++++++++++++++-----=
+--
+> > >  arch/riscv/mm/physaddr.c      | 16 +++++++++++
+> > >  drivers/of/fdt.c              | 11 ++++----
+> > >  include/linux/memblock.h      |  1 +
+> > >  mm/memblock.c                 | 20 +++++++++++++
+> > >  7 files changed, 119 insertions(+), 26 deletions(-)
+> > >
+> > > --
+> > > 2.37.2
+> > >
