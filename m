@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE786C6F0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3076C6F0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjCWRbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S232535AbjCWRb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjCWRb3 (ORCPT
+        with ESMTP id S232443AbjCWRbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:31:29 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC8D2B629
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:26 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id z11so13718475pfh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:26 -0700 (PDT)
+        Thu, 23 Mar 2023 13:31:39 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD292BF26
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:28 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id o2so15580078plg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592686;
+        d=chromium.org; s=google; t=1679592688;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PrlHsI5Z/NNnOc1NjNfOu1jz21Q+M+e28AawYyOfx3M=;
-        b=edHQ2+I5cm1iMvu/Yj4j6Xbo05S5NenSnnJ/8+XM+FqQ9x1iG7FiNzB4IqHhkdKkdy
-         I7hNLoWg0LzzdN1YAC5hKBHtRdEq0ZUvRvp4YkxNHFhYoF36rHr7JoId7M/TCNQpSQj0
-         2YixmX4hf3itZ3gWw9KyqAqkg0eMTKQYXPTgU=
+        bh=ItXOwha8h+SsgLUIpHMGhHvifqAv9ElkC8GCOIPwlBw=;
+        b=dlcfhiyu360dY4oLMEki5fh68mVrzK1golDy+8Cl/tA1wIHUAz5UypP9RbEfsj/oPz
+         Q192lYMSR1A2uPv9Q7Edridi1TOXxy/UISMuh1Q1qYdm+3okAQFuaxPQ4WJ3XTS9J1fj
+         arFPfu9+Wy9gvejEE21dWL8FGSCl5kOrmFnEE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592686;
+        d=1e100.net; s=20210112; t=1679592688;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PrlHsI5Z/NNnOc1NjNfOu1jz21Q+M+e28AawYyOfx3M=;
-        b=yAuMTJK1alvZx9OwqmDguNdr2/0JSGMulMSbuG7AmExLpm2EBP3AiWr5lXbAG2Hygc
-         brtwFlOvl7P4TirFaEHv9qlGBV3puQJ9nciEvtr2vUdzTaFL1QXAzkNW+FN51V2GLCHL
-         wEPdhBSwGqhJL0ZEVr1K2jrMvJ6L5ORoOYBdlWKgXvBBMjcZp7WUul/gMTlFOOB84UXy
-         5FgDmvMFpPHxZ79QM8IwLweLCrX9NzsQBd2pqOmQF2UUv5Ls/WHQw7c8Wt+GQTdkLYha
-         AlIpdzoPI9BbYQVL19KsegP+at7BbawrS8s9IYAMFRqt5pTKZ72W33gHGMczwmYSuKi8
-         FayQ==
-X-Gm-Message-State: AO0yUKWng/qpy6E8HKrYwODE+ATGavmhj/qLOx4tlCUeuT7ad+aJXMbb
-        nAhgfjCIQYnP5bBir1UmLztNGQ==
-X-Google-Smtp-Source: AKy350aipydQzWbD4aLzbW5qWar+RQQyGCphddK1U85iT9QM7zEOrgHW0QB0QuHoYtR6mtAQbvOAAw==
-X-Received: by 2002:a62:1941:0:b0:5e2:434d:116b with SMTP id 62-20020a621941000000b005e2434d116bmr179799pfz.23.1679592685919;
-        Thu, 23 Mar 2023 10:31:25 -0700 (PDT)
+        bh=ItXOwha8h+SsgLUIpHMGhHvifqAv9ElkC8GCOIPwlBw=;
+        b=NYZ+48jidcMFcxiWF0PLvXGLWGtL+ZeBVpqzSdgMUXhibpNda//4hy8+D9kELuEFeF
+         IJZGOJnVEofwlJY9ZK2n3/lYfDRuvWSsV3CNAd1A72YehNXYsoruJxktBeKEpjfGdPGL
+         rnYTn0GbJymPeh27Q5alqxy8AZLLXxw9js7jYLmMyUNYShSwy5euXr/SJeYcrQbgLCN/
+         BqxxfQQv7/Go7JI+56CLr0M0P6QQelaywrW0EdL/aJGJKtLel0UodXqPGXVSvL3rzl2Y
+         EuPsHQVcFxo7VVCQxkJsaPelIqVl5F1gYw8l1y2Rnff2wrO6/edi9gAxs8cj96fzKj3F
+         YC9A==
+X-Gm-Message-State: AO0yUKUREfoNL4Ylrfg3Ztkdlly6QI273VGnAUC0m/7mfYBAmUvoIq4m
+        rV/QZC7ZVZ9R6i+JhMMG5plwhg==
+X-Google-Smtp-Source: AK7set9xgENCrOfo90ZpjRRQSLIrRXwbPcZgC3d88EUdy4NyQal6IFhJCQ1/Qsa1/qHZs38tljQAcQ==
+X-Received: by 2002:a05:6a20:8b82:b0:d9:7fcf:1076 with SMTP id m2-20020a056a208b8200b000d97fcf1076mr374864pzh.25.1679592687986;
+        Thu, 23 Mar 2023 10:31:27 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.23
+        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:24 -0700 (PDT)
+        Thu, 23 Mar 2023 10:31:27 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/14] dt-bindings: pinctrl: qcom: Add output-enable
-Date:   Thu, 23 Mar 2023 10:30:11 -0700
-Message-Id: <20230323102605.7.I7874c00092115c45377c2a06f7f133356956686e@changeid>
+Subject: [PATCH 08/14] pinctrl: qcom: Support OUTPUT_ENABLE; deprecate INPUT_ENABLE
+Date:   Thu, 23 Mar 2023 10:30:12 -0700
+Message-Id: <20230323102605.8.Id740ae6a993f9313b58add6b10f6a92795d510d4@changeid>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
 References: <20230323173019.3706069-1-dianders@chromium.org>
@@ -78,51 +78,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the patch ("dt-bindings: pinctrl: qcom: tlmm should use
-output-disable, not input-enable") we allowed setting "output-disable"
-for TLMM pinctrl states. Let's also add "output-enable".
+The Qualcomm pinctrl driver has been violating the documented meaning
+of PIN_CONFIG_INPUT_ENABLE. That documentation says:
 
-At first blush this seems a needless thing to do. Specifically:
-- In Linux (and presumably any other OSes using the same device trees)
-  the GPIO/pinctrl driver knows to automatically enable the output
-  when a GPIO is changed to an output. Thus in most cases specifying
-  "output-enable" is superfluous and should be avoided.
-- If we need to set a pin's default state we already have
-  "output-high" and "output-low" and these properties already imply
-  "output-enabled" (at least on the Linux Qualcomm TLMM driver).
+  Note that this does not affect the pin's ability to drive output.
 
-However, there is one instance where "output-enable" seems like it
-could be useful: sleep states. It's not uncommon to want to configure
-pins as inputs (with appropriate pulls) when the driver controlling
-them is in a low power state. Then we want the pins back to outputs
-when the driver wants things running normally. To accomplish this we'd
-want to be able to use "output-enable". Then the "default" state could
-have "output-enable" and the "sleep" state could have
-"output-disable".
+...yet the Qualcomm driver's sole action when asked to "enable input"
+on a pin is to disable its output.
 
-NOTE: in all instances I'm aware of, we'd only want to use
-"output-enable" on pins that are configured as "gpio". The Qualcomm
-documentation that I have access to says that "output-enable" only
-does something useful when in GPIO mode.
+The Qualcomm driver's implementation stems from the fact that
+"output-disable" is a "new" property from 2017. It was introduced in
+commit 425562429d4f ("pinctrl: generic: Add output-enable
+property"). The "input-enable" handling in Qualcomm drivers is from
+2015 introduced in commit 407f5e392f9c ("pinctrl: qcom: handle
+input-enable pinconf property").
+
+Let's change the Qualcomm driver to move us in the right direction. As
+part of this:
+1. We'll now support PIN_CONFIG_OUTPUT_ENABLE
+2. We'll still support using PIN_CONFIG_INPUT_ENABLE to disable a
+   pin's output (in violation of the docs) with a big comment in the
+   code. This is needed because old device trees have "input-enable"
+   in them and, in some cases, people might need the old
+   behavior. While we could programmatically change all old device
+   trees, it doesn't really hurt to keep supporting the old behavior
+   and we're _supposed_ to try to be compatible with old device trees
+   anyway.
+
+It can also be noted that the PIN_CONFIG_INPUT_ENABLE handling code
+seems to have purposefully ignored its argument. That means that old
+boards that had _either_ "input-disable" or "input-enable" in them
+would have had the effect of disabling a pin's output. While we could
+change this behavior, since we're only leaving the
+PIN_CONFIG_INPUT_ENABLE there for backward compatibility we might as
+well be fully backward compatible.
+
+NOTE: despite the fact that we'll still support
+PIN_CONFIG_INPUT_ENABLE for _setting_ config, we take it away from
+msm_config_group_get(). This appears to be only used for populating
+debugfs and fixing debugfs to "output enabled" where relevant instead
+of "input enabled" makes more sense and has more truthiness.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/qcom/pinctrl-msm.c | 36 +++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-index 5a815c199642..90b7d75840c1 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-@@ -77,6 +77,7 @@ $defs:
-       bias-disable: true
-       input-enable: false
-       output-disable: true
-+      output-enable: true
-       output-high: true
-       output-low: true
- 
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index daeb79a9a602..4515f375c5e8 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -323,6 +323,7 @@ static int msm_config_reg(struct msm_pinctrl *pctrl,
+ 		break;
+ 	case PIN_CONFIG_OUTPUT:
+ 	case PIN_CONFIG_INPUT_ENABLE:
++	case PIN_CONFIG_OUTPUT_ENABLE:
+ 		*bit = g->oe_bit;
+ 		*mask = 1;
+ 		break;
+@@ -414,11 +415,9 @@ static int msm_config_group_get(struct pinctrl_dev *pctldev,
+ 		val = msm_readl_io(pctrl, g);
+ 		arg = !!(val & BIT(g->in_bit));
+ 		break;
+-	case PIN_CONFIG_INPUT_ENABLE:
+-		/* Pin is output */
+-		if (arg)
++	case PIN_CONFIG_OUTPUT_ENABLE:
++		if (!arg)
+ 			return -EINVAL;
+-		arg = 1;
+ 		break;
+ 	default:
+ 		return -ENOTSUPP;
+@@ -502,9 +501,36 @@ static int msm_config_group_set(struct pinctrl_dev *pctldev,
+ 			arg = 1;
+ 			break;
+ 		case PIN_CONFIG_INPUT_ENABLE:
+-			/* disable output */
++			/*
++			 * According to pinctrl documentation this should
++			 * actually be a no-op.
++			 *
++			 * The docs are explicit that "this does not affect
++			 * the pin's ability to drive output" but what we do
++			 * here is to modify the output enable bit. Thus, to
++			 * follow the docs we should remove that.
++			 *
++			 * The docs say that we should enable any relevant
++			 * input buffer, but TLMM there is no input buffer that
++			 * can be enabled/disabled. It's always on.
++			 *
++			 * The points above, explain why this _should_ be a
++			 * no-op. However, for historical reasons and to
++			 * support old device trees, we'll violate the docs
++			 * still affect the output.
++			 *
++			 * It should further be noted that this old historical
++			 * behavior actually overrides arg to 0. That means
++			 * that "input-enable" and "input-disable" in a device
++			 * tree would _both_ disable the output. We'll
++			 * continue to preserve this behavior as well since
++			 * we have no other use for this attribute.
++			 */
+ 			arg = 0;
+ 			break;
++		case PIN_CONFIG_OUTPUT_ENABLE:
++			arg = !!arg;
++			break;
+ 		default:
+ 			dev_err(pctrl->dev, "Unsupported config parameter: %x\n",
+ 				param);
 -- 
 2.40.0.348.gf938b09366-goog
 
