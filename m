@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962EF6C6A27
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A836C6A03
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjCWN6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S231923AbjCWNxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCWN56 (ORCPT
+        with ESMTP id S231868AbjCWNw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:57:58 -0400
+        Thu, 23 Mar 2023 09:52:56 -0400
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AE39001;
-        Thu, 23 Mar 2023 06:57:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FDB26CC5;
+        Thu, 23 Mar 2023 06:52:52 -0700 (PDT)
 Received: from koko.localdomain ([89.1.213.94]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mlf8e-1qO42W3fCk-00iiuN; Thu, 23 Mar 2023 14:52:46 +0100
+ 1MjjKf-1qM8600U0p-00lCww; Thu, 23 Mar 2023 14:52:47 +0100
 From:   Maximilian Weigand <mweigand@mweigand.net>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -25,29 +25,29 @@ To:     Linus Walleij <linus.walleij@linaro.org>,
         devicetree@vger.kernel.org
 Cc:     Maximilian Weigand <mweigand@mweigand.net>,
         Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH 4/6] Input: cyttsp5: properly initialize the device as a pm wakeup device
-Date:   Thu, 23 Mar 2023 14:52:03 +0100
-Message-Id: <20230323135205.1160879-5-mweigand@mweigand.net>
+Subject: [PATCH 5/6] devicetree: input: cypress,tt21000: add wakeup-source entry to documentation
+Date:   Thu, 23 Mar 2023 14:52:04 +0100
+Message-Id: <20230323135205.1160879-6-mweigand@mweigand.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230323135205.1160879-1-mweigand@mweigand.net>
 References: <20230323135205.1160879-1-mweigand@mweigand.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:IukSdTMfV9ZkGrQVT2rC0B+Y/Pto+OPq5ITXNsFzFMoMUaCEDL1
- LHmLGD0PnlwCPvPp6BhuEBKAgQ438yVOcZz0TG43belz6St65TbsbPtpmQeZrWtRqOongCN
- 3O8ALtKjxXrm30JqIt5O1CS9gyCRiUMQfGn4SqNsRZvK1Mkn4GWW5qYsX9jadAFjCizveWV
- KE2HZk3Om4rjmvLWj0zEA==
-UI-OutboundReport: notjunk:1;M01:P0:AbOjXQs477k=;CWtsoK34/JP8HKzCFveKNB0Zb+z
- 8h2cWw4QIgwsiqqCrLBA8GtoMYk91276u94KXw514ZjoHf+MJFHz+5VVjxUPFM9zpD0SOOdWg
- mxXYF2caE8zrn22f/JRTL7GdrRaFL2vHjuHiI5xmPH7Tfk0Hq97AJHeB/CoKmd4YbPMB1ftPg
- jP1kq5ViAHwudtOi/uUVtD2Bk9ltCGSFsk3ZGgVFmt0/XMi7WZP6q5u1IAvlhYvwL8OrX0grr
- SQCxB/7GToId9/7rOE1myZnkkckLVYHYqnm+MAaFwCa0ym6eGKkXq9B46nnQow62lleYRDskr
- oeew8eH1wGxWH0/UffJBJcUVO7VQW/BmfzsLV1GweKs5dwA6pjetZT73whRZKl2k8VqZSSi0c
- SWxPvLXu0/kTjkIvyN1iAh+Kz/74ZS+TTw0HRD78ByPA8MvTNGxyxQciVwpiGlK6BMrW/QZ/l
- rJPVFPHgndAMCnOuPShiG+jRRscPM4IRurb0qTp5hlGqxJBQupqPm6xFkxypWCa/NMIWa6sl2
- RYjgvYeUR/yL62TBou84SBWt5oGz2tVwTy5HPgOsRhp8IAJCn1aN2c5tohw9iae5LswK8sq9s
- NooqeAi2N2J/d7WWtnpAPFnry/5UNIrJ0g+T2KuxxYg3iqkyxNpDqKfGoWlpfr0TGKnMW7b4X
- BX3umrEawAFezN31QgEdBm9+NMTUThlscyxjUp8ySA==
+X-Provags-ID: V03:K1:b3r0ZYyInXa19U1aLlkg64sS922exnyPcnGdVPzW36yPBPehFUk
+ y9ERr+Ts+4ZxNd+0QglLwufcGlwUbkaHRYjxX46/zkryfreRxUy0mwfd+YdFL2YS5SbciNZ
+ I09CSXF5IWfdU4ODvY5VhlXRtokqArMIB6Gq2I0BTeYt1OJXZFOXluWWXVM33z61HOcDNa8
+ Rq8u5BNguDiLm9WMFboog==
+UI-OutboundReport: notjunk:1;M01:P0:iEAOO3st3Uc=;KYadPSUtVnzgubKGGqN25wMHyYM
+ yqExI3Q1T1r9e6A9tBIQQUIzKh2Q7XJCFH4+HjjMCXeneypqL3AFyTZ6WrNOesvSIGwziaDlP
+ X9Bm7ituvmj+fulOMXdvmsT1+HoQNq8gfFECsHovtSVRopjGvv0eSc7Dw9KE4O3sh5V94fMr4
+ oKKSMs3+amJzu/K8wJGCM3JMr32jOj0fHoA2O+NwjrjY7EqEba6U5Iu2Sjm09dAzja1GWpp6V
+ 2ow4RlN6MZqkTrIV5NgBnOZtlBV147u9/I/R3h6z/v+3XNiXHeo2WcmpS4qb2StxARFeLBs63
+ HSTzwtLEMX6QrsAj05dlxyQdRrQWdqp7EUHS7AhZty8YWfHDTanWRades6IXfdh6iJISqYPQk
+ iIM0Ln90Bs2L5anvzal1P9WruvPkWePwVwXNGJ3hHIypsBSt3MZ7+MkSuGYrKwCk1KohuPZgD
+ Qx01+mCFOt8OpN3mqD228J9kNS+BM2cTaM0i0XLCqN8qGPrU/bTjuewA41S3G9SDSidwYVD3V
+ eWlwSL2PGplqh5pksa6s3XnllB1ncF7ZTDqUEbXDFdVAEzJhSRXVyffPAvnGfk2Sq43s7i/Y+
+ L2Z9a0ZO37rjL41xW4s8Rqip4UlOg/YuM9SlGVptc6zftpWAmC5A414pBp6qJztgKn+P+Rs4F
+ 12oY7+LtMrXE+uQ8VTsnzohBeisZaPRg7PzxT7k2ug==
 X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
@@ -57,29 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When used as a wakeup source the driver should be properly registered
-with the pm system using device_init_wakeup.
+The touchscreen can be used to wake up systems from sleep and therefore
+the wakeup-source entry should be included in the documentation.
 
 Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
 Reviewed-by: Alistair Francis <alistair@alistair23.me>
 ---
- drivers/input/touchscreen/cyttsp5.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../devicetree/bindings/input/touchscreen/cypress,tt21000.yaml  | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-index 8b0c6975c6ec..01dd10a596ab 100644
---- a/drivers/input/touchscreen/cyttsp5.c
-+++ b/drivers/input/touchscreen/cyttsp5.c
-@@ -830,6 +830,9 @@ static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
- 		return error;
- 	}
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+index a77203c78d6e..e2da13b7991d 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
++++ b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+@@ -40,6 +40,8 @@ properties:
+   linux,keycodes:
+     description: EV_ABS specific event code generated by the axis.
  
-+	if (device_property_read_bool(dev, "wakeup-source"))
-+		device_init_wakeup(dev, true);
++  wakeup-source: true
 +
- 	error = cyttsp5_startup(ts);
- 	if (error) {
- 		dev_err(ts->dev, "Fail initial startup r=%d\n", error);
+ patternProperties:
+   "^button@[0-9]+$":
+     type: object
 -- 
 2.39.2
 
