@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1756C66FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140E56C66F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjCWLoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S231299AbjCWLoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjCWLoB (ORCPT
+        with ESMTP id S229485AbjCWLn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:44:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F178C65B7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679571791;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cVq2mVM36cawCh4Vfk1jD5A152b458CdM0n5/LpNp2k=;
-        b=VVyAZ5nEKLioWGwn/1cQ25ibuuiV/3KS7IP5efILEnGhCB7f0frl3cMf+XNnrAH7VxyAtZ
-        Qg+xmOP4FCMAEmAzWta0i45q5psoqdfa1zAQeU061J/8tEn+7OkdgJsDScEVdnh0zwF4i/
-        X9Sbdslqbbz/W08Q3pGNT+EzQPAhDOI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-381-nOhDvYQjNG2gUy1ZJSgLGA-1; Thu, 23 Mar 2023 07:43:09 -0400
-X-MC-Unique: nOhDvYQjNG2gUy1ZJSgLGA-1
-Received: by mail-ed1-f69.google.com with SMTP id es16-20020a056402381000b004fa3e04c882so31708780edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:43:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679571788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cVq2mVM36cawCh4Vfk1jD5A152b458CdM0n5/LpNp2k=;
-        b=kRwV3uJzFa77tE7pvWdEPab+FwCpSYm7gxVr57u+eXLcj5MZAy3jrQtrXkxstX0oB3
-         bgRP1CaeFbLBgKddMRgmJqbniTrhPqymV8jvnWnE8hvrCWmONna5jEmfJc8FO88iOQJx
-         19OGEOQOXVsxiC5hL4z+hs7jigwLjqk3p0WGicbZhejrAf2pyka7+/WaKPgggyUhTPTt
-         tDHeUO5PEx1NOsZUVVMA3z68AsF0WieyzDIeG+OTrSyv+vYLQfBKYl+MWdipQpG2zPDz
-         R+wfq92Q0vRQDeEVbRc3wXRZcIpA+xL0f0w7yB9EMziXCaCnDRzvcSsV44IbfYG/fn0t
-         GrGA==
-X-Gm-Message-State: AO0yUKV9+G/BvZgTVquzT3RT97h6aiJe/A/xwA/DiJvSV13opNVl7xHY
-        SChT3j+ExTJq7dA7KwAJFXK72REKfkf9R5SzLmKDJM0FayzLtw3/heFn2klOo20qXYL8D0WZ6qQ
-        6Gu4FW4Z5xaJaARDRbJfQVVSj
-X-Received: by 2002:aa7:d8d1:0:b0:4fa:4b1c:6979 with SMTP id k17-20020aa7d8d1000000b004fa4b1c6979mr9960918eds.28.1679571788587;
-        Thu, 23 Mar 2023 04:43:08 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8KZdBp0oRYbIBzh9n5LfprMrAnKWiAlrUE2BOpvPhUzjwGFy4ljscwHArQq5l6tGkLkXTHLA==
-X-Received: by 2002:aa7:d8d1:0:b0:4fa:4b1c:6979 with SMTP id k17-20020aa7d8d1000000b004fa4b1c6979mr9960900eds.28.1679571788332;
-        Thu, 23 Mar 2023 04:43:08 -0700 (PDT)
-Received: from redhat.com ([2.52.143.71])
-        by smtp.gmail.com with ESMTPSA id b22-20020a50ccd6000000b00501dac14d7asm2175467edj.3.2023.03.23.04.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 04:43:07 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 07:43:04 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
-        jasowang@redhat.com, stefanha@redhat.com,
-        syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] vhost_task: Fix vhost_task_create return value
-Message-ID: <20230323073918-mutt-send-email-mst@kernel.org>
-References: <20230322185605.1307-1-michael.christie@oracle.com>
- <20230323033557-mutt-send-email-mst@kernel.org>
- <20230323104445.qidusxeruimeawy6@wittgenstein>
+        Thu, 23 Mar 2023 07:43:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C141043F;
+        Thu, 23 Mar 2023 04:43:58 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3519366030B7;
+        Thu, 23 Mar 2023 11:43:56 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679571836;
+        bh=40CudmEZ80ffRNlrSfZD49rg1pKabWucP0ROERdjI/c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l+7QJ5qUCIJ7KE1zlge63WJbhjG9XmELWynJnChfqRAbIxyTMI9jKFkfVrJPnutrP
+         sAWxqyt4BvQQoVobctCM6gsP8PXEYEp9Lb+cb1GWoJ5wm6TW/cYfdIUJ8HK5GMzBMG
+         lJXq7fU2M4Fv6l7oN+4jUz4Vk+uhxp97D+1RIvBetDNOQEWT3AvpbU1fAeESQSiH+9
+         G4EBgB12nIf8tEYeXP11TKmaTfrPIk5DSotjqtLJYGG5S4RwKmwECz5mcyw/NYKYTo
+         MuvhYEnkS6vFtEAfc188XreHClWI9e/zNIKVC0h2gLRV4+daeo1R+zoadEs5Dmf60Z
+         veJGurWztwB1Q==
+Message-ID: <9e08ad33-ef86-6e49-2ef8-f697d2b82f04@collabora.com>
+Date:   Thu, 23 Mar 2023 12:43:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323104445.qidusxeruimeawy6@wittgenstein>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] cpufreq: mediatek: guard error paths to avoid kernel
+ panic
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Sam Shih <sam.shih@mediatek.com>, John Crispin <john@phrozen.org>
+References: <ZBwyN7NwZ2zqHygr@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ZBwyN7NwZ2zqHygr@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:44:45AM +0100, Christian Brauner wrote:
-> On Thu, Mar 23, 2023 at 03:37:19AM -0400, Michael S. Tsirkin wrote:
-> > On Wed, Mar 22, 2023 at 01:56:05PM -0500, Mike Christie wrote:
-> > > vhost_task_create is supposed to return the vhost_task or NULL on
-> > > failure. This fixes it to return the correct value when the allocation
-> > > of the struct fails.
-> > > 
-> > > Fixes: 77feab3c4156 ("vhost_task: Allow vhost layer to use copy_process") # mainline only
-> > > Reported-by: syzbot+6b27b2d2aba1c80cc13b@syzkaller.appspotmail.com
-> > > Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> > 
-> > Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> > 
-> > The affected patch is not upstream yet, right?
-> > I don't know if the tree in question allows rebases - linux-next
-> > does. So ideally it would be squashed to avoid issues during bisect.
-> > Still it's error path so I guess not a tragedy even without squashing.
+Il 23/03/23 12:04, Daniel Golle ha scritto:
+> Guard pointer access in error path of mtk_cpu_dvfs_info_init() to
+> make sure info->proc_reg and info->sram_reg are valid pointers before
+> accessing them, which would result in kernel panic e.g. in case of
+> them being set to -EPROBE_DEFER.
 > 
-> I tend to not rebase once stuff has been in linux-next but I make
-> exceptions as long as it's before -rc4. For now I've put the patch on
-> top (see the other mail I sent) but if it's really important I can
-> squash it after the weekend (I'll be mostly afk until then.).
+> Fixes: 4b9ceb757bbb ("cpufreq: mediatek: Enable clocks and regulators")
+> Reported-by: Sam Shih <sam.shih@mediatek.com>
+> Suggested-by: Sam Shih <sam.shih@mediatek.com>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 4466d0c91a6a..980a31ddd0f2 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -579,10 +579,12 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>   	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+>   
+>   out_free_resources:
+> -	if (regulator_is_enabled(info->proc_reg))
+> -		regulator_disable(info->proc_reg);
+> -	if (info->sram_reg && regulator_is_enabled(info->sram_reg))
+> -		regulator_disable(info->sram_reg);
+> +	if (!IS_ERR(info->proc_reg))
+> +		if (regulator_is_enabled(info->proc_reg))
+> +			regulator_disable(info->proc_reg);
+> +	if (!IS_ERR(info->sram_reg))
 
-Hard to say how important, but I'd prefer that, yes.
+For both, actually, if you suspect that (xxxx)_reg may be NULL, then you should
+use IS_ERR_OR_NULL() instead...
 
--- 
-MST
+> +		if (info->sram_reg && regulator_is_enabled(info->sram_reg))
+
+...otherwise, here it's useless to check if it's not NULL?
+
+Regards,
+Angelo
 
