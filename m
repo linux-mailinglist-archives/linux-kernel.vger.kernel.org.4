@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC7F6C6776
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A5A6C6781
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCWMBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S231744AbjCWMCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjCWMBK (ORCPT
+        with ESMTP id S231446AbjCWMB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:01:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD7633B23B;
-        Thu, 23 Mar 2023 04:59:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D80F4B3;
-        Thu, 23 Mar 2023 05:00:10 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.155])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 991403F766;
-        Thu, 23 Mar 2023 04:59:24 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:59:14 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/5] selftests/mm: Implement support for arm64 on va
-Message-ID: <ZBw/CVePzmshvMu7@FVFF77S0Q05N>
-References: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
- <20230323111436.mj2kbesfxfmvj5by@box.shutemov.name>
+        Thu, 23 Mar 2023 08:01:59 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8D83D6;
+        Thu, 23 Mar 2023 05:00:11 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 65F781C0E45; Thu, 23 Mar 2023 13:00:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1679572810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i6g24iXeL9/ShWvEYoM0S6zS1IAwwllZY3vf7uOY3BQ=;
+        b=FUd82qEkq+eW84cAEji9+56Yzv2dhP9NcP+rEBPwkgQcu38rU4qSxXQN3Iyd+/LGu6pe6G
+        TI7cog3eHrcVT+7wxVkneHkY8YGz5YUGYLLv2joiddVHP8rRxoOclT8tHt2RPVQ+wp1Bdm
+        Km8X54avX15p43UoP+idujHY7IEQQ4Q=
+Date:   Thu, 23 Mar 2023 13:00:09 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lee Jones <lee@kernel.org>, John Crispin <john@phrozen.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        Jonathan McDowell <noodles@earth.li>
+Subject: Re: [net-next PATCH v5 13/15] arm: qcom: dt: Add Switch LED for each
+ port for rb3011
+Message-ID: <ZBw/SbstO5oU6osW@duo.ucw.cz>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-14-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="zouinu9G3n7jzOuo"
 Content-Disposition: inline
-In-Reply-To: <20230323111436.mj2kbesfxfmvj5by@box.shutemov.name>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230319191814.22067-14-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:14:36PM +0300, Kirill A. Shutemov wrote:
-> On Thu, Mar 23, 2023 at 04:22:38PM +0530, Chaitanya S Prakash wrote:
-> > The va_128TBswitch selftest is designed and implemented for PowerPC and
-> > x86 architectures which support a 128TB switch, up to 256TB of virtual
-> > address space and hugepage sizes of 16MB and 2MB respectively. Arm64
-> > platforms on the other hand support a 256Tb switch, up to 4PB of virtual
-> > address space and a default hugepage size of 512MB when 64k pagesize is
-> > enabled.
-> > 
-> > These architectural differences require introducing support for arm64
-> > platforms, after which a more generic naming convention is suggested.
-> > The in code comments are amended to provide a more platform independent
-> > explanation of the working of the code and nr_hugepages are configured
-> > as required. Finally, the file running the testcase is modified in order
-> > to prevent skipping of hugetlb testcases of va_high_addr_switch.
-> > 
-> > This series has been tested on 6.3.0-rc3 kernel, both on arm64 and x86
-> > platforms.
-> > 
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> > Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: linux-mm@kvack.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org 
-> > 
-> > Chaitanya S Prakash (5):
-> >   selftests/mm: Add support for arm64 platform on va switch
-> >   selftests/mm: Rename va_128TBswitch to va_high_addr_switch
-> >   selftests/mm: Add platform independent in code comments
-> >   selftests/mm: Configure nr_hugepages for arm64
-> >   selftests/mm: Run hugetlb testcases of va switch
-> > 
-> >  tools/testing/selftests/mm/Makefile           |  4 +-
-> >  tools/testing/selftests/mm/run_vmtests.sh     | 12 +++++-
-> >  ...va_128TBswitch.c => va_high_addr_switch.c} | 41 +++++++++++++++----
-> >  ..._128TBswitch.sh => va_high_addr_switch.sh} |  6 ++-
-> >  4 files changed, 49 insertions(+), 14 deletions(-)
-> >  rename tools/testing/selftests/mm/{va_128TBswitch.c => va_high_addr_switch.c} (86%)
-> >  rename tools/testing/selftests/mm/{va_128TBswitch.sh => va_high_addr_switch.sh} (89%)
-> 
-> The patchset looks sane to me, but I have question: why arm64 has switch
-> on 256TB. The reason we have the switch is to keep system backward
-> compatible.
 
-It's the same reason, it's just that arm64 initially supported 48-bits / 256TB
-of user addresses (0x0000000000000000..0x0000ffffffffffff), while x86_64
-supported 47-bits / 128TB (0x0000000000000000..0x00007fffffffffff).
+--zouinu9G3n7jzOuo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note: arm64 has separate page tables for the user / kernel halves of the VA
-space, which in practice means we get an extra bit of address range for each
-half.
+On Sun 2023-03-19 20:18:12, Christian Marangi wrote:
+> Add Switch LED for each port for MikroTik RB3011UiAS-RM.
+>=20
+> MikroTik RB3011UiAS-RM is a 10 port device with 2 qca8337 switch chips
+> connected.
+>=20
+> It was discovered that in the hardware design all 3 Switch LED trace of
+> the related port is connected to the same LED. This was discovered by
+> setting to 'always on' the related led in the switch regs and noticing
+> that all 3 LED for the specific port (for example for port 1) cause the
+> connected LED for port 1 to turn on. As an extra test we tried enabling
+> 2 different LED for the port resulting in the LED turned off only if
+> every led in the reg was off.
+>=20
+> Aside from this funny and strange hardware implementation, the device
+> itself have one green LED for each port, resulting in 10 green LED one
+> for each of the 10 supported port.
+>=20
+> Cc: Jonathan McDowell <noodles@earth.li>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-> Maybe it is better to make arm64 switch also on 128TB to make it
-> compatible across architectures?
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
 
-I don't think that's something that we can change; user addresses between 128TB
-and 256TB have been the case for over a decade now, and avoiding that by
-default could easily break something.
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-Thanks,
-Mark.
+--zouinu9G3n7jzOuo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBw/SQAKCRAw5/Bqldv6
+8oFMAKClNfnf4Qid7kCyj0YBbLipLy2WhQCffrRvBkk2AKCW09Vxt7sn/z9R3tU=
+=MGkU
+-----END PGP SIGNATURE-----
+
+--zouinu9G3n7jzOuo--
