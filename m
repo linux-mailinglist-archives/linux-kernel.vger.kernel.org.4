@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B746C6544
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F228E6C653F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjCWKiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S231553AbjCWKh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCWKhm (ORCPT
+        with ESMTP id S229485AbjCWKhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:37:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60671E5F9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:34:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62817B82051
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0505AC4339C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679567649;
-        bh=fJu4buwju+aXou8+VwqF0BZQbX9HcKk4lN1aVLiCobw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NP9BcpC4iG0ZV2MbmZH201WUnV5YSjsNTzxzICfbYcfldnPbkMcSeoWyUZJdclUxs
-         Gdyi6fsjL1ZTy0CvRoDbdNswtoqm5CrhVMuRNxe4wIKs+40r102n6rAIfrIIDsVCK7
-         fOb+aZd7Ip7FWY90GVQ8dR4RCneXuLQb0FLc1i4u2rP16O5334F23+oJ5Go8UlevtL
-         L7CqIvlNFxDuwoDmdYaQstPnNPVRUzdDfJABFD+Eq8z+/N7QjcmwajdurFBQ6Mbq56
-         zXDfmmD0NpdKHebsDQZodGxq2z1SwmMVO+kPMS8QlfApKiBGJ12iDUIJIdMPFrSyxe
-         DuEUGQTWh5lYQ==
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5419d4c340aso387105487b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:34:08 -0700 (PDT)
-X-Gm-Message-State: AAQBX9c8O85Fmv8LifM/XTOmVdNaIIxBpO2zPTO9ISjOLzaSY0UbIT9L
-        CQbnokenqeAftHpXQ5+mpq+h/uPL6PBcSr3hoI4=
-X-Google-Smtp-Source: AKy350YPEjHVSAhmQPCXnKtsgwqbKyg8CBncmUaehuSDRZziR65QgWO4mv97VCOV/F7KkCRmjNdFTCgBA1Z28mbqmKU=
-X-Received: by 2002:a81:4505:0:b0:544:5042:324a with SMTP id
- s5-20020a814505000000b005445042324amr1624643ywa.3.1679567647951; Thu, 23 Mar
- 2023 03:34:07 -0700 (PDT)
+        Thu, 23 Mar 2023 06:37:38 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D922A30
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:33:58 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id r11so84360003edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679567636;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJvlB1/rh6Hpalkxu3jTJ8YoiluXE/8fG50CDYwqDlk=;
+        b=dY2ajohMVM50QDWHUF+mXYO/Q1Rvu6+pYqOPiqwaLuDkiT0XFZYNbzcXI/TnCP+h8h
+         Q2BuboB7rl4qoEDW2fvdgg33RByQdIdesDz+yCFgm0rxGKEoGetkbvFAri5qPAc/djWY
+         cgIlRbbZ8SEHLO2pImvyZq8KfchZCMaMS7PtAAOS4X6uWpyBNWBdFpRv3Po6XRbwY7dm
+         yjrF0y/Ny90KyY5WSPa0GifJu7putX2CpQhnPtayTB9+3U1c7fXOKk0xL/VQXMdRXUkY
+         teQzB6JoepuhWKd0r4AvQKXj9ENqm9Np8HbEcT981YdrkdGFxRZChHyKSpT3GZW5OUKc
+         hdmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679567636;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OJvlB1/rh6Hpalkxu3jTJ8YoiluXE/8fG50CDYwqDlk=;
+        b=AmZpnTJIERJJWVqREQhGW2NSeH7MxQtKaV4WdXqiUUHiSyx+keib3rAJyC0GlNJEhj
+         EnK56duZhKXxl8ewEujDUrmxoPtwnK0xgN20A0jzg/Qcnhf/kNoYxolHqYgkwpC73no5
+         WnbJJx7qpD3i0ZjXGDk0xJAzPBaHEFhHw46012IsP8Dm+I65j+6tWSQSmk6Nr6Tl6UjM
+         /GkZM1NsO+qAJyOl3i0tUuLAwZZRFsYTFGUDRNlCpqbGhBGpp0ocr1UdI3kPLm46+Mzh
+         02c5708CMF1BPrUsTU6LhZQn9T7X1oaf47ktwWZwtOXcz793G5+ewJI2sUsArv4ld6yp
+         HkQQ==
+X-Gm-Message-State: AO0yUKWRWyBRFd1Y+Tw6D2YrPrkr/UoigoT9350x/uHeNZW2yQwb9o/Y
+        AiWt+ElbOCbJiC940iI1myw2DHHjMV691Q==
+X-Google-Smtp-Source: AK7set+/xZooQyOwxULME6tptP/L1+jeMfX6gGC4sTTj3x9xNdhJXVLOl7gAHyuOmsJweblxRUuq+w==
+X-Received: by 2002:a17:906:c413:b0:8b1:7de3:cfb4 with SMTP id u19-20020a170906c41300b008b17de3cfb4mr10010320ejz.4.1679567636710;
+        Thu, 23 Mar 2023 03:33:56 -0700 (PDT)
+Received: from lelloman-5950.. (host-79-13-135-230.retail.telecomitalia.it. [79.13.135.230])
+        by smtp.gmail.com with ESMTPSA id s15-20020a1709060c0f00b00928e0ea53e5sm8432687ejf.84.2023.03.23.03.33.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 03:33:56 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, surenb@google.com, brauner@kernel.org,
+        chris@chrisdown.name, hannes@cmpxchg.org,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH v2 0/3] sched/psi: Allow unprivileged PSI polling
+Date:   Thu, 23 Mar 2023 11:33:47 +0100
+Message-Id: <20230323103350.40569-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230323083553.16864-1-cai.huoqing@linux.dev> <20230323102952.GD2130371@linux.intel.com>
-In-Reply-To: <20230323102952.GD2130371@linux.intel.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 23 Mar 2023 12:33:41 +0200
-X-Gmail-Original-Message-ID: <CAFCwf13Xi+w6OiR=_6Lqu9LPBfpmr-0deLUMkqsXsjXD0iKqNg@mail.gmail.com>
-Message-ID: <CAFCwf13Xi+w6OiR=_6Lqu9LPBfpmr-0deLUMkqsXsjXD0iKqNg@mail.gmail.com>
-Subject: Re: [PATCH] accel/habanalabs: Remove redundant pci_clear_master
-To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Tomer Tayar <ttayar@habana.ai>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:29=E2=80=AFPM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
->
-> On Thu, Mar 23, 2023 at 04:35:49PM +0800, Cai Huoqing wrote:
-> > Remove pci_clear_master to simplify the code,
-> > the bus-mastering is also cleared in do_pci_disable_device,
-> > like this:
-> > ./drivers/pci/pci.c:2197
-> > static void do_pci_disable_device(struct pci_dev *dev)
-> > {
-> >       u16 pci_command;
-> >
-> >       pci_read_config_word(dev, PCI_COMMAND, &pci_command);
-> >       if (pci_command & PCI_COMMAND_MASTER) {
-> >               pci_command &=3D ~PCI_COMMAND_MASTER;
-> >               pci_write_config_word(dev, PCI_COMMAND, pci_command);
-> >       }
-> >
-> >       pcibios_disable_device(dev);
-> > }.
-> > And dev->is_busmaster is set to 0 in pci_disable_device.
-> >
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> LGTM
->
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
->
-Applied to -next
-Thanks,
-Oded
+PSI offers 2 mechanisms to get information about a specific resource
+pressure. One is reading from /proc/pressure/<resource>, which gives
+average pressures aggregated every 2s. The other is creating a pollable
+fd for a specific resource and cgroup.
+
+The trigger creation requires CAP_SYS_RESOURCE, and gives the
+possibility to pick specific time window and threshold, spawing an RT
+thread to aggregate the data.
+
+Systemd would like to provide containers the option to monitor pressure
+on their own cgroup and sub-cgroups. For example, if systemd launches a
+container that itself then launches services, the container should have
+the ability to poll() for pressure in individual services. But neither
+the container nor the services are privileged.
+
+The series is implemented in 3 steps in order to reduce the noise of
+the change.
+
+V2:
+- removed renaming patch (previous 2/4) and applied suggested solution
+- changed update_triggers side effect removal as suggested in review
+- rebased core patch on other V2 changes
+
+Domenico Cerasuolo (3):
+  sched/psi: rearrange polling code in preparation
+  sched/psi: extract update_triggers side effect
+  sched/psi: allow unprivileged polling of N*2s period
+
+ Documentation/accounting/psi.rst |   4 +
+ include/linux/psi.h              |   2 +-
+ include/linux/psi_types.h        |  11 +-
+ kernel/cgroup/cgroup.c           |   2 +-
+ kernel/sched/psi.c               | 315 ++++++++++++++++---------------
+ 5 files changed, 181 insertions(+), 153 deletions(-)
+
+-- 
+2.34.1
+
