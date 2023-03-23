@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3486C5B30
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEE76C5B37
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjCWALF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S231215AbjCWALl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCWAKv (ORCPT
+        with ESMTP id S230493AbjCWALY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:10:51 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DA231E37;
-        Wed, 22 Mar 2023 17:10:15 -0700 (PDT)
+        Wed, 22 Mar 2023 20:11:24 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2823335EDE;
+        Wed, 22 Mar 2023 17:10:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hyNKk2EPWia4ZUVAsbcMelXnyckZilv+8G2tWYXIXbi2aMasVlRVlvah5OUHg5YcN/f6D7MjafwoPiD9qNThA97qhJsiCi6zMjK88PYAv82B+2TUjoxd/cTYCnmOaUotnOF1vvr0cwdpKUXrXUVPwzqdpQjgeRUkbDuyXZwU+dp3hNrLQRoADWMJUu8e/dG7XcoeKa0SY06HwUB7ernxozUhzier0vYfQUlizmXZDoHbnSGpQyUNqDaB3dBNbje6x75Fry1u6VyE2cYjGxlsNZc+8N2I+HQj9N17pIt4JlvKSefWpeADm7u/FZmKwb2NgtVG5LCPf1Fos0OUV34Zzw==
+ b=dsbH/d1iUxSe3H2SMDgHI3OyPjR/suEmbkx9n6Yc6U3vr7NXpz3vymHEERgfe7hWPFFp2x6rEsAgUfxyCwjDSWzVSXK3k883rkctuE8LY4lHGJML+lzTM2PLYA225D9D4+3zV+WlJSti+ydLo2oyeNhXqX8VtSySiW6xZocOgvf3lrXbsc/DsUkyLhseyy+NILc2x/nVkT0AwJLqRZsiAK3jYcZncG0WB1PASMtNSjfP1WVcyDCV+T8YpyK7Eh5g2GgADAX9TyGvVLACaisuQR3UzZJAYIJO3bQ8JDvpY+LOEgI5hC8FjCtUYukHFcnHcdLL9z5hYYO1Z3+weAbVBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ymfACAjSLWbCk+4U3bvrCLTQlZYsf0VDrwtsvVsOjLE=;
- b=FJ+WqYs3Abl+R9eY++HiNPWqRkSfxE5iXyaEGtO0GCo0mlxZqT9V1VaNMnGbe5V7tLeInqSENzokUPIY57IHfspEa7UXicHcBOo37ViSFiJRqjfb5oJbi/DdNUmqcB3PgIv81RbFqX5jbQT0Q3sRO9eOaf9sWUt6ySo0lxrbHlRwDfHFhKN0Z5QLhy4mUCcsgeMzxBifWBedO4yCBq+pVfLeLc1i4Hi+lz0cKmK6T4zI03p6HmaDfYbDzvKBBNXvnUe32mch1Ex2ofFlrj/izWpFEQ7AhYFnv4CbmtT52W/hKVtBePt9ihcmStIq4izGESCwyhPllBRcG+0ZBHqteA==
+ bh=1MDls9ITIFGGKkwfzufckKk9fjZ1Lh0w+zr7TA/z5wc=;
+ b=gclitdk/YNVPSCRObHenfOhDJyADSZMz67t9fCYLU9LgqgYgzly+vXIwGTBZjnp6C7yxma2s1vMCgrtQ9DXi0szOshdk6mQTI2X2ZhDarKQawKCdbEmSerRDgvhxZ7EtbTIZgCoihIoOuONljcxLXY/ap4Qn2GTcjPrmBJnt42wQ8tEkmxg/xx5+e3T82cZmtG79ZeXuFUPow2w0wsQA4WYtYlWKWIY1HbfG/V4I5YfkGlSFlXidjrwK0tLpagd9JP0PiGAt6qNugfqbXvIhs1EYF6ogmh42nZw0/ili366P7FsGIsGHxSnEcePl8xTyIgOxKr4DIuYK0MdOYysuYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ymfACAjSLWbCk+4U3bvrCLTQlZYsf0VDrwtsvVsOjLE=;
- b=xQLmccMVPSGW8jo4cqx+mhrsNPBl+2FjvkQ1h0IBSSIfC0nQ7Mnz2Rd/ddDsSKxeZLCcxunIl0Jh3p98Uo1nc1nrRadxrXNtCepVwyfDp09I8VWXjUmYFeR74r2DA/mmKnAxOKnp1sSjbiA1EgN//WPCZPOaJotdjH7MNfS57v0=
-Received: from MN2PR11CA0012.namprd11.prod.outlook.com (2603:10b6:208:23b::17)
- by BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22) with
+ bh=1MDls9ITIFGGKkwfzufckKk9fjZ1Lh0w+zr7TA/z5wc=;
+ b=Jnymu99BEijCKDHV9pa6ClhJAUb8WNPUYrvkvGuGMe2uyigHDhDqqdBnJl9AH4FM+9IubqvJOU+LzaXGCCINHvkfHFt3vF8H9ESE7uekek0VedqZLqWJ8BhoBkcAFTr89ZqZA8WcFDXqT+MOOaFZanYEt5fdnmtTYDMg2MgniRc=
+Received: from BL1PR13CA0241.namprd13.prod.outlook.com (2603:10b6:208:2ba::6)
+ by MN2PR12MB4517.namprd12.prod.outlook.com (2603:10b6:208:267::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 00:10:00 +0000
-Received: from BL02EPF000100D0.namprd05.prod.outlook.com
- (2603:10b6:208:23b:cafe::67) by MN2PR11CA0012.outlook.office365.com
- (2603:10b6:208:23b::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Thu, 23 Mar 2023 00:10:00 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 00:10:19 +0000
+Received: from BL02EPF000100D3.namprd05.prod.outlook.com
+ (2603:10b6:208:2ba:cafe::d8) by BL1PR13CA0241.outlook.office365.com
+ (2603:10b6:208:2ba::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.17 via Frontend
+ Transport; Thu, 23 Mar 2023 00:10:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF000100D0.mail.protection.outlook.com (10.167.241.204) with Microsoft
+ BL02EPF000100D3.mail.protection.outlook.com (10.167.241.207) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Thu, 23 Mar 2023 00:10:00 +0000
+ 15.20.6178.30 via Frontend Transport; Thu, 23 Mar 2023 00:10:19 +0000
 Received: from platform-dev1.pensando.io (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 22 Mar 2023 19:09:57 -0500
+ 15.1.2375.34; Wed, 22 Mar 2023 19:10:16 -0500
 From:   Brad Larson <blarson@amd.com>
 To:     <linux-arm-kernel@lists.infradead.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
@@ -73,9 +73,9 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
         <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
         <vaishnav.a@ti.com>, <will@kernel.org>,
         <devicetree@vger.kernel.org>
-Subject: [PATCH v12 11/15] mmc: sdhci-cadence: Enable device specific override of writel()
-Date:   Wed, 22 Mar 2023 17:06:53 -0700
-Message-ID: <20230323000657.28664-12-blarson@amd.com>
+Subject: [PATCH v12 12/15] mmc: sdhci-cadence: Support device specific init during probe
+Date:   Wed, 22 Mar 2023 17:06:54 -0700
+Message-ID: <20230323000657.28664-13-blarson@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230323000657.28664-1-blarson@amd.com>
 References: <20230323000657.28664-1-blarson@amd.com>
@@ -86,23 +86,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000100D0:EE_|BL0PR12MB5506:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bdbfc15-741f-4fe6-6d47-08db2b32f1c4
+X-MS-TrafficTypeDiagnostic: BL02EPF000100D3:EE_|MN2PR12MB4517:EE_
+X-MS-Office365-Filtering-Correlation-Id: 519749aa-39ef-412f-539a-08db2b32fcef
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uzI6ke5ikwd2dHSVTV1j9PvcvYw+A+eOGQYCx0oxrJ9DwoIpuQhLyCHj4djG4bb6HEVLds4+Jr6pljoUEYADapcZ8C3t7TXgvsud7sCiLj3q7M7F/lwoMxkbF2R4mmYQN5r3c/h0PaaNjJTQ99NCC6Yr2LQ4IrG8i46uftBKUUx3beqAsNNZnTZohHwA+U0D/MresNTPfQ5KXaWgL8rpiJ2IEqptGJ5k2mH0I3R/VSkhqpcHq1fZgTKlOhrO0Mj14QvBx1sfb7ZFBsycoT0oLeNgpafdE7pOrbtl2lb5KlBz0DwlZgBYYw5qClYbSmEcEznG35XDi+P9JKSFrTpTBXz3/H6fqE06a0dcdk3c5EsEsAidCB2kagWcMOUGTJNxy+0bGd77cS0jlpKIvYtrpvL2uqO4uefjVQ7X8RLgDwa+KgaDCKKtE7lQjHlFUCDVh+U+e3tezBKjpYTvl+39ice/Fe1FLcQM7pCsKjsioJhyMMrrWr5E0biPWrGe3Ea5StIr+yj63vjV1JgyMIW9ACa7uET7FqgE5BoabTYJ05lEKv862wvvoOE6ZpepOArpKBG7/itJUlnX4KWnpITiN3DNP6YvvjjZfeegrhmAoKzTS0NJHF3EYTSg0vCpAhFsmL7OvmxIesxUxuqs5HVFzGcGnwXXgYwb9k8Q0cVTF4bA6CYEWdphijHKOyxeKm1LwJZyYjjRmf/X1nh84VfIUKJ7iVFGsGOEJZSjJ2nARVQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199018)(46966006)(40470700004)(36840700001)(7416002)(5660300002)(8936002)(7406005)(41300700001)(36860700001)(82310400005)(40480700001)(36756003)(356005)(40460700003)(82740400003)(81166007)(2906002)(47076005)(16526019)(336012)(1076003)(83380400001)(6666004)(426003)(478600001)(2616005)(186003)(26005)(4326008)(54906003)(316002)(70206006)(8676002)(6916009)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CrdNSGjl+Xzyf1NStkBP1cYKS5J4NHFTzF27gfPDPL3jNeJdl94cpL4bMt6Nl/xNugF/12H2HPhmjPlzGaeqS9WricERWLTdRN4lLihxFM/HY4zR+xs5vdRbu60gZq6/xK70fC5I6Mw7Jg5bDgmjYUmmhTsKI5gKg1wnJf3mlIhWD1suwGZS7EATcg0bl+FmkIQxOVJq55C8JAu2wpeiNAAvpXwU2/jO9NdLClMNMDuNvniC5HhqlhWFvm0okFIsMDbvP61k2yLDi7Tczig0iNhqQ5JEOERMt2RwHqcB2qX9boi8v/Rws3xfU8DQhKGnSdVqhtNaAYhhHng3q2YX/Z8chCCCQhFaTu4z0//GCpp9sdAlvkFiPVjQNnvofeG8XO0CZJZ1MmJCyB0YRt429MlQVX0PowoWZyFy/Qg6lNlUQd0MUsxxv4O742jBn2u66OHOHkIFeWA+KL/kk/CPMEcrfcZIf+ikOzydWlpQMAF+MVrZl/5uTSvgVf6OAy+ZF4ZP0uaV4YTzc89N+FrmvsoRebDOZP1rL1xzUmS35iKooNwvJmhMBKOtq7HotKRnaEU2H8N/HCpz/QJ5H8lvRTqnG3a+iPrxaWIRQFKLKwjz2u/rC8hC+cMjlZ8letknoKt/zzMS5C4+Bu0oNZlFX+nSaYbVBFlGM0pRvm9zNB6KBdXbCbQ+gp95tIx3zOsRwwdLgc0E0AIXPh1n4EgCGlV86qQPBA8WQtimu68lwd8=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199018)(36840700001)(40470700004)(46966006)(82740400003)(356005)(40480700001)(81166007)(40460700003)(186003)(16526019)(54906003)(336012)(2906002)(316002)(47076005)(83380400001)(36860700001)(426003)(41300700001)(82310400005)(70586007)(6916009)(4326008)(70206006)(2616005)(8676002)(26005)(1076003)(7416002)(7406005)(478600001)(6666004)(8936002)(5660300002)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 00:10:00.6973
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 00:10:19.4334
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bdbfc15-741f-4fe6-6d47-08db2b32f1c4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 519749aa-39ef-412f-539a-08db2b32fcef
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D3.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5506
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4517
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
@@ -113,106 +113,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SoCs with device specific Cadence implementation, such as setting
-byte-enables before the write, need to override writel().  Add a
-callback where the default is writel() for all existing chips.
+Move struct sdhci_pltfm_data under new struct sdhci_cdns_drv_data.
+Add an init() into sdhci_cdns_drv_data for platform specific device
+initialization in the device probe which is not used for existing devices.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
 
 v10 changes:
-- The 1st patch adding private writel() is unchanged.  The 2nd patch is split
-  into two patches to provide for device specific init in one patch with no
-  effect on existing designs.  Then add the pensando support into the next patch.
-  Then the 4th patch is mmc hardware reset support which is unchanged.
-
-v9 changes:
-- No change to this patch but as some patches are deleted and this is
-  a respin the three successive patches to sdhci-cadence.c are
-  patches 12, 13, and 14 which do the following:
-
-  1. Add ability for Cadence specific design to have priv writel().
-  2. Add Elba SoC support that requires its own priv writel() for
-     byte-lane control .
-  3. Add support for mmc hardware reset.
+- New patch to provide for platform specific init() with no change
+  to existing designs.
 
 ---
- drivers/mmc/host/sdhci-cadence.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ drivers/mmc/host/sdhci-cadence.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-index 6f2de54a5987..708d4297f241 100644
+index 708d4297f241..c528a25f48b8 100644
 --- a/drivers/mmc/host/sdhci-cadence.c
 +++ b/drivers/mmc/host/sdhci-cadence.c
-@@ -67,6 +67,7 @@ struct sdhci_cdns_phy_param {
- struct sdhci_cdns_priv {
- 	void __iomem *hrs_addr;
- 	bool enhanced_strobe;
-+	void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
- 	unsigned int nr_phy_params;
- 	struct sdhci_cdns_phy_param phy_params[];
- };
-@@ -90,6 +91,12 @@ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
- 	{ "cdns,phy-dll-delay-strobe", SDHCI_CDNS_PHY_DLY_STROBE, },
+@@ -77,6 +77,11 @@ struct sdhci_cdns_phy_cfg {
+ 	u8 addr;
  };
  
-+static inline void cdns_writel(struct sdhci_cdns_priv *priv, u32 val,
-+			       void __iomem *reg)
-+{
-+	writel(val, reg);
-+}
++struct sdhci_cdns_drv_data {
++	int (*init)(struct platform_device *pdev);
++	const struct sdhci_pltfm_data pltfm_data;
++};
 +
- static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
- 				    u8 addr, u8 data)
+ static const struct sdhci_cdns_phy_cfg sdhci_cdns_phy_cfgs[] = {
+ 	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
+ 	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
+@@ -325,13 +330,17 @@ static const struct sdhci_ops sdhci_cdns_ops = {
+ 	.set_uhs_signaling = sdhci_cdns_set_uhs_signaling,
+ };
+ 
+-static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
+-	.ops = &sdhci_cdns_ops,
+-	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
++static const struct sdhci_cdns_drv_data sdhci_cdns_uniphier_drv_data = {
++	.pltfm_data = {
++		.ops = &sdhci_cdns_ops,
++		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
++	},
+ };
+ 
+-static const struct sdhci_pltfm_data sdhci_cdns_pltfm_data = {
+-	.ops = &sdhci_cdns_ops,
++static const struct sdhci_cdns_drv_data sdhci_cdns_drv_data = {
++	.pltfm_data = {
++		.ops = &sdhci_cdns_ops,
++	},
+ };
+ 
+ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+@@ -357,7 +366,7 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+ static int sdhci_cdns_probe(struct platform_device *pdev)
  {
-@@ -104,17 +111,17 @@ static int sdhci_cdns_write_phy_reg(struct sdhci_cdns_priv *priv,
+ 	struct sdhci_host *host;
+-	const struct sdhci_pltfm_data *data;
++	const struct sdhci_cdns_drv_data *data;
+ 	struct sdhci_pltfm_host *pltfm_host;
+ 	struct sdhci_cdns_priv *priv;
+ 	struct clk *clk;
+@@ -376,10 +385,10 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
  
- 	tmp = FIELD_PREP(SDHCI_CDNS_HRS04_WDATA, data) |
- 	      FIELD_PREP(SDHCI_CDNS_HRS04_ADDR, addr);
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
+ 	data = of_device_get_match_data(dev);
+ 	if (!data)
+-		data = &sdhci_cdns_pltfm_data;
++		data = &sdhci_cdns_drv_data;
  
- 	tmp |= SDHCI_CDNS_HRS04_WR;
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
- 
- 	ret = readl_poll_timeout(reg, tmp, tmp & SDHCI_CDNS_HRS04_ACK, 0, 10);
- 	if (ret)
- 		return ret;
- 
- 	tmp &= ~SDHCI_CDNS_HRS04_WR;
--	writel(tmp, reg);
-+	priv->priv_writel(priv, tmp, reg);
- 
- 	ret = readl_poll_timeout(reg, tmp, !(tmp & SDHCI_CDNS_HRS04_ACK),
- 				 0, 10);
-@@ -191,7 +198,7 @@ static void sdhci_cdns_set_emmc_mode(struct sdhci_cdns_priv *priv, u32 mode)
- 	tmp = readl(priv->hrs_addr + SDHCI_CDNS_HRS06);
- 	tmp &= ~SDHCI_CDNS_HRS06_MODE;
- 	tmp |= FIELD_PREP(SDHCI_CDNS_HRS06_MODE, mode);
--	writel(tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
-+	priv->priv_writel(priv, tmp, priv->hrs_addr + SDHCI_CDNS_HRS06);
- }
- 
- static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
-@@ -223,7 +230,7 @@ static int sdhci_cdns_set_tune_val(struct sdhci_host *host, unsigned int val)
- 	 */
- 	for (i = 0; i < 2; i++) {
- 		tmp |= SDHCI_CDNS_HRS06_TUNE_UP;
--		writel(tmp, reg);
-+		priv->priv_writel(priv, tmp, reg);
- 
- 		ret = readl_poll_timeout(reg, tmp,
- 					 !(tmp & SDHCI_CDNS_HRS06_TUNE_UP),
-@@ -386,6 +393,7 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
- 	priv->nr_phy_params = nr_phy_params;
- 	priv->hrs_addr = host->ioaddr;
- 	priv->enhanced_strobe = false;
-+	priv->priv_writel = cdns_writel;
+ 	nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+-	host = sdhci_pltfm_init(pdev, data,
++	host = sdhci_pltfm_init(pdev, &data->pltfm_data,
+ 				struct_size(priv, phy_params, nr_phy_params));
+ 	if (IS_ERR(host)) {
+ 		ret = PTR_ERR(host);
+@@ -397,6 +406,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
  	host->mmc_host_ops.hs400_enhanced_strobe =
  				sdhci_cdns_hs400_enhanced_strobe;
++	if (data->init) {
++		ret = data->init(pdev);
++		if (ret)
++			goto free;
++	}
+ 	sdhci_enable_v4_mode(host);
+ 	__sdhci_read_caps(host, &version, NULL, NULL);
+ 
+@@ -461,7 +475,7 @@ static const struct dev_pm_ops sdhci_cdns_pm_ops = {
+ static const struct of_device_id sdhci_cdns_match[] = {
+ 	{
+ 		.compatible = "socionext,uniphier-sd4hc",
+-		.data = &sdhci_cdns_uniphier_pltfm_data,
++		.data = &sdhci_cdns_uniphier_drv_data,
+ 	},
+ 	{ .compatible = "cdns,sd4hc" },
+ 	{ /* sentinel */ }
 -- 
 2.17.1
 
