@@ -2,116 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3166C5EA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875C66C5E9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjCWFRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S230000AbjCWFRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjCWFRk (ORCPT
+        with ESMTP id S229848AbjCWFRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:17:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D20F1F5C4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:16:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679548612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HoUzTMO8R5MhPq7S8OoMssryl9/6eR6zluDti49MEro=;
-        b=eDNhgma4RHwHo38UjyW4mFPa+ytR2DlR2DQhp7HfmCF63ds7b2521j6UMry4gpKdrYGsw1
-        SlsDJDZFruvM7qvS6B8FN3jcC/qtU5Q7V2gFWDfBZbHbwsCZVRfCOIxUIGLEseQpGVCLv1
-        THLYBYqEBQa0Q9tXhdictkx96Sdkv+Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-179-KY9zo7YzPqyCZhglvOgcqw-1; Thu, 23 Mar 2023 01:16:43 -0400
-X-MC-Unique: KY9zo7YzPqyCZhglvOgcqw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 362258828C2;
-        Thu, 23 Mar 2023 05:16:41 +0000 (UTC)
-Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D3854021B1;
-        Thu, 23 Mar 2023 05:16:24 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 13:16:20 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        jefflexu@linux.alibaba.com, jaegeuk@kernel.org,
-        trond.myklebust@hammerspace.com, anna@kernel.org,
-        konishi.ryusuke@gmail.com, mark@fasheh.com, jlbec@evilplan.org,
-        joseph.qi@linux.alibaba.com, richard@nod.at, djwong@kernel.org,
-        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
-        jth@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, ming.lei@redhat.com
-Subject: Re: [PATCH v3 01/10] kobject: introduce kobject_del_and_put()
-Message-ID: <ZBvgpBzEuFuyOD/c@ovpn-8-16.pek2.redhat.com>
-References: <20230322165830.55071-1-frank.li@vivo.com>
+        Thu, 23 Mar 2023 01:17:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E431F5CF
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:17:18 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eg48so81615773edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679548637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wf+Rn+FqVZ/sEEsLcWdc0Ab7428JNqhvJozhY+1OPkE=;
+        b=UHxWcP+YzEnDXmlCMM4KkoxJ1LDDdOcgokWC5PN8qmiIJBy4Amlu03ZpAtkmIXsfwm
+         RWn4PlsACc2XuTxyHVrWJGu4NoFd4ClniTSizL/83reSjz4HKmvfbePZbcokbL9DDWiG
+         TP5Sjo3IF8xMn8px91h8B4L5Eh9dPtZq4JhbqVT9k24fwBDe+4+sU9Z2i8Ok57D6Qb/N
+         rnLUbX3kP4DcjeHwrk+/nzNrcNoBYwqDvNsx8nBG6TmYcm1YuX9LPzwcvMxSubyOjAnF
+         krM2wEcyWV/eQ3sw5wI3NOyBMOQzFLMafCs6zrgwLGYhZyaKdjtssQ8BakuWxEgVN9jf
+         A4+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679548637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wf+Rn+FqVZ/sEEsLcWdc0Ab7428JNqhvJozhY+1OPkE=;
+        b=iKWIz5XwUUBRKlOCUOBT4cSIQGYh4twj1J7WsKOjZO2vxznySERN5ItQBdWpq76ZbW
+         mEKf2+jlxghlzcAhPfrXEzgZN2n8LgreT8Kx8YFo/yeJT8aCkKNwBDTiXtstRZS0DEfg
+         v9NM9qNwBQsD/scWfc7BhUTqA2LJgExgUow8SNQ8k6roP8+bIIuyxBTBJrb5E/k+cM28
+         4b9x+zrzDdNEzwKxZ0jqb5Y6FTybnA07uVxKLx/PZeiTZolC1sTpuS+uOtPfOc7uHtt4
+         HmhXLE2x33SIZWTcaysDEiao22x77SceB08fcESOcWC1Ea9QEtoe53l1q22YxijUlHfM
+         hOrg==
+X-Gm-Message-State: AO0yUKWU7yoHlv9zcWr51HOJz32WuUVy13IRXnA8vAE+APTkBOrcac/n
+        jmpeGUzlp63zPayPP2y6SaMiUrn9aFgsoEognjZGwg==
+X-Google-Smtp-Source: AK7set+njzVnfe8Swf7T8yAS00s4xUQcg5nPNp7fc0oRod15AHWx6jQG85RvuSvIK+G/onp8lGtBweZI7fXPAisH/a4=
+X-Received: by 2002:a50:9b55:0:b0:4fc:473d:3308 with SMTP id
+ a21-20020a509b55000000b004fc473d3308mr2358825edj.8.1679548636938; Wed, 22 Mar
+ 2023 22:17:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322165830.55071-1-frank.li@vivo.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-3-yosryahmed@google.com> <CALvZod5MnM8UJ0pj44QYb4sVwgFZ1B2KpSL6oqBQbJU3wH6eNA@mail.gmail.com>
+In-Reply-To: <CALvZod5MnM8UJ0pj44QYb4sVwgFZ1B2KpSL6oqBQbJU3wH6eNA@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 22 Mar 2023 22:16:40 -0700
+Message-ID: <CAJD7tkZJWXDinusUeYNBf_qov0+4ug2hG75Ge8NuP=6jG7+byA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/7] memcg: do not disable interrupts when holding stats_flush_lock
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:58:30AM +0800, Yangtao Li wrote:
-> There are plenty of using kobject_del() and kobject_put() together
-> in the kernel tree. This patch wraps these two calls in a single helper.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v3:
-> -convert to inline helper
-> v2:
-> -add kobject_del_and_put() users
->  include/linux/kobject.h | 13 +++++++++++++
->  lib/kobject.c           |  3 +--
->  2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-> index bdab370a24f4..e21b7c22e355 100644
-> --- a/include/linux/kobject.h
-> +++ b/include/linux/kobject.h
-> @@ -112,6 +112,19 @@ extern struct kobject * __must_check kobject_get_unless_zero(
->  						struct kobject *kobj);
->  extern void kobject_put(struct kobject *kobj);
->  
-> +/**
-> + * kobject_del_and_put() - Delete kobject.
-> + * @kobj: object.
-> + *
-> + * Unlink kobject from hierarchy and decrement the refcount.
-> + * If refcount is 0, call kobject_cleanup().
-> + */
-> +static inline void kobject_del_and_put(struct kobject *kobj)
-> +{
-> +	kobject_del(kobj);
-> +	kobject_put(kobj);
-> +}
+On Wed, Mar 22, 2023 at 9:32=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
+wrote:
+>
+> On Wed, Mar 22, 2023 at 9:00=E2=80=AFPM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
+> > The rstat flushing code was modified so that we do not disable interrup=
+ts
+> > when we hold the global rstat lock. Do the same for stats_flush_lock on
+> > the memcg side to avoid unnecessarily disabling interrupts throughout
+> > flushing.
+> >
+> > Since the code exclusively uses trylock to acquire this lock, it should
+> > be fine to hold from interrupt contexts or normal contexts without
+> > disabling interrupts as a deadlock cannot occur. For interrupt contexts
+> > we will return immediately without flushing anyway.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  mm/memcontrol.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 5abffe6f8389..e0e92b38fa51 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -636,15 +636,17 @@ static inline void memcg_rstat_updated(struct mem=
+_cgroup *memcg, int val)
+> >
+> >  static void __mem_cgroup_flush_stats(void)
+> >  {
+> > -       unsigned long flag;
+> > -
+> > -       if (!spin_trylock_irqsave(&stats_flush_lock, flag))
+> > +       /*
+> > +        * This lock can be acquired from interrupt context,
+>
+> How? What's the code path?
 
-kobject_put() actually covers kobject removal automatically, which is
-single stage removal. So if you see the two called together, it is
-safe to kill kobject_del() directly.
+I believe through the charge/uncharge path we can do
+memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage()->mem_cgrou=
+p_flush_stats(),
+right? I am assuming we can charge/uncharge memory in an interrupt
+context.
 
+Also the current code always disables interrupts before calling
+memcg_check_events(), which made me suspect the percpu variables that
+are modified by that call can also be modified in interrupt context.
 
-thanks,
-Ming
-
+>
+> > but we only acquire
+> > +        * using trylock so it should be fine as we cannot cause a dead=
+lock.
+> > +        */
+> > +       if (!spin_trylock(&stats_flush_lock))
+> >                 return;
+> >
+> >         flush_next_time =3D jiffies_64 + 2*FLUSH_TIME;
+> >         cgroup_rstat_flush_irqsafe(root_mem_cgroup->css.cgroup);
+> >         atomic_set(&stats_flush_threshold, 0);
+> > -       spin_unlock_irqrestore(&stats_flush_lock, flag);
+> > +       spin_unlock(&stats_flush_lock);
+> >  }
+> >
+> >  void mem_cgroup_flush_stats(void)
+> > --
+> > 2.40.0.rc1.284.g88254d51c5-goog
+> >
