@@ -2,149 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDC76C6BC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0569D6C6BC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjCWPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S231470AbjCWPBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbjCWPA2 (ORCPT
+        with ESMTP id S231995AbjCWPAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:00:28 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2058.outbound.protection.outlook.com [40.107.104.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D325B9D;
-        Thu, 23 Mar 2023 08:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
- b=Pl97knR0tRGBkf4BDKqvO48FKz0y/Dc6CCgZCNKhH0REyEKqU69R5ReTqzf+hEqbr+2UTygTGp0RoPIRy6otfnyTXl0JBvDx8vFQ61BSjcisiQ3NpkDwwyKenCHmvYuFmVOtobPhBZrXis43J5vF3C+sYZixGUcY4r2ApgBrHvHCA9cZ48doL4F+cDjTDijdQAq5sDAow7RAeFmhxz/faTLwmqClOIOTJeDsPui+s5DlbiyJ+juVHgPevVdz1rvsHgCkF5Qe4rmXFinJlklUnIgUD1TWsH5qDWYy5kVUrGOEdC8QMF3ZIUVATRZCTO6EDiVuKW1Vpau1ikH09/tatA==
-Received: from DB6PR07CA0081.eurprd07.prod.outlook.com (2603:10a6:6:2b::19) by
- AS8PR03MB6871.eurprd03.prod.outlook.com (2603:10a6:20b:29e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 15:00:20 +0000
-Received: from DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
- (2603:10a6:6:2b:cafe::bd) by DB6PR07CA0081.outlook.office365.com
- (2603:10a6:6:2b::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.16 via Frontend
- Transport; Thu, 23 Mar 2023 15:00:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.80)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.80 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.80; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.80) by
- DB8EUR05FT055.mail.protection.outlook.com (10.233.239.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.21 via Frontend Transport; Thu, 23 Mar 2023 15:00:19 +0000
-Received: from outmta (unknown [192.168.82.135])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id A1D852008088E;
-        Thu, 23 Mar 2023 15:00:19 +0000 (UTC)
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (unknown [104.47.14.52])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 4476D2008006F;
-        Thu, 23 Mar 2023 14:58:22 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O5Ja4NNh4/zyR0+XdjC+nsTPqs00LablKxGz0M1FBDkY79ywTeeWf5Aaw8fJshp5q4igZUPC7AQL5PY2P3fSxRtELG/C28YRatJmfQs+L2Ur3tXJBgbqU0MD+Vr/GwXubjVKhqtQRzmSjmkymbY0hMMFbe4nsSZm7I4+Ph++Wyj1vjpWVY4OBG1x6UM19e7Glmoeu5WB5mV+UWMMjzM2CbuEeOuaLNCLffT8pPp26uvOzrKBYmaROyQrB00HiHsrQdtdryK4MEKJNBq+esOFreF0dMb8FKUKENcmseTG+zbWu9qWCXgzx1GV/0lP6JQng8NRuFkrDI62emNgehzDfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
- b=LExzLBB9lAaM2sagF14N5s9vj+Edy6tmYBpYt5R9Pk6N7CxkY1AlHYTVUCj8yNNOK/FvflfCQu7d3w2KXU25zbb1/naT+QPonW3UJFP8Hj0+THlTwic4TlPUBKeT1x8yEtY+9Ou2WTuOweUxu9WgTb9iJ0l9gP2CN0gsC4EB9TIxCXVtf+VOvGiDC59t/92GWJclaf3i7gVRKRl7pA+/a62fLhvf1NzGksXMFPvm/r+Trwk6066JUbgGklHbbGH9Bc0sv9c4GuqkSHxhbGizXfJsNzwP/jpWUIzPn4Ao9y2zfIATIz+WalQ+zkNFdRvzh2y66U3rkDpUT9l3PZXlug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
- b=Pl97knR0tRGBkf4BDKqvO48FKz0y/Dc6CCgZCNKhH0REyEKqU69R5ReTqzf+hEqbr+2UTygTGp0RoPIRy6otfnyTXl0JBvDx8vFQ61BSjcisiQ3NpkDwwyKenCHmvYuFmVOtobPhBZrXis43J5vF3C+sYZixGUcY4r2ApgBrHvHCA9cZ48doL4F+cDjTDijdQAq5sDAow7RAeFmhxz/faTLwmqClOIOTJeDsPui+s5DlbiyJ+juVHgPevVdz1rvsHgCkF5Qe4rmXFinJlklUnIgUD1TWsH5qDWYy5kVUrGOEdC8QMF3ZIUVATRZCTO6EDiVuKW1Vpau1ikH09/tatA==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DB9PR03MB8374.eurprd03.prod.outlook.com (2603:10a6:10:395::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 15:00:12 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e%6]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 15:00:12 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH] net: fman: Add myself as a reviewer
-Date:   Thu, 23 Mar 2023 10:59:57 -0400
-Message-Id: <20230323145957.2999211-1-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR19CA0042.namprd19.prod.outlook.com
- (2603:10b6:208:19b::19) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        Thu, 23 Mar 2023 11:00:54 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D31728E76
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:00:42 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230323150039euoutp01d7816eb2a329cbe272b3559624dcbb28~PFGv4WXdl1682616826euoutp01k
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230323150039euoutp01d7816eb2a329cbe272b3559624dcbb28~PFGv4WXdl1682616826euoutp01k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679583640;
+        bh=Icol1NVQVqXWLETTQ6qBuGxVjyUvKpu5FRVxPfMJI5w=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=a0wEK/WILT2l2yTo7hODi6knqNCGLVGsWm1o9nnVOFmazylpeSUowNYKpW9hbmAdx
+         8MhSHQbumCLTtm3Gs9WPa0wNGb01fXT7Mcczv+AaVg7lusT0RJwGXhJk1wBUP3Dwa3
+         tpo78MbYZkTmwvgVEYiKrAgK892rDgTohFlCd9qc=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230323150039eucas1p2c7b2e1906656e2f9285fe5c95907c5c9~PFGvm1TmA2995529955eucas1p2N;
+        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 28.11.09503.7996C146; Thu, 23
+        Mar 2023 15:00:39 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230323150039eucas1p26720ff35cb61c319cf3689f2f692f720~PFGvHi8AG2042820428eucas1p2e;
+        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230323150039eusmtrp27e05b1483f2166f1785c5879c94b1e57~PFGvG7Gmy2667426674eusmtrp2p;
+        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
+X-AuditID: cbfec7f2-ea5ff7000000251f-bc-641c6997ca0e
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1A.39.09583.6996C146; Thu, 23
+        Mar 2023 15:00:39 +0000 (GMT)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230323150038eusmtip1bb56ea103192735c274ede4a1e924d2e~PFGu3--cZ1265912659eusmtip1b;
+        Thu, 23 Mar 2023 15:00:38 +0000 (GMT)
+Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 23 Mar 2023 15:00:37 +0000
+Message-ID: <fbf5bc8a-6c82-a43e-dd96-8a9d2b7d3bf4@samsung.com>
+Date:   Thu, 23 Mar 2023 16:00:37 +0100
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DB9PR03MB8374:EE_|DB8EUR05FT055:EE_|AS8PR03MB6871:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60176034-80ea-4868-a37c-08db2baf5221
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: wKwFlOd4carv6KhzL7UEZUgbNWemOROMRJPY2yVpKYw5s2zc3PwpZbxsDjRck4MlMjqoD9x60sbp5cI7WeIl7OtE3pwIEKs/zCtOVQsP35hD75+S0NDn/DSwk9u+wdMXHuHMbc6YJDAoIB9yF9kFfBPvzr0YqamQbIcMzzYpmpTpsjZPHoSTJfvC9kIFIix4YFVPAb06KTMb5rvPzQqNqe8S0w8jtHoarV9guK2XcHfKVkJyhl1TIwm+e8inFkCyCdnXVeI8nadR25Eq3EEGLKfmg/FbQqBxERGkIG9iATbaZQogVzVsnGuOdycUjZxjQIQDkIzkavWTiKamZfWevZAdickX+1hO76915qYKut+89F9tBhwGQ88swfJs5ERR+vxGxrZnnjn7HwapYHPXm/zTOxwdtpHLVKMKrZ8NvRTkTGc5Sqx4GmLstxNdwGdKPNj7Y6KarGb7+ETcxRApzS4I//G8J36vDyVb5uwDDlL+FBYrd8ixComDXGyRNZ7r2seKOM501I0SfAo9zRs7vXURwd8K1P6HwU6iyz+m2Y0d9esgYUQAxmB2qB6foRjAPXK1nKo750cXZ5DNEziwUzvBtnhuf9sPXufno0UQmddmSub9FrFksjguMSD62AstzlUOmCmFz5pJXecmFcCxIUuY/kUP3E7bOIN8rbIBkxwHvXZXCVqkoWn+j8cFCKI47dzEsux729QgJnaTgom9jg==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(136003)(366004)(39850400004)(451199018)(36756003)(26005)(1076003)(6666004)(6512007)(6506007)(44832011)(6486002)(4744005)(107886003)(2906002)(86362001)(41300700001)(66946007)(66556008)(316002)(4326008)(66476007)(110136005)(54906003)(8676002)(2616005)(186003)(38350700002)(38100700002)(478600001)(52116002)(5660300002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8374
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 70c60dc7-4565-4baa-5d71-08db2baf4da8
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kCKOZxRL1Vwf/J4JJpZtEEZX0kdbe8zcDHBUBWJ5UTNPxV29nAZIm5h7aMOsZwlZtEMHeUN4Dt7AQvsbMQ1J7AJnkA0DOZMAKvVqZb7CrcAif8qI+YEKskjqox/mBfTh8wPIQUsebNQO5/2WATF7IQQDKMjOsk9aM1T9tcR0fzELXSFOuOVcY190NBAxObwiC51TZYCzSYUOkHhOv8vXYjwMcZWYNKHmVQDvQQlBBquhNa24h4F+7iRdqIZsdGq7xawzMUKgoV3+5eT+ExdIW/o2Nvk960Hiuj6q/6DP7IiktAnFFgULQMlHYMyWTSbV8P6aK/vbRQhp94tuZIGcMxGbmGV7V+gcK7NSx312PWtyOr+tBpSrzmgUUAgTVAj3FckjhTGZWIKNdqIOx1Hj5kYtuA2PqtCTCTwidfSzn/WP5PGMeKewsFYTtLoWgmpNl2V/iQ+evrc0tyuuNzECNEhYuOqtTbdJLcSomSr4pvHUKiT9pF5TniOktSqD+XBe2x+iCnGFnldb19Sz6N0hJw+1nLb81lEJUy+1NYIKWkyFpMGPNUWUhsbGd/5UW5dgktkJR0/UwMVNQqh3Djrv7NEV04ujuH7J7By5d3i3IZ0emOpHvT6885eSFwwY7Rp/+/HCL9UIhm8sV5nrT2NuZ218vvyY+3NHTfA0hcXXuPj2oLV7u3pg4nMs8ib4Hquz+vE5ghsFF0PGu5idBtLXBgEAHAkDmLoCuqoRgxBZiXs=
-X-Forefront-Antispam-Report: CIP:20.160.56.80;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(39850400004)(376002)(346002)(136003)(396003)(451199018)(36840700001)(46966006)(40470700004)(356005)(40480700001)(2906002)(40460700003)(478600001)(6486002)(2616005)(336012)(186003)(86362001)(82310400005)(36756003)(316002)(110136005)(34020700004)(54906003)(4744005)(8676002)(36860700001)(4326008)(70586007)(70206006)(26005)(47076005)(107886003)(6666004)(8936002)(6512007)(6506007)(1076003)(7596003)(82740400003)(7636003)(5660300002)(44832011)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 15:00:19.9014
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60176034-80ea-4868-a37c-08db2baf5221
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.80];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6871
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.8.0
+Subject: Re: [RFC v2 0/5] remove page_endio()
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <senozhatsky@chromium.org>, <viro@zeniv.linux.org.uk>,
+        <axboe@kernel.dk>, <brauner@kernel.org>,
+        <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <hubcap@omnibond.com>, <martin@omnibond.com>, <mcgrof@kernel.org>,
+        <devel@lists.orangefs.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <ZBtSevjWLybE6S07@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.110.32.65]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7djPc7rTM2VSDPaeUrOYs34Nm8Xqu/1s
+        Fq8Pf2K02L95CpNF+90+Jou9t7Qt9uw9yWJxedccNot7a/6zWpxc/5/Z4saEp4wWy76+Z7fY
+        vXERm8X5v8dZLX7/mMPmwO8xu+Eii8fmFVoel8+Wemxa1cnmsenTJHaPEzN+s3g0TL3F5vHr
+        9h1Wj8+b5Dw2PXnLFMAVxWWTkpqTWZZapG+XwJXRfeQHY8FVnoqVy44zNjC2c3UxcnJICJhI
+        zN3zirGLkYtDSGAFo8SDDwfZIZwvjBInzm5kBKkSEvjMKDH9qhFMx54jd9kgipYzSrxbep8V
+        rqh7tjREYiejxKu2xywgCV4BO4mDf6aygdgsAqoSLS3vmCHighInZz4BquHgEBWIknjxugwk
+        LCygK3FxTydYK7OAuMStJ/OZQEpEBDQk3mwxAhnPLNDDLLFo7S6wVjYBLYnGTnaQck6g2yY9
+        WMUO0aop0br9N5QtL7H97RxmiPsVJSbdfM8KYddKnNpyiwlkpoTAPU6Jb+cPskAkXCSWNt+H
+        KhKWeHV8CzuELSPxfyfIPSB2tcTTG7+ZIZpbGCX6d65nAzlIQsBaou9MDkSNo8SezedZIcJ8
+        EjfeCkLcwycxadt05gmMqrOQAmIWko9nIXlhFpIXFjCyrGIUTy0tzk1PLTbMSy3XK07MLS7N
+        S9dLzs/dxAhMf6f/Hf+0g3Huq496hxiZOBgPMUpwMCuJ8LoxS6QI8aYkVlalFuXHF5XmpBYf
+        YpTmYFES59W2PZksJJCeWJKanZpakFoEk2Xi4JRqYFK5Munvw7ke7WpXNDg1G5si1rrXhJ3l
+        kvw0Revb9oVuDFz7RW+UJL8x3b/sSuzCFN6U53MbE8y8zl5dNCHmq4rC6gP8ov1PpDu443n2
+        l12/3trGvMHctir5Y7iJ06kd32YuWDingqH1rqvfj4afS6WfNiwSNdyQVu26LN7xek2IWbag
+        h6D896mTJPZ22LBvnLRj8osvFbxPH66S9lyVMfNges/8GI81T47Ha+4wEV7Q+Emut0rmzKGP
+        7/SPtTT+YAmIkavcF6je26i07QpzWqWI0EnBpWGZgcFbGg/fVzkauWB2gu1FSYdHuWft2h94
+        H1hgev3+09QzrX+Dp3SrBCUqBQfz7zny/znnnQnMr5RYijMSDbWYi4oTAde99cruAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xu7rTM2VSDKbsYbSYs34Nm8Xqu/1s
+        Fq8Pf2K02L95CpNF+90+Jou9t7Qt9uw9yWJxedccNot7a/6zWpxc/5/Z4saEp4wWy76+Z7fY
+        vXERm8X5v8dZLX7/mMPmwO8xu+Eii8fmFVoel8+Wemxa1cnmsenTJHaPEzN+s3g0TL3F5vHr
+        9h1Wj8+b5Dw2PXnLFMAVpWdTlF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eT
+        kpqTWZZapG+XoJfRfeQHY8FVnoqVy44zNjC2c3UxcnJICJhI7Dlyl62LkYtDSGApo8Tsc19Y
+        IRIyEp+ufGSHsIUl/lzrgir6yCjRMv0EM4Szk1FizYJDbCBVvAJ2Egf/TAWzWQRUJVpa3jFD
+        xAUlTs58wgJiiwpESTy9cwgsLiygK3FxTydYnFlAXOLWk/lMXYwcHCICGhJvthiBzGcW6GGW
+        mD9rKiPEsh2MEq17r7CAFLEJaEk0doJdxwn0wqQHq9gh5mhKtG7/DWXLS2x/O4cZ4gNFiUk3
+        30N9Vivx+e8zxgmMorOQnDcLyRmzkIyahWTUAkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmb
+        GIGpY9uxn1t2MK589VHvECMTB+MhRgkOZiURXjdmiRQh3pTEyqrUovz4otKc1OJDjKbAMJrI
+        LCWanA9MXnkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUwMymwC
+        TpNn7j6sZ8lplHKrTqX15ur7P77v+rnkrcqXpR/fXJPkOXIyfEPPRYuz979NtKlLeF9591cG
+        44pOPYG2dXGeZjLHv8zdEKZ47PrZctNFK0tT5r2yefBm/c2TKUlnH00VnnHLnU1JM9VxnhCP
+        s0RTcBf3motOn53W7xEurPnRd2bWdNm6Rw6HFnZkvNrgNee2WnpOVcmhfwomqr07Ln+awhMu
+        zrz8mo7pgqspWY2H1k5ZmNx4t/4af1bMSsVlbrs39Tq///Tm1nPZBbtCusTsvI/kJRpXVkrf
+        a3VjsZrwQjf8xEN9Jw+t3vn84k4++s/dnktzsote1jPrY2uotWj5lPNXpE7YLih68hslluKM
+        REMt5qLiRACWM9NJpgMAAA==
+X-CMS-MailID: 20230323150039eucas1p26720ff35cb61c319cf3689f2f692f720
+X-Msg-Generator: CA
+X-RootMTR: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
+References: <CGME20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c@eucas1p2.samsung.com>
+        <20230322135013.197076-1-p.raghav@samsung.com>
+        <ZBtSevjWLybE6S07@casper.infradead.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've read through or reworked a good portion of this driver. Add myself
-as a reviewer.
+>> Open questions:
+>> - Willy pointed out that the calls to folio_set_error() and
+>>   folio_clear_uptodate() are not needed anymore in the read path when an
+>>   error happens[2]. I still don't understand 100% why they aren't needed
+>>   anymore as I see those functions are still called in iomap. It will be
+>>   good to put that rationale as a part of the commit message.
+> 
+> page_endio() was generic.  It needed to handle a lot of cases.  When it's
+> being inlined into various completion routines, we know which cases we
+> need to handle and can omit all the cases which we don't.
+> 
+> We know the uptodate flag is clear.  If the uptodate flag is set,
+> we don't call the filesystem's read path.  Since we know it's clear,
+> we don't need to clear it.
+> 
+Got it.
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
+> We don't need to set the error flag.  Only some filesystems still use
+> the error flag, and orangefs isn't one of them.  I'd like to get rid
+> of the error flag altogether, and I've sent patches in the past which
+> get us a lot closer to that desired outcome.  Not sure we're there yet.
+> Regardless, generic code doesn't check the error flag.
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for the explanation. I think found the series you are referring here.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9faef5784c03..c304714aff32 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8216,6 +8216,7 @@ F:	drivers/net/ethernet/freescale/dpaa
- 
- FREESCALE QORIQ DPAA FMAN DRIVER
- M:	Madalin Bucur <madalin.bucur@nxp.com>
-+R:	Sean Anderson <sean.anderson@seco.com>
- L:	netdev@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/net/fsl-fman.txt
--- 
-2.35.1.1320.gc452695387.dirty
+https://lore.kernel.org/linux-mm/20220527155036.524743-1-willy@infradead.org/#t
 
+I see orangefs is still setting the error flag in orangefs_read_folio(), so
+it should be removed at some point?
+
+I also changed mpage to **not set** the error flag in the read path. It does beg
+the question whether block_read_full_folio() and iomap_finish_folio_read() should
+also follow the suit.
+
+--
+Pankaj
