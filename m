@@ -2,152 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4B6C63D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A306C63B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjCWJit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S230487AbjCWJdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjCWJiA (ORCPT
+        with ESMTP id S231152AbjCWJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:38:00 -0400
-X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Mar 2023 02:35:52 PDT
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B7822036;
-        Thu, 23 Mar 2023 02:35:52 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 85BD22B0681D;
-        Thu, 23 Mar 2023 05:28:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 23 Mar 2023 05:28:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679563702; x=1679570902; bh=D+
-        6uZuc9G8Cokr6D/ZuPojKuYrWzIuh3IXwIRgnmVHA=; b=Grd14zRIvsJco7ab2/
-        EJppZ6ZNhgtslECuLaA5r9XEO8okGkzdmEuF1h4mkA7fvqNHyJbX1PMqYWo8Rtwx
-        X5ataRWTesx2mnefGO8VnZhl34tj9QLV6h4HBnhuC7VGeianQ5Vf6j8MpK0asBmu
-        LBg5t3uuwyzq/WkBCDRNIn77XW7mqFoZAe2rFL30HoSMFEUX/QNw6eCicRx+HMT2
-        4526yveHRgi1cryfZVVNV+L6gAwXfBpDWUdeGI9HtJYwc/BOkOKnFllfopMKKha9
-        XhcbeV+GTxShxnK9HxfMXvp0pejBmIcuSwUJjve96I2Nvsq0DlggDwPFwzJ3vuST
-        ku8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679563702; x=1679570902; bh=D+6uZuc9G8Cok
-        r6D/ZuPojKuYrWzIuh3IXwIRgnmVHA=; b=Ai0ccEckw5DnS+8GQfsYqpXuWpFGB
-        ttQLPWjSKlnP2tyns81XXlCFD0Q3xCeGff5rzdlC/6fX8JQ+4kiJDnn1U75c53bw
-        3N6GGfyyybi+Oc1hH+quCZw/v4mKnLiAwdLBGbsgKsp24nDseAFy6LSW9eugCmVb
-        +KWHJcUBGeH/Xl9DeNU/1942HFw577G7yPJsIuuQ1YmES20O/zI4WxZkMh2fgyvE
-        a++ZfjFMGS7aM9uIVZ7hwQRJ5mpW9rkPe/CqQE4TXKbCH/6yyeyeHBBofsebtprR
-        HWH8eNTjFX/5jiVQ+ZZg+2Wzp8v4NHUZ9+PfVsCpbk2QaiHtJw9Vu6qrg==
-X-ME-Sender: <xms:tBscZNYU0sYr-0l50Yk4duLxqaae1ei9hUNtbliJx9BdbCtXahbacg>
-    <xme:tBscZEY_aXclh9vdqLqnl4wru2s6kxPDvdXjMxVMjjpPUds2kh_VV4YfON44u9ijp
-    eN3I--qqDpHqT8kqb8>
-X-ME-Received: <xmr:tBscZP8skWawj0kRdUZp0NZnNW7iLg1bpc9apnCh3xEamIO3DRctlsv_Do8_iUT-3gjsZHLbhGlaCwh_7I23TS4fALDfcrQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:tBscZLquNPybogS3zNBGkVjdxMrFA_wmROPfMRKE76tl3-jPfie6VA>
-    <xmx:tBscZIpFJVMEV1zDSpLQ5e2Og2-mS-3BlS-BryqQYSpE93anFPLqpA>
-    <xmx:tBscZBQ0dyta-7zR6gLyviIlJ54-XWhFYU9iBu9fMXL9ozk-HdFNNg>
-    <xmx:thscZEeaobicffGMWazNsg-Qr4l9xbsovbY_2Ck1BEPfHDBnfTOBrqEaAAY>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 05:28:19 -0400 (EDT)
-Date:   Thu, 23 Mar 2023 10:28:16 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Gow <davidgow@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Airlie <airlied@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 0/8] Support ROHM BU27034 ALS sensor
-Message-ID: <20230323092816.eemjbfez6wxbumx7@houat>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <ZBrSCYp+QrHK47dS@smile.fi.intel.com>
- <87edphnkg1.fsf@minerva.mail-host-address-is-not-set>
- <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
+        Thu, 23 Mar 2023 05:33:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C3812CE9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679563757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fH6RVdKUD2qMc5iJ7El8bayWDBifjWMzYWs3C5XGkao=;
+        b=L8nc2o34XIfjXiYd7yD5B50WGV0VCq5zajn4isNqla7vlLEBOsU+qz8vvdaJcVeqXJ/oVw
+        HyVMmLGKKUiKCw9kS0VAsxBSynt8PiLr3bykSb/N7m6q5M6Odq6T+po2x00h9ygUgDAuzz
+        M/mMEL5eaWNMpAV7xFV+2sU1PJ9AmZM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-8-tJ-CbJUUOk6vxyDaTua28Q-1; Thu, 23 Mar 2023 05:29:13 -0400
+X-MC-Unique: tJ-CbJUUOk6vxyDaTua28Q-1
+Received: by mail-qt1-f200.google.com with SMTP id y10-20020a05622a164a00b003e38e0a3cc3so2236611qtj.14
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:29:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679563753;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fH6RVdKUD2qMc5iJ7El8bayWDBifjWMzYWs3C5XGkao=;
+        b=vVM9VsZNlb//qop5BGgQmBaJZHTJLUCo380VbjBASz+gCpGtarDfyqXiMfbu6sQLe6
+         +KGOWsqNyQ6ltDM/dZv8pEGtDszHfOg1fuSTWLLemcN6/DKx2GAecRFDjCV/Mf8AsZwA
+         4pux73VTQ1N1vx2Lx/aXmnAYHLfrLOyhrB9mEJWe56yi85EYKATSIkZLmGvnrvQhaTLL
+         9/xIcfBUtFoj0ZlTOTH0fVJA4qjPGzYlJyZBR11ZaKfIuFrM0mgTXQpoECHsGcFXa5PG
+         HmJZuZ63GHcCkLEkPzgflvfNO4pFeXAh9X3hfdO1KMfUOcRN8un+qG2RWFdrjLKyR32X
+         q4TQ==
+X-Gm-Message-State: AO0yUKVQfkIAsdG46qk8krZ4uPFL6uPC0sJeCxatikDbd97/3RoxxHYF
+        IspFrCPnZj24FkoOvOx3VYha0lK9kxuwlA/y/TjQkCWsfSMvdYjQaVEBOJ4gfBpw8CQCVUDOyph
+        8BNBJLaC6fROuIdBq8E9P/sUb
+X-Received: by 2002:a05:622a:34e:b0:3e1:9557:123c with SMTP id r14-20020a05622a034e00b003e19557123cmr9437368qtw.52.1679563753150;
+        Thu, 23 Mar 2023 02:29:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+dTXZSkoRXA666MxWsVBLAIywm8KzMAVacD1thH1ce+YO4OCqSzCTtD2lH0cRCelCFnUU+cQ==
+X-Received: by 2002:a05:622a:34e:b0:3e1:9557:123c with SMTP id r14-20020a05622a034e00b003e19557123cmr9437356qtw.52.1679563752860;
+        Thu, 23 Mar 2023 02:29:12 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id o10-20020a05620a228a00b007441b675e81sm12893452qkh.22.2023.03.23.02.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:29:12 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 10:29:05 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v5 2/2] virtio/vsock: check argument to avoid no
+ effect call
+Message-ID: <20230323092905.fpsiiaca2ba2wug3@sgarzare-redhat>
+References: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
+ <50bb0210-1ed7-42fb-b5f6-8d97247209b5@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ihwqacloxsmu5zbe"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <50bb0210-1ed7-42fb-b5f6-8d97247209b5@sberdevices.ru>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 22, 2023 at 09:36:24PM +0300, Arseniy Krasnov wrote:
+>Both of these functions have no effect when input argument is 0, so to
+>avoid useless spinlock access, check argument before it.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> net/vmw_vsock/virtio_transport_common.c | 6 ++++++
+> 1 file changed, 6 insertions(+)
 
---ihwqacloxsmu5zbe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-On Wed, Mar 22, 2023 at 12:59:33PM +0200, Matti Vaittinen wrote:
-> > I agree with Maxime that a little bit of duplication (that can be clean=
-ed
-> > up by each subsystem at their own pace) is the path of least resistance.
->=20
-> I'd say this depends. It probably is the path of least resistance for peo=
-ple
-> maintaining the trees. It can also be the path of least resistance in
-> general - but it depends on if there will be no new users for those DRM
-> helpers while waiting the new APIs being merged in DRM tree. More users we
-> see in DRM, more effort the clean-up requires.
+>
+>diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>index 9e87c7d4d7cf..312658c176bd 100644
+>--- a/net/vmw_vsock/virtio_transport_common.c
+>+++ b/net/vmw_vsock/virtio_transport_common.c
+>@@ -302,6 +302,9 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 credit)
+> {
+> 	u32 ret;
+>
+>+	if (!credit)
+>+		return 0;
+>+
+> 	spin_lock_bh(&vvs->tx_lock);
+> 	ret = vvs->peer_buf_alloc - (vvs->tx_cnt - vvs->peer_fwd_cnt);
+> 	if (ret > credit)
+>@@ -315,6 +318,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_get_credit);
+>
+> void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit)
+> {
+>+	if (!credit)
+>+		return;
+>+
+> 	spin_lock_bh(&vvs->tx_lock);
+> 	vvs->tx_cnt -= credit;
+> 	spin_unlock_bh(&vvs->tx_lock);
+>-- 
+>2.25.1
+>
 
-So far there's one user in DRM, and I'm not aware of any current work
-using it at the moment. Even if some show up in the short-term future,
-it's not going to be overwhelming.
-
-Maxime
-
---ihwqacloxsmu5zbe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBwbsAAKCRDj7w1vZxhR
-xaHTAP0eX38oKDx4w+f18p920Z65wm1LMJZUsTQTKppqDXkAgAEA+oBatGCMd3iz
-2GkL2vZla5OIIAXWxReh2dxN+LliWA0=
-=5iWi
------END PGP SIGNATURE-----
-
---ihwqacloxsmu5zbe--
