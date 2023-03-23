@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB85F6C6BDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF856C6BE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjCWPEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S231622AbjCWPGm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 11:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjCWPEJ (ORCPT
+        with ESMTP id S231730AbjCWPGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:04:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E3528E74;
-        Thu, 23 Mar 2023 08:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2957B8215E;
-        Thu, 23 Mar 2023 15:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7276DC4339E;
-        Thu, 23 Mar 2023 15:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679583760;
-        bh=A4cz5sAtdGojClghNnzslTTn+0telsrqWPrc7ZEY92A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QZ2KDQiDLNeolamz/rBZXmXKaml10w90GcGwB6l5yO87qYFqQPDIQgKZ80zht8Qsc
-         Xeoi/zLrt2EtH3nbngx/R5sYZx0Xwf4JkO9knqHSrKtOYd2+7MSeapV8B/zw9rxmZf
-         9UhNHPKZpA1ucTpj/VgulfE/ACFQnVZP8YBw36pan4Gf8wwyvTOnEEDjDM2KPQPTQp
-         ZGCnVZCISmiqwx5zKNrKd8Mk7Zh6u/0oYwI8LPRfc1PEUXu67DDtdxfqNx9ryyF1pw
-         4cNq1h1H67JIwrFngX1Sl9ypuAP/OCB5kx8wJtxg7nOzQYMGU2gbmFC/O67YEr6JCJ
-         aHqE0tG0UVQoQ==
-Date:   Thu, 23 Mar 2023 10:02:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v6 1/4] PCI: Introduce pci_dev_for_each_resource()
-Message-ID: <20230323150238.GA2550157@bhelgaas>
+        Thu, 23 Mar 2023 11:06:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA97629409
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:05:18 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-317-R2rEoX7jPMafGqBjMLdziw-1; Thu, 23 Mar 2023 15:03:57 +0000
+X-MC-Unique: R2rEoX7jPMafGqBjMLdziw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 23 Mar
+ 2023 15:03:56 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 23 Mar 2023 15:03:56 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mel Gorman' <mgorman@suse.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/10] Fix confusion around MAX_ORDER
+Thread-Topic: [PATCH 00/10] Fix confusion around MAX_ORDER
+Thread-Index: AQHZXBOmxeBm0+nagESVZv8C8tAqRK8IeMpg
+Date:   Thu, 23 Mar 2023 15:03:56 +0000
+Message-ID: <54496a4d8b31499993aac50f2979f99a@AcuMS.aculab.com>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230321163845.qpybxa5rlwclvko2@suse.de>
+In-Reply-To: <20230321163845.qpybxa5rlwclvko2@suse.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBxiaflGTeK8Jlgx@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 04:30:01PM +0200, Andy Shevchenko wrote:
-> On Wed, Mar 22, 2023 at 02:28:04PM -0500, Bjorn Helgaas wrote:
-> > On Mon, Mar 20, 2023 at 03:16:30PM +0200, Andy Shevchenko wrote:
-> ...
+From: Mel Gorman
+> Sent: 21 March 2023 16:39
 > 
-> > > +	pci_dev_for_each_resource_p(dev, r) {
-> > >  		/* zap the 2nd function of the winbond chip */
-> > > -		if (dev->resource[i].flags & IORESOURCE_IO
-> > > -		    && dev->bus->number == 0 && dev->devfn == 0x81)
-> > > -			dev->resource[i].flags &= ~IORESOURCE_IO;
-> > > -		if (dev->resource[i].start == 0 && dev->resource[i].end) {
-> > > -			dev->resource[i].flags = 0;
-> > > -			dev->resource[i].end = 0;
-> > > +		if (dev->bus->number == 0 && dev->devfn == 0x81 &&
-> > > +		    r->flags & IORESOURCE_IO)
-> > 
-> > This is a nice literal conversion, but it's kind of lame to test
-> > bus->number and devfn *inside* the loop here, since they can't change
-> > inside the loop.
+> On Wed, Mar 15, 2023 at 02:31:23PM +0300, Kirill A. Shutemov wrote:
+> > MAX_ORDER currently defined as number of orders page allocator supports:
+> > user can ask buddy allocator for page order between 0 and MAX_ORDER-1.
+> >
+> > This definition is counter-intuitive and lead to number of bugs all over
+> > the kernel.
+> >
+> > Fix the bugs and then change the definition of MAX_ORDER to be
+> > inclusive: the range of orders user can ask from buddy allocator is
+> > 0..MAX_ORDER now.
+> >
 > 
-> Hmm... why are you asking me, even if I may agree on that? It's
-> in the original code and out of scope of this series.
-
-Yeah, I don't think it would be *unreasonable* to clean this up at the
-same time so the maintainers can look at both at the same time (this
-is arch/powerpc/platforms/pseries/pci.c, so Michael, et al), but no
-need for you to do anything, certainly.  I can post a follow-up patch.
-
-> > but
-> > since we're converging on the "(dev, res)" style, I think we should
-> > reverse the names so we have something like:
-> > 
-> >   pci_dev_for_each_resource(dev, res)
-> >   pci_dev_for_each_resource_idx(dev, res, i)
+> Acked-by: Mel Gorman <mgorman@suse.de>
 > 
-> Wouldn't it be more churn, including pci_bus_for_each_resource() correction?
+> Overall looks sane other than the fixups that need to be added as
+> flagged by LKP. There is a mild risk for stable backports that reference
+> MAX_ORDER but that's the responsibilty of who is doing the backport.
+> There is a mild risk of muscle memory adding off-by-one errors for new
+> code using MAX_ORDER but it's low.
 
-Yes, it definitely is a little more churn because we already have
-pci_bus_for_each_resource() that would have to be changed.
+How many of the places that use MAX_ORDER weren't touched?
+Is it actually worth changing the name at the same time.
+That will stop stable backport issues.
 
-I poked around looking for similar patterns elsewhere with:
+	David
 
-  git grep "#define.*for_each_.*_p("
-  git grep "#define.*for_each_.*_idx("
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-I didn't find any other "_p" iterators and just a few "_idx" ones, so
-my hope is to follow what little precedent there is, as well as
-converge on the basic "*_for_each_resource()" iterators and remove the
-"_idx()" versions over time by doing things like the
-pci_claim_resource() change.
-
-What do you think?  If it seems like excessive churn, we can do it
-as-is and still try to reduce the use of the index variable over time.
-
-Bjorn
