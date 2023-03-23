@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BAC6C6892
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 247926C686F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjCWMib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S231678AbjCWMeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjCWMiT (ORCPT
+        with ESMTP id S231515AbjCWMeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:38:19 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702F426C0E;
-        Thu, 23 Mar 2023 05:38:18 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id bl9so3424863iob.8;
-        Thu, 23 Mar 2023 05:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679575098;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ENFbyVo6ntDOx+QsNQdjIvn/5kMh1BsTEjEJ3xCsmA=;
-        b=gusgrPJ5tIfDMajJ9dD9H6OPD/k85/TF8VNdLZ9CSn3HKJpS2UHnT3ndA7cbj+z6Yg
-         D/R40cVIC2EW/UvTz2uoeTG1q5tQ7He0Sa5cBtLuM8D8+WVssapgIT7mQoII1OtfGpwR
-         snxu1+TuXy9KzPh/yCKcn/TeveiTxMy5FeJZRNq4D9g5xtgy3pY/tqGRudkE6gwk6xyI
-         rOvm5US8DecYxfAy1fMcGGi/4jlTz5o4L5zY1NcmQFbitFu8GUddM11TA4qjwYCMOqFR
-         QtuzEBQyQ+D72cmqVTT3+3ibT57+GI4ckVz1KExeq6c7ieHBg34I5oZi45YYlJjV4zmm
-         vVDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679575098;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3ENFbyVo6ntDOx+QsNQdjIvn/5kMh1BsTEjEJ3xCsmA=;
-        b=Q4nVv4rX55XbzOQwKIADf5uyprbHxsMXKVYOjMEHvBKol4VrAmL9fYXiQy3AZLTUWm
-         FmhnWY6DPlDSnNOH4S21l0ejNE7EMrkxuau6fru1j3sGCs44BhbE8lptbWD1RhPR7p7B
-         ENLFyTYkADVuO5pAJnh6Bgyb2ZsD1st3tNYSo2OjpTA+F7AhiCcvRMo2AKPa0FuXC49f
-         Nz+XqXcLtHQpgfu8bPbZiLM++dWsKfvxeaJHckKScrk6WuOcZ4z3heC9XFDpjG3Sz+Oh
-         A8s/9KoWvmF4SfURHc4yEhpwk5ipQ8iCMVTbI6qOdrBzi+rjFX5nYyYbV3sWZlPjcb8A
-         KFCg==
-X-Gm-Message-State: AO0yUKUaM5L17XrFFODSmGUYj2GruTWJKb5NFxHbwfN8mir9IH1+bNhC
-        HcDfXYQXMZiKUVONYuSEdhg=
-X-Google-Smtp-Source: AK7set+IaJfYgWqqcuRAkH2Km+qXS+Iwzem0q/SeHq8SA0lVnfafOdrDz9WP8FLjnAaL1C8mue4bQA==
-X-Received: by 2002:a5e:9705:0:b0:758:a91a:aa82 with SMTP id w5-20020a5e9705000000b00758a91aaa82mr3711730ioj.11.1679575097662;
-        Thu, 23 Mar 2023 05:38:17 -0700 (PDT)
-Received: from localhost.localdomain (tunnel785484-pt.tunnel.tserv9.chi1.ipv6.he.net. [2001:470:1f10:aed::2])
-        by smtp.googlemail.com with ESMTPSA id n11-20020a6bed0b000000b00758993500f3sm1307608iog.7.2023.03.23.05.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 05:38:17 -0700 (PDT)
-From:   Tianling Shen <cnsztl@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Tianling Shen <cnsztl@gmail.com>, Andy Yan <andyshrk@163.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: rockchip: Add Xunlong OrangePi R1 Plus LTS
-Date:   Thu, 23 Mar 2023 20:38:07 +0800
-Message-Id: <20230323123807.11882-5-cnsztl@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230323123807.11882-1-cnsztl@gmail.com>
-References: <20230323123807.11882-1-cnsztl@gmail.com>
-MIME-Version: 1.0
+        Thu, 23 Mar 2023 08:34:07 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2057.outbound.protection.outlook.com [40.107.14.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B155C196BB;
+        Thu, 23 Mar 2023 05:34:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g/zbZ91lp9mcLw/h+O0Z7hP+sW1EdzEeX6K1q5zGbsPupGCOeyUJeJzrjmte4rgYkUerqfaFCgcOx/HH3n6kb+04+oWIwRGnbCGSB6nTPKCwhtvPTZfnMF+7NdX/m121sFB9gyPWP/ptbh23Xbudjr61y4U2PUGvlbClvOYx6OI4XqhrDka+HDgpR48kucAexs5btpR9bjdnbbkQaBGqr0S/aTWsawTfE8Msb2Sj4nYWkC4+ilsI2y9xsglUicjBDM3e6HB6Xxu8vHY+w6fUYeqSNKKkAFUgoFvaa9cvAF07cFfZfB6Iztq7OUWDcM9NA77bJNLERv27rWZlNFvouA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1rPu+BslgaSm6CfHCKtQIy6DG802vpF7dfMOB9wjPnw=;
+ b=nf0FSG/NE/U32fsTn99JAevN2IiVOGrpFe4IMuwbqZlIAXpH7DhGyOB5CLqazIz3cz276WE1DhBp8fuGgTF07i1+lm2QGDrUuT/r1zM3N1uUb4skinFfHKIMXEL/CRWYm3CHjX5LfjDfa6FdeQ+uYWt0sZfoFaXhWDITC31Z78Epbs8ZT4WU6qLPuoC6rhwYC6MlUU5Pd3DfxD3B7p+Sw93po6rYEgt8A/l6NiGif4coffx61LYbqfpOMGzBibETRS1umXhZJ5eg4F+ITFvsRCAFUm11NzDxOYAnHIw2i0kPCmhsoCycFTorLfL3XDW1vh6z0tWBSdIm01hU8KWP8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1rPu+BslgaSm6CfHCKtQIy6DG802vpF7dfMOB9wjPnw=;
+ b=lhpzDMY+fQt7LE0oMoownkwlAVIRcxlZ2ZyJM6bKF8dQ+t1YO/yswa5Y+Xe0BfajvgcVAZia/5wuduMF5vhu0BzMC2eImCj5I++QaRe5GPbVEx0gFRxV1/kxNtoCOxgExH+SHHv0Iggn5tVlJitridv6sdnZtb5IzbEDStUyL58=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by GVXPR04MB9926.eurprd04.prod.outlook.com (2603:10a6:150:11a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 12:34:01 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%9]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
+ 12:34:01 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] dt-bindings: crypto: sec-v4.0-mon: add snvs power off support
+Date:   Thu, 23 Mar 2023 20:39:07 +0800
+Message-Id: <20230323123907.103719-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0020.apcprd02.prod.outlook.com
+ (2603:1096:4:195::7) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|GVXPR04MB9926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fc6237d-9b3b-44f1-3c0c-08db2b9ae14f
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LrJE7hpZnVL8jOvBgjzpW+IItfN44scs/QJcfpx+uAuTlgu1DlpgkXiJEYuZMhpqFuOEJcguFxznMWYydBE75pFiQvuWBn4Gg6LQdvWlvYmxpxdK3NBq3U/iYzw4+rsEPZkSSCxPwC34MarXauRGLhnAyDjGZYzJRVKShjIF02cB2cV71JAKuJmi/+++RSueJXt5I01WQUBr+BJf35oUYFMQR8tnOIgw3kkijbU0bsx3pr5kMvNutNgj34zBhyIyDjOOhh0rKGT2+60CS5/Z7Y+u6XaJ5KBRcLzeOhlyk9JgFVqUHjH3bwBjnal1gVkUml3jgzmrDkzuKF2xsT/HEh8j8Isgp9T2W20u1ySziXrXTQ/S7/GLzOgrJ/ykRvHj1SK8pKUJyiMmM6PVCtrBydfaFgQlY3Ypbhu8LNe+DycPVaB7nCX/S+B1MaHtjDwpey2XlNJL8wGG94dwZBexYLcUEm2PAixHZxhUei7ka1r3PJJcfLuVKt6ergpdXNO/KwlvVx7tYNU08AJA0YWOby8lRmyMeZlo9PVbR3QmqlgV/ZQZpYRM2VwDI01LxxbB9aX19GyHhxcDP83QzbojKCStu1pZ2UZkSg6CWIHQQpJK5jOgexuYMhrew6j1NzEPj6OPYQREsgKsSpteGt4NJbfEHLO0Wv4P8sJFuzziVnZvsumuQSW2CH7CisFiAKsj3WdyVHbrL695q3j0lnDzXg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199018)(8936002)(5660300002)(316002)(86362001)(66946007)(66556008)(66476007)(4326008)(8676002)(478600001)(41300700001)(4744005)(2906002)(6486002)(52116002)(6512007)(6506007)(26005)(1076003)(38350700002)(38100700002)(186003)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/X77Aay93A1RN/VlyIQiHKXau7rN+tEoyU7LZcL7stm+n6hDq8Rq9CQnnZ3C?=
+ =?us-ascii?Q?DPcZ8z8faBoIuJmfYrzazvCBD2rqS8jBIh9bKFzf44Fdofd0sPiDKGHGkA2z?=
+ =?us-ascii?Q?3IT7WTKPgJRbwc3jLwff42jfsYuDOpCiG8UTrU+jcXjzssBNYCeWIzcX49ZO?=
+ =?us-ascii?Q?zAOAGToGmTQotEjStY+BrFWgdPIpgKxSH3bmf4CTfL/kzl+3gauIv6g88yw5?=
+ =?us-ascii?Q?DvmE4S222EqnnOTVZvWVQQSFvlTthIpEebD0SU5DMUR6K+4uouLp2V5qLc/4?=
+ =?us-ascii?Q?ws7DsIpMwVWlukStPvRuXbuSDPCf8gAF+Au4iJ4tmzUf9jw6ivrCXLNpsO2C?=
+ =?us-ascii?Q?E9+CMrSHjG5cvYQ7BFezIwNXtHW5fxUu7u7G7kAGwjTlusCy4eADU2hPJH/G?=
+ =?us-ascii?Q?qSh8toUwV47vp9GpCqPDbL4A7pJRIgLTg2UrCBEBSyKOBBD8WFKN4IFz5upb?=
+ =?us-ascii?Q?g/8RuuSegQbG+6Jo6aVMLzzlTRGVbbv1PiQ0BcqYTWThtWNKy7kEJ3m+7x1V?=
+ =?us-ascii?Q?l7amYhDbO0Gk9b/vHWeL00yZkVSZeUmB0l8c2pBvk0YPOkabu83NAaf1i8JT?=
+ =?us-ascii?Q?eB82gGaHhmJqZOjxxju6HZ0+ro2rqUk7NOajIZN6ofYB97GEdN0LGObUjZEu?=
+ =?us-ascii?Q?vS2D+QpGuTjwmFfQ7k81rjuAn7FeRHaXWYOaQydghIN4HnGzTgsWaEPs4bBo?=
+ =?us-ascii?Q?/5GmJJcFAz3WZQfv9RXmXUsq8FeblyCbqjIM2dMqam/RKsz0ZH47rg+Np/3I?=
+ =?us-ascii?Q?n4otXSONkEvhUnwGxMePRC8HJMSkzLs7KmuzsMLIcqbWe5Vd9IUD8bxiXfPK?=
+ =?us-ascii?Q?JPok7FU+2shhU9BdW6reEkTHjuK0pV+OtOwQrnXdGcfT7f0A2WLGEOPvLQvy?=
+ =?us-ascii?Q?Lqb27BlRKjTtneTiYN5MsZ/q+Y/LXv3BZrI47J4DMJGovPkLQAoyYmAW6geY?=
+ =?us-ascii?Q?ITgQxqS0zKnAk5qs+PQN2tpvOJOIq8kFGdRymGhZ1QJZQ/UzMcr49sqPd9Wg?=
+ =?us-ascii?Q?vcRfrxJt+nEW+yK70PUx8T5MCqFD71uIXawQQUAG4cAlCRvcYOF5UMP+AMqu?=
+ =?us-ascii?Q?dqoV7aSUmSnRn74srlT/RpkZoTYNgLFNT39p9hTxHaY0/2dRaJwrRJbWNU/Z?=
+ =?us-ascii?Q?9B6uKAawzourk3bQNDrUl4m5ZIw+NlAIYRt0Th7hQHaX60/iuTsuJGPvHyQx?=
+ =?us-ascii?Q?2cRjJCGLwHm1/ecZ0UP18xd5P+/2ZFxIT44+lj+uju2J1QxG3xIkIpbI5qFj?=
+ =?us-ascii?Q?2SIy5+NKc8sDeo+Kxf5uxTGK4B6bKlvp/FbJ1c4D9i84U/NcbgXcOkGl20EM?=
+ =?us-ascii?Q?zvNaVd6w61FoQABJHdgzrbHlpWgHgTYWmEEO0QPgKaWy6v32vzcPAGiWh016?=
+ =?us-ascii?Q?iSzZvtFjICRYCxdJQQ5bX0FzfthFwvhTBSOWwo6K3vDwo5i0vBrCFQDmjHPF?=
+ =?us-ascii?Q?QhU3//uBok1YgT53Osh4AAvu2HgQDd6+lowitcZ5QLX9SBuaCqWU0/Eu9ydl?=
+ =?us-ascii?Q?WyvjJRXQeaWhLWlZW9Ob72P3oYhXXejU2GUBRqrUJns1xew3l2MJn9/n9Hjl?=
+ =?us-ascii?Q?7oCZ8YTRodl0m4ggDVyiwAU8OlmBuV+K/fPunKq0?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fc6237d-9b3b-44f1-3c0c-08db2b9ae14f
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 12:34:01.2455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7D8QOMt4Dezj/11JVC2EAiTxS06gpru6pEWJtzr9I1N/p2c3JxD6kHU7SxvXdZYCXKgWJmugHX870Gj9fUFi4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB9926
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OrangePi R1 Plus LTS is a minor variant of OrangePi R1 Plus with
-the on-board NIC chip changed from rtl8211e to yt8531c, and otherwise
-identical to OrangePi R1 Plus.
+From: Peng Fan <peng.fan@nxp.com>
 
-Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+Add SNVS power off support. The SNVS_LP LPCR register could
+drive signal to PMIC to turn off system power.
+
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../rockchip/rk3328-orangepi-r1-plus-lts.dts  | 40 +++++++++++++++++++
- 2 files changed, 41 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3328-orangepi-r1-plus-lts.dts
+ .../devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml        | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 0bdcddd221f8..2d585bbb8f3a 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -17,6 +17,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2c.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2s.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-orangepi-r1-plus.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-orangepi-r1-plus-lts.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock-pi-e.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-roc-cc.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328-orangepi-r1-plus-lts.dts b/arch/arm64/boot/dts/rockchip/rk3328-orangepi-r1-plus-lts.dts
-new file mode 100644
-index 000000000000..5d7d567283e5
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3328-orangepi-r1-plus-lts.dts
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright (c) 2016 Xunlong Software. Co., Ltd.
-+ * (http://www.orangepi.org)
-+ *
-+ * Copyright (c) 2021-2023 Tianling Shen <cnsztl@gmail.com>
-+ */
+diff --git a/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml b/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
+index 353d9140dcea..286dffa0671b 100644
+--- a/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
++++ b/Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
+@@ -113,6 +113,12 @@ properties:
+   snvs-lpgpr:
+     $ref: /schemas/nvmem/snvs-lpgpr.yaml#
+ 
++  snvs-poweroff:
++    description:
++      The SNVS could drive signal to PMIC to turn off system power by setting
++      SNVS_LP LPCR register.
++    $ref: /schemas/power/reset/syscon-poweroff.yaml#
 +
-+/dts-v1/;
-+#include "rk3328-orangepi-r1-plus.dts"
-+
-+/ {
-+	model = "Xunlong Orange Pi R1 Plus LTS";
-+	compatible = "xunlong,orangepi-r1-plus-lts", "rockchip,rk3328";
-+};
-+
-+&gmac2io {
-+	phy-handle = <&yt8531c>;
-+	tx_delay = <0x19>;
-+	rx_delay = <0x05>;
-+
-+	mdio {
-+		/delete-node/ ethernet-phy@1;
-+
-+		yt8531c: ethernet-phy@0 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			reg = <0>;
-+
-+			motorcomm,clk-out-frequency-hz = <125000000>;
-+			motorcomm,keep-pll-enabled;
-+			motorcomm,auto-sleep-disabled;
-+
-+			pinctrl-0 = <&eth_phy_reset_pin>;
-+			pinctrl-names = "default";
-+			reset-assert-us = <15000>;
-+			reset-deassert-us = <50000>;
-+			reset-gpios = <&gpio1 RK_PC2 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
+ required:
+   - compatible
+   - reg
 -- 
-2.40.0
+2.37.1
 
