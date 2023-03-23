@@ -2,142 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADAD6C71C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939CC6C71CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjCWUpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 16:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S229499AbjCWUqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 16:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCWUp3 (ORCPT
+        with ESMTP id S231504AbjCWUql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 16:45:29 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC2A18AA4;
-        Thu, 23 Mar 2023 13:45:28 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id d22so13349142pgw.2;
-        Thu, 23 Mar 2023 13:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679604328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HkFIb5y369ALv/uraf7WBJF0jCLGL7/0PVLZyZnzEfE=;
-        b=ZC7LcbKKAX6hzUly+biSIToShZR6kNkrvYrU4uOUN0+3OxH8qN+ox1Ue5pAGqw4jOE
-         SlL7k0SJFziPCc4qQxg7GjMkzR+dOT7gPCY3MNYIuV5ymYr6s2h6s6dPup/36L8+GRC+
-         SCMs8wOe4brwI8svowpqIy3dwMQGwt2JI02Zfk5wzzzWxyKw7OSNzHDS+0A1pfp9zFif
-         lRtYgjcFLP/Kd9zTfk07hqyHNCho/DTZb+Dg7VTuODRPG4z4kf94wPgic9i9L3iWeucq
-         +EB1UlbTmBg5LjoLu45EYN/+vbCisVIfVKA40/+dh5HeAYpM93FixO8dOV6pueJODn8Q
-         P8bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679604328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HkFIb5y369ALv/uraf7WBJF0jCLGL7/0PVLZyZnzEfE=;
-        b=ExPRaEmfqFtbXXEnya1TydvePejsCSV8lYrXqmrdeYRVF56LVqs4W6DJZ/DyLtQ6OF
-         IYKSYBPj+iEsDJJ1o5fuj4AILQ/wtA7lmTL+C5jzW3UvKVJqCKyPHmMX+DDQfizAt7CD
-         MAP/GeC7n6/eUUGBn7Vhz8Uc2yX/u0XdddVQBbtfPWn9xLOvERYtVRuym+O77TLua4kc
-         4XejpHcFDlTj1QVvfl6r1gSbQ4lgnIzQtbg4utMrqOrpn4c/Q5tvpiRkhbLKgBJ5cSVX
-         f0d3fsAvA8qxmKYI9cA3DQ/LrzQ6/ifdEd9vMJqeef9jpGAdCK9LhDI6EPumOUC63O2F
-         PBPA==
-X-Gm-Message-State: AO0yUKX7hxyMy+xjrZi/NFgjrbiBpNLAZqIrMGxCKd+8WgCz+eFLKrgD
-        P9Tmbb61h9huvHxVvbO0ZcjmDNfE1sAHar+5OQw=
-X-Google-Smtp-Source: AK7set+0yy8YgmbG5LFZTd+1sGnN2sabKkbGcNeJ8C6HJt001bRUyI6k/+CrcqiRwC0aCBMqGKISiKVPqZzuUAYLX48=
-X-Received: by 2002:a63:1919:0:b0:50b:e80f:caff with SMTP id
- z25-20020a631919000000b0050be80fcaffmr2319620pgl.0.1679604327835; Thu, 23 Mar
- 2023 13:45:27 -0700 (PDT)
+        Thu, 23 Mar 2023 16:46:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EB118B26;
+        Thu, 23 Mar 2023 13:46:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 185E3628AC;
+        Thu, 23 Mar 2023 20:46:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFF3C433D2;
+        Thu, 23 Mar 2023 20:46:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679604395;
+        bh=P6I0W6qPAsf0hZMdu29TtpwKztyniEZ29LfDRXsGq7w=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=HGkcOxq8/EGtQMuOQjnEgKzxYEn6jA+Tkv/UlOH6epkeISTnRnPz0LjAgMNk30+BK
+         hzQ5nrKVAfC2B5/h8brgxFunzYp6nf1TL/P7rCn3bPcYN1Ylbp5EMeDdv4/cMfVOXx
+         S359U2GjKhuUieB+GOYFFswsZU2VTyEgKYrw36fa4o0xaLiv6ntKlpGs9KGGJLxyKF
+         ODuVJ5oPwQ5OHQcuBhUCQBVPGgGp7UL0ElTsGVFX4QPhHwHkEBtgeGGjCpigpJTeSs
+         n8GOjvk6+xr2k1wgEoeJhRrSn4m7hc5Y3CxcBf0KwbB5//OlrdZn3Lc8Lb+rIMp8E2
+         eAwY1Y9AOlGLg==
+Message-ID: <8e0fac7e756272e2593e7c220f9ae69f.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220203182641.824731-1-shy828301@gmail.com> <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
- <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com> <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
-In-Reply-To: <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 23 Mar 2023 13:45:16 -0700
-Message-ID: <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com>
-Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>,
-        kirill.shutemov@linux.intel.com, jannh@google.com,
-        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5b3fcceb-1a0d-d0c7-910d-eb4e65892676@quicinc.com>
+References: <20230317141622.1926573-1-quic_mohs@quicinc.com> <20230317141622.1926573-5-quic_mohs@quicinc.com> <406d02f72767afafa8e563ec2ee7f310.sboyd@kernel.org> <5b3fcceb-1a0d-d0c7-910d-eb4e65892676@quicinc.com>
+Subject: Re: [PATCH v9 4/4] clk: qcom: lpassaudiocc-sc7280: Modify qcom_cc_probe to qcom_cc_probe_by_index
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_visr@quicinc.com
+Date:   Thu, 23 Mar 2023 13:46:33 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 3:11=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
-> On 3/23/23 11:08, David Hildenbrand wrote:
-> > On 23.03.23 10:52, Vlastimil Babka wrote:
-> >> On 2/3/22 19:26, Yang Shi wrote:
-> >>> --- a/fs/proc/task_mmu.c
-> >>> +++ b/fs/proc/task_mmu.c
-> >>> @@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size=
-_stats *mss,
-> >>>   }
-> >>>
-> >>>   static void smaps_account(struct mem_size_stats *mss, struct page *=
-page,
-> >>> -           bool compound, bool young, bool dirty, bool locked)
-> >>> +           bool compound, bool young, bool dirty, bool locked,
-> >>> +           bool migration)
-> >>>   {
-> >>>     int i, nr =3D compound ? compound_nr(page) : 1;
-> >>>     unsigned long size =3D nr * PAGE_SIZE;
-> >>> @@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats =
-*mss, struct page *page,
-> >>>      * page_count(page) =3D=3D 1 guarantees the page is mapped exactl=
-y once.
-> >>>      * If any subpage of the compound page mapped with PTE it would e=
-levate
-> >>>      * page_count().
-> >>> +    *
-> >>> +    * The page_mapcount() is called to get a snapshot of the mapcoun=
-t.
-> >>> +    * Without holding the page lock this snapshot can be slightly wr=
-ong as
-> >>> +    * we cannot always read the mapcount atomically.  It is not safe=
- to
-> >>> +    * call page_mapcount() even with PTL held if the page is not map=
-ped,
-> >>> +    * especially for migration entries.  Treat regular migration ent=
-ries
-> >>> +    * as mapcount =3D=3D 1.
-> >>>      */
-> >>> -   if (page_count(page) =3D=3D 1) {
-> >>> +   if ((page_count(page) =3D=3D 1) || migration) {
-> >>
-> >> Since this is now apparently a CVE-2023-1582 for whatever RHeasons...
-> >>
-> >> wonder if the patch actually works as intended when
-> >> (page_count() || migration) is in this particular order and not the ot=
-her one?
-> >
-> > Only the page_mapcount() call to a page that should be problematic, not
-> > the page_count() call. There might be the rare chance of the page
->
-> Oh right, page_mapcount() vs page_count(), I need more coffee.
->
-> > getting remove due to memory offlining... but we're still holding the
-> > page table lock with the migration entry, so we should be protected
-> > against that.
-> >
-> > Regarding the CVE, IIUC the main reason for the CVE should be
-> > RHEL-specific -- which behaves differently than other code bases; for
-> > other code bases, it's just a way to trigger a BUG_ON as described here=
-.
+Quoting Mohammad Rafi Shaik (2023-03-23 00:45:26)
+>=20
+> On 3/17/2023 11:57 PM, Stephen Boyd wrote:
+> > Quoting Mohammad Rafi Shaik (2023-03-17 07:16:22)
+> >> Modify AHB clocks explicit registration from qcom_cc_probe to
+> >> qcom_cc_probe_by_index.
+> > Why? Isn't it the same?
+> yes, it is same.
+>=20
+> As per the previous version review comment, modified qcom_cc_probe to=20
+> qcom_cc_probe_by_index.
 
-Out of curiosity, is there any public link for this CVE? Google search
-can't find it.
-
->
-> That's good to know so at least my bogus mail was useful for that, thanks=
-!
+Previously you were probing with index 1. That necessitated using
+qcom_cc_probe_by_index() instead of qcom_cc_probe(). That is no longer
+the case though, so this patch is unnecessary.
