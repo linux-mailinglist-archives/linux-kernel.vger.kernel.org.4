@@ -2,199 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350846C7070
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B576C7072
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjCWSpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S231524AbjCWSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjCWSpG (ORCPT
+        with ESMTP id S231521AbjCWSpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:45:06 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A7DFF24;
-        Thu, 23 Mar 2023 11:45:05 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id e12so10745619uaa.3;
-        Thu, 23 Mar 2023 11:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679597104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iBDC4YqSAlgVBo8jKYk3v5jKYzycCpJsqxMwBoNPQHc=;
-        b=UDQUaTiM3Ol49YOYEaeIUV8i6kXJ0/rUqSHOrix46bMOBVgNbpsJgfUBoEx9iPVV4b
-         rKGEJQ8MwG16gdGoO+RXiL+uX5MbOGczBKE3HmK2zTcpkQaGSOtEDVMgGWHTT6w/7JiM
-         iXMR44j6znM3JDjoywrdSnqYB37yHgOIHsQr5HSH2ubU7RyF6RAyYhgDoCjnruC9Vci6
-         w7mpg14fB0pTc/3HWWeL0QzgPxDim7rW9u9L6L6861mnOKBDC+4Io9OFZ7+u+0t9JltE
-         wrWb1+DPFoCp6Mpo3w0RXX7w7t2AmUQ1vjsQJtt1LE+7u2wiO98o0rfTUQzmvawKo6V2
-         vsXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679597104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iBDC4YqSAlgVBo8jKYk3v5jKYzycCpJsqxMwBoNPQHc=;
-        b=T6PcskDLgjf0INWY7/lW+MGSNse4bxWjdETj7U5fFECXDfRmt4QNipdRnp9A06KdMF
-         WHYSVW4ezYcUtHcovAhjfh0KpeFVmwGoEXUamuxr4fNcgV32GNX+fxL4EiC5TS6iP0Ec
-         dA9VKh8djog1GA0lBiSpGYNrIprrQnOjgbff3tE4MChwzWxdg/qMmWyqbhAbR31gLUQ2
-         ZCqIDnJjxL7pasqTjtx6xFWBO0UvqRXHErPv0nyHuEiJPwCe47M/kGwhlf9J6mdqU/lf
-         KHb54FeA8R2DiTdMqa+UI8jz7cTk74IftFueborQYMJf+fM8TbsFmknRF0raoYZTamfD
-         ikQQ==
-X-Gm-Message-State: AAQBX9eiXaxUSfI3tKIk1IlJCZyvJUa8V9K3LCqlFu/8oTCUl7L9o1n+
-        AfFCjEaFlJWeAq0kI/Ayq8GnK0FEN2+gniZanqg=
-X-Google-Smtp-Source: AKy350YeNXJkSX/tlhFD+Slv47JiiTHx1k8LWpgsM0iesU7f43QZt8XyntJ5ViDjN245LJNzev8d1Ai3xZ7oRFvEaxk=
-X-Received: by 2002:a1f:2d56:0:b0:439:d3e1:112b with SMTP id
- t83-20020a1f2d56000000b00439d3e1112bmr385078vkt.0.1679597104229; Thu, 23 Mar
- 2023 11:45:04 -0700 (PDT)
+        Thu, 23 Mar 2023 14:45:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916851166D;
+        Thu, 23 Mar 2023 11:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB1362859;
+        Thu, 23 Mar 2023 18:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB9BC433EF;
+        Thu, 23 Mar 2023 18:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679597124;
+        bh=WBplPgPjttulgaA8Xi55MWgaUgRrcw1aBmIQbNUQakg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hO0vpyI7W+wHQtVzcAKmyObsj+Fk00P30z8SnYEWhqaHiQWj7CgEDGWfHThs6C6VP
+         tyBzXBO1wRbWzlBxu74Np0Qh6uz2aA3rNLaETAQRKB6FIQy5nRm/uoC4W+SAUj47+p
+         SlDIKgeAjLNgjFpbTlhHTyDweTIthe0ENHElEo9JiSZlRHp+GdhRJ/njqjLukVveb+
+         jAk2rKxW95dw5HySvIEXrWLJAgYwCJNGXrWfhpgliK9KLtmUaVBSbetLn3esdwq+tn
+         xRV3qftHOoBYDwQHjkmMX4V4qSQ4I1MJ1i0JG+L/lPs+UvtT1olWnPw5gaoW7Bj+M+
+         Ac+1ZgpN1grFA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id EBF701540398; Thu, 23 Mar 2023 11:45:23 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:45:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model: Remove out-of-date SRCU documentation
+Message-ID: <451e1eb4-a1a3-41b3-9189-fa8aa5096eb3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230323013751.77588-1-parri.andrea@gmail.com>
 MIME-Version: 1.0
-References: <20230323144833.28562-1-clin@suse.com> <20230323144833.28562-4-clin@suse.com>
-In-Reply-To: <20230323144833.28562-4-clin@suse.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 23 Mar 2023 20:44:28 +0200
-Message-ID: <CAHp75Vfue6TNNbNh8b_fCFKF7+rACd=hgXdoQd7drfojDWOvUw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] pinctrl: s32cc: refactor pin config parsing
-To:     Chester Lin <clin@suse.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        NXP S32 Linux Team <s32@nxp.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323013751.77588-1-parri.andrea@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 4:49=E2=80=AFPM Chester Lin <clin@suse.com> wrote:
->
-> Move common codes into smaller inline functions and remove argument check=
-s
-> that are not actually used by pull up/down bits in S32 MSCR register.
+On Thu, Mar 23, 2023 at 02:37:51AM +0100, Andrea Parri wrote:
+> Commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU semantics")
+> changed the semantics of partially overlapping SRCU read-side critical
+> sections (among other things), making such documentation out-of-date.
+> The new, semantic changes are discussed in explanation.txt.  Remove the
+> out-of-date documentation.
+> 
+> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-in the S32
+Applied, thank you all!
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+							Thanx, Paul
 
-> Signed-off-by: Chester Lin <clin@suse.com>
 > ---
-> Changes v3:
-> - Move the PIN_CONFIG_BIAS_DISABLE case to be with PU and PD cases since
->   they have the same function call.
-> - Roll back the argument checks of OUTPUT_ENABLE and INPUT_ENABLE cases
->   since they were wrongly removed with the PU & PD parts in v2.
->
->  drivers/pinctrl/nxp/pinctrl-s32cc.c | 52 ++++++++++++++++++-----------
->  1 file changed, 33 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/pinctrl/nxp/pinctrl-s32cc.c b/drivers/pinctrl/nxp/pi=
-nctrl-s32cc.c
-> index f698e1a240ef..36f323f87785 100644
-> --- a/drivers/pinctrl/nxp/pinctrl-s32cc.c
-> +++ b/drivers/pinctrl/nxp/pinctrl-s32cc.c
-> @@ -474,11 +474,38 @@ static int s32_get_slew_regval(int arg)
->         return -EINVAL;
->  }
->
-> -static int s32_get_pin_conf(enum pin_config_param param, u32 arg,
-> -                           unsigned int *mask, unsigned int *config)
-> +static inline void s32_pin_set_pull(enum pin_config_param param,
-> +                                  unsigned int *mask, unsigned int *conf=
-ig)
->  {
-> +       switch (param) {
-> +       case PIN_CONFIG_BIAS_DISABLE:
-> +       case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
-> +               *config &=3D ~(S32_MSCR_PUS | S32_MSCR_PUE);
-> +               break;
-> +       case PIN_CONFIG_BIAS_PULL_UP:
-> +               *config |=3D S32_MSCR_PUS | S32_MSCR_PUE;
-> +               break;
-> +       case PIN_CONFIG_BIAS_PULL_DOWN:
-> +               *config &=3D ~S32_MSCR_PUS;
-> +               *config |=3D S32_MSCR_PUE;
-> +               break;
-> +       default:
-> +               return;
-> +       }
-> +
-> +       *mask |=3D S32_MSCR_PUS | S32_MSCR_PUE;
-> +}
-> +
-> +static int s32_parse_pincfg(unsigned long pincfg, unsigned int *mask,
-> +                           unsigned int *config)
-> +{
-> +       enum pin_config_param param;
-> +       u32 arg;
->         int ret;
->
-> +       param =3D pinconf_to_config_param(pincfg);
-> +       arg =3D pinconf_to_config_argument(pincfg);
-> +
->         switch (param) {
->         /* All pins are persistent over suspend */
->         case PIN_CONFIG_PERSIST_STATE:
-> @@ -508,26 +535,15 @@ static int s32_get_pin_conf(enum pin_config_param p=
-aram, u32 arg,
->                 *config |=3D S32_MSCR_SRE((u32)ret);
->                 *mask |=3D S32_MSCR_SRE(~0);
->                 break;
-> +       case PIN_CONFIG_BIAS_DISABLE:
->         case PIN_CONFIG_BIAS_PULL_UP:
-> -               if (arg)
-> -                       *config |=3D S32_MSCR_PUS;
-> -               else
-> -                       *config &=3D ~S32_MSCR_PUS;
-> -               fallthrough;
->         case PIN_CONFIG_BIAS_PULL_DOWN:
-> -               if (arg)
-> -                       *config |=3D S32_MSCR_PUE;
-> -               else
-> -                       *config &=3D ~S32_MSCR_PUE;
-> -               *mask |=3D S32_MSCR_PUE | S32_MSCR_PUS;
-> +               s32_pin_set_pull(param, mask, config);
->                 break;
->         case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
->                 *config &=3D ~(S32_MSCR_ODE | S32_MSCR_OBE | S32_MSCR_IBE=
-);
->                 *mask |=3D S32_MSCR_ODE | S32_MSCR_OBE | S32_MSCR_IBE;
-> -               fallthrough;
-> -       case PIN_CONFIG_BIAS_DISABLE:
-> -               *config &=3D ~(S32_MSCR_PUS | S32_MSCR_PUE);
-> -               *mask |=3D S32_MSCR_PUS | S32_MSCR_PUE;
-> +               s32_pin_set_pull(param, mask, config);
->                 break;
->         default:
->                 return -EOPNOTSUPP;
-> @@ -553,9 +569,7 @@ static int s32_pinconf_mscr_update(struct pinctrl_dev=
- *pctldev,
->                 pin_get_name(pctldev, pin_id), num_configs);
->
->         for (i =3D 0; i < num_configs; i++) {
-> -               ret =3D s32_get_pin_conf(pinconf_to_config_param(configs[=
-i]),
-> -                                      pinconf_to_config_argument(configs=
-[i]),
-> -                                      &mask, &config);
-> +               ret =3D s32_parse_pincfg(configs[i], &mask, &config);
->                 if (ret)
->                         return ret;
->         }
-> --
-> 2.37.3
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+>  .../Documentation/litmus-tests.txt            | 27 +------------------
+>  1 file changed, 1 insertion(+), 26 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+> index 26554b1c5575e..acac527328a1f 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+>  		additional call_rcu() process to the site of the
+>  		emulated rcu-barrier().
+>  
+> -	e.	Although sleepable RCU (SRCU) is now modeled, there
+> -		are some subtle differences between its semantics and
+> -		those in the Linux kernel.  For example, the kernel
+> -		might interpret the following sequence as two partially
+> -		overlapping SRCU read-side critical sections:
+> -
+> -			 1  r1 = srcu_read_lock(&my_srcu);
+> -			 2  do_something_1();
+> -			 3  r2 = srcu_read_lock(&my_srcu);
+> -			 4  do_something_2();
+> -			 5  srcu_read_unlock(&my_srcu, r1);
+> -			 6  do_something_3();
+> -			 7  srcu_read_unlock(&my_srcu, r2);
+> -
+> -		In contrast, LKMM will interpret this as a nested pair of
+> -		SRCU read-side critical sections, with the outer critical
+> -		section spanning lines 1-7 and the inner critical section
+> -		spanning lines 3-5.
+> -
+> -		This difference would be more of a concern had anyone
+> -		identified a reasonable use case for partially overlapping
+> -		SRCU read-side critical sections.  For more information
+> -		on the trickiness of such overlapping, please see:
+> -		https://paulmck.livejournal.com/40593.html
+> -
+> -	f.	Reader-writer locking is not modeled.  It can be
+> +	e.	Reader-writer locking is not modeled.  It can be
+>  		emulated in litmus tests using atomic read-modify-write
+>  		operations.
+>  
+> -- 
+> 2.34.1
+> 
