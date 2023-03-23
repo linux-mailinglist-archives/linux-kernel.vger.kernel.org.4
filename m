@@ -2,78 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7086C6E85
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267D26C6E88
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjCWRQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S231486AbjCWRR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCWRQa (ORCPT
+        with ESMTP id S229508AbjCWRRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:16:30 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC4626866;
-        Thu, 23 Mar 2023 10:16:29 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eg48so89793487edb.13;
-        Thu, 23 Mar 2023 10:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679591788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UyfF97kg0OssMdjFthc2Xy3Web7QH9KpQCMnZmHyDZk=;
-        b=S1lCXnisFdgkrdmHgl445bKHxAT6H/kvGykTpRQPIo/DybGALPmoPHFCMhfvqOynYp
-         rzD6GIf2zaPtL+TULCx3Dwi1MchAMAzmf7ZkwzWxCw09gMLPqDpQwtm5caU48hbfW5TN
-         kB3pUQvBupZQpK5kgTQo7JCo7koODxfOvDzmUiUKFPYCt+Y5Z0Tpxh+aRgJ0r9w0EVMG
-         rNwCKNsDx4hzQzpq0Co/U0DagdmUiNAzCHCvjSzfFxZswwg0HRaJK7AZNa651M9tHzfj
-         kNaeKuPBBzXK66cSq7opPWUNzXYUS55LwVFWHorz3kY8lHYVWpnGasRIHoFrXzapHoqW
-         0sGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679591788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UyfF97kg0OssMdjFthc2Xy3Web7QH9KpQCMnZmHyDZk=;
-        b=0mWddD8ayk4PEIsn+tfrbaXsx4Rq74VUg93g25nhVXT9Xvxw35dK9LRcUkd0Qr6rHX
-         mwLPhZ3qoqyBdSe3PVZsFTcbFypiPGR9PCbYSo6Jf1GXHOLT45T2VYejt/fRWWWKri/T
-         RaAXQaCpYMWO36hygoGd1WUgqZ9d0Yo78uTRcuuGhEnyGQSUhxa1Qdw2IGyqqduhYgaV
-         sLrkXKy0KpViUr/dkzxzO3aOmrHW3YGWWcqD7rT/1n76r4R1NhfczbLHZz/T20jI1RVh
-         JDH+jNRKA4RuRwrNv/xiHoDWwpby9lSYpeir2NfcfsGQ9gceQcT/rJBK+6xysa12U5e7
-         V+Vg==
-X-Gm-Message-State: AAQBX9dxXJULrKtejaVkWux76dLMu99m9wh86REjz7wMJNI42SNgyOuK
-        eH/i2UF+uUv1IOH48kODDr1VHiFrytSTcRaG5Js=
-X-Google-Smtp-Source: AKy350bmZ5vj8yuVcu/t2T1UlfpfQBHXV0sDBGYwZrM4kP7wn4O4dtC7c+SDujPKZRG0TUuff+VqrYDiQCi6iVzFdWk=
-X-Received: by 2002:a50:f69e:0:b0:4fc:8749:cd77 with SMTP id
- d30-20020a50f69e000000b004fc8749cd77mr87589edn.3.1679591788153; Thu, 23 Mar
- 2023 10:16:28 -0700 (PDT)
+        Thu, 23 Mar 2023 13:17:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD00E2686C;
+        Thu, 23 Mar 2023 10:17:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 488942F4;
+        Thu, 23 Mar 2023 10:18:06 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.167])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BE133F766;
+        Thu, 23 Mar 2023 10:17:20 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 17:17:14 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+Message-ID: <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230324045842.729719-1-xukuohai@huaweicloud.com> <20230324045842.729719-2-xukuohai@huaweicloud.com>
-In-Reply-To: <20230324045842.729719-2-xukuohai@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 23 Mar 2023 10:16:17 -0700
-Message-ID: <CAADnVQLKxssX1K_CSpbkcOPep2NNnoTRt2bMFzKhCo5AaUzwWA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: add bound tracking for BPF_MOD
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202074036.507249-1-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +47,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 8:59=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com=
-> wrote:
->
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> dst_reg is marked as unknown when BPF_MOD instruction is verified, causin=
-g
-> the following bpf prog to be incorrectly rejected.
->
-> 0: r0 =3D 0
-> 1: r0 %=3D 1   // r0 is marked as unknown
-> 2: r1 =3D 0
-> 3: r1 +=3D 1
-> 4: if r1 < r0 goto pc-2 // verifier treats the loop as unbounded
-> 5: exit
->
-> To teach verifier to accept the above prog, this patch adds bound trackin=
-g
-> for BPF_MOD.
->
-> The approach is based on the following rules:
->
-> 1. BPF_MOD is unsigned;
->
-> 2. For an unsigned constant divisor x:
->
->  a. when x !=3D 0, the resulted dst_reg bits are in the range [0, x - 1],
->     and if no wrapping occurs, the result can be further narrowed down
->     to [umin mod x, umax mod x];
->
->  b. when x =3D=3D 0, dst_reg is truncated to 32 bits by mod32 or remains
->     unchanged by mod64.
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Hi Madhavan,
 
-Same Nack as before.
-You haven't answered _why_ anyone needs it.
+At a high-level, I think this still falls afoul of our desire to not reverse
+engineer control flow from the binary, and so I do not think this is the right
+approach. I've expanded a bit on that below.
+
+I do think it would be nice to have *some* of the objtool changes, as I do
+think we will want to use objtool for some things in future (e.g. some
+build-time binary patching such as table sorting).
+
+On Thu, Feb 02, 2023 at 01:40:14AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> Introduction
+> ============
+> 
+> The livepatch feature requires an unwinder that can provide a reliable stack
+> trace. General requirements for a reliable unwinder are described in this
+> document from Mark Rutland:
+> 
+> 	Documentation/livepatch/reliable-stacktrace.rst
+> 
+> The requirements have two parts:
+> 
+> 1. The unwinder must be enhanced with certain features. E.g.,
+> 
+> 	- Identifying successful termination of stack trace
+> 	- Identifying unwindable and non-unwindable code
+> 	- Identifying interrupts and exceptions occurring in the frame pointer
+> 	  prolog and epilog
+> 	- Identifying features such as kretprobe and ftrace graph tracing
+> 	  that can modify the return address stored on the stack
+> 	- Identifying corrupted/unreliable stack contents
+> 	- Architecture-specific items that can render a stack trace unreliable
+> 	  at certain points in code
+> 
+> 2. Validation of the frame pointer
+> 
+> 	This assumes that the unwinder is based on the frame pointer (FP).
+> 	The actual frame pointer that the unwinder uses cannot just be
+> 	assumed to be correct. It needs to be validated somehow.
+> 
+> This patch series is to address the following:
+> 
+> 	- Identifying unwindable and non-unwindable code
+> 	- Identifying interrupts and exceptions occurring in the frame pointer
+> 	  prolog and epilog
+> 	- Validation of the frame pointer
+> 
+> The rest are already in place AFAICT.
+
+Just as a note: there are a few issues remaining (e.g. the kretprobe and fgraph
+PC recovery both have windows where they lose the original return address), and
+there are a few compiler-generated trampoline functions with non-AAPCS calling
+conventions that will need special care.
+
+> Validation of the FP (aka FRAME_POINTER_VALIDATION)
+> ====================
+> 
+> The current approach in Linux is to use objtool, a build time tool, for this
+> purpose. When configured, objtool is invoked on every relocatable object file
+> during kernel build. It performs static analysis of the code in each file. It
+> walks the instructions in every function and notes the changes to the stack
+> pointer (SP) and the frame pointer (FP). It makes sure that the changes are in
+> accordance with the ABI rules. There are also a lot of other checks that
+> Objtool performs. Once objtool completes successfully, the kernel can then be
+> used for livepatch purposes.
+> 
+> Objtool can have uses other than just FP validation. For instance, it can check
+> control flow integrity during its analysis.
+> 
+> Problem
+> =======
+> 
+> Objtool is complex and highly architecture-dependent. There are a lot of
+> different checks in objtool that all of the code in the kernel must pass
+> before livepatch can be enabled. If a check fails, it must be corrected
+> before we can proceed. Sometimes, the kernel code needs to be fixed.
+> Sometimes, it is a compiler bug that needs to be fixed. The challenge is
+> also to prove that all the work is complete for an architecture.
+> 
+> As such, it presents a great challenge to enable livepatch for an
+> architecture.
+
+There's a more fundamental issue here in that objtool has to reverse-engineer
+control flow, and so even if the kernel code and compiled code generation is
+*perfect*, it's possible that objtool won't recognise the structure of the
+generated code, and won't be able to reverse-engineer the correct control flow.
+
+We've seen issues where objtool didn't understand jump tables, so support for
+that got disabled on x86. A key objection from the arm64 side is that we don't
+want to disable compile code generation strategies like this. Further, as
+compiles evolve, their code generation strategies will change, and it's likely
+there will be other cases that crop up. This is inherently fragile.
+
+The key objections from the arm64 side is that we don't want to
+reverse-engineer details from the binary, as this is complex, fragile, and
+unstable. This is why we've previously suggested that we should work with
+compiler folk to get what we need.
+
+I'll note that at the last Linux Plumbers Conference, there was a discussion
+about what is now called SFrame, which *might* give us sufficient information,
+but I have not had the time to dig into that as I have been chasing other
+problems and trying to get other infrastructure in place.
+
+> A different approach
+> ====================
+> 
+> I would like to propose a different approach for FP validation. I would
+> like to be able to enable livepatch for an architecture as is. That is,
+> without "fixing" the kernel or the compiler for it:
+> 
+> There are three steps in this:
+> 
+> 1. Objtool walks all the functions as usual. It computes the stack and
+>    frame pointer offsets at each instruction as usual. It generates ORC
+>    records and stores them in special sections as usual. This is simple
+>    enough to do.
+
+This still requires reverse-engineering the forward-edge control flow in order
+to compute those offets, so the same objections apply with this approach. I do
+not think this is the right approach.
+
+I would *strongly* prefer that we work with compiler folk to get the
+information that we need.
+
+[...]
+
+> 		FWIW, I have also compared the CFI I am generating with DWARF
+> 		information that the compiler generates. The CFIs match a
+> 		100% for Clang. In the case of gcc, the comparison fails
+> 		in 1.7% of the cases. I have analyzed those cases and found
+> 		the DWARF information generated by gcc is incorrect. The
+> 		ORC generated by my Objtool is correct.
+
+
+Have you reported this to the GCC folk, and can you give any examples?
+I'm sure they would be interested in fixing this, regardless of whether we end
+up using it.
+
+Thanks,
+Mark.
