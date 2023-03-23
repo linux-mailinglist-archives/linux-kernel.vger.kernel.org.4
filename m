@@ -2,139 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67416C675B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0926C674B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjCWL6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S231362AbjCWL46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCWL5W (ORCPT
+        with ESMTP id S231317AbjCWL4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:57:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF44366A5;
-        Thu, 23 Mar 2023 04:56:58 -0700 (PDT)
-Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pj3dm2qw1zbcQg;
-        Thu, 23 Mar 2023 19:53:48 +0800 (CST)
-Received: from build.huawei.com (10.175.101.6) by
- kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+        Thu, 23 Mar 2023 07:56:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501ED3770B;
+        Thu, 23 Mar 2023 04:56:21 -0700 (PDT)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pj3f065CvzLFVK;
+        Thu, 23 Mar 2023 19:54:00 +0800 (CST)
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 23 Mar 2023 19:56:56 +0800
-From:   Wenchao Hao <haowenchao2@huawei.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, <louhongxiang@huawei.com>,
-        <haowenchao2@huawei.com>
-Subject: [PATCH 5/5] scsi:scsi_debug: set command's result and sense data if the error is injected
-Date:   Thu, 23 Mar 2023 19:56:01 +0800
-Message-ID: <20230323115601.178494-6-haowenchao2@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230323115601.178494-1-haowenchao2@huawei.com>
-References: <20230323115601.178494-1-haowenchao2@huawei.com>
+ 15.1.2507.21; Thu, 23 Mar 2023 19:56:18 +0800
+Message-ID: <e80ede3b-f92a-294f-64ee-a52cdf6de7a0@huawei.com>
+Date:   Thu, 23 Mar 2023 19:56:18 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600012.china.huawei.com (7.193.23.74)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+CC:     <mawupeng1@huawei.com>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: Return early in truncate_pagecache if newsize
+ overflows
+Content-Language: en-US
+To:     <akpm@linux-foundation.org>, <willy@infradead.org>
+References: <20230306113317.2295343-1-mawupeng1@huawei.com>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <20230306113317.2295343-1-mawupeng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a fail commnd error is injected, set the command's status and sense
-data then finish this scsi command.
+Hi maintainers.
 
-For example, the following command would make read(0x88) command finished
-with UNC for 8 times:
-  error=/sys/class/scsi_device/0:0:0:1/device/error_inject/error
-  echo "2 -8 0x88 0 0 0x2 0x3 0x11 0x0" >$error
+Kindly ping.
 
-Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
----
- drivers/scsi/scsi_debug.c | 46 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 1deccf8dfc90..863e1a23c055 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -7788,6 +7788,41 @@ static int sdebug_fail_queue_cmd(struct scsi_cmnd *cmnd)
- 	return 0;
- }
- 
-+static int sdebug_fail_cmd(struct scsi_cmnd *cmnd, int *retval,
-+			   struct sdebug_err_inject *info)
-+{
-+	struct scsi_device *sdp = cmnd->device;
-+	struct sdebug_dev_info *devip = (struct sdebug_dev_info *)sdp->hostdata;
-+	struct sdebug_err_inject *err;
-+	unsigned char *cmd = cmnd->cmnd;
-+	int ret = 0;
-+	int result;
-+
-+	if (devip == NULL)
-+		return 0;
-+
-+	list_for_each_entry(err, &devip->inject_err_list, list) {
-+		if (err->type == ERR_FAIL_CMD &&
-+		    (err->cmd == cmd[0] || err->cmd == 0xff)) {
-+			if (!err->cnt)
-+				return 0;
-+			ret = !!err->cnt;
-+			goto out_handle;
-+		}
-+	}
-+	return 0;
-+
-+out_handle:
-+	if (err->cnt < 0)
-+		err->cnt++;
-+	mk_sense_buffer(cmnd, err->sense_key, err->asc, err->asq);
-+	result = err->status_byte | err->host_byte << 16 | err->driver_byte << 24;
-+	*info = *err;
-+	*retval = schedule_resp(cmnd, devip, result, NULL, 0, 0);
-+
-+	return ret;
-+}
-+
- static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 				   struct scsi_cmnd *scp)
- {
-@@ -7808,6 +7843,7 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 	bool has_wlun_rl;
- 	bool inject_now;
- 	int ret = 0;
-+	struct sdebug_err_inject err;
- 
- 	scsi_set_resid(scp, 0);
- 	if (sdebug_statistics) {
-@@ -7860,6 +7896,16 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 		return ret;
- 	}
- 
-+	if (sdebug_fail_cmd(scp, &ret, &err)) {
-+		scmd_printk(KERN_INFO, scp,
-+			"fail command 0x%x with hostbyte=0x%x, "
-+			"driverbyte=0x%x, statusbyte=0x%x, "
-+			"sense_key=0x%x, asc=0x%x, asq=0x%x\n",
-+			opcode, err.host_byte, err.driver_byte,
-+			err.status_byte, err.sense_key, err.asc, err.asq);
-+		return ret;
-+	}
-+
- 	if (unlikely(inject_now && !atomic_read(&sdeb_inject_pending)))
- 		atomic_set(&sdeb_inject_pending, 1);
- 
--- 
-2.35.3
-
+On 2023/3/6 19:33, Wupeng Ma wrote:
+> From: Ma Wupeng <mawupeng1@huawei.com>
+> 
+> Our own test reports a UBSAN in truncate_pagecache:
+> 
+> UBSAN: Undefined behaviour in mm/truncate.c:788:9
+> signed integer overflow:
+> 9223372036854775807 + 1 cannot be represented in type 'long long int'
+> 
+> Call Trace:
+>   truncate_pagecache+0xd4/0xe0
+>   truncate_setsize+0x70/0x88
+>   simple_setattr+0xdc/0x100
+>   notify_change+0x654/0xb00
+>   do_truncate+0x108/0x1a8
+>   do_sys_ftruncate+0x2ec/0x4a0
+>   __arm64_sys_ftruncate+0x5c/0x80
+> 
+> For huge file which pass LONG_MAX to ftruncate, truncate_pagecache() will
+> be called to truncate with newsize be LONG_MAX which will lead to
+> overflow for holebegin:
+> 
+>   loff_t holebegin = round_up(newsize, PAGE_SIZE);
+> 
+> Since there is no meaning to truncate a file to LONG_MAX, return here
+> to avoid burn a bunch of cpu cycles.
+> 
+> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> ---
+>  mm/truncate.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/mm/truncate.c b/mm/truncate.c
+> index 7b4ea4c4a46b..99b6ce2d669b 100644
+> --- a/mm/truncate.c
+> +++ b/mm/truncate.c
+> @@ -730,6 +730,9 @@ void truncate_pagecache(struct inode *inode, loff_t newsize)
+>  	struct address_space *mapping = inode->i_mapping;
+>  	loff_t holebegin = round_up(newsize, PAGE_SIZE);
+>  
+> +	if (holebegin < 0)
+> +		return;
+> +
+>  	/*
+>  	 * unmap_mapping_range is called twice, first simply for
+>  	 * efficiency so that truncate_inode_pages does fewer
