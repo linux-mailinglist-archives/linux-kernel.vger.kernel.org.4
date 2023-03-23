@@ -2,179 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993276C732E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A31D6C7330
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjCWWhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S230369AbjCWWhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCWWhB (ORCPT
+        with ESMTP id S230132AbjCWWhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:37:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762CC25971;
-        Thu, 23 Mar 2023 15:36:58 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679611016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=22ZydMyEuf14Xznb4V9gZs4EGpNlBOHEmuOl6UIfBtU=;
-        b=imtkstIPgIE5LCrnkFaOXqO+3pmbX0fP2De+OV53Ac6gfpuLuBN/SL6B5bZTybVZ6MtvEd
-        I4+YazIMEc40rEmEGJ/x2JBueX7ZrM1bLqbx88m3Yguaxrz3YgMPaXBU99btML8CR/glw9
-        Gfe5RBIvF0u1A2vCMGj5JEc6ZFzxvnjSEYcFSCplzXbGWUodPU+GT3FiZVPcjDb0GaU22q
-        XCGNGrqcybi0FQHsom1yUgeleS9Ugp1Y0gYArkk0ZFU85RrqsBbhMyUb66yrSPGBLVW8eV
-        uaVNmomI6JFrd7q66IniSvNRiLIw0nkpNPi/CLBx8A8yUT1TkTpbinDAIv6q1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679611016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=22ZydMyEuf14Xznb4V9gZs4EGpNlBOHEmuOl6UIfBtU=;
-        b=ebhsEA4aZ3rzDQcyfCoUGKndamTysLpWVyyfgv8GYE+QSBVNFahuhLD5yicB01AGa0yEOB
-        jbI3UHuOeArX0hBA==
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
- states before CPUHP_BRINGUP_CPU
-In-Reply-To: <20230321194008.785922-4-usama.arif@bytedance.com>
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
- <20230321194008.785922-4-usama.arif@bytedance.com>
-Date:   Thu, 23 Mar 2023 23:36:55 +0100
-Message-ID: <874jqb8588.ffs@tglx>
+        Thu, 23 Mar 2023 18:37:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D56623C6C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:37:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52C55B8227C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA471C4339B;
+        Thu, 23 Mar 2023 22:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679611041;
+        bh=e+h2mUJYZuNyVdV99tfY2YFd4SgSC26RuV1oY/psovU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h6GWOthwrssi8xkFClxadiP4fsPn5GIG7nQamIY8sYfhhsWtohT49zxN6MgRzoMQe
+         EnUxpHaQd1zFig97QJDRow9It5swMIU5mburl17t/gEtQuJdG82Nxq7bKEWKOQrGnQ
+         j5wT0jtgEPG7JK/Qy5VuM8WrBoralmvcUeZM2y54QElvSmr32PJadazV3ncgH4Fsmq
+         Ee4NduAs4qZuH01wlre5VO9BBKqJJuzm2rqjSLiuCyra0JyLWvRysMI26iwmofjH+/
+         dhTFurYdG4canFngXpu9AOGI9yqbm5Qzr967AHwa2X7uKGrO8xidyIbexWGuB1C2N4
+         fhm/EsVNNpUwA==
+Date:   Thu, 23 Mar 2023 15:37:20 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Hans Holmberg <hans.holmberg@wdc.com>
+Cc:     Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
+        damien.lemoal@wdc.com, aravind.ramesh@wdc.com, hans@owltronix.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] f2fs: preserve direct write semantics when buffering
+ is forced
+Message-ID: <ZBzUoJ9sydeS4TpI@google.com>
+References: <20230220122004.26555-1-hans.holmberg@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220122004.26555-1-hans.holmberg@wdc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21 2023 at 19:40, Usama Arif wrote:
->  void bringup_nonboot_cpus(unsigned int setup_max_cpus)
->  {
-> +	unsigned int n = setup_max_cpus - num_online_cpus();
->  	unsigned int cpu;
+On 02/20, Hans Holmberg wrote:
+> In some cases, e.g. for zoned block devices, direct writes are
+> forced into buffered writes that will populate the page cache
+> and be written out just like buffered io.
+> 
+> Direct reads, on the other hand, is supported for the zoned
+> block device case. This has the effect that applications
+> built for direct io will fill up the page cache with data
+> that will never be read, and that is a waste of resources.
+> 
+> If we agree that this is a problem, how do we fix it?
+> 
+> A) Supporting proper direct writes for zoned block devices would
+> be the best, but it is currently not supported (probably for
+> a good but non-obvious reason). Would it be feasible to
+> implement proper direct IO?
+> 
+> B) Avoid the cost of keeping unwanted data by syncing and throwing
+> out the cached pages for buffered O_DIRECT writes before completion.
+> 
+> This patch implements B) by reusing the code for how partial
+> block writes are flushed out on the "normal" direct write path.
+> 
+> Note that this changes the performance characteristics of f2fs
+> quite a bit.
+> 
+> Direct IO performance for zoned block devices is lower for
+> small writes after this patch, but this should be expected
+> with direct IO and in line with how f2fs behaves on top of
+> conventional block devices.
+> 
+> Another open question is if the flushing should be done for
+> all cases where buffered writes are forced.
+> 
+> Signed-off-by: Hans Holmberg <hans.holmberg@wdc.com>
+> ---
+>  fs/f2fs/file.c | 38 ++++++++++++++++++++++++++++++--------
+>  1 file changed, 30 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index ecbc8c135b49..4e57c37bce35 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -4513,6 +4513,19 @@ static const struct iomap_dio_ops f2fs_iomap_dio_write_ops = {
+>  	.end_io = f2fs_dio_write_end_io,
+>  };
 >  
-> +	/*
-> +	 * An architecture may have registered parallel pre-bringup states to
-> +	 * which each CPU may be brought in parallel. For each such state,
-> +	 * bring N CPUs to it in turn before the final round of bringing them
-> +	 * online.
-> +	 */
-> +	if (n > 0) {
-> +		enum cpuhp_state st = CPUHP_BP_PARALLEL_DYN;
+> +static void f2fs_flush_buffered_write(struct address_space *mapping,
+> +				      loff_t start_pos, loff_t end_pos)
+> +{
+> +	int ret;
 > +
-> +		while (st <= CPUHP_BP_PARALLEL_DYN_END && cpuhp_hp_states[st].name) {
+> +	ret = filemap_write_and_wait_range(mapping, start_pos, end_pos);
+> +	if (ret < 0)
+> +		return;
+> +	invalidate_mapping_pages(mapping,
+> +				 start_pos >> PAGE_SHIFT,
+> +				 end_pos >> PAGE_SHIFT);
+> +}
+> +
+>  static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
+>  				   bool *may_need_sync)
+>  {
+> @@ -4612,14 +4625,9 @@ static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
+>  
+>  			ret += ret2;
+>  
+> -			ret2 = filemap_write_and_wait_range(file->f_mapping,
+> -							    bufio_start_pos,
+> -							    bufio_end_pos);
+> -			if (ret2 < 0)
+> -				goto out;
+> -			invalidate_mapping_pages(file->f_mapping,
+> -						 bufio_start_pos >> PAGE_SHIFT,
+> -						 bufio_end_pos >> PAGE_SHIFT);
+> +			f2fs_flush_buffered_write(file->f_mapping,
+> +						  bufio_start_pos,
+> +						  bufio_end_pos);
+>  		}
+>  	} else {
+>  		/* iomap_dio_rw() already handled the generic_write_sync(). */
+> @@ -4717,8 +4725,22 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>  	inode_unlock(inode);
+>  out:
+>  	trace_f2fs_file_write_iter(inode, orig_pos, orig_count, ret);
+> +
+>  	if (ret > 0 && may_need_sync)
+>  		ret = generic_write_sync(iocb, ret);
+> +
+> +	/* If buffered IO was forced, flush and drop the data from
+> +	 * the page cache to preserve O_DIRECT semantics
+> +	 */
+> +	if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT)) {
+> +		struct file *file = iocb->ki_filp;
+> +		loff_t end_pos = orig_pos + ret - 1;
+> +
+> +		f2fs_flush_buffered_write(file->f_mapping,
+> +					  orig_pos,
+> +					  end_pos);
 
+I applied a minor change:
 
-There is no point in special casing this. All architectures can invoke
-the CPUHP_BP_* states before CPUHP_BRINGUP_CPU for each to be brought up
-CPU first. So this can be made unconditional and common exercised code.
+        /* If buffered IO was forced, flush and drop the data from
+         * the page cache to preserve O_DIRECT semantics
+         */
+-       if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT)) {
+-               struct file *file = iocb->ki_filp;
+-               loff_t end_pos = orig_pos + ret - 1;
+-
+-               f2fs_flush_buffered_write(file->f_mapping,
++       if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT))
++               f2fs_flush_buffered_write(iocb->ki_filp->f_mapping,
+                                          orig_pos,
+-                                         end_pos);
+-       }
++                                         orig_pos + ret - 1);
 
-Aside of that this dynamic state range is pretty pointless. There is
-really nothing dynamic here and there is no real good reason to have
-four dynamic parallel states just because.
-
-The only interesting thing after CPUHP_BP_PREPARE_DYN_END and before
-CPUHP_BP_BRINGUP is a state which kicks the AP into life, i.e. we can
-just hardcode that as CPUHP_BP_PARALLEL_STARTUP.
-
-Thanks,
-
-        tglx
----
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -133,6 +133,20 @@ enum cpuhp_state {
- 	CPUHP_MIPS_SOC_PREPARE,
- 	CPUHP_BP_PREPARE_DYN,
- 	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
-+	/*
-+	 * This is an optional state if the architecture supports parallel
-+	 * startup. It's used to send the startup IPI so that the APs can
-+	 * run in parallel through the low level startup code instead of
-+	 * sending the IPIs one by one in CPUHP_BRINGUP_CPU. This avoids
-+	 * waiting for the AP to react and shortens the serialized bringup.
-+	 */
-+	CPUHP_BP_PARALLEL_STARTUP,
-+
-+	/*
-+	 * Fully per AP serialized bringup from here on. If the
-+	 * architecture does no register the CPUHP_BP_PARALLEL_STARTUP
-+	 * state, this step sends the startup IPI first.
-+	 */
- 	CPUHP_BRINGUP_CPU,
- 
- 	/*
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1504,13 +1504,49 @@ int bringup_hibernate_cpu(unsigned int s
- 
- void bringup_nonboot_cpus(unsigned int setup_max_cpus)
- {
--	unsigned int cpu;
-+	unsigned int cpu, n = 1;
- 
-+	/*
-+	 * All CHUHP_BP* states are invoked on the control CPU (BP). There
-+	 * is no requirement that these states need to be invoked
-+	 * sequentially for a particular CPU. They can be invoked state by
-+	 * state for each to be onlined CPU.
-+	 *
-+	 * On architectures which have setup the CPUHP_BP_PARALLEL_STARTUP
-+	 * state, this sends the startup IPI to each of the to be onlined
-+	 * APs. This avoids waiting for each AP to respond to the startup
-+	 * IPI in CPUHP_BRINGUP_CPU. The APs proceed through the low level
-+	 * bringup code and then wait for the control CPU to release them
-+	 * one by one for the final onlining procedure in the loop below.
-+	 *
-+	 * For architectures which do not support parallel bringup the
-+	 * CPUHP_BP_PARALLEL_STARTUP state is a NOOP and the actual startup
-+	 * happens in the CPUHP_BRINGUP_CPU state which is fully serialized
-+	 * per CPU in the loop below.
-+	 */
-+	for_each_present_cpu(cpu) {
-+		if (n++ >= setup_max_cpus)
-+			break;
-+		cpu_up(cpu, CPUHP_BP_PARALLEL_STARTUP);
-+	}
-+
-+	/* Do the per CPU serialized bringup to ONLINE state */
- 	for_each_present_cpu(cpu) {
- 		if (num_online_cpus() >= setup_max_cpus)
- 			break;
--		if (!cpu_online(cpu))
--			cpu_up(cpu, CPUHP_ONLINE);
-+
-+		if (!cpu_online(cpu)) {
-+			struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-+			int ret = cpu_up(cpu, CPUHP_ONLINE);
-+
-+			/*
-+			 * Due to the above preparation loop a failed online attempt
-+			 * has only rolled back to CPUHP_BP_PARALLEL_STARTUP. Do the
-+			 * remaining cleanups.
-+			 */
-+			if (ret && can_rollback_cpu(st))
-+				WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
-+		}
- 	}
+        return ret;
  }
- 
+
+
+> +	}
+> +
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
