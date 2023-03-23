@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD5C6C5F06
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE81F6C5F17
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjCWFhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        id S230137AbjCWFlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjCWFgx (ORCPT
+        with ESMTP id S229518AbjCWFlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:36:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B4C22DF2;
-        Wed, 22 Mar 2023 22:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=4rYA27bP5SJ96nwlsw/Ut9+9UJxvq6/W6cEfEakTthw=; b=sFBJRaKocNeVAn4DYTWwAZHy9e
-        k6BkoKt9dkyqQSMcwRG6UuUOA2cIZ/gCw8tcHR+kgmspjCMMl74M9jK227yPt4L2nkCBZYi320A+2
-        eSgAkLSwlU0nCybjsTgj210oum2+Ll4E3d0mqMvk4kjTkcPK0wJzuTOKBytcaSqtHTaZVUN0MyCmp
-        qgzhYfCTQLeHxavmgazRuhxXoWn66gHWvM8kUaGtJg5DxDAr/6AAd/rRQHq/FYmUBnaT/fyN7+qBA
-        aNXT/F7yAq2FGOpJhjWWReJVrjtut3C6WObbfzoZrhF20jTNkp3lTCjPm2aMhQfaSvBrgtckLmw/m
-        B/QTpyWQ==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfDcQ-000rkX-2k;
-        Thu, 23 Mar 2023 05:36:10 +0000
-Message-ID: <5952c3e9-814c-288f-3682-e026f4250406@infradead.org>
-Date:   Wed, 22 Mar 2023 22:36:08 -0700
+        Thu, 23 Mar 2023 01:41:05 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0CA1F5C2;
+        Wed, 22 Mar 2023 22:41:03 -0700 (PDT)
+Received: from pride-PowerEdge-R740.. ([172.16.0.254])
+        (user=lihuya@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32N5dm9Y015381-32N5dm9Z015381
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 23 Mar 2023 13:39:48 +0800
+From:   lihuya <lihuya@hust.edu.cn>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     dzm91@hust.edu.cn, hust-os-kernel-patches@googlegroups.com,
+        lihuya <lihuya@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: remove dead code in dwc3_otg_get_irq
+Date:   Thu, 23 Mar 2023 13:39:46 +0800
+Message-Id: <20230323053946.53094-1-lihuya@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] fix typos in net/sched/* files
-Content-Language: en-US
-To:     Taichi Nishimura <awkrail01@gmail.com>, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org
-References: <20230323052713.858987-1-awkrail01@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230323052713.858987-1-awkrail01@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: lihuya@hust.edu.cn
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+platform_get_irq() only return non-zero irq number on success, or
+negative error number on failure.
 
+There is no need to check the return value of platform_get_irq()
+to determine the return value of dwc3_otg_get_irq(), removing
+them to solve this problem.
 
-On 3/22/23 22:27, Taichi Nishimura wrote:
-> This patch fixes typos in net/sched/* files.
-> 
-> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+Signed-off-by: lihuya <lihuya@hust.edu.cn>
+---
+ drivers/usb/dwc3/drd.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Thanks.
-
-> ---
->  net/sched/cls_flower.c | 2 +-
->  net/sched/em_meta.c    | 2 +-
->  net/sched/sch_pie.c    | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-
-
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 039bf241769a..c2e09700212d 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -154,11 +154,6 @@ static int dwc3_otg_get_irq(struct dwc3 *dwc)
+ 		goto out;
+ 
+ 	irq = platform_get_irq(dwc3_pdev, 0);
+-	if (irq > 0)
+-		goto out;
+-
+-	if (!irq)
+-		irq = -EINVAL;
+ 
+ out:
+ 	return irq;
 -- 
-~Randy
+2.34.1
+
