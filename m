@@ -2,64 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00896C72E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0156C6C72E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCWWSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S231501AbjCWWTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjCWWSx (ORCPT
+        with ESMTP id S231241AbjCWWTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:18:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8DC1B2F2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:18:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 23 Mar 2023 18:19:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA311E5EF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:19:19 -0700 (PDT)
+Received: from [192.168.2.179] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19124627BD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F79C433EF;
-        Thu, 23 Mar 2023 22:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1679609931;
-        bh=O4Ru8fyq2qUax/RXRkWJCuIYSsBuJuIiR89K5Axpcu4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kOBgCgRc8rQm1vntzgi5hLvvhvdE6Eqzr9aQp8n229iEe56JnICdaFMX08mh4vHBX
-         LdBLr1tzqUYsqyoo65DUNxPLjx7I2JQ3ngE6bqPug9LmE6aWxgNSniozxkBYOczzui
-         V+63CvojAZFdSoolrBOpiv3lVQGcUfGxvPtBCbC0=
-Date:   Thu, 23 Mar 2023 15:18:50 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     glider@google.com, elver@google.com, dvyukov@google.com,
-        jannh@google.com, sjpark@amazon.de, muchun.song@linux.dev,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: kfence: fix handling discontiguous page
-Message-Id: <20230323151850.e2785b1cff37fba078f26f2b@linux-foundation.org>
-In-Reply-To: <20230323025003.94447-1-songmuchun@bytedance.com>
-References: <20230323025003.94447-1-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 677B86603101;
+        Thu, 23 Mar 2023 22:19:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679609958;
+        bh=13qVgcP+l402P7/bUsTCXjHnBiBLeTZcTgT6kSPNWb0=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=Uf3/eNdZhGOsKSWW+wFFZJ6SCAGucTcsjedMz7X0kGqPhoroFdQpqSfN58NCXdNHM
+         XHuuJLFzA63hNuh/hylex9xAK/fp4qMWcqJPuFnE3c0pYA0546tyH987EBn50LW+6b
+         LP7MKjL7rJgPKL+wf3lBrrvoqB0QdKoKbbFoD7XJrL+SqdLt8ikeV7eXzoGyyFBw51
+         OUnvBc0xOovAoDYoSp8+OHZDHtatjo9Lgt9HdSNYbRB2vjzH/G/5P9LbmeCKHLH2VY
+         xqHRzJXXkRNTMa3lQ88ScL1Tk0ATT5lmktMYO6hR21pFMPFgtKw52ZDuonSmVQFhuK
+         6sVMtc+lR6Stw==
+Message-ID: <be12c081-61a9-f476-7afe-b1bb78c35dea@collabora.com>
+Date:   Fri, 24 Mar 2023 01:19:15 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drm/virtio: Support sync objects
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Emil Velikov <emil.velikov@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230323190340.950875-1-dmitry.osipenko@collabora.com>
+ <20230323190340.950875-3-dmitry.osipenko@collabora.com>
+ <CAF6AEGs28wzuXc3w+qYvcUH+dT271w=dtxmzKfR6zgHqXqjMzQ@mail.gmail.com>
+ <889ce0e7-f61a-ed0a-35d5-1a9290521d49@collabora.com>
+In-Reply-To: <889ce0e7-f61a-ed0a-35d5-1a9290521d49@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 10:50:03 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+On 3/24/23 00:51, Dmitry Osipenko wrote:
+> On 3/24/23 00:18, Rob Clark wrote:
+> ...
+>>> +static int
+>>> +virtio_gpu_parse_deps(struct virtio_gpu_submit *submit)
+>>> +{
+>>> +       struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
+>>> +       struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
+>>> +       size_t syncobj_stride = exbuf->syncobj_stride;
+>>> +       struct drm_syncobj **syncobjs;
+>>> +       int ret = 0, i;
+>>> +
+>>> +       if (!submit->num_in_syncobjs)
+>>> +               return 0;
+>>> +
+>>> +       syncobjs = kcalloc(submit->num_in_syncobjs, sizeof(*syncobjs),
+>>> +                          GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
+>> I *think*, assuming I'm reading where this is called correctly (kinda
+>> wish git would show more lines of context by default) that these don't
+>> need to be NOWARN|NORETRY (same for post_deps).  I guess you inherited
+>> this from drm/msm, where I appear to have forgotten to update the
+>> syncobj path in commit f0de40a131d9 ("drm/msm: Reorder lock vs submit
+>> alloc").  I don't see anything obvious that would require NORETRY, but
+>> lockdep should be able to tell you otherwise if needed.
+> 
+> The NORETRY should prevent waking up OOM killer, it shouldn't help with
+> lockdep. Nothing prevents userspace from giving a big number of
+> num_in_syncobjs. But perhaps indeed not very practical to care about
+> this case, given that other similar memalloc paces of execbuffer_ioctl()
+> aren't using NORETRY. Alright, let's drop it in v4.
+> 
 
-> The struct pages could be discontiguous when the kfence pool is allocated
-> via alloc_contig_pages() with CONFIG_SPARSEMEM and !CONFIG_SPARSEMEM_VMEMMAP.
-> So, the iteration should use nth_page().
+Although no, there is only a kvmalloc_array() in the code and vmalloc
+uses NOWARN and NORETRY flags implicitly. May be better switch to use
+kvmalloc everywhere, for consistency. Technically, vmalloc shouldn't
+ever be needed for a submit code path and kmalloc should be enough. On
+the other hand, vmalloc acts like kmalloc until there is no enough
+contig memory.
 
-What are the user-visible runtime effects of this flaw?
+-- 
+Best regards,
+Dmitry
 
-Thanks.
