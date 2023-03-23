@@ -2,112 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D336C6A0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A762C6C6A12
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjCWNyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S231283AbjCWNyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjCWNxx (ORCPT
+        with ESMTP id S231794AbjCWNyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:53:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7E91ACF1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:53:47 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NB65Jx030676;
-        Thu, 23 Mar 2023 13:53:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=vJo0wVGYC5RZLt1+sY/GHDRgIaFyRoklJ7hvkdnd5hw=;
- b=P8XNamuKaCNiMLwDg1WhP0dRfYcx0HE2mH8O66FCu+0TneO1VZ88rgUJ0SmtyCElny36
- pife807h1tj6PBUAgez4pVyOWhlHIfoeG+2ojPiC1hTb+O0pkzkB4cqsogJkQUZmD4wf
- 7oCGMpFWwkjgG7cnvEVnTtjdunqP3TpKhIknlk2ELYdruaVBlJYN8MJxRSWKhtwbqiHG
- 5hatXSz5MspS0DNBIbTojM3OZk13akMOI99unEYaCCUjhDVMcDsRJ0L3y4+D0mcWwEig
- OFasMQYFYtucb0q/j9YpYIgohmqaUBuzwMzvBR9xoYbIFcKd5xuWD0/YqFjMLjJbTT9T WQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg64k2ff9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:53:26 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NDrPmE004916
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:53:25 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 23 Mar 2023 06:53:24 -0700
-Date:   Thu, 23 Mar 2023 06:53:23 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bhavya Kapoor <b-kapoor@ti.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <dmitry.baryshkov@linaro.org>, <arnd@arndb.de>,
-        <krzysztof.kozlowski@linaro.org>, <geert+renesas@glider.be>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>, <rafal@milecki.pl>
-Subject: Re: [PATCH v2] arm64: defconfig: Enable CAN PHY transceiver driver
-Message-ID: <20230323135323.GA309305@hu-bjorande-lv.qualcomm.com>
-References: <20230323113324.361991-1-b-kapoor@ti.com>
+        Thu, 23 Mar 2023 09:54:25 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6954CE07A;
+        Thu, 23 Mar 2023 06:54:17 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id x22-20020a056830409600b0069b30fb38f7so12150533ott.5;
+        Thu, 23 Mar 2023 06:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679579656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QjOvv/ZPDbSli/SQ67teItUX/ZV6UdqvrawXfnsTP9c=;
+        b=fABtsO48pFpSWP4FcJ3dhrQvnIbnb6omivu7xuuBdoBA4dAX6OWqKUf4WBRar8getR
+         uUDMYAy1h2w23MXumxi25yo+48vMiJEIn5x8S1NDp366vvkhUGWs+owx8UORr2HoHxlB
+         ykH2TgdVhWu5Fksfm3zSNiK49GwWe2X3eh6MX118M+k0gIdAaLNdDqMqn75WkLB4TfR0
+         r9/ieRqMhlAB9Kw0+rhmW7lPPju/rMRdNh0TgpA3bu3aA0pl3Qbg/wT4E4pMSI3LEu2y
+         yN7mf0oNFNDE0wW+qiibGf6aTFeFcMYFoCHx22IFdOen1v8Yj2+ioZPS7pS0fo1NhOXY
+         mGtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679579656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QjOvv/ZPDbSli/SQ67teItUX/ZV6UdqvrawXfnsTP9c=;
+        b=qhIZ4zhWHp+oI6YwbqRP/+LQcodSDBy8yhAqSAmDZMQNyarCUGvPe0VXZ4GYubpKko
+         V/LKadxUN+9iAZFGIa+kGiG0uSjA8g1K77hJtUGj6NKNty8TZjidkR3QPgFVxK3EKfMk
+         STfpTEY9FimaBSJR2yseyIN2LefkjNeNrD8tGVDolGWXc2zMbnA1QfN/JglR0lEvVkvZ
+         hz0G963kg4zgoK27Qdx9E2PyGCGC23RSRzsfuDeDRwa4A2doPJpOQ1UPNkugLAIBl0p5
+         rxoojBotrQYZrpQuAIOUgvCEEq4qlrAf8Ac3D/G4611Vihq37lcNLzeZxgLL+wX2eENv
+         ltnA==
+X-Gm-Message-State: AO0yUKUcyg+cpM2L5hMOD1p90tEpVW/nx5lFjQyDNzeHhzjqQ++IHkDb
+        N1LlDzR0Aquz+SwDIvEb/0D8hFY4AuZ9lMOq308=
+X-Google-Smtp-Source: AK7set+pjqtGtPO6GLHBGh9hBOwDRWaRvZoOvDszymMlwhM38Q5UfQVowYMdv7Wz5SBe768rCFIMjR8hTTsUyroJSF4=
+X-Received: by 2002:a05:6830:1483:b0:68b:cd1e:1ef1 with SMTP id
+ s3-20020a056830148300b0068bcd1e1ef1mr2274617otq.7.1679579656288; Thu, 23 Mar
+ 2023 06:54:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230323113324.361991-1-b-kapoor@ti.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: G0pm7JZGZ7RmXrgvA_366z0pJWEdpAYM
-X-Proofpoint-ORIG-GUID: G0pm7JZGZ7RmXrgvA_366z0pJWEdpAYM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- clxscore=1011 priorityscore=1501 adultscore=0 mlxlogscore=907 phishscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230105
+References: <20230322224403.35742-1-robdclark@gmail.com> <b9fb81f1-ac9e-cf3f-5cf4-f2d972d3ed3d@amd.com>
+In-Reply-To: <b9fb81f1-ac9e-cf3f-5cf4-f2d972d3ed3d@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 23 Mar 2023 06:54:05 -0700
+Message-ID: <CAF6AEGvMwZCLntfYeH3Vg_Z7kYynqdVrinp+pmcbREksK1WGMA@mail.gmail.com>
+Subject: Re: [RFC] drm/scheduler: Unwrap job dependencies
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 05:03:24PM +0530, Bhavya Kapoor wrote:
-> Enable CAN PHY transceiver driver to be built as a module.
+On Thu, Mar 23, 2023 at 12:35=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 22.03.23 um 23:44 schrieb Rob Clark:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Container fences have burner contexts, which makes the trick to store a=
+t
+> > most one fence per context somewhat useless if we don't unwrap array or
+> > chain fences.
+>
+> Mhm, we intentionally kept them not unwrapped since this way they only
+> occupy one fence slot.
+>
+> But it might be better to unwrap them if you add many of those dependenci=
+es.
+>
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> > tbh, I'm not sure why we weren't doing this already, unless there is
+> > something I'm overlooking
+> >
+> >   drivers/gpu/drm/scheduler/sched_main.c | 43 +++++++++++++++++--------=
+-
+> >   1 file changed, 28 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/s=
+cheduler/sched_main.c
+> > index c2ee44d6224b..f59e5335afbb 100644
+> > --- a/drivers/gpu/drm/scheduler/sched_main.c
+> > +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> > @@ -41,20 +41,21 @@
+> >    * 4. Entities themselves maintain a queue of jobs that will be sched=
+uled on
+> >    *    the hardware.
+> >    *
+> >    * The jobs in a entity are always scheduled in the order that they w=
+ere pushed.
+> >    */
+> >
+> >   #include <linux/kthread.h>
+> >   #include <linux/wait.h>
+> >   #include <linux/sched.h>
+> >   #include <linux/completion.h>
+> > +#include <linux/dma-fence-unwrap.h>
+> >   #include <linux/dma-resv.h>
+> >   #include <uapi/linux/sched/types.h>
+> >
+> >   #include <drm/drm_print.h>
+> >   #include <drm/drm_gem.h>
+> >   #include <drm/gpu_scheduler.h>
+> >   #include <drm/spsc_queue.h>
+> >
+> >   #define CREATE_TRACE_POINTS
+> >   #include "gpu_scheduler_trace.h"
+> > @@ -665,41 +666,27 @@ void drm_sched_job_arm(struct drm_sched_job *job)
+> >       sched =3D entity->rq->sched;
+> >
+> >       job->sched =3D sched;
+> >       job->s_priority =3D entity->rq - sched->sched_rq;
+> >       job->id =3D atomic64_inc_return(&sched->job_id_count);
+> >
+> >       drm_sched_fence_init(job->s_fence, job->entity);
+> >   }
+> >   EXPORT_SYMBOL(drm_sched_job_arm);
+> >
+> > -/**
+> > - * drm_sched_job_add_dependency - adds the fence as a job dependency
+> > - * @job: scheduler job to add the dependencies to
+> > - * @fence: the dma_fence to add to the list of dependencies.
+> > - *
+> > - * Note that @fence is consumed in both the success and error cases.
+> > - *
+> > - * Returns:
+> > - * 0 on success, or an error on failing to expand the array.
+> > - */
+> > -int drm_sched_job_add_dependency(struct drm_sched_job *job,
+> > -                              struct dma_fence *fence)
+> > +static int _add_dependency(struct drm_sched_job *job, struct dma_fence=
+ *fence)
+>
+> Please keep the drm_sched_job_ prefix here even for static functions.
+> The symbol _add_dependency just sucks in a backtrace, especially when
+> it's tail optimized.
+>
+> >   {
+> >       struct dma_fence *entry;
+> >       unsigned long index;
+> >       u32 id =3D 0;
+> >       int ret;
+> >
+> > -     if (!fence)
+> > -             return 0;
+> > -
+> >       /* Deduplicate if we already depend on a fence from the same cont=
+ext.
+> >        * This lets the size of the array of deps scale with the number =
+of
+> >        * engines involved, rather than the number of BOs.
+> >        */
+> >       xa_for_each(&job->dependencies, index, entry) {
+> >               if (entry->context !=3D fence->context)
+> >                       continue;
+> >
+> >               if (dma_fence_is_later(fence, entry)) {
+> >                       dma_fence_put(entry);
+> > @@ -709,20 +696,46 @@ int drm_sched_job_add_dependency(struct drm_sched=
+_job *job,
+> >               }
+> >               return 0;
+> >       }
+> >
+> >       ret =3D xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, GF=
+P_KERNEL);
+> >       if (ret !=3D 0)
+> >               dma_fence_put(fence);
+> >
+> >       return ret;
+> >   }
+> > +
+> > +/**
+> > + * drm_sched_job_add_dependency - adds the fence as a job dependency
+> > + * @job: scheduler job to add the dependencies to
+> > + * @fence: the dma_fence to add to the list of dependencies.
+> > + *
+> > + * Note that @fence is consumed in both the success and error cases.
+> > + *
+> > + * Returns:
+> > + * 0 on success, or an error on failing to expand the array.
+> > + */
+> > +int drm_sched_job_add_dependency(struct drm_sched_job *job,
+> > +                              struct dma_fence *fence)
+>
+> Maybe name the new function drm_sched_job_unwrap_add_dependency or
+> something like this.
+>
+> I need to double check, but I think for some cases we don't need or
+> don't even want this in the driver.
 
-Please use the commit message to describe why the driver should be
-enabled. The patch and the subject already states clearly that the
-driver is being enabled.
+I'd be curious to know the cases where you don't want this.. one thing
+I was thinking about, what if you have a container fence with two
+contained fences.  One is on the same ctx as the job, one is not but
+signals sooner.  You end up artificially waiting on both, which seems
+sub-optimal.
 
-Regards,
-Bjorn
+Anyways, I can make this a new entrypoint which unwraps, and/or rename
+the internal static function, if we think this is a good idea.
 
-> 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-> ---
-> changelog v1->v2:
->  - changed position of config in the file
-> 
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 7790ee42c68a..6e123de3a9cf 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1292,6 +1292,7 @@ CONFIG_RESET_QCOM_PDC=m
->  CONFIG_RESET_RZG2L_USBPHY_CTRL=y
->  CONFIG_RESET_TI_SCI=y
->  CONFIG_PHY_XGENE=y
-> +CONFIG_PHY_CAN_TRANSCEIVER=m
->  CONFIG_PHY_SUN4I_USB=y
->  CONFIG_PHY_CADENCE_TORRENT=m
->  CONFIG_PHY_CADENCE_SIERRA=m
-> -- 
-> 2.34.1
-> 
+BR,
+-R
+
+> Christian.
+>
+> > +{
+> > +     struct dma_fence_unwrap iter;
+> > +     struct dma_fence *f;
+> > +     int ret =3D 0;
+> > +
+> > +     dma_fence_unwrap_for_each (f, &iter, fence) {
+> > +             ret =3D _add_dependency(job, f);
+> > +             if (ret)
+> > +                     break;
+> > +     }
+> > +
+> > +     return ret;
+> > +}
+> >   EXPORT_SYMBOL(drm_sched_job_add_dependency);
+> >
+> >   /**
+> >    * drm_sched_job_add_resv_dependencies - add all fences from the resv=
+ to the job
+> >    * @job: scheduler job to add the dependencies to
+> >    * @resv: the dma_resv object to get the fences from
+> >    * @usage: the dma_resv_usage to use to filter the fences
+> >    *
+> >    * This adds all fences matching the given usage from @resv to @job.
+> >    * Must be called with the @resv lock held.
+>
