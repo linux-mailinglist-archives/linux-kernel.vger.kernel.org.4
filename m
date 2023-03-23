@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A416C6EF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2964D6C6EFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjCWRbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S232339AbjCWRbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbjCWRbY (ORCPT
+        with ESMTP id S232220AbjCWRb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:31:24 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DBB2B610
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:20 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id j13so22123384pjd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:20 -0700 (PDT)
+        Thu, 23 Mar 2023 13:31:27 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29743C0C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:23 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so2650208pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592680;
+        d=chromium.org; s=google; t=1679592683;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=axzKHWKEv5YVhGt7OnDPPiY6mPvXZ76IZmLOehTivRM=;
-        b=Hr6ofu6oqBQij15HDorCxP6qJd/DFWqt6l/Ey7WIKytvKq0Hg1t6qCmeE664vXR+Z9
-         N59aPdWEExquxwyH812aZNz20iZjJTt5Bk3jJvB2U7kgSZVLQutKqiBNL36uDXjSqWfU
-         jL5NAUAv3Uxd6DivSrdFnrub1l7TcPWrtBjyk=
+        bh=FoRlfx7CbmqnP3zURzbR63MNq645Q0jdEhms+74MeYc=;
+        b=kAbV/I/7xnERMCRUryA9uRdH+3r0Gbql1oICa8dpLQkpw3nzC30aFv0O2WVZhad+Rg
+         z/5TPz2pe2fz4w0QwV2aTcCxsSSCzZRWT4Rb7+IXKwSWE25W9HVRgq2ygsxETUMA6Yeu
+         1bfWQmuHyrMczCGKRaLFy9bXJTz805huHOKHY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592680;
+        d=1e100.net; s=20210112; t=1679592683;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=axzKHWKEv5YVhGt7OnDPPiY6mPvXZ76IZmLOehTivRM=;
-        b=Fapam9n1hU33HLmaQal6BVKoYe0exM/msG5KjY20NfWEssm1/Ujzqd/M5zbdXjf2+r
-         FBBAXJEqD5lrE7SE9uQefBUKlPc9fPVLPLrp4I+L1fsZ62XIgd0qgb0TD86jN+jNLsW3
-         he9lT2RYZJDb4Fs5o5cEcmmxtxvxEYpeSzNc+g5aMBEIy+AdN75e28NXtET0XGmXH0r8
-         9aT8EG6E8tHNclT2Lj2rKhs7z2UcxN47x0OOtiqY8dANMmBh5jyLKZqwGoYtddsdQATq
-         2kjk/QG8BCHUbu1X5P/pBMGkBgnOLnoE9TLhX0STn/8NqabTgLQT0KB+FWH1aHq6AAQu
-         DKMw==
-X-Gm-Message-State: AO0yUKVV4zzYtQx9/Vr4jz+ztN/wmHwcNJyo472pjLciZn4mvxHp5p/2
-        YEv/x/Supgz0wRUy9cDY7K6zmQ==
-X-Google-Smtp-Source: AK7set98W2pL/pZaFCyJ1kV68FLpW0uLABrjIbr4GjXq3ykVerKMR6GAGJsUb4A7bHVMxCGlYMXUNg==
-X-Received: by 2002:a05:6a20:8b14:b0:d9:840f:79c2 with SMTP id l20-20020a056a208b1400b000d9840f79c2mr464959pzh.2.1679592679750;
-        Thu, 23 Mar 2023 10:31:19 -0700 (PDT)
+        bh=FoRlfx7CbmqnP3zURzbR63MNq645Q0jdEhms+74MeYc=;
+        b=lk6xzfmOCVYqbMLdUIFxa1fL0Ok9nxuQ9b7Varu4xqXQNNHMC3zsIcz+9VI0/Z0IlN
+         7O0YxMTTeK478zZkObt8aNsBHMtcqoL9qW6OsFR+4rIMoDYnL88Fg1NcnjvA36IXeQVx
+         SZFDCzMOBnMgIOFwytBVUVrUXRm+goBzLmz0abs+rx4dicqPiVwZ9+OoS5aHFLaSQeuG
+         xVfmf0Vsc6uEy7T05wz3NNk2UmEDd1lJQpgSCaz0Dkn7VkBxPkfwTtl6OipsQgz56zqd
+         kYfHafngaiQfEGchQRIMpbuT2qcMPQ+bcZMKN4q6+Q7CtuwrCmC55RCq1qOg3ym4mZHc
+         kLQg==
+X-Gm-Message-State: AO0yUKV2zHAWPERqr10AX3HQaakHYPT8yVOXf/abpy05UcJ6y5c8Uzlm
+        8LI3rhH/Ghi3R3An1GlFUvrhQQ==
+X-Google-Smtp-Source: AK7set+wKfX/T8HiiMPPsgLGNmM1PcdDUUn5hrO5kvSgLUVSymrEOe8m2EhrenDZ8jrFoHqrR+7FrA==
+X-Received: by 2002:a05:6a20:33a8:b0:d4:c605:4512 with SMTP id f40-20020a056a2033a800b000d4c6054512mr318424pzd.30.1679592683296;
+        Thu, 23 Mar 2023 10:31:23 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.17
+        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:18 -0700 (PDT)
+        Thu, 23 Mar 2023 10:31:21 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Matthias Kaehlcke <mka@chromium.org>,
         linux-spi@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 05/14] spi: spi-qcom-qspi: Support pinctrl sleep states
-Date:   Thu, 23 Mar 2023 10:30:09 -0700
-Message-Id: <20230323102605.5.I79544b9486033bd7b27f2be55adda6d36f62a366@changeid>
+Subject: [PATCH 06/14] dt-bindings: pinctrl: qcom: tlmm should use output-disable, not input-enable
+Date:   Thu, 23 Mar 2023 10:30:10 -0700
+Message-Id: <20230323102605.6.I291ce0ba2c6ea80b341659c4f75a567a76dd7ca6@changeid>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
 References: <20230323173019.3706069-1-dianders@chromium.org>
@@ -78,47 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's fairly common practice for drivers to switch to a "sleep" pinctrl
-state at the end of its runtime_suspend function and then back to
-"default" at the beginning of runtime_resume. Let's do that for
-spi-qcom-qspi.
+As evidenced by the Qualcomm TLMM Linux driver, the TLMM IP block in
+Qualcomm SoCs has a bit to enable/disable the output for a pin that's
+configured as a GPIO but _not_ a bit to enable/disable an input
+buffer. Current device trees that are specifying "input-enable" for
+pins managed by TLMM are either doing so needlessly or are using it to
+mean "output-disable".
+
+Presumably the current convention of using "input-enable" to mean
+"output-disable" stems from the fact that "output-disable" is a "new"
+property from 2017. It was introduced in commit 425562429d4f
+("pinctrl: generic: Add output-enable property"). The "input-enable"
+handling in Qualcomm drivers is from 2015 introduced in commit
+407f5e392f9c ("pinctrl: qcom: handle input-enable pinconf property").
+
+Given that there's no other use for "input-enable" for TLMM, we can
+still handle old device trees in code, but let's encourage people to
+move to the proper / documented property by updating the bindings.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- drivers/spi/spi-qcom-qspi.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/pinctrl/qcom,tlmm-common.yaml          | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index c334dfec4117..7851cf1986cc 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/pm_runtime.h>
- #include <linux/pm_opp.h>
- #include <linux/spi/spi.h>
-@@ -581,6 +582,8 @@ static int __maybe_unused qcom_qspi_runtime_suspend(struct device *dev)
- 		return ret;
- 	}
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+index cb5ba1bd6f8d..5a815c199642 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+@@ -75,7 +75,8 @@ $defs:
+       bias-pull-down: true
+       bias-pull-up: true
+       bias-disable: true
+-      input-enable: true
++      input-enable: false
++      output-disable: true
+       output-high: true
+       output-low: true
  
-+	pinctrl_pm_select_sleep_state(dev);
-+
- 	return 0;
- }
- 
-@@ -590,6 +593,8 @@ static int __maybe_unused qcom_qspi_runtime_resume(struct device *dev)
- 	struct qcom_qspi *ctrl = spi_master_get_devdata(master);
- 	int ret;
- 
-+	pinctrl_pm_select_default_state(dev);
-+
- 	ret = icc_enable(ctrl->icc_path_cpu_to_qspi);
- 	if (ret) {
- 		dev_err_ratelimited(ctrl->dev, "%s: ICC enable failed for cpu: %d\n",
 -- 
 2.40.0.348.gf938b09366-goog
 
