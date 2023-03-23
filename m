@@ -2,133 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641256C698E
+	by mail.lfdr.de (Postfix) with ESMTP id AF1F36C698F
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjCWNdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:33:02 -0400
+        id S231857AbjCWNdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:33:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjCWNc6 (ORCPT
+        with ESMTP id S231476AbjCWNdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:32:58 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8007C26C21;
-        Thu, 23 Mar 2023 06:32:54 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1E8545C019C;
-        Thu, 23 Mar 2023 09:32:51 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 09:32:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679578371; x=1679664771; bh=lS
-        jp5ItBmhWT9xUkDsgQrEKtWC/JiZkjQJaqsouqKsY=; b=WKd5BdXaz0bjKNcnYo
-        2t29u4D6AxPNZvlBgEegmaxPmZZ+lERvx5OpEa1XFKcgkE5moCpPo1pbPRa4LGsF
-        Xsrn3NG0cZ9tuUqhugPUGk7gPrdk3HNG+JBWmMhvjdNGZ+PyaBkJjvBK2ROVkZb+
-        0zgivhpMaYm8TJOlR4mCnP0vsKOOFRUgVVt00qmL2jKli+cKoF9Oi/eGi/7HQama
-        XTqbv/yCO+s8YV5v287KxMgvR9Z5XZdTC9hTWNTp76LJyapOAVZ9fewBdxxXrGUE
-        8c786DVMYyNYsJ0/1IsAoczLM7V2iSF0xHUKOX7a/n7oYE88Umv47lLF9zee32XU
-        Sybg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679578371; x=1679664771; bh=lSjp5ItBmhWT9
-        xUkDsgQrEKtWC/JiZkjQJaqsouqKsY=; b=eBANsLqlNwqef/I23uYLMELTWFE3R
-        mec1E4E5f6fKV/7l1gjMWp6cs0YZ7N1rf0rOVaokKeo3/85BkuoqmUwgsUdIW6JN
-        p/5L2OBWczZ/NxXtnIjV2joult6ACUWzh4+dFwSCd+QEgO1NbSzVCCQgr5yZMBTj
-        P7NMw3QHKrxa309gBSb6jnGHgKJu3HDcmT7hwyvPVaJOxC6m6Ul0NMauHqL3o4d/
-        EggF0o8t19/dNfWEz0CKITqUuay3XYc7Z6g0jvPkAftDS/RcXQgFoknJkU0KHTZF
-        8BZeQAHZ3T6ZBg7xA+5zdtGh1HM1BK30D/CqTBLV0hjrnXbbz+vy41j8g==
-X-ME-Sender: <xms:AlUcZDL30vVch_WqY5mIkcVkYZ8NSm3h4a0jXK6psU-0U3WE-n9pYA>
-    <xme:AlUcZHJI-LpQtyfpHr7JTG5VleHDiH2lcm4MKyf-mxqjW2hRJbDuYarJKQMx-ivrR
-    IMIov0rxxN4Wa2Rtlg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:AlUcZLucRUlqDVzQKvewhxJyh3joyiDiIb5jNV7JOR7aIRFykzhzIw>
-    <xmx:AlUcZMYpu6h09cWvJMxCVIfgLjDbiu-wp0TJ7XzW_QbtagZJtBKWgA>
-    <xmx:AlUcZKZxBHJlde-1lKaOJwSQa12UZE5XZjyiDJzmf599Ai8i7bqi1g>
-    <xmx:A1UcZPLW9FtN6gyQMNVThN-NzF7j6YHNiwh8xg6Vht1V4-Df43c3YA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 699E6B60086; Thu, 23 Mar 2023 09:32:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <97b5a5c3-d20f-4201-8deb-1d34e7edee6c@app.fastmail.com>
-In-Reply-To: <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-16-schnelle@linux.ibm.com>
- <20230316161442.GV9667@google.com>
- <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
-Date:   Thu, 23 Mar 2023 14:32:30 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Lee Jones" <lee@kernel.org>
-Cc:     "Pavel Machek" <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 09:33:00 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4ED233C9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:32:57 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id z83so24797158ybb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679578377;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xmves1iun0LubRv/Ys4nZA2xeBzv8UQwNvC60f9TikY=;
+        b=gqkCvl2kGvvcTFaJQcV+x+kJOcpeu9ZiQhIHPJC0OblCLfOis7YK/eGv26OVsFrtoz
+         yF7QAL9IeR7Rl/5uP7zwJhv0/2wQ9lovpDLkPDqEoknhnuHKlupaLBiMsYcIMBjQN/ed
+         eP+12pBn9LjvItcCaIc6NJaeVb0/CYZqx2OqluVyrt/SyExWWDSE5s4Hawf/NJFUuHbv
+         yehmkzEfSAkzQpT3dy0bztCSWWIGWcO1inuFAzLwo2eWq626YjqVNy+F71C6YMb4kOTJ
+         fAvYxsa0SAZhPy2sbgpYsINZoBew9fe47bzdP3TSHNh2fuNAf2deKx4v0EWeaStgK6Bg
+         F+oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679578377;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xmves1iun0LubRv/Ys4nZA2xeBzv8UQwNvC60f9TikY=;
+        b=ZOni52sucYuF+FmxqR8a8/2uecLZyLIbhDCsLPR8eiwIieaiQv2zAITI1snhm0NKE5
+         cPCaIXfDG7uggLTEsh52qttdze03mQ0z5ZsO6v6Q5lGl//gAiRSS4kxLW1+IaRYH8WOz
+         8Ij26EttTOMXSS6uutu0NhPxu8cphoU/O3CInguLM0EYNW6P5n+th1yLN5Moi/AmP701
+         oLcjAaWgB5UUk/kVo9qB4ExCPzpwjwELp7D1tDJvnboypq+vsFjTXI0u+UxTPeIy6M22
+         owrbDsg3xOyJC9n4+VdXwWwvL8yBo4lXuRabtfY4a9HoUHwi9KxNi2qptYe/ipX08Ca+
+         dAdQ==
+X-Gm-Message-State: AAQBX9fmrp+IFEtFM0glOPX1m0iPbyJhY2iEkLP32N9OT++HblMsSrFO
+        rsBkDa1fkkS0Lx6kod5GrAY0cOuAWhPjpFBjG9Fvsc2j/7SVeljX
+X-Google-Smtp-Source: AKy350YvJQnyVMRG28Mg7eTiOxvu2RSo5Ia+/3VnicOc+rmBAoLIdzonkW39U5RjqaDQaMKRmgLmwP/lEA4ZnbSOUxQ=
+X-Received: by 2002:a05:6902:728:b0:a09:314f:a3ef with SMTP id
+ l8-20020a056902072800b00a09314fa3efmr2229914ybt.12.1679578377145; Thu, 23 Mar
+ 2023 06:32:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230323122913.4f0410b8@canb.auug.org.au> <ZBtb6ML7FmMZ6uQ3@fedora>
+In-Reply-To: <ZBtb6ML7FmMZ6uQ3@fedora>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Thu, 23 Mar 2023 14:32:46 +0100
+Message-ID: <CACMJSev=ojX5j1qsMjTDev-cXxrKmT3o2rF=YpuuSbsVsuNzgw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023, at 13:42, Niklas Schnelle wrote:
-> On Thu, 2023-03-16 at 16:14 +0000, Lee Jones wrote:
->> On Tue, 14 Mar 2023, Niklas Schnelle wrote:
->> 
->> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
->> > not being declared. We thus need to add HAS_IOPORT as dependency for
->> > those drivers using them.
->> > 
->> > Acked-by: Pavel Machek <pavel@ucw.cz>
->> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
->> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->> > ---
->> >  drivers/leds/Kconfig | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> Applied, thanks
+On Thu, 23 Mar 2023 at 02:47, William Breathitt Gray
+<william.gray@linaro.org> wrote:
 >
-> Sorry should have maybe been more clear, without patch 1 of this series
-> this won't work as the HAS_IOPORT config option is new and will be
-> missing otherwise. There's currently two options of merging this,
-> either all at once or first only patch 1 and then the additional
-> patches per subsystem until finally the last patch can remove
-> inb()/outb() and friends when HAS_IOPORT is unset.
+> On Thu, Mar 23, 2023 at 12:29:13PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > After merging the gpio-brgl tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > drivers/gpio/gpio-pci-idio-16.c:32:30: error: field 'state' has incomplete type
+> >    32 |         struct idio_16_state state;
+> >       |                              ^~~~~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_direction':
+> > drivers/gpio/gpio-pci-idio-16.c:39:13: error: implicit declaration of function 'idio_16_get_direction'; did you mean 'idio_16_gpio_get_direction'? [-Werror=implicit-function-declaration]
+> >    39 |         if (idio_16_get_direction(offset))
+> >       |             ^~~~~~~~~~~~~~~~~~~~~
+> >       |             idio_16_gpio_get_direction
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> > drivers/gpio/gpio-pci-idio-16.c:62:16: error: implicit declaration of function 'idio_16_get'; did you mean 'idio_16_gpio_get'? [-Werror=implicit-function-declaration]
+> >    62 |         return idio_16_get(idio16gpio->reg, &idio16gpio->state, offset);
+> >       |                ^~~~~~~~~~~
+> >       |                idio_16_gpio_get
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_multiple':
+> > drivers/gpio/gpio-pci-idio-16.c:70:9: error: implicit declaration of function 'idio_16_get_multiple'; did you mean 'idio_16_gpio_get_multiple'? [-Werror=implicit-function-declaration]
+> >    70 |         idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+> >       |         ^~~~~~~~~~~~~~~~~~~~
+> >       |         idio_16_gpio_get_multiple
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set':
+> > drivers/gpio/gpio-pci-idio-16.c:79:9: error: implicit declaration of function 'idio_16_set'; did you mean 'idio_16_gpio_set'? [-Werror=implicit-function-declaration]
+> >    79 |         idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, value);
+> >       |         ^~~~~~~~~~~
+> >       |         idio_16_gpio_set
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set_multiple':
+> > drivers/gpio/gpio-pci-idio-16.c:87:9: error: implicit declaration of function 'idio_16_set_multiple'; did you mean 'idio_16_gpio_set_multiple'? [-Werror=implicit-function-declaration]
+> >    87 |         idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+> >       |         ^~~~~~~~~~~~~~~~~~~~
+> >       |         idio_16_gpio_set_multiple
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_mask':
+> > drivers/gpio/gpio-pci-idio-16.c:106:45: error: invalid use of undefined type 'struct idio_16'
+> >   106 |                 iowrite8(0, &idio16gpio->reg->irq_ctl);
+> >       |                                             ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_unmask':
+> > drivers/gpio/gpio-pci-idio-16.c:129:41: error: invalid use of undefined type 'struct idio_16'
+> >   129 |                 ioread8(&idio16gpio->reg->irq_ctl);
+> >       |                                         ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_handler':
+> > drivers/gpio/gpio-pci-idio-16.c:164:46: error: invalid use of undefined type 'struct idio_16'
+> >   164 |         irq_status = ioread8(&idio16gpio->reg->irq_status);
+> >       |                                              ^~
+> > drivers/gpio/gpio-pci-idio-16.c:178:37: error: invalid use of undefined type 'struct idio_16'
+> >   178 |         iowrite8(0, &idio16gpio->reg->in0_7);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_init_hw':
+> > drivers/gpio/gpio-pci-idio-16.c:198:37: error: invalid use of undefined type 'struct idio_16'
+> >   198 |         iowrite8(0, &idio16gpio->reg->irq_ctl);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c:199:37: error: invalid use of undefined type 'struct idio_16'
+> >   199 |         iowrite8(0, &idio16gpio->reg->in0_7);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_probe':
+> > drivers/gpio/gpio-pci-idio-16.c:232:37: error: invalid use of undefined type 'struct idio_16'
+> >   232 |         iowrite8(0, &idio16gpio->reg->filter_ctl);
+> >       |                                     ^~
+> > drivers/gpio/gpio-pci-idio-16.c:248:9: error: implicit declaration of function 'idio_16_state_init'; did you mean 'file_ra_state_init'? [-Werror=implicit-function-declaration]
+> >   248 |         idio_16_state_init(&idio16gpio->state);
+> >       |         ^~~~~~~~~~~~~~~~~~
+> >       |         file_ra_state_init
+> > drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+> > drivers/gpio/gpio-pci-idio-16.c:63:1: error: control reaches end of non-void function [-Werror=return-type]
+> >    63 | }
+> >       | ^
+> >
+> > Caused by commit
+> >
+> >   473b79057bbd ("gpio: idio-16: Remove unused legacy interface")
+> >
+> > I have used the gpio-brgl tree from next-20230322 for today.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+>
+> Commit 473b79057bbd shouldn't be merged until all of the IDIO-16 legacy
+> interface is first removed.
+>
+> Bart, would you revert all of the "Migrate IDIO-16 GPIO drivers to
+> regmap API" patches [0]? That patchset needs to be revised anyway to
+> prevent conflicts with the handle_mask_sync() API change [1]; I'll
+> submit a v3 later this week that resolves the incompatibilies and
+> rebase on the latest gpio/for-next.
+>
+> William Breathitt Gray
+>
+> [0] https://lore.kernel.org/all/cover.1677515341.git.william.gray@linaro.org/
+> [1] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
 
-It's probably too late now to squeeze patch 1 into linux-6.3
-as a late preparation patch for the rest of the series in 6.4.
+Done, thanks!
 
-It would be good if you could respin that patch separately
-anyway, so I can add it to the asm-generic tree and make
-sure we get it ready for the next merge window.
-
-     Arnd
+Bart
