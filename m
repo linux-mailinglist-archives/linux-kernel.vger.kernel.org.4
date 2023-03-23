@@ -2,136 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5659A6C716D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5FE6C7175
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbjCWT6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S231580AbjCWUBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 16:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWT63 (ORCPT
+        with ESMTP id S230321AbjCWUBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:58:29 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2125.outbound.protection.outlook.com [40.107.22.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75C112871;
-        Thu, 23 Mar 2023 12:58:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aEVaQOcM9y+yYeFODi6Pp7xSDudGZ+b0VYSIDyVZGaBBCZbSD07MG4DYyEL/AZMLAvEu+k/QZc7uJ/H+KUHtwdIX7SBUYBAiQo1KaEz/917xpYz4kXvCwDsP7lMZoWf80e6vPXTKbLyu8bVmig4MSFXT8uz8Y3PgLwUTxG4AR6h837muceT985s411O1LUB6hVTvrQ05vFUTt7+Jn+c0oNYGmAcGEMke/sCSzr3vdtsHNX4jhN6EBc9j2kkbZ83Ipuojd1a4hz7x/V6hfnw4T6SZ3UyBZOEYevHVVeW+J9STNmu4Dbm4bjoUY57uA0hqrsfh53reYqOoDKYuzOC8rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FHbDsqPKtt3CmtW4bQBSAerL6A+X466WDLXEIhGkI18=;
- b=WBH2o+23Rk2Lc8Y4tyesCC9oNp3DZ5ybmp+37txtIco+8xsPg8P/YCcU5aK9KIjKc8gbDXsZ/F+UOueBVQ+gGVodNbahBIS9+ZF/lXBPMlePS+GtEQLb02bpACJGNpFf4GktIlJWfdMNbq6PqiFSBWdxzsGnV3JxgacA000G5G2Sl8Y647I3cya6UcACvDfrzS13b0XKTxfPwt6VDIOwf+215/1+1FL/ETgVPuINMlkHdWWoxKQvXmPG6AncSW4L6C1yhCPKU39dWb+eK9gTEB8hIuFMBX46iEqlWoBwuKkaCKgxV4T86Z6t/B/Kc35mglnXlaW+uOxvlZDQnqhZ3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prodrive-technologies.com; dmarc=pass action=none
- header.from=prodrive-technologies.com; dkim=pass
- header.d=prodrive-technologies.com; arc=none
+        Thu, 23 Mar 2023 16:01:13 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2C725BBA;
+        Thu, 23 Mar 2023 13:01:09 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id i13so13636011lfe.9;
+        Thu, 23 Mar 2023 13:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=prodrive-technologies.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FHbDsqPKtt3CmtW4bQBSAerL6A+X466WDLXEIhGkI18=;
- b=H2d85dQAD0M1kxdxTnN9K/y2htqTSizuzSNqCd7hfSJckxZSDOJeh0cAFMimUqJOvrKkp5TJBg6hVcqfm6Sxfl0DAv5UIjQkEanY58JyvnKj41SOQDh55/dwj48MvrqTFP5atE6iCjlEEVqxM6tmzlYaSvS7KCa7bNoG0zp++eE=
-Received: from AM0PR02MB5524.eurprd02.prod.outlook.com (2603:10a6:208:15a::12)
- by AS4PR02MB8056.eurprd02.prod.outlook.com (2603:10a6:20b:4e4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 19:58:24 +0000
-Received: from AM0PR02MB5524.eurprd02.prod.outlook.com
- ([fe80::b0de:8e68:fc8:480e]) by AM0PR02MB5524.eurprd02.prod.outlook.com
- ([fe80::b0de:8e68:fc8:480e%5]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
- 19:58:24 +0000
-From:   Paul Geurts <paul.geurts@prodrive-technologies.com>
-To:     =?utf-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jonas.gorski@gmail.com" <jonas.gorski@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/2] net: dsa: b53: mdio: add support for BCM53134
-Thread-Topic: [PATCH 0/2] net: dsa: b53: mdio: add support for BCM53134
-Thread-Index: AQHZXYGJgbn0KrBHmky8B++N4lZb6q8Ix4fg
-Date:   Thu, 23 Mar 2023 19:58:24 +0000
-Message-ID: <AM0PR02MB552462D79D12B21CAC00A465BD879@AM0PR02MB5524.eurprd02.prod.outlook.com>
-References: <20230323121804.2249605-1-noltari@gmail.com>
-In-Reply-To: <20230323121804.2249605-1-noltari@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=prodrive-technologies.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR02MB5524:EE_|AS4PR02MB8056:EE_
-x-ms-office365-filtering-correlation-id: db9b6b9e-3125-4d1b-c4bc-08db2bd8f649
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d3A7DY8O2UHC+smbx6NuOj7fEx+PXISM8CN7SYyDcPsYVl3qUaq+7rlULhEQ8RsxxttzSAQbmIZ++qsBY9kpowQQd03XZYIbAtUaYpe6eisa1wyzqEMgWUtuvDQ3zR2RI+cU97c1nY1hTCEioc/MJXWsJ7WPRhLy7WZOe1ZcCle0znJ2KVtQIg8du05hsu/DVMwpFMjyY8CrPwlSRuSBk2PSUx7ncApjSRahr0+clzgag4w8Yl8i68Osu3WodWSojM91ij1387aN8w2a8ZR0RJl/4MMLc94dqR9ftWpP6SNDJNO7YaGrB96xTnaaEaFia6tN6aZaTq5FgmR5he3FW9ik7Lp3lX3jIqzvf855YT+JpgPziwcS07MSXCMT305889BYUyvp84cYRyC5O6AVvFeMd0vyX3wcW30OdhT1qK6JBtPdvB3QcvYNn25Op3e720BGm6KNFsj/+o2awl0sV/Z4DDAZrkQz3wQdAzwVFCmSm4SZbFm0FzDG0JybdE5kNfdY4k2cS35H9OaAhFAxbjJhI+0UM6ibLg44RhTn67BfNPTnze/tOP5yPuZaRvJS7MHOc5/1utC+JfOMcKWyqYiNhNDrt9UTuYQYoq/9mizgf4Mh2QBM4UXn8RZnX5Xs0Q8wiUo+aZKVUEB4KnaYS4hMdGgcWTr13fy01lHeyeRjQLxtrvrY99HFyVlDijiQ3WDDfmwPoSa1JD4P3j8K24IB2Ne1JU11c423zkR0S8Q=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB5524.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39850400004)(376002)(396003)(366004)(136003)(451199018)(478600001)(66476007)(64756008)(66556008)(66446008)(76116006)(8676002)(66946007)(52536014)(110136005)(7416002)(122000001)(41300700001)(5660300002)(44832011)(8936002)(26005)(53546011)(6506007)(9686003)(316002)(186003)(83380400001)(7696005)(71200400001)(66574015)(33656002)(86362001)(921005)(38100700002)(38070700005)(55016003)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aVdvejluVGJNekNCYXltYytZNUR4b3pMNS81K3V5SjdUMGlIVlVsRzArRnND?=
- =?utf-8?B?RkdGNGc5STVHVDMxTWVJaW1KU3Y2Vi9DTkQwb2FwTm5JNFliWS9EVWdSd0ZI?=
- =?utf-8?B?dHRFUElsQ2RNNUQ2YlZMMjY5amtOanRXRGlmUXlKcVZuZnpkTVRYYUJIVDh0?=
- =?utf-8?B?NmFQallYWGd3MW13c0pJcmUxRWxjUE5MdXhYYWFUTUNPZU9maGVUVHRXdHhO?=
- =?utf-8?B?VVFnNnBZRHlFV3NKTzA5UGsyU2xZRjZSUjJHNGdhMlRHS3lvMmU0SUpwMXBU?=
- =?utf-8?B?SURiOXF5OTNNYStFUmR0dFVIRFJxNGJLbHVJZEVKUGVFUzRyQmY2WktUdmFi?=
- =?utf-8?B?SHpFanBvSVdrK3ZkTGtUMmlqSlppNWxwcTY3TmhPVUVuODV0cTlzbXNBeUl2?=
- =?utf-8?B?WC9XUTdhUHhOeWkyamFMVGNwNElvcUIyWGI2VnJ1c1pLQ1pLYW1MWnpHWmhH?=
- =?utf-8?B?cWoyR21aYStITVZxM2t2SFJLTkJwZUFDZjV5RGdNS1A1SGlzRlowc05icGJl?=
- =?utf-8?B?QTJyY3gyRFQ4dmNkam1pTmtjQWxPMzVLRG0xbDl6bGorTndhTnc3ekxxM3NS?=
- =?utf-8?B?UTE0T1VOT0hTRnIveS9MVmRsdnNyL255a2paMUV6dDV3SkhQREZneUw0SVJS?=
- =?utf-8?B?RjVZOUd6ckhERW5CYXozZXYzQ3J4eU4wb2VOQXRIOEl6SUxOMFVhZ2JocG1C?=
- =?utf-8?B?L1FTV0h0VlpBWXN6V1pqeVBUVElNMkwyeFhsTjdRbzgrVUtLb0hHL2h6bmxC?=
- =?utf-8?B?dDJ3OWRDcXBpTDY3NEZ1S1JxSDMzcDFQa1A1Z0V6MjFtR29tUGljK0hmcXNw?=
- =?utf-8?B?RkhFWnpPWWZvQkgzUHVKbnVZblFCRlRuNGVZYS9CYUFVby9FZmF2NGxERjdE?=
- =?utf-8?B?b2NkNzdRb0MyRWNVcVRHNU9FdE1ZWGxqZ1dyeDZuT1NZTW9xb2Z6Q3FMdWRq?=
- =?utf-8?B?Y3ZETUx6RlZoSzIxQk9wMVVTUUorUWpPZE05ZmQvNjZMQW9FWWFjUzhPSUh0?=
- =?utf-8?B?SVVxSE9kSW1SY0pLSmFLVUpPUE5sMEhFaFQyTTR2ZWkwK2RpWnhFREtDOTls?=
- =?utf-8?B?OXdyZ25CZCsrb1Fyek1jVURwTFZPVE1Dd1JYNUJSNFR5aVZXSDBEc3psbnZq?=
- =?utf-8?B?enU1TEpxNUlMZUpjYzdJdGVFQVdGdmdVc0FvRHhtdHVlVlZ1T1FoY210R1dz?=
- =?utf-8?B?UFd3R0VVSzZWWFo1dGcvY1I3K1Ayd0wzM0Fac1dBaHdJeml5K3pLVmdCb0VZ?=
- =?utf-8?B?RVAzb2FLTG8xcXBjTW42dkZVN1Q0aG5WT1ppc2dHd3VTZEhld3AvQzhqenFp?=
- =?utf-8?B?b2x0MnVUZFNkMGhkMDl1WVVWVWZJdVF5VUlxN3ZLU2w0akY1SVNET2g3Tjcr?=
- =?utf-8?B?ZVdJS0VnT3BYZmxoWWFFTkJ0WjRSVGJyOEY4NlRuSFBnODR2Y0x1SjM3VFd3?=
- =?utf-8?B?NzQ0eXQyYjZwekZBajBYcWpvZnZONHJ2SUVad1VwNjRYTlhVS2pMRG1tc2Q5?=
- =?utf-8?B?a0g0dkowZEpkNzUrSENUcEV4aWFPUjJoYVpSZkNBTSsrOUp5WUVVbkZ0L1c0?=
- =?utf-8?B?ZmdEWlFXa1owc0wwRmh4SDNyRmRDVmlPRU9HRkRjSkkrME8xeUNQMllNMmU0?=
- =?utf-8?B?bXVTOE54c2xTTi90THVkYjYvUkt6YStWRjZkRE1JcWVKYnFRaGFoWWswUm1Y?=
- =?utf-8?B?cE9WQ3BRaDM5SFVzbEVjR2dsbFIreXJsRmF2a2l2U1YyN0dPbk5ncVFqRDVE?=
- =?utf-8?B?NUlwWnFKdFVIQTdUdTJUYjBBMXhISENJa3o3QTI2SXNPL1RXMXZBQjNvVURG?=
- =?utf-8?B?dlVYU0xMekFXUm9BVlB0aDZMTnFVYWNZZ3gyMmhJc29jZzJITlN5bTROTlR3?=
- =?utf-8?B?b05QUkhqQWFEZzFOY3RQQkdmaTVLaHBMeWZXU3hGMkVXNkFxLzg2S3hJWnV4?=
- =?utf-8?B?TjdFS0Y2b1lkOW05V0hXb3FiNHFnT0dmWmoxVmtzbTA0c3lWMk9JQ2Q2WVlr?=
- =?utf-8?B?R1pzY3VicGRLV3JidGtOWEtMcUQ1QTY2QkJWUDBiTTM2UXJyRTJyM2kzNG9t?=
- =?utf-8?B?bElkVm1sdm0yT0RsZnRBbDRhWkkyZWJEc3dMTE4vdFRxeG9CbFVOY013YVF6?=
- =?utf-8?B?MkZucEhmOGcxK0NqNUVUMGZJUnQwTWJpa0JCUHUvdVBtRG5odS85OXk0V2Zl?=
- =?utf-8?Q?3gOavJUSPE2thO8+oW1Yp58=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112; t=1679601667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CYgMKwwmghRmpVtJ77/gKQ0qSQFaMv343+RMHvCiaIc=;
+        b=jZ9NHpaOlmaQq29gRDVBv/nmK0HARx5tJ463lUOPfiUOB8Sg4oDFK85LbX+qlYSIf7
+         jtzNJfyY4ZY/1HlN2JoT3K4BoW6aSB1mPiD6y+0Tf2yMOPwEaBACZ6aeEJCV7T+2b10n
+         lLttc1CuKIWwEp723f6HEP0xX4+7UKbt1WxfRZHbNoCYPQPUpW3UI9EoyNGgybUzJiVH
+         oHNrahUY5YppVlTvlwiOJNVoSfRF6bj07S8j9V+8TCrnPY6g9YS2Qrpyz6qmXYlysoHv
+         SfB0ODmShfzCvq4qVdyFyzSBi2xv8i0EDoNn1ipFsqkTHMTDktMOkspeojj+JLBG5SF3
+         zrEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679601667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CYgMKwwmghRmpVtJ77/gKQ0qSQFaMv343+RMHvCiaIc=;
+        b=aw8PscK9PCySSz+TywFmRHSUp9pG+qZITzVySKUWgO3OEZV+OvTBB3qwbioB/C71Xu
+         BmLJjRLaiGyJSxuRe2UmQbqWDa0H+n74nqyRAvpYkJSosFq/ZVl4AT00E9JYSM7ZZoyM
+         XJ2tDRPH4BwOqspnMhI2wSUSy6oKmXzBwpsKKf3oSBkrut50GU6kLJSfqwk29AXCtpea
+         +y3M/2BRsQzzTlyhMB5bkLJlxMaCZNaz/fKvdt39e2In28/UQBgpSoqmy/Dz1ak0Xq4N
+         7oJr3WJptQsULbvARan5YZ4VTQ77ATMR6nzzq/hreNUHRr/SwOc8wXH90ER3Z4/W+H42
+         sc9A==
+X-Gm-Message-State: AO0yUKWbHMic+hoedcvVHBPZjtpwrdSLsZAOnWnniQl+FyQifl1YGY+d
+        B8qHTCLFviWGGthmY+ock6ew00oTVZF7GxppE08=
+X-Google-Smtp-Source: AK7set/BjwvGc+358bBWj++nqAOqD0WEkHTezfVSxCajk59gIPWhSnk04fjuqO0YmyLBuqB0y7We/6LwVm4JISFoWJc=
+X-Received: by 2002:a05:6512:b8a:b0:4e8:4409:bb76 with SMTP id
+ b10-20020a0565120b8a00b004e84409bb76mr3910463lfv.2.1679601667117; Thu, 23 Mar
+ 2023 13:01:07 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: prodrive-technologies.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB5524.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db9b6b9e-3125-4d1b-c4bc-08db2bd8f649
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2023 19:58:24.7704
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 612607c9-5af7-4e7f-8976-faf1ae77be60
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QaNxcMcSynTc8D2qNAbM+gBg2cMycgiEfC1TYM5Bkf8JatczKxJ4h6SvA50to4tBQxdW2Au9DylulTFSgUEBn22SNKjt/zI1sZYBYlDwogKYZ6aB1P6nHRJVmYOdGNWm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR02MB8056
+References: <20220826022031.GA76590@inn2.lkp.intel.com> <c8310cba-36ef-2940-b2c2-07573e015185@intel.com>
+ <95e604ff-516a-4f7c-7f2c-8ff3d2cc66fa@intel.com> <CAH2r5msk7R4qZ-GQT2mKnCWzZ_MzYPUyJwWXuLRUMtt2XtApoA@mail.gmail.com>
+ <997614df-10d4-af53-9571-edec36b0e2f3@intel.com>
+In-Reply-To: <997614df-10d4-af53-9571-edec36b0e2f3@intel.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 23 Mar 2023 15:00:55 -0500
+Message-ID: <CAH2r5mt8krLwUomWBb28rw6uRZgAhqCSjphrsUzWueGrd+VgGw@mail.gmail.com>
+Subject: Re: [smb3] 5efdd9122e: filebench.sum_operations/s -50.0% regression
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     kernel test robot <yujie.liu@intel.com>,
+        Steve French <stfrench@microsoft.com>, lkp@lists.01.org,
+        lkp@intel.com, Bharath SM <bharathsm@microsoft.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -139,33 +77,405 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiDDgWx2YXJvIEZlcm7DoW5kZXog
-Um9qYXMgPG5vbHRhcmlAZ21haWwuY29tPg0KPiBTZW50OiBkb25kZXJkYWcgMjMgbWFhcnQgMjAy
-MyAxMzoxOA0KPiBUbzogUGF1bCBHZXVydHMgPHBhdWwuZ2V1cnRzQHByb2RyaXZlLXRlY2hub2xv
-Z2llcy5jb20+Ow0KPiBmLmZhaW5lbGxpQGdtYWlsLmNvbTsgam9uYXMuZ29yc2tpQGdtYWlsLmNv
-bTsgYW5kcmV3QGx1bm4uY2g7DQo+IG9sdGVhbnZAZ21haWwuY29tOyBkYXZlbUBkYXZlbWxvZnQu
-bmV0OyBlZHVtYXpldEBnb29nbGUuY29tOw0KPiBrdWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRo
-YXQuY29tOyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+IGtyenlzenRvZi5rb3psb3dza2krZHRAbGlu
-YXJvLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5l
-bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IMOBbHZhcm8gRmVybsOh
-bmRleiBSb2phcyA8bm9sdGFyaUBnbWFpbC5jb20+DQo+IFN1YmplY3Q6IFtQQVRDSCAwLzJdIG5l
-dDogZHNhOiBiNTM6IG1kaW86IGFkZCBzdXBwb3J0IGZvciBCQ001MzEzNA0KPiANCj4gVGhpcyBp
-cyBiYXNlZCBvbiB0aGUgaW5pdGlhbCB3b3JrIGZyb20gUGF1bCBHZXVydHMgdGhhdCB3YXMgc2Vu
-dCB0byB0aGUNCj4gaW5jb3JyZWN0IGxpbnV4IGRldmVsb3BtZW50IGxpc3RzIGFuZCByZWNpcGll
-bnRzLg0KPiBJJ3ZlIG1vZGlmaWVkIGl0IGJ5IHJlbW92aW5nIEJDTTUzMTM0X0RFVklDRV9JRCBm
-cm9tIGlzNTMxeDUoKSBhbmQNCj4gdGhlcmVmb3JlIGFkZGluZyBpczUzMTM0KCkgd2hlcmUgbmVl
-ZGVkLg0KPiBJIGFsc28gYWRkZWQgYSBzZXBhcmF0ZSBSR01JSSBoYW5kbGluZyBibG9jayBmb3Ig
-aXM1MzEzNCgpIHNpbmNlIGFjY29yZGluZyB0bw0KPiBQYXVsLCBCQ001MzEzNCBkb2Vzbid0IHN1
-cHBvcnQgUkdNSUlfQ1RSTF9USU1JTkdfU0VMIGFzIG9wcG9zZWQgdG8NCj4gaXM1MzF4NSgpLg0K
-PiANCj4gUGF1bCBHZXVydHMgKDEpOg0KPiAgIG5ldDogZHNhOiBiNTM6IG1kaW86IGFkZCBzdXBw
-b3J0IGZvciBCQ001MzEzNA0KPiANCj4gw4FsdmFybyBGZXJuw6FuZGV6IFJvamFzICgxKToNCj4g
-ICBkdC1iaW5kaW5nczogbmV0OiBkc2E6IGI1MzogYWRkIEJDTTUzMTM0IHN1cHBvcnQNCj4gDQo+
-ICAuLi4vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQvZHNhL2JyY20sYjUzLnlhbWwgfCAgMSArDQo+
-ICBkcml2ZXJzL25ldC9kc2EvYjUzL2I1M19jb21tb24uYyAgICAgICAgICAgICAgfCA1MyArKysr
-KysrKysrKysrKysrKystDQo+ICBkcml2ZXJzL25ldC9kc2EvYjUzL2I1M19tZGlvLmMgICAgICAg
-ICAgICAgICAgfCAgNSArLQ0KPiAgZHJpdmVycy9uZXQvZHNhL2I1My9iNTNfcHJpdi5oICAgICAg
-ICAgICAgICAgIHwgIDkgKysrLQ0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA2NSBpbnNlcnRpb25zKCsp
-LCAzIGRlbGV0aW9ucygtKQ0KPiANCj4gLS0NCj4gMi4zMC4yDQoNClRoYW5rIHlvdSBmb3IgcmVz
-ZW5kaW5nIG15IHBhdGNoZXMhIEkgZGlkbid0IGdldCB0byBpdCB5ZXQuIEFueSBwYXJ0aWN1bGFy
-IHJlYXNvbiB5b3UgZGlkbid0IGluY2x1ZGUgdGhlIG9wdGlvbmFsIEdQSU8gcGF0Y2ggSSBoYWQg
-aW4gbXkgc2V0Pw0KLS0tDQpQYXVsDQo=
+This is VERY useful data.  Thank you.   It show the SMB3 CLOSE
+operation on the wire takes twice as long to complete with
+closetimeo=3D5 rather than 1.  Can you do the same stats for
+closetimeo=3D0
+
+On Thu, Mar 23, 2023 at 2:48=E2=80=AFAM Yin Fengwei <fengwei.yin@intel.com>=
+ wrote:
+>
+> On 3/15/23 22:26, Steve French wrote:
+> > Can you verify what this perf looks like with "closetime=3D0" and "clos=
+etime=3D1"
+> >
+> > Are there differences in /proc/fs/cifs/Stats when you run the same
+> > steps with "closetimeo=3D1" vs. the more recent default (5 seconds)?
+> The dump of /proc/fs/cifs/Stats are attached. You can tell which
+> closetimeo is used from the file name. Thanks.
+>
+>
+> Regards
+> Yin, Fengwei
+>
+> >
+> > On Wed, Mar 15, 2023 at 2:46=E2=80=AFAM Yin, Fengwei <fengwei.yin@intel=
+.com> wrote:
+> >>
+> >>
+> >>
+> >> On 8/26/2022 10:41 AM, kernel test robot wrote:
+> >>> Greeting,
+> >>>
+> >>> FYI, we noticed a -50.0% regression of filebench.sum_operations/s due=
+ to commit:
+> >>>
+> >>>
+> >>> commit: 5efdd9122eff772eae2feae9f0fc0ec02d4846a3 ("smb3: allow deferr=
+ed close timeout to be configurable")
+> >>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git maste=
+r
+> >>>
+> >>> in testcase: filebench
+> >>> on test machine: 88 threads 2 sockets Intel(R) Xeon(R) Gold 6238M CPU=
+ @ 2.10GHz (Cascade Lake) with 128G memory
+> >>> with following parameters:
+> >>>
+> >>>      disk: 1HDD
+> >>>      fs: ext4
+> >>>      fs2: cifs
+> >>>      test: filemicro_delete.f
+> >>>      cpufreq_governor: performance
+> >>>      ucode: 0x5003302
+> >> Please note, we still could see this regresion on v6.3-rc2. And the re=
+gression is related with
+> >> the commit: 5efdd9122eff772eae2feae9f0fc0ec02d4846a3. This commit chan=
+ged the default timeout
+> >> value from 1s to 5s. If change the timeout back to 1s as following:
+> >>
+> >> diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+> >> index 6d13f8207e96..6b930fb0c4bd 100644
+> >> --- a/fs/cifs/fs_context.c
+> >> +++ b/fs/cifs/fs_context.c
+> >> @@ -1537,7 +1537,7 @@ int smb3_init_fs_context(struct fs_context *fc)
+> >>
+> >>          ctx->acregmax =3D CIFS_DEF_ACTIMEO;
+> >>          ctx->acdirmax =3D CIFS_DEF_ACTIMEO;
+> >> -       ctx->closetimeo =3D SMB3_DEF_DCLOSETIMEO;
+> >> +       ctx->closetimeo =3D CIFS_DEF_ACTIMEO;
+> >>
+> >>          /* Most clients set timeout to 0, allows server to use its de=
+fault */
+> >>          ctx->handle_timeout =3D 0; /* See MS-SMB2 spec section 2.2.14=
+.2.12 */
+> >>
+> >> The regression is gone:
+> >> dcb45fd7f501f864                    v6.3-rc2 32715af441411a5a266606be0=
+8f
+> >> ---------------- --------------------------- -------------------------=
+--
+> >>         fail:runs  %reproduction    fail:runs  %reproduction    fail:r=
+uns
+> >>             |             |             |             |             |
+> >>             :25           0%            :3           33%           1:3=
+     last_state.booting
+> >>             :25           0%            :3           33%           1:3=
+     last_state.is_incomplete_run
+> >>           %stddev     %change         %stddev     %change         %std=
+dev
+> >>               \          |                \          |                =
+\
+> >>      515.95           -50.0%     257.98            -0.0%     515.92   =
+     filebench.sum_operations/s
+> >>        5.04 =C2=B1  7%    +833.7%      47.09 =C2=B1  2%      -2.9%    =
+   4.90 =C2=B1  2%  filebench.sum_time_ms/op
+> >>       10438          -100.0%       0.33 =C2=B1141%    -100.0%       0.=
+50 =C2=B1100%  filebench.time.major_page_faults
+> >>      167575            -4.1%     160660            -4.4%     160140   =
+     filebench.time.maximum_resident_set_size
+> >>        7138 =C2=B1 11%    +141.4%      17235 =C2=B1  3%    +147.6%    =
+  17677        filebench.time.minor_page_faults
+> >>       28.68 =C2=B1  9%    +199.9%      86.00 =C2=B1  7%      -2.4%    =
+  28.00        filebench.time.percent_of_cpu_this_job_got
+> >>     2453485 =C2=B1 54%     -63.0%     907380           -66.2%     8302=
+73 =C2=B1  6%  cpuidle..usage
+> >>        0.61 =C2=B1 38%      +0.8        1.41 =C2=B1  3%      +0.2     =
+   0.80 =C2=B1  4%  mpstat.cpu.all.sys%
+> >>      142984 =C2=B1 13%     -45.6%      77725           -47.5%      751=
+06        vmstat.system.in
+> >>       34.23 =C2=B1  7%     +27.9%      43.79           +27.8%      43.=
+74        boot-time.boot
+> >>       17.09 =C2=B1 11%     +66.0%      28.38           +65.5%      28.=
+28        boot-time.dhcp
+> >>        2661 =C2=B1  7%     +37.5%       3659           +37.2%       36=
+51        boot-time.idle
+> >>      104737 =C2=B1185%     -87.8%      12762 =C2=B1 10%     -89.8%    =
+  10631 =C2=B1  4%  turbostat.C1
+> >>
+> >>
+> >> 32715af441411a5a266606be08f is v6.3-rc2 with the change to restore the=
+ timeout to 1s. Thanks.
+> >>
+> >> Regards
+> >> Yin, Fengwei
+> >>
+> >>
+> >>>
+> >>>
+> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>> compiler/cpufreq_governor/disk/fs2/fs/kconfig/rootfs/tbox_group/test/=
+testcase/ucode:
+> >>>    gcc-11/performance/1HDD/cifs/ext4/x86_64-rhel-8.3/debian-11.1-x86_=
+64-20220510.cgz/lkp-csl-2sp9/filemicro_delete.f/filebench/0x5003302
+> >>>
+> >>> commit:
+> >>>    dcb45fd7f5 ("cifs: Do not use tcon->cfid directly, use the cfid we=
+ get from open_cached_dir")
+> >>>    5efdd9122e ("smb3: allow deferred close timeout to be configurable=
+")
+> >>>
+> >>> dcb45fd7f501f864 5efdd9122eff772eae2feae9f0f
+> >>> ---------------- ---------------------------
+> >>>           %stddev     %change         %stddev
+> >>>               \          |                \
+> >>>      515.95           -50.0%     257.98        filebench.sum_operatio=
+ns/s
+> >>>        4.81 =C2=B1  2%   +1038.4%      54.78 =C2=B1  6%  filebench.su=
+m_time_ms/op
+> >>>       29.00 =C2=B1  8%    +212.1%      90.50 =C2=B1  3%  filebench.ti=
+me.percent_of_cpu_this_job_got
+> >>>       24629            +2.7%      25297        filebench.time.volunta=
+ry_context_switches
+> >>>   7.685e+08           +19.3%  9.169e+08 =C2=B1  4%  cpuidle..time
+> >>>        2.53 =C2=B1  6%     -20.6%       2.00 =C2=B1  3%  iostat.cpu.i=
+owait
+> >>>     1506141 =C2=B1  8%     +22.4%    1843256 =C2=B1  3%  turbostat.IR=
+Q
+> >>>        2.00           -50.0%       1.00        vmstat.procs.b
+> >>>       21969 =C2=B1  2%      -9.5%      19885 =C2=B1  2%  vmstat.syste=
+m.cs
+> >>>        3.06 =C2=B1  7%      -0.7        2.35 =C2=B1  4%  mpstat.cpu.a=
+ll.iowait%
+> >>>        0.79 =C2=B1  5%      +0.5        1.27 =C2=B1  2%  mpstat.cpu.a=
+ll.sys%
+> >>>        0.89 =C2=B1  3%      -0.1        0.79 =C2=B1  3%  mpstat.cpu.a=
+ll.usr%
+> >>>       34.55 =C2=B1 14%     -34.8%      22.51 =C2=B1 27%  sched_debug.=
+cfs_rq:/.removed.runnable_avg.avg
+> >>>      119.64 =C2=B1  3%     -20.0%      95.69 =C2=B1 17%  sched_debug.=
+cfs_rq:/.removed.runnable_avg.stddev
+> >>>       34.55 =C2=B1 14%     -34.8%      22.51 =C2=B1 27%  sched_debug.=
+cfs_rq:/.removed.util_avg.avg
+> >>>      119.64 =C2=B1  3%     -20.0%      95.69 =C2=B1 17%  sched_debug.=
+cfs_rq:/.removed.util_avg.stddev
+> >>>        5249           +15.8%       6076        meminfo.Active
+> >>>        3866 =C2=B1  2%     +17.7%       4552        meminfo.Active(an=
+on)
+> >>>        1382 =C2=B1  4%     +10.3%       1524 =C2=B1  4%  meminfo.Acti=
+ve(file)
+> >>>       69791 =C2=B1 14%     +39.8%      97553 =C2=B1  6%  meminfo.Anon=
+HugePages
+> >>>       72709 =C2=B1  2%     +12.5%      81779 =C2=B1  3%  meminfo.Inac=
+tive(file)
+> >>>       23219           +13.5%      26352 =C2=B1  3%  meminfo.KernelSta=
+ck
+> >>>      966.50 =C2=B1  2%     +17.7%       1137        proc-vmstat.nr_ac=
+tive_anon
+> >>>       74302            +6.3%      78977 =C2=B1  2%  proc-vmstat.nr_an=
+on_pages
+> >>>       81133            +6.0%      85973        proc-vmstat.nr_inactiv=
+e_anon
+> >>>       18172 =C2=B1  2%     +12.5%      20442 =C2=B1  3%  proc-vmstat.=
+nr_inactive_file
+> >>>       23213           +13.5%      26348 =C2=B1  3%  proc-vmstat.nr_ke=
+rnel_stack
+> >>>       17983            +2.3%      18400        proc-vmstat.nr_mapped
+> >>>        7446 =C2=B1  2%      +5.5%       7853 =C2=B1  3%  proc-vmstat.=
+nr_shmem
+> >>>       26888            +1.6%      27306        proc-vmstat.nr_slab_re=
+claimable
+> >>>       47220            +3.4%      48803        proc-vmstat.nr_slab_un=
+reclaimable
+> >>>      966.50 =C2=B1  2%     +17.7%       1137        proc-vmstat.nr_zo=
+ne_active_anon
+> >>>       81133            +6.0%      85973        proc-vmstat.nr_zone_in=
+active_anon
+> >>>       18172 =C2=B1  2%     +12.5%      20442 =C2=B1  3%  proc-vmstat.=
+nr_zone_inactive_file
+> >>>      361460            +2.5%     370454        proc-vmstat.numa_hit
+> >>>      946.67           +18.6%       1122        proc-vmstat.pgactivate
+> >>>      361562            +2.5%     370553        proc-vmstat.pgalloc_no=
+rmal
+> >>>      187906            +4.7%     196761        proc-vmstat.pgfault
+> >>>        8189            +2.5%       8395        proc-vmstat.pgreuse
+> >>>   1.097e+09           +15.5%  1.267e+09 =C2=B1  7%  perf-stat.i.branc=
+h-instructions
+> >>>    39079265 =C2=B1  6%     -20.9%   30915354 =C2=B1  4%  perf-stat.i.=
+branch-misses
+> >>>     5093263 =C2=B1  4%     -23.7%    3884752 =C2=B1  9%  perf-stat.i.=
+cache-misses
+> >>>       29213           -18.7%      23764 =C2=B1  5%  perf-stat.i.conte=
+xt-switches
+> >>>   7.666e+09 =C2=B1  4%      +5.7%  8.106e+09 =C2=B1  2%  perf-stat.i.=
+cpu-cycles
+> >>>        1877 =C2=B1 15%     +75.1%       3287 =C2=B1 12%  perf-stat.i.=
+cycles-between-cache-misses
+> >>>     1735450 =C2=B1  3%     -12.9%    1512060 =C2=B1  3%  perf-stat.i.=
+iTLB-load-misses
+> >>>        2898 =C2=B1  3%     +34.4%       3895 =C2=B1  7%  perf-stat.i.=
+instructions-per-iTLB-miss
+> >>>        1493           -20.3%       1190 =C2=B1  7%  perf-stat.i.major=
+-faults
+> >>>        0.09 =C2=B1  3%      +5.8%       0.09 =C2=B1  2%  perf-stat.i.=
+metric.GHz
+> >>>       48.47 =C2=B1 11%      +8.4       56.83 =C2=B1  7%  perf-stat.i.=
+node-store-miss-rate%
+> >>>      283426 =C2=B1  4%     -21.6%     222190 =C2=B1 10%  perf-stat.i.=
+node-stores
+> >>>        3.57 =C2=B1  7%      -1.1        2.44 =C2=B1  6%  perf-stat.ov=
+erall.branch-miss-rate%
+> >>>        1508 =C2=B1  3%     +39.8%       2108 =C2=B1  9%  perf-stat.ov=
+erall.cycles-between-cache-misses
+> >>>        3022 =C2=B1  3%     +23.6%       3736 =C2=B1  5%  perf-stat.ov=
+erall.instructions-per-iTLB-miss
+> >>>   9.585e+08           +18.8%  1.138e+09 =C2=B1  6%  perf-stat.ps.bran=
+ch-instructions
+> >>>    34151514 =C2=B1  6%     -18.8%   27725316 =C2=B1  4%  perf-stat.ps=
+.branch-misses
+> >>>     4450329 =C2=B1  5%     -21.7%    3486409 =C2=B1  9%  perf-stat.ps=
+.cache-misses
+> >>>       25524           -16.4%      21333 =C2=B1  4%  perf-stat.ps.cont=
+ext-switches
+> >>>       77139            +2.5%      79105        perf-stat.ps.cpu-clock
+> >>>   6.704e+09 =C2=B1  4%      +8.7%  7.287e+09        perf-stat.ps.cpu-=
+cycles
+> >>>    1.06e+09           +11.3%   1.18e+09 =C2=B1  5%  perf-stat.ps.dTLB=
+-loads
+> >>>     1517349 =C2=B1  3%     -10.5%    1357716 =C2=B1  2%  perf-stat.ps=
+.iTLB-load-misses
+> >>>   4.582e+09           +10.8%  5.075e+09 =C2=B1  6%  perf-stat.ps.inst=
+ructions
+> >>>        1296           -18.1%       1061 =C2=B1  6%  perf-stat.ps.majo=
+r-faults
+> >>>      247613 =C2=B1  4%     -19.5%     199283 =C2=B1  9%  perf-stat.ps=
+.node-stores
+> >>>       77139            +2.5%      79105        perf-stat.ps.task-cloc=
+k
+> >>>   3.697e+10           +35.3%  5.003e+10        perf-stat.total.instru=
+ctions
+> >>>        8.51 =C2=B1 91%      -6.9        1.59 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.getdents64
+> >>>        8.34 =C2=B1 83%      -6.7        1.67 =C2=B1141%  perf-profile=
+.calltrace.cycles-pp.exit_to_user_mode_loop.exit_to_user_mode_prepare.sysca=
+ll_exit_to_user_mode.do_syscall_64.entry_SYSCALL_64_after_hwframe
+> >>>        6.25 =C2=B1107%      -6.2        0.00        perf-profile.call=
+trace.cycles-pp.entry_SYSCALL_64_after_hwframe.open64
+> >>>        6.25 =C2=B1107%      -6.2        0.00        perf-profile.call=
+trace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.open64
+> >>>        6.25 =C2=B1107%      -6.2        0.00        perf-profile.call=
+trace.cycles-pp.open64
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.getdents64
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.getdents6=
+4
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.__x64_sys_getdents64.do_syscall_64.entry_SYSCALL_64_af=
+ter_hwframe.getdents64
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.iterate_dir.__x64_sys_getdents64.do_syscall_64.entry_S=
+YSCALL_64_after_hwframe.getdents64
+> >>>        6.26 =C2=B1115%      -5.4        0.88 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.syscall_exit_to_user_mode.do_syscall_64.entry_SYSCALL_=
+64_after_hwframe
+> >>>        6.26 =C2=B1115%      -5.4        0.88 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.exit_to_user_mode_prepare.syscall_exit_to_user_mode.do=
+_syscall_64.entry_SYSCALL_64_after_hwframe
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.calltrace.cycles-pp.do_group_exit.get_signal.arch_do_signal_or_restart.exi=
+t_to_user_mode_loop.exit_to_user_mode_prepare
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.calltrace.cycles-pp.do_exit.do_group_exit.get_signal.arch_do_signal_or_res=
+tart.exit_to_user_mode_loop
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.calltrace.cycles-pp.arch_do_signal_or_restart.exit_to_user_mode_loop.exit_=
+to_user_mode_prepare.syscall_exit_to_user_mode.do_syscall_64
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.calltrace.cycles-pp.get_signal.arch_do_signal_or_restart.exit_to_user_mode=
+_loop.exit_to_user_mode_prepare.syscall_exit_to_user_mode
+> >>>        4.57 =C2=B1 73%      -3.8        0.76 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.asm_exc_page_fault.perf_mmap__read_head.perf_mmap__pus=
+h.record__mmap_read_evlist.__cmd_record
+> >>>        4.57 =C2=B1 73%      -3.8        0.76 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.exc_page_fault.asm_exc_page_fault.perf_mmap__read_head=
+.perf_mmap__push.record__mmap_read_evlist
+> >>>        4.57 =C2=B1 73%      -3.8        0.76 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.do_user_addr_fault.exc_page_fault.asm_exc_page_fault.p=
+erf_mmap__read_head.perf_mmap__push
+> >>>        4.57 =C2=B1 73%      -3.8        0.76 =C2=B1223%  perf-profile=
+.calltrace.cycles-pp.perf_mmap__read_head.perf_mmap__push.record__mmap_read=
+_evlist.__cmd_record.cmd_record
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.call=
+trace.cycles-pp.unmap_vmas.exit_mmap.mmput.exit_mm.do_exit
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.call=
+trace.cycles-pp.unmap_page_range.unmap_vmas.exit_mmap.mmput.exit_mm
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.call=
+trace.cycles-pp.zap_pmd_range.unmap_page_range.unmap_vmas.exit_mmap.mmput
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.call=
+trace.cycles-pp.zap_pte_range.zap_pmd_range.unmap_page_range.unmap_vmas.exi=
+t_mmap
+> >>>        8.51 =C2=B1 91%      -6.9        1.59 =C2=B1223%  perf-profile=
+.children.cycles-pp.getdents64
+> >>>        8.34 =C2=B1 83%      -6.7        1.67 =C2=B1141%  perf-profile=
+.children.cycles-pp.exit_to_user_mode_prepare
+> >>>        8.34 =C2=B1 83%      -6.7        1.67 =C2=B1141%  perf-profile=
+.children.cycles-pp.exit_to_user_mode_loop
+> >>>        8.34 =C2=B1 83%      -6.7        1.67 =C2=B1141%  perf-profile=
+.children.cycles-pp.syscall_exit_to_user_mode
+> >>>        6.25 =C2=B1107%      -6.2        0.00        perf-profile.chil=
+dren.cycles-pp.open64
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.children.cycles-pp.__x64_sys_getdents64
+> >>>        7.63 =C2=B1 84%      -6.0        1.59 =C2=B1223%  perf-profile=
+.children.cycles-pp.iterate_dir
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.children.cycles-pp.arch_do_signal_or_restart
+> >>>        6.26 =C2=B1115%      -4.6        1.67 =C2=B1141%  perf-profile=
+.children.cycles-pp.get_signal
+> >>>        4.57 =C2=B1 73%      -3.8        0.76 =C2=B1223%  perf-profile=
+.children.cycles-pp.perf_mmap__read_head
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.chil=
+dren.cycles-pp.unmap_vmas
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.chil=
+dren.cycles-pp.unmap_page_range
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.chil=
+dren.cycles-pp.zap_pmd_range
+> >>>        3.38 =C2=B1103%      -3.4        0.00        perf-profile.chil=
+dren.cycles-pp.zap_pte_range
+> >>>        8.54 =C2=B1 43%      +8.6       17.19 =C2=B1 38%  perf-profile=
+.children.cycles-pp.asm_exc_page_fault
+> >>>
+> >>>
+> >>> If you fix the issue, kindly add following tag
+> >>> Reported-by: kernel test robot <yujie.liu@intel.com>
+> >>>
+> >>>
+> >>> To reproduce:
+> >>>
+> >>>          git clone https://github.com/intel/lkp-tests.git
+> >>>          cd lkp-tests
+> >>>          sudo bin/lkp install job.yaml           # job file is attach=
+ed in this email
+> >>>          bin/lkp split-job --compatible job.yaml # generate the yaml =
+file for lkp run
+> >>>          sudo bin/lkp run generated-yaml-file
+> >>>
+> >>>          # if come across any failure that blocks the test,
+> >>>          # please remove ~/.lkp and /lkp dir to run from a clean stat=
+e.
+> >>>
+> >>>
+> >>> Disclaimer:
+> >>> Results have been estimated based on internal Intel analysis and are =
+provided
+> >>> for informational purposes only. Any difference in system hardware or=
+ software
+> >>> design or configuration may affect actual performance.
+> >>>
+> >>>
+> >>> #regzbot introduced: 5efdd9122e
+> >>>
+> >>>
+> >
+> >
+> >
+
+
+
+--=20
+Thanks,
+
+Steve
