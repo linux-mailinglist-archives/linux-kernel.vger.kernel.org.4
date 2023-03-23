@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816966C72BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884B36C72BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCWWIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S230404AbjCWWJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjCWWH7 (ORCPT
+        with ESMTP id S230377AbjCWWJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:07:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D375E39C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:07:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC91162864
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01901C433EF;
-        Thu, 23 Mar 2023 22:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1679609277;
-        bh=reLqZ6mL7WqZDYYjDhmQkKBmgPIHanFWRcBr7gpKytk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yWnmA7jho28TdcB1GYNPLBSK1E0F2yavbxbGf5yE5BOHyqq4nxKHTwWpAFBQ7gqdq
-         kK4H+M4qD3qNbibUmbwo3f5JF0Hn3Xf21nMMrCr7TMJobLuTsAkNci/EDg68VV2ZT6
-         A/q4A6FXFsWJh+LO4VGt3pxf9RZ+HpGXB6OyFJ2o=
-Date:   Thu, 23 Mar 2023 15:07:55 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 0/2] kexec: Remove unnecessary arch hook
-Message-Id: <20230323150755.06f8977fa2b860b8e02c37c3@linux-foundation.org>
-In-Reply-To: <ZBwEgDPq71+09OiD@MiWiFi-R3L-srv>
-References: <20230307224416.907040-1-helgaas@kernel.org>
-        <ZBwEgDPq71+09OiD@MiWiFi-R3L-srv>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Thu, 23 Mar 2023 18:09:01 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC5C1F92D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:09:00 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-544b959a971so398787b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679609337;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ApAT3jYclJ6tuM4Ar5bjYfOiqAXLl2HW8ed0MpHOtvE=;
+        b=m+DwhZDVXHVwX1qyHNU6dFSrO+1jD/zZCGm2dvuoW5IfwY9tr6P8LFAPbJ6Rxyt3Ok
+         TMeMcfOV49NreKzQuP+//Bx0exsKnTczPf5DFinUDHfqyuLt57npsZT/GYgdtNGyqVSz
+         t1ZQ7QUftT1/vUwsrJcIQ+zb7c/GXOwRAyfXQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679609337;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ApAT3jYclJ6tuM4Ar5bjYfOiqAXLl2HW8ed0MpHOtvE=;
+        b=HiEADdG29yESAhcpYpRM0993BWa5VytVT7qWC/GFDQrDe4PjZHmcjYph0n0nIoufAh
+         43wAnZBF5byyWeEbk5fWceTxKRGkQhpyRPRd+J61S0slz6N6MbYyIvPaPZRuTH9pNx3t
+         o1ulJvs/URGvKQ9YYXX6/pdLoVOKcW5wiUBqrFUU61sRnm8uJZ8FjkcPKb7dub3cF17l
+         YpbLFFAZ/JmxGb8gEkwpBEgTIMGm0YC2TAXlV84u/kqDTOhoj8WtIrVfbu8Vl/0t9c2T
+         mqShte/4TP962uHemvwEvoqtQ5tejIpzQo1Jko+wRiOG7r6FLwQhWE3oK9/HVrxNyVyp
+         SAMA==
+X-Gm-Message-State: AAQBX9esGL0NMQUDvN3R3g6hh4BuP0iq5rboudva/RGgpVEYzlzueVzK
+        8aqLm42VbUNLpcurWFzyRznBk6ntt/n96P60F+Q=
+X-Google-Smtp-Source: AKy350a+P09PsuqT4hTPGM7ChT9N85wBD50gwbkzYt/AzcCzwLKZM8lfpRElC8y/Q7ztazbsmiwB9w==
+X-Received: by 2002:a81:6889:0:b0:544:69f5:fadc with SMTP id d131-20020a816889000000b0054469f5fadcmr143528ywc.6.1679609337321;
+        Thu, 23 Mar 2023 15:08:57 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id p184-20020a81b1c1000000b00545a08184bbsm70299ywh.75.2023.03.23.15.08.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 15:08:56 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-541a05e4124so562297b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:08:56 -0700 (PDT)
+X-Received: by 2002:a81:b387:0:b0:545:5f92:f7ee with SMTP id
+ r129-20020a81b387000000b005455f92f7eemr53774ywh.2.1679609335803; Thu, 23 Mar
+ 2023 15:08:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <CGME20230323220529eucas1p12e5e1bbe2a31fe775cd9e6244f9282ce@eucas1p1.samsung.com>
+ <20230323220518.3247530-1-m.szyprowski@samsung.com>
+In-Reply-To: <20230323220518.3247530-1-m.szyprowski@samsung.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 23 Mar 2023 15:08:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WfREMuL6Z-aseAWPKXqpkutPofrWGy4ySH-WgbTHC-fg@mail.gmail.com>
+Message-ID: <CAD=FV=WfREMuL6Z-aseAWPKXqpkutPofrWGy4ySH-WgbTHC-fg@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,24 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 15:49:20 +0800 Baoquan He <bhe@redhat.com> wrote:
+Hi,
 
-> Hi,
-> 
-> On 03/07/23 at 04:44pm, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > There are no arch-specific things in arch_kexec_kernel_image_load(), so
-> > remove it and just use the generic version.
-> > 
-> > v1 is at:
-> > https://lore.kernel.org/all/20221215182339.129803-1-helgaas@kernel.org/
-> > 
-> > This v2 is trivially rebased to v6.3-rc1 and the commit log expanded
-> > slightly.
-> 
-> This is an obvious and good cleanup patchset, who should I ping to ask
-> for accepting?  It's touching kexec generic code, while the hook
-> only exists on x86 ARCH.
+On Thu, Mar 23, 2023 at 3:05=E2=80=AFPM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> Restore synchronous probing for 'qcom,pm8150-rpmh-regulators' because
+> otherwise the UFSHC device is not properly initialized on QRB5165-RB5
+> board.
+>
+> Fixes: ed6962cc3e05 ("regulator: Set PROBE_PREFER_ASYNCHRONOUS for driver=
+s between 4.14 and 4.19")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-I grabbed them
+I don't object to this patch landing temporarily, but can you provide
+any more details, please? On Qualcomm Chromebooks I'm not seeing any
+issues with RPMH regulators probing asynchronously, so I can only
+assume that there's a bug in the UFSHC driver that's being tickled.
+
+-Doug
