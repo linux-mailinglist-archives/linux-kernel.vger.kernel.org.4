@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A31D6C7330
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301BD6C7337
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjCWWhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S230075AbjCWWkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjCWWhc (ORCPT
+        with ESMTP id S229499AbjCWWkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:37:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D56623C6C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:37:24 -0700 (PDT)
+        Thu, 23 Mar 2023 18:40:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE672C648;
+        Thu, 23 Mar 2023 15:40:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52C55B8227C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA471C4339B;
-        Thu, 23 Mar 2023 22:37:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6B67628DE;
+        Thu, 23 Mar 2023 22:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129BAC4339C;
+        Thu, 23 Mar 2023 22:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679611041;
-        bh=e+h2mUJYZuNyVdV99tfY2YFd4SgSC26RuV1oY/psovU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h6GWOthwrssi8xkFClxadiP4fsPn5GIG7nQamIY8sYfhhsWtohT49zxN6MgRzoMQe
-         EnUxpHaQd1zFig97QJDRow9It5swMIU5mburl17t/gEtQuJdG82Nxq7bKEWKOQrGnQ
-         j5wT0jtgEPG7JK/Qy5VuM8WrBoralmvcUeZM2y54QElvSmr32PJadazV3ncgH4Fsmq
-         Ee4NduAs4qZuH01wlre5VO9BBKqJJuzm2rqjSLiuCyra0JyLWvRysMI26iwmofjH+/
-         dhTFurYdG4canFngXpu9AOGI9yqbm5Qzr967AHwa2X7uKGrO8xidyIbexWGuB1C2N4
-         fhm/EsVNNpUwA==
-Date:   Thu, 23 Mar 2023 15:37:20 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Hans Holmberg <hans.holmberg@wdc.com>
-Cc:     Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
-        damien.lemoal@wdc.com, aravind.ramesh@wdc.com, hans@owltronix.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] f2fs: preserve direct write semantics when buffering
- is forced
-Message-ID: <ZBzUoJ9sydeS4TpI@google.com>
-References: <20230220122004.26555-1-hans.holmberg@wdc.com>
+        s=k20201202; t=1679611252;
+        bh=Wvm9oO+TGTT6BMrhpf55Flb9UTupepd5i3H6Nq8mDmQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rMSBFNzosq9oJs2+SFAzlKpRvqZroTrJW0wB6pXUPPIH4fmZ702CLwjfa0Yd430IC
+         cdgsjYTSaS3YhERpUigO7qrMROGz0TAFodl4TF5zHHJcec4O9MsB7JUuyq9gj++/1c
+         UsSUkufqGLAeUeAz37pBtVCsnkH21dkfmSR4oz/7V7loX6FWeJHNUtQl0d387ykQe0
+         BSah+Z7C/cj/fH+d7cbPx82CL/5LkFSyCyDIoUm9hKfPPrzH35ruqdlMnA+VsZWGoT
+         dEQkaX5apvBHZuYwx+5zebugcIbnLW+pAbk1woAHOeFyFo01DaeLcfGMMxuEKEJEOj
+         r/KvvMLNcvuuA==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-53d277c1834so1113777b3.10;
+        Thu, 23 Mar 2023 15:40:52 -0700 (PDT)
+X-Gm-Message-State: AAQBX9ccCbmAJ+Vf2GJJfEeDA+2S8gF3OA0ewOMAa8iDqb9EkU7+0paT
+        XjJ5vLv0Hed5n/Q9gPIkPKpquBnOP9/+n9VC9Q==
+X-Google-Smtp-Source: AKy350Ye3nCQoXobESxoqVV0U6QLwpHk+LL8jCYaZ/FlvFyOF4q/jbN2KYecF+P4OkcijobOhAzVvjmmCcgvuozE42w=
+X-Received: by 2002:a81:a9c5:0:b0:545:62cb:3bdd with SMTP id
+ g188-20020a81a9c5000000b0054562cb3bddmr81297ywh.5.1679611251079; Thu, 23 Mar
+ 2023 15:40:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220122004.26555-1-hans.holmberg@wdc.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+References: <1674183732-5157-1-git-send-email-lizhi.hou@amd.com> <1674183732-5157-2-git-send-email-lizhi.hou@amd.com>
+In-Reply-To: <1674183732-5157-2-git-send-email-lizhi.hou@amd.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 23 Mar 2023 17:40:39 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+FM9P0n7BQZBY1AGJRtjAWw9F6h5DYmLkdPeXZaiYJwA@mail.gmail.com>
+Message-ID: <CAL_Jsq+FM9P0n7BQZBY1AGJRtjAWw9F6h5DYmLkdPeXZaiYJwA@mail.gmail.com>
+Subject: Re: [PATCH V7 1/3] of: dynamic: Add interfaces for creating device
+ node dynamically
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, frowand.list@gmail.com,
+        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,131 +66,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/20, Hans Holmberg wrote:
-> In some cases, e.g. for zoned block devices, direct writes are
-> forced into buffered writes that will populate the page cache
-> and be written out just like buffered io.
-> 
-> Direct reads, on the other hand, is supported for the zoned
-> block device case. This has the effect that applications
-> built for direct io will fill up the page cache with data
-> that will never be read, and that is a waste of resources.
-> 
-> If we agree that this is a problem, how do we fix it?
-> 
-> A) Supporting proper direct writes for zoned block devices would
-> be the best, but it is currently not supported (probably for
-> a good but non-obvious reason). Would it be feasible to
-> implement proper direct IO?
-> 
-> B) Avoid the cost of keeping unwanted data by syncing and throwing
-> out the cached pages for buffered O_DIRECT writes before completion.
-> 
-> This patch implements B) by reusing the code for how partial
-> block writes are flushed out on the "normal" direct write path.
-> 
-> Note that this changes the performance characteristics of f2fs
-> quite a bit.
-> 
-> Direct IO performance for zoned block devices is lower for
-> small writes after this patch, but this should be expected
-> with direct IO and in line with how f2fs behaves on top of
-> conventional block devices.
-> 
-> Another open question is if the flushing should be done for
-> all cases where buffered writes are forced.
-> 
-> Signed-off-by: Hans Holmberg <hans.holmberg@wdc.com>
+On Thu, Jan 19, 2023 at 9:02=E2=80=AFPM Lizhi Hou <lizhi.hou@amd.com> wrote=
+:
+>
+> of_create_node() creates device node dynamically. The parent device node
+> and full name are required for creating the node. It optionally creates
+> an OF changeset and attaches the newly created node to the changeset. The
+> device node pointer and the changeset pointer can be used to add
+> properties to the device node and apply the node to the base tree.
+>
+> of_destroy_node() frees the device node created by of_create_node(). If
+> an OF changeset was also created for this node, it will destroy the
+> changeset before freeing the device node.
+>
+> Expand of_changeset APIs to handle specific types of properties.
+>     of_changeset_add_prop_string()
+>     of_changeset_add_prop_string_array()
+>     of_changeset_add_prop_u32_array()
+>
+> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+
+Your Sob should be last because you sent this patch. The order of Sob
+is roughly the order of possession of the patch.
+
+> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> Signed-off-by: Max Zhen <max.zhen@amd.com>
+
+So Sonal and Max modified this patch?
+
+> Reviewed-by: Brian Xu <brian.xu@amd.com>
+> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+
+Why does this have Cl=C3=A9ment's Sob?
+
 > ---
->  fs/f2fs/file.c | 38 ++++++++++++++++++++++++++++++--------
->  1 file changed, 30 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index ecbc8c135b49..4e57c37bce35 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -4513,6 +4513,19 @@ static const struct iomap_dio_ops f2fs_iomap_dio_write_ops = {
->  	.end_io = f2fs_dio_write_end_io,
->  };
->  
-> +static void f2fs_flush_buffered_write(struct address_space *mapping,
-> +				      loff_t start_pos, loff_t end_pos)
-> +{
-> +	int ret;
-> +
-> +	ret = filemap_write_and_wait_range(mapping, start_pos, end_pos);
-> +	if (ret < 0)
-> +		return;
-> +	invalidate_mapping_pages(mapping,
-> +				 start_pos >> PAGE_SHIFT,
-> +				 end_pos >> PAGE_SHIFT);
-> +}
-> +
->  static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
->  				   bool *may_need_sync)
->  {
-> @@ -4612,14 +4625,9 @@ static ssize_t f2fs_dio_write_iter(struct kiocb *iocb, struct iov_iter *from,
->  
->  			ret += ret2;
->  
-> -			ret2 = filemap_write_and_wait_range(file->f_mapping,
-> -							    bufio_start_pos,
-> -							    bufio_end_pos);
-> -			if (ret2 < 0)
-> -				goto out;
-> -			invalidate_mapping_pages(file->f_mapping,
-> -						 bufio_start_pos >> PAGE_SHIFT,
-> -						 bufio_end_pos >> PAGE_SHIFT);
-> +			f2fs_flush_buffered_write(file->f_mapping,
-> +						  bufio_start_pos,
-> +						  bufio_end_pos);
->  		}
->  	} else {
->  		/* iomap_dio_rw() already handled the generic_write_sync(). */
-> @@ -4717,8 +4725,22 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
->  	inode_unlock(inode);
->  out:
->  	trace_f2fs_file_write_iter(inode, orig_pos, orig_count, ret);
-> +
->  	if (ret > 0 && may_need_sync)
->  		ret = generic_write_sync(iocb, ret);
-> +
-> +	/* If buffered IO was forced, flush and drop the data from
-> +	 * the page cache to preserve O_DIRECT semantics
-> +	 */
-> +	if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT)) {
-> +		struct file *file = iocb->ki_filp;
-> +		loff_t end_pos = orig_pos + ret - 1;
-> +
-> +		f2fs_flush_buffered_write(file->f_mapping,
-> +					  orig_pos,
-> +					  end_pos);
-
-I applied a minor change:
-
-        /* If buffered IO was forced, flush and drop the data from
-         * the page cache to preserve O_DIRECT semantics
-         */
--       if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT)) {
--               struct file *file = iocb->ki_filp;
--               loff_t end_pos = orig_pos + ret - 1;
--
--               f2fs_flush_buffered_write(file->f_mapping,
-+       if (ret > 0 && !dio && (iocb->ki_flags & IOCB_DIRECT))
-+               f2fs_flush_buffered_write(iocb->ki_filp->f_mapping,
-                                          orig_pos,
--                                         end_pos);
--       }
-+                                         orig_pos + ret - 1);
-
-        return ret;
- }
-
-
-> +	}
-> +
->  	return ret;
+>  drivers/of/dynamic.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/of.h   |  24 ++++++
+>  2 files changed, 221 insertions(+)
+>
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index cd3821a6444f..4e211a1d039f 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -461,6 +461,71 @@ struct device_node *__of_node_dup(const struct devic=
+e_node *np,
+>         return NULL;
 >  }
->  
-> -- 
-> 2.25.1
+>
+> +/**
+> + * of_create_node - Dynamically create a device node
+
+For consistency, I think this should be of_changeset_create_node().
+
+> + *
+> + * @parent: Pointer to parent device node
+> + * @full_name: Node full name
+> + * @cset: Pointer to returning changeset
+> + *
+> + * Return: Pointer to the created device node or NULL in case of an erro=
+r.
+> + */
+> +struct device_node *of_create_node(struct device_node *parent,
+> +                                  const char *full_name,
+> +                                  struct of_changeset **cset)
+> +{
+> +       struct of_changeset *ocs;
+> +       struct device_node *np;
+> +       int ret;
+> +
+> +       np =3D __of_node_dup(NULL, full_name);
+> +       if (!np)
+> +               return NULL;
+> +       np->parent =3D parent;
+> +
+> +       if (!cset)
+> +               return np;
+> +
+> +       ocs =3D kmalloc(sizeof(*ocs), GFP_KERNEL);
+> +       if (!ocs) {
+> +               of_node_put(np);
+> +               return NULL;
+> +       }
+> +
+> +       of_changeset_init(ocs);
+> +       ret =3D of_changeset_attach_node(ocs, np);
+> +       if (ret) {
+> +               of_changeset_destroy(ocs);
+> +               of_node_put(np);
+> +               kfree(ocs);
+> +               return NULL;
+> +       }
+> +
+> +       np->data =3D ocs;
+> +       *cset =3D ocs;
+> +
+> +       return np;
+> +}
+> +EXPORT_SYMBOL(of_create_node);
+> +
+> +/**
+> + * of_destroy_node - Destroy a dynamically created device node
+> + *
+> + * @np: Pointer to dynamically created device node
+> + *
+> + */
+> +void of_destroy_node(struct device_node *np)
+> +{
+> +       struct of_changeset *ocs;
+> +
+> +       if (np->data) {
+> +               ocs =3D (struct of_changeset *)np->data;
+> +               of_changeset_destroy(ocs);
+> +       }
+> +       of_node_put(np);
+
+A sequence like this would be broken:
+
+np  =3D of_create_node()
+of_node_get(np)
+of_destroy_node(np)
+
+The put here won't free the node because it still has a ref, but we
+just freed the changeset. For this to work correctly, we would need
+the release function to handle np->data instead. However, all users of
+data aren't a changeset.
+
+I'm failing to remember why we're storing the changeset in 'data', but
+there doesn't seem to be a reason now so I think that can just be
+dropped. Then if you want to free the node, you'd just do an
+of_node_put(). (And maybe after the node is attached you do a put too,
+because the attach does a get. Not completely sure.)
+
+A unittest for all these functions would be helpful.
+
+Rob
