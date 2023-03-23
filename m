@@ -2,119 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5CD6C6644
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7F16C664A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjCWLOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S231643AbjCWLPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjCWLN7 (ORCPT
+        with ESMTP id S231597AbjCWLO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:13:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C23303E6;
-        Thu, 23 Mar 2023 04:13:38 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r11so3219549wrr.12;
-        Thu, 23 Mar 2023 04:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679570017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tVjjdfxKWJEPl9oz0aYLy6zRsnTQ4oFQj5M+MsLi4UU=;
-        b=F38AvaBM+QVvhoEnXN/37RC/wbr5gxcg/xewMRi1HC7Qv7kCXalhuf833HvjJqKw4O
-         zRgjZqyyxWkpJuAOW7Cn+gqdpYKYMReZZ9GlFT8rPDlxs14cxZG7fnotxyfLLZvPb171
-         CZKxM8I79dR0DNCbyMh3WuH8XVvDxzL2oFlawTiz8A4Rj9HD6MXoaziEbdFPnK9J2ugL
-         j0Viyah3LFtDb8sKolhlgbpcUWLtOdV+chIkJark5/JfkQ0dckXV+07w+mEHi5zum2+V
-         osOl3HwKTp18tsPhwrWjMGzvWljZZpFuZ9GGVRs/uhh0TuYBBtealfYpe1LnGyl+4mrQ
-         717g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679570017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tVjjdfxKWJEPl9oz0aYLy6zRsnTQ4oFQj5M+MsLi4UU=;
-        b=fm4W/tADbnaDkBE6aZeThvfejFbk9Ls7iO0lAlMJDTJIFYFoPasMcbSmwR0zZTkddT
-         1b8X7FF7XyOTdyywekZ1t7L/QvK1JzOtSnmAr/VHUwMkxvoW5jlMX860fr8mWBfrnACI
-         zjQEPxkLzUPDusBx1BfyCEC4gbcYNbbwbdaIht6EIziT9AujnZVR1khVhXWX0sUPJ4YV
-         p5hDHml25SDDmnXtfaKqnpL4/TL7vIlhpE2e0jRYiq5AOcOWChr5tPBfhSDQ55GOi1zn
-         mIACVlKC5rRiwE31qYw0LmkB+mfkE/aRLJon9OsftAC9W66pkjCVJzkiLsigRs2TpcrQ
-         J6fg==
-X-Gm-Message-State: AAQBX9df4J4nonbP2gKq8NkMW6n18nJEb0cDCE0J67AeJQJKVF0tkDby
-        cepB1cYRIW5AzU9LfxOKKoQ=
-X-Google-Smtp-Source: AKy350aKrb8xl5DTuyk28zfuFFdjZVHpayeWp5XlGIfFI7LBg2xKwfNHJeZvj24SuK6d7LqD5X8SlQ==
-X-Received: by 2002:adf:e690:0:b0:2d6:4e98:5f32 with SMTP id r16-20020adfe690000000b002d64e985f32mr2167688wrm.23.1679570017143;
-        Thu, 23 Mar 2023 04:13:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id r6-20020a05600c458600b003ee9f396dcesm202370wmo.30.2023.03.23.04.13.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 04:13:36 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 14:13:33 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Mingxuan Xiang <mx_xiang@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: dwc3: host: remove dead code in
- dwc3_host_get_irq()
-Message-ID: <201fba22-f537-4d1f-bfc4-e4dc931707bc@kili.mountain>
-References: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
- <129aec21-4997-6b8d-5bd2-8e013f575208@gmail.com>
- <73fd29ce-3072-dfce-ebf0-3e197230fa94@suse.com>
+        Thu, 23 Mar 2023 07:14:59 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E2E1C5BB;
+        Thu, 23 Mar 2023 04:14:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 10D0632007E8;
+        Thu, 23 Mar 2023 07:14:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 23 Mar 2023 07:14:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679570079; x=
+        1679656479; bh=8NrkxqYFn1cmxiBC/AP5l36rNX2XShFZCWb/ANhJcJc=; b=j
+        4AZy/sYpJyS0jeLawRXQBN3nDejIyCKw7+YPvm5sbZXe28DbJttLmt8Dr7MoubPd
+        MczO7OQHmRTIaiDGzuQh7iqE+UxF8MquHJluhxOqxL71ffiR5UUznEo5pcaJjy8R
+        J00fKj165ykVXOtnDKjJ4OYbUJb6wAsicfT0gkziBn6sLf+v6TzlGXWse8eOaT63
+        15rZVrErpoAAYHBXVkhrXj6esKIxYIdl6ylllc3IxVAXEv94ZhkvWjFmKkNeI/hA
+        gNCG6G61sTOHN+J+PGAV43LdTJv+jjjn+hZkSiU2N12XTMimgP4xmjx4ACQXQKRm
+        jeKGrRxgLLIrsPxLUwzxQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679570079; x=1679656479; bh=8NrkxqYFn1cmx
+        iBC/AP5l36rNX2XShFZCWb/ANhJcJc=; b=aGvqLE1XiTofOZnLpAYDtlJVNnUPW
+        FOXKv6RWj29TPsPcsymfn2euI76PK51+3ziiuywNbPLFU93pqI3s447whMl7ie+c
+        vpT5RYatyJiwyEO+yEV/o5gkbFS/S8LuKP5U/FIM0EiR0QIgEEnalQKThlDIaelo
+        7Nf5CeNLvMjFT1/dknBheyT3EtmdccTHco4LIJnPP2cnN6u0cRMQuY7geBhDpYL4
+        DCAMqhMlQWScYc79sevoX6sb2Q8/yWIPVqrL+lSkSs2Ce92PO2klQzgcH6ay8poW
+        11sQPQNsMU8Ze7Iu/K405GmuEj4VI4TnP/E8gmdZhP3G5OEe48+oLwYMg==
+X-ME-Sender: <xms:nzQcZFy3Hf43sfD6n243uP73VG--x-WNkFk9bZiBhCQmAFbbvtiW7g>
+    <xme:nzQcZFTWKf7sekxTXyM8ySjE2lh15U7Rjbw1k9tmLiBE2jkaoEaX1C-f6EBo2QgZJ
+    8weHE-tTTPYzgWKpzw>
+X-ME-Received: <xmr:nzQcZPURMDPDArRiFDKMDieZEws2Vig2Lcy2hquz3hhJheqNNFZ9lZ5TuSOYv8iBiqmPHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:nzQcZHgvWUSTJJnQWJgH3hdkIXIBJ_R5vJuahfga3aP10Ki_fnrktw>
+    <xmx:nzQcZHDKgkly7khBv_1UA6yFQ0A7tyCqH1mtcaTn-ETB5eLANzU-cw>
+    <xmx:nzQcZAJutw4vj90zx_U3teB3-6iA7V-Qc7ENU2kzpKrSBNmgwSSqsw>
+    <xmx:nzQcZJ2rFwIgPB2tD6cThSz7D8b5umTVXGk3Rd-AwFn02PKAdt75gw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 07:14:38 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 2230A109FCC; Thu, 23 Mar 2023 14:14:36 +0300 (+03)
+Date:   Thu, 23 Mar 2023 14:14:36 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/5] selftests/mm: Implement support for arm64 on va
+Message-ID: <20230323111436.mj2kbesfxfmvj5by@box.shutemov.name>
+References: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <73fd29ce-3072-dfce-ebf0-3e197230fa94@suse.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:54:24AM +0100, 'Oliver Neukum' via HUST OS Kernel Contribution wrote:
+On Thu, Mar 23, 2023 at 04:22:38PM +0530, Chaitanya S Prakash wrote:
+> The va_128TBswitch selftest is designed and implemented for PowerPC and
+> x86 architectures which support a 128TB switch, up to 256TB of virtual
+> address space and hugepage sizes of 16MB and 2MB respectively. Arm64
+> platforms on the other hand support a 256Tb switch, up to 4PB of virtual
+> address space and a default hugepage size of 512MB when 64k pagesize is
+> enabled.
 > 
+> These architectural differences require introducing support for arm64
+> platforms, after which a more generic naming convention is suggested.
+> The in code comments are amended to provide a more platform independent
+> explanation of the working of the code and nr_hugepages are configured
+> as required. Finally, the file running the testcase is modified in order
+> to prevent skipping of hugetlb testcases of va_high_addr_switch.
 > 
-> On 23.03.23 11:29, Sergei Shtylyov wrote:
-> > On 3/23/23 12:53 PM, Mingxuan Xiang wrote:
-> > 
-> > > platform_get_irq() no longer returns 0, so there is no
-> > > need to check whether the return value is 0.
-> > > 
-> > > Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
-> > > ---
-> > > v1->v2: remove redundant goto
-> > >   drivers/usb/dwc3/host.c | 4 ----
-> > >   1 file changed, 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > index f6f13e7f1ba1..ca1e8294e835 100644
-> > > --- a/drivers/usb/dwc3/host.c
-> > > +++ b/drivers/usb/dwc3/host.c
-> > > @@ -54,12 +54,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
-> > >   	irq = platform_get_irq(dwc3_pdev, 0);
-> > >   	if (irq > 0) {
-> > >   		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
-> > > -		goto out;
-> > >   	}
-> > 
-> >     Now drop {} please. :-)
+> This series has been tested on 6.3.0-rc3 kernel, both on arm64 and x86
+> platforms.
 > 
-> Well, no, please drop the whole patch.
-> If platform_get_irq() returns -EPROBE_DEFER you now give that
-> as a return value.
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org 
 > 
-> This tiny bit of optimization is not worth changing semantics.
+> Chaitanya S Prakash (5):
+>   selftests/mm: Add support for arm64 platform on va switch
+>   selftests/mm: Rename va_128TBswitch to va_high_addr_switch
+>   selftests/mm: Add platform independent in code comments
+>   selftests/mm: Configure nr_hugepages for arm64
+>   selftests/mm: Run hugetlb testcases of va switch
+> 
+>  tools/testing/selftests/mm/Makefile           |  4 +-
+>  tools/testing/selftests/mm/run_vmtests.sh     | 12 +++++-
+>  ...va_128TBswitch.c => va_high_addr_switch.c} | 41 +++++++++++++++----
+>  ..._128TBswitch.sh => va_high_addr_switch.sh} |  6 ++-
+>  4 files changed, 49 insertions(+), 14 deletions(-)
+>  rename tools/testing/selftests/mm/{va_128TBswitch.c => va_high_addr_switch.c} (86%)
+>  rename tools/testing/selftests/mm/{va_128TBswitch.sh => va_high_addr_switch.sh} (89%)
 
-The v2 patch doesn't change the semantics.  Mine did though...
+The patchset looks sane to me, but I have question: why arm64 has switch
+on 256TB. The reason we have the switch is to keep system backward
+compatible.
 
-regards,
-dan carpenter
+Maybe it is better to make arm64 switch also on 128TB to make it
+compatible across architectures?
 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
