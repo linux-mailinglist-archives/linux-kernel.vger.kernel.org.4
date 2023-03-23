@@ -2,76 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ABA6C6D06
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2874F6C6D03
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjCWQLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S230011AbjCWQLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjCWQLg (ORCPT
+        with ESMTP id S229948AbjCWQLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:11:36 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B435626CE0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:11:31 -0700 (PDT)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NFlW4v008657;
-        Thu, 23 Mar 2023 16:10:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=UcIvhkzkGuLo0g+xF50Km9vHChuy/Y2XH/s5lgfqbdU=;
- b=Yd0D3OUro2IX/wK2mMzz+CwOm36+lTWkCjZsiIiBEWajcjw6Owh81CUuskzOBzY8kSVA
- w1LOr/i67AC7yy8kkY2mqY8tVIjpztOeuCS/8tZUXMDQZlYZrdJ6wk7R3snHjA/BtrPy
- PMH8usX/1f+7N57EbL0+VojjKZpesp4On7P+Je5YZwy1IXvdTfwtPnaUdXS+ci1qe9jQ
- 5Qm4MfN+SanPR4xmZ4fqbljuHffFV0MIp54gCmK7PA4seClZrg12crdRCaO0OgnGeHD2
- 3V2Lq6do7CGmm3k28EYrHMEroXAbPEkS9dd1BF//g37oCA7jwHzPpmXC0sDD89R7vBg9 gg== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3pgsqcr6w3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 16:10:54 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 46FEF804792;
-        Thu, 23 Mar 2023 16:10:52 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 93228816D1C;
-        Thu, 23 Mar 2023 16:10:50 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 11:10:24 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] x86/platform/uv: UV support for sub-NUMA clustering
-Message-ID: <20230323161024.GA3653487@dog.eag.rdlabs.hpecorp.net>
-References: <20230224225904.2618624-1-steve.wahl@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224225904.2618624-1-steve.wahl@hpe.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-GUID: ZIJ-BUJh7JrnlCdLT7Y0yuYOEiiD4r5P
-X-Proofpoint-ORIG-GUID: ZIJ-BUJh7JrnlCdLT7Y0yuYOEiiD4r5P
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-23_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- adultscore=0 suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0
- mlxlogscore=999 impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303230118
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Thu, 23 Mar 2023 12:11:22 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B204A32CCF;
+        Thu, 23 Mar 2023 09:10:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VeUu73m_1679587840;
+Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VeUu73m_1679587840)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Mar 2023 00:10:53 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [RESEND PATCH] driver/perf: arm-cmn: support ACPI probe
+Date:   Fri, 24 Mar 2023 00:10:38 +0800
+Message-Id: <1679587838-80000-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,14 +41,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 04:59:04PM -0600, Steve Wahl wrote:
-> Sub-NUMA clustering (SNC) invalidates previous assumptions of a 1:1
-> relationship between blades, sockets, and nodes.  Fix these
-> assumptions and build tables correctly when SNC is enabled.
+ACPI companion devices call insert_resource() in platform_device_add()
+to claim the device resources. If the resources are claimed again before
+ioremap(), and the addresses of multiple resources overlap, it will
+return -BUSY, causing the driver to fail to load.
 
-Gentle ping, does anyone have comments for me on this patch?
+For example, the CMN700 on my machine is set with two resources similar
+to CMN600, and the overlap of resource addresses makes the CMN driver
+unable to match my CMN700. The error log:
 
-Thanks,
+[  12.016837] arm-cmn ARMHC700:00: can't request region for resource [mem 0x40000000-0x4fffffff]
+[  12.028230] arm-cmn: probe of ARMHC700:00 failed with error -16
+[  12.036832] arm-cmn ARMHC700:01: can't request region for resource [mem 0x40040000000-0x4004fffffff]
+[  12.051289] arm-cmn: probe of ARMHC700:01 failed with error -16
 
---> Steve Wahl, <steve.wahl@hpe.com>
+So let ACPI companion devices call arm_cmn_acpi_probe() and not claim
+resource again. In addition, the arm_cmn_acpi_probe() and
+arm_cmn_of_probe() functions are refactored to make them compatible
+with both CMN600 and CMN-ANY.
+
+Fixes: 61ec1d875812 ("perf/arm-cmn: Demarcate CMN-600 specifics")
+Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+---
+ drivers/perf/arm-cmn.c | 57 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 1deb61b..beb3b37 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -2206,7 +2206,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn, unsigned int rgn_offset)
+ 	return 0;
+ }
+ 
+-static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
++static int arm_cmn_acpi_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+ {
+ 	struct resource *cfg, *root;
+ 
+@@ -2214,12 +2214,21 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+ 	if (!cfg)
+ 		return -EINVAL;
+ 
+-	root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	if (!root)
+-		return -EINVAL;
++	/* If ACPI defines more than one resource, such as cmn-600, then there may be
++	 * a deviation between ROOTNODEBASE and PERIPHBASE, and ROOTNODEBASE can
++	 * be obtained from the second resource. Otherwise, it can be considered that
++	 * ROOT NODE BASE is PERIPHBASE. This is compatible with cmn-600 and cmn-any.
++	 */
++	if (pdev->num_resources > 1) {
++		root = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++		if (!root)
++			return -EINVAL;
+ 
+-	if (!resource_contains(cfg, root))
+-		swap(cfg, root);
++		if (!resource_contains(cfg, root))
++			swap(cfg, root);
++	} else {
++		root = cfg;
++	}
+ 	/*
+ 	 * Note that devm_ioremap_resource() is dumb and won't let the platform
+ 	 * device claim cfg when the ACPI companion device has already claimed
+@@ -2227,17 +2236,30 @@ static int arm_cmn600_acpi_probe(struct platform_device *pdev, struct arm_cmn *c
+ 	 * appropriate name, we don't really need to do it again here anyway.
+ 	 */
+ 	cmn->base = devm_ioremap(cmn->dev, cfg->start, resource_size(cfg));
+-	if (!cmn->base)
+-		return -ENOMEM;
++	if (IS_ERR(cmn->base))
++		return PTR_ERR(cmn->base);
+ 
+ 	return root->start - cfg->start;
+ }
+ 
+-static int arm_cmn600_of_probe(struct device_node *np)
++static int arm_cmn_of_probe(struct platform_device *pdev, struct arm_cmn *cmn)
+ {
+ 	u32 rootnode;
++	int ret;
++
++	cmn->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(cmn->base))
++		return PTR_ERR(cmn->base);
+ 
+-	return of_property_read_u32(np, "arm,root-node", &rootnode) ?: rootnode;
++	/* If of_property_read_u32() return -EINVAL, it means that device tree has
++	 * not define root-node, and root-node will return 0, which is compatible
++	 * with cmn-600 and cmn-any.
++	 */
++	ret = of_property_read_u32(pdev->dev.of_node, "arm,root-node", &rootnode);
++	if (ret == -EINVAL)
++		return 0;
++
++	return rootnode;
+ }
+ 
+ static int arm_cmn_probe(struct platform_device *pdev)
+@@ -2255,16 +2277,11 @@ static int arm_cmn_probe(struct platform_device *pdev)
+ 	cmn->model = (unsigned long)device_get_match_data(cmn->dev);
+ 	platform_set_drvdata(pdev, cmn);
+ 
+-	if (cmn->model == CMN600 && has_acpi_companion(cmn->dev)) {
+-		rootnode = arm_cmn600_acpi_probe(pdev, cmn);
+-	} else {
+-		rootnode = 0;
+-		cmn->base = devm_platform_ioremap_resource(pdev, 0);
+-		if (IS_ERR(cmn->base))
+-			return PTR_ERR(cmn->base);
+-		if (cmn->model == CMN600)
+-			rootnode = arm_cmn600_of_probe(pdev->dev.of_node);
+-	}
++	if (has_acpi_companion(cmn->dev))
++		rootnode = arm_cmn_acpi_probe(pdev, cmn);
++	else
++		rootnode = arm_cmn_of_probe(pdev, cmn);
++
+ 	if (rootnode < 0)
+ 		return rootnode;
+ 
+-- 
+1.8.3.1
 
