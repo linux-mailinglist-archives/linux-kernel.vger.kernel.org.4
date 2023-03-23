@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984046C6A71
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D39946C6A6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjCWOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S231236AbjCWOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWOIM (ORCPT
+        with ESMTP id S230157AbjCWOHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:08:12 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34D23801B;
-        Thu, 23 Mar 2023 07:06:53 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4B4EB5C00C1;
-        Thu, 23 Mar 2023 10:06:21 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 10:06:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679580381; x=1679666781; bh=dY
-        48kEVl9pgLxa2CyFA5QtbXG3NJEfHcCiZY//VXuhI=; b=N3CTATQ7q9ZFPQYbjV
-        2M3sXLRM2ydNF/4V7sLh4NmkOAzI9HQjCc6cgXlL0VVeZCU+MMnXXyp+z/sy+Vja
-        hz+o8yvkfpAY6CcmZfx+nB4/3SiUyZifZ0kioxWvtjd0WrCuk3Rdqwg7P6oj6oZw
-        BP00DjLhNvHgy0S0vFIl76edKgf5TYfKRH2O88jk7FJaj68BZJoVLpX691hcsxXB
-        HmZTxrTNuaJKQHIZe6DVgSZMU9ZxkBkKxM6cC1mBv5vh1U5LZ6qHUOGetE+5aQgH
-        1J35G7Z2vO2KHY/Cqhexk2prWj8+onKH6dOYQ215k9JGqOWuoEesdDzaMQr+GgoQ
-        dV1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679580381; x=1679666781; bh=dY48kEVl9pgLx
-        a2CyFA5QtbXG3NJEfHcCiZY//VXuhI=; b=MrT5Zv5EfNpKnWV6JOjV1cAVQBsiX
-        X69n9fMDOkRG2DaY40xnf5Xp5v5H30Wc3Xr9qL+lmaWpmZa2Wuyd+tdNv125UsbP
-        BJvqNR5y/pu57M9ocW6THhNRR5JtPDlnmxrc1CKSGgDYHjPO//KOMd5PMWaHLfyn
-        9OjZG1nQnKekdjHEbdkq/UjVimMEMNx/Iil1ZfVlq53WnAwn5RlxAJ8mabhpf5wf
-        Axs6dZHlmj7Aufn5J1+a/S3f4OlW6IwLmZ5TKy93kubwd57uWAFPFb8YVlfjbAFv
-        sNDuEf9qNuS2Hw5ZIdzqNt2HRbnFfCeESmChliRFB1zR1kIF8SLq/E9bQ==
-X-ME-Sender: <xms:3FwcZIMb2z1yB6dpSJjclnQp0c-g-lab80yefJt_urC7W_tgT_ULPQ>
-    <xme:3FwcZO-EvG-pyZdpHzyWeIH89xbuD-8PDBV5dbYy0EPs7X6Y5ySw-sXvrWR5U-GXe
-    876k-6A86weXyQFOn0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:3FwcZPSrZ7jEVy-WPrRZ5LUBHatN2NLK7f773ycdY-B25mAA0VgZPQ>
-    <xmx:3FwcZAvbdApivWiyh4QQ7VI6OANcoDaPBkkoLTzsFyEASiWhklMopA>
-    <xmx:3FwcZAfq9CQcGmPgxlBY_2tFfqCwjAviKvXsxQMQxyKYhMNeoGvvuQ>
-    <xmx:3VwcZE9Hgf136vtECKcakHIv9C-QVEG_JWMzrPs17JgoSwjI7bqzog>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 21472B60086; Thu, 23 Mar 2023 10:06:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <357de40d-e1bd-4e67-9a8c-240ed2ef7809@app.fastmail.com>
-In-Reply-To: <14a5fa1cc6edd9a297b20af779b68d1e58f83419.camel@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-16-schnelle@linux.ibm.com>
- <20230316161442.GV9667@google.com>
- <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
- <97b5a5c3-d20f-4201-8deb-1d34e7edee6c@app.fastmail.com>
- <14a5fa1cc6edd9a297b20af779b68d1e58f83419.camel@linux.ibm.com>
-Date:   Thu, 23 Mar 2023 15:05:59 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Lee Jones" <lee@kernel.org>
-Cc:     "Pavel Machek" <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 10:07:36 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A8222793;
+        Thu, 23 Mar 2023 07:06:23 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso1277887wms.1;
+        Thu, 23 Mar 2023 07:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679580378;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z4BMiXjAP1ZDCS80RIcwxql2HNxRwPUInw3Q2X6diKU=;
+        b=GPQuBpzB70pNVCwyNA98ZNN6PaiMrOOhDlHsXGsvfQ7Rk0AKwWgWIQR09P3q7tyxrW
+         3zel+WM6jx5cSkf0wf7H4HZQC+RNr/ewq6fxF/RGDaZICvsTYKUCRWD50VT7z2N2j/cB
+         EYYvpNwajjWjyYQAXdwiYuTxMeWChWl5THqn3vgb6PvSX2nizF1aVufdlUJ0IQrUyxUJ
+         1z7GLmeDN5EseQPF5m9w0DddAqosd/9X26frWdbsH/nblx7vC1bAlv4uQ0IBEzuji011
+         GuNpDqzgjcE9zPpkRS/s91mEJiubyJQCdqiEGUDg9rFbnOJmE24FMnOWzHxUZXD8tDJm
+         TMVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679580378;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z4BMiXjAP1ZDCS80RIcwxql2HNxRwPUInw3Q2X6diKU=;
+        b=MQvpw7sC05LBfNEK63EzII0Ga5X8hZmgW56khA6J2gKU+hYynWg4xFEW1755fA5y2u
+         SNjxtEmzPKaysXaBVoPKU5ahOxEynrfKKiaxQ0umULV/o5JDhDmauGtQ935C3dgqKOOq
+         SiSRGZF3f926t9Wg25SiYy+/2fHpF1fawlejT/jOOpB0sbIQXa82qq86BAOK++egyd2E
+         n6wzrzDlookojo/pzj0rgWkJCbsYQuk4FHfo8U0CAPGgpDTiRjOCCe8XF0JxOcDdwov6
+         A/0x23PDD4HvfB+3WE5sennVbleqECDU6RdmrRDlgrtIYjWVQUFRSi6AWlHfnq6dAP4e
+         Lksw==
+X-Gm-Message-State: AO0yUKXtbmALT5+vBGz0PTWiXx7KKOVLSSwShXXhCsCTVvZzqe8X+YAn
+        tUeU2TvCvelF9aYuf7KwdTX94YCHJRQ=
+X-Google-Smtp-Source: AK7set97LqRWSWhWWcYp/0nGzUtkX3dT5/Jw8lv/CcNhZdDP0IpK9zCEg5Uz7F/2N0vC8/CgOHMGXQ==
+X-Received: by 2002:a05:600c:3795:b0:3ed:93de:49ff with SMTP id o21-20020a05600c379500b003ed93de49ffmr2390666wmr.0.1679580378202;
+        Thu, 23 Mar 2023 07:06:18 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i11-20020a05600c290b00b003ee20b4b2dasm1912223wmd.46.2023.03.23.07.06.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 07:06:17 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 17:06:14 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: dwc3: host: remove dead code in
+ dwc3_host_get_irq()
+Message-ID: <6677e2c6-b621-4c7e-9dd6-631a02ce5996@kili.mountain>
+References: <20230323095311.1266655-1-mx_xiang@hust.edu.cn>
+ <129aec21-4997-6b8d-5bd2-8e013f575208@gmail.com>
+ <73fd29ce-3072-dfce-ebf0-3e197230fa94@suse.com>
+ <201fba22-f537-4d1f-bfc4-e4dc931707bc@kili.mountain>
+ <181feb34-c46d-cadb-ad20-46074a53b4c9@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <181feb34-c46d-cadb-ad20-46074a53b4c9@suse.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023, at 15:02, Niklas Schnelle wrote:
-> On Thu, 2023-03-23 at 14:32 +0100, Arnd Bergmann wrote:
->> On Thu, Mar 23, 2023, at 13:42, Niklas Schnelle wrote:
->> > On Thu, 2023-03-16 at 16:14 +0000, Lee Jones wrote:
->> > > On Tue, 14 Mar 2023, Niklas Schnelle wrote:
+On Thu, Mar 23, 2023 at 02:48:56PM +0100, Oliver Neukum wrote:
+> On 23.03.23 12:13, Dan Carpenter wrote:
+> 
+> > > > > v1->v2: remove redundant goto
+> > > > >    drivers/usb/dwc3/host.c | 4 ----
+> > > > >    1 file changed, 4 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > > > > index f6f13e7f1ba1..ca1e8294e835 100644
+> > > > > --- a/drivers/usb/dwc3/host.c
+> > > > > +++ b/drivers/usb/dwc3/host.c
+> > > > > @@ -54,12 +54,8 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+> > > > >    	irq = platform_get_irq(dwc3_pdev, 0);
+> > > > >    	if (irq > 0) {
+> > > > >    		dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+> > > > > -		goto out;
+> > > > >    	}
+> > > > 
+> > > >      Now drop {} please. :-)
+> > > 
+> > > Well, no, please drop the whole patch.
+> > > If platform_get_irq() returns -EPROBE_DEFER you now give that
+> > > as a return value.
+> > > 
+> > > This tiny bit of optimization is not worth changing semantics.
+> > 
+> > The v2 patch doesn't change the semantics.  Mine did though...
+> 
+> Now I may be dense, but let's look at the current code:
+> 
+>         irq = platform_get_irq(dwc3_pdev, 0);
+> 
+> assuming irq = -EPROBE_DEFER
+> 
+>         if (irq > 0) {
+> 
+> not taken
+>                 dwc3_host_fill_xhci_irq_res(dwc, irq, NULL);
+>                 goto out;
+>         }
+> 
+>         if (!irq)
+> 
+> irq != 0
 
-> Yes, sorry I was traveling Thursday to Monday and then spent some time
-> catching up and investigating an internal issue. I'm currently going
-> through the patches one by one incorporating comments. I fear the split
-> of the USB patch as well as the suggestions for video might take a bit
-> of time, so if you prefer I could also send just an updated patch 1
-> separately. How would I do this cleanly? Send as v4 without(?) a cover
-> letter and add a Note after the '---'?
+You've reversed this if statement in your head.  It says that if
+platform_get_irq() returns zero, then return -EINVAL.
 
-Yes, that sounds good to me. In case you need multiple
-versions, I would suggest you continue counting at v4
-independently for both the preparation patch and the
-rest of the series.
+The problem that Mingxuan is trying to address is that checking for zero
+is dead code and sometimes represents a bug when people check for zero
+instead of negatives.
 
-    Arnd
+>                 irq = -EINVAL;
+> 
+> out:
+>         return irq;
+> 
+> returning -EINVAL
+
+We do *want* it to return -EPROBE_DEFER as the current code does.
+
+regards,
+dan carpenter
+
