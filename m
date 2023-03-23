@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751B56C5FC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B80D6C5FCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjCWGeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229461AbjCWGfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCWGeB (ORCPT
+        with ESMTP id S229691AbjCWGfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:34:01 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8D71F4BE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:58 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54184571389so379223857b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:33:58 -0700 (PDT)
+        Thu, 23 Mar 2023 02:35:43 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E37120
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:35:42 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so82100070edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679553238;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4npRT0ZBm4ONH6zdpwhBbu8AXu0dsqmRu8iUAcRhwn4=;
-        b=Jz1+PRu0n2E15Vf/qVjLQyMAiMh0wcsZxyHdXjjLSylh8kOTYeud4m+r7TyiYDDIwY
-         AxsoBwLqHysKwhK8ZhCrxd++CTHeifnZx2H/a7f6897A8184FcTnA8nkSly0zpDgPi8l
-         TKdXhZ2aJZmAatpzBOs+lBb7LUlbNYb+axNHN1pnyDXlerc97Ur9a03S8UXOF+Zd74k4
-         gqkj6iLTsEnSJQbd2l4qo+JewrHaebREOudXM1ZFKVj+/O7sw5rZ7K4qyVJ/GRsIz6X7
-         YYb2KoWhc8MlSNAC5BHhIQEHo2dus1NCcP6Sq5RMpw3G+MhaBbrd5GDjSKW2etMYFYuA
-         FiEw==
+        d=linaro.org; s=google; t=1679553340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M8FMzTY6q5btYc/0V6wZVAFqAPO/lou94Wj6pSxpohs=;
+        b=fiVYKJ8WFPkbZOS+OaFNF1g8SVtUVsKtYnO8lwtKtBtM/KRGN6mp75f5ff4QMjfDZ8
+         3QOZlVoMTIXgyJaDorsrLt7DXPKp4v5vl1/+dzbGgX8arqCozP9krwMMIIWpHyLIsn6N
+         xX3d4fEvrv7/cPPqQF2pLs0hgnWV/dASourLzBUg3plt6GZyKZzqtAnhAaidJx+IAliS
+         9TI1RRIrfInMo4njmTcxINcJ+eLpSv4gfUJqjlkFfoxBiZLyRqe8gw+yZ8gh2Hnggx7r
+         GsdBtD+Jpw/gJxyNvwpRBZEL4DglpNKw2q79kQ+Vkm3oadIEcp5eArI6lsk8ZxO14wJk
+         TtKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679553238;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4npRT0ZBm4ONH6zdpwhBbu8AXu0dsqmRu8iUAcRhwn4=;
-        b=WYXB80RL4mhBveLXZV8ApzyA0oUs2JTSgZpVjXA880ieIXpvmC1yTdtdsgkS33NemH
-         xCWJJ/VJiK549oamMDcK2cRB5f7/egHrcBnMLopVSP5yEURk2T0bYmpB02uq+oZpFPf8
-         Ad8Y681hih0DyQ7V7WxTK77yuDT/nfm95PeavO1Bd5r4hg5woYV45FyToMFwTvWuEDvT
-         zzFV5JrIBiwD0kXDgIsPaw3qFs2RDKmxigWHPQjz2m0jjCX2mgGDeF0bLmayr8zZJUl5
-         C0yjBCBPy1K8GxDtFnOK2wgdcU0IZenyU70U2Nsp8Dhb3GTUOSwe4V9PlIQq4Typ8VJj
-         Nepg==
-X-Gm-Message-State: AAQBX9fGmWFPzOw2UUYGhoYTfYO3/5O8iZ886Ba6AzA4zBpUYGLDyAYF
-        3mFdncGh6iZ77Q8wm698pKvGW8t2+dKLYrd+8toVVA==
-X-Google-Smtp-Source: AKy350aHHQKdZp4F3yh5LRMUAbDOYYx+U8YW/TWmS88VUzuhypP1degkbjLzws2GkQD3eUT2N+VpjDY6LDIYMpAhu5A=
-X-Received: by 2002:a81:ae1c:0:b0:52e:e095:d840 with SMTP id
- m28-20020a81ae1c000000b0052ee095d840mr1330885ywh.0.1679553237698; Wed, 22 Mar
- 2023 23:33:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679553340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M8FMzTY6q5btYc/0V6wZVAFqAPO/lou94Wj6pSxpohs=;
+        b=OV/7UEgato+pXGcC6oRLgjF7YugCLbWjCKrqyKywAtpWiShfd5FD6UVqxBOAkqDwme
+         lcGJ833+Xb0gPAoX85aTpZOqoxKUgrwfDEpxbJAUhQ3GT08bjdltXDyetPW4IZUdd3gA
+         hA3FJw1PE6NfbtmkSY1z0ACagDvT+iRlDCuZhuuYrDXXcseGienNWg3q6GOiu33doSpy
+         Vr/LXLUix7jRI6VXeYgQxP5RutSWDBhMwsiGfF/CFgxk9mY4sdaggA+XedX8XlFirjjX
+         TKrzNmy1JVym4Tw5zaukKEaV22Lpk9Pqc7i6SCL6waAEwYww+kceZzqO8PZVz5z6uxRL
+         jFQQ==
+X-Gm-Message-State: AO0yUKVeZxbM6Z43WIkgp1YPs879ov/DgqKOwc+6UfV6XzEx39BvttMW
+        X2e+BPpLctfePyF4fHx/nanl1w==
+X-Google-Smtp-Source: AK7set8eEzWYxNr66Ew154eC20TxMTLywUYnk7e9yySgeanJd+Y6A7RWRyMlYBh41WTjvuXrI+uFLA==
+X-Received: by 2002:a17:906:f8db:b0:8b1:7ae8:ba6f with SMTP id lh27-20020a170906f8db00b008b17ae8ba6fmr9570962ejb.16.1679553340695;
+        Wed, 22 Mar 2023 23:35:40 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
+        by smtp.gmail.com with ESMTPSA id q2-20020a1709066b0200b0092be0d267besm8344890ejr.142.2023.03.22.23.35.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 23:35:40 -0700 (PDT)
+Message-ID: <fc444dbc-2ac2-91b3-42eb-f16e7c1a2ec2@linaro.org>
+Date:   Thu, 23 Mar 2023 07:35:39 +0100
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
- <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
-In-Reply-To: <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 22 Mar 2023 23:33:46 -0700
-Message-ID: <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: ak5558: Convert to dtschema
+Content-Language: en-US
+To:     Saalim Quadri <danascape@gmail.com>, daniel.baluta@nxp.com
+Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org
+References: <d1559192-8f6d-26e0-ef19-d14ac7987a74@linaro.org>
+ <20230322200949.8986-1-danascape@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230322200949.8986-1-danascape@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,53 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 10:15=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
->
-[...]
-> > Couple of questions:
-> >
-> > 1. What exactly is cgroup_rstat_lock protecting? Can we just remove it
-> > altogether?
->
-> I believe it protects the global state variables that we flush into.
-> For example, for memcg, it protects mem_cgroup->vmstats.
->
-> I tried removing the lock and allowing concurrent flushing on
-> different cpus, by changing mem_cgroup->vmstats to use atomics
-> instead, but that turned out to be a little expensive. Also,
-> cgroup_rstat_lock is already contended by different flushers
-> (mitigated by stats_flush_lock on the memcg side). If we remove it,
-> concurrent flushers contend on every single percpu lock instead, which
-> also seems to be expensive.
+On 22/03/2023 21:09, Saalim Quadri wrote:
+> Convert the AK5558 ADC audio codec bindings to DT schema.
+> 
+> Signed-off-by: Saalim Quadri <danascape@gmail.com>
 
-We should add a comment on what it is protecting. I think block rstat
-are fine but memcg and bpf would need this.
 
->
-> > 2. Are we really calling rstat flush in irq context?
->
-> I think it is possible through the charge/uncharge path:
-> memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage(). I
-> added the protection against flushing in an interrupt context for
-> future callers as well, as it may cause a deadlock if we don't disable
-> interrupts when acquiring cgroup_rstat_lock.
->
-> > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() is only
-> > done for root memcg. Why is mem_cgroup_threshold() interested in root
-> > memcg usage? Why not ignore root memcg in mem_cgroup_threshold() ?
->
-> I am not sure, but the code looks like event notifications may be set
-> up on root memcg, which is why we need to check thresholds.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This is something we should deprecate as root memcg's usage is ill defined.
+Best regards,
+Krzysztof
 
->
-> Even if mem_cgroup_threshold() does not flush memcg stats, the purpose
-> of this patch is to make sure the rstat flushing code itself is not
-> disabling interrupts; which it currently does for any unsleepable
-> context, even if it is interruptible.
-
-Basically I am saying we should aim for VM_BUG_ON(!in_task()) in the
-flush function rather than adding should_skip_flush() which does not
-stop potential new irq flushers.
