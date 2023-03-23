@@ -2,68 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB6F6C6989
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0B06C6987
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjCWNci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S231720AbjCWNcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjCWNcd (ORCPT
+        with ESMTP id S231146AbjCWNcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:32:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB5D25959
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679578308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mXzYR6c2WCVTnZ/W9wW/e0omNfMuDAlzjXCmVrC/wTo=;
-        b=WfjDxaPQ9FioChtd0Uc2b4MIYU+fadgXmATai95NqTPhtK4iCEpyPBN6Rjx2D2uiXhsoyO
-        5mAxCxBG5U//QBilgdLw2sE5T8oYMVaKVvdjz3aTmtB9NNRexnZZZrZBFoSX0HfV0VKHdS
-        L8ISAPcZst7gIXJCO2Yp655a67Jfx6k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-599-yk90ah0pPruWBLBfLw4E4g-1; Thu, 23 Mar 2023 09:31:47 -0400
-X-MC-Unique: yk90ah0pPruWBLBfLw4E4g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EE80855304;
-        Thu, 23 Mar 2023 13:31:46 +0000 (UTC)
-Received: from localhost (ovpn-12-97.pek2.redhat.com [10.72.12.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DFDC8C15BA0;
-        Thu, 23 Mar 2023 13:31:44 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 21:31:40 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
-Message-ID: <ZBxUvBFHcQvsl0r9@MiWiFi-R3L-srv>
-References: <cover.1679511146.git.lstoakes@gmail.com>
- <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
- <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
- <ff630c2e-42ff-42ec-9abb-38922d5107ec@lucifer.local>
- <ZBwroYh22pEqJYhv@MiWiFi-R3L-srv>
- <7aee68e9-6e31-925f-68bc-73557c032a42@redhat.com>
+        Thu, 23 Mar 2023 09:32:06 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2102265A4;
+        Thu, 23 Mar 2023 06:32:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M8vGP1NnKw3ZD89V0bUIUakRNQOEJwcWTjkgs8CWsJK9b77oVR1tw8oQpKae7t/tzlDvDArw+my0L66aNq2V8lgyy3DCJQN1w1zswpAi/YKty9ffn+4CZH6PMl3BCg6qD9YjJc1gqtrWjEhQgkvDICB9sYpHIrPpVYT1thg6Co1j7hF29kiKGJaULt2V+9N428dEV/dawHY+eezlr16k7+qiF6wW62CRh2jWz6IbMINdtfpVHJEzcJmmbdAv5/F8SOr25d01zcl+yPm2T55bNr8TF+BXsQAj6B6eyVa1CVauMnVwq/eanW8pFx+LXH1N+iH+hOQerwH/WPhROeG99w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xVpb6RDzdFywZeWR+nDntq53D5pQGOko46DMqPTlvbQ=;
+ b=Liw5FMY2adc/GWbk0k5DY0kOgKALtfJYJ27zF2IVDAuyRD6yzEUE59zSzujx6NJ8lRj3wA6nqfSEWiCpfmlgDDP1+sayyiHpUBrGkrXyAZv/rBvR3l9IFZMfTwAbxScDGIyG90BSePe5EFjiI2w8T8Y+o39zerdxy6/42M/B29zlZsMxFCSjVKMfnzZPMN/EUWpPVeXp1GLkr9sEzcn/ud3+4iDy3SAd62Z7hi8hs/GGrRAr4kwhPkVJSo52VkTGn1MgpQHDsVNXri6N1gacmo4MG7fFecrMrQ3uAti87xdiQamWDMUoBWS9b9xLoSp36FZzi1QdceEtnB48ShgkWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xVpb6RDzdFywZeWR+nDntq53D5pQGOko46DMqPTlvbQ=;
+ b=rU4UIeqxiYsDAtT4cqHMYXf3HDaQ+JVdBu3TRkp6Rh0Qwpy0a7cQ68IK/hi6JrUadFUEF/bGKbsRbmmG/A9w3Gzwhl9TmQqQTy1BXJlOPSL6gU1xuytJPH+8g9+P68RZeZISm1WhIWPW3YA6yerxkQJjQQAM7PqLK86zMM9mjOo=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CY5PR12MB6550.namprd12.prod.outlook.com (2603:10b6:930:42::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 13:32:02 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a4e:62dd:d463:5614]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::a4e:62dd:d463:5614%9]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
+ 13:32:01 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     =?iso-8859-2?Q?Jan_D=B1bro=B6?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v6 4/4] i2c: designware: Add doorbell support for
+ Mendocino
+Thread-Topic: [PATCH v6 4/4] i2c: designware: Add doorbell support for
+ Mendocino
+Thread-Index: AQHZXQIIuegHdzU3/kyhZjCumBVofq8IVnSAgAAHD+A=
+Date:   Thu, 23 Mar 2023 13:32:01 +0000
+Message-ID: <MN0PR12MB61010E4D635FB23135EFAD59E2879@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230322210227.464-1-mario.limonciello@amd.com>
+ <20230322210227.464-5-mario.limonciello@amd.com>
+ <ZBxOwTggrZTvJf2H@smile.fi.intel.com>
+In-Reply-To: <ZBxOwTggrZTvJf2H@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-03-23T13:32:00Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=45498d36-57ef-43f5-b6a4-9e76c2f09853;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-03-23T13:32:00Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: c76a7e63-c619-4e70-accc-90adbebd2a06
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|CY5PR12MB6550:EE_
+x-ms-office365-filtering-correlation-id: d7593f8e-98fc-4b87-3bb8-08db2ba2fc35
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rB646sV0ZvIObLvYGE9j+IxTR/aeYyXceZa6EqZhJbhf8gFf/uM03bD/Pv8tzW9/qt01bgOldffRybbF44MBW0+0H0eJP9cnHg2ZsvZoaNmNysBH6x9wQzt9zEPLZRqPwIECuqKQc33zt/aj1ZWNh+podWHuVuePAYlpt5ywKbxGk7NHGQ7vHMyeLCZkkbiIQbvtzjEGokiLoX+hmrYuETvX54wJ9iDPHAAgmO1lJK17t/TAIhCkb7+lr/LOeabV9+J79a+ZGHMrP7LAjB2CKYji91HloA84p76V62YyddxwXu9tiD4b41YV+U9N/4ahY5LudqLA+PusAjRX0wbqJxAoaQ1Br/gpgIrfXFT1eN8DWPkWNH8mu3FYl129ZYO9bl2eNobj6Qbp3KJ8Z6ge8EO3wS44sGnYtDu/0/J1LfwWtolydRQ4pB5ar3SGmXJjEPmpPeccS+l1AvwB3kuJ+wXzaboxbGvCWXHXiqMpfWgN+Mygxqpu/0qdRwGYVmGmwpQkkISJo0PSm3RMQuU9XyAtXuQVbV5tn/euL4ErxNkZQhYjX69QqMEbu9kX14Qhs2pmQTHVktZOf0yq9Y8+6yU/GU8GyrQqAxkEW11zfjAAY5BJ/En5HPDgl7J6zJSPp6pv2PJlKx8yJFW/0/wfalRA55GzEjRJe8FFJYEwYw3CsNDLVHPqmkop9NBPt8LdQUTSA5szPjm7zo6QyJtEHg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199018)(122000001)(2906002)(5660300002)(41300700001)(8936002)(52536014)(55016003)(38070700005)(86362001)(33656002)(38100700002)(7696005)(83380400001)(71200400001)(26005)(9686003)(478600001)(186003)(53546011)(6506007)(66574015)(76116006)(66946007)(6916009)(4326008)(8676002)(66556008)(66476007)(66446008)(64756008)(54906003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?IdSFQ4v2GmfVrMBJlDwXYBzT243Tj+Je4BkdX9YvF5PLfzzxHN4l82lWxq?=
+ =?iso-8859-2?Q?UJ024A9l4OUx7y5V/pN7+YPdgWKzzEDh/BTrMZu+6SltpN/ycgO6MjW1Ss?=
+ =?iso-8859-2?Q?3cZR5M0h1UHqAVAi24O68Q0esWGf4SDcj4Dhrg1U51oWJm1TdfsFiIyYby?=
+ =?iso-8859-2?Q?rzwuiQPV3teoGcgCoP5VXsK6C4lGcVTEJgxfUwq51CnU4RFr5EOzsCfzdP?=
+ =?iso-8859-2?Q?BGe+xlA4/lkrzc4+/Y0erqwpC6U+WgotAGTookJ2KMSAfb+EDdfqGQAiR9?=
+ =?iso-8859-2?Q?XhbuYg8DyHPvhG9zqktaFQhwHMr9PgALZhOwpoKOFBTVoUi0h2a68xc8+7?=
+ =?iso-8859-2?Q?vsRauRrFvlQgL1cQMCSua9PuqjwTH0y/Q7dLGS7gcN/JkayPhZXKZkj0RS?=
+ =?iso-8859-2?Q?YNqyb9fat7s/9DQPwC7pB2VRvSX5fhy9BVRLC5sRmXGqFyXSsYqJs0IVwz?=
+ =?iso-8859-2?Q?+aVqptTG92cZDFQDrh0lMnUeqQ3egMhkX9syY67lbW29M39pD+10vmtK4e?=
+ =?iso-8859-2?Q?H3ey3WCX4cRcHfdSi/663I9pfgZaqRDAb2il9F4GPtoqrod/+v+44tsQna?=
+ =?iso-8859-2?Q?AKY/appHDabBVjpNI2MtON3nbZNaLNnE3MPvF7qiBVRNpSzd/q7KL5f/2R?=
+ =?iso-8859-2?Q?oeI7UivRWw8aON52WxsYxGc5CdxX1RyXEg9hKeZq26MnJ/vRIYcIxUmKyi?=
+ =?iso-8859-2?Q?El6qnXcy/DuiAqzLxUlOYTz80/O+WpgFIJBG7DRQg+VyZvcswFGu6K9yGj?=
+ =?iso-8859-2?Q?FURnejo9hoA6VnESQV0Rhh5GQy+JExfiBlfRf03eCRAVBAWFTt8U/+EakW?=
+ =?iso-8859-2?Q?qcxEy74y8ie69szg5NsdhtydHBX/Z8191Wc7rXQ4RuJUaMncdWd1j2+QFj?=
+ =?iso-8859-2?Q?jtrxMzNxIEepcBQWCH+YnlP6RStfwIsAjIogjaLxtl202TFmfIwfFIw+Od?=
+ =?iso-8859-2?Q?k9779m8YC4lpQf485KnbUs7820Rmj/QDIJ9x/i335VJLrqCO2TthmOv/sy?=
+ =?iso-8859-2?Q?G8nPUuaTlh7yClgErmM/DFLGSw+xQBbFV5w6x3YtOmY7EI4kObS6617bDf?=
+ =?iso-8859-2?Q?wto1BPOhKviML32kUGiaRLf7VjOjurSaUk6Yya/fBCagxjQ1NeAeM5e2pn?=
+ =?iso-8859-2?Q?gdewGaH55fxGwT/OVxNdDhOjzQrkCnyyElq+rI3XPothCCMjCeIFEjWr8U?=
+ =?iso-8859-2?Q?zublZeKdE2XzbLpksTvRxBgyFwi6tfz/2wMRAeJ5flGDv0NKjDn5RI+UHy?=
+ =?iso-8859-2?Q?6ISTxVRL7H0eFucCaDNGHepfYH957zo90xf6cLe5585vo9meVyXMYvq9F2?=
+ =?iso-8859-2?Q?IelgsBpf/W03e4Ghc0KqgDh1SAzDZj7F8idaS1gJEDW/7VeMQnzH8n8fkD?=
+ =?iso-8859-2?Q?u/+b9pms82OcOVWXFurF8TMk2IXs0i5o/WBjZPYJEpt14dNHCmwbG76tYb?=
+ =?iso-8859-2?Q?/v+1b3Z/LY4v4Y5vuPVLylzkxIw5PM5qsJERZGVfUxKWAbXVbtoFClbN8k?=
+ =?iso-8859-2?Q?obleRkj0WHX0zGyVDlm2/1s2pu7Kg6AJf6jcw4LdUK6xSn18DeuX8EE/eY?=
+ =?iso-8859-2?Q?PioIvHldWEFRVjZ7FQhBY/2MfVtb+ReybWJHODOK/GqMX58QQwvWQQteRb?=
+ =?iso-8859-2?Q?+PbGYLqSeuoEY=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7aee68e9-6e31-925f-68bc-73557c032a42@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7593f8e-98fc-4b87-3bb8-08db2ba2fc35
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2023 13:32:01.8475
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2cMf0xg38bzlaMFKlNYxL4lln9c+kfjICCyOxVFR1Vq/aymhh67xoj05Zq0UARjxDEDWut4zwfzzMeHWiEpjPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6550
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,71 +139,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/23/23 at 11:38am, David Hildenbrand wrote:
-> On 23.03.23 11:36, Baoquan He wrote:
-> > On 03/23/23 at 06:44am, Lorenzo Stoakes wrote:
-> > > On Thu, Mar 23, 2023 at 10:52:09AM +0800, Baoquan He wrote:
-> > > > On 03/22/23 at 06:57pm, Lorenzo Stoakes wrote:
-> > > > > Having previously laid the foundation for converting vread() to an iterator
-> > > > > function, pull the trigger and do so.
-> > > > > 
-> > > > > This patch attempts to provide minimal refactoring and to reflect the
-> > > > > existing logic as best we can, for example we continue to zero portions of
-> > > > > memory not read, as before.
-> > > > > 
-> > > > > Overall, there should be no functional difference other than a performance
-> > > > > improvement in /proc/kcore access to vmalloc regions.
-> > > > > 
-> > > > > Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
-> > > > > we dispense with it, and try to write to user memory optimistically but
-> > > > > with faults disabled via copy_page_to_iter_nofault(). We already have
-> > > > > preemption disabled by holding a spin lock. We continue faulting in until
-> > > > > the operation is complete.
-> > > > 
-> > > > I don't understand the sentences here. In vread_iter(), the actual
-> > > > content reading is done in aligned_vread_iter(), otherwise we zero
-> > > > filling the region. In aligned_vread_iter(), we will use
-> > > > vmalloc_to_page() to get the mapped page and read out, otherwise zero
-> > > > fill. While in this patch, fault_in_iov_iter_writeable() fault in memory
-> > > > of iter one time and will bail out if failed. I am wondering why we
-> > > > continue faulting in until the operation is complete, and how that is done.
-> > > 
-> > > This is refererrring to what's happening in kcore.c, not vread_iter(),
-> > > i.e. the looped read/faultin.
-> > > 
-> > > The reason we bail out if failt_in_iov_iter_writeable() is that would
-> > > indicate an error had occurred.
-> > > 
-> > > The whole point is to _optimistically_ try to perform the operation
-> > > assuming the pages are faulted in. Ultimately we fault in via
-> > > copy_to_user_nofault() which will either copy data or fail if the pages are
-> > > not faulted in (will discuss this below a bit more in response to your
-> > > other point).
-> > > 
-> > > If this fails, then we fault in, and try again. We loop because there could
-> > > be some extremely unfortunate timing with a race on e.g. swapping out or
-> > > migrating pages between faulting in and trying to write out again.
-> > > 
-> > > This is extremely unlikely, but to avoid any chance of breaking userland we
-> > > repeat the operation until it completes. In nearly all real-world
-> > > situations it'll either work immediately or loop once.
-> > 
-> > Thanks a lot for these helpful details with patience. I got it now. I was
-> > mainly confused by the while(true) loop in KCORE_VMALLOC case of read_kcore_iter.
-> > 
-> > Now is there any chance that the faulted in memory is swapped out or
-> > migrated again before vread_iter()? fault_in_iov_iter_writeable() will
-> > pin the memory? I didn't find it from code and document. Seems it only
-> > falults in memory. If yes, there's window between faluting in and
-> > copy_to_user_nofault().
-> > 
-> 
-> See the documentation of fault_in_safe_writeable():
-> 
-> "Note that we don't pin or otherwise hold the pages referenced that we fault
-> in.  There's no guarantee that they'll stay in memory for any duration of
-> time."
+[Public]
 
-Thanks for the info. Then swapping out/migration could happen again, so
-that's why while(true) loop is meaningful.
 
+
+> -----Original Message-----
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Sent: Thursday, March 23, 2023 08:06
+> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Cc: Jan D=B1bro=B6 <jsd@semihalf.com>; Grzegorz Bernacki
+> <gjb@semihalf.com>; Mark Hasemeyer <markhas@chromium.org>; Jarkko
+> Nikula <jarkko.nikula@linux.intel.com>; Mika Westerberg
+> <mika.westerberg@linux.intel.com>; linux-i2c@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH v6 4/4] i2c: designware: Add doorbell support for
+> Mendocino
+>=20
+> On Wed, Mar 22, 2023 at 04:02:26PM -0500, Mario Limonciello wrote:
+> > Mendocino and later platform don't use the platform feature mailbox for
+> > communication for I2C arbitration, they rely upon ringing a doorbell.
+> >
+> > Detect the platform by the device ID of the root port and choose the
+> > appropriate method.
+>=20
+> ...
+>=20
+> > -	ret =3D read_poll_timeout(psp_send_i2c_req_cezanne, status,
+> > +	ret =3D read_poll_timeout(_psp_send_i2c_req, status,
+> >  				(status !=3D -EBUSY),
+>=20
+> You can place it now in the above line, but up to you.
+>=20
+> >  				PSP_I2C_REQ_RETRY_DELAY_US,
+> >  				PSP_I2C_REQ_RETRY_CNT *
+> PSP_I2C_REQ_RETRY_DELAY_US,
+>=20
+> ...
+>=20
+> > +	/* Cezanne uses platform mailbox, Mendocino and later use doorbell
+> */
+> > +	rdev =3D pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
+> > +	if (rdev->device =3D=3D 0x1630)
+> > +		_psp_send_i2c_req =3D psp_send_i2c_req_cezanne;
+> > +	else
+> > +		_psp_send_i2c_req =3D psp_send_i2c_req_mendocino;
+>=20
+> Where is pci_dev_put()?
+
+Missing, thanks for catching it!
