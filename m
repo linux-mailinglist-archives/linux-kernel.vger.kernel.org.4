@@ -2,136 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB8B6C66C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADFF6C66D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCWLh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S231443AbjCWLiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbjCWLh4 (ORCPT
+        with ESMTP id S229691AbjCWLiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:37:56 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215DD12BDE;
-        Thu, 23 Mar 2023 04:37:54 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j11so27237078lfg.13;
-        Thu, 23 Mar 2023 04:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679571472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wqfCTQu6TpSkQBuufTN+FDVnW3u9zukJQMSdPwg2XI=;
-        b=Op0RbaHTvg7xYxUMJ5x37/ssOSmmCk314Ar6tZMsow7cQf4VpukR5WbwpoKvNPlu2w
-         qpLueWiBUoznP+bidlh55yerR8HD4zeejtChefwtTSe1QazWFMbdyGnY7mUCCXIN+C5p
-         UtnU1MO4sn6fjSneBxTpdUUWbf/OTjbDO2fQyhJFMTedWk4Q8Hz0fa2g4qKvUuPB0R0L
-         pOA5cNoFm5zLcVhgdJ0m8/KbohJNPJzBwmiyVYWwPrA/h+CvdZpyS1elXEd1H4aTKx2K
-         M5V9cImzOfpBDW+UvHUuaXJGB+wAOK6qAO5qwuxxINZy8nyW6mJW1jCqvnH/gYAcr4fB
-         81Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679571472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9wqfCTQu6TpSkQBuufTN+FDVnW3u9zukJQMSdPwg2XI=;
-        b=Unbvszsm7eLglGA1LnP6fJu/N3jEBKeqP5T62uf83AX/NevSgXKkZgXRB70MSXoNLa
-         g6TkGur8DRXD2ZstJGHX/H9hSd2J96izAZVK46J+8sji6m6W44kO1LIOsMYTIvgiwDn9
-         N6Ku4cjlll3GwwIu/j9YOGTkDXbv7fUCOPXYfY1waxZzRKoweFsr4Gec1syTewcX23L5
-         O+ien4cHkO9n/UdYxjHYXBfAXr5xCyTCLUIaqQGK1CCOr16XSaiS9vid7Pk7j1HhTQQh
-         RrawrcCylXj3FcNDDdqasi4DcO6ImLmVtM3zHZdV8+OdIhltkQNX3U/Xj4/igpsUkcl+
-         Ma5Q==
-X-Gm-Message-State: AO0yUKUaKjsD5nuAIGWcDApTUoeyL5CevFZg3JC5uYBsyG/r/w4YMpUj
-        NHicp+w2woNCATJVLNoO1Yc=
-X-Google-Smtp-Source: AK7set/GwotgsUGGJrT8NBvp53IUC4qj6qO7Ly+8+IGCS8e+OHcK+s+ODAxaZ68ZV4PenA/B0IUpqw==
-X-Received: by 2002:a05:6512:102d:b0:4e7:fa8a:886e with SMTP id r13-20020a056512102d00b004e7fa8a886emr2704920lfr.51.1679571472098;
-        Thu, 23 Mar 2023 04:37:52 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id w9-20020ac254a9000000b004e845b49d81sm2898087lfk.140.2023.03.23.04.37.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 04:37:51 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 14:37:48 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 09/16] dt-bindings: net: dwmac: Prohibit
- additional props in AXI-config
-Message-ID: <20230323113748.bj45qbvut2cthvyr@mobilestation>
-References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
- <20230313225103.30512-10-Sergey.Semin@baikalelectronics.ru>
- <78224241-00a3-2e8e-4763-603b27ac3b83@linaro.org>
+        Thu, 23 Mar 2023 07:38:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4412B9D8;
+        Thu, 23 Mar 2023 04:38:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C71C362606;
+        Thu, 23 Mar 2023 11:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE66C4339C;
+        Thu, 23 Mar 2023 11:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679571518;
+        bh=F+fuZgEG2+3pg4JMJViOzTfJymZjqTVxKp+YQTYEjPg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rZ1vsGM/uhS/KS4c5iFJXuu1zo2wqLgBBLScOmRAdh58WEw5+c+xsOPLB4m2gmXal
+         BirrIeFQN2LOtz8XqB/AqkXHe2EmpkmWK3hGEIODV+Amfjie+fqe40nr3NXf3uhbbQ
+         8ui9cDolyQVhhDalr8MrWlstaEOewESjQG52fV97ZOmtg7LrFOIC6WOpCTsFH+OpOd
+         edXh3daVpt0ck5AWKrzec5Vv8N44HmuaKpY2Ax+f1cSJpQCF6SuH1ER6Snj1mfxjzL
+         mjupBIID94DnqGvwSAdi9CRo4dmwyRdfjzcQtf3WrzstNhyIkIVqcCnGGTYRGpfY0r
+         +ln0zEWMzYXbQ==
+Date:   Thu, 23 Mar 2023 11:38:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     jerome Neanne <jneanne@baylibre.com>
+Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
+        lgirdwood@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jpanis@baylibre.com
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Message-ID: <e08686be-0b46-403b-b3cd-3462db92dd60@sirena.org.uk>
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
+ <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
+ <bd4aa2ad-4535-94ca-7630-846546ae3d82@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sqyr3pdl018Qcdzn"
 Content-Disposition: inline
-In-Reply-To: <78224241-00a3-2e8e-4763-603b27ac3b83@linaro.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <bd4aa2ad-4535-94ca-7630-846546ae3d82@baylibre.com>
+X-Cookie: A lie in time saves nine.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:06:04AM +0100, Krzysztof Kozlowski wrote:
-> On 13/03/2023 23:50, Serge Semin wrote:
-> > Currently DT-schema of the AXI-bus config sub-node prohibits to have
-> > unknown properties by using the unevaluatedProperties property. It's
-> > overkill for the sub-node which doesn't use any combining schemas
-> > keywords (allOf, anyOf, etc). Instead more natural is to use
-> > additionalProperties to prohibit for that.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > index 89be67e55c3e..d1b2910b799b 100644
-> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > @@ -466,7 +466,6 @@ properties:
-> >  
-> >    stmmac-axi-config:
-> >      type: object
-> > -    unevaluatedProperties: false
-> >      description:
-> >        AXI BUS Mode parameters.
-> >  
-> > @@ -518,6 +517,8 @@ properties:
-> >          description:
-> >            rebuild INCRx Burst
-> >  
-> > +    additionalProperties: false
-> 
-> But why moving it? Keep the same placement.
 
-No firm justification except that vast majority of DT bindings have
-that keyword placed at the tail of the schema body. Anyway I'll get
-the it back to the original line.
+--sqyr3pdl018Qcdzn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--Serge(y)
+On Thu, Mar 23, 2023 at 10:12:21AM +0100, jerome Neanne wrote:
 
-> 
-> Best regards,
-> Krzysztof
-> 
+> > This would be simpler and you wouldn't need this lookup function if the
+> > regulator descriptions included their IRQ names, then you could just
+> > request the interrupts while registering the regulators.
+
+> I changed the code to follow your recommendations then now in case of a
+> multiphase buck, only one set of interrupt is requested.
+
+> buck2, buck3, buck4 are not associated to a regulator device because buck1
+> registers control all the multiphase bucks (only one logic regulator).
+> Consequently the mapping for the associated interrupts does not occur.
+> I'm not sure it's the right option.
+> Do you suggest to keep it like that for multiphase?
+> Is it better to request all the interrupts anyway and map it to the same
+> rdev?
+
+Do the other interrupts do anything useful for this configuration?  With
+a lot of hardware the whole control interface gets merged into one which
+includes the interrupts.
+
+> > > +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
+> > > +						  tps6594_regulator_irq_handler,
+> > > +						  IRQF_ONESHOT,
+> > > +						  irq_type->irq_name,
+> > > +						  &irq_data[i]);
+> > > +		if (error) {
+> > > +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+> > > +				irq_type->irq_name, irq, error);
+> > > +			return error;
+> > > +		}
+
+> > This leaks all previously requested interrupts.
+
+> I'm not sure to understand this sentence correctly. You mean all the
+> interrupts already requested are still allocated after the error occurs?
+
+Yes, I'd either not registered the devm or thought there was some other
+interrupt wasn't devm.
+
+--sqyr3pdl018Qcdzn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQcOjQACgkQJNaLcl1U
+h9Auuwf+PN5kS1OlVilZrrkY1SzeCUq5W+chBmTUcyD85lp5xFNkACPMHE1lYwjE
+uVj1L15Dqzt9wbKb5i5/c1p2aiumc4Uz6EYkgn5JIQ5ozBBUI9JYzhyWdPOWKw4/
+Vr3NvPPkXLy/na7nRyuGJKmexIo/189mXkIRya3jDLIV7iI0arIc4wdXRJDe3YyO
+DbFIaBVG3nudg6GGf1zKJ9rrkB/HMd4WFfbDURoQm4yicpTx2sP7SQQ4zk1KC4QT
+hcRVB60RoXOYaESfSvPavmEwMXcrNgQrGCiePgvOUHI1VTMtqDN/3DfM+HD5YgNF
+pN2QCR1QG69NJC6jSt3EpqYcayQsJw==
+=T/Ls
+-----END PGP SIGNATURE-----
+
+--sqyr3pdl018Qcdzn--
