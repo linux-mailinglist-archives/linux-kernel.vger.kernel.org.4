@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498AB6C5B72
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0EC6C5B6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCWAkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S230209AbjCWAkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjCWAj5 (ORCPT
+        with ESMTP id S230101AbjCWAkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:39:57 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A3F1632D
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:54 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i17-20020a056e020d9100b00325a80f683cso4773589ilj.22
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:54 -0700 (PDT)
+        Wed, 22 Mar 2023 20:40:01 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408771EFD6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:55 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id z65-20020a6bc944000000b007584beb0e28so4024122iof.21
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:39:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679531994;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IaRX0pgESu9HWGk8g/PO1osl2nS+cMN0WgqbIcZnRUU=;
-        b=TD0RmbgfDfbFw7a7AFklJWECcZzaMS1pIovZG1lfgTiC6Zb9FH02EteKzujaw5a3hR
-         J1AgeO+lW20CCC8qnXEB1AJrLIZtbMnrlPnASVeDGu9AJ6SaKJhKl/7XXzc/dUhh8wfb
-         HApOhC3m1uJv3LB7yIqHkk1H/nWZrQ4JqCIO9WCegYOz/zKVKNNBy0mMLoG6Kt2TGNJZ
-         e/WnEJBnOPezASID5lFhJJuXAXy7v2XwDo4Xgu4JvFWvp77cZtilYM2UiPE2Zl6+saea
-         UpIcFjgHp63Xb/b/u21NZs4r5KQ8Pb7HfO+9CLmtRDqASc7yXRoDfgK77eq8w6ImWuJl
-         Zn3g==
-X-Gm-Message-State: AO0yUKW5CcN0gXV9wfdZU3kcIvrenPk60C+ytir5Jwl+7d0CW0C7t/cm
-        8Wu5MUKFun9zN2Z6P2jDVfougMwq+3Rxfr9mVJhcXb2RlXO+
-X-Google-Smtp-Source: AK7set9HPan20YrTNHcdhFU26NpdqcY7CRhCZusJLZlh+ieMFlCVxTiMxE5CWXWLkPRjrw7nsMX1mK1hpBg7OzmToF6iUW44uFB2
+        bh=cRmAnTw5x2//9xw8ssGmcUbF4NEnjW4TaY2uygOKll4=;
+        b=xUtgWyMzCYEK2nCQ3mmXoKijcoeZI0x3RVUE6v8bWleNskAkaKVU8Vn90UHJdlI6js
+         sUQqdgqTLR+KQzauZ6AYsO1/GxnvVpMoeuHxgiGk2VjemLRrwiTnlgKE7RrPJVaqlXRU
+         px9PefN2tfd0LpY+kxf/6IgBVDhhYBuDe8rHr7sdCML2MGnIrhbJpZ3Wb9KsHviaVoi2
+         FGOMfNOBHq5GZTVUkajLskoQGHkq9fWeOwBkdW1zfoObmGqUJi1DUt+We5gi0beWjl9F
+         dCvklko5G0pKrJbfOVtPOLVR3ESPXsfnBmlm7/H0bfHEic4fkZs+oWBpBk2RjtPIwPGO
+         AjSg==
+X-Gm-Message-State: AO0yUKWHMIZhHNf4qE/j97nVYfcVqtlEIBbq9qcRTObk/Y+++Kh5zo6N
+        xtWoej3a/gHZy9xTYwqc+3wnwYU8jnXpDqL1cQ0/AMWVObmv
+X-Google-Smtp-Source: AK7set+lg35o6E3vNTGqfBkhJh4iHmqWe/pBv0lYcq/fhuijMdnHb973Am1aOOD/gFF2NnmeIci09LMorlH0GDh/RAPQAPXKckwK
 MIME-Version: 1.0
-X-Received: by 2002:a02:9485:0:b0:3be:81d3:5af3 with SMTP id
- x5-20020a029485000000b003be81d35af3mr3967436jah.3.1679531993978; Wed, 22 Mar
- 2023 17:39:53 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 17:39:53 -0700
+X-Received: by 2002:a02:84e6:0:b0:3c5:1971:1b7f with SMTP id
+ f93-20020a0284e6000000b003c519711b7fmr3728669jai.6.1679531994236; Wed, 22 Mar
+ 2023 17:39:54 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 17:39:54 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e3e09c05f78683a6@google.com>
-Subject: [syzbot] [arm-msm?] [net?] WARNING: refcount bug in qrtr_recvmsg (2)
-From:   syzbot <syzbot+a7492efaa5d61b51db23@syzkaller.appspotmail.com>
+Message-ID: <000000000000e7f27b05f78683fb@google.com>
+Subject: [syzbot] [arm-msm?] [net?] WARNING: refcount bug in qrtr_node_lookup (2)
+From:   syzbot <syzbot+e8a22d28d4527d9d6148@syzkaller.appspotmail.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         mani@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
@@ -61,61 +61,72 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    9c1bec9c0b08 Merge tag 'linux-kselftest-fixes-6.3-rc3' of ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17285724c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6c84f77790aba2eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=a7492efaa5d61b51db23
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c9f8a4c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8fe2cc80000
+HEAD commit:    fe15c26ee26e Linux 6.3-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=111b3ca4c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e8a22d28d4527d9d6148
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160ec3dcc80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103d9d42c80000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/eee5724f97b4/disk-9c1bec9c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/00ee10c4bc28/vmlinux-9c1bec9c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/42cf9c3e67cd/bzImage-9c1bec9c.xz
+disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a7492efaa5d61b51db23@syzkaller.appspotmail.com
+Reported-by: syzbot+e8a22d28d4527d9d6148@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
 refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 0 PID: 46 at lib/refcount.c:25 refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
+WARNING: CPU: 1 PID: 9 at lib/refcount.c:25 refcount_warn_saturate+0x1a8/0x20c lib/refcount.c:25
 Modules linked in:
-CPU: 0 PID: 46 Comm: kworker/u4:3 Not tainted 6.3.0-rc2-syzkaller-00050-g9c1bec9c0b08 #0
+CPU: 1 PID: 9 Comm: kworker/u4:0 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
 Workqueue: qrtr_ns_handler qrtr_ns_worker
-RIP: 0010:refcount_warn_saturate+0x17c/0x1f0 lib/refcount.c:25
-Code: 0a 31 ff 89 de e8 64 17 73 fd 84 db 0f 85 2e ff ff ff e8 47 1b 73 fd 48 c7 c7 e0 6a a6 8a c6 05 5d 73 52 0a 01 e8 e4 94 3b fd <0f> 0b e9 0f ff ff ff e8 28 1b 73 fd 0f b6 1d 47 73 52 0a 31 ff 89
-RSP: 0018:ffffc90000b779d8 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888017d61d40 RSI: ffffffff814b6037 RDI: 0000000000000001
-RBP: ffff88802717ec98 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff888145178000
-R13: ffff88802717ec00 R14: ffff8880280b1030 R15: ffff8880280b1034
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffdb2009388 CR3: 0000000029dad000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_add include/linux/refcount.h:199 [inline]
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : refcount_warn_saturate+0x1a8/0x20c lib/refcount.c:25
+lr : refcount_warn_saturate+0x1a8/0x20c lib/refcount.c:25
+sp : ffff80001a3a6da0
+x29: ffff80001a3a6da0 x28: dfff800000000000 x27: ffff700003474dc8
+x26: ffff80001a3a6e60 x25: 0000000000000000 x24: 00000000003a6056
+x23: ffff0000d22173f0 x22: 0000000000000000 x21: 0000000000000002
+x20: ffff0000d751c098 x19: ffff8000186ee000 x18: ffff80001a3a62a0
+x17: 0000000000000000 x16: ffff80001246250c x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: ff808000081bd230 x10: 0000000000000000 x9 : 04bb8433d1680a00
+x8 : 04bb8433d1680a00 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff80001a3a6698 x4 : ffff800015dc52c0 x3 : ffff80000859c514
+x2 : 0000000000000001 x1 : 0000000100000001 x0 : 0000000000000000
+Call trace:
+ refcount_warn_saturate+0x1a8/0x20c lib/refcount.c:25
  __refcount_inc include/linux/refcount.h:250 [inline]
  refcount_inc include/linux/refcount.h:267 [inline]
  kref_get include/linux/kref.h:45 [inline]
  qrtr_node_acquire net/qrtr/af_qrtr.c:202 [inline]
- qrtr_node_lookup net/qrtr/af_qrtr.c:398 [inline]
+ qrtr_node_lookup+0xdc/0x100 net/qrtr/af_qrtr.c:398
  qrtr_send_resume_tx net/qrtr/af_qrtr.c:1003 [inline]
- qrtr_recvmsg+0x85f/0x990 net/qrtr/af_qrtr.c:1070
- sock_recvmsg_nosec net/socket.c:1017 [inline]
- sock_recvmsg+0xe2/0x160 net/socket.c:1038
- qrtr_ns_worker+0x170/0x1700 net/qrtr/ns.c:688
- process_one_work+0x991/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+ qrtr_recvmsg+0x3dc/0x954 net/qrtr/af_qrtr.c:1070
+ sock_recvmsg_nosec net/socket.c:1015 [inline]
+ sock_recvmsg net/socket.c:1036 [inline]
+ kernel_recvmsg+0x124/0x18c net/socket.c:1061
+ qrtr_ns_worker+0x294/0x513c net/qrtr/ns.c:688
+ process_one_work+0x868/0x16f4 kernel/workqueue.c:2390
+ worker_thread+0x8e0/0xfe8 kernel/workqueue.c:2537
+ kthread+0x24c/0x2d4 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+irq event stamp: 766220
+hardirqs last  enabled at (766219): [<ffff800012543b48>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (766219): [<ffff800012543b48>] _raw_spin_unlock_irqrestore+0x44/0xa4 kernel/locking/spinlock.c:194
+hardirqs last disabled at (766220): [<ffff80001254393c>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
+hardirqs last disabled at (766220): [<ffff80001254393c>] _raw_spin_lock_irqsave+0x2c/0x88 kernel/locking/spinlock.c:162
+softirqs last  enabled at (766216): [<ffff80001066ca80>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
+softirqs last  enabled at (766216): [<ffff80001066ca80>] lock_sock_nested+0xe8/0x138 net/core/sock.c:3480
+softirqs last disabled at (766214): [<ffff80001066ca28>] spin_lock_bh include/linux/spinlock.h:355 [inline]
+softirqs last disabled at (766214): [<ffff80001066ca28>] lock_sock_nested+0x90/0x138 net/core/sock.c:3476
+---[ end trace 0000000000000000 ]---
 
 
 ---
