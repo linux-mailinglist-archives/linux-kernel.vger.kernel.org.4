@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5AC6C63D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6722B6C63E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCWJkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S229976AbjCWJl6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 05:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjCWJjr (ORCPT
+        with ESMTP id S231384AbjCWJlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:39:47 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B336E9E;
-        Thu, 23 Mar 2023 02:39:46 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id ja10so21763075plb.5;
-        Thu, 23 Mar 2023 02:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679564386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zx1cWbW8skW+J91S4nIUH2+PrWy6/cJUo3hRxlmG+G4=;
-        b=pCQdPrCYjY2EZyqDFB6ur/y+zD7pfxrqPKXJ6qROgn8YzstnagOQ80gua0e1yJf5be
-         Iio59oXde7Wup+LLoxrsV6D9TeOXDdjIwSR0uzeN8xXXiJrpqDFsl3PPA9Bn/1zF3BIo
-         YLwOlu/RQCnP/HzzbsPc80+gLMzoDTJiFBHeGDoqzkTbPeTcgvhX6vrX/IYCDMIOQ+lF
-         oU3W9kqDe16PxbF7PpEZ1wobldylApgBPHSg1aCrJv/TSvboroNCYTId4WKXpZR8qvGg
-         BPHyb212ZPe8k9S2ggTMwGgiVnV72nO1xLe9xzULnDLsdD1LalTMpJY686VYZd+oZ85l
-         A86A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679564386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zx1cWbW8skW+J91S4nIUH2+PrWy6/cJUo3hRxlmG+G4=;
-        b=01Z6A2u3tRgTUhDxrhIZy6Fk3M24es8sOC/vb2QlpUU3YYd6nZJv/o3pl3bH+cyBmS
-         E3Lx8Eqx6P/HsAraN65FAgI0WfbXbXh3ItQbtpp97GYqGO4dsBqKUmyVOpUKOx7dqnes
-         w/zV8J3B0XuFzAg3kZh8zf+55tRRH2Vt0f4wiXPKP/Ug1lnq93saYaa4/xvYLKgZbz8q
-         SeCIovxWhMYQNWIxn8Fh2YRgKFU14tElIR92QjXWlhSCJme3eoJqei+bQEcaUYNO21ad
-         By67qTAqmecGM8sm++CVGStGXiElQwyQ8jFyCFRAj695qWXg/H9jJNvsAXttZ8mRayzl
-         VVMw==
-X-Gm-Message-State: AAQBX9dpK3GyeHvYnf6UsqhbyknCosthKN6Zly1f3FzqPQ9Z9K5mvSq7
-        09rblEsHTU66A02exX84XCfCS7/yAPTGqf6dv5M=
-X-Google-Smtp-Source: AKy350bCAexRMlOcrYwrCk12cMPtsoPYJWZ/XiHrtIhAZ4B6tk5Hhx8gC4VdgE3XYHEjClHtI+16JTGrwgF9+BfNLfM=
-X-Received: by 2002:a17:902:b687:b0:1a1:ffc5:1e8d with SMTP id
- c7-20020a170902b68700b001a1ffc51e8dmr942230pls.3.1679564386271; Thu, 23 Mar
- 2023 02:39:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323092156.2545741-1-rppt@kernel.org> <20230323092156.2545741-15-rppt@kernel.org>
-In-Reply-To: <20230323092156.2545741-15-rppt@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Thu, 23 Mar 2023 02:39:34 -0700
-Message-ID: <CAMo8BfJtCgak4mbeZ2R61EEWz+HYYhK-KOz+XJ+fhLY+zFgajA@mail.gmail.com>
-Subject: Re: [PATCH 14/14] xtensa: reword ARCH_FORCE_MAX_ORDER prompt and help text
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Thu, 23 Mar 2023 05:41:23 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9D8113DD;
+        Thu, 23 Mar 2023 02:41:08 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pfHRQ-002zTH-Fy; Thu, 23 Mar 2023 10:41:04 +0100
+Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pfHRQ-000BqP-8k; Thu, 23 Mar 2023 10:41:04 +0100
+Message-ID: <075155911e5be40a7f74cc0d05003f8683d784e0.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 0/7 v4] sh: various doc, build, init fixes
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
+        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Mar 2023 10:41:03 +0100
+In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
+MIME-Version: 1.0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.153.82
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 2:24=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
-> describe this configuration option.
->
-> Update both to actually describe what this option does.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/xtensa/Kconfig | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+Hi Randy!
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> All of these patches have been sent previously, anywhere from
+> one to 3 times.  All patches are now called "v4".
+> 
+> This refresh/resend is to assist the new SH maintainer.
+> 
+>  [PATCH 1/7 v4] sh: SH2007: drop the bad URL info
+>  [PATCH 2/7 v4] sh: nmi_debug: fix return value of __setup handler
+>  [PATCH 3/7 v4] sh: init: use OF_EARLY_FLATTREE for early init
+>  [PATCH 4/7 v4] sh: math-emu: fix macro redefined warning
+>  [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
+>  [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
+>  [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
+> 
+> diffstat:
+>  Documentation/kbuild/kbuild.rst                           |    1 -
+>  Documentation/scheduler/sched-arch.rst                    |    2 --
+>  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
+>  arch/sh/Kconfig                                           |    4 ++++
+>  arch/sh/Kconfig.debug                                     |    2 +-
+>  arch/sh/boards/Kconfig                                    |    1 -
+>  arch/sh/kernel/head_32.S                                  |    6 +++---
+>  arch/sh/kernel/nmi_debug.c                                |    4 ++--
+>  arch/sh/kernel/setup.c                                    |    4 ++--
+>  arch/sh/math-emu/sfp-util.h                               |    4 ----
+>  scripts/checkstack.pl                                     |    7 -------
+>  tools/perf/arch/common.c                                  |    2 --
+>  tools/scripts/Makefile.arch                               |    5 -----
+>  tools/testing/selftests/mm/Makefile                       |    2 +-
+>  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
+>  15 files changed, 14 insertions(+), 34 deletions(-)
+> 
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
+> Cc: linux-sh@vger.kernel.org
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
---=20
-Thanks.
--- Max
+All applied to sh-linux/for-next now except for patch number 6.
+
+Apologies that it took so long, I'm still learning :-).
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
