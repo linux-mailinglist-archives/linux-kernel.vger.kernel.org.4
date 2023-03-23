@@ -2,137 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B406C62DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004286C62E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCWJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S230495AbjCWJJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjCWJJR (ORCPT
+        with ESMTP id S230075AbjCWJJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:09:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF03E1E1FF;
-        Thu, 23 Mar 2023 02:08:31 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25A4A66030C0;
-        Thu, 23 Mar 2023 09:08:30 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679562510;
-        bh=2/LIFSrMCDoyTlFa4VDWRrfC/Sm1DtA+dl9eYJSJR1A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yt//uoEkj/BWkf0EBe+96syvd9Bu0BOr19S3kLHTikmPp7PfL15jVOl1ZLyOPkxJV
-         T4YcpH3oExuHfHzEQvv70Fhcucgf6SFBxtXa/ed9HHKgZf4np7vDrHja7j6h4Tj74z
-         SpAYDtAYtpcIE4Uzzw99WG3zT6M0M57CJ9vwZgbQbAD+H/ma/DaOscrfBErRoOBhrp
-         TX+1sJqcED6Tr7jQobIW+foKmaYPgDwdz/YUw19+d9KfBl0LQ1MHjjpZ8XY6IkB/kH
-         v9movDENfui0+J6C+uGPOCDmCDTSUZEJ8HlbuqDNFVUFBkViONVieTGrzVs3hqRir1
-         ypVrB0FCXDkGw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     airlied@gmail.com
-Cc:     daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wenst@chromium.org,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        robh@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v1 RESEND 2/2] drm/panfrost: Add basic support for speed binning
-Date:   Thu, 23 Mar 2023 10:08:22 +0100
-Message-Id: <20230323090822.61766-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
-References: <20230323090822.61766-1-angelogioacchino.delregno@collabora.com>
+        Thu, 23 Mar 2023 05:09:21 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6D276B8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:09:19 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id x1so25753345qtr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679562558;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ByZB1dfpBLtRSxR4wsct9Rq4cdr9+sGmdoakL+D6enU=;
+        b=iN4k2v093EH2wRtAGHgKQHcyCb0UcLnGPIRyMhAJ7F7+eR6HqMaOd7shNGBW+Dy+Qb
+         L03DkTJZcB3APXNEHS0LEJPsHIO/yiJl3FhxvUfav1mD04iy10MsuDdxO+Cr+8+zH5Qn
+         SWRKeSnim0idtWVYh4B6ttEIqldnquUCRsAG6SKdzmzj6LZy5a+yKFxReA2rtHkvmS+T
+         c4Uirl5eERJAhUF/iCpamCSf4VaYC0sLGUk+gCNStDAZOxnJyzVgzOOMr08sUf+0vrpe
+         pWutZQ3YTMhkP/crDSILGU9x2kTHEWeewATPFS0xMaovrLUO5gbSBHCWafgh7aNFc368
+         zOjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679562558;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ByZB1dfpBLtRSxR4wsct9Rq4cdr9+sGmdoakL+D6enU=;
+        b=sbl7sh9P29uY5Fl5UgNt2hb9iHCmWas0L06++9T7Vxg/iMPZkkt1tk6W3/n997h1t+
+         3GTVGHGF4DSttOqr66omX6GrJ7B7lVB0dfuMbigCdkKay3OJzW+XfAQrxRcbQ+XdbXYt
+         0rPYfvAlgcnlszjDFdIy1YyKF1uAws6FbOXCdEfWpCRmifFdHW4ma9BC9O5vJXXIKjHv
+         3+sGo7pVIaGWDNiqCz2rZyqRsKH2D4vSd6W7C+H245Qs1gdphIFi5+q+IH/tzhlb1Mwv
+         iLwGCjhZ5HSPybmWCXoo0z1+5VDC13jCs3MnVlKKrt//fRIrpDRuImE5ysGapAeeMZJL
+         lSbw==
+X-Gm-Message-State: AO0yUKUQcNYFRsOAy71S9QnALwr8l62bbU2WcVkbNHm+5ymcrxblQk1g
+        l99KFYto/cZPVCef9SR7dsg90IlAPgHK4lB/tK+xxw==
+X-Google-Smtp-Source: AK7set/+4ywgAlTaCsgGxm3/dod0QQalCnShIMRyRvo4q8aAl8ElohRI3/lqce8EiFR3wqz50KK5uuSf+M/eAmK8KvQ=
+X-Received: by 2002:a05:622a:2c1:b0:3e0:755f:c0e5 with SMTP id
+ a1-20020a05622a02c100b003e0755fc0e5mr2323439qtx.9.1679562558382; Thu, 23 Mar
+ 2023 02:09:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320172620.18254-1-james.morse@arm.com> <20230320172620.18254-10-james.morse@arm.com>
+ <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
+In-Reply-To: <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Thu, 23 Mar 2023 10:09:07 +0100
+Message-ID: <CALPaoCgnHYwpyVy_aPafPm6-v+DqirXSbVBLP_wx6jEp8pNBOA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/19] x86/resctrl: Queue mon_event_read() instead of
+ sending an IPI
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some SoCs implementing ARM Mali GPUs are subject to speed binning:
-this means that some versions of the same SoC model may need to be
-limited to a slower frequency compared to the other:
-this is being addressed by reading nvmem (usually, an eFuse array)
-containing a number that identifies the speed binning of the chip,
-which is usually related to silicon quality.
+On Wed, Mar 22, 2023 at 3:07=E2=80=AFPM Peter Newman <peternewman@google.co=
+m> wrote:
+> On Mon, Mar 20, 2023 at 6:27=E2=80=AFPM James Morse <james.morse@arm.com>=
+ wrote:
+> >
+> > x86 is blessed with an abundance of monitors, one per RMID, that can be
+>
+> As I explained earlier, this is not the case on AMD.
+>
+> > read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
+> > the number implemented is up to the manufacturer. This means when there=
+ are
+> > fewer monitors than needed, they need to be allocated and freed.
+> >
+> > Worse, the domain may be broken up into slices, and the MMIO accesses
+> > for each slice may need performing from different CPUs.
+> >
+> > These two details mean MPAMs monitor code needs to be able to sleep, an=
+d
+> > IPI another CPU in the domain to read from a resource that has been sli=
+ced.
+>
+> This doesn't sound very convincing. Could mon_event_read() IPI all the
+> CPUs in the domain? (after waiting to allocate and install monitors
+> when necessary?)
 
-To address such situation, add basic support for reading the
-speed-bin through nvmem, as to make it possible to specify the
-supported hardware in the OPP table for GPUs.
-This commit also keeps compatibility with any platform that does
-not specify (and does not even support) speed-binning.
+No wait, I know that isn't correct.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 30 +++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+As you explained it, the remote CPU needs to sleep because it may need
+to atomically acquire, install, and read a CSU monitor.
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index fe5f12f16a63..58dfb15a8757 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -4,6 +4,7 @@
- #include <linux/clk.h>
- #include <linux/devfreq.h>
- #include <linux/devfreq_cooling.h>
-+#include <linux/nvmem-consumer.h>
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
- 
-@@ -82,6 +83,31 @@ static struct devfreq_dev_profile panfrost_devfreq_profile = {
- 	.get_dev_status = panfrost_devfreq_get_dev_status,
- };
- 
-+static int panfrost_read_speedbin(struct device *dev)
-+{
-+	u32 val;
-+	int ret;
-+
-+	ret = nvmem_cell_read_variable_le_u32(dev, "speed-bin", &val);
-+	if (ret) {
-+		/*
-+		 * -ENOENT means that this platform doesn't support speedbins
-+		 * as it didn't declare any speed-bin nvmem: in this case, we
-+		 * keep going without it; any other error means that we are
-+		 * supposed to read the bin value, but we failed doing so.
-+		 */
-+		if (ret != -ENOENT) {
-+			DRM_DEV_ERROR(dev, "Cannot read speed-bin (%d).", ret);
-+			return ret;
-+		}
-+
-+		return 0;
-+	}
-+	DRM_DEV_DEBUG(dev, "Using speed-bin = 0x%x\n", val);
-+
-+	return devm_pm_opp_set_supported_hw(dev, &val, 1);
-+}
-+
- int panfrost_devfreq_init(struct panfrost_device *pfdev)
- {
- 	int ret;
-@@ -101,6 +127,10 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 		return 0;
- 	}
- 
-+	ret = panfrost_read_speedbin(dev);
-+	if (ret)
-+		return ret;
-+
- 	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names);
- 	if (ret) {
- 		/* Continue if the optional regulator is missing */
--- 
-2.40.0
+It still seems possible for the mon_event_read() thread to do all the
+waiting (tell remote CPU to program CSU monitor, wait, tell same remote
+CPU to read monitor), but that sounds like more work that I don't see a
+lot of benefit to doing today.
 
+Can you update the changelog to just say the remote CPU needs to block
+when installing a CSU monitor?
+
+Thanks!
+-Peter
