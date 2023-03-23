@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2496C6479
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABF56C647C
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjCWKLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        id S231211AbjCWKMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjCWKLm (ORCPT
+        with ESMTP id S230236AbjCWKMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:11:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B7012CEA;
-        Thu, 23 Mar 2023 03:11:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F2F61FDB6;
-        Thu, 23 Mar 2023 10:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679566300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eIVf6X9+8w7hFkVIs+NEITGJgY3dPy4ZtkDYRI94iS4=;
-        b=pv0xanWEkShhW8d9mi9xUUKWZCzV5wq1QxwI5LK3zM7ugLCnEb7SJgXrfzjJqROaYC5sJ5
-        Hh3IyZK3OVFNWwkuYDnF/mxRh88kIlYIs8pWCxQIMwvSrsmN0MJjmdQ9C33HY+UxxYEn9T
-        Orjb3Mv3szzbF0HcmYf1LhgpbYPDtiw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679566300;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eIVf6X9+8w7hFkVIs+NEITGJgY3dPy4ZtkDYRI94iS4=;
-        b=sRexLaKzDUTT7eODp4EQ1BU8/ZK30x6HSerOZZzUI2XzbAWEE0gnj8gw7SMh+Gc+Auys0i
-        Th5K7lmGXZuxdpBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C993132C2;
-        Thu, 23 Mar 2023 10:11:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EawSFtwlHGTTYAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 23 Mar 2023 10:11:40 +0000
-Message-ID: <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
-Date:   Thu, 23 Mar 2023 11:11:40 +0100
+        Thu, 23 Mar 2023 06:12:22 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCDB12BC4;
+        Thu, 23 Mar 2023 03:12:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 1A02932001C6;
+        Thu, 23 Mar 2023 06:12:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 23 Mar 2023 06:12:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679566338; x=1679652738; bh=cZ
+        xHKXBZ21bZ6K9A2HYjfRbp4aeJPjlsC5O/xK/dOIE=; b=P/ahRNyon56M8IZuK1
+        ywYfTgXwzwN+dPwd8hhNDADBtCjZdyQhRFlXHY10himQfH+gUi1Z9mePUo56K/7p
+        gMQ2e9kqE9mTi59ucP12oxgpFPun4WsDBnuYq7+rngBmpUC6hhsX1Ttc35/T4JQ3
+        pgU9iQ/CHz9b6WdDY5ocFUazQXkMlBoa3DUSaqsvG2n9PdtCFSy2NxuRd6JPWzav
+        1Nw3jyuysE5ayy6KH/020i/SJP5Vy9ObKD+SutpmOPaS6tnJKxJ4m+MviYUGOqTy
+        ElOIltjCcQfR4Y0Z7E93pWgX2vnfC2EUx9qwAqURSg450qcW5z8lpUvMDREUvVJs
+        MLng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679566338; x=1679652738; bh=cZxHKXBZ21bZ6
+        K9A2HYjfRbp4aeJPjlsC5O/xK/dOIE=; b=KfcP3+xUf+8DB0z3agWxrRSu95Wmv
+        TrxhgBRBsA+AeDCv9SuhqXdu9dWU+vANITnezTsq2nGvEY8AIZEpvkWjwEV0iWSV
+        Bqo0Lks+fj9cyXRthBSvIDayKbm0SvYs/r+bJd2TBcOn7HYOQuMShYWiG2N/2KaJ
+        G27cdjAc1sqRiGlfRxnFhqNYLdKxXWpeIxwHNZSzRme05QuKxFbA5OwiACHwStUt
+        7zEpA0ojGHrHstbzW6Ida0i+zVpll4ShGevbNuyW2hMDj4W9faVQ1j6UVIzUvHkz
+        yAOHdQ//Eh/4P7c0V7gsr827pNvdMevMFinVm5QBAhRahALsdT/NK05oA==
+X-ME-Sender: <xms:AiYcZJn_FchdEOUBNvREqSUl4ixwDEb2mnVMn0EMghZ7rABEpoorQA>
+    <xme:AiYcZE1mA4wvTfZyimKU5_KqSkg86oq2ySrggnyz7IbPgcMPQvbBYFOX3AicD4es2
+    OPBzv-lt_cFuPGYrbw>
+X-ME-Received: <xmr:AiYcZPoUuLfSpMGrE8UXS1DDXyV0FOq3ZkEyuhnhv9tzN-CW6l_h8X13dTr-TNfEGQ-AEOWPFommkDSVMTFFKhZ2JH3TITM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:AiYcZJn2lAONPiY-Kh8MC-e14UAAiJHBKglJohap7FvTlaTyQ8W95A>
+    <xmx:AiYcZH05SptfUayg5irD02DMFMbKPFk2PnHmAlWrQz-Kd4HJB83-Jw>
+    <xmx:AiYcZItkY7QjAeZ-tlWAZ5swV9Xk-KOgXylrFiT_iGzyYetej83cJw>
+    <xmx:AiYcZLIfDXmhaNDWRg6c6t_9MAWMwYrm1yPErm_gUodj9uNjAjJmeA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 06:12:17 -0400 (EDT)
+Date:   Thu, 23 Mar 2023 11:12:16 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230323101216.w56kz3rudlj23vab@houat>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
- entry
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        kirill.shutemov@linux.intel.com, jannh@google.com,
-        willy@infradead.org, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220203182641.824731-1-shy828301@gmail.com>
- <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
- <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o473qzwbd5lb4d5q"
+Content-Disposition: inline
+In-Reply-To: <ZBtPhoelZo4U5jwC@kroah.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,52 +98,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 11:08, David Hildenbrand wrote:
-> On 23.03.23 10:52, Vlastimil Babka wrote:
->> On 2/3/22 19:26, Yang Shi wrote:
->>> --- a/fs/proc/task_mmu.c
->>> +++ b/fs/proc/task_mmu.c
->>> @@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
->>>   }
->>>   
->>>   static void smaps_account(struct mem_size_stats *mss, struct page *page,
->>> -		bool compound, bool young, bool dirty, bool locked)
->>> +		bool compound, bool young, bool dirty, bool locked,
->>> +		bool migration)
->>>   {
->>>   	int i, nr = compound ? compound_nr(page) : 1;
->>>   	unsigned long size = nr * PAGE_SIZE;
->>> @@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
->>>   	 * page_count(page) == 1 guarantees the page is mapped exactly once.
->>>   	 * If any subpage of the compound page mapped with PTE it would elevate
->>>   	 * page_count().
->>> +	 *
->>> +	 * The page_mapcount() is called to get a snapshot of the mapcount.
->>> +	 * Without holding the page lock this snapshot can be slightly wrong as
->>> +	 * we cannot always read the mapcount atomically.  It is not safe to
->>> +	 * call page_mapcount() even with PTL held if the page is not mapped,
->>> +	 * especially for migration entries.  Treat regular migration entries
->>> +	 * as mapcount == 1.
->>>   	 */
->>> -	if (page_count(page) == 1) {
->>> +	if ((page_count(page) == 1) || migration) {
->> 
->> Since this is now apparently a CVE-2023-1582 for whatever RHeasons...
->> 
->> wonder if the patch actually works as intended when
->> (page_count() || migration) is in this particular order and not the other one?
-> 
-> Only the page_mapcount() call to a page that should be problematic, not 
-> the page_count() call. There might be the rare chance of the page 
 
-Oh right, page_mapcount() vs page_count(), I need more coffee.
+--o473qzwbd5lb4d5q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> getting remove due to memory offlining... but we're still holding the 
-> page table lock with the migration entry, so we should be protected 
-> against that.
-> 
-> Regarding the CVE, IIUC the main reason for the CVE should be 
-> RHEL-specific -- which behaves differently than other code bases; for 
-> other code bases, it's just a way to trigger a BUG_ON as described here.
+On Wed, Mar 22, 2023 at 07:57:10PM +0100, Greg Kroah-Hartman wrote:
+> > > > +/**
+> > > > + * test_kunit_helper_alloc_device - Allocate a mock device for a K=
+Unit test
+> > > > + * @test: The test context object
+> > > > + *
+> > > > + * This allocates a fake struct &device to create a mock for a KUn=
+it
+> > > > + * test. The device will also be bound to a fake driver. It will t=
+hus be
+> > > > + * able to leverage the usual infrastructure and most notably the
+> > > > + * device-managed resources just like a "real" device.
+> > >=20
+> > > What specific "usual infrastructure" are you wanting to access here?
+> > >=20
+> > > And again, if you want a fake device, make a virtual one, by just
+> > > calling device_create().
+> > >=20
+> > > Or are you wanting to do "more" with that device pointer than
+> > > device_create() can give you?
+> >=20
+> > Personally, I was (am) only interested in devm_ unwinding. I guess the
+> > device_create(), device_add(), device_remove()... (didn't study this
+> > sequence in details so sorry if there is errors) could've been sufficie=
+nt
+> > for me. I haven't looked how much of the code that there is for 'platfo=
+rm
+> > devices' should be duplicated to support that sequence for testability
+> > purposes.
+>=20
+> Any device can access devm_ code, there's no need for it to be a
+> platform device at all.
 
-That's good to know so at least my bogus mail was useful for that, thanks!
+Sure but the resources are only released if the device is part of a bus,
+so it can't be a root_device (or bare device) either
+
+Maxime
+
+--o473qzwbd5lb4d5q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBwmAAAKCRDj7w1vZxhR
+xcNBAQDSXxwFY9SnlOiifKsShUzZ9vn3t2jQGwBUwDob7I57jAD/c0M4qZV5QxOp
+2nfAsQutY88p59v6z9OzS6W/PqsxaQo=
+=NWug
+-----END PGP SIGNATURE-----
+
+--o473qzwbd5lb4d5q--
