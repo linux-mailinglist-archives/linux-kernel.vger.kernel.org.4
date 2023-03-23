@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0E06C70CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DFF6C70D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjCWTKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S231215AbjCWTLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjCWTKE (ORCPT
+        with ESMTP id S229823AbjCWTLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:10:04 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA1B14494
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:09:49 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id s67so9268103ybi.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679598585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLtQVw9Q3r/EIfGHaHQqJXqtgGhueRqlggc/xqxY+5U=;
-        b=iWmN5qdQNSjpgISH3j2kib5cc+h8AoBaK9c2AaVVVURUW5rI9o8n06FvmV1M+bBFfX
-         YNubq65NBM6w9TNZeohFGxGQHBSYpmJ2MVCGqXlkjI0pG66JFFF6zyIvXaCtVFAsMNFh
-         hXEcIALahsRpm5ULADGvB6dWEK8Cco4UeMk/PeV198/yaHKWNMbjOkpRw/jOeaVEUa88
-         WYew6Gts30zeIuE6WLRNasfDpPaC4wq9Q+TgniIJZLVp7q+T9A9NqwNBf4mhube6dHtB
-         lKvNpdpZCmdXI0XAsx+tbsEVIpm8bgaFMld59t1NK22AG0oMOtTQgmguJ9Zy1dAlKVSJ
-         vknQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679598585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vLtQVw9Q3r/EIfGHaHQqJXqtgGhueRqlggc/xqxY+5U=;
-        b=CZ0d3Ii1UZFr8v0edoekumU5ijC/5uyT+0Rtsm4tMWx/sBmyKWGD9kQbQPVtTs/jZS
-         R3w+UafTjzEOQiSzf7w5+NO2cv9EChqlkOw/hc1iLM9AKXw08ayjxwxGOA3dd1FwM8xw
-         MgltAgBPalgTTY1r0KZQlzVyUmDeiD3KozBDUW4YSWNbM/5nr94Kkqk9AGaH6irQuNRS
-         ei9vqMC/+TqahyCxmycVyFDflz8vDkTYj++T+rdbJFT71HPMrfK9BDo6Rowj0KDd0SSI
-         L6tA/0bZy8Kdl29rXV3VC1u96ZCsTq6S9FxcacnR7XRIEAn/lLCVjvtZAPSsE9NS1NE3
-         W2og==
-X-Gm-Message-State: AAQBX9dtyXNACu7DMt5Phs/C7WYCz05Q6A2Ked7xJUt62WWRhmwZON1a
-        rgrKyBwIKijNgoyP5EdW4emRdrgmmQSkNFfkGkBu+g==
-X-Google-Smtp-Source: AKy350akUM/9iIf8a3thcZVFCFca2DEXgqBqR2kjsnCDm5WKBJDwjnFCzpyD3JyTXxOLuZxXO5ARoUIWjEn4MKy8lr8=
-X-Received: by 2002:a25:a28f:0:b0:a99:de9d:d504 with SMTP id
- c15-20020a25a28f000000b00a99de9dd504mr2809088ybi.12.1679598584842; Thu, 23
- Mar 2023 12:09:44 -0700 (PDT)
+        Thu, 23 Mar 2023 15:11:03 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D37171C;
+        Thu, 23 Mar 2023 12:11:02 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 6FE291C0E45; Thu, 23 Mar 2023 20:11:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1679598660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aRHbTBB+ZgSTv8KzTFw1avZ2sf6wVSfYjmXj3OLadfU=;
+        b=WUsbZMTdi1dQlK/4H3Xv9ArPjsuIMUxpSFwGMub4AZtfoYc0oMVOCdkbQ2YjKggzu6dMB1
+        8/6ydNZJvXxECORDcGhsUhgc71YQX105BVUfg1favqDeOxxfizoj39rK55mpyM+ncRrurM
+        7AuueYcYPNp8XcC2R2Lb0NBjGgM+2GI=
+Date:   Thu, 23 Mar 2023 20:11:00 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lee Jones <lee@kernel.org>, John Crispin <john@phrozen.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 15/15] arm: mvebu: dt: Add PHY LED support
+ for 370-rd WAN port
+Message-ID: <ZBykRJmkxF7zf8g8@duo.ucw.cz>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-16-ansuelsmth@gmail.com>
+ <ZBxAZRcEBg4to132@duo.ucw.cz>
+ <318f65ef-fd63-446d-bd08-1ba51b1d1f72@lunn.ch>
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
- <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
- <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
- <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
- <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
- <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
- <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com>
- <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
- <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com>
- <CALvZod7saq910u4JxnuY4C7EwiK5vgNF=-Bv+236RprUOQdkjw@mail.gmail.com>
- <CAJD7tkb8oHoK5RW96tEXjY9iyJpMXfGAvnFw1rG-5Sr+Mpubdg@mail.gmail.com>
- <CALvZod5USCtNtnPuYRbRv_psBCNytQWWQ592TFsJLfrLpyLJmw@mail.gmail.com> <CAJD7tkad5NbqjXZ1qLaNx1g-FYsrv-BVLcNinycFStG_Bu0_zw@mail.gmail.com>
-In-Reply-To: <CAJD7tkad5NbqjXZ1qLaNx1g-FYsrv-BVLcNinycFStG_Bu0_zw@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 23 Mar 2023 12:09:33 -0700
-Message-ID: <CALvZod4n+_zo7fkn=NfRSKeShHbarUPWL3D=uScZmg9aiKkP-w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="rI4G7utm2RBg+ik3"
+Content-Disposition: inline
+In-Reply-To: <318f65ef-fd63-446d-bd08-1ba51b1d1f72@lunn.ch>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 9:52=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
->
-[...]
->
-> Sure, I can do that in the next version. I will include a patch that
-> adds an in_task() check to mem_cgroup_usage() before this one. Since
-> BUG_ON() is discouraged and VM_BUG_ON() is mm specific, I guess we are
-> left with WARN_ON_ONCE() for the rstat core code, right?
->
-> Thanks Shakeel. Any other thoughts I should address for the next version?
 
-This is all for now (at least for this patch).
+--rI4G7utm2RBg+ik3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> > > The WAN port of the 370-RD has a Marvell PHY, with one LED on
+> > > the front panel. List this LED in the device tree.
+> > >=20
+> > > Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> >=20
+> > > @@ -135,6 +136,19 @@ &mdio {
+> > >  	pinctrl-names =3D "default";
+> > >  	phy0: ethernet-phy@0 {
+> > >  		reg =3D <0>;
+> > > +		leds {
+> > > +			#address-cells =3D <1>;
+> > > +			#size-cells =3D <0>;
+> > > +
+> > > +			led@0 {
+> > > +				reg =3D <0>;
+> > > +				label =3D "WAN";
+> > > +				color =3D <LED_COLOR_ID_WHITE>;
+> > > +				function =3D LED_FUNCTION_LAN;
+> > > +				function-enumerator =3D <1>;
+> > > +				linux,default-trigger =3D "netdev";
+> > > +			};
+> > > +		};
+> > >  	};
+> > > =20
+> >=20
+> > How will this end up looking in sysfs?
+>=20
+> Hi Pavel
+>=20
+> It is just a plain boring LED, so it will look like all other LEDs.
+> There is nothing special here.
+
+Well, AFAICT it will end up as /sys/class/leds/WAN, which is really
+not what we want. (Plus the netdev trigger should be tested; we'll
+need some kind of link to the ethernet device if we want this to work
+on multi-ethernet systems).
+
+> > Should documentation be added to Documentation/leds/leds-blinkm.rst
+> >  ?
+>=20
+> This has nothing to do with blinkm, which appears to be an i2c LED
+> driver.
+
+Sorry, I meant
+
+Should documentation be added to Documentation/leds/well-known-leds.txt ?
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--rI4G7utm2RBg+ik3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBykRAAKCRAw5/Bqldv6
+8hYAAJ9Bvn10XxUIr7aK5MpezU9ojjLFBQCdGvLFTqwn12xC4aE58YdyoLAftHM=
+=uXc6
+-----END PGP SIGNATURE-----
+
+--rI4G7utm2RBg+ik3--
