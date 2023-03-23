@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B926C7446
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A478A6C7448
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbjCWXst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S230357AbjCWXtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjCWXsr (ORCPT
+        with ESMTP id S229522AbjCWXtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:48:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4046E187;
-        Thu, 23 Mar 2023 16:48:41 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679615318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/pfMy1WN4egsBlE9AThbnvQzL8RklY9yBTWSLXY9mvs=;
-        b=ote8OolLcDXcpy9s28Dh2PsdN458b3hJGFsqGpPSCxLx7p+Kdk1xjwRog1qduHuxIkTtpF
-        ByKy5X5+1FperpsP4ZdhzAAAJMCuV9S8/bOyoVPeaTeION3wB/P5fYUI1HlC5QrgrATvDW
-        r9dxE1Q5RQhQOk/vXZEILbqV0bQ7KodBdFCGSGoXbS+csxCjBS/J/IbOsKR2tsfBNrY31q
-        XCCboYxvA+q1fbYYb79M8ieWS0tK1vddhEDrxbdcsdZbzy9oRJxclB/ytAU2wOHaSWLOu0
-        LWh09hR70huXpA2dPuXY0VtOqAhlZUPAzbTMV020pFE6zdnNjc5B6oI/O7c3OQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679615318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/pfMy1WN4egsBlE9AThbnvQzL8RklY9yBTWSLXY9mvs=;
-        b=t4idkLr/NdbUlRWGI/+iTM913jHQmhGyPmtTNxDJ3m6rwsejkqLVbbvw8CpymWzBxGu8TU
-        SG4hx0cx08zjgBAg==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
-        brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com
-Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
- states before CPUHP_BRINGUP_CPU
-In-Reply-To: <47150207bfb76bb98aff678cf7c91f245e9f5dd9.camel@infradead.org>
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
- <20230321194008.785922-4-usama.arif@bytedance.com> <874jqb8588.ffs@tglx>
- <47150207bfb76bb98aff678cf7c91f245e9f5dd9.camel@infradead.org>
-Date:   Fri, 24 Mar 2023 00:48:38 +0100
-Message-ID: <87y1nn6nc9.ffs@tglx>
+        Thu, 23 Mar 2023 19:49:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96B9F75F;
+        Thu, 23 Mar 2023 16:49:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D198628F0;
+        Thu, 23 Mar 2023 23:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09DFC433A0;
+        Thu, 23 Mar 2023 23:49:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679615379;
+        bh=QAMYwFTlkBNx7Uzy8bwNabUvsUJwifE27Eycpq5I58A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gv9wmPdyqPS2BVuQe1El7EUITWlBqbF1tKaWFDz9XH2wZjxBT7anRPkbl17YyBr5c
+         /lpGca41L23mNvDFB41m1vgWW0ObXeSLTj9dtdeSHH+MOKKj30kNuK377i6fSOoVFU
+         KcqJYFXsb66EBPRVAGfg63yr/+TtiSbgTRSAYtK1gA3jmy2HN/yMKCPOYgsNBgZ0RX
+         tPDh8bP5q+yQtRG/QX98ak05APGqPJw2NECkt84e1TYJ9MSgBNOx3uLs6SCKZaEnL9
+         vsCjUsjJiocDz1phZoryzre2AiHAHjp8dlPYqxYGzHPgcK57x4mc5Oqnh9GbKW+vbd
+         GBDJrDClHK8qQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 57F881540379; Thu, 23 Mar 2023 16:49:39 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 16:49:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     parri.andrea@gmail.com, stern@rowland.harvard.edu, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org
+Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model: Document
+ locking corner cases
+Message-ID: <7f977c87-c2ba-4897-8d03-dc35ef706f9e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
+ <20230321010549.51296-1-paulmck@kernel.org>
+ <f940cb6c-4aa6-41a4-d9d7-330becd5427a@gmail.com>
+ <cd356db2-1643-4b01-bb13-16a7f92cf980@paulmck-laptop>
+ <2d26aad2-a1d5-649c-86ec-9457c577333f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d26aad2-a1d5-649c-86ec-9457c577333f@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23 2023 at 22:49, David Woodhouse wrote:
-> On Thu, 2023-03-23 at 23:36 +0100, Thomas Gleixner wrote:
->> There is no point in special casing this. All architectures can invoke
->> the CPUHP_BP_* states before CPUHP_BRINGUP_CPU for each to be brought up
->> CPU first. So this can be made unconditional and common exercised code.
->>=20
->
-> There were three paragraphs in the commit message explaining why I
-> didn't want to do that. It didn't work for x86 before I started, and I
-> haven't reviewed *every* other architecture to ensure that it will work
-> there. It was opt-in for a reason. :)
+On Fri, Mar 24, 2023 at 08:30:38AM +0900, Akira Yokosawa wrote:
+> On Thu, 23 Mar 2023 11:52:15 -0700, Paul E. McKenney wrote:
+> > On Thu, Mar 23, 2023 at 11:52:57AM +0900, Akira Yokosawa wrote:
+> >> Hi Paul,
+> >>
+> >> On Mon, 20 Mar 2023 18:05:19 -0700, Paul E. McKenney wrote:
+> >>> Most Linux-kernel uses of locking are straightforward, but there are
+> >>> corner-case uses that rely on less well-known aspects of the lock and
+> >>> unlock primitives.  This commit therefore adds a locking.txt and litmus
+> >>> tests in Documentation/litmus-tests/locking to explain these corner-case
+> >>> uses.
+> >>>
+> >>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >>> ---
+> >>>  .../litmus-tests/locking/DCL-broken.litmus    |  55 +++
+> >>>  .../litmus-tests/locking/DCL-fixed.litmus     |  56 +++
+> >>>  .../litmus-tests/locking/RM-broken.litmus     |  42 +++
+> >>>  .../litmus-tests/locking/RM-fixed.litmus      |  42 +++
+> >>>  tools/memory-model/Documentation/locking.txt  | 320 ++++++++++++++++++
+> >>
+> >> I think the documentation needs adjustment to cope with Andrea's change
+> >> of litmus tests.
+> >>
+> >> Also, coding style of code snippets taken from litmus tests look somewhat
+> >> inconsistent with other snippets taken from MP+... litmus tests:
+> >>
+> >>   - Simple function signature such as "void CPU0(void)".
+> >>   - No declaration of local variables.
+> >>   - Indirection level of global variables.
+> >>   - No "locations" clause
+> >>
+> >> How about applying the diff below?
+> > 
+> > Good eyes, thank you!  I will fold this in with attribution.
+> 
+> Feel free to add
+> 
+> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
 
-I noticed myself before reading your reply :)
+Thank you, I will apply on my next full rebase.
 
->> Aside of that this dynamic state range is pretty pointless. There is
->> really nothing dynamic here and there is no real good reason to have
->> four dynamic parallel states just because.
->
-> The original patch set did use more than one state; the plan to do
-> microcode updates in parallel does involve doing at least one more, I
-> believe.
-
-I don't think so. The micro code muck can completely serialize itself
-and does not need control CPU assistance if done right. If we go there
-we have to fix that mess and not just proliferatng it with moar duct tape.
-
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Fully per AP serialized br=
-ingup from here on. If the
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * architecture does no regis=
-ter the CPUHP_BP_PARALLEL_STARTUP
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * state, this step sends the=
- startup IPI first.
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->
-> Not sure I'd conceded that yet; the APs do their *own* bringup from
-> here, and that really ought to be able to run in parallel.
-
-Somewhere in the distance future once we've
-
-  1) sorted the mandatory synchronization points, e.g. TSC sync in the
-     early bootup phase.
-
-  2) audited _all_ AP state callbacks that they are able to cope with
-     parallel bringup.
-
-     That's a long road as there are tons of assumptions about the
-     implicit CPU hotplug serialization in those callbacks.
-
-     Just because it did not explode in your face yet does not mean this
-     is safe.
-
-     I just looked at 10 randomly picked AP online callbacks and found 5
-     of them being not ready :)
-
-Thanks,
-
-        tglx
-
-
+							Thanx, Paul
