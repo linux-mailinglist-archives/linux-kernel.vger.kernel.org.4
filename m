@@ -2,125 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749F66C618F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC426C6194
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjCWIYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S231393AbjCWIYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjCWIXv (ORCPT
+        with ESMTP id S231364AbjCWIYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:23:51 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CB3303CC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:23:47 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eg48so82945015edb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679559825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AIE/U68x3uSInXEW6KNHZvs1hznr1wFNENd55MjTdLk=;
-        b=rLgf6L+07k4Eifu/vhgCPXbEUN5wzYR2AvYsJr3AQObjKl3S8LZRRiwtPtn7ajC8vL
-         CJKD6qW1vuq70Nf9XIrKzDx2M4LTKsXJ+B1ne36RIPXhqAfL67FP+u4vLn2pOUBAPaXf
-         W2l0WgC7xocf7hG5scQBtIGyp41h2NvGkDO0gkdFlRT/qoBz66ElIFX1PvYeHnuOIPip
-         E6milHMZ6WbiN+bU/yNUYjkMfc5pwdPF9Z4Sx97vXdd00iQbRKA3ht8/IPc7OIuFKIjF
-         7h12wjBFbD7VjphfKOaXfGEAgp7FejrMTes58GYzg66Z9O43921B84tUDhMoM12k4EDR
-         aTvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679559825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIE/U68x3uSInXEW6KNHZvs1hznr1wFNENd55MjTdLk=;
-        b=CJx1dxf3BNnwVd1dFz9SWsfgnUlSDgsKVIQwKGqaVUS+NO2lPB83vtxVM9X5wtRG0c
-         nqYJODxtToKqy4eHp3XYfmZR47zUkN7kfTxhWG+84poIyrqfAxCKUoSOfohhNQzvLgq/
-         YIcJkS0fAkNFu3j7NbS2OV/ezHh6hQznRdEtgsJ71Rh91gZY/ywmJ2bU+wtwsLlia8ii
-         vYM5KjUZLqupVscn1MKzfcAOLgnBsDneyRGsoArA1XLMFZbdaQ9vjLTmTBvWniXO/thg
-         E9YHIODCqRKsicSNY2CjmNRJ47WlraxPmDLHaUxfLItcjdPnm9i4Y3XgDTfphWEUeJRy
-         Fa7A==
-X-Gm-Message-State: AO0yUKXj5Nh/55FHcsoS7PbbqkJN73inixbhsMOKjlsY1qcyCUwDQMEf
-        Rz1XR+oO/myKNl6G3lm+gXKvqQ==
-X-Google-Smtp-Source: AK7set9Ft9Tio7464rwlMIwtDD2Ui7cQ1MoFhecyq9TTVIsrTGpdtRWhPZJZmljemRrMLTX6HApETA==
-X-Received: by 2002:a17:906:22d4:b0:931:a0cb:1ef1 with SMTP id q20-20020a17090622d400b00931a0cb1ef1mr9364177eja.7.1679559825688;
-        Thu, 23 Mar 2023 01:23:45 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id e7-20020a170906248700b0093408d33875sm5524228ejb.49.2023.03.23.01.23.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 01:23:45 -0700 (PDT)
-Message-ID: <7e9ee8e2-988e-1f51-e7ed-19f9e3181d9e@linaro.org>
-Date:   Thu, 23 Mar 2023 08:23:40 +0000
+        Thu, 23 Mar 2023 04:24:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31183305EA;
+        Thu, 23 Mar 2023 01:24:11 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E24946602083;
+        Thu, 23 Mar 2023 08:24:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679559849;
+        bh=UWXuvXPQgmw3d6w9F651414Ya/jCWnC0G3/dbhij6o8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DHfAr2uw3MKKXcYNKcEuDgZIWwbPq2uARctq8NYrQvUzyrWqVXhYzfgbiEUQtrWri
+         0DtdQ87CpsW9bdDtxpQf0osiDTPSMPbHDMEx5wGQ3c1dMOk7dotCL0a30KqCKS7wAb
+         4tLsZ+2UQ0O7fzQ3N+cK2HLwZ5X1DqrnyLEQaI/7GwhW9oXSq/MS25Wk9Fg5e7ggYI
+         wnBehdiT1v+WIN//HJWALbjXjx5bUDbLM3z961HdU8vE85urUMaK2K5Ssg6HJn66Sb
+         CMOV4fnuy9hRxtZjUx7f3x+CFjtLnueIQsqzWuXzDcd3lP3GXR4L80QsXzH3vbLUDn
+         MJQqkhwTLE8Hg==
+Message-ID: <0800ffeb-c7c4-1671-173e-1529b8eeb12c@collabora.com>
+Date:   Thu, 23 Mar 2023 09:24:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 0/3] nvmem: support post read for U-Boot's "ethaddr"
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 00/12] Panfrost: Improve and add MediaTek SoCs support
 Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, u-boot@lists.denx.de,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20230318171356.29515-1-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230318171356.29515-1-zajec5@gmail.com>
+To:     airlied@gmail.com
+Cc:     daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, wenst@chromium.org
+References: <20230316102041.210269-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230316102041.210269-1-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/03/2023 17:13, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+Il 16/03/23 11:20, AngeloGioacchino Del Regno ha scritto:
+> Changes in v5:
+>   - Changed minItems for power-domain-names in base schema as
+>     suggested by Rob
 > 
-> This change is required for NVMEM consumers to get expected MAC address
-> from U-Boot env data variable "ethaddr".
+> Changes in v4:
+>   - Refactored power-domains and power-domain-names exclusions as
+>     suggested by Krzysztof
+>   - Small changes in MT8192 bindings addition
 > 
-> To address some previous concerns:
-> 1. Yes, U-Boot env binding & driver should be converted to NVMEM layout
-> 2. My priority is to get working MAC rather than fancy DT syntax
-> 3. I AM going to convert U-Boot env into layout later
-> 4. This work DOESN'T conflict with layout migration
-> 5. This code WILL stay during / after layout migration
+> Changes in v3:
+>   - Changed MT8186 bindings to declare only two power domains
+>   - Added a commit introducing MT8186 specific platform data to
+>     panfrost_drv
 > 
-> My brain limitations don't allow me to handle everything at once, please
-> let's review what I already have here.
-
-
-Thanks for your patience.
-
-Applied now,
-
---srini
-
+> Changes in v2:
+>   - Add power-domain-names commit from Chen-Yu to the series
+>   - Kept sram-supply in base schema, overridden for non-MediaTek
+>   - Added Reviewed-by tags from Steven Price to the driver commits
+>     (as released in reply to v1's cover letter - thanks!)
 > 
-> Rafał Miłecki (3):
->    dt-bindings: nvmem: u-boot,env: add MAC's #nvmem-cell-cells
->    nvmem: core: support specifying both: cell raw data & post read
->      lengths
->    nvmem: u-boot-env: post-process "ethaddr" env variable
+> This series adds support for new MediaTek SoCs (MT8186/MT8192/MT8195)
+> and improves MT8183 support: since the mtk-regulator-coupler driver
+> was picked, it is now useless for Panfrost to look for, and manage,
+> two regulators (GPU Vcore and GPU SRAM) on MediaTek;
 > 
->   .../devicetree/bindings/nvmem/u-boot,env.yaml |  7 ++++-
->   drivers/nvmem/Kconfig                         |  1 +
->   drivers/nvmem/core.c                          | 11 +++++---
->   drivers/nvmem/u-boot-env.c                    | 26 +++++++++++++++++++
->   include/linux/nvmem-provider.h                |  2 ++
->   5 files changed, 42 insertions(+), 5 deletions(-)
+> The aforementioned driver will take care of keeping the voltage
+> relation (/constraints) of the two regulators on its own when a
+> voltage change request is sent to the Vcore, solving the old time
+> issue with not working DVFS on Panfrost+MediaTek (due to devfreq
+> supporting only single regulator).
 > 
+> In the specific case of MT8183, in order to not break the ABI, it
+> was necessary to add a new compatible for enabling DVFS.
+> 
+> Alyssa Rosenzweig (3):
+>    drm/panfrost: Increase MAX_PM_DOMAINS to 5
+>    drm/panfrost: Add the MT8192 GPU ID
+>    drm/panfrost: Add mediatek,mt8192-mali compatible
+> 
+> AngeloGioacchino Del Regno (9):
+>    dt-bindings: gpu: mali-bifrost: Split out MediaTek power-domains
+>      variation
+>    dt-bindings: gpu: mali-bifrost: Set power-domains maxItems to 5
+>    dt-bindings: gpu: mali-bifrost: Fix power-domain-names validation
+>    dt-bindings: gpu: mali-bifrost: Add sub-schema for MT8192's power
+>      domains
+>    dt-bindings: gpu: mali-bifrost: Add new MT8183 compatible
+>    dt-bindings: gpu: mali-bifrost: Add support for MediaTek MT8186
+>    dt-bindings: gpu: mali-bifrost: Add compatible for MT8195 SoC
+>    drm/panfrost: Add new compatible for Mali on the MT8183 SoC
+>    drm/panfrost: Add support for Mali on the MT8186 SoC
+> 
+>   .../bindings/gpu/arm,mali-bifrost.yaml        | 80 ++++++++++++++++++-
+>   drivers/gpu/drm/panfrost/panfrost_device.h    |  2 +-
+>   drivers/gpu/drm/panfrost/panfrost_drv.c       | 37 +++++++++
+>   drivers/gpu/drm/panfrost/panfrost_gpu.c       |  8 ++
+>   4 files changed, 123 insertions(+), 4 deletions(-)
+> 
+
+Hello maintainers,
+
+this series is fully tested, fully reviewed and fully ready.
+
+Can anyone please pick it ASAP, so that we can finally get GPU support
+on MediaTek SoCs (including lots of Chromebooks)?
+
+Many thanks!
+Angelo
