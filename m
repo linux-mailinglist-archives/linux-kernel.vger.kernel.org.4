@@ -2,286 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4508A6C6B5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0062D6C6B58
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjCWOpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S231673AbjCWOoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjCWOpB (ORCPT
+        with ESMTP id S231318AbjCWOo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:45:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2723A79
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679582653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NrVA7uU+nRMqFw4cOUV9tVLaScyoHsXz3KJEw/B4yIU=;
-        b=SSS6o459/FJXNCrXr5TxJDDLTi/HoWF11nfpK2sAXLB8YR8kUwWwoZgUvY2/pPBLlVEScg
-        hKW75Pf+kh40Ek0R4D8HUJo6biTJNO1sSovif8xtuj85UVzLe1V13J3c2qgxI8FC4jMRm+
-        li+6cY9sWLAwlF+uSMCUnJ+LF9TD8rc=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-398-zHj6U9TDNJ-phZ80ri_yeQ-1; Thu, 23 Mar 2023 10:44:12 -0400
-X-MC-Unique: zHj6U9TDNJ-phZ80ri_yeQ-1
-Received: by mail-yb1-f200.google.com with SMTP id 204-20020a250fd5000000b00b6d6655dc35so11365434ybp.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:44:11 -0700 (PDT)
+        Thu, 23 Mar 2023 10:44:27 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE5E23A78
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:44:26 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so1356813wmq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679582665;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Ek4wZhl4Mg0GrDMidRpjCLxiT+Jj8TNIew80B1+dS8=;
+        b=t3Vp7RyFM8QV+VOhJkauXK9ZBmgTbo+zXmbbdNc5YTzFZhULmKx7ULUx2hi9UKIvj4
+         yIAo+gNJ6mUmL6zRsgWruEYkTL1nqJr4XVGp9j53f1R59pcJo9BvjgV6ZGPCOWExngg3
+         9lwyhlQ7PfizNhOXlnvJ2BjCjfCnW+3z+rA2W9HGw5O1aPBlgxrSE/lr6RkeFNqBSoPK
+         gJ3bS3SEKIW41PNmlixE4c62EWhsHJcY3ftPuqZ/F3JOmp8dUDVFskJH15Bv/IRWLTtI
+         VmGC96o6jb8k6ouaD0vV0GREdN870JpBDWppohe72sFOYfxOkxkoAarzmhvWz0vtwhhG
+         l4sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679582650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NrVA7uU+nRMqFw4cOUV9tVLaScyoHsXz3KJEw/B4yIU=;
-        b=4PZ4pWu37d2ya00wZqbS/sL0TvKvTFfZAEMZYpYdnTTUCvSPqRQQwUJt6bi02AKOtn
-         Rq8JRbOavNgTXLuJeA/MwJK3gqN8dKWYZ8aN1ZCUeDEZQKJ5I0zDuDqP7DVAfukaMaYY
-         37ouFrogULx4XHfuOZLuu/bl+9oHObqnwyhHk+nx3XnUwAVEReWywrqb0Ej1fyAdIcKx
-         WE7AQc5zHzvPDVgvsmyuUMAG+ChwegWDkjo4QroqbFYwqncLAFlyTElsFcW8DLSVVCTS
-         bCQwGoa0bEkIXe4m21Cho4jy3bAg6g8o/WAi31QSVzlLeC/84hr3hEDkWk/4GhEPbMgr
-         PfIA==
-X-Gm-Message-State: AAQBX9cXszKnKTsMMjBV6x9gBNV9L24PYMyKupujStW6BvUJdDt01KZD
-        0uCV/NrBueyvjKhy15NrVu4BwCOcybqJAtugwIIS1ou/Nf07OMZJL6RvxhTysCi9ddsZUT7LZCe
-        iw0v7RAdmhzrdtYNmLevegJeL6V6U7Vl3WeY3E3MC
-X-Received: by 2002:a25:b001:0:b0:b70:ad30:dacc with SMTP id q1-20020a25b001000000b00b70ad30daccmr1906297ybf.2.1679582650461;
-        Thu, 23 Mar 2023 07:44:10 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yp90qJTyafDDZI8Zx6KKeaVqtRTbdnVnhZPzCnb/pi2s126PXUI5QEyJvtGxI/gRHywVjAEr2ZJillufAyOvY=
-X-Received: by 2002:a25:b001:0:b0:b70:ad30:dacc with SMTP id
- q1-20020a25b001000000b00b70ad30daccmr1906287ybf.2.1679582650156; Thu, 23 Mar
- 2023 07:44:10 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679582665;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Ek4wZhl4Mg0GrDMidRpjCLxiT+Jj8TNIew80B1+dS8=;
+        b=US8klX2t6a2XEL5HbxYFrXbzlrbdH00tJQJC5xHn6HOaEy1HoKkdF68V92uby2gSuJ
+         /ZeV1GssuBs9KX0z4wo/Z5G84g8sCJGOu0N+UkuI8YuLOIRJq/0NIK9CBDiNbqm995Nc
+         a8JB9L705iSvh3VtEaJy2oVzf2hiWgzLcBpo8i8XdBi0je5mLDQ6n9d9bKhoeEkaXtEo
+         qUerBvl5+bUVLbwtJQcE6P4qokA9APCA9+Ad/UFClEHBcXEGDxq6MIfi2FhzZ68HgbKD
+         8Zfr++W8HzLbbPFY4kItklkpl8DHm6ThfzqFRFLhsyWsHGtbQsnUaGrlTP3PWSTlifcu
+         s6FA==
+X-Gm-Message-State: AO0yUKWHWg5kXmJ94aPa1S3NC0M4lefg4WowEuCd7is71wO1KKF/4zNP
+        ZamXrUgIqjk3NZAXSaeTPsvZOg==
+X-Google-Smtp-Source: AK7set/LnBgJwUokuNj+rBAbXxBzVAIv6jLo1Im7boQzr5ZnmQ5GFZnXrwDgWbSR8lrMohjRlVuXtQ==
+X-Received: by 2002:a05:600c:2c48:b0:3eb:39e0:3530 with SMTP id r8-20020a05600c2c4800b003eb39e03530mr2306311wmg.41.1679582664667;
+        Thu, 23 Mar 2023 07:44:24 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:e25a:65de:379a:3899? ([2a01:e0a:982:cbb0:e25a:65de:379a:3899])
+        by smtp.gmail.com with ESMTPSA id c18-20020a7bc852000000b003ed2c0a0f37sm2045208wml.35.2023.03.23.07.44.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 07:44:23 -0700 (PDT)
+Message-ID: <381cad84-da61-5a55-73eb-869294aa1d1c@linaro.org>
+Date:   Thu, 23 Mar 2023 15:44:22 +0100
 MIME-Version: 1.0
-References: <20230321154228.182769-1-sgarzare@redhat.com> <20230321154228.182769-5-sgarzare@redhat.com>
- <CAJaqyWcCwwu1UJ968A=s30GCezjLcwWKDhCFMsQ2EcGGgkiz7g@mail.gmail.com> <20230323104638.67hbwwbk7ayp4psq@sgarzare-redhat>
-In-Reply-To: <20230323104638.67hbwwbk7ayp4psq@sgarzare-redhat>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Thu, 23 Mar 2023 15:43:34 +0100
-Message-ID: <CAJaqyWfSor5PKZn0iAOthCkeGDBc7+rjVXuSHMy1LWY+fV5o7A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/8] vringh: support VA with iotlb
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, stefanha@redhat.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/8] dt-bindings: display: msm: sm8450-mdss: Fix DSI
+ compatible
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>, Sean Paul <sean@poorly.run>,
+        freedreno@lists.freedesktop.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-scsi@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
+ <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-1-3ead1e418fe4@linaro.org>
+ <167957963042.3095255.5445133387110199668.robh@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <167957963042.3095255.5445133387110199668.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:46=E2=80=AFAM Stefano Garzarella <sgarzare@redha=
-t.com> wrote:
->
-> On Thu, Mar 23, 2023 at 09:09:14AM +0100, Eugenio Perez Martin wrote:
-> >On Tue, Mar 21, 2023 at 4:43=E2=80=AFPM Stefano Garzarella <sgarzare@red=
-hat.com> wrote:
-> >>
-> >> vDPA supports the possibility to use user VA in the iotlb messages.
-> >> So, let's add support for user VA in vringh to use it in the vDPA
-> >> simulators.
-> >>
-> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> ---
-> >>
-> >> Notes:
-> >>     v3:
-> >>     - refactored avoiding code duplication [Eugenio]
-> >>     v2:
-> >>     - replace kmap_atomic() with kmap_local_page() [see previous patch=
-]
-> >>     - fix cast warnings when build with W=3D1 C=3D1
-> >>
-> >>  include/linux/vringh.h            |   5 +-
-> >>  drivers/vdpa/mlx5/net/mlx5_vnet.c |   2 +-
-> >>  drivers/vdpa/vdpa_sim/vdpa_sim.c  |   4 +-
-> >>  drivers/vhost/vringh.c            | 153 +++++++++++++++++++++++------=
--
-> >>  4 files changed, 127 insertions(+), 37 deletions(-)
-> >>
-> >> diff --git a/include/linux/vringh.h b/include/linux/vringh.h
-> >> index 1991a02c6431..d39b9f2dcba0 100644
-> >> --- a/include/linux/vringh.h
-> >> +++ b/include/linux/vringh.h
-> >> @@ -32,6 +32,9 @@ struct vringh {
-> >>         /* Can we get away with weak barriers? */
-> >>         bool weak_barriers;
-> >>
-> >> +       /* Use user's VA */
-> >> +       bool use_va;
-> >> +
-> >>         /* Last available index we saw (ie. where we're up to). */
-> >>         u16 last_avail_idx;
-> >>
-> >> @@ -279,7 +282,7 @@ void vringh_set_iotlb(struct vringh *vrh, struct v=
-host_iotlb *iotlb,
-> >>                       spinlock_t *iotlb_lock);
-> >>
-> >>  int vringh_init_iotlb(struct vringh *vrh, u64 features,
-> >> -                     unsigned int num, bool weak_barriers,
-> >> +                     unsigned int num, bool weak_barriers, bool use_v=
-a,
-> >>                       struct vring_desc *desc,
-> >>                       struct vring_avail *avail,
-> >>                       struct vring_used *used);
-> >> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net=
-/mlx5_vnet.c
-> >> index 520646ae7fa0..dfd0e000217b 100644
-> >> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> >> @@ -2537,7 +2537,7 @@ static int setup_cvq_vring(struct mlx5_vdpa_dev =
-*mvdev)
-> >>
-> >>         if (mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ))
-> >>                 err =3D vringh_init_iotlb(&cvq->vring, mvdev->actual_f=
-eatures,
-> >> -                                       MLX5_CVQ_MAX_ENT, false,
-> >> +                                       MLX5_CVQ_MAX_ENT, false, false=
-,
-> >>                                         (struct vring_desc *)(uintptr_=
-t)cvq->desc_addr,
-> >>                                         (struct vring_avail *)(uintptr=
-_t)cvq->driver_addr,
-> >>                                         (struct vring_used *)(uintptr_=
-t)cvq->device_addr);
-> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/=
-vdpa_sim.c
-> >> index eea23c630f7c..47cdf2a1f5b8 100644
-> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> @@ -60,7 +60,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpa=
-sim, unsigned int idx)
-> >>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
-> >>         uint16_t last_avail_idx =3D vq->vring.last_avail_idx;
-> >>
-> >> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true=
-,
-> >> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true=
-, false,
-> >>                           (struct vring_desc *)(uintptr_t)vq->desc_add=
-r,
-> >>                           (struct vring_avail *)
-> >>                           (uintptr_t)vq->driver_addr,
-> >> @@ -92,7 +92,7 @@ static void vdpasim_vq_reset(struct vdpasim *vdpasim=
-,
-> >>         vq->cb =3D NULL;
-> >>         vq->private =3D NULL;
-> >>         vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_feat=
-ures,
-> >> -                         VDPASIM_QUEUE_MAX, false, NULL, NULL, NULL);
-> >> +                         VDPASIM_QUEUE_MAX, false, false, NULL, NULL,=
- NULL);
-> >>
-> >>         vq->vring.notify =3D NULL;
-> >>  }
-> >> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> >> index 0ba3ef809e48..72c88519329a 100644
-> >> --- a/drivers/vhost/vringh.c
-> >> +++ b/drivers/vhost/vringh.c
-> >> @@ -1094,10 +1094,18 @@ EXPORT_SYMBOL(vringh_need_notify_kern);
-> >>
-> >>  #if IS_REACHABLE(CONFIG_VHOST_IOTLB)
-> >>
-> >> +struct iotlb_vec {
-> >> +       union {
-> >> +               struct iovec *iovec;
-> >> +               struct bio_vec *bvec;
-> >> +       } iov;
-> >> +       size_t count;
-> >> +       bool is_iovec;
-> >> +};
-> >> +
-> >>  static int iotlb_translate(const struct vringh *vrh,
-> >>                            u64 addr, u64 len, u64 *translated,
-> >> -                          struct bio_vec iov[],
-> >> -                          int iov_size, u32 perm)
-> >> +                          struct iotlb_vec *ivec, u32 perm)
-> >>  {
-> >>         struct vhost_iotlb_map *map;
-> >>         struct vhost_iotlb *iotlb =3D vrh->iotlb;
-> >> @@ -1107,9 +1115,9 @@ static int iotlb_translate(const struct vringh *=
-vrh,
-> >>         spin_lock(vrh->iotlb_lock);
-> >>
-> >>         while (len > s) {
-> >> -               u64 size, pa, pfn;
-> >> +               u64 size;
-> >>
-> >> -               if (unlikely(ret >=3D iov_size)) {
-> >> +               if (unlikely(ret >=3D ivec->count)) {
-> >>                         ret =3D -ENOBUFS;
-> >>                         break;
-> >>                 }
-> >> @@ -1124,10 +1132,22 @@ static int iotlb_translate(const struct vringh=
- *vrh,
-> >>                 }
-> >>
-> >>                 size =3D map->size - addr + map->start;
-> >> -               pa =3D map->addr + addr - map->start;
-> >> -               pfn =3D pa >> PAGE_SHIFT;
-> >> -               bvec_set_page(&iov[ret], pfn_to_page(pfn), min(len - s=
-, size),
-> >> -                             pa & (PAGE_SIZE - 1));
-> >> +               if (ivec->is_iovec) {
-> >> +                       struct iovec *iovec =3D ivec->iov.iovec;
-> >> +
-> >> +                       iovec[ret].iov_len =3D min(len - s, size);
-> >> +                       iovec[ret].iov_base =3D (void __user *)(unsign=
-ed long)
-> >
-> >s/unsigned long/uintptr_t ?
-> >
->
-> yep, good catch!
->
-> As I wrote to Jason, I think I'll take it out of the if and just declare
-> an uintptr_t variable, since I'm using it also in the else branch.
->
-> >
-> >
-> >> +                                             (map->addr + addr - map-=
->start);
-> >> +               } else {
-> >> +                       u64 pa =3D map->addr + addr - map->start;
-> >> +                       u64 pfn =3D pa >> PAGE_SHIFT;
-> >> +                       struct bio_vec *bvec =3D ivec->iov.bvec;
-> >> +
-> >> +                       bvec_set_page(&bvec[ret], pfn_to_page(pfn),
-> >> +                                     min(len - s, size),
-> >> +                                     pa & (PAGE_SIZE - 1));
-> >> +               }
-> >> +
-> >>                 s +=3D size;
-> >>                 addr +=3D size;
-> >>                 ++ret;
-> >> @@ -1141,26 +1161,42 @@ static int iotlb_translate(const struct vringh=
- *vrh,
-> >>         return ret;
-> >>  }
-> >>
-> >> +#define IOTLB_IOV_SIZE 16
-> >
-> >I'm fine with defining here, but maybe it is better to isolate the
-> >change in a previous patch or reuse another well known macro?
->
-> Yep, good point!
->
-> Do you have any well known macro to suggest?
->
+On 23/03/2023 14:58, Rob Herring wrote:
+> 
+> On Thu, 23 Mar 2023 11:25:16 +0100, Neil Armstrong wrote:
+>> The DSI compatible changed between patchset revisions, but that wasn't
+>> reflected in the bindings. Fix it.
+>>
+>> 0eda3c6cb1c5 ("dt-bindings: display/msm: add support for the display on SM8450")
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.example.dtb: display-subsystem@ae00000: phy@ae94400:compatible:0: 'qcom,sm8450-dsi-phy-5nm' was expected
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.example.dtb: display-subsystem@ae00000: phy@ae96400:compatible:0: 'qcom,sm8450-dsi-phy-5nm' was expected
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml
+> Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.example.dtb: /example-0/display-subsystem@ae00000/phy@ae94400: failed to match any schema with compatible: ['qcom,dsi-phy-5nm-8450']
+> Documentation/devicetree/bindings/display/msm/qcom,sm8450-mdss.example.dtb: /example-0/display-subsystem@ae00000/phy@ae96400: failed to match any schema with compatible: ['qcom,dsi-phy-5nm-8450']
 
-Not really, 16 seems like a convenience value here actually :). Maybe
-replace _SIZE with _STRIDE or similar?
 
-I keep the Acked-by even if the final name is IOTLB_IOV_SIZE though.
+Indeed I forgot to fix the bindings example....
 
-Thanks!
+Thx,
+Neil
+
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-1-3ead1e418fe4@linaro.org
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
 
