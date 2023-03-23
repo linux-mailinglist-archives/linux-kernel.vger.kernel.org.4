@@ -2,173 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BD56C6324
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37DE6C632B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjCWJUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S229877AbjCWJWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCWJUi (ORCPT
+        with ESMTP id S229461AbjCWJWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:20:38 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0173C10;
-        Thu, 23 Mar 2023 02:20:36 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s8so26545716lfr.8;
-        Thu, 23 Mar 2023 02:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679563235;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u9HIeaE6YfreA7aFslVWmFTHAzUEzJTO0gNYWp3d2YA=;
-        b=TO5alSmo69AjSE9DKZP3tSaKo7PRxjYPwRHpPVTcAtnfANEWJNxUoW7l0yTVePyqun
-         +f8lh2WkvYbY8gTIomK20r+TibXI7BIlDOZZ34mokv2W/gbLwxmyFp/UCgOTWqqQLwuZ
-         HFjfL32aF9kXg2/yLYmfg5F3kftV1Vt0IAAedwYV8hPNREzZA0ey21fJT7TWG8ZxJ7T6
-         fri9eKvIOUovyzx9yFP3VpcSXUZJxFIXn18kYrPL4Ths1+QQ4AbuAvXQ+UckSacRrptS
-         tJS75t1c959qI3o7Xl7+stwDn1AJ/JANJri36WH0srVA5eGdRx618VMdFAgjTft3MHs+
-         KkwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679563235;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u9HIeaE6YfreA7aFslVWmFTHAzUEzJTO0gNYWp3d2YA=;
-        b=vC50tCY0zJQ72PYcfc1tFFDnQXwqlz9Sm8lCKAMQSshYJqBchGD5w/DwTFJSa9yvtn
-         SqY9u4BgDFM84yR9kLHy5XO54iyypBfdSrY9qaQn5Xzz5dl54gDjhJXuD7L+wtCt+LNz
-         u5wwvJaQaKFjmniTrI6Aj6+E04v4tEzDBTJL08qBycAGYgXCT/xStlbou9UVht56h7DX
-         XxfAuZ7FIPrHJu82/I0H6ttQTkxgjH9JwCiEFqpFem9nems61Sv3i4DQUgRpYZXI2aC1
-         +WfUgxWPxholmrWq/ZnopCe+ZFcTj4syqfyed9FKw6Ax4Mzs+r1Nc4vmxPTlTqeMDUWo
-         npvw==
-X-Gm-Message-State: AAQBX9dDX6XpYVGQHh6jyRHGZM0hJYMU70/gPsp/tIoCVtL22QpGVqwr
-        83c9iffVaJVsMRiH9OGJcZTdrCH6BDs=
-X-Google-Smtp-Source: AKy350bePlJ4Diz4wfTBgsfrngsnQ7KDKc8lQ70DmTlV6RWdUCm23wjZJvNaZXUBpp+/8hzng8/b7g==
-X-Received: by 2002:ac2:51dd:0:b0:4e8:3d24:de6f with SMTP id u29-20020ac251dd000000b004e83d24de6fmr3139121lfm.14.1679563234716;
-        Thu, 23 Mar 2023 02:20:34 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id y26-20020ac2447a000000b004cc82b7080bsm2872706lfl.200.2023.03.23.02.20.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 02:20:34 -0700 (PDT)
-Message-ID: <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
-Date:   Thu, 23 Mar 2023 11:20:33 +0200
+        Thu, 23 Mar 2023 05:22:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3697C3C3B;
+        Thu, 23 Mar 2023 02:22:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2D07B8201C;
+        Thu, 23 Mar 2023 09:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81329C433A0;
+        Thu, 23 Mar 2023 09:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679563333;
+        bh=D35W3oT4dEB7lQGf2gyibA65I3USxy0/PoMsBYvdggw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FvLGPcFNvposDJHd12P4B6tiY0alzsOWKmMDuuC6Bbtu7FQoT8X1aprZqvi0FJfLS
+         mt0kh+Jo3486s1qGacqEDX/OHvGQZOMLk3QivFrdR+KFUHaYTxUB878ydKgR4ebxQD
+         hFtgvnKM+VqXPQFFh+LsJ24F5Nvj1PwRnlN6oaSMVilDaV5obtUxIDQf1ebqfjw///
+         Xh234xD1rgyjvmGU7SMuN7Gnez8IKfnGstw+tdb8tErfz4SpbTfAXlP81Ofg/1ejcw
+         5ntVdo/7OGVtej0l0Oes4NXXVkuGPAKtpkLi1VbVSLZcdokDBgJOW5/iwZAcLFvNjO
+         EHVKriGuB7TNg==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mm@kvack.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: [PATCH 00/14] arch,mm: cleanup Kconfig entries for ARCH_FORCE_MAX_ORDER
+Date:   Thu, 23 Mar 2023 11:21:42 +0200
+Message-Id: <20230323092156.2545741-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <12ea1d68-2a3c-0aa7-976c-7bd3eef35239@fi.rohmeurope.com>
- <ZBwUp/fRIjQZtjF7@kroah.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-In-Reply-To: <ZBwUp/fRIjQZtjF7@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 10:58, Greg Kroah-Hartman wrote:
-> On Thu, Mar 23, 2023 at 07:17:40AM +0000, Vaittinen, Matti wrote:
->> On 3/22/23 20:57, Greg Kroah-Hartman wrote:
->>> On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
->>>> Hi Greg,
->>>>
->>>> Thanks for looking at this.
->>>>
->>>> On 3/22/23 14:07, Greg Kroah-Hartman wrote:
->>>>> On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
->> I am very conservative what comes to adding unit tests due to the huge
->> inertia they add to any further development. I usually only add tests to
->> APIs which I know won't require changing (I don't know such in-kernel
->> APIs)
-> 
-> So anything that is changing doesn't get a test? 
+Hi,
 
-No. I think you misread me. I didn't say I don't like adding tests to 
-code which changes. I said, I don't like adding tests to APIs which change.
+Several architectures have ARCH_FORCE_MAX_ORDER in their Kconfig and
+they all have wrong and misleading prompt and help text for this option.
 
-  If you only test
-> things that don't change then no tests fail, and so, why have the test
-> at all?
+Besides, some define insane limits for possible values of
+ARCH_FORCE_MAX_ORDER, some carefully define ranges only for a subset of
+possible configurations, some make this option configurable by users for no
+good reason.
 
-Because implementation cascading into functions below an API may change 
-even if the API stays unchanged.
+This set updates the prompt and help text everywhere and does its best to
+update actual definitions of ranges where applicable.
 
-> On the contrary, tests should be used to verify things that are changing
-> all the time, to ensure that we don't break things.
+Mike Rapoport (IBM) (14):
+  arm: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
+  arm64: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  csky: drop ARCH_FORCE_MAX_ORDER
+  ia64: don't allow users to override ARCH_FORCE_MAX_ORDER
+  m68k: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  nios2: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  nios2: drop ranges for definition of ARCH_FORCE_MAX_ORDER
+  powerpc: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  powerpc: drop ranges for definition of ARCH_FORCE_MAX_ORDER
+  sh: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  sh: drop ranges for definition of ARCH_FORCE_MAX_ORDER
+  sparc: reword ARCH_FORCE_MAX_ORDER prompt and help text
+  xtensa: reword ARCH_FORCE_MAX_ORDER prompt and help text
 
-This is only true when your test code stays valid. Problem with 
-excessive amount of tests is that more we have callers for an API, 
-harder changing that API becomes. I've seen a point where people stop 
-fixing "unimportant" things just because the amount of work fixing all 
-impacted UT-cases would take. I know that many things went wrong before 
-that project ended up to the point - but what I picked up with me is 
-that carelessly added UTs do really hinder further development.
+ arch/arm/Kconfig      | 16 +++++++++-------
+ arch/arm64/Kconfig    | 27 ++++++++++++---------------
+ arch/csky/Kconfig     |  4 ----
+ arch/ia64/Kconfig     |  3 +--
+ arch/m68k/Kconfig.cpu | 16 +++++++++-------
+ arch/nios2/Kconfig    | 17 +++++++++--------
+ arch/powerpc/Kconfig  | 22 +++++++++-------------
+ arch/sh/mm/Kconfig    | 19 +++++++++----------
+ arch/sparc/Kconfig    | 16 +++++++++-------
+ arch/xtensa/Kconfig   | 16 +++++++++-------
+ 10 files changed, 76 insertions(+), 80 deletions(-)
 
-  That's why we need
-> them, not to just validate that old code still is going ok.
-> 
-> The driver core is changing, and so, I would love to see tests for it to
-> ensure that I don't break anything over time.  That should NOT slow down
-> development but rather, speed it up as it ensures that things still work
-> properly.
 
-I agree that there are cases where UTs are very handy and can add 
-confidence that things work as intended. Still, my strong opinion is 
-that people should consider what parts of code are really worth testing 
-- and how to do the tests so that the amount of maintenance required by 
-the tests stays low. It's definitely _not fun_ to do refactoring for 
-minor improvement when 400+ unit-test cases break. It's a point when 
-many developers start seeing fixing this minor culprit much less 
-important... And when people stop fixing minor things ... major things 
-start to be just around the corner.
-
-> 
->> - or to functions which I think are error-prone. So, I am probably
->> one of the last persons adding UTs to code I don't know :)
-> 
-> That's fine, you don't have to add test code for stuff you don't know.
-> 
-> But again, do NOT abuse a platform device for this, that's not ok, and
-> the in-kernel code that does do this should be fixed up.
-
-As suggested by David in another mail - I'll go with the 
-root_device_[un]register(). I'll drop this patch entirely. Thanks for 
-help, this was once again very educating :)
-
-Yours,
-	-- Matti
-
+base-commit: 51551d71edbc998fd8c8afa7312db3d270f5998e
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.35.1
 
