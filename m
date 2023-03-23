@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503AA6C71F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1119F6C7204
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjCWU4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 16:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S231300AbjCWU6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 16:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjCWU4U (ORCPT
+        with ESMTP id S229794AbjCWU6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 16:56:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFD12385D;
-        Thu, 23 Mar 2023 13:55:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 632F9B821F7;
-        Thu, 23 Mar 2023 20:55:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CC3C433D2;
-        Thu, 23 Mar 2023 20:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679604948;
-        bh=Se9iqlkm2NlxhGRw5dLuisre2BWhBSGH+XXtTwkAW3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q9av95IdebW97uXMjuuWaSOU9+6s38liLw9eop0O6YtYu5U7+ayny1NdQmV2hpXjK
-         cxqgRn3/eYQ+BHORHBGICPS+AEhYRpItj4NwWQxXNiFP2beFmUBxNBFvYhL6LMaAmg
-         w+5naHUi3Nzm1jfibt4mYXrfvUCsFmRZxOtbqVjBD62M5GQPGLWt/MXW3d1OzHM2Es
-         GaPfGO7/7Efp4SIl/X8b82fbjuzb4SmoE2Xm/aTHuDZaJVB8OdVY5W5k7cttiw1m/e
-         qRHejOOSGc+h8wqWf68TXgzrpaO+izAWhcf44cEV+em6vK/JIo/z2B3240WyNbbHI9
-         CJFQ95Mij9GKA==
-Date:   Thu, 23 Mar 2023 20:55:43 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     nathan@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Conor Dooley <conor.dooley@microchip.com>,
-        ndesaulniers@google.com, trix@redhat.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: b4 send (was Re: [PATCH] riscv: Handle zicsr/zifencei issues between
- clang and binutils)
-Message-ID: <754a6cf4-cb89-4adb-a5f6-ea5b143af921@spud>
-References: <20230313-riscv-zicsr-zifencei-fiasco-v1-1-dd1b7840a551@kernel.org>
- <mhng-8af569d4-c3a7-4f33-8900-e458f75abf18@palmer-ri-x1c9a>
+        Thu, 23 Mar 2023 16:58:24 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2054.outbound.protection.outlook.com [40.107.102.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627CD211F3;
+        Thu, 23 Mar 2023 13:58:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K7rqsNw1HG8KjoQWWs5Uorow4qWiJi/KaLKuHBCpijfDP3WM7aq5GPjVeQ0tobqDxOfb8vcwVr7IGREdI1boaFy2IPbjZIKzjeevUS/kze2ddwiPhLMBuWr7epuLRqeOWd4pmFgsC4F9Yg/+l9xPsJ9sAxoenmz6t2KsRRYkKHzlgqgmvfUfCVvj+ZyIh/8Ewd3iL83lyiShNVdGIEATVpx6NmbFVVwh8PWmCILHQ+84lbEwgDiTO5uTprUFQpJF8HZnbhWAEV/xid8/OL/4XiBW6PvmuGuMltfwMjwTkYeaKY3KNbrxEB/zydK8ila1UXCODYyxGwmEfkvLkexfeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Gy/49iwHAImWPsLmW8jPpDcIBB3Ap6uG5BaW/9Qya0=;
+ b=AhWMLRsZepXkcK0PakzETfKWPUjo3lrWPu7KshGaP0G5+VhxxXtoF7dLiPfR1UXCu5XAtwTkwXkpKt7mZMUlJwSDSQUMqT0WJXyhfUJJVgf+aE+58cV3/7ySF9HdFTqYYT61a/K/EQ+cJjLQN1O+Tn9/kTCtkzdSKGZ/wJc4HdW2aImrNT6tZL/dZlfBQe2OL0qlfnUe6CdoDtmIP4Bzx5S/A+jQ0YOANlyvdt7lj2tCabNlsz4gdg5Jz239KbXb/M4FuJ2zPx2Z7O62SsMuCByIIvkpvYr0+2HDetgGiRmElNhTj3SiHavBztn5QEEu/Y/DhJszDblCsuiCJRenSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Gy/49iwHAImWPsLmW8jPpDcIBB3Ap6uG5BaW/9Qya0=;
+ b=LnK9xHHfA7dXXmBef6SuXVd5R96ihra8RD0m8t7mc70NjeKeWoGKDuEH0toqQA+d4DuOGutTD11wJvN1CjkhAkxep02rl1jcLjChFU84pj0R1d6sp7rGM4JNw/Rw71BeKdhJ1f5keD0BQ/DaSpYB755koMq59hN7wnIKn3TEFZvwD/vqhSwbjI+wuFGuY5gKMEjqyKkt+m4b/FTG/mFttc5pgTWe2w9NH8Rg/bisHwoZJSTQbjhkHxttn6b2grVHOuJCaKlcMJYkUKsHhY/qF02fRRjdoPqSoZ/Sf98xziCftvGO1RAkUKo/4AtSc5SGZOV8hABjxQgQ6O0eG2Cc2g==
+Received: from MW4PR03CA0100.namprd03.prod.outlook.com (2603:10b6:303:b7::15)
+ by DS0PR12MB7534.namprd12.prod.outlook.com (2603:10b6:8:139::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 20:57:50 +0000
+Received: from CO1NAM11FT095.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::60) by MW4PR03CA0100.outlook.office365.com
+ (2603:10b6:303:b7::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
+ Transport; Thu, 23 Mar 2023 20:57:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT095.mail.protection.outlook.com (10.13.174.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Thu, 23 Mar 2023 20:57:50 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
+ 13:57:37 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
+ 2023 13:57:37 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Thu, 23 Mar
+ 2023 13:57:36 -0700
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
+Date:   Thu, 23 Mar 2023 16:57:33 -0400
+Message-ID: <20230323205733.20763-1-asmaa@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wsQ8tM8/Zn6mTV2x"
-Content-Disposition: inline
-In-Reply-To: <mhng-8af569d4-c3a7-4f33-8900-e458f75abf18@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT095:EE_|DS0PR12MB7534:EE_
+X-MS-Office365-Filtering-Correlation-Id: eccd70ed-11c0-4f13-d8c9-08db2be143ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K+0rAvllmmM/9QJeY6Lkz+OzOepVS6T7RZHJ5V+Z56Twn+k99eeeSyYpgHINlmiUpSxvldIRQvCSlqdG6i/txOYvdLEQkR7zPvVs11Yuaguh9s8YzCRc2zGer8uB1liaIABwiW18A3QWG83nkGLroQ9Z9vkXni/8t+tURN9SPP8tfhQ3Ty7ix/MeWUAchKakvNiklS/5af+26uoelISUngMM14rw+iVmBKLuNjGub6tEX3mbfE476DdBxQEszEz9nt0dwveMDmOqyNpZG15j0y5C86Ikxw0uAnDOwyJ1faSrSuUQki4T1plcxXCBPcXJCQl9CmCo9hjF7SiCi289j/vUMCFrd10hy2+OSqa8scxrySW56bPF4cWoQv3UBUh9ICE3jsXm953PGQ95WIS2cUQhfB3K6V0cmaQoBzpEwGfo0CT09bmA2kZRjW1yQHDMfCOJkwheBPBgECVp+4zend/VMCEgJOpU8Dff0FSZ1Ftbjn5nEXtEXXvYbOVyeQ77Lg0A2gES7vnuzaafyZXy+QXOOcxLuDIo/fXLdXl5Z/mbfdc2znk8EuyLk1yahARXFrHGg1jXki0copmJ5lz07NPf7MHxidVZgYHXh/Wv56HfL9T05SHgo5SXcwDeyeIB2yG1T5gAh6hSexNxzxsCO90j0KLGbOXPFwa4/3S8dWhpzwiIsUYryMBaKJrkRqnAdTqxzOAR04Xck8g8Eh8GT4N738X5yflNQXR13y8zRM3VxrT+hQ5hK9wwaGChuWsO8gBp/JaLsEDgHg34+JjBJA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199018)(40470700004)(36840700001)(46966006)(5660300002)(2906002)(82740400003)(7636003)(4744005)(41300700001)(8936002)(40480700001)(82310400005)(36756003)(86362001)(40460700003)(36860700001)(356005)(6666004)(107886003)(47076005)(426003)(7696005)(478600001)(110136005)(83380400001)(2616005)(336012)(26005)(186003)(70586007)(1076003)(70206006)(8676002)(316002)(4326008)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 20:57:50.6760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eccd70ed-11c0-4f13-d8c9-08db2be143ce
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT095.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7534
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If the "ngpios" property is specified, bgpio_bits is calculated
+as the round up value of ngpio. At the moment, the only requirement
+specified is that the round up value must be a multiple of 8 but
+it should also be a power of 2 because we provide accessors based
+on the bank size in bgpio_setup_accessors().
 
---wsQ8tM8/Zn6mTV2x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+---
+ drivers/gpio/gpio-mmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Mar 23, 2023 at 01:49:57PM -0700, Palmer Dabbelt wrote:
-> On Mon, 13 Mar 2023 16:00:23 PDT (-0700), nathan@kernel.org wrote:
+diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
+index b52a3dd511ca..74fdf0d87b2c 100644
+--- a/drivers/gpio/gpio-mmio.c
++++ b/drivers/gpio/gpio-mmio.c
+@@ -623,7 +623,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
+ 	if (ret)
+ 		gc->ngpio = gc->bgpio_bits;
+ 	else
+-		gc->bgpio_bits = round_up(gc->ngpio, 8);
++		gc->bgpio_bits = roundup_pow_of_two(round_up(gc->ngpio, 8));
+ 
+ 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
+ 	if (ret)
+-- 
+2.30.1
 
-> > base-commit: eeac8ede17557680855031c6f305ece2378af326
-> > change-id: 20230313-riscv-zicsr-zifencei-fiasco-2941caebe7dc
->=20
-> Is that a b4 thing?  Having change IDs with names is nice, it's way easier
-> to remember what's what when sorting through backports.
-
-It's `b4 send`, for anyone that's lurking on the list and hasn't seen it
-before: https://b4.docs.kernel.org/en/latest/contributor/send.html
-
-b4 is now a tool for contributing, not just maintaining, although I'm not
-sure that the distro copies of it are recent enough to make use of those
-features.
-
-
---wsQ8tM8/Zn6mTV2x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBy8zwAKCRB4tDGHoIJi
-0oA8AP488Y3vQ6GOyC43ij6dHOgg5qC/tN1d/004eaPVnXcchwD9HD8j4YSanqCw
-hajorAxTSD0FUynICmBd3ZaUANbX7Ak=
-=t9Wz
------END PGP SIGNATURE-----
-
---wsQ8tM8/Zn6mTV2x--
