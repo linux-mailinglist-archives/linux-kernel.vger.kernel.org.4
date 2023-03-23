@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563E86C6C98
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FE46C6C9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjCWPxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S232086AbjCWPxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjCWPxR (ORCPT
+        with ESMTP id S231974AbjCWPx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:53:17 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC238A59
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:53:15 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id h17so21090290wrt.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:53:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679586794;
-        h=content-transfer-encoding:in-reply-to:mime-version:user-agent:date
-         :message-id:from:references:cc:to:subject:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+TKUCmR9gfXMA0n/ry5oLIWbm0kINX2ZUTI+cvMxkhE=;
-        b=D7T7I2vRyypIgXUSYd0sVhTpodxWWxYfyza0geRpA/FcgBH+ZcYDZV4AjKd8/LLT+s
-         UvOuA+lVpjK35QGFdSCw+325mNzGshd0+WJwR5Cu/WkN7Yuc0H2q2ZWkB2fwQMBO+SqV
-         Dq47JSnWIcGKlOKKiPnkeTn3+t2h42J1kIAlWXpjDF5Hty3a9NqIwUaVmtUJOUdzycTf
-         NyO985pCnfTffGC4jBjduGRTGTmehFNWzVXKwAqrCjB46lwmkRJCoSB+Vkp/h7DdGfEi
-         agI5qGZylxSBVEYhmNkB6s8Ey+keHt+rDo1867sgiLlEFNkSH8+NFdy8TdGPkuQuPR3R
-         pwaA==
-X-Gm-Message-State: AAQBX9cM7+PqLW6T0O0ZVmCwCc8Qn34xZKpt7iX6C0CM/OcIGbsbQgqd
-        BQIHWOsSFkNI9PlaUSa5lH8M2zjZSqmqiEH0
-X-Google-Smtp-Source: AKy350afa2c66pbR2VfjPz+s/GcSJI2hIYLsASzSQMnMko6lnSOT1LFGB1kY565oLywRma0IHzQXMw==
-X-Received: by 2002:a5d:58d6:0:b0:2d3:3cda:b3c6 with SMTP id o22-20020a5d58d6000000b002d33cdab3c6mr3147818wrf.40.1679586794280;
-        Thu, 23 Mar 2023 08:53:14 -0700 (PDT)
-Received: from Johanness-MBP.fritz.box ([2001:a62:1493:d101:d423:498b:c14e:a659])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d4e05000000b002d75909c76esm9532684wrt.73.2023.03.23.08.53.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 08:53:13 -0700 (PDT)
-Subject: Re: [PATCH 1/1] mcb: Remove requesting memory region to avoid memory
- overlapping
-To:     =?UTF-8?Q?Rodr=c3=adguez_Barbarin=2c_Jos=c3=a9_Javier?= 
-        <JoseJavier.Rodriguez@duagon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     =?UTF-8?B?U2FuanXDoW4gR2FyY8OtYSwgSm9yZ2U=?= 
-        <Jorge.SanjuanGarcia@duagon.com>, "mmoese@suse.de" <mmoese@suse.de>
-References: <20230323124900.898035-1-josejavier.rodriguez@duagon.com>
- <20230323124900.898035-2-josejavier.rodriguez@duagon.com>
- <c08407ec-8553-87ca-85d5-1988b8f9172b@kernel.org>
- <121decd1d4f8c4aa469636756557fce02b245ddc.camel@duagon.com>
-From:   Johannes Thumshirn <jth@kernel.org>
-Message-ID: <9851e06c-8430-0303-f5c2-ebcb5e38996b@kernel.org>
-Date:   Thu, 23 Mar 2023 16:53:12 +0100
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Thu, 23 Mar 2023 11:53:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BE615881
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:53:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B89A16258C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5422BC4339B;
+        Thu, 23 Mar 2023 15:53:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679586804;
+        bh=FdHS15So9Ov5UwML5lh/46ZuooLqJDDwXlY+p4s6GWw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CNGSrs2QzotBEF+17I0Y5+b51GhUySm0eSUNvTgMHB4n9OihqfcOVEMFP6nf5qmGI
+         ynMvvmfJAW2mFYi3wY7vWpCN6pAAXD8Xa2+8LTCzG0thi+Lg5vSHYl+TyW3t++2GpO
+         m9bMWI98WntyjRC4t5aiuzNch7ZZW2+X/gnx0sGHYuOg3s+lFRMUQl/Fo8I2ASWL41
+         Ii0p0CJaz1xq6aLJVwHi6tUYKlsr57s7WrVZccZqOOnwjNlRQeRrQAducIsXOWNgpK
+         F01q12N6DgleqZ/gYdsZe8zFngRL4WJJE656WuNC+rGnlnUlMIzg1ijukzA1ndMIUJ
+         nQ/yG/FnXKFNA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Amit Pundir <amit.pundir@linaro.org>
+In-Reply-To: <20230323110125.23790-1-srinivas.kandagatla@linaro.org>
+References: <20230323110125.23790-1-srinivas.kandagatla@linaro.org>
+Subject: Re: [RESEND PATCH] ASoC: codecs: lpass: fix the order or clks turn
+ off during suspend
+Message-Id: <167958680207.69273.10837351413048222652.b4-ty@kernel.org>
+Date:   Thu, 23 Mar 2023 15:53:22 +0000
 MIME-Version: 1.0
-In-Reply-To: <121decd1d4f8c4aa469636756557fce02b245ddc.camel@duagon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.03.23 16:11, Rodríguez Barbarin, José Javier wrote:
-> One thing we can do is modify the chameleon_parse_cells prototype to
-> return the actual "chameleon table" size instead of the number of cells
-> which can have an undetermined size. At the moment, the return value is
-> only used for error checking but the number of cells is never used.
->
-> After that, we can check the actual "chameleon table" size and
-> drop/reallocate if needed.
-Hi Javier,
+On Thu, 23 Mar 2023 11:01:25 +0000, Srinivas Kandagatla wrote:
+> The order in which clocks are stopped matters as some of the clock
+> like NPL are derived from MCLK.
+> 
+> Without this patch, Dragonboard RB5 DSP would crash with below error:
+>  qcom_q6v5_pas 17300000.remoteproc: fatal error received:
+>  ABT_dal.c:278:ABTimeout: AHB Bus hang is detected,
+>  Number of bus hang detected := 2 , addr0 = 0x3370000 , addr1 = 0x0!!!
+> 
+> [...]
 
-Yeah that sounds reasonable. mcb_bus_add_devices() calls device_attach()
-for the respective IP cores, so they individual driver's ->probe() function
-shouldn't be called before mcb_bus_add_devices(). So you could shrink
-the resource between chameleon_parse_cells() and mcb_add_devices().
+Applied to
 
-Btw, mcb-lpc.c needs the same fix as well.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Byte,
-    Johannes
+Thanks!
+
+[1/1] ASoC: codecs: lpass: fix the order or clks turn off during suspend
+      commit: a4a3203426f4b67535d6442ddc5dca8878a0678f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
