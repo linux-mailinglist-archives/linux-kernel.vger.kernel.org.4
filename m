@@ -2,173 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD656C6856
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1476C685E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjCWMag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S231154AbjCWMcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjCWMac (ORCPT
+        with ESMTP id S230488AbjCWMcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:30:32 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB291BBAB;
-        Thu, 23 Mar 2023 05:30:30 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id D14AB40003;
-        Thu, 23 Mar 2023 12:30:25 +0000 (UTC)
-Message-ID: <5e3dec6d-c3a1-1fdb-7c5a-e9b81cfde2b5@ghiti.fr>
-Date:   Thu, 23 Mar 2023 13:30:25 +0100
+        Thu, 23 Mar 2023 08:32:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B1F24CA6;
+        Thu, 23 Mar 2023 05:32:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49BBD625D3;
+        Thu, 23 Mar 2023 12:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF62C433EF;
+        Thu, 23 Mar 2023 12:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679574722;
+        bh=EYf6786yE/sBEJ5kVxCWKnQjuC3+cnNr9QYBjueYbts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J++0vaReFWwPOwPXGP+Po4zvrxhwh5She2/Ec56VQSyU/fB7On301Z7qGfUhVnUyX
+         SdO5C25BT+xlwKrVGf5EnOQLRMO0ivqJ2a1v86lLTJn0ok331QoJwer4z39XS8p4Tv
+         UWf3+tr8QcyH2hsSvavwjncNpjTVFvkGGC9IXuf9140dHvo6FawidhHQRWGdMaF8wQ
+         fcFQXvjQ/lzngUvaOsH6tJBNoNLxkfsvI7wRhhU9EUYNnrTZhsSc7mDc3J2u7PqPVf
+         MF9uFDrtjjga7TBZG1HIgr2H3KboAaLcQttd83XsXeOrQUjR+94n4RpXrBUoAzQqYo
+         rdLJcSSaPByGQ==
+Date:   Thu, 23 Mar 2023 12:31:56 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux MediaTek <linux-mediatek@lists.infradead.org>,
+        Linux LEDs <linux-leds@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Subject: Re: [PATCH 0/3] Documentation fixes for MT6370 RGB
+Message-ID: <20230323123156.GL2673958@google.com>
+References: <20230319074903.13075-1-bagasdotme@gmail.com>
+ <2b8667b5-ea54-2ef4-f069-a86acd28ecea@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 2/4] mm: Introduce memblock_isolate_memory
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
- <20230316131711.1284451-3-alexghiti@rivosinc.com>
- <ZBN4Hoo99DNd5wKx@kernel.org> <efe1ef6b-b1c2-8d5b-82b7-3cd64053643e@ghiti.fr>
- <ZBibYDR0h1UeL6L5@kernel.org> <67ba29ff-b03d-2d24-a844-7ae25ddca447@ghiti.fr>
- <ZBxDDPnldPIgKngc@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <ZBxDDPnldPIgKngc@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2b8667b5-ea54-2ef4-f069-a86acd28ecea@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 23 Mar 2023, Bagas Sanjaya wrote:
 
-On 3/23/23 13:16, Mike Rapoport wrote:
-> On Thu, Mar 23, 2023 at 12:52:36PM +0100, Alexandre Ghiti wrote:
->> On 3/20/23 18:44, Mike Rapoport wrote:
->>> On Mon, Mar 20, 2023 at 11:54:14AM +0100, Alexandre Ghiti wrote:
->>>> Hi Mike,
->>>>
->>>> On 3/16/23 21:12, Mike Rapoport wrote:
->>>>> Hi Alexandre,
->>>>>
->>>>> On Thu, Mar 16, 2023 at 02:17:09PM +0100, Alexandre Ghiti wrote:
->>>>>> This function allows to split a region in memblock.memory and will be
->>>>>> useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
->>>>>> allows to isolate the kernel text/rodata and then avoid to map those
->>>>>> regions with a PUD/P4D/PGD.
->>>>> Sorry I've missed it last time. The changelog is fine in the context of
->>>> No worries :)
->>>>
->>>>
->>>>> this series, but if you look at it as a part of memblock changelog it
->>>>> doesn't provide enough background on why memblock_isolate_memory() is
->>>>> useful.
->>>>>
->>>>> Can you please add more context so it would be self explanatory?
->>>> What about: "memblock.memory contains the list of memory regions and a
->>>> memory region can cover memory that will be mapped with different
->>>> permissions. So to ease the mapping process, allow to isolate those regions
->>>> by introducing a new function called memblock_isolate_memory. This will be
->>>> used in arch specific code to isolate the kernel text/rodata regions when
->>>> STRICT_KERNEL_RWX is enabled so that we avoid mapping them with PUD/P4D/PGD
->>>> mappings."
->>> With this change
->>>
->>> ... STRICT_KERNEL_RWX is enabled so that they can be mapped with base pages.
->>
->> Actually they will get mapped with PMD mappings :) I'll just append: "or PMD
->> mapping" to your sentence above if that's ok with you.
-> Didn't read the rest of the patches :)
+> On 3/19/23 14:49, Bagas Sanjaya wrote:
+> > kernel test robot recently reported htmldocs warnings on documentation
+> > for MT6370 RGB LED. So here are the fixes.
+> >
+> > Bagas Sanjaya (3):
+> >   Documentation: leds: Add MT6370 doc to the toctree
+> >   Documentation: leds: MT6370: Properly wrap hw_pattern chart
+> >   Documentation: leds: MT6370: Use bullet lists for timing variables
+> >
+> >  Documentation/leds/index.rst           |  1 +
+> >  Documentation/leds/leds-mt6370-rgb.rst | 42 +++++++++++++-------------
+> >  2 files changed, 22 insertions(+), 21 deletions(-)
+> >
+> >
+> > base-commit: 4ba9df04b7ac66d2d000ed7ae2d8136302d99a57
 >
-> .. STRICT_KERNEL_RWX is enabled so that they can be mapped with differently
-> than the rest of the memory.
->
-> Does it cover the usescases?
+> ping
 
+a) Don't do that!
 
-Yes, fine with me!
+b) Especually don't do that 4 days after submission!
 
-Thanks again
+The usual expectation is 2 full weeks before submitting a [RESEND].
 
+Mark Brown says it best:
 
->
->>> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
->>
->> Thanks for your review,
->>
->> Alex
->>
->>
->>>> Thanks,
->>>>
->>>> Alex
->>>>
->>>>
->>>>>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->>>>>> Reviewed-by: Anup Patel <anup@brainfault.org>
->>>>>> Tested-by: Anup Patel <anup@brainfault.org>
->>>>>> ---
->>>>>>     include/linux/memblock.h |  1 +
->>>>>>     mm/memblock.c            | 20 ++++++++++++++++++++
->>>>>>     2 files changed, 21 insertions(+)
->>>>>>
->>>>>> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
->>>>>> index 50ad19662a32..2f7ef97c0da7 100644
->>>>>> --- a/include/linux/memblock.h
->>>>>> +++ b/include/linux/memblock.h
->>>>>> @@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
->>>>>>     int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
->>>>>>     int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
->>>>>>     int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
->>>>>> +int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
->>>>>>     void memblock_free_all(void);
->>>>>>     void memblock_free(void *ptr, size_t size);
->>>>>> diff --git a/mm/memblock.c b/mm/memblock.c
->>>>>> index 25fd0626a9e7..e8c651a37012 100644
->>>>>> --- a/mm/memblock.c
->>>>>> +++ b/mm/memblock.c
->>>>>> @@ -805,6 +805,26 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
->>>>>>     	return 0;
->>>>>>     }
->>>>>> +/**
->>>>>> + * memblock_isolate_memory - isolate given range in memblock.memory
->>>>>> + * @base: base of range to isolate
->>>>>> + * @size: size of range to isolate
->>>>>> + *
->>>>>> + * Isolates the given range in memblock.memory so that it does not share any
->>>>>> + * region with other ranges.
->>>>>> + *
->>>>>> + * Return:
->>>>>> + * 0 on success, -errno on failure.
->>>>>> + */
->>>>>> +
->>>>>> +int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
->>>>>> +{
->>>>>> +	int start_rgn, end_rgn;
->>>>>> +
->>>>>> +	return memblock_isolate_range(&memblock.memory, base, size,
->>>>>> +				      &start_rgn, &end_rgn);
->>>>>> +}
->>>>>> +
->>>>>>     static int __init_memblock memblock_remove_range(struct memblock_type *type,
->>>>>>     					  phys_addr_t base, phys_addr_t size)
->>>>>>     {
->>>>>> -- 
->>>>>> 2.37.2
->>>>>>
+"
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+"
+
+--
+Lee Jones [李琼斯]
