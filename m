@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7026C6C4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032E86C6C4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjCWP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
+        id S229600AbjCWPan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjCWP2o (ORCPT
+        with ESMTP id S231127AbjCWPal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:28:44 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675D832E4E;
-        Thu, 23 Mar 2023 08:28:43 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 103-20020a9d0870000000b0069f000acf40so9893858oty.1;
-        Thu, 23 Mar 2023 08:28:43 -0700 (PDT)
+        Thu, 23 Mar 2023 11:30:41 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B83034325
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:30:40 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54463468d06so222879687b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679585439;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+qI/oNwFeW5AU4lNqRSemjHEDPcMdJv7efareLc9JI=;
+        b=pYBYHAzRnUHg1ZIG+T4kZzo8qWT+DElhuGUnwneUR/mF5Lij/6Q6KJsTaJvn8Q6dGv
+         ygB8qrtA4OrfpSW3n13l9JKnhrcQXgsKLN2ApThD7mxb48Jcevk+F+9nfD9JbPjkMv3K
+         sDc3TVFk3byG0190WDuvvjiz8kw/6rfdul6u8y3/Rzg8dbkM/ZGcBD1+Bsi1eMr2jGkj
+         BWTCNIFTDmdX+pIOaL8Dgx7Zt2a99k544J2gjdxEpclc01RC2PRMc5zqZm5eeWvQH4Ho
+         2t8yuWJeV4zPLLcsUKbqtlAvou56czy262wZnkUKTw4BkF3FH9zF+NzpspH/0035ae3S
+         IBag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679585322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2lMC9l9Xu+R4kY0unfw7S3jTRffsrFJM0dcw4eNt4L4=;
-        b=nlk/B+HieGujYOuOVgGs36Xhbm76oh3ubYH6RWTo0UNZJkdRrve9AGsjXOFJeoVQDo
-         9DBPaT5CsP7XAtaymO29WPAo+mGOVIX3Y4zJUaJYncgdalS1JwSrdsUwtkVkZB/wgth3
-         cOZawB6uJcqSd5w1gcZ3mfKeSxzBdru5Qw0gMalnI5uOH6/DTaz2oYw8IDNCB0Vj0z7C
-         iHY4GPTd+OOrLbcAM5Z9tYH5yczTJVCB0ePbJTVawJIYB/b38PrP4fwM9QXN+goHdGNc
-         KLfta5h6Q6KJIo2Mzf7b5ti8c5RqsK9CSfMfcf2iS6f1ZRCjSdHnBavuFXNgRblbcFaw
-         31mw==
-X-Gm-Message-State: AO0yUKVwszJ6NvQn69TyXLBQAwLQG0yDZ7kRqF+jeDE7Sq9KXb6ybWN0
-        qPm4SE83KTRl9PTpQL7J9A==
-X-Google-Smtp-Source: AK7set/TI9oZV8LrGVWiAqlaRR1tJHqqMU6cCKVVJ8hOeATVMGV7fOq4p/87Qdp/qx7+W40LEtpk7A==
-X-Received: by 2002:a05:6830:1b70:b0:69f:8f30:89b5 with SMTP id d16-20020a0568301b7000b0069f8f3089b5mr2810365ote.19.1679585322633;
-        Thu, 23 Mar 2023 08:28:42 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q3-20020a9d6303000000b0069f17869390sm5195536otk.2.2023.03.23.08.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 08:28:42 -0700 (PDT)
-Received: (nullmailer pid 3289654 invoked by uid 1000);
-        Thu, 23 Mar 2023 15:28:41 -0000
-Date:   Thu, 23 Mar 2023 10:28:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, Peng Fan <peng.fan@nxp.com>,
-        s.hauer@pengutronix.de, linux-usb@vger.kernel.org,
-        shawnguo@kernel.org, xu.yang_2@nxp.com, linux-imx@nxp.com,
-        robh+dt@kernel.org, kernel@pengutronix.de, jun.li@nxp.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        festevam@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V7 02/10] dt-bindings: usb: ci-hdrc-usb2: convert to DT
- schema format
-Message-ID: <167958532041.3289575.14742530117909404528.robh@kernel.org>
-References: <20230322052504.2629429-1-peng.fan@oss.nxp.com>
- <20230322052504.2629429-3-peng.fan@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322052504.2629429-3-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679585439;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+qI/oNwFeW5AU4lNqRSemjHEDPcMdJv7efareLc9JI=;
+        b=CeYKDt2xMAfi1KFWlv0LvxelMUkbum4SHs6W1UJUcMtK/efjL6kXjH+8+0abSmeu7x
+         L83kL3QB6N97Z1q+PrfCnudo4PbA8YnhtrbBAQLWYrjgonb/CO1VwWyhqNs9PfxqTxVg
+         kpyh0rGtN0DkDOIOTm0QFt+WGKU+vgwEOzbbJjCDB+ZExQsWZWTXjAnsgSwzTdEKbX0B
+         9t6xZRxxi82Ls+Ilw4VIFGtvSSvVu0EuQ3ldU/9DkCooaP2DINZaZjbFmoP7WmGQuRxM
+         pVEb7CGGRlsrvfhGJXzDE0zyZYTo1WpBwtRAjsQbpVsWsYkf3O0X55SwdsoZp3PixS23
+         MZGg==
+X-Gm-Message-State: AAQBX9c3Snf/FeM1cvbFafzWZAqXoJewoY9wPZoTxj51lnCopQ9mPpfk
+        EFU65+gQI+/6pU/1wIcy8Kk9cRak/Ag=
+X-Google-Smtp-Source: AKy350a00+PVtD4gMfoaD4iNCL0ZDQAzD5N6bhQaxe1CtCJstjnO3aAc6TWBd49huAyNeBuSvhfpCPVxx9M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:100d:b0:b6d:fc53:c5c0 with SMTP id
+ w13-20020a056902100d00b00b6dfc53c5c0mr2444777ybt.1.1679585439650; Thu, 23 Mar
+ 2023 08:30:39 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 08:30:38 -0700
+In-Reply-To: <20230207123713.3905-3-wei.w.wang@intel.com>
+Mime-Version: 1.0
+References: <20230207123713.3905-1-wei.w.wang@intel.com> <20230207123713.3905-3-wei.w.wang@intel.com>
+Message-ID: <ZBxwnq3dG3kzLcHg@google.com>
+Subject: Re: [PATCH v2 2/2] kvm/eventfd: use list_for_each_entry when deassign ioeventfd
+From:   Sean Christopherson <seanjc@google.com>
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     pbonzini@redhat.com, mhal@rbox.co, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 07, 2023, Wei Wang wrote:
+> Simpify kvm_deassign_ioeventfd_idx to use list_for_each_entry as the
+> loop just ends at the entry that's founded and deleted.
+> 
 
-On Wed, 22 Mar 2023 13:24:56 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert the binding to DT schema format. To fix the dtbs_check
-> error, some properties were also added, such as nvidia,phy, reset-names
-> ulpi; missing compatibles are added.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Suggested-by: Michal Luczaj <mhal@rbox.co>
+
+> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
 > ---
->  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 447 ++++++++++++++++++
->  2 files changed, 447 insertions(+), 159 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+Reviewed-by: Sean Christopherson <seanjc@google.com>
