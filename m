@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373BF6C6CDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C176C6CDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbjCWQCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S231449AbjCWQDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCWQCs (ORCPT
+        with ESMTP id S230302AbjCWQDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:02:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436A32F04E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:02:47 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i5so41950522eda.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:02:47 -0700 (PDT)
+        Thu, 23 Mar 2023 12:03:10 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C004C13D5E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:03:03 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id o12so88836693edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679587366;
+        d=google.com; s=20210112; t=1679587382;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jdxCtHk5BHFsSI7nCxtLNI5LUnK63CNxiy4dYgR/sK4=;
-        b=QlTme/lFyoVDGKhtIAPxITQZffC97/l2oat44BkhKOQXnc7z5W55mV5A44zPZ8OGX6
-         ieCQS9QJJe04JPyGxmvKoxYcb/6gQvd8J2I8xk4kzIExvTBSFeUJ3fpgJT80yPCg0j3n
-         KVOa+0j43EavuVRfPpI2YeoOpHD2sYJ8JORlybIjrlpmdZq0xNZpet1HPVPAsNx1EyNw
-         imyiMcCNDyrct+tw5WnnPBMwbfXgBSsHluGWQ9dzfC5g79d1pB3qvkF5UzSptGRUNLx2
-         RqDfaKK3gyCo40qWY0d2X7soZJSq46RP/P8uVQRQH4A39erkept9iI80vCztx4p5iEEi
-         K1yg==
+        bh=0qq4eAJlExkTdfdM7Y2EFZtPczMJ0l3cf4DT7uOI7JI=;
+        b=b2L3krFnhws7f+p6hNHEuWxd6zHS4DqTuXhpP/rStBHvPGchFK0OAE51Mv5Gggdeva
+         0g+X1gb+kxTGwE7MuENLR+hBwy5CJCvKIeflwI8gTeX7juPYoXVi6mToYkQu2jsd6VVK
+         XkpNk/cz5nwC5XHfmfjMuww1FYcjHs0qPmGVGUo4z9Ghsk7Eb1tXZJTLTmpPar+FodLP
+         ufTGqdkDyfaPIyftUYuOdlRHEhAF00xxGUsvAS7AFhZdslbx6UQqkV+Zc9Xvt9lR/pVo
+         p0D8+Hc5PEtyv37lvNruiMQD1DsZALHgLLaWg+NZbdFcsLcZ3CNgbGpSXxz9y6+ZVaJt
+         NXIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679587366;
+        d=1e100.net; s=20210112; t=1679587382;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jdxCtHk5BHFsSI7nCxtLNI5LUnK63CNxiy4dYgR/sK4=;
-        b=6plX5sSL1ce0A1QzgYa9Cm/SciSUzHwrehhp+W3vFa4IwPc7Ti6zts9sHf4Pcr2nQv
-         fJcRpoP5wYaCg0qEWTMgYbRujFI+b3iYuVxv1bP50DEQDyL4rRNekv9NqOpavSwpNl7/
-         DhkqS7IHC2gB7bPqsGVeBwUEPzEFVpf6L6dMKT9i46LzQGr5v2s3F9VLIrH3iWuk+IFa
-         pd3XqUxNzexVWPRzHbme6et2it2LBrWnHT04l2c7M6+QnZD7T7ARz0mrsflM+Z+azCsu
-         15UHi/oEK/XIhETZshWdlUms3+vsRrx2LuFw6vFqpUb668SMAVaqPZN1ns1w7BtJ0ElS
-         PPhA==
-X-Gm-Message-State: AO0yUKXdGPwIO5OKT9gTdzDrSJSVRok1ifOd1aUT7U3LjuOLpQjFGIqB
-        ko04lbxXxZldCCo8xEST49hULS03IAKHbCavDPjSfQ==
-X-Google-Smtp-Source: AK7set990Oll8W/SXU/i0j17c5vuX4anYSeMLFlhYksbJJFOfM6VZxj2yzvlsoVTIsqgNYyJr8BxTWFke55LyxTw83E=
+        bh=0qq4eAJlExkTdfdM7Y2EFZtPczMJ0l3cf4DT7uOI7JI=;
+        b=SuZEoZUkHSTOPSnrcCCspM/ofyz2KjdADshJusxXpat8GQltypUI0KKzd70yhXhkpv
+         sXRIZ5bp/NylS37vJ7RAs5DdlwQ6Bc5/orn8bMPU+fW/siM4FC1bv9t+C9FhzigF2sYC
+         l2gXqO4bAMqHUhrVC+BVsOKCUGL8Q/H7syPhZ1tIukVCFbC5/VKfmuVrchff3oCSI28b
+         ut1W77/WFeG3BdbVgk5PTu5iFO389frjTmnVGxMwKuvmHAZtlfGbg+Ol3yA8mlOAkShG
+         6CMX5BLsn3Dots23S0DceQkUTzC/siY551Qk/DiTJrLqwYEA5qJOIar0hqwPwyzX6R8y
+         qhCA==
+X-Gm-Message-State: AO0yUKU/x8MCQ2YPcxmg/3MXz4KKuRVUHnHrtWEnMEgWY6ovGaWPb+NG
+        5BYd4DmJm5+FLgk6iuVwcI4SbdWhTjF3z27FQ4bsbg==
+X-Google-Smtp-Source: AK7set/CTEwM+vAIIaFjtAYd2scGR7MdjQ8kvYZ6kSB1SLo+YTrn50F185ArhVjN2rVBhkCYuegGR8kNlO2/oWLc7XU=
 X-Received: by 2002:a17:906:34cd:b0:8e5:411d:4d09 with SMTP id
- h13-20020a17090634cd00b008e5411d4d09mr5207317ejb.15.1679587365591; Thu, 23
- Mar 2023 09:02:45 -0700 (PDT)
+ h13-20020a17090634cd00b008e5411d4d09mr5207827ejb.15.1679587382152; Thu, 23
+ Mar 2023 09:03:02 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-7-yosryahmed@google.com> <20230323155040.GB739026@cmpxchg.org>
-In-Reply-To: <20230323155040.GB739026@cmpxchg.org>
+ <20230323040037.2389095-7-yosryahmed@google.com> <20230323160030.GD739026@cmpxchg.org>
+In-Reply-To: <20230323160030.GD739026@cmpxchg.org>
 From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 23 Mar 2023 09:02:09 -0700
-Message-ID: <CAJD7tkZ7d_ZFdcfOdZGSeL9i46cyEV+p2rPm0gotvRT8u8atpw@mail.gmail.com>
+Date:   Thu, 23 Mar 2023 09:02:25 -0700
+Message-ID: <CAJD7tkZ2cOQ8fVRewxznYin6VgeRHiJAQMZbhhi6cT64xfRvqg@mail.gmail.com>
 Subject: Re: [RFC PATCH 6/7] workingset: memcg: sleep when flushing stats in workingset_refault()
 To:     Johannes Weiner <hannes@cmpxchg.org>
 Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
@@ -81,7 +81,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 8:50=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
+On Thu, Mar 23, 2023 at 9:00=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
 > wrote:
 >
 > On Thu, Mar 23, 2023 at 04:00:36AM +0000, Yosry Ahmed wrote:
@@ -98,7 +98,30 @@ On Thu, Mar 23, 2023 at 8:50=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
 > > generally sure at all whether it's okay to sleep in all contexts or not=
 .
 > > Feedback here would be very helpful.
+> >
+> > ---
+> >  mm/workingset.c | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/workingset.c b/mm/workingset.c
+> > index 042eabbb43f6..410bc6684ea7 100644
+> > --- a/mm/workingset.c
+> > +++ b/mm/workingset.c
+> > @@ -406,6 +406,8 @@ void workingset_refault(struct folio *folio, void *=
+shadow)
+> >       unpack_shadow(shadow, &memcgid, &pgdat, &eviction, &workingset);
+> >       eviction <<=3D bucket_order;
+> >
+> > +     /* Flush stats (and potentially sleep) before holding RCU read lo=
+ck */
+> > +     mem_cgroup_flush_stats_delayed(true);
 >
-> Yes, it's safe.
+> Btw, it might be a good time to rename this while you're in the
+> area. delayed suggests this is using a delayed_work, but this is
+> actually sometimes flushing directly from the callsite.
+>
+> What it's doing is ratelimited calls. A better name would be:
+>
+>         mem_cgroup_flush_stats_ratelimited()
 
-Thanks! That's very helpful!
+Agreed. Will do in the next version.
