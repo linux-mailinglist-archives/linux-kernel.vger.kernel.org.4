@@ -2,153 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1BF6C6B5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7774C6C6B65
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjCWOow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S231819AbjCWOpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCWOou (ORCPT
+        with ESMTP id S229548AbjCWOp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:44:50 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2055.outbound.protection.outlook.com [40.107.100.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DA523C4A;
-        Thu, 23 Mar 2023 07:44:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MJcRl98iEIqvPvFxbOX1f0vfmgN9D4Ebv6VnmB/kzVg+S2SCzf+bPyyjZyMA1NQhjePoqam24AKZ/T93OgAFDKwIuwcL6lwoHuV5osQZvHhj8n4Il+AaoGraGgWobOTIQXi1ZBlbIqHQNs/DDUBR+x6TZ/8o5b4sp3pXUS/+w1g+mp2D7P89TNgUEbTgXxW66KHjfRR0PR0rAPvBSmV6QuthMNCbliedzM5d0Be/wE+0V4Vt7ThOVfeuDR2DUyUQbSVvrCCgHg7DSGkSXCHcW/3Wzz2tNhohw+oJk8GjHdwDR0qTg+XSAf9CNgBx52fpjlr4cF4B8fBrFfKJDoMweA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d5OfBQRiycuaBHtBOx5aeEMwuOGWXdzHUtTHFG/eKFU=;
- b=Ih28e0qMxFiwakvDxZ0J3rHH/n5J4OjqKYhyXzbKZkibnnspzYUzKoEhZRCaH0tVjyE4ERx/6sa/ln7SItBTNM1evPkybnaB7u3W4qkAdjJwe8yNfCrGwXDQBHl/8rMaf393exMT8QwRFLxn2TfNT8tJfkTpz68wfKgqKpKxywvMaNBgjpw3x0QhJT1aDdjrCHIVW0FI12XMrlCPQZhtybun4wqqXSdS2tJJ6GNxa1E/kuKvlxqcKdNbm7Im6M9l5VKC1JFkTLOYoOQ0D4BByphvhjdZTEQgh4zv2G9B44Fv/ea4clQdavJSQPTkC1pXGQUH5iIzB2LNvMza9BJaCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d5OfBQRiycuaBHtBOx5aeEMwuOGWXdzHUtTHFG/eKFU=;
- b=o50rw0+PjZNdt5d9VHy69rxnG125tnzSzLweowkYv1Mw9UYFw3FoTvNkJBKwwTViad7IGxe+lATjFid2liVqnHEIlNxTRZguqIXqIj2LefD19A/ewDsdHVME0Ok4m0XeBk1T/30r6zthQVPnzFhT1t2vaEWdx/eKTKJHXKbry+iiAT73wxTMgsLx/Avk9Co2DAEHe5qYvs8zkmBunX0+ts2Wb1fwI0eXyvWocXUA/Dn7CaYEwMkAyZd19O1zFnSwvLjuG8IxY3ogOVuz7imdowC7Om1vES9eTuiFUgFBff0qeTe0iaGavgrnLKxsiwJzRI0Zyv5WjiTo888SCsnagg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH8PR12MB7301.namprd12.prod.outlook.com (2603:10b6:510:222::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 14:44:47 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 14:44:47 +0000
-Date:   Thu, 23 Mar 2023 11:44:44 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH v8 0/7] Remove VT-d virtual command interface and IOASID
-Message-ID: <ZBxl3FgN/m2Qus7V@nvidia.com>
-References: <20230322200803.869130-1-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322200803.869130-1-jacob.jun.pan@linux.intel.com>
-X-ClientProxiedBy: MN2PR17CA0017.namprd17.prod.outlook.com
- (2603:10b6:208:15e::30) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 23 Mar 2023 10:45:28 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C128523A79;
+        Thu, 23 Mar 2023 07:45:10 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id y4so87753494edo.2;
+        Thu, 23 Mar 2023 07:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679582709;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PkZtZRWwDV6yq9X5+ka1CKddoIkNJT/5gBkOd73Dzhk=;
+        b=fWbdg8d08k+UL2B3EdfqQaYnk+sH8AlzOL0Ttg/V8/ZeI+g5mp2Z0sAF9FbObBSTtF
+         U79d5sx/p22jFcT1c7JVwd1EKNNNfXUYUlM4Lr5DArSsbhciyU9fDXPSR3RXj2OoOj/x
+         wnANmmzmwam86O2UKvevVImuC4HMGit4j55hMoDljuvhQtJYwkPz66DGY14jGVfM167U
+         CZxapPbwqDjeko6BhDTXeiDPy+uN7naF99XskRQYxr+hSJDdXbMQ3y5S7Uw1scdfvsff
+         cXISSCqSfJ02ZCZnPAAjuR8lvY0DB7oxW/+Q7IiC9rZWISNsnRtMCaCEgVkh19bE0NOF
+         UKMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679582709;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PkZtZRWwDV6yq9X5+ka1CKddoIkNJT/5gBkOd73Dzhk=;
+        b=PF9tjZCkJh1M+IwD4KQLakI+AGt1UMQJebTKI3m8ixbo6TMg4L75XdCgN9fo7KA7uf
+         /qvHtn4htkcytLdWTuoH9la0DQEB4LEIZRIx09JBIwAtc6hEFNxiyCm8Va+4fYt5v1Zc
+         Ivrj7699kuBMf5tXAXPCozWwqoRFEEN1iM+/cegYpDT7vB0KssD/2N/33DqDhmCZHpzb
+         3GK5dgXFWhKZJvhvjhvNbvh5goPKQlRjb/AuK322fj501o+nzB3bGGhdiGq76MG+9yOl
+         arKyfPuhqJnYW4CZH6aQ636vdDGHKonVsi123q94gs6Tfi/3UaX3cc5HJZh3NaLraMI4
+         phWA==
+X-Gm-Message-State: AO0yUKX5/p0fJZBnNBzr7Jh7BRWFmmP4FCiXDUNNpdne9AuG8F7b18vj
+        3On4FRsDtR4GmaRT+Hyx6nw=
+X-Google-Smtp-Source: AK7set9v7wgfuKd5vWk9f/V+g771oktAijHifRK/8sWE88Bfmjt7S6cryPKpkXpWwONL9jVAl3Xieg==
+X-Received: by 2002:a17:907:118b:b0:939:c395:1b3 with SMTP id uz11-20020a170907118b00b00939c39501b3mr11028438ejb.31.1679582709113;
+        Thu, 23 Mar 2023 07:45:09 -0700 (PDT)
+Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id fi9-20020a170906da0900b00931faf03db0sm8458743ejb.27.2023.03.23.07.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 07:45:08 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] soc/tegra: cbb: remove linux/version.h
+Date:   Thu, 23 Mar 2023 15:45:05 +0100
+Message-Id: <167958269200.541422.1665611551980712106.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230303130346.2062989-1-usama.anjum@collabora.com>
+References: <20230303130346.2062989-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH8PR12MB7301:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4836d225-7648-499e-6564-08db2bad2553
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: laV7rn+toP6JvrKKq7YOydiXOIEBwQeZ+aQLdpEUYwpsePbUmf9Y9UdWlDm4xhNDXn74AoRyt01cFdWSSeg9LIRjf8s/e5nlf5wSvEWq/pPa3+xp5UH+B2L/oAAfiHmCY0qHCQNlfNQOyUasR5FO/eZKaM3Wb3WNBRHUo4eJTL/gqr1YBRdDQgsobEEQL5VyPAcVV9LtBlHl2tpEqa4HqogH9nHVMPTdKiR0yCmUQCApbBeyMwmOULXNIrGMJPYbzIshSlWt5mW4Cubee8btY95rfSG+K0eZ0AwYz4xzLS4Ln85hQAwM5sPpnVylopvo3/GKLKyYdQTxTY+fDk0L/arJ3EBP8oQPLkznE5Z/8ytFJPt6ZbZKxOVF5BNRvoGZrnAqGLYQpKEJ3gvNmcxwVoM3g11Fb6G/XqYf+9oydgrIoZUzuU0g2HUYnuM1vpvgXBreChYK9RZ7FQyXZWIWGKoG2Vymg715bk7oKfEyvSlATOE2fmZpSAbJPEGJKdICdqvTdt+wEdaklaXnDlQC71M0gv1y4kGiWy31dCSJfVdKnJHceHvjDNfd93pMBJeZKbw81LVGWdMmO+41u6VCjDMup3WRaNosqXn+g97FB5xMlDT13ud0mLuwT/mtMaUHWpWFOaka7XP6gP3V5Mh+Gg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199018)(36756003)(6916009)(8676002)(86362001)(4326008)(66946007)(66556008)(8936002)(66476007)(41300700001)(6486002)(478600001)(316002)(54906003)(5660300002)(2906002)(7416002)(4744005)(26005)(38100700002)(6512007)(6506007)(6666004)(186003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TvOZCtjCdJwNDjZCGvWutS+XrBEb1YBhhuIcBkrSuhQLB3RJbkrwZjUjaByd?=
- =?us-ascii?Q?DY+aT5BhkOZPNLwUEOCgPJvdoiFKmFu39CmETWCgxhHmDtuLfoCkAUHLieiF?=
- =?us-ascii?Q?YTO/+VqMpYTAynkGFuLxooF/NM3kZLEkLt4Ndq5fXzQs4Q8vs2Xal34xG88E?=
- =?us-ascii?Q?FNqjD9KN7PxkyoTBGASIHtO0/iZFLsNmsBzqKYpNYav+u0BNOJg2BHGT3mDZ?=
- =?us-ascii?Q?/Fw9urzA0A2J9WQFKEgkXeIHi6MfBRTWiMavmib5/NnhrwLWTKGmSmg2kMw5?=
- =?us-ascii?Q?pNtZHtFkH0f6lqzm/pIbQr3cslNl8JXj5xorfrjWF1zslnaYdAgSAlQEE7rt?=
- =?us-ascii?Q?Pcy+CTcGlGhB/uRXruIXjjmEmoG8P2kJJMJWt2ae8aptTAS5LuLJCbvMjK8b?=
- =?us-ascii?Q?Lg0tVtg+5Hxq7/zgI5Xb7n2lHv1TNVIjZxNS5iN+uL2QkouCk0vkDrZK7Xlx?=
- =?us-ascii?Q?3TkdQPHNGvDdc6k32Vv+L+7T+d3dtHI78pY6FmuNCTypkahUkRdy3YHahiuH?=
- =?us-ascii?Q?UdUx4sE3dtzM18G0ruVQtaI9vMBXIy0/OWrhOudWsw+Np+i0ilS0PB0Korbk?=
- =?us-ascii?Q?4YLQ9BuDZS8rGlJGO7UavLx58emhSNima9VjzxhPWQh4Py0qGN3rWSRTLaAo?=
- =?us-ascii?Q?/jpdiARGovURmfbq2oYObjt0Pj41BuK4/KPCpD/JzMCltHTwq/3jZsn1MHr4?=
- =?us-ascii?Q?oX7pCFhc27iQTS+c0wz43c6Zz/ldoXOq+NZqYASigHbnBEmxxl0+1mjL2vsG?=
- =?us-ascii?Q?0r/5Ic/pTEimD67ShGrb6ryBe0aCE1owcZVq2btRah5DeZX4WNBRVahpTT7C?=
- =?us-ascii?Q?UhargBul45j7/KTjYWTv9c2x6U6ijL8bJp8GJkOo+i7QSk/2wwJ0m16CvrQ7?=
- =?us-ascii?Q?9IUTdOVKEMK/fa0DD2OTxIrO3ryAGPh/VGtWDLpafhr7ONTJgdXMTQQM1lap?=
- =?us-ascii?Q?y2gl1QXwYgRksL6hjcQPxgLMXgzNJZRJXauDCUuXNm9zU3X1f71Jh6MEhHfT?=
- =?us-ascii?Q?BEN1YEx+Hp0JVT6SVAF2QhiUCrsY9mgrw7HUOeu8pSQzvqvQauLHigrXYjEc?=
- =?us-ascii?Q?+9PaRDo7WNtE0Wr8IJJLEcJZidoVFWRMtu7skFsnwTkS4wA5hXOU3lzC4x+j?=
- =?us-ascii?Q?mJGb3++1LlWZr7DAARLBvVVjRYv1iOIiFj9wz7oI40itTnIy8NRTBTElPile?=
- =?us-ascii?Q?KEbC3P/kGv0OjVrNe43kIeEUJnc9bTT0IXZ5prJagBQC+oxtr7rghx7fKpM9?=
- =?us-ascii?Q?iClMopW8IA4zWo8S1F3Y4LK/RdBDRKRJxcB/jXVTY8H6qxcJEU6TsWYOHF+B?=
- =?us-ascii?Q?ebK9y39Wj7z1iAXg68OT00TRIv1+Iw53U9gDSMmY2W3mRZf4WmLgEoSRPaKS?=
- =?us-ascii?Q?UR6XiAF27ZGT4AMY0tQNRCd8bKEchM37rqhEZqC9YAC6heeWliolbcva+inP?=
- =?us-ascii?Q?1uuwE40mb83wrZmKl7jH0zGnOlWvkPrPF3ueuXJyKwGgruIZ493l3uZcUYnq?=
- =?us-ascii?Q?8fnvZA7sVJRH5jQd4N0X99nfUHYyVk1pMkQaRdcaw197a1LxgctBe5GT9H4d?=
- =?us-ascii?Q?wXczKlHIGmjMname2xfdffiqK8frJ7gQQxxHXC9C?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4836d225-7648-499e-6564-08db2bad2553
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 14:44:46.8614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SYTLrNF7E9ondJUrtxtbP3ZVAI6LgMYkVulL/y4wvvGF4n6p9Y5hFZAeMHd8CWoA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7301
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 01:07:56PM -0700, Jacob Pan wrote:
-> Hi all,
-> 
-> This patch set removes unused VT-d virtual command interface followed by
-> removal of the IOASID infrastructure.
-> 
-> This has only been tested on x86 platforms, need help with testing on ARM
-> SMMU and other architectures.
-> 
-> 
-> Thanks,
-> 
-> Jacob
-> 
-> ChangeLog:
-> v8:
->  - remove #ifdef CONFIG_IOMMU_SVA since we have dummy inline functions.
->  - fixed a compile bug that affects bisectability
+From: Thierry Reding <treding@nvidia.com>
 
-I think this looks OK now, thanks
+On Fri, 3 Mar 2023 18:03:46 +0500, Muhammad Usama Anjum wrote:
+> make versioncheck reports the following:
+> ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+> ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+> ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
+> 
+> So remove linux/version.h from these files.
+> 
+> [...]
 
-Jason
+Applied, thanks!
+
+[1/1] soc/tegra: cbb: remove linux/version.h
+      commit: 9737a63558deeec01ce202c6c06c96a0503a3128
+
+Best regards,
+-- 
+Thierry Reding <treding@nvidia.com>
