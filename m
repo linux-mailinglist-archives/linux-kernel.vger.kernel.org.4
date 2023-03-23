@@ -2,97 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD586C6DC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5956A6C6DCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjCWQgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S231611AbjCWQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjCWQgY (ORCPT
+        with ESMTP id S231857AbjCWQgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:36:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C436448;
-        Thu, 23 Mar 2023 09:34:59 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        Thu, 23 Mar 2023 12:36:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFAD399E2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:35:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 809A61EC0666;
-        Thu, 23 Mar 2023 17:34:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679589295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4sg0gkB9DRPOhlMDZ3zP/dpFav3wNu5TRPV6O3JS84Q=;
-        b=FyrzPcj0DL33qZdewBbLEPpJ1DHFdxbWP3v7Wcce+2+bLo4VhNzy7gZuttjXvFk7hZBOCS
-        ecsQYvzGAW+GdThqAEiKjSgEyu7kLtpNulEsxpV4BP5pH+8qhkKW+Wkp7UdWzULXSTsFwb
-        Y4qa5WnyTodkPt4/nRMIX5Ka24ZQZJI=
-Date:   Thu, 23 Mar 2023 17:34:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        linux-crypto@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
-Message-ID: <20230323163450.GGZBx/qpnclFnMaf7e@fat_crate.local>
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
- <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
- <20230322181541.GEZBtFzRAMcH9BAzUe@fat_crate.local>
- <ecf005b1-ddb9-da4c-4526-28df4806426c@linux.microsoft.com>
- <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
- <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7A78627F6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6552BC433EF;
+        Thu, 23 Mar 2023 16:34:57 +0000 (UTC)
+Date:   Thu, 23 Mar 2023 12:34:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracepoint: Fix CFI failures with tp_stub_func
+Message-ID: <20230323123455.36dd83f6@gandalf.local.home>
+In-Reply-To: <ZBx9+ZyiF6LoKbPr@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230323114012.2162285-1-mark.rutland@arm.com>
+        <20230323085321.0f8d1b98@gandalf.local.home>
+        <ZBxX/uu/s5IKBQOw@FVFF77S0Q05N.cambridge.arm.com>
+        <ZBx9+ZyiF6LoKbPr@FVFF77S0Q05N.cambridge.arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 05:11:26PM +0100, Jeremi Piotrowski wrote:
-> That same interface is exposed by physical hardware+firmware to the underlying
-> Hyper-V.
+On Thu, 23 Mar 2023 16:27:37 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-Let me see if I understand it correctly: Hyper-V *baremetal* is using
-the same ASPT spec to to talk to the *physical* PSP device?
+> On Thu, Mar 23, 2023 at 01:45:34PM +0000, Mark Rutland wrote:
+> > On Thu, Mar 23, 2023 at 08:53:21AM -0400, Steven Rostedt wrote:  
+> > > On Thu, 23 Mar 2023 11:40:12 +0000
+> > > Mark Rutland <mark.rutland@arm.com> wrote:  
+> 
+> > > > diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> > > > index 6811e43c1b5c2..1640926441910 100644
+> > > > --- a/include/linux/tracepoint.h
+> > > > +++ b/include/linux/tracepoint.h
+> > > > @@ -303,6 +303,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+> > > >  	__section("__tracepoints_strings") = #_name;			\
+> > > >  	extern struct static_call_key STATIC_CALL_KEY(tp_func_##_name);	\
+> > > >  	int __traceiter_##_name(void *__data, proto);			\
+> > > > +	void __tracestub_##_name(void *, proto);			\
+> > > >  	struct tracepoint __tracepoint_##_name	__used			\
+> > > >  	__section("__tracepoints") = {					\
+> > > >  		.name = __tpstrtab_##_name,				\
+> > > > @@ -310,6 +311,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+> > > >  		.static_call_key = &STATIC_CALL_KEY(tp_func_##_name),	\
+> > > >  		.static_call_tramp = STATIC_CALL_TRAMP_ADDR(tp_func_##_name), \
+> > > >  		.iterator = &__traceiter_##_name,			\
+> > > > +		.stub = &__tracestub_##_name,				\
+> > > >  		.regfunc = _reg,					\
+> > > >  		.unregfunc = _unreg,					\
+> > > >  		.funcs = NULL };					\
+> > > > @@ -330,6 +332,9 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+> > > >  		}							\
+> > > >  		return 0;						\
+> > > >  	}								\
+> > > > +	void __tracestub_##_name(void *__data, proto)			\
+> > > > +	{								\
+> > > > +	}								\  
+> > > 
+> > > I purposely did not do this because this adds over a thousand stub
+> > > functions! It adds one for *every* tracepoint (and that is a superset of
+> > > trace events).
+> > > 
+> > > Is there some other way we could do this?
+> > > 
+> > > C really really needs a way to make a generic void do_nothing(...) function!
+> > > 
+> > > I added some compiler folks to the Cc to hear our grievances.  
+> > 
+> > I pulled in Sami, who did much of the kCFI work, and PeterZ too...
+> > 
+> > We can't have a generic function that's compatible will all function
+> > prototypes, since that mechanism would undermine the CFI scheme. Either callers
+> > would always have to omit the check, or we're have to have a special "always
+> > compatible" type hash, and both would be gigantic targets for attack.
+> > 
+> > Can we avoid the stub entirely? e.g. make hte call conditional on the func
+> > pointer not being some bad value (e.g. like the error pointers?). That way we
+> > could avoid the call, and we wouldn't need the stub implementation.  
+> 
+> Along those lines (and as Peter also suggested over IRC), would something like
+> the below be preferable?
 
-Is that ASPT interface to talk to the PSP used by the L0 hypervisor?
+So we had this discussion a while ago:
 
-Or does the L0 HV have a normal driver, similar to the Linux one,
-without the functionality this ASPT spec provides?
+See befe6d946551 ("tracepoint: Do not fail unregistering a probe due to memory failure")
 
-> So it wasn't a matter of Microsoft architects coming up with a
-> guest-host interface but rather exposing the virtual hardware in the same
-> way as on a physical server.
+Where I believe one answer was to use NULL instead of a stub.
 
-So if you want to expose the same interface to the L1 guest, why isn't
-Hyper-V emulating an ACPI device just like any other functionality? Why
-does it need to reach into the interrupt handling internals?
+I have to go back and re-read that thread. Mathieu was involved with all
+this too.
 
-I'd expect that the L0 HV would emulate a PSP device, the L1 would
-simply load the Linux PSP device driver and everything should just work.
+And as I mentioned in my other reply. There was a more complex solution
+that could handle this if the stub solution ended up being an issue.
 
-What's the point of that alternate access at all?
+Repeated again so Mathieu doesn't have to search for it.
 
-But I might still be missing something...
+    [ Note, this version does use undefined compiler behavior (assuming that
+      a stub function with no parameters or return, can be called by a location
+      that thinks it has parameters but still no return value. Static calls
+      do the same thing, so this trick is not without precedent.
 
--- 
-Regards/Gruss,
-    Boris.
+      There's another solution that uses RCU tricks and is more complex, but
+      can be an alternative if this solution becomes an issue.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+      Link: https://lore.kernel.org/lkml/20210127170721.58bce7cc@gandalf.local.home/
+    ]
+
+-- Steve
+
+
+> 
+> Mark.
+> 
+> ---->8----  
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 6811e43c1b5c..b8017e906049 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -33,6 +33,8 @@ struct trace_eval_map {
+>  
+>  #define TRACEPOINT_DEFAULT_PRIO	10
+>  
+> +void tp_stub_func(void);
+> +
+>  extern struct srcu_struct tracepoint_srcu;
+>  
+>  extern int
+> @@ -324,6 +326,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  		if (it_func_ptr) {					\
+>  			do {						\
+>  				it_func = READ_ONCE((it_func_ptr)->func); \
+> +				if (it_func == tp_stub_func)		\
+> +					continue;			\
+>  				__data = (it_func_ptr)->data;		\
+>  				((void(*)(void *, proto))(it_func))(__data, args); \
+>  			} while ((++it_func_ptr)->func);		\
+> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> index 8d1507dd0724..dcf5a637429f 100644
+> --- a/kernel/tracepoint.c
+> +++ b/kernel/tracepoint.c
+> @@ -99,7 +99,7 @@ struct tp_probes {
+>  };
+>  
+>  /* Called in removal of a func but failed to allocate a new tp_funcs */
+> -static void tp_stub_func(void)
+> +void tp_stub_func(void)
+>  {
+>  	return;
+>  }
+
