@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F49E6C6E06
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC1B6C6E07
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjCWQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S232446AbjCWQpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbjCWQpE (ORCPT
+        with ESMTP id S232109AbjCWQpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:45:04 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0649FC14B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:20 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b20so56541849edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:19 -0700 (PDT)
+        Thu, 23 Mar 2023 12:45:08 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234E2C165
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:21 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h8so89472203ede.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679589858;
+        d=linaro.org; s=google; t=1679589859;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2ylgpuVGeZBO2/cPigFjTck4l8oNGf5kwYVPeLJ7mYo=;
-        b=dacXY7BgXtYyAS8zIpvXAvcqNaLtsWu7+lJTg+KFrpJT1Z5K5gYJ6Y4K6BD2huGCa9
-         5vhnXieE415UGVwoecZOfFSqsXshhfWe0aJYOC40tSvBgxuWU7W7QimqqscSY0hOKA1C
-         f6B73Y3wVgs2Ck9zYnrKTG9/A2JgGhG/WfrOGxzOUzclZKUb9GAOC0mSYqjcjbWB54IR
-         v5g1bq5pz25hcf0I0nckMSeP97SFjcdBMrvximAgZa4ZNKFcCC4KOZgOv1zRYkk2ZEIx
-         lofDYwd6dqtHaVtcjzex+63NchJQ9oGh/C9orGbqSyPyTwEX21yljYRSH/KlBeg0JoWE
-         HiUg==
+        bh=u/ixaKYCINrc8PZNvIv/BmX3oT7UL3hRYGh8CvIW67w=;
+        b=gR+HrEbSGNaBPXyDWCKFxXDo8N8eJof0wkZfcPSoIFUybYbdbDk7TQ50jIYpTPg1Mu
+         7iUSc/JXUV5V2uo6O3W5pCXzqXrByLxMX5Stnh03QSQfvHQQv0Y4y7V0MIBYQscWcpjp
+         mSLEFwG0h7sUfUq76wecIuaYUoC3IoMoK0a5F8Y9CXY88+Bjn07Jee7XkQ1reJ/TFS1l
+         vquOdwHsm8w3ytV1TkaeX/IycPc8k4Q6nbDFFZ/Ll20wE2tL/k68mTeom7TaPPoMLAnf
+         18n656Li66Q7oHf+7SAmOEqoZS1R8eXyPolMfaltUhxm2dX0WJRSryEFQYkh7PS4fOZz
+         iMIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589858;
+        d=1e100.net; s=20210112; t=1679589859;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2ylgpuVGeZBO2/cPigFjTck4l8oNGf5kwYVPeLJ7mYo=;
-        b=qXj9KvQo4/UnsGYYC8U5zOtHDHFqCbnbbIv7YkoGNI6TpdEV9qak5xRuz1RpWxcxIX
-         ZU91X4mWjs86GMSgfeEwBChTj6WlteQFxiOSuUo8H9RohRIaInUNJdiP0NNOg0nlL2qe
-         vbGKIDqSedGe7gKXa6UJbkro4ug3EJDZrHiTv/FtP2jIT6BHNlSZ0JDCLEZ5vRgHlIRe
-         8dcu+XdfuTfsuAVm9IcR5CwCJhA/VlJo1zSUQNoDcqU8bKjPhrjLqngRJdmljQuLgTtH
-         CLgNqaDXqRiK7i/8j+ctkfUEYCJ837r4HW844CwgSLFCPU0Iw/ubQrMspy7sUHzb0agl
-         Tnmw==
-X-Gm-Message-State: AO0yUKWIhR/QeHS1Uc2YOzktqhkooiwbfAvv0+Y9euY3uEzzfaaptyV/
-        hbavBRooAbSDdGdNcqw537PtTg==
-X-Google-Smtp-Source: AK7set8PJ6DrVeZ74exAstkDNXg0vgDtpg5//VFYMzxKWQ4tvmjHT43tXBzHbo9OovNiaKw/g+ELLw==
-X-Received: by 2002:a17:906:b0b:b0:930:f149:7865 with SMTP id u11-20020a1709060b0b00b00930f1497865mr10714465ejg.21.1679589858511;
-        Thu, 23 Mar 2023 09:44:18 -0700 (PDT)
+        bh=u/ixaKYCINrc8PZNvIv/BmX3oT7UL3hRYGh8CvIW67w=;
+        b=gAF+lgB3txfpMAfWONWLicJcE5kbJ4TW7xzGRkgNf+rybO0RIkJS9GRQhoC6yPSUpe
+         GonxlIvDWn1J7rZcZ6SJ+6+4wRNakJ/PnhT10P4oMeeN+6t/kDk02P5c8s7dCZ2Ryf12
+         2DW93tpOd7urquB50uuWoBeIDBKgSkTKZHxLsaRCLObroxHNSCPq4JQH8DgtwGZAIaxq
+         tolQ29TIMR2AOkq/IB5LP9ncGe/NtFVvop1UvvwpKMmL6Mn+V57TFCnonxEQ0gQ7enO1
+         bKtEFCCcaflJDCYMKKzDVxFowmy3YV1lioqe0nnPTkbHbUmwxNCyyl6Pa2ZwJlbfuTXP
+         zu8w==
+X-Gm-Message-State: AO0yUKUFeWyKR3dYMoKqTvii5JOXMT8dAxcsdNvYHcw2ygN4JVJJioBs
+        VLNnCMuD+QkmOmG29YxHcRk3yQ==
+X-Google-Smtp-Source: AK7set/vy+gzeXZ1o5gE0FO2a65HuiXtu0JMZsOOtsd+Qb317JBUb4yMNlyBnCpcSiQd8mGZ+rWzSA==
+X-Received: by 2002:a17:906:1b15:b0:8b1:7ae9:647 with SMTP id o21-20020a1709061b1500b008b17ae90647mr10473349ejg.76.1679589859734;
+        Thu, 23 Mar 2023 09:44:19 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id m10-20020a50998a000000b004e48f8df7e2sm9542187edb.72.2023.03.23.09.44.16
+        by smtp.gmail.com with ESMTPSA id m10-20020a50998a000000b004e48f8df7e2sm9542187edb.72.2023.03.23.09.44.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 09:44:16 -0700 (PDT)
+        Thu, 23 Mar 2023 09:44:19 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
@@ -57,9 +57,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         johan+linaro@kernel.org, steev@kali.org,
         dmitry.baryshkov@linaro.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 3/4] ASoC: codecs: wsa883x: mute/unmute PA in correct sequence
-Date:   Thu, 23 Mar 2023 16:44:02 +0000
-Message-Id: <20230323164403.6654-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 4/4] ASoC: codecs: wsa881x: mute/unmute PA in correct sequence
+Date:   Thu, 23 Mar 2023 16:44:03 +0000
+Message-Id: <20230323164403.6654-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
 References: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
@@ -88,50 +88,30 @@ help a lot with this Click/Pop issues reported on this Codec.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/wsa883x.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ sound/soc/codecs/wsa881x.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
-index c609cb63dae6..b83b5b0d4bab 100644
---- a/sound/soc/codecs/wsa883x.c
-+++ b/sound/soc/codecs/wsa883x.c
-@@ -1204,9 +1204,6 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
- 			break;
- 		}
- 
--		snd_soc_component_write_field(component, WSA883X_DRE_CTL_1,
--					      WSA883X_DRE_GAIN_EN_MASK,
--					      WSA883X_DRE_GAIN_FROM_CSR);
- 		if (wsa883x->port_enable[WSA883X_PORT_COMP])
- 			snd_soc_component_write_field(component, WSA883X_DRE_CTL_0,
- 						      WSA883X_DRE_OFFSET_MASK,
-@@ -1219,9 +1216,6 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
- 		snd_soc_component_write_field(component, WSA883X_PDM_WD_CTL,
- 					      WSA883X_PDM_EN_MASK,
- 					      WSA883X_PDM_ENABLE);
--		snd_soc_component_write_field(component, WSA883X_PA_FSM_CTL,
--					      WSA883X_GLOBAL_PA_EN_MASK,
--					      WSA883X_GLOBAL_PA_ENABLE);
- 
- 		break;
- 	case SND_SOC_DAPM_PRE_PMD:
-@@ -1341,10 +1335,38 @@ static int wsa883x_digital_mute(struct snd_soc_dai *dai, int mute, int stream)
+diff --git a/sound/soc/codecs/wsa881x.c b/sound/soc/codecs/wsa881x.c
+index f709231b1277..4ce72a7f01b6 100644
+--- a/sound/soc/codecs/wsa881x.c
++++ b/sound/soc/codecs/wsa881x.c
+@@ -1033,11 +1033,39 @@ static int wsa881x_digital_mute(struct snd_soc_dai *dai, int mute, int stream)
  	return 0;
  }
  
-+static int wsa883x_trigger(struct snd_pcm_substream *s, int cmd,
++static int wsa881x_trigger(struct snd_pcm_substream *s, int cmd,
 +			   struct snd_soc_dai *dai)
 +{
 +	switch (cmd) {
 +	case SNDRV_PCM_TRIGGER_START:
 +	case SNDRV_PCM_TRIGGER_RESUME:
 +	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-+		wsa883x_digital_mute(dai, false, 0);
++		wsa881x_digital_mute(dai, false, 0);
 +		break;
 +	case SNDRV_PCM_TRIGGER_STOP:
 +	case SNDRV_PCM_TRIGGER_SUSPEND:
 +	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-+		wsa883x_digital_mute(dai, true, 0);
++		wsa881x_digital_mute(dai, true, 0);
 +		break;
 +	default:
 +		break;
@@ -140,21 +120,22 @@ index c609cb63dae6..b83b5b0d4bab 100644
 +	return 0;
 +}
 +
-+static int wsa883x_startup(struct snd_pcm_substream *stream,
++static int wsa881x_startup(struct snd_pcm_substream *stream,
 +			   struct snd_soc_dai *dai)
 +{
-+	return wsa883x_digital_mute(dai, true, 0);
++	return wsa881x_digital_mute(dai, true, 0);
 +}
 +
- static const struct snd_soc_dai_ops wsa883x_dai_ops = {
-+	.startup = wsa883x_startup,
- 	.hw_params = wsa883x_hw_params,
- 	.hw_free = wsa883x_hw_free,
--	.mute_stream = wsa883x_digital_mute,
-+	.trigger = wsa883x_trigger,
- 	.set_stream = wsa883x_set_sdw_stream,
+ static const struct snd_soc_dai_ops wsa881x_dai_ops = {
++	.startup = wsa881x_startup,
+ 	.hw_params = wsa881x_hw_params,
+ 	.hw_free = wsa881x_hw_free,
+-	.mute_stream = wsa881x_digital_mute,
+ 	.set_stream = wsa881x_set_sdw_stream,
++	.trigger = wsa881x_trigger,
  };
  
+ static struct snd_soc_dai_driver wsa881x_dais[] = {
 -- 
 2.21.0
 
