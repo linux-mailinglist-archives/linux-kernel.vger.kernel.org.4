@@ -2,126 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC896C68FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3BB6C6905
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjCWM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S231415AbjCWNAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWM7d (ORCPT
+        with ESMTP id S229729AbjCWNAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:59:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02C42ED60;
-        Thu, 23 Mar 2023 05:59:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68DC2B820F7;
-        Thu, 23 Mar 2023 12:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DDBC433D2;
-        Thu, 23 Mar 2023 12:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679576370;
-        bh=YOBJmsp7i1KWavj4jti1adesbNPKvG0aHPIRQJ341es=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FtRpihDZjj8YcJgKjX7fIpTyRbnyV4VbInU34L/Be6y2oJw4mlI0Xer2LWmTObvJ+
-         mV5cF1F2wQc1eUGVaxnMUoPBLM/ufAOE3c5eo2QB51a9l1KF5PkJIzJYxy6C2/iewN
-         MQKyG2kvqH+p9IxIMz3BJDUN99XUcogSFInpgL8iZnoS+ru9kA0n+PxX7rAc7wCmT5
-         Ktxczm2yE1eutPSei0MWh8TmeOfnexhfw1mJZCMpLKxBXOhGl2R/EUtFDETX4dcmXW
-         O5rluaav4wp2+KPGGj5nRCwmKKdhg+4C16p2GAS2DybK1ZoUFFU4XRsNxWHm29/Smj
-         qexajRgdCP71Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 72EEF4052D; Thu, 23 Mar 2023 09:59:27 -0300 (-03)
-Date:   Thu, 23 Mar 2023 09:59:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com
-Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
-Message-ID: <ZBxNLxmCh11Ig+Pk@kernel.org>
-References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
- <20230313080201.2440201-2-tmricht@linux.ibm.com>
- <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
- <ZA9sYL/re/aNVpo+@kernel.org>
- <1ee6884a-2d92-68d9-0917-3ae4f5390714@linux.ibm.com>
- <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
- <ZBDo2GiuUTrHhd2L@kernel.org>
- <ZBtsNTt6Fbp1Lg3t@kernel.org>
- <9632bc6c-276e-d0d6-b6d9-efe91fe3a1e2@linux.ibm.com>
- <ZBwkl77/I31AQk12@osiris>
+        Thu, 23 Mar 2023 09:00:06 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D982FCD8;
+        Thu, 23 Mar 2023 06:00:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kjr2kXQ3oPeyvz3gN27oxcBuwBDoplpTAE2WHyMAcUeCgIzO6+VT+hwzOISFMgfMZSlHEVhSDz80v4ByAG6p5745RB11vRcV1deTjloQT9SZJIHBveHwALLx59m2emcbojrumuAmZYkJ6EoalWproLQieyPMJngGMLg7npwDk26c5/NfDYmyYO7A1VSzFier70idKJGUuEvkFe5C8pyvfnSuu5HHtl5yYz/AuShZly02qnZkm5OR4kjFeOryPQNwiGV35Va/EaO0bgpoxdbidPolLeO/Yh5dS89YN486oX8ao8LYZyNAu7k/JQnUPydFVTbyrWw8SczzkBcQdOgk1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BTWUjc5IAUswz2wUrGyMauyczuDOVyRIkwq+Wl7Zla8=;
+ b=HPNRQwNryaVLcXNullXiHw6s0tlQTunQB2WLnH7tTnPZYns1prNxpctgwv+KbbRj+ksS3VVUdGEnvVsvuH0nxXLq6o31e+Qdc4cnxuyZf7R4SykroojOG57Gd81mNxKcpDEKv3HCzvCSwhajfBr6EIIH7gsTI5ZMLycJpCdi7QCSCDSd607epPS1e63PdObysmN2JZxWVF1LmzHmLSMH04ciHHZInAauskqs4pOql+e+mO0DE6vToMS0LUYJzx+IOoj70TVOZScj1fuNhHcLy52fFigTdBHXFDCldeKwdwzDaHkrC7Kp+MF52Ik8mmjWkVE7y2JI5fxELaAfx+t/kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BTWUjc5IAUswz2wUrGyMauyczuDOVyRIkwq+Wl7Zla8=;
+ b=t+Qby4sFpK+MRgYtODGMKr60QiJ2koJarXvVx8hh3lQhjczKaHt9VGO1hGLXMq37+tj2+uOHcdtOjMxIDCtASTiptXl3BqgMQnBi2JXNozQaY7fGvjcqGmEci6KLcjqIOJsUelEJVdcgKz31ROzinSNvRzbx0n0UnIaojFvAcVbYNNLVJPth8X828OXTpwub4NNRy0SpOUPhtRS9S1dkr6NMymS/wUPd72XC64tBxc2NDONM1EtGB4as06Khng4AQKHrRSXR7ITFOQSj4QUIyz4pdKmQxKRhhoAK8pwCL02H/Pq0GprbZmO2rbCpS7dWa2YI3Uh+hRnf+pn7zA9/tw==
+Received: from DM6PR10CA0009.namprd10.prod.outlook.com (2603:10b6:5:60::22) by
+ DS0PR12MB8453.namprd12.prod.outlook.com (2603:10b6:8:157::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.36; Thu, 23 Mar 2023 13:00:02 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:60:cafe::b7) by DM6PR10CA0009.outlook.office365.com
+ (2603:10b6:5:60::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
+ Transport; Thu, 23 Mar 2023 13:00:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.21 via Frontend Transport; Thu, 23 Mar 2023 13:00:02 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
+ 05:59:53 -0700
+Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
+ 2023 05:59:47 -0700
+Message-ID: <c240eae7-8862-0589-d56d-f2e82e21569c@nvidia.com>
+Date:   Thu, 23 Mar 2023 18:29:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBwkl77/I31AQk12@osiris>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [Patch v3 01/11] firmware: tegra: add function to get BPMP data
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
+        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
+        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <lpieralisi@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
+        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
+        <ishah@nvidia.com>, <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20230320182441.11904-1-sumitg@nvidia.com>
+ <20230320182441.11904-2-sumitg@nvidia.com> <ZBwlLmPlBgC5tYTD@orome>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <ZBwlLmPlBgC5tYTD@orome>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT003:EE_|DS0PR12MB8453:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a763006-29f7-4291-d329-08db2b9e83f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KRXnL6wQ8BVttKldbHYwzo3hVSFyOekSIvYCr6xrFbeLitvzNU9MDn/5vTQeZsSdU2BGGnKCcDPKpQWaPmOecYUkTxONyEVNG0s1hkpkZuADmpA9g4E+NLqwTTj7P/0jaaCKjgIgwFnlcFhVvAFW4ok4ichVgu5/A+ZI+K3hcy2gadJHmCUR4DvGiaXfm11B2IRfmtZ2wTGjRMubwpLKRV1PXK1I1//62JhdZUUEwmctMxlSG1PlmQcaTJvmVWFUbk41QFbNG5BaD2ustWLii4uIFcpsHS0J1wsBsmuQ6lHpoNpnPmZuyyNILwatXQOHTyBfcjmgzrDeOZ003Ujrrt9ddGLUdOm7BQgPOX5N61tdQUTWjkWC+ioGFbc7HdclESdhGQVNiZSSnkMKtbhCDcyTFR21LnjxjUMzRq+aQgU4nFDIcK4+1Z/Fcr2Z1B23hv7VIUs721VTzFUeSLeoPQJ5PveJAt/xGtcTrtKORYDPhIRaUqrrWHMtOIyJOcbeiEdeiHi368dZK4gf38uIoh8Y+CLLTil+KASUR1DT1V7EwdWGpcSKC3d/uCFoRQE11XM4ayVOeVXCcjycV+iYDsuLs8qGR3PxhToP308UT8H79bwAGOye0/iy/AVs3qSC4JR6nyhnQINqCamCnpkNXZG79P+ywOM1ygGVsLPhwXyIygnR1OpnrBoopayHg8lifs6nXmSjmXLHAxBRZueKTZwMgD+5nu4jkw+792C7pjVU2Gg7CT10mlMEIjRdCsZTHcxYoFZz5WgdFyXvxv8z2g==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(46966006)(40470700004)(36840700001)(31686004)(41300700001)(4744005)(7416002)(5660300002)(8676002)(6916009)(4326008)(2906002)(40460700003)(36860700001)(82740400003)(356005)(86362001)(36756003)(31696002)(7636003)(26005)(107886003)(6666004)(70586007)(70206006)(478600001)(16576012)(316002)(8936002)(40480700001)(82310400005)(426003)(54906003)(47076005)(336012)(2616005)(16526019)(53546011)(186003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 13:00:02.0509
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a763006-29f7-4291-d329-08db2b9e83f9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8453
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 23, 2023 at 11:06:15AM +0100, Heiko Carstens escreveu:
-> On Thu, Mar 23, 2023 at 10:51:16AM +0100, Thomas Richter wrote:
-> > On 3/22/23 21:59, Arnaldo Carvalho de Melo wrote:
-> > > While trying to cross build to s390 on:
-> > > 
-> > > ubuntu:18.04
-> > > 
-> > > using python3
-> > >  
-> > > 
-> > >    CC      /tmp/build/perf/tests/parse-events.o
-> > > Exception processing pmu-events/arch/s390/cf_z16/extended.json
-> > > Traceback (most recent call last):
-> > >   File "pmu-events/jevents.py", line 997, in <module>
-> > >     main()
-> > >   File "pmu-events/jevents.py", line 979, in main
-> > >     ftw(arch_path, [], preprocess_one_file)
-> > >   File "pmu-events/jevents.py", line 935, in ftw
-> > >     ftw(item.path, parents + [item.name], action)
-> > >   File "pmu-events/jevents.py", line 933, in ftw
-> > >     action(parents, item)
-> > >   File "pmu-events/jevents.py", line 514, in preprocess_one_file
-> > >     for event in read_json_events(item.path, topic):
-> > >   File "pmu-events/jevents.py", line 388, in read_json_events
-> > >     events = json.load(open(path), object_hook=JsonEvent)
-> > >   File "/usr/lib/python3.6/json/__init__.py", line 296, in load
-> > >     return loads(fp.read(),
-> > >   File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
-> > >     return codecs.ascii_decode(input, self.errors)[0]
-> > > UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 4271: ordinal not in range(128)
-> > > 
-> > >
-> > 
-> > Hmmm, this is very strange. After reading this mail I installed Ubuntu 18.04
-> > on my s390 system. The build works fine, no errors at all.
-> > 
-> > 
-> > # pmu-events/jevents.py s390 all pmu-events/arch pmu-events/pmu-events.c
-> > # ll pmu-events/pmu-events.c
-> > -rw-r--r-- 1 root root 317284 Mar 23 10:46 pmu-events/pmu-events.c
-> > #
-> > 
-> > The file has the correct contents and the build works fine too.
-> > # make 
+
+
+On 23/03/23 15:38, Thierry Reding wrote:
+> On Mon, Mar 20, 2023 at 11:54:31PM +0530, Sumit Gupta wrote:
+>> Add new function 'of_tegra_bpmp_get()' which can be
+>> used by other drivers like MC to get BPMP data without
+>> adding any property in respective drivers DT node.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   drivers/firmware/tegra/bpmp.c | 38 +++++++++++++++++++++++++++++++++++
+>>   include/soc/tegra/bpmp.h      |  5 +++++
+>>   2 files changed, 43 insertions(+)
 > 
-> The file contains UTF-8 characters, which were already present before
-> your patch. Guess you need to provide an addon patch which converts to
-> plain ASCII.
+> Sorry for not noticing this earlier, but can we not resolve the BPMP
+> using the existing tegra_bpmp_get()? That requires the presence of the
+> nvidia,bpmp property, but since we're adding new functionality here
+> that's not a problem.
+> 
+> Thierry
 
-Yeah, and in this s390 perf test build container in the past I didn't
-have the needed python3-dev package needed to build jevents.py, so it
-was being disabled and the problem was left unnoticed.
+Ok, will add "nvidia,bpmp" property within mc node and cache the result 
+to use later instead of doing the lookup every time. Also, will drop 
+this patch in v4.
 
-Now that it is a opt-out feature, I installed python3-dev, jevents.py
-got built and then this failure surfaced.
+Thank you for suggesting.
 
-- Arnaldo
+
+Thank,
+Sumit
