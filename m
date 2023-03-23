@@ -2,136 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BAE6C6466
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 153186C645B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCWKFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S230050AbjCWKCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCWKFD (ORCPT
+        with ESMTP id S229775AbjCWKCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:05:03 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A33E192;
-        Thu, 23 Mar 2023 03:05:01 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5E6AC5FD46;
-        Thu, 23 Mar 2023 13:04:58 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679565898;
-        bh=4I6K2VuM3Da1cSkhjgvGdlFDwk1yFiCLVbvH4zYxFMI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=cXqZeHxwQKL7MWm8AKzKeg7/EgsGf33Phk4U5AQxeHyAk6yCh1vDw8YgBVRfnEXVT
-         EPsWLCRlSQYLbfjELBDFN11GRS/G8rGipqLO2OmPIdmKPRrAiNeD/kAdo5q7vamxN2
-         07RapRFHxJgIVwjqVaUt2wa1UYGHD/lUZNx52ZDY6KMXk16Ym9u9/BQ2BJKmmlkQQI
-         DE0wofm95yvQ2DxtojbW5NYW9LrrRME52CMf9Rfg4c8nt46ep5/l3VHf9wa6DE4BuD
-         7WX5efTJQZ3cA0qPlciLt9Nrn3WKmPQ6kkEscAwCSkSaUbGCrGmtFGqYYMPm0ggKYJ
-         8N86WVQcvSqFw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 23 Mar 2023 13:04:52 +0300 (MSK)
-Message-ID: <2e06387d-036b-dde2-5ddc-734c65a2f50d@sberdevices.ru>
-Date:   Thu, 23 Mar 2023 13:01:40 +0300
+        Thu, 23 Mar 2023 06:02:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76B31025D;
+        Thu, 23 Mar 2023 03:02:43 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so83934706edb.10;
+        Thu, 23 Mar 2023 03:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679565762;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1QLDCkiGfjxuB12NSD16ak9V/6TuGJM06eY8YUnZjuc=;
+        b=A/8U8irwMTu1zrqW7p8BT2Y42CZhN5BaFc3Tc/NvL2J9GtmOyNcPzkavntRO4AQygq
+         OcLQAAjPFpV3rgHZIHnkJHwjibdAsfh951Umib5UNzj3ketfOSOBGsBaaSDTRc+M0K6y
+         U4WkosAsUHOSV7vYl6moj56Qvi1zURYrJpkhI+IXiwwYD83u2BHdWMk2DemZU3AZi08J
+         HV0GaRMfQA8Zfg/bqyVQ02nWgT1onzDQg2O0BuKB/o0FiTJzj6cKl21yvspUzqATuowf
+         U6DZjAaFIe1hnlNDkcC4ysWyumTpCT7cgR2uKE0mH3bPj9bHQha2WvYBmaeXS+fKIXvs
+         NIhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679565762;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1QLDCkiGfjxuB12NSD16ak9V/6TuGJM06eY8YUnZjuc=;
+        b=aiaKbfQdbgron0CHxsbVJt6KaXPw9KBFPU3LYRvlOmTsSzCrsAAwwPS1enllaWNUuL
+         yyK51XE9RcKOyFYOsfdoP+EvzWBZCL0BdJKbJYeyu3F2KXdytcYRYxUl1O2dsg3OBh0o
+         PNkqsQy9ZsJSgaYV7b6bXLAE9CifxNJCTK/xGOzHGUconZdYvkF8mFBc6bCC29iWuzQK
+         0bMjJTN6ndFDrRe0PxvO1l+cA2G1ADjD/QZYPBlc0tILM0+wFlFY26a+tblwQOAK5u/l
+         RnpdT1bkA8gee3Vy/gR+C+FRmZgH/T5KvMUIn+Q/xV+17M6BzEkW4j+VZBilqV0cGaj9
+         OdmQ==
+X-Gm-Message-State: AO0yUKWqdN7coenikMPUCcDLW4PU9LWHBTNZ4/7JKfar4/a32rNcS2wM
+        xY4xSaIic0NuQDdXSVdACeo=
+X-Google-Smtp-Source: AK7set+96Vu2kio4Ss0ozHPi6bWoPEmQwPjpdtwPgocU6FJGD8S68fYR+nVcNzY2DjAHSoDXaEkRHQ==
+X-Received: by 2002:a17:906:698d:b0:930:28d6:4581 with SMTP id i13-20020a170906698d00b0093028d64581mr9818790ejr.59.1679565762054;
+        Thu, 23 Mar 2023 03:02:42 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id h19-20020a1709070b1300b008ec4333fd65sm8415618ejl.188.2023.03.23.03.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 03:02:41 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:02:39 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, lpieralisi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v3 10/11] memory: tegra: handle no BWMGR MRQ support in
+ BPMP
+Message-ID: <ZBwjvy9KXWE02I1X@orome>
+References: <20230320182441.11904-1-sumitg@nvidia.com>
+ <20230320182441.11904-11-sumitg@nvidia.com>
+ <dd6257a9-1a12-23f9-e770-0809aaa7ed0e@linaro.org>
+ <ZBwiFEJ1bTMy6yTf@orome>
+ <65352fe3-6fb8-cb84-37b8-c9f59e26d3f9@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 0/2] allocate multiple skbuffs on tx
-Content-Language: en-US
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/23 05:59:00 #20997558
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7412yGgzZ0zqK6O1"
+Content-Disposition: inline
+In-Reply-To: <65352fe3-6fb8-cb84-37b8-c9f59e26d3f9@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Stefano,
 
-thanks for review!
+--7412yGgzZ0zqK6O1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Since both patches are R-b, i can wait for a few days, then send this
-as 'net-next'?
+On Thu, Mar 23, 2023 at 10:58:18AM +0100, Krzysztof Kozlowski wrote:
+> On 23/03/2023 10:55, Thierry Reding wrote:
+> > On Wed, Mar 22, 2023 at 06:50:23PM +0100, Krzysztof Kozlowski wrote:
+> >> On 20/03/2023 19:24, Sumit Gupta wrote:
+> >>> If BPMP-FW doesn't support 'MRQ_BWMGR_INT', then the MC Client driver
+> >>> probe fails with 'EPROBE_DEFER' which it receives on calling the func
+> >>> 'devm_of_icc_get()'. Fix this by initializing the ICC even if the MRQ
+> >>> is missing and return 'EINVAL' from 'icc_set_bw()' instead of passing
+> >>> the request to BPMP-FW later when the BW request is made by client.
+> >>>
+> >>> Fixes: ("memory: tegra: add interconnect support for DRAM scaling in =
+Tegra234")
+> >>
+> >> That's not correct tag.
+> >>
+> >> Anyway, send fixes separately.
+> >=20
+> > I think this was a bit confusing. This fixes an issue that was
+> > introduced in a patch earlier in this series, so it's probably better to
+> > squash it into that patch rather than have a separate fix patch in the
+> > same series.
+> >=20
+>=20
+> Yeah, it is quite confusing to send buggy code and immediately fix it...
+> Introducing known bugs is actually non-bisectable and harming.
 
-Thanks, Arseniy
+I don't think this was done purposefully but rather as a way of more
+clearly showing what was changed. This is also an issue that can only
+happen on certain boards, so it's easy to miss.
 
-On 22.03.2023 21:34, Arseniy Krasnov wrote:
-> This adds small optimization for tx path: instead of allocating single
-> skbuff on every call to transport, allocate multiple skbuff's until
-> credit space allows, thus trying to send as much as possible data without
-> return to af_vsock.c.
-> 
-> Also this patchset includes second patch which adds check and return from
-> 'virtio_transport_get_credit()' and 'virtio_transport_put_credit()' when
-> these functions are called with 0 argument. This is needed, because zero
-> argument makes both functions to behave as no-effect, but both of them
-> always tries to acquire spinlock. Moreover, first patch always calls
-> function 'virtio_transport_put_credit()' with zero argument in case of
-> successful packet transmission.
-> 
->  Link to v1:
->  https://lore.kernel.org/netdev/2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru/
->  Link to v2:
->  https://lore.kernel.org/netdev/ea5725eb-6cb5-cf15-2938-34e335a442fa@sberdevices.ru/
->  Link to v3:
->  https://lore.kernel.org/netdev/f33ef593-982e-2b3f-0986-6d537a3aaf08@sberdevices.ru/
->  Link to v4:
->  https://lore.kernel.org/netdev/0e0c1421-7cdc-2582-b120-cad6f42824bb@sberdevices.ru/
-> 
->  Changelog:
->  v1 -> v2:
->  - If sent something, return number of bytes sent (even in
->    case of error). Return error only if failed to sent first
->    skbuff.
-> 
->  v2 -> v3:
->  - Handle case when transport callback returns unexpected value which
->    is not equal to 'skb->len'. Break loop.
->  - Don't check for zero value of 'rest_len' before calling
->    'virtio_transport_put_credit()'. Decided to add this check directly
->    to 'virtio_transport_put_credit()' in separate patch.
-> 
->  v3 -> v4:
->  - Use WARN_ONCE() to handle case when transport callback returns
->    unexpected value.
->  - Remove useless 'ret = -EFAULT;' assignment for case above.
-> 
->  v4 -> v5:
->  - Remove extra 'ret' initialization.
->  - Remove empty extra line before 'if (ret < 0)'.
->  - Add R-b tag for the first patch.
->  - Add second patch, thus creating patchset of 2 patches.
-> 
-> Arseniy Krasnov (2):
->   virtio/vsock: allocate multiple skbuffs on tx
->   virtio/vsock: check argument to avoid no effect call
-> 
->  net/vmw_vsock/virtio_transport_common.c | 63 +++++++++++++++++++------
->  1 file changed, 49 insertions(+), 14 deletions(-)
-> 
+But yeah, this is bad for bisectibility.
+
+Sumit, please merge this into the patch that you reference in the Fixes:
+tag along with the fix in patch 11.
+
+Thierry
+
+--7412yGgzZ0zqK6O1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcI78ACgkQ3SOs138+
+s6EhDw//Us6AoMbGIV7k4mocQuIduHsO0hohbLa+4kSJMGsVH1VulnkHvOdYQrjb
+ff7+L2m0wY84SYjhkBsi88EnF+0x/YQMMVh+ksLKwZJw+4tnh0SvjIXK/CgB2Z2R
+quNGyzrBKomz+jLkJA/q2bVJqoj3w6ReyBKPFt/P4QgDy/OG2yQcTN8OEkLIknab
+keMYf41x31W0ZkDMtPNqiII8wMGcdyqVjGX8GxXCpi6NW/LjOGDIQKIiHsT2Ybg0
+Ly3RKo34+ITUAU8wQL8h+C65dZKsLN30Lk8CCy2dZulxdcGfRzq6G2pwM4RMjjby
+1GeayKAHEvuZu/bh6EW5yQjB/Dbs3qi8Lfee2qqz5C4it6DDxXng44CQvNnOzgAA
+NdYl8pVPgBHij4+V16VzB1VcbY0QMYutfB0Z+8+U9x+ZyRxBzShcqf/aH0auy4SZ
+VeC6AyoWmii9FqVwAYcArtT8SchRQwVbTELAb/i65sfJKRbtx+EJejIc9MbR/WtD
+pqE3VkfJH8Os176+nR4KAIn7S8OLUMpIU1CMWL8ueVenUNUi5l7mtzE6228cXYOr
+u0nyxEw4EWYUNIWSiUaQnVO1/KMLaF8JOmZclk0G6Q8i0tSXPjCBJbtJr//GFUOJ
+5vbVYneAJpLcvIxHhzIJGZ+1q8M1rh/QPEkVGfJbQHICeSyahXY=
+=+sI2
+-----END PGP SIGNATURE-----
+
+--7412yGgzZ0zqK6O1--
