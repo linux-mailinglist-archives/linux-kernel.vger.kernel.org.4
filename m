@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B436A6C7151
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5375B6C7154
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjCWTta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S230426AbjCWTvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCWTt2 (ORCPT
+        with ESMTP id S229484AbjCWTvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:49:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5851FF940;
-        Thu, 23 Mar 2023 12:49:27 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 2119C1C0E45; Thu, 23 Mar 2023 20:49:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679600966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NF6JGwEiBb3A1966uTV2ceil1MVZpjYOBG+VDfrrDGk=;
-        b=phZY1YA9DWHh+GMOFjap/L1p6/j6tG3kJeQJ5Dwdz+2vjdEXGygpKx1ZPj4socFkd5Zpjk
-        XyDJGcoMRKoNip1eWXNbtpbRn7Ao1v8Y73xvP/52MXYLqaV7dGUL9NrckA3FrCnnZS30PM
-        jHea30xt6OsLLiTgGWaK6vmMBrWJtVc=
-Date:   Thu, 23 Mar 2023 20:49:25 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_c_skakit@quicinc.com
-Subject: Re: [PATCH 2/3] leds: rgb: leds-qcom-lpg: Add support for high
- resolution PWM
-Message-ID: <ZBytRdLCTm/D34Ua@duo.ucw.cz>
-References: <20230316192134.26436-1-quic_amelende@quicinc.com>
- <20230316192134.26436-3-quic_amelende@quicinc.com>
+        Thu, 23 Mar 2023 15:51:38 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21C5206BD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:51:36 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ek18so91518892edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679601095;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8gkkF864aZS59/wrLTPRII1/9wrsBmF5g69w8PpiScM=;
+        b=ZDntVr7hGYS17cMcBRD2/8NnbvON+Hi1QWuvh42GyExWsfuN07qDtZ0LLP0TrhD9uS
+         lZNHg6vYXPNhxGE1BSx87OXFANVOSVD9ms7Zkj5IaHPnF8euA5DtFTB2ZMW7o2xZq7ft
+         zBWdPjYw8jivP6BTmS/0b7pDCJvqgE1oqyu5Yl0gFzMzdDeHudQ+Ur8KlLem8jD736fA
+         o05MV2R+bwhYbyha1T8gZ1lj2bpX/IZQGqC6RySEpBohg8lCtF1GsZOxVSN4CdGleWtP
+         9GVyz4+NSDVA5iCboEK81aaVUHpXt2dnhdlfWU1NFub1ky0PoLK0wQD+FYJ8/YgJPzEY
+         uYjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679601095;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8gkkF864aZS59/wrLTPRII1/9wrsBmF5g69w8PpiScM=;
+        b=KzjfUwg+rGx5cjiop4sqHo3XRPYjJuTQe1ztfuCcLWFJxttZduj9EW0vZ9hQLK/Wf3
+         afKSvnpLuqK2CMPgE2KKTiXuJx+HLE+VW8tvxxlyGCJKS9JHMI2Cto2ID7Vi/YwbMzaU
+         QCOpCTHJaOys1V5zkpIot62YPxN352lZbAGKSwcR4UrvZjhSVr4kD2G6DMVqCEXqAEVh
+         hNr2TCT1cY7ED5qRY0p+/RHGnlKkF5oGveciN4bt5ADTfftgaPHsj3IkSkdJ5UWZ+OTQ
+         IXFaa8W8aRZvcn9ggLWAXIT9dCX4Aa7+3AoQ8U1kgzKx6s4TWXtPbnqWSfa5z2+m928v
+         CMLg==
+X-Gm-Message-State: AAQBX9chWcqOkYNLT/D8K/5UpeGRMpWNN/sxhuWhbTA7bWqibohvm+dd
+        xHQ2chVuSkbyX97JEIjarnVLB/KbWFC+MSad
+X-Google-Smtp-Source: AKy350ZumT4pJKPLCEo18Nd347kxtyvr7vACqOLRVSXvIyrVAiJCF8uHCHjiELSF+VZxWwBFDOWj8g==
+X-Received: by 2002:a17:906:7109:b0:931:32f5:1f31 with SMTP id x9-20020a170906710900b0093132f51f31mr234075ejj.9.1679601094826;
+        Thu, 23 Mar 2023 12:51:34 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id ot9-20020a170906ccc900b009331450d04esm7997236ejb.178.2023.03.23.12.49.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 12:50:47 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 00:49:44 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: most: fix line ending with '(' in video/
+Message-ID: <ZBytWDocM7XbXkRx@khadija-virtual-machine>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ys+4h6ZS/zW1fps0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316192134.26436-3-quic_amelende@quicinc.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Splitting function header to multiple lines because of 80 characters per
+line limit, results in ending the function call line with '('.
+This leads to CHECK reported by checkpatch.pl
 
---ys+4h6ZS/zW1fps0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Move the function parameters right after the '(' in the function call
+line.
 
-On Thu 2023-03-16 12:21:33, Anjelique Melendez wrote:
-> Certain PMICs like PMK8550 have a high resolution PWM module which can
-> support from 8-bit to 15-bit PWM. Add support for it.
->=20
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+---
 
-Provided build problems are fixed:
+Changes in v2:
+ - Changed the subject name because there was another patch for most/
+   with the same name. This was causing confusion.
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
+ drivers/staging/most/video/video.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-							Pavel
+diff --git a/drivers/staging/most/video/video.c b/drivers/staging/most/video/video.c
+index ffa97ef21ea5..6254a5df2502 100644
+--- a/drivers/staging/most/video/video.c
++++ b/drivers/staging/most/video/video.c
+@@ -365,8 +365,7 @@ static const struct video_device comp_videodev_template = {
+ 
+ /**************************************************************************/
+ 
+-static struct most_video_dev *get_comp_dev(
+-	struct most_interface *iface, int channel_idx)
++static struct most_video_dev *get_comp_dev(struct most_interface *iface, int channel_idx)
+ {
+ 	struct most_video_dev *mdev;
+ 	unsigned long flags;
+-- 
+2.34.1
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---ys+4h6ZS/zW1fps0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBytRQAKCRAw5/Bqldv6
-8h/5AKC+0XiH3kRszN1Vtw6OzkIz3PMeYACdHjPxPeRAKnxjsC2upepDtSe3KLA=
-=GpGg
------END PGP SIGNATURE-----
-
---ys+4h6ZS/zW1fps0--
