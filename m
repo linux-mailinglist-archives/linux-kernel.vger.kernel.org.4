@@ -2,114 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9006C5C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481836C5C67
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCWB5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S229997AbjCWB5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjCWB5J (ORCPT
+        with ESMTP id S229642AbjCWB5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 22 Mar 2023 21:57:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F6211EB;
-        Wed, 22 Mar 2023 18:57:07 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E1D211ED
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679536627; x=1711072627;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AOaSIlwCUsIpDTclzW9GoxbdemwcG9Jdhr/dYoorob4=;
-  b=kEvaG11plclAHJdYPEUHe46zO+Rx7nfv6NmdSuzfEFTrRxMzIYCL2Z76
-   yNLOjcrIXfzeY/9UX85kwIAPWr3MTp+lL4zPquKAFa/5p4wYLwMOPN289
-   ++3CzrOlc3BBhAbXaRMM5zKe09OlNlM3/oJRmZVNXZLbyR11VZ4RFZEMz
-   RdpUXLLvOi6QI5dOYDsaGFcnR0U52ozSM1e6cLZn7HQ390YihRLXE7NQ/
-   SeBexWLBcyr9PXgm22uqK2vJ6HicGRfqF8atwBBBj6fzL0diaZjKdN+/f
-   zDO3LcjxgE8dnp2p/aJP0ryyjnk1MHxCPxcQ6bdkAUZ/GbUlvJt8ODI11
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="340912687"
+  t=1679536628; x=1711072628;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S4J23vlMifTu0C/qcM5GZRfKQJI8Zib/+EwiNhOEfAU=;
+  b=eDsCL6MjRmjnnrXgCSx5YafEprlJrZrAnfhrULGo+YV49iXj04CcfHSG
+   h8dCn7i7SU/XOfzPWYKAou/ky6GdomMRF9m/L73lcCkRLSA7o1K0Hg4kj
+   fYZ5ydwXf59QZtfaonvWAxk6j3xRMozwBKSJWgpKV+RuBmAaZ/VXZiU87
+   NVkdXwxUjUj/KCqJJZCcdvyY3zNWRnHMlqBaZpJpJ8r4d/R7BpBV7uD7E
+   bMr92JPitl6x5koqgc7RaesPY+f1IETkpqbN0L7WQxn0X3dGuUJ8eyGX2
+   FLosRKWkJBIz3NVdeGD0dbsJ2l3F6btlUD/fWk7UqWaZp7VNYzeCUwOK8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="401943931"
 X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="340912687"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:57:07 -0700
+   d="scan'208";a="401943931"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:57:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="771268782"
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="792813180"
 X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="771268782"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Mar 2023 18:57:04 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfACN-000Dpq-2w;
-        Thu, 23 Mar 2023 01:57:03 +0000
-Date:   Thu, 23 Mar 2023 09:56:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ross Zwisler <zwisler@google.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
-Message-ID: <202303230955.doWocaU3-lkp@intel.com>
-References: <20230321215121.71b339c5@gandalf.local.home>
+   d="scan'208";a="792813180"
+Received: from jhuan49-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.255.31.187])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:57:03 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        zhang.jia@linux.alibaba.com, len.brown@intel.com,
+        rui.zhang@intel.com
+Subject: [PATCH V3] x86/topology: fix erroneous smp_num_siblings on Intel Hybrid platform
+Date:   Thu, 23 Mar 2023 09:56:40 +0800
+Message-Id: <20230323015640.27906-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321215121.71b339c5@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+The SMT siblings value returned by CPUID.1F SMT level EBX differs
+among CPUs on Intel Hybrid platforms like AlderLake and MeteorLake.
+It returns 2 for Pcore CPUs which have SMT siblings and returns 1 for
+Ecore CPUs which do not have SMT siblings.
 
-Thank you for the patch! Perhaps something to improve:
+Today, the CPU boot code sets the global variable smp_num_siblings when
+every CPU thread is brought up. The last thread to boot will overwrite
+it with the number of siblings of *that* thread. That last thread to
+boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
+is an Ecore, smp_num_siblings == 1.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+smp_num_siblings describes if the *system* supports SMT.  It should
+specify the maximum number of SMT threads among all cores.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-patch link:    https://lore.kernel.org/r/20230321215121.71b339c5%40gandalf.local.home
-patch subject: [PATCH] tracing: Trace instrumentation begin and end
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20230323/202303230955.doWocaU3-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
-        git checkout 1f40755bb9b4817135459d6cf76fcbd17ffb53dd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Ensure that smp_num_siblings represents the system-wide maximum number
+of siblings by always increasing its value. Never allow it to decrease.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230955.doWocaU3-lkp@intel.com/
+On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
+not updated in any cpu sibling map because the system is treated as an
+UP system when probing Ecore CPUs.
 
-All warnings (new ones prefixed by >>):
+Below shows part of the CPU topology information before and after the
+fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
+...
+-/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
+-/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
++/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
++/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
+...
+-/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
+-/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
++/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
++/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
 
->> vmlinux.o: warning: objtool: .text+0x2bb7f2: relocation to !ENDBR: .text+0x2bb7e9
-   vmlinux.o: warning: objtool: .text+0x2bb803: relocation to !ENDBR: .text+0x2bb7e2
+And this also breaks userspace tools like lscpu
+-Core(s) per socket:  1
+-Socket(s):           11
++Core(s) per socket:  16
++Socket(s):           1
 
+CC: stable@kernel.org
+Fixes: bbb65d2d365e ("x86: use cpuid vector 0xb when available for detecting cpu topology")
+Fixes: 95f3d39ccf7a ("x86/cpu/topology: Provide detect_extended_topology_early()")
+Suggested-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+V2 -> V3
+   Add Acked-by tag from Peter.
+   Add Fixes tag.
 
-objdump-func vmlinux.o .text:
+V1 -> V2
+   Improve changelog to focus on the smp_num_siblings issue.
+---
+ arch/x86/kernel/cpu/topology.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
+index 5e868b62a7c4..0270925fe013 100644
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
+ 	 * initial apic id, which also represents 32-bit extended x2apic id.
+ 	 */
+ 	c->initial_apicid = edx;
+-	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+ #endif
+ 	return 0;
+ }
+@@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
+ 	 */
+ 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
+ 	c->initial_apicid = edx;
+-	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
+ 	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+ 	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
+ 	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
