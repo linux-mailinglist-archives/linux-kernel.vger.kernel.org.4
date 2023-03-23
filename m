@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109576C5EF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B316C5EF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjCWFdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S230263AbjCWFdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCWFcg (ORCPT
+        with ESMTP id S230380AbjCWFdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:32:36 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D503331BFF
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:43 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q102so6022693pjq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:43 -0700 (PDT)
+        Thu, 23 Mar 2023 01:33:02 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B43B2F05E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:46 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso906796pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679549501;
+        d=bytedance.com; s=google; t=1679549504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z3L8PmXiSvjLVceUhGVSQ/YpVSqRUm7l08t6hYdW7rQ=;
-        b=ZcREzIu7n87MPds+0JEnBXyCnfjLevqaZTyGPMTWqzFXLsm9zhW/EGCBw9+75/b7uA
-         dDwbU0gBfmuhRD/k48xb1fwWQd7/nBUoyYOHx0NhuBkIjegKc/UfcOdUDMyVUUejofDm
-         N0muRXClPNJdvCQPhQYzbD75+0Sv8I2m8KzPFX0A6gVyDxkr1Cdl8W42Is3gUmgasZST
-         nwXCw9TipfhS0fU09I3ioxtyd67i8pbD1e9ijFQ0P2NtOlYXrufpCROOS16eT2fa/XYQ
-         W9B/lzynns5i8E/1983hOL2a1CT8jKJPwyXiNw9cNi1natn8lwssfDXpXpXJtHCd3E68
-         89xA==
+        bh=zPmWWrpSgaPOGhUBOkIMLmxdo25WMNikMv3Jin+/Fz0=;
+        b=btCCImtEbx8h8b5MD0xvsC/Msz/cOhLuDrbLg0UodbNPkO2mHUq11NP+bQKtb0oenJ
+         ijTDX4qMzrOxRN8Q6m6QdHKsRDBa76hJsly6iCT01NSBqpkAQDe92CfLIZiuWEoBVMth
+         aPzzyKYC1lrr0yhkDkhOBJCgUVryj7L3C+/W3RgS/IjjsoznZU7iTadcsrnVzciP+mpU
+         wibTJbNT2kcHf4OTU7b2/kApuwKfm2BqzuBvmpHRrKqg+RIDVrZSc9iubeSdvWMR1rRR
+         E50p9m2g+chyR2K+FXF/HExk9tuZNlFHaAzgDs8Hns1KSqmj9gv9dK6mg1K4OW6F83RR
+         yhEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679549501;
+        d=1e100.net; s=20210112; t=1679549504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z3L8PmXiSvjLVceUhGVSQ/YpVSqRUm7l08t6hYdW7rQ=;
-        b=3tzMZ3pug3ILlRovAi0qrefsmpCxFb6FZr+90gyolg95OSbsroyfFkcR16nTULFSd8
-         ymsHaiD0kxcCKHK9bvAbVZbJIjjyVjstVJWcpUV+ilocrfI3aOed23jb7gx/YLwbaxLN
-         jSZZgQfCUGfoVNeFhEILDw1w51vqA+u4iBfaQc9geHKXk3YDSd19teDLQx9Tyiw91BrA
-         dU5JFbcbZGKcm3TEmKnQm7pWt9uHHCx852mQfab0n3/J3XtK6LNTPTtTm7O9YgB6nX1k
-         bnNVFW4Zm4Jo4wUNKiTjRt09P2aXnK3GB1UcJp1EpjV1lrAp2SbXF+o3HC7mjNUF6jj7
-         FZZQ==
-X-Gm-Message-State: AO0yUKUGVHYx0C1oceAS9EySSTGPgdfrdM6EO9nbQzc/HtigMgJcpBVs
-        tQ575emDZphJgM8XBoJ2jEdt
-X-Google-Smtp-Source: AK7set9j0u8vFU3yXople0gqTw5etOUHxcdupDqHdy2cWkGsMZLgrBTd0eeRlM7gq5+XrC1sCxtD4w==
-X-Received: by 2002:a17:902:6944:b0:1a1:b3bb:cd5b with SMTP id k4-20020a170902694400b001a1b3bbcd5bmr4657750plt.62.1679549501430;
-        Wed, 22 Mar 2023 22:31:41 -0700 (PDT)
+        bh=zPmWWrpSgaPOGhUBOkIMLmxdo25WMNikMv3Jin+/Fz0=;
+        b=FdYPAAIVtjFSJzGMrKTSSyjwg7LJo6zfoduR9ocoGaZbNeP2tw6UcpwbO/YV+89ZTa
+         hcdvCeVqGkK30O5PdkeZw++9r2j5RxKO4gw0VCUAFo1+iw92ewmqKHH0VkTJR53U6IKN
+         iH3SovaxaMAFFMZW3WkW38i4g61Q2pu7GfjevHoVEY4BB3gOmSClE9mo3mO73m5kM8Ga
+         fLCak4KVSHQdFp5ouWbjAor+c76yyg7XbD2OU5bD7w3y5kHXHos4ZjExX0cZ54ktpWAb
+         A2j4X5y5AjkixjQ/JzkyrlH5OtgVWkLVaVfJLyF8fKIwmbRxsWfKm3NNGFlaATXgv/R2
+         AzPA==
+X-Gm-Message-State: AAQBX9eyxy66AJQgx5SRgqyxzP1UQTZK8HJENFchHv/ESH4clS1VL1KC
+        tx9tSuKQgN7p58f6sUdE1bVB
+X-Google-Smtp-Source: AKy350aYQXtp/fxWTfa15HOXnombEQ5hcdOFqTe4R06IwntYd5TeLT8X9GUayCtlAZZ6G7O2XGmANQ==
+X-Received: by 2002:a17:903:32d1:b0:1a1:abc9:198f with SMTP id i17-20020a17090332d100b001a1abc9198fmr4732456plr.4.1679549504645;
+        Wed, 22 Mar 2023 22:31:44 -0700 (PDT)
 Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902854900b0019c90f8c831sm11419677plo.242.2023.03.22.22.31.40
+        by smtp.gmail.com with ESMTPSA id p9-20020a63f449000000b0050bf1d1cdc8sm10687768pgk.21.2023.03.22.22.31.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 22:31:41 -0700 (PDT)
+        Wed, 22 Mar 2023 22:31:44 -0700 (PDT)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     mst@redhat.com, jasowang@redhat.com, tglx@linutronix.de, hch@lst.de
 Cc:     virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 09/11] vduse: Signal vq trigger eventfd directly if possible
-Date:   Thu, 23 Mar 2023 13:30:41 +0800
-Message-Id: <20230323053043.35-10-xieyongji@bytedance.com>
+Subject: [PATCH v4 10/11] vduse: Delay iova domain creation
+Date:   Thu, 23 Mar 2023 13:30:42 +0800
+Message-Id: <20230323053043.35-11-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230323053043.35-1-xieyongji@bytedance.com>
 References: <20230323053043.35-1-xieyongji@bytedance.com>
@@ -71,79 +71,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now the vdpa callback will associate an trigger
-eventfd in some cases. For performance reasons,
-VDUSE can signal it directly during irq injection.
+Delay creating iova domain until the vduse device is
+registered to vdpa bus.
+
+This is a preparation for adding sysfs interface to
+support specifying bounce buffer size for the iova
+domain.
 
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/vdpa/vdpa_user/vduse_dev.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 75 +++++++++++++++++++++---------
+ 1 file changed, 53 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 77da3685568a..8c06f6ab960b 100644
+index 8c06f6ab960b..ccca84d51a28 100644
 --- a/drivers/vdpa/vdpa_user/vduse_dev.c
 +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -459,6 +459,7 @@ static void vduse_dev_reset(struct vduse_dev *dev)
- 		spin_lock(&vq->irq_lock);
- 		vq->cb.callback = NULL;
- 		vq->cb.private = NULL;
-+		vq->cb.trigger = NULL;
- 		spin_unlock(&vq->irq_lock);
- 		flush_work(&vq->inject);
- 		flush_work(&vq->kick);
-@@ -524,6 +525,7 @@ static void vduse_vdpa_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
- 	spin_lock(&vq->irq_lock);
- 	vq->cb.callback = cb->callback;
- 	vq->cb.private = cb->private;
-+	vq->cb.trigger = cb->trigger;
- 	spin_unlock(&vq->irq_lock);
- }
+@@ -111,6 +111,8 @@ struct vduse_dev {
+ 	u32 vq_align;
+ 	struct vduse_umem *umem;
+ 	struct mutex mem_lock;
++	unsigned int bounce_size;
++	struct mutex domain_lock;
+ };
  
-@@ -941,6 +943,23 @@ static void vduse_vq_irq_inject(struct work_struct *work)
- 	spin_unlock_irq(&vq->irq_lock);
- }
+ struct vduse_dev_msg {
+@@ -425,7 +427,7 @@ static void vduse_dev_reset(struct vduse_dev *dev)
+ 	struct vduse_iova_domain *domain = dev->domain;
  
-+static bool vduse_vq_signal_irqfd(struct vduse_virtqueue *vq)
-+{
-+	bool signal = false;
+ 	/* The coherent mappings are handled in vduse_dev_free_coherent() */
+-	if (domain->bounce_map)
++	if (domain && domain->bounce_map)
+ 		vduse_domain_reset_bounce_map(domain);
+ 
+ 	down_write(&dev->rwsem);
+@@ -993,6 +995,9 @@ static int vduse_dev_dereg_umem(struct vduse_dev *dev,
+ 		goto unlock;
+ 
+ 	ret = -EINVAL;
++	if (!dev->domain)
++		goto unlock;
 +
-+	if (!vq->cb.trigger)
-+		return false;
-+
-+	spin_lock_irq(&vq->irq_lock);
-+	if (vq->ready && vq->cb.trigger) {
-+		eventfd_signal(vq->cb.trigger, 1);
-+		signal = true;
-+	}
-+	spin_unlock_irq(&vq->irq_lock);
-+
-+	return signal;
-+}
-+
- static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
- 				    struct work_struct *irq_work,
- 				    int irq_effective_cpu)
-@@ -1243,11 +1262,14 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
- 		if (index >= dev->vq_num)
+ 	if (dev->umem->iova != iova || size != dev->domain->bounce_size)
+ 		goto unlock;
+ 
+@@ -1019,7 +1024,7 @@ static int vduse_dev_reg_umem(struct vduse_dev *dev,
+ 	unsigned long npages, lock_limit;
+ 	int ret;
+ 
+-	if (!dev->domain->bounce_map ||
++	if (!dev->domain || !dev->domain->bounce_map ||
+ 	    size != dev->domain->bounce_size ||
+ 	    iova != 0 || uaddr & ~PAGE_MASK)
+ 		return -EINVAL;
+@@ -1109,7 +1114,6 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		struct vduse_iotlb_entry entry;
+ 		struct vhost_iotlb_map *map;
+ 		struct vdpa_map_file *map_file;
+-		struct vduse_iova_domain *domain = dev->domain;
+ 		struct file *f = NULL;
+ 
+ 		ret = -EFAULT;
+@@ -1120,8 +1124,13 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		if (entry.start > entry.last)
  			break;
  
-+		ret = 0;
- 		index = array_index_nospec(index, dev->vq_num);
--
--		vduse_vq_update_effective_cpu(dev->vqs[index]);
--		ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index]->inject,
--					dev->vqs[index]->irq_effective_cpu);
-+		if (!vduse_vq_signal_irqfd(dev->vqs[index])) {
-+			vduse_vq_update_effective_cpu(dev->vqs[index]);
-+			ret = vduse_dev_queue_irq_work(dev,
-+						&dev->vqs[index]->inject,
-+						dev->vqs[index]->irq_effective_cpu);
+-		spin_lock(&domain->iotlb_lock);
+-		map = vhost_iotlb_itree_first(domain->iotlb,
++		mutex_lock(&dev->domain_lock);
++		if (!dev->domain) {
++			mutex_unlock(&dev->domain_lock);
++			break;
 +		}
++		spin_lock(&dev->domain->iotlb_lock);
++		map = vhost_iotlb_itree_first(dev->domain->iotlb,
+ 					      entry.start, entry.last);
+ 		if (map) {
+ 			map_file = (struct vdpa_map_file *)map->opaque;
+@@ -1131,7 +1140,8 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 			entry.last = map->last;
+ 			entry.perm = map->perm;
+ 		}
+-		spin_unlock(&domain->iotlb_lock);
++		spin_unlock(&dev->domain->iotlb_lock);
++		mutex_unlock(&dev->domain_lock);
+ 		ret = -EINVAL;
+ 		if (!f)
+ 			break;
+@@ -1284,8 +1294,10 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 				 sizeof(umem.reserved)))
+ 			break;
+ 
++		mutex_lock(&dev->domain_lock);
+ 		ret = vduse_dev_reg_umem(dev, umem.iova,
+ 					 umem.uaddr, umem.size);
++		mutex_unlock(&dev->domain_lock);
  		break;
  	}
- 	case VDUSE_IOTLB_REG_UMEM: {
+ 	case VDUSE_IOTLB_DEREG_UMEM: {
+@@ -1299,15 +1311,15 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 		if (!is_mem_zero((const char *)umem.reserved,
+ 				 sizeof(umem.reserved)))
+ 			break;
+-
++		mutex_lock(&dev->domain_lock);
+ 		ret = vduse_dev_dereg_umem(dev, umem.iova,
+ 					   umem.size);
++		mutex_unlock(&dev->domain_lock);
+ 		break;
+ 	}
+ 	case VDUSE_IOTLB_GET_INFO: {
+ 		struct vduse_iova_info info;
+ 		struct vhost_iotlb_map *map;
+-		struct vduse_iova_domain *domain = dev->domain;
+ 
+ 		ret = -EFAULT;
+ 		if (copy_from_user(&info, argp, sizeof(info)))
+@@ -1321,18 +1333,24 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
+ 				 sizeof(info.reserved)))
+ 			break;
+ 
+-		spin_lock(&domain->iotlb_lock);
+-		map = vhost_iotlb_itree_first(domain->iotlb,
++		mutex_lock(&dev->domain_lock);
++		if (!dev->domain) {
++			mutex_unlock(&dev->domain_lock);
++			break;
++		}
++		spin_lock(&dev->domain->iotlb_lock);
++		map = vhost_iotlb_itree_first(dev->domain->iotlb,
+ 					      info.start, info.last);
+ 		if (map) {
+ 			info.start = map->start;
+ 			info.last = map->last;
+ 			info.capability = 0;
+-			if (domain->bounce_map && map->start == 0 &&
+-			    map->last == domain->bounce_size - 1)
++			if (dev->domain->bounce_map && map->start == 0 &&
++			    map->last == dev->domain->bounce_size - 1)
+ 				info.capability |= VDUSE_IOVA_CAP_UMEM;
+ 		}
+-		spin_unlock(&domain->iotlb_lock);
++		spin_unlock(&dev->domain->iotlb_lock);
++		mutex_unlock(&dev->domain_lock);
+ 		if (!map)
+ 			break;
+ 
+@@ -1355,7 +1373,10 @@ static int vduse_dev_release(struct inode *inode, struct file *file)
+ {
+ 	struct vduse_dev *dev = file->private_data;
+ 
+-	vduse_dev_dereg_umem(dev, 0, dev->domain->bounce_size);
++	mutex_lock(&dev->domain_lock);
++	if (dev->domain)
++		vduse_dev_dereg_umem(dev, 0, dev->domain->bounce_size);
++	mutex_unlock(&dev->domain_lock);
+ 	spin_lock(&dev->msg_lock);
+ 	/* Make sure the inflight messages can processed after reconncection */
+ 	list_splice_init(&dev->recv_list, &dev->send_list);
+@@ -1564,6 +1585,7 @@ static struct vduse_dev *vduse_dev_create(void)
+ 
+ 	mutex_init(&dev->lock);
+ 	mutex_init(&dev->mem_lock);
++	mutex_init(&dev->domain_lock);
+ 	spin_lock_init(&dev->msg_lock);
+ 	INIT_LIST_HEAD(&dev->send_list);
+ 	INIT_LIST_HEAD(&dev->recv_list);
+@@ -1613,7 +1635,8 @@ static int vduse_destroy_dev(char *name)
+ 	idr_remove(&vduse_idr, dev->minor);
+ 	kvfree(dev->config);
+ 	vduse_dev_deinit_vqs(dev);
+-	vduse_domain_destroy(dev->domain);
++	if (dev->domain)
++		vduse_domain_destroy(dev->domain);
+ 	kfree(dev->name);
+ 	vduse_dev_destroy(dev);
+ 	module_put(THIS_MODULE);
+@@ -1722,11 +1745,7 @@ static int vduse_create_dev(struct vduse_dev_config *config,
+ 	if (!dev->name)
+ 		goto err_str;
+ 
+-	dev->domain = vduse_domain_create(VDUSE_IOVA_SIZE - 1,
+-					  VDUSE_BOUNCE_SIZE);
+-	if (!dev->domain)
+-		goto err_domain;
+-
++	dev->bounce_size = VDUSE_BOUNCE_SIZE;
+ 	dev->config = config_buf;
+ 	dev->config_size = config->config_size;
+ 
+@@ -1756,8 +1775,6 @@ static int vduse_create_dev(struct vduse_dev_config *config,
+ err_dev:
+ 	idr_remove(&vduse_idr, dev->minor);
+ err_idr:
+-	vduse_domain_destroy(dev->domain);
+-err_domain:
+ 	kfree(dev->name);
+ err_str:
+ 	vduse_dev_destroy(dev);
+@@ -1924,9 +1941,23 @@ static int vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+ 	if (ret)
+ 		return ret;
+ 
++	mutex_lock(&dev->domain_lock);
++	if (!dev->domain)
++		dev->domain = vduse_domain_create(VDUSE_IOVA_SIZE - 1,
++						  dev->bounce_size);
++	mutex_unlock(&dev->domain_lock);
++	if (!dev->domain) {
++		put_device(&dev->vdev->vdpa.dev);
++		return -ENOMEM;
++	}
++
+ 	ret = _vdpa_register_device(&dev->vdev->vdpa, dev->vq_num);
+ 	if (ret) {
+ 		put_device(&dev->vdev->vdpa.dev);
++		mutex_lock(&dev->domain_lock);
++		vduse_domain_destroy(dev->domain);
++		dev->domain = NULL;
++		mutex_unlock(&dev->domain_lock);
+ 		return ret;
+ 	}
+ 
 -- 
 2.20.1
 
