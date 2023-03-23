@@ -2,130 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1119F6C7204
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FB56C7201
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCWU6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 16:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S229823AbjCWU61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 16:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCWU6Y (ORCPT
+        with ESMTP id S229484AbjCWU6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 16:58:24 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2054.outbound.protection.outlook.com [40.107.102.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627CD211F3;
-        Thu, 23 Mar 2023 13:58:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K7rqsNw1HG8KjoQWWs5Uorow4qWiJi/KaLKuHBCpijfDP3WM7aq5GPjVeQ0tobqDxOfb8vcwVr7IGREdI1boaFy2IPbjZIKzjeevUS/kze2ddwiPhLMBuWr7epuLRqeOWd4pmFgsC4F9Yg/+l9xPsJ9sAxoenmz6t2KsRRYkKHzlgqgmvfUfCVvj+ZyIh/8Ewd3iL83lyiShNVdGIEATVpx6NmbFVVwh8PWmCILHQ+84lbEwgDiTO5uTprUFQpJF8HZnbhWAEV/xid8/OL/4XiBW6PvmuGuMltfwMjwTkYeaKY3KNbrxEB/zydK8ila1UXCODYyxGwmEfkvLkexfeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4Gy/49iwHAImWPsLmW8jPpDcIBB3Ap6uG5BaW/9Qya0=;
- b=AhWMLRsZepXkcK0PakzETfKWPUjo3lrWPu7KshGaP0G5+VhxxXtoF7dLiPfR1UXCu5XAtwTkwXkpKt7mZMUlJwSDSQUMqT0WJXyhfUJJVgf+aE+58cV3/7ySF9HdFTqYYT61a/K/EQ+cJjLQN1O+Tn9/kTCtkzdSKGZ/wJc4HdW2aImrNT6tZL/dZlfBQe2OL0qlfnUe6CdoDtmIP4Bzx5S/A+jQ0YOANlyvdt7lj2tCabNlsz4gdg5Jz239KbXb/M4FuJ2zPx2Z7O62SsMuCByIIvkpvYr0+2HDetgGiRmElNhTj3SiHavBztn5QEEu/Y/DhJszDblCsuiCJRenSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4Gy/49iwHAImWPsLmW8jPpDcIBB3Ap6uG5BaW/9Qya0=;
- b=LnK9xHHfA7dXXmBef6SuXVd5R96ihra8RD0m8t7mc70NjeKeWoGKDuEH0toqQA+d4DuOGutTD11wJvN1CjkhAkxep02rl1jcLjChFU84pj0R1d6sp7rGM4JNw/Rw71BeKdhJ1f5keD0BQ/DaSpYB755koMq59hN7wnIKn3TEFZvwD/vqhSwbjI+wuFGuY5gKMEjqyKkt+m4b/FTG/mFttc5pgTWe2w9NH8Rg/bisHwoZJSTQbjhkHxttn6b2grVHOuJCaKlcMJYkUKsHhY/qF02fRRjdoPqSoZ/Sf98xziCftvGO1RAkUKo/4AtSc5SGZOV8hABjxQgQ6O0eG2Cc2g==
-Received: from MW4PR03CA0100.namprd03.prod.outlook.com (2603:10b6:303:b7::15)
- by DS0PR12MB7534.namprd12.prod.outlook.com (2603:10b6:8:139::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 20:57:50 +0000
-Received: from CO1NAM11FT095.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b7:cafe::60) by MW4PR03CA0100.outlook.office365.com
- (2603:10b6:303:b7::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
- Transport; Thu, 23 Mar 2023 20:57:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT095.mail.protection.outlook.com (10.13.174.179) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6222.17 via Frontend Transport; Thu, 23 Mar 2023 20:57:50 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
- 13:57:37 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
- 2023 13:57:37 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Thu, 23 Mar
- 2023 13:57:36 -0700
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
-Date:   Thu, 23 Mar 2023 16:57:33 -0400
-Message-ID: <20230323205733.20763-1-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        Thu, 23 Mar 2023 16:58:23 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93262311A;
+        Thu, 23 Mar 2023 13:57:59 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 20so16757462lju.0;
+        Thu, 23 Mar 2023 13:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679605075;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QllIjtDRCuTkdGt8RZ/w1lWCVqloNvO62icgDypzWxg=;
+        b=qyriCx0PBBRPf1+fQOkg8s+pbF04J3uTUMSIsu9eLbfXqhrSN4/HCghGBOot4Rjt2K
+         asmRbQrmCCHtOfx8bgXD21aw2hcRT/n3mKJs9w2lztiAVO94wsuHscWD+zvq9aJcm0wq
+         mY+n3kWv8peCQeAUQp0msLFKs/yM6KPOmeZ+/N9zuEBKf8+HxvuOPzdw7Z93QEspMCkn
+         yE7gt41jBsZI4ZMUiWUVGMteqFp8+DvWI8A6WeFyjlRB0mAw/iWTeCLShCDJA7LHv4Sy
+         ZnLq+T/MqFz2vSXo/VLqyhORuWIeAPHtXVhh4E9GHpCbIyHQJEhRct9s0yV4ibeR5/YC
+         WGHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679605075;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QllIjtDRCuTkdGt8RZ/w1lWCVqloNvO62icgDypzWxg=;
+        b=ojyuDK+MDpPuaYuKTaZ145oHCX1hgJgbDlafGdKTmwS2AGfOzsLHw9UW0znox2i88A
+         eyxpamblv287Eeesoo/ib7QFf4d87ZFZoQ8Jii4/dFU9A/uDZHEkuFH2fjVM0Id+vn/A
+         2BfwsCOgQTMCh3SKSixlfZPdVhpCPSOniMluCMN0pWFEoO27GK+L5VVl+rYK8tZkZgfL
+         B5FKIrGudDvfZsSHjSQTvsHlf1LZAYsKfRc9i6wCrn6NW98oLN9GbXEXf+9fjfg1MUGk
+         OfgnYYDn5VkxXosleoYdMd18S7oENNQhqGeSL75Tcxciyi7ffje9N8ohZhM7u0NVS0Os
+         6kjQ==
+X-Gm-Message-State: AAQBX9fD6KvnRhxFxbadGtc00aZbanZuoF8lLIvPWWtbaP83q3xd/E2P
+        Cu7sVMa0JfcqM573jPb1I38=
+X-Google-Smtp-Source: AKy350Z7haypN7p3yGB0EsrKpQnNdZdrOKH7hLWK6nxyC8dEQVyQ9Ab8bedfHPJYX5QnZIGQ5Eg1YQ==
+X-Received: by 2002:a2e:88c9:0:b0:29b:d5a6:579c with SMTP id a9-20020a2e88c9000000b0029bd5a6579cmr158791ljk.27.1679605074437;
+        Thu, 23 Mar 2023 13:57:54 -0700 (PDT)
+Received: from [192.168.50.20] (077222238142.warszawa.vectranet.pl. [77.222.238.142])
+        by smtp.gmail.com with ESMTPSA id l2-20020a2e3e02000000b0029e5448e752sm1638273lja.131.2023.03.23.13.57.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 13:57:53 -0700 (PDT)
+Message-ID: <6813a7ce-93f1-3a63-0641-f6a77aa7c343@gmail.com>
+Date:   Thu, 23 Mar 2023 21:57:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT095:EE_|DS0PR12MB7534:EE_
-X-MS-Office365-Filtering-Correlation-Id: eccd70ed-11c0-4f13-d8c9-08db2be143ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K+0rAvllmmM/9QJeY6Lkz+OzOepVS6T7RZHJ5V+Z56Twn+k99eeeSyYpgHINlmiUpSxvldIRQvCSlqdG6i/txOYvdLEQkR7zPvVs11Yuaguh9s8YzCRc2zGer8uB1liaIABwiW18A3QWG83nkGLroQ9Z9vkXni/8t+tURN9SPP8tfhQ3Ty7ix/MeWUAchKakvNiklS/5af+26uoelISUngMM14rw+iVmBKLuNjGub6tEX3mbfE476DdBxQEszEz9nt0dwveMDmOqyNpZG15j0y5C86Ikxw0uAnDOwyJ1faSrSuUQki4T1plcxXCBPcXJCQl9CmCo9hjF7SiCi289j/vUMCFrd10hy2+OSqa8scxrySW56bPF4cWoQv3UBUh9ICE3jsXm953PGQ95WIS2cUQhfB3K6V0cmaQoBzpEwGfo0CT09bmA2kZRjW1yQHDMfCOJkwheBPBgECVp+4zend/VMCEgJOpU8Dff0FSZ1Ftbjn5nEXtEXXvYbOVyeQ77Lg0A2gES7vnuzaafyZXy+QXOOcxLuDIo/fXLdXl5Z/mbfdc2znk8EuyLk1yahARXFrHGg1jXki0copmJ5lz07NPf7MHxidVZgYHXh/Wv56HfL9T05SHgo5SXcwDeyeIB2yG1T5gAh6hSexNxzxsCO90j0KLGbOXPFwa4/3S8dWhpzwiIsUYryMBaKJrkRqnAdTqxzOAR04Xck8g8Eh8GT4N738X5yflNQXR13y8zRM3VxrT+hQ5hK9wwaGChuWsO8gBp/JaLsEDgHg34+JjBJA==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199018)(40470700004)(36840700001)(46966006)(5660300002)(2906002)(82740400003)(7636003)(4744005)(41300700001)(8936002)(40480700001)(82310400005)(36756003)(86362001)(40460700003)(36860700001)(356005)(6666004)(107886003)(47076005)(426003)(7696005)(478600001)(110136005)(83380400001)(2616005)(336012)(26005)(186003)(70586007)(1076003)(70206006)(8676002)(316002)(4326008)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 20:57:50.6760
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eccd70ed-11c0-4f13-d8c9-08db2be143ce
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT095.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7534
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2] net: usb: lan78xx: Limit packet length to skb->len
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <202303180031.EsiDo4qY-lkp@intel.com>
+ <20230317173606.91426-1-szymon.heidrich@gmail.com>
+ <ZBx+eGTSjRM8fvsf@kroah.com>
+Content-Language: en-US
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+In-Reply-To: <ZBx+eGTSjRM8fvsf@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the "ngpios" property is specified, bgpio_bits is calculated
-as the round up value of ngpio. At the moment, the only requirement
-specified is that the round up value must be a multiple of 8 but
-it should also be a power of 2 because we provide accessors based
-on the bank size in bgpio_setup_accessors().
+On 23/03/2023 17:29, Greg KH wrote:
+> On Fri, Mar 17, 2023 at 06:36:06PM +0100, Szymon Heidrich wrote:
+>> Packet length retrieved from descriptor may be larger than
+>> the actual socket buffer length. In such case the cloned
+>> skb passed up the network stack will leak kernel memory contents.
+>>
+>> Additionally prevent integer underflow when size is less than
+>> ETH_FCS_LEN.
+>>
+>> Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
+>> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> the test robot did not report the fact that the packet length needed to
+> be limited :(
+> 
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
----
- drivers/gpio/gpio-mmio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-index b52a3dd511ca..74fdf0d87b2c 100644
---- a/drivers/gpio/gpio-mmio.c
-+++ b/drivers/gpio/gpio-mmio.c
-@@ -623,7 +623,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
- 	if (ret)
- 		gc->ngpio = gc->bgpio_bits;
- 	else
--		gc->bgpio_bits = round_up(gc->ngpio, 8);
-+		gc->bgpio_bits = roundup_pow_of_two(round_up(gc->ngpio, 8));
- 
- 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
- 	if (ret)
--- 
-2.30.1
+Yes, I removed the Reported-by tag in V3 as suggested by Jakub.
 
