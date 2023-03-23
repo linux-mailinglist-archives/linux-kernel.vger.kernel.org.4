@@ -2,212 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CD96C5C44
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11C66C5BB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCWBr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S229870AbjCWBEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWBrZ (ORCPT
+        with ESMTP id S229713AbjCWBEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:47:25 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7332D45
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:47:24 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id f5-20020a4ad805000000b005399cfd276bso2635979oov.6
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:47:24 -0700 (PDT)
+        Wed, 22 Mar 2023 21:04:31 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B4E27D51;
+        Wed, 22 Mar 2023 18:04:29 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w4so12806565plg.9;
+        Wed, 22 Mar 2023 18:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679536043;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lK7QVFfOQBKFYTRiRkRUQTZo9g0ScVlTvvUuZwddc2Q=;
-        b=EeLkLvkG1Pnry2U6usWKyJsdt4p+JLbPDzy0jif8flMd9H8MCtfTsSb1Yh7QtBELzf
-         HeBZXCaLX9RBZaJWf+rRe6aF8cfAFESqoviS19b5sCZjplMskwL7XHTRjG3J4tulYkKB
-         +etVtfiTM6VhFcvmi6ZhpZWRjjoPMBMNTrdN9wgRG+LVZpRXZzpkiv2spKvvsBlP6Nux
-         sCFyWF5/yPMiYS5HEEgi68eEHxNv6/8+3v7kPixtGk5uInuQTNKE1gJdjuDhZMQqsXwX
-         /313w7h8im+bPeGpVY8z3Y+LoixTivrn5leHRGLDN1N+Fvv9U5Ff5i2CFd5h0Vt+huMy
-         hDhQ==
+        d=gmail.com; s=20210112; t=1679533469;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3MwmtD+ic/YD9AyL8GSa44JOfk9u43RAIZVxl0paBN4=;
+        b=nNWuSwOKH7BEiohFuQh8LGj92GHaM785BhB+8I7fhMFecxliFp4fYI96zs1ZmhCHja
+         /a+Vi96g7rM+x8sytO1qBz2ktxxLSwRH6vFxoqVOkGR51RmwbYn/PrQvf6w88GVdvUd8
+         L5U4qnUn5VDhkQ8Gw73+ibbp/vpz8pW4iw/+qXrbirP2l2pV1P3zccWs2j7vm/Ti5OzF
+         MmplpwhLhrJiWm+yhk6D6jI/H2iATV6+rD0f9tUwQwgtpFSGoG99C/iskLw31MkwqZi1
+         keFZu2EHthZgN/AMoALvbn0c5p8SYC0eXZxVmGHTCc5icFD4ydZxukQhXW4ad/Dqyn3S
+         4M+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679536043;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lK7QVFfOQBKFYTRiRkRUQTZo9g0ScVlTvvUuZwddc2Q=;
-        b=YjWk99nIkCdME37iuUfj/iV+rxD5/1CKvLQihsb3kFK+K44XaTkj+52YlCKS7LBoWi
-         Oo7ck9f8UjytXUpOLtbORwtzfbUasVRyJ4HKagOSrS79RbvTkP124dBvXs+Iks0heSTO
-         uD5aQ8GIzh5ly3YNqngGfbZHkmvpbbQ3LLtsVB6GuDqwPfxXyWAXXgSr+wpv5/AZ+Dhz
-         IU596TsKFzkS4ijyWGrABnYErzLZtBmdnfx23nFkbfhQHT2YlXqS5OW4Iuk/hgPv9Ho/
-         0aeS3Pi60yRkpnNXE1INGrjRG/Gwe0uf8OEqhWd2cPwjP8r7SB84CuPoyFbQIl2po0wq
-         2JGQ==
-X-Gm-Message-State: AO0yUKVVib7RFazol4R6spxwRowRIIlJzPPBsBbi8qPj4YHDmEuO94/w
-        sJPHKVDUAsjsDe+66W0LJYKJ/DnGLkgJya9QwD9SUg==
-X-Google-Smtp-Source: AK7set+3xXLR1dgb32hph+I0pKJcJFERnSJJsKR/987fHU1xyfNHT6K9h9Yixp0+k9uwNLyHyRcLpg==
-X-Received: by 2002:a4a:94a1:0:b0:536:a447:b270 with SMTP id k30-20020a4a94a1000000b00536a447b270mr2280976ooi.6.1679536043550;
-        Wed, 22 Mar 2023 18:47:23 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id f12-20020a4a890c000000b0053a7aaa85a0sm5376988ooi.0.2023.03.22.18.47.21
+        d=1e100.net; s=20210112; t=1679533469;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3MwmtD+ic/YD9AyL8GSa44JOfk9u43RAIZVxl0paBN4=;
+        b=c20CJd/dI3TYpRYpqw3HP43D3tX4Cg2ZhdzNqDkSXDs4jzOk004Mo2fFzvD6+M6sMB
+         yRVw7LanBDuaI9HZU2zl6WW1xB0Wd+wrvuWqlJkqFX7paJUeoXM0/Bw3ZwU6ahZYmcoH
+         zl8ibDTLIcdJzgB2RYsDuGdcZHSJ1zpKEeQZng9HAIt4g4htWZQa+3JrirP8atn154bF
+         BuhgEeEiRJi+jmtnTHzM0FJOuyFt7I42X75KzoGLhh8hdRHY3Ex1ZlUAzYzxG5DlD35C
+         p64wAroMwyVDyIJmzt/DNDPQLaqFkFLs9Ylm6CxkvjyL4X1EqwvOnZ7XwoBg/3xIS4N6
+         v6yA==
+X-Gm-Message-State: AO0yUKWkjTOzk7jX6Rwt+vrSNgRhoGZXlnIZcj71Eeq+uPCY617y1lku
+        srkuhYKr7v3uMl0X3EOn5lg=
+X-Google-Smtp-Source: AK7set/1gln3iAMgLULjYc0mJevIs3D097MVVyf2kRHldya7bcuKEj6gPk2dSI0VPDXHP267caITgw==
+X-Received: by 2002:a17:903:430c:b0:19f:31cc:47fc with SMTP id jz12-20020a170903430c00b0019f31cc47fcmr3557378plb.39.1679533468693;
+        Wed, 22 Mar 2023 18:04:28 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id o11-20020a1709026b0b00b0019a96d3b456sm7386086plk.44.2023.03.22.18.04.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 18:47:22 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 15:50:00 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-Message-ID: <ZBtb6ML7FmMZ6uQ3@fedora>
-References: <20230323122913.4f0410b8@canb.auug.org.au>
+        Wed, 22 Mar 2023 18:04:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 22 Mar 2023 15:04:26 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, fsverity@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [GIT PULL] fsverity fixes for v6.3-rc4
+Message-ID: <ZBulmj3CcYTiCC8z@slm.duckdns.org>
+References: <20230320210724.GB1434@sol.localdomain>
+ <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
+ <ZBlJJBR7dH4/kIWD@slm.duckdns.org>
+ <CAHk-=wh0wxPx1zP1onSs88KB6zOQ0oHyOg_vGr5aK8QJ8fuxnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="swKWi4Hlp6vhftZ+"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230323122913.4f0410b8@canb.auug.org.au>
-X-Spam-Status: No, score=0.9 required=5.0 tests=DATE_IN_PAST_03_06,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wh0wxPx1zP1onSs88KB6zOQ0oHyOg_vGr5aK8QJ8fuxnw@mail.gmail.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello, Linus.
 
---swKWi4Hlp6vhftZ+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 21, 2023 at 11:31:35AM -0700, Linus Torvalds wrote:
+> On Mon, Mar 20, 2023 at 11:05 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > Do you remember what the other case was? Was it also on heterogenous arm
+> > setup?
+> 
+> Yup. See commit c25da5b7baf1 ("dm verity: stop using WQ_UNBOUND for verify_wq")
+> 
+> But see also 3fffb589b9a6 ("erofs: add per-cpu threads for
+> decompression as an option").
+> 
+> And you can see the confusion this all has in commit 43fa47cb116d ("dm
+> verity: remove WQ_CPU_INTENSIVE flag since using WQ_UNBOUND"), which
+> perhaps should be undone now.
 
-On Thu, Mar 23, 2023 at 12:29:13PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the gpio-brgl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/gpio/gpio-pci-idio-16.c:32:30: error: field 'state' has incomplet=
-e type
->    32 |         struct idio_16_state state;
->       |                              ^~~~~
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_direction':
-> drivers/gpio/gpio-pci-idio-16.c:39:13: error: implicit declaration of fun=
-ction 'idio_16_get_direction'; did you mean 'idio_16_gpio_get_direction'? [=
--Werror=3Dimplicit-function-declaration]
->    39 |         if (idio_16_get_direction(offset))
->       |             ^~~~~~~~~~~~~~~~~~~~~
->       |             idio_16_gpio_get_direction
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
-> drivers/gpio/gpio-pci-idio-16.c:62:16: error: implicit declaration of fun=
-ction 'idio_16_get'; did you mean 'idio_16_gpio_get'? [-Werror=3Dimplicit-f=
-unction-declaration]
->    62 |         return idio_16_get(idio16gpio->reg, &idio16gpio->state, o=
-ffset);
->       |                ^~~~~~~~~~~
->       |                idio_16_gpio_get
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_multiple':
-> drivers/gpio/gpio-pci-idio-16.c:70:9: error: implicit declaration of func=
-tion 'idio_16_get_multiple'; did you mean 'idio_16_gpio_get_multiple'? [-We=
-rror=3Dimplicit-function-declaration]
->    70 |         idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state,=
- mask, bits);
->       |         ^~~~~~~~~~~~~~~~~~~~
->       |         idio_16_gpio_get_multiple
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set':
-> drivers/gpio/gpio-pci-idio-16.c:79:9: error: implicit declaration of func=
-tion 'idio_16_set'; did you mean 'idio_16_gpio_set'? [-Werror=3Dimplicit-fu=
-nction-declaration]
->    79 |         idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, =
-value);
->       |         ^~~~~~~~~~~
->       |         idio_16_gpio_set
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set_multiple':
-> drivers/gpio/gpio-pci-idio-16.c:87:9: error: implicit declaration of func=
-tion 'idio_16_set_multiple'; did you mean 'idio_16_gpio_set_multiple'? [-We=
-rror=3Dimplicit-function-declaration]
->    87 |         idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state,=
- mask, bits);
->       |         ^~~~~~~~~~~~~~~~~~~~
->       |         idio_16_gpio_set_multiple
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_mask':
-> drivers/gpio/gpio-pci-idio-16.c:106:45: error: invalid use of undefined t=
-ype 'struct idio_16'
->   106 |                 iowrite8(0, &idio16gpio->reg->irq_ctl);
->       |                                             ^~
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_unmask':
-> drivers/gpio/gpio-pci-idio-16.c:129:41: error: invalid use of undefined t=
-ype 'struct idio_16'
->   129 |                 ioread8(&idio16gpio->reg->irq_ctl);
->       |                                         ^~
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_handler':
-> drivers/gpio/gpio-pci-idio-16.c:164:46: error: invalid use of undefined t=
-ype 'struct idio_16'
->   164 |         irq_status =3D ioread8(&idio16gpio->reg->irq_status);
->       |                                              ^~
-> drivers/gpio/gpio-pci-idio-16.c:178:37: error: invalid use of undefined t=
-ype 'struct idio_16'
->   178 |         iowrite8(0, &idio16gpio->reg->in0_7);
->       |                                     ^~
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_init_hw':
-> drivers/gpio/gpio-pci-idio-16.c:198:37: error: invalid use of undefined t=
-ype 'struct idio_16'
->   198 |         iowrite8(0, &idio16gpio->reg->irq_ctl);
->       |                                     ^~
-> drivers/gpio/gpio-pci-idio-16.c:199:37: error: invalid use of undefined t=
-ype 'struct idio_16'
->   199 |         iowrite8(0, &idio16gpio->reg->in0_7);
->       |                                     ^~
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_probe':
-> drivers/gpio/gpio-pci-idio-16.c:232:37: error: invalid use of undefined t=
-ype 'struct idio_16'
->   232 |         iowrite8(0, &idio16gpio->reg->filter_ctl);
->       |                                     ^~
-> drivers/gpio/gpio-pci-idio-16.c:248:9: error: implicit declaration of fun=
-ction 'idio_16_state_init'; did you mean 'file_ra_state_init'? [-Werror=3Di=
-mplicit-function-declaration]
->   248 |         idio_16_state_init(&idio16gpio->state);
->       |         ^~~~~~~~~~~~~~~~~~
->       |         file_ra_state_init
-> drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
-> drivers/gpio/gpio-pci-idio-16.c:63:1: error: control reaches end of non-v=
-oid function [-Werror=3Dreturn-type]
->    63 | }
->       | ^
->=20
-> Caused by commit
->=20
->   473b79057bbd ("gpio: idio-16: Remove unused legacy interface")
->=20
-> I have used the gpio-brgl tree from next-20230322 for today.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
+Thanks for the pointers. They all seem plausible symptoms of work items
+getting bounced across slow cache boundaries. I'm off for a few weeks so
+can't really dig in right now but will get to it afterwards.
 
-Commit 473b79057bbd shouldn't be merged until all of the IDIO-16 legacy
-interface is first removed.
+> > There aren't many differences between unbound workqueues and percpu ones
+> > that aren't concurrency managed. If there are significant performance
+> > differences, it's unlikely to be directly from whatever workqueue is doing.
+> 
+> There's a *lot* of special cases for WQ_UNBOUND in the workqueue code,
+> and they are a lot less targeted than the other WQ_xyz flags, I feel.
+> They have their own cpumask logic, special freeing rules etc etc.
+>
+> So I would say that the "aren't many differences" is not exactly true.
+> There are subtle and random differences, including the very basic
+> "queue_work()" workflow.
 
-Bart, would you revert all of the "Migrate IDIO-16 GPIO drivers to
-regmap API" patches [0]? That patchset needs to be revised anyway to
-prevent conflicts with the handle_mask_sync() API change [1]; I'll
-submit a v3 later this week that resolves the incompatibilies and
-rebase on the latest gpio/for-next.
+Oh yeah, pwq management side is pretty involved, being dynamic and all. I
+just couldn't think of anything in the issue & execution path which would
+explain the reported significant performance penalty. The issue path
+differences come down to node selection and dynamic pwq release handling,
+neither of which should be in play in this case.
 
-William Breathitt Gray
+> Now, I assume that the arm cases don't actually use
+> wq_unbound_cpumask, so I assume it's mostly the "instead of local cpu
+> queue, use the local node queue", and so it's all on random CPU's
+> since nobody uses NUMA nodes.
+> 
+> And no, if it's caching effects, doing it on LLC boundaries isn't
+> rigth *either*. By default it should probably be on L2 boundaries or
+> something, with most non-NUMA setups likely having one single LLC but
+> multiple L2 nodes.
 
-[0] https://lore.kernel.org/all/cover.1677515341.git.william.gray@linaro.or=
-g/
-[1] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.or=
-g/
+Hmm... on recent x86 cpus, that'd just end up paring up the hyperthreads,
+which would likely be too narrow especially given that l3's on recent cpus
+seem pretty fast. I think what I need to do is generalizing the numa logic
+so that it can sit on any of these topological boundaries and let arch
+define the default boundary and let each wq to override the selection.
 
---swKWi4Hlp6vhftZ+
-Content-Type: application/pgp-signature; name="signature.asc"
+Another related shortcoming is that while the unbound wq's say "let the
+scheduler figure out the best solution within the boundary", they don't
+communicate the locality of work item to the scheduler at all, so within
+each boundary, from scheduler pov, the assignment is completely random. Down
+the line, it'd probably help if wq can provide some hints re. the expected
+locality.
 
------BEGIN PGP SIGNATURE-----
+Thanks.
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBtb6AAKCRC1SFbKvhIj
-K4NCAQCqLDrnXwSgH7e8UiVOm13v/dU+QyDRY6iFiL2k7CupWwEAw/vXToO6FJov
-2fmlH+ZUqaTfPr4iLpdwwXhWPdMBeAw=
-=EHEJ
------END PGP SIGNATURE-----
-
---swKWi4Hlp6vhftZ+--
+-- 
+tejun
