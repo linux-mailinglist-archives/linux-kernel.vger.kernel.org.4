@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533186C5D6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585B46C5D76
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 04:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCWDrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 23:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S230056AbjCWDtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 23:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWDrV (ORCPT
+        with ESMTP id S229600AbjCWDtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 23:47:21 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA002CFD4;
-        Wed, 22 Mar 2023 20:47:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhrrP6pj2z4whr;
-        Thu, 23 Mar 2023 14:47:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679543238;
-        bh=/oflFH8u0+y3EDIAa+W0ZJ3fJxp0x2wW6jB5mSBm3Ow=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FXL4NT5tn7GakfxMSUzZk88+F2PwFb+bD9thFm6M7pbHNlUhcqVCCePwRq98zAkgO
-         7rc3EEG8QcpxQeukG0+gKDT6X068480BpdBG5psiW6XP11lpgtGS0MATkSuyyuf3rW
-         wrNFB1wCGkmjicCyZevdxf6mSqt2A6IDRdet9JtLzMw6XbvnabY86wCyFuCGUzSpJf
-         itYbUWt8kLS7UJ3xv5IOqxXp+kDv3MoR9grEUbPtXnuCeQOgxHpGDR3YLaQ0bA4ez2
-         Uo1cbnN6mEtR4VZpC6DgIDT4OWb3tcZ+Afuz/a3j3Cv+RljA9unNJPk/nLMbigPBww
-         t9tu6dAsc63xw==
-Date:   Thu, 23 Mar 2023 14:47:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the rcu tree
-Message-ID: <20230323144717.6346fdab@canb.auug.org.au>
+        Wed, 22 Mar 2023 23:49:19 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E804C19;
+        Wed, 22 Mar 2023 20:49:19 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso2675877pjf.0;
+        Wed, 22 Mar 2023 20:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679543358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4P4sczMlLsp+gPtr1QGMWUNlSRoo/6Ef28EDu7xXAA0=;
+        b=kB5Q2KP+JhIhSoBKI/gKVN0twUZxQi3zIMtd0hNrQ+TYwqKWRenB+L3ReUTsw+t8H1
+         ZsrgYUAMYJRARxiVgibDu0jO8w6WqDhXKhKU9dO5FTDgQTewWCRc4zEDbfX7aMz8iTbH
+         gYB93LE4E5kL43+PULmSgX/AH480HljXBN42/OsJ6l8iE9FTd3t/wcY7XtgSxIApqi0d
+         E6ju+bbLJSwuXmnUmQJdQNnZoXwdRhFhZSlBr5vL+h/eC73Uupf8bLGT1ozwUfnWJAmp
+         x0Yq85IiNgteCKw6sEa27xB+A9TYBxYYWEzXWs7zydJW1Rd4kMB4XdRq6Yfsq06M32fA
+         GM/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679543358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4P4sczMlLsp+gPtr1QGMWUNlSRoo/6Ef28EDu7xXAA0=;
+        b=q+NUMQ9z2xWtlm6PU7leaBWlTePXguNKSI+wHXPBiKImQOWMsPC1b6OPFQZuFTjytf
+         oszK+g578BtomTfFy2xe/pPRoAvZyB8tGhTT2ZtNs+ZBzxvHykkEqD5adrw/j0aLU2N5
+         hWpDYKVZ1xpIDcclIyvmSnBFGxjqjRzMzXK3/mmo9rDq7nkj9orhsiO+8pS8LX1lW0Nq
+         eSWSAvuEAoIaTgPRSyapK+s830b9Rd1n7pn/3muqIONs4yc/uiONTG9//ugwiBEJikcV
+         jgRnWDscnpXRPnYDCZE8s4QS/BFJa6jAlT14JHdT0Y6apJg7nOHkZsvRYzBvppPXmEXe
+         n8iA==
+X-Gm-Message-State: AO0yUKU7bc0DInKgqtewW//2RAFo9PvdTpHAuaXC3qiUOHLbhmUxTxpj
+        KmUJnn/wC7pvSdBTZZFJzxde6szezNBIydRbDoQP2JHeAhfyoW0B
+X-Google-Smtp-Source: AK7set+nUZK1ltyrntedDdxlg/5GivXZkm46GNdcHtL09KKvRKeEduVqqfDfNiGUyMWNgkyTMWj7kPN6dO/zTUTGXtM=
+X-Received: by 2002:a17:90a:348a:b0:23f:a26e:daa3 with SMTP id
+ p10-20020a17090a348a00b0023fa26edaa3mr1775460pjb.9.1679543358398; Wed, 22 Mar
+ 2023 20:49:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=336hLObrJMP10vgGOJ4oA3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230318080526.785457-1-zyytlz.wz@163.com> <167930401750.16850.14731742864962914143.git-patchwork-notify@kernel.org>
+ <20230320122259.6f6ddc81@kernel.org>
+In-Reply-To: <20230320122259.6f6ddc81@kernel.org>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Thu, 23 Mar 2023 11:49:06 +0800
+Message-ID: <CAJedcCzT0wt=QrrA0XVihyEvpK4eUo+_Aen6OqPE6gJidjNpGg@mail.gmail.com>
+Subject: Re: [PATCH net v2] net: qcom/emac: Fix use after free bug in
+ emac_remove due to race condition
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     patchwork-bot+netdevbpf@kernel.org, Zheng Wang <zyytlz.wz@163.com>,
+        timur@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=336hLObrJMP10vgGOJ4oA3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8821=E6=97=
+=A5=E5=91=A8=E4=BA=8C 03:23=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, 20 Mar 2023 09:20:17 +0000 patchwork-bot+netdevbpf@kernel.org
+> wrote:
+> > Here is the summary with links:
+> >   - [net,v2] net: qcom/emac: Fix use after free bug in emac_remove due =
+to race condition
+> >     https://git.kernel.org/netdev/net/c/6b6bc5b8bd2d
+>
+> Don't think this is correct FWIW, randomly shutting things down without
+> holding any locks and before unregister_netdev() is called has got to
+> be racy. Oh, eh.
 
-Hi all,
+Dear Jakubju,
 
-The following commit is also in the tip tree as a different commit
-(but the same patch):
+Sorry for my late reply. I had a busy week.
 
-  f339c76cfe29 ("entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up")
+I have taken a look at similar fixes implemented in other drivers, but
+I do think your advice is more precious for I'm not familiar with the
+driver.
 
-This is commit
+Based on your experience and expertise, what do you think would be the
+most effective solution to address the race condition issue that you
+have identified in the emac_remove function of the qcom/emac driver? I
+appreciate any insights or suggestions that you might have on this
+matter.
 
-  b41651405481 ("entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up")
+Thank you for your time and help.
 
-in the tip tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=336hLObrJMP10vgGOJ4oA3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQby8UACgkQAVBC80lX
-0GzCRgf+OLtQOPpY9kROnqISn5or+NWyxWuBmXhNq810Uv6rxI6USxqnQWPjBagl
-8Msfu84mn/9s6olF6d0yJHJh1FQ9iwlqdKLtwLZTify4jNJmyvE0VC48ZPK22+l2
-p7ZYauf2MTzTWG/1SqVlHPx+qNw59vFEgnf8ab98JJZCi8rNBiAgBTT0j20rNMLz
-IyF3uSlSpzSCdUzsI0fd2KAc89hT89pKGnvZ19QUCZ/mXAbQuZ+J3Gx42x/DsTZh
-2sEbQfVKL0umtN5HKwV3NwrbzfALSO1DSv9MvTp2sj4Ib34s9wd7KrbeDsWIJFwt
-p2IUtl7OhwjLzrOxY1nsarEZsFHOdg==
-=UT0q
------END PGP SIGNATURE-----
-
---Sig_/=336hLObrJMP10vgGOJ4oA3--
+Best regards,
+Zheng Wang
