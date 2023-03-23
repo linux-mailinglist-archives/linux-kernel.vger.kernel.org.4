@@ -2,79 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA056C6E8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4246C6C6E92
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjCWRTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S231650AbjCWRVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWRTp (ORCPT
+        with ESMTP id S229508AbjCWRVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:19:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6619B26872
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:19:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pfOb9-0005wZ-5s; Thu, 23 Mar 2023 18:19:35 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pfOb7-006CZa-9o; Thu, 23 Mar 2023 18:19:33 +0100
-Received: from mfe by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pfOb6-00H8q2-NS; Thu, 23 Mar 2023 18:19:32 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] usb: dwc3: gadget: lower informal user notifaction dequeue operation
-Date:   Thu, 23 Mar 2023 18:19:31 +0100
-Message-Id: <20230323171931.4085496-1-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Thu, 23 Mar 2023 13:21:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D22926866;
+        Thu, 23 Mar 2023 10:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679592069; x=1711128069;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F8VEs+gAoTbNxRMLbfeYtBj/ROtGxGe7/N+1j6jckaw=;
+  b=b/ucdEI/q5ecmvInal7rOQKhySCMnA4cP7VjA4lyMa3iP7W6R+LkVH7o
+   LttSaiMVTlmEoV13e4rDuisPqtm5X/i7rW4mdnhTFqBh63wZL6cx8ZkYS
+   dZvGqCBAADrOALgVaYJog1neTe9sU0mzIf/opw7o1bo0iKMee4xtliV8c
+   pYkw6GfxSXqkM93eeCGv7XBIfoUpAiVr8OFQZm5duh0kcr745eMoMcXTA
+   UlHGoOFxik5wRXnv/eA5Az34u2HsyaqEghVLsgxfboBF5noEENBiuyM1U
+   g4EEqnJJXYlmQHITL2YsQuQ/Vt+gvOL9d3kRDEjy3qrzYhj3oC4WhnYK9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="425840143"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="425840143"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 10:21:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="712748266"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="712748266"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by orsmga008.jf.intel.com with ESMTP; 23 Mar 2023 10:21:03 -0700
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v6 0/6] Add Intel LJCA device driver
+Date:   Fri, 24 Mar 2023 01:21:07 +0800
+Message-Id: <20230323172113.1231050-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Printing an error message during usb_ep_dequeue() is more confusing than
-helpful since the usb_ep_dequeue() could be call during unbind() just
-in case that everything is canceld before unbinding the driver. Lower
-the dev_err() message to dev_dbg() to keep the message for developers.
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-Fixes: fcd2def66392 ("usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue")
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- drivers/usb/dwc3/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v6:
+ - ljca: split LJCA USB driver into two commits: USB part and API part.
+ - gpio/i2c/spi: use auxiliary bus for sub-module device enumeration instead of MFD.
+ - move document patch for LJCA sysfs entry to the 3th patch of this patch series.
+ - ljca: fix potential race condition when wait response timeout.
+ - ljca: use devm_kzalloc to malloc ljca device struct. 
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 89dcfac01235f..6699db26cc7b5 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2106,7 +2106,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 		}
- 	}
- 
--	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-+	dev_dbg(dwc->dev, "request %pK was not queued to %s\n",
- 		request, ep->name);
- 	ret = -EINVAL;
- out:
+v5:
+ - move ljca.h from drivers/include/mfd to drivers/include/usb.
+ - ljca: fix a potential memory leak issue.
+ - add a blank line before return to adust to kernel code style.
+ - ljca: sysfs: split "cmd" to "ljca_dfu" and "ljca_trace_level".
+
+v4:
+ - move ljca.c from drivers/mfd to drivers/usb/misc folder.
+ - fix index warning in sysfs-bus-devices-ljca.
+
+v3:
+ - spi: make ljca_spi_transfer inline and fix an endian issue.
+
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
+
+Ye Xiang (6):
+  usb: Add support for Intel LJCA device
+  usb: ljca: Add transport interfaces for sub-module drivers
+  Documentation: Add ABI doc for attributes of LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |   36 +
+ drivers/gpio/Kconfig                          |   12 +
+ drivers/gpio/Makefile                         |    1 +
+ drivers/gpio/gpio-ljca.c                      |  458 ++++++++
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ljca.c                 |  355 ++++++
+ drivers/spi/Kconfig                           |   11 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-ljca.c                        |  289 +++++
+ drivers/usb/misc/Kconfig                      |   13 +
+ drivers/usb/misc/Makefile                     |    1 +
+ drivers/usb/misc/ljca.c                       | 1012 +++++++++++++++++
+ include/linux/usb/ljca.h                      |   95 ++
+ 14 files changed, 2296 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
 -- 
-2.30.2
+2.34.1
 
