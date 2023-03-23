@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D46F6C7074
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480726C7077
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjCWSqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S231248AbjCWSsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCWSq3 (ORCPT
+        with ESMTP id S229508AbjCWSsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:46:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1602F25B81
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679597141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zkEo5KV5pWtY0chRAyhZO0yxLe6DPrfJex1y5U7s5pA=;
-        b=gp8wERYbHSK7cbgvTZsY1A5P//gPD0g5HStsbHk0EQPedxULb5FBrEKFNaklsFfGzimfcw
-        ThUhIuD/n7fdebcesJFUR79Z2b29GA2Me72xBFh7i/XA6HVkCJM8/5qPGoHyBuBs64q4HQ
-        TWumidyTuCqzI/BTFmyUv8uCKce/B2g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-SsonzWg2PRm_e_dynO_K-Q-1; Thu, 23 Mar 2023 14:45:39 -0400
-X-MC-Unique: SsonzWg2PRm_e_dynO_K-Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3DF05855300;
-        Thu, 23 Mar 2023 18:45:39 +0000 (UTC)
-Received: from pasta.redhat.com (unknown [10.45.224.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 50520400D796;
-        Thu, 23 Mar 2023 18:45:38 +0000 (UTC)
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] gfs2 fix for v6.3-rc4
-Date:   Thu, 23 Mar 2023 19:45:37 +0100
-Message-Id: <20230323184537.749868-1-agruenba@redhat.com>
+        Thu, 23 Mar 2023 14:48:01 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B13130E8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:48:00 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id l27so13324445wrb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679597279;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q8FWNgQNPCC7D7xKGDpYpPeNQgBYQlnN/7rIkoHcrFk=;
+        b=A3qhSSsUsD/lcphIMCN1rqn4spmYLqxOG8pKshDIEoxr8HVR/L+UzpNq5BOfMPIJlD
+         B+5wR6AvIR2CuZIdGd/WKGkkXAscp6/88OntRjifaYmyNwSrb4gfjIYsp+wGqgcGbAig
+         84j2hnha0Zr1scEZymEwQ5hztC7yaglGYdoV9scQ6HZJIQ2ZYWgrMoY4kXQax7P3S7BW
+         a+jaAvwmRJDo6prhIBJYdpSCGEHUoS47IG7mjmzGoIX5t9YZ8nyk0FgpgVT/rcdZN7XR
+         ssXBToTblWo9v1ALX+5Q685638iWGa+KYZf3azI0kGvK/Te7brV4PRbCVlHDE3R15THq
+         +wxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679597279;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q8FWNgQNPCC7D7xKGDpYpPeNQgBYQlnN/7rIkoHcrFk=;
+        b=DVM1Li1Pp/UuKzvy1Dq/SAXqKYhqQeiJ7spN+pfKdsbRF3aG6Jok7cAuJNXyNA+5LK
+         2VVjKwC716NXukJnM63ISpE2Pj5x/YpF58s5gDyA61+xDuR091lZtrXIlXcjTigOLxEy
+         FV13bqUfW1N72j0ekAVM/E52i4YqmaljWrbIGKM4m8hSIdx00Hkdkl41kDBX4mvc98qJ
+         umQqShd9uNrSQw0AQXYFaJm0/+ANmYs+9kZIPwOBQfiaSqHX7DJfNJRHyFFvUnEuPIja
+         OX4RtkBiT2CmkPUF7GHFFhDpCDO0HT3gkb4gTaYqJSQ9H6vxoxY7m4Dc/3BdKmw5TQJr
+         lrWA==
+X-Gm-Message-State: AAQBX9cfAEh2vpTkJXAXeMAxRrsCqoVLw1MkXOuzImL8/Ef0xZDkkQKQ
+        Nk8etjFmZhSoZPZG8NUMkCGdwsYtx14=
+X-Google-Smtp-Source: AKy350aBvrFH/pBwHenW0d3ikefW7j6jxF4RZSJ9EpFvZkGt37FYUa2OgZABIV5NDF983nCS4QRhbQ==
+X-Received: by 2002:a5d:6389:0:b0:2cf:e058:3ccc with SMTP id p9-20020a5d6389000000b002cfe0583cccmr119559wru.66.1679597278568;
+        Thu, 23 Mar 2023 11:47:58 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id p5-20020adfce05000000b002d64fcb362dsm11489891wrn.111.2023.03.23.11.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 11:47:57 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     vkoul@kernel.org, ye.xingchen@zte.com.cn
+Cc:     kishon@kernel.org, wens@csie.org, samuel@sholland.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: allwinner: Use dev_err_probe()
+Date:   Thu, 23 Mar 2023 19:47:56 +0100
+Message-ID: <2672110.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <202303231542125412125@zte.com.cn>
+References: <202303231542125412125@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+Dne =C4=8Detrtek, 23. marec 2023 ob 08:42:12 CET je ye.xingchen@zte.com.cn=
+=20
+napisal(a):
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Replace the open-code with dev_err_probe() to simplify the code.
+>=20
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Hi Linus,
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-please consider pulling the following fix.
+Best regards,
+Jernej
 
-Thanks,
-Andreas
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git gfs2-v6.3-rc3-fix
-
-for you to fetch changes up to 260595b439776c473cc248f0de63fe78d964d849:
-
-  Reinstate "GFS2: free disk inode which is deleted by remote node -V2" (2023-03-23 19:37:56 +0100)
-
-----------------------------------------------------------------
-gfs2 fix
-
-- Reinstate commit 970343cd4904 ("GFS2: free disk inode which is deleted
-  by remote node -V2") as reverting that commit could cause
-  gfs2_put_super() to hang.
-
-----------------------------------------------------------------
-Bob Peterson (1):
-      Reinstate "GFS2: free disk inode which is deleted by remote node -V2"
-
- fs/gfs2/dentry.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
 
