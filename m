@@ -2,139 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A146C6D2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3D86C6D34
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjCWQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S231137AbjCWQSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCWQRQ (ORCPT
+        with ESMTP id S229923AbjCWQSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:17:16 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE6335EE3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:17:08 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230323161704euoutp01de4553fcf0bd311522c0c4bf1e318e39~PGJdvmqnL0682506825euoutp01F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230323161704euoutp01de4553fcf0bd311522c0c4bf1e318e39~PGJdvmqnL0682506825euoutp01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679588224;
-        bh=NC0js/0E3Lmn93x2gAtkO3H2r7kJun3rlD/UogXKMmk=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=Rps3jbjoKJjTPqNLSBDj9URmKyPAV/AbdvYBrpwlA8T2/VndNLxPneUJ8G2VW4mTD
-         oLDjBGfBDWjBr8uVSJubBtbuK+aupoyjFYTxT0M5SwVq4QE76cdfirSpd4wgUUORq2
-         TS0HiPhch1SsDQIhwNUNmFmxEbkZo76ld9vP/hlk=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230323161704eucas1p2faa7b65ac36f6a3d0a17f66f18211380~PGJdJJM6i0730607306eucas1p2C;
-        Thu, 23 Mar 2023 16:17:04 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id E3.D0.09503.F7B7C146; Thu, 23
-        Mar 2023 16:17:03 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230323161703eucas1p1eaaf0da321fcbf807af78fb3224baf59~PGJcztT1q1108211082eucas1p1y;
-        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230323161703eusmtrp104829574f193b3aac92abd40a47b5760~PGJczCpJZ1658716587eusmtrp1T;
-        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
-X-AuditID: cbfec7f2-e8fff7000000251f-12-641c7b7fee58
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id C6.B6.08862.F7B7C146; Thu, 23
-        Mar 2023 16:17:03 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230323161703eusmtip2214de612046c115e47c514f99c83abf2~PGJcnZBIa0225902259eusmtip2f;
-        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
-Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 23 Mar 2023 16:16:59 +0000
-Message-ID: <655ddc1c-8b64-1168-0f6b-76c565363325@samsung.com>
-Date:   Thu, 23 Mar 2023 17:16:59 +0100
+        Thu, 23 Mar 2023 12:18:13 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590601711
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:18:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so89023243edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679588290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DxwPj9zc4wVERdaRm3UD6tbyjSI8uDBIlR3KTexXHNg=;
+        b=XhO6nZVp3cJ6GYNnQ2ZPBd/bevteGrZU/HIt7rhk+LHiYXbwkTEIAA/Gm2lDHIMikg
+         gfoYKiDCpNo8lnfMBlGGsI0PLQz5CrW36qepgWsG7uExChYhRpji3UqRtZum7cH/vdbZ
+         nMqTsTLwMkfU7eqB6QIAZhzjzcr6MfIBsV9+Mh7lY8ajGfGMxL7VuLMDYbs0rNlH1Lgf
+         iV6mh1620CTOr/soDFy1jiw2Cv+8sGb2vRKHlFpQOFPw708c41xBPfnbqLdjoqoACMXl
+         o1UnaPMAjjFpYJ904SCgAI0gxQMgUnTxaQY+oMY7qneZ4HxyRULhAJKXlDXAWNrPcPJl
+         8/jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679588290;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DxwPj9zc4wVERdaRm3UD6tbyjSI8uDBIlR3KTexXHNg=;
+        b=II+BtD9HwrPqEKtPWHcLowh5hvxtnSkkeX56k98ckrqP6HcdQRDvUVNC34lTLE+ZWi
+         Ndy8MUzQVyo3B0ISLyB1vDKz78y0sohogRWqhcMkMGearZ0RiyoFH1uvmKzc8HO7QAEa
+         vQ4rby17YZL0onuiugGIlhCFd59FWBjM+3j4flb/ZflzzTmLNqw7PHDpdy2HEKlZF6ow
+         HohACOlkJ3894H2zk/wHGCTSxdZCUEeSjOUkCuMemE3Fqh1RSKEQD17MHsrKI9vA/fZQ
+         NZOLMD2EJM8WryR9myQApf+xbqmQlc9jiN7cPoI1QEjiLOgHU2Z1mWvgXTfUBGzLB5sZ
+         OQ8g==
+X-Gm-Message-State: AO0yUKX76gip3/Q0Jy1TZlfFcPXFgjCqGqzIr7D3VOoAzfRoTVYZ1Tz6
+        z87NP+OC/ruPicNt5OVat2BUpCAIOXhiA+3XN+ANmA==
+X-Google-Smtp-Source: AK7set/F5NNXvDsHcjBnswex17zee4ALhFHj/vmjoRRqfjUnNDh8XIbYrOkU+1HM87gBHlOIW8+AR+spBXumt/uarsQ=
+X-Received: by 2002:a50:9b55:0:b0:4fc:473d:3308 with SMTP id
+ a21-20020a509b55000000b004fc473d3308mr3392273edj.8.1679588289734; Thu, 23 Mar
+ 2023 09:18:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.8.0
-Subject: Re: [RFC v2 0/5] remove page_endio()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <senozhatsky@chromium.org>, <viro@zeniv.linux.org.uk>,
-        <axboe@kernel.dk>, <brauner@kernel.org>,
-        <akpm@linux-foundation.org>, <minchan@kernel.org>,
-        <hubcap@omnibond.com>, <martin@omnibond.com>, <mcgrof@kernel.org>,
-        <devel@lists.orangefs.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <ZBxxPw9BTdkE4KF0@casper.infradead.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+ <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+ <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+ <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
+ <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
+ <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
+ <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com> <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
+In-Reply-To: <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Mar 2023 09:17:33 -0700
+Message-ID: <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.110.32.65]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsWy7djP87r11TIpBr/X21jMWb+GzWL13X42
-        i9eHPzFa7N88hcmi/W4fk8XeW9oWe/aeZLG4vGsOm8W9Nf9ZLU6u/89scWPCU0aLZV/fs1vs
-        3riIzeL83+OsFr9/zGFz4PeY3XCRxWPzCi2Py2dLPTat6mTz2PRpErvHiRm/WTwapt5i8/h1
-        +w6rx+dNch6bnrxlCuCK4rJJSc3JLEst0rdL4MqYf2U6c8EalorJtywaGHczdzFyckgImEic
-        /vCLpYuRi0NIYAWjRMvnY+wQzhdGiX1fXoBVCQl8ZpT4OsURpuPqpE1sEEXLGSWOthxmhXCA
-        ij7e3w/l7GSUeNu7lKmLkYODV8BOYsJ7X5BuFgFViQMtW9lBbF4BQYmTM5+wgJSICkRJvHhd
-        BhIWFtCVuLinkwXEZhYQl7j1ZD7YFBEBDYk3W4xApjML9DBLLFq7C6yVTUBLorETbCIn0G1v
-        3y9jhWjVlGjd/psdwpaX2P52DtTHihKTbr5nhbBrJU5tucUEMlNC4B6nxLMjh9ghEi4S6x7P
-        gLKFJV4d3wJly0icntzDAmFXSzy98ZsZormFUaJ/53o2kIMkBKwl+s7kQNQ4SuzZfJ4VIswn
-        ceOtIMQ9fBKTtk1nnsCoOgspIGYh+XgWkhdmIXlhASPLKkbx1NLi3PTUYsO81HK94sTc4tK8
-        dL3k/NxNjMDkd/rf8U87GOe++qh3iJGJg/EQowQHs5IIrxuzRIoQb0piZVVqUX58UWlOavEh
-        RmkOFiVxXm3bk8lCAumJJanZqakFqUUwWSYOTqkGpv5rv5R+i8nVBNoYTv7xwn3fJF3Bb/xF
-        M7+fayrzN1wpbmPQWmeUVL3w6el366/4Sqln1SVnMn69cyoz9+O2XXfnaInv9mm0+Ofw9dLh
-        qIqvz9mNZjWcyNzfW9l6ffXHs74PT8Q6nzfMlXY05vz07tzhkLCTsgINfyPiJZ78USzr5jqw
-        V3PiFv2tVv1P8pufOJklKMmu2q7h4i05wz588YmAyk0b6p0vzl3De9dJI6pPgmtVP8+q89Kr
-        rl3dsaBhOa/ByV0zGr5VMfKXhMif8Nxz4E9Iy9Sg0rO1t27rfsrdXDy5PypfqUHrZXBybWH6
-        F+nfx0/OkmiYJN+fNu/g7ejJwQmXfTeELnqRXGaarcRSnJFoqMVcVJwIAOVFs6ftAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIKsWRmVeSWpSXmKPExsVy+t/xe7r11TIpBve+qFrMWb+GzWL13X42
-        i9eHPzFa7N88hcmi/W4fk8XeW9oWe/aeZLG4vGsOm8W9Nf9ZLU6u/89scWPCU0aLZV/fs1vs
-        3riIzeL83+OsFr9/zGFz4PeY3XCRxWPzCi2Py2dLPTat6mTz2PRpErvHiRm/WTwapt5i8/h1
-        +w6rx+dNch6bnrxlCuCK0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJ
-        Sc3JLEst0rdL0MuYf2U6c8EalorJtywaGHczdzFyckgImEhcnbSJrYuRi0NIYCmjxPv5F9kg
-        EjISn658ZIewhSX+XOuCKvrIKNFw6D8zhLOTUWL6mU+sXYwcHLwCdhIT3vuCNLAIqEocaNkK
-        1swrIChxcuYTFhBbVCBK4umdQ2CbhQV0JS7u6QSLMwuIS9x6Mp8JZIyIgIbEmy1GIOOZBXqY
-        JebPmsoIsWs6k8SFmdPZQYrYBLQkGjvB5nMCffD2/TJWiDmaEq3bf7ND2PIS29/OgfpSUWLS
-        zfesEHatxOe/zxgnMIrOQnLeLCRnzEIyahaSUQsYWVYxiqSWFuem5xYb6hUn5haX5qXrJefn
-        bmIEpo1tx35u3sE479VHvUOMTByMhxglOJiVRHjdmCVShHhTEiurUovy44tKc1KLDzGaAsNo
-        IrOUaHI+MHHllcQbmhmYGpqYWRqYWpoZK4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwBXK9
-        7G2peeHeeG6y3EwRrtM/zSLNXgopyy74Vp2p/4Z/7a6qmbO3RSWr3z5/e7Ot9TzGqVZBPs8V
-        V3YenSiwW6VD+UicRKZ9Yf43gxOu7w6LPLmypc+q9P4P7ivcaxzPz+At/H2MaZ7/TfGGG88D
-        uQKV9aeeNOx74C3OHMPPdFjq/Gzn8+JZNyK0VuzcHmvwsC+gKlPPZK47U+49Bf7TdxNvdmpk
-        PzKuf+PcHHNeV+hJ8uo5V943hzJJbGq58T/9RHnf1YW7W/13fzyYYauxfOb1SScZjZdqXXu5
-        uMFuRqeLrZHFw52rG6s/rFS+mHDg2Jz8ws57F963nPSUDPoo8Kk8xV47xHvpWVa71suHlFiK
-        MxINtZiLihMBLWdwS6QDAAA=
-X-CMS-MailID: 20230323161703eucas1p1eaaf0da321fcbf807af78fb3224baf59
-X-Msg-Generator: CA
-X-RootMTR: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
-References: <CGME20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c@eucas1p2.samsung.com>
-        <20230322135013.197076-1-p.raghav@samsung.com>
-        <ZBtSevjWLybE6S07@casper.infradead.org>
-        <fbf5bc8a-6c82-a43e-dd96-8a9d2b7d3bf4@samsung.com>
-        <ZBxxPw9BTdkE4KF0@casper.infradead.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> I also changed mpage to **not set** the error flag in the read path. It does beg
->> the question whether block_read_full_folio() and iomap_finish_folio_read() should
->> also follow the suit.
-> 
-> Wrong.  mpage is used by filesystems which *DO* check the error flag.
-> You can't remove it being set until they're fixed to not check it.
-Got it. I think after your explanation on the Error flag, it makes sense why mpage
-needs to set the error flag, for now. I will change it as a part of the next version
-along with the other comment on Patch 4.
+On Thu, Mar 23, 2023 at 9:10=E2=80=AFAM Shakeel Butt <shakeelb@google.com> =
+wrote:
+>
+> On Thu, Mar 23, 2023 at 8:46=E2=80=AFAM Shakeel Butt <shakeelb@google.com=
+> wrote:
+> >
+> > On Thu, Mar 23, 2023 at 8:43=E2=80=AFAM Yosry Ahmed <yosryahmed@google.=
+com> wrote:
+> > >
+> > > On Thu, Mar 23, 2023 at 8:40=E2=80=AFAM Shakeel Butt <shakeelb@google=
+.com> wrote:
+> > > >
+> > > > On Thu, Mar 23, 2023 at 6:36=E2=80=AFAM Yosry Ahmed <yosryahmed@goo=
+gle.com> wrote:
+> > > > >
+> > > > [...]
+> > > > > > >
+> > > > > > > > 2. Are we really calling rstat flush in irq context?
+> > > > > > >
+> > > > > > > I think it is possible through the charge/uncharge path:
+> > > > > > > memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usag=
+e(). I
+> > > > > > > added the protection against flushing in an interrupt context=
+ for
+> > > > > > > future callers as well, as it may cause a deadlock if we don'=
+t disable
+> > > > > > > interrupts when acquiring cgroup_rstat_lock.
+> > > > > > >
+> > > > > > > > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() =
+is only
+> > > > > > > > done for root memcg. Why is mem_cgroup_threshold() interest=
+ed in root
+> > > > > > > > memcg usage? Why not ignore root memcg in mem_cgroup_thresh=
+old() ?
+> > > > > > >
+> > > > > > > I am not sure, but the code looks like event notifications ma=
+y be set
+> > > > > > > up on root memcg, which is why we need to check thresholds.
+> > > > > >
+> > > > > > This is something we should deprecate as root memcg's usage is =
+ill defined.
+> > > > >
+> > > > > Right, but I think this would be orthogonal to this patch series.
+> > > > >
+> > > >
+> > > > I don't think we can make cgroup_rstat_lock a non-irq-disabling loc=
+k
+> > > > without either breaking a link between mem_cgroup_threshold and
+> > > > cgroup_rstat_lock or make mem_cgroup_threshold work without disabli=
+ng
+> > > > irqs.
+> > > >
+> > > > So, this patch can not be applied before either of those two tasks =
+are
+> > > > done (and we may find more such scenarios).
+> > >
+> > >
+> > > Could you elaborate why?
+> > >
+> > > My understanding is that with an in_task() check to make sure we only
+> > > acquire cgroup_rstat_lock from non-irq context it should be fine to
+> > > acquire cgroup_rstat_lock without disabling interrupts.
+> >
+> > From mem_cgroup_threshold() code path, cgroup_rstat_lock will be taken
+> > with irq disabled while other code paths will take cgroup_rstat_lock
+> > with irq enabled. This is a potential deadlock hazard unless
+> > cgroup_rstat_lock is always taken with irq disabled.
+>
+> Oh you are making sure it is not taken in the irq context through
+> should_skip_flush(). Hmm seems like a hack. Normally it is recommended
+> to actually remove all such users instead of silently
+> ignoring/bypassing the functionality.
+
+It is a workaround, we simply accept to read stale stats in irq
+context instead of the expensive flush operation.
+
+>
+> So, how about removing mem_cgroup_flush_stats() from
+> mem_cgroup_usage(). It will break the known chain which is taking
+> cgroup_rstat_lock with irq disabled and you can add
+> WARN_ON_ONCE(!in_task()).
+
+This changes the behavior in a more obvious way because:
+1. The memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage()
+path is also exercised in a lot of paths outside irq context, this
+will change the behavior for any event thresholds on the root memcg.
+With proposed skipped flushing in irq context we only change the
+behavior in a small subset of cases.
+
+I think we can skip flushing in irq context for now, and separately
+deprecate threshold events for the root memcg. When that is done we
+can come back and remove should_skip_flush() and add a VM_BUG_ON or
+WARN_ON_ONCE instead. WDYT?
+
+2. mem_cgroup_usage() is also used when reading usage from userspace.
+This should be an easy workaround though.
