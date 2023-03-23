@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E5B6C5E68
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068056C5E64
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjCWFIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S229949AbjCWFIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjCWFI1 (ORCPT
+        with ESMTP id S229951AbjCWFIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:08:27 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C60118ABB
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:08:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id cn12so36026186edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679548103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=irOCu6qMS+se6H9bO0nEHf2Vgt336FUw4SAiYtLjT5U=;
-        b=BqoBVzRuIH8J9krQGYDjW2lWJAbsyVIbf54oq0OxDs8xWSUXzKrPjJFi9K972u6e4Y
-         y/WyGtS2YaZab2zyJzmpClXNAUt0Fvy5kT7BMkYWzvuydcQjU94k/Kwekd9E46Cjri/2
-         O+AyFp7RSfLmAQ6+Lp71LY5X76waPqmxpGicoeDUt+pDLFmY/Qnz1EIa3j3xxaSs/JgT
-         1M+WnK+NgenBX6Rz/kWFePDYEHcwxigsbxOboPo3tY+4Zxt0O6QI73Dbr/KwLnsWa9ut
-         bng9scnddfnOejaHZOiUDLeyML3IeISce4O9Zwns1kdY8oue8KvKtY6wqq5uKRWDExoe
-         6FrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679548103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=irOCu6qMS+se6H9bO0nEHf2Vgt336FUw4SAiYtLjT5U=;
-        b=CPBBHJIVT34fYJ2t3OrszY8RB54Q0hwTpSSN1BJLvSnQu4miQBqEccl31jFcaDWcDU
-         djr565gVZvXalUqL6So9thhB8RnOq++iN8zyyW2netbkfpSKIMkG45NGB8POoABBpVDr
-         alcxR7mILzItKsZWJlEnEh13HYIR+wLxnwVO9l6cevUPnZrO33sgOPqFpafD+p53jWWS
-         2Pr+5Fyi+d6XGRnmE5eWMsZ9sfXiMF9fj1a2kYl0nuIcWkz2eWno3lDyQWV78Tp31dJB
-         zyWxjBBJf94XUynIveGBMdM8W9dIrldrsWNa6WLmNC/2mvydcszAD5z0aZKNdtNi2zGl
-         5HEw==
-X-Gm-Message-State: AO0yUKVkc+goqQOLhhtNBLYqnGnQq5o694I9eXeK4IJHbIHch+RJpH9x
-        2XwnFzHG6Of4dGWGAryBzH4+lXAb/LPmgm38yK38BA==
-X-Google-Smtp-Source: AK7set9L4/JEldbS+vem7o7GQfeNOXJxnDX3lhbvkFsjgECp0SgBx4+C1/jKHbRkNfpn4DaMdDatddiaW9yipF6aSKc=
-X-Received: by 2002:a17:906:b28e:b0:935:3085:303b with SMTP id
- q14-20020a170906b28e00b009353085303bmr4270303ejz.15.1679548102936; Wed, 22
- Mar 2023 22:08:22 -0700 (PDT)
+        Thu, 23 Mar 2023 01:08:14 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A013D5D;
+        Wed, 22 Mar 2023 22:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679548088; x=1711084088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FdONquWcPrciSMSG9VJ10s8v+lY1FDG1spblU1KxGJg=;
+  b=jqtzag3zyrzp5WEFJJ6TN0cUGIsh9NTfEm0DR6O8z8rNRgUHGaZ0ZD0V
+   DFocpW1D4ICpgniUwHXHRYjwwAO++hpPNrdmtUP83Z3nIKV0MS47FNsfT
+   uXD2xn12lavqrYT0wv4+4ZkChC/ZsyfemheqaotlTu2TZZ26twH8ZZSZg
+   AGKQQMeMcJfX/iGNtz4v01wDMkc6F5HU0h3isnQntUmccGmDzok3IPnhc
+   7qNSOhM+uQE1HeyVGsfLdFMRKXP4oGr8FAZ4FuprXvmINRCDlg7oubIcJ
+   /0zNL4Zpwbnb37OolgFSh5fdhWGFsB6o8q033r1/2kKwIV8pnuMBcdP5r
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319787348"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="319787348"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 22:08:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="825684119"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="825684119"
+Received: from jmichaud-mobl.amr.corp.intel.com (HELO desk) ([10.252.131.127])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 22:08:07 -0700
+Date:   Wed, 22 Mar 2023 22:07:53 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough
+ MSR_IA32_FLUSH_CMD
+Message-ID: <20230323050753.rufixzrzt2sf3avv@desk>
+References: <20230322011440.2195485-1-seanjc@google.com>
+ <20230322011440.2195485-6-seanjc@google.com>
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com> <CALvZod5uyZRsvA5ntw0jSBXUNa1_HzB9zOabsGKsndyA5KCYnQ@mail.gmail.com>
-In-Reply-To: <CALvZod5uyZRsvA5ntw0jSBXUNa1_HzB9zOabsGKsndyA5KCYnQ@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 22 Mar 2023 22:07:43 -0700
-Message-ID: <CAJD7tkYYQjZyDpTc02WTGG_aW+wS8m2k407X3NhLrN8Y_5RKPA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] Make rstat flushing IRQ and sleep friendly
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322011440.2195485-6-seanjc@google.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 9:10=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
-wrote:
->
-> On Wed, Mar 22, 2023 at 9:00=E2=80=AFPM Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
-> >
-> > Currently, if rstat flushing is invoked using the irqsafe variant
-> > cgroup_rstat_flush_irqsafe(), we keep interrupts disabled and do not
-> > sleep for the entire flush operation, which is O(# cpus * # cgroups).
-> > This can be rather dangerous.
-> >
-> > Not all contexts that use cgroup_rstat_flush_irqsafe() actually cannot
-> > sleep, and among those that cannot sleep, not all contexts require
-> > interrupts to be disabled.
->
-> Too many negations in the above sentence is making it very confusing.
+On Tue, Mar 21, 2023 at 06:14:39PM -0700, Sean Christopherson wrote:
+> Virtualize FLUSH_L1D so that the guest can use the performant L1D flush
+> if one of the many mitigations might require a flush in the guest, e.g.
+> Linux provides an option to flush the L1D when switching mms.
+> 
+> Passthrough MSR_IA32_FLUSH_CMD for write when it's supported in hardware
+> and exposed to the guest, i.e. always let the guest write it directly if
+> FLUSH_L1D is fully supported.
+> 
+> Forward writes to hardware in host context on the off chance that KVM
+> ends up emulating a WRMSR, or in the really unlikely scenario where
+> userspace wants to force a flush.  Restrict these forwarded WRMSRs to
+> the known command out of an abundance of caution.  Passing through the
+> MSR means the guest can throw any and all values at hardware, but doing
+> so in host context is arguably a bit more dangerous.
+> 
+> Link: https://lkml.kernel.org/r/CALMp9eTt3xzAEoQ038bJQ9LN0ZOXrSWsN7xnNUD%2B0SS%3DWwF7Pg%40mail.gmail.com
+> Link: https://lore.kernel.org/all/20230201132905.549148-2-eesposit@redhat.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/cpuid.c      |  2 +-
+>  arch/x86/kvm/svm/svm.c    |  5 +++++
+>  arch/x86/kvm/vmx/nested.c |  3 +++
+>  arch/x86/kvm/vmx/vmx.c    |  5 +++++
+>  arch/x86/kvm/vmx/vmx.h    |  2 +-
+>  arch/x86/kvm/x86.c        | 12 ++++++++++++
+>  6 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 599aebec2d52..9583a110cf5f 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -653,7 +653,7 @@ void kvm_set_cpu_caps(void)
+>  		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
+>  		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
+>  		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
+> -		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
+> +		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(FLUSH_L1D)
+>  	);
+>  
+>  	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 85bb535fc321..b32edaf5a74b 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -95,6 +95,7 @@ static const struct svm_direct_access_msrs {
+>  #endif
+>  	{ .index = MSR_IA32_SPEC_CTRL,			.always = false },
+>  	{ .index = MSR_IA32_PRED_CMD,			.always = false },
+> +	{ .index = MSR_IA32_FLUSH_CMD,			.always = false },
+>  	{ .index = MSR_IA32_LASTBRANCHFROMIP,		.always = false },
+>  	{ .index = MSR_IA32_LASTBRANCHTOIP,		.always = false },
+>  	{ .index = MSR_IA32_LASTINTFROMIP,		.always = false },
+> @@ -4140,6 +4141,10 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_PRED_CMD, 0,
+>  				     !!guest_has_pred_cmd_msr(vcpu));
+>  
+> +	if (boot_cpu_has(X86_FEATURE_FLUSH_L1D))
 
-Sorry, this is indeed very confusing. I guess a better rephrasing is:
+Just curious, will this ever be true on AMD hardware? AFAIK,
+X86_FEATURE_FLUSH_L1D is Intel-defined CPU feature.
 
-Multiple code paths use cgroup_rstat_flush_irqsafe(), but many of them
-can sleep. Even among the code paths that actually cannot sleep,
-multiple ones are interruptible.
+> +		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_FLUSH_CMD, 0,
+> +				     !!guest_cpuid_has(vcpu, X86_FEATURE_FLUSH_L1D));
+> +
+>  	/* For sev guests, the memory encryption bit is not reserved in CR3.  */
+>  	if (sev_guest(vcpu->kvm)) {
+>  		best = kvm_find_cpuid_entry(vcpu, 0x8000001F);
