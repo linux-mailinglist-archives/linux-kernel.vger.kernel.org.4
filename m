@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FE46C6C9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF466C6C9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjCWPxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S232067AbjCWPxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjCWPx3 (ORCPT
+        with ESMTP id S232048AbjCWPxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:53:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BE615881
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:53:25 -0700 (PDT)
+        Thu, 23 Mar 2023 11:53:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32DA1ABF1;
+        Thu, 23 Mar 2023 08:53:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B89A16258C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5422BC4339B;
-        Thu, 23 Mar 2023 15:53:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A459EB82197;
+        Thu, 23 Mar 2023 15:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA58C433EF;
+        Thu, 23 Mar 2023 15:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679586804;
-        bh=FdHS15So9Ov5UwML5lh/46ZuooLqJDDwXlY+p4s6GWw=;
+        s=k20201202; t=1679586806;
+        bh=tDREPBXaK0ti0eVcANz4uaiEmiQSyLL0wDgzguewic4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CNGSrs2QzotBEF+17I0Y5+b51GhUySm0eSUNvTgMHB4n9OihqfcOVEMFP6nf5qmGI
-         ynMvvmfJAW2mFYi3wY7vWpCN6pAAXD8Xa2+8LTCzG0thi+Lg5vSHYl+TyW3t++2GpO
-         m9bMWI98WntyjRC4t5aiuzNch7ZZW2+X/gnx0sGHYuOg3s+lFRMUQl/Fo8I2ASWL41
-         Ii0p0CJaz1xq6aLJVwHi6tUYKlsr57s7WrVZccZqOOnwjNlRQeRrQAducIsXOWNgpK
-         F01q12N6DgleqZ/gYdsZe8zFngRL4WJJE656WuNC+rGnlnUlMIzg1ijukzA1ndMIUJ
-         nQ/yG/FnXKFNA==
+        b=FEbZlfWVelo81n17h/rHSnGYvpV84bdnc08jYT204xGP63j3TdDis1tRuSloVmbSn
+         4fnpOJBuGzquO0Oc7YeJ5a8A05ONvkz1U3I1g2xuV90Dg6ENt9KmeGxzV8Rmw3klmS
+         eXNnRUqRT8Iv0W7hueSn8VfXKIwa/Kqv9/sSXcyz8cHHmmW6r6ViEt51Fz46vvKkQY
+         4qWMRjshszKKRWfmP7q2gBsvhKZMr7K2C55n6lb5RLbwPr6wqMAvsDwS/A9PnAE0LO
+         NtFjzT9ruGGP1+9pQ5WVgVP0YZyPbclwX33bn4pSz90FwjIUJe0+oj+UvVXu+jg0wI
+         r9vQzqm7iK6sw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Amit Pundir <amit.pundir@linaro.org>
-In-Reply-To: <20230323110125.23790-1-srinivas.kandagatla@linaro.org>
-References: <20230323110125.23790-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [RESEND PATCH] ASoC: codecs: lpass: fix the order or clks turn
- off during suspend
-Message-Id: <167958680207.69273.10837351413048222652.b4-ty@kernel.org>
-Date:   Thu, 23 Mar 2023 15:53:22 +0000
+To:     krzysztof.kozlowski@linaro.org, daniel.baluta@nxp.com,
+        Saalim Quadri <danascape@gmail.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+In-Reply-To: <20230322200949.8986-1-danascape@gmail.com>
+References: <d1559192-8f6d-26e0-ef19-d14ac7987a74@linaro.org>
+ <20230322200949.8986-1-danascape@gmail.com>
+Subject: Re: [PATCH v2] ASoC: dt-bindings: ak5558: Convert to dtschema
+Message-Id: <167958680436.69273.12643001731670842652.b4-ty@kernel.org>
+Date:   Thu, 23 Mar 2023 15:53:24 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,16 +57,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 11:01:25 +0000, Srinivas Kandagatla wrote:
-> The order in which clocks are stopped matters as some of the clock
-> like NPL are derived from MCLK.
+On Thu, 23 Mar 2023 01:39:49 +0530, Saalim Quadri wrote:
+> Convert the AK5558 ADC audio codec bindings to DT schema.
 > 
-> Without this patch, Dragonboard RB5 DSP would crash with below error:
->  qcom_q6v5_pas 17300000.remoteproc: fatal error received:
->  ABT_dal.c:278:ABTimeout: AHB Bus hang is detected,
->  Number of bus hang detected := 2 , addr0 = 0x3370000 , addr1 = 0x0!!!
 > 
-> [...]
 
 Applied to
 
@@ -73,8 +68,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: codecs: lpass: fix the order or clks turn off during suspend
-      commit: a4a3203426f4b67535d6442ddc5dca8878a0678f
+[1/1] ASoC: dt-bindings: ak5558: Convert to dtschema
+      commit: 829d78e3ea321eb4f4e93bc7b162b8cc6ed91ec7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
