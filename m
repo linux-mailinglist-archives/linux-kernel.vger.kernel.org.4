@@ -2,116 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961EC6C5B85
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513446C5B87
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCWAtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S229569AbjCWAt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCWAtQ (ORCPT
+        with ESMTP id S229496AbjCWAtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:49:16 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018463ABC
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:49:14 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id o2so13452085plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:49:14 -0700 (PDT)
+        Wed, 22 Mar 2023 20:49:50 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D116A5D
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:49:49 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id p5-20020a17090a428500b0023b4776f0daso6449574pjg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679532554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yFinEt8kHc7HQLo+1UsNq4JpKO4209Jy1HzJsb1u+qk=;
-        b=tSPmm7XzHxdrOtOYSJ9lf0e6pwuA3cihNFEXId0XA72Duarh0XB3OjjFwSf4zbAHpL
-         5cIQOZ1xF7sTNtjfzqMVpEunKYsmhtVxeJZEBVJiueftjO+m0+mpdsPKyqEjo1dJbROG
-         LhXAPeLcAEuAvIyw0cHVOtSeRJ00ZxWRaHe3CJELjtOah3HkF29hS3nXf4qbblnjuMu2
-         bTe57X/XXd3QzGQmJF6f7JTXDlZEeVmag4Fll46LAhnrfoS9mfcLyTprNCKEubcWoE4s
-         RZkpd1ajyBiS+Er7l+3hbgl2wnUycCuOMBJzXXBXWtOrc++utfClFA+wFfcehlM8Mmn/
-         cvng==
+        d=google.com; s=20210112; t=1679532589;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zwyTZ6PPDlnRZ+ynhQz9mBlyubWr9J0/Y5MHbDWpLSo=;
+        b=dh7zaaeyc7G6ZT7JBzoyD0LhZsP8pQF7EtF1VKDgQTLfVeofXv5NFsXlGvhm/5Y+uQ
+         A2l0AHmazfJSOind1Dc0U8haTrD2hsRYL2w66BLtYrwIA/p2u4aHBBaHLjyOiiccI3/H
+         rrVCsUPf5oovclYimaRs7Dm90jHzO7SqrsIe3ZEJZdqC1uPXs0iRlvWt4ZouhzJ65QJS
+         umtT+BjVR0JiiGd1PI9fh8AIcCG85x3vfGaIL8owz1bIdHRH7oyvUVmIu2VTCss5LWN7
+         Z2dL0VOT4Ym+ijISqZ4swB/8QLjsWEEPywlYc4Qe9jxSVXGDDWW8+7m/uD0dEp53foBp
+         Efpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679532554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yFinEt8kHc7HQLo+1UsNq4JpKO4209Jy1HzJsb1u+qk=;
-        b=L9BchFCtLBCasdmBylg8c9InbLy6qK5IoKuK5BNgpKLyt/S8g8JKAeUmlb/zwo6ySt
-         lSJdoDBTwMNBHS4PJqSYuWbml66mtX9oxmy40iVgErklqs/ZLDvzM6ESvKQOntTRWYWl
-         dSIpt7ODTAhFKkX2EUJh798mL//R5pz0zQtfyW+vDL0gZlK2N2XUwABxHsKiLe/9b+n4
-         Mt7JnJmghKkDAdFmeC6ukVmKr7BAZAxR4ya2LhYp8Pyeg9S9GzULRQLvCttgygi/Nffk
-         QhxTzEMGsHn5Lux+KLYv1AMKnGJUfEPUARA8gAjpPqqusFCgB+LOsOZ1Wcw4vUH2qyWy
-         3gbQ==
-X-Gm-Message-State: AO0yUKUvdligVZpDxq3fil4ZEA8PQ4DrajpJLPd7h4gFG2GnifNFflxd
-        4NiRnVQcuvg+r2cjSaI8XjnwWQ==
-X-Google-Smtp-Source: AK7set/Ugqwpuo0LoGUKSS82SOIYdcMIG+P3fgnkCA/4i10sb9Scd9m+KpqKu1/i9BFAcZoJ76V7mw==
-X-Received: by 2002:a05:6a20:7f8c:b0:da:4b41:8606 with SMTP id d12-20020a056a207f8c00b000da4b418606mr8717063pzj.5.1679532554375;
-        Wed, 22 Mar 2023 17:49:14 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d19-20020aa78693000000b0061ddff8c53dsm10619584pfo.151.2023.03.22.17.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 17:49:13 -0700 (PDT)
-Message-ID: <85e0405e-98e7-9610-c76a-de8ab8131a2b@kernel.dk>
-Date:   Wed, 22 Mar 2023 18:49:12 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: linux-next: manual merge of the block tree with the mm tree
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-References: <20230323100204.0917cecf@canb.auug.org.au>
- <3431084.1679526799@warthog.procyon.org.uk>
- <82ade7f2-017e-af6b-2fb3-eb1a3f570505@kernel.dk>
- <20230322162638.d940201434ac3a3a29968979@linux-foundation.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230322162638.d940201434ac3a3a29968979@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679532589;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zwyTZ6PPDlnRZ+ynhQz9mBlyubWr9J0/Y5MHbDWpLSo=;
+        b=sZk+oZXPmoZ1VJnilR1GbcGC4+Zw/tiltxSs+Tlpa6sR9eFtF3k5dmGHmyv4N8TYFG
+         z4ABNBXK79Gmtg2zgv9anSaXC0QAXY3AQqrmXnc+vPO1vPrFxz5UvPYnwDCh0eWp6BzR
+         /PVssZBk67GqjYkjkuBiUIc93P1k1c+46TgUqr9XkW6FlIecq+IBoMsy13l3e5GgTA8p
+         hKyMe2gF5c3aklRpFUCpKKn/t162FY3NkNiGw1bSRlv+nlePSATVv8mjTc3i1OnKpdbQ
+         thK02449A6jJZkDbxspYR5q7vA/x/3wcElWETL7rIufChs2knrVTieYBRM15ze1onoA5
+         ObUg==
+X-Gm-Message-State: AO0yUKXU8fIyD67B0c4aqULDwhgHu3zPBhiRWnYg8u74Zf/YWIVSqE/n
+        VhXaGiXuWaTJ5Oay8QPT2XJ64lZjMtA=
+X-Google-Smtp-Source: AK7set/ggVY7eghL5+4OPHbzZnQdu8vaJmFCyxwI0dYxc5vdM79JxaftdCW3cxcpUdqPtzaxAJkWX+vAIyo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:9a9:b0:625:563e:7d17 with SMTP id
+ u41-20020a056a0009a900b00625563e7d17mr3134470pfg.0.1679532588962; Wed, 22 Mar
+ 2023 17:49:48 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 17:49:47 -0700
+In-Reply-To: <20230227084016.3368-11-santosh.shukla@amd.com>
+Mime-Version: 1.0
+References: <20230227084016.3368-1-santosh.shukla@amd.com> <20230227084016.3368-11-santosh.shukla@amd.com>
+Message-ID: <ZBuiK3bJyxsZ0k5A@google.com>
+Subject: Re: [PATCHv4 10/11] KVM: x86: add support for delayed virtual NMI
+ injection interface
+From:   Sean Christopherson <seanjc@google.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
+        joro@8bytes.org, linux-kernel@vger.kernel.org,
+        mail@maciej.szmigiero.name, mlevitsk@redhat.com,
+        thomas.lendacky@amd.com, vkuznets@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 5:26?PM, Andrew Morton wrote:
-> On Wed, 22 Mar 2023 17:15:48 -0600 Jens Axboe <axboe@kernel.dk> wrote:
+Please take the time to update shortlogs, changelogs, and comments when spinning
+a new version.  This patch does waaaaay more than just "add support for delayed
+virtual NMI injection interface", and the changelog isn't any better.   As you
+can probably deduce from the nearly one month delay in me reviewing this version,
+churning out a new version as quickly as possible is slower overall than taking
+the time to make each version as solid as possible.
+
+I'll fix things up this time.  I don't mind that much in this case because the
+vNMI stuff is rather subtle and it reworking changelogs+comments was a good way
+to review the code.  But in the future please take the time to fine tune the
+entire patch, not just the code.
+
+On Mon, Feb 27, 2023, Santosh Shukla wrote:
+> Introducing two new vendor callbacks so to support virtual NMI
+> injection example vNMI feature for SVM.
 > 
->> On 3/22/23 5:13?PM, David Howells wrote:
->>> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>>>  +	if (unlikely(iov_iter_is_pipe(i))) {
->>>>  +		copied = copy_page_to_iter_pipe(page, offset, bytes, i);
->>>>  +		goto out;
->>>>  +	}
->>>
->>> This bit would need to be removed from copy_page_to_iter_atomic() as the two
->>> functions it calls should be removed by the patch in the block tree.
->>
->> Maybe it'd be better to consolidate rather than split the changes over
->> two trees?
+> - kvm_x86_is_vnmi_pending()
+> - kvm_x86_set_vnmi_pending()
 > 
-> fyi, Lorenzo has sent out v7 of this series.  I'll be pushing this in
-> an hour or so.  After which I suggest Stephen removes those (now) two
-> lines and sends out one of his "build fix" emails which can be the
-> basis for Linus's resolution.
+> Using those callbacks the KVM can take advantage of the
+> hardware's accelerated delayed NMI delivery (currently vNMI on SVM).
 > 
-> Or I can just steal "iov_iter: Kill ITER_PIPE"...
+> Once NMI is set to pending via this interface, it is assumed that
 
-Or how about we just make sure to queue up items that touch them same
-stuff in the same tree? I've already had this queued for a week, and
-seems pretty silly to shuffle things around because some thing got
-posted in 4 iterations today and then queued up right after.
+State what the hardware does, not what it is assumed to do.  Hardware behavior
+must be an immutable truth as far as KVM is concerned.
 
-Plus the build is now broken, so maybe a bit more diligence would be
-required here than the drive-by-merging.
+> the hardware will deliver the NMI on its own to the guest once
+> all the x86 conditions for the NMI delivery are met.
+> 
+> Note that the 'kvm_x86_set_vnmi_pending()' callback is allowed
+> to fail, in which case a normal NMI injection will be attempted
+> when NMI can be delivered (possibly by using a NMI window).
 
--- 
-Jens Axboe
+Leading with "possibly by using an NMI window" and then contradicting that a few
+sentences later is really confusing.
 
+> With vNMI that can happen either if vNMI is already pending or
+> if a nested guest is running.
+> 
+> When the vNMI injection fails due to the 'vNMI is already pending'
+> condition, the new NMI will be dropped unless the new NMI can be
+> injected immediately, so no NMI window will be requested.
+> 
+> Use '.kvm_x86_set_hw_nmi_pending' method to inject the
+
+Stale reference.  Just delete this sentence, the role of the changelog is not to
+give a play-by-play of the code.
+
+> pending NMIs for AMD's VNMI feature.
+> 
+> Note that vNMI doesn't need nmi_window_existing feature to
+> pend the new virtual NMI and that KVM will now be able to
+> detect with flag (KVM_VCPUEVENT_VALID_NMI_PENDING) and pend
+> the new NMI by raising KVM_REQ_NMI event.
+> 
+> Signed-off-by: Santosh Shukla <Santosh.Shukla@amd.com>
+> Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+> v3:
+>  - Fixed SOB
+>  - Merged V_NMI implementation with x86_ops delayed NMI
+>    API proposal for better readablity.
+>  - Added early WARN_ON for VNMI case in svm_enable_nmi_window.
+>  - Indentation and style fixes per v2 comment.
+>  - Removed `svm->nmi_masked` check from svm_enable_nmi_window
+>    and replaced with svm_get_nmi_mask().
+>  - Note that I am keeping kvm_get_total_nmi_pending() logic
+>    like v2.. since `events->nmi.pending` is u8 not a boolean.
+> https://lore.kernel.org/all/Y9mwz%2FG6+G8NSX3+@google.com/
+> 
+>  arch/x86/include/asm/kvm-x86-ops.h |   2 +
+>  arch/x86/include/asm/kvm_host.h    |  11 ++-
+>  arch/x86/kvm/svm/svm.c             | 113 +++++++++++++++++++++++------
+>  arch/x86/kvm/svm/svm.h             |  22 ++++++
+>  arch/x86/kvm/x86.c                 |  26 ++++++-
+>  5 files changed, 147 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 8dc345cc6318..092ef2398857 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -68,6 +68,8 @@ KVM_X86_OP(get_interrupt_shadow)
+>  KVM_X86_OP(patch_hypercall)
+>  KVM_X86_OP(inject_irq)
+>  KVM_X86_OP(inject_nmi)
+> +KVM_X86_OP_OPTIONAL_RET0(is_vnmi_pending)
+> +KVM_X86_OP_OPTIONAL_RET0(set_vnmi_pending)
+>  KVM_X86_OP(inject_exception)
+>  KVM_X86_OP(cancel_injection)
+>  KVM_X86_OP(interrupt_allowed)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 792a6037047a..f8a44c6c8633 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -878,7 +878,11 @@ struct kvm_vcpu_arch {
+>  	u64 tsc_scaling_ratio; /* current scaling ratio */
+>  
+>  	atomic_t nmi_queued;  /* unprocessed asynchronous NMIs */
+> -	unsigned nmi_pending; /* NMI queued after currently running handler */
+> +	/*
+> +	 * NMI queued after currently running handler
+> +	 * (not including a hardware pending NMI (e.g vNMI))
+> +	 */
+> +	unsigned int nmi_pending;
+>  	bool nmi_injected;    /* Trying to inject an NMI this entry */
+>  	bool smi_pending;    /* SMI queued after currently running handler */
+>  	u8 handling_intr_from_guest;
+> @@ -1640,6 +1644,10 @@ struct kvm_x86_ops {
+>  	int (*nmi_allowed)(struct kvm_vcpu *vcpu, bool for_injection);
+>  	bool (*get_nmi_mask)(struct kvm_vcpu *vcpu);
+>  	void (*set_nmi_mask)(struct kvm_vcpu *vcpu, bool masked);
+> +	/* returns true, if a NMI is pending injection on hardware level (e.g vNMI) */
+> +	bool (*is_vnmi_pending)(struct kvm_vcpu *vcpu);
+> +	/* attempts make a NMI pending via hardware interface (e.g vNMI) */
+
+Expand this comment to justify/explain the use of a boolean return (static_call
+RET0).
+
+> +	bool (*set_vnmi_pending)(struct kvm_vcpu *vcpu);
+>  	void (*enable_nmi_window)(struct kvm_vcpu *vcpu);
+>  	void (*enable_irq_window)(struct kvm_vcpu *vcpu);
+>  	void (*update_cr8_intercept)(struct kvm_vcpu *vcpu, int tpr, int irr);
+
+...
+
+> @@ -3745,8 +3802,8 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+>  	 * problem (IRET or exception injection or interrupt shadow)
+>  	 */
+>  	svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+> -	svm->nmi_singlestep = true;
+>  	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+> +	svm->nmi_singlestep = true;
+
+Spurious change.
+
+>  }
+>  
+>  static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+> @@ -4780,6 +4837,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.patch_hypercall = svm_patch_hypercall,
+>  	.inject_irq = svm_inject_irq,
+>  	.inject_nmi = svm_inject_nmi,
+> +	.is_vnmi_pending = svm_is_vnmi_pending,
+> +	.set_vnmi_pending = svm_set_vnmi_pending,
+>  	.inject_exception = svm_inject_exception,
+>  	.cancel_injection = svm_cancel_injection,
+>  	.interrupt_allowed = svm_interrupt_allowed,
+> @@ -5070,6 +5129,16 @@ static __init int svm_hardware_setup(void)
+>  			pr_info("Virtual GIF supported\n");
+>  	}
+>  
+> +	vnmi = vgif && vnmi && boot_cpu_has(X86_FEATURE_AMD_VNMI);
+> +	if (vnmi)
+> +		pr_info("Virtual NMI enabled\n");
+> +
+> +	if (!vnmi) {
+> +		svm_x86_ops.is_vnmi_pending = NULL;
+> +		svm_x86_ops.set_vnmi_pending = NULL;
+> +	}
+> +
+> +
+>  	if (lbrv) {
+>  		if (!boot_cpu_has(X86_FEATURE_LBRV))
+>  			lbrv = false;
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 839809972da1..fb48c347bbe0 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -36,6 +36,7 @@ extern bool npt_enabled;
+>  extern int vgif;
+>  extern bool intercept_smi;
+>  extern bool x2avic_enabled;
+> +extern bool vnmi;
+>  
+>  /*
+>   * Clean bits in VMCB.
+> @@ -548,6 +549,27 @@ static inline bool is_x2apic_msrpm_offset(u32 offset)
+>  	       (msr < (APIC_BASE_MSR + 0x100));
+>  }
+>  
+> +static inline struct vmcb *get_vnmi_vmcb_l1(struct vcpu_svm *svm)
+> +{
+> +	if (!vnmi)
+> +		return NULL;
+> +
+> +	if (is_guest_mode(&svm->vcpu))
+> +		return NULL;
+> +	else
+> +		return svm->vmcb01.ptr;
+> +}
+> +
+> +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> +{
+> +	struct vmcb *vmcb = get_vnmi_vmcb_l1(svm);
+> +
+> +	if (vmcb)
+> +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE_MASK);
+> +	else
+> +		return false;
+> +}
+> +
+>  /* svm.c */
+>  #define MSR_INVALID				0xffffffffU
+>  
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index b22074f467e0..b5354249fe00 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5113,7 +5113,7 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+>  	events->interrupt.shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
+>  
+>  	events->nmi.injected = vcpu->arch.nmi_injected;
+> -	events->nmi.pending = vcpu->arch.nmi_pending;
+> +	events->nmi.pending = kvm_get_total_nmi_pending(vcpu);
+>  	events->nmi.masked = static_call(kvm_x86_get_nmi_mask)(vcpu);
+>  
+>  	/* events->sipi_vector is never valid when reporting to user space */
+> @@ -5201,9 +5201,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  
+>  	vcpu->arch.nmi_injected = events->nmi.injected;
+>  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+> -		vcpu->arch.nmi_pending = events->nmi.pending;
+> -		if (vcpu->arch.nmi_pending)
+> -			kvm_make_request(KVM_REQ_NMI, vcpu);
+> +		vcpu->arch.nmi_pending = 0;
+> +		atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
+> +		kvm_make_request(KVM_REQ_NMI, vcpu);
+
+I'm going to split this out to a separate patch.  I want to isolate this change
+from vNMI support, and unlike the addition of the kvm_x86_ops hooks, it makes
+sense as a standalone thing (at least, IMO it does :-) ).
+
+>  	}
+>  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+>  
+
+...
+
+> +/* Return total number of NMIs pending injection to the VM */
+> +int kvm_get_total_nmi_pending(struct kvm_vcpu *vcpu)
+
+I much prefer kvm_get_nr_pending_nmis() to make it obvious that this returns a
+number and that that number can be greater than 1.
+
+> +{
+> +	return vcpu->arch.nmi_pending + static_call(kvm_x86_is_vnmi_pending)(vcpu);
+> +}
+> +
+> +
+>  void kvm_make_scan_ioapic_request_mask(struct kvm *kvm,
+>  				       unsigned long *vcpu_bitmap)
+>  {
+> -- 
+> 2.25.1
+> 
