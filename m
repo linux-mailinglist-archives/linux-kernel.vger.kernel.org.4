@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0C86C7407
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 012096C742B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjCWXar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S231384AbjCWXiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjCWXap (ORCPT
+        with ESMTP id S231418AbjCWXh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:30:45 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC0225BBF;
-        Thu, 23 Mar 2023 16:30:45 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id i15so226808pfo.8;
-        Thu, 23 Mar 2023 16:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679614244;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gGnK9kK6rwPE9Cig9j09DuEmiYA9Kj1n7jjctGAB9Ic=;
-        b=GJ9VeSHvJENNkSlhS1vvDkzUudpQA2ONvLrGRjvUl+P+nTPj111yCwQTUUY8z9+rZ2
-         +F10vAsuqJs5k5sA7jOkFPTzeu4eaZxDZAWOsnXmU0HnLD0kMuxoSPGBjkqAS5St/47P
-         EW34fnL1WzJ43qrq4NC4MKQfzXfBx1zKJNDLbxKbf5GF+FYwaUtKkNoAQCUawdn8SZEl
-         cGNZwdnf7DQeco3xpS9AjeCNr/IStf7BQGcQUjNBkVpmfrSoqMjaghqeECzdF2PIbCEe
-         QW5nO+e5EeQ2tL3TkVhTld07oFfa13mzRi1BAq9R9RXmZDUKNeyYzdjPe8pJR/TQ/kcd
-         LDwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679614244;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGnK9kK6rwPE9Cig9j09DuEmiYA9Kj1n7jjctGAB9Ic=;
-        b=l7Ba6OCxuPhQ2q2SivKZCrUF3UZFANi+WIO7puKnCYAFweiOM6ghobwiVxxi8Agirh
-         Yc8Ro3BMK0f2W6mxjDpevCr4qyuMVMf1HK6Mnst6ejUUGVg5nF91WEDeznlfksba01X9
-         71uP/KHUZPMQqIKIGhmxTyW+Luvj75gXE0lmlvbVv1otMBYUWTjrHiETn/b7vJ1Q+Vye
-         kGkmgpQ8FR/fmn1ScZmADToLKkFpWqB7uQRRr+SmwtdanQ79JEpZZrsem2ZsJYIwFQb9
-         /hsISfa7cNBaerkG7qYZrq6C2mctvQdbnfzDYOEikRlOegpCByES6kILZF/SlIPVZ6pA
-         S/kg==
-X-Gm-Message-State: AAQBX9dmGDgQJvz6mSI7C/TGuHudS7v+DU4jslgVn7nUlri7wLHomA4J
-        PZpY3ZVTO7KSaanx9Tsc5GI=
-X-Google-Smtp-Source: AKy350arDXi1ErMT2avja0wJVTL1MaLBvhcDLtF6L3fuVg0w3KNh4LAvc+sBGxh+PzdedZWiyOuaJA==
-X-Received: by 2002:a62:1d95:0:b0:627:e577:4326 with SMTP id d143-20020a621d95000000b00627e5774326mr716072pfd.17.1679614244499;
-        Thu, 23 Mar 2023 16:30:44 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 22-20020aa79216000000b005fdf8c06320sm12874003pfo.175.2023.03.23.16.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 16:30:44 -0700 (PDT)
-Message-ID: <2d26aad2-a1d5-649c-86ec-9457c577333f@gmail.com>
-Date:   Fri, 24 Mar 2023 08:30:38 +0900
+        Thu, 23 Mar 2023 19:37:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF722DE7D;
+        Thu, 23 Mar 2023 16:37:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8255F338EC;
+        Thu, 23 Mar 2023 23:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679614672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=zBpz1dvx7Y466ilipp+W4Pn3BrJM32TOneNWpMSXPBo=;
+        b=cTLqC7Woa5G+OmlykmaZ4deu+5XzO+N3zhbCt+GMxY0qe+fZucFT2GSvjW5x8DdI34n0R2
+        aVC9UyerBH14x18HpSZnwTan7F7VeHIhAgixz5FQmEL5j8VrxcTwpqePvXoLjjOrYrb/Zp
+        s/2udI4k9TGmbKNalQf1AoUtP77vnzc=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 6BE062C141;
+        Thu, 23 Mar 2023 23:37:52 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 0DF7DDA7DE; Fri, 24 Mar 2023 00:31:41 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.3-rc4
+Date:   Fri, 24 Mar 2023 00:31:40 +0100
+Message-Id: <cover.1679610326.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model: Document
- locking corner cases
-To:     paulmck@kernel.org
-Cc:     parri.andrea@gmail.com, stern@rowland.harvard.edu, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
- <20230321010549.51296-1-paulmck@kernel.org>
- <f940cb6c-4aa6-41a4-d9d7-330becd5427a@gmail.com>
- <cd356db2-1643-4b01-bb13-16a7f92cf980@paulmck-laptop>
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <cd356db2-1643-4b01-bb13-16a7f92cf980@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 11:52:15 -0700, Paul E. McKenney wrote:
-> On Thu, Mar 23, 2023 at 11:52:57AM +0900, Akira Yokosawa wrote:
->> Hi Paul,
->>
->> On Mon, 20 Mar 2023 18:05:19 -0700, Paul E. McKenney wrote:
->>> Most Linux-kernel uses of locking are straightforward, but there are
->>> corner-case uses that rely on less well-known aspects of the lock and
->>> unlock primitives.  This commit therefore adds a locking.txt and litmus
->>> tests in Documentation/litmus-tests/locking to explain these corner-case
->>> uses.
->>>
->>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>> ---
->>>  .../litmus-tests/locking/DCL-broken.litmus    |  55 +++
->>>  .../litmus-tests/locking/DCL-fixed.litmus     |  56 +++
->>>  .../litmus-tests/locking/RM-broken.litmus     |  42 +++
->>>  .../litmus-tests/locking/RM-fixed.litmus      |  42 +++
->>>  tools/memory-model/Documentation/locking.txt  | 320 ++++++++++++++++++
->>
->> I think the documentation needs adjustment to cope with Andrea's change
->> of litmus tests.
->>
->> Also, coding style of code snippets taken from litmus tests look somewhat
->> inconsistent with other snippets taken from MP+... litmus tests:
->>
->>   - Simple function signature such as "void CPU0(void)".
->>   - No declaration of local variables.
->>   - Indirection level of global variables.
->>   - No "locations" clause
->>
->> How about applying the diff below?
-> 
-> Good eyes, thank you!  I will fold this in with attribution.
+Hi,
 
-Feel free to add
+a few more fixes, the zoned accounting fix is spread across a few
+patches, preparatory and the actual fixes. Please pull, thanks.
 
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+- zoned mode
+  - fix accounting of unusable zone space
+  - fix zone activation condition for DUP profile
+  - preparatory patches
 
-        Thanks, Akira
-> 
-> 							Thanx, Paul
-> 
->>         Thanks, Akira
+- improved error handling of missing chunks
 
+- fix compiler warning
+
+----------------------------------------------------------------
+The following changes since commit 675dfe1223a69e270b3d52cb0211c8a501455cec:
+
+  btrfs: fix block group item corruption after inserting new block group (2023-03-08 01:14:01 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.3-rc3-tag
+
+for you to fetch changes up to e15acc25880cf048dba9df94d76ed7e7e10040e6:
+
+  btrfs: zoned: drop space_info->active_total_bytes (2023-03-15 20:51:07 +0100)
+
+----------------------------------------------------------------
+Josef Bacik (2):
+      btrfs: rename BTRFS_FS_NO_OVERCOMMIT to BTRFS_FS_ACTIVE_ZONE_TRACKING
+      btrfs: use temporary variable for space_info in btrfs_update_block_group
+
+Naohiro Aota (3):
+      btrfs: zoned: fix btrfs_can_activate_zone() to support DUP profile
+      btrfs: zoned: count fresh BG region as zone unusable
+      btrfs: zoned: drop space_info->active_total_bytes
+
+Qu Wenruo (1):
+      btrfs: handle missing chunk mapping more gracefully
+
+Sweet Tea Dorminy (1):
+      btrfs: fix compiler warning on SPARC/PA-RISC handling fscrypt_setup_filename
+
+ fs/btrfs/block-group.c      | 28 ++++++++++++----------------
+ fs/btrfs/free-space-cache.c |  8 +++++++-
+ fs/btrfs/fs.h               |  7 ++-----
+ fs/btrfs/inode.c            |  7 ++++++-
+ fs/btrfs/space-info.c       | 42 ++++++++++--------------------------------
+ fs/btrfs/space-info.h       |  2 --
+ fs/btrfs/volumes.c          |  3 ++-
+ fs/btrfs/zoned.c            | 45 ++++++++++++++++++++++++++++++++-------------
+ 8 files changed, 71 insertions(+), 71 deletions(-)
