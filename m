@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266AA6C5CCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E416F6C5CDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjCWCuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 22:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S229877AbjCWCxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCWCuJ (ORCPT
+        with ESMTP id S229881AbjCWCxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:50:09 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF9C1F5F7;
-        Wed, 22 Mar 2023 19:50:08 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso598222pjb.2;
-        Wed, 22 Mar 2023 19:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679539808; x=1682131808;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4keVKlJNdo1j4qFYE//r1eDE0ShQaX85E5D5pockwg=;
-        b=WlxaKMdUWP6NF61Enqgn/cZbbwYafq7NXQi9eUxKsSptIGlgpjqSHnPEFHCeawJuk9
-         X5gAh/gM5rAO0kYp2M09Zezh7woZMiofK14yeFb84H1r0Xt2XmgGYhegj3yOOyh4nUFk
-         3AwLAdYWC70mD5rSB9KykDG9n2d/jVyW+az2+jNJCOq2PcxakBGU7ELXtFfHURtHCbP+
-         LFWAdIZJJjrDhXBRPmD4z4+eyb6JSGzMD2p/lp7au5mK7vpdtQxeZfVmRAQhLsMzeINe
-         LrH9+sQvV325fqlDdaOmIs4N16W89Sp51neKpM/rAsJLGRyqWNsiCe9SesWq+CYHnaKw
-         YoYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679539808; x=1682131808;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a4keVKlJNdo1j4qFYE//r1eDE0ShQaX85E5D5pockwg=;
-        b=RbEYUxx1ONA3RHHY2MD9lNQ5xW6MBN2kpXlGKX0D4kJsdfmvbm1C7ImpM1le4Og6d7
-         r9AwrSYtcOhqOVzkEdqzMWjFv98kFWOm1Z/01xNDkcZmqXjPV9y8e9sJSSviCmESneTe
-         OrjSZq8wXJ4q0u7lQMQmvhSZuxDX4aXgLb3fonSIyV1TZ3mVrbKqz7zcEKbTfyit/ZXa
-         SqBQkTdf4uWYkPv9Bbz9uM0FtjHtvu35loxbNqy5X1iRR0uLu3fLGKj6whU0NDJe4Rdt
-         Xqxkkr/Q9M0cXb9ElkEcGckAqKV086aoUVxu2vE4v4KYkS4xFiwDT4FMF2DYJ+eDM7br
-         9Okg==
-X-Gm-Message-State: AO0yUKXPlj423v2dFS+sqMf7YIA+9X1UEsMNQz3gA7UxRDaurE8kYNuf
-        hEX9BYRJ0w9AN4cgmG+5xsI=
-X-Google-Smtp-Source: AK7set/ezdzcrTsE9YggmSOhJq3msvgSPLQjU+Vex3eUzm6YN+Mlj0bCQCBskj4eL0u/kirscVBfQQ==
-X-Received: by 2002:a17:902:da8b:b0:1a1:a273:1812 with SMTP id j11-20020a170902da8b00b001a1a2731812mr5420072plx.45.1679539807527;
-        Wed, 22 Mar 2023 19:50:07 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6780:44b0:9957:6acc:41b5:fbeb])
-        by smtp.gmail.com with ESMTPSA id ji17-20020a170903325100b00199023c688esm11274738plb.26.2023.03.22.19.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 19:50:07 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf hist: Improve srcfile sort key performance (really)
-Date:   Wed, 22 Mar 2023 19:50:05 -0700
-Message-Id: <20230323025005.191239-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+        Wed, 22 Mar 2023 22:53:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9901F5FD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679539938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W0ebE6bgoVx/Mv3B6TcJ7pQSb0U66C3AjGiXsmuMBx4=;
+        b=Whxe1lUq5oreq/rH540bIBT1wG9u9pN/PHyKciqQbxVE56FLSJE/m8UaP2Mhl2BHVNGE0E
+        QJLqrBYlWVx/ptl/BAsVKpB4QrH1fcH66rn+96v4t6aB3sziGbOS8WD38zv9MmzUTefkwL
+        NBacKNFIxDN6qOxe6u1sq/BleO6mRRs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-472-Uu42UDlnMkup59I9Lyv7rg-1; Wed, 22 Mar 2023 22:52:15 -0400
+X-MC-Unique: Uu42UDlnMkup59I9Lyv7rg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93FFB8828C0;
+        Thu, 23 Mar 2023 02:52:14 +0000 (UTC)
+Received: from localhost (ovpn-12-97.pek2.redhat.com [10.72.12.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 76B4B4021B1;
+        Thu, 23 Mar 2023 02:52:13 +0000 (UTC)
+Date:   Thu, 23 Mar 2023 10:52:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
+Message-ID: <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
+References: <cover.1679511146.git.lstoakes@gmail.com>
+ <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The earlier commit f0cdde28fecc ("perf hist: Improve srcfile sort key
-performance") updated the srcfile logic but missed to change the ->cmp()
-callback which is called for every sample.  It should use the same logic
-like in the srcline to speed up the processing because it'd return the
-same information repeatedly for the same address.  The real processing
-will be done in sort__srcfile_collapse().
+On 03/22/23 at 06:57pm, Lorenzo Stoakes wrote:
+> Having previously laid the foundation for converting vread() to an iterator
+> function, pull the trigger and do so.
+> 
+> This patch attempts to provide minimal refactoring and to reflect the
+> existing logic as best we can, for example we continue to zero portions of
+> memory not read, as before.
+> 
+> Overall, there should be no functional difference other than a performance
+> improvement in /proc/kcore access to vmalloc regions.
+> 
+> Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
+> we dispense with it, and try to write to user memory optimistically but
+> with faults disabled via copy_page_to_iter_nofault(). We already have
+> preemption disabled by holding a spin lock. We continue faulting in until
+> the operation is complete.
 
-Fixes: pf0cdde28fecc ("perf hist: Improve srcfile sort key performance")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/sort.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+I don't understand the sentences here. In vread_iter(), the actual
+content reading is done in aligned_vread_iter(), otherwise we zero
+filling the region. In aligned_vread_iter(), we will use
+vmalloc_to_page() to get the mapped page and read out, otherwise zero
+fill. While in this patch, fault_in_iov_iter_writeable() fault in memory
+of iter one time and will bail out if failed. I am wondering why we 
+continue faulting in until the operation is complete, and how that is done. 
 
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index e11e68ecf0a2..2b5cc8e4aa6e 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -657,12 +657,7 @@ static char *hist_entry__get_srcfile(struct hist_entry *e)
- static int64_t
- sort__srcfile_cmp(struct hist_entry *left, struct hist_entry *right)
- {
--	if (!left->srcfile)
--		left->srcfile = hist_entry__get_srcfile(left);
--	if (!right->srcfile)
--		right->srcfile = hist_entry__get_srcfile(right);
--
--	return strcmp(right->srcfile, left->srcfile);
-+	return sort__srcline_cmp(left, right);
- }
- 
- static int64_t
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+If we look into the failing point in vread_iter(), it's mainly coming
+from copy_page_to_iter_nofault(), e.g page_copy_sane() checking failed,
+i->data_source checking failed. If these conditional checking failed,
+should we continue reading again and again? And this is not related to
+memory faulting in. I saw your discussion with David, but I am still a
+little lost. Hope I can learn it, thanks in advance.
+
+......
+> diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+> index 08b795fd80b4..25b44b303b35 100644
+> --- a/fs/proc/kcore.c
+> +++ b/fs/proc/kcore.c
+......
+> @@ -507,13 +503,30 @@ read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
+>  
+>  		switch (m->type) {
+>  		case KCORE_VMALLOC:
+> -			vread(buf, (char *)start, tsz);
+> -			/* we have to zero-fill user buffer even if no read */
+> -			if (copy_to_iter(buf, tsz, iter) != tsz) {
+> -				ret = -EFAULT;
+> -				goto out;
+> +		{
+> +			const char *src = (char *)start;
+> +			size_t read = 0, left = tsz;
+> +
+> +			/*
+> +			 * vmalloc uses spinlocks, so we optimistically try to
+> +			 * read memory. If this fails, fault pages in and try
+> +			 * again until we are done.
+> +			 */
+> +			while (true) {
+> +				read += vread_iter(iter, src, left);
+> +				if (read == tsz)
+> +					break;
+> +
+> +				src += read;
+> +				left -= read;
+> +
+> +				if (fault_in_iov_iter_writeable(iter, left)) {
+> +					ret = -EFAULT;
+> +					goto out;
+> +				}
+>  			}
+>  			break;
+> +		}
+>  		case KCORE_USER:
+>  			/* User page is handled prior to normal kernel page: */
+>  			if (copy_to_iter((char *)start, tsz, iter) != tsz) {
 
