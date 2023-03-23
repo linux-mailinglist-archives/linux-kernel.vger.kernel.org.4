@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E156C628A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A776C6291
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjCWJBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S231289AbjCWJCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCWJBl (ORCPT
+        with ESMTP id S230072AbjCWJCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:01:41 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF831717B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:01:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id x37so12134714pga.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:01:36 -0700 (PDT)
+        Thu, 23 Mar 2023 05:02:14 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619BE19F12;
+        Thu, 23 Mar 2023 02:01:59 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id br6so26760787lfb.11;
+        Thu, 23 Mar 2023 02:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679562096;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8RWJzOeM5GIaIf82zupXR/wrUWqvRt22D3jyGfDKRi0=;
-        b=GT9VzWPWIi3fRiiTEQRqtMPzOf4UlHEtpXWnaON7ZeEB/MsGe1J2NYF8yO4jWTpa+B
-         FDQV3dtv10AicBYCDB/kw4dhLuluZpSeo4pELv0kz4QwZ437E+CFPkbAktP56Z68kafx
-         pl9eoxJaIMGEU+MxDRx2AeiYW560rczy2CdmHzR3iR7Udwr6HKFYfK8/2xHYyh4B6rw6
-         hnQbxBujs2CSMhjGSR8KDudwUIzlEFct3Frk27NrUzCEGG6WfEI9/Jn0Z6SYnMJT5EC0
-         xuUOiTtxrHodzem+fDQjMWr07zfXJvklPIPaKReyyu8FYIdkCtcTIrJm2FBO1YWJ8x/m
-         IhLw==
+        d=gmail.com; s=20210112; t=1679562117;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TeKpxRkxGHsen3R9CE60PmIdGzFJliSRTZ2LQ26QvEE=;
+        b=Gg/R8XFM+7F7/j/PgljzMAp5BU8Xj20rWae2+5+eKcWsu28YVvHre0+6NjRkMUj0mZ
+         /7f8kSz0lyuxuVizN+q6CxpKFK3Fw8ikwqEsiYSfJPADbqQFXMcKDFwebAeGz+zNDazx
+         kT4y10HIj0r38eeWK2t5sS13fXMYM73eJsr/SURX6dem98P7msMcANOoGvuE/3hYA20u
+         yFg5xttuI+OFt8yMfnCZr36Wk7kexZIC1aiwxEt0Fye5tsrgCQvTHgm9+0ToHcJFYZDz
+         tJ+EKzYGVQtLnoLRUZR4oHRrDRS4Tjnpy80mhpTe62jsLBzN6Sfbrwhe/lbZeHZc0Npp
+         NnVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679562096;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8RWJzOeM5GIaIf82zupXR/wrUWqvRt22D3jyGfDKRi0=;
-        b=PY/+WrJ6vW5rMaTozphqDucoXBrml0Im2ICnm1lLbdKWBJcHY7bk8fBxbpniYuapBI
-         qld0ZVWh6LhvSlYyhkTl+iJNVfsQYpNwXUua17R6peDj/RWBebccsOFGRFw2VN9xoe+e
-         ef4LusJ3l+KClMZMCWmu3971rEHNKIBRSgwA2ro85K52cS3R8JjHUWGdO940HoDOu/VV
-         0bfhw/ruc/iGGR2hOPow4/eWnp6PVxiCuajf7t93ndy95TLIglMrYs9J1GjSR4YBWoHX
-         sG1ukP4JiNER52213iRjpzDJ1tO/ZNubySSGIb/lmw/UIv0fd0xRGIcGVSqXogxjUVuA
-         XhkA==
-X-Gm-Message-State: AO0yUKUYkS5a1lG4/U8d6WFuTiRjdKJ8JB/A3T5ksoJK4uBnL4noOLqD
-        +lTucgVdq1o/yzT5YszIc2lF46LLkZ1Bsg==
-X-Google-Smtp-Source: AK7set9PXu7Uw9YhBNw4+ICSHXADaMDo6mZwCvehYYG3R5Lm9keHwVatsPeUKZXZPuWSWtZHu4/U5w==
-X-Received: by 2002:a62:1d8f:0:b0:5dc:6dec:e992 with SMTP id d137-20020a621d8f000000b005dc6dece992mr5088682pfd.1.1679562095852;
-        Thu, 23 Mar 2023 02:01:35 -0700 (PDT)
-Received: from ubuntu.localdomain ([117.207.139.205])
-        by smtp.gmail.com with ESMTPSA id i21-20020aa787d5000000b00625f5aaa1d9sm11346893pfo.83.2023.03.23.02.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 02:01:35 -0700 (PDT)
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH 0/3] Staging: greybus: Convert macro definitions to
-Date:   Thu, 23 Mar 2023 02:01:04 -0700
-Message-Id: <cover.1679558269.git.sumitraartsy@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20210112; t=1679562117;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TeKpxRkxGHsen3R9CE60PmIdGzFJliSRTZ2LQ26QvEE=;
+        b=G3JrpNOPcd0chbcLSMIsIDA5eXDDxKTQMWSrhXSScvcggH41P+fhBsRtFfzjTO8PJr
+         Si9ZoU+1U4YvlBrD6ES8zw9EXTfGh6jTXKFcfQThUCJmHDV9CC3wDYTjyNdiTx5NJpm3
+         i+ztYQTJHBhLHBJKnQ5X7CxJbBlTwxN6q4betagfyV+62GkzsSx2o0BbfYzahNysiHHk
+         zQaWKTw+lM781JPWfwwlkW/QBpMFQdU6DUrDrBtF2IkxUsIfXtRjJWJphegOmKux40OW
+         h/LqX8nHZ2UZ1sMR0K6G92aj0QbdPT+oqwxkTR/zNDxWwWHgvrXIANqANQ1Cjzv7l1gp
+         H2Pg==
+X-Gm-Message-State: AO0yUKV3ab58nNzsaEyAu0Z4OjjiSU0zfUAp0TUFlPObpjr25ugNsqiC
+        4Vgx3zG1Q6CU3JvgxW4gQQwiRm3fT8A=
+X-Google-Smtp-Source: AKy350YkkEBi8AWyazctY5qpjTSz2ybeVQzPbXNM4hgPnAqNRKUOQdrSyQfxgEI7gCjoY/nOV3g9pA==
+X-Received: by 2002:a05:6512:218d:b0:4ea:f6f2:7a7f with SMTP id b13-20020a056512218d00b004eaf6f27a7fmr1654565lft.34.1679562117116;
+        Thu, 23 Mar 2023 02:01:57 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.74.111])
+        by smtp.gmail.com with ESMTPSA id r10-20020a056512102a00b004e7b84c6419sm2852967lfr.192.2023.03.23.02.01.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 02:01:56 -0700 (PDT)
+Subject: Re: [PATCH] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
+To:     Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230323054232.1135734-1-mx_xiang@hust.edu.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <75332169-0249-c53d-962d-c5f3641a7980@gmail.com>
+Date:   Thu, 23 Mar 2023 12:01:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230323054232.1135734-1-mx_xiang@hust.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert macros to a static inline function, to make the relevant 
-types apparent in the definition and to benefit from the type 
-checking performed by the compiler at call sites.
+On 3/23/23 8:42 AM, Mingxuan Xiang wrote:
 
-Sumitra Sharma (3):
-  Staging: greybus: Convert macro gpio_chip_to_gb_gpio_controller to an
-    inline function
-  Staging: greybus: Convert macro struct gb_audio_manager_module to an
-    inline function
-  Staging: greybus: Convert macro struct pwm_chip_to_gb_pwm_chip to an
-    inline function
+> platform_get_irq() no longer returns 0, so there is no
+> need to check whether the return value is 0.
+> 
+> Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
+> ---
+>  drivers/usb/dwc3/host.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f6f13e7f1ba1..aa19c27344e6 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -57,9 +57,6 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+>  		goto out;
 
- drivers/staging/greybus/audio_manager_module.c | 7 +++++--
- drivers/staging/greybus/gpio.c                 | 7 +++++--
- drivers/staging/greybus/pwm.c                  | 6 ++++--
- 3 files changed, 14 insertions(+), 6 deletions(-)
+   Shouldn't *goto* be dropped now?
 
--- 
-2.25.1
+>  	}
+>  
+> -	if (!irq)
+> -		irq = -EINVAL;
+> -
+>  out:
+>  	return irq;
+>  }
 
+MBR, Sergey
