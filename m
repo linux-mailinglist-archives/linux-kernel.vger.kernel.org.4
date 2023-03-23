@@ -2,126 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86736C616C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3E76C616F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjCWIQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S230374AbjCWIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjCWIQR (ORCPT
+        with ESMTP id S229729AbjCWIQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:16:17 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9284D2F786;
-        Thu, 23 Mar 2023 01:16:16 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y2so8200582pfw.9;
-        Thu, 23 Mar 2023 01:16:16 -0700 (PDT)
+        Thu, 23 Mar 2023 04:16:34 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D443028D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:16:31 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w9so83046945edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679559376;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1679559390;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=usnIjHwz36hfSgB6TOSaOZ0wc+pBGQXqLiqMJobH5vs=;
-        b=SSDMz4HNblLnK3JC26k6p35IrRxAfF1kISi4xbyv76O/Jlo66wzdT/f1HBn4xEDutV
-         TgvtcIi92PIqkf78deWWk4VYp64zcUaw2wdJVfW9bncxJ7eFxaysLGqx0OipH9+fyD4w
-         tI80bLBOyeNaRiDVF+enE7gE6hDw1o5X0xj6FAsiTFrUle6Xu8r0UJ7jc3NOlwz5iIJQ
-         dxThj3WcUJERbg39EsPvJibU6mOUM3fC0Hq5YEvo95xHHTl6bX/ARNWwlWDaslLaVR1j
-         33nzNSyYiGg2GqARlP4GHsdm1sWIRfmf3MFarnNc2PJ/ei/578clPxEzErr33vGVhIsZ
-         hwag==
+        bh=AqP+ZP8sH6vMG+bn3ACKrPM9D21kWUUhEZmJlPJtpmY=;
+        b=FdNJgshxeGZT5pwBN/Co+A+q/UQ468gKHVTlrYyytUQmjKBZ+cuWFQXf0lwi0n8A7U
+         skuylVDirnBnQ5WkEK0xwRPPmONDYGXrDg3LtzFitCmSWh5Evy9T02iAZLOC59SBytBf
+         tGyZ8ofs6+gZXFoht+ncc7RNl31yMDVqEoKQ+itB6wj1AwNXMyCNypEoBQzbI30hwfNP
+         SQ+kk6N5ots/Xa0qzfAhEkrRqOaioqWGwQ9+yi8ahXkNVSe6gkoXXzE4pjJfSxCFOX+5
+         STP50gtubDfTyNSHnyDHl8BvEiHIuTMouNMsNVc56SR01g38H6KrtGs42t46x5oTE6KZ
+         /5Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679559376;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679559390;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=usnIjHwz36hfSgB6TOSaOZ0wc+pBGQXqLiqMJobH5vs=;
-        b=7kyrYD5QfsnNtPGcUnH/DdN+lrWnQpM0p/XQebUqeAFqbxc884CJjby1TeRs7VJov3
-         aMQmGpCGX5gE8/Q/4czpHecgWevqT4HbPXi0/ap3cHj3dO5wu1FVsa1RvrQlxwWG2cLC
-         RVVN4rc1Yf1CujOVLV+SyvAYagpS6xQyY3rk63dDZOu47HwD8koVdmSn/bR7d2SFiKO4
-         v6m1lAlFKxnJYD1qzL+Lnropeim7+0QhltNVtnwpEBa2OBChyNH4G9vs5mczPcgnrgXp
-         Zqk9e4uanqADfi1kujJwoOhg55XoXBZ2bVfpNssfkIecy9yNP9rADJaisP/PuR1WOB7w
-         Wcvg==
-X-Gm-Message-State: AO0yUKXJ9cmGbbSBV6CfWDxEVQl8fnOAzO1emoz4L7NXYFtRQ7FN0kw3
-        C3lihLrtilDApk3o+VJ/TRYUX9GnjbKNjKg7
-X-Google-Smtp-Source: AK7set+PTZ9zt7tw/2afPwV2sY4SwtDV5GUrQmHbZPb2gtTaRyYjxl2Gw7Mvo0qnW8FenvvHpPSr8g==
-X-Received: by 2002:aa7:9e44:0:b0:624:2e60:f21e with SMTP id z4-20020aa79e44000000b006242e60f21emr5580517pfq.29.1679559376054;
-        Thu, 23 Mar 2023 01:16:16 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id m26-20020aa78a1a000000b005a8a5be96b2sm7898233pfa.104.2023.03.23.01.16.09
+        bh=AqP+ZP8sH6vMG+bn3ACKrPM9D21kWUUhEZmJlPJtpmY=;
+        b=jLm357k5+cjNwFbtAF0d9BE43o77+S/uVYO6oBwtB46HRsYdbG5dPTpcv+4xvmveA9
+         G10NdcfU+7Zp3gf37sqhqf2cY/FKuSC2eReFwOCKlQkAJxQLq4N+fdeSqqsYk4mjJ14x
+         9FkJKYdViQEALyrqITU24Yl8PQ2GdnhG1WKgcMlyBB+/9lgYvElawzrLrQ/Iis0Y1GzN
+         4o56FDha6+FwWoGzmhldsN92OivU5wARp1rAl4E5WdY2qGEqOZ7Wy9q490w4nqiKsj2G
+         uXCpcaaH6h1wlajL+U75Uo/EBEM9bUCm2jykrPKCZ2at4HVyi6ke6+ZaV62HM7qD6RVr
+         /87w==
+X-Gm-Message-State: AO0yUKXmuU4ALUAmgsh630yhniqksGZ8tnY7hQYi3M0zdi1y83XQK4hI
+        k9wtITEeoejaFDFHIoEVHXkLEQ==
+X-Google-Smtp-Source: AK7set+JP9ir3V7fgGfUv1Je6oAcXJaO5jckAE1d7CoD7z376FD7oyJOURnrCV/q/ZX3UiCxFeEqZw==
+X-Received: by 2002:aa7:c947:0:b0:500:4c0e:cb8d with SMTP id h7-20020aa7c947000000b005004c0ecb8dmr9127551edt.5.1679559390163;
+        Thu, 23 Mar 2023 01:16:30 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
+        by smtp.gmail.com with ESMTPSA id y2-20020a50ce02000000b004c0057b478bsm8838242edi.34.2023.03.23.01.16.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 01:16:15 -0700 (PDT)
-Message-ID: <589b70b6-6795-7f15-45c8-59a9736d3488@gmail.com>
-Date:   Thu, 23 Mar 2023 16:16:02 +0800
+        Thu, 23 Mar 2023 01:16:28 -0700 (PDT)
+Message-ID: <386e5c1b-cf64-8047-97e5-2cbbe3dc415b@linaro.org>
+Date:   Thu, 23 Mar 2023 09:16:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] KVM: x86/pmu: Hide guest counter updates from the
- VMRUN instruction
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
+ other CPU for PREEMPT_RT
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
+ <20230321100456.0_DhhkZJ@linutronix.de>
+ <ba547675-59f2-84a9-82f3-93f6cb131799@linaro.org>
+ <20230321105734.Z7F3Uvf1@linutronix.de>
+ <3e227a63-a45f-8c20-f697-b263121ec173@linaro.org>
+ <20230321133922.ontdC41h@linutronix.de>
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        Sandipan Das <sandipan.das@amd.com>
-References: <20230310105346.12302-1-likexu@tencent.com>
- <a53c8ba7-f66d-5bd7-c934-2357f42b3ac9@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <a53c8ba7-f66d-5bd7-c934-2357f42b3ac9@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230321133922.ontdC41h@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/3/2023 6:57 pm, Sandipan Das wrote:
-> +CC: Santosh, Tom, Ananth
-> 
-> Hi Like,
-> 
-> On 3/10/2023 4:23 PM, Like Xu wrote:
->> Considering that developers are more likely to have access to AMD VMs
->> and use vPMU inside guest, there's a dark cloud that needs to rain.
->> The x86_64/pmu_event_filter_test always fails on Zen3 boxes:
+On 21/03/2023 14:39, Sebastian Andrzej Siewior wrote:
+> On 2023-03-21 12:27:42 [+0100], Krzysztof Kozlowski wrote:
+>>> I still fail to understand why this is PREEMPT_RT specific and not a
+>>> problem in general when it comes not NO_HZ_FULL and/ or CPU isolation.
 >>
->>    test_amd_deny_list: Branch instructions retired = 43 (expected 42)
->>    test_without_filter: Branch instructions retired = 43 (expected 42)
->>    test_member_allow_list: Branch instructions retired = 43 (expected 42)
->>    test_not_member_deny_list: Branch instructions retired = 43 (expected 42)
->>
->> ,which is not caused by the event_filter feature (otherwise it's zero).
->>
->> After some dubious guessing and microtesting on Zen3+ pmu hardware,
->> we found that VMRUN or one of the instructions in __svm_vcpu_run()
->> causes a guest-only enabled counter for counting guest instruction (in the
->> pmu_event_filter case, the branch instruction) to always increase by one
->> right after each vm_entry.
->>
->> This creates an inconsistency with the AMD64_EVENTSEL_GUESTONLY,
->> where the vPMU user in the VM does not expect to see any counter
->> changes due to the SVM transaction at all. This patch set provides a low
->> overhead software fix until HW change arrives or simply no fix planned.
->>
+>> Hm, good point, I actually don't know what is the workqueue
+>> recommendation for NO_HZ_FULL CPUs - is still locality of the workqueue
+>> preferred?
 > 
-> Yes, VMRUNs do get counted as retired branches in the guest context. My
-> understanding is that this behaviour applies to all generations of Zen
-> and even some older ones too, not just Zen 3 and later. I also do not
-> expect this to change in the near future.
+> If you isolate a CPU you want the kernel to stay away from it. The idea
+> is that something is done on that CPU and the kernel should leave it
+> alone. That is why the HZ tick avoided. That is why timers migrate to
+> the "housekeeping" CPU and do not fire on the CPU that it was programmed
+> on (unless the timer has to fire on this CPU).
 > 
-> - Sandipan
+>> And how such code would look like?
+>> if (tick_nohz_tick_stopped())?
 > 
+> Yeah closer :) The CPU-mask for workqueues can still be different on
+> non-NOHZ-full CPUs. Still you interrupt the CPU doing in-userland work
+> and this is not desired.
 
-Interesting, thanks for confirming this issue (I presume this is an official reply).
+Probably this should be done by workqueue core code.  Individual drivers
+should not need to investigate which CPUs are isolated.
 
-If this hardware behavior is not expected to change, this software-based correction
-would be essential and urgent for those who only use vPMU inside AMD guests.
 
-Let's see what will happen ...
+> You have a threaded-IRQ which does nothing but schedules a worker. Why?
+> Why not sleep and remain in that threaded IRQ until the work is done?
+> You _can_ sleep in the threaded IRQ if you have to. Force-threaded is
+> different but this is one is explicit threaded so you could do it.
+
+If I get your point correctly, you want the IRQ handler thread to do the
+actual work instead of scheduling work? The answer to this is probably here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0e27c3d4e20dab861566f1c348ae44e4b498630
+
+> 	
+>>> However the thermal notifications have nothing to do with cpufreq.
+>>
+>> They have. The FW notifies that thermal mitigation is happening and
+>> maximum allowed frequency is now XYZ. The cpufreq receives this and sets
+>> maximum allowed scaling frequency for governor.
+> 
+> I see. So the driver is doing something in worst case. This interrupt,
+> you have per-CPU and you need to do this CPU? I mean could you change
+> the affinity of the interrupt to another CPU?
+
+I don't know. The commit introducing it:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3ed6dfbd3bb987b3d2de86304ae45972ebff5870
+claimed it helps to reduce number of interrupts hitting CPU 10x-100x
+times... I don't see it - neither in tests nor in the code, so I am just
+thinking to revert that one.
+
+Best regards,
+Krzysztof
+
