@@ -2,107 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC8F6C695F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 129AF6C6965
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjCWNUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S231436AbjCWNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjCWNUy (ORCPT
+        with ESMTP id S229600AbjCWNXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:20:54 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F3211E1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:20:53 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N7a5UG009487;
-        Thu, 23 Mar 2023 08:20:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=Rjr0/PkiGJgZ0ewLLrVUNFvNKSEl8YbvL/H2O3u1swk=;
- b=D3BeQPYtufLyE1I+/2iLxMJskYpV0HniquOUyq1CgsDOWnaIcCdbTfUlY77fOXVC4AQu
- 3vTztJxHu7VGlxzGOyAx/1FFs421XgLD1v3dtG6cVrbn/IkBoQvDxm9Yde2VSZRgtox4
- lwL6fyF2RAS+KopwAS9EuWvz+YqpaxX74EwCXV7CKhj35uxKMPAI0zei9o0jntmGcRQk
- n2ddWUaBNntFnJAOwUe3AOuD4R14m4hnBbFv6/5rIZOstQXPTt2ybrUH7CYnpqSjtWmR
- 9EbwEWX3Z0sxaeMeHGGSs+3XakY7kCDtLFB34oL1ZiEs/S5sY7WiJNH/KgWQQd1DSC3y Hw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pf7tj4sr7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 08:20:49 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 23 Mar
- 2023 08:20:47 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Thu, 23 Mar 2023 08:20:47 -0500
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AD495B06;
-        Thu, 23 Mar 2023 13:20:47 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <lgirdwood@gmail.com>, <dianders@chromium.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] regulator: arizona-micsupp: Use PROBE_FORCE_SYNCHRONOUS
-Date:   Thu, 23 Mar 2023 13:20:47 +0000
-Message-ID: <20230323132047.833737-2-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230323132047.833737-1-ckeepax@opensource.cirrus.com>
-References: <20230323132047.833737-1-ckeepax@opensource.cirrus.com>
+        Thu, 23 Mar 2023 09:23:30 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525A6421B;
+        Thu, 23 Mar 2023 06:23:28 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32NDN7ls117175;
+        Thu, 23 Mar 2023 08:23:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679577787;
+        bh=MJVj6U+Sml+yBBT4L4TySKHSpgVK26/7pJRTNZYUNCI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=S2/F2rKxBFhnWLNDjszFPkYhGwKY3/8bcZfrFsMe1B+DVpJJqWZxaeWU2XZI2unpt
+         j/yzIrlXHFGHTdqmY0NseuKhi+5TxVVZ6zTvnZhT9xDu9eIt/R5923lfYQ4gfe/+2y
+         4vbJE+2hcji2AiOOW77vS9ZqWORxsifq4DNPL0OY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32NDN74Y094549
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Mar 2023 08:23:07 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
+ Mar 2023 08:23:07 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 23 Mar 2023 08:23:07 -0500
+Received: from [172.24.145.199] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32NDN2DH029735;
+        Thu, 23 Mar 2023 08:23:03 -0500
+Message-ID: <2bfdd0ab-a73a-f1af-def1-0044cf8d4a01@ti.com>
+Date:   Thu, 23 Mar 2023 18:53:02 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: BJvf09bhuNAK9CRNnK36cllxOmraR5WT
-X-Proofpoint-GUID: BJvf09bhuNAK9CRNnK36cllxOmraR5WT
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 5/6] arm64: dts: ti: k3-am62a7-sk: Split vcc_3v3
+ regulators
+Content-Language: en-US
+To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+References: <20230313-mcasp_upstream-v6-0-77685d7cbeb8@ti.com>
+ <20230313-mcasp_upstream-v6-5-77685d7cbeb8@ti.com>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <20230313-mcasp_upstream-v6-5-77685d7cbeb8@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Restore synchronous probing for Arizona regulators as the main MFD
-relies on the ordering of the devices probing.
+Hi Jai,
 
-As these regulators are built into the CODEC and typically have no DT
-representation the regulator framework is unaware of their existence
-until the driver probes. These means the probing of the driver needs to
-be synchronous to ensure the regulators are not substitued for the dummy
-later when the users request them.
+Thanks for the patch.
 
-Fixes: 259b93b21a9f ("regulator: Set PROBE_PREFER_ASYNCHRONOUS for drivers that existed in 4.14")
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- drivers/regulator/arizona-micsupp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 15/03/23 14:33, Jai Luthra wrote:
+> VCC_3V3_MAIN is the output of LM5141-Q1, and it serves as an input to
+> TPS22965DSGT which produces VCC_3V3_SYS.
+I would suggest to put link to schematics too :
+Design docs: Link: https://www.ti.com/lit/zip/sprr459
+> 
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+With that change,
+Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
 
-diff --git a/drivers/regulator/arizona-micsupp.c b/drivers/regulator/arizona-micsupp.c
-index ffd8416487eb9..e250e5f3fcbcb 100644
---- a/drivers/regulator/arizona-micsupp.c
-+++ b/drivers/regulator/arizona-micsupp.c
-@@ -365,7 +365,7 @@ static struct platform_driver arizona_micsupp_driver = {
- 	.probe = arizona_micsupp_probe,
- 	.driver		= {
- 		.name	= "arizona-micsupp",
--		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+		.probe_type = PROBE_FORCE_SYNCHRONOUS,
- 	},
- };
- 
-@@ -373,7 +373,7 @@ static struct platform_driver madera_micsupp_driver = {
- 	.probe = madera_micsupp_probe,
- 	.driver		= {
- 		.name	= "madera-micsupp",
--		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-+		.probe_type = PROBE_FORCE_SYNCHRONOUS,
- 	},
- };
- 
--- 
-2.30.2
-
+Regards
+Devarsh
+> ---
+>  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> index 5c9012141ee2..063e69e45163 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> @@ -76,10 +76,10 @@ vcc_5v0: regulator-1 {
+>  		regulator-boot-on;
+>  	};
+>  
+> -	vcc_3v3_sys: regulator-2 {
+> +	vcc_3v3_main: regulator-2 {
+>  		/* output of LM5141-Q1 */
+>  		compatible = "regulator-fixed";
+> -		regulator-name = "vcc_3v3_sys";
+> +		regulator-name = "vcc_3v3_main";
+>  		regulator-min-microvolt = <3300000>;
+>  		regulator-max-microvolt = <3300000>;
+>  		vin-supply = <&vmain_pd>;
+> @@ -98,6 +98,17 @@ vdd_mmc1: regulator-3 {
+>  		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
+>  	};
+>  
+> +	vcc_3v3_sys: regulator-4 {
+> +		/* output of TPS222965DSGT */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc_3v3_sys";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc_3v3_main>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+>  	leds {
+>  		compatible = "gpio-leds";
+>  		pinctrl-names = "default";
+> 
