@@ -2,185 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDD36C65AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195F56C65B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjCWKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S231473AbjCWKwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjCWKuy (ORCPT
+        with ESMTP id S230498AbjCWKvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:50:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE06F35262
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:49:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A1964B3;
-        Thu, 23 Mar 2023 03:50:17 -0700 (PDT)
-Received: from [10.57.55.121] (unknown [10.57.55.121])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 116003F766;
-        Thu, 23 Mar 2023 03:49:31 -0700 (PDT)
-Message-ID: <4c7578af-d384-95e6-fa92-7082dfa0df6d@arm.com>
-Date:   Thu, 23 Mar 2023 10:49:30 +0000
+        Thu, 23 Mar 2023 06:51:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE32F36FEE;
+        Thu, 23 Mar 2023 03:50:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39193625AD;
+        Thu, 23 Mar 2023 10:50:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235A2C4339B;
+        Thu, 23 Mar 2023 10:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679568637;
+        bh=6bjS4jIxMl+j083BULXsAmGvEUpjTDQFOqlIa1PfSXk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rxegH0bb9kGbPsubd8HWExWGB4f5XxqpTBC/o8JxMpCXqMBChgjs55D3+PSXblCTY
+         wEpjtrvnXNn4O7M6hUuH1ImAE0E99YbFWFoH9g1Ilf5QwWHOuTLqqGIE7AHRpttFZf
+         APXvPbX8NmiZAMw0Y4qy6VQCqXkcZLeKir2/Y5Nog09M40NLguOAnrDZn7fhrbSnya
+         n83f0Ay8Ga4jufUXB9FbVuAvqgz95PwAsKQMMUlmeCa6IA+DucdX2/79bNUKt1BZzu
+         h8q97KKi3FNkpswN/SXmDk4sVL9eLs9rP8lbnuZkSF7DtwiPJi6QcYSsvhpL4UK4Ci
+         dkJXlODITnaFg==
+Date:   Thu, 23 Mar 2023 11:50:34 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v10 0/4] Add support for Maxim MAX735x/MAX736x variants
+Message-ID: <20230323105034.zgrgnc35h3emad4o@intel.intel>
+References: <20230323074419.2494609-1-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 5/9] coresight: Dynamically add connections
-To:     Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     coresight@lists.linaro.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230310160610.742382-1-james.clark@arm.com>
- <20230310160610.742382-6-james.clark@arm.com>
- <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
- <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323074419.2494609-1-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Patrick,
 
+> Patrick Rudolph (4):
+>   dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+>   i2c: muxes: pca954x: Add MAX735x/MAX736x support
+>   i2c: muxes: pca954x: Add regulator support
+>   i2c: muxes: pca954x: Configure MAX7357 in enhanced mode
 
-On 21/03/2023 17:56, Mike Leach wrote:
-> Hi James
-> 
-> On Thu, 16 Mar 2023 at 17:12, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->> On 10/03/2023 16:06, James Clark wrote:
->>> Add a function for adding connections dynamically. This also removes
->>> the 1:1 mapping between port number and the index into the connections
->>> array. The only place this mapping was used was in the warning for
->>> duplicate output ports, which has been replaced by a search. Other
->>> uses of the port number already use the port member variable.
->>>
->>> Being able to dynamically add connections will allow other devices like
->>> CTI to re-use the connection mechanism despite not having explicit
->>> connections described in the DT.
->>>
->>> Signed-off-by: James Clark <james.clark@arm.com>
->>> ---
->>>   .../hwtracing/coresight/coresight-platform.c  | 77 ++++++++++++++-----
->>>   include/linux/coresight.h                     |  7 +-
->>>   2 files changed, 64 insertions(+), 20 deletions(-)
->>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
->>> index c77238cdf448..16553f7dde12 100644
->>> --- a/drivers/hwtracing/coresight/coresight-platform.c
->>> +++ b/drivers/hwtracing/coresight/coresight-platform.c
->>> @@ -27,8 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
->>>                                struct coresight_platform_data *pdata)
->>>   {
->>>       if (pdata->nr_outconns) {
->>> -             pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
->>> -                                         sizeof(*pdata->out_conns), GFP_KERNEL);
->>> +             pdata->out_conns = devm_krealloc_array(
->>> +                     dev, pdata->out_conns, pdata->nr_outconns,
->>
->> super minor nit:
->>                 pdata->out_conns = devm_krealloc_array(dev,
->>
->>
->>> +                     sizeof(*pdata->out_conns), GFP_KERNEL | __GFP_ZERO);
->>>               if (!pdata->out_conns)
->>>                       return -ENOMEM;
->>>       }
->>> @@ -36,6 +37,48 @@ static int coresight_alloc_conns(struct device *dev,
->>>       return 0;
->>>   }
->>>
->>> +/*
->>> + * Add a connection in the first free slot, or realloc
->>> + * if there is no space. @conn's contents is copied into the new slot.
->>> + *
->>> + * If the output port is already assigned on this device, return -EINVAL
->>> + */
->>> +int coresight_add_conn(struct device *dev,
->>> +                    struct coresight_platform_data *pdata,
->>> +                    const struct coresight_connection *conn)
->>> +{
->>> +     int ret;
->>> +     struct coresight_connection *free_conn = NULL;
->>> +     struct coresight_connection *i;
->>> +
->>> +     /*
->>> +      * Search for a free slot, and while looking for one, warn
->>> +      * on any existing duplicate output port.
->>> +      */
->>> +     for (i = pdata->out_conns; i < pdata->out_conns + pdata->nr_outconns;
->>> +          ++i) {
->>
->> minor nit: I see why you have gone against using "i" as index into
->> the array. But I think having that as the index is still better
->> readable.
->>
->>         for (i = 0; i < pdata->nr_outconns; i++) {
->>                 struct coresight_connection *c = &pdata->out_conns[i];
->>
->>> +             if (i->remote_fwnode && conn->port != -1 &&
->>> +                 i->port == conn->port) {
->>> +                     dev_warn(dev, "Duplicate output port %d\n", i->port);
->>> +                     return -EINVAL;
->>> +             }
-> 
-> This code assumes that slots are filled sequentially and that it is
-> not possible to release slots out of order - i.e. if we find a free
-> slot, there is not a match in a later slot.
-> I can't think how this could happen but a comment to confirm this
-> might be needed here.
-> 
-> When we had 1:1 port / array index then this check was guaranteed
->> Mike
+this last patch did not come through as you can also see here[*].
 
-I thought about this but I couldn't see an issue here. The loop always
-runs to the end even if a free slot is found so it should find
-duplicates in any order. Unless I'm missing some other edge case?
+Is it just me not receiving 4/4? If not, can you resend, please?
 
-> 
-> 
-> 
->>> +             if (!i->remote_fwnode && !free_conn)
->>> +                     free_conn = i;
->>> +     }
->>> +
->>> +     if (!free_conn) {
->>
->> and:
->>         /* No free slots */
->>         if (i == pdata->nr_outconns) {
->>
->>> +             pdata->nr_outconns++;
->>> +             ret = coresight_alloc_conns(dev, pdata);
->>> +             if (ret)
->>> +                     return ret;
->>> +             free_conn = &pdata->out_conns[pdata->nr_outconns - 1];
->>> +     }
->>> +
->>
->> and:
->>         pdata->out_conns[i] = *conn;
->>
->>
->> Otherwise looks good to me.
->>
->> Suzuki
->>
->>
-> 
-> 
-> --
-> Mike Leach
-> Principal Engineer, ARM Ltd.
-> Manchester Design Centre. UK
+Andi
+
+[*] https://lore.kernel.org/linux-i2c/?q=f%3Apatrick.rudolph%409elements.com
