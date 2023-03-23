@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD9C6C67E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0A46C67ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjCWMPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S231717AbjCWMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjCWMOn (ORCPT
+        with ESMTP id S231531AbjCWMPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:14:43 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354A7274BE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:13 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id z83so24493571ybb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:13 -0700 (PDT)
+        Thu, 23 Mar 2023 08:15:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB00279A4;
+        Thu, 23 Mar 2023 05:14:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ew6so22560609edb.7;
+        Thu, 23 Mar 2023 05:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573651;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uppU9AbNohBvi0g75x2gTr8jOQr1QPXx8DqWx6y8HIg=;
-        b=Vlb2igggfGE4b7llwtKfNo8B5oectf4E0xhuW4+2yO68QpEJ3NRBnNhQlu7RmbRAlU
-         W1MMxKBikROrMe8sgjLXZGVNSosF+iQl14XVbrWHUPbfGOqloFi7A4AR/lHg+gT/OSlg
-         Ld8NoZZYlYyxnXlI9NVLxUAoSR1sBuQ3HdKeMvcos4KXmEiHUD6n0cAFcs+/S22L9Mnk
-         f75Fn4vGuAN8u5i1kfOHmz3Ex/97PhYFlNKdehGH/ZQYLvP1Or3HF3iuNXCAeVmh6o78
-         MbjuPpiNaRtMfxnPwbXtI9nNBfxu8W2V/LGBE1N34aqj0PxAvhe2nUr4OKIPbzSZUpY4
-         dxPQ==
+        d=gmail.com; s=20210112; t=1679573683;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QtfyA5+0e27PBCjZwhJRtSv2XkdtikGY1iiyI1Ysvsc=;
+        b=CsTdLDaM4ckiOneovfOqYSr+RapnYsg0Em1LH78jxOaP8J8VJR/OlcupAihouHCkNk
+         uzr7h7GEN5zUAuqehdtnNOkxyi4A86b1qa+3Dagw1r4saZkPbGehuQOr+7k4MMZ3++SE
+         5oubKdfoYCPeM//ZXBsQ7l/4HBLgey5isd6A8mug/WyP+kM250QMYUKIZ5qVuKxMjvsE
+         aF84KmkCvBupLdx2IWP9uvUxYdOZfbQYV0vFj6zGbsXX6gHNxfegFmB24vvtjKbgeHx5
+         OOvqlUtB6t98UJzkuGD3gC9+FuhvYYw4zYdAjDvbc6xfBmGVWrMljb7LCrVhWWUTMj17
+         ulng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573651;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uppU9AbNohBvi0g75x2gTr8jOQr1QPXx8DqWx6y8HIg=;
-        b=hUWHzmWQ2S/LtBr6WueR7PttQyM5OswtHKeWdexwKYfazVxW6mdff7jNKqpKK/cIgK
-         0zTM8jdJknPzPNbK4hTVO3YfbXDZXK51NO2L7aXLgmG/rNbB4v67PK+rAMp9nIfPLEmP
-         8kLsIh3vVm/U/iYi50N81m1L0dJSja+pls+arUYMiFCga1ZM6LY/tz7OwZZQzWTTldeQ
-         ugVfPopViwEJkQVoOHWndHadNFJZxKfDj9LvQd7dHoIPBArzgk6Eb1xRqazqh+aR4CzX
-         RnPMJr3QPEqhmGYNGY6n2egEiVZ1tIMxeUhkOjIf/law0Jp8VElZjmIpe1rf4AhMVJga
-         1Nzg==
-X-Gm-Message-State: AAQBX9cL11oUcGXOorvzbShjkttXpng0vXd1c6T8V9jd6hFiKa+2xRl2
-        Apdu9/t+V4g7ekjc02reFzOLb1L6HpZ+l+wB/e3RdA==
-X-Google-Smtp-Source: AKy350bw608jypkAmbz7acytC3RVNxEt/PVeJGobnfoIjzTjIlalXCNplviPPUJpYgMZ0MsoLN3QQm1Nl1hm01rloTg=
-X-Received: by 2002:a05:6902:1705:b0:b75:8ac3:d5d8 with SMTP id
- by5-20020a056902170500b00b758ac3d5d8mr943033ybb.3.1679573650766; Thu, 23 Mar
- 2023 05:14:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314220619.41242-1-georgy.kruglov@yandex.ru> <20230321203715.3975-1-georgy.kruglov@yandex.ru>
-In-Reply-To: <20230321203715.3975-1-georgy.kruglov@yandex.ru>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Mar 2023 13:13:35 +0100
-Message-ID: <CAPDyKFpfXq0yi462tvTP5u0BR8EVas4WSiALRO9y-kiLuBYLzA@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: sdhci-of-esdhc: fix quirk to ignore command
- inhibit for data
-To:     Georgii Kruglov <georgy.kruglov@yandex.ru>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>, Yinbo Zhu <yinbo.zhu@nxp.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20210112; t=1679573683;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QtfyA5+0e27PBCjZwhJRtSv2XkdtikGY1iiyI1Ysvsc=;
+        b=gAzaS4Ay/Iy9K3SFkbOtuVzcqA5gFHW2i2yFetTOrzkiI5QP65741E9rKiXv3VPxH7
+         QpjKGWgrN8GnMf2gCPNl7g0WEREvLRMrGoAbijrlWEO5XwbYNE0iGSt+h02DyEoNzuPU
+         qp0VXRk7Kinp6HTCBXZPrmLpkSGfmew83zbPMz5ypulOiXk9ClA2Yfc7Dwvz5VuJxHge
+         tsmHIGqYNxz+bKkAuwrDRMcqmR28o/JAP9ejXR9O4qs993hFZXZrcPGKoOrN9Kg5/kIK
+         8WZjSkQlz4ZYih7qedW5CxhvjSIwbFaxMw3Mr+xS+ciPmic3GTENr0DICWAiMWuxDSBQ
+         RoSQ==
+X-Gm-Message-State: AO0yUKW0mhJqO4vhnH2yyIXD/1n5qoLSmG0X3FCy6UGkhkBGrpBEd8hc
+        kYoqVCSS7qEkpQWtbnKx/WHmTPq2t+f2zA==
+X-Google-Smtp-Source: AK7set+HmNtTcwTYVRADBqYt9gkrEw4spWc+kfydjtrvRIb2Z0PVz5ZIdmiiy6REIw4t61dQidpwHQ==
+X-Received: by 2002:a17:907:1def:b0:8b2:d30:e722 with SMTP id og47-20020a1709071def00b008b20d30e722mr10074299ejc.3.1679573682628;
+        Thu, 23 Mar 2023 05:14:42 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:d509:cbf0:f579:76f0])
+        by smtp.gmail.com with ESMTPSA id z21-20020a1709064e1500b00930de1da701sm8772930eju.10.2023.03.23.05.14.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 05:14:42 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: remove obsolete file entry in MIPS/LOONGSON1 ARCHITECTURE
+Date:   Thu, 23 Mar 2023 13:14:37 +0100
+Message-Id: <20230323121437.28239-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023 at 21:37, Georgii Kruglov <georgy.kruglov@yandex.ru> wrote:
->
-> If spec_reg is equal to 'SDHCI_PRESENT_STATE', esdhc_readl_fixup()
-> fixes up register value and returns it immediately. As a result, the
-> further block
-> (spec_reg == SDHCI_PRESENT_STATE)
->     &&(esdhc->quirk_ignore_data_inhibit == true),
-> is never executed.
->
-> The patch merges the second block into the first one.
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 1f1929f3f2fa ("mmc: sdhci-of-esdhc: add quirk to ignore command inhibit for data")
-> Signed-off-by: Georgii Kruglov <georgy.kruglov@yandex.ru>
+Commit c46496119ed0 ("clk: loongson1: Remove the outdated driver") removes
+all files matching the pattern drivers/*/*/*loongson1*, but misses to
+adjust the file entry for MIPS/LOONGSON1 ARCHITECTURE in MAINTAINERS.
 
-Next time, please include acks according to earlier replies. This time
-I have added Adrian's ack.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
-Applied for next, thanks!
+Remove this file entry in MIPS/LOONGSON1 ARCHITECTURE.
 
-Kind regards
-Uffe
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Keguang, please ack.
+Stephen, please pick this minor fix-up on the top of the commit above.
 
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-> ---
-> v2: Drop the redundant '== true' as Adrian Hunter <adrian.hunter@intel.com> suggested.
->  drivers/mmc/host/sdhci-of-esdhc.c | 24 +++++++++++-------------
->  1 file changed, 11 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-of-esdhc.c b/drivers/mmc/host/sdhci-of-esdhc.c
-> index 4712adac7f7c..48ca1cf15b19 100644
-> --- a/drivers/mmc/host/sdhci-of-esdhc.c
-> +++ b/drivers/mmc/host/sdhci-of-esdhc.c
-> @@ -133,6 +133,7 @@ static u32 esdhc_readl_fixup(struct sdhci_host *host,
->                         return ret;
->                 }
->         }
-> +
->         /*
->          * The DAT[3:0] line signal levels and the CMD line signal level are
->          * not compatible with standard SDHC register. The line signal levels
-> @@ -144,6 +145,16 @@ static u32 esdhc_readl_fixup(struct sdhci_host *host,
->                 ret = value & 0x000fffff;
->                 ret |= (value >> 4) & SDHCI_DATA_LVL_MASK;
->                 ret |= (value << 1) & SDHCI_CMD_LVL;
-> +
-> +               /*
-> +                * Some controllers have unreliable Data Line Active
-> +                * bit for commands with busy signal. This affects
-> +                * Command Inhibit (data) bit. Just ignore it since
-> +                * MMC core driver has already polled card status
-> +                * with CMD13 after any command with busy siganl.
-> +                */
-> +               if (esdhc->quirk_ignore_data_inhibit)
-> +                       ret &= ~SDHCI_DATA_INHIBIT;
->                 return ret;
->         }
->
-> @@ -158,19 +169,6 @@ static u32 esdhc_readl_fixup(struct sdhci_host *host,
->                 return ret;
->         }
->
-> -       /*
-> -        * Some controllers have unreliable Data Line Active
-> -        * bit for commands with busy signal. This affects
-> -        * Command Inhibit (data) bit. Just ignore it since
-> -        * MMC core driver has already polled card status
-> -        * with CMD13 after any command with busy siganl.
-> -        */
-> -       if ((spec_reg == SDHCI_PRESENT_STATE) &&
-> -       (esdhc->quirk_ignore_data_inhibit == true)) {
-> -               ret = value & ~SDHCI_DATA_INHIBIT;
-> -               return ret;
-> -       }
-> -
->         ret = value;
->         return ret;
->  }
-> --
-> 2.34.1
->
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8f8e846fc453..4aac18b5d5c1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14047,7 +14047,6 @@ L:	linux-mips@vger.kernel.org
+ S:	Maintained
+ F:	arch/mips/include/asm/mach-loongson32/
+ F:	arch/mips/loongson32/
+-F:	drivers/*/*/*loongson1*
+ F:	drivers/*/*loongson1*
+ 
+ MIPS/LOONGSON2EF ARCHITECTURE
+-- 
+2.17.1
+
