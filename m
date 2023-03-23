@@ -2,116 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEC46C5CA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786FA6C5CA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjCWCaS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 22:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
+        id S230054AbjCWCa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWCaQ (ORCPT
+        with ESMTP id S230038AbjCWCaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:30:16 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26DB193F0;
-        Wed, 22 Mar 2023 19:30:14 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32N2TjAkA006817, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32N2TjAkA006817
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 23 Mar 2023 10:29:45 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 23 Mar 2023 10:29:59 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 23 Mar 2023 10:29:59 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 23 Mar 2023 10:29:59 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: RE: [PATCH v3 7/9] wifi: rtw88: Add support for the SDIO based RTL8822BS chipset
-Thread-Topic: [PATCH v3 7/9] wifi: rtw88: Add support for the SDIO based
- RTL8822BS chipset
-Thread-Index: AQHZW3PnaO1Cqho490aVatml1UdBHa8Hp7FA
-Date:   Thu, 23 Mar 2023 02:29:59 +0000
-Message-ID: <ba765e70e5904575b5c9b90671f701bf@realtek.com>
-References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
- <20230320213508.2358213-8-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230320213508.2358213-8-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 22 Mar 2023 22:30:25 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ABA2823A
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:30:23 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id r25-20020a056602235900b0074d472df653so10740168iot.2
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:30:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679538623;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OYMvRLD2NpUAW3woXFYIOhYNOpa7z27tVJFgyzUeP7I=;
+        b=AdGorpFGltzotkD6qbw1EjMbuDV3JEmvo7PHsFLvMD/p/plCDA9a6T4R+Uax88Z6CB
+         tSkWJ5rb0ln7qUZdlJAuUR0PG0Dl8vQcmTR/e9CNhB9UDZNMNcDaUWrHpPIr0r5MpmTq
+         8u8wCpII8VjitQhT0X8tst35a5f6W7y/F7KJ8v0MOj8obMWhkrC1QLSV3n6RRIYZMK07
+         bHWlA9gnjkoomUN5GUn+Id0RF8wZpt31t0eKJGqbPfTUJUgbUL1NlHLCJPZQ1aceYh1w
+         GnsayM+uTQx+4TwHXeWW4vcnWgpa8VBJN/neZNM3GI3dUJ9F2rnPLLsMf166PDjFjQ3V
+         9+2A==
+X-Gm-Message-State: AO0yUKVqwislE3nMf7hGLd1N7I4F1pMYFENu36t7BjKn/IdG7vGZk0o4
+        Oi4g/YO9AIX/e4ewKb2pQZ6aU/hj1SXndWNPG6zx4Cd1cfjO
+X-Google-Smtp-Source: AK7set9fRXsxbEMt/tmSHgEJGyIE/SzIUGrTyM3O0QBd16Sh3l7iLnmBqC2mdtflQQtJzGWa79f8HgdAFj9rp305Qi7OPe19j+7F
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:93a2:0:b0:3fc:e1f5:9619 with SMTP id
+ z31-20020a0293a2000000b003fce1f59619mr3689155jah.3.1679538623052; Wed, 22 Mar
+ 2023 19:30:23 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 19:30:23 -0700
+In-Reply-To: <20230323020722.2574-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000038dfa05f7880f4d@google.com>
+Subject: Re: [syzbot] [arm-msm?] [net?] WARNING: refcount bug in qrtr_recvmsg (2)
+From:   syzbot <syzbot+a7492efaa5d61b51db23@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Tuesday, March 21, 2023 5:35 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Larry Finger <Larry.Finger@lwfinger.net>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v3 7/9] wifi: rtw88: Add support for the SDIO based RTL8822BS chipset
-> 
-> From: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> Wire up RTL8822BS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8822B chipset code.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reported-and-tested-by: syzbot+a7492efaa5d61b51db23@syzkaller.appspotmail.com
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+Tested on:
 
-> ---
-> Changes since v2:
-> - sort includes alphabetically as suggested by Ping-Ke
-> - add missing #include "main.h" (after it has been removed from sdio.h
->   in patch 2 from this series)
-> 
-> Changes since v1:
-> - use /* ... */ style for copyright comments
-> 
-> 
+commit:         9c1bec9c Merge tag 'linux-kselftest-fixes-6.3-rc3' of ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f48da1c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6c84f77790aba2eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7492efaa5d61b51db23
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=121b8109c80000
 
-[..]
-
+Note: testing is done by a robot and is best-effort only.
