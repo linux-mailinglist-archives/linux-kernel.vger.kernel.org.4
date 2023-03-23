@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09736C5FE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B806C5FE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjCWGog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S230052AbjCWGoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjCWGoM (ORCPT
+        with ESMTP id S230167AbjCWGoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:44:12 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398212DE59
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:44:09 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eg48so82156055edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:44:09 -0700 (PDT)
+        Thu, 23 Mar 2023 02:44:17 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452F2DE5C;
+        Wed, 22 Mar 2023 23:44:13 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v1so13207511wrv.1;
+        Wed, 22 Mar 2023 23:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679553847;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nM/3ywyvpAsiOiRY1HG3AOIo3FGoRoVm1IbIAeulEYo=;
-        b=xmy41Dff79qydbj9wKemr6aBQC0XKLClWYZ1/+XIZiVohdMkGZJ3QKWXtj7Oas6pAn
-         ldPX8vzbA8iht3C0HmibE5watwyMozHf0LmEN4iP2kI/b+Qtq05XzUA0kTEP17vPOmy9
-         5tVHC1kyAfrLGtjIWpY4P8gRjvj3HErA819f1QHu+QOcszwMScwZl5EPe+2pUx/a1Okk
-         mjedExTz7dM5edumDgRMTPZheLYzy//eor94c+ffp3c7KbJmJp23O2RowN7igR4mlAaO
-         ypmEGPtxEKgG2/TK15pKhCTwzMLKBPdimmQGskMRgXeZzSuLVD2YK6jCd8L4ZKRBS9E1
-         X1RA==
+        d=gmail.com; s=20210112; t=1679553852;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMt6IiIj1g/DqQnbQSAvbNGtbOJm5tLZxMcMsHALdIk=;
+        b=GhmjoBqZnTla9JBkjF1UZtu8wu6QjffqlHVeeBSYX2nsCx2EjNUPd9PoBLsyD6Fvay
+         PUDva7C4NGKsmwEbwBCxAOGd9EL87aiHG+kQudl9u9UlFpmv9e/4RjhfDSdSVwnwvcBm
+         baBY0/IoZRR49XX2VcDjY1RfhNbEJkmSxuN/ffwm0Mm67KsM6hDo5BFwoP77jL1yua9J
+         37n9J27adgwFwke7WNhN8IzlQlAPD55U+bklIM3krb05IsmeD8vkf20E9UygrsGyoZ9R
+         Tc00rBGRQW6lUANqYbvaQ+qdXnh/WeUiS1MpV6MziUy55YOmt4caiqeTmvENycbM24So
+         ACTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679553847;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nM/3ywyvpAsiOiRY1HG3AOIo3FGoRoVm1IbIAeulEYo=;
-        b=lX9QIQiyTyYcMeDSVXmpO/9IT4PXFSr7uW6CvEuDHZ7Zg88/T1xj1vF4cDLrt7PSiz
-         wk1RDhHuA7iXilGLr5IUhug1DWAAiiXv2VP2QdXERogTSqNTQIekj0QDOlbG6YJojGyp
-         v1F8OcE4PMK7JWEYW56xTATOwRCBa5Xo4kieA+Qwufp96YzPkWzvbm00AlNUyYKG8zEl
-         PqATxsT0/I7PC8RtfVzdzYQRgrehIXtmLPt2TfKPrLpwB4xi2OWgXrzkx2MK4GlYxxpl
-         74ivDmPTexWynIURiBO7RjMc0bFmZi/sUfmQ3/2NCuQYJaCviFtJ1TBKqvjJukoU7aRC
-         76kA==
-X-Gm-Message-State: AO0yUKXeLjYQ42L5c73xYTn+17pIe3nGEn2duFwxoIDsuiWrMaPyD3d2
-        1JZce67eVo2z4Y6CWwz9w3rYSA==
-X-Google-Smtp-Source: AK7set99aCxB2NNu170LpJUYY1O9/A3/pVich1AlGKdGJ2lRlsdCiHActK9XKOraSg3Fw0G08QsM2g==
-X-Received: by 2002:a17:907:382:b0:921:412b:d8c1 with SMTP id ss2-20020a170907038200b00921412bd8c1mr9233255ejb.71.1679553847515;
-        Wed, 22 Mar 2023 23:44:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id ch19-20020a170906c2d300b00933d64cd447sm5552271ejb.121.2023.03.22.23.44.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 23:44:07 -0700 (PDT)
-Message-ID: <b50470b0-4062-5d2c-2eaf-29cef34fd2d4@linaro.org>
-Date:   Thu, 23 Mar 2023 07:44:06 +0100
+        d=1e100.net; s=20210112; t=1679553852;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XMt6IiIj1g/DqQnbQSAvbNGtbOJm5tLZxMcMsHALdIk=;
+        b=W5cLQhdJmNdBQFo4dCPZRzzfHVmnCtu87sXroPeqtE9YeMV1cc/z+ivQbJDda1Hisg
+         bRfqOZ3t2ocelhXtNDjee/t/sT5wBBkEkFqBpwfJcdqpbfgLGuCj+oqV2Km09DbuGnbP
+         VV2EH3ti2QOcLDxDMqhSeRopRUq0hse+Vl8t4JnUoFXtdq4s1obEzROVGoAe41O6JZbg
+         aFLv93oiPcalDWm8/2QL9Fs2jHPr8jJEWHzoVPRJ/RkR4rzS7VpsZWQA69R298UOzh2g
+         4YQFrdq2aLfPelYT6eqYRisugHM6qu660WZlCO6Tz2JKNgfEKzrqJ1oelaaiKJfGs//B
+         lL7w==
+X-Gm-Message-State: AAQBX9ce29FazUbaPs1XJmeEzWhkhOAkZ2I7xblP0TDrknIThigvQv8a
+        j0mHaTBPWvs9eNrK63LdQ64=
+X-Google-Smtp-Source: AKy350ZGd5btCaPavQ2r8rRtJiNmG4yjfpo1Ok0NUgSUne0wsPU91oXttK7RYC1dOoDQRW6+1/L2hg==
+X-Received: by 2002:adf:ee84:0:b0:2ce:ae54:1592 with SMTP id b4-20020adfee84000000b002ceae541592mr1469269wro.38.1679553851918;
+        Wed, 22 Mar 2023 23:44:11 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05600c474400b003edc9a5f98asm845384wmo.44.2023.03.22.23.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 23:44:10 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 06:44:10 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
+Message-ID: <ff630c2e-42ff-42ec-9abb-38922d5107ec@lucifer.local>
+References: <cover.1679511146.git.lstoakes@gmail.com>
+ <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
+ <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq5332: add support for the RDP468
- variant
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230323044929.8694-1-quic_kathirav@quicinc.com>
- <20230323044929.8694-3-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323044929.8694-3-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,85 +79,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 05:49, Kathiravan T wrote:
-> Add the initial device tree support for the Reference Design
-> Platform(RDP) 468 based on IPQ5332 family of SoCs. This patch carries the
-> support for Console UART, SPI NOR, eMMC.
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile           |   1 +
->  arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 103 ++++++++++++++++++++
->  2 files changed, 104 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 1a29403400b7..79cf8373997f 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> new file mode 100644
-> index 000000000000..b2899f953aa4
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> @@ -0,0 +1,103 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * IPQ5332 RDP468 board device tree source
-> + *
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "ipq5332.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ5332 MI01.6";
-> +	compatible = "qcom,ipq5332-ap-mi01.6", "qcom,ipq5332";
-> +
-> +	aliases {
-> +		serial0 = &blsp1_uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0";
-> +	};
-> +};
-> +
-> +&blsp1_uart0 {
-> +	pinctrl-0 = <&serial_0_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&blsp1_spi0 {
-> +	pinctrl-0 = <&spi_0_data_clk_pins &spi_0_cs_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		compatible = "micron,n25q128a11", "jedec,spi-nor";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		reg = <0>;
+On Thu, Mar 23, 2023 at 10:52:09AM +0800, Baoquan He wrote:
+> On 03/22/23 at 06:57pm, Lorenzo Stoakes wrote:
+> > Having previously laid the foundation for converting vread() to an iterator
+> > function, pull the trigger and do so.
+> >
+> > This patch attempts to provide minimal refactoring and to reflect the
+> > existing logic as best we can, for example we continue to zero portions of
+> > memory not read, as before.
+> >
+> > Overall, there should be no functional difference other than a performance
+> > improvement in /proc/kcore access to vmalloc regions.
+> >
+> > Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
+> > we dispense with it, and try to write to user memory optimistically but
+> > with faults disabled via copy_page_to_iter_nofault(). We already have
+> > preemption disabled by holding a spin lock. We continue faulting in until
+> > the operation is complete.
+>
+> I don't understand the sentences here. In vread_iter(), the actual
+> content reading is done in aligned_vread_iter(), otherwise we zero
+> filling the region. In aligned_vread_iter(), we will use
+> vmalloc_to_page() to get the mapped page and read out, otherwise zero
+> fill. While in this patch, fault_in_iov_iter_writeable() fault in memory
+> of iter one time and will bail out if failed. I am wondering why we
+> continue faulting in until the operation is complete, and how that is done.
 
-reg is always second property, after compatible.
+This is refererrring to what's happening in kcore.c, not vread_iter(),
+i.e. the looped read/faultin.
 
-> +		spi-max-frequency = <50000000>;
-> +	};
-> +};
-> +
+The reason we bail out if failt_in_iov_iter_writeable() is that would
+indicate an error had occurred.
 
+The whole point is to _optimistically_ try to perform the operation
+assuming the pages are faulted in. Ultimately we fault in via
+copy_to_user_nofault() which will either copy data or fail if the pages are
+not faulted in (will discuss this below a bit more in response to your
+other point).
 
-Best regards,
-Krzysztof
+If this fails, then we fault in, and try again. We loop because there could
+be some extremely unfortunate timing with a race on e.g. swapping out or
+migrating pages between faulting in and trying to write out again.
 
+This is extremely unlikely, but to avoid any chance of breaking userland we
+repeat the operation until it completes. In nearly all real-world
+situations it'll either work immediately or loop once.
+
+>
+> If we look into the failing point in vread_iter(), it's mainly coming
+> from copy_page_to_iter_nofault(), e.g page_copy_sane() checking failed,
+> i->data_source checking failed. If these conditional checking failed,
+> should we continue reading again and again? And this is not related to
+> memory faulting in. I saw your discussion with David, but I am still a
+> little lost. Hope I can learn it, thanks in advance.
+>
+
+Actually neither of these are going to happen. page_copy_sane() checks the
+sanity of the _source_ pages, and the 'sanity' is defined by whether your
+offset and length sit within the (possibly compound) folio. Since we
+control this, we can arrange for it never to happen.
+
+i->data_source is checking that it's an output iterator, however we would
+already have checked this when writing ELF headers at the bare minimum, so
+we cannot reach this point with an invalid iterator.
+
+Therefore it is not possible either cause a failure. What could cause a
+failure, and what we are checking for, is specified in copyout_nofault()
+(in iov_iter.c) which we pass to the iterate_and_advance() macro. Now we
+have a fault-injection should_fail_usercopy() which would just trigger a
+redo, or copy_to_user_nofault() returning < 0 (e.g. -EFAULT).
+
+This code is confusing as this function returns the number of bytes _not
+copied_ rather than copied. I have tested this to be sure by the way :)
+
+Therefore the only way for a failure to occur is for memory to not be
+faulted in and thus the loop only triggers in this situation. If we fail to
+fault in pages for any reason, the whole operation aborts so this should
+cover all angles.
+
+> ......
+> > diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
+> > index 08b795fd80b4..25b44b303b35 100644
+> > --- a/fs/proc/kcore.c
+> > +++ b/fs/proc/kcore.c
+> ......
+> > @@ -507,13 +503,30 @@ read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
+> >
+> >  		switch (m->type) {
+> >  		case KCORE_VMALLOC:
+> > -			vread(buf, (char *)start, tsz);
+> > -			/* we have to zero-fill user buffer even if no read */
+> > -			if (copy_to_iter(buf, tsz, iter) != tsz) {
+> > -				ret = -EFAULT;
+> > -				goto out;
+> > +		{
+> > +			const char *src = (char *)start;
+> > +			size_t read = 0, left = tsz;
+> > +
+> > +			/*
+> > +			 * vmalloc uses spinlocks, so we optimistically try to
+> > +			 * read memory. If this fails, fault pages in and try
+> > +			 * again until we are done.
+> > +			 */
+> > +			while (true) {
+> > +				read += vread_iter(iter, src, left);
+> > +				if (read == tsz)
+> > +					break;
+> > +
+> > +				src += read;
+> > +				left -= read;
+> > +
+> > +				if (fault_in_iov_iter_writeable(iter, left)) {
+> > +					ret = -EFAULT;
+> > +					goto out;
+> > +				}
+> >  			}
+> >  			break;
+> > +		}
+> >  		case KCORE_USER:
+> >  			/* User page is handled prior to normal kernel page: */
+> >  			if (copy_to_iter((char *)start, tsz, iter) != tsz) {
+>
