@@ -2,79 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2AD6C6EC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:26:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEEB6C6ECA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjCWR0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S231994AbjCWR12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjCWR0r (ORCPT
+        with ESMTP id S230132AbjCWR10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:26:47 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D34B777;
-        Thu, 23 Mar 2023 10:26:42 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5DB07378;
-        Thu, 23 Mar 2023 17:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5DB07378
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679592402; bh=MBuRS26mgv6HpsYzuzNMBYMg9+1oJPHXW00uMeFRd3M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NM/ZkxP2Csjnth8cI1gftpl8cvVvA0aSpJ9hspjYmKD75/FqUs0yno0GMoR843bM9
-         n77dqi4HfOewvPUzEtuBjZ96I8ZpIGzoaEFMakTpbAEnuscMyWocgcY6x7Jlo2DdJf
-         9bO7OjMSYXqkx2IzorWrtBD8NWVU4M86sLqe2t6WKDIMJ24Qa2rqNBEUctuUe+AgOy
-         SanktsE5ibv+h71c7HXbgl399kD0FvKHnv9Sb0plP+0RaXB3UQzRey8iDB/r6rmkQR
-         cNCSg49BcAs/DhYBulWhxz6NR/IHtRcztjaDOje8GQAFrniHOOjcdwGeSxjP9Jddes
-         G9Vbmw4lcH/7Q==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] Documentation: maintainer-tip: Rectify link to
- "Describe your changes" section of submitting-patches.rst
-In-Reply-To: <874jqd9jol.ffs@tglx>
-References: <20230320124327.174881-1-bagasdotme@gmail.com>
- <874jqd9jol.ffs@tglx>
-Date:   Thu, 23 Mar 2023 11:26:41 -0600
-Message-ID: <87fs9vcram.fsf@meer.lwn.net>
+        Thu, 23 Mar 2023 13:27:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 201E8F1;
+        Thu, 23 Mar 2023 10:27:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC3CB2F4;
+        Thu, 23 Mar 2023 10:28:08 -0700 (PDT)
+Received: from [10.57.53.151] (unknown [10.57.53.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B25633F766;
+        Thu, 23 Mar 2023 10:27:21 -0700 (PDT)
+Message-ID: <b3bb6dc1-ceeb-0116-055b-25a27da8ab38@arm.com>
+Date:   Thu, 23 Mar 2023 17:27:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 08/11] coresight-tpdm: Add nodes to configure pattern
+ match output
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-9-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1679551448-19160-9-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+On 23/03/2023 06:04, Tao Zhang wrote:
+> Add nodes to configure trigger pattern and trigger pattern mask.
+> Each DSB subunit TPDM has maximum of n(n<7) XPR registers to
+> configure trigger pattern match output. Eight 32 bit registers
+> providing DSB interface trigger output pattern match comparison.
+> And each DSB subunit TPDM has maximum of m(m<7) XPMR registers to
+> configure trigger pattern mask match output. Eight 32 bit
+> registers providing DSB interface trigger output pattern match
+> mask.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 +++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.c       | 84 ++++++++++++++++++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.h       |  8 +++
+>   3 files changed, 116 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> index 094d624..c06374f 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -71,3 +71,27 @@ Description:
+>   		value 1: Start EDCMR register number
+>   		value 2: End EDCMR register number
+>   		value 3: The value need to be written
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_patt_val
+> +Date:		March 2023
+> +KernelVersion	6.3
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the trigger pattern value of DSB tpdm.
+> +		Read the trigger pattern value of DSB tpdm.
+> +
+> +		Accepts the following two values.
+> +		value 1: Index number of XPR register
+> +		value 2: The value need to be written
 
-> On Mon, Mar 20 2023 at 19:43, Bagas Sanjaya wrote:
->> The general changelog rules for the tip tree refers to "Describe your
->> changes" section of submitting patches guide. However, the internal link
->> reference targets to non-existent "submittingpatches" label, which
->> brings reader to the top of the linked doc.
->>
->> Correct the target. No changes to submitting-patches.rst since the
->> required label is already there.
->>
->> Fixes: 31c9d7c8297558 ("Documentation/process: Add tip tree handbook")
->> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
->
-> In cass Jonathan is picking this up:
->
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+minor nit: What values are acceptable ? Otherwise looks fine.
 
-I've applied it, thanks.
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-jon
