@@ -2,130 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F746C6C53
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B916C6C55
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjCWPdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S231611AbjCWPdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjCWPdM (ORCPT
+        with ESMTP id S231851AbjCWPdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:33:12 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30ED4C15
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:33:10 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so1367211wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679585589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bWzV0wqw+QUny4vBuf5noKBzVlSQvYul3BLsErs4wPs=;
-        b=nE70CcOnpzRtcFP13268W5ddUTDmrfyKgTYgcKyXf4G0CbtV++YOUP/KCwFhdfmP5R
-         4ZziXvOQgb/4PUV+pXLiYcrP6yg1rIj31gP/ubaSTHC4Lv4mn8HMh4RXvLrVIxXYz0Jg
-         UbaYTGWVi54ue1d8oJ01pvlXV5ZZYw5VufHkCFVl57ZRtImHEeTjKycnYAFZqmxmhIZf
-         Fxcr/gncrhWrtRXORHBg/By6zWUecEYw9xfJ0qLn7Uc26lR6n+maSmMFXxrmyq6VPIFf
-         ichPFeaEVTZHGgirQIOZ1lvUDZcr8NMDcjYNkCw7csmyNAg1TNRdizftmuCmzoqLbP4u
-         8Peg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679585589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bWzV0wqw+QUny4vBuf5noKBzVlSQvYul3BLsErs4wPs=;
-        b=rOOm1wuOEVch3k0WKSnznyGb7JHMq69xQpTGcO9xTXugb4FtrusI0UeesChXlOY/T5
-         +n20ySClx2XIqiBPO66wO+slT75fGyMPjeSjoSHVlMCbQXQm4QU0uFemcY5HNzOaTqK9
-         tZSTTcGurfVVjI3RUiokroIGjt/7k3GgCmf5Kv6aboRFe8nqKRLpNlODqCo3Bn1zkudS
-         4Kt8VBgZDKbo/Syzbn6gGbVyCh7D7v/Q8+Rjy98vKpc7fmDXe1w/rPys4Bwfut14bI84
-         CmUk8ivk8CIzadglMvmMYwk9YuF+kuL7egW7EWmPA4eDYCmbetsc7d8Fn7MFzNNqv+KB
-         exQA==
-X-Gm-Message-State: AO0yUKUNRcTtYTEwMTu5ChS8N4/dUWhi2Ggim0/t+eYeXlJWwjdhySTf
-        2iqI5IQaz9/C4V6uC2LiM0U=
-X-Google-Smtp-Source: AK7set89KBo8ssPJsdn4bRr4WqiRqjZ4Kh/DGgxbByNflaFDjX3IHnAB/41lzTxcVsOZJMZOMPe8oQ==
-X-Received: by 2002:a7b:cb95:0:b0:3d0:6a57:66a5 with SMTP id m21-20020a7bcb95000000b003d06a5766a5mr112087wmi.0.1679585589075;
-        Thu, 23 Mar 2023 08:33:09 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b002cea8664304sm16292368wrz.91.2023.03.23.08.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 08:33:08 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 18:32:54 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 0/4] staging: rtl8192e: code cleanup patches
-Message-ID: <1973548d-e76e-4512-bed4-792c95b59c12@kili.mountain>
-References: <cover.1679573474.git.kamrankhadijadj@gmail.com>
- <alpine.DEB.2.22.394.2303231408000.2866@hadrien>
- <alpine.DEB.2.22.394.2303231408410.2866@hadrien>
- <090ee842-46d0-4f35-bf00-68a3e1393b72@kili.mountain>
- <ZBxu5RBG9kCRlwRB@khadija-virtual-machine>
+        Thu, 23 Mar 2023 11:33:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F406A7C;
+        Thu, 23 Mar 2023 08:33:16 -0700 (PDT)
+Received: from [192.168.10.28] (unknown [39.37.168.222])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1BC166030F9;
+        Thu, 23 Mar 2023 15:33:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679585594;
+        bh=0aQLKHjLOTgdbKmhdLK7tohNMOcwT+Ues9r3AnesFFk=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=XOt6ixAokkLd08Ez3LiKvD3xdJs88pNcTeYuhCSMvX1bOQdwHuPYsNRyuDAtEfiy7
+         VNaHHNPWfagI1aGzuqytwfjrCBOYh2mjg1r1w4vVFhl3xUkd7k+m1sVDDc0xBwg0EJ
+         taR/4yKz9qWXnmhAgaQ9exm/M3EYvxNCECmTmMipPuCv2QDUBICnEQxTzHXMCuOkw9
+         Bg/7bhy9UMRlWdOwjmKOMcqyM/z0Z1sryt0w28o+AyMBhYUZHbgBpFU7DyHrH40R6M
+         k/qOzJe47X6vIX0EQXC04W2qYcW1ipt9OL3HUC39t9u0cZ2iiC0Fmrl8VEXNBzwXEy
+         WV6+GHw8DZkpQ==
+Message-ID: <f411b983-0c47-73f8-775b-928fcf61620a@collabora.com>
+Date:   Thu, 23 Mar 2023 20:33:07 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBxu5RBG9kCRlwRB@khadija-virtual-machine>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        linux-stable <stable@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/hugetlb: Fix uffd wr-protection for CoW optimization
+ path
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230321191840.1897940-1-peterx@redhat.com>
+ <44aae7fc-fb1f-b38e-bc17-504abf054e3f@redhat.com> <ZBoKod6+twRYvSYz@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZBoKod6+twRYvSYz@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 08:23:17PM +0500, Khadija Kamran wrote:
-> On Thu, Mar 23, 2023 at 04:34:43PM +0300, Dan Carpenter wrote:
-> > On Thu, Mar 23, 2023 at 02:08:58PM +0100, Julia Lawall wrote:
-> > > 
-> > > 
-> > > On Thu, 23 Mar 2023, Julia Lawall wrote:
-> > > 
-> > > >
-> > > >
-> > > > On Thu, 23 Mar 2023, Khadija Kamran wrote:
-> > > >
-> > > > > Fix several cleanup issues reported by checkpatch.pl in module
-> > > > > staging/rtl8192e in file rtllib_rx.c
-> > > >
-> > > > Why is it resent?
-> > > 
-> > > OK, I see, sorry for the noise.
-> > 
-> > I'm still confused...  :P
-> >
+Hi Peter,
+
+Sorry for late reply.
+
+On 3/22/23 12:50 AM, Peter Xu wrote:
+> On Tue, Mar 21, 2023 at 08:36:35PM +0100, David Hildenbrand wrote:
+>> On 21.03.23 20:18, Peter Xu wrote:
+>>> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
+>>> writable even with uffd-wp bit set.  It only happens with all these
+>>> conditions met: (1) hugetlb memory (2) private mapping (3) original mapping
+>>> was missing, then (4) being wr-protected (IOW, pte marker installed).  Then
+>>> write to the page to trigger.
+>>>
+>>> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
+>>> even reaching hugetlb_wp() to avoid taking more locks that userfault won't
+>>> need.  However there's one CoW optimization path for missing hugetlb page
+>>> that can trigger hugetlb_wp() inside hugetlb_no_page(), that can bypass the
+>>> userfaultfd-wp traps.
+>>>
+>>> A few ways to resolve this:
+>>>
+>>>    (1) Skip the CoW optimization for hugetlb private mapping, considering
+>>>    that private mappings for hugetlb should be very rare, so it may not
+>>>    really be helpful to major workloads.  The worst case is we only skip the
+>>>    optimization if userfaultfd_wp(vma)==true, because uffd-wp needs another
+>>>    fault anyway.
+>>>
+>>>    (2) Move the userfaultfd-wp handling for hugetlb from hugetlb_fault()
+>>>    into hugetlb_wp().  The major cons is there're a bunch of locks taken
+>>>    when calling hugetlb_wp(), and that will make the changeset unnecessarily
+>>>    complicated due to the lock operations.
+>>>
+>>>    (3) Carry over uffd-wp bit in hugetlb_wp(), so it'll need to fault again
+>>>    for uffd-wp privately mapped pages.
+>>>
+>>> This patch chose option (3) which contains the minimum changeset (simplest
+>>> for backport) and also make sure hugetlb_wp() itself will start to be
+>>> always safe with uffd-wp ptes even if called elsewhere in the future.
+>>>
+>>> This patch will be needed for v5.19+ hence copy stable.
+>>>
+>>> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> Cc: linux-stable <stable@vger.kernel.org>
+>>> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>   mm/hugetlb.c | 8 +++++---
+>>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>> index 8bfd07f4c143..22337b191eae 100644
+>>> --- a/mm/hugetlb.c
+>>> +++ b/mm/hugetlb.c
+>>> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>   		       struct folio *pagecache_folio, spinlock_t *ptl)
+>>>   {
+>>>   	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+>>> -	pte_t pte;
+>>> +	pte_t pte, newpte;
+>>>   	struct hstate *h = hstate_vma(vma);
+>>>   	struct page *old_page;
+>>>   	struct folio *new_folio;
+>>> @@ -5622,8 +5622,10 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>   		mmu_notifier_invalidate_range(mm, range.start, range.end);
+>>>   		page_remove_rmap(old_page, vma, true);
+>>>   		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
+>>> -		set_huge_pte_at(mm, haddr, ptep,
+>>> -				make_huge_pte(vma, &new_folio->page, !unshare));
+>>> +		newpte = make_huge_pte(vma, &new_folio->page, !unshare);
+>>> +		if (huge_pte_uffd_wp(pte))
+>>> +			newpte = huge_pte_mkuffd_wp(newpte);
+>>> +		set_huge_pte_at(mm, haddr, ptep, newpte);
+>>>   		folio_set_hugetlb_migratable(new_folio);
+>>>   		/* Make the old page be freed below */
+>>>   		new_folio = page_folio(old_page);
+>>
+>> Looks correct to me. Do we have a reproducer?
 > 
-> Hey Dan!
+> I used a reproducer for the async mode I wrote (patch 2 attached, need to
+> change to VM_PRIVATE):
 > 
-> Sorry about the confusion. I sent the last patch with the wrong email
-> mistakenly. It was causing following warning as reported by Philipp,
-> Checkpatch:
+> https://lore.kernel.org/all/ZBNr4nohj%2FTw4Zhw@x1n/
 > 
-> WARNING: From:/Signed-off-by: email address mismatch: 'From: Khadija
-> Kamran <kkamran.bese16seecs@seecs.edu.pk>' != 'Signed-off-by: Khadija
-> Kamran <kamrankhadijadj@gmail.com>
+> I don't think kernel kselftest can trigger it because we don't do strict
+> checks yet with uffd-wp bits.  I've already started looking into cleanup
+> the test cases and I do plan to add new tests to cover this.
 > 
-> I resent this patch with the correct email address. I hope I did not do
-> this wrong.
+> Meanwhile, let's also wait for an ack from Muhammad.  Even though the async
+> mode is not part of the code base, it'll be a good test for verifying every
+> single uffd-wp bit being set or cleared as expected.
+I've tested by applying this patch. But the bug is still there. Just like
+Peter has mentioned, we are using our in progress patches related to
+pagemap_scan ioctl and userfaultd wp async patches to reproduce it.
 
-It needs to be v2: resend from the correct email address.
+To reproduce please build kernel and run pagemap_ioctl test in mm in
+hugetlb_mem_reproducer branch:
+https://gitlab.collabora.com/usama.anjum/linux-mainline/-/tree/hugetlb_mem_reproducer
 
-When you send a patch a second time that always needs to be explained
-because we don't remember all the email we get.  The v2 information is
-really interesting as a reviewer.  Maybe I am wondering, "Did I respond
-to the original email and is my complaint fixed?"
+In case you have any question on how to reproduce, please let me know. I'll
+try to provide a cleaner alternative.
 
-For RESEND patches it means that the first patch was perfect but
-something broke down in the process.  Maybe a maintainer was on vacation
-and accidentally ignored the patch.  If Greg asks you to resend
-everything that's a kind of breakdown in the process as well, but just
-add that information in the patch "Resending all the most/ patches
-because it was confusing which one were supposed to be applied".
+> 
+>> Acked-by: David Hildenbrand <david@redhat.com>
+> 
+> Thanks,
+> 
 
-That information is super interesting because it shows we are all on the
-same page about how to go forward.
-
-regards,
-dan carpenter
+-- 
+BR,
+Muhammad Usama Anjum
