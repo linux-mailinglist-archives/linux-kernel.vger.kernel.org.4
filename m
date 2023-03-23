@@ -2,112 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6722B6C63E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10CE6C63E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCWJl6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 05:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S230302AbjCWJng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjCWJlX (ORCPT
+        with ESMTP id S229738AbjCWJn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:41:23 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9D8113DD;
-        Thu, 23 Mar 2023 02:41:08 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pfHRQ-002zTH-Fy; Thu, 23 Mar 2023 10:41:04 +0100
-Received: from p57bd9952.dip0.t-ipconnect.de ([87.189.153.82] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pfHRQ-000BqP-8k; Thu, 23 Mar 2023 10:41:04 +0100
-Message-ID: <075155911e5be40a7f74cc0d05003f8683d784e0.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 0/7 v4] sh: various doc, build, init fixes
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
-        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 23 Mar 2023 10:41:03 +0100
-In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Thu, 23 Mar 2023 05:43:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761AEC155;
+        Thu, 23 Mar 2023 02:43:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0468A33AFE;
+        Thu, 23 Mar 2023 09:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679564602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=klNWhIy8hiXGSUgaFtlmoMw45I3AHJjiiJxXlBCB2YE=;
+        b=y4bAYuP0tUJ3WO7M9lYm1GYFACckupaP7f4nLoIji81aKWP13DWy7vrrxxcK+E/DnRROQy
+        OzxG4JcYmNC9gf4Lq3S7tEMWWmzgw9yw+lupH3uAtlc42Rgj+nSwO9iuFPAIPXMoymZCi7
+        IjgcsnSULtkBXblwaSPAXU7/r3nNa9I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679564602;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=klNWhIy8hiXGSUgaFtlmoMw45I3AHJjiiJxXlBCB2YE=;
+        b=lCCTR4LTrC40Hd8pcwb7sUO5Hc564tiR4anU1tdXp0GhiqbkppSIVUSZOvAah/90rHxqz6
+        aTVZYD0sd55bwLCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3BE6132C2;
+        Thu, 23 Mar 2023 09:43:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CZGvMjkfHGToTwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 23 Mar 2023 09:43:21 +0000
+Message-ID: <1fcc9df0-10a6-f31c-e3d3-e2474c9da817@suse.cz>
+Date:   Thu, 23 Mar 2023 10:43:21 +0100
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.153.82
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: mm/mmap.c:939:11: error: variable 'next' is used uninitialized
+ whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        linux-mm <linux-mm@kvack.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <CA+G9fYvEqk8tC7w3xxPcFhycctZeOj4CMJj3JbrtWKkp3w9qPQ@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CA+G9fYvEqk8tC7w3xxPcFhycctZeOj4CMJj3JbrtWKkp3w9qPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy!
-
-On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> All of these patches have been sent previously, anywhere from
-> one to 3 times.  All patches are now called "v4".
+On 3/23/23 08:58, Naresh Kamboju wrote:
+> Following multiple build warnings / errors noticed while building
+> Linux next-20230323 with clang-16 for x86_64.
 > 
-> This refresh/resend is to assist the new SH maintainer.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
->  [PATCH 1/7 v4] sh: SH2007: drop the bad URL info
->  [PATCH 2/7 v4] sh: nmi_debug: fix return value of __setup handler
->  [PATCH 3/7 v4] sh: init: use OF_EARLY_FLATTREE for early init
->  [PATCH 4/7 v4] sh: math-emu: fix macro redefined warning
->  [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
->  [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
->  [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
+> Build warnings / errors:
+> ---------
+> mm/mmap.c:939:11: error: variable 'next' is used uninitialized
+> whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>         else if (!curr)
+>                  ^~~~~
+> mm/mmap.c:952:15: note: uninitialized use occurs here
+>         merge_next = next && mpol_equal(policy, vma_policy(next)) &&
+>                      ^~~~
+> mm/mmap.c:939:7: note: remove the 'if' if its condition is always true
+>         else if (!curr)
+>              ^~~~~~~~~~
+> mm/mmap.c:912:36: note: initialize the variable 'next' to silence this warning
+>         struct vm_area_struct *curr, *next, *res;
+>                                           ^
+>                                            = NULL
+
+Same issue as https://lore.kernel.org/all/CA%2BG9fYvBxp38KEggtvtvVtGMaSBdL3NDV9ns%3DZi9-Jtx7H9g1A@mail.gmail.com/
+Thus already resolved in the next -next hopefully.
+
+> 1 error generated.
+> make[3]: *** [scripts/Makefile.build:252: mm/mmap.o] Error 1
 > 
-> diffstat:
->  Documentation/kbuild/kbuild.rst                           |    1 -
->  Documentation/scheduler/sched-arch.rst                    |    2 --
->  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
->  arch/sh/Kconfig                                           |    4 ++++
->  arch/sh/Kconfig.debug                                     |    2 +-
->  arch/sh/boards/Kconfig                                    |    1 -
->  arch/sh/kernel/head_32.S                                  |    6 +++---
->  arch/sh/kernel/nmi_debug.c                                |    4 ++--
->  arch/sh/kernel/setup.c                                    |    4 ++--
->  arch/sh/math-emu/sfp-util.h                               |    4 ----
->  scripts/checkstack.pl                                     |    7 -------
->  tools/perf/arch/common.c                                  |    2 --
->  tools/scripts/Makefile.arch                               |    5 -----
->  tools/testing/selftests/mm/Makefile                       |    2 +-
->  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
->  15 files changed, 14 insertions(+), 34 deletions(-)
+> mm/vmalloc.c:3543:6: error: variable 'remains' is used uninitialized
+> whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>         if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> mm/vmalloc.c:3587:17: note: uninitialized use occurs here
+>         return count - remains + zero_iter(iter, remains);
+>                        ^~~~~~~
+> mm/vmalloc.c:3543:2: note: remove the 'if' if its condition is always false
+>         if (bitmap_empty(vb->used_map, VMAP_BBMAP_BITS)) {
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> mm/vmalloc.c:3539:6: error: variable 'remains' is used uninitialized
+> whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>         if (!vb)
+>             ^~~
+> mm/vmalloc.c:3587:17: note: uninitialized use occurs here
+>         return count - remains + zero_iter(iter, remains);
+>                        ^~~~~~~
+> mm/vmalloc.c:3539:2: note: remove the 'if' if its condition is always false
+>         if (!vb)
+>         ^~~~~~~~
+> mm/vmalloc.c:3524:16: note: initialize the variable 'remains' to
+> silence this warning
+>         size_t remains, n;
+>                       ^
+>                        = 0
+> 2 errors generated.
+> make[3]: *** [scripts/Makefile.build:252: mm/vmalloc.o] Error 1
+> make[3]: Target 'mm/' not remade because of errors.
 > 
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
-> Cc: linux-sh@vger.kernel.org
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
+> steps to reproduce:
+> ----------
+> 
+> tuxmake  \
+>   --runtime podman \
+>   --target-arch x86_64 \
+>   --toolchain clang-16 LLVM=1 LLVM_IAS=1 \
+>   --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2NOjxURhByyb4dR3Ld788iuYvAR/config
+> 
+> Related discussion on mailing list,
+>  - https://lore.kernel.org/llvm/202303231055.DeninwHS-lkp@intel.com/
+>  - https://lore.kernel.org/llvm/14c60785-2427-45db-9613-683410ff6802@lucifer.local/T/#t
+> 
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> 
 
-All applied to sh-linux/for-next now except for patch number 6.
-
-Apologies that it took so long, I'm still learning :-).
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
