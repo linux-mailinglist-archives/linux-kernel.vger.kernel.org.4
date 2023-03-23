@@ -2,133 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B736C5BDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710FB6C5BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCWB2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S229903AbjCWB3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCWB2B (ORCPT
+        with ESMTP id S229499AbjCWB3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:28:01 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE681B5;
-        Wed, 22 Mar 2023 18:27:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dx8Z0uObm40mi3yuk8K1nHaWFE2bo2nQI5GSk0uc7gLBY4D3afw91ZeTr73O2YUoTlib3SbvfirkMfuwrjn3zCAXunElunospOORb46L3KShcdDU1hoUdTfoA7SoH8PVYZsNak4XvmFyAvKN+HGSBQeizWRZ7C4NHUrHOnEOCppMwEJg9yxq/s6l8d6bD0znNPajX/LAj6vzlczZlJPwW8ybfXgDD9tGX9M605RACOCd7vYfbErkd8nByyH+HrNFXVZ2z4HXgLJPYNdpHzowkH+85+e55xFeOL1Gb7r6qqCgUO/VsDUd+voJ2CS+Z33H/wjHGLRGUFJS2AFuEgYiiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jx0LCcrl0zhtbGtyYthgXkwmDL7Ey5uollXMP76ypVQ=;
- b=ISOIssF6qWEsvwMPt/nal2OHvseWPNezvQtyMejinG5aaRCluWoImar2FvQIqAI+bXPMpMkuY0WrMNB4R1WOPON7/VNBcek6m9WZtkqTzMyi6aJFa6yBnY59ZiP4EgBWHg4HlwY8ZN90S8w6BAJgooAOJnmfzA+Hn43+45kb+gr1NlivK+1nac0x62efuTA9788tPeUtAUdOWX3mIvSifpY0t3FZfJCqxAxfRodxzZviByTiPVa6npOqMW0gWXzvzi3xCd6AeLBlFbHzIedkl4/ocI70oMGPslUEdMxrOvWeJazHBK8KlCXfuqFsclfnEQCDm3Y4AEguQwMaMT79eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jx0LCcrl0zhtbGtyYthgXkwmDL7Ey5uollXMP76ypVQ=;
- b=pa8dn0jsDfbm9tpQREmymVcwoTNcI8YYC4qm+zy6vCpsBTijJ2acWva7hbfqpzyj6UTahvanAgSa2CHY3wwK37dileayrx4aA6acoMg77L5JfHC28kOy7W8faj9w6px/kdwVRHV7sUM6YmQQAQrXQplja+0/LGlE/X/iWN7FUlM=
-Received: from MN2PR15CA0059.namprd15.prod.outlook.com (2603:10b6:208:237::28)
- by SA0PR12MB4463.namprd12.prod.outlook.com (2603:10b6:806:92::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 01:27:56 +0000
-Received: from BL02EPF0000EE3C.namprd05.prod.outlook.com
- (2603:10b6:208:237:cafe::f1) by MN2PR15CA0059.outlook.office365.com
- (2603:10b6:208:237::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
- Transport; Thu, 23 Mar 2023 01:27:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000EE3C.mail.protection.outlook.com (10.167.241.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.30 via Frontend Transport; Thu, 23 Mar 2023 01:27:54 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 22 Mar
- 2023 20:27:54 -0500
-Date:   Wed, 22 Mar 2023 20:27:37 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     Sean Christopherson <seanjc@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, <wei.w.wang@intel.com>
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <20230323012737.7vn4ynsbfz7c2ch4@amd.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com>
- <20230119111308.GC2976263@ls.amr.corp.intel.com>
- <Y8lg1G2lRIrI/hld@google.com>
- <20230119223704.GD2976263@ls.amr.corp.intel.com>
- <Y880FiYF7YCtsw/i@google.com>
- <20230213130102.two7q3kkcf254uof@amd.com>
- <20230221121135.GA1595130@chaop.bj.intel.com>
+        Wed, 22 Mar 2023 21:29:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04DE26B2;
+        Wed, 22 Mar 2023 18:29:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Phnn62h0sz4x4r;
+        Thu, 23 Mar 2023 12:29:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679534954;
+        bh=+VFAB2pMsm05yxN6D2aQPmwkIZna1h6eOO+0BZM5wYk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Nb7Ys4y/iTXep9YbrWk5JqeGLgXHu6bDIVPWec1nCE+d9VlKJnyBUc8KFEaspCzrq
+         Ojnmm0oA+kpr+Fhk4ZF9ubgkZznJWqsdJzcbP5UDGL9fW6wK+DHuIjAvBUGDzIKvm0
+         4ao1Wt5buwf9Tb9X9Xb/34XC8LvydKeWw8GJ9vU3IDrsx9NC5rSIAQ7XoGM5xszmvc
+         B3blP7yT46sGJADEO7koDYiVaOH5WSo3XL8NWX96FZD9AiaAleKYwT240ftTcZEcje
+         tzDCmv1GUS1ibTpiQVFLTBgvSuzu9osRETkIrcNW3EGZsSMlOgEAVFF0YOOqpHv0WO
+         MBaMbinLarnVw==
+Date:   Thu, 23 Mar 2023 12:29:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the gpio-brgl tree
+Message-ID: <20230323122913.4f0410b8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230221121135.GA1595130@chaop.bj.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3C:EE_|SA0PR12MB4463:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62866689-2cda-4b67-8414-08db2b3dd3c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LMAXdBDFqtDpIFu82ZPHqUkd4fl7aS4dBZQjtL/hw6oW3BaJcSWalbXjEJJre0jRwXcOI4cEd45XlDjpTRAmX8qhXYZPMNxe1HUUn5LIUd/9cBFCz0Anc2TR+O6K26xEpy6AT94syR4zQpvxoFzLtmMwCy97e/zAyKPX8YTr9e4H25rwOzwIjAxZqCLSXMVEDbBz/RacrPMbvcem2DvkzBuo8ETuOEOxBfY6y6eh3Lz5EiFEBoBJ6wycIxHp9b9D9xrrshnOYs+4AhzvylzKLo/zwLrC6dlONWVizJFEGGLE6vlm1X68vEgi6xxwEc/f3GUx3MoBQgfh3JsQO5Ft1EUJwb/YfZE8axCmfItrOh6gddG+qinxFRDnTHfh9TWdHa1ue5C2l7/RbEKsaEV7M3qyWEwqmcKk7hgvq9znDIUvASCcqaxUqpi2SGkqDVYYaSlzCFS9C988vxI8bXnFTDnL+i3zjncqom92OuZRI0yKv4zhC1620iEGMLDpDVGW+oPMjJdyFoYYlEoax8ikci6WaFwcgkY3anGH2IbP5BWQMLpnKTNzSXvaH1l0H4yZtsvko6h7CYqPlOyg7vVc0eRWUAGfjMXP9g4RD1PAtQzuV4myf4A2SFd9zPoAiHiuExt+HM739KerY92e5IZFRd5uOQfzz4oYyFvdq8I56vDyRjsn6DrvEYY3XuZ7FSOnS3MwjCMj313DmL8+3cNMTi9/Y3dRSk3YO2Ff+9dlVuM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199018)(46966006)(36840700001)(40470700004)(1076003)(26005)(82310400005)(336012)(6666004)(36756003)(426003)(47076005)(40460700003)(16526019)(186003)(40480700001)(316002)(81166007)(2906002)(356005)(54906003)(41300700001)(36860700001)(8936002)(8676002)(4326008)(6916009)(70586007)(70206006)(2616005)(44832011)(82740400003)(7416002)(7406005)(5660300002)(83380400001)(966005)(86362001)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 01:27:54.7925
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62866689-2cda-4b67-8414-08db2b3dd3c3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3C.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4463
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/Sg8vRiHpwKXiOwck02eqFc4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,125 +52,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 21, 2023 at 08:11:35PM +0800, Chao Peng wrote:
-> > Hi Sean,
-> > 
-> > We've rebased the SEV+SNP support onto your updated UPM base support
-> > tree and things seem to be working okay, but we needed some fixups on
-> > top of the base support get things working, along with 1 workaround
-> > for an issue that hasn't been root-caused yet:
-> > 
-> >   https://github.com/mdroth/linux/commits/upmv10b-host-snp-v8-wip
-> > 
-> >   *stash (upm_base_support): mm: restrictedmem: Kirill's pinning implementation
-> >   *workaround (use_base_support): mm: restrictedmem: loosen exclusivity check
-> 
-> What I'm seeing is Slot#3 gets added first and then deleted. When it's
-> gets added, Slot#0 already has the same range bound to restrictedmem so
-> trigger the exclusive check. This check is exactly the current code for.
+--Sig_/Sg8vRiHpwKXiOwck02eqFc4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-With the following change in QEMU, we no longer trigger this check:
+Hi all,
 
-  diff --git a/hw/pci-host/q35.c b/hw/pci-host/q35.c
-  index 20da121374..849b5de469 100644
-  --- a/hw/pci-host/q35.c
-  +++ b/hw/pci-host/q35.c
-  @@ -588,9 +588,9 @@ static void mch_realize(PCIDevice *d, Error **errp)
-       memory_region_init_alias(&mch->open_high_smram, OBJECT(mch), "smram-open-high",
-                                mch->ram_memory, MCH_HOST_BRIDGE_SMRAM_C_BASE,
-                                MCH_HOST_BRIDGE_SMRAM_C_SIZE);
-  +    memory_region_set_enabled(&mch->open_high_smram, false);
-       memory_region_add_subregion_overlap(mch->system_memory, 0xfeda0000,
-                                           &mch->open_high_smram, 1);
-  -    memory_region_set_enabled(&mch->open_high_smram, false);
+After merging the gpio-brgl tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-I'm not sure if QEMU is actually doing something wrong here though or if
-this check is putting tighter restrictions on userspace than what was
-expected before. Will look into it more.
+drivers/gpio/gpio-pci-idio-16.c:32:30: error: field 'state' has incomplete =
+type
+   32 |         struct idio_16_state state;
+      |                              ^~~~~
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_direction':
+drivers/gpio/gpio-pci-idio-16.c:39:13: error: implicit declaration of funct=
+ion 'idio_16_get_direction'; did you mean 'idio_16_gpio_get_direction'? [-W=
+error=3Dimplicit-function-declaration]
+   39 |         if (idio_16_get_direction(offset))
+      |             ^~~~~~~~~~~~~~~~~~~~~
+      |             idio_16_gpio_get_direction
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+drivers/gpio/gpio-pci-idio-16.c:62:16: error: implicit declaration of funct=
+ion 'idio_16_get'; did you mean 'idio_16_gpio_get'? [-Werror=3Dimplicit-fun=
+ction-declaration]
+   62 |         return idio_16_get(idio16gpio->reg, &idio16gpio->state, off=
+set);
+      |                ^~~~~~~~~~~
+      |                idio_16_gpio_get
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get_multiple':
+drivers/gpio/gpio-pci-idio-16.c:70:9: error: implicit declaration of functi=
+on 'idio_16_get_multiple'; did you mean 'idio_16_gpio_get_multiple'? [-Werr=
+or=3Dimplicit-function-declaration]
+   70 |         idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, m=
+ask, bits);
+      |         ^~~~~~~~~~~~~~~~~~~~
+      |         idio_16_gpio_get_multiple
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set':
+drivers/gpio/gpio-pci-idio-16.c:79:9: error: implicit declaration of functi=
+on 'idio_16_set'; did you mean 'idio_16_gpio_set'? [-Werror=3Dimplicit-func=
+tion-declaration]
+   79 |         idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, va=
+lue);
+      |         ^~~~~~~~~~~
+      |         idio_16_gpio_set
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_set_multiple':
+drivers/gpio/gpio-pci-idio-16.c:87:9: error: implicit declaration of functi=
+on 'idio_16_set_multiple'; did you mean 'idio_16_gpio_set_multiple'? [-Werr=
+or=3Dimplicit-function-declaration]
+   87 |         idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, m=
+ask, bits);
+      |         ^~~~~~~~~~~~~~~~~~~~
+      |         idio_16_gpio_set_multiple
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_mask':
+drivers/gpio/gpio-pci-idio-16.c:106:45: error: invalid use of undefined typ=
+e 'struct idio_16'
+  106 |                 iowrite8(0, &idio16gpio->reg->irq_ctl);
+      |                                             ^~
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_unmask':
+drivers/gpio/gpio-pci-idio-16.c:129:41: error: invalid use of undefined typ=
+e 'struct idio_16'
+  129 |                 ioread8(&idio16gpio->reg->irq_ctl);
+      |                                         ^~
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_handler':
+drivers/gpio/gpio-pci-idio-16.c:164:46: error: invalid use of undefined typ=
+e 'struct idio_16'
+  164 |         irq_status =3D ioread8(&idio16gpio->reg->irq_status);
+      |                                              ^~
+drivers/gpio/gpio-pci-idio-16.c:178:37: error: invalid use of undefined typ=
+e 'struct idio_16'
+  178 |         iowrite8(0, &idio16gpio->reg->in0_7);
+      |                                     ^~
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_irq_init_hw':
+drivers/gpio/gpio-pci-idio-16.c:198:37: error: invalid use of undefined typ=
+e 'struct idio_16'
+  198 |         iowrite8(0, &idio16gpio->reg->irq_ctl);
+      |                                     ^~
+drivers/gpio/gpio-pci-idio-16.c:199:37: error: invalid use of undefined typ=
+e 'struct idio_16'
+  199 |         iowrite8(0, &idio16gpio->reg->in0_7);
+      |                                     ^~
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_probe':
+drivers/gpio/gpio-pci-idio-16.c:232:37: error: invalid use of undefined typ=
+e 'struct idio_16'
+  232 |         iowrite8(0, &idio16gpio->reg->filter_ctl);
+      |                                     ^~
+drivers/gpio/gpio-pci-idio-16.c:248:9: error: implicit declaration of funct=
+ion 'idio_16_state_init'; did you mean 'file_ra_state_init'? [-Werror=3Dimp=
+licit-function-declaration]
+  248 |         idio_16_state_init(&idio16gpio->state);
+      |         ^~~~~~~~~~~~~~~~~~
+      |         file_ra_state_init
+drivers/gpio/gpio-pci-idio-16.c: In function 'idio_16_gpio_get':
+drivers/gpio/gpio-pci-idio-16.c:63:1: error: control reaches end of non-voi=
+d function [-Werror=3Dreturn-type]
+   63 | }
+      | ^
 
-> 
-> >   *fixup (upm_base_support): KVM: use inclusive ranges for restrictedmem binding/unbinding
-> >   *fixup (upm_base_support): mm: restrictedmem: use inclusive ranges for issuing invalidations
-> 
-> As many kernel APIs treat 'end' as exclusive, I would rather keep using
-> exclusive 'end' for these APIs(restrictedmem_bind/restrictedmem_unbind
-> and notifier callbacks) but fix it internally in the restrictedmem. E.g.
-> all the places where xarray API needs a 'last'/'max' we use 'end - 1'.
-> See below for the change.
+Caused by commit
 
-Yes I did feel like I was fighting the kernel a bit on that; your
-suggestion seems like it would be a better fit.
+  473b79057bbd ("gpio: idio-16: Remove unused legacy interface")
 
-> 
-> >   *fixup (upm_base_support): KVM: fix restrictedmem GFN range calculations
-> 
-> Subtracting slot->restrictedmem.index for start/end in
-> restrictedmem_get_gfn_range() is the correct fix.
-> 
-> >   *fixup (upm_base_support): KVM: selftests: CoCo compilation fixes
-> > 
-> > We plan to post an updated RFC for v8 soon, but also wanted to share
-> > the staging tree in case you end up looking at the UPM integration aspects
-> > before then.
-> > 
-> > -Mike
-> 
-> This is the restrictedmem fix to solve 'end' being stored and checked in xarray:
+I have used the gpio-brgl tree from next-20230322 for today.
 
-Looks good.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks!
+--Sig_/Sg8vRiHpwKXiOwck02eqFc4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--Mike
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -46,12 +46,12 @@ static long restrictedmem_punch_hole(struct restrictedmem *rm, int mode,
->          */
->         down_read(&rm->lock);
->  
-> -       xa_for_each_range(&rm->bindings, index, notifier, start, end)
-> +       xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
->                 notifier->ops->invalidate_start(notifier, start, end);
->  
->         ret = memfd->f_op->fallocate(memfd, mode, offset, len);
->  
-> -       xa_for_each_range(&rm->bindings, index, notifier, start, end)
-> +       xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
->                 notifier->ops->invalidate_end(notifier, start, end);
->  
->         up_read(&rm->lock);
-> @@ -224,7 +224,7 @@ static int restricted_error_remove_page(struct address_space *mapping,
->                 }
->                 spin_unlock(&inode->i_lock);
->  
-> -               xa_for_each_range(&rm->bindings, index, notifier, start, end)
-> +               xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
->                         notifier->ops->error(notifier, start, end);
->                 break;
->         }
-> @@ -301,11 +301,12 @@ int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
->                 if (exclusive != rm->exclusive)
->                         goto out_unlock;
->  
-> -               if (exclusive && xa_find(&rm->bindings, &start, end, XA_PRESENT))
-> +               if (exclusive &&
-> +                   xa_find(&rm->bindings, &start, end - 1, XA_PRESENT))
->                         goto out_unlock;
->         }
->  
-> -       xa_store_range(&rm->bindings, start, end, notifier, GFP_KERNEL);
-> +       xa_store_range(&rm->bindings, start, end - 1, notifier, GFP_KERNEL);
->         rm->exclusive = exclusive;
->         ret = 0;
->  out_unlock:
-> @@ -320,7 +321,7 @@ void restrictedmem_unbind(struct file *file, pgoff_t start, pgoff_t end,
->         struct restrictedmem *rm = file->f_mapping->private_data;
->  
->         down_write(&rm->lock);
-> -       xa_store_range(&rm->bindings, start, end, NULL, GFP_KERNEL);
-> +       xa_store_range(&rm->bindings, start, end - 1, NULL, GFP_KERNEL);
->         synchronize_rcu();
->         up_write(&rm->lock);
->  }
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQbq2kACgkQAVBC80lX
+0GwBmAf9FN9KTFSYvy8Yj//my0QFXnFGjK7oA9+s9RbcD6dm8hhGy8IQWaWO2Tfm
+JI+/xyqSfufwIumXb5mH5dslIatiE8+meR1hrvaGQ9o/ASd5uwQorCrwJwvEfyqt
+SeEZx0GYJ6SJmpLsGlqzpTExe9stsPKtHDtmVYgIHk13gPdZNlTOvOT6ePKpS53E
+xDFwI287t3GxNsDHsh2tmtR7igl4ZYgPy6VYQxePRtTDw6ExKTeI27Is5EYRjOZk
+43L6lKxPIGkY/hznVBY3iHSq5o6FK5WxcMvU7WhOgRJ7hqAZtM54ACPl8ueeYZmi
+tIT5chxLE07dUEPc90lBNwt6HbBeFA==
+=E1vA
+-----END PGP SIGNATURE-----
+
+--Sig_/Sg8vRiHpwKXiOwck02eqFc4--
