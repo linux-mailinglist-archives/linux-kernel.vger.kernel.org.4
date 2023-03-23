@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E8C6C61F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B4D6C61FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjCWIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S231617AbjCWIij convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 04:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjCWIhr (ORCPT
+        with ESMTP id S231620AbjCWIiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:37:47 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D26735261
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:36:31 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id i6so23890063ybu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679560587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rUuy98YfrrGR9WlMIlTaa+4F/lCxj6Hdgjgj3ZONIGA=;
-        b=Q7owO8OcLsAk4Smi2JWsWIKAzqfBJpGOHyVtF07hxl9piqNLJCWoW7ed4RVNmHjhGk
-         ol3NRAXqNtaHo6lDY/g//4xjwt/zxo/2zoFknjy1zGZhizSaFw5hdgDuLK8RdU/zZVAH
-         dCepbf77TgGhUbiTSUqhp684enkT1DtfqWYiu+D4zXHU39Q95c87S5jHYzWSUjmQidIr
-         CR/bcZ9UWgx4ZwxmbVTnGPjgT3U1OF+r4Mp8yx8TwvEPJeXshXVD54tjYJO1ApHYyVfH
-         z4fQSasarnufBSTBhpRbCiJTIbgj3WYu0exC/3/6OArXM7pWXh8QX0awOx12n+r31erH
-         QTsQ==
+        Thu, 23 Mar 2023 04:38:08 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F9F35EF7;
+        Thu, 23 Mar 2023 01:36:53 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id c19so25702661qtn.13;
+        Thu, 23 Mar 2023 01:36:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679560587;
+        d=1e100.net; s=20210112; t=1679560613;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rUuy98YfrrGR9WlMIlTaa+4F/lCxj6Hdgjgj3ZONIGA=;
-        b=iJKufMp89lwj/9X5rEf2koTQ4YaH3WmC9R32Dahz+1PIiR05jzrJfnJYuPQD0+/GKq
-         fmQkxNQYIIYb2vVj5ztyhOLOSIm8E8qm7yzsI6cxOZurJXbLDg6fc5B4BIFnLiTNH7qf
-         hSwrgHQKCn+PAptor0FjqT6ArOIaksD2WI0fN6k5oQJ23hcSFAulrBtfdtMWmnbOp2/M
-         qbesqu65V+XPaMW+qMp/bs8Lfgx0Db166xw1643xHaVbhZ88SbmOvL0HC0ySRxnSPN09
-         qBucpUgdkR95MKniQrb5+GZM4X6pgM/78l+mI/XiNcAjwcz8JlKdhF9ckXCfedEuHV7R
-         NJKA==
-X-Gm-Message-State: AAQBX9cOlNCTjSua3Y5Xt6cGQhmCM8p1bXzNbR+fArRjIZYsECcwY6DV
-        7EQZG6mcgrFCbU1IobHYN4Gzab9TdLvqUJQHAqovsg==
-X-Google-Smtp-Source: AKy350bcnM7cm+AyBPl6E7Dhs+RovIUhLWC1y2V4vCJ+ybMyh+qGNl7hbQ/eRRAdXm8YoocIetQrjs3e6tsPxiaKuts=
-X-Received: by 2002:a05:6902:a93:b0:b23:4649:7ef3 with SMTP id
- cd19-20020a0569020a9300b00b2346497ef3mr1654862ybb.4.1679560587513; Thu, 23
- Mar 2023 01:36:27 -0700 (PDT)
+        bh=DLvOHhjGtQPAGxbfhV5i2RzlDMu0DOqPCzbtGbv4UHg=;
+        b=wUD+P+CNiRq5ncqepbhg9mtUuXC9Z7FWsgBQvs+uU7DCX7jpufVeVnruutUYbyJ+CC
+         QzLr+hGotRBzvijOm8Xi1Ye/AeO5DHt70rbatvf1Ql/j3vXscsfutS1E7vLH5N2SNQlB
+         ilrMZqYYXVLNlds4TG0lOGL0KQA7oqHG9trQfLnqXViAKTKKMq+2H58GN6vHiRKnGybb
+         N1U4T2Olnn7W2WGPdK5kMrI3TTB7iwXYucA95wAWQr4YtMpKclgyEPVEMjSbCoIzLFa4
+         nH+vZB8BDykcLj6X6JAceN2kMz7ljjeoS4Kd2wkq6NpuPANSntn1d9663Su9rLJnD9lo
+         ZhQg==
+X-Gm-Message-State: AO0yUKWii5BMcSgkHLBQ9FQBKWIO0kp/cfJi/jjUrAfxjUeDqBxKoAif
+        eO7n0wZaQQ3qK/4MclwXehYhHg6QgjbqgQ==
+X-Google-Smtp-Source: AK7set9P5xWan7eeEzD1Ah340/W3CLp6dOjOm+sFWYiQgdCBZ4CPsWzGOblq/4C3IvC/YsQewdDIMw==
+X-Received: by 2002:a05:622a:58a:b0:3bb:8a14:badd with SMTP id c10-20020a05622a058a00b003bb8a14baddmr7016607qtb.29.1679560612906;
+        Thu, 23 Mar 2023 01:36:52 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id i14-20020ac84f4e000000b003e3895903bfsm3006909qtw.8.2023.03.23.01.36.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 01:36:51 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id y5so23909930ybu.3;
+        Thu, 23 Mar 2023 01:36:51 -0700 (PDT)
+X-Received: by 2002:a25:6b0e:0:b0:a27:3ecc:ffe7 with SMTP id
+ g14-20020a256b0e000000b00a273eccffe7mr1426444ybc.3.1679560611303; Thu, 23 Mar
+ 2023 01:36:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230323012929.10815-1-dipenp@nvidia.com> <20230323012929.10815-5-dipenp@nvidia.com>
-In-Reply-To: <20230323012929.10815-5-dipenp@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 23 Mar 2023 09:36:16 +0100
-Message-ID: <CACRpkdbkCEPOV9xEXx20qm5idG0p2vdoyU09FRwXmMyj5gGqoA@mail.gmail.com>
-Subject: Re: [PATCH V4 04/10] dt-bindings: timestamp: Add nvidia,gpio-controller
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
+ <ZBneELQuakjva1xa@casper.infradead.org> <6320abf6-0898-361b-d5f6-bcc58306f55c@intel.com>
+ <ZBsw9lRbJU4c2wLD@casper.infradead.org> <CAMuHMdW1ed0ns=Xb-ug=wfUuBTU1Pr0V6Deds1GkSb_f-Ac3Xw@mail.gmail.com>
+ <4cd6f0c8d7603254df9e2eb1e7b80973e75c4e45.camel@physik.fu-berlin.de>
+In-Reply-To: <4cd6f0c8d7603254df9e2eb1e7b80973e75c4e45.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 23 Mar 2023 09:36:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW52q5d8R4DawXRhLGj7sNoaZiwayAsMh6eWPGxUW=_HA@mail.gmail.com>
+Message-ID: <CAMuHMdW52q5d8R4DawXRhLGj7sNoaZiwayAsMh6eWPGxUW=_HA@mail.gmail.com>
+Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
+ and !SMP
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 2:29=E2=80=AFAM Dipen Patel <dipenp@nvidia.com> wro=
-te:
+Hi Adrian,
 
-> Introducing nvidia,gpio-controller property from Tegra234 SoCs onwards.
-> This is done to help below case.
+On Thu, Mar 23, 2023 at 9:28 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Thu, 2023-03-23 at 09:25 +0100, Geert Uytterhoeven wrote:
+> > It's supported. Dave just forgot to update the #ifdef around the
+> > definition of init_cache_node_node() when updating an #ifdef around
+> > a code block that contains one of the callers.
+> >
+> > P.S. To me, this discussion reminds me of the old discussion about
+> >      discontigmem without NUMA. Yes, not all systems are PCs with
+> >      contiguous memory on a single fast bus ;-)
 >
-> Without this property code would look like:
-> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
->         hte_dev->c =3D gpiochip_find("tegra194-gpio-aon",
->                                    tegra_get_gpiochip_from_name);
-> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-aon")=
-)
->         hte_dev->c =3D gpiochip_find("tegra234-gpio-aon",
->                                    tegra_get_gpiochip_from_name);
-> else
->         return -ENODEV;
->
-> This means for every future addition of the compatible string, if else
-> condition statements have to be expanded.
->
-> With the property:
-> gpio_ctrl =3D of_parse_phandle(dev->of_node, "nvidia,gpio-controller", 0)=
-;
-> ....
-> hte_dev->c =3D gpiochip_find(gpio_ctrl, tegra_get_gpiochip_from_of_node);
->
-> This simplifies the code significantly. The introdunction of this
-> property/binding does not break existing Tegra194 provider driver.
->
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> I'm wondering: Could the NUMA code be used to work with the different
+> memory types found on the Amiga, i.e. chip RAM, fast RAM etc?
 
-It is fair to assume that other operating systems will need this too
-so I interpret the commit message as an example of the issues
-faced by anyone making a driver for this HW.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I guess so, but only for 32-bit motherboard RAM on A3000/A4000
+vs. RAM on an accelerator card vs. Zorro-III RAM on e.g. BigRamPlus.
+Chip RAM and Zorro-II RAM do not support RMW-cycles on
+Zorro-III capable machines.
 
-Yours,
-Linus Walleij
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
