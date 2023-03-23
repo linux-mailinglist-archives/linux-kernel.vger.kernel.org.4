@@ -2,147 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA986C65FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B1F6C65C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjCWLAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S230253AbjCWKxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCWLAb (ORCPT
+        with ESMTP id S230038AbjCWKx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:00:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB8B2659F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679569178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MAscxfxWjnWJvYP+PGVC3a50JuQ7qCpSYPPBetUb0UU=;
-        b=gLQmc0rk/8KJ8RIwOehhtFjn0axLjiyz1BTSIhN17k+/FercaZBWhsRJyV0g2krbOsYVT8
-        9B3Rtv1QH2VqrZLMHEA2nHxMEnfrlK8NJ1O7coFWdt3Po1U1ltuNDy450Zfc3bBsPbvsg5
-        1AIOdDWcL0BONlPB07LxkOlQlD6aVL0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-5MA8H9wmOtum8LO_aKfnUg-1; Thu, 23 Mar 2023 06:59:34 -0400
-X-MC-Unique: 5MA8H9wmOtum8LO_aKfnUg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CBE6185A588;
-        Thu, 23 Mar 2023 10:59:33 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A110C1121314;
-        Thu, 23 Mar 2023 10:59:33 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 3D3C04038C716; Thu, 23 Mar 2023 07:52:22 -0300 (-03)
-Date:   Thu, 23 Mar 2023 07:52:22 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
+        Thu, 23 Mar 2023 06:53:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 127031A8;
+        Thu, 23 Mar 2023 03:52:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4BE24B3;
+        Thu, 23 Mar 2023 03:53:39 -0700 (PDT)
+Received: from a077209.blr.arm.com (a077209.arm.com [10.162.40.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 45A803F766;
+        Thu, 23 Mar 2023 03:52:53 -0700 (PDT)
+From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZBwvZkDXfCBuWMe8@tpad>
-References: <20230320180332.102837832@redhat.com>
- <ZBilM1JR2HKElIR1@dhcp22.suse.cz>
- <ZBiu8csaxB/zrOAS@tpad>
- <ZBrUruIsOjdaqiFv@dhcp22.suse.cz>
- <ZBrlKeZTsHgRW021@tpad>
- <ZBsEGMEfEI98Wpwq@dhcp22.suse.cz>
- <ZBsOx1abWfBTdGFl@tpad>
- <ZBwE8gUUxI+aKuAm@dhcp22.suse.cz>
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] selftests/mm: Implement support for arm64 on va
+Date:   Thu, 23 Mar 2023 16:22:38 +0530
+Message-Id: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBwE8gUUxI+aKuAm@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 08:51:14AM +0100, Michal Hocko wrote:
-> On Wed 22-03-23 11:20:55, Marcelo Tosatti wrote:
-> > On Wed, Mar 22, 2023 at 02:35:20PM +0100, Michal Hocko wrote:
-> [...]
-> > > > "Performance details for the kworker interruption:
-> > > > 
-> > > > oslat   1094.456862: sys_mlock(start: 7f7ed0000b60, len: 1000)
-> > > > oslat   1094.456971: workqueue_queue_work: ... function=vmstat_update ...
-> > > > oslat   1094.456974: sched_switch: prev_comm=oslat ... ==> next_comm=kworker/5:1 ...
-> > > > kworker 1094.456978: sched_switch: prev_comm=kworker/5:1 ==> next_comm=oslat ...
-> > > > 
-> > > > The example above shows an additional 7us for the
-> > > > 
-> > > >         oslat -> kworker -> oslat
-> > > > 
-> > > > switches. In the case of a virtualized CPU, and the vmstat_update
-> > > > interruption in the host (of a qemu-kvm vcpu), the latency penalty
-> > > > observed in the guest is higher than 50us, violating the acceptable
-> > > > latency threshold for certain applications."
-> > > 
-> > > Yes, I have seen that but it doesn't really give a wider context to
-> > > understand why those numbers matter.
-> > 
-> > OK.
-> > 
-> > "In the case of RAN, a MAC scheduler with TTI=1ms, this causes >100us
-> > interruption observed in a guest (which is above the safety
-> > threshold for this application)."
-> > 
-> > Is that OK?
-> 
-> This might be a sufficient information for somebody familiar with the
-> matter (not me). So no, not enough. We need to hear a more complete
-> story. 
+The va_128TBswitch selftest is designed and implemented for PowerPC and
+x86 architectures which support a 128TB switch, up to 256TB of virtual
+address space and hugepage sizes of 16MB and 2MB respectively. Arm64
+platforms on the other hand support a 256Tb switch, up to 4PB of virtual
+address space and a default hugepage size of 512MB when 64k pagesize is
+enabled.
 
-Michal,
+These architectural differences require introducing support for arm64
+platforms, after which a more generic naming convention is suggested.
+The in code comments are amended to provide a more platform independent
+explanation of the working of the code and nr_hugepages are configured
+as required. Finally, the file running the testcase is modified in order
+to prevent skipping of hugetlb testcases of va_high_addr_switch.
 
-Please refer to 
-https://www.diva-portal.org/smash/get/diva2:541460/FULLTEXT01.pdf
+This series has been tested on 6.3.0-rc3 kernel, both on arm64 and x86
+platforms.
 
-2.3 Channel Dependent Scheduling
-The purpose of scheduling is to decide which terminal will transmit data on which set
-of resource blocks with what transport format to use. The objective is to assign
-resources to the terminal such that the quality of service (QoS) requirement is fulfilled.
-Scheduling decision is taken every 1 ms by base station (termed as eNodeB) as the
-same length of Transmission Time Interval (TTI) in LTE system.
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org 
 
-In general:
+Chaitanya S Prakash (5):
+  selftests/mm: Add support for arm64 platform on va switch
+  selftests/mm: Rename va_128TBswitch to va_high_addr_switch
+  selftests/mm: Add platform independent in code comments
+  selftests/mm: Configure nr_hugepages for arm64
+  selftests/mm: Run hugetlb testcases of va switch
 
-https://en.wikipedia.org/wiki/Real-time_computing
+ tools/testing/selftests/mm/Makefile           |  4 +-
+ tools/testing/selftests/mm/run_vmtests.sh     | 12 +++++-
+ ...va_128TBswitch.c => va_high_addr_switch.c} | 41 +++++++++++++++----
+ ..._128TBswitch.sh => va_high_addr_switch.sh} |  6 ++-
+ 4 files changed, 49 insertions(+), 14 deletions(-)
+ rename tools/testing/selftests/mm/{va_128TBswitch.c => va_high_addr_switch.c} (86%)
+ rename tools/testing/selftests/mm/{va_128TBswitch.sh => va_high_addr_switch.sh} (89%)
 
-Real-time computing (RTC) is the computer science term for hardware and
-software systems subject to a "real-time constraint", for example from
-event to system response.[1] Real-time programs must guarantee response
-within specified time constraints, often referred to as "deadlines".[2]
-
-Real-time responses are often understood to be in the order of
-milliseconds, and sometimes microseconds. A system not specified as
-operating in real time cannot usually guarantee a response within any
-timeframe, although typical or expected response times may be given.
-Real-time processing fails if not completed within a specified deadline
-relative to an event; deadlines must always be met, regardless of system
-load.
-
-For example, for the MAC scheduler processing must occur every 1ms,
-and a certain amount of computation takes place (and must finish before
-the next 1ms timeframe). A > 50us latency spike as observed by cyclictest
-is considered a "failure".
-
+-- 
+2.30.2
 
