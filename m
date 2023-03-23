@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140E56C66F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8C36C66FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjCWLoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S231672AbjCWLoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjCWLn7 (ORCPT
+        with ESMTP id S231667AbjCWLoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:43:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C141043F;
-        Thu, 23 Mar 2023 04:43:58 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Mar 2023 07:44:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C9615881;
+        Thu, 23 Mar 2023 04:44:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3519366030B7;
-        Thu, 23 Mar 2023 11:43:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679571836;
-        bh=40CudmEZ80ffRNlrSfZD49rg1pKabWucP0ROERdjI/c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l+7QJ5qUCIJ7KE1zlge63WJbhjG9XmELWynJnChfqRAbIxyTMI9jKFkfVrJPnutrP
-         sAWxqyt4BvQQoVobctCM6gsP8PXEYEp9Lb+cb1GWoJ5wm6TW/cYfdIUJ8HK5GMzBMG
-         lJXq7fU2M4Fv6l7oN+4jUz4Vk+uhxp97D+1RIvBetDNOQEWT3AvpbU1fAeESQSiH+9
-         G4EBgB12nIf8tEYeXP11TKmaTfrPIk5DSotjqtLJYGG5S4RwKmwECz5mcyw/NYKYTo
-         MuvhYEnkS6vFtEAfc188XreHClWI9e/zNIKVC0h2gLRV4+daeo1R+zoadEs5Dmf60Z
-         veJGurWztwB1Q==
-Message-ID: <9e08ad33-ef86-6e49-2ef8-f697d2b82f04@collabora.com>
-Date:   Thu, 23 Mar 2023 12:43:54 +0100
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 76AD3339C9;
+        Thu, 23 Mar 2023 11:44:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679571848; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=02wHikqJQjlQXDxF4J81KE4SFli5AhbVDrvqB/d55To=;
+        b=eCCG0uhqFbuznYxi3bOPXwK2H6eAior6LfRZbZLZA4znSHPJcoC6dqHyM/jarktXKPLiHV
+        8N7WMf+yZ/Kq7VSryJQlMsi+pFET/6RBWdGiIQwJaPy4F/1uWG4fqfWi1JAZVp+s5xrKta
+        YBXwzQekR8I2Ca1tLbfiUZePMMXUjz4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679571848;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=02wHikqJQjlQXDxF4J81KE4SFli5AhbVDrvqB/d55To=;
+        b=PKlN7ad4ktsCSEoI6PlUkec6xcQY5gHH1Pb45eT5ZsO2Y081n1thQtThO0PGEwe3W6ZIwa
+        uDoQY+iuZhyVrvDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 674A5132C2;
+        Thu, 23 Mar 2023 11:44:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xN0mGYg7HGRjGwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 23 Mar 2023 11:44:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DC7BFA071C; Thu, 23 Mar 2023 12:44:07 +0100 (CET)
+Date:   Thu, 23 Mar 2023 12:44:07 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, yukuai3@huawei.com, stable@vger.kernel.org
+Subject: Re: [PATCH 3/3] ext4: fix race between writepages and remount
+Message-ID: <20230323114407.xenntblzv4ewfqkk@quack3>
+References: <20230316112832.2711783-1-libaokun1@huawei.com>
+ <20230316112832.2711783-4-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] cpufreq: mediatek: guard error paths to avoid kernel
- panic
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Sam Shih <sam.shih@mediatek.com>, John Crispin <john@phrozen.org>
-References: <ZBwyN7NwZ2zqHygr@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ZBwyN7NwZ2zqHygr@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316112832.2711783-4-libaokun1@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,44 +73,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/03/23 12:04, Daniel Golle ha scritto:
-> Guard pointer access in error path of mtk_cpu_dvfs_info_init() to
-> make sure info->proc_reg and info->sram_reg are valid pointers before
-> accessing them, which would result in kernel panic e.g. in case of
-> them being set to -EPROBE_DEFER.
+On Thu 16-03-23 19:28:32, Baokun Li wrote:
+> We got a WARNING in ext4_add_complete_io:
+> ==================================================================
+>  WARNING: at fs/ext4/page-io.c:231 ext4_put_io_end_defer+0x182/0x250
+>  CPU: 10 PID: 77 Comm: ksoftirqd/10 Tainted: 6.3.0-rc2 #85
+>  RIP: 0010:ext4_put_io_end_defer+0x182/0x250 [ext4]
+>  [...]
+>  Call Trace:
+>   <TASK>
+>   ext4_end_bio+0xa8/0x240 [ext4]
+>   bio_endio+0x195/0x310
+>   blk_update_request+0x184/0x770
+>   scsi_end_request+0x2f/0x240
+>   scsi_io_completion+0x75/0x450
+>   scsi_finish_command+0xef/0x160
+>   scsi_complete+0xa3/0x180
+>   blk_complete_reqs+0x60/0x80
+>   blk_done_softirq+0x25/0x40
+>   __do_softirq+0x119/0x4c8
+>   run_ksoftirqd+0x42/0x70
+>   smpboot_thread_fn+0x136/0x3c0
+>   kthread+0x140/0x1a0
+>   ret_from_fork+0x2c/0x50
+> ==================================================================
 > 
-> Fixes: 4b9ceb757bbb ("cpufreq: mediatek: Enable clocks and regulators")
-> Reported-by: Sam Shih <sam.shih@mediatek.com>
-> Suggested-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Above issue may happen as follows:
+>            cpu1                           cpu2
+> ______________________________|_____________________________
+> mount -o dioread_lock
+> ext4_writepages
+>  ext4_do_writepages
+>   *if (ext4_should_dioread_nolock(inode))*
+>     // rsv_blocks is not assigned here
+>                                  mount -o remount,dioread_nolock
+>   ext4_journal_start_with_reserve
+>    __ext4_journal_start
+>     __ext4_journal_start_sb
+>      jbd2__journal_start
+>       *if (rsv_blocks)*
+>         // h_rsv_handle is not initialized here
+>   mpage_map_and_submit_extent
+>     mpage_map_one_extent
+>       dioread_nolock = ext4_should_dioread_nolock(inode)
+>       if (dioread_nolock && (map->m_flags & EXT4_MAP_UNWRITTEN))
+>         mpd->io_submit.io_end->handle = handle->h_rsv_handle
+>         ext4_set_io_unwritten_flag
+>           io_end->flag |= EXT4_IO_END_UNWRITTEN
+>       // now io_end->handle is NULL but has EXT4_IO_END_UNWRITTEN flag
+> 
+> scsi_finish_command
+>  scsi_io_completion
+>   scsi_io_completion_action
+>    scsi_end_request
+>     blk_update_request
+>      req_bio_endio
+>       bio_endio
+>        bio->bi_end_io  > ext4_end_bio
+>         ext4_put_io_end_defer
+> 	 ext4_add_complete_io
+> 	  // trigger WARN_ON(!io_end->handle && sbi->s_journal);
+> 
+> The immediate cause of this problem is that ext4_should_dioread_nolock()
+> function returns inconsistent values in the ext4_do_writepages() and
+> mpage_map_one_extent(). There are four conditions in this function that
+> can be changed at mount time to cause this problem. These four conditions
+> can be divided into two categories:
+>     (1) journal_data and EXT4_EXTENTS_FL, which can be changed by ioctl
+>     (2) DELALLOC and DIOREAD_NOLOCK, which can be changed by remount
+> The two in the first category have been fixed by commit c8585c6fcaf2
+> ("ext4: fix races between changing inode journal mode and ext4_writepages")
+> and commit cb85f4d23f79 ("ext4: fix race between writepages and enabling
+> EXT4_EXTENTS_FL") respectively.
+> Two cases in the other category have not yet been fixed, and the above
+> issue is caused by this situation. We refer to the fix for the first
+> category, When DELALLOC or DIOREAD_NOLOCK is detected to be changed
+> during remount, we hold the s_writepages_rwsem lock to avoid racing with
+> ext4_writepages to trigger the problem.
+> Moreover, we add an EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK macro to ensure that
+> the mount options used by ext4_should_dioread_nolock() and __ext4_remount()
+> are always consistent.
+> 
+> Fixes: 6b523df4fb5a ("ext4: use transaction reservation for extent conversion in ext4_end_io")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+
+Nice catch! One comment below:
+
 > ---
->   drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
+>  fs/ext4/ext4.h      |  3 ++-
+>  fs/ext4/ext4_jbd2.h |  9 +++++----
+>  fs/ext4/super.c     | 14 ++++++++++++++
+>  3 files changed, 21 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 4466d0c91a6a..980a31ddd0f2 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -579,10 +579,12 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->   	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
->   
->   out_free_resources:
-> -	if (regulator_is_enabled(info->proc_reg))
-> -		regulator_disable(info->proc_reg);
-> -	if (info->sram_reg && regulator_is_enabled(info->sram_reg))
-> -		regulator_disable(info->sram_reg);
-> +	if (!IS_ERR(info->proc_reg))
-> +		if (regulator_is_enabled(info->proc_reg))
-> +			regulator_disable(info->proc_reg);
-> +	if (!IS_ERR(info->sram_reg))
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 08b29c289da4..f60967fa648f 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1703,7 +1703,8 @@ struct ext4_sb_info {
+>  
+>  	/*
+>  	 * Barrier between writepages ops and changing any inode's JOURNAL_DATA
+> -	 * or EXTENTS flag.
+> +	 * or EXTENTS flag or between changing SHOULD_DIOREAD_NOLOCK flag on
+> +	 * remount and writepages ops.
+>  	 */
+>  	struct percpu_rw_semaphore s_writepages_rwsem;
+>  	struct dax_device *s_daxdev;
+> diff --git a/fs/ext4/ext4_jbd2.h b/fs/ext4/ext4_jbd2.h
+> index 0c77697d5e90..d82bfcdd56e5 100644
+> --- a/fs/ext4/ext4_jbd2.h
+> +++ b/fs/ext4/ext4_jbd2.h
+> @@ -488,6 +488,9 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
+>  	return blocks + 2*(EXT4_SB(inode->i_sb)->s_cluster_ratio - 1);
+>  }
+>  
+> +/* delalloc is a temporary fix to prevent generic/422 test failures*/
+> +#define EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK (EXT4_MOUNT_DIOREAD_NOLOCK | \
+> +					  EXT4_MOUNT_DELALLOC)
+>  /*
+>   * This function controls whether or not we should try to go down the
+>   * dioread_nolock code paths, which makes it safe to avoid taking
+> @@ -499,7 +502,8 @@ static inline int ext4_free_data_revoke_credits(struct inode *inode, int blocks)
+>   */
+>  static inline int ext4_should_dioread_nolock(struct inode *inode)
+>  {
+> -	if (!test_opt(inode->i_sb, DIOREAD_NOLOCK))
+> +	if (test_opt(inode->i_sb, SHOULD_DIOREAD_NOLOCK) !=
+> +	    EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK)
+>  		return 0;
+>  	if (!S_ISREG(inode->i_mode))
+>  		return 0;
+> @@ -507,9 +511,6 @@ static inline int ext4_should_dioread_nolock(struct inode *inode)
+>  		return 0;
+>  	if (ext4_should_journal_data(inode))
+>  		return 0;
+> -	/* temporary fix to prevent generic/422 test failures */
+> -	if (!test_opt(inode->i_sb, DELALLOC))
+> -		return 0;
+>  	return 1;
+>  }
 
-For both, actually, if you suspect that (xxxx)_reg may be NULL, then you should
-use IS_ERR_OR_NULL() instead...
+Is there a need for this SHOULD_DIOREAD_NOLOCK? When called from writeback
+we will be protected by s_writepages_rwsem anyway. When called from other
+places, we either decide to do dioread_nolock or don't but the situation
+can change at any instant so I don't see how unifying this check would
+help. And the new SHOULD_DIOREAD_NOLOCK somewhat obfuscates what's going
+on.
 
-> +		if (info->sram_reg && regulator_is_enabled(info->sram_reg))
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index fefcd42f34ea..bdf6b288aeff 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -6403,8 +6403,22 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+>  
+>  	}
+>  
+> +	/* Get the flag we really need to set/clear. */
+> +	ctx->mask_s_mount_opt &= sbi->s_mount_opt;
+> +	ctx->vals_s_mount_opt &= ~sbi->s_mount_opt;
+> +
+> +	/*
+> +	 * If EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK change on remount, we need
+> +	 * to hold s_writepages_rwsem to avoid racing with writepages ops.
+> +	 */
+> +	if (ctx_changed_mount_opt(ctx, EXT4_MOUNT_SHOULD_DIOREAD_NOLOCK))
+> +		percpu_down_write(&sbi->s_writepages_rwsem);
+> +
 
-...otherwise, here it's useless to check if it's not NULL?
+Honestly, I'd be inclined to grab s_writepages_rwsem unconditionally during
+remount. Remount is not a fast path operation and waiting for writepages
+isn't too bad. Also it's easier for testing :).
 
-Regards,
-Angelo
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
