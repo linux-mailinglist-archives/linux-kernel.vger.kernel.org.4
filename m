@@ -2,155 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B336C5EBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2446C5EBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCWFXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S230211AbjCWFXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjCWFXP (ORCPT
+        with ESMTP id S229517AbjCWFXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:23:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1921F5CC;
-        Wed, 22 Mar 2023 22:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679548993; x=1711084993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZZWhajVf94otlaDxvhMc13wCWR+0aAVrmHV4MxrPRbo=;
-  b=SM4Ye3cBA24rbzkGECBg8nsTQETgbfowYR0qvdtolK3X0lMNHneV5Ogc
-   0xaon6v+B2kI6FljbZv/UlRgAOfPmr7kOVD5GpOfYw8COE6j4FgtIec6e
-   9hlBmaDE002lLfnxfLM2EJy6tRjw7KuAurcbEsSeOXPGfYzaac0yW/USu
-   gXmilr7OdSXCubkkWM8ePdwgSKVN1qobi1ZoRtMom15ZTI9/JBgLoHZF7
-   NU9QwFar725X1ZQQFBPLj5BURHu7pfiG4HzjoK3VWoUxfj7Xr8rsz1qhl
-   gDMRpEPGmEN8vIQf3vEtUqm+osBxZDzSsBah0fi4HUCUYBSZY0QHY40eU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338119708"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="338119708"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 22:23:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751343160"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="751343160"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 22:23:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfDPq-000DzY-01;
-        Thu, 23 Mar 2023 05:23:10 +0000
-Date:   Thu, 23 Mar 2023 13:22:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ye.xingchen@zte.com.cn, shawn.lin@rock-chips.com
-Cc:     oe-kbuild-all@lists.linux.dev, lpieralisi@kernel.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, heiko@sntech.de,
-        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: rockchip: Use dev_err_probe()
-Message-ID: <202303231338.oVZa9IHF-lkp@intel.com>
-References: <202303231146312337844@zte.com.cn>
+        Thu, 23 Mar 2023 01:23:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD03E30E7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:23:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53F88B81EDF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A1EC433EF;
+        Thu, 23 Mar 2023 05:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679548978;
+        bh=rNrfvpy2HzWHkPct+hqcH/KHmu0jX3CjJR2Do9AOHJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dgrgNI0cDyF3ZNRmaWnY2X7ueTcKguDOFF5iF9ow8yzOgFRTM10RxUOrTaQH1raSK
+         RzrxkkxCrqmwYc/60v4B3OK0NUahknbh8dei7XWdD1wE/uSHO6eq1AUCevajuiKOIU
+         pEXUUmqrMv1mjH0XGv1RnG9MsAIxmcmZnHMC6TDs=
+Date:   Thu, 23 Mar 2023 06:22:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Julia Lawall <julia.lawall@inria.fr>, Alex Elder <elder@ieee.org>,
+        Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        outreachy@lists.linux.dev, johan@kernel.org, elder@kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2] staging: greybus: use inline function for macros
+Message-ID: <ZBviL+IuY43djHyS@kroah.com>
+References: <20230321183456.10385-1-eng.mennamahmoud.mm@gmail.com>
+ <2e869677-2693-6419-ea25-f0cc2efcf3dd@ieee.org>
+ <alpine.DEB.2.22.394.2303212140480.2919@hadrien>
+ <5efa6e6d-8573-31de-639a-d15b2e9deca0@ieee.org>
+ <alpine.DEB.2.22.394.2303212218500.2919@hadrien>
+ <48674d8f-9753-780c-f37c-f83ea2855ae6@ieee.org>
+ <eabacc6f-c7fb-ff33-26d1-271537fb4760@inria.fr>
+ <ZBvcWkpMJnxea78L@kroah.com>
+ <ZBveN3HT96/cktRI@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202303231146312337844@zte.com.cn>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZBveN3HT96/cktRI@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 23, 2023 at 10:35:59AM +0530, Deepak R Varma wrote:
+> On Thu, Mar 23, 2023 at 05:58:02AM +0100, Greg KH wrote:
+> > Nice, that shows that it is the same both ways as the compiler version
+> > you are using is smart enough
+> > 
+> > Which compiler and version is this?  Does it work the same for all of
+> > the supported versions we have to support (i.e. really old gcc?)
+> > 
+> > For the most part, sysfs files are not on any sort of "fast path" so a
+> 
+> Hello,
+> Is there a guideline/documentation on how to identify if a code is part of
+> fast/slow path?
 
-Thank you for the patch! Perhaps something to improve:
+Not really, the general rule is if the code is used in a function that
+is time criticial, then it is in the "fast path".
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.3-rc3 next-20230323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Normally the code path for I/O or for determining what process to
+schedule next is a "fast path" as you want to do the least amount of
+work in the kernel so as to get the I/O to the hardware or caller, or
+you want to schedule the next process faster so that it can do the real
+work that is wanted.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/PCI-rockchip-Use-dev_err_probe/20230323-114809
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/202303231146312337844%40zte.com.cn
-patch subject: [PATCH] PCI: rockchip: Use dev_err_probe()
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230323/202303231338.oVZa9IHF-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4ad6c26e54b926f384a1bdc99892900cbfa83eea
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/PCI-rockchip-Use-dev_err_probe/20230323-114809
-        git checkout 4ad6c26e54b926f384a1bdc99892900cbfa83eea
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/pci/
+But for some I/O, where the hardware is the limiting factor (like slow
+USB or serial connections), no matter how optimized the kernel is, the
+data can not get to the user any faster because the hardware just can
+not provide it, so for that, it's not really that critical.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303231338.oVZa9IHF-lkp@intel.com/
+Note that "time critical" can change depending on the user of the system
+and as hardware evolves.
 
-All warnings (new ones prefixed by >>):
+One example would be the creation of a number of sysfs entries for the
+disks in the systems.  On a "normal" system, creating them all is trivial
+as there are not many disks.  But on some "big" systems with many tens
+of thousands of disks, it can become a boot time bottleneck.
 
-   drivers/pci/controller/pcie-rockchip.c: In function 'rockchip_pcie_get_phys':
->> drivers/pci/controller/pcie-rockchip.c:313:74: warning: format '%ld' expects a matching 'long int' argument [-Wformat=]
-     313 |                                              "missing phy for lane %d: %ld\n", i);
-         |                                                                        ~~^
-         |                                                                          |
-         |                                                                          long int
+So it's usually "you know it when you see it show up on a profile", use
+the perf tool to test your workload on, to see where in the kernel
+things are taking up too much time so you know what needs to be made
+faster.
 
+hope this helps,
 
-vim +313 drivers/pci/controller/pcie-rockchip.c
-
-   282	
-   283	int rockchip_pcie_get_phys(struct rockchip_pcie *rockchip)
-   284	{
-   285		struct device *dev = rockchip->dev;
-   286		struct phy *phy;
-   287		char *name;
-   288		u32 i;
-   289	
-   290		phy = devm_phy_get(dev, "pcie-phy");
-   291		if (!IS_ERR(phy)) {
-   292			rockchip->legacy_phy = true;
-   293			rockchip->phys[0] = phy;
-   294			dev_warn(dev, "legacy phy model is deprecated!\n");
-   295			return 0;
-   296		}
-   297	
-   298		if (PTR_ERR(phy) == -EPROBE_DEFER)
-   299			return PTR_ERR(phy);
-   300	
-   301		dev_dbg(dev, "missing legacy phy; search for per-lane PHY\n");
-   302	
-   303		for (i = 0; i < MAX_LANE_NUM; i++) {
-   304			name = kasprintf(GFP_KERNEL, "pcie-phy-%u", i);
-   305			if (!name)
-   306				return -ENOMEM;
-   307	
-   308			phy = devm_of_phy_get(dev, dev->of_node, name);
-   309			kfree(name);
-   310	
-   311			if (IS_ERR(phy))
-   312				return dev_err_probe(dev, PTR_ERR(phy),
- > 313						     "missing phy for lane %d: %ld\n", i);
-   314	
-   315			rockchip->phys[i] = phy;
-   316		}
-   317	
-   318		return 0;
-   319	}
-   320	EXPORT_SYMBOL_GPL(rockchip_pcie_get_phys);
-   321	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+greg k-h
