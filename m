@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3376C5CDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641FF6C5CF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCWCxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 22:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S229980AbjCWC7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjCWCx0 (ORCPT
+        with ESMTP id S229942AbjCWC7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:53:26 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DE30197;
-        Wed, 22 Mar 2023 19:53:08 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so601591pjp.1;
-        Wed, 22 Mar 2023 19:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679539987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lUIti2w3zoA1edKcsXAjpxPn2QEkm+FuO+iswKLAI/g=;
-        b=NtZrbvoxKjNgA+xGoQw0VkjOqoUrcYmv0q9yVlg3/j9PS72bUvCUPg3cxt4+qCBISr
-         KaDDhlnzGmQQoTlo72ftedHP2nmqpQgcBKBOzf4AonGyQeb5ef5AdQLJd8EO1u1hWeYH
-         DTJ2Iw/MID2Qd7YVkv9cNi+Zlhj58jAbYuIllc6eJ6jAzfUdRHXeESv20KHWPdduVDCX
-         L0AaNN2TH+5uJwAv+wfJJGa/mhUd+fXyZdFWhmyqHkTk5W0XG4YE1ft2Gd0Rz/fIUwv2
-         8u/BXEREPRnTis/YpLX+Y0I1OUDlTRPYhAHpqwEOtAnbBaivgFXfLAD3aMhRikW7sTCb
-         PALg==
+        Wed, 22 Mar 2023 22:59:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D2AE18C
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679540299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D0VvJoT/In9zXsTG4Y/WHrDmIvI8+3uyMcN0Vni7Bkk=;
+        b=MR3wS8FkkIgsoZBelJcZaUDuJkwcw4vhyLNFZvBUYWVrq2PPaqOc9+lJbPbFdHRCUXNqOi
+        sQqPogTTI4b+B99Ug8TZGNnBxjDm3N7S5dbtmZm1Z1fNxvFrnEpCI4Yc2mi6SDNL2wLUh3
+        4/1GWbJj+D1ivhgFdgoaU5QzUUpd/Ik=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-283-fFEv3554P4iTN7DXJAWBKQ-1; Wed, 22 Mar 2023 22:58:17 -0400
+X-MC-Unique: fFEv3554P4iTN7DXJAWBKQ-1
+Received: by mail-oo1-f69.google.com with SMTP id d2-20020a4a5202000000b0053b5874f94aso2641640oob.3
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:58:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679539987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUIti2w3zoA1edKcsXAjpxPn2QEkm+FuO+iswKLAI/g=;
-        b=OPgpWW7dn7X90TjLetkmmZ8KDWcNWsNjH3yOdff8P/ghBBggwoDlpa+K95oGfzGQni
-         MTvodj+X/B5eA4O7aNC4I2KU47dPzkZJqCfQNXKd/u0JJdqecofOfLwQPAKYYGKY7BXq
-         8bHJ4QinD5GesY2lji52FtIL80/SL4Kf5bzbES8VffsnpZmOoN/ZJPDxgS+a+L3NNO1g
-         Epuo70mP9qqTTev/oqQX43HjNCdbKbs+DUvULC/a86yORsCAK7sjLzcHUcZe9k1a8mgu
-         0CL6+VaqwEdWCXBdTN6+zH2NvJNaujtFqkE8qTIN72VnYUbVH9+Zt/Ontti5zBQWPX06
-         72qw==
-X-Gm-Message-State: AO0yUKVIffuxcAwGgivong16llkoECr/RR1YbZZpw9amrkUv1tzsoLyV
-        SpPuayf+Vof6PlGF6TeQytw=
-X-Google-Smtp-Source: AK7set/J8FImsjRQ9ZGziCp1gE2RxxB/o0DKoRZJBu8JTtIKjSnVPP/RCOb87cxvAGVa8roChk2pfw==
-X-Received: by 2002:a05:6a20:4b10:b0:da:99f3:4b15 with SMTP id fp16-20020a056a204b1000b000da99f34b15mr1509003pzb.13.1679539987556;
-        Wed, 22 Mar 2023 19:53:07 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa793a3000000b005a8851e0cddsm10752459pff.188.2023.03.22.19.53.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 19:53:07 -0700 (PDT)
-Message-ID: <f940cb6c-4aa6-41a4-d9d7-330becd5427a@gmail.com>
-Date:   Thu, 23 Mar 2023 11:52:57 +0900
+        d=1e100.net; s=20210112; t=1679540297;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D0VvJoT/In9zXsTG4Y/WHrDmIvI8+3uyMcN0Vni7Bkk=;
+        b=nxabUZ68G9i3ADUC3b6l8Ugy0S86l5ngVULTWPOvlU5k7xkA08CaRD4gyYIgXPkelz
+         zPQcCELAGgz6+h6mTTlDTuUvRljsAlGRVvNT2o/HU/e5Beg23KvnOBTVKmdOsgs/vH05
+         fDPDtUWv1Gr+ZFqKhdwcLi3feA8IlSvSWVmrY0vmm7WNXRceCOK/TVbYQ+IhhMdZMDpv
+         yHDoB2lIcxaOvK65pLzrP90BFhdl8cErotrSDGMUfvaBzjvlerGMcY6Zr70mMNebW9Zi
+         UYAOmSWMv3Q6825C2PXl7wsn+xdV8kge3gXJrvXQpnJ589tDpq7eGAhcbovGvdN8iAED
+         WLlg==
+X-Gm-Message-State: AO0yUKU+IAzj5Eyl78rGCR44Yfr+IRJ0m3knsaPVmR36Tk3A2rYV8XmF
+        oKQJTAO8E9264avnadG3f2lMEooeVTfYlxmiDlLpSj1lHOCa77HLDMqZ4UEpKPyIo+B5GVISnh0
+        ioybty9yzoQQelzMe3589/0YelxH01Fj1Lgk12McGpaKA7yrT88nZjw==
+X-Received: by 2002:a9d:66d1:0:b0:69f:bac:aa8a with SMTP id t17-20020a9d66d1000000b0069f0bacaa8amr1815473otm.2.1679540296912;
+        Wed, 22 Mar 2023 19:58:16 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/BWrafeE27f5b5IZId0P5hAaqy+ikMd7Pl7UM4zZNHvprQ9rbOtFWqSmX8VPoPdPkZ143ngQ4DrCO+EBX4+4A=
+X-Received: by 2002:a9d:66d1:0:b0:69f:bac:aa8a with SMTP id
+ t17-20020a9d66d1000000b0069f0bacaa8amr1815470otm.2.1679540296705; Wed, 22 Mar
+ 2023 19:58:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model: Document
- locking corner cases
-To:     "Paul E. McKenney" <paulmck@kernel.org>, parri.andrea@gmail.com
-Cc:     stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
- <20230321010549.51296-1-paulmck@kernel.org>
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20230321010549.51296-1-paulmck@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20230321154228.182769-1-sgarzare@redhat.com> <20230321154228.182769-2-sgarzare@redhat.com>
+In-Reply-To: <20230321154228.182769-2-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 23 Mar 2023 10:58:05 +0800
+Message-ID: <CACGkMEsZog+-CHDjc5gM-3FKZySvN_6xBK10dHD3ahoxB8S+yQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] vdpa: add bind_mm/unbind_mm callbacks
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, stefanha@redhat.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,227 +78,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Tue, Mar 21, 2023 at 11:42=E2=80=AFPM Stefano Garzarella <sgarzare@redha=
+t.com> wrote:
+>
+> These new optional callbacks is used to bind/unbind the device to
+> a specific address space so the vDPA framework can use VA when
+> these callbacks are implemented.
+>
+> Suggested-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-On Mon, 20 Mar 2023 18:05:19 -0700, Paul E. McKenney wrote:
-> Most Linux-kernel uses of locking are straightforward, but there are
-> corner-case uses that rely on less well-known aspects of the lock and
-> unlock primitives.  This commit therefore adds a locking.txt and litmus
-> tests in Documentation/litmus-tests/locking to explain these corner-case
-> uses.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
 > ---
->  .../litmus-tests/locking/DCL-broken.litmus    |  55 +++
->  .../litmus-tests/locking/DCL-fixed.litmus     |  56 +++
->  .../litmus-tests/locking/RM-broken.litmus     |  42 +++
->  .../litmus-tests/locking/RM-fixed.litmus      |  42 +++
->  tools/memory-model/Documentation/locking.txt  | 320 ++++++++++++++++++
-
-I think the documentation needs adjustment to cope with Andrea's change
-of litmus tests.
-
-Also, coding style of code snippets taken from litmus tests look somewhat
-inconsistent with other snippets taken from MP+... litmus tests:
-
-  - Simple function signature such as "void CPU0(void)".
-  - No declaration of local variables.
-  - Indirection level of global variables.
-  - No "locations" clause
-
-How about applying the diff below?
-
-        Thanks, Akira
-
------
-diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
-index 4e05c6d53ab7..65c898c64a93 100644
---- a/tools/memory-model/Documentation/locking.txt
-+++ b/tools/memory-model/Documentation/locking.txt
-@@ -91,25 +91,21 @@ double-checked locking work correctly,  This litmus test illustrates
- one incorrect approach:
- 
- 	/* See Documentation/litmus-tests/locking/DCL-broken.litmus. */
--	P0(int *flag, int *data, int *lck)
-+	void CPU0(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = READ_ONCE(*flag);
-+		r0 = READ_ONCE(flag);
- 		if (r0 == 0) {
--			spin_lock(lck);
--			r1 = READ_ONCE(*flag);
-+			spin_lock(&lck);
-+			r1 = READ_ONCE(flag);
- 			if (r1 == 0) {
--				WRITE_ONCE(*data, 1);
--				WRITE_ONCE(*flag, 1);
-+				WRITE_ONCE(data, 1);
-+				WRITE_ONCE(flag, 1);
- 			}
--			spin_unlock(lck);
-+			spin_unlock(&lck);
- 		}
--		r2 = READ_ONCE(*data);
-+		r2 = READ_ONCE(data);
- 	}
--	/* P1() is the exactly the same as P0(). */
-+	/* CPU1() is the exactly the same as CPU0(). */
- 
- There are two problems.  First, there is no ordering between the first
- READ_ONCE() of "flag" and the READ_ONCE() of "data".  Second, there is
-@@ -120,25 +116,21 @@ One way to fix this is to use smp_load_acquire() and smp_store_release()
- as shown in this corrected version:
- 
- 	/* See Documentation/litmus-tests/locking/DCL-fixed.litmus. */
--	P0(int *flag, int *data, int *lck)
-+	void CPU0(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = smp_load_acquire(flag);
-+		r0 = smp_load_acquire(&flag);
- 		if (r0 == 0) {
--			spin_lock(lck);
--			r1 = READ_ONCE(*flag);
-+			spin_lock(&lck);
-+			r1 = READ_ONCE(flag);
- 			if (r1 == 0) {
--				WRITE_ONCE(*data, 1);
--				smp_store_release(flag, 1);
-+				WRITE_ONCE(data, 1);
-+				smp_store_release(&flag, 1);
- 			}
--			spin_unlock(lck);
-+			spin_unlock(&lck);
- 		}
--		r2 = READ_ONCE(*data);
-+		r2 = READ_ONCE(data);
- 	}
--	/* P1() is the exactly the same as P0(). */
-+	/* CPU1() is the exactly the same as CPU0(). */
- 
- The smp_load_acquire() guarantees that its load from "flags" will
- be ordered before the READ_ONCE() from data, thus solving the first
-@@ -238,81 +230,67 @@ loads, with a "filter" clause to constrain the first to return the
- initial value and the second to return the updated value, as shown below:
- 
- 	/* See Documentation/litmus-tests/locking/RM-fixed.litmus. */
--	P0(int *x, int *y, int *lck)
-+	void CPU0(void)
- 	{
--		int r2;
--
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		WRITE_ONCE(*x, 1);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		WRITE_ONCE(x, 1);
-+		spin_unlock(&lck);
- 	}
- 
--	P1(int *x, int *y, int *lck)
-+	void CPU1(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = READ_ONCE(*x);
--		r1 = READ_ONCE(*x);
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		spin_unlock(lck);
-+		r0 = READ_ONCE(x);
-+		r1 = READ_ONCE(x);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		spin_unlock(&lck);
- 	}
- 
--	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	filter (1:r0=0 /\ 1:r1=1)
- 	exists (1:r2=1)
- 
- The variable "x" is the control variable for the emulated spin loop.
--P0() sets it to "1" while holding the lock, and P1() emulates the
-+CPU0() sets it to "1" while holding the lock, and CPU1() emulates the
- spin loop by reading it twice, first into "1:r0" (which should get the
- initial value "0") and then into "1:r1" (which should get the updated
- value "1").
- 
--The purpose of the variable "y" is to reject deadlocked executions.
--Only those executions where the final value of "y" have avoided deadlock.
-+The "filter" clause takes this into account, constraining "1:r0" to
-+equal "0" and "1:r1" to equal 1.
- 
--The "filter" clause takes all this into account, constraining "y" to
--equal "2", "1:r0" to equal "0", and "1:r1" to equal 1.
--
--Then the "exists" clause checks to see if P1() acquired its lock first,
--which should not happen given the filter clause because P0() updates
-+Then the "exists" clause checks to see if CPU1() acquired its lock first,
-+which should not happen given the filter clause because CPU0() updates
- "x" while holding the lock.  And herd7 confirms this.
- 
- But suppose that the compiler was permitted to reorder the spin loop
--into P1()'s critical section, like this:
-+into CPU1()'s critical section, like this:
- 
- 	/* See Documentation/litmus-tests/locking/RM-broken.litmus. */
--	P0(int *x, int *y, int *lck)
-+	void CPU0(void)
- 	{
- 		int r2;
- 
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		WRITE_ONCE(*x, 1);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		WRITE_ONCE(x, 1);
-+		spin_unlock(&lck);
- 	}
- 
--	P1(int *x, int *y, int *lck)
-+	void CPU1(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		spin_lock(lck);
--		r0 = READ_ONCE(*x);
--		r1 = READ_ONCE(*x);
--		r2 = atomic_inc_return(y);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r0 = READ_ONCE(x);
-+		r1 = READ_ONCE(x);
-+		r2 = atomic_inc_return(&y);
-+		spin_unlock(&lck);
- 	}
- 
--	locations [x;lck;0:r2;1:r0;1:r1;1:r2]
--	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	filter (1:r0=0 /\ 1:r1=1)
- 	exists (1:r2=1)
- 
--If "1:r0" is equal to "0", "1:r1" can never equal "1" because P0()
--cannot update "x" while P1() holds the lock.  And herd7 confirms this,
-+If "1:r0" is equal to "0", "1:r1" can never equal "1" because CPU0()
-+cannot update "x" while CPU1() holds the lock.  And herd7 confirms this,
- showing zero executions matching the "filter" criteria.
- 
- And this is why Linux-kernel lock and unlock primitives must prevent
-
-
+>
+> Notes:
+>     v2:
+>     - removed `struct task_struct *owner` param (unused for now, maybe
+>       useful to support cgroups) [Jason]
+>     - add unbind_mm callback [Jason]
+>
+>  include/linux/vdpa.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 43f59ef10cc9..369c21394284 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -290,6 +290,14 @@ struct vdpa_map_file {
+>   *                             @vdev: vdpa device
+>   *                             @idx: virtqueue index
+>   *                             Returns pointer to structure device or er=
+ror (NULL)
+> + * @bind_mm:                   Bind the device to a specific address spa=
+ce
+> + *                             so the vDPA framework can use VA when thi=
+s
+> + *                             callback is implemented. (optional)
+> + *                             @vdev: vdpa device
+> + *                             @mm: address space to bind
+> + * @unbind_mm:                 Unbind the device from the address space
+> + *                             bound using the bind_mm callback. (option=
+al)
+> + *                             @vdev: vdpa device
+>   * @free:                      Free resources that belongs to vDPA (opti=
+onal)
+>   *                             @vdev: vdpa device
+>   */
+> @@ -351,6 +359,8 @@ struct vdpa_config_ops {
+>         int (*set_group_asid)(struct vdpa_device *vdev, unsigned int grou=
+p,
+>                               unsigned int asid);
+>         struct device *(*get_vq_dma_dev)(struct vdpa_device *vdev, u16 id=
+x);
+> +       int (*bind_mm)(struct vdpa_device *vdev, struct mm_struct *mm);
+> +       void (*unbind_mm)(struct vdpa_device *vdev);
+>
+>         /* Free device resources */
+>         void (*free)(struct vdpa_device *vdev);
+> --
+> 2.39.2
+>
 
