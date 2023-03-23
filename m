@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62C6C60AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAE56C60AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjCWH1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 03:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S230483AbjCWH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 03:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjCWH1i (ORCPT
+        with ESMTP id S230304AbjCWH1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 03:27:38 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3F12A175;
-        Thu, 23 Mar 2023 00:27:35 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id mp3-20020a17090b190300b0023fcc8ce113so1095492pjb.4;
-        Thu, 23 Mar 2023 00:27:35 -0700 (PDT)
+        Thu, 23 Mar 2023 03:27:17 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E272D2A9A4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 00:27:10 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b20so49634325edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 00:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679556454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeEaKj3RnlCsOSDCKAm5SvUFqtjjJOWX+vjkiEHpKPU=;
-        b=cTuemhkuASkwQu7n122Mzhdxg9NLJUQs5ovPlC/wwoeiNvdgOGLKqJe/LrOS6oFZd+
-         wELzuhQEDg0jSm6OONhWE8Sl4D5zpOMONdeq/w3bKUWzIR67akAVpL0x7C8er+J/qkYa
-         Hw4s8EPClW8MzsWcTNkx7AbBa5TmA3lfnWv27Hg8qztgfc+xVMIv0YJOy4qX5Vxd9sh/
-         OVQ5r8Xf7SrOaMoAOB7z5xrn7X7lTxTREGGgOPNuZ6WrTzQGSyDvgTSzcEjsts7t9yxN
-         OkU4BI+hRqpOLZrR3FnK4wKsOUs+ZlFnHvv9dlEbmY0s2OI8ebi5SVOBwR8J7cyCv0FS
-         zLmg==
+        d=linaro.org; s=google; t=1679556429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ToMu+RdmbnNsy0OZQSnVmDUbWaHiYbL8P0vd9oJXtEI=;
+        b=gKxjAG0PWtQezTkFsrc45pjCcZc06LpkviYlVH0nMmjQqQUI+iBvAVZyn1HmLKnw0V
+         CXNygbnFUKI8xBytn7DFx8b7aRRujpIHJZOke8WlaoiNKUsXfPAvN7kzMHtlfcmk4v2w
+         8P5fL8CKQzrt9svViHYxd8/CElL33SFA7T7+S5adF1j9bg6YcZPmrM5geoC+cbAg9B4Y
+         n9l0xZ61LoxrCNW8wRNiQ/0XM1mTCdj5onBltdMrCCxb6IZKTujmd5qwB37pWqNV54n+
+         QGhf4XujKMoxeIML4ShyfwkEdzXF8XrDbKE3gSigcBlrHX0s8NbpJkbAabMtfgeJIKEu
+         kzjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679556454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JeEaKj3RnlCsOSDCKAm5SvUFqtjjJOWX+vjkiEHpKPU=;
-        b=SCG7PZZxYjfDjgw4EDWHeATx4ySU60DTZgx2G928l9szCRdiYW4H8FwIW61FU/jKVM
-         nHUkXqwjW8mxQhyThz3TkLJXEGphjh9KBBA3tBZoEZeq2X0xpFOAl1XTK4pA6WhRFrj8
-         wk8hYdlLFV1EmjCHZfEfn3UhWftP6W369JqEemXXYOvTf5Tg0BEp/JwhU+0YPifk5Ff2
-         W5Uok2rT9Og/yDSfFM9JRdgonoqn/02CfLgUoWkBA+AVFpnfzElSBikR9t6+MqbKDEXd
-         0hadIc2MvK0lFhfDalEzOx8IOyeVgaTpjRDwR2uZHKaw1cvxR4DwnW6Nf5AtPZKgAmQ+
-         7UmA==
-X-Gm-Message-State: AO0yUKXW+IKMM6uLe4tuuyALpafnR3TWctk9w3xZsZdpUYrR9sq4St99
-        cM6KRqJDTbjoOH1J463VbIi1XnOsYrXraSab
-X-Google-Smtp-Source: AK7set/B0dfZu3JgvKhkxVT5+d/Mv2QL4dByTgcfGSDQ+OLrMLaAvePjm2L5uyB8ejLJWP1dkRPxWQ==
-X-Received: by 2002:a17:902:e80c:b0:1a1:a531:460e with SMTP id u12-20020a170902e80c00b001a1a531460emr6582099plg.63.1679556454590;
-        Thu, 23 Mar 2023 00:27:34 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0017a032d7ae4sm11645447plg.104.2023.03.23.00.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 00:27:34 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH 0/7] KVM: selftests: Test the consistency of the PMU's CPUID and its features
-Date:   Thu, 23 Mar 2023 15:27:07 +0800
-Message-Id: <20230323072714.82289-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20210112; t=1679556429;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ToMu+RdmbnNsy0OZQSnVmDUbWaHiYbL8P0vd9oJXtEI=;
+        b=b8+DDcs78y3a7a80J9tf1tfQIOBtznC1AeM1QWIPwzSSdyUBqn/pIzUvLWvhtq83jT
+         tRpFhDye861i/6m/ZUOUjvY32knaEpvoOwIOKmoNzd9x5yymsijNQdz7BUafZeUVlEvN
+         Rppo0KteJaGQ871lLvUL0y6uZxzH2XWOy2OThIwWii/yUovY3CoZZ1/yUlnNFr9BXdnQ
+         hASbiUcoOh1bWVf4p1iYMJf+K1Xq4e1Sdbo4izgx1+hWstDoUP3dEnexTIHIwFfUfVIc
+         P5jEmYbnUU3uMRkVo/A6vqDb5Gyxc3KjWDWR0PoTs62WyndNyKnZIYP7zw6B06q13DYJ
+         C7vA==
+X-Gm-Message-State: AO0yUKVm7kcMBBeGRTGosfV3pl3r0eT4dUuo49m6kAMFOyIkAZj65BWA
+        Lmb70iZYQL9aryWt3xmpCdkgbTZ+TsAS3sTVpcU=
+X-Google-Smtp-Source: AK7set/uSENcq54nsOUS2mWQwLa7k1hFNTDmoviQMII0Uq1CmTjxKfNZewVYYgTS3BefvcmJOxcYJg==
+X-Received: by 2002:a17:906:eb8b:b0:884:930:b017 with SMTP id mh11-20020a170906eb8b00b008840930b017mr10896269ejb.60.1679556429387;
+        Thu, 23 Mar 2023 00:27:09 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id qx20-20020a170906fcd400b008eaf99be56esm8448234ejb.170.2023.03.23.00.27.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 00:27:08 -0700 (PDT)
+Message-ID: <fc85ceb9-5699-99b8-caee-3da64851cee4@linaro.org>
+Date:   Thu, 23 Mar 2023 07:27:08 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] nvmem: add new NXP QorIQ eFuse driver
+Content-Language: en-US
+To:     Richard Alpe <richard@bit42.se>
+Cc:     niklas.soderlund@ragnatech.se, linux-kernel@vger.kernel.org
+References: <20230320141408.1555041-1-richard@bit42.se>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230320141408.1555041-1-richard@bit42.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,49 +74,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-The KVM selfstests shows advantages over the KUT in terms of finding
-defects through flexible and varied guest settings form KVM user space.
 
-This patch set tests whether Intel vPMU works properly with different
-Intel CPUID.0xA configurations, in which three issues were identified.
-It also provides test scaffolding and a sufficient number of pmu test cases
-to subsequently provide adequate code coverage of AMD vPMU or Intel
-complex features such as LBR or PEBS in selftests.
+On 20/03/2023 14:14, Richard Alpe wrote:
+> Add SFP (Security Fuse Processor) read support for NXP (Freescale)
+> QorIQ series SOC's.
+> 
+> This patch adds support for the T1023 SOC using the SFP offset from
+> the existing T1023 device tree. In theory this should also work for
+> T1024, T1014 and T1013 which uses the same SFP base offset.
+> 
+> Signed-off-by: Richard Alpe <richard@bit42.se>
+> ---
+> v2: Rebase on v6.3-rc3
+> 
+>   drivers/nvmem/Kconfig       | 12 ++++++
+>   drivers/nvmem/Makefile      |  2 +
+>   drivers/nvmem/qoriq-efuse.c | 80 +++++++++++++++++++++++++++++++++++++
+>   3 files changed, 94 insertions(+)
+>   create mode 100644 drivers/nvmem/qoriq-efuse.c
+> 
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index 6dec38805041..43446e5f7d9b 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -377,4 +377,16 @@ config NVMEM_ZYNQMP
+>   
+>   	  If sure, say yes. If unsure, say no.
+>   
+> +config NVMEM_QORIQ_EFUSE
+> +	tristate "NXP QorIQ eFuse support"
+> +	depends on PPC_85xx || COMPILE_TEST
+> +	depends on HAS_IOMEM
+> +	help
+> +	  This driver provides read support for the eFuses (SFP) on NXP QorIQ
+> +	  series SoC's. This includes secure boot settings, the globally unique
+> +	  NXP ID 'FUIDR' and the OEM unique ID 'OUIDR'.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called nvmem_qoriq_efuse.
+> +
+>   endif
+> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+> index 6a1efffa88f0..b8fdf9b51953 100644
+> --- a/drivers/nvmem/Makefile
+> +++ b/drivers/nvmem/Makefile
+> @@ -74,3 +74,5 @@ obj-$(CONFIG_NVMEM_VF610_OCOTP)		+= nvmem-vf610-ocotp.o
+>   nvmem-vf610-ocotp-y			:= vf610-ocotp.o
+>   obj-$(CONFIG_NVMEM_ZYNQMP)		+= nvmem_zynqmp_nvmem.o
+>   nvmem_zynqmp_nvmem-y			:= zynqmp_nvmem.o
+> +obj-$(CONFIG_NVMEM_QORIQ_EFUSE)		+= nvmem-qoriq-efuse.o
+> +nvmem-qoriq-efuse-y			:= qoriq-efuse.o
+> diff --git a/drivers/nvmem/qoriq-efuse.c b/drivers/nvmem/qoriq-efuse.c
+> new file mode 100644
+> index 000000000000..a332bb603e7a
+> --- /dev/null
+> +++ b/drivers/nvmem/qoriq-efuse.c
+> @@ -0,0 +1,80 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + *  Copyright (C) 2022  Westermo Network Technologies AB
+2023 ?
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/nvmem-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +struct qoriq_efuse_priv {
+> +	void __iomem *base;
+> +};
+> +
+> +static int qoriq_efuse_read(void *context, unsigned int offset, void *val,
+> +			  size_t bytes)
+> +{
+> +	struct qoriq_efuse_priv *priv = context;
+> +	u32 *_val = val;
+> +
+> +	while (bytes >= sizeof(u32)) {
+> +		*_val++ = readl_relaxed(priv->base + offset);
+> +		offset += sizeof(u32);
+> +		bytes -= sizeof(u32);
+> +	}
 
-Please feel free to add more tests or share valuable comments.
+__ioread32_copy ?
 
-Related bugs:
-KVM: x86/pmu: Fix emulation on Intel counters' bit width
-(https://lore.kernel.org/kvm/20230322093117.48335-1-likexu@tencent.com/)
-KVM: x86/pmu: Add Intel PMU supported fixed counters bit mask
-(https://lore.kernel.org/kvm/20230321112742.25255-1-likexu@tencent.com/)
-KVM: x86/pmu: Prevent the PMU from counting disallowed events
-(https://lore.kernel.org/kvm/20230307141400.1486314-2-aaronlewis@google.com/)
+> +
+> +	return 0;
+> +}
+> +
+> +static int qoriq_efuse_probe(struct platform_device *pdev)
+> +{
+> +	struct nvmem_config config = {
+> +		.dev = &pdev->dev,
+> +		.read_only = true,
+> +		.reg_read = qoriq_efuse_read,
+> +		.stride = sizeof(u32),
+> +		.word_size = sizeof(u32),
+> +		.name = "qoriq_efuse_read",
+> +		.id = NVMEM_DEVID_AUTO,
+> +		.root_only = true,
+> +	};
+> +	struct qoriq_efuse_priv *priv;
+> +	struct nvmem_device *nvmem;
+> +	struct resource *res;
+> +
+> +	priv = devm_kzalloc(config.dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	config.size = resource_size(res);
+> +	config.priv = priv;
+> +	nvmem = devm_nvmem_register(config.dev, &config);
+> +
+> +	return PTR_ERR_OR_ZERO(nvmem);
+> +}
+> +
+> +static const struct of_device_id qoriq_efuse_of_match[] = {
+> +	{ .compatible = "fsl,t1023-sfp", },
 
-Prerequisite:
-KVM: selftests: Report enable_pmu module value when test is skipped
-KVM: selftests: Add a helper to read kvm boolean module parameters
-(https://lore.kernel.org/kvm/20230313085311.25327-1-likexu@tencent.com/)
+Have you already sent the bindings patch for this?
 
-Jinrong Liang (3):
-  KVM: selftests: Test Intel PMU architectural events on fixed counters
-  KVM: selftests: Test consistency of CPUID with num of Fixed counters
-  KVM: selftests: Test consistency of PMU MSRs with Intel PMU version
-
-Like Xu (4):
-  KVM: selftests: Test Intel PMU architectural events on gp counters
-  KVM: selftests: Test consistency of CPUID with num of GP counters
-  KVM: selftests: Test Intel supported fixed counters bit mask
-  KVM: selftests: Test Intel counters' bit width emulation
-
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 626 ++++++++++++++++++
- 2 files changed, 627 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
-
-base-commit: 94db7c022e10c76ac8ac27878822c3deed80aae1
--- 
-2.40.0
-
+> +	{/* sentinel */},
+> +};
+> +MODULE_DEVICE_TABLE(of, qoriq_efuse_of_match);
+> +
+> +static struct platform_driver qoriq_efuse_driver = {
+> +	.probe = qoriq_efuse_probe,
+> +	.driver = {
+> +		.name = "qoriq-efuse",
+> +		.of_match_table = qoriq_efuse_of_match,
+> +	},
+> +};
+> +module_platform_driver(qoriq_efuse_driver);
+> +
+> +MODULE_AUTHOR("Richard Alpe <richard.alpe@bit42.se>");
+> +MODULE_DESCRIPTION("NXP QorIQ Security Fuse Processor (SFP) Reader");
+> +MODULE_LICENSE("GPL");
