@@ -2,104 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F21B6C6E5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C64F6C6E5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjCWREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S231665AbjCWRFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCWRD7 (ORCPT
+        with ESMTP id S229680AbjCWRFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:03:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228C1DD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679590982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cglotdbZ9kvOmjiiA3xfBy0x7OKBSKTg0p62tpcUq34=;
-        b=Q25uFBrQ09ucTL2QBePvWNRJ/rBmGsde7BeLG253T116aUVHZLNtYrdB3do9S2KTLk4YIY
-        AHjzvl8tKJLRVCS0lJW67mBnHVG11Ax4SisbUO2MaD4U5hxzaV8BxSXPZty6jsdw+Q2wC8
-        vanX98uGgKro+UO04aTpc9+wEZnfEaM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-2A5KN25pMQaWSIo6SsQxmQ-1; Thu, 23 Mar 2023 13:03:00 -0400
-X-MC-Unique: 2A5KN25pMQaWSIo6SsQxmQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bg7-20020a05600c3c8700b003ee86f5a756so1304991wmb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:02:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679590979;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cglotdbZ9kvOmjiiA3xfBy0x7OKBSKTg0p62tpcUq34=;
-        b=AGHuUJY55Cet+qOp5f2Mb+wF0onXd+oHs/w5P+4n0lhHxGKTmCNX8/CmZag27pEqhI
-         +26VCt0ZzQWLSBwO1+fGLfRAMyX+Pn8eqRRPfoUu3pOeuMBC8Mvwd2+xhbwnDpEK1lxf
-         Brbeaqmd3rxTuKBPeM8v2sf54kNXuur+uKS5vLTGfifG3lESNKk5jMvx9lGB4C+BAvau
-         ez8Wfy0DFYbponwJOWjM+/nzv0JCu+A6ptFpHX2IaB2WYc+sJOWPViHqu85rFMeXcpcC
-         tP9yo4g1whvbUJ0mqrurqrRAo18EF9JkSWjy7/F9zCDuuEJpiNTwA2uVrt4cB1c98E0u
-         CwEQ==
-X-Gm-Message-State: AO0yUKWUML48fvz4ZbhlAfuL7C9AwdXIF7fnM4r6UDazNnTZvByXN/xw
-        KoIJIbSL3t19bZ7OlAHh/Ukke0Qdp1qhzSNe003UJxaa9x9Uh9YG+qdc1ITgdViIEuIRwJOJXV7
-        UJ4DW+HI8F1QOJsEcNyIgvSjx
-X-Received: by 2002:a1c:7406:0:b0:3ed:320a:3721 with SMTP id p6-20020a1c7406000000b003ed320a3721mr281089wmc.22.1679590978973;
-        Thu, 23 Mar 2023 10:02:58 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/2X0vV6gTyBSJOJJGL1Fdh0QWcbOfAS0eHPNeVmmhuLkrzvxlO/MiBZ4ftHK9wZ9NuLSr74Q==
-X-Received: by 2002:a1c:7406:0:b0:3ed:320a:3721 with SMTP id p6-20020a1c7406000000b003ed320a3721mr281045wmc.22.1679590978561;
-        Thu, 23 Mar 2023 10:02:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:e500:5cdf:c280:4b31:4016? (p200300cbc704e5005cdfc2804b314016.dip0.t-ipconnect.de. [2003:cb:c704:e500:5cdf:c280:4b31:4016])
-        by smtp.gmail.com with ESMTPSA id fk6-20020a05600c0cc600b003ee7169d57dsm2353857wmb.40.2023.03.23.10.02.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 10:02:57 -0700 (PDT)
-Message-ID: <3dd0e43d-36f7-3325-7680-33779e9b0a55@redhat.com>
-Date:   Thu, 23 Mar 2023 18:02:56 +0100
+        Thu, 23 Mar 2023 13:05:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9540D90;
+        Thu, 23 Mar 2023 10:05:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 592B32F4;
+        Thu, 23 Mar 2023 10:05:48 -0700 (PDT)
+Received: from [10.57.53.151] (unknown [10.57.53.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26EC53F766;
+        Thu, 23 Mar 2023 10:05:01 -0700 (PDT)
+Message-ID: <0d6faa00-c630-c739-6a0a-c5cf858a04fa@arm.com>
+Date:   Thu, 23 Mar 2023 17:04:59 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v10 02/16] x86/virt/tdx: Detect TDX during kernel boot
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
- <35a2421ca97d9e8dd938dcd744674602f4faa617.1678111292.git.kai.huang@intel.com>
- <90f6a15c-0dec-4a19-7a21-b18b73932a21@redhat.com>
- <e8cc32a3f374e494bc6b93dad31367d8b093f9c8.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <e8cc32a3f374e494bc6b93dad31367d8b093f9c8.camel@intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 07/11] coresight-tpdm: Add nodes for dsb edge control
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-8-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1679551448-19160-8-git-send-email-quic_taozha@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,194 +59,333 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.03.23 23:37, Huang, Kai wrote:
-> On Thu, 2023-03-16 at 13:48 +0100, David Hildenbrand wrote:
->> On 06.03.23 15:13, Kai Huang wrote:
->>> Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->>> host and certain physical attacks.  A CPU-attested software module
->>> called 'the TDX module' runs inside a new isolated memory range as a
->>> trusted hypervisor to manage and run protected VMs.
->>>
->>> Pre-TDX Intel hardware has support for a memory encryption architecture
->>> called MKTME.  The memory encryption hardware underpinning MKTME is also
->>> used for Intel TDX.  TDX ends up "stealing" some of the physical address
->>> space from the MKTME architecture for crypto-protection to VMs.  The
->>> BIOS is responsible for partitioning the "KeyID" space between legacy
->>> MKTME and TDX.  The KeyIDs reserved for TDX are called 'TDX private
->>> KeyIDs' or 'TDX KeyIDs' for short.
->>>
->>> TDX doesn't trust the BIOS.  During machine boot, TDX verifies the TDX
->>> private KeyIDs are consistently and correctly programmed by the BIOS
->>> across all CPU packages before it enables TDX on any CPU core.  A valid
->>> TDX private KeyID range on BSP indicates TDX has been enabled by the
->>> BIOS, otherwise the BIOS is buggy.
->>
+On 23/03/2023 06:04, Tao Zhang wrote:
+> Add the nodes to set value for DSB edge control and DSB edge
+> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
+> resgisters to configure edge control. DSB edge detection control
+> 00: Rising edge detection
+> 01: Falling edge detection
+> 10: Rising and falling edge detection (toggle detection) > And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
+> configure mask. Eight 32 bit registers providing DSB interface
+> edge detection mask control.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  26 ++++
+>   drivers/hwtracing/coresight/coresight-tpdm.c       | 142 ++++++++++++++++++++-
+>   drivers/hwtracing/coresight/coresight-tpdm.h       |  14 ++
+>   3 files changed, 181 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> index f13e282..094d624 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -45,3 +45,29 @@ Description:
+>   		tpdm.
+>   
+>   		Accepts the value needs to be greater than 0.
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
+> +Date:		March 2023
+> +KernelVersion	6.3
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the edge control of DSB tpdm. Read the
+> +		edge control of DSB tpdm.
 
-Sorry for the late reply!
+Could we not say :
+	Read / Write a set of the edge control registers of the DSB in
+         TPDM
 
->> So we don't trust the BIOS, but trust the BIOS that it won't hot-remove
->> physical memory or hotplug physical CPUS (if I understood the cover
->> letter correctly)? :)
-> 
-> The "trust" in this context means security, but not functionality.  BIOS needs
-> to do the right thing in order to make things work correctly in terms of
-> functionality.
-> 
-> For physical memory hotplug or CPU hotplug, we don't have patch to _explicitly_
-> distinguish them (from logical memory hotplug and logical cpu online/offline),
-> but actually they are kinda also handled:  For memory hotplug, and hot-added
-> memory is rejected to go online (because they cannot be in TDX's convertible
-> memory ranges).  For CPU hotplug, we have a function to do per-cpu
-> initialization (tdx_cpu_enable() in patch 5), and it will return error for hot-
-> added physical cpu.
+> +
+> +		Accepts the following three values.
 
-Make sense, thanks!
+This is a bit confusing, at least to me. This could either mean,
+a single write of values 1-3 are accepted.
 
-> 
->>
->>>
->>> The TDX module is expected to be loaded by the BIOS when it enables TDX,
->>> but the kernel needs to properly initialize it before it can be used to
->>> create and run any TDX guests.  The TDX module will be initialized by
->>> the KVM subsystem when KVM wants to use TDX.
->>>
->>> Add a new early_initcall(tdx_init) to detect the TDX by detecting TDX
->>> private KeyIDs.  Also add a function to report whether TDX is enabled by
->>> the BIOS.  Similar to AMD SME, kexec() will use it to determine whether
->>> cache flush is needed.
->>>
->>> The TDX module itself requires one TDX KeyID as the 'TDX global KeyID'
->>> to protect its metadata.  Each TDX guest also needs a TDX KeyID for its
->>> own protection.  Just use the first TDX KeyID as the global KeyID and
->>> leave the rest for TDX guests.  If no TDX KeyID is left for TDX guests,
->>> disable TDX as initializing the TDX module alone is useless.
->>
->> Does that really happen in practice that we care about that at all?
->> Seems weird and rather like a broken firmware or sth like that ...
-> 
-> No it doesn't happen in practice, because the BIOS is sane enough.
-> 
-> But since the public spec doesn't explicitly say it is guaranteed this doesn't
-> happen when TDX is enabled, I just added this sanity check.
+> +		value 1: Start EDCR register number
+> +		value 2: End EDCR register number
+> +		value 3: The value need to be written
 
-Okay!
+But you really mean to say, the writes must be of the following format
+	<integer1> <integer2> <integer3>
 
-> 
->>
->>>
->>> To start to support TDX, create a new arch/x86/virt/vmx/tdx/tdx.c for
->>> TDX host kernel support.  Add a new Kconfig option CONFIG_INTEL_TDX_HOST
->>> to opt-in TDX host kernel support (to distinguish with TDX guest kernel
->>> support).  So far only KVM uses TDX.  Make the new config option depend
->>> on KVM_INTEL.
->>>
->>> Signed-off-by: Kai Huang <kai.huang@intel.com>
->>> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->>
->>
->> [...]
->>
->>> ---
->>>    arch/x86/Kconfig                 |  12 ++++
->>>    arch/x86/Makefile                |   2 +
->>>    arch/x86/include/asm/msr-index.h |   3 +
->>>    arch/x86/include/asm/tdx.h       |   7 +++
->>>    arch/x86/virt/Makefile           |   2 +
->>>    arch/x86/virt/vmx/Makefile       |   2 +
->>>    arch/x86/virt/vmx/tdx/Makefile   |   2 +
->>>    arch/x86/virt/vmx/tdx/tdx.c      | 105 +++++++++++++++++++++++++++++++
->>>    8 files changed, 135 insertions(+)
->>>    create mode 100644 arch/x86/virt/Makefile
->>>    create mode 100644 arch/x86/virt/vmx/Makefile
->>>    create mode 100644 arch/x86/virt/vmx/tdx/Makefile
->>>    create mode 100644 arch/x86/virt/vmx/tdx/tdx.c
->>>
->>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->>> index 3604074a878b..fc010973a6ff 100644
->>> --- a/arch/x86/Kconfig
->>> +++ b/arch/x86/Kconfig
->>> @@ -1952,6 +1952,18 @@ config X86_SGX
->>>    
->>>    	  If unsure, say N.
->>>    
->>> +config INTEL_TDX_HOST
->>> +	bool "Intel Trust Domain Extensions (TDX) host support"
->>> +	depends on CPU_SUP_INTEL
->>> +	depends on X86_64
->>> +	depends on KVM_INTEL
->>> +	help
->>> +	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
->>> +	  host and certain physical attacks.  This option enables necessary TDX
->>> +	  support in host kernel to run protected VMs.
->>
->> s/in host/in the host/ ?
-> 
-> Sure.
-> 
->>
->> Also, is "protected VMs" the right term to use here? "Encrypted VMs",
->> "Confidential VMs" ... ?
-> 
-> "Encrypted VM" perhaps is not a good choice, because there are more things than
-> encryption.  I am also OK with "Confidential VMs", but "protected VMs" is also
-> used in the KVM series (not upstreamed yet), and also used by s390 by looking at
-> the git log.
-> 
-> So both "protected VM" and "confidential VM" work for me.
-> 
-> Not sure anyone else wants to comment?
+where :
+		<integer1> : Start EDCR ...
+		....
+	
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
+> +Date:		March 2023
+> +KernelVersion	6.3
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the edge control mask of DSB tpdm. Read
+> +		the edge control mask of DSB tpdm.
+> +
+> +		Accepts the following three values.
+> +		value 1: Start EDCMR register number
+> +		value 2: End EDCMR register number
+> +		value 3: The value need to be written
 
-I'm fine as long as it's used consistently. "Protected VM" would have 
-been the one out of the 3 alternatives that I have heard least frequently.
+Similarly here.
 
-> 
->>
-> [...]
-> 
->>> +static u32 tdx_global_keyid __ro_after_init;
->>> +static u32 tdx_guest_keyid_start __ro_after_init;
->>> +static u32 tdx_nr_guest_keyids __ro_after_init;
->>> +
->>> +/*
->>> + * Use tdx_global_keyid to indicate that TDX is uninitialized.
->>> + * This is used in TDX initialization error paths to take it from
->>> + * initialized -> uninitialized.
->>> + */
->>> +static void __init clear_tdx(void)
->>> +{
->>> +	tdx_global_keyid = 0;
->>> +}
->>
->> Why not set "tdx_global_keyid" last, such that you don't have to clear
->> when anything goes wrong before that? Seems more straight forward.
-> 
-> My thinking was by reserving the global keyid and taking it out first, I can
-> check the remaining keyids for TDX guests easily:
-> 
-> 
-> +	if (!nr_tdx_keyids) {
-> +		pr_info("initialization failed: too few private KeyIDs
-> available.\n");
-> +		goto no_tdx;
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 8cd822f..2a0b36c 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -88,7 +88,14 @@ static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+>   
+>   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>   {
+> -	u32 val;
+> +	u32 val, i;
+> +
+> +	for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
+> +		writel_relaxed(drvdata->dsb->edge_ctrl[i],
+> +			   drvdata->base + TPDM_DSB_EDCR(i));
+> +	for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
+> +		writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
+> +			   drvdata->base + TPDM_DSB_EDCMR(i));
+>   
+>   	val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
+>   	/* Set trigger timestamp */
+> @@ -311,6 +318,137 @@ static ssize_t dsb_mode_store(struct device *dev,
+>   }
+>   static DEVICE_ATTR_RW(dsb_mode);
+>   
+> +static ssize_t dsb_edge_ctrl_show(struct device *dev,
+> +				       struct device_attribute *attr,
+> +				       char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	ssize_t size = 0;
+> +	int i;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
+> +		size += sysfs_emit_at(buf, size,
+> +				  "Index:0x%x Val:0x%x\n", i,
+> +				  drvdata->dsb->edge_ctrl[i]);
 > +	}
-> 
-> Otherwise need to do:
-> 
-> 	if (nr_tdx_keyids < 2) {
-> 		...
-> 	}
-> 
-> Also, in the later patch to handle memory hotplug we will add an additional step
-> to register_memory_notifier() which can also fail, so I just introduced
-> clear_tdx() here.
-> 
-> But nothing is big deal, and yes we can set the global keyid at last and remove
-> clear_tdx().
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +
+> +/*
+> + * value 1: Start EDCR register number
+> + * value 2: End EDCR register number
+> + * value 3: The value need to be written
+> + * The EDCR registers can include up to 16 32-bit registers, and each
+> + * one can be configured to control up to 16 edge detections(2 bits
+> + * control one edge detection). So a total 256 edge detections can be
+> + * configured. So the starting number(value 1) and ending number(value 2)
+> + * cannot be greater than 256, and value 1 should be less than value 2.
+> + * The following values are the rage of value 3.
+> + * 0 - Rising edge detection
+> + * 1 - Falling edge detection
+> + * 2 - Rising and falling edge detection (toggle detection)
+> + */
+> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
+> +					struct device_attribute *attr,
+> +					const char *buf,
+> +					size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long start, end, edge_ctrl;
+> +	uint32_t val;
+> +	int i, index, bit, reg;
+> +
+> +	if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
+> +		return -EINVAL;
+> +	if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES) ||
+> +	    edge_ctrl > 0x2)
+> +		return -EPERM;
 
-Good, that simplifies things, thanks!
+	Isn't it an error to provide start > end ?
 
--- 
-Thanks,
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	for (i = start; i <= end; i++) {
+> +		/*
+> +		 * The 32-bit register has 32 bits(NUM_OF_BITS).
+> +		 * Each one register can be configured to control 16
+> +		 * (NUM_OF_BITS / 2) edge detectioins.
+> +		 */
 
-David / dhildenb
+		/*
+		 * Each DSB Edge control line requires 2bits.
+		 * Thus we have 16 lines in a 32bit word.
+		 */
+
+Could we please define something like:
+
+#define EDCRS_PER_WORD			16
+#define EDCR_TO_WORD_IDX(r)		((r) / EDCRS_PER_WORD)
+#define EDCR_TO_WORD_SHIFT(r)		((r) % EDCRS_PER_WORD)
+#define EDCR_TO_WORD_MASK(r)		(0x3 << EDCR_TO_WORD_SHIFT((r)))
+
+> +		reg = i / (NUM_OF_BITS / 2);
+> +		index = i % (NUM_OF_BITS / 2);
+> +		bit = index * 2;
+> +
+
+	reg = EDCR_TO_WORD_IDX(i);
+	mask = EDCR_TO_WORD_MASK(i);
+	
+	val &= ~mask;
+	val |= FIELD_PREP(mask, edge_ctrl);
+
+> +		val = drvdata->dsb->edge_ctrl[reg];
+> +		val &= ~GENMASK((bit + 1), bit);
+> +		val |= (edge_ctrl << bit);
+
+
+> +		drvdata->dsb->edge_ctrl[reg] = val;
+> +	}
+> +	spin_unlock(&drvdata->spinlock);
+> +
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_edge_ctrl);
+> +
+> +static ssize_t dsb_edge_ctrl_mask_show(struct device *dev,
+> +					    struct device_attribute *attr,
+> +					    char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	ssize_t size = 0;
+> +	int i;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	for (i = 0; i < TPDM_DSB_MAX_EDCR / 2; i++) {
+
+Why is this not `i < TPDM_DSB_MAX_EDCMR` ?
+
+> +		size += sysfs_emit_at(buf, size,
+> +				  "Index:0x%x Val:0x%x\n", i,
+> +				  drvdata->dsb->edge_ctrl_mask[i]);
+> +	}
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +
+> +/*
+> + * value 1: Start EDCMR register number
+> + * value 2: End EDCMR register number
+> + * value 3: The value need to be written
+> + */
+> +static ssize_t dsb_edge_ctrl_mask_store(struct device *dev,
+> +					     struct device_attribute *attr,
+> +					     const char *buf,
+> +					     size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long start, end, val;
+> +	u32 set;
+> +	int i, index, reg;
+> +
+> +	if (sscanf(buf, "%lx %lx %lx", &start, &end, &val) != 3)
+> +		return -EINVAL;
+> +	if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES)
+> +		|| (val & ~1UL))
+> +		return -EPERM;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	for (i = start; i <= end; i++) {
+> +		/*
+> +		 * The 32-bit register has 32 bits(NUM_OF_BITS).
+> +		 * Each one register can be configured to control 32
+> +		 * (NUM_OF_BITS) edge detectioin masks.
+
+minor nit: detection.
+
+You could simply say:
+		/*
+		 * There is 1 bit per DSB Edge Control line.
+		 * Thus we have 32 lines in a 32bit word.
+		 */
+	 	reg = i / 32;
+
+> +		reg = i / NUM_OF_BITS;
+> +		index = (i % NUM_OF_BITS);
+> +
+> +		set = drvdata->dsb->edge_ctrl_mask[reg];
+> +		if (val)
+> +			set |= BIT(index);
+> +		else
+> +			set &= ~BIT(index);
+> +		drvdata->dsb->edge_ctrl_mask[reg] = set;
+> +	}
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
+> +
+>   static ssize_t dsb_trig_type_show(struct device *dev,
+>   				     struct device_attribute *attr,
+>   				     char *buf)
+> @@ -383,6 +521,8 @@ static DEVICE_ATTR_RW(dsb_trig_ts);
+>   
+>   static struct attribute *tpdm_dsb_attrs[] = {
+>   	&dev_attr_dsb_mode.attr,
+> +	&dev_attr_dsb_edge_ctrl.attr,
+> +	&dev_attr_dsb_edge_ctrl_mask.attr,
+>   	&dev_attr_dsb_trig_ts.attr,
+>   	&dev_attr_dsb_trig_type.attr,
+>   	NULL,
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> index 8fee562..342ef23 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> @@ -12,6 +12,8 @@
+>   /* DSB Subunit Registers */
+>   #define TPDM_DSB_CR		(0x780)
+>   #define TPDM_DSB_TIER		(0x784)
+> +#define TPDM_DSB_EDCR(n)	(0x808 + (n * 4))
+> +#define TPDM_DSB_EDCMR(n)	(0x848 + (n * 4))
+>   
+>   /* Enable bit for DSB subunit */
+>   #define TPDM_DSB_CR_ENA		BIT(0)
+> @@ -31,6 +33,8 @@
+>   #define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
+>   #define TPDM_DSB_HPSEL		GENMASK(6, 2)
+>   
+> +#define NUM_OF_BITS		32
+
+Please don't use such generic names. Instead define TPDM specific
+helper definitions. See above.
+
+
+Suzuki
+
+
+> +
+>   /* TPDM integration test registers */
+>   #define TPDM_ITATBCNTRL		(0xEF0)
+>   #define TPDM_ITCNTRL		(0xF00)
+> @@ -57,14 +61,24 @@
+>   #define TPDM_PIDR0_DS_IMPDEF	BIT(0)
+>   #define TPDM_PIDR0_DS_DSB	BIT(1)
+>   
+> +#define TPDM_DSB_MAX_LINES	256
+> +/* MAX number of EDCR registers */
+> +#define TPDM_DSB_MAX_EDCR	16 > +/* MAX number of EDCMR registers */
+> +#define TPDM_DSB_MAX_EDCMR	8
+> +
+>   /**
+>    * struct dsb_dataset - specifics associated to dsb dataset
+>    * @mode:             DSB programming mode
+> + * @edge_ctrl:        Save value for edge control
+> + * @edge_ctrl_mask:   Save value for edge control mask
+>    * @trig_ts:          Enable/Disable trigger timestamp.
+>    * @trig_type:        Enable/Disable trigger type.
+>    */
+>   struct dsb_dataset {
+>   	u32				mode;
+> +	u32				edge_ctrl[TPDM_DSB_MAX_EDCR];
+> +	u32				edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
+>   	bool			trig_ts;
+>   	bool			trig_type;
+>   };
 
