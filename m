@@ -2,260 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6F86C6296
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3B46C6299
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjCWJCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S231466AbjCWJDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjCWJCe (ORCPT
+        with ESMTP id S230025AbjCWJC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:02:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04482193CD;
-        Thu, 23 Mar 2023 02:02:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679562145; x=1711098145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PaQtkvTOLRhCk6nrvbWJlygudDxC9m49B4Nt0wj5BMc=;
-  b=yJywUyoMCTuAFFAJKjbbZ6a9n3Bw5Y2/uR3PLpCsumlo6yTBeFbZ4AOU
-   zSXN09gaRymNAuZ7r/aOnquUFSsnx/FdMnlezSp1vZzQpPpObidqPLnFN
-   9ZKIU8684AqFXMG6zcRXKxRnTAWa8OHyQWuOAry262dJAUbhw+CX0MCK8
-   h+DXozjLqPRTiwlqXSCZJSX1Jln2RMXDXZ2/R+v+wSHfgE6ffCq/utR+J
-   fXpJV7XsjLHBCKp3RXJ7chEnnaNT5QKI6/FP4Mya9qEqwc6LI4YJ0D+ZQ
-   EtCYXpnn5V8YRCOVoknXjpsSzMSpv2XF3OPGk0rwmJikpOkntixqburj2
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,283,1673938800"; 
-   d="asc'?scan'208";a="203031984"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Mar 2023 02:02:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 23 Mar 2023 02:02:20 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 23 Mar 2023 02:02:16 -0700
-Date:   Thu, 23 Mar 2023 09:01:58 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Conor Dooley <conor@kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 11/21] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Message-ID: <828e8cb9-a4c6-4c2d-8a23-2cfdc4395fe1@spud>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
- <20230320103750.60295-12-hal.feng@starfivetech.com>
- <b4beb457-8581-4b2f-8655-2e3f82a94f75@spud>
- <5b75161e-3d0d-50e5-fd4e-af92edf62317@starfivetech.com>
+        Thu, 23 Mar 2023 05:02:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAB919C77;
+        Thu, 23 Mar 2023 02:02:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31D7062538;
+        Thu, 23 Mar 2023 09:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E764C433A1;
+        Thu, 23 Mar 2023 09:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679562155;
+        bh=zyJpkW5dS5USg5bG9tqn5sX8U9cbNGdvBNNjrS6Bvu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bMJv4zgy6xVHXtXNMdto0sYZVXEsUGRHRP4VGoqVwtXZ7rURmczeXJFg2WHzfJePh
+         yZtvJKQrn4YazJEtqYZjvmkasyyJEB/Heuelkm3BnQm9o/IwhGVaunVGtZfeLF438l
+         Jj9YHFf8mCGxqYv3+zK277z3dbkbopbEdHEVcxoE=
+Date:   Thu, 23 Mar 2023 10:02:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <ZBwVqDgWGmjXS2ij@kroah.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <CABVgOS=KUg+18wJe=O29tgOB0tQghAk030kONEm5fOzJHgKLgw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Foui7XXDAfVTlAsO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5b75161e-3d0d-50e5-fd4e-af92edf62317@starfivetech.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CABVgOS=KUg+18wJe=O29tgOB0tQghAk030kONEm5fOzJHgKLgw@mail.gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Foui7XXDAfVTlAsO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 23, 2023 at 03:30:34PM +0800, David Gow wrote:
+> On Wed, 22 Mar 2023 at 17:06, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >
+> > The creation of a dummy device in order to test managed interfaces is a
+> > generally useful test feature. The drm test helpers
+> > drm_kunit_helper_alloc_device() and drm_kunit_helper_free_device()
+> > are doing exactly this. It makes no sense that each and every component
+> > which intends to be testing managed interfaces will create similar
+> > helpers so stole these for more generic use.
+> >
+> > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> >
+> > ---
+> > Changes:
+> > v4 => v5:
+> > - Add accidentally dropped header and email recipients
+> > - do not rename + move helpers from DRM but add temporary dublicates to
+> >   simplify merging. (This patch does not touch DRM and can be merged
+> >   separately. DRM patch and IIO test patch still depend on this one).
+> >
+> > Please note that there's something similar ongoing in the CCF:
+> > https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
+> >
+> > I do like the simplicity of these DRM-originated helpers so I think
+> > they're worth. I do equally like the Stephen's idea of having the
+> > "dummy platform device" related helpers under drivers/base and the
+> > header being in include/kunit/platform_device.h which is similar to real
+> > platform device under include/linux/platform_device.h
+> > ---
+> 
+> Thanks for sending this my way.
+> 
+> It's clear we need some way of creating "fake" devices for KUnit
+> tests. Given that there are now (at least) three different drivers
+> looking to use this, we'll ultimately need something which works for
+> everyone.
+> 
+> I think the questions we therefore need to answer are:
+> - Do we specifically need a platform_device (or, any other specific
+> device struct), or would any old struct device work? I can see why we
+> would need a platform device for cases where we're testing things like
+> device-tree properties (or, in the future, having e.g. USB-specific
+> helpers which create usb_device). Most tests just use
+> root_device_register() thus far, though.
 
-Hal, Emil,
+Any struct device would work, so please do NOT use a platform device.
 
-On Thu, Mar 23, 2023 at 03:44:41PM +0800, Hal Feng wrote:
-> On Wed, 22 Mar 2023 21:53:37 +0000, Conor Dooley wrote:
-> > On Mon, Mar 20, 2023 at 06:37:40PM +0800, Hal Feng wrote:
-> >> From: Emil Renner Berthing <kernel@esmil.dk>
-> >>=20
-> >> Add bindings for the system clock and reset generator (SYSCRG) on the
-> >> JH7110 RISC-V SoC by StarFive Ltd.
-> >>=20
-> >> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> >> ---
-> >>  .../clock/starfive,jh7110-syscrg.yaml         | 104 +++++++++
-> >>  MAINTAINERS                                   |   8 +-
-> >>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 203 ++++++++++++++++++
-> >>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 142 ++++++++++++
-> >>  4 files changed, 454 insertions(+), 3 deletions(-)
-> >>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,j=
-h7110-syscrg.yaml
-> >>  create mode 100644 include/dt-bindings/clock/starfive,jh7110-crg.h
-> >>  create mode 100644 include/dt-bindings/reset/starfive,jh7110-crg.h
-> >>=20
-> >> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-s=
-yscrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg=
-=2Eyaml
-> >> new file mode 100644
-> >> index 000000000000..84373ae31644
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.y=
-aml
-> >> @@ -0,0 +1,104 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-syscrg.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: StarFive JH7110 System Clock and Reset Generator
-> >> +
-> >> +maintainers:
-> >> +  - Emil Renner Berthing <kernel@esmil.dk>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: starfive,jh7110-syscrg
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  clocks:
-> >> +    oneOf:
-> >> +      - items:
-> >> +          - description: Main Oscillator (24 MHz)
-> >> +          - description: GMAC1 RMII reference or GMAC1 RGMII RX
-> >> +          - description: External I2S TX bit clock
-> >> +          - description: External I2S TX left/right channel clock
-> >> +          - description: External I2S RX bit clock
-> >> +          - description: External I2S RX left/right channel clock
-> >> +          - description: External TDM clock
-> >> +          - description: External audio master clock
-> >> +
-> >> +      - items:
-> >> +          - description: Main Oscillator (24 MHz)
-> >> +          - description: GMAC1 RMII reference
-> >> +          - description: GMAC1 RGMII RX
-> >> +          - description: External I2S TX bit clock
-> >> +          - description: External I2S TX left/right channel clock
-> >> +          - description: External I2S RX bit clock
-> >> +          - description: External I2S RX left/right channel clock
-> >> +          - description: External TDM clock
-> >> +          - description: External audio master clock
-> >> +
-> >> +  clock-names:
-> >> +    oneOf:
-> >> +      - items:
-> >> +          - const: osc
-> >> +          - enum:
-> >> +              - gmac1_rmii_refin
-> >> +              - gmac1_rgmii_rxin
-> >> +          - const: i2stx_bclk_ext
-> >> +          - const: i2stx_lrck_ext
-> >> +          - const: i2srx_bclk_ext
-> >> +          - const: i2srx_lrck_ext
-> >> +          - const: tdm_ext
-> >> +          - const: mclk_ext
-> >> +
-> >> +      - items:
-> >> +          - const: osc
-> >> +          - const: gmac1_rmii_refin
-> >> +          - const: gmac1_rgmii_rxin
-> >> +          - const: i2stx_bclk_ext
-> >> +          - const: i2stx_lrck_ext
-> >> +          - const: i2srx_bclk_ext
-> >> +          - const: i2srx_lrck_ext
-> >> +          - const: tdm_ext
-> >> +          - const: mclk_ext
-> >=20
-> > I'm sorry to be a bit of a bore about these bindings, but Emil mentioned
-> > to me today that he had some doubts about whether any of these audio
-> > clocks are actually required.
-> > I've had a bit of a look at the driver, cos the TRM that I have doesn't
-> > describe the clock tree (from what recall at least) and I think he is
-> > right.
-> > For example, the TDM clock:
-> > +	JH71X0_GATE(JH7110_SYSCLK_TDM_AHB, "tdm_ahb", 0, JH7110_SYSCLK_AHB0),
-> > +	JH71X0_GATE(JH7110_SYSCLK_TDM_APB, "tdm_apb", 0, JH7110_SYSCLK_APB0),
-> > +	JH71X0_GDIV(JH7110_SYSCLK_TDM_INTERNAL, "tdm_internal", 0, 64, JH7110=
-_SYSCLK_MCLK),
-> > +	JH71X0__MUX(JH7110_SYSCLK_TDM_TDM, "tdm_tdm", 2,
-> > +		    JH7110_SYSCLK_TDM_INTERNAL,
-> > +		    JH7110_SYSCLK_TDM_EXT),
-> >=20
-> > Hopefully, I'm not making a balls of something here, but it looks like I
-> > can choose an internal TDM clock, that is based on JH7110_SYSCLK_MCLK,
-> > which in turn comes from either an internal or external source.
-> > If I am following correctly, that'd be:
-> > +	JH71X0__DIV(JH7110_SYSCLK_MCLK_INNER, "mclk_inner", 64, JH7110_SYSCLK=
-_AUDIO_ROOT),
-> >=20
-> > Which in turn comes from:
-> > +	JH71X0__DIV(JH7110_SYSCLK_AUDIO_ROOT, "audio_root", 8, JH7110_SYSCLK_=
-PLL2_OUT),
-> >=20
-> > This leaves me wondering which clocks are *actually* required for a
-> > functioning system - is it actually just osc and one of gmac1_rmii_refin
-> > or gmac1_rgmii_rxin.
->=20
-> As I had mentioned somewhere before, some audio clocks need to change the=
-ir
-> parents at different stages of work. I should explain in detail here.
->=20
-> For the i2s*_ext clocks, we should use these external clocks as parents w=
-hen
-> the I2S module is working in the slave mode, while we should use the inte=
-rnal
-> clocks as parents when the I2S module is working in the master mode.
->=20
-> For the tdm_ext clock, we use it as the clock source for an accurate play=
-back
-> rate. If we use the internal clock as clock source, the TDM can't work
-> normally, because it can't get a required rate from the internal divider.
-> By the way, note that we need to use the internal clock as clock source w=
-hen
-> we try to reset the tdm clock, otherwise, the reset will fail.
->=20
-> For the mclk_ext clock, which is 12.288MHz, it's used as the clock source
-> through all the running time, otherwise, the daughter clocks can't get the
-> required rate from the internal PLL2 clock (1188MHz) through dividers.
->=20
-> So all these audio external clocks (i2s*_ext / tdm_ext / mclk_ext) are
-> actually required.
+Use aux devices, or better yet, just a normal virtual device by calling
+device_create().
 
-Okay. I think I am okay with leaving the binding as-is then, and if
-someone needs to omit the entire audio subsystem on the SoC, they can
-follow Stephen's suggestion.
+> - What helpers do we need to make creating, using, and cleaning up
+> these devices as simple as possible.
 
-@Emil, is that okay with you?
+Becides what the driver core already provides you?  What exactly are you
+wanting to do here?
 
---Foui7XXDAfVTlAsO
-Content-Type: application/pgp-signature; name="signature.asc"
+> I think that in this particular case, we don't actually need a struct
+> platform_device. Replacing these helpers with simple calls to
+> root_device_register() and root_device_unregister() seems to work fine
+> with this patch series for me. (It does break the
+> drm_test_managed_run_action test, though.) So I don't think having
+> these helpers actually help this series at the moment.
 
------BEGIN PGP SIGNATURE-----
+Why abuse root_device_*() for something that really is not a root device
+in the system?  Why not use a virtual device?  Or better yet, a kunit
+bus with devices on it that are just for testing?  That way you can
+properly test the bus and driver and device code fully, which is what
+you are implying is needed here.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBwVhgAKCRB4tDGHoIJi
-0i/3AP9r2zZm6eoH/54hqo2pd+NSfc9/7hEFva5Rb8WtL+g7jQD/eIwjER83anUB
-EBld9LgX9JfHICJiEkV/c3WCtgEtbQo=
-=XiNe
------END PGP SIGNATURE-----
+> That being said, if they used the KUnit resource system to
+> automatically clean up the device when the test is finished (or
+> otherwise exits), that would seem like a real advantage. The clk and
+> drm examples both do this, and I'm hoping to add an API to make it
+> even simpler going forward. (With the work-in-progress API described
+> here[1], the whole thing should boil down to "struct device *dev =
+> root_device_register(name); kunit_defer(root_device_unregister,
+> dev);".)
+> 
+> So, I guess we have three cases we need to look at:
+> - A test just needs any old struct device. Tests thus far have
+> hardcoded, or had their own wrappers around root_device_register() for
+> this.
 
---Foui7XXDAfVTlAsO--
+Again, make a kunit bus and devices, that might be "simplest" overall.
+
+> - A test needs a device attached to a bus (but doesn't care which
+> bus). Thus far, people have used struct platform_device for this (see
+> the DRM helpers, which use a platform device for managed resource
+> tests[2]). Maybe the right solution here is something like a struct
+> kunit_device?
+
+Yes.
+
+> - A test needs a device attached to a specific bus. We'll probably
+> need some more detailed faking of that bus. This covers cases like
+> having fake USB devices, devicetree integration, etc.
+
+Have your own bus.  No need to mess with USB or any real bus UNLESS you
+want to actually test those busses, and if so, just create fake USB or
+clk or whatever devices so that you can test them.
+
+Or just rely on the testing that some busses have for their devices (USB
+has this today and syzbot knows how to test it), as busses for hardware
+can be complex and usually require a "real" driver to be written for
+them to test things.
+
+thanks,
+
+gre gk-h
