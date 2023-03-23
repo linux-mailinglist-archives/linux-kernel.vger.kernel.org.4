@@ -2,168 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75F06C640F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402916C6416
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjCWJwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S230154AbjCWJx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjCWJwH (ORCPT
+        with ESMTP id S229734AbjCWJws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:52:07 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D024F113C0;
-        Thu, 23 Mar 2023 02:50:20 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x3so83807780edb.10;
-        Thu, 23 Mar 2023 02:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679565019;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OtPIjUfsWdlwSV6rImZ+GnLBsBre2w3xZOSEdd58AR8=;
-        b=K9ucQhY65SoKMVGWQt+Zbte8kRJICazFnVNi+8FJygkxC+7hJLCdLiA2MwIBWM7k6H
-         BiFHTYXNMYUteEwA+HTZSIoinfhHq/+jC+a3LY6n51UngKyWu9EThBg9pXxtj0tqQ6DK
-         HdzTeO62MdC318HO0PjR4yL1HYebTVbHnYPgOcSw1x4fKNr3lL4eVTUVcC13EZLqlfXQ
-         16BKQI/dmqLcbTyyL80j4ZSkW3NDf7E3gJSWkeTJoVQDu/gyX3AvFYOlYEuIoMP4wUAd
-         isigwtTNt8CcgFwrfLd8JYp5CsRS0SFtzE/IZaRvuv6PQXnan+yAoMObrADTID8Ivn9F
-         Ir0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679565019;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OtPIjUfsWdlwSV6rImZ+GnLBsBre2w3xZOSEdd58AR8=;
-        b=AhEWfzq4pCii731kHQg20p+t6ESr/Hju2hl/7cq6NYbbhhcl+I4qkg4Oh4/ePdKjhL
-         AY2iYvGpJmHijtlinAAglRPTZwOLquwuXGjkS60fYOtdTBIVGfGz4LTSjJQNy4mrlE3r
-         tWOMZ4BmxMBSO8Sg8TVpHU+OTqudN55wH/uEVb2rh5zq5s8gmm8K1T3/CrHyI2mtzzy8
-         PnVjE2mSn6W42uw2WymAuy3mEiU2hbln8CjCBZ6rmxx2hdlm4+pu/p2R+Ybs6BJe+5wx
-         jY51JBFEWfkPRNTFhDOJlxz5u6yHrX2HCHeQ8IJn3W1B+lm/vzoXRJm77mSqsJ43GLR0
-         fVBQ==
-X-Gm-Message-State: AO0yUKW+CnVszjsIMBuYT89StHIjq2JxT73w7qCZWDuF+jh0v4Teh/Ih
-        SZOkAexH1F+2U+4qUYJu3GI=
-X-Google-Smtp-Source: AK7set+Gc3YhjaJaQlW/wLDkoHxO6Lhe7FSdbzBK9ql1Wg6MkJYALcc1a36+syNrk7dCjVh9BE4ihg==
-X-Received: by 2002:a50:ff08:0:b0:4fb:6523:2b38 with SMTP id a8-20020a50ff08000000b004fb65232b38mr10075244edu.27.1679565019069;
-        Thu, 23 Mar 2023 02:50:19 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5099c4000000b00501cc88b3adsm4982468edb.46.2023.03.23.02.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 02:50:18 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 10:50:17 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "digetx@gmail.com" <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH v3] i2c: tegra: Share same DMA channel for RX and TX
-Message-ID: <ZBwg2Rnc6d5EQ3pu@orome>
-References: <20230322102413.52886-1-akhilrajeev@nvidia.com>
- <db870e74-9d97-740a-9829-5fafc0bb0559@nvidia.com>
- <SJ1PR12MB6339FC0B9BB57D1D2300D46CC0869@SJ1PR12MB6339.namprd12.prod.outlook.com>
- <b9235dfc-10dc-1ed0-1510-fd98902491e3@nvidia.com>
- <SJ1PR12MB63395F16F399E67733EED69BC0879@SJ1PR12MB6339.namprd12.prod.outlook.com>
+        Thu, 23 Mar 2023 05:52:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46B02687F;
+        Thu, 23 Mar 2023 02:51:26 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N8JMfo000484;
+        Thu, 23 Mar 2023 09:51:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Fpu/aGQe/6rf5hwrLvGz3kiD/UAiRN2pQ/Vd9SJ0fHs=;
+ b=so/mUCe4oGq3qlqx54cMBDmAvJlD8cjTjPlx+t1rC823f3mKb9IXN8VV+yaZYy+tbAnt
+ YLQRaSab96TjMJAy5rLMXdaz/6sCg71MsGYtAOa0eUJ6dyeXGDkAjhDyxvvesz82QkwO
+ St9UZ1NXERDJ+kPrwYqifCJPI2xcjBVxMsVdbo8DIFrtyRMnCGSHym4BloRi52x1OuZQ
+ 0vHOR10eLoKMY0YEfo+l07HdtMySs8ch7PLxuH5mW9SjgHiN6lmen44r38Q0SAqwagFq
+ Sd4c0ReWUEUwUhiYVFHzsPTFPWYpexbpM7lRkYifpO1ubfplAOXwVGO36KvS4Z80nsXK bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pggdmdxaw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 09:51:23 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32N9AUR7029515;
+        Thu, 23 Mar 2023 09:51:23 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pggdmdx9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 09:51:23 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N0ljZO001990;
+        Thu, 23 Mar 2023 09:51:21 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3pd4x6e17n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 09:51:20 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32N9pHDr27263614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 09:51:17 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DC7420049;
+        Thu, 23 Mar 2023 09:51:17 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F75220043;
+        Thu, 23 Mar 2023 09:51:16 +0000 (GMT)
+Received: from [9.171.44.204] (unknown [9.171.44.204])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 09:51:16 +0000 (GMT)
+Message-ID: <9632bc6c-276e-d0d6-b6d9-efe91fe3a1e2@linux.ibm.com>
+Date:   Thu, 23 Mar 2023 10:51:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        sumanthk@linux.ibm.com, svens@linux.ibm.com, gor@linux.ibm.com,
+        hca@linux.ibm.com
+References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
+ <20230313080201.2440201-2-tmricht@linux.ibm.com>
+ <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
+ <ZA9sYL/re/aNVpo+@kernel.org>
+ <1ee6884a-2d92-68d9-0917-3ae4f5390714@linux.ibm.com>
+ <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
+ <ZBDo2GiuUTrHhd2L@kernel.org> <ZBtsNTt6Fbp1Lg3t@kernel.org>
+Content-Language: en-US
+From:   Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <ZBtsNTt6Fbp1Lg3t@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lyDSte1bk8pa_dmsOBjdYJFC06R-LdwR
+X-Proofpoint-ORIG-GUID: uHWipVPCyhMSLSsABRgimI0v3iJzSRWE
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/U2W7SI2pG14y3lP"
-Content-Disposition: inline
-In-Reply-To: <SJ1PR12MB63395F16F399E67733EED69BC0879@SJ1PR12MB6339.namprd12.prod.outlook.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ impostorscore=0 adultscore=0 phishscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 spamscore=0 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230071
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/22/23 21:59, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Mar 14, 2023 at 06:36:24PM -0300, Arnaldo Carvalho de Melo escreveu:
+>> Em Tue, Mar 14, 2023 at 09:34:46AM -0700, Ian Rogers escreveu:
+>>> On Tue, Mar 14, 2023 at 1:20 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+>>>>
+>>>> On 3/13/23 19:33, Arnaldo Carvalho de Melo wrote:
+>>>>> Em Mon, Mar 13, 2023 at 08:22:44AM -0700, Ian Rogers escreveu:
+>>>>>> On Mon, Mar 13, 2023 at 1:30 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+>>>>>>>
+>>>>>>> Add metrics for s390 z16
+>>>>>>> - Percentage sourced from Level 2 cache
+>>>>>>> - Percentage sourced from Level 3 on same chip cache
+>>>>>>> - Percentage sourced from Level 4 Local cache on same book
+>>>>>>> - Percentage sourced from Level 4 Remote cache on different book
+>>>>>>> - Percentage sourced from memory
+>>>>>>>
+>>>>>>> For details about the formulas see this documentation:
+>>>>>>> https://www.ibm.com/support/pages/system/files/inline-files/CPU%20MF%20Formulas%20including%20z16%20-%20May%202022_1.pdf
+>>>>>>>
+>>>>>>> Outpuf after:
+>>>>>>>  # ./perf stat -M l4rp -- dd if=/dev/zero of=/dev/null bs=10M count=10K
+>>>>>>>  .... dd output deleted
+>>>>>>>
+>>>>>>>  Performance counter stats for 'dd if=/dev/zero of=/dev/null bs=10M count=10K':
+>>>>>>>
+>>>>>>>                  0      IDCW_OFF_DRAWER_CHIP_HIT         #     0.00 l4rp
+>>>>>>>            431,866      L1I_DIR_WRITES
+>>>>>>>              2,395      IDCW_OFF_DRAWER_IV
+>>>>>>>                  0      ICW_OFF_DRAWER
+>>>>>>>                  0      IDCW_OFF_DRAWER_DRAWER_HIT
+>>>>>>>              1,437      DCW_OFF_DRAWER
+>>>>>>>        425,960,793      L1D_DIR_WRITES
+>>>>>>>
+>>>>>>>       12.165030699 seconds time elapsed
+>>>>>>>
+>>>>>>>        0.001037000 seconds user
+>>>>>>>       12.162140000 seconds sys
+>>>>>>>
+>>>>>>>  #
+>>>>>>>
+>>>>>>> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+>>>>>>> Acked-By: Sumanth Korikkar <sumanthk@linux.ibm.com>
+>>>>>>
+>>>>>> Acked-by: Ian Rogers <irogers@google.com>
+>>>>>
+>>>>> Thanks, applied the first two patches, please address the review
+>>>>> suggestions for patches 3-6 and resubmit only those.
+>>>>>
+>>>>> The patches will be in the public perf-tools-next branch later today.
+>>>>>
+>>>>> - Arnaldo
+>>>>>
+>>>>
+>>>> I would really prefer the current implementation without using "ScaleUnit": "100%"
+>>>> The reason is that these formulars are given to me from the s390 Performance team.
+>>>> They want to use the exact same formulars on all platforms running on s390
+>>>> which includes z/OS and z/VM. This way they are sure to get the same numbers.
+>>>>
+>>>> Hope this background info helps.
+>>>
+>>> For the series:
+>>> Acked-by: Ian Rogers <irogers@google.com>
+>>
+>> Thanks, applied.
+>>
+>> - Arnaldo
+> 
+> While trying to cross build to s390 on:
+> 
+> ubuntu:18.04
+> 
+> using python3
+>  
+> 
+>    CC      /tmp/build/perf/tests/parse-events.o
+> Exception processing pmu-events/arch/s390/cf_z16/extended.json
+> Traceback (most recent call last):
+>   File "pmu-events/jevents.py", line 997, in <module>
+>     main()
+>   File "pmu-events/jevents.py", line 979, in main
+>     ftw(arch_path, [], preprocess_one_file)
+>   File "pmu-events/jevents.py", line 935, in ftw
+>     ftw(item.path, parents + [item.name], action)
+>   File "pmu-events/jevents.py", line 933, in ftw
+>     action(parents, item)
+>   File "pmu-events/jevents.py", line 514, in preprocess_one_file
+>     for event in read_json_events(item.path, topic):
+>   File "pmu-events/jevents.py", line 388, in read_json_events
+>     events = json.load(open(path), object_hook=JsonEvent)
+>   File "/usr/lib/python3.6/json/__init__.py", line 296, in load
+>     return loads(fp.read(),
+>   File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
+>     return codecs.ascii_decode(input, self.errors)[0]
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 4271: ordinal not in range(128)
+> 
+>
 
---/U2W7SI2pG14y3lP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hmmm, this is very strange. After reading this mail I installed Ubuntu 18.04
+on my s390 system. The build works fine, no errors at all.
 
-On Thu, Mar 23, 2023 at 09:26:00AM +0000, Akhil R wrote:
-> > On 22/03/2023 12:00, Akhil R wrote:
-> > >> On 22/03/2023 10:24, Akhil R wrote:
-> > >>> Allocate only one DMA channel for I2C and share it for both TX and =
-RX
-> > >>> instead of using two different DMA hardware channels with the same
-> > >>> slave ID. Since I2C supports only half duplex, there is no impact on
-> > >>> perf with this.
-> > >>>
-> > >>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > >>
-> > >> Just to confirm. This impacts all Tegra devices from Tegra20 to the
-> > >> latest. Does this work for all Tegra and the different DMA controlle=
-rs
-> > >> that they have?
-> > >>
-> > > Yes, It should. I could see in the APB DMA driver that the same chann=
-el
-> > > could be used for TX and RX and the direction is configured only duri=
-ng
-> > > dma_prep_*() calls.
-> > > I did not test it on a Tegra with APB DMA, but since it works very si=
-milar
-> > > to GPC DMA there should not be any impact.
-> >=20
-> >=20
-> > OK. BTW, this does not apply cleanly on top of -next. It appears that
-> > this is based on top "i2c: tegra: Fix PEC support for SMBUS block read"
-> > and that one needs to be applied first. This can be avoided if you send
-> > as a series.
-> >=20
-> Oh. Okay. I used 'git am --3way' when I tried, and the conflict went unno=
-ticed.
-> Shall I send a new version on top of -next?
-> The two patches were added in different contexts and that=E2=80=99s why I=
- did not
-> combine them as a series.
 
-It's usually best to combine them in a series even if they are in
-slightly different contexts. This is especially true if they cause
-conflicts between one another. If you send them as a series, you can
-resolve the conflicts yourself (you may not even have conflicts locally
-if you create the patches in the same branch), but if you send them
-separately the maintainer will end up having to resolve the conflicts
-(or apply in the right order).
+# pmu-events/jevents.py s390 all pmu-events/arch pmu-events/pmu-events.c
+# ll pmu-events/pmu-events.c
+-rw-r--r-- 1 root root 317284 Mar 23 10:46 pmu-events/pmu-events.c
+#
 
-It's best if you resolve the conflicts because you know better than the
-maintainer (usually) or specify any dependencies to make it easier for
-the maintainer to do the right thing.
+The file has the correct contents and the build works fine too.
+# make 
+....
+Auto-detecting system features:
+...                                   dwarf: [ on  ]
+...                      dwarf_getlocations: [ on  ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ OFF ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ on  ]
+...                  numa_num_possible_cpus: [ on  ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ OFF ]
+...                      libdw-dwarf-unwind: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ OFF ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ OFF ]
 
-But again, in the vast majority of cases, it's best to combine all the
-work on one driver in a single series before sending out.
+  INSTALL libsubcmd_headers
+  INSTALL libsymbol_headers
+  INSTALL libperf_headers
+  INSTALL libapi_headers
+  INSTALL libbpf_headers
+  CC      pmu-events/pmu-events.o
+  LD      pmu-events/pmu-events-in.o
+  LINK    perf
+# ./perf list | grep -A 20 basic:
+basic:
+  CPU_CYCLES
+       [Cycle Count. Unit: cpum_cf]
+  INSTRUCTIONS
+       [Instruction Count. Unit: cpum_cf]
+  L1D_DIR_WRITES
+       [Level-1 D-Cache Directory Write Count. Unit: cpum_cf]
+  L1D_PENALTY_CYCLES
+       [Level-1 D-Cache Penalty Cycle Count. Unit: cpum_cf]
+  L1I_DIR_WRITES
+       [Level-1 I-Cache Directory Write Count. Unit: cpum_cf]
+  L1I_PENALTY_CYCLES
+       [Level-1 I-Cache Penalty Cycle Count. Unit: cpum_cf]
+  PROBLEM_STATE_CPU_CYCLES
+       [Problem-State Cycle Count. Unit: cpum_cf]
+  PROBLEM_STATE_INSTRUCTIONS
+       [Problem-State Instruction Count. Unit: cpum_cf]
 
-Thierry
 
---/U2W7SI2pG14y3lP
-Content-Type: application/pgp-signature; name="signature.asc"
+So everythings works as usual.
+-- 
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Geschäftsführung: David Faller
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcINYACgkQ3SOs138+
-s6Hb7A//RY4yqQJDFVPWvq6X0vDHSAkMuIKB7cNKAOOdg9CnwUHXTj/CTqFFYAt2
-Ifv+bhqJq0f+/jUTGpicyLO+Sb/OBIBpfIeg3opqG7gA/xt2BXkqSPuALZk1bkua
-lv0IQ8GEgmynhsSUeVYbdorzpmbBND4emJE/v/IBd//9EWZdqb1myM+zuNz2ixLW
-ifEkDDR9WkrSBWCHCXByC8pFcLtnLV4XUVEFCBUmFQsJfTcIcQrlzTJ1kzJZv9NU
-T8skz0Pm3Oai4cBWuDtFsgZVnsmn687RppTnB4vDPzG4ttQe0dxnhbwUZfuHANVY
-zgasJjYNoh1xT/FMiWHCXRIjyAt129F+T2cnC+Cews5kCuIM04gn20aYqNa/6BSX
-1kEwbgWEebIUxJAI/4/MmbMdDtjiFjYeN0diBCRwNILciK9mHqyr96Rzn7y+7Z/C
-wTRNEs1WBkCDGDy1Sv9IYx9VArdfz8YP0woru8JTZNdR66/hQO926e3nkHWuNwqX
-WD4UMi/9OvTEapsiP891ZL/E8I0NUFAhI1RigyuhCgWHGSIYBOPpKHVxVvzDaoAA
-AVaqs0jEqDFOm8ZbRM3VcbgBdCyoFLJhGqavhxdvA0i6fcvPYZ7CUfINYYJW0e5D
-J0oIxWt/AceiOnTqmKI5GjjN5Kee4ys/F4SLfq4/5+g8qMrIO/k=
-=vz4Y
------END PGP SIGNATURE-----
-
---/U2W7SI2pG14y3lP--
