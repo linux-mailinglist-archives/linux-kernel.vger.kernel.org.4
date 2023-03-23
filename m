@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAE56C60AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBC16C60AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 08:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjCWH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 03:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S231150AbjCWH1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 03:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjCWH1R (ORCPT
+        with ESMTP id S231127AbjCWH1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 03:27:17 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E272D2A9A4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 00:27:10 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b20so49634325edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 00:27:10 -0700 (PDT)
+        Thu, 23 Mar 2023 03:27:40 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8632A6D7;
+        Thu, 23 Mar 2023 00:27:37 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id z19so11111062plo.2;
+        Thu, 23 Mar 2023 00:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679556429;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ToMu+RdmbnNsy0OZQSnVmDUbWaHiYbL8P0vd9oJXtEI=;
-        b=gKxjAG0PWtQezTkFsrc45pjCcZc06LpkviYlVH0nMmjQqQUI+iBvAVZyn1HmLKnw0V
-         CXNygbnFUKI8xBytn7DFx8b7aRRujpIHJZOke8WlaoiNKUsXfPAvN7kzMHtlfcmk4v2w
-         8P5fL8CKQzrt9svViHYxd8/CElL33SFA7T7+S5adF1j9bg6YcZPmrM5geoC+cbAg9B4Y
-         n9l0xZ61LoxrCNW8wRNiQ/0XM1mTCdj5onBltdMrCCxb6IZKTujmd5qwB37pWqNV54n+
-         QGhf4XujKMoxeIML4ShyfwkEdzXF8XrDbKE3gSigcBlrHX0s8NbpJkbAabMtfgeJIKEu
-         kzjg==
+        d=gmail.com; s=20210112; t=1679556457;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHgR8WnUGtyQlzlXJoBF94+5SlpfH7HFwfB03S3iMjg=;
+        b=k25/JmpULurq7a+KwS00111eD3hcJsdFkYd2R+WTM/eDcosEvnl/WTVZX/0pso7TM+
+         s77HTnChysFAL+H8QdiRZBcn9kmkI3pXVcAEXNveRPsOxAN94d/2FBG1XuhP1mriRDWP
+         ck03f6B9q0AfQums0mckX79XZ+wzKGFxVSZ1QsJA7fKBW9Ujh99Bq+lyLdsJr166H7Df
+         3o2DpCcfyvA2ZOQQIogObdwIhu4g1b5/xTUN0z8V/ReVJ9BUwHPMkP4K6AyS0vMxr9ic
+         d6MpLz5x47FVM8fG/vbW0zZB5nPCpsMbvoUk2EehRiUXHV988ujCaeYQrggr8q3Aa7R6
+         Sm7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679556429;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ToMu+RdmbnNsy0OZQSnVmDUbWaHiYbL8P0vd9oJXtEI=;
-        b=b8+DDcs78y3a7a80J9tf1tfQIOBtznC1AeM1QWIPwzSSdyUBqn/pIzUvLWvhtq83jT
-         tRpFhDye861i/6m/ZUOUjvY32knaEpvoOwIOKmoNzd9x5yymsijNQdz7BUafZeUVlEvN
-         Rppo0KteJaGQ871lLvUL0y6uZxzH2XWOy2OThIwWii/yUovY3CoZZ1/yUlnNFr9BXdnQ
-         hASbiUcoOh1bWVf4p1iYMJf+K1Xq4e1Sdbo4izgx1+hWstDoUP3dEnexTIHIwFfUfVIc
-         P5jEmYbnUU3uMRkVo/A6vqDb5Gyxc3KjWDWR0PoTs62WyndNyKnZIYP7zw6B06q13DYJ
-         C7vA==
-X-Gm-Message-State: AO0yUKVm7kcMBBeGRTGosfV3pl3r0eT4dUuo49m6kAMFOyIkAZj65BWA
-        Lmb70iZYQL9aryWt3xmpCdkgbTZ+TsAS3sTVpcU=
-X-Google-Smtp-Source: AK7set/uSENcq54nsOUS2mWQwLa7k1hFNTDmoviQMII0Uq1CmTjxKfNZewVYYgTS3BefvcmJOxcYJg==
-X-Received: by 2002:a17:906:eb8b:b0:884:930:b017 with SMTP id mh11-20020a170906eb8b00b008840930b017mr10896269ejb.60.1679556429387;
-        Thu, 23 Mar 2023 00:27:09 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id qx20-20020a170906fcd400b008eaf99be56esm8448234ejb.170.2023.03.23.00.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 00:27:08 -0700 (PDT)
-Message-ID: <fc85ceb9-5699-99b8-caee-3da64851cee4@linaro.org>
-Date:   Thu, 23 Mar 2023 07:27:08 +0000
+        d=1e100.net; s=20210112; t=1679556457;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DHgR8WnUGtyQlzlXJoBF94+5SlpfH7HFwfB03S3iMjg=;
+        b=zxbXxnyDR65mVks2BGu5FY5N1nZ9DgsOrkhx0afkbZeeByUqud812187pHfW1bWum9
+         Kf20nHQHB3DeXXZlkHpYTYFRySRTkbASmmfNpXUIl/feeWxRV6iNncpnNKZqF21nYl5w
+         vOpOvwnP3mPgRTtX9Cqri6Iqba7bAM7ESQRvKlUiNPcdX8b/sIijp93f91IWFm/qmK11
+         i/J8+aVXW9Oo+HfY87zSBAEG9sWGB3pBGWT3V8RGSYDal2f/bzS2jPOkzVJs2+EDW8X4
+         2dWYllw8wXyVRVT535yQsbPoRGq+3a2HbiyQCLMqo/kAwTC0M6mzOH3wJHxx2PaiTuM2
+         jnRw==
+X-Gm-Message-State: AO0yUKV32cWEwPQuI0e+Irdo6o4frur7p8JI6tJtFifkl5/8JPH4g1mt
+        NbH2LZjZFD6JiYc1NokFPRo=
+X-Google-Smtp-Source: AK7set9G62XWGMycWIpk9Ve2tXMtC8+bS7oASx1uWpyeNDJSPN/s2LBbyoBbZtzoRZkwRWr/QF/JPw==
+X-Received: by 2002:a17:903:2345:b0:19e:cfbf:f68d with SMTP id c5-20020a170903234500b0019ecfbff68dmr6564770plh.23.1679556456689;
+        Thu, 23 Mar 2023 00:27:36 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0017a032d7ae4sm11645447plg.104.2023.03.23.00.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 00:27:36 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH 1/7] KVM: selftests: Test Intel PMU architectural events on gp counters
+Date:   Thu, 23 Mar 2023 15:27:08 +0800
+Message-Id: <20230323072714.82289-2-likexu@tencent.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230323072714.82289-1-likexu@tencent.com>
+References: <20230323072714.82289-1-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] nvmem: add new NXP QorIQ eFuse driver
-Content-Language: en-US
-To:     Richard Alpe <richard@bit42.se>
-Cc:     niklas.soderlund@ragnatech.se, linux-kernel@vger.kernel.org
-References: <20230320141408.1555041-1-richard@bit42.se>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230320141408.1555041-1-richard@bit42.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,147 +74,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Like Xu <likexu@tencent.com>
 
+Add test cases to check if different Architectural events are available
+after it's marked as unavailable via CPUID. It covers vPMU event filtering
+logic based on Intel CPUID, which is a complement to pmu_event_filter.
 
-On 20/03/2023 14:14, Richard Alpe wrote:
-> Add SFP (Security Fuse Processor) read support for NXP (Freescale)
-> QorIQ series SOC's.
-> 
-> This patch adds support for the T1023 SOC using the SFP offset from
-> the existing T1023 device tree. In theory this should also work for
-> T1024, T1014 and T1013 which uses the same SFP base offset.
-> 
-> Signed-off-by: Richard Alpe <richard@bit42.se>
-> ---
-> v2: Rebase on v6.3-rc3
-> 
->   drivers/nvmem/Kconfig       | 12 ++++++
->   drivers/nvmem/Makefile      |  2 +
->   drivers/nvmem/qoriq-efuse.c | 80 +++++++++++++++++++++++++++++++++++++
->   3 files changed, 94 insertions(+)
->   create mode 100644 drivers/nvmem/qoriq-efuse.c
-> 
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index 6dec38805041..43446e5f7d9b 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -377,4 +377,16 @@ config NVMEM_ZYNQMP
->   
->   	  If sure, say yes. If unsure, say no.
->   
-> +config NVMEM_QORIQ_EFUSE
-> +	tristate "NXP QorIQ eFuse support"
-> +	depends on PPC_85xx || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	help
-> +	  This driver provides read support for the eFuses (SFP) on NXP QorIQ
-> +	  series SoC's. This includes secure boot settings, the globally unique
-> +	  NXP ID 'FUIDR' and the OEM unique ID 'OUIDR'.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called nvmem_qoriq_efuse.
-> +
->   endif
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index 6a1efffa88f0..b8fdf9b51953 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -74,3 +74,5 @@ obj-$(CONFIG_NVMEM_VF610_OCOTP)		+= nvmem-vf610-ocotp.o
->   nvmem-vf610-ocotp-y			:= vf610-ocotp.o
->   obj-$(CONFIG_NVMEM_ZYNQMP)		+= nvmem_zynqmp_nvmem.o
->   nvmem_zynqmp_nvmem-y			:= zynqmp_nvmem.o
-> +obj-$(CONFIG_NVMEM_QORIQ_EFUSE)		+= nvmem-qoriq-efuse.o
-> +nvmem-qoriq-efuse-y			:= qoriq-efuse.o
-> diff --git a/drivers/nvmem/qoriq-efuse.c b/drivers/nvmem/qoriq-efuse.c
-> new file mode 100644
-> index 000000000000..a332bb603e7a
-> --- /dev/null
-> +++ b/drivers/nvmem/qoriq-efuse.c
-> @@ -0,0 +1,80 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  Copyright (C) 2022  Westermo Network Technologies AB
-2023 ?
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/nvmem-provider.h>
-> +#include <linux/platform_device.h>
-> +
-> +struct qoriq_efuse_priv {
-> +	void __iomem *base;
-> +};
-> +
-> +static int qoriq_efuse_read(void *context, unsigned int offset, void *val,
-> +			  size_t bytes)
-> +{
-> +	struct qoriq_efuse_priv *priv = context;
-> +	u32 *_val = val;
-> +
-> +	while (bytes >= sizeof(u32)) {
-> +		*_val++ = readl_relaxed(priv->base + offset);
-> +		offset += sizeof(u32);
-> +		bytes -= sizeof(u32);
-> +	}
+According to Intel SDM, the number of architectural events is reported
+through CPUID.0AH:EAX[31:24] and the architectural event x is
+supported if EBX[x]=0 && EAX[31:24]>x.
 
-__ioread32_copy ?
+Co-developed-by: Jinrong Liang <cloudliang@tencent.com>
+Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/pmu_cpuid_test.c     | 202 ++++++++++++++++++
+ 2 files changed, 203 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
 
-> +
-> +	return 0;
-> +}
-> +
-> +static int qoriq_efuse_probe(struct platform_device *pdev)
-> +{
-> +	struct nvmem_config config = {
-> +		.dev = &pdev->dev,
-> +		.read_only = true,
-> +		.reg_read = qoriq_efuse_read,
-> +		.stride = sizeof(u32),
-> +		.word_size = sizeof(u32),
-> +		.name = "qoriq_efuse_read",
-> +		.id = NVMEM_DEVID_AUTO,
-> +		.root_only = true,
-> +	};
-> +	struct qoriq_efuse_priv *priv;
-> +	struct nvmem_device *nvmem;
-> +	struct resource *res;
-> +
-> +	priv = devm_kzalloc(config.dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	config.size = resource_size(res);
-> +	config.priv = priv;
-> +	nvmem = devm_nvmem_register(config.dev, &config);
-> +
-> +	return PTR_ERR_OR_ZERO(nvmem);
-> +}
-> +
-> +static const struct of_device_id qoriq_efuse_of_match[] = {
-> +	{ .compatible = "fsl,t1023-sfp", },
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 84a627c43795..8aa63081b3e6 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -78,6 +78,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
+ TEST_GEN_PROGS_x86_64 += x86_64/monitor_mwait_test
+ TEST_GEN_PROGS_x86_64 += x86_64/nested_exceptions_test
+ TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
++TEST_GEN_PROGS_x86_64 += x86_64/pmu_cpuid_test
+ TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
+ TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
+ TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
+diff --git a/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+new file mode 100644
+index 000000000000..faab0a91e191
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/pmu_cpuid_test.c
+@@ -0,0 +1,202 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test the consistency of the PMU's CPUID and its features
++ *
++ * Copyright (C) 2023, Tencent, Inc.
++ *
++ * Check that the VM's PMU behaviour is consistent with the
++ * VM CPUID definition.
++ */
++
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <x86intrin.h>
++
++#include "processor.h"
++
++/* Guest payload for any performance counter counting */
++#define NUM_BRANCHES 10
++
++#define EVENTSEL_OS BIT_ULL(17)
++#define EVENTSEL_EN BIT_ULL(22)
++#define PMU_CAP_FW_WRITES BIT_ULL(13)
++#define EVENTS_MASK GENMASK_ULL(7, 0)
++#define PMU_VERSION_MASK GENMASK_ULL(7, 0)
++#define GP_CTR_NUM_OFS_BIT 8
++#define GP_CTR_NUM_MASK GENMASK_ULL(15, GP_CTR_NUM_OFS_BIT)
++#define EVT_LEN_OFS_BIT 24
++#define EVT_LEN_MASK GENMASK_ULL(31, EVT_LEN_OFS_BIT)
++
++#define ARCH_EVENT(select, umask) (((select) & 0xff) | ((umask) & 0xff) << 8)
++
++/*
++ * Intel Pre-defined Architectural Performance Events. Note some events
++ * are skipped for testing due to difficulties in stable reproduction.
++ */
++static const uint64_t arch_events[] = {
++	[0] = ARCH_EVENT(0x3c, 0x0),
++	[1] = ARCH_EVENT(0xc0, 0x0),
++	[2] = ARCH_EVENT(0x3c, 0x1),
++	[3] = ARCH_EVENT(0x2e, 0x4f), /* LLC Reference */
++	[4] = ARCH_EVENT(0x2e, 0x41), /* LLC Misses */
++	[5] = ARCH_EVENT(0xc4, 0x0),
++	[6] = ARCH_EVENT(0xc5, 0x0),  /* Branch Misses Retired */
++	[7] = ARCH_EVENT(0xa4, 0x1), /* Topdown Slots */
++};
++
++static struct kvm_vcpu *new_vcpu(void *guest_code)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	vm_init_descriptor_tables(vm);
++	vcpu_init_descriptor_tables(vcpu);
++
++	return vcpu;
++}
++
++static void free_vcpu(struct kvm_vcpu *vcpu)
++{
++	kvm_vm_free(vcpu->vm);
++}
++
++static void run_vcpu(struct kvm_vcpu *vcpu, const char *msg,
++		     bool (*check_ucall)(struct ucall *uc, void *data),
++		     void *expect_args)
++{
++	struct ucall uc;
++
++	for (;;) {
++		vcpu_run(vcpu);
++		switch (get_ucall(vcpu, &uc)) {
++		case UCALL_SYNC:
++			TEST_ASSERT(check_ucall(&uc, expect_args), "%s", msg);
++			continue;
++		case UCALL_DONE:
++			break;
++		default:
++			TEST_ASSERT(false, "Unexpected exit: %s",
++				    exit_reason_str(vcpu->run->exit_reason));
++		}
++		break;
++	}
++}
++
++static bool first_uc_arg_non_zero(struct ucall *uc, void *data)
++{
++	return uc->args[1];
++}
++
++static void intel_guest_run_arch_event(uint8_t version, uint8_t max_gp_num,
++				       bool supported, uint32_t ctr_base_msr,
++				       uint64_t evt_code)
++{
++	uint32_t global_msr = MSR_CORE_PERF_GLOBAL_CTRL;
++	unsigned int i;
++
++	for (i = 0; i < max_gp_num; i++) {
++		wrmsr(ctr_base_msr + i, 0);
++		wrmsr(MSR_P6_EVNTSEL0 + i, EVENTSEL_OS | EVENTSEL_EN | evt_code);
++		if (version > 1)
++			wrmsr(global_msr, BIT_ULL(i));
++
++		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
++
++		if (version > 1)
++			wrmsr(global_msr, 0);
++
++		GUEST_SYNC(supported == !!_rdpmc(i));
++	}
++
++	GUEST_DONE();
++}
++
++static void test_arch_events_setup(struct kvm_vcpu *vcpu, uint8_t evt_vector,
++				   uint8_t unavl_mask, uint8_t idx)
++{
++	struct kvm_cpuid_entry2 *entry;
++	uint32_t ctr_msr = MSR_IA32_PERFCTR0;
++	bool is_supported;
++
++	entry = vcpu_get_cpuid_entry(vcpu, 0xa);
++	entry->eax = (entry->eax & ~EVT_LEN_MASK) |
++		(evt_vector << EVT_LEN_OFS_BIT);
++	entry->ebx = (entry->ebx & ~EVENTS_MASK) | unavl_mask;
++	vcpu_set_cpuid(vcpu);
++
++	if (vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES) & PMU_CAP_FW_WRITES)
++		ctr_msr = MSR_IA32_PMC0;
++
++	/* Arch event x is supported if EBX[x]=0 && EAX[31:24]>x */
++	is_supported = !(entry->ebx & BIT_ULL(idx)) &&
++		(((entry->eax & EVT_LEN_MASK) >> EVT_LEN_OFS_BIT) > idx);
++
++	vcpu_args_set(vcpu, 5, entry->eax & PMU_VERSION_MASK,
++		      (entry->eax & GP_CTR_NUM_MASK) >> GP_CTR_NUM_OFS_BIT,
++		      is_supported, ctr_msr, arch_events[idx]);
++}
++
++static void intel_check_arch_event_is_unavl(uint8_t idx)
++{
++	const char *msg = "Unavailable arch event is counting.";
++	uint8_t eax_evt_vec, ebx_unavl_mask, i, j;
++	struct kvm_vcpu *vcpu;
++
++	/*
++	 * A brute force iteration of all combinations of values is likely to
++	 * exhaust the limit of the single-threaded thread fd nums, so it's
++	 * tested here by iterating through all valid values on a single bit.
++	 */
++	for (i = 0; i < ARRAY_SIZE(arch_events); i++) {
++		eax_evt_vec = BIT_ULL(i);
++		for (j = 0; j < ARRAY_SIZE(arch_events); j++) {
++			ebx_unavl_mask = BIT_ULL(j);
++
++			vcpu = new_vcpu(intel_guest_run_arch_event);
++			test_arch_events_setup(vcpu, eax_evt_vec,
++					       ebx_unavl_mask, idx);
++			run_vcpu(vcpu, msg, first_uc_arg_non_zero, NULL);
++			free_vcpu(vcpu);
++		}
++	}
++}
++
++static void intel_test_arch_events(void)
++{
++	uint8_t idx;
++
++	for (idx = 0; idx < ARRAY_SIZE(arch_events); idx++) {
++		/*
++		 * Given the stability of performance event recurrence,
++		 * only these arch events are currently being tested:
++		 * - Core cycle event (idx = 0)
++		 * - Instruction retired event (idx = 1)
++		 * - Reference cycles event (idx = 2)
++		 * - Branch instruction retired event (idx = 5)
++		 */
++		if (idx > 2 && idx != 5)
++			continue;
++
++		intel_check_arch_event_is_unavl(idx);
++	}
++}
++
++static void intel_test_pmu_cpuid(void)
++{
++	intel_test_arch_events();
++}
++
++int main(int argc, char *argv[])
++{
++	TEST_REQUIRE(get_kvm_param_bool("enable_pmu"));
++
++	if (host_cpu_is_intel) {
++		TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
++		TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
++		TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
++
++		intel_test_pmu_cpuid();
++	}
++
++	return 0;
++}
+-- 
+2.40.0
 
-Have you already sent the bindings patch for this?
-
-> +	{/* sentinel */},
-> +};
-> +MODULE_DEVICE_TABLE(of, qoriq_efuse_of_match);
-> +
-> +static struct platform_driver qoriq_efuse_driver = {
-> +	.probe = qoriq_efuse_probe,
-> +	.driver = {
-> +		.name = "qoriq-efuse",
-> +		.of_match_table = qoriq_efuse_of_match,
-> +	},
-> +};
-> +module_platform_driver(qoriq_efuse_driver);
-> +
-> +MODULE_AUTHOR("Richard Alpe <richard.alpe@bit42.se>");
-> +MODULE_DESCRIPTION("NXP QorIQ Security Fuse Processor (SFP) Reader");
-> +MODULE_LICENSE("GPL");
