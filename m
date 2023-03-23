@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEEB6C6ECA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4796C6ED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjCWR12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S232101AbjCWR2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjCWR10 (ORCPT
+        with ESMTP id S232090AbjCWR2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:27:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 201E8F1;
-        Thu, 23 Mar 2023 10:27:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC3CB2F4;
-        Thu, 23 Mar 2023 10:28:08 -0700 (PDT)
-Received: from [10.57.53.151] (unknown [10.57.53.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B25633F766;
-        Thu, 23 Mar 2023 10:27:21 -0700 (PDT)
-Message-ID: <b3bb6dc1-ceeb-0116-055b-25a27da8ab38@arm.com>
-Date:   Thu, 23 Mar 2023 17:27:20 +0000
+        Thu, 23 Mar 2023 13:28:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8355EF1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679592452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rqUj59ylPYbek9OHHWmJ/oxl6nIZ0K3LfZJ1jC35bg4=;
+        b=fwAxNY9/+EvWl6p417jQwT2O8pIZV9sZnVfUuZPLs+mpqOR9ROO12/ATx6xSl3CFzIZsyU
+        gLLyAUcXt5+1evQI/hVN3Y47sGVjvolRxDPFSh3BpXA01f3fL+/11E31VzZui1aY6x/kCi
+        Ld/1CnK4PhU/FcuDm4fElzRubu9U/5E=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-115-DUioiuNlMyesrS7KpP3NPQ-1; Thu, 23 Mar 2023 13:27:31 -0400
+X-MC-Unique: DUioiuNlMyesrS7KpP3NPQ-1
+Received: by mail-wm1-f69.google.com with SMTP id bh19-20020a05600c3d1300b003ee93fac4a9so977308wmb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679592450;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rqUj59ylPYbek9OHHWmJ/oxl6nIZ0K3LfZJ1jC35bg4=;
+        b=nm52I5pfaxcnTif5HcfloWB3FxAYsAdgL/rJdL4QmkvpQ7etVfJB9Q5RCHnxWw/Qkx
+         X0EPFZ/nziVLZivgWpfIdO+AjTslRBFLEl4QLQCuBQMGQh5y+ZSL6pQuOrGwdJ1uDavN
+         zmVN5nLYqEi/Bu9PfEVixBRfmzetySkmLyzVER77YOI3M79XXaTZeO2Y1aduSzokANrE
+         SYfc1dXpnO/5qxQNCw0meCejHjwfWXknDenyqkgbgthDfdkbPW3+KKpDZoQrVW2ZkRvO
+         IsbMDuPLXzKLJeIWCaqWE0njVuCSJBLZJZmBPXLYeNLIwuncjzKsR3hyyVECJivbI/oz
+         vPUw==
+X-Gm-Message-State: AAQBX9cumWkK7DVf4GKdj75J1oLAzvETBCOt+nb1TmmrgJmPrYQPSm/4
+        PQMj20whW+gXyPah5iW2iNuiXMyj31Mq2LhNQRqfRZiKs6P94ua4yPnHxx0Ic12mSnhnm/9fMsH
+        NCxPmTE0NU+lMufPp85guOPhQ5DPzu764
+X-Received: by 2002:adf:f382:0:b0:2ce:a6de:2098 with SMTP id m2-20020adff382000000b002cea6de2098mr3247322wro.17.1679592450270;
+        Thu, 23 Mar 2023 10:27:30 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bErc1SOUZLCZE3ySna6brxGhOEwPKg+R5sV3oNSZC92wU9Vza0cMQB2t6urjMMr12jYwAT2A==
+X-Received: by 2002:adf:f382:0:b0:2ce:a6de:2098 with SMTP id m2-20020adff382000000b002cea6de2098mr3247309wro.17.1679592449992;
+        Thu, 23 Mar 2023 10:27:29 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:e500:5cdf:c280:4b31:4016? (p200300cbc704e5005cdfc2804b314016.dip0.t-ipconnect.de. [2003:cb:c704:e500:5cdf:c280:4b31:4016])
+        by smtp.gmail.com with ESMTPSA id t13-20020adfe10d000000b002db1b66ea8fsm3123495wrz.57.2023.03.23.10.27.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 10:27:29 -0700 (PDT)
+Message-ID: <a9985035-237a-467c-6516-f996d56cb7e5@redhat.com>
+Date:   Thu, 23 Mar 2023 18:27:28 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 08/11] coresight-tpdm: Add nodes to configure pattern
- match output
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-9-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1679551448-19160-9-git-send-email-quic_taozha@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mm: Be less noisy during memory hotplug
+Content-Language: en-US
+To:     Tomas Krcka <krckatom@amazon.de>, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Pavel Tatashin <pavel.tatashin@microsoft.com>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20230323171904.14444-1-krckatom@amazon.de>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230323171904.14444-1-krckatom@amazon.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 06:04, Tao Zhang wrote:
-> Add nodes to configure trigger pattern and trigger pattern mask.
-> Each DSB subunit TPDM has maximum of n(n<7) XPR registers to
-> configure trigger pattern match output. Eight 32 bit registers
-> providing DSB interface trigger output pattern match comparison.
-> And each DSB subunit TPDM has maximum of m(m<7) XPMR registers to
-> configure trigger pattern mask match output. Eight 32 bit
-> registers providing DSB interface trigger output pattern match
-> mask.
+On 23.03.23 18:19, Tomas Krcka wrote:
+> Turn a pr_info() into a pr_debug() to prevent dmesg spamming on systems
+> where memory hotplug is a frequent operation.
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> Fixes: 966cf44f637e ("mm: defer ZONE_DEVICE page initialization to the point where we init pgmap")
+> 
+
+Fixes? I suggest top drop that tag here.
+
+> Suggested-by: Jan H. Schönherr <jschoenh@amazon.de>
+> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
 > ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 +++++++
->   drivers/hwtracing/coresight/coresight-tpdm.c       | 84 ++++++++++++++++++++++
->   drivers/hwtracing/coresight/coresight-tpdm.h       |  8 +++
->   3 files changed, 116 insertions(+)
+>   mm/page_alloc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index 094d624..c06374f 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -71,3 +71,27 @@ Description:
->   		value 1: Start EDCMR register number
->   		value 2: End EDCMR register number
->   		value 3: The value need to be written
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_patt_val
-> +Date:		March 2023
-> +KernelVersion	6.3
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the trigger pattern value of DSB tpdm.
-> +		Read the trigger pattern value of DSB tpdm.
-> +
-> +		Accepts the following two values.
-> +		value 1: Index number of XPR register
-> +		value 2: The value need to be written
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index ac1fc986af44..14d70f4e6c0a 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6959,7 +6959,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
+>   				     compound_nr_pages(altmap, pfns_per_compound));
+>   	}
+>   
+> -	pr_info("%s initialised %lu pages in %ums\n", __func__,
+> +	pr_debug("%s initialised %lu pages in %ums\n", __func__,
+>   		nr_pages, jiffies_to_msecs(jiffies - start));
+>   }
+>   
 
-minor nit: What values are acceptable ? Otherwise looks fine.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+-- 
+Thanks,
+
+David / dhildenb
 
