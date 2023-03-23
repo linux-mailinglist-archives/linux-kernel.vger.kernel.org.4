@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7D26C6DBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2EB6C6DC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjCWQf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S232343AbjCWQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCWQfi (ORCPT
+        with ESMTP id S229708AbjCWQgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:35:38 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D094438E87;
-        Thu, 23 Mar 2023 09:34:12 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id t19so13155729qta.12;
-        Thu, 23 Mar 2023 09:34:12 -0700 (PDT)
+        Thu, 23 Mar 2023 12:36:23 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3781367E1;
+        Thu, 23 Mar 2023 09:34:58 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id t13so14459592qvn.2;
+        Thu, 23 Mar 2023 09:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679589251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20210112; t=1679589294;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ymDJDYJzs0i/isCCvz+nZjYckQ5h0Q/W69CkIWbYoQg=;
-        b=hiGb2bGruQXMpAzeZV3fsezlqDScHym1Jsg7pvtvvOmrH2A2WrFLx2ljvX/etEABRX
-         X00J6SQHFU/TBtMNQbKYg5EBtHIEoSFVeSGt6vd4igc6RW+hSTBa9k7BPGmJuS3QIJAZ
-         DWJ39g5lrdzmt2cNylEVFDmb0l8cxgmIzfE798T8qHFgH/G6Zk1JL+LuWWMrcLXrFFen
-         t7dv1co5LqcHpwan3zkZyrVB5grt3vbdsZnCV0KTibJ6UbTr33xDXpZL9Eq9WqMShiHV
-         ry6TqRaJjMiH80IAn/ms2baOO7vba1cIeIm8nv5qC/t6Yv0kDTQ/wBuXl7BejuhlFW/8
-         fagw==
+        bh=stUzCFXiD8PEYBONMfjB7APazeCwrM/CiIh5xilJVJw=;
+        b=eKJLZ3Cdh0SSrcbVglElFiWgm8u8asgClu667oKe4dLR6pNXT1rg0Y14NS7rybTGKK
+         EVTsaQm5UYqpvKAY2z/7N5zVRmvQc9GTaJXpCSxQlexZ8TT2ZHsfVJNqDQF3yO4YIiLP
+         JzJO8TYDoEVC+gFK028z5Yb1F9S2D6+jwPEhWt43xXssMdOTlHaNu1z2awMv1F20vifC
+         DEeNJJOCuylD9doTvOI4S1UF2L+d02esoWjLRH9SDog4/E22ThyHFxMU+zwg6wrDdG8U
+         T8Lq1w27fYl6w6w8PRieIsmiA7Cb9ZI/GtQm6WqdtnZaUZhhbV9lVvpCDitRg5IncSt9
+         fw0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1679589294;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymDJDYJzs0i/isCCvz+nZjYckQ5h0Q/W69CkIWbYoQg=;
-        b=qasIyf8mHBot/CxM3IA6Xfr3Mg0cvgoZ2OHh1OIs8Ic4N1gFkFY+WzAOhGtvKWm8uK
-         aBcm3UnluqSYUqdFct2+Mor0p2rD2CXo3mvU8QYyRd4caoGG4szTbg5QwWfHGyrDBcNC
-         odNp/IYl+7LQmJPELARlK3SB6u4yWPaCZHALtsP783uBswrCYubrNaRa2cTFU26wCixY
-         dFoI92ZegQJCw6n4+NCTQtH7bGC4cv4Fzbf7p/ijUiC8OuoPGacX3EQD/owuuKtUVswk
-         wNOzpCQRJHqS1CTS3ELvwmH7pSnVpjB3/It1+6SiroHsXghVt5ZYZdzRB/CvsPSUiqFL
-         MpjA==
-X-Gm-Message-State: AO0yUKUUV6x6Hf1dOlhsmYq8gkXf18wB53Z/0+u1NzwEGFlq4kCXedLU
-        vDW+dZ3QAREaW71Bu+24Gws=
-X-Google-Smtp-Source: AK7set9/1KHBdOD4impskBvEATZdqeWunhSKtK0Xpt+noJ8I6XEF7zvHUiLJbXEHkTX82eVB0u1utQ==
-X-Received: by 2002:a05:622a:284:b0:3bf:d238:6ca with SMTP id z4-20020a05622a028400b003bfd23806camr10924314qtw.68.1679589251634;
-        Thu, 23 Mar 2023 09:34:11 -0700 (PDT)
+        bh=stUzCFXiD8PEYBONMfjB7APazeCwrM/CiIh5xilJVJw=;
+        b=qClwRTPSjqM7cpLu6kGK9yTEXJ3kQu2j2VqzibPnE7+x9lzPWP+6v7U3GhDzon/S1S
+         bgAoF71RqI/4iLUsILYtvEtlf+nexD2Y0WgsNbyWew24Rl1zdfdjE2pe6rNFfiVIcTzV
+         DUTzHT2/3f8uhGG/9sLXW2YOA/80p3QQNWWKulCyv1Uf5qMvMDmrS4rIcE0HX2tNkHyB
+         w/yObrFVmo9cIr3y5Hy8ifoL/JYLocAv2yZSUSpra5R3ixQApySXqgoVVYMmUDftdDjm
+         7K7jMo1171pvnI3QwAKcoICxiaSh3qvq9GII/hcTl+feDvk9TxgjbiUUO47rVhsawZtv
+         nPGA==
+X-Gm-Message-State: AO0yUKV5ZyA37wD5Q0BmFpaPoLZbc3rW4Acu9w9FGaliKMHEUoxwHyM9
+        //6KXIDEF1+rzBHXHTB8BhM=
+X-Google-Smtp-Source: AK7set8wSykQWhLKJW29Dr3h+aqlQ2XOZDHdJCbSAbjLfBqN9d1PUV6EBv7PR5nMwBVzXM49BB6C7A==
+X-Received: by 2002:a05:6214:2409:b0:5a7:a434:c307 with SMTP id fv9-20020a056214240900b005a7a434c307mr14968249qvb.24.1679589293908;
+        Thu, 23 Mar 2023 09:34:53 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b6-20020ac87546000000b003d29e23e214sm12007406qtr.82.2023.03.23.09.34.02
+        by smtp.googlemail.com with ESMTPSA id p11-20020a05620a22ab00b0074583bda590sm13401830qkh.10.2023.03.23.09.34.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 09:34:11 -0700 (PDT)
-Message-ID: <1dab843b-268f-7c7c-6049-8f0f6d4c920a@gmail.com>
-Date:   Thu, 23 Mar 2023 09:34:00 -0700
+        Thu, 23 Mar 2023 09:34:53 -0700 (PDT)
+Message-ID: <d9d3b20b-d288-8b6c-b8fd-77a24bf7aab2@gmail.com>
+Date:   Thu, 23 Mar 2023 09:34:45 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH net-next 9/9] net: dsa: tag_ocelot: call only the relevant
- portion of __skb_vlan_pop() on TX
+Subject: Re: [PATCH 1/2] dt-bindings: net: dsa: b53: add BCM53134 support
 Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        paul.geurts@prodrive-technologies.com, jonas.gorski@gmail.com,
+        andrew@lunn.ch, olteanv@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230322233823.1806736-1-vladimir.oltean@nxp.com>
- <20230322233823.1806736-10-vladimir.oltean@nxp.com>
+References: <20230323121804.2249605-1-noltari@gmail.com>
+ <20230323121804.2249605-2-noltari@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230322233823.1806736-10-vladimir.oltean@nxp.com>
+In-Reply-To: <20230323121804.2249605-2-noltari@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -80,54 +80,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 16:38, Vladimir Oltean wrote:
-> ocelot_xmit_get_vlan_info() calls __skb_vlan_pop() as the most
-> appropriate helper I could find which strips away a VLAN header.
-> That's all I need it to do, but __skb_vlan_pop() has more logic, which
-> will become incompatible with the future revert of commit 6d1ccff62780
-> ("net: reset mac header in dev_start_xmit()").
+On 3/23/23 05:18, Álvaro Fernández Rojas wrote:
+> BCM53134 are B53 switches connected by MDIO.
 > 
-> Namely, it performs a sanity check on skb_mac_header(), which will stop
-> being set after the above revert, so it will return an error instead of
-> removing the VLAN tag.
-> 
-> ocelot_xmit_get_vlan_info() gets called in 2 circumstances:
-> 
-> (1) the port is under a VLAN-aware bridge and the bridge sends
->      VLAN-tagged packets
-> 
-> (2) the port is under a VLAN-aware bridge and somebody else (an 8021q
->      upper) sends VLAN-tagged packets (using a VID that isn't in the
->      bridge vlan tables)
-> 
-> In case (1), there is actually no bug to defend against, because
-> br_dev_xmit() calls skb_reset_mac_header() and things continue to work.
-> 
-> However, in case (2), illustrated using the commands below, it can be
-> seen that our intervention is needed, since __skb_vlan_pop() complains:
-> 
-> $ ip link add br0 type bridge vlan_filtering 1 && ip link set br0 up
-> $ ip link set $eth master br0 && ip link set $eth up
-> $ ip link add link $eth name $eth.100 type vlan id 100 && ip link set $eth.100 up
-> $ ip addr add 192.168.100.1/24 dev $eth.100
-> $ # needed to work around an apparent DSA RX filtering bug
-> $ ip link set $eth promisc on
-> 
-> I could fend off the checks in __skb_vlan_pop() with some
-> skb_mac_header_was_set() calls, but seeing how few callers of
-> __skb_vlan_pop() there are from TX paths, that seems rather
-> unproductive.
-> 
-> As an alternative solution, extract the bare minimum logic to strip a
-> VLAN header, and move it to a new helper named vlan_remove_tag(), close
-> to the definition of vlan_insert_tag(). Document it appropriately and
-> make ocelot_xmit_get_vlan_info() call this smaller helper instead.
-> 
-> Seeing that it doesn't appear illegal to test skb->protocol in the TX
-> path, I guess it would be a good for vlan_remove_tag() to also absorb
-> the vlan_set_encap_proto() function call.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
