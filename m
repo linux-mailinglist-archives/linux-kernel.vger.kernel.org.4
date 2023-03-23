@@ -2,219 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16FE6C6D2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A146C6D2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbjCWQRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S231226AbjCWQRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjCWQQr (ORCPT
+        with ESMTP id S230137AbjCWQRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:16:47 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2852D36686
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:16:29 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id by8so21909912ljb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679588187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ryTu6zaCoI2WK0bZO1AkabKmhlUxG/TKoy8qClCDl3s=;
-        b=X35gckylit4clnuJCHYArzsheet/i/G//qUBdWpgiz31svNxTKw9uIF1ce96dYHrlU
-         wf7biuyvGZzW053nOjPU1al8iq2TEIaOjAhWhFLmmy95b9hECCRdLK0c0/9lxE6mKP68
-         U89tN/BuLAy3Vywj+ZvVTaC0F31vOv8SQeHbqLa7KhNM0qorUpUhH7p3/NgsdZ868WHt
-         A1D5EN90vgs2q9aMIlvpLwv+YGmM9OkoVlRTu+cydBGjgotNsqN4UpaL2cWxjJu9rPC0
-         mBPsVsIhzTWugKDz3+exNLswtjqD34cgyxAx17qiCiWVVnZHydRHF6LC7OL9rwbSJ76k
-         7+pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679588187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ryTu6zaCoI2WK0bZO1AkabKmhlUxG/TKoy8qClCDl3s=;
-        b=TxhXSGE/JvfAfvvO7/FCJojytzfFL5TpFheUSKEJ2NLzXQ3kPrwurW5pOa9lsRy0uf
-         zUkmTWHU1lUS/cqIrdunTx4lP3u/b5IsP0RL3k1xOf2hcbEi3H5CYHmCCgLyTX8WWpda
-         kNtj7tSugBbHASs72MtLNGAnkx4GpRf7T9rl8KbGeJNuD0ENPZDHpQ71IrgoJQSIyi7p
-         aT+DamxYJbTtK7SUwwhWN+r3luzPLFoYK1lX6yu6hairWmg9OJ8MNsFwEJmlFBPAQ+lE
-         Z3HM4abyXYFOyl5LPh1GhJEKlL8FUcdTlO54U6/3HrQiEdLXMyKkFZuBhQCQr5+wDIgT
-         a6WA==
-X-Gm-Message-State: AO0yUKXtZqM9JCrpf8s1aaUpGr4ZwVueW2JJ92CuM4pQDl87pbP3TtDe
-        qE8hx4ymCw5aTmaAG1Jz0bgA7w==
-X-Google-Smtp-Source: AK7set9Y4cajNDfcbllrzFUVHfIvE/fAcRhK+cwjghBUW380/gIDvSK6YWOY/ErBaBnPUCnkf5w9Qg==
-X-Received: by 2002:a2e:6a0d:0:b0:2a0:51b4:855b with SMTP id f13-20020a2e6a0d000000b002a051b4855bmr2371646ljc.18.1679588187317;
-        Thu, 23 Mar 2023 09:16:27 -0700 (PDT)
-Received: from [192.168.1.101] (abxj225.neoplus.adsl.tpnet.pl. [83.9.3.225])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05651c010100b00298a8527806sm3070801ljb.93.2023.03.23.09.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 09:16:26 -0700 (PDT)
-Message-ID: <146cd9ba-5646-2033-0f46-ab7cab5d6b86@linaro.org>
-Date:   Thu, 23 Mar 2023 17:16:22 +0100
+        Thu, 23 Mar 2023 12:17:16 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE6335EE3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:17:08 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230323161704euoutp01de4553fcf0bd311522c0c4bf1e318e39~PGJdvmqnL0682506825euoutp01F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230323161704euoutp01de4553fcf0bd311522c0c4bf1e318e39~PGJdvmqnL0682506825euoutp01F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679588224;
+        bh=NC0js/0E3Lmn93x2gAtkO3H2r7kJun3rlD/UogXKMmk=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=Rps3jbjoKJjTPqNLSBDj9URmKyPAV/AbdvYBrpwlA8T2/VndNLxPneUJ8G2VW4mTD
+         oLDjBGfBDWjBr8uVSJubBtbuK+aupoyjFYTxT0M5SwVq4QE76cdfirSpd4wgUUORq2
+         TS0HiPhch1SsDQIhwNUNmFmxEbkZo76ld9vP/hlk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230323161704eucas1p2faa7b65ac36f6a3d0a17f66f18211380~PGJdJJM6i0730607306eucas1p2C;
+        Thu, 23 Mar 2023 16:17:04 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id E3.D0.09503.F7B7C146; Thu, 23
+        Mar 2023 16:17:03 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230323161703eucas1p1eaaf0da321fcbf807af78fb3224baf59~PGJcztT1q1108211082eucas1p1y;
+        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230323161703eusmtrp104829574f193b3aac92abd40a47b5760~PGJczCpJZ1658716587eusmtrp1T;
+        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
+X-AuditID: cbfec7f2-e8fff7000000251f-12-641c7b7fee58
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id C6.B6.08862.F7B7C146; Thu, 23
+        Mar 2023 16:17:03 +0000 (GMT)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230323161703eusmtip2214de612046c115e47c514f99c83abf2~PGJcnZBIa0225902259eusmtip2f;
+        Thu, 23 Mar 2023 16:17:03 +0000 (GMT)
+Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 23 Mar 2023 16:16:59 +0000
+Message-ID: <655ddc1c-8b64-1168-0f6b-76c565363325@samsung.com>
+Date:   Thu, 23 Mar 2023 17:16:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add
- mdss and dsi panel
+        Thunderbird/102.8.0
+Subject: Re: [RFC v2 0/5] remove page_endio()
 Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230323005925.23179-1-lujianhua000@gmail.com>
- <20230323005925.23179-2-lujianhua000@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230323005925.23179-2-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <senozhatsky@chromium.org>, <viro@zeniv.linux.org.uk>,
+        <axboe@kernel.dk>, <brauner@kernel.org>,
+        <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <hubcap@omnibond.com>, <martin@omnibond.com>, <mcgrof@kernel.org>,
+        <devel@lists.orangefs.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <ZBxxPw9BTdkE4KF0@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [106.110.32.65]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsWy7djP87r11TIpBr/X21jMWb+GzWL13X42
+        i9eHPzFa7N88hcmi/W4fk8XeW9oWe/aeZLG4vGsOm8W9Nf9ZLU6u/89scWPCU0aLZV/fs1vs
+        3riIzeL83+OsFr9/zGFz4PeY3XCRxWPzCi2Py2dLPTat6mTz2PRpErvHiRm/WTwapt5i8/h1
+        +w6rx+dNch6bnrxlCuCK4rJJSc3JLEst0rdL4MqYf2U6c8EalorJtywaGHczdzFyckgImEic
+        /vCLpYuRi0NIYAWjRMvnY+wQzhdGiX1fXoBVCQl8ZpT4OsURpuPqpE1sEEXLGSWOthxmhXCA
+        ij7e3w/l7GSUeNu7lKmLkYODV8BOYsJ7X5BuFgFViQMtW9lBbF4BQYmTM5+wgJSICkRJvHhd
+        BhIWFtCVuLinkwXEZhYQl7j1ZD7YFBEBDYk3W4xApjML9DBLLFq7C6yVTUBLorETbCIn0G1v
+        3y9jhWjVlGjd/psdwpaX2P52DtTHihKTbr5nhbBrJU5tucUEMlNC4B6nxLMjh9ghEi4S6x7P
+        gLKFJV4d3wJly0icntzDAmFXSzy98ZsZormFUaJ/53o2kIMkBKwl+s7kQNQ4SuzZfJ4VIswn
+        ceOtIMQ9fBKTtk1nnsCoOgspIGYh+XgWkhdmIXlhASPLKkbx1NLi3PTUYsO81HK94sTc4tK8
+        dL3k/NxNjMDkd/rf8U87GOe++qh3iJGJg/EQowQHs5IIrxuzRIoQb0piZVVqUX58UWlOavEh
+        RmkOFiVxXm3bk8lCAumJJanZqakFqUUwWSYOTqkGpv5rv5R+i8nVBNoYTv7xwn3fJF3Bb/xF
+        M7+fayrzN1wpbmPQWmeUVL3w6el366/4Sqln1SVnMn69cyoz9+O2XXfnaInv9mm0+Ofw9dLh
+        qIqvz9mNZjWcyNzfW9l6ffXHs74PT8Q6nzfMlXY05vz07tzhkLCTsgINfyPiJZ78USzr5jqw
+        V3PiFv2tVv1P8pufOJklKMmu2q7h4i05wz588YmAyk0b6p0vzl3De9dJI6pPgmtVP8+q89Kr
+        rl3dsaBhOa/ByV0zGr5VMfKXhMif8Nxz4E9Iy9Sg0rO1t27rfsrdXDy5PypfqUHrZXBybWH6
+        F+nfx0/OkmiYJN+fNu/g7ejJwQmXfTeELnqRXGaarcRSnJFoqMVcVJwIAOVFs6ftAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIKsWRmVeSWpSXmKPExsVy+t/xe7r11TIpBve+qFrMWb+GzWL13X42
+        i9eHPzFa7N88hcmi/W4fk8XeW9oWe/aeZLG4vGsOm8W9Nf9ZLU6u/89scWPCU0aLZV/fs1vs
+        3riIzeL83+OsFr9/zGFz4PeY3XCRxWPzCi2Py2dLPTat6mTz2PRpErvHiRm/WTwapt5i8/h1
+        +w6rx+dNch6bnrxlCuCK0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJ
+        Sc3JLEst0rdL0MuYf2U6c8EalorJtywaGHczdzFyckgImEhcnbSJrYuRi0NIYCmjxPv5F9kg
+        EjISn658ZIewhSX+XOuCKvrIKNFw6D8zhLOTUWL6mU+sXYwcHLwCdhIT3vuCNLAIqEocaNkK
+        1swrIChxcuYTFhBbVCBK4umdQ2CbhQV0JS7u6QSLMwuIS9x6Mp8JZIyIgIbEmy1GIOOZBXqY
+        JebPmsoIsWs6k8SFmdPZQYrYBLQkGjvB5nMCffD2/TJWiDmaEq3bf7ND2PIS29/OgfpSUWLS
+        zfesEHatxOe/zxgnMIrOQnLeLCRnzEIyahaSUQsYWVYxiqSWFuem5xYb6hUn5haX5qXrJefn
+        bmIEpo1tx35u3sE479VHvUOMTByMhxglOJiVRHjdmCVShHhTEiurUovy44tKc1KLDzGaAsNo
+        IrOUaHI+MHHllcQbmhmYGpqYWRqYWpoZK4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwBXK9
+        7G2peeHeeG6y3EwRrtM/zSLNXgopyy74Vp2p/4Z/7a6qmbO3RSWr3z5/e7Ot9TzGqVZBPs8V
+        V3YenSiwW6VD+UicRKZ9Yf43gxOu7w6LPLmypc+q9P4P7ivcaxzPz+At/H2MaZ7/TfGGG88D
+        uQKV9aeeNOx74C3OHMPPdFjq/Gzn8+JZNyK0VuzcHmvwsC+gKlPPZK47U+49Bf7TdxNvdmpk
+        PzKuf+PcHHNeV+hJ8uo5V943hzJJbGq58T/9RHnf1YW7W/13fzyYYauxfOb1SScZjZdqXXu5
+        uMFuRqeLrZHFw52rG6s/rFS+mHDg2Jz8ws57F963nPSUDPoo8Kk8xV47xHvpWVa71suHlFiK
+        MxINtZiLihMBLWdwS6QDAAA=
+X-CMS-MailID: 20230323161703eucas1p1eaaf0da321fcbf807af78fb3224baf59
+X-Msg-Generator: CA
+X-RootMTR: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
+References: <CGME20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c@eucas1p2.samsung.com>
+        <20230322135013.197076-1-p.raghav@samsung.com>
+        <ZBtSevjWLybE6S07@casper.infradead.org>
+        <fbf5bc8a-6c82-a43e-dd96-8a9d2b7d3bf4@samsung.com>
+        <ZBxxPw9BTdkE4KF0@casper.infradead.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23.03.2023 01:59, Jianhua Lu wrote:
-> Add nodes for BOE NT36523 panel found in xiaomi-elish. This panel
-> is a dual dsi mode panel and the dsi phy type is cphy.
+>> I also changed mpage to **not set** the error flag in the read path. It does beg
+>> the question whether block_read_full_folio() and iomap_finish_folio_read() should
+>> also follow the suit.
 > 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> Changes in v2:
->   - Include missing <dt-bindings/phy/phy.h> for phy-type property.
-> 
-> Changes in v3:
->   - Sort include header.
->   - Move qcom,sync-dual-dsi to the front of qcom,master-dsi 
->   - Add newline before subnode.
-> 
->  .../boot/dts/qcom/sm8250-xiaomi-elish-boe.dts |  5 ++
->  .../dts/qcom/sm8250-xiaomi-elish-common.dtsi  | 75 +++++++++++++++++++
->  2 files changed, 80 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
-> index bd9ad109daf9..8b2ae39950ff 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
-> @@ -11,3 +11,8 @@ / {
->  	model = "Xiaomi Mi Pad 5 Pro (BOE)";
->  	compatible = "xiaomi,elish", "qcom,sm8250";
->  };
-> +
-> +&display_panel {
-> +	compatible = "xiaomi,elish-boe-nt36523";
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> index a43d4b73ffca..4585f61781f1 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-> @@ -4,6 +4,7 @@
->   */
->  
->  #include <dt-bindings/arm/qcom,ids.h>
-> +#include <dt-bindings/phy/phy.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  #include "sm8250.dtsi"
->  #include "pm8150.dtsi"
-> @@ -469,6 +470,76 @@ &cdsp {
->  	status = "okay";
->  };
->  
-> +&dsi0 {
-> +	vdda-supply = <&vreg_l9a_1p2>;
-> +	qcom,dual-dsi-mode;
-> +	qcom,sync-dual-dsi;
-> +	qcom,master-dsi;
-> +	status = "okay";
-> +
-> +	display_panel: panel@0 {
-> +		reg = <0>;
-> +		vddio-supply = <&vreg_l14a_1p88>;
-> +		reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
-> +		backlight = <&backlight>;
-> +
-> +		status = "disabled";
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +
-> +				panel_in_0: endpoint {
-> +					remote-endpoint = <&dsi0_out>;
-> +				};
-> +			};
-> +
-> +			port@1{
-> +				reg = <1>;
-> +
-> +				panel_in_1: endpoint {
-> +					remote-endpoint = <&dsi1_out>;
-> +				};
-> +			};
-> +
-> +		};
-> +	};
-> +};
-> +
-> +&dsi0_out {
-> +	data-lanes = <0 1 2>;
-> +	remote-endpoint = <&panel_in_0>;
-> +};
-> +
-> +&dsi0_phy {
-> +	vdds-supply = <&vreg_l5a_0p88>;
-> +	phy-type = <PHY_TYPE_CPHY>;
-> +	status = "okay";
-> +};
-> +
-> +&dsi1 {
-> +	vdda-supply = <&vreg_l9a_1p2>;
-> +	qcom,dual-dsi-mode;
-> +	qcom,sync-dual-dsi;
-> +	/* DSI1 is slave, so use DSI0 clocks */
-> +	assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
-> +	status = "okay";
-> +};
-> +
-> +&dsi1_out {
-> +	data-lanes = <0 1 2>;
-> +	remote-endpoint = <&panel_in_1>;
-> +};
-> +
-> +&dsi1_phy {
-> +	vdds-supply = <&vreg_l5a_0p88>;
-> +	phy-type = <PHY_TYPE_CPHY>;
-> +	status = "okay";
-> +};
-> +
->  &gmu {
->  	status = "okay";
->  };
-> @@ -533,6 +604,10 @@ fuel-gauge@55 {
->  	};
->  };
->  
-> +&mdss {
-> +	status = "okay";
-> +};
-> +
->  &pcie0 {
->  	status = "okay";
->  };
+> Wrong.  mpage is used by filesystems which *DO* check the error flag.
+> You can't remove it being set until they're fixed to not check it.
+Got it. I think after your explanation on the Error flag, it makes sense why mpage
+needs to set the error flag, for now. I will change it as a part of the next version
+along with the other comment on Patch 4.
