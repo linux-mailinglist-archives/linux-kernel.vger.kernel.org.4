@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EA06C665B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 717BA6C665E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjCWLRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S231706AbjCWLSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjCWLRf (ORCPT
+        with ESMTP id S230437AbjCWLSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:17:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAE928E7D;
-        Thu, 23 Mar 2023 04:17:29 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N5uEqW011415;
-        Thu, 23 Mar 2023 11:17:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UBQtHcLoBj1gvJaKvZeK+QVSnl95BO+2Eb/SvLRXf3g=;
- b=NaGQftmAT00lAn8UWa+3sdvj1eVu5XXflASdw4E0B+zPhp/BAzIJdEpPKi7OV8zVuPm7
- MK7uqVQ1i0IlD9N/elCCzMU7wnME7LuDNqlCwJn+rLAaW/GaWo3Yj7bZUmEVA5GIyTab
- u9AnoeV+eKj1O3YdWV+vuGDuZDcGoTYKpEGSwLsZBTFRukq87JAgoIW/8Hj9bMZoPeJp
- sXXx5N9AMLuiwSlqgEYBKTL2seLPCGClsl2xl3Udx4rsBTVDEcf2RFkBbz2XDjTXX1Xa
- 0Ir442w17yG/eayakPYigjOKqyKS4LxnzLXryICo1KC69DuPto/pUTp6VHcE92VM3rCt mA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg9nahj94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 11:17:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NBHQUp016433
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 11:17:26 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Mar
- 2023 04:17:23 -0700
-Message-ID: <c53ac749-0d19-b1ca-c5e9-0970a9e77106@quicinc.com>
-Date:   Thu, 23 Mar 2023 16:47:20 +0530
+        Thu, 23 Mar 2023 07:18:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F8844489;
+        Thu, 23 Mar 2023 04:18:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554364B3;
+        Thu, 23 Mar 2023 04:18:53 -0700 (PDT)
+Received: from [10.57.53.151] (unknown [10.57.53.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E3AD3F766;
+        Thu, 23 Mar 2023 04:18:06 -0700 (PDT)
+Message-ID: <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
+Date:   Thu, 23 Mar 2023 11:18:04 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V2 2/2] arm64: dts: qcom: ipq5332: add support for the
- RDP468 variant
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230323093120.20558-1-quic_kathirav@quicinc.com>
- <20230323093120.20558-3-quic_kathirav@quicinc.com>
- <3b2e7b07-7598-45af-0dce-a60310aa5d60@linaro.org>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <3b2e7b07-7598-45af-0dce-a60310aa5d60@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v3 01/11] dt-bindings: arm: Add support for DSB element
+ size
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+ <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NBji5t5HUHlDprz_08V63mT-CG-wlcVa
-X-Proofpoint-ORIG-GUID: NBji5t5HUHlDprz_08V63mT-CG-wlcVa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=674 suspectscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0 bulkscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230085
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23/03/2023 06:03, Tao Zhang wrote:
+> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
+> Bit) element for TPDM. The associated aggregator will read this
+> size before it is enabled. DSB element size currently only
+> supports 32-bit and 64-bit.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../devicetree/bindings/arm/qcom,coresight-tpdm.yaml          | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> index 5c08342..d9b6b613 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+> @@ -44,6 +44,15 @@ properties:
+>       minItems: 1
+>       maxItems: 2
 
-On 3/23/2023 4:26 PM, Krzysztof Kozlowski wrote:
-> On 23/03/2023 10:31, Kathiravan T wrote:
->> Add the initial device tree support for the Reference Design
->> Platform(RDP) 468 based on IPQ5332 family of SoCs. This patch carries the
->> support for Console UART, SPI NOR, eMMC.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->> Changes in V2:
->> 	- Moved the 'reg' property after 'compatible'
->>
->>   arch/arm64/boot/dts/qcom/Makefile           |   1 +
->>   arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 103 ++++++++++++++++++++
->>   2 files changed, 104 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> Hi,
->
-> Your v1 was reported that it does not build. Does this patch build fine?
-As mentioned in the cover letter,
 
-This series depends on the below which adds support the SPI NOR
+>   
+> +  qcom,dsb-element-size:
+> +    description:
+> +      Specifies the DSB(Discrete Single Bit) element size supported by
+> +      the monitor. The associated aggregator will read this size before it
+> +      is enabled. DSB element size currently only supports 32-bit and 64-bit.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 32
+> +    maximum: 64
 
-https://lore.kernel.org/linux-arm-msm/20230320104530.30411-1-quic_kathirav@quicinc.com/
+Shouldn't this be something like oneOf ? It is not a range, but one of
+those two specific values ?
 
-Thanks,
+Suzuki
 
-Kathiravan T.
 
