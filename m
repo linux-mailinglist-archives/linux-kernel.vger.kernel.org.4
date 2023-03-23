@@ -2,129 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB59E6C68EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FCB6C68F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjCWMzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S231620AbjCWM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCWMzS (ORCPT
+        with ESMTP id S230267AbjCWM4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:55:18 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E7EF5;
-        Thu, 23 Mar 2023 05:55:17 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id r187so553320ybr.6;
-        Thu, 23 Mar 2023 05:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679576116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ISNE15I6zaSxAQPnN0sxzeTcFnWMQ3qxrhuU6mm7D/g=;
-        b=obbXsD6Xkj43SRB5k8Hk63Wj2lWc99tg5p3t2mW3Znfk2VnMSCR3eUFGK0kfrMwksD
-         si6pMdZiJw+1YjpGX/mA241glVL/8ubNlEMZXQIaidsvyjo5i7kzwOOjCVF4C5B0HS6A
-         lnRYikqPcpPBFhyydCOQZ8zKaBH+PK5d2rzjrd+w+Wz5ob6A1ljdrCODDGfEbe0oRPFe
-         gBEIdHZIxmhqh+DL+9RHhnpdFt3Mu4Oz3CcfBpnlkA76LwSsDdUEJP0JXCb8jhWxCK3/
-         +ttnZnZt7uUz3by6HT2CCmvyVofvwWbcg2YjjW6q+qDK/sxv16jQUP52k1C3dW4D7C9b
-         W1gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679576116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ISNE15I6zaSxAQPnN0sxzeTcFnWMQ3qxrhuU6mm7D/g=;
-        b=EB9l3UkG7MSXv7T6RjoUVV2EtPMFnZzh2L3++wOsuXDE4MEKuuj0k9SJykdEoooJTb
-         5USXHYkPk2sznEqUwjL1jwLMVbutPBwP/T1hPFQ8xfCbe03RRg+c8ywxbapLLQrwqptH
-         P7GDNZss88vsAJwpWEB8+JaJJFcPDCcbx1Eo7966S+q8zzFMQb821axrLRI2BrZeBXX0
-         dX5309zh8/V/VjAGczLkL6+whPvjTW4RcBB+hVidrONmpQtMS8u0cdIDTesfQMW5/HxM
-         fUBMofPJmo4BNJsL/0Qyaw/bdBKY8ib0Aa0/RtOlp1Dwwl9FDb+2u9z9bUFG/HVLQe3c
-         MQsw==
-X-Gm-Message-State: AAQBX9fGsAwvV+kYxrwsfjA66OZB//c6vhccgigey7DHsp0tnXGJbDz0
-        hHcqzfamNvCwBS2RO0KX06Y7wJpkfY/65QfTYfQ=
-X-Google-Smtp-Source: AKy350ajsSH3bjPX97LUk0SQpzJRBv6W0MBm7d3pkgLTNBNI2ud97ge35PAHVbP9tprvCQnq6q1iOAiH+rWW76PA/x4=
-X-Received: by 2002:a05:6902:1586:b0:b6c:a94:9bf3 with SMTP id
- k6-20020a056902158600b00b6c0a949bf3mr2200866ybu.9.1679576116524; Thu, 23 Mar
- 2023 05:55:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323124510.2484808-1-noltari@gmail.com> <20230323124510.2484808-3-noltari@gmail.com>
- <3e0fa788-173d-a014-20d5-0b4ca4d890b4@linaro.org>
-In-Reply-To: <3e0fa788-173d-a014-20d5-0b4ca4d890b4@linaro.org>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Thu, 23 Mar 2023 13:55:05 +0100
-Message-ID: <CAKR-sGfnKdWmbGwTSgu9qiuJF+qFS=AiwORFDMcKf1x1PpY4Ng@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mtd: nand: raw: macronix: allow disabling block protection
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        masonccyang@mxic.com.tw, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 23 Mar 2023 08:56:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47902CFD7;
+        Thu, 23 Mar 2023 05:56:12 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NBKSXK022815;
+        Thu, 23 Mar 2023 12:55:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=WGvt1tA3Zdk26SSxIzJUKoKuqvx3KwswYKcjn4Jb9Fc=;
+ b=jzUlyZ4ozowNa1iwb3IUhj06Kbwh25fZs9qfyi4AfHJmQx44pwFBuZHKt95nFhu19q1U
+ GTIJ6BVuBHmdJSQusFTpIAHLBZfhZggk29QCblYNYDsCs/yZgr8WzL7TnmVj6radzth6
+ IDWkFQi80yr94v0r74lzeAPjH3QGXj0JLOQZE8zRvfvwEZlWJUqXo3lQAKIlM7JvqTPU
+ QI2OjED50v3BVENpYqrQ6eZ8iWtXKKoqKyNUKL677VFfiABImwuqN3lXGVLBLuLKl4p8
+ uvjn+n33ihWRbUfzX9u+ICKkqbQ3pVtiSj2cHR/DZsCEQi5jh9PY4E/7sVfFRfUSkgk/ 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pge77mu2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:55:44 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32NBS1O5026870;
+        Thu, 23 Mar 2023 12:55:43 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pge77mu10-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:55:43 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N4XRlf018070;
+        Thu, 23 Mar 2023 12:55:40 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3pd4x6e7u3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:55:40 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NCtbLw32244458
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 12:55:37 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B963B20043;
+        Thu, 23 Mar 2023 12:55:37 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81F3C20049;
+        Thu, 23 Mar 2023 12:55:36 +0000 (GMT)
+Received: from [9.171.87.16] (unknown [9.171.87.16])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 12:55:36 +0000 (GMT)
+Message-ID: <2bcabfceab658ae62bf854e5fdaf5bc916481359.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 26/38] pnp: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-acpi@vger.kernel.org
+Date:   Thu, 23 Mar 2023 13:55:36 +0100
+In-Reply-To: <CAJZ5v0gHFA_BgLuCx=Eb3J5D7f7j8kV3Pthqy3jAfpavY6UMuQ@mail.gmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-27-schnelle@linux.ibm.com>
+         <CAJZ5v0gYGkbUk4uFXgidMaRBniwiXpizZWwMGixeNNejeZjPzg@mail.gmail.com>
+         <CAJZ5v0gHFA_BgLuCx=Eb3J5D7f7j8kV3Pthqy3jAfpavY6UMuQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AodznXdTibR-B5qDAN4iAweHV8OlJvjO
+X-Proofpoint-ORIG-GUID: VqiraoOxe_Uj9DZ687OluBDOrMzSML3q
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ clxscore=1015 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 mlxlogscore=851
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230094
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-El jue, 23 mar 2023 a las 13:47, Tudor Ambarus
-(<tudor.ambarus@linaro.org>) escribi=C3=B3:
->
-> Hi,
->
-> On 3/23/23 12:45, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> > Some devices hang when block protection is enabled, so let's add a bool=
-ean
-> > property to allow disabling it.
-> >
->
-> Why do they hang?
+On Tue, 2023-03-21 at 14:56 +0100, Rafael J. Wysocki wrote:
+> On Mon, Mar 20, 2023 at 6:37=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >=20
+> > On Tue, Mar 14, 2023 at 1:13=E2=80=AFPM Niklas Schnelle <schnelle@linux=
+.ibm.com> wrote:
+> > >=20
+> > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
+nds
+> > > not being declared. We thus need to depend on HAS_IOPORT even when
+> > > compile testing only.
+> > >=20
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
+> > >  drivers/pnp/isapnp/Kconfig | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/pnp/isapnp/Kconfig b/drivers/pnp/isapnp/Kconfig
+> > > index d0479a563123..79bd48f1dd94 100644
+> > > --- a/drivers/pnp/isapnp/Kconfig
+> > > +++ b/drivers/pnp/isapnp/Kconfig
+> > > @@ -4,7 +4,7 @@
+> > >  #
+> > >  config ISAPNP
+> > >         bool "ISA Plug and Play support"
+> > > -       depends on ISA || COMPILE_TEST
+> > > +       depends on ISA || (HAS_IOPORT && COMPILE_TEST)
+>=20
+> This breaks code selecting ISAPNP and not depending on it.  See
+> https://lore.kernel.org/linux-acpi/202303211932.5gtCVHCz-lkp@intel.com/T/=
+#u
+> for example.
+>=20
+> I'm dropping the patch now, please fix and resend.
+>=20
+> >=20
 
-At first I thought it would be due to the low level op not being
-supported on BCM63268 brcmnand controllers, but after debugging it
-seemed to be working...
+Sorry if this wasn't super clear but all patches in this series depend
+on patch 1 which introduces the HAS_IOPORT Kconfig option. There's
+really two options, either the whole series goes via e.g. Arnd's tree
+at once or we first only merge patch 1 and then add the rest per
+subsystem until finally the last patch can remove inb()/outb() when
+HAS_IOPORT is unset.
 
-This is the log with block protection disabled:
-[    0.495831] bcm6368_nand 10000200.nand: there is not valid maps for
-state default
-[    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
-[    0.511526] nand: Macronix MX30LF1G18AC
-[    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-2048, OOB size: 64
-[    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
-128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-[    0.535912] Bad block table found at page 65472, version 0x01
-[    0.544268] Bad block table found at page 65408, version 0x01
-[    0.954329] 9 fixed-partitions partitions found on MTD device brcmnand.0
-...
+That said I'm a little unsure about the linked error if that is just
+due to missing HAS_IOPORT or something else. I'll still have to try
+with the instructions in that mail and will report back if it is
+something else.
 
-This is the log with block protection enabled:
-[    0.495095] bcm6368_nand 10000200.nand: there is not valid maps for
-state default
-[    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
-[    0.510772] nand: Macronix MX30LF1G18AC
-[    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-2048, OOB size: 64
-[    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
-128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-[    0.539687] Bad block table not found for chip 0
-[    0.550153] Bad block table not found for chip 0
-[    0.555069] Scanning device for bad blocks
-[    0.601213] CPU 1 Unable to handle kernel paging request at virtual
-address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
-*** Device hangs ***
-
-As you can see, when block protection is enabled, the bad block table
-isn't found and when the device is scanned for bad blocks it just
-hangs...
-
-If you want me to debug something I would be happy to do it, but I
-need some guidance here...
-
-Best regards,
-=C3=81lvaro.
+Thanks,
+Niklas
