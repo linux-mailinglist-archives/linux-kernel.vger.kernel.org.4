@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF656C723E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764A26C7244
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjCWVVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S231289AbjCWVZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjCWVVN (ORCPT
+        with ESMTP id S230281AbjCWVZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:21:13 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C8A2CC70;
-        Thu, 23 Mar 2023 14:21:12 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s13so29254wmr.4;
-        Thu, 23 Mar 2023 14:21:12 -0700 (PDT)
+        Thu, 23 Mar 2023 17:25:54 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4EE28E55
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:25:52 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54184571389so418283237b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:25:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679606470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVc7Of+Ix0ryK/+RAH7Z4FzYtXWWON2rs5eqRA4tiWA=;
-        b=XEapRCAfRjQ3Vvhm/kfmQ20knSNfS4nyJ/DeNjhfKvWH2mP0mTbIUKHMGqzD4Cny7L
-         pnHGYrLZhiQ3qpg0UnAKWYhtQZymabZ89gHgA1UyPiUr4X7/ZucB76UM7P0gfnMvc6+w
-         N5ju5ShkPJ2UoqBR347f7Sp37dTkbdMKiUc9AA7vOWH0vKbb1W/v4qj5vn/YMqyPRi1U
-         lXEjFYiMa/v/g6AvU66r1/KY0L+P0QKdJTvenLQcUmsEoGVjxZlcqUlAN8BPK9i3oDcF
-         Xpqr43xWIu9Ae7F5+NEs5ALgrRlDuC7Rws/EFSWvlJeAFI8XZV9HC8BQB7pdZxSqO4ew
-         JX3A==
+        d=linaro.org; s=google; t=1679606752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJlfsjEn2YPJBYCKiEqWnj0cMJtOD/6yvVL6bZk3/ko=;
+        b=RchpHhQ8JNK34VJo90S90GJErY+zx/gqfDhZnZNvz1FCvx1CQaK4Ql4kYfvMCnI1T/
+         tWhVoLyrcjH7su+EfGejf7x87DcF2fcONkAzcWGHQYpGkvvzea2IJt/GV3nUEZB6IOaz
+         O2EmP05Jr5dP+26DorvY7xftPphPPLj8lySEfJ37CgEMbpi93wK0YqthUFrXpUajCLK+
+         6E2HHUW3uUybZh4rZtNiSKi2CL3vI9xpWYH8Yvrzq7HVsnN5a82yG24MyOxRONQH26nS
+         s2HbZUFsgA/QdY1J4YhzoNXsI3xLz59m0rE6tO004OuPxeVlhHgnqiYDINBI2kFLS6i/
+         0goQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679606470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OVc7Of+Ix0ryK/+RAH7Z4FzYtXWWON2rs5eqRA4tiWA=;
-        b=YM9d2Qggeknso3Fxr0TgRERxPVOCI2tNQxJ84fNWzksZqwqXF3I2wcCu6Z/8H/4c8C
-         6QOVsiTgSNjP36Nk/Co/iolHGKR5Wi893+CnYgoKYBVFbRCTmXUkZIsKZ+mKWbVF/X+A
-         p3q0hqVAzp17uTDbiuIuzAUUmrz1TCI12UPYqP9LV4XfU/rSMtQ8LiNu25JdK07ExmST
-         fdcqW0xMH/AkRNAW8pyGMZ03JRBVucQ9DyUZh2RXH5iVSJNLC9wvyddnhPaYPFFY3/5w
-         DgFbh1DviPA6+JKUoBmpdnBDvYxc3nJqZpNa5XC7D1hehsQ0TRhcN9U4lV/puC86ebFT
-         sVXg==
-X-Gm-Message-State: AO0yUKWfzUCmol7Hjuf7jyPKoC4dKW4BO1Ah3IsBEs6AzXu34NTfE1XZ
-        WFEAoQJZeIimI/Hewey+DcI=
-X-Google-Smtp-Source: AK7set+7XkMQw//QRP6U0zw01ONMG6SisHKvyle8hz7Ra/I8s94s0O0zFWuYYD6E3TY5EKsJLVrbaA==
-X-Received: by 2002:a7b:cd10:0:b0:3ee:672d:caa4 with SMTP id f16-20020a7bcd10000000b003ee672dcaa4mr686528wmj.17.1679606470461;
-        Thu, 23 Mar 2023 14:21:10 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05600c450700b003edddae1068sm3135457wmo.9.2023.03.23.14.21.09
+        d=1e100.net; s=20210112; t=1679606752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OJlfsjEn2YPJBYCKiEqWnj0cMJtOD/6yvVL6bZk3/ko=;
+        b=tyN7kzeuHAuchrqvNS5TwWRj2ry7tEQbkzJq8dPi2dGzcSEumNftZ6kUvhNyskZg1t
+         9KsyGJj6dy+3GjztApTSdSFk9TB/8DR+O4+HjMnFPlN4Gbr1T6TAEJ3Se5q1AJ7bmXpg
+         YceU3g6welqApvXzOLx0QszVq2lqgBeB0+I3WyqM00PGvVbhsjzNWP51tHFjd0gAvrA5
+         PhymqcVBr4MnmY+NJiQ4oOHDJN+3KY9wF75eViSS+VyhQHKZrRN7vc34eK4xfkeSveT6
+         pdFwdshx7ydZPsASyOkTLGSyrhCuQr/iFTWi8J22JTk+Ev0j8g3eFfNTwE99PIi/sohy
+         8ZEA==
+X-Gm-Message-State: AAQBX9dgI4Go+/mGBH+7Vf364LDfqlG+jd+dzTFgkJ65mLQ8MjCQpy1T
+        shb9vwl8Ow1luS+mF+rUZCw7Kw==
+X-Google-Smtp-Source: AKy350YPoPduVAo9sxtqNxUfqKbvyNc+o3O33T59Ozx72gUu8zjS8BtU2FvFBZuo8S2j63CLUEhp+A==
+X-Received: by 2002:a81:bb48:0:b0:545:6224:96f1 with SMTP id a8-20020a81bb48000000b00545622496f1mr4699021ywl.24.1679606751863;
+        Thu, 23 Mar 2023 14:25:51 -0700 (PDT)
+Received: from fedora.attlocal.net ([172.56.72.93])
+        by smtp.gmail.com with ESMTPSA id 204-20020a8112d5000000b00545a0818495sm52281yws.37.2023.03.23.14.25.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 14:21:10 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        =?ISO-8859-1?Q?Andr=E1s_Szemz=F6?= <szemzo.andras@gmail.com>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Fabien Poussin <fabien.poussin@gmail.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Belisko Marek <marek.belisko@gmail.com>
-Subject: Re: [PATCH v2 4/4] ARM: dts: sunxi: add MangoPi MQ-R-T113 board
-Date:   Thu, 23 Mar 2023 22:21:08 +0100
-Message-ID: <3225657.44csPzL39Z@jernej-laptop>
-In-Reply-To: <20230320005249.13403-5-andre.przywara@arm.com>
-References: <20230320005249.13403-1-andre.przywara@arm.com>
- <20230320005249.13403-5-andre.przywara@arm.com>
+        Thu, 23 Mar 2023 14:25:51 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v2 0/3] Refactor 104-quad-8 to match device operations
+Date:   Thu, 23 Mar 2023 17:25:26 -0400
+Message-Id: <cover.1679605919.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 20. marec 2023 ob 01:52:49 CET je Andre Przywara napisal(a):
-> The MangoPi MQ-R-T113 is a small SBC with the Allwinner T113-s3 SoC.
-> The SoC features two Arm Cortex-A7 cores and 128 MB of co-packaged DDR3
-> DRAM. The board adds mostly connectors and the required regulators, plus
-> a Realtek RTL8189FTV WiFi chip.
-> Power comes in via a USB-C connector wired as a peripheral, and there is
-> a second USB-C connector usable as a host port.
-> 
-> Add a .dtsi file describing most of the board's peripherals, and include
-> that from the actual board .dts file. This allows to re-use the .dtsi
-> for the MQ-R-F113 RISC-V variant of that board.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Changes in v2:
+ - Drop FIELD_MODIFY() macro introduction; u8p_replace_bits() is
+   utilized instead for the same purpose
+ - Replace FIELD_PREP() and FIELD_GET() with u8_encode_bits() and
+   u8_get_bits()
+ - Replace FIELD_MODIFY() with u8p_replace_bits()
+ - Wrap up control register update in quad8_control_register_update()
+ - Utilize ioread8_rep() and iowrite8_rep() to read and write counter
+   data
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+The 104-quad-8 driver was initially introduced to the IIO subsystem
+where it didn't quite fit with the existing paradigm [0]; these
+differences eventually led to the creation of the Counter subsystem[1].
+As a result of its awkward beginnings, the design of the 104-quad-8
+driver was structured around maintaining abstract state buffers that
+would eventually be converted to match the actual device registers
+states on-the-fly as needed.
 
-Best regards,
-Jernej
+The original design approach for the 104-quad-8 driver was neither
+efficient nor easy to troubleshoot, but it did allow us to focus on
+implementing and supporting necessary APIs for the nascent Counter
+subsystem. Now that development for the 104-quad-8 driver has shifted
+to maintenance, it is a good time to refactor and clean up the code to
+match closer to what is actually happening on the device. This patchset
+is an attempt to rectify the situation as such.
 
+The primary change is a transition from maintaining individual
+configuration states independently, to storing buffers of the device
+register configurations. To that end, the bitfield API is leveraged to
+access and retrieve field states. Some helper functions are introduced
+as well to abstract the handling of the PR, FLAG, PSC, and control
+registers.
+
+[0] https://lore.kernel.org/r/b43e2942b763b87afc85bfa9fe36e5695cba4c44.1475079578.git.vilhelm.gray@gmail.com/
+[1] https://lore.kernel.org/r/cover.1554184734.git.vilhelm.gray@gmail.com/
+
+William Breathitt Gray (3):
+  counter: 104-quad-8: Utilize bitfield access macros
+  counter: 104-quad-8: Refactor to buffer states for CMR, IOR, and IDR
+  counter: 104-quad-8: Utilize helper functions to handle PR, FLAG and
+    PSC
+
+ drivers/counter/104-quad-8.c | 536 +++++++++++++++++------------------
+ 1 file changed, 257 insertions(+), 279 deletions(-)
+
+
+base-commit: 00f4bc5184c19cb33f468f1ea409d70d19f8f502
+-- 
+2.39.2
 
