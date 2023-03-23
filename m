@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F0B6C61D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427E26C61C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjCWIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S231464AbjCWIeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjCWIdx (ORCPT
+        with ESMTP id S231463AbjCWIdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:33:53 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351733A8D;
-        Thu, 23 Mar 2023 01:33:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XPwjOaLVv8BNnkkF0Azvi7WjGDoqyWGxZv3CCa68SRh1uWhl4Yd9hAestbfdMK9+Kd+of8DGEe3oUCPi1lf8toWzo9LxXfaNS8cSFu1Twu+iylTOdVxVwwgHN1XIp/ekwnQqtnfqcRnA7PQzCNUWxZsjkCB2hHPeTJgu6swS6mxFex2XV76Q74ELZb1QK1SSWLEwstPku619vfaf0YJaNzlxU/otc9gsq1DMSz1Y4cwMxWPUy3xix1PoVTdEB2IjZWkJ5VnRSdlYqQEjO/WUiG+ceeSbsbdXlMQreXw28R84mVBQS6Sju6z9TAz5qfZY1YLNRdZixsVKlp8LmjxMzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZZrI4Zh2ZNVvzhQaED0G2DfuNqC97VHB92s1qyb1cmE=;
- b=Kgn2+vaCLnHWtKfWDB7JWbOIKGcSjb6SDHbopE3xZjsLm4zND75BQeDtMkD6ZKUTAN9qU3BUHPEpLrDvgPji5JG3y4+4YeE86cqZpnABMhp7IxAZ2reqc5tuGYhvIwpsJbU42c985VGYkG52ff7oIPSZmU8tUBa1QZ6fc18N8AsB+DkhNkZmALEjnR+KBARtGDK/w2/N1jgA1XvqxXYFcmUnIHjl0KdRY8wLxvHOIKDzlUbnYxK7EuwtdFQ5clmyGEfaVoZnRETrWd4YJ5UUKf/lrPMmV1+xipZ6MKDNrEIsiSZ4dW0ILuVXeNXuH4LfVLLFs8yovLM79MTfw+PqBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZZrI4Zh2ZNVvzhQaED0G2DfuNqC97VHB92s1qyb1cmE=;
- b=ASHXemwr65/kXE9hWOjA3Sz6U+d+GdOdJmkNtwembnOnquZTpn4lXJUxoYieflqKnc0yi4XJlh/E6zLL51i2Rxt1wNye4DQIV5MS4o7NYuS6ma2NLDkJX9PXKlgBD6ed0KU+WHw1v/GH3BdlZM3GLZLNaQx5D40LnZ0NyBvwRvpimtsLS72QORy1bpOsjqFRJZvh9JwgtoWk1j/yfI+BbE/z0x7hxdMBxdZ/06aGrpR+d6Euai/3R9qpYs/8qO30Argo+Jf2v+9y/3UCL336RixxW8guNXYWLXN0BfTujjPnXmy+E7CINGhDXIVu01pzdHN85xzxJno22ajdE+YbVw==
-Received: from BN0PR04CA0028.namprd04.prod.outlook.com (2603:10b6:408:ee::33)
- by IA0PR12MB7776.namprd12.prod.outlook.com (2603:10b6:208:430::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 08:33:41 +0000
-Received: from BL02EPF000108E9.namprd05.prod.outlook.com
- (2603:10b6:408:ee:cafe::1d) by BN0PR04CA0028.outlook.office365.com
- (2603:10b6:408:ee::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
- Transport; Thu, 23 Mar 2023 08:33:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF000108E9.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.30 via Frontend Transport; Thu, 23 Mar 2023 08:33:41 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
- 01:33:27 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
- 2023 01:33:27 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Thu, 23 Mar 2023 01:33:26 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>
-CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <farman@linux.ibm.com>
-Subject: [PATCH v5 4/4] vfio: Support IO page table replacement
-Date:   Thu, 23 Mar 2023 01:33:05 -0700
-Message-ID: <29023644817002345ab94d8916a8447debb45a95.1679559476.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <cover.1679559476.git.nicolinc@nvidia.com>
-References: <cover.1679559476.git.nicolinc@nvidia.com>
+        Thu, 23 Mar 2023 04:33:40 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56851769A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:33:33 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230323083330euoutp01ada7a16a0f4c7caac6b21f03a485fd86~O-0uD_PNR1426814268euoutp01t
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:33:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230323083330euoutp01ada7a16a0f4c7caac6b21f03a485fd86~O-0uD_PNR1426814268euoutp01t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679560410;
+        bh=YudGPA60bFxRDbJj3Qc3E+Wrq3F9hpMuQjBdPXmpKAo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=PRhlmaiynunD/Lf64BFyTvlQ2rjTylZ2cuCD9xdli1z9wny5OOeVCn3sTS4CGk5ZU
+         rAmn1sJyHuBzQ4FQoZy0zfSb4+8jkCb7bEWItJhY7BiW2cMeI5UWvsiJ21LWBZNQGQ
+         DwAq0tekHwGFLHVqn8ep61VTLrVeDnzcOW7AqSt8=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230323083330eucas1p19a97dfc0ce93df9ef18fa48df58faa23~O-0t2oqWn0376103761eucas1p1P;
+        Thu, 23 Mar 2023 08:33:30 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id BF.96.10014.ADE0C146; Thu, 23
+        Mar 2023 08:33:30 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0~O-0taGy_-0377303773eucas1p1M;
+        Thu, 23 Mar 2023 08:33:30 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230323083330eusmtrp1fd0d0ddebb0ed10535121ce630db59bf~O-0tZfgZI1498714987eusmtrp1Y;
+        Thu, 23 Mar 2023 08:33:30 +0000 (GMT)
+X-AuditID: cbfec7f5-b8bff7000000271e-1c-641c0eda28c8
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 08.8B.08862.ADE0C146; Thu, 23
+        Mar 2023 08:33:30 +0000 (GMT)
+Received: from AMDC2765.eu.corp.samsungelectronics.net (unknown
+        [106.120.51.73]) by eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230323083329eusmtip190f52998ff08829aa6a9ccae7d7e7f53~O-0s8uj8e1892518925eusmtip1O;
+        Thu, 23 Mar 2023 08:33:29 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        patches@opensource.cirrus.com
+Subject: [PATCH] regulator: wm8994: Use PROBE_FORCE_SYNCHRONOUS
+Date:   Thu, 23 Mar 2023 09:33:12 +0100
+Message-Id: <20230323083312.199189-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108E9:EE_|IA0PR12MB7776:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4fa4bf11-7ea6-4dcb-799f-08db2b794ee8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YkBx7RCN6HgYF0AdmMF3/tTF9ZS07KI75VNH8i1+OajQbBmH2YabTYrLZX4zh9EdRuZnOK/9t4bZF3ou7C5SYAR/ior03jldGQcjBwRMMdsUMnVLzIjfUv1IabUiDRd8Jr/RW6zOeGKvYNAZlMU8lB/3OEM1TxfvaFd1yvkI0uh6775c37OceOLoEeDD7FEtZ4CesWexrw/Pa37al5wlcdVpSB/pxHX6a/fKt3Och1ezwbWVJ66oxUYcBYZWpXNDlOb2fCkL+h6CGZcNWh97duqAT+mQ57DW6p0Yi++kuGJF+TTapjnwzRROnfWNXTmwzPviryw4DD2MtPqy+E0N0Y8+yMv9HuPyZOQ38sN3R/OCPPihtTaDrnFe/1Hgx7Nl/jzr02i3kRxBAYcvawrZsuuc1fu/HxHBbGj71dWIeXGAjCDJaJaNha4ArSNzHvH6ZOLuBsEKsG4fECTBgGYgujN/oHANArmelE64Jb8Gljiv5vQiwRsZlMqKBrvm8mjuLIrPdVqqATjDdKZUHfHl+gSjEQjotIgADO+57j1ipJ2im6HVpoT7+aKPS582hvGjOjzzwrMmyvhspQvA6e+TpIv2Q0m16xkgQFanZU3DSW44L1cVV6egO8ercnT3IA2B0iSwUT4jFstsXVhfYUZuut+M74quTcD8v6NZFeQfCtLbo9GAWKZxwngTz9RNXavv+z8I4vBorvU2hWnXtX4QOQ+sqd7iIJkxaL7YqqP+DAlG3E0FYxyTweDIYtxIGbme
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(8676002)(7696005)(70586007)(86362001)(2906002)(5660300002)(70206006)(8936002)(36756003)(7416002)(36860700001)(82740400003)(7636003)(4326008)(356005)(478600001)(316002)(6666004)(110136005)(54906003)(40480700001)(336012)(83380400001)(26005)(41300700001)(40460700003)(2616005)(47076005)(82310400005)(426003)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 08:33:41.6077
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fa4bf11-7ea6-4dcb-799f-08db2b794ee8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7776
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOKsWRmVeSWpSXmKPExsWy7djPc7q3+GRSDPa+lLOY+vAJm8XZZQfZ
+        LL5d6WCyuLxrDpvFjPP7mCzWHrnLbvH5/X5WB3aP2Q0XWTx2zrrL7rFpVSebx/Q5/xk9+ras
+        YvT4vEkugC2KyyYlNSezLLVI3y6BK+PxhI0sBd/YKk5tbGBpYPzI2sXIySEhYCJxr+klI4gt
+        JLCCUWLdNI0uRi4g+wujxJurH9ghnM+MEue2zoHr6LpyAyqxnFFiybLXTBBOK5PEhI8/WECq
+        2AQMJbredrGB2CICzhK3P3xjASliFjjEKLFtx012kISwgL3E3f42sAYWAVWJvg8/wQ7hFbCT
+        +DHvHzPEOnmJ/QfPMkPEBSVOznwCVs8MFG/eOpsZZKiEwFIOiffnvgBt4wByXCROfBOE6BWW
+        eHV8CzuELSNxenIPC0R9O6PEgt/3mSCcCYwSDc9vMUJUWUvcOfcLbBCzgKbE+l36EGFHicNd
+        i5gh5vNJ3HgrCHEDn8SkbdOhwrwSHW1CENVqErOOr4Nbe/DCJahXPCSePZzKAgnrWInHu9vZ
+        JjAqzELy2Swkn81CuGEBI/MqRvHU0uLc9NRi47zUcr3ixNzi0rx0veT83E2MwLRz+t/xrzsY
+        V7z6qHeIkYmDERjIHMxKIrxuzBIpQrwpiZVVqUX58UWlOanFhxilOViUxHm1bU8mCwmkJ5ak
+        ZqemFqQWwWSZODilGpiW+MzSO/RYSiVpwqPpB9de9Hno/PSh1cK3QR+v8m23Dlf4EvBHNOoh
+        9+Lj2z/e5LoeOzOkK1Gs+a/vXT1Gycxfpy9ph+mEv9JjKlZeesjqAe/GWQ5qHOt7xZe5iP4I
+        8or8tlJ6u4jrstkW26z0azdraOk93+b2/vrz/5NUwrcFmydnfwxbqrHTfqrT5NpdcYcvRxuV
+        fVDU8lfON70ceLCIi+NoYrt02Otzuyf+y67kCbh8QdfeJSIiZQVfeU9JfbCAWnGE08VS1vaO
+        iGansg1isxjZDgRNUjbPdwlas0LG1y3n1zddE/tkLZ39sTcWpd7K3BOffaUqtd197Q3HxXyx
+        wR8/c70/+3jKnm3OvEosxRmJhlrMRcWJANuPX5WqAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHLMWRmVeSWpSXmKPExsVy+t/xu7q3+GRSDPoeMVtMffiEzeLssoNs
+        Ft+udDBZXN41h81ixvl9TBZrj9xlt/j8fj+rA7vH7IaLLB47Z91l99i0qpPNY/qc/4wefVtW
+        MXp83iQXwBalZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqk
+        b5egl/F4wkaWgm9sFac2NrA0MH5k7WLk5JAQMJHounKDvYuRi0NIYCmjxM7OG0wQCRmJk9Ma
+        oIqEJf5c62KDKGpmknhy8BMjSIJNwFCi6y1IgpNDRMBVovXLDxaQImaBY4wSt5e9AOsWFrCX
+        uNvfxgJiswioSvR9+AnWzCtgJ/Fj3j9miA3yEvsPnmWGiAtKnJz5BKyeGSjevHU28wRGvllI
+        UrOQpBYwMq1iFEktLc5Nzy021CtOzC0uzUvXS87P3cQIDPhtx35u3sE479VHvUOMTByMhxgl
+        OJiVRHjdmCVShHhTEiurUovy44tKc1KLDzGaAt03kVlKNDkfGHN5JfGGZgamhiZmlgamlmbG
+        SuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1M8vv4s1ZXCd9nYTPbb28Uu+fwDKXc3EWhy0J2
+        G0Y9W9j9hu/1e6sooZm96YIz+OZuubJf4/D9QqOS6acFs52enPRX6fr2Ref4qq4Z85hCzRmt
+        Uidus99jFPW5XKO3STCUeZ1Jws0pswNkawJVb4nXvZhi8+zjHp51F9s2aswIT9Ge9NK98op3
+        V2Rx342c0gWP29k3fn5w1kI/w3bat/R3V1O2NpjcPrxAc82bzRxzmT8nZPA3zU6791fuU8jM
+        6XuWPFUy317RVlf16Z7YbeMd1ta1p3KyGTYkum35d/m1Q93lcobP0y9sV9ZamZsaeeram07J
+        ij9v/theeeAwfdODl+mMKROW77zGrjpVlakqQYmlOCPRUIu5qDgRAICrdyIBAwAA
+X-CMS-MailID: 20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0
+References: <CGME20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,64 +110,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now both the physical path and the emulated path should support an IO page
-table replacement. Call iommufd_device_replace/iommufd_access_replace(),
-when vdev->iommufd_attached is true.
+Restore synchronous probing for wm8994 regulators because otherwise the
+sound device is never initialized on Exynos5250-based Arndale board.
 
-Also update the VFIO_DEVICE_ATTACH_IOMMUFD_PT kdoc in the uAPI header.
-
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Fixes: 259b93b21a9f ("regulator: Set PROBE_PREFER_ASYNCHRONOUS for drivers that existed in 4.14")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- drivers/vfio/iommufd.c    | 11 ++++++-----
- include/uapi/linux/vfio.h |  6 ++++++
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ drivers/regulator/wm8994-regulator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
-index f3fa03495a41..861e10a6b198 100644
---- a/drivers/vfio/iommufd.c
-+++ b/drivers/vfio/iommufd.c
-@@ -113,9 +113,9 @@ int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 		return -EINVAL;
+diff --git a/drivers/regulator/wm8994-regulator.c b/drivers/regulator/wm8994-regulator.c
+index 8921051a00e9..2946db448aec 100644
+--- a/drivers/regulator/wm8994-regulator.c
++++ b/drivers/regulator/wm8994-regulator.c
+@@ -227,7 +227,7 @@ static struct platform_driver wm8994_ldo_driver = {
+ 	.probe = wm8994_ldo_probe,
+ 	.driver		= {
+ 		.name	= "wm8994-ldo",
+-		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
++		.probe_type = PROBE_FORCE_SYNCHRONOUS,
+ 	},
+ };
  
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--
--	rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
-+		rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
-+	else
-+		rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-@@ -192,8 +192,9 @@ int vfio_iommufd_emulated_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 	if (WARN_ON(!vdev->iommufd_access))
- 		return -ENOENT;
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--	rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
-+		rc = iommufd_access_replace(vdev->iommufd_access, *pt_id);
-+	else
-+		rc = iommufd_access_attach(vdev->iommufd_access, *pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index 53c72e26ecd3..3f2548a5e847 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -243,6 +243,12 @@ struct vfio_device_bind_iommufd {
-  *
-  * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.
-  *
-+ * If a vfio device is currently attached to a valid hw_pagetable, without doing
-+ * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl
-+ * passing in another hw_pagetable (hwpt) id is allowed. This action, also known
-+ * as a hw_pagetable replacement, will replace the device's currently attached
-+ * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
-+ *
-  * @argsz:	user filled size of this data.
-  * @flags:	must be 0.
-  * @pt_id:	Input the target id which can represent an ioas or a hwpt
 -- 
-2.40.0
+2.34.1
 
