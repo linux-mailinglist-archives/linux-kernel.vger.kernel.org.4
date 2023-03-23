@@ -2,246 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8936C6BA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDC76C6BC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjCWO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S232002AbjCWPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjCWO4B (ORCPT
+        with ESMTP id S231931AbjCWPA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:56:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20D371EFE7;
-        Thu, 23 Mar 2023 07:55:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D87404B3;
-        Thu, 23 Mar 2023 07:56:38 -0700 (PDT)
-Received: from [10.57.53.151] (unknown [10.57.53.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B33B53F6C4;
-        Thu, 23 Mar 2023 07:55:51 -0700 (PDT)
-Message-ID: <ab840019-a44c-3d72-1dd5-5ef3071f139a@arm.com>
-Date:   Thu, 23 Mar 2023 14:55:50 +0000
+        Thu, 23 Mar 2023 11:00:28 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2058.outbound.protection.outlook.com [40.107.104.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D325B9D;
+        Thu, 23 Mar 2023 08:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
+ b=Pl97knR0tRGBkf4BDKqvO48FKz0y/Dc6CCgZCNKhH0REyEKqU69R5ReTqzf+hEqbr+2UTygTGp0RoPIRy6otfnyTXl0JBvDx8vFQ61BSjcisiQ3NpkDwwyKenCHmvYuFmVOtobPhBZrXis43J5vF3C+sYZixGUcY4r2ApgBrHvHCA9cZ48doL4F+cDjTDijdQAq5sDAow7RAeFmhxz/faTLwmqClOIOTJeDsPui+s5DlbiyJ+juVHgPevVdz1rvsHgCkF5Qe4rmXFinJlklUnIgUD1TWsH5qDWYy5kVUrGOEdC8QMF3ZIUVATRZCTO6EDiVuKW1Vpau1ikH09/tatA==
+Received: from DB6PR07CA0081.eurprd07.prod.outlook.com (2603:10a6:6:2b::19) by
+ AS8PR03MB6871.eurprd03.prod.outlook.com (2603:10a6:20b:29e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 15:00:20 +0000
+Received: from DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:6:2b:cafe::bd) by DB6PR07CA0081.outlook.office365.com
+ (2603:10a6:6:2b::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.16 via Frontend
+ Transport; Thu, 23 Mar 2023 15:00:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.80)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.80 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.80; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.80) by
+ DB8EUR05FT055.mail.protection.outlook.com (10.233.239.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.21 via Frontend Transport; Thu, 23 Mar 2023 15:00:19 +0000
+Received: from outmta (unknown [192.168.82.135])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id A1D852008088E;
+        Thu, 23 Mar 2023 15:00:19 +0000 (UTC)
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (unknown [104.47.14.52])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 4476D2008006F;
+        Thu, 23 Mar 2023 14:58:22 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O5Ja4NNh4/zyR0+XdjC+nsTPqs00LablKxGz0M1FBDkY79ywTeeWf5Aaw8fJshp5q4igZUPC7AQL5PY2P3fSxRtELG/C28YRatJmfQs+L2Ur3tXJBgbqU0MD+Vr/GwXubjVKhqtQRzmSjmkymbY0hMMFbe4nsSZm7I4+Ph++Wyj1vjpWVY4OBG1x6UM19e7Glmoeu5WB5mV+UWMMjzM2CbuEeOuaLNCLffT8pPp26uvOzrKBYmaROyQrB00HiHsrQdtdryK4MEKJNBq+esOFreF0dMb8FKUKENcmseTG+zbWu9qWCXgzx1GV/0lP6JQng8NRuFkrDI62emNgehzDfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
+ b=LExzLBB9lAaM2sagF14N5s9vj+Edy6tmYBpYt5R9Pk6N7CxkY1AlHYTVUCj8yNNOK/FvflfCQu7d3w2KXU25zbb1/naT+QPonW3UJFP8Hj0+THlTwic4TlPUBKeT1x8yEtY+9Ou2WTuOweUxu9WgTb9iJ0l9gP2CN0gsC4EB9TIxCXVtf+VOvGiDC59t/92GWJclaf3i7gVRKRl7pA+/a62fLhvf1NzGksXMFPvm/r+Trwk6066JUbgGklHbbGH9Bc0sv9c4GuqkSHxhbGizXfJsNzwP/jpWUIzPn4Ao9y2zfIATIz+WalQ+zkNFdRvzh2y66U3rkDpUT9l3PZXlug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PTe6iNPMex4LrTQ+kOJF4gCGAWtWlgwZiGx+1KxmgtE=;
+ b=Pl97knR0tRGBkf4BDKqvO48FKz0y/Dc6CCgZCNKhH0REyEKqU69R5ReTqzf+hEqbr+2UTygTGp0RoPIRy6otfnyTXl0JBvDx8vFQ61BSjcisiQ3NpkDwwyKenCHmvYuFmVOtobPhBZrXis43J5vF3C+sYZixGUcY4r2ApgBrHvHCA9cZ48doL4F+cDjTDijdQAq5sDAow7RAeFmhxz/faTLwmqClOIOTJeDsPui+s5DlbiyJ+juVHgPevVdz1rvsHgCkF5Qe4rmXFinJlklUnIgUD1TWsH5qDWYy5kVUrGOEdC8QMF3ZIUVATRZCTO6EDiVuKW1Vpau1ikH09/tatA==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by DB9PR03MB8374.eurprd03.prod.outlook.com (2603:10a6:10:395::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 15:00:12 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e%6]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 15:00:12 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH] net: fman: Add myself as a reviewer
+Date:   Thu, 23 Mar 2023 10:59:57 -0400
+Message-Id: <20230323145957.2999211-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR19CA0042.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::19) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 06/11] coresight-tpdm: Add node to set dsb programming
- mode
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-7-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1679551448-19160-7-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DB9PR03MB8374:EE_|DB8EUR05FT055:EE_|AS8PR03MB6871:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60176034-80ea-4868-a37c-08db2baf5221
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: wKwFlOd4carv6KhzL7UEZUgbNWemOROMRJPY2yVpKYw5s2zc3PwpZbxsDjRck4MlMjqoD9x60sbp5cI7WeIl7OtE3pwIEKs/zCtOVQsP35hD75+S0NDn/DSwk9u+wdMXHuHMbc6YJDAoIB9yF9kFfBPvzr0YqamQbIcMzzYpmpTpsjZPHoSTJfvC9kIFIix4YFVPAb06KTMb5rvPzQqNqe8S0w8jtHoarV9guK2XcHfKVkJyhl1TIwm+e8inFkCyCdnXVeI8nadR25Eq3EEGLKfmg/FbQqBxERGkIG9iATbaZQogVzVsnGuOdycUjZxjQIQDkIzkavWTiKamZfWevZAdickX+1hO76915qYKut+89F9tBhwGQ88swfJs5ERR+vxGxrZnnjn7HwapYHPXm/zTOxwdtpHLVKMKrZ8NvRTkTGc5Sqx4GmLstxNdwGdKPNj7Y6KarGb7+ETcxRApzS4I//G8J36vDyVb5uwDDlL+FBYrd8ixComDXGyRNZ7r2seKOM501I0SfAo9zRs7vXURwd8K1P6HwU6iyz+m2Y0d9esgYUQAxmB2qB6foRjAPXK1nKo750cXZ5DNEziwUzvBtnhuf9sPXufno0UQmddmSub9FrFksjguMSD62AstzlUOmCmFz5pJXecmFcCxIUuY/kUP3E7bOIN8rbIBkxwHvXZXCVqkoWn+j8cFCKI47dzEsux729QgJnaTgom9jg==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(136003)(366004)(39850400004)(451199018)(36756003)(26005)(1076003)(6666004)(6512007)(6506007)(44832011)(6486002)(4744005)(107886003)(2906002)(86362001)(41300700001)(66946007)(66556008)(316002)(4326008)(66476007)(110136005)(54906003)(8676002)(2616005)(186003)(38350700002)(38100700002)(478600001)(52116002)(5660300002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8374
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 70c60dc7-4565-4baa-5d71-08db2baf4da8
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kCKOZxRL1Vwf/J4JJpZtEEZX0kdbe8zcDHBUBWJ5UTNPxV29nAZIm5h7aMOsZwlZtEMHeUN4Dt7AQvsbMQ1J7AJnkA0DOZMAKvVqZb7CrcAif8qI+YEKskjqox/mBfTh8wPIQUsebNQO5/2WATF7IQQDKMjOsk9aM1T9tcR0fzELXSFOuOVcY190NBAxObwiC51TZYCzSYUOkHhOv8vXYjwMcZWYNKHmVQDvQQlBBquhNa24h4F+7iRdqIZsdGq7xawzMUKgoV3+5eT+ExdIW/o2Nvk960Hiuj6q/6DP7IiktAnFFgULQMlHYMyWTSbV8P6aK/vbRQhp94tuZIGcMxGbmGV7V+gcK7NSx312PWtyOr+tBpSrzmgUUAgTVAj3FckjhTGZWIKNdqIOx1Hj5kYtuA2PqtCTCTwidfSzn/WP5PGMeKewsFYTtLoWgmpNl2V/iQ+evrc0tyuuNzECNEhYuOqtTbdJLcSomSr4pvHUKiT9pF5TniOktSqD+XBe2x+iCnGFnldb19Sz6N0hJw+1nLb81lEJUy+1NYIKWkyFpMGPNUWUhsbGd/5UW5dgktkJR0/UwMVNQqh3Djrv7NEV04ujuH7J7By5d3i3IZ0emOpHvT6885eSFwwY7Rp/+/HCL9UIhm8sV5nrT2NuZ218vvyY+3NHTfA0hcXXuPj2oLV7u3pg4nMs8ib4Hquz+vE5ghsFF0PGu5idBtLXBgEAHAkDmLoCuqoRgxBZiXs=
+X-Forefront-Antispam-Report: CIP:20.160.56.80;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(39850400004)(376002)(346002)(136003)(396003)(451199018)(36840700001)(46966006)(40470700004)(356005)(40480700001)(2906002)(40460700003)(478600001)(6486002)(2616005)(336012)(186003)(86362001)(82310400005)(36756003)(316002)(110136005)(34020700004)(54906003)(4744005)(8676002)(36860700001)(4326008)(70586007)(70206006)(26005)(47076005)(107886003)(6666004)(8936002)(6512007)(6506007)(1076003)(7596003)(82740400003)(7636003)(5660300002)(44832011)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 15:00:19.9014
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60176034-80ea-4868-a37c-08db2baf5221
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.80];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT055.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6871
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 06:04, Tao Zhang wrote:
-> Add node to set and show programming mode for TPDM DSB subunit.
-> Once the DSB programming mode is set, it will be written to the
-> register DSB_CR. Bit[10:9] of the DSB_CR register is used to set
-> the DSB test mode.
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 10 ++++
->   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 ++++++++++++++++++++++
->   drivers/hwtracing/coresight/coresight-tpdm.h       | 13 +++++
->   3 files changed, 85 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index 27ce681..f13e282 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -35,3 +35,13 @@ Description:
->   		Accepts only one of the 2 values -  0 or 1.
->   		0 : Set the DSB trigger type to false
->   		1 : Set the DSB trigger type to true
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_mode
-> +Date:		March 2023
-> +KernelVersion	6.3
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the mode of DSB tpdm. Read the mode of DSB
-> +		tpdm.
-> +
-> +		Accepts the value needs to be greater than 0.
+I've read through or reworked a good portion of this driver. Add myself
+as a reviewer.
 
-Please could you document the values ?
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+---
 
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index e28cf10..8cd822f 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #include <linux/amba/bus.h>
-> +#include <linux/bitfield.h>
->   #include <linux/bitmap.h>
->   #include <linux/coresight.h>
->   #include <linux/coresight-pmu.h>
-> @@ -51,6 +52,32 @@ static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
->   	return 0;
->   }
->   
-> +static void set_dsb_cycacc_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	u32 mode;
-> +
-> +	mode = TPDM_DSB_MODE_CYCACC(drvdata->dsb->mode);
-> +	*val &= ~TPDM_DSB_TEST_MODE;
-> +	*val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
-> +}
-> +
-> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	u32 mode;
-> +
-> +	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
-> +	*val &= ~TPDM_DSB_HPSEL;
-> +	*val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
-> +}
-> +
-> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
-> +		*val |= TPDM_DSB_CR_MODE;
-> +	else
-> +		*val &= ~TPDM_DSB_CR_MODE;
-> +}
-> +
->   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
->   {
->   	if (drvdata->dsb->trig_type)
-> @@ -72,6 +99,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
->   
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-> +	/* Set the cycle accurate mode */
-> +	set_dsb_cycacc_mode(drvdata, &val);
-> +	/* Set the byte lane for high-performance mode */
-> +	set_dsb_hpsel_mode(drvdata, &val);
-> +	/* Set the performance mode */
-> +	set_dsb_perf_mode(drvdata, &val);
->   	/* Set trigger type */
->   	set_trigger_type(drvdata, &val);
->   	/* Set the enable bit of DSB control register to 1 */
-> @@ -250,6 +283,34 @@ static struct attribute_group tpdm_attr_grp = {
->   	.attrs = tpdm_attrs,
->   };
->   
-> +static ssize_t dsb_mode_show(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%lx\n",
-> +			 (unsigned long)drvdata->dsb->mode);
-> +}
-> +
-> +static ssize_t dsb_mode_store(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   const char *buf,
-> +				   size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || val < 0)
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	drvdata->dsb->mode = val & TPDM_MODE_ALL;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_mode);
-> +
->   static ssize_t dsb_trig_type_show(struct device *dev,
->   				     struct device_attribute *attr,
->   				     char *buf)
-> @@ -321,6 +382,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
->   static DEVICE_ATTR_RW(dsb_trig_ts);
->   
->   static struct attribute *tpdm_dsb_attrs[] = {
-> +	&dev_attr_dsb_mode.attr,
->   	&dev_attr_dsb_trig_ts.attr,
->   	&dev_attr_dsb_trig_type.attr,
->   	NULL,
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> index 68f33bd..8fee562 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -15,11 +15,22 @@
->   
->   /* Enable bit for DSB subunit */
->   #define TPDM_DSB_CR_ENA		BIT(0)
-> +/* Enable bit for DSB subunit perfmance mode */
-> +#define TPDM_DSB_CR_MODE		BIT(1)
->   /* Enable bit for DSB subunit trigger type */
->   #define TPDM_DSB_CR_TRIG_TYPE		BIT(12)
-> +
->   /* Enable bit for DSB subunit trigger timestamp */
->   #define TPDM_DSB_TIER_XTRIG_TSENAB		BIT(1)
->   
-> +/* DSB programming modes */
-> +#define TPDM_DSB_MODE_CYCACC(val)	(val & GENMASK(2, 0))
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-What do the values for the CYCACC mode mean ?
-
-> +#define TPDM_DSB_MODE_PERF		BIT(3)
-> +#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
-> +#define TPDM_MODE_ALL			(0xFFFFFFF)
-> +#define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
-> +#define TPDM_DSB_HPSEL		GENMASK(6, 2)
-
-Again what do the values mean ? Even if the kernel doesn't use them
-it would be good to document it.
-
-Suzuki
-
-> +
->   /* TPDM integration test registers */
->   #define TPDM_ITATBCNTRL		(0xEF0)
->   #define TPDM_ITCNTRL		(0xF00)
-> @@ -48,10 +59,12 @@
->   
->   /**
->    * struct dsb_dataset - specifics associated to dsb dataset
-> + * @mode:             DSB programming mode
->    * @trig_ts:          Enable/Disable trigger timestamp.
->    * @trig_type:        Enable/Disable trigger type.
->    */
->   struct dsb_dataset {
-> +	u32				mode;
->   	bool			trig_ts;
->   	bool			trig_type;
->   };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9faef5784c03..c304714aff32 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8216,6 +8216,7 @@ F:	drivers/net/ethernet/freescale/dpaa
+ 
+ FREESCALE QORIQ DPAA FMAN DRIVER
+ M:	Madalin Bucur <madalin.bucur@nxp.com>
++R:	Sean Anderson <sean.anderson@seco.com>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/fsl-fman.txt
+-- 
+2.35.1.1320.gc452695387.dirty
 
