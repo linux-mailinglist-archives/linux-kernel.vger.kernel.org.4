@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0576C5F39
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA286C5F41
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjCWF4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S229672AbjCWGAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCWF4h (ORCPT
+        with ESMTP id S229796AbjCWGAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:56:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CD02312A
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:56:35 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso429270wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679550994; x=1682142994;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6pY6n5J6nh7sc6BZPrtW1Af5iIpNiv08jLRK1EZDr/Y=;
-        b=kYCf0RAszOEg9bkDgtsJ82BX5g8JwgtElM89s+ujOPDkz/jt1ucDniqxAcxTCRA3F7
-         455ZTTlekoP/kHAcQMrgevEI8jDBTC/lN4zyiRyJCBpcbSzJ7Zq0KJ1hDYyqtRWzZ054
-         8gWnbGwG5v1tlw5qeoyHQtQ/9KMCIxuS9QOcLQEWCysL0Uks0KO2EdKL30aFvXlcvltO
-         QA/6dhghtNmrCd/fmtjjfcpqtg8NlOubBlKLTe4hUNSzFnb7JN5Umiu4fFzJH6o8L64c
-         Qac1hWr1D5TDucHyTvOJ6dnnsYN1CQJ4baIUBxVH9i+aIR33n/jviJS7e2EZZpRnuKDd
-         /5ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679550994; x=1682142994;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pY6n5J6nh7sc6BZPrtW1Af5iIpNiv08jLRK1EZDr/Y=;
-        b=u7B9hbhWp57NVTdILtotjwGduA7SBjQazwSDP7wkbaHUE0iXXbilKfB7rfs4Gjb604
-         lGvwlaVy0WR9m2PLxHTOMabfBYrwfe2S/JYVElppdWjdx9YW5gIE5T1braIYMemX8nof
-         je2KPkz8iihkV3rI/biyNNdBA8NyW+l2MUJAMSmEO5UyOHC7GIk7XstbmXZHyam9zwLz
-         cQ8pC5L19EFW3Ura5/+4hR3dSFO3NThsU7z42lHLrmRI6yNObMxpZOC/8xjCpckF51gv
-         nmF8cttC3tPV6ufY8JhbdLZaiJCB6X2ZtJ049fPFyok2N8NSj9B/HPvUMZN63Kxrh7zN
-         deZQ==
-X-Gm-Message-State: AO0yUKXj6rg82vEKP/YCXYpE9/0JnCBL0jQYmfpTvSCJxR/Ni5nJPYrv
-        pewqX+bRoOC+dF+du2i7jEY=
-X-Google-Smtp-Source: AK7set88g+PhzfJWEbM0eHlqrdsc/zQZK3vdrSgOPFrvQYoe6frpHYLB1SoXS21mb48QA3EysJGvVg==
-X-Received: by 2002:a05:600c:3103:b0:3ed:d2ae:9adb with SMTP id g3-20020a05600c310300b003edd2ae9adbmr8230524wmo.0.1679550993976;
-        Wed, 22 Mar 2023 22:56:33 -0700 (PDT)
-Received: from [192.168.0.104] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056000054d00b002da1261aa44sm3691623wrf.48.2023.03.22.22.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 22:56:33 -0700 (PDT)
-Message-ID: <9cdfab96-ee7d-db11-4bde-71648a640385@gmail.com>
-Date:   Thu, 23 Mar 2023 06:56:32 +0100
+        Thu, 23 Mar 2023 02:00:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAEF2473E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:00:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfE04-0001NC-1K; Thu, 23 Mar 2023 07:00:36 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfE02-0004PC-Hv; Thu, 23 Mar 2023 07:00:34 +0100
+Date:   Thu, 23 Mar 2023 07:00:34 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>
+Cc:     UNGLinuxDriver@microchip.com, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org
+Subject: Re: [PATCH net v1 6/6] net: dsa: microchip: ksz8: fix MDF
+ configuration with non-zero VID
+Message-ID: <20230323060034.GF23237@pengutronix.de>
+References: <20230322143130.1432106-1-o.rempel@pengutronix.de>
+ <20230322143130.1432106-7-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/4] staging: rtl8192e: code cleanup patches
-To:     Khadija Kamran <kkamran.bese16seecs@seecs.edu.pk>,
-        outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Khadija Kamran <kamrankhadijadj@gmail.com>
-References: <cover.1679521517.git.kamrankhadijadj@gmail.com>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <cover.1679521517.git.kamrankhadijadj@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230322143130.1432106-7-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 23:07, Khadija Kamran wrote:
-> Fix several cleanup issues reported by checkpatch.pl in module
-> staging/rtl8192e in file rtllib_rx.c
+A typo in subject s/MDF/MDB
+
+On Wed, Mar 22, 2023 at 03:31:30PM +0100, Oleksij Rempel wrote:
+> FID is directly mapped to VID. However, configuring a MAC address with a
+> VID != 0 resulted in incorrect configuration due to an incorrect bit
+> mask. This kernel commit fixed the issue by correcting the bit mask and
+> ensuring proper configuration of MAC addresses with non-zero VID.
 > 
-> Khadija Kamran (4):
->    staging: rtl8192e: remove extra blank lines
->    staging: rtl8192e: add blank lines after declarations
->    staging: rtl8192e: add spaces around binary operators
->    staging: rtl8192e: remove blank lines after '{'
+> Fixes: d23a5e18606c ("net: dsa: microchip: move ksz8->masks to ksz_common")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/dsa/microchip/ksz_common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   drivers/staging/rtl8192e/rtllib_rx.c | 73 +++++++++++-----------------
->   1 file changed, 29 insertions(+), 44 deletions(-)
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index 4929fb29ed06..74c56d05ab0b 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -404,7 +404,7 @@ static const u32 ksz8863_masks[] = {
+>  	[VLAN_TABLE_VALID]		= BIT(19),
+>  	[STATIC_MAC_TABLE_VALID]	= BIT(19),
+>  	[STATIC_MAC_TABLE_USE_FID]	= BIT(21),
+> -	[STATIC_MAC_TABLE_FID]		= GENMASK(29, 26),
+> +	[STATIC_MAC_TABLE_FID]		= GENMASK(25, 22),
+>  	[STATIC_MAC_TABLE_OVERRIDE]	= BIT(20),
+>  	[STATIC_MAC_TABLE_FWD_PORTS]	= GENMASK(18, 16),
+>  	[DYNAMIC_MAC_TABLE_ENTRIES_H]	= GENMASK(1, 0),
+> -- 
+> 2.30.2
+> 
+> 
 > 
 
-Checkpatch:
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Khadija 
-Kamran <kkamran.bese16seecs@seecs.edu.pk>' != 'Signed-off-by: Khadija 
-Kamran <kamrankhadijadj@gmail.com>'
-
-Is this wanted?
-
-
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
