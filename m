@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2286C7050
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095946C704E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjCWSev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
+        id S231422AbjCWSea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjCWSep (ORCPT
+        with ESMTP id S229708AbjCWSeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:34:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4D510AA5;
-        Thu, 23 Mar 2023 11:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679596482; x=1711132482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LGy7Q84BjzZMuq5uOO+dWdMwnplCocPGQbI8I2BPrDE=;
-  b=dwLmymK1tYu+MCnyJfUc5XP93yQHGAPFNhhPqgqdnS8Y38SPwSsyTJxk
-   uaUNyExln5z608zgqFXMU8oJ6eUA/mZM/X6WrNkBVx2cx/dlVsBJ4HxCq
-   HZCh9fB6Y9urUA8+kfGNouISSiSQcVgG/CofzkA59Se8U2+PMUHO2J1nX
-   cbFfE5Gv0sYAIXHjxx1A7oIUN/sDME3tYYNdU/ae8Jz8H1Nsz3MybBV5e
-   rKHulSCe3YDydlhSZjg7V3+HEeLxhAsYpHWl78y8k6VoXUyl049w38pFi
-   YVsFGvLeLnM9Y7LdBHa3mSl3TL95FTExaxVUOhTGWQlExRsm3geCMiJq1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="323448768"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="323448768"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 11:34:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="712774241"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="712774241"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Mar 2023 11:34:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfPlm-000EcS-2D;
-        Thu, 23 Mar 2023 18:34:38 +0000
-Date:   Fri, 24 Mar 2023 02:34:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for
- communication
-Message-ID: <202303240224.PvBra327-lkp@intel.com>
-References: <20230322210227.464-4-mario.limonciello@amd.com>
+        Thu, 23 Mar 2023 14:34:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E6A25286;
+        Thu, 23 Mar 2023 11:34:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 542F46285C;
+        Thu, 23 Mar 2023 18:34:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AF6C433EF;
+        Thu, 23 Mar 2023 18:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679596463;
+        bh=cbM4eh9+G5u44urX8yb80DsKZlsjHhpGtzb4F/RXZbE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Dsesqpn+JLClFeqe0E866tT+jCL1VcXlGmYUpmMMflVF/ozl14+UP2rthdfxylFA7
+         vHEbM3uSE+kVFVUR7oKf+/7gvb2Itn9BLFbeRLezNnQ1vRlhPr+K2IlpW2PWWjQToB
+         17URw7s+voHD8pMOKgOkdmyWzjfjY5tYRyTqcOvXNMMdIwL40FCi7Wf99j877NeeOg
+         5JJrHxHDHyPGr/6fbjQGpQsciSFsfbVH/aclta5RwwhTHaAKO+OFYwaiAHBwhcBb97
+         XGSDxrgDZC8oPnZruijpapexEN6KkEJZ3CCkuy92/6+odUC97gd9+tkhCtv+8dJH1S
+         buvShBL1GOoQA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 50BA01540398; Thu, 23 Mar 2023 11:34:23 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:34:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: Re: [next-20230322] Kernel WARN at kernel/workqueue.c:3182
+ (rcutorture)
+Message-ID: <ae015179-03b5-4e4b-86dd-cbab75230c7f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+ <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+ <233B28DA-70DD-4AD8-9C72-1FFCA6EFE56D@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230322210227.464-4-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <233B28DA-70DD-4AD8-9C72-1FFCA6EFE56D@linux.ibm.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario,
+On Thu, Mar 23, 2023 at 11:00:59PM +0530, Sachin Sant wrote:
+> 
+> >> [ 3629.243407] NIP [00007fff8cd39558] 0x7fff8cd39558
+> >> [ 3629.243410] LR [000000010d800398] 0x10d800398
+> >> [ 3629.243413] --- interrupt: c00
+> >> [ 3629.243415] Code: 419dffa4 e93a0078 39400001 552907be 2f890000 7d20579e 0b090000 e95a0078 e91a0080 39200001 7fa85000 7d204f9e <0b090000> 7f23cb78 4bfffd65 0b030000 
+> >> [ 3629.243430] ---[ end trace 0000000000000000 ]—
+> >> 
+> >> These warnings are repeated few times. The LTP test is marked as PASS.
+> >> 
+> >> Git bisect point to the following patch
+> >> commit f46a5170e6e7d5f836f2199fe82cdb0b4363427f
+> >>    srcu: Use static init for statically allocated in-module srcu_struct
+> > 
+> > Hello, Sachin, and it looks like you hit something that Zqiang and I
+> > have been tracking down.  I am guessing that you were using modprobe
+> > and rmmod to make this happen, and that this happened at rmmod time.
+> > 
+> Yes, the LTP test script rcu_torture.sh relies on modprobe to load/unload
+> the rcutorture module.
+> 
+> > Whatever the reproducer, does the following patch help?
+> 
+> Thank you for the patch. Yes, with this patch applied, the test completes
+> successfully without the reported warning.
 
-Thank you for the patch! Yet something to improve:
+Very good, thank you!  May we have your Tested-by?
 
-[auto build test ERROR on e6af5c0c4d32a27e04a56f29aad587e03ff427f1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
-base:   e6af5c0c4d32a27e04a56f29aad587e03ff427f1
-patch link:    https://lore.kernel.org/r/20230322210227.464-4-mario.limonciello%40amd.com
-patch subject: [PATCH v6 3/4] i2c: designware: Use PCI PSP driver for communication
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303240224.PvBra327-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/addff0f32acff3a5278cbbf6fffc9054ecb03e2f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/crypto-ccp-Bump-up-doorbell-debug-messages-to-error/20230323-050710
-        git checkout addff0f32acff3a5278cbbf6fffc9054ecb03e2f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303240224.PvBra327-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> aarch64-linux-ld: Unexpected GOT/PLT entries detected!
->> aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `psp_send_i2c_req':
-   i2c-designware-amdpsp.c:(.text+0xe0): undefined reference to `psp_send_platform_access_msg'
-   aarch64-linux-ld: i2c-designware-amdpsp.c:(.text+0x16c): undefined reference to `psp_send_platform_access_msg'
-   aarch64-linux-ld: drivers/i2c/busses/i2c-designware-amdpsp.o: in function `i2c_dw_amdpsp_probe_lock_support':
-   i2c-designware-amdpsp.c:(.text+0xad4): undefined reference to `psp_check_platform_access_status'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+							Thanx, Paul
