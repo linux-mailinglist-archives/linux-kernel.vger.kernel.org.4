@@ -2,127 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEDC6C69F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A66C6A2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjCWNwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S231941AbjCWN6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjCWNwC (ORCPT
+        with ESMTP id S231459AbjCWN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:52:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7A93599;
-        Thu, 23 Mar 2023 06:52:01 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N86q2v021150;
-        Thu, 23 Mar 2023 13:51:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=NlVdZ9nLQmvQl7BXjEHStDcD+x9JoHAKNiHr8EHjfW4=;
- b=hKvJLtNjj5TpDoQ8dRpOOAB4yA0ejPsxaj0xnKP1n7IvMEHh/fZKrwAwWenuYaxFp9jA
- Y5jTKgqDwFnjCt5085LqZOd+lWKEdzGLuAhlktEtSd0JiY2jP0v+nXBby5SHj8Z7onYt
- fFjPz0DDR/a49fqTnWpSTJaAd7uOfzgYTKzX7lUZWyYSpKbZpbzVpknHGKmJx3fHxwgb
- yKO/DlXe0S7iE7xyfwIIBsOdF6iyrYPckq11Z5nBp5FrDhynLqUrJHqB7IMu19JNBwQL
- RvTz8vklsWt8hH4+6KiQAk0y1fFl1XaxUbWKAJ1KrEHaqvPOVzmglhuXfnPS5an99Tww kQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgfaxh9eu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:51:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NDpoW9018017
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:51:50 GMT
-Received: from [10.50.6.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Mar
- 2023 06:51:46 -0700
-Message-ID: <9467586f-4fda-7fb9-2752-35a9e1147ad8@quicinc.com>
-Date:   Thu, 23 Mar 2023 19:21:42 +0530
+        Thu, 23 Mar 2023 09:57:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5023393E3;
+        Thu, 23 Mar 2023 06:57:58 -0700 (PDT)
+Received: from koko.localdomain ([89.1.213.94]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MdNPq-1qEg7Z3cnY-00ZLEr; Thu, 23 Mar 2023 14:52:45 +0100
+From:   Maximilian Weigand <mweigand@mweigand.net>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Maximilian Weigand <mweigand@mweigand.net>,
+        Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH 0/6] Small fixes to the cyttsp5 touchscreen driver
+Date:   Thu, 23 Mar 2023 14:51:59 +0100
+Message-Id: <20230323135205.1160879-1-mweigand@mweigand.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V1 2/4] dt-bindings: soc: qcom,mpm-sleep-counter: Add the
- dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <576e53a1d0ef218536da976102b4cc207436ec1d.1679403696.git.quic_schowdhu@quicinc.com>
- <e845b412-9afa-3d9e-54fc-7f9f04d25c05@linaro.org>
- <8efa2296-7136-690a-6e6b-c9b41562ba84@quicinc.com>
- <855b64ea-ccd3-4925-29a8-ebb8d0734adc@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <855b64ea-ccd3-4925-29a8-ebb8d0734adc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aECxtBJgfDAqk5qEqYto4prmuEjtXv3r
-X-Proofpoint-ORIG-GUID: aECxtBJgfDAqk5qEqYto4prmuEjtXv3r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0
- adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230105
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:JOAqyRTVG5uDiEIeXH/4dCz/MkWByUALV6oyJfiU5CzPIBn5XK+
+ e9Ux4T5lUNqYnx6Q658/Gu3c1+SlMfdMq1QPyxOxhrpu/ceEqv5Ox9hesRy1cu3Wj3s7zv+
+ MZo9/PnIl/LRf3pzRCwd6vXwQKAG6KXdJJZqPEbhShxD6x5Rz5LSb1CTlAENgLfAcuurgDm
+ YDqx2NSgal95zEB80+Q4w==
+UI-OutboundReport: notjunk:1;M01:P0:bprECCQxY0w=;NgAleBBDWDAR8yoqUSGi3AdAy+E
+ 0p3CINEFazWUNbK//03G5dKunXePXVRnsCaFNMC1eUf/26LJtlUky9XX/lvmXvM3wiYenFkP2
+ 0Ns1gDg6jUYzOLY1JQMrySOBk1sXqM4MSmIvC5X1B9ieLFcFVLbMki1PEMCSgplCVZUQzd+DY
+ QnDUvV6Icbn4sNkjm3F8umGK5SHmhOcp1+EoGZbP92WQlV3tiK7sTOmSgyLB3jy0I0T/dqYPd
+ NS3hIkVj7tfeQo87lFQM8f4fFYyqHg1PBT026inZ8ZdgNLvIsxKx0w1A+7ZpCibATEDP3iVw4
+ cgKoWQYaLWM7NP6g2UY2NMgivRgWaNcm05UpR0flJOi9yO6dl089PBY3Dx72/2LEcuUL8zMCN
+ 3Z7AaQhx2/gKUtHTXzxboFfD8gxu+Sju8P1Jy03E7ufwaCUcy/oRE9dX7i7YXqb54m542rX2B
+ VPWCCA2f4nsnPe+EXrR2qeN/aEkxGoL5DajrGE9++0ImOgg7r2zHgNQ40ue766SCxA+xj7Zw5
+ 2OyG7+Yy6n01r0nyqf9EDKivOGBuvwpfbQnWV63ZOJuaT/NWUkwZtCUQgIx8APxxm12HOVxLY
+ 7vslXpHvHuzSk163FfWQbnzkyE92OgBqr1cLl7O5mOrqMP5z+upgGE70351VrCGhbvPqlvRiC
+ Y7lGHU2etsPjxARQ7pjfSpoo6/ZpMhk36L50MHu7HQ==
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While working on some intermittent module-loading problems of the
+cyttsp5 module on the Pine64 PineNote it was found that the device tree
+example of the cypress,tt21000 was in error regarding the interrupt
+type (IRQ_TYPE_EDGE_FALLING should be used instead of IRQ_TYPE_LEVEL_LOW).
+
+This lead to the proper implementation of device sleep states, which is
+required to ensure proper functioning of the touchscreen after resume
+when the correct interrupt type IRQ_TYPE_FALLING_EDGE is used. Sleep and
+wakeup commands to the touchscreen were derived from the GPL-2 android
+driver by Cypress Semiconductor (copyright note for Cypress
+Semiconductor is already in the current driver).
+
+The first two patches fix small issues with the code found during
+development of the suspend functionality.
 
 
-On 3/22/2023 10:01 PM, Krzysztof Kozlowski wrote:
-> On 22/03/2023 15:02, Souradeep Chowdhury wrote:
->>
->>
->> On 3/21/2023 11:09 PM, Krzysztof Kozlowski wrote:
->>> On 21/03/2023 14:51, Souradeep Chowdhury wrote:
->>>> Add the device tree bindings for the module power manager sleep
->>>> counter.
->>>>
->>>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->>>> ---
->>>>    .../bindings/soc/qcom/qcom,mpm-sleep-counter.yaml  | 40 ++++++++++++++++++++++
->>>>    1 file changed, 40 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->>>> new file mode 100644
->>>> index 0000000..f9f46b7
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,mpm-sleep-counter.yaml
->>>
->>> Your code a bit explains this... this is not a device but some memory
->>> region. Does not look like suitable for bindings as separate device.
->>
->> Ack. Can you let me know the suitable place to put the bindings for this?
-> 
-> Reserved memory region? Or drop from bindings entirely.
+Maximilian Weigand (6):
+  Input: cyttsp5: fix array length
+  Input: cyttsp5: remove unused code
+  devicetree: input: cypress,tt21000: fix interrupt type in dts example
+  Input: cyttsp5: properly initialize the device as a pm wakeup device
+  devicetree: input: cypress,tt21000: add wakeup-source entry to
+    documentation
+  Input: cyttsp5: implement proper sleep and wakeup procedures
 
-Ack. Will drop this for now.
-> 
-> Best regards,
-> Krzysztof
-> 
+ .../input/touchscreen/cypress,tt21000.yaml    |   4 +-
+ drivers/input/touchscreen/cyttsp5.c           | 138 +++++++++++++++++-
+ 2 files changed, 136 insertions(+), 6 deletions(-)
+
+--
+2.39.2
+
