@@ -2,95 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5733E6C61FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031606C6208
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCWIje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S229990AbjCWIj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjCWIjF (ORCPT
+        with ESMTP id S231250AbjCWIja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:39:05 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5241637B70;
-        Thu, 23 Mar 2023 01:37:45 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cy23so83076166edb.12;
-        Thu, 23 Mar 2023 01:37:45 -0700 (PDT)
+        Thu, 23 Mar 2023 04:39:30 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D230413D5D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:38:04 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id s67so7068956ybi.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:38:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679560663;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GICzYJuZSuUCn45nyDLfAR5+CyYyPzlWvW+cK0yjdzI=;
-        b=KRcs8iOTSBhpkt1U6EnEyD9Pis2zwpbUeq0uwMGjT64pEACMv+iymWc2EeZX6g2Mea
-         z9P7FeQP8snjTAG7v5FbSzHMvs4pJBvGz9lLkgxKqqU2na+XpqYZYa+meP1QhrQLMVa/
-         t6NcZenr1DSxF1sOAZuq66bn5GGqFVUIECGS/8zeAh66te7NqsH5W3qg+0IpVfq55zsb
-         VFXTsXdza5b6N67qsctLvx/IdspoAp6zkwdQc2VFTu24lCbiJ2fPOCioF/KBn9N3IR5V
-         SStp8WFPn4fBVtzuoojmTlFd5kSa3nyCi4EcHz3I7CgjHFZ+DQOMeK+0tKdsagmfdxn1
-         N0gA==
+        d=linaro.org; s=google; t=1679560683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uq8iULvcx+/Gb+0OFAUtoLewabyi+bElNPlA9W28jjU=;
+        b=QE23HGJQHnGAd09QtB+TQS3Q2R0AzQuCJycDS0LJ3CvnhtMzqkExBmjQuj/DUSULwW
+         CdTUyRpJfr0BxLeiqJk77HGiEpcXePcfNRVwAuvI4fjDQMcfKVbD5YDefCwoepOjxwZs
+         CRKobbEslFR4+47TabRND3zS6BWHhNJQPmXbEQsdpKGm0+ZIf0RjTtSzFo1V0GM4z8iO
+         t8YpWg2zcFpkTKc8apwndzQ5TnHNOY/z+enoDLOK1JvEzONxhz0ECaTqBZ98ytvb76mU
+         C7s7uOR2SKQANO394Ed6N34I7/1N8dPGan68/QCltgPt0qY65XouFSoJLketbqzkmIx8
+         o4BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679560663;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679560683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GICzYJuZSuUCn45nyDLfAR5+CyYyPzlWvW+cK0yjdzI=;
-        b=7Sj1XTvFAWgBixGLGgmp0UaYdP4uozR/waz1VCHHeNakuOHrpHxW3AjVj+XzogDqGa
-         tDmLG99g2YcRjjg52HsTaJ2XCFfnvmb+oE7PFk1U0aZnf/551P9u5ME0cYP0LZ5L+N27
-         D04bu4UmzrQFEX1lYtpREFymldxrRYzvPAr3n5ouuj+C0MWNv2wRzoNfc4yM3KAJ8b7C
-         2N+VE74ghtz5Ce3RXEHugA9zVdnuU2xUfdPvg5jsY1ZWFzJ9Hn7fFkww/8N6zN8xkOiF
-         pCILXbOUss5CUeSsWVL4+ggDlWpGOmGqPt8lWzj0spPmd+n6Dq0RXeU4T/OP5uWRcUrx
-         1s8A==
-X-Gm-Message-State: AO0yUKXUpnC4ii25F81TBakYMuntcuunMhinwlQWBzUmwl1+yT+djnyx
-        s2IMg9oEIUAehmOXkDJ7DO3qHclv7yk=
-X-Google-Smtp-Source: AK7set9UmJMactIFDbD2WL6H1MiyAvI7uQW4ru8+mTPBcqpuoICJeSD6GGusyyZxR9/1cFHaJGcrFQ==
-X-Received: by 2002:a17:906:868f:b0:8f1:937c:f450 with SMTP id g15-20020a170906868f00b008f1937cf450mr8839212ejx.13.1679560663557;
-        Thu, 23 Mar 2023 01:37:43 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h27-20020a17090634db00b00933f31034f2sm5571281ejb.38.2023.03.23.01.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 01:37:43 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     linux-tegra@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: tegra: drop serial clock-names and reset-names
-Date:   Thu, 23 Mar 2023 09:37:42 +0100
-Message-Id: <167956063896.504776.1342558454400507763.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230123151543.369724-1-krzysztof.kozlowski@linaro.org>
-References: <20230123151543.369724-1-krzysztof.kozlowski@linaro.org>
+        bh=Uq8iULvcx+/Gb+0OFAUtoLewabyi+bElNPlA9W28jjU=;
+        b=RhD1hdCM3nlID6iAd0Pp/DVWJx1EyJEI0P6gqIgc+Ugx+wwMmVpQzYfqVc4ZASfWL5
+         bNCBZhZlbrprFl7pFK6YJA0ZWwXyp6Z8wqLTmjG7N+8ezqlVwjmUaU18VxLLmUytHcUb
+         76IJMqSBWJj1g3xan3UzE/nB+3btEGAeaakT88Z5/aEEx4uR991ssIqHFX1M4+G8Y3/6
+         JoXwlTik61KG3MH8Y06FCkOq9N/93ca1pILSJHk0zd7xmq9gO0Xlxf0JDjzEXY5sd63f
+         o4INDPosNvTs38cBc7wW5aoqr6xF/qyUyyanN2tAQliUryzI0Ad/q8Uv+PSYxdNiY1AL
+         4XiA==
+X-Gm-Message-State: AAQBX9dcIbtYpUj2JG61X5ayT0nwaIyu6XUnnUkIof5G5X/iXEAZF2pA
+        D+xlD6utm4eLj4LMUtObn0LaPTSuBGm5lb9N15kvog==
+X-Google-Smtp-Source: AKy350Y1PGIFybckLNdnrmn7B3+z+PO42zpuO3LlrftnXKkUHf5Mxe7g7DsahcR71Hcc5jkg0FrjjJg/mpuCBsLCn1U=
+X-Received: by 2002:a05:6902:124a:b0:b74:77fa:581d with SMTP id
+ t10-20020a056902124a00b00b7477fa581dmr1459338ybu.4.1679560683403; Thu, 23 Mar
+ 2023 01:38:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230323012929.10815-1-dipenp@nvidia.com> <20230323012929.10815-10-dipenp@nvidia.com>
+In-Reply-To: <20230323012929.10815-10-dipenp@nvidia.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 23 Mar 2023 09:37:52 +0100
+Message-ID: <CACRpkda9A-1qKqUPMC=9JKN5uotUmTt2CGQZv5Z91wgrSmwtHw@mail.gmail.com>
+Subject: Re: [PATCH V4 09/10] hte: handle nvidia,gpio-controller property
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Thu, Mar 23, 2023 at 2:29=E2=80=AFAM Dipen Patel <dipenp@nvidia.com> wro=
+te:
 
-On Mon, 23 Jan 2023 16:15:43 +0100, Krzysztof Kozlowski wrote:
-> The serial node does not use clock-names and reset-names:
-> 
->   tegra234-sim-vdk.dtb: serial@3100000: Unevaluated properties are not allowed ('clock-names', 'reset-names' were unexpected)
-> 
-> 
+> The dt binding adds nvidia,gpio-controller property from Tegra234 SoC
+> onwards to simplify code handling gpio chip search. The gpio chip search
+> is needed for the AON GPIO GTE instances to map the hardware timestamp
+> GPIO request (coming from the GPIO framework) to the tegra HTE
+> providers. The patch also adds new gpio chip match function to match
+> from the fwnode instead of the gpio controller label. The addition
+> of the property does not break ABI for the existing Tegra194 code.
+>
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
 
-Applied, thanks!
+Yups just like this!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-[1/1] arm64: dts: tegra: drop serial clock-names and reset-names
-      (no commit info)
-
-Best regards,
--- 
-Thierry Reding <treding@nvidia.com>
+Yours,
+Linus Walleij
