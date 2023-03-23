@@ -2,139 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8C86C5DE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 05:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604606C5DED
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 05:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjCWE0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 00:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S229713AbjCWE03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 00:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCWEZ4 (ORCPT
+        with ESMTP id S229796AbjCWE00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 00:25:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B873AD31;
-        Wed, 22 Mar 2023 21:25:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0106B4B3;
-        Wed, 22 Mar 2023 21:26:39 -0700 (PDT)
-Received: from [10.162.40.16] (a077893.blr.arm.com [10.162.40.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C720E3F766;
-        Wed, 22 Mar 2023 21:25:50 -0700 (PDT)
-Message-ID: <f7e24b0c-3e33-755a-65c9-2ee78d5a79ec@arm.com>
-Date:   Thu, 23 Mar 2023 09:55:47 +0530
+        Thu, 23 Mar 2023 00:26:26 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275C7231D9;
+        Wed, 22 Mar 2023 21:26:25 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id g19so179173qts.9;
+        Wed, 22 Mar 2023 21:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679545584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=m71zsVivzHPhz262MIZjHPWFUGOi4WzXmXh+VaxIc18=;
+        b=EQ7QLeeZLlMbUuGH4tbDcR8oO3gMKAKXndJmeoi/zamjx6Q7lu6TOTPL/NyiWOvKf8
+         9RHo2WaKrNHyEQmd4GU27KCfAZZ2eREglSsYislMDmVBT55AxmtqQkOTwlF2sAQM2KeN
+         Hm0s61Qv6fxqwTD3vqP+PRS6h0Ksmpsqy6ow3pOJP7m6PfL7MxSzXl/L5eSOSuJIGYL6
+         WyvtmW5r3e1QGs9KLnqcIq3z/NjnAfRp5ucZzn1WF0tmaqv5ANiPPRPfxzMSUYUfy+wD
+         OMr7SvtzmtocGHZABYRMWVk34AVMXkQ8gQyXjS8jeT58XT3nU5SE3dms6w8/S0I+o6Zo
+         oZbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679545584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m71zsVivzHPhz262MIZjHPWFUGOi4WzXmXh+VaxIc18=;
+        b=dVX7Z6VEUZ8yqFPVlF92WlQgKbS8T/XkVDO+CT9wtUQ1rIRcY964mxmAidE7oxJhc2
+         tQ7V0NUcUpfWY8dc6GH4cIpoQR81C5BDLFC/l2i0DyUh5uPyEGgD4wR3eY5sKfdUYPwx
+         zTPtlAxyZUIqCLk11vkKMPvH724vy77KEwx+OPcv66BzTh9DmANPOR0+A6/r8Rd7wFlq
+         vH6bYqQQ3QKPTaIHvy3eAsow4XsP0ncX/36icf4giX5QyNCppsSku7jK2fzBCFfymkaS
+         zj1trJ9wRUL9bVuObGMFipY/buaF2gWqqpz5GyICXGjowBkMip+gxUhOUE7maliZrNxc
+         921g==
+X-Gm-Message-State: AO0yUKVbtsJhbglw9TTscBfQbaSt81FOzBSksY9iFemMU8v01xPrTifB
+        bH4+PYcmCeHNXAtNu6kMyUZIcXXtfEM=
+X-Google-Smtp-Source: AK7set/hFPEBgjbu1OY/J8kGibdPA87T8WbPpJKO967sCI2Gs34meqq8uz8VOjyIRQ0syTkjxas1jA==
+X-Received: by 2002:a05:622a:49:b0:3e3:7ed6:3db with SMTP id y9-20020a05622a004900b003e37ed603dbmr9925908qtw.29.1679545584311;
+        Wed, 22 Mar 2023 21:26:24 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05620a22ab00b0074357fa9e15sm12596448qkh.42.2023.03.22.21.26.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 21:26:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 016C527C0054;
+        Thu, 23 Mar 2023 00:26:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 23 Mar 2023 00:26:23 -0400
+X-ME-Sender: <xms:7tQbZNm4H_vZ8ibV5yORE8QkYKcUhHk8ktwhm99aH0FNznVM-TcsXQ>
+    <xme:7tQbZI3GlkrFAVsHUqVQoY4v_z8XPCu_2158m55yX8dblEaQ8_Ge9ByFrpdFjtwkO
+    Bd62OMBB_rEFRtj7g>
+X-ME-Received: <xmr:7tQbZDqQ8X8_qMHNCFDFlu4IEcmVf6OM2ZLNwIVurvVW2qMNxvN3n_96y1fWf8Lm-lrwq3YzJXq1u5dmqOGRNwpMZFVSGK_S250>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeeggeeukeeghfevudektdevjeehhfekffevueefudeivdelteeltdekheejgfei
+    veenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
+    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
+    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:7tQbZNnwyQf3QxDax3Eojlqyy0zuxO4U-p7tvocODglkP6PI5c6qjQ>
+    <xmx:7tQbZL1GrjF9j_-zPUtyWA2wc2CvzCfBheZ7GkMeG2sJHcpK0VHZ0g>
+    <xmx:7tQbZMuI5Ff-yvR9qIj74c8QigWZQv2597ZaI2x7YPDjYGT9WaKcmA>
+    <xmx:7tQbZNWrQ14jmmG7-rOPz7zxObs0iSFXPBI9hdukbcTFibCYohnxzw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 00:26:22 -0400 (EDT)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     rcu@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH rcu v2 0/7] RCU-related lockdep changes for v6.4
+Date:   Wed, 22 Mar 2023 21:26:07 -0700
+Message-Id: <20230323042614.1191120-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V9 00/10] arm64/perf: Enable branch stack sampling
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <655ff114-99d2-4612-9167-cc8688f2b6b2@sirena.org.uk>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <655ff114-99d2-4612-9167-cc8688f2b6b2@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mark,
+Hi,
 
-On 3/22/23 00:32, Mark Brown wrote:
-> On Wed, Mar 15, 2023 at 10:44:34AM +0530, Anshuman Khandual wrote:
->> This series enables perf branch stack sampling support on arm64 platform
->> via a new arch feature called Branch Record Buffer Extension (BRBE). All
->> relevant register definitions could be accessed here.
->>
->> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> 
-> While looking at another feature I noticed that HFGITR_EL2 has two traps
-> for BRBE instructions, nBRBINJ and nBRBIALL which trap BRB INJ and BRB
-> IALL.  Even if we don't use those right now does it make sense to
+Another week, another version ;-)
 
-Right, current branch stack sampling experiments have been on EL2 host itself.
+Previous versions:
 
-> document a requirement for those traps to be disabled now in case we
-> need them later, and do so during EL2 setup for KVM guests?  That could
-> always be done incrementally.
-Unlike all other instruction trap enable fields in SYS_HFGITR_EL2, these BRBE
-instructions ones are actually inverted in semantics i.e the particular fields
-need to be set for these traps to be disabled in EL2.
+v1: https://lore.kernel.org/rcu/20230317031339.10277-1-boqun.feng@gmail.com/
 
-SYS_HFGITR_EL2.nBRBIALL
-SYS_HFGITR_EL2.nBRBINJ
+Changes since v1:
 
-By default entire SYS_HFGITR_EL2 is set as cleared during init and that would
-prevent a guest from using BRBE.
+*	Minor typo fixes
+*	Apply Acked-by tags
+*	Add license and copyright headers for srcu_lockdep.sh
 
-init_kernel_el()
-	init_el2()
-		init_el2_state()
-			__init_el2_fgt()
-				........
-				msr_s   SYS_HFGITR_EL2, xzr
-				........
+Thank you all for helping improve this!
 
-I guess something like the following (untested) needs to be done, to enable
-BRBE in guests.
+You can also find this series at
 
-diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
-index 037724b19c5c..309708127a2a 100644
---- a/arch/arm64/include/asm/el2_setup.h
-+++ b/arch/arm64/include/asm/el2_setup.h
-@@ -161,6 +161,15 @@
-        msr_s   SYS_HFGWTR_EL2, x0
-        msr_s   SYS_HFGITR_EL2, xzr
- 
-+       mrs     x1, id_aa64dfr0_el1
-+       ubfx    x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
-+       cbz     x1, .Lskip_brbe_\@
-+       mov     x0, xzr
-+       orr     x0, x0, #HFGITR_EL2_nBRBIALL
-+       orr     x0, x0, #HFGITR_EL2_nBRBINJ
-+       msr_s   SYS_HFGITR_EL2, x0
-+
-+.Lskip_brbe_\@:
-        mrs     x1, id_aa64pfr0_el1             // AMU traps UNDEF without AMU
-        ubfx    x1, x1, #ID_AA64PFR0_EL1_AMU_SHIFT, #4
-        cbz     x1, .Lskip_fgt_\@
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index b3bc03ee22bd..3b939c42f3b8 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -527,6 +527,9 @@
- #define SYS_HFGITR_EL2                 sys_reg(3, 4, 1, 1, 6)
- #define SYS_HACR_EL2                   sys_reg(3, 4, 1, 1, 7)
- 
-+#define        HFGITR_EL2_nBRBIALL             (BIT(56))
-+#define HFGITR_EL2_nBRBINJ             (BIT(55))
-+
- #define SYS_TTBR0_EL2                  sys_reg(3, 4, 2, 0, 0)
- #define SYS_TTBR1_EL2                  sys_reg(3, 4, 2, 0, 1)
- #define SYS_TCR_EL2                    sys_reg(3, 4, 2, 0, 2)
+	https://github/fbq/linux rcu/lockdep.2023.03.22a
 
+top commit is:
 
-> 
-> I've got a patch adding the definition of that register to sysreg which
-> I should be sending shortly, no need to duplicate that effort.
+	450ef54e199f
 
-Sure, I assume you are moving the existing definition for SYS_HFGITR_EL2 along
-with all its fields from ../include/asm/sysreg.h to ../tools/sysreg. Right, it
-makes sense.
+List of changes:
 
-- Anshuman
+Boqun Feng (4):
+  locking/lockdep: Introduce lock_sync()
+  rcu: Annotate SRCU's update-side lockdep dependencies
+  locking: Reduce the number of locks in ww_mutex stress tests
+  locking/lockdep: Improve the deadlock scenario print for sync and read
+    lock
+
+Paul E. McKenney (3):
+  rcutorture: Add SRCU deadlock scenarios
+  rcutorture: Add RCU Tasks Trace and SRCU deadlock scenarios
+  rcutorture: Add srcu_lockdep.sh
+
+ include/linux/lockdep.h                       |   8 +-
+ include/linux/srcu.h                          |  34 +++-
+ kernel/locking/lockdep.c                      |  64 +++++-
+ kernel/locking/test-ww_mutex.c                |   2 +-
+ kernel/rcu/rcutorture.c                       | 185 ++++++++++++++++++
+ kernel/rcu/srcutiny.c                         |   2 +
+ kernel/rcu/srcutree.c                         |   2 +
+ .../selftests/rcutorture/bin/srcu_lockdep.sh  |  78 ++++++++
+ 8 files changed, 364 insertions(+), 11 deletions(-)
+ create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+
+-- 
+2.38.1
+
