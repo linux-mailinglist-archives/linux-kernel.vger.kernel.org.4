@@ -2,54 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA80B6C712D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8776C7130
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjCWTkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S231783AbjCWTkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjCWTkQ (ORCPT
+        with ESMTP id S231418AbjCWTk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:40:16 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A0420069;
-        Thu, 23 Mar 2023 12:40:15 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 877CF60A;
-        Thu, 23 Mar 2023 19:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 877CF60A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679600414; bh=iQi8Bi9hacIn33KLkpIHUMRozKG0oaFhXdu49BmPO4k=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=k0FDr3OzJvgw2XqhhWd1E+YHjnJ0AUrhtyaUyDHHAw+k0FR4HqJBaXoY+3sEVbgQF
-         vF5oGSNrO6mX6ul+tg9Xv92MWo56Z0+oF6hIqBNOGq7DeBqt4RcMQF54B3YeX0EtmN
-         jFdtJ809hXRkOGpKI08CVbIVTlA/L3Y+luIFMg9GgE+/jUkpVc8Q0MYUv41ewex2ia
-         qBxcXulpBMhTTM2qDirqXJXSB4l4XtIIZaT1GakvDrRp8FCp+tv28m+g/u21wq6LU/
-         tJDrve0L9Qts0xBIy9uy30HFA0G6iGk0zqKPttP/6tBjyUoSTdAIMJVrvKU05I1fX1
-         qPBk0C4u1yCEw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
-In-Reply-To: <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
-References: <20230315211523.108836-1-corbet@lwn.net>
- <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
- <87cz4zb8xu.fsf@meer.lwn.net>
- <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
-Date:   Thu, 23 Mar 2023 13:40:13 -0600
-Message-ID: <87v8ir9rz6.fsf@meer.lwn.net>
+        Thu, 23 Mar 2023 15:40:28 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185C42068E
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:40:27 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id fQnPptlrMzvWyfQnPpVPOc; Thu, 23 Mar 2023 20:40:25 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 23 Mar 2023 20:40:25 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: pci-quirks: Reduce the length of a spinlock section in usb_amd_find_chipset_info()
+Date:   Thu, 23 Mar 2023 20:40:22 +0100
+Message-Id: <08ee42fced6af6bd56892cd14f2464380ab071fa.1679600396.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,26 +43,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dave Hansen <dave.hansen@intel.com> writes:
+'info' is local to the function. There is no need to zeroing it within
+a spin_lock section. Moreover, there is no need to explicitly initialize
+the .need_pll_quirk field.
 
-> On 3/23/23 11:48, Jonathan Corbet wrote:
->> I could do the "fix up and send at the end of the merge window" trick
->> with it.
->
-> That would work for me.
->
->>  Or perhaps some of this should go via tip?  Suggestions welcome.
->
-> Since we have so many branches, we'll still have to do the merges
-> between whatever branch carries the move and the actual doc-update branches.
->
-> The end-of-the-merge-window is nice for us maintainers because we can
-> ask the submitters to do any rebasing.
+Initialize the structure when defined and remove the now useless memset().
 
-Now that I look...the only thing in linux-next currently that conflicts
-is the shadow-stack series; if that continues, it might not be necessary
-to do anything special.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/usb/host/pci-quirks.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thanks,
+diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+index ef08d68b9714..2665832f9add 100644
+--- a/drivers/usb/host/pci-quirks.c
++++ b/drivers/usb/host/pci-quirks.c
+@@ -207,8 +207,7 @@ EXPORT_SYMBOL_GPL(sb800_prefetch);
+ static void usb_amd_find_chipset_info(void)
+ {
+ 	unsigned long flags;
+-	struct amd_chipset_info info;
+-	info.need_pll_quirk = false;
++	struct amd_chipset_info info = { };
+ 
+ 	spin_lock_irqsave(&amd_lock, flags);
+ 
+@@ -218,7 +217,6 @@ static void usb_amd_find_chipset_info(void)
+ 		spin_unlock_irqrestore(&amd_lock, flags);
+ 		return;
+ 	}
+-	memset(&info, 0, sizeof(info));
+ 	spin_unlock_irqrestore(&amd_lock, flags);
+ 
+ 	if (!amd_chipset_sb_type_init(&info)) {
+-- 
+2.34.1
 
-jon
