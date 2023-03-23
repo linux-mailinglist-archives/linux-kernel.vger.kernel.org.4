@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F306C648D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BE56C6492
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjCWKPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S231308AbjCWKP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCWKPC (ORCPT
+        with ESMTP id S231179AbjCWKPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:15:02 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA5E1A485;
-        Thu, 23 Mar 2023 03:15:01 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ek18so84162056edb.6;
-        Thu, 23 Mar 2023 03:15:01 -0700 (PDT)
+        Thu, 23 Mar 2023 06:15:25 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F2C1ADC5;
+        Thu, 23 Mar 2023 03:15:24 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so718984wmq.3;
+        Thu, 23 Mar 2023 03:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679566499;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3dA8ydvuA/WaWBfApBoDiSPygU9WQclAtBqZTzXYAyw=;
-        b=TjPlwTNo/orl5t5bVDpRZec4X8IxUGIUtVAJOBLVIsNi3J6yrU6l2CVd16qmGliCmV
-         4AWEgN/2viyAzUvGQAJKHBvdVqzZtL1+kBGT1K5Xhi59wa6zdCqvc1IGeUxfCQVOpXd/
-         FpxYwRMk6QAnFhhDcFKsMk+Olr2gTLRSRJe8craht8vaM06TVBbl5jg5tyWpqqLUxYCO
-         TU4gKZ6fGRBWF2jf3KNvOJjliGnhiW/MJRzRamnhhbfyVXpGRZgWuGV8A/H6i6j63hMA
-         KNO9lZS5P6iIc7cRigE9dbiMrSDh8jcfGahl+SN0gJwnfH8jgOX1tAlEBd51a4FFj4nD
-         F8hw==
+        d=gmail.com; s=20210112; t=1679566522;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FYs0HNDKIjrbcHM960jzzYGdPLX0yWmJ512l9ylAAsA=;
+        b=LKYKTn/mAihd2Bc4LkHcL7PhZ42dOCwu8amQKMAtuqOVRW3CRd/8Z0qV1wzmwhVchw
+         4r9oaTWN6QA2gdI2/NID/KnImI2llCWGPHflnXNwo8UHDquvblu9Pq+gOOof7x+Thy2f
+         BMAFndZctNaBWfo/pst6Kcl7aoJsRdM10aS6hUCzqdb41tPABOljDMbnj4kh2WYwtHhs
+         VMEkmOGSy5PcykxTMW1tfW6lPFjJcrs6JtZBZRiO+iKfrKBvlE31K14xQp0qLTCnfTMP
+         dfybgCDKTkDlk5oV4k45WWo4YsSYuRgJ0FdLeNDUBuOwl85n2av62ISun5IGNNgnJSmk
+         Sixg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679566499;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3dA8ydvuA/WaWBfApBoDiSPygU9WQclAtBqZTzXYAyw=;
-        b=CJSJFeizck34qJ4wDSAHs8kztiAFHWLLXxvB6W+eEJQbg9tcnLFJU85Pm1wzkK6x/R
-         t39ZrNvJG+hK5wUspx9N2Z/laSJeDYVlsoTCA02xITQkz5ZtnImLO2DhAyKDS0VWgPUj
-         X92iUAKso9F8OvO1df0AhkANWid5DQ6pD//BkpAXerZ/8Vgf1J3vPuyqDQMhJS3UVUzD
-         3hCr0CEHpNkYeIjAGcOQPpc2tIQ+x6FkXVVDaQIP2M95In/az+0NMoXGrI1iWnj70Gbr
-         TB58ToF2Ot4/jfOK+Wf5RYXv07OshZcHFHqf1b06VSMzMCtVJ+GoQqqH8tnKCavMYY0v
-         rFiA==
-X-Gm-Message-State: AO0yUKVBkkf6leY/xwyEw0CHsFWFBrJc4usxSF4qCvBDPjUTZigma0vq
-        bz17XSroaED4VumTszV1qafy6X2OD/A=
-X-Google-Smtp-Source: AK7set+K+/unjZLyY3xnuTerkikW2195nmRVJS9iuB+6xAitd4cGPffhlnrZwVnoBlXhdvCcZhG3QA==
-X-Received: by 2002:a17:906:18a1:b0:92f:43a2:bf7d with SMTP id c1-20020a17090618a100b0092f43a2bf7dmr10092447ejf.73.1679566499512;
-        Thu, 23 Mar 2023 03:14:59 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i4-20020a170906850400b0093018c7c07dsm8361948ejx.82.2023.03.23.03.14.58
+        d=1e100.net; s=20210112; t=1679566522;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FYs0HNDKIjrbcHM960jzzYGdPLX0yWmJ512l9ylAAsA=;
+        b=R3QDX7LKE8nN8QlEDYYbTmbMXrE2o6ir4MP7/qW8wWiu2Z1xVoYdNznkRn2GUKNdwX
+         9ZISU6gIXWLeH+0mQvBAxqipbpcRatUBrCSrbyGr9bX6qDEBvT3ACMasMn2RXMpO2ebi
+         cxO0EM4f1EptStJPNwjAxbIbOuXBPiLTe8SxUGwVydICW22dVVHLid7EAv7VK1hQF4Pf
+         kO5D7/OggMK5MSEfoleFs59HQSUBsJvojVzumrQrUgFJexrEIxDl6J/a5IA0ULCm5ItC
+         eknZhVP3U7MgYBUZBUR61KGXVeOargtgNpaMIVYVDkI3tIgDQnMLUhiVu9qX9d+oMfiE
+         s1wg==
+X-Gm-Message-State: AO0yUKWKzbhJyTlSMtte3WyAIyATD67lwsZF1XoxKOKI4yoCrd6znwUL
+        6omSvw96KWTs4ALToB1Y95w=
+X-Google-Smtp-Source: AK7set+u3N9pK0uVUfLJoYX7FdNxrz5SxQIAIYF5d0P5xpI2bb78fwkUwtAVU91EarVqyF4a083v+w==
+X-Received: by 2002:a05:600c:3781:b0:3ee:5d1d:6c2d with SMTP id o1-20020a05600c378100b003ee5d1d6c2dmr1834876wmr.35.1679566522345;
+        Thu, 23 Mar 2023 03:15:22 -0700 (PDT)
+Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.googlemail.com with ESMTPSA id f18-20020a05600c155200b003ede2c59a54sm1416952wmg.37.2023.03.23.03.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:14:59 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:14:57 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 02/11] memory: tegra: add interconnect support for
- DRAM scaling in Tegra234
-Message-ID: <ZBwmoZJAEgzc+VEK@orome>
-References: <20230320182441.11904-1-sumitg@nvidia.com>
- <20230320182441.11904-3-sumitg@nvidia.com>
+        Thu, 23 Mar 2023 03:15:21 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, Uladzislau Rezki <urezki@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v8 0/4] convert read_kcore(), vread() to use iterators
+Date:   Thu, 23 Mar 2023 10:15:15 +0000
+Message-Id: <cover.1679566220.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FGn3JdHJT1ZVxORw"
-Content-Disposition: inline
-In-Reply-To: <20230320182441.11904-3-sumitg@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -83,65 +76,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While reviewing Baoquan's recent changes to permit vread() access to
+vm_map_ram regions of vmalloc allocations, Willy pointed out [1] that it
+would be nice to refactor vread() as a whole, since its only user is
+read_kcore() and the existing form of vread() necessitates the use of a
+bounce buffer.
 
---FGn3JdHJT1ZVxORw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch series does exactly that, as well as adjusting how we read the
+kernel text section to avoid the use of a bounce buffer in this case as
+well.
 
-On Mon, Mar 20, 2023 at 11:54:32PM +0530, Sumit Gupta wrote:
-[...]
-> diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
-[...]
-> +static int tegra234_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	struct tegra_mc *mc = icc_provider_to_tegra_mc(dst->provider);
-> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
-> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
-> +	const struct tegra_mc_client *pclient = src->data;
-> +	struct tegra_bpmp_message msg;
-> +	struct tegra_bpmp *bpmp;
-> +	int ret;
-> +
-> +	/*
-> +	 * Same Src and Dst node will happen during boot from icc_node_add().
-> +	 * This can be used to pre-initialize and set bandwidth for all clients
-> +	 * before their drivers are loaded. We are skipping this case as for us,
-> +	 * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
-> +	 */
-> +	if (src->id == dst->id)
-> +		return 0;
-> +
-> +	bpmp = of_tegra_bpmp_get();
-> +	if (IS_ERR(bpmp)) {
-> +		ret = PTR_ERR(bpmp);
-> +		return ret;
-> +	}
+This has been tested against the test case which motivated Baoquan's
+changes in the first place [2] which continues to function correctly, as do
+the vmalloc self tests.
 
-Irrespective of Whether we end up doing the BPMP lookup via
-tegra_bpmp_get() or of_tegra_bpmp_get(), I think we should resolve at
-probe time and cache the result, since this function can get called
-multiple times and the lookup is a rather heavy operation.
+[1] https://lore.kernel.org/all/Y8WfDSRkc%2FOHP3oD@casper.infradead.org/
+[2] https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
 
-Thierry
+v8:
+- Make zero_iter() static.
 
---FGn3JdHJT1ZVxORw
-Content-Type: application/pgp-signature; name="signature.asc"
+v7:
+- Keep trying to fault in memory until the vmalloc read operation
+  completes.
+https://lore.kernel.org/all/cover.1679511146.git.lstoakes@gmail.com/
 
------BEGIN PGP SIGNATURE-----
+v6:
+- Correct copy_page_to_iter_nofault() to handle -EFAULT case correctly.
+https://lore.kernel.org/all/cover.1679496827.git.lstoakes@gmail.com/
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcJqEACgkQ3SOs138+
-s6E48BAAgKA1povzoTBUTaZIIbXSLlYXE1lnamtot8dMIFOrfAXaRc3i9AcPQ3gM
-eSVszZtSL1ARSVMQjvTCEvg3kNuzQioBk6rdspuQ7j/I0P8TjXNadrQe0M0uVwdp
-fKnDBTAxYDIjAP0jTezBUE5hA6SaxWumnpNZrNqL9mmoAbQGeBXeqrfcbhb/I54H
-1g6dqNjHnOyiESk7pvCcMf8CFaSG8BT3OqVyPhc5Vst4yLtqztPFBdmx9gzXJ6HN
-zr1/oeYiu+nzya1gRhga+4SM3L6IvAWIbj0TqoE+5QTzZt2ccFlw+wbwlC4K8pLJ
-pU0LE56UbwM42D+yMLA/DsWOi4r8zL+A432JrXk5464P018X+I/dYKnmlg/0nWAR
-zqyVv4nQxY46DOwfPH6mUnl/02J4GHJGYJ7E980APnUgkObOX15NNvh6Xat6Go7v
-kf3S/byknRohkjE7kbaUm1Ys/79RTvwLTIVU005zAT5wjpVyU6qTXDg0kA5AaF2d
-HtvnSratQkv9kDyoEiqC7dwPXeEez1HWdbY+sZ/sKccEonME1o/hmGFdAZaxYnlV
-/fhhl9DKUQt9eordK1gEb95qN8t+ksxi8m+LnadsPbFrLIxcA8OwTOm2BPWxFy1P
-blYrmZF1mFMk4RS7f7oamceSXxdBut1rQBC4f85ZxzJzcB6Zamg=
-=9mRi
------END PGP SIGNATURE-----
+v5:
+- Do not rename fpos to ppos in read_kcore_iter() to avoid churn.
+- Fix incorrect commit messages after prior revisions altered the approach.
+- Replace copy_page_to_iter_atomic() with copy_page_to_iter_nofault() and
+  adjust it to be able to handle compound pages. This uses
+  copy_to_user_nofault() which ensures page faults are disabled during copy
+  which kmap_local_page() was not doing.
+- Only try to fault in pages if we are unable to copy in the first place
+  and try only once to avoid any risk of spinning.
+- Do not zero memory in aligned_vread_iter() if we couldn't copy it.
+- Fix mistake in zeroing missing or unpopulated blocks in
+  vmap_ram_vread_iter().
+https://lore.kernel.org/linux-mm/cover.1679494218.git.lstoakes@gmail.com/
 
---FGn3JdHJT1ZVxORw--
+v4:
+- Fixup mistake in email client which orphaned patch emails from the
+  cover letter.
+https://lore.kernel.org/all/cover.1679431886.git.lstoakes@gmail.com
+
+v3:
+- Revert introduction of mutex/rwsem in vmalloc
+- Introduce copy_page_to_iter_atomic() iovec function
+- Update vread_iter() and descendent functions to use only this
+- Fault in user pages before calling vread_iter()
+- Use const char* in vread_iter() and descendent functions
+- Updated commit messages based on feedback
+- Extend vread functions to always check how many bytes we could copy. If
+  at any stage we are unable to copy/zero, abort and return the number of
+  bytes we did copy.
+https://lore.kernel.org/all/cover.1679354384.git.lstoakes@gmail.com/
+
+v2:
+- Fix ordering of vread_iter() parameters
+- Fix nommu vread() -> vread_iter()
+https://lore.kernel.org/all/cover.1679209395.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/all/cover.1679183626.git.lstoakes@gmail.com/
+
+Lorenzo Stoakes (4):
+  fs/proc/kcore: avoid bounce buffer for ktext data
+  fs/proc/kcore: convert read_kcore() to read_kcore_iter()
+  iov_iter: add copy_page_to_iter_nofault()
+  mm: vmalloc: convert vread() to vread_iter()
+
+ fs/proc/kcore.c         |  85 +++++++--------
+ include/linux/uio.h     |   2 +
+ include/linux/vmalloc.h |   3 +-
+ lib/iov_iter.c          |  48 +++++++++
+ mm/nommu.c              |  10 +-
+ mm/vmalloc.c            | 234 +++++++++++++++++++++++++---------------
+ 6 files changed, 243 insertions(+), 139 deletions(-)
+
+--
+2.39.2
