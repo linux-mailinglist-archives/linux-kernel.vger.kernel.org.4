@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2D86C73E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC9C6C73EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCWXJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S231245AbjCWXNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjCWXJL (ORCPT
+        with ESMTP id S229849AbjCWXNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:09:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80E1FF25
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:09:09 -0700 (PDT)
-Received: from workpc.. (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 796756603105;
-        Thu, 23 Mar 2023 23:09:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679612948;
-        bh=XYVO4qL+BZk0tswR1nVz2i6B9bX936Liy6QwloPRSYE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jxqVhjwd2ld4IVbDmOkMeYkgOYBraeNfFyVRTz8Klpm2ChjBd4z5PPDYMBNK6Ly4P
-         QajC3LcibautpBFRW7lOCll3uXDuYDZ1KeDtHcqLTcMptiVatOWS+u1DV/WLwOfF96
-         1aLDWAUa2cWIvkswAWy/t3Cw46xkIZbg3cYcoPuqo3rtlP0yMwTohofm5S8ZoP8M6a
-         25KiIxRGcmW0j1/E2AKKDDq+DT2wTfVwo0OIGMlNNxDq2CedjQQhkyrxWPuxTI3YQC
-         9l8YLewfYgACuj37q0EO/0/3lrFMdFO/2vd48IH88xr+3BR8rop0dVeA6e5QWuoWe6
-         wrhcEIxdS0nBA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 2/2] drm/virtio: Support sync objects
-Date:   Fri, 24 Mar 2023 02:07:55 +0300
-Message-Id: <20230323230755.1094832-3-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
-References: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
+        Thu, 23 Mar 2023 19:13:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDC81025D;
+        Thu, 23 Mar 2023 16:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/0J7jFvtU4QW5iapXrj+eQ92EbtgLqnD7gTrHBDqeFc=; b=otsaus3Dq50b8CS7m8/ItOJM/V
+        w+5QEqxZEH7fyeCPzd5pdp4bzF8CwPoklvzLvf1hx11OyIZEsnCXc9D7UA27sY4T4vPS7bZsmaCDy
+        yX++A58xQ1zjAEnBerlZ36V0lEmdaQ/iIKyE5zKanM0EgZ8BokAWwaPJzjAZvJVd77ATThBXC2ddX
+        korORuY50uqwoouFlQ1ucWsRQqs/clwQin8JRT/lXUrO09zTISQDDL1TSyYV81mSSAQ4xxys0dMkG
+        oVpmoIzdXsAka1UxyyFQpFlCx6WRi0W79/Z6Xj5Y0WoyvtQqRuAv9wdsSsbSoam0BI5pZvhnP07y4
+        9kWa9kYA==;
+Received: from [2001:8b0:10b:5:b3d4:e39d:531b:642a] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pfU6a-004Lgv-AM; Thu, 23 Mar 2023 23:12:24 +0000
+Message-ID: <8dff6ae5ffaebfbcc55a01c04420fd478070b830.camel@infradead.org>
+Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
+ states before CPUHP_BRINGUP_CPU
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com
+Date:   Thu, 23 Mar 2023 23:12:21 +0000
+In-Reply-To: <871qlf83wj.ffs@tglx>
+References: <20230321194008.785922-1-usama.arif@bytedance.com>
+         <20230321194008.785922-4-usama.arif@bytedance.com> <874jqb8588.ffs@tglx>
+         <871qlf83wj.ffs@tglx>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-jBRsuR+mRLHq8Anu5NHE"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,335 +64,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sync object DRM UAPI support to VirtIO-GPU driver. It's required
-for enabling a full-featured Vulkan fencing by Venus and native context
-VirtIO-GPU Mesa drivers.
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/virtio/virtgpu_drv.c    |   3 +-
- drivers/gpu/drm/virtio/virtgpu_submit.c | 219 ++++++++++++++++++++++++
- include/uapi/drm/virtgpu_drm.h          |  16 +-
- 3 files changed, 236 insertions(+), 2 deletions(-)
+--=-jBRsuR+mRLHq8Anu5NHE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
-index add075681e18..a22155577152 100644
---- a/drivers/gpu/drm/virtio/virtgpu_drv.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
-@@ -176,7 +176,8 @@ static const struct drm_driver driver = {
- 	 * If KMS is disabled DRIVER_MODESET and DRIVER_ATOMIC are masked
- 	 * out via drm_device::driver_features:
- 	 */
--	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC,
-+	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_RENDER | DRIVER_ATOMIC |
-+			   DRIVER_SYNCOBJ | DRIVER_SYNCOBJ_TIMELINE,
- 	.open = virtio_gpu_driver_open,
- 	.postclose = virtio_gpu_driver_postclose,
- 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_submit.c b/drivers/gpu/drm/virtio/virtgpu_submit.c
-index 42c79869f192..a18b21f9d07a 100644
---- a/drivers/gpu/drm/virtio/virtgpu_submit.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_submit.c
-@@ -14,11 +14,24 @@
- #include <linux/uaccess.h>
- 
- #include <drm/drm_file.h>
-+#include <drm/drm_syncobj.h>
- #include <drm/virtgpu_drm.h>
- 
- #include "virtgpu_drv.h"
- 
-+struct virtio_gpu_submit_post_dep {
-+	struct drm_syncobj *syncobj;
-+	struct dma_fence_chain *chain;
-+	uint64_t point;
-+};
-+
- struct virtio_gpu_submit {
-+	struct virtio_gpu_submit_post_dep *post_deps;
-+	unsigned int num_out_syncobjs;
-+
-+	struct drm_syncobj **in_syncobjs;
-+	unsigned int num_in_syncobjs;
-+
- 	struct virtio_gpu_object_array *buflist;
- 	struct drm_virtgpu_execbuffer *exbuf;
- 	struct virtio_gpu_fence *out_fence;
-@@ -58,6 +71,189 @@ static int virtio_gpu_dma_fence_wait(struct virtio_gpu_submit *submit,
- 	return 0;
- }
- 
-+static void virtio_gpu_free_syncobjs(struct drm_syncobj **syncobjs,
-+				     uint32_t nr_syncobjs)
-+{
-+	uint32_t i = nr_syncobjs;
-+
-+	while (i--) {
-+		if (syncobjs[i])
-+			drm_syncobj_put(syncobjs[i]);
-+	}
-+
-+	kvfree(syncobjs);
-+}
-+
-+static int
-+virtio_gpu_parse_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
-+	struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
-+	size_t syncobj_stride = exbuf->syncobj_stride;
-+	struct drm_syncobj **syncobjs;
-+	int ret = 0, i;
-+
-+	if (!submit->num_in_syncobjs)
-+		return 0;
-+
-+	syncobjs = kvcalloc(submit->num_in_syncobjs, sizeof(*syncobjs),
-+			    GFP_KERNEL);
-+	if (!syncobjs)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < submit->num_in_syncobjs; i++) {
-+		uint64_t address = exbuf->in_syncobjs + i * syncobj_stride;
-+		struct dma_fence *fence;
-+
-+		if (copy_from_user(&syncobj_desc,
-+				   u64_to_user_ptr(address),
-+				   min(syncobj_stride, sizeof(syncobj_desc)))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		if (syncobj_desc.flags & ~VIRTGPU_EXECBUF_SYNCOBJ_FLAGS) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		ret = drm_syncobj_find_fence(submit->file, syncobj_desc.handle,
-+					     syncobj_desc.point, 0, &fence);
-+		if (ret)
-+			break;
-+
-+		ret = virtio_gpu_dma_fence_wait(submit, fence);
-+
-+		dma_fence_put(fence);
-+		if (ret)
-+			break;
-+
-+		if (syncobj_desc.flags & VIRTGPU_EXECBUF_SYNCOBJ_RESET) {
-+			syncobjs[i] =
-+				drm_syncobj_find(submit->file, syncobj_desc.handle);
-+			if (!syncobjs[i]) {
-+				ret = -EINVAL;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (ret) {
-+		virtio_gpu_free_syncobjs(syncobjs, i);
-+		return ret;
-+	}
-+
-+	submit->in_syncobjs = syncobjs;
-+
-+	return ret;
-+}
-+
-+static void virtio_gpu_reset_syncobjs(struct drm_syncobj **syncobjs,
-+				      uint32_t nr_syncobjs)
-+{
-+	uint32_t i;
-+
-+	for (i = 0; i < nr_syncobjs; i++) {
-+		if (syncobjs[i])
-+			drm_syncobj_replace_fence(syncobjs[i], NULL);
-+	}
-+}
-+
-+static void
-+virtio_gpu_free_post_deps(struct virtio_gpu_submit_post_dep *post_deps,
-+			  uint32_t nr_syncobjs)
-+{
-+	uint32_t i = nr_syncobjs;
-+
-+	while (i--) {
-+		kfree(post_deps[i].chain);
-+		drm_syncobj_put(post_deps[i].syncobj);
-+	}
-+
-+	kvfree(post_deps);
-+}
-+
-+static int virtio_gpu_parse_post_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
-+	struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
-+	struct virtio_gpu_submit_post_dep *post_deps;
-+	size_t syncobj_stride = exbuf->syncobj_stride;
-+	int ret = 0, i;
-+
-+	if (!submit->num_out_syncobjs)
-+		return 0;
-+
-+	post_deps = kvcalloc(submit->num_out_syncobjs, sizeof(*post_deps),
-+			     GFP_KERNEL);
-+	if (!post_deps)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < submit->num_out_syncobjs; i++) {
-+		uint64_t address = exbuf->out_syncobjs + i * syncobj_stride;
-+
-+		if (copy_from_user(&syncobj_desc,
-+				   u64_to_user_ptr(address),
-+				   min(syncobj_stride, sizeof(syncobj_desc)))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		post_deps[i].point = syncobj_desc.point;
-+
-+		if (syncobj_desc.flags) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (syncobj_desc.point) {
-+			post_deps[i].chain = dma_fence_chain_alloc();
-+			if (!post_deps[i].chain) {
-+				ret = -ENOMEM;
-+				break;
-+			}
-+		}
-+
-+		post_deps[i].syncobj =
-+			drm_syncobj_find(submit->file, syncobj_desc.handle);
-+		if (!post_deps[i].syncobj) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+	}
-+
-+	if (ret) {
-+		virtio_gpu_free_post_deps(post_deps, i);
-+		return ret;
-+	}
-+
-+	submit->post_deps = post_deps;
-+
-+	return 0;
-+}
-+
-+static void
-+virtio_gpu_process_post_deps(struct virtio_gpu_submit *submit)
-+{
-+	struct virtio_gpu_submit_post_dep *post_deps = submit->post_deps;
-+	struct dma_fence *fence = &submit->out_fence->f;
-+	uint32_t i;
-+
-+	if (!post_deps)
-+		return;
-+
-+	for (i = 0; i < submit->num_out_syncobjs; i++) {
-+		if (post_deps[i].chain) {
-+			drm_syncobj_add_point(post_deps[i].syncobj,
-+					      post_deps[i].chain,
-+					      fence, post_deps[i].point);
-+			post_deps[i].chain = NULL;
-+		} else {
-+			drm_syncobj_replace_fence(post_deps[i].syncobj, fence);
-+		}
-+	}
-+}
-+
- static int virtio_gpu_fence_event_create(struct drm_device *dev,
- 					 struct drm_file *file,
- 					 struct virtio_gpu_fence *fence,
-@@ -121,6 +317,18 @@ static int virtio_gpu_init_submit_buflist(struct virtio_gpu_submit *submit)
- 
- static void virtio_gpu_cleanup_submit(struct virtio_gpu_submit *submit)
- {
-+	if (submit->in_syncobjs) {
-+		virtio_gpu_reset_syncobjs(submit->in_syncobjs,
-+					  submit->num_in_syncobjs);
-+
-+		virtio_gpu_free_syncobjs(submit->in_syncobjs,
-+					 submit->num_in_syncobjs);
-+	}
-+
-+	if (submit->post_deps)
-+		virtio_gpu_free_post_deps(submit->post_deps,
-+					  submit->num_out_syncobjs);
-+
- 	if (!IS_ERR(submit->buf))
- 		kvfree(submit->buf);
- 
-@@ -173,6 +381,8 @@ static int virtio_gpu_init_submit(struct virtio_gpu_submit *submit,
- 		return err;
- 	}
- 
-+	submit->num_out_syncobjs = exbuf->num_out_syncobjs;
-+	submit->num_in_syncobjs = exbuf->num_in_syncobjs;
- 	submit->out_fence = out_fence;
- 	submit->fence_ctx = fence_ctx;
- 	submit->ring_idx = ring_idx;
-@@ -285,6 +495,14 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
- 	if (ret)
- 		goto cleanup;
- 
-+	ret = virtio_gpu_parse_deps(&submit);
-+	if (ret)
-+		goto cleanup;
-+
-+	ret = virtio_gpu_parse_post_deps(&submit);
-+	if (ret)
-+		goto cleanup;
-+
- 	ret = virtio_gpu_install_out_fence_fd(&submit);
- 	if (ret)
- 		goto cleanup;
-@@ -294,6 +512,7 @@ int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
- 		goto cleanup;
- 
- 	virtio_gpu_submit(&submit);
-+	virtio_gpu_process_post_deps(&submit);
- 	virtio_gpu_complete_submit(&submit);
- cleanup:
- 	virtio_gpu_cleanup_submit(&submit);
-diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
-index 7b158fcb02b4..ce4948aacafd 100644
---- a/include/uapi/drm/virtgpu_drm.h
-+++ b/include/uapi/drm/virtgpu_drm.h
-@@ -64,6 +64,16 @@ struct drm_virtgpu_map {
- 	__u32 pad;
- };
- 
-+#define VIRTGPU_EXECBUF_SYNCOBJ_RESET		0x01
-+#define VIRTGPU_EXECBUF_SYNCOBJ_FLAGS ( \
-+		VIRTGPU_EXECBUF_SYNCOBJ_RESET | \
-+		0)
-+struct drm_virtgpu_execbuffer_syncobj {
-+	__u32 handle;
-+	__u32 flags;
-+	__u64 point;
-+};
-+
- /* fence_fd is modified on success if VIRTGPU_EXECBUF_FENCE_FD_OUT flag is set. */
- struct drm_virtgpu_execbuffer {
- 	__u32 flags;
-@@ -73,7 +83,11 @@ struct drm_virtgpu_execbuffer {
- 	__u32 num_bo_handles;
- 	__s32 fence_fd; /* in/out fence fd (see VIRTGPU_EXECBUF_FENCE_FD_IN/OUT) */
- 	__u32 ring_idx; /* command ring index (see VIRTGPU_EXECBUF_RING_IDX) */
--	__u32 pad;
-+	__u32 syncobj_stride;
-+	__u32 num_in_syncobjs;
-+	__u32 num_out_syncobjs;
-+	__u64 in_syncobjs;
-+	__u64 out_syncobjs;
- };
- 
- #define VIRTGPU_PARAM_3D_FEATURES 1 /* do we have 3D features in the hw */
--- 
-2.39.2
+T24gRnJpLCAyMDIzLTAzLTI0IGF0IDAwOjA1ICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
+Cj4gU3RpbGwgdGhlIHJlc3QgY2FuIGJlIHNpbXBsaWZpZWQgYXMgYmVsb3cuCgouLi4KCj4gLS0t
+IGEva2VybmVsL2NwdS5jCj4gKysrIGIva2VybmVsL2NwdS5jCj4gQEAgLTE1MDQsMTMgKzE1MDQs
+NDUgQEAgaW50IGJyaW5ndXBfaGliZXJuYXRlX2NwdSh1bnNpZ25lZCBpbnQgcwo+IMKgCj4gwqB2
+b2lkIGJyaW5ndXBfbm9uYm9vdF9jcHVzKHVuc2lnbmVkIGludCBzZXR1cF9tYXhfY3B1cykKPiDC
+oHsKPiAtwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgY3B1Owo+ICvCoMKgwqDCoMKgwqDCoHVu
+c2lnbmVkIGludCBjcHUsIG4gPSAxOwo+IMKgCj4gK8KgwqDCoMKgwqDCoMKgLyoKPiArwqDCoMKg
+wqDCoMKgwqAgKiBPbiBhcmNoaXRlY3R1cmVzIHdoaWNoIGhhdmUgc2V0dXAgdGhlIENQVUhQX0JQ
+X1BBUkFMTEVMX1NUQVJUVVAKPiArwqDCoMKgwqDCoMKgwqAgKiBzdGF0ZSwgdGhpcyBpbnZva2Vz
+IGFsbCBCUCBwcmVwYXJlIHN0YXRlcyBhbmQgdGhlIHBhcmFsbGVsCj4gK8KgwqDCoMKgwqDCoMKg
+ICogc3RhcnR1cCBzdGF0ZSBzZW5kcyB0aGUgc3RhcnR1cCBJUEkgdG8gZWFjaCBvZiB0aGUgdG8g
+YmUgb25saW5lZAo+ICvCoMKgwqDCoMKgwqDCoCAqIEFQcy4gVGhpcyBhdm9pZHMgd2FpdGluZyBm
+b3IgZWFjaCBBUCB0byByZXNwb25kIHRvIHRoZSBzdGFydHVwCj4gK8KgwqDCoMKgwqDCoMKgICog
+SVBJIGluIENQVUhQX0JSSU5HVVBfQ1BVLiBUaGUgQVBzIHByb2NlZWQgdGhyb3VnaCB0aGUgbG93
+IGxldmVsCj4gK8KgwqDCoMKgwqDCoMKgICogYnJpbmd1cCBjb2RlIGFuZCB0aGVuIHdhaXQgZm9y
+IHRoZSBjb250cm9sIENQVSB0byByZWxlYXNlIHRoZW0KPiArwqDCoMKgwqDCoMKgwqAgKiBvbmUg
+Ynkgb25lIGZvciB0aGUgZmluYWwgb25saW5pbmcgcHJvY2VkdXJlIGluIHRoZSBsb29wIGJlbG93
+Lgo+ICvCoMKgwqDCoMKgwqDCoCAqCj4gK8KgwqDCoMKgwqDCoMKgICogRm9yIGFyY2hpdGVjdHVy
+ZXMgd2hpY2ggZG8gbm90IHN1cHBvcnQgcGFyYWxsZWwgYnJpbmd1cCBhbGwKPiArwqDCoMKgwqDC
+oMKgwqAgKiBzdGF0ZXMgYXJlIGZ1bGx5IHNlcmlhbGl6ZWQgaW4gdGhlIGxvb3AgYmVsb3cuCj4g
+K8KgwqDCoMKgwqDCoMKgICovCj4gK8KgwqDCoMKgwqDCoMKgaWYgKCFjcHVocF9zdGVwX2VtcHR5
+KHRydWUsIENQVUhQX0JQX1BBUkFMTEVMX1NUQVJUVVApIHsKCkknbGwgdGFrZSB1c2luZyBjcHVo
+cF9zdGVwX2VtcHR5KCkuCgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgZm9yX2VhY2hfcHJlc2VudF9jcHUoY3B1KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKG4rKyA+PSBz
+ZXR1cF9tYXhfY3B1cykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY3B1
+X3VwKGNwdSwgQ1BVSFBfQlBfUEFSQUxMRUxfU1RBUlRVUCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsKPiAr
+wqDCoMKgwqDCoMKgwqAvKiBEbyB0aGUgcGVyIENQVSBzZXJpYWxpemVkIGJyaW5ndXAgdG8gT05M
+SU5FIHN0YXRlICovCj4gwqDCoMKgwqDCoMKgwqDCoGZvcl9lYWNoX3ByZXNlbnRfY3B1KGNwdSkg
+ewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKG51bV9vbmxpbmVfY3B1cygp
+ID49IHNldHVwX21heF9jcHVzKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGJyZWFrOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAo
+IWNwdV9vbmxpbmUoY3B1KSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGNwdV91cChjcHUsIENQVUhQX09OTElORSk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqBpZiAoIWNwdV9vbmxpbmUoY3B1KSkgewo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNwdWhwX2NwdV9zdGF0ZSAq
+c3QgPSBwZXJfY3B1X3B0cigmY3B1aHBfc3RhdGUsIGNwdSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnQgcmV0ID0gY3B1X3VwKGNwdSwgQ1BVSFBf
+T05MSU5FKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAvKgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+ICogRHVlIHRvIHRoZSBhYm92ZSBwcmVwYXJhdGlvbiBsb29wIGEgZmFpbGVkIG9ubGluZSBhdHRl
+bXB0Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBt
+aWdodCBoYXZlIG9ubHkgcm9sbGVkIGJhY2sgdG8gQ1BVSFBfQlBfUEFSQUxMRUxfU1RBUlRVUC4g
+RG8gdGhlCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+KiByZW1haW5pbmcgY2xlYW51cHMuIE5PT1AgZm9yIHRoZSBub24gcGFyYWxsZWwgY2FzZS4KPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCAmJiBjYW5f
+cm9sbGJhY2tfY3B1KHN0KSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBXQVJOX09OKGNwdWhwX2ludm9rZV9jYWxsYmFja19y
+YW5nZShmYWxzZSwgY3B1LCBzdCwgQ1BVSFBfT0ZGTElORSkpOwo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqB9CgpBbmQgSSdsbCB0YWtlIGRvaW5nIHRoaXMgYml0IHVuY29uZGl0aW9u
+YWxseSAoaXQncyBiYXNpY2FsbHkgYSBuby1vcCBpZgp0aGV5IGFscmVhZHkgZ290IHJvbGxlZCBh
+bGwgdGhlIHdheSBiYWNrIHRvIENQVUhQX09GRkxJTkUsIHJpZ2h0PykuCgpCdXQgdGhlIGFkZGl0
+aW9uYWwgY29tcGxleGl0eSBvZiBoYXZpbmcgbXVsdGlwbGUgc3RlcHMgaXMgZmFpcmx5Cm1pbmlt
+YWwsIGFuZCBJJ20gYWxyZWFkeSBwbGFubmluZyB0byAqdXNlKiBhbm90aGVyIG9uZSBldmVuIGlu
+IHg4NiwgYXMKZGlzY3Vzc2VkLgoKCgo=
 
+
+--=-jBRsuR+mRLHq8Anu5NHE
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzIzMjMxMjIxWjAvBgkqhkiG9w0BCQQxIgQg3h1u2k82
+AYT5QQdg1rMAUOI+bIyC293FgMd0JaPiqoowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAZFB0uyQF0E7Y++Xvs0NXTvoq1V3qRvLb6
+kuavAFIC/fTkFk7Nk6YdNHyXskhoWdbMgmZIs7Un89z/5a7jY6NRaw6FliE/r9HnOYnc4p4+yFfZ
+j4ZJNl7Bxjm5497k9J2pKnevq5NtDJOs4l54fe/5rA+O8eiTSxIaX/TKK9f51GUUBuiwPxbZRUIX
+G0LFVQ8lIbF3p+oOMC3wRXPHjRUG5GpSzfmq5l1sDWaTTdTRuwqXk7lPttS3El+SiUpO+ss5edBZ
+e7LR+aqMuKC3zOg8NLAxAncOF49SIASxMDIqDrouwTOTakb3Y/e/VX5ec9IpHnjfll1nWvmExewd
+Sa2tFV+aFL+caItC7XJlzEQvi/gvo3qNjmO63Ya9+ZjruSOXNgTQK4iVgMZMfxWGwAiStzFyUklO
+iziMOvoFR8MMiudiBipASq6V1ygRByTa7Hq1lEWHhTAjwcBa0tHSrtDs2tRiTR30EXPzBN9IWiTd
+xfFs/J+U39+F9oNcaW3gHM+dOyLD4o15i7Vl1/mZMJDU+pGMq2WpyJtUoeundvVX12IVBtOUEDQZ
+32pbtamSFUmGRTytcMzbVA79cjoM0yDWZeTgCuhijqtbBi7knA9ZUnVPKvfun1Fk+73aFh9Fc4kD
+kHAieZiYU9EsyBhRijTsA7ZN5eqUhqStlTpObrjfpQAAAAAAAA==
+
+
+--=-jBRsuR+mRLHq8Anu5NHE--
