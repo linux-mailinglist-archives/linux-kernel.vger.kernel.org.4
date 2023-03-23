@@ -2,181 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99A06C6F28
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A916C6F06
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbjCWRcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S232446AbjCWRbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbjCWRcR (ORCPT
+        with ESMTP id S232382AbjCWRb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:32:17 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1665E37703
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:41 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id d10so13015524pgt.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679592699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=atxXW/bb/Kha81+083F6Kw6bAgYeqNPEO1ABZE0wVDw=;
-        b=P8BlZdRlVK88iY7jAdBGyiIJ69nn1tyzqQCBr6btUu6Fv2jM5HvV+pUX6AtfzmXfJR
-         9/wUGRhjF1pCUzZPbLTZggyLHW2Ipo0RGRG9L2EkH2oDSwFogiPxCfZ6stRuN1ZVYV4X
-         6i+o1Y7RiUw+mj+LhDs3s0a2wEGLmwjZCTI4c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592699;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=atxXW/bb/Kha81+083F6Kw6bAgYeqNPEO1ABZE0wVDw=;
-        b=oLAGXL/U5O4jv4G6Kc5OYqoisEe/PsL4n/YJF6Cyf6w6hcls9hWWocsF1XPyK0dASd
-         K9nPpw5of8pQjcmJcL0BWjNwW8wZj87tkRb0n6bY0FB4sAThtxzmV9GGqWUVsivR/tYD
-         CQbo6k2RtGn1CxlLjkCXKiaW0L4vJr0NNOiF00morhy8Rp56hghQLHBIAutvE9Sm9PdN
-         EP8UlOEX5NhftKbrDvmbXy7ddyDpYN7TQ2fr8GYS5K/NRAHILLpUKVVYKFja5gLocTos
-         RoTSUwgzRycbZlM33Yja5alKTS05aEn15hdUndmz8D1I3VL4DQRVWsKWm6xf27EiZJsa
-         wrMQ==
-X-Gm-Message-State: AAQBX9fcVTrmWtO1Vf6V7vBUN4YppuTeGHQnPdADzgfirQLcOco+XqxP
-        xAvXgO0nQN82W/9tMt8/UobP4Q==
-X-Google-Smtp-Source: AKy350alGRILKGMzdTzgubUmEWdzm9e6AU+vGaekDr5N8UzorD/EQzHiibjnHJ+LjAsbS4cBpBYUfg==
-X-Received: by 2002:a62:5254:0:b0:625:febb:bc25 with SMTP id g81-20020a625254000000b00625febbbc25mr239719pfb.11.1679592699617;
-        Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16d3:ef20:206a:6521])
-        by smtp.gmail.com with ESMTPSA id x13-20020a62fb0d000000b0061a6f4c1b2bsm12613546pfm.171.2023.03.23.10.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:31:39 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 14/14] arm64: dts: qcom: sdm845: Fix cheza qspi pin config
-Date:   Thu, 23 Mar 2023 10:30:18 -0700
-Message-Id: <20230323102605.14.I82951106ab8170f973a4c1c7d9b034655bbe2f60@changeid>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-In-Reply-To: <20230323173019.3706069-1-dianders@chromium.org>
-References: <20230323173019.3706069-1-dianders@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Mar 2023 13:31:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1045A2823C;
+        Thu, 23 Mar 2023 10:31:26 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NFgsjF024916;
+        Thu, 23 Mar 2023 17:31:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=MNoS4Gyvfm8TosyaqhjyVn5ODMUmahFiqFYTcJIr4/o=;
+ b=pNhny9ifE0nNUadSDSsy3qDaEfC7GYSakjO1mO5IiNSS9JJpNe6nIhdP+8bwXjXTM/1j
+ cAEhzMwHfPrnKmRIXkuIuOdJ6q6BHNo6IDecRkBVy2LTbu+Tuk8zRcSAVxWMBQDXWh2O
+ ve5IQO6Ck9HJhW1i3xvseagi+7/nyDIXpfrbcGOxc76rFMRPC91nkAtuxiXbI3OdGLq1
+ zbhx1SrpVkdAQjXo2R4rrZLGIXKvK6De9LJ0A7bcDswOn7nToAlEMVfZ4FrHGO9anPa3
+ dHCEWCmf6r6ju+uyEO0F4CBvymwu9+zcJioQPl3DBw33q84m7cMq8lrX8v2HvJNCnaNN Wg== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgmu7k4rx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 17:31:16 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NDlMbY014687;
+        Thu, 23 Mar 2023 17:31:14 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3pd4x6eepn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 17:31:14 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NHVCEC24052346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 17:31:12 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E91C220043;
+        Thu, 23 Mar 2023 17:31:11 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD73820040;
+        Thu, 23 Mar 2023 17:31:10 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.34.166])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 17:31:10 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [next-20230322] Kernel WARN at kernel/workqueue.c:3182
+ (rcutorture)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+Date:   Thu, 23 Mar 2023 23:00:59 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <233B28DA-70DD-4AD8-9C72-1FFCA6EFE56D@linux.ibm.com>
+References: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+ <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3M356xG5GLdKkxm4sUicxH7aE3_zQHtU
+X-Proofpoint-GUID: 3M356xG5GLdKkxm4sUicxH7aE3_zQHtU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 phishscore=0 priorityscore=1501 spamscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303230124
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cheza's SPI flash hookups (qspi) are exactly the same as trogdor's.
-Apply the same solution that's described in the patch ("arm64: dts:
-qcom: sc7180: Fix trogdor qspi pin config")
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-I think cheza is only very lightly used today (it was never sold, but
-there are various people still using the dev boards) and I'm not
-personally setup to test this. It's fairly straightforward but has
-only been compile-tested.
+>> [ 3629.243407] NIP [00007fff8cd39558] 0x7fff8cd39558
+>> [ 3629.243410] LR [000000010d800398] 0x10d800398
+>> [ 3629.243413] --- interrupt: c00
+>> [ 3629.243415] Code: 419dffa4 e93a0078 39400001 552907be 2f890000 =
+7d20579e 0b090000 e95a0078 e91a0080 39200001 7fa85000 7d204f9e =
+<0b090000> 7f23cb78 4bfffd65 0b030000=20
+>> [ 3629.243430] ---[ end trace 0000000000000000 ]=E2=80=94
+>>=20
+>> These warnings are repeated few times. The LTP test is marked as =
+PASS.
+>>=20
+>> Git bisect point to the following patch
+>> commit f46a5170e6e7d5f836f2199fe82cdb0b4363427f
+>>    srcu: Use static init for statically allocated in-module =
+srcu_struct
+>=20
+> Hello, Sachin, and it looks like you hit something that Zqiang and I
+> have been tracking down.  I am guessing that you were using modprobe
+> and rmmod to make this happen, and that this happened at rmmod time.
+>=20
+Yes, the LTP test script rcu_torture.sh relies on modprobe to =
+load/unload
+the rcutorture module.
 
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi | 34 +++++++++++++++++-----
- arch/arm64/boot/dts/qcom/sdm845.dtsi       |  9 ++++--
- 2 files changed, 34 insertions(+), 9 deletions(-)
+> Whatever the reproducer, does the following patch help?
+>=20
+> Thanx, Paul
+>=20
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index 588165ee74b3..64ad8d1ed433 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -319,8 +319,9 @@ venus_mem: memory@96000000 {
- 
- &qspi {
- 	status = "okay";
--	pinctrl-names = "default";
--	pinctrl-0 = <&qspi_clk &qspi_cs0 &qspi_data01>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&qspi_clk>, <&qspi_cs0>, <&qspi_data0>, <&qspi_data1>;
-+	pinctrl-1 = <&qspi_sleep>;
- 
- 	flash@0 {
- 		compatible = "jedec,spi-nor";
-@@ -995,16 +996,19 @@ &wifi {
- /* PINCTRL - additions to nodes defined in sdm845.dtsi */
- 
- &qspi_cs0 {
--	bias-disable;
-+	bias-disable;		/* External pullup */
- };
- 
- &qspi_clk {
--	bias-disable;
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
- };
- 
--&qspi_data01 {
--	/* High-Z when no transfers; nice to park the lines */
--	bias-pull-up;
-+&qspi_data0 {
-+	bias-disable;		/* Rely on Cr50 internal pulldown */
-+};
-+
-+&qspi_data1 {
-+	bias-pull-down;
- };
- 
- &qup_i2c3_default {
-@@ -1233,6 +1237,22 @@ pen_rst_l: pen-rst-l-state {
- 		output-high;
- 	};
- 
-+	qspi_sleep: qspi-sleep-state {
-+		pins = "gpio90", "gpio91", "gpio92", "gpio95";
-+
-+		/*
-+		 * When we're not actively transferring we want pins as GPIOs
-+		 * with output disabled so that the quad SPI IP block stops
-+		 * driving them. We rely on the normal pulls configured in
-+		 * the active state and don't redefine them here. Also note
-+		 * that we don't need the reverse (output-enable) in the
-+		 * normal mode since the "output-enable" only matters for
-+		 * GPIO function.
-+		 */
-+		function = "gpio";
-+		output-disable;
-+	};
-+
- 	sdc2_clk: sdc2-clk-state {
- 		pins = "sdc2_clk";
- 		bias-disable;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index aafc7cc7edd8..dce2cb29347b 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2758,8 +2758,13 @@ qspi_cs1: qspi-cs1-state {
- 				function = "qspi_cs";
- 			};
- 
--			qspi_data01: qspi-data01-state {
--				pins = "gpio91", "gpio92";
-+			qspi_data0: qspi-data0-state {
-+				pins = "gpio91";
-+				function = "qspi_data";
-+			};
-+
-+			qspi_data1: qspi-data1-state {
-+				pins = "gpio92";
- 				function = "qspi_data";
- 			};
- 
--- 
-2.40.0.348.gf938b09366-goog
+Thank you for the patch. Yes, with this patch applied, the test =
+completes
+successfully without the reported warning.
+
+- Sachin
 
