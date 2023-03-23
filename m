@@ -2,352 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12C36C634D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2A66C633A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjCWJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S231690AbjCWJXF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 05:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjCWJXB (ORCPT
+        with ESMTP id S231395AbjCWJWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:23:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2640B35B5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Z5dWilORB0zLMtzSdBMtj12Lj1FQDInyA7EOQ2cLKIE=; b=LRdCCtHv+zxfyv2WnNxm2MUSAa
-        Pi625yi0vG0rRrTGy1ip6pfsbbcZ1As44PCZpYwaJx//MaZoOlhskqe8Pjfj+yfFDckZa/gEqCVM4
-        sRRmunH56ztHlnudN6b5za5WTvFWqvq0GFLSorjl4QXH0UaXinQAIH6wLLRcgCZUtL0ocNSmy1HRf
-        EfTpIEHaj/RaMsy0udp6wXdkcS4y+QdV35zEMdnJ92pNVn0V2opYVzv4XoMzvgDwZxxs8lU7YtZoU
-        jAaW/BFWSZ+0MYwOQmjJpuk7RVWg66Zh7Wghh/E2bE1HZooRBIIn1HlxcLSvegj+snTTcIg4g5ZM6
-        qw2nhWDA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfH9R-004p44-0S;
-        Thu, 23 Mar 2023 09:22:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 106BB300237;
-        Thu, 23 Mar 2023 10:22:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E8CA920218DB0; Thu, 23 Mar 2023 10:22:21 +0100 (CET)
-Date:   Thu, 23 Mar 2023 10:22:21 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
-Message-ID: <20230323092221.GA2508414@hirez.programming.kicks-ass.net>
-References: <20230301141744.16063-1-anna-maria@linutronix.de>
- <20230301141744.16063-17-anna-maria@linutronix.de>
+        Thu, 23 Mar 2023 05:22:40 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB481CBC4;
+        Thu, 23 Mar 2023 02:22:35 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id a16so16591671pjs.4;
+        Thu, 23 Mar 2023 02:22:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679563355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HpKkhyG3kY0MZoMYHml99x+9t/mfe40fmpPl1syLvyE=;
+        b=hcPQnb55qxobdkcUGjvllNOqdlrn32Fl0+5+1G+dFyQrinMSTvzPhgO8edgvobcZ1e
+         0e4ksRvf/0mMZczECwpgPNWBX5fNuF1inQQIUpb1kPdSUDQMYWwYzH7bt8XQzjgtSGho
+         pCCj3+2ECLIgIhDvNwmjSRd2zviqM3ggL+eub9ZDEgUXKF421zOtLpcxXDDaIz8e7PRJ
+         BAeSuCrW0GsvvGglHHFiZ7hNsK1RwTzeOOv18vqN7XgxCUJ5sAUVY74SyC/26QAzgsQe
+         piwZkZOFpklyfIAax5d7thRUNlEmMcYMdLR6AjqYqn5K3nUktaG510+WrPWbR15JGmNb
+         kt7Q==
+X-Gm-Message-State: AAQBX9dY2WhH3WSzWyPPl+yrxGJOlbxoeGdp8CL0lqOj1krJOKVN++kK
+        LBgAjyqGLE9gZRO0Nj4aculsCQIcDslYpAWM89SGrW+ky2j2kw==
+X-Google-Smtp-Source: AKy350bIoU8Zid66dudm652RyKct4B57/THEpIrfPdquoM1cIMEZDGNzlLCKkxJ9KBe0l0l2FigPWyRsP6p3mJzsqFo=
+X-Received: by 2002:a17:903:7c8:b0:19f:39f8:88c4 with SMTP id
+ ko8-20020a17090307c800b0019f39f888c4mr1906789plb.2.1679563354730; Thu, 23 Mar
+ 2023 02:22:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301141744.16063-17-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
+ <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
+ <f71f1f59-f729-2c8c-f6da-8474be2074b1@fintek.com.tw> <CAMZ6Rq+xSCLe8CYm6K0CyPABo-Gzrt-JUO7_XGgXum+G8k5FCQ@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+xSCLe8CYm6K0CyPABo-Gzrt-JUO7_XGgXum+G8k5FCQ@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 23 Mar 2023 18:22:23 +0900
+Message-ID: <CAMZ6RqJNn8UQ62zyKFVHGLm44h2zverRgkKkwwFCUfSjYEXe-A@mail.gmail.com>
+Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu. 23 Mar 2023 at 14:54, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> Le jeu. 23 mars 2023 à 14:14, Peter Hong <peter_hong@fintek.com.tw> a écrit :
+> >
+> > Hi Vincent,
+> >
+> > Vincent MAILHOL 於 2023/3/21 下午 11:50 寫道:
+> > >> +static netdev_tx_t f81604_start_xmit(struct sk_buff *skb,
+> > >> +                                    struct net_device *netdev)
+> > >> +{
+> > >> +       struct can_frame *cf = (struct can_frame *)skb->data;
+> > >> +       struct f81604_port_priv *priv = netdev_priv(netdev);
+> > >> +       struct net_device_stats *stats = &netdev->stats;
+> > >> +       int status;
+> > >> +       u8 *ptr;
+> > >> +       u32 id;
+> > >> +
+> > >> +       if (can_dropped_invalid_skb(netdev, skb))
+> > >> +               return NETDEV_TX_OK;
+> > >> +
+> > >> +       netif_stop_queue(netdev);
+> > >> +
+> > >> +       ptr = priv->bulk_write_buffer;
+> > >> +       memset(ptr, 0, F81604_DATA_SIZE);
+> > >> +
+> > >> +       ptr[0] = F81604_CMD_DATA;
+> > >> +       ptr[1] = min_t(u8, cf->can_dlc & 0xf, 8);
+> > >> +
+> > >> +       if (cf->can_id & CAN_EFF_FLAG) {
+> > >> +               id = (cf->can_id & CAN_ERR_MASK) << 3;
+> > >> +               ptr[1] |= F81604_EFF_BIT;
+> > >> +               ptr[2] = (id >> 24) & 0xff;
+> > >> +               ptr[3] = (id >> 16) & 0xff;
+> > >> +               ptr[4] = (id >> 8) & 0xff;
+> > >> +               ptr[5] = (id >> 0) & 0xff;
+> > >> +               memcpy(&ptr[6], cf->data, ptr[1]);
+> > > Rather than manipulating an opaque u8 array, please declare a
+> > > structure with explicit names.
+> >
+> > I had try to declare a struct like below and refactoring code :
+> >
+> > struct f81604_bulk_data {
+> >      u8 cmd;
+> >      u8 dlc;
+> >
+> >      union {
+> >          struct {
+> >              u8 id1, id2;
+> >              u8 data[CAN_MAX_DLEN];
+> >          } sff;
+> >
+> >          struct {
+> >              u8 id1, id2, id3, id4;
+> >              u8 data[CAN_MAX_DLEN];
+> >          } eff;
+> >      };
+> > } __attribute__((packed));
+> >
+> > This struct can used in TX/RX bulk in/out. Is it ok?
+>
+> That's nearly it. It is better to declare the struct sff and eff
+> separately. Also, do not split the id in bytes. Declare it as a little
+> endian using the __le16 and __le32 types.
+>
+> Something like this (I let you adjust):
+>
+>   struct f81604_sff {
+>           __le16 id:
+>           u8 data[CAN_MAX_DLEN];
+>   } __attribute__((packed));
+>
+>   struct f81604_eff {
+>           __le32 id;
+>           u8 data[CAN_MAX_DLEN];
+>   } __attribute__((packed));
+>
+>   struct f81604_bulk_data {
+>           u8 cmd;
+>           u8 dlc;
+>
+>           union {
+>                   struct f81604_sff sff;
+>                   struct f81604_eff eff;
+>            };
+>   } __attribute__((packed));
+>
+> The __le16 field should be manipulated using cpu_to_leXX() and
+> leXX_to_cpu() if the field is aligned, if not, it should be
+> manipulated using {get|set}_unaligned_leXX() (where XX represents the
+> size in bits).
+>
+> Also, f81604_bulk_data->dlc is not only a DLC but also carries the
+> F81604_EFF_BIT flag, right? At least, add documentation to the
+> structure to clarify this point.
+>
+> > > +static int f81604_prepare_urbs(struct net_device *netdev)
+> > > +{
+> > > +       static const u8 bulk_in_addr[F81604_MAX_DEV] = { 0x82, 0x84 };
+> > > +       static const u8 bulk_out_addr[F81604_MAX_DEV] = { 0x01, 0x03 };
+> > > +       static const u8 int_in_addr[F81604_MAX_DEV] = { 0x81, 0x83 };
+> > > +       struct f81604_port_priv *priv = netdev_priv(netdev);
+> > > +       int id = netdev->dev_id;
+> > > +       int i;
+> > > +
+> > > +       /* initialize to NULL for error recovery */
+> > > +       for (i = 0; i < F81604_MAX_RX_URBS; ++i)
+> > > +               priv->read_urb[i] = NULL;
+> > > priv was allocated with devm_kzalloc() so it should already be zeroed,
+> > > right? What is the purpose of this loop?
+> >
+> > This operation due to following condition:
+> >      f81604_open() -> f81604_close() -> f81604_open() failed.
+> >
+> > We had used  devm_kzalloc() in f81604_probe(), so first f81604_open() all
+> > pointers are NULL. But after f81604_close() then f81604_open() second
+> > times, the URB pointers are not NULLed, it'll makes error on 2nd
+> > f81604_open()
+> > with fail.
+>
+> Makes sense, thanks for the clarification.
+>
+> Then, please replace your loop by a memset(priv->read_urb, 0,
+> sizeof(priv->read_urb).
 
-(since the code is structured such, I also wrote the comments bottom-up)
+Actually, your code never accesses the zeroed memory. The next lines are:
 
-On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
+  for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
+          priv->read_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
 
-> +static struct tmigr_group *tmigr_get_group(unsigned int cpu, unsigned int node,
-> +					   unsigned int lvl)
-> +{
-> +	struct tmigr_group *tmp, *group = NULL;
-> +	bool first_loop = true;
-> +	atomic_t *migr_state;
+If priv->read_urb[i] is never read before being initialized, no need to zero it.
 
-When first reading this I was wondering what was protecting the lists;
-since this is at least 2 deep from where you take the lock. Perhaps add:
-
-	lockdep_assert_held(&tmigr_mutex);
-
-to clarify the locking context.
-
-> +
-> +reloop:
-> +	/* Try to attach to an exisiting group first */
-> +	list_for_each_entry(tmp, &tmigr_level_list[lvl], list) {
-> +		/*
-> +		 * If @lvl is below the cross numa node level, check whether
-> +		 * this group belongs to the same numa node.
-> +		 */
-> +		if (lvl < tmigr_crossnode_level && tmp->numa_node != node)
-> +			continue;
-> +
-> +		/* Capacity left? */
-> +		if (tmp->num_childs >= TMIGR_CHILDS_PER_GROUP)
-> +			continue;
-> +
-> +		/*
-> +		 * If this is the lowest level of the hierarchy, make sure
-> +		 * that thread siblings share a group. It is only executed
-> +		 * when siblings exist. ALL groups of lowest level needs to
-> +		 * be checked for thread sibling, before thread cpu is
-> +		 * added to a random group with capacity. When all groups
-> +		 * are checked and no thread sibling was found, reloop of
-> +		 * level zero groups is required to get a group with
-> +		 * capacity.
-> +		 */
-> +		if (!lvl && (tmigr_cores_per_group != TMIGR_CHILDS_PER_GROUP)) {
-> +			if (first_loop == true && !sibling_in_group(cpu, tmp)) {
-> +				continue;
-> +			} else if (first_loop == false) {
-> +				if (tmp->num_cores >= tmigr_cores_per_group)
-> +					continue;
-> +				else
-> +					tmp->num_cores++;
-> +			}
-> +		}
-> +
-> +		group = tmp;
-> +		break;
-> +	}
-> +
-> +	if (group) {
-> +		return group;
-> +	} else if (first_loop == true) {
-> +		first_loop = false;
-> +		goto reloop;
-> +	}
-> +
-> +	/* Allocate and	set up a new group with corresponding migr_state */
-> +	group = kzalloc_node(sizeof(*group), GFP_KERNEL, node);
-> +	if (!group)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	migr_state = kzalloc_node(sizeof(atomic_t), GFP_KERNEL, node);
-> +	if (!migr_state) {
-> +		kfree(group);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	tmigr_init_group(group, lvl, node, migr_state);
-> +	/* Setup successful. Add it to the hierarchy */
-> +	list_add(&group->list, &tmigr_level_list[lvl]);
-> +	return group;
-> +}
-> +
-> +static void tmigr_connect_child_parent(struct tmigr_group *child,
-> +				       struct tmigr_group *parent)
-> +{
-> +	union tmigr_state childstate;
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave(&child->lock, flags);
-
-Both callsites are in tmigr_setup_groups(), which must be ran in
-preemptible context due to GFP_KERNEL allocations. Please use
-raw_spin_lock_irq().
-
-> +	raw_spin_lock_nested(&parent->lock, SINGLE_DEPTH_NESTING);
-> +
-> +	child->parent = parent;
-> +	child->childmask = BIT(parent->num_childs++);
-> +
-> +	raw_spin_unlock(&parent->lock);
-> +	raw_spin_unlock_irqrestore(&child->lock, flags);
-> +
-> +	/*
-> +	 * To prevent inconsistent states, active childs needs to be active
-> +	 * in new parent as well. Inactive childs are already marked
-> +	 * inactive in parent group.
-> +	 */
-> +	childstate.state = atomic_read(child->migr_state);
-> +	if (childstate.migrator != TMIGR_NONE) {
-> +		struct tmigr_walk data;
-> +
-> +		data.childmask = child->childmask;
-> +		data.groupstate.state = atomic_read(parent->migr_state);
-> +
-> +		/*
-> +		 * There is only one new level per time. When connecting
-> +		 * child and parent and set child active when parent is
-> +		 * inactive, parent needs to be the upperst
-> +		 * level. Otherwise there went something wrong!
-> +		 */
-> +		WARN_ON(!tmigr_active_up(parent, child, &data) && parent->parent);
-> +	}
-> +}
-> +
-> +static int tmigr_setup_groups(unsigned int cpu, unsigned int node)
-> +{
-> +	struct tmigr_group *group, *child, **stack;
-> +	int top = 0, err = 0, i = 0;
-> +	struct list_head *lvllist;
-> +	size_t sz;
-> +
-> +	sz = sizeof(struct tmigr_group *) * tmigr_hierarchy_levels;
-> +	stack = kzalloc(sz, GFP_KERNEL);
-> +	if (!stack)
-> +		return -ENOMEM;
-> +
-> +	do {
-> +		group = tmigr_get_group(cpu, node, i);
-> +		if (IS_ERR(group)) {
-> +			err = IS_ERR(group);
-> +			break;
-> +		}
-> +
-> +		top = i;
-> +		stack[i++] = group;
-> +
-> +		/*
-> +		 * When booting only less CPUs of a system than CPUs are
-> +		 * available, not all calculated hierarchy levels are required.
-> +		 *
-> +		 * The loop is aborted as soon as the highest level, which might
-> +		 * be different from tmigr_hierarchy_levels, contains only a
-> +		 * single group.
-> +		 */
-> +		if (group->parent || i == tmigr_hierarchy_levels ||
-> +		    (list_empty(&tmigr_level_list[i]) &&
-> +		     list_is_singular(&tmigr_level_list[i - 1])))
-> +			break;
-> +
-> +	} while (i < tmigr_hierarchy_levels);
-> +
-> +	do {
-> +		group = stack[--i];
-> +
-> +		if (err < 0) {
-> +			list_del(&group->list);
-> +			kfree(group);
-> +			continue;
-> +		}
-> +
-> +		DBG_BUG_ON(i != group->level);
-> +
-> +		/*
-> +		 * Update tmc -> group / child -> group connection
-> +		 */
-> +		if (i == 0) {
-> +			struct tmigr_cpu *tmc = this_cpu_ptr(&tmigr_cpu);
-> +			unsigned long flags;
-> +
-> +			raw_spin_lock_irqsave(&group->lock, flags);
-
-You're holding a mutex, you just did a GFP_KERNEL allocation; there is
-no way IRQs are already disabled here, please use raw_spin_lock_irq() to
-reduce confusion.
-
-> +
-> +			tmc->tmgroup = group;
-> +			tmc->childmask = BIT(group->num_childs);
-> +
-> +			group->cpus[group->num_childs++] = cpu;
-> +
-> +			raw_spin_unlock_irqrestore(&group->lock, flags);
-> +
-> +			/* There are no childs that needs to be connected */
-> +			continue;
-> +		} else {
-> +			child = stack[i - 1];
-> +			tmigr_connect_child_parent(child, group);
-> +		}
-> +
-> +		/* check if upperst level was newly created */
-> +		if (top != i)
-> +			continue;
-> +
-> +		DBG_BUG_ON(top == 0);
-> +
-> +		lvllist = &tmigr_level_list[top];
-> +		if (group->num_childs == 1 && list_is_singular(lvllist)) {
-> +			lvllist = &tmigr_level_list[top - 1];
-> +			list_for_each_entry(child, lvllist, list) {
-> +				if (child->parent)
-> +					continue;
-> +
-> +				tmigr_connect_child_parent(child, group);
-> +			}
-> +		}
-> +	} while (i > 0);
-> +
-> +	kfree(stack);
-> +
-> +	return err;
-> +}
-> +
-> +static int tmigr_add_cpu(unsigned int cpu)
-> +{
-> +	unsigned int node = cpu_to_node(cpu);
-> +	int ret;
-> +	mutex_lock(&tmigr_mutex);
-> +	ret = tmigr_setup_groups(cpu, node);
-> +	mutex_unlock(&tmigr_mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static int tmigr_cpu_online(unsigned int cpu)
-> +{
-> +	struct tmigr_cpu *tmc = this_cpu_ptr(&tmigr_cpu);
-> +	unsigned long flags;
-> +	unsigned int ret;
-> +
-> +	/* First online attempt? Initialize CPU data */
-> +	if (!tmc->tmgroup) {
-> +		raw_spin_lock_init(&tmc->lock);
-> +
-> +		ret = tmigr_add_cpu(cpu);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (tmc->childmask == 0)
-> +			return -EINVAL;
-> +
-> +		timerqueue_init(&tmc->cpuevt.nextevt);
-> +		tmc->cpuevt.nextevt.expires = KTIME_MAX;
-> +		tmc->cpuevt.ignore = 1;
-> +		tmc->cpuevt.cpu = cpu;
-> +
-> +		tmc->remote = 0;
-> +		tmc->idle = 0;
-> +		tmc->wakeup = KTIME_MAX;
-> +	}
-> +	raw_spin_lock_irqsave(&tmc->lock, flags);
-
-You just called tmigr_add_cpu() which takes a mutex, there is no
-possible way this can be called with IRQs already disabled. Please use
-raw_spin_lock_irq() to reduce confusion.
-
-Also, offline below does that and this is just inconsistent.
-
-> +	__tmigr_cpu_activate(tmc);
-> +	tmc->online = 1;
-> +	raw_spin_unlock_irqrestore(&tmc->lock, flags);
-> +	return 0;
-> +}
-> +
-> +static int tmigr_cpu_offline(unsigned int cpu)
-> +{
-> +	struct tmigr_cpu *tmc = this_cpu_ptr(&tmigr_cpu);
-> +
-> +	raw_spin_lock_irq(&tmc->lock);
-> +	tmc->online = 0;
-> +	__tmigr_cpu_deactivate(tmc, KTIME_MAX);
-> +	raw_spin_unlock_irq(&tmc->lock);
-> +
-> +	return 0;
-> +}
+> > >> +/* Called by the usb core when driver is unloaded or device is removed */
+> > >> +static void f81604_disconnect(struct usb_interface *intf)
+> > >> +{
+> > >> +       struct f81604_priv *priv = usb_get_intfdata(intf);
+> > >> +       int i;
+> > >> +
+> > >> +       for (i = 0; i < F81604_MAX_DEV; ++i) {
+> > >> +               if (!priv->netdev[i])
+> > >> +                       continue;
+> > >> +
+> > >> +               unregister_netdev(priv->netdev[i]);
+> > >> +               free_candev(priv->netdev[i]);
+> > >> +       }
+> > >   i> +}
+> >
+> > Is typo here?
+>
+> Yes, please ignore.
+>
+>
+> Yours sincerely,
+> Vincent Mailhol
