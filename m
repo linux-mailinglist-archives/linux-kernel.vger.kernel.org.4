@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47696C5CC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3046C5CC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCWCnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 22:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S229806AbjCWCq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCWCn3 (ORCPT
+        with ESMTP id S229496AbjCWCq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:43:29 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50B3CC21
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:43:28 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id z8-20020a92cd08000000b00317b27a795aso11025041iln.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 19:43:28 -0700 (PDT)
+        Wed, 22 Mar 2023 22:46:26 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF1618B3A;
+        Wed, 22 Mar 2023 19:46:25 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso2589370pjf.0;
+        Wed, 22 Mar 2023 19:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679539585;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F57MJj6F7aifzKTWNIu/6TzVSNIYejDepQS3opnsa+w=;
+        b=NVlTFfJl83eAXd6sVHfYwcELNYkJSu2MlkzvFrwC4AD7IGk9ZZlx6Vhgc5PIrorZN5
+         ogEUrB2vwaYjkiOAbSJZaC8fUmZ9jgP4M4HDO0AAFUAfoCMYXfx0LbY/FhWofiWrnUsq
+         a9VLZX5vNzBmhIlFUPMNW0kZReRHHEsb5Vgj6QI73pJyGj0IZk7xU+SDXiworLJXb5vz
+         vCgZmED4ImdxmpwvVXPug2zBFsoP7ahTWssFJ0KKK6fRKTXf1Hfp6DfgN2/ZrOlL9EUf
+         GRP3tG7UuHJvRqhnR2GBVzvVDpnR7T7QI8IgCuoTJX3x/E2dSk/X9g30Beji4TDno4pa
+         GwwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679539408;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vW6SjApLYllQMRpcpYJmdWhVK/LigR0wTMNHt18V/gE=;
-        b=UqbfLwUyuZ2XCQLibD0mKK+FnPrluA0WiGW4j+VrqLrgkvS63cNI1xRby/bjRhpGb5
-         dgG0n6EJYmw4PpJfKQ9iI3oYXuykq/savsRkj2WZKx3WBoGa5G3isW5oo5lzh99SG29C
-         DCWs7De+Km8z/67ZC1D3MHPKNg/816ER4uwwLEsuU4A7YRRdR1Jd1ENqm0U6uxE8wA9q
-         JVsHoX68xeLu75X2EZWP921cxwYABNltRs7h3XunXDb1pP1meEhslmkzVU/i+1M4oLFL
-         4yitGZmIpvVwjKNco25M0XoVRmKGKMMeGKfn8Q+F4kBv+ouv59CbtNCQYzPjUR8MoTxq
-         lDQA==
-X-Gm-Message-State: AO0yUKUbqO50TL+IYZposuY6yDSHje3yfNs9MT9PcoV3+38bPIZ2aATi
-        P6XDjeeR9skbhJ295FJEtuOKxg2c1qQWJFdRDrnYFC9jvAIv
-X-Google-Smtp-Source: AK7set/ehLbfMH7yprt+HN1+vR1kcm6eEwmJIq35LhCse5IqAgGAK9l6feNXMkd77UBxyyyarZHt82Ph+OwQ+MXVrMnPvDNMdmmO
+        d=1e100.net; s=20210112; t=1679539585;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F57MJj6F7aifzKTWNIu/6TzVSNIYejDepQS3opnsa+w=;
+        b=ebshOKfKjMUgPU+ju+3cYzoA9t9zN6WlfvT/ETqV/b7OERTIllIkkrlaaoZNnU9kTQ
+         2G0dG4fvolKN81mpJeYQTG2QSubYz43ne8HWjNIrvGk++3WOgW4TgiI+SBRZBilnB91f
+         9S6U3YVBZb1/uWDUneMyX++a7gGWt57rV3vJaeUFMkEmPA21OvE3pWxL61frgzUozNC4
+         Hibl5WGZxiJ+1uV/3TeRMHshIlnHf6MTz8dOU8E0X7G5rZYpMXgAoNVMzSfXY0ZuBGYN
+         XguAdCgZexHv7jQzsGvYCIVmrAgx3vFEsPWSkLxKvmdEqETc6pqzSW3VQADvLOYnEgud
+         RgXQ==
+X-Gm-Message-State: AO0yUKVa6qP0f33Tn0aRUUW3/SG2j52UIBARgirKyogLtTjRh3k2j+pA
+        jnCPNjtlbT3oWsxN6KcDYvE=
+X-Google-Smtp-Source: AK7set/KKpNAs8Z2pueKPemj2d1nOMHOxr1HQ0yytoF52hVl+GNHtVLXGTa6T2evJ6TK0T0xvV/rNA==
+X-Received: by 2002:a05:6a20:1585:b0:d9:a977:fae with SMTP id h5-20020a056a20158500b000d9a9770faemr7801582pzj.3.1679539584722;
+        Wed, 22 Mar 2023 19:46:24 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id c12-20020aa7880c000000b00625d5635617sm4378330pfo.67.2023.03.22.19.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 19:46:24 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 19:46:22 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Min Li <lnimi@hotmail.com>, lee@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Min Li <min.li.xe@renesas.com>
+Subject: Re: [PATCH mfd 1/1] mfd/ptp: clockmatrix: support 32-bit address
+ space
+Message-ID: <ZBu9ftxTmtMc/BmG@hoboy.vegasvil.org>
+References: <MW5PR03MB69323E281F1360A4F6C92838A0819@MW5PR03MB6932.namprd03.prod.outlook.com>
+ <20230322125619.731912cf@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:cac:b0:315:8de2:2163 with SMTP id
- 12-20020a056e020cac00b003158de22163mr3726520ilg.5.1679539408101; Wed, 22 Mar
- 2023 19:43:28 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 19:43:28 -0700
-In-Reply-To: <20230323021611.2625-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ce69cf05f7883d0f@google.com>
-Subject: Re: [syzbot] [arm-msm?] [net?] WARNING: refcount bug in
- qrtr_node_lookup (2)
-From:   syzbot <syzbot+e8a22d28d4527d9d6148@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322125619.731912cf@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Mar 22, 2023 at 12:56:19PM -0700, Jakub Kicinski wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> Could you to split your patches into multiple steps to make them easier
+> to reivew?
 
-Reported-and-tested-by: syzbot+e8a22d28d4527d9d6148@syzkaller.appspotmail.com
++1
 
-Tested on:
+I was thinking the same thing.
 
-commit:         fe15c26e Linux 6.3-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14783619c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=e8a22d28d4527d9d6148
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11d40289c80000
-
-Note: testing is done by a robot and is best-effort only.
+Thanks,
+Richard
