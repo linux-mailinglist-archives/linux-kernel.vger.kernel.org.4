@@ -2,93 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D6E6C6E6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4891F6C6E72
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCWRLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S229708AbjCWRMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjCWRLT (ORCPT
+        with ESMTP id S229963AbjCWRMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:11:19 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C5622031;
-        Thu, 23 Mar 2023 10:11:19 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so2740682pjz.1;
-        Thu, 23 Mar 2023 10:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679591478;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yk7SEtB9O6XaM6uP+epD7ilSH+AGZvmgcFSg/qKerCI=;
-        b=NmeHd9TY+roYM/Oz03gAgRhQpqw9mDk2J/rCkAUwkIPRvr6pA590KPpv/gJ/tcsf0r
-         zO5zOAa+CT7U9/5gEnfw5rNV3kXYt796M8eTNCYSXYRk3MJqFjKo4YZHQmd/hSrOg54W
-         JEpmfTUn1d5eKmXJN1oyaOcsFi0aJroF3kIvVdxAeE6kX2jRAoTOA5+w6f5tuk8yCiLb
-         sLxgleQcvk1IDzNcHI+48fMVnzHyXyUyTaGstu+aWw4L8q+sxiMuq6jtJZasI6vY4HO+
-         Owvzyj9x23lsTM8X9uJ+9pET/S2y2HfhZokU5sU3/DhSJSUc2sSHveidQcMcTLiGcAUa
-         wLMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679591478;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yk7SEtB9O6XaM6uP+epD7ilSH+AGZvmgcFSg/qKerCI=;
-        b=2cMEXaMuL0Gzq7DNWNyfpYF9/QSpQ+bXe8C1nzqBXCQTn716kQggxbGRtp/Jj00kqe
-         ucpMN9AOmi15/W+1opOplAK5fWbMDPungVAAwZF88r+QOldj/1ue08Pa7jaUDc1JKULz
-         HmTPWl4LffHU3O5TRP3DnXdzhTrI7sAGVDFGaDBrK1pdTdN7K26Y8Kx54wchgrXRLI3B
-         dhboTN2Vsm1fOJMRA+eg5yItWD0VKmbcWTZnnWX4OxmfRj92cmnXbfFCCLMNS5bQ9ir5
-         1bT7jSy7ABw4u3xjcEKdqNocSvhGWQkZJ5JqvBnX/TYiHw0aIXxk8kOGh6vubOUbcPT9
-         /oUQ==
-X-Gm-Message-State: AO0yUKVqkkqyk+jvyuEiqgAtbIwOrQHBlpFZygxKo01U5/QdE86Z1Gcf
-        nmyk/wFj8WwnBbkyd134VCzHWsrzJVPJVEbJbso=
-X-Google-Smtp-Source: AK7set9zYXnWHCU6xqJjbpiCYnTLpN1sKQOZhAruDh4oyjqc2OCxFzrs+aD7PF4vpswXjJtR2sHA2Q==
-X-Received: by 2002:a17:902:d1cd:b0:19f:27fd:7cb5 with SMTP id g13-20020a170902d1cd00b0019f27fd7cb5mr5396016plb.10.1679591478507;
-        Thu, 23 Mar 2023 10:11:18 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:2146:a9a:96dd:65b4:8354:3919])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902a9c400b0019f3da8c2a4sm12557102plr.69.2023.03.23.10.11.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:11:18 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org,
-        danascape@gmail.com, daniel.baluta@nxp.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH] ASoC: dt-bindings: alc5632: Convert to dtschema
-Date:   Thu, 23 Mar 2023 22:41:11 +0530
-Message-Id: <20230323171111.17393-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <1a2e0f7a-771f-5590-fc54-b9dbf059a925@linaro.org>
-References: <1a2e0f7a-771f-5590-fc54-b9dbf059a925@linaro.org>
+        Thu, 23 Mar 2023 13:12:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFAB23C68;
+        Thu, 23 Mar 2023 10:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679591560; x=1711127560;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1P6DW8GCu0Rh5J3iAuRbJHRJpgLRrsh0L9ouH/3CJLg=;
+  b=PJWMxZqqocQHGP8huFT75Euv5bA4XMHxw65nwifY8M9uaTQW3Kdxi+E1
+   Ewa93e6I2g0/Y3wd00dz8yfEjFLHpunf3Xs4/6LASDQupl83iQ3rOF1fz
+   5+TlEZDd6nnRWfYryplfXH85Lc0yvVVcngGHSiKmUd6hbllEOkEK+Z+at
+   0Xkj2asLekWxiyTe4T6yCx6ZYNLbGb7wTsiK1ef/m5JCOo8OC6GtAtSWG
+   nMSijUBIxTJbdvR8O+wwW4urWkEsmRFFvwuTOkUiNKWwBYkery2XVL7if
+   4+3X1zaovEejfLd9E2X4liOQy1RmlI401aInKBCGOwG1CpC8chQuwLsgN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="341942779"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="341942779"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 10:12:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="1011906519"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="1011906519"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Mar 2023 10:12:36 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfOUO-000EZ6-09;
+        Thu, 23 Mar 2023 17:12:36 +0000
+Date:   Fri, 24 Mar 2023 01:11:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chester Lin <clin@suse.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Chester Lin <clin@suse.com>,
+        NXP S32 Linux Team <s32@nxp.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: Re: [PATCH v3 1/6] pinctrl: s32g2: use of_device_get_match_data() to
+ get device data
+Message-ID: <202303240158.uaLsPb4O-lkp@intel.com>
+References: <20230323144833.28562-2-clin@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323144833.28562-2-clin@suse.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Chester,
 
-This is my first time using the Linux Kernel Mailing List. I apologise if I commit any mistakes.
+I love your patch! Perhaps something to improve:
 
-> This should not be subsystem maintainer but someone related to the
-> device. It's maintainer or interested contributor. Unless that's the
-> case here?
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next next-20230323]
+[cannot apply to linus/master v6.3-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-yes it is wrong, he is not the subsystem maintainer. I will send the updated patch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chester-Lin/pinctrl-s32g2-use-of_device_get_match_data-to-get-device-data/20230323-225141
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20230323144833.28562-2-clin%40suse.com
+patch subject: [PATCH v3 1/6] pinctrl: s32g2: use of_device_get_match_data() to get device data
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230324/202303240158.uaLsPb4O-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b716f96ba217e92e79b0d888f187ba0f30d705cf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chester-Lin/pinctrl-s32g2-use-of_device_get_match_data-to-get-device-data/20230323-225141
+        git checkout b716f96ba217e92e79b0d888f187ba0f30d705cf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/nxp/
 
-I have a doubt, for the maintainers list, is it required to include all the names of the subsystem maintainer
-in the yaml too? As for this codec, there are 4, shall I include the names of all of them or the one to whom the
-module is authored to?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303240158.uaLsPb4O-lkp@intel.com/
 
-Apologies,
+All warnings (new ones prefixed by >>):
 
-Saalim
+   drivers/pinctrl/nxp/pinctrl-s32g2.c: In function 's32g_pinctrl_probe':
+>> drivers/pinctrl/nxp/pinctrl-s32g2.c:747:40: warning: passing argument 2 of 's32_pinctrl_probe' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     747 |         return s32_pinctrl_probe(pdev, info);
+         |                                        ^~~~
+   In file included from drivers/pinctrl/nxp/pinctrl-s32g2.c:18:
+   drivers/pinctrl/nxp/pinctrl-s32.h:70:54: note: expected 'struct s32_pinctrl_soc_info *' but argument is of type 'const struct s32_pinctrl_soc_info *'
+      70 |                         struct s32_pinctrl_soc_info *info);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+
+vim +747 drivers/pinctrl/nxp/pinctrl-s32g2.c
+
+   740	
+   741	static int s32g_pinctrl_probe(struct platform_device *pdev)
+   742	{
+   743		const struct s32_pinctrl_soc_info *info;
+   744	
+   745		info = of_device_get_match_data(&pdev->dev);
+   746	
+ > 747		return s32_pinctrl_probe(pdev, info);
+   748	}
+   749	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
