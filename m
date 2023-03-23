@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E080D6C7354
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5BC6C7357
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjCWWvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S231183AbjCWWv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjCWWvX (ORCPT
+        with ESMTP id S231311AbjCWWvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:51:23 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC0E2CC59
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:20 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso3446465pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:20 -0700 (PDT)
+        Thu, 23 Mar 2023 18:51:44 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F3F2C660;
+        Thu, 23 Mar 2023 15:51:42 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z1so78242iot.11;
+        Thu, 23 Mar 2023 15:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679611880; x=1682203880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E0OX40ehjV5gIkQr/Q9nraxMiJdzGjqFLifP7n6ggXk=;
-        b=TTqPzThDGMupB/gagrp+rTbV3eHSKSSrLjeATpLujyP3BjQhyLVdJPW0nFqfh7lx4X
-         /tL5/prrRpFJnHz7NO9yWbSZYuEIbhgoUu+hIfGI0YCk0HO1n6FyPw4xLxD9b87pvVSL
-         CK4W5AVwxkz0p8kq6QRhUEa31VKANW6YLLR5YwZwnuwvYDUbDeFzkaD1tIbclly1k12L
-         ahS0F94a0rnpiFBIxQyHIiS7ylZ5k+o/htcVsn/9Ucp/a9U4M5NJTvX5L1BCfVR3S3RX
-         8wl5iIN2tmHyYrx+Vw8BnXwd2RfKOSW3OFEYaEwQz3LNenf0o4ch+tpXJBuJgtXi4Taf
-         1V+g==
+        d=gmail.com; s=20210112; t=1679611901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UnBIsoL06ul586Qa3bwXtsOpGTIU2c/qhQKSFEV/y8=;
+        b=nKZyXAxk53A9/NUyEBnydGtUJrcnMT7bMgYIDhdaaKoxVaGnnqN1FcxsfhjeufLu3w
+         9wfZIBv0FyTO4F+gN1pDr87wzeAHZABZjYwYh+axa+CfMOf68O890vIASPikrDoC9Asl
+         oBRhvyztk4tNGCLiSUYnfaDsqHEvpSISNzP7UYOly/O9mFB2pmHB8ffScAQ9rvFPYMqx
+         lBklGW0BpZXs22ud/9W7wECYJ/x9dDiVxE7QAdfDzEFERyco7wiNqo6tTb+xHId5toTo
+         MBPTOVawjzlwdd8NCHuvaXxzJ4Ew14TcHcDEI3k92MkSRva8VKPLvwDyOD+DXCS3kJj3
+         R12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679611880; x=1682203880;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E0OX40ehjV5gIkQr/Q9nraxMiJdzGjqFLifP7n6ggXk=;
-        b=m4DtUebK2PYC9CiybMTlehVje6Sma+BfBW2DNqGIS1xiCDxh1dzQFOaEU5zH/hI5uK
-         +VqSYDGXv1V/MphpRjeQpZflIgsJ5uHTpO5LmTyeqIKrEHgLeUgcdgVHNEP9DDH/1cFX
-         eN3yZpbMg3UH+nwYC2WdZWmuPQww1LvVRQ8Hog/vLujpD57tvBECu943cv605pDqih1Q
-         PTymZFgcj1THESQ7+5LThgV77xYQDmw18RYXVzuxbqWQqGe0cl1eFnxjimlAxc7chb/6
-         t0Xwfo8pKjCwqafJZwLNHz0VxqmrBkxn3i/ojF2SwK7r0kBYNjZIC8NacwjVGc+ExpPn
-         hAHw==
-X-Gm-Message-State: AAQBX9c8fH2pWeWTwTffJpjUNVl9KG2iQzk8VjVnDebDHRtJ7SbUAc8f
-        wFWB0gmqprx4jUhosxiYF270Wg==
-X-Google-Smtp-Source: AKy350YwB4kYOrekaxdEpI+hPuVho+rJnXECPnSPxRKXmlcV0fNHAsS4nvedwv84jZJ4QD01oSfi+Q==
-X-Received: by 2002:a17:903:788:b0:1a1:bf37:7c2e with SMTP id kn8-20020a170903078800b001a1bf377c2emr225398plb.4.1679611879706;
-        Thu, 23 Mar 2023 15:51:19 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b0019b9a075f1fsm12871828plb.80.2023.03.23.15.51.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 15:51:19 -0700 (PDT)
-Message-ID: <6c507b78-35fb-fe23-51f0-e5bb754679d0@kernel.dk>
-Date:   Thu, 23 Mar 2023 16:51:17 -0600
+        d=1e100.net; s=20210112; t=1679611901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+UnBIsoL06ul586Qa3bwXtsOpGTIU2c/qhQKSFEV/y8=;
+        b=IBKIk9zxx5sjmYzdfWo9K93yGkTrxXkxV44MXAc3n8qBCxPNjql3tr7rLVz+CnZFHn
+         Q4IaxClbCRtwqTkDzWM3918m6nPY1qxp/a84eKu46FB19KjJikgZSXmnkab+ZP4y4rvZ
+         mY4bAo8aY5DLO7Df+60Bv+cm/SDyYrgfrsHj9Nx9cotgTO+pVQ1BJPFtTSBjiWl2qjUL
+         QG9JYDprwurSw6BzaeAHaD0zm2bej6ANj2BHf5f75xyoYW/qEG6Kt3p2gEIbXDrZ6Mkt
+         boZljVQjl2KR2JfFAOI4hRFZzreOhZSUqtK5MyEPLMqZYh5wZceYgwWCXdRnldOooyZh
+         ZX0g==
+X-Gm-Message-State: AO0yUKXT40VP5BzURXKWXyZrcXD8tz8+rIDPYUxjDzFa2d+XtaZUnQgr
+        aYcR6w9NAYMdqwc1P6vfHs8gIV5whi4=
+X-Google-Smtp-Source: AK7set+mtHynBG5wPBpiwElgQd2SKyuTocEl+HCMtbl8s56W8aYQs3B1SPdVz6s2zkNm92V4R5exGw==
+X-Received: by 2002:a6b:5b17:0:b0:758:6e42:83e4 with SMTP id v23-20020a6b5b17000000b007586e4283e4mr599306ioh.11.1679611901273;
+        Thu, 23 Mar 2023 15:51:41 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:897f:f38d:f05d:4666:1249])
+        by smtp.gmail.com with ESMTPSA id f102-20020a0284ef000000b0040631e8bf89sm6266988jai.38.2023.03.23.15.51.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 15:51:40 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/4] clk: imx: Improve imx8mm/imx8mn LCDIF clocks
+Date:   Thu, 23 Mar 2023 17:51:24 -0500
+Message-Id: <20230323225128.117061-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RESEND v3] nbd_genl_status: null check for nla_nest_start
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>
-Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org,
-        Navid Emamdoost <navid.emamdoost@gmail.com>,
-        Michal Kubecek <mkubecek@suse.cz>
-References: <20230323193032.28483-1-mkoutny@suse.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230323193032.28483-1-mkoutny@suse.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 1:30 PM, Michal Koutný wrote:
-> From: Navid Emamdoost <navid.emamdoost@gmail.com>
-> 
-> nla_nest_start may fail and return NULL. The check is inserted, and
-> errno is selected based on other call sites within the same source code.
-> Update: removed extra new line.
-> v3 Update: added release reply, thanks to Michal Kubecek for pointing
-> out.
+Both the i.MX8M Mini and Nano have a video_pll which can be used 
+to source a clock which feeds the lcdif interface.  This interface
+currently fixes video_pll and divides down the clock feeding LCDIF.
+However, when connected to an HDMI bridge chip that supports a
+variety of video resolutions and refresh rates, the only settings
+that properly sync are ones that evenly divide from the video_pll_out
+clock.
 
-Josef? Looks straight forward to me, though it's not clear (to me) how
-this can be triggered and hence how important it is.
+This series adds the ability for the clk-compolsite-8m to
+request a better parent clock rate if the proper clock flag is
+enable and sets that flag in the corresponding imx8mm and 
+imx8mn video_pll clocks to increase the number of resolutions
+and refresh rates timings that the LCDIF can produce.
 
-> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
-> Reviewed-by: Michal Kubecek <mkubecek@suse.cz>
-> Link: https://lore.kernel.org/r/20190911164013.27364-1-navid.emamdoost@gmail.com/
-> ---
-> 
-> I'm resending the patch because there was apparent consensus of its
-> inclusion and it seems it was only overlooked. Some people may care
-> about this because of CVE-2019-16089.
+This also has a side benefit of allowing the video-pll to run
+at a lower clock speed which can potentially save some power
+depending on the requested resolution and refresh rate.
 
-Anyone can file a CVE, and in fact they are often filed as some kind
-of silly trophy. Whether a CVE exists or not has ZERO bearing on
-whether a bug is worth fixing.
+V3:  Change the name of clk_divider_determine_rate to
+      imx8m_clk_divider_determine_rate
+V2:  Split off the new imx8m_clk_hw_composite_flags definition
+     into its own patch and re-order to fix build error.
+      
+Adam Ford (3):
+  clk: imx: composite-8m: Add support to determine_rate
+  clk: imx8mm: Let IMX8MM_CLK_LCDIF_PIXEL set parent rate
+  clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
 
-So please don't mix CVEs into any of this, they don't matter one bit.
-Never have, and never will. What's important is how the bug can be
-triggered.
+ drivers/clk/imx/clk-composite-8m.c | 7 +++++++
+ drivers/clk/imx/clk-imx8mm.c       | 2 +-
+ drivers/clk/imx/clk-imx8mn.c       | 2 +-
+ drivers/clk/imx/clk.h              | 4 ++++
+ 4 files changed, 13 insertions(+), 2 deletions(-)
 
 -- 
-Jens Axboe
-
+2.34.1
 
