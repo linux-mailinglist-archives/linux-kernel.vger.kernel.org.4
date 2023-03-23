@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFB96C5C64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9006C5C66
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjCWByM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S229936AbjCWB5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCWByK (ORCPT
+        with ESMTP id S229517AbjCWB5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:54:10 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCA735B5;
-        Wed, 22 Mar 2023 18:54:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VeSOjFT_1679536441;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VeSOjFT_1679536441)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Mar 2023 09:54:04 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     tony.luck@intel.com
-Cc:     xueshuai@linux.alibaba.com, baolin.wang@linux.alibaba.com,
-        benjamin.cheatham@amd.com, bp@alien8.de, dan.j.williams@intel.com,
-        james.morse@arm.com, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        zhuo.song@linux.alibaba.com
-Subject: [PATCH v2] ACPI: APEI: EINJ: warn on invalid argument when explicitly indicated by platform
-Date:   Thu, 23 Mar 2023 09:53:57 +0800
-Message-Id: <20230323015357.8481-1-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
-References: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
+        Wed, 22 Mar 2023 21:57:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F6211EB;
+        Wed, 22 Mar 2023 18:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679536627; x=1711072627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AOaSIlwCUsIpDTclzW9GoxbdemwcG9Jdhr/dYoorob4=;
+  b=kEvaG11plclAHJdYPEUHe46zO+Rx7nfv6NmdSuzfEFTrRxMzIYCL2Z76
+   yNLOjcrIXfzeY/9UX85kwIAPWr3MTp+lL4zPquKAFa/5p4wYLwMOPN289
+   ++3CzrOlc3BBhAbXaRMM5zKe09OlNlM3/oJRmZVNXZLbyR11VZ4RFZEMz
+   RdpUXLLvOi6QI5dOYDsaGFcnR0U52ozSM1e6cLZn7HQ390YihRLXE7NQ/
+   SeBexWLBcyr9PXgm22uqK2vJ6HicGRfqF8atwBBBj6fzL0diaZjKdN+/f
+   zDO3LcjxgE8dnp2p/aJP0ryyjnk1MHxCPxcQ6bdkAUZ/GbUlvJt8ODI11
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="340912687"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="340912687"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:57:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="771268782"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="771268782"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Mar 2023 18:57:04 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfACN-000Dpq-2w;
+        Thu, 23 Mar 2023 01:57:03 +0000
+Date:   Thu, 23 Mar 2023 09:56:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ross Zwisler <zwisler@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH] tracing: Trace instrumentation begin and end
+Message-ID: <202303230955.doWocaU3-lkp@intel.com>
+References: <20230321215121.71b339c5@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321215121.71b339c5@gandalf.local.home>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OSPM executes an EXECUTE_OPERATION action to instruct the platform to begin
-the injection operation, then executes a GET_COMMAND_STATUS action to
-determine the status of the completed operation. The ACPI Specification
-documented error codes[1] are:
+Hi Steven,
 
-	0 = Success (Linux #define EINJ_STATUS_SUCCESS)
-	1 = Unknown failure (Linux #define EINJ_STATUS_FAIL)
-	2 = Invalid Access (Linux #define EINJ_STATUS_INVAL)
+Thank you for the patch! Perhaps something to improve:
 
-The original code report -EBUSY for both "Unknown Failure" and "Invalid
-Access" cases. Actually, firmware could do some platform dependent sanity
-checks and returns different error codes, e.g. "Invalid Access" to indicate
-to the user that the parameters they supplied cannot be used for injection.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc3 next-20230322]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-To this end, fix to return -EINVAL in the __einj_error_inject() error
-handling case instead of always -EBUSY, when explicitly indicated by the
-platform in the status of the completed operation.
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
+patch link:    https://lore.kernel.org/r/20230321215121.71b339c5%40gandalf.local.home
+patch subject: [PATCH] tracing: Trace instrumentation begin and end
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20230323/202303230955.doWocaU3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/1f40755bb9b4817135459d6cf76fcbd17ffb53dd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Steven-Rostedt/tracing-Trace-instrumentation-begin-and-end/20230322-095354
+        git checkout 1f40755bb9b4817135459d6cf76fcbd17ffb53dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-[1] ACPI Specification 6.5 18.6.1. Error Injection Table
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230955.doWocaU3-lkp@intel.com/
 
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
-changelog since v1:
-- elaborate commit log based on follow up discussion with Tony
-- pick up Reviewed-by tag of Tony
----
- drivers/acpi/apei/einj.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/acpi/apei/einj.c b/drivers/acpi/apei/einj.c
-index b4373e575660..fa0b4320312e 100644
---- a/drivers/acpi/apei/einj.c
-+++ b/drivers/acpi/apei/einj.c
-@@ -489,9 +489,15 @@ static int __einj_error_inject(u32 type, u32 flags, u64 param1, u64 param2,
- 	if (rc)
- 		return rc;
- 	val = apei_exec_ctx_get_output(&ctx);
--	if (val != EINJ_STATUS_SUCCESS)
-+	if (val == EINJ_STATUS_FAIL)
- 		return -EBUSY;
-+	else if (val == EINJ_STATUS_INVAL)
-+		return -EINVAL;
- 
-+	/*
-+	 * The error is injected into the platform successfully, then it needs
-+	 * to trigger the error.
-+	 */
- 	rc = apei_exec_run(&ctx, ACPI_EINJ_GET_TRIGGER_TABLE);
- 	if (rc)
- 		return rc;
+>> vmlinux.o: warning: objtool: .text+0x2bb7f2: relocation to !ENDBR: .text+0x2bb7e9
+   vmlinux.o: warning: objtool: .text+0x2bb803: relocation to !ENDBR: .text+0x2bb7e2
+
+
+objdump-func vmlinux.o .text:
+
 -- 
-2.20.1.12.g72788fdb
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
