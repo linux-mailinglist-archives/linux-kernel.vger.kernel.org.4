@@ -2,150 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C0A6C6E4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420066C6E4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjCWRAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S231243AbjCWRAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCWRAW (ORCPT
+        with ESMTP id S230418AbjCWRAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:00:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F08EDA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679590779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+upkbu9j0REGb3XQPl52CEvrtu/lB3040Vqf6c3jPBI=;
-        b=RuJm1Ndpa5XhfXebE+ZD/0Bh47PVNOgibsucvW4q1ynvYcjv4gdu49LGhHWcxvouJlJhAd
-        XxK10DEUjeWC4BEDn+9EmLSSlgRBdDTehCULdQepG8GZZzb5ISRAboasJtnoRN1JdBE7r7
-        Bv1fou0ZPZqnCZguK2Lw2laZT/GgGb0=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-387-EJET_Qb-MaygCPB2FJBPSw-1; Thu, 23 Mar 2023 12:59:38 -0400
-X-MC-Unique: EJET_Qb-MaygCPB2FJBPSw-1
-Received: by mail-qv1-f69.google.com with SMTP id g6-20020ad45426000000b005a33510e95aso11131427qvt.16
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:59:38 -0700 (PDT)
+        Thu, 23 Mar 2023 13:00:12 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8A9C5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:00:10 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3ee75104d2cso56605e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679590809;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sUol+gIMtQKOAhQw7QtvtbIC1bGcoAW2dXKwXzWBXXk=;
+        b=VhgGPN+FX34nPVJ2xN7eJA3bE4E2emohZVQj1Kx9AUAwGR/CDotHCQ1aNhlH6NML5l
+         z3V80shFdB3FJFo8AU1xtBqgnQJbRuXParGdRlle+LO3t67m0AFTjKpvbCqHHAD/RugC
+         QnCpG2jEtNpFZ6DaUlPrI4pAVyC3oR90pF0uD1OWq6VDnaG2f7x3JzGhhNsP0iITpQR3
+         XKn1berfUSIR19KymwD53IiGSIAUBtpbl3XKcrCrGe8YCLIPsUGF+/SDH8q2JxujhdgH
+         FPJxgPqhk7zajBxu8zMd64nSBy7pOvxAfY2PA1obWvR27GgJIN0eBhoMA6z06PxAAp0J
+         AXMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679590778;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+upkbu9j0REGb3XQPl52CEvrtu/lB3040Vqf6c3jPBI=;
-        b=PH2WFXu/ra6LVVkTqVB5/xN+fnNscm+H6pxqJPwflRtwf8WrPJRW3HBpwH9K3E2nqj
-         V2sGxkMjt/uK2TSUaYgpx0fQSJHwWQupGaP8IKXhHENwo0ur/P+OX0IHkt9UfDxIAbYN
-         LFGZ9wgBnanKh5lC6d2Jtb0/2q6XH9il1j+B/97DF+HHU4WxxYBgfjJSy4HeZgd9RTVp
-         XcXRm08zK4yRj2Q6LRMAIQqEjbG6k5UZFnf8VnCRVW4ulfgm9Ju0IGFw0bpXfYCmLnRb
-         SK593KuPRqI8cVXkVbj/UXe5rMQsOlAVZeMMWFE3ZiNjf3GbdBuIsGcEvBgrYAmzVL26
-         dz+A==
-X-Gm-Message-State: AO0yUKXQsoIBtZP9JMerQztCr1jijWVNNK9ZUq3H63Ns210HYzfGzvXm
-        Xc+/uIG5v2h0nHHNdPAZvZyMvFZIkH1MwOa/xYCfS1R2nbhuw3WjF9La3YMwPxARF4jzs1YczC3
-        o8h2s0sK+6tzB6u640aQmtRYE
-X-Received: by 2002:ac8:5fcf:0:b0:3d8:519a:91c9 with SMTP id k15-20020ac85fcf000000b003d8519a91c9mr11318276qta.8.1679590777754;
-        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8bCx/r2ljWME1lt8mzPqwTkV08BThI3LuMi5lnq3IRAqduegWWqYlgrB2h30Ce/+PHxdWpgQ==
-X-Received: by 2002:ac8:5fcf:0:b0:3d8:519a:91c9 with SMTP id k15-20020ac85fcf000000b003d8519a91c9mr11318256qta.8.1679590777497;
-        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i4-20020a378604000000b0073b3316bbd0sm13538309qkd.29.2023.03.23.09.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, error27@gmail.com, colin.i.king@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] staging: rtl8192u: remove unused ieee80211_SignalStrengthTranslate function
-Date:   Thu, 23 Mar 2023 12:59:31 -0400
-Message-Id: <20230323165931.2634587-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1679590809;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sUol+gIMtQKOAhQw7QtvtbIC1bGcoAW2dXKwXzWBXXk=;
+        b=NtX8524sD/vQZmjBkGqroBbBoE+y4t+znJjj59y3Co/AYDl59WcWrpKpgqFCgE1Iaj
+         CGZhTCgdcie/dM5MOno4g6JbOiT+Axx6uiXHfzi0cE1VhXx7Er6tjHXJcDx0X1Cmzv0p
+         6ukn+onmWyLVEexxiYuQJfYRSa7r3zpwooLLf5SzorgWjKGUQa4fyQTxMg6U8U2pjOF5
+         DIV/3amiJvKMBO+d7UvWTF6770VvnoZv08PVic5D6qpbNhT7PLIpEBTSIBf86yz8Fdjp
+         PQjWcQ1DgeDow7aFpp2WfJ9wSDvwE4O74Qeo/3x2xCl5XDcgMw+4ZZvChYoAUp7FhATS
+         80WA==
+X-Gm-Message-State: AO0yUKW8/8fBvi6FmegHfQtPfYP+y0QKXcsfrEHkNUCEgED5AqvS/1+L
+        r8LVZHki1FCk4mXE5z7rF2e8PhBvJmHjNEVtzj0o1Q==
+X-Google-Smtp-Source: AK7set+Y7Ldly5Y4VeSE1EqYooqWVCaAA1+Kc8LoxIex2/a5eMFbubGBgcd57S5UlfxTKfsR2KDvD9pGGNGDORDed+k=
+X-Received: by 2002:a05:600c:5102:b0:3ed:353e:a8a7 with SMTP id
+ o2-20020a05600c510200b003ed353ea8a7mr483322wms.2.1679590808808; Thu, 23 Mar
+ 2023 10:00:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230322223801.1451827-1-irogers@google.com>
+In-Reply-To: <20230322223801.1451827-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 23 Mar 2023 09:59:57 -0700
+Message-ID: <CAP-5=fW_8FEsrvYxR8wXcGJR3WFfepmfrZFcaPsHwE+ugTB9Pg@mail.gmail.com>
+Subject: Re: [PATCH] perf vendor events: Sandybridge and version number minor updates
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Edward Baker <edward.baker@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c:1961:18: error: unused
-  function 'ieee80211_SignalStrengthTranslate' [-Werror,-Wunused-function]
-static inline u8 ieee80211_SignalStrengthTranslate(
-                 ^
-This function is not used so remove it.
-It may have been used in the past but that has been commented out.
-Also remove the comment.
+On Wed, Mar 22, 2023 at 3:38=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> Add BR_MISP_EXEC.INDIRECT to Sandybridge. Update version numbers based on=
+:
+> https://github.com/intel/perfmon/pull/62
+> which didn't modify the generated perf json.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../staging/rtl8192u/ieee80211/ieee80211_rx.c | 38 -------------------
- 1 file changed, 38 deletions(-)
+I've spotted a mistake with this and will resend.
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-index 5c73e3f8541a..ca09367005e1 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
-@@ -1958,43 +1958,6 @@ int ieee80211_parse_info_param(struct ieee80211_device *ieee,
- 	return 0;
- }
- 
--static inline u8 ieee80211_SignalStrengthTranslate(
--	u8  CurrSS
--	)
--{
--	u8 RetSS;
--
--	// Step 1. Scale mapping.
--	if (CurrSS >= 71 && CurrSS <= 100) {
--		RetSS = 90 + ((CurrSS - 70) / 3);
--	} else if (CurrSS >= 41 && CurrSS <= 70) {
--		RetSS = 78 + ((CurrSS - 40) / 3);
--	} else if (CurrSS >= 31 && CurrSS <= 40) {
--		RetSS = 66 + (CurrSS - 30);
--	} else if (CurrSS >= 21 && CurrSS <= 30) {
--		RetSS = 54 + (CurrSS - 20);
--	} else if (CurrSS >= 5 && CurrSS <= 20) {
--		RetSS = 42 + (((CurrSS - 5) * 2) / 3);
--	} else if (CurrSS == 4) {
--		RetSS = 36;
--	} else if (CurrSS == 3) {
--		RetSS = 27;
--	} else if (CurrSS == 2) {
--		RetSS = 18;
--	} else if (CurrSS == 1) {
--		RetSS = 9;
--	} else {
--		RetSS = CurrSS;
--	}
--	//RT_TRACE(COMP_DBG, DBG_LOUD, ("##### After Mapping:  LastSS: %d, CurrSS: %d, RetSS: %d\n", LastSS, CurrSS, RetSS));
--
--	// Step 2. Smoothing.
--
--	//RT_TRACE(COMP_DBG, DBG_LOUD, ("$$$$$ After Smoothing:  LastSS: %d, CurrSS: %d, RetSS: %d\n", LastSS, CurrSS, RetSS));
--
--	return RetSS;
--}
--
- /* 0-100 index */
- static long ieee80211_translate_todbm(u8 signal_strength_index)
- {
-@@ -2095,7 +2058,6 @@ static inline int ieee80211_network_init(
- 		network->flags |= NETWORK_EMPTY_ESSID;
- 
- 	stats->signal = 30 + (stats->SignalStrength * 70) / 100;
--	//stats->signal = ieee80211_SignalStrengthTranslate(stats->signal);
- 	stats->noise = ieee80211_translate_todbm((u8)(100 - stats->signal)) - 25;
- 
- 	memcpy(&network->stats, stats, sizeof(network->stats));
--- 
-2.27.0
+Thanks,
+Ian
 
+> ---
+>  tools/perf/pmu-events/arch/x86/mapfile.csv         | 14 +++++++-------
+>  .../pmu-events/arch/x86/sandybridge/pipeline.json  |  8 ++++++++
+>  2 files changed, 15 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-=
+events/arch/x86/mapfile.csv
+> index 9abebe50ae0d..41d755d570e6 100644
+> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
+> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+> @@ -2,26 +2,26 @@ Family-model,Version,Filename,EventType
+>  GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
+>  GenuineIntel-6-BE,v1.19,alderlaken,core
+>  GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
+> -GenuineIntel-6-(3D|47),v26,broadwell,core
+> -GenuineIntel-6-56,v7,broadwellde,core
+> -GenuineIntel-6-4F,v19,broadwellx,core
+> +GenuineIntel-6-(3D|47),v27,broadwell,core
+> +GenuineIntel-6-56,v9,broadwellde,core
+> +GenuineIntel-6-4F,v20,broadwellx,core
+>  GenuineIntel-6-55-[56789ABCDEF],v1.17,cascadelakex,core
+>  GenuineIntel-6-9[6C],v1.03,elkhartlake,core
+>  GenuineIntel-6-5[CF],v13,goldmont,core
+>  GenuineIntel-6-7A,v1.01,goldmontplus,core
+>  GenuineIntel-6-A[DE],v1.01,graniterapids,core
+> -GenuineIntel-6-(3C|45|46),v32,haswell,core
+> -GenuineIntel-6-3F,v26,haswellx,core
+> +GenuineIntel-6-(3C|45|46),v33,haswell,core
+> +GenuineIntel-6-3F,v27,haswellx,core
+>  GenuineIntel-6-(7D|7E|A7),v1.17,icelake,core
+>  GenuineIntel-6-6[AC],v1.19,icelakex,core
+>  GenuineIntel-6-3A,v23,ivybridge,core
+>  GenuineIntel-6-3E,v22,ivytown,core
+> -GenuineIntel-6-2D,v22,jaketown,core
+> +GenuineIntel-6-2D,v23,jaketown,core
+>  GenuineIntel-6-(57|85),v10,knightslanding,core
+>  GenuineIntel-6-A[AC],v1.01,meteorlake,core
+>  GenuineIntel-6-1[AEF],v3,nehalemep,core
+>  GenuineIntel-6-2E,v3,nehalemex,core
+> -GenuineIntel-6-2A,v18,sandybridge,core
+> +GenuineIntel-6-2A,v19,sandybridge,core
+>  GenuineIntel-6-(8F|CF),v1.11,sapphirerapids,core
+>  GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
+>  GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v55,skylake,core
+> diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json b/t=
+ools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
+> index 54454e5e262c..ecaf94ccc9c7 100644
+> --- a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
+> +++ b/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
+> @@ -210,6 +210,14 @@
+>          "SampleAfterValue": "200003",
+>          "UMask": "0xc4"
+>      },
+> +    {
+> +        "BriefDescription": "Speculative mispredicted indirect branches"=
+,
+> +        "EventCode": "0x89",
+> +        "EventName": "BR_MISP_EXEC.INDIRECT",
+> +        "PublicDescription": "Counts speculatively miss-predicted indire=
+ct branches at execution time. Counts for indirect near CALL or JMP instruc=
+tions (RET excluded).",
+> +        "SampleAfterValue": "200003",
+> +        "UMask": "0xe4"
+> +    },
+>      {
+>          "BriefDescription": "Not taken speculative and retired mispredic=
+ted macro conditional branches.",
+>          "EventCode": "0x89",
+> --
+> 2.40.0.rc1.284.g88254d51c5-goog
+>
