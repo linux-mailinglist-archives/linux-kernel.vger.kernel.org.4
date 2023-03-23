@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA866C686E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E366C6876
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjCWMeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S231742AbjCWMf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjCWMeG (ORCPT
+        with ESMTP id S231627AbjCWMfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:34:06 -0400
+        Thu, 23 Mar 2023 08:35:54 -0400
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B33196AD;
-        Thu, 23 Mar 2023 05:34:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480E91C7EF;
+        Thu, 23 Mar 2023 05:35:46 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DE791420CF;
-        Thu, 23 Mar 2023 12:33:59 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 495EE420CF;
+        Thu, 23 Mar 2023 12:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1679574842;
-        bh=dU+ouRLpZkJDik6nlmkKXlAzXALaF6/l7WtvgLXO5Rg=;
+        s=default; t=1679574944;
+        bh=k+/jNhkIqz21sSLfPIEvNUhnHjFRyyWDKLpN6Jw1wxU=;
         h=From:Date:Subject:To:Cc;
-        b=KCmfvMiMVpberx82OFDcDMPsbno/GMxpzLzAunpRDDyccD9oRx9YXrVvq0B6ja2+2
-         6uAd6QuJb1ZCVPPwdf/RGoVp75+S3HGkXKUDFCr+VVhcDzC/Jgj9OS0RHq8mTW5Lpy
-         oveYqQCEB+E6sLFoZLXvAMkw+TSoPwMz+/EMvfRtz7W25bmDCZnzDdz3O+I5hlzw/c
-         Ipp/GSvbwL+OJk7o6phNwyM+rppi2PTa7V9C/GGm1clx5RFaXOUl6BXrka47vzZ6Hz
-         +RCm2sSZzsaH1Vn8csb+A/YA7Jso4wbt13rysCibodoHQ9HZUVER/8lctaDjycbsZi
-         q3S585ItjEupw==
+        b=VXelSGS2IcIt3B+VHlZr9BxU5mUptTGoqcA6yRdv4+ynP69yhP4tnhBZPsOtpS2cf
+         H+0XWFHrrU0U3mV8fxE5x6NspLo2zVit53oGLM5ij/8plajqQaOXab3PbQxP3E2cl4
+         NyzweZJVCTLbFURO58z+9uy84e/RdbtASBQ8fS5u2zClkF6FN28wjEaMDxn7b+GUZe
+         hHTI0vDQzsGivABMCad2aDpl5S0+5rhEAaRM0TmxrZrSJfA6begDehIed19FcfKdSZ
+         GakS9CwZSy7ZDpZpghMwB/mks9+LzW2GQW2xMb/1HOIm2c8d4aPH6yUT/n5c3ew5NI
+         LCNZ8QV5w09Ag==
 From:   Asahi Lina <lina@asahilina.net>
-Date:   Thu, 23 Mar 2023 21:33:54 +0900
-Subject: [PATCH v3] rust: ioctl: Add ioctl number manipulation functions
+Date:   Thu, 23 Mar 2023 21:35:10 +0900
+Subject: [PATCH v2] rust: macros: Allow specifying multiple module aliases
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-ioctl-v3-1-3c5f7a6954b5@asahilina.net>
-X-B4-Tracking: v=1; b=H4sIADFHHGQC/3WNwQ6CMBBEf4X0bBW2FMWT/2E8LLDQTUwhLTQaw
- r/bcjR6fJN5M6vw5Ji8uGarcBTY82gjqEMmWoN2IMldZAE5qByglG7xs+SxnZ8SNeS9okYhXkQ
- UGvQkG4e2NUkZpuW0t1MOqTA56vm1v90fkQ37eXTv/TwUKf35EwpZSF2U0KlKY63KG3o0/GSLR
- 0uzSFMB/uuQdAWazhXW0PXf+rZtHzY15/EIAQAA
+Message-Id: <20230224-rust-macros-v2-1-7396e8b7018d@asahilina.net>
+X-B4-Tracking: v=1; b=H4sIAH1HHGQC/22Nyw6CMBBFf4V0bbUPgsrK/zAspjDQSbSQDhAN4
+ d9tWbs8N/fkbIIxErKoi01EXIlpDAnMqRCthzCgpC6xMMpYZUwp48KzfEMbR5aVtZ3rb1cFqEU
+ yHDBKFyG0PjvDtFyOe95NPkwRe/ocuWeT2BPPY/we9VXn9X9o1VJJZ+89YFmhVuYBDJ5eFOAcc
+ BbNvu8/O05zf8sAAAA=
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arch@vger.kernel.org,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, Finn Behrens <me@kloenk.dev>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
         Asahi Lina <lina@asahilina.net>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679574839; l=4426;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679574940; l=4848;
  i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=dU+ouRLpZkJDik6nlmkKXlAzXALaF6/l7WtvgLXO5Rg=;
- b=pNeQGZgAbH44+sahsleVEVvZ/xncu3esemq28+oJ0oHzhrHwUv6yVnjKisOIoI73mCXQ0/ayb
- W5kgtIYTLLLDl5j0pqcQPo7VuOzOvobdPG7yMPnAilECZwhGMG8BzWF
+ bh=k+/jNhkIqz21sSLfPIEvNUhnHjFRyyWDKLpN6Jw1wxU=;
+ b=lgA5l4q9e7uUQnB7Ylry8BsisMHTO8M6xNJaAdgue98S+UwcbB6JqodsZB4SVNwB6A3JhYROn
+ 1AoPjlEVO6FA6p3zP6kBTa5PiqljotC48ADXoTMQ5hmrHHcP8XX5LDY
 X-Developer-Key: i=lina@asahilina.net; a=ed25519;
  pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -69,137 +70,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add simple 1:1 wrappers of the C ioctl number manipulation functions.
-Since these are macros we cannot bindgen them directly, and since they
-should be usable in const context we cannot use helper wrappers, so
-we'll have to reimplement them in Rust. Thankfully, the C headers do
-declare defines for the relevant bitfield positions, so we don't need
-to duplicate that.
+Modules can (and usually do) have multiple alias tags, in order to
+specify multiple possible device matches for autoloading. Allow this by
+changing the alias ModuleInfo field to an Option<Vec<String>>.
 
+Note: For normal device IDs this is autogenerated by modpost (which is
+not properly integrated with Rust support yet), so it is useful to be
+able to manually add device match aliases for now, and should still be
+useful in the future for corner cases that modpost does not handle.
+
+This pulls in the expect_group() helper from the rfl/rust branch
+(with credit to authors).
+
+Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Co-developed-by: Finn Behrens <me@kloenk.dev>
+Signed-off-by: Finn Behrens <me@kloenk.dev>
+Co-developed-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
+Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
-Changes in v3:
-- Actually made the change intended in v2.
-- Link to v2: https://lore.kernel.org/r/20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net
-
-Changes in v2:
-- Changed from assert!() to build_assert!() (static_assert!() can't work
-  here)
-- Link to v1: https://lore.kernel.org/r/20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net
+Note: This used to be part of the series
+"rust: Miscellaneous macro improvements", but we agreed to drop the
+concat_idents!() change for now (and therefore the prerequisite it
+carried), so that leaves just the module macro change.
 ---
- rust/bindings/bindings_helper.h |  3 +-
- rust/kernel/ioctl.rs            | 71 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |  1 +
- 3 files changed, 74 insertions(+), 1 deletion(-)
+ rust/macros/helpers.rs | 10 +++++++++-
+ rust/macros/module.rs  | 30 +++++++++++++++++++++++++-----
+ 2 files changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 75d85bd6c592..aef60f300be0 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -6,8 +6,9 @@
-  * Sorted alphabetically.
-  */
+diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+index cf7ad950dc1e..b2bdd4d8c958 100644
+--- a/rust/macros/helpers.rs
++++ b/rust/macros/helpers.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
  
--#include <linux/slab.h>
-+#include <linux/ioctl.h>
- #include <linux/refcount.h>
-+#include <linux/slab.h>
+-use proc_macro::{token_stream, TokenTree};
++use proc_macro::{token_stream, Group, TokenTree};
  
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
-new file mode 100644
-index 000000000000..b2076113b6a8
---- /dev/null
-+++ b/rust/kernel/ioctl.rs
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#![allow(non_snake_case)]
-+
-+//! ioctl() number definitions
-+//!
-+//! C header: [`include/asm-generic/ioctl.h`](../../../../include/asm-generic/ioctl.h)
-+
-+use crate::build_assert;
-+
-+/// Build an ioctl number, analogous to the C macro of the same name.
-+#[inline(always)]
-+const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-+    build_assert!(dir <= bindings::_IOC_DIRMASK);
-+    build_assert!(ty <= bindings::_IOC_TYPEMASK);
-+    build_assert!(nr <= bindings::_IOC_NRMASK);
-+    build_assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-+
-+    (dir << bindings::_IOC_DIRSHIFT)
-+        | (ty << bindings::_IOC_TYPESHIFT)
-+        | (nr << bindings::_IOC_NRSHIFT)
-+        | ((size as u32) << bindings::_IOC_SIZESHIFT)
+ pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
+     if let Some(TokenTree::Ident(ident)) = it.next() {
+@@ -56,6 +56,14 @@ pub(crate) fn expect_string_ascii(it: &mut token_stream::IntoIter) -> String {
+     string
+ }
+ 
++pub(crate) fn expect_group(it: &mut token_stream::IntoIter) -> Group {
++    if let TokenTree::Group(group) = it.next().expect("Reached end of token stream for Group") {
++        group
++    } else {
++        panic!("Expected Group");
++    }
 +}
 +
-+/// Build an ioctl number for an argumentless ioctl.
-+#[inline(always)]
-+pub const fn _IO(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_NONE, ty, nr, 0)
+ pub(crate) fn expect_end(it: &mut token_stream::IntoIter) {
+     if it.next().is_some() {
+         panic!("Expected end");
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index a7e363c2b044..5e7ab83908a0 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -1,9 +1,27 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+ use crate::helpers::*;
+-use proc_macro::{token_stream, Literal, TokenStream, TokenTree};
++use proc_macro::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
+ use std::fmt::Write;
+ 
++fn expect_string_array(it: &mut token_stream::IntoIter) -> Vec<String> {
++    let group = expect_group(it);
++    assert_eq!(group.delimiter(), Delimiter::Bracket);
++    let mut values = Vec::new();
++    let mut it = group.stream().into_iter();
++
++    while let Some(val) = try_string(&mut it) {
++        assert!(val.is_ascii(), "Expected ASCII string");
++        values.push(val);
++        match it.next() {
++            Some(TokenTree::Punct(punct)) => assert_eq!(punct.as_char(), ','),
++            None => break,
++            _ => panic!("Expected ',' or end of array"),
++        }
++    }
++    values
 +}
 +
-+/// Build an ioctl number for an read-only ioctl.
-+#[inline(always)]
-+pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for an write-only ioctl.
-+#[inline(always)]
-+pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for a read-write ioctl.
-+#[inline(always)]
-+pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(
-+        bindings::_IOC_READ | bindings::_IOC_WRITE,
-+        ty,
-+        nr,
-+        core::mem::size_of::<T>(),
-+    )
-+}
-+
-+/// Get the ioctl direction from an ioctl number.
-+pub const fn _IOC_DIR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
-+}
-+
-+/// Get the ioctl type from an ioctl number.
-+pub const fn _IOC_TYPE(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
-+}
-+
-+/// Get the ioctl number from an ioctl number.
-+pub const fn _IOC_NR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
-+}
-+
-+/// Get the ioctl size from an ioctl number.
-+pub const fn _IOC_SIZE(nr: u32) -> usize {
-+    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 223564f9f0cc..7610b18ee642 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -30,6 +30,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
- mod allocator;
- mod build_assert;
- pub mod error;
-+pub mod ioctl;
- pub mod prelude;
- pub mod print;
- mod static_assert;
+ struct ModInfoBuilder<'a> {
+     module: &'a str,
+     counter: usize,
+@@ -78,7 +96,7 @@ struct ModuleInfo {
+     name: String,
+     author: Option<String>,
+     description: Option<String>,
+-    alias: Option<String>,
++    alias: Option<Vec<String>>,
+ }
+ 
+ impl ModuleInfo {
+@@ -112,7 +130,7 @@ impl ModuleInfo {
+                 "author" => info.author = Some(expect_string(it)),
+                 "description" => info.description = Some(expect_string(it)),
+                 "license" => info.license = expect_string_ascii(it),
+-                "alias" => info.alias = Some(expect_string_ascii(it)),
++                "alias" => info.alias = Some(expect_string_array(it)),
+                 _ => panic!(
+                     "Unknown key \"{}\". Valid keys are: {:?}.",
+                     key, EXPECTED_KEYS
+@@ -163,8 +181,10 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+         modinfo.emit("description", &description);
+     }
+     modinfo.emit("license", &info.license);
+-    if let Some(alias) = info.alias {
+-        modinfo.emit("alias", &alias);
++    if let Some(aliases) = info.alias {
++        for alias in aliases {
++            modinfo.emit("alias", &alias);
++        }
+     }
+ 
+     // Built-in modules also export the `file` modinfo string.
 
 ---
 base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230224-rust-ioctl-a520f3eb3aa8
+change-id: 20230224-rust-macros-633dbf870ae1
 
 Thank you,
 ~~ Lina
