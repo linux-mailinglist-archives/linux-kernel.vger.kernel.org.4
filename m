@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB756C67C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2765C6C67CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCWMNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S230501AbjCWMOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjCWMNm (ORCPT
+        with ESMTP id S231384AbjCWMNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:13:42 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF8B20A3C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:36 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id s67so7673796ybi.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:36 -0700 (PDT)
+        Thu, 23 Mar 2023 08:13:46 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78FC25B8F
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:39 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-544b959a971so357214617b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573615;
+        d=linaro.org; s=google; t=1679573618;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QHbs0rnNZeieI4I/+z7njBcl6R6MpIcd0316GA7EDq8=;
-        b=DPlkjAbo4Yl5mr6xKESFph0Zi3CIqqAuq13v8w89o9AGuE7Z3fAuMErAfPzSd5IJc6
-         OmkVcToFh+y3TBHkUI+FQUPepXEwa8wzvHVjlX7+hqXYehySbcSNKYpWysAYtVpaaMfF
-         JpwTbY/HOQkyiU7BdTBoxlQnRfHxadYvKU8qsFUt5RzcYtI4E7tfVwL4mrKiJJKy+6Kt
-         KZEV8uc59LuvSYNILXuYumYFsbw+epMpGyhQLR/PjdEggzG2Mf1roScTsA4an1xSzFbs
-         OGfCBW2r4ZbqLt8abAaeaJHwff3VjWsfk0NFR3LeZtzQeNCP5TQBati9DwkrLAjXZ602
-         rBOg==
+        bh=rxdfkNfg9Cqx5PYmumxkm8NMkeCxgHCaWOIO7seRGFc=;
+        b=Oc5CC7lkTCcR+4UrY3yOys4sw49dgOCf2d5z51X3K0DuBDgj3jifHLKiXt0FJw3gPj
+         pbghvApM4AgjcaL91jsik0stF+kvYUY19NsBmiaefZ1B/NbhWme7+70jgOmxsiCLzfMV
+         XKKphWjjwAAuMYbLFQFxLbcAH3g3Mn1gfTD+JZItMNK/RRfOe2t+lOrynVrDbZG6YcxH
+         QPFulzsnm/qEpU0MAW9sdNl6RCqTZ/+nYK8QJ0tXfJA5z8VkRTrftoG9A6V9UrBM5npy
+         19EwLyDH6UJIFbJDW7W3Ci7pyqwZppyfUZD3IMkRHqsC5XyubAvqYDXowWrsKu2xp6qE
+         MA+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573615;
+        d=1e100.net; s=20210112; t=1679573618;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QHbs0rnNZeieI4I/+z7njBcl6R6MpIcd0316GA7EDq8=;
-        b=ED07rYFryCdj5TvuzAowATCfunVb0HswbtnNHPsNl2ax9qQKUC8WrdNLwDYv/4iACE
-         bvmFPOUJRpCbqukMaDhl2zWKOjEvn604IHes4W2R3D9aAzjWB6ldWUhQztkGHaHeSFbM
-         n9nPNT9fjHt7RAsLbNUFNS+8L4FGWGMNBrojWVyBs2pkNtRqYd8YQQqzZtvM31lmJUII
-         hfrVuBQmf6pJfsEiccT1tbFnowxVD5/BAuK9nTupoixU0cHe9g6r1VlUKodexGvO7Sb9
-         nBWjjLyTBMPYTgu10ILoIBp+5HNe2PVnFuGHPSdEPYyLDRdEvUVyYRKl8RvqKnGGROux
-         Dkqw==
-X-Gm-Message-State: AAQBX9e7MypXJRcDUxrDMsHL5CSSS9YFNf9by9Qsys1XdAwSPIwMXyCL
-        LL5+ZUzABQmz5lhLgZDfU7aRN6G5FOrYQgy0ApPnfA==
-X-Google-Smtp-Source: AKy350a/EpBi14YjETGVL/MH7zuDiC8Odp9sDpzFsFQTi2EtyeR/Gz8t6w4wvGvyniowTsWkM+nSOfh9XfMpKSJf9Ow=
-X-Received: by 2002:a05:6902:1689:b0:b75:8ac3:d5d9 with SMTP id
- bx9-20020a056902168900b00b758ac3d5d9mr947479ybb.3.1679573615378; Thu, 23 Mar
- 2023 05:13:35 -0700 (PDT)
+        bh=rxdfkNfg9Cqx5PYmumxkm8NMkeCxgHCaWOIO7seRGFc=;
+        b=7I66Lx7e8s4E74fTF0I4x/47OkkXBGcplXjAvZCnBxB+/JlSm8ntBPBNlK8VPfLCMC
+         ygZLeniqV/VMLgKzJNL2oeup9wgoc/cGcgWE1fj/20Deqkib2jnqOKF6jlqsbcVwX8KP
+         6dCn3KOtIzziEOrbpegfIevTqSjKiIVqK5QkjVwHOMYTI0qD3OsLyWPPe1yrJJwq/WKK
+         6E546k0aQnWkg22WOjC1/NgY4CHtjn/lYrr/GD5rVf//xP4QqTcm9ri/SLUrEg1R0Vkz
+         pUTsw2Hn6T5QDvxs9VxF7lQbdPI/LCikBKT6kVYcbV13lBhoKjQOjr6bMSF2C+RmwxNX
+         DFig==
+X-Gm-Message-State: AAQBX9dSltPtu/yedq423FijqS+FVk/U/ECamoU6fpDH4QbuC4nO2ahb
+        SUY62QPJeTk/BpijGg133nXHbf8cbqlPle8DHJEIZeFcnvJJ5s+c
+X-Google-Smtp-Source: AKy350Y1gToqF8IQePPQcs6V/flQM1zYWsO0bWIIjsJI3krL5ltJnWiQ2EPXtgKJDKpk0TDLCWLLljtGESt2ExHdzgg=
+X-Received: by 2002:a81:b388:0:b0:541:7237:6e6b with SMTP id
+ r130-20020a81b388000000b0054172376e6bmr1609332ywh.0.1679573618392; Thu, 23
+ Mar 2023 05:13:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230315054113.48898-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230315054113.48898-1-yang.lee@linux.alibaba.com>
+References: <20230315055355.66733-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230315055355.66733-1-yang.lee@linux.alibaba.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Mar 2023 13:12:59 +0100
-Message-ID: <CAPDyKFphyqEDRvmFOPdyx1uy4i7nfaoJN4usDmNf+uXuqn7Z3A@mail.gmail.com>
-Subject: Re: [PATCH -next] mmc: owl-mmc: Use devm_platform_get_and_ioremap_resource()
+Date:   Thu, 23 Mar 2023 13:13:02 +0100
+Message-ID: <CAPDyKFqeQf-eiBjY_Wi58ZLAGH=L0Dec=OA+UFZZ5RYVAzRdGA@mail.gmail.com>
+Subject: Re: [PATCH -next] mmc: usdhi6rol0: Use devm_platform_get_and_ioremap_resource()
 To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     afaerber@suse.de, mani@kernel.org, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     jesper.nilsson@axis.com, lars.persson@axis.com,
+        linux-arm-kernel@axis.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
@@ -67,7 +67,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 at 06:41, Yang Li <yang.lee@linux.alibaba.com> wrote:
+On Wed, 15 Mar 2023 at 06:54, Yang Li <yang.lee@linux.alibaba.com> wrote:
 >
 > According to commit 890cc39a8799 ("drivers: provide
 > devm_platform_get_and_ioremap_resource()"), convert
@@ -84,23 +84,23 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/owl-mmc.c | 3 +--
+>  drivers/mmc/host/usdhi6rol0.c | 3 +--
 >  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> diff --git a/drivers/mmc/host/owl-mmc.c b/drivers/mmc/host/owl-mmc.c
-> index 3dc143b03939..6f9d31a886ba 100644
-> --- a/drivers/mmc/host/owl-mmc.c
-> +++ b/drivers/mmc/host/owl-mmc.c
-> @@ -578,8 +578,7 @@ static int owl_mmc_probe(struct platform_device *pdev)
->         owl_host->mmc = mmc;
->         spin_lock_init(&owl_host->lock);
+> diff --git a/drivers/mmc/host/usdhi6rol0.c b/drivers/mmc/host/usdhi6rol0.c
+> index 99515be6e5e5..2f59917b105e 100644
+> --- a/drivers/mmc/host/usdhi6rol0.c
+> +++ b/drivers/mmc/host/usdhi6rol0.c
+> @@ -1790,8 +1790,7 @@ static int usdhi6_probe(struct platform_device *pdev)
+>
+>         host->pins_uhs = pinctrl_lookup_state(host->pinctrl, "state_uhs");
 >
 > -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       owl_host->base = devm_ioremap_resource(&pdev->dev, res);
-> +       owl_host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->         if (IS_ERR(owl_host->base)) {
->                 ret = PTR_ERR(owl_host->base);
->                 goto err_free_host;
+> -       host->base = devm_ioremap_resource(dev, res);
+> +       host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>         if (IS_ERR(host->base)) {
+>                 ret = PTR_ERR(host->base);
+>                 goto e_free_mmc;
 > --
 > 2.20.1.7.g153144c
 >
