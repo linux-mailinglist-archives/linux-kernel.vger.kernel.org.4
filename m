@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00D56C73DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205526C73DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCWXFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S230498AbjCWXJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCWXFg (ORCPT
+        with ESMTP id S229484AbjCWXJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:05:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DEE15575;
-        Thu, 23 Mar 2023 16:05:34 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679612733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5sjryDy5LEhlWt18Hl0IcqzfSwt8nmXit8rKsnVSBI=;
-        b=MxkKiT5HXCdVQqFTNy0TTutikBpxy8YTJV2dqP2Gx6KzRyW1+DhRmkXucvuYBAog3qYiOU
-        VGNZOL5HzEMOGuE/49d+fMCMQ8Yf2MqXqpDEk2hkDffq60uUn4IhszvX4lA0tOVJPu8+qa
-        AnHcV9fCZzMk761KKwFxZbq6saZpslFObLwXLidh7OWLtWPZAQVE/4JlO7C7KpCTUBZh0f
-        ib/F0Rk/UY0F/fDtxbPz/PGCLtJH7rwe6pTWmw3jtM/Hf5EI4cN1byJnVX5QzsolsFPxz2
-        QB09ZPk5Z1J4f4LYhDGKPuGrItwNIubix/4AupPTq8M/DcS270iZ9vzbXOXaeA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679612733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5sjryDy5LEhlWt18Hl0IcqzfSwt8nmXit8rKsnVSBI=;
-        b=ilEd8OWAQp53lLRAFyKoM4qc5uVzjbwhMMCiIYPM88uhrxgbCscRwfA3q8kJYwdfYS9JoM
-        vYBdQgM3o5YNz+Aw==
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
- states before CPUHP_BRINGUP_CPU
-In-Reply-To: <874jqb8588.ffs@tglx>
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
- <20230321194008.785922-4-usama.arif@bytedance.com> <874jqb8588.ffs@tglx>
-Date:   Fri, 24 Mar 2023 00:05:32 +0100
-Message-ID: <871qlf83wj.ffs@tglx>
+        Thu, 23 Mar 2023 19:09:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA11F970
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:09:07 -0700 (PDT)
+Received: from workpc.. (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DC3226602065;
+        Thu, 23 Mar 2023 23:09:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679612946;
+        bh=rb/6RO+1PkXC/qjWWlC3SEK8oY5IpI1lDfqo7fZhXC8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=flXYq59bkgkkKkTYoHGCXEQlUWo0Pvv0vPLZeJmdFvuuRJQoqK7AvF1zTQJ1TNZ8M
+         b7CJZCRwroO7DPXepdVTe35k1JQcLD9w0p3ULAD8hiOsC0Ds/P6IeAltfkj5GqdDVN
+         uZfoX5UI7i6KRfdSz1WInk5rzDIQL0Li+iuaoMuGBIpXZ3CXjyzJD1Rmh1U3CKuvAt
+         d5Op8IRZ5Kb3vETetFjGsxMf7mRMCfqfcvotCIH9rDwng9MiOFBc2h3qeOjxZTq1RT
+         Vl6NDgLLi6OAuFvKbeI+Kyf+qKuN4hGVnoPafb3NOa203eaJ9jRcw0zWnKyGU2ThKn
+         SwKFKyePUDUXA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+Subject: [PATCH v4 0/2] Add sync object UAPI support to VirtIO-GPU driver
+Date:   Fri, 24 Mar 2023 02:07:53 +0300
+Message-Id: <20230323230755.1094832-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,111 +58,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23 2023 at 23:36, Thomas Gleixner wrote:
-> On Tue, Mar 21 2023 at 19:40, Usama Arif wrote:
->>  void bringup_nonboot_cpus(unsigned int setup_max_cpus)
->>  {
->> +	unsigned int n = setup_max_cpus - num_online_cpus();
->>  	unsigned int cpu;
->>  
->> +	/*
->> +	 * An architecture may have registered parallel pre-bringup states to
->> +	 * which each CPU may be brought in parallel. For each such state,
->> +	 * bring N CPUs to it in turn before the final round of bringing them
->> +	 * online.
->> +	 */
->> +	if (n > 0) {
->> +		enum cpuhp_state st = CPUHP_BP_PARALLEL_DYN;
->> +
->> +		while (st <= CPUHP_BP_PARALLEL_DYN_END && cpuhp_hp_states[st].name) {
->
->
-> There is no point in special casing this. All architectures can invoke
-> the CPUHP_BP_* states before CPUHP_BRINGUP_CPU for each to be brought up
-> CPU first. So this can be made unconditional and common exercised
-> code.
+We have multiple Vulkan context types that are awaiting for the addition
+of the sync object DRM UAPI support to the VirtIO-GPU kernel driver:
 
-Bah. There is. We discussed that before. Architectures need to opt in to
-make sure that there are no implicit dependencies on the full
-serialization.
+ 1. Venus context
+ 2. Native contexts (virtio-freedreno, virtio-intel, virtio-amdgpu)
 
-Still the rest can be simplified as below.
+Mesa core supports DRM sync object UAPI, providing Vulkan drivers with a
+generic fencing implementation that we want to utilize.
 
-Thanks,
+This patch adds initial sync objects support. It creates fundament for a
+further fencing improvements. Later on we will want to extend the VirtIO-GPU
+fencing API with passing fence IDs to host for waiting, it will be a new
+additional VirtIO-GPU IOCTL and more. Today we have several VirtIO-GPU context
+drivers in works that require VirtIO-GPU to support sync objects UAPI.
 
-        tglx
----
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -133,6 +133,20 @@ enum cpuhp_state {
- 	CPUHP_MIPS_SOC_PREPARE,
- 	CPUHP_BP_PREPARE_DYN,
- 	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
-+	/*
-+	 * This is an optional state if the architecture supports parallel
-+	 * startup. It's used to send the startup IPI so that the APs can
-+	 * run in parallel through the low level startup code instead of
-+	 * sending the IPIs one by one in CPUHP_BRINGUP_CPU. This avoids
-+	 * waiting for the AP to react and shortens the serialized bringup.
-+	 */
-+	CPUHP_BP_PARALLEL_STARTUP,
-+
-+	/*
-+	 * Fully per AP serialized bringup from here on. If the
-+	 * architecture does no register the CPUHP_BP_PARALLEL_STARTUP
-+	 * state, this step sends the startup IPI first.
-+	 */
- 	CPUHP_BRINGUP_CPU,
- 
- 	/*
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1504,13 +1504,45 @@ int bringup_hibernate_cpu(unsigned int s
- 
- void bringup_nonboot_cpus(unsigned int setup_max_cpus)
- {
--	unsigned int cpu;
-+	unsigned int cpu, n = 1;
- 
-+	/*
-+	 * On architectures which have setup the CPUHP_BP_PARALLEL_STARTUP
-+	 * state, this invokes all BP prepare states and the parallel
-+	 * startup state sends the startup IPI to each of the to be onlined
-+	 * APs. This avoids waiting for each AP to respond to the startup
-+	 * IPI in CPUHP_BRINGUP_CPU. The APs proceed through the low level
-+	 * bringup code and then wait for the control CPU to release them
-+	 * one by one for the final onlining procedure in the loop below.
-+	 *
-+	 * For architectures which do not support parallel bringup all
-+	 * states are fully serialized in the loop below.
-+	 */
-+	if (!cpuhp_step_empty(true, CPUHP_BP_PARALLEL_STARTUP) {
-+			for_each_present_cpu(cpu) {
-+				if (n++ >= setup_max_cpus)
-+					break;
-+				cpu_up(cpu, CPUHP_BP_PARALLEL_STARTUP);
-+			}
-+	}
-+
-+	/* Do the per CPU serialized bringup to ONLINE state */
- 	for_each_present_cpu(cpu) {
- 		if (num_online_cpus() >= setup_max_cpus)
- 			break;
--		if (!cpu_online(cpu))
--			cpu_up(cpu, CPUHP_ONLINE);
-+
-+		if (!cpu_online(cpu)) {
-+			struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-+			int ret = cpu_up(cpu, CPUHP_ONLINE);
-+
-+			/*
-+			 * Due to the above preparation loop a failed online attempt
-+			 * might have only rolled back to CPUHP_BP_PARALLEL_STARTUP. Do the
-+			 * remaining cleanups. NOOP for the non parallel case.
-+			 */
-+			if (ret && can_rollback_cpu(st))
-+				WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
-+		}
- 	}
- }
- 
+The patch is heavily inspired by the sync object UAPI implementation of the
+MSM driver.
+
+Changelog:
+
+v4: - Added r-b from Rob Clark to the "refactoring" patch.
+
+    - Replaced for/while(ptr && itr) with if (ptr), like was suggested by
+      Rob Clark.
+
+    - Dropped NOWARN and NORETRY GFP flags and switched syncobj patch
+      to use kvmalloc.
+
+    - Removed unused variables from syncobj patch that were borrowed by
+      accident from another (upcoming) patch after one of git rebases.
+
+v3: - Switched to use dma_fence_unwrap_for_each(), like was suggested by
+      Rob Clark.
+
+    - Fixed missing dma_fence_put() in error code path that was spotted by
+      Rob Clark.
+
+    - Removed obsoleted comment to virtio_gpu_execbuffer_ioctl(), like was
+      suggested by Rob Clark.
+
+v2: - Fixed chain-fence context matching by making use of
+      dma_fence_chain_contained().
+
+    - Fixed potential uninitialized var usage in error code patch of
+      parse_post_deps(). MSM driver had a similar issue that is fixed
+      already in upstream.
+
+    - Added new patch that refactors job submission code path. I found
+      that it was very difficult to add a new/upcoming host-waits feature
+      because of how variables are passed around the code, the virtgpu_ioctl.c
+      also was growing to unmanageable size.
+
+Dmitry Osipenko (2):
+  drm/virtio: Refactor job submission code path
+  drm/virtio: Support sync objects
+
+ drivers/gpu/drm/virtio/Makefile         |   2 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.c    |   3 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.h    |   4 +
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c  | 182 ---------
+ drivers/gpu/drm/virtio/virtgpu_submit.c | 521 ++++++++++++++++++++++++
+ include/uapi/drm/virtgpu_drm.h          |  16 +-
+ 6 files changed, 543 insertions(+), 185 deletions(-)
+ create mode 100644 drivers/gpu/drm/virtio/virtgpu_submit.c
+
+-- 
+2.39.2
+
