@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5806C6DA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A42DA6C6DA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjCWQdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S232289AbjCWQdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjCWQdW (ORCPT
+        with ESMTP id S229682AbjCWQd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:33:22 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E485238018;
-        Thu, 23 Mar 2023 09:32:08 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id t9so27225852qtx.8;
-        Thu, 23 Mar 2023 09:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679589127;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gQ/65gDGq3+1pjKQZ0fWq2F2Rh6nvrUOZSoWkysxM04=;
-        b=LqjJ4DbfjCWviUtNpoA/1fSXgIA9/nIKEZlqoGnSw6+ElCoCwxKNuAtG9Lg9pXSV5V
-         iMjudHA31eGRZEPht3+EIw5u5qlOM7kLVU+W8t3Sm6PaORl96hH1yFZSL4Ml3wGOxoJF
-         P/90/Q67q6lP/HwVxEm93gYZ2kZI40j2JuaHiDEOf9Vu7QE8zCEWTnyHARCBXGSaaNwi
-         t+4F2qjqCarZ23lcTggC5p3rk30qhS/MATCHCdXc7397R6QTSHHyUFn08lXnMV49aEyD
-         kOTEBvgV7jbz250SHYc/hut16Mv1ncVm0EpzocMzaRXE0HrrknNtIfcSnnsrEY3PYJUJ
-         3Ykg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589127;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQ/65gDGq3+1pjKQZ0fWq2F2Rh6nvrUOZSoWkysxM04=;
-        b=L5Cp5HHjjqzVd8FhUa2PvOV/MESnQl6rf6kld4oJ/AGzpG4MuyFCWdlnxcAkZk6+1E
-         OmxjndbHtsfdbYjGuFJpJpWd/wj6OTG9tTDdTmpkNIkVSiBrWVq1AjA0BtyMaoMbL6bO
-         207ZeLTvW3+dLli4Xn/60vl4pM3/yS1M0U+91E7rzf3KjQKrCW2Ro5dmzicZkrWaJkU/
-         SSc6lEzTTU8UpQomp3QYNJFAOBy5ImW1IkbZRpx9e/kGs4LbhTMrUNMx7IwxPvu7s5jJ
-         4VL1pjXo8aVXEzbfWNovt/D4BxxH4QLgvSlDoFCujGrgr2c30sxXRbXwFUsNrzYttZBX
-         Xx/A==
-X-Gm-Message-State: AO0yUKWh9oowcKeNFbHBNQNoTychtFpQfzCZ7Otl9Kh8wKRtqmGEkWWp
-        BVjXfQ28IUE4nGhx41tE2Mo=
-X-Google-Smtp-Source: AK7set8ANqOPpB9E1lRpETucq+PNWITsG2zbnE1m8uArJ3vKRAq5BUHhOLphTrb1hGrAMbURuKXf2w==
-X-Received: by 2002:a05:622a:cd:b0:3bf:da69:6107 with SMTP id p13-20020a05622a00cd00b003bfda696107mr12917170qtw.67.1679589127296;
-        Thu, 23 Mar 2023 09:32:07 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b13-20020ac8540d000000b003d2d815825fsm4831428qtq.40.2023.03.23.09.32.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 09:32:06 -0700 (PDT)
-Message-ID: <700949b0-8548-9a9a-042a-d30df7ca7b3d@gmail.com>
-Date:   Thu, 23 Mar 2023 09:31:59 -0700
+        Thu, 23 Mar 2023 12:33:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA6529413;
+        Thu, 23 Mar 2023 09:32:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7D96627F5;
+        Thu, 23 Mar 2023 16:32:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C58E9C433D2;
+        Thu, 23 Mar 2023 16:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679589136;
+        bh=Z+hK39DxAGT9ENxUSdUl1KEjAOL/mypmkO9p8VKVPHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u2VL2lrMrkls9/9RsRHNlNP49f+/699035XtgRiplt6uuNdu4tw1d52CbgUZhJ54q
+         i9e0YVemSSNf2pxi9svB5tt8pK5oGgCBVbdRWBOlde27jYMaWpz8FdVUsWDGesnh55
+         QGv5AF0zuCRrM28Dam56m0hrLmWVtp1gtz82BnAA=
+Date:   Thu, 23 Mar 2023 17:32:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: pci-quirks: Remove a useless initialization
+Message-ID: <ZBx/DeY4rwX+4zg8@kroah.com>
+References: <3850d93ff40ed12f4724621a540fb5993c0a0fa9.1679434951.git.christophe.jaillet@wanadoo.fr>
+ <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next 4/9] net: dsa: tag_ocelot: do not rely on
- skb_mac_header() for VLAN xmit
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        linux-kernel@vger.kernel.org
-References: <20230322233823.1806736-1-vladimir.oltean@nxp.com>
- <20230322233823.1806736-5-vladimir.oltean@nxp.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230322233823.1806736-5-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 16:38, Vladimir Oltean wrote:
-> skb_mac_header() will no longer be available in the TX path when
-> reverting commit 6d1ccff62780 ("net: reset mac header in
-> dev_start_xmit()"). As preparation for that, let's use
-> skb_vlan_eth_hdr() to get to the VLAN header instead, which assumes it's
-> located at skb->data (assumption which holds true here).
+On Tue, Mar 21, 2023 at 10:43:10PM +0100, Christophe JAILLET wrote:
+> 'info' is memset()'ed a few lines below and is not use in the between.
 > 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> There is no need to initialize one of its field to false here.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/usb/host/pci-quirks.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> index 6b741327d2c4..46f2412dcb40 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -208,7 +208,6 @@ static void usb_amd_find_chipset_info(void)
+>  {
+>  	unsigned long flags;
+>  	struct amd_chipset_info info;
+> -	info.need_pll_quirk = false;
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Why not just change the line above it to:
+	struct amd_chipset_info info = { };
+and drop the call to memset entirely?
 
+thanks,
+
+greg k-h
