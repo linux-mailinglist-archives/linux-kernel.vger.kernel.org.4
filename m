@@ -2,66 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CF06C6744
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF806C6746
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjCWL4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S231790AbjCWL4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjCWLzs (ORCPT
+        with ESMTP id S229518AbjCWLzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:55:48 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6CB19B1;
+        Thu, 23 Mar 2023 07:55:50 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CDA3403F;
+        Thu, 23 Mar 2023 04:55:48 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id g17so27350359lfv.4;
+        Thu, 23 Mar 2023 04:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679572547;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pHYNa83tThQ0frWDsHo/QOWwz8cR/Huh6dJxDrDmET4=;
+        b=d81+39x4T8gwhwD0voOXLnGjRi0m4lXLzZQbM4rcY4LigBG+OX7ZZ96LpmQRdtPxX6
+         w1bn1TLk7uFeXt8uWdica9hKim26bA/XH/GEWJMXD4AjH5t/URAoRcooZqlDrDENuNP2
+         bghCIRj1iLAOVT2l9d20s++OesHhu5JiAEhD0FUFNcjF7k9YaOIfRDYL7xfTk5ylhiYf
+         UupgoVyOentJkbDLQhbDoWFUHw/z8tarHjfd41Edtwpva4nb5QJzJtTTgqtW8Kg+493N
+         vXwxgP0hGJErnw9Lu4d106vIbE6neWnhVITO6tFcQqffd4tgxOytPdMvHv8QaZJ+GOql
+         5UCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679572547;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pHYNa83tThQ0frWDsHo/QOWwz8cR/Huh6dJxDrDmET4=;
+        b=EyR3RxLM4vDaBoNGpOVPi0uRYxqKYoCYAjpYf0OiOwbEx8H13sU2SXEFQRRrlDabY1
+         omcP4DvgPzwM8EeHzsqkeikSpsDdlDGZ8NJ1sx/sAoOSiW4QBHcbn5AxbZr/6tBT5bJq
+         siscNmGnxjc1jJZZAIQpl+lvIyuPV6aLnpTrOOhlmb5AAbnGasAhUsB4P/4Q+lllUNy9
+         a+WgT5+4CSYVRmxsfXRCmUZroy/cAFLSTSmZdrUTqgHlaMBEXKAy+xZ7X8GQ3rJUXzi8
+         HQiCEK6kZjq7vSvJ1MRcVWmqZnNoRklvlw736G6KBXeSp5p0PySbxMufLVmnGuIZVHmb
+         8pqg==
+X-Gm-Message-State: AO0yUKVKkc5jH0v1bEzAidz7pXaCPpvhlPpC7vj6/yl/lPKjuY54NkBy
+        1qyGxlLXSo4o456Hqj4UVvs=
+X-Google-Smtp-Source: AK7set89jZchCIsXX8h5YTQ2Zx37B5rmzAxc7o7bY98z7lG5jEKTSU6uW9D5YFkz2yX8SL9IU7b3Sw==
+X-Received: by 2002:a05:6512:4c4:b0:4da:e925:c95b with SMTP id w4-20020a05651204c400b004dae925c95bmr3804924lfq.62.1679572547008;
+        Thu, 23 Mar 2023 04:55:47 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id w19-20020ac24433000000b004eb00c0d417sm92313lfl.130.2023.03.23.04.55.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 23 Mar 2023 04:55:46 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32NBtbd7070313;
-        Thu, 23 Mar 2023 06:55:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679572537;
-        bh=EDRAraXsrfnCC8fcfomneLhyhI3khcdDnG5K3ZiYUyI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=eQjxQJVJsJ710M6YrIfTyoO/zfCj3c7ArxxcLyKqjHIKZeNTXPLFeWN6LYnAFbqYG
-         mYOJoOcsKtdx+SNEY7LURYXADbTl/uVcUxkJInwHnuR5JOXD+qlzovq1YY189V/v1E
-         mCMtwSXfp3J5gia39OIFHHRf0/h7B0UR9dquE+cQ=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32NBtbxf103130
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Mar 2023 06:55:37 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
- Mar 2023 06:55:37 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 23 Mar 2023 06:55:37 -0500
-Received: from [172.24.145.176] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32NBtYgS114011;
-        Thu, 23 Mar 2023 06:55:35 -0500
-Message-ID: <2ddcbea8-d3fa-ed73-ead1-834a8f304f88@ti.com>
-Date:   Thu, 23 Mar 2023 17:25:34 +0530
+Date:   Thu, 23 Mar 2023 14:55:43 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Subject: Re: [PATCH net-next 12/16] dt-bindings: net: dwmac: Add MTL Tx Queue
+ properties constraints
+Message-ID: <20230323115543.3d25i3hdhvqvz2d6@mobilestation>
+References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
+ <20230313225103.30512-13-Sergey.Semin@baikalelectronics.ru>
+ <60ce1510-6f2f-dad0-005c-7bcb3880872a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dma: ti: k3-udma: Workaround errata i2234
-Content-Language: en-US
-To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
-References: <20211209180715.27998-1-vigneshr@ti.com>
- <a76fcbd1-20fa-fb16-bca4-68dd90031787@gmail.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <a76fcbd1-20fa-fb16-bca4-68dd90031787@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60ce1510-6f2f-dad0-005c-7bcb3880872a@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,67 +93,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
-
-On 10/12/21 20:52, Péter Ujfalusi wrote:
-> Hi Vignesh,
+On Thu, Mar 16, 2023 at 09:08:02AM +0100, Krzysztof Kozlowski wrote:
+> On 13/03/2023 23:50, Serge Semin wrote:
+> > Currently none of the MTL Tx Queues QoS-related DT-properties have been
+> > equipped with the proper constraints meanwhile they can be specified at
+> > least based on the corresponding CSR field sizes or the DW (x|xG)MAC
+> > IP-core synthesize parameter constraints. Let's do that:
+> > + snps,tx-queues-to-use - number of Tx queues to utilise is limited with a
+> > number of available queues. DW MAC/GMAC: no queues, DW Eth QoS: <= 8, DW
+> > xGMAC: <= 16.
+> > + snps,weight - Tx Queue/Traffic Class quantum/weight utilised depending
+> > on enabled algorithm for the Data Center Bridging feature: DWRR (up to
+> > 0x1312D0 bytes to add to credit) or WFQ (up to 0x3FFF - least bandwidth)
+> > or WFQ (up to 0x64). DW MAC/GMAC: no queues, DW Eth QoS: <= 0x1312D0, DW
+> > xGMAC: <= 0x1312D0.
+> > + snps,send_slope - Tx Queue/Traffic Class Send-Slope credit value
+> > subtracted from the accumulated credit for the Audio/Video bridging
+> > feature (CBS algorithm, bits per cycle scaled up by 1,024). DW MAC/GMAC:
+> > no queues, DW Eth QoS: <= 0x2000, DW xGMAC: <= 0x3FFF.
+> > + snps,idle_slope - same meaning as snps,send_slope except it's determines
+> > the Idle-Slope credit of CBS algorithm. DW MAC/GMAC: no queues, DW Eth
+> > QoS: <= 0x2000, DW xGMAC: <= 0x8000.
+> > + snps,high_credit/snps,low_credit - maximum and minimum values
+> > accumulated in the credit for the Audio/Video bridging feature (CBS
+> > algorithm, bits scaled up by 1,024). DW MAC/GMAC: no queues, DW Eth
+> > QoS: <= 0x1FFFFFFF, DW xGMAC: <= 0x1FFFFFFF.
+> > + snps,priority - Tx Queue/Traffic Class priority (enabled by the
+> > PFC-packets) limits determined by the VLAN tag PRI field width (it's 7).
+> > DW MAC/GMAC: no queues, DW Eth QoS: 0xff, DW xGMAC: 0xff.
+> > 
+> > Since the constraints vary for different IP-cores and the DT-schema is
+> > common for all of them the least restrictive values are chosen. The info
+> > above can be used for the IP-core specific DT-schemas if anybody ever is
+> > bothered with one to create.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  .../bindings/net/snps,dwmac-generic.yaml      |  2 +-
+> >  .../devicetree/bindings/net/snps,dwmac.yaml   | 24 ++++++++++++++++++-
+> >  2 files changed, 24 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac-generic.yaml b/Documentation/devicetree/bindings/net/snps,dwmac-generic.yaml
+> > index ae740a1ab213..2974af79511d 100644
+> > --- a/Documentation/devicetree/bindings/net/snps,dwmac-generic.yaml
+> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac-generic.yaml
+> > @@ -137,7 +137,7 @@ examples:
+> >                  snps,send_slope = <0x1000>;
+> >                  snps,idle_slope = <0x1000>;
+> >                  snps,high_credit = <0x3E800>;
+> > -                snps,low_credit = <0xFFC18000>;
+> > +                snps,low_credit = <0x1FC18000>;
+> >                  snps,priority = <0x1>;
+> >              };
+> >          };
+> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > index e5662b1498b7..2ebf7995426b 100644
+> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > @@ -250,6 +250,10 @@ properties:
+> >        snps,tx-queues-to-use:
+> >          $ref: /schemas/types.yaml#/definitions/uint32
+> >          description: number of TX queues to be used in the driver
+> > +        default: 1
+> > +        minimum: 1
+> > +        maximum: 16
+> > +
+> >        snps,tx-sched-wrr:
+> >          type: boolean
+> >          description: Weighted Round Robin
+> > @@ -296,13 +300,16 @@ properties:
+> >              snps,tx-sched-wfq: false
+> >              snps,tx-sched-dwrr: false
+> >      patternProperties:
+> > -      "^queue[0-9]$":
+> > +      "^queue([0-9]|1[0-5])$":
+> >          description: Each subnode represents a queue.
+> >          type: object
+> >          properties:
+> >            snps,weight:
+> >              $ref: /schemas/types.yaml#/definitions/uint32
+> >              description: TX queue weight (if using a DCB weight algorithm)
+> > +            minimum: 0
+> > +            maximum: 0x1312D0
+> > +
+> >            snps,dcb-algorithm:
+> >              type: boolean
+> >              description: TX queue will be working in DCB
+> > @@ -315,15 +322,27 @@ properties:
+> >            snps,send_slope:
+> >              $ref: /schemas/types.yaml#/definitions/uint32
+> >              description: enable Low Power Interface
+> > +            minimum: 0
+> > +            maximum: 0x3FFF
 > 
-> On 09/12/2021 20:07, Vignesh Raghavendra wrote:
->> Per [1], UDMA TR15 transactions may hang if ICNT0 is less than 64B
->> Work around is to set EOL flag is to 1 for ICNT0.
->>
->> Since, there is no performance penalty / side effects of setting EOL
->> flag event ICNTO > 64B, just set the flag for all UDMAP TR15
->> descriptors.
-> 
-> PDMAs and CSI does not send EOL? If you set it the EOL to one then when
-> it arrives the remaining icnt0 is skipped...
+> lowercase hex everywhere.
 
-I am planning to respin v2 for this.
-Will fix this in v2.
+Got it. Thanks.
+
+-Serge(y)
 
 > 
->>
->> [1] https://www.ti.com/lit/er/sprz455a/sprz455a.pdf
->> Errata doc for J721E DRA829/TDA4VM Processors Silicon Revision 1.1/1.0 (Rev. A)
->>
->> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->> ---
->>   drivers/dma/ti/k3-udma.c     | 48 +++++++++++++++++++-----------------
->>   include/linux/dma/ti-cppi5.h |  1 +
->>   2 files changed, 27 insertions(+), 22 deletions(-)
->>
-
-[...]
-
->> diff --git a/include/linux/dma/ti-cppi5.h b/include/linux/dma/ti-cppi5.h
->> index efa2f0309f00..c53c0f6e3b1a 100644
->> --- a/include/linux/dma/ti-cppi5.h
->> +++ b/include/linux/dma/ti-cppi5.h
->> @@ -616,6 +616,7 @@ static inline void *cppi5_hdesc_get_swdata(struct cppi5_host_desc_t *desc)
->>   #define   CPPI5_TR_CSF_SUPR_EVT			BIT(2)
->>   #define   CPPI5_TR_CSF_EOL_ADV_SHIFT		(4U)
->>   #define   CPPI5_TR_CSF_EOL_ADV_MASK		GENMASK(6, 4)
->> +#define   CPPI5_TR_CSF_EOL_ICNT0		BIT(4)
-> 
-> the correct expression is: (1 << CPPI5_TR_CSF_EOL_ADV_SHIFT)
-
-Both these expressions expands to the same value
-(CPPI5_TR_CSF_EOL_ADV_SHIFT = 4U)
-
-And according to the linux checkpatch, the usage of BIT macro
-is preferred so I will keep it the same.
-
-Warm regards,
--Jayesh
-
-> as EOL = 1 is what you want to set.
-> EOL = 2 will clear icnt0 and 1 on EOL.
-> 3 will do the same for icnt 0, 1 and 2
-> 4 will skip the remainin tr.
-> 
->>   #define   CPPI5_TR_CSF_EOP			BIT(7)
->>   
->>   /**
->>
+> Best regards,
+> Krzysztof
 > 
