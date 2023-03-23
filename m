@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4796C6ED3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C9E6C6ECC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjCWR2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S232048AbjCWR1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjCWR2T (ORCPT
+        with ESMTP id S232063AbjCWR1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:28:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8355EF1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679592452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rqUj59ylPYbek9OHHWmJ/oxl6nIZ0K3LfZJ1jC35bg4=;
-        b=fwAxNY9/+EvWl6p417jQwT2O8pIZV9sZnVfUuZPLs+mpqOR9ROO12/ATx6xSl3CFzIZsyU
-        gLLyAUcXt5+1evQI/hVN3Y47sGVjvolRxDPFSh3BpXA01f3fL+/11E31VzZui1aY6x/kCi
-        Ld/1CnK4PhU/FcuDm4fElzRubu9U/5E=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-115-DUioiuNlMyesrS7KpP3NPQ-1; Thu, 23 Mar 2023 13:27:31 -0400
-X-MC-Unique: DUioiuNlMyesrS7KpP3NPQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bh19-20020a05600c3d1300b003ee93fac4a9so977308wmb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:31 -0700 (PDT)
+        Thu, 23 Mar 2023 13:27:36 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5472A166CF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:34 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id oe8so1595203qvb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679592453;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=z/h2YRuqxkbq2WVy9rSukgPkz7MffMXHVCaEQ8JsfSI=;
+        b=0b1sytAcRxnizGxvw+p+lkYnbDhWMhQxrXGPJPm5sHacyMrIEdNLQJWaWguMuI6iRT
+         gIob4qZ61pz7VHAvob8ln+eERCrG8SD695iKZx3xXdVhxJf2AK68WpjLNHTbfR1+mL/h
+         W7T8K7/p+oIhtsGd2HUyWvFwIy6iY8DRoXXxq5zUNE26HtDLdvCeI65VKxv5w/6Cz/WF
+         fEPo60DJZK/R6TZ+NZeMzWnHn7sJXOyNF2qPFslVrcEcKc1n5cSCHU1BEimYAOU8AJaR
+         A2BbTJLzfny7Nv4w5tfJ4xLxwqSSQOmSgthksXW6BG1tzizPpqODzSDd5+8QtbLdZvtY
+         p2Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592450;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rqUj59ylPYbek9OHHWmJ/oxl6nIZ0K3LfZJ1jC35bg4=;
-        b=nm52I5pfaxcnTif5HcfloWB3FxAYsAdgL/rJdL4QmkvpQ7etVfJB9Q5RCHnxWw/Qkx
-         X0EPFZ/nziVLZivgWpfIdO+AjTslRBFLEl4QLQCuBQMGQh5y+ZSL6pQuOrGwdJ1uDavN
-         zmVN5nLYqEi/Bu9PfEVixBRfmzetySkmLyzVER77YOI3M79XXaTZeO2Y1aduSzokANrE
-         SYfc1dXpnO/5qxQNCw0meCejHjwfWXknDenyqkgbgthDfdkbPW3+KKpDZoQrVW2ZkRvO
-         IsbMDuPLXzKLJeIWCaqWE0njVuCSJBLZJZmBPXLYeNLIwuncjzKsR3hyyVECJivbI/oz
-         vPUw==
-X-Gm-Message-State: AAQBX9cumWkK7DVf4GKdj75J1oLAzvETBCOt+nb1TmmrgJmPrYQPSm/4
-        PQMj20whW+gXyPah5iW2iNuiXMyj31Mq2LhNQRqfRZiKs6P94ua4yPnHxx0Ic12mSnhnm/9fMsH
-        NCxPmTE0NU+lMufPp85guOPhQ5DPzu764
-X-Received: by 2002:adf:f382:0:b0:2ce:a6de:2098 with SMTP id m2-20020adff382000000b002cea6de2098mr3247322wro.17.1679592450270;
-        Thu, 23 Mar 2023 10:27:30 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bErc1SOUZLCZE3ySna6brxGhOEwPKg+R5sV3oNSZC92wU9Vza0cMQB2t6urjMMr12jYwAT2A==
-X-Received: by 2002:adf:f382:0:b0:2ce:a6de:2098 with SMTP id m2-20020adff382000000b002cea6de2098mr3247309wro.17.1679592449992;
-        Thu, 23 Mar 2023 10:27:29 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:e500:5cdf:c280:4b31:4016? (p200300cbc704e5005cdfc2804b314016.dip0.t-ipconnect.de. [2003:cb:c704:e500:5cdf:c280:4b31:4016])
-        by smtp.gmail.com with ESMTPSA id t13-20020adfe10d000000b002db1b66ea8fsm3123495wrz.57.2023.03.23.10.27.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 10:27:29 -0700 (PDT)
-Message-ID: <a9985035-237a-467c-6516-f996d56cb7e5@redhat.com>
-Date:   Thu, 23 Mar 2023 18:27:28 +0100
+        d=1e100.net; s=20210112; t=1679592453;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/h2YRuqxkbq2WVy9rSukgPkz7MffMXHVCaEQ8JsfSI=;
+        b=cry8afJRuej1/uuJpN5yLP4Ruu2zpK1zT85mCiE81EeI1J4LpeV+NrwH9/hmnbGwV6
+         Djm3kQCpv8wc4ePRAZHjglb/0RF8MII5md2mtPKGIwoWZLKOAdZsIQHDOKSKsBJoAYdC
+         Tx6nmbQjmzS2FFPYtBnDBJ+yZcs1ZILbQs7IZcvVscXCxYIqEShFZMlSyTncvtaA+oWL
+         RSCCQHwVLpMHE3e9IwOBVD/eH4g7PRsPg7/2E3mZIUsakgPjRwcpzOCqbDDiPql9U+5R
+         CmGsSDh2QtlzXKPopPQw0l6zzITIAGeoXyaXQMkx7IaJvY6iBziSFfcnS8LMjLZzEfXa
+         +ozQ==
+X-Gm-Message-State: AO0yUKVoIExKRKx9Bf0HjpWRPSlSg/VS1BHLFNW3bD4XAGWE/jPOA91d
+        5d8ahqxUFALZqZss8EzpElmQOg==
+X-Google-Smtp-Source: AK7set8dWjwTTSIaOdmksX5IwKh8t2lW/W7AGyyEyTnTU89teSPpKydWtKCANGNduWs4VknW+c/exA==
+X-Received: by 2002:a05:6214:5010:b0:56b:fb30:49c6 with SMTP id jo16-20020a056214501000b0056bfb3049c6mr12890918qvb.50.1679592453212;
+        Thu, 23 Mar 2023 10:27:33 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id 123-20020a370581000000b007456df35859sm9126833qkf.74.2023.03.23.10.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 10:27:32 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 13:27:32 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe
+ contexts
+Message-ID: <20230323172732.GE739026@cmpxchg.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-5-yosryahmed@google.com>
+ <20230323155613.GC739026@cmpxchg.org>
+ <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mm: Be less noisy during memory hotplug
-Content-Language: en-US
-To:     Tomas Krcka <krckatom@amazon.de>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Pavel Tatashin <pavel.tatashin@microsoft.com>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20230323171904.14444-1-krckatom@amazon.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230323171904.14444-1-krckatom@amazon.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,39 +86,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.03.23 18:19, Tomas Krcka wrote:
-> Turn a pr_info() into a pr_debug() to prevent dmesg spamming on systems
-> where memory hotplug is a frequent operation.
+On Thu, Mar 23, 2023 at 09:01:12AM -0700, Yosry Ahmed wrote:
+> On Thu, Mar 23, 2023 at 8:56 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
+> > > @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
+> > >               return;
+> > >
+> > >       flush_next_time = jiffies_64 + 2*FLUSH_TIME;
+> > > -     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
+> > > +     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
+> >
+> > How is it safe to call this with may_sleep=true when it's holding the
+> > stats_flush_lock?
 > 
-> Fixes: 966cf44f637e ("mm: defer ZONE_DEVICE page initialization to the point where we init pgmap")
-> 
+> stats_flush_lock is always called with trylock, it is only used today
+> so that we can skip flushing if another cpu is already doing a flush
+> (which is not 100% correct as they may have not finished flushing yet,
+> but that's orthogonal here). So I think it should be safe to sleep as
+> no one can be blocked waiting for this spinlock.
 
-Fixes? I suggest top drop that tag here.
+I see. It still cannot sleep while the lock is held, though, because
+preemption is disabled. Make sure you have all lock debugging on while
+testing this.
 
-> Suggested-by: Jan H. Schönherr <jschoenh@amazon.de>
-> Signed-off-by: Tomas Krcka <krckatom@amazon.de>
-> ---
->   mm/page_alloc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index ac1fc986af44..14d70f4e6c0a 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -6959,7 +6959,7 @@ void __ref memmap_init_zone_device(struct zone *zone,
->   				     compound_nr_pages(altmap, pfns_per_compound));
->   	}
->   
-> -	pr_info("%s initialised %lu pages in %ums\n", __func__,
-> +	pr_debug("%s initialised %lu pages in %ums\n", __func__,
->   		nr_pages, jiffies_to_msecs(jiffies - start));
->   }
->   
+> Perhaps it would be better semantically to replace the spinlock with
+> an atomic test and set, instead of having a lock that can only be used
+> with trylock?
 
-Acked-by: David Hildenbrand <david@redhat.com>
+It could be helpful to clarify what stats_flush_lock is protecting
+first. Keep in mind that locks should protect data, not code paths.
 
--- 
-Thanks,
+Right now it's doing multiple things:
 
-David / dhildenb
+1. It protects updates to stats_flush_threshold
+2. It protects updates to flush_next_time
+3. It serializes calls to cgroup_rstat_flush() based on those ratelimits
 
+However,
+
+1. stats_flush_threshold is already an atomic
+
+2. flush_next_time is not atomic. The writer is locked, but the reader
+   is lockless. If the reader races with a flush, you could see this:
+
+					if (time_after(jiffies, flush_next_time))
+	spin_trylock()
+        flush_next_time = now + delay
+        flush()
+        spin_unlock()
+					spin_trylock()
+					flush_next_time = now + delay
+					flush()
+					spin_unlock()
+
+   which means we already can get flushes at a higher frequency than
+   FLUSH_TIME during races. But it isn't really a problem.
+
+   The reader could also see garbled partial updates, so it needs at
+   least READ_ONCE and WRITE_ONCE protection.
+
+3. Serializing cgroup_rstat_flush() calls against the ratelimit
+   factors is currently broken because of the race in 2. But the race
+   is actually harmless, all we might get is the occasional earlier
+   flush. If there is no delta, the flush won't do much. And if there
+   is, the flush is justified.
+
+In summary, it seems to me the lock can be ditched altogether. All the
+code needs is READ_ONCE/WRITE_ONCE around flush_next_time.
