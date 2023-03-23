@@ -2,139 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349B16C664C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162236C6672
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjCWLPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S230499AbjCWLWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjCWLPD (ORCPT
+        with ESMTP id S229526AbjCWLWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:15:03 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2057.outbound.protection.outlook.com [40.107.105.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4784B2DE65
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:14:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mtaXSeHptZtFe3NkcREbDc52PEEULN6TAa1/0rLj0Qsq/KBfLi1VGUIwK6JiQRZjrnC+rdbSiSQDS6hH0JY/3iLDle7JpZFhjIGBMHCxXJPwNqQDrCBWUpcdkDGlz92zGpzovzogm0gVeZRXMnT6qBHZ/cIEXTuwM2GUIu5bikG/S2RVMcBgQ7YukBbayKeib5hyRuZnvjBcho4B/4eUqeJ6Ea7lnxN8SSNRWxSFpLNOkQO0WuF539l/8S6TMbpkpR3LlAiusMnGdYQNgpWa/c6tkv7ePX9uNQ5JcZNxKvHo5SOC1Im5SVzNpeWS/6Mwd/v6OSe3FJ0rMt/cckOzqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VERnEcrNZzX7250zMZl8ZwSmHC2TsmeKWodyAOm7jU8=;
- b=V7w9es1GWvQVGoe0rqrbIgluOhV/xgRT1yyqonXGYKXncEQ+pCyOUgKrd8H1HNnGt/0pVGt3UNB5vgSrgCD4fGbea5olhkeW3Wr4OwIWhuQmOGGqlPUDJvewCGr3D8BPc6W1l295KpcgmLYjsndgurTn2qoGAIT0NtSLjKOJPdDS2IcXM9T+b78BhoMP5DLyhuYihLKBrswJ34RarJjYG6TsRyms1sTZ5/OFsLeN/5bn91ULo3Qyw1B2ye63cU9rBNnQIMapOPJRr3FhbHgqfb2dP9rtVJQKuzDxAn5iV2XFez3A2NxB8rPB+1AyzgKAdpCERR6SnfQOAEJPRUmLXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VERnEcrNZzX7250zMZl8ZwSmHC2TsmeKWodyAOm7jU8=;
- b=LpT1SdHGRLY4pMAOlwGOmwptXT8cKBXm+jvsLarVc6JKxpxtXrlE/X9eLLTt3aWoxdnqB8XPSe+BGTfeP2wlq8oiZLkz90iFi4auJ3L3oaXRFlnnnrY7WFeWI2D5WSElHqSZx3B7eZ0m9b4kd8tGCikN2vGJ8p7xH2HO2x/pwn4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM9PR04MB8416.eurprd04.prod.outlook.com (2603:10a6:20b:3b7::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 11:14:46 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%9]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
- 11:14:46 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] arm64: dts: imx8dxl: drop clocks from scu clock controller
-Date:   Thu, 23 Mar 2023 19:19:51 +0800
-Message-Id: <20230323111951.102620-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG3P274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::26)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        Thu, 23 Mar 2023 07:22:31 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EED125B1;
+        Thu, 23 Mar 2023 04:22:25 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D65D124DEAE;
+        Thu, 23 Mar 2023 19:22:22 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Mar
+ 2023 19:22:23 +0800
+Received: from [192.168.60.143] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Mar
+ 2023 19:22:22 +0800
+Message-ID: <d2dd7d2c-8469-c3a9-5ecd-9c1a22caee2c@starfivetech.com>
+Date:   Thu, 23 Mar 2023 19:22:21 +0800
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8416:EE_
-X-MS-Office365-Filtering-Correlation-Id: 983261cb-393d-41c0-8707-08db2b8fcf37
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wG03vpdK/Nf1EldznU7kvMiyUozihhPGrTg+FXDhPiXdmIFAexSuQKX6xejLD17BM0OMKf9m3Wd/NbmT6pPqrjJu5NqDwDbehTIjNzIB9RXWGDQH1NBHwWvZP2tuu2ryh0+lj69fXSRdX9XmEhubpBKEGqpZJ0cOVIqIn2ihbpvcNBFdz5RI9PZaodm0CWAzGqbKfaE/+Gi7XAzt0RvLTwLb11KYjQ0/6Rn3CvosXFnPKjoQ/SwqH5n3HViTkBVEqPxGUZs7JgvK3MCDmeCJMPDbikKJMOqPGYt9BlbFrNbZtU1wi/bCMJzezmldW8bKLZdCRt9crZ5I3tMB0f2xQIkOAgp1akwhIIHB013w5mz0Nzk8ITpz5wW/r5ep0XVIXV8yUXLZyf4VB0GNFR9p6jh+4xqZ91A7vJ3LD7qpN+q1MdG5Cq6vAFvY7Yf1hL2pqWpUYjhEIFreKxcHEWslOh64Y0n5UGvrVZsDFiek5UMPehaYlNEZXExEhMNY08IVo9BwBQgnYyPiG+n7FZ2tmPJVquRwzx4HXC1zXK+TdX+uqVgGIZ4y2uViyPjBaFhbrPgc93Kbg1vtUD82t365xnC6khBIlFJgHT2RV64SojIz+7v4rbGLaS92+326F4kr4G7w++eDwcpfY1UAdGAgc5VARkL/UHgJf/eKWXkx5aTnELNCtO5KORskUibZg8BuJ9IzTyGK34b2BMHUQehrPU1FHBmUNjmfsiGzxkydYC0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199018)(4326008)(66476007)(8676002)(66556008)(66946007)(4744005)(5660300002)(41300700001)(8936002)(6512007)(6506007)(1076003)(26005)(316002)(6666004)(186003)(2616005)(83380400001)(478600001)(6486002)(52116002)(86362001)(38100700002)(38350700002)(2906002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?apBXKPzSOUJXlE35lQowewX3ctptt41+CjHdVWl3JAV/i/Z7FTdA+SjeHR3a?=
- =?us-ascii?Q?VCGV2FM3PtP1g6D8wb6rAqMt/w6foDho3brwdalFu0+QMVixuIe5JEt1Qnuu?=
- =?us-ascii?Q?6FN1el2W218QCu4meAsNfeJqMxgyj6+r4YHWni364fvafj38oHzeD1QASmW/?=
- =?us-ascii?Q?rVK4P9BIcZjSUuf1OjNneFhLNyRystmByy10NNGKJt0VM3WsIrcx7/tmc5rv?=
- =?us-ascii?Q?Lb0OhaE7hseKmjldEQZ36w0JF00+LsbwQpPzo9D06OqowAnPJ5Uu3j9JrQ9E?=
- =?us-ascii?Q?L10f/9kq597jjx3qUi1frcp1LJMQPdEGUrOH6z0JzHTTFc+Mx4oGN6lRq6m5?=
- =?us-ascii?Q?0symP+ZJ4rZwID/nAIluh2tjN9palmyM4G7/co2ovqKCuays88tisOAFWkoJ?=
- =?us-ascii?Q?fdzg6FDeluW7YARC1LgT7gap2SAnfqOf1gdmze6SWTzwxKAN656Aykig/b5U?=
- =?us-ascii?Q?1pR76tqB48+JTyQFWQapvrQKu92qZ6PpRHPN2Iz1bzSejk5Gp9B61NKktNMB?=
- =?us-ascii?Q?NGoi9oPvHT8SzukRDFLTjfunIiNx5VGXyLTCQsixgdw7C3PMrRQME2nW25cN?=
- =?us-ascii?Q?YzryNopMdEPcfOXGqKUzTrvg4IYDS5DYvBaRyeksVup9Zr2EpAyeR5aGd3kp?=
- =?us-ascii?Q?vFb6pWbRKLYN5fOcrIRxWygYj52RXZ+LO/hjQDaKAt0ZzFDNA6bhsf9cNa1Y?=
- =?us-ascii?Q?CrP4aPz3X1uN3FyE7e5NuoqIiEA3XVlKH8kXk85F/FsEl2vz+08tPkcWWfNo?=
- =?us-ascii?Q?Ai+rpq2AZFMP21eg1rBQqo7+Mjtn5aIbRWQ5D+ziMtSwdDz11ybjDzrX+XFB?=
- =?us-ascii?Q?2k3hH9UPJFq393QGOwfJOC0pycQF4wmfCf1M015Y8TJKMmQDI4Z3EiliNn5B?=
- =?us-ascii?Q?x5HaSOukZIVGq9ER9ALsQ1/VS8Y1aMIbffZ9v/v1DbE07VQXvd+1zAK1Eppt?=
- =?us-ascii?Q?RmSWQz9uB/JsapvK2CI+Jrjkq7i7D0oc7y6w8+xUz2JCVx4GkM+eB/4Z4/S4?=
- =?us-ascii?Q?8igMpRzEOyfvUsZPgXVRa4+BS6hcaoTuN0XGtFa21USPfT3aGW+RpM/RpQON?=
- =?us-ascii?Q?87b7Oyt2dQfdJWi2Hm/C9svImr1gFbCLr0IHft9kBMwTE4jS0cB/zUgSvPO6?=
- =?us-ascii?Q?OTMMQ5Y9asPSlHbRTQZTnaLkhPHaoAUu0+mFJ3mlAf7nAhLCcZL0Mq0/m1r3?=
- =?us-ascii?Q?s1Yw9zF+puIMyvWTaNZdyuuSyS7kOSF3n48Df7JaeLxk0LZiUCjNROoh/iTX?=
- =?us-ascii?Q?Oot2CrsF0R5cWo8+1hI9+ktXP0CP+YvAgeax/boghifcx7nv9dpoHfNQYdQ2?=
- =?us-ascii?Q?ySMjLpeGUmeekAwXmf7L+qrihiL4uXasiV5+dAlnPq3Yq34KasDwcilPsB5b?=
- =?us-ascii?Q?8Ou0BvNZBfa7bDWItvUzjlqcYw4STRM9H0LKlL0T+kawCGRgvAwNwOw16bbo?=
- =?us-ascii?Q?MDOHnz9TREqvkndpkTeAjt6GfXGTnknRrJuH8gIcp2SUnOm54+dr5tqSCbFs?=
- =?us-ascii?Q?vMxsWlENQ+JQv3aYoOwg3bqdG1LafhRvr/9FZ46sdB8h2NnPawUBEGbaWtgW?=
- =?us-ascii?Q?s5DLbUQeQcCJh2CaQANiXHh8Bn/RAbId/lFZOEsu?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 983261cb-393d-41c0-8707-08db2b8fcf37
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 11:14:46.3646
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CDga9laeWXQ7caMDoWjpdj55rDAjFSpLLlHg8tzWlmrx4mEk2jomHU/PlLmqajf1fjtwKpFqw3A9G6xx9e7lgw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8416
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 6/6] media: starfive: Add Starfive Camera Subsystem
+ driver
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        "Todor Tomov" <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Eugen Hristev" <eugen.hristev@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+ <20230310120553.60586-7-jack.zhu@starfivetech.com>
+ <20230312124339.GD2545@pendragon.ideasonboard.com>
+ <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
+ <20230321175626.GD20234@pendragon.ideasonboard.com>
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <20230321175626.GD20234@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
 
-The clocks and clock-names are not documented and not used, drop them.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8dxl.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+On 2023/3/22 1:56, Laurent Pinchart wrote:
+> Hi Jack,
+> 
+> On Tue, Mar 21, 2023 at 08:56:34PM +0800, Jack Zhu wrote:
+>> On 2023/3/12 20:43, Laurent Pinchart wrote:
+>> > Hi Jack,
+>> > 
+>> > Thank you for the patch.
+>> > 
+>> > I'll do a partial review here as the patch is huge and I'm lacking time
+>> > at the moment.
+>> 
+>> Thank you for the review and your time.
+>> 
+>> > On Fri, Mar 10, 2023 at 08:05:53PM +0800, Jack Zhu wrote:
+>> >> Add the driver for Starfive Camera Subsystem found on
+>> >> Starfive JH7110 SoC. It is used for handing image sensor
+>> >> data.
+>> >> 
+>> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+>> >> ---
+>> >>  drivers/media/platform/Kconfig                |    1 +
+>> >>  drivers/media/platform/Makefile               |    1 +
+>> >>  drivers/media/platform/starfive/Kconfig       |   18 +
+>> >>  drivers/media/platform/starfive/Makefile      |   14 +
+>> >>  drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
+>> >>  drivers/media/platform/starfive/stf_camss.h   |  104 ++
+>> >>  drivers/media/platform/starfive/stf_common.h  |  149 ++
+>> >>  drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
+>> >>  drivers/media/platform/starfive/stf_isp.h     |  183 +++
+>> >>  .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
+>> >>  drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
+>> >>  drivers/media/platform/starfive/stf_video.h   |   89 ++
+>> >>  drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
+>> >>  drivers/media/platform/starfive/stf_vin.h     |  194 +++
+>> >>  .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
+>> >>  include/uapi/linux/stf_isp_ioctl.h            |  127 ++
+>> >>  16 files changed, 6930 insertions(+)
+>> >>  create mode 100644 drivers/media/platform/starfive/Kconfig
+>> >>  create mode 100644 drivers/media/platform/starfive/Makefile
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.c
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.h
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_common.h
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_video.c
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_video.h
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.c
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.h
+>> >>  create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
+>> >>  create mode 100644 include/uapi/linux/stf_isp_ioctl.h
+> 
+> [snip]
+> 
+>> >> diff --git a/drivers/media/platform/starfive/stf_camss.c b/drivers/media/platform/starfive/stf_camss.c
+>> >> new file mode 100644
+>> >> index 000000000000..525f2d80c5eb
+>> >> --- /dev/null
+>> >> +++ b/drivers/media/platform/starfive/stf_camss.c
+>> >> @@ -0,0 +1,728 @@
+> 
+> [snip]
+> 
+>> >> +/*
+>> >> + * stfcamss_find_sensor - Find a linked media entity which represents a sensor
+>> >> + * @entity: Media entity to start searching from
+>> >> + *
+>> >> + * Return a pointer to sensor media entity or NULL if not found
+>> >> + */
+>> >> +struct media_entity *stfcamss_find_sensor(struct media_entity *entity)
+>> > 
+>> > From a camss point of view, the source is the csi2rx. You shouldn't
+>> > need to access the sensor directly, only the csi2rx. If you think you
+>> > have a need to access the sensor, please explain why and we can discuss
+>> > it.
+>> 
+>> need to use format and bpp of sensor to configure isp HW.
+> 
+> You can obtain the same information from the ISP sink pad:
+> 
+> 
+> +----------+       +------------+       +-----------+
+> |          |       |            |       |           | 
+> | Sensor [0| ----> |0] csi2rx [1| ----> |0]   ISP   |
+> |          |       |            |       |           |
+> +----------+       +------------+       +-----------+
+> 
+> (I'm not entirely sure if the csi2rx and ISP pad numbers are correct,
+> but that's the idea.)
+> 
+> The csi2rx can't modify the format (size and bpp), so the format on the
+> sensor's pad 0, csi2rx pad 0, csi2rx pad 1 and ISP pad 0 must be
+> identical.
+> 
+> In isp_sensor_fmt_to_index(), the ISP driver doesn't need to get the
+> format from the sensor, it can use the format on ISP pad 0 instead.
+> 
+> In video_enum_framesizes(), the ISP driver shouldn't look at the format
+> on the ISP input at all, it must enumerate all sizes that the video node
+> supports, regardless of what is connected to its input.
+> 
+> video_enum_frameintervals() should be dropped, the ISP itself has no
+> notion of frame interval. Userspace can query and configure the frame
+> rate from the sensor subdev directly.
+> 
+> In video_pipeline_s_fmt(), the ISP driver shouldn't look at the format
+> on the ISP input at all either. It must accept any format supported by
+> the ISP. It's only when starting streaming that the pipeline is
+> validated to make sure the formats configured on all subdevs match. I
+> recommend reading https://git.ideasonboard.org/doc/mc-v4l2.git for an
+> overview of how Media Controller-based drivers should behave. The
+> documentation describes how the API is meant to be used from userspace,
+> but the operating principles apply to driver development too.
+> 
+> video_subscribe_event() and video_unsubscribe_event() should also be
+> dropped, events from the sensor can be accessed by userspace on the
+> sensor subdev directly.
+> 
+> vin_set_stream() should call .s_stream() on the csi2rx, not the sensor.
+> The csi2rx .s_stream() handler will forward the call to the sensor.
+> 
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-index 97d7df0813a5..70fadd79851a 100644
---- a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
-@@ -130,8 +130,6 @@ pd: power-controller {
- 		clk: clock-controller {
- 			compatible = "fsl,imx8dxl-clk", "fsl,scu-clk";
- 			#clock-cells = <2>;
--			clocks = <&xtal32k &xtal24m>;
--			clock-names = "xtal_32KHz", "xtal_24Mhz";
- 		};
- 
- 		scu_gpio: gpio {
--- 
-2.37.1
+OK, will fix. Thank you for your comment.
 
+>> >> +{
+>> >> +	struct media_pad *pad;
+>> >> +
+>> >> +	while (1) {
+>> >> +		if (!entity->pads)
+>> >> +			return NULL;
+>> >> +
+>> >> +		pad = &entity->pads[0];
+>> >> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
+>> >> +			return NULL;
+>> >> +
+>> >> +		pad = media_pad_remote_pad_first(pad);
+>> >> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
+>> >> +			return NULL;
+>> >> +
+>> >> +		entity = pad->entity;
+>> >> +
+>> >> +		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
+>> >> +			return entity;
+>> >> +	}
+>> >> +}
+> 
+> [snip]
+> 
+>> >> diff --git a/include/uapi/linux/stf_isp_ioctl.h b/include/uapi/linux/stf_isp_ioctl.h
+>> >> new file mode 100644
+>> >> index 000000000000..3f302ef235d2
+>> >> --- /dev/null
+>> >> +++ b/include/uapi/linux/stf_isp_ioctl.h
+>> >> @@ -0,0 +1,127 @@
+> 
+> [snip]
+> 
+>> >> +enum _STF_ISP_IOCTL {
+>> > 
+>> > Device-specific ioctls are allowed, but they must all be clearly
+>> > documented.
+>> 
+>> OK, I will add annotations for these ioctls.
+>> 
+>> > 
+>> >> +	STF_ISP_IOCTL_LOAD_FW = BASE_VIDIOC_PRIVATE + 1,
+>> > 
+>> > Why can't you use the Linux kernel firmware API ?
+>> 
+>> The ioctl is used for loading config file, it is different from
+>> the Linux kernel firmware API. I will rename it.
+> 
+> Could you explain what the config file is used for ?
+
+used for debugging. It's not necessary. I will drop it.
+
+> 
+>> >> +	STF_ISP_IOCTL_DMABUF_ALLOC,
+>> >> +	STF_ISP_IOCTL_DMABUF_FREE,
+>> >> +	STF_ISP_IOCTL_GET_HW_VER,
+>> > 
+>> > Not used, drop them.
+>> 
+>> OK, will drop them.
+>> 
+>> > 
+>> >> +	STF_ISP_IOCTL_REG,
+>> > 
+>> > Setting registers from userspace isn't allowed. No exception.
+>> 
+>> OK, will fix.
+>> 
+>> > 
+>> >> +	STF_ISP_IOCTL_SHADOW_LOCK,
+>> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK,
+>> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK_N_TRIGGER,
+>> >> +	STF_ISP_IOCTL_SET_USER_CONFIG_ISP,
+>> > 
+>> > I'm not sure what these ioctls do exactly as documentation is missing,
+>> > but I don't think they are the right API. Please describe the problem
+>> > you're trying to solve, and we'll find a good API.
+>> 
+>> These were used for debugging, I will drop them. Thanks.
+>> 
+>> >> +	STF_ISP_IOCTL_MAX
+>> >> +};
+> 
+> [snip]
+> 
