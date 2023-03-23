@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC9C6C73EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74C56C73E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjCWXNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S229529AbjCWXLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCWXNG (ORCPT
+        with ESMTP id S230011AbjCWXLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:13:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDC81025D;
-        Thu, 23 Mar 2023 16:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/0J7jFvtU4QW5iapXrj+eQ92EbtgLqnD7gTrHBDqeFc=; b=otsaus3Dq50b8CS7m8/ItOJM/V
-        w+5QEqxZEH7fyeCPzd5pdp4bzF8CwPoklvzLvf1hx11OyIZEsnCXc9D7UA27sY4T4vPS7bZsmaCDy
-        yX++A58xQ1zjAEnBerlZ36V0lEmdaQ/iIKyE5zKanM0EgZ8BokAWwaPJzjAZvJVd77ATThBXC2ddX
-        korORuY50uqwoouFlQ1ucWsRQqs/clwQin8JRT/lXUrO09zTISQDDL1TSyYV81mSSAQ4xxys0dMkG
-        oVpmoIzdXsAka1UxyyFQpFlCx6WRi0W79/Z6Xj5Y0WoyvtQqRuAv9wdsSsbSoam0BI5pZvhnP07y4
-        9kWa9kYA==;
-Received: from [2001:8b0:10b:5:b3d4:e39d:531b:642a] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pfU6a-004Lgv-AM; Thu, 23 Mar 2023 23:12:24 +0000
-Message-ID: <8dff6ae5ffaebfbcc55a01c04420fd478070b830.camel@infradead.org>
-Subject: Re: [PATCH v16 3/8] cpu/hotplug: Add dynamic parallel bringup
- states before CPUHP_BRINGUP_CPU
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
-        brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        gpiccoli@igalia.com
-Date:   Thu, 23 Mar 2023 23:12:21 +0000
-In-Reply-To: <871qlf83wj.ffs@tglx>
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
-         <20230321194008.785922-4-usama.arif@bytedance.com> <874jqb8588.ffs@tglx>
-         <871qlf83wj.ffs@tglx>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-jBRsuR+mRLHq8Anu5NHE"
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 23 Mar 2023 19:11:30 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ED5FF29
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:11:29 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 518BC3200681;
+        Thu, 23 Mar 2023 19:11:28 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 23 Mar 2023 19:11:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679613087; x=1679699487; bh=2rW/87ETWD5jh
+        MIHF2OdIMo1SriFDPE0qXDeXQlInQo=; b=O35dTJ5pBBwM1f2ZeAI4pnXWPcl07
+        ByQH4ClCFarMEcBxNZy9zasI7rGGPDWMYpQJ5iuKrVpAeWi+uzCg4YWoyhjrmAOK
+        sA0L0Zdz1wzxAzn5gQoe6/zioZKmSabHXAoGkqsHNrAFpDkWNe9kTQpCEEeH+jxu
+        vT8hu5OybHgHq/FTeuDe/EYn1EDMoIEpP7SFYMJ5yyJqgojlrxiwfbvtQntDnNEO
+        6wZ29ERNIBdlaeUP2Djna/cqeMp8Gh+Ue3Ar/zHIIFQY2j5v3k0Hd6vGgzdkeotN
+        OA81iEJ6W9SdObThSVC2RjVJ79366r/2lxAjxBl9Vojk/WdNMFwKOi+EA==
+X-ME-Sender: <xms:ntwcZIad5GPU8o9tcbTECNkzCngg3saufUWi5YJG7gkouCaoyIoZuQ>
+    <xme:ntwcZDaSW6G5HKJlx4WfrSSISp0P9h20kK8RF0cLQEok5y92ySHba8RHGRc_Tsxzq
+    QYyPI1GS8_N6KTxXT8>
+X-ME-Received: <xmr:ntwcZC8dgo7c9rit5VqrC18aKvAgb26Cvy9o5n_sr9YkM1k2Iy9czCwPWowLBE05_QYTkKmrtgKhClrn6mjxz9TpM25NGfkTlTw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeghedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevufgjkfhfgggtsehmtderredttdejnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeelfeeklefggfetkedukeevfffgvdeuheetffekledtfeejteelieejteeh
+    geelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:ntwcZCoT1oHwF74N4TMHcjHG6MsxKAs34pA1mVZ2c2yaeuIfQP_6RA>
+    <xmx:ntwcZDqpWfA0f4NNMCFNXTxG9x0EqVTZ_VqhG_eJIFMBz7ewOInTzg>
+    <xmx:ntwcZATGlbJHlf-3twiU2ObRx-LaHsSAnwbcVJmyaJBztNrsdxsLRg>
+    <xmx:n9wcZMCZ6KhVxgrQtRMwh3oJW-pHGJWsEtgXwQcmTJJyFf3QtjIgAg>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 19:11:24 -0400 (EDT)
+Date:   Fri, 24 Mar 2023 10:13:51 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Brad Boyer <flar@allandria.com>
+cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nubus: Don't list card resources by default
+In-Reply-To: <CAMuHMdUJ6kbpYGTjyY5dX+-YRv3pL0ydG3HQ-H1khyeqLOa05A@mail.gmail.com>
+Message-ID: <072fd894-ec50-ae5f-2be5-ebbeb0e7b39b@linux-m68k.org>
+References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org> <CAMuHMdUJ6kbpYGTjyY5dX+-YRv3pL0ydG3HQ-H1khyeqLOa05A@mail.gmail.com>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: multipart/mixed; boundary="-1463811774-1418837779-1679613231=:7816"
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,182 +71,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---=-jBRsuR+mRLHq8Anu5NHE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+---1463811774-1418837779-1679613231=:7816
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-T24gRnJpLCAyMDIzLTAzLTI0IGF0IDAwOjA1ICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
-Cj4gU3RpbGwgdGhlIHJlc3QgY2FuIGJlIHNpbXBsaWZpZWQgYXMgYmVsb3cuCgouLi4KCj4gLS0t
-IGEva2VybmVsL2NwdS5jCj4gKysrIGIva2VybmVsL2NwdS5jCj4gQEAgLTE1MDQsMTMgKzE1MDQs
-NDUgQEAgaW50IGJyaW5ndXBfaGliZXJuYXRlX2NwdSh1bnNpZ25lZCBpbnQgcwo+IMKgCj4gwqB2
-b2lkIGJyaW5ndXBfbm9uYm9vdF9jcHVzKHVuc2lnbmVkIGludCBzZXR1cF9tYXhfY3B1cykKPiDC
-oHsKPiAtwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgY3B1Owo+ICvCoMKgwqDCoMKgwqDCoHVu
-c2lnbmVkIGludCBjcHUsIG4gPSAxOwo+IMKgCj4gK8KgwqDCoMKgwqDCoMKgLyoKPiArwqDCoMKg
-wqDCoMKgwqAgKiBPbiBhcmNoaXRlY3R1cmVzIHdoaWNoIGhhdmUgc2V0dXAgdGhlIENQVUhQX0JQ
-X1BBUkFMTEVMX1NUQVJUVVAKPiArwqDCoMKgwqDCoMKgwqAgKiBzdGF0ZSwgdGhpcyBpbnZva2Vz
-IGFsbCBCUCBwcmVwYXJlIHN0YXRlcyBhbmQgdGhlIHBhcmFsbGVsCj4gK8KgwqDCoMKgwqDCoMKg
-ICogc3RhcnR1cCBzdGF0ZSBzZW5kcyB0aGUgc3RhcnR1cCBJUEkgdG8gZWFjaCBvZiB0aGUgdG8g
-YmUgb25saW5lZAo+ICvCoMKgwqDCoMKgwqDCoCAqIEFQcy4gVGhpcyBhdm9pZHMgd2FpdGluZyBm
-b3IgZWFjaCBBUCB0byByZXNwb25kIHRvIHRoZSBzdGFydHVwCj4gK8KgwqDCoMKgwqDCoMKgICog
-SVBJIGluIENQVUhQX0JSSU5HVVBfQ1BVLiBUaGUgQVBzIHByb2NlZWQgdGhyb3VnaCB0aGUgbG93
-IGxldmVsCj4gK8KgwqDCoMKgwqDCoMKgICogYnJpbmd1cCBjb2RlIGFuZCB0aGVuIHdhaXQgZm9y
-IHRoZSBjb250cm9sIENQVSB0byByZWxlYXNlIHRoZW0KPiArwqDCoMKgwqDCoMKgwqAgKiBvbmUg
-Ynkgb25lIGZvciB0aGUgZmluYWwgb25saW5pbmcgcHJvY2VkdXJlIGluIHRoZSBsb29wIGJlbG93
-Lgo+ICvCoMKgwqDCoMKgwqDCoCAqCj4gK8KgwqDCoMKgwqDCoMKgICogRm9yIGFyY2hpdGVjdHVy
-ZXMgd2hpY2ggZG8gbm90IHN1cHBvcnQgcGFyYWxsZWwgYnJpbmd1cCBhbGwKPiArwqDCoMKgwqDC
-oMKgwqAgKiBzdGF0ZXMgYXJlIGZ1bGx5IHNlcmlhbGl6ZWQgaW4gdGhlIGxvb3AgYmVsb3cuCj4g
-K8KgwqDCoMKgwqDCoMKgICovCj4gK8KgwqDCoMKgwqDCoMKgaWYgKCFjcHVocF9zdGVwX2VtcHR5
-KHRydWUsIENQVUhQX0JQX1BBUkFMTEVMX1NUQVJUVVApIHsKCkknbGwgdGFrZSB1c2luZyBjcHVo
-cF9zdGVwX2VtcHR5KCkuCgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgZm9yX2VhY2hfcHJlc2VudF9jcHUoY3B1KSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKG4rKyA+PSBz
-ZXR1cF9tYXhfY3B1cykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY3B1
-X3VwKGNwdSwgQ1BVSFBfQlBfUEFSQUxMRUxfU1RBUlRVUCk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsKPiAr
-wqDCoMKgwqDCoMKgwqAvKiBEbyB0aGUgcGVyIENQVSBzZXJpYWxpemVkIGJyaW5ndXAgdG8gT05M
-SU5FIHN0YXRlICovCj4gwqDCoMKgwqDCoMKgwqDCoGZvcl9lYWNoX3ByZXNlbnRfY3B1KGNwdSkg
-ewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKG51bV9vbmxpbmVfY3B1cygp
-ID49IHNldHVwX21heF9jcHVzKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoGJyZWFrOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAo
-IWNwdV9vbmxpbmUoY3B1KSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGNwdV91cChjcHUsIENQVUhQX09OTElORSk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBpZiAoIWNwdV9vbmxpbmUoY3B1KSkgewo+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNwdWhwX2NwdV9zdGF0ZSAq
-c3QgPSBwZXJfY3B1X3B0cigmY3B1aHBfc3RhdGUsIGNwdSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnQgcmV0ID0gY3B1X3VwKGNwdSwgQ1BVSFBf
-T05MSU5FKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAvKgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ICogRHVlIHRvIHRoZSBhYm92ZSBwcmVwYXJhdGlvbiBsb29wIGEgZmFpbGVkIG9ubGluZSBhdHRl
-bXB0Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBt
-aWdodCBoYXZlIG9ubHkgcm9sbGVkIGJhY2sgdG8gQ1BVSFBfQlBfUEFSQUxMRUxfU1RBUlRVUC4g
-RG8gdGhlCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-KiByZW1haW5pbmcgY2xlYW51cHMuIE5PT1AgZm9yIHRoZSBub24gcGFyYWxsZWwgY2FzZS4KPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCAmJiBjYW5f
-cm9sbGJhY2tfY3B1KHN0KSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBXQVJOX09OKGNwdWhwX2ludm9rZV9jYWxsYmFja19y
-YW5nZShmYWxzZSwgY3B1LCBzdCwgQ1BVSFBfT0ZGTElORSkpOwo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqB9CgpBbmQgSSdsbCB0YWtlIGRvaW5nIHRoaXMgYml0IHVuY29uZGl0aW9u
-YWxseSAoaXQncyBiYXNpY2FsbHkgYSBuby1vcCBpZgp0aGV5IGFscmVhZHkgZ290IHJvbGxlZCBh
-bGwgdGhlIHdheSBiYWNrIHRvIENQVUhQX09GRkxJTkUsIHJpZ2h0PykuCgpCdXQgdGhlIGFkZGl0
-aW9uYWwgY29tcGxleGl0eSBvZiBoYXZpbmcgbXVsdGlwbGUgc3RlcHMgaXMgZmFpcmx5Cm1pbmlt
-YWwsIGFuZCBJJ20gYWxyZWFkeSBwbGFubmluZyB0byAqdXNlKiBhbm90aGVyIG9uZSBldmVuIGlu
-IHg4NiwgYXMKZGlzY3Vzc2VkLgoKCgo=
+On Thu, 23 Mar 2023, Geert Uytterhoeven wrote:
 
+> On Thu, Mar 23, 2023 at 7:02=E2=80=AFAM Finn Thain <fthain@linux-m68k.org=
+> wrote:
+> > Some Nubus cards have many ROM resources. A single Radius video card
+> > produced well over a thousand entries under /proc/bus/nubus/. Populatin=
+g
+> > /proc/bus/nubus on a slow machine with several such cards installed tak=
+es
+> > long enough that the user may think that the system is wedged. All thos=
+e
+> > procfs entries also consume significant RAM though they are not normall=
+y
+> > needed (except by developers). Omit these resources from /proc/bus/nubu=
+s/
+> > by default and add a kernel parameter to enable them when needed.
+> > On the test machine, this saved 300 kB and 10 seconds.
+> >
+> > Tested-by: Stan Johnson <userm57@yahoo.com>
+> > Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+>=20
+> Thanks for your patch!
+>=20
 
---=-jBRsuR+mRLHq8Anu5NHE
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+Thanks for your review.
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzIzMjMxMjIxWjAvBgkqhkiG9w0BCQQxIgQg3h1u2k82
-AYT5QQdg1rMAUOI+bIyC293FgMd0JaPiqoowgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAZFB0uyQF0E7Y++Xvs0NXTvoq1V3qRvLb6
-kuavAFIC/fTkFk7Nk6YdNHyXskhoWdbMgmZIs7Un89z/5a7jY6NRaw6FliE/r9HnOYnc4p4+yFfZ
-j4ZJNl7Bxjm5497k9J2pKnevq5NtDJOs4l54fe/5rA+O8eiTSxIaX/TKK9f51GUUBuiwPxbZRUIX
-G0LFVQ8lIbF3p+oOMC3wRXPHjRUG5GpSzfmq5l1sDWaTTdTRuwqXk7lPttS3El+SiUpO+ss5edBZ
-e7LR+aqMuKC3zOg8NLAxAncOF49SIASxMDIqDrouwTOTakb3Y/e/VX5ec9IpHnjfll1nWvmExewd
-Sa2tFV+aFL+caItC7XJlzEQvi/gvo3qNjmO63Ya9+ZjruSOXNgTQK4iVgMZMfxWGwAiStzFyUklO
-iziMOvoFR8MMiudiBipASq6V1ygRByTa7Hq1lEWHhTAjwcBa0tHSrtDs2tRiTR30EXPzBN9IWiTd
-xfFs/J+U39+F9oNcaW3gHM+dOyLD4o15i7Vl1/mZMJDU+pGMq2WpyJtUoeundvVX12IVBtOUEDQZ
-32pbtamSFUmGRTytcMzbVA79cjoM0yDWZeTgCuhijqtbBi7knA9ZUnVPKvfun1Fk+73aFh9Fc4kD
-kHAieZiYU9EsyBhRijTsA7ZN5eqUhqStlTpObrjfpQAAAAAAAA==
+> > Checkpatch says "externs should be avoided in .c files" and if this one
+> > appeared twice I would agree. But as it only appears once, I can't see
+> > any advantage to putting it in a new .h file instead of the .c file...
+>=20
+> The advantage is that it allows the compiler to check that the=20
+> signatures of the declaration and the definition do match, now and in=20
+> the future.
+>=20
 
+Ah yes, I forgot that we use a header file to make sure that the header=20
+file is correct ;-)
 
---=-jBRsuR+mRLHq8Anu5NHE--
+> > --- a/drivers/nubus/nubus.c
+> > +++ b/drivers/nubus/nubus.c
+> > @@ -34,6 +34,9 @@
+> >
+> >  LIST_HEAD(nubus_func_rsrcs);
+> >
+> > +bool procfs_rsrcs;
+> > +module_param(procfs_rsrcs, bool, 0444);
+>=20
+> With the expanded functionality, is "rsrcs" still a good name?
+> Perhaps this should be an integer, so you can define different
+> levels? E.g.
+>   - 0 =3D just devices
+>   - 1 =3D above + boards + public resources
+>   - 2 =3D above + private resources
+
+That really depends on how the proc entries get used. I think it's=20
+probably going to be developers who would use them so I consider all of=20
+this to be outside of the UAPI and subject to change. But it would be nice=
+=20
+to hear from other developers on that point.
+
+Regarding terminology, the files in /proc/bus/nubus/*/ are termed=20
+"records" or "entries" while the subdirectories may represent boards, slot=
+=20
+resources or tables of entries. So a parameter like "proc_entries" (in=20
+effect nubus.proc_entries) might be more apt than "procfs_rsrcs".
+
+Linux "devices" correspond to the "functional resources" offered by a=20
+card. (Other resources have other purposes.)
+
+I don't know where the "local/private" designation originates from. It's=20
+not to be found in Apple's book, "Designing Cards and Drivers for the=20
+Macintosh". AFAIK, there's no distinction between "public" and "private"=20
+like you might expect to find between the slot resources needed by Apple's=
+=20
+Slot Manager and those needed by 3rd party drivers. E.g. the=20
+NUBUS_RESID_MAC_ADDRESS and NUBUS_RESID_GAMMADIR slot resources were=20
+Apple-defined, even though nubus.c describes them as "local/private".
+
+Note that this patch doesn't affect the /proc/bus/nubus/boards file which=
+=20
+lists category, type, dr_sw, dr_hw for every functional resource=20
+implemented by every board.
+
+> (disclaimer: I know nothing about NuBus and the current /proc/nubus
+> layout)
+
+Here's an example from my LCIII. There's only one card (in slot e) and it=
+=20
+has minimal resources and entries. e/1 is the "vendor info" slot resource,=
+=20
+e/1/3 is the "revision" entry from that slot resource.
+
+# grep -ar . /proc/bus/nubus
+/proc/bus/nubus/e/1/1:
+/proc/bus/nubus/e/1/2:Ethernet A-Series
+/proc/bus/nubus/e/1/20:
+/proc/bus/nubus/e/1/24/1:A-Series
+/proc/bus/nubus/e/1/24/3:001
+/proc/bus/nubus/e/1/24/4:SS DEV
+/proc/bus/nubus/e/80/1:
+
+/proc/bus/nubus/e/80/2:Network_Ethernet_A_Series
+/proc/bus/nubus/e/80/a:
+/proc/bus/nubus/e/80/80:[snipped binary MAC address]
+/proc/bus/nubus/devices:e       0004 0001 010c 0100     fe000000
+#=20
+
+With this patch, only the /proc/bus/nubus/devices file appears by default.=
+=20
+nubus.c captures that information for bus matching purposes, but the=20
+/proc/bus/nubus/e/* inodes are unused AFAIK. I think they were put there=20
+so that userland programs could find uses for them. Problem is, it can be=
+=20
+expensive to do that, depending on the card ROM, and hence this patch.
+
+>=20
+> Should this be documented? I know there is currently nothing about NuBus=
+=20
+> under Documentation/.
+>=20
+
+Probably...
+
+> > +
+> >  /* Meaning of "bytelanes":
+> >
+> >     The card ROM may appear on any or all bytes of each long word in
+> > @@ -574,7 +577,9 @@ nubus_get_functional_resource(struct nubus_board *b=
+oard, int slot,
+> >                 default:
+> >                         /* Local/Private resources have their own
+> >                            function */
+> > -                       nubus_get_private_resource(fres, dir.procdir, &=
+ent);
+> > +                       if (procfs_rsrcs)
+> > +                               nubus_get_private_resource(fres, dir.pr=
+ocdir,
+> > +                                                          &ent);
+> >                 }
+> >         }
+> >
+> > diff --git a/drivers/nubus/proc.c b/drivers/nubus/proc.c
+> > index 2c320a84fd72..844e86636798 100644
+> > --- a/drivers/nubus/proc.c
+> > +++ b/drivers/nubus/proc.c
+> > @@ -51,11 +51,13 @@ static struct proc_dir_entry *proc_bus_nubus_dir;
+> >   * /proc/bus/nubus/x/ stuff
+> >   */
+> >
+> > +extern bool procfs_rsrcs;
+> > +
+> >  struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board)
+> >  {
+> >         char name[2];
+> >
+> > -       if (!proc_bus_nubus_dir)
+> > +       if (!proc_bus_nubus_dir || !procfs_rsrcs)
+> >                 return NULL;
+> >         snprintf(name, sizeof(name), "%x", board->slot);
+> >         return proc_mkdir(name, proc_bus_nubus_dir);
+> > @@ -72,7 +74,7 @@ struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct=
+ proc_dir_entry *procdir,
+> >         char name[9];
+> >         int lanes =3D board->lanes;
+> >
+> > -       if (!procdir)
+> > +       if (!procdir || !procfs_rsrcs)
+> >                 return NULL;
+> >         snprintf(name, sizeof(name), "%x", ent->type);
+> >         remove_proc_subtree(name, procdir);
+> > @@ -157,7 +159,7 @@ void nubus_proc_add_rsrc_mem(struct proc_dir_entry =
+*procdir,
+> >         char name[9];
+> >         struct nubus_proc_pde_data *pded;
+> >
+> > -       if (!procdir)
+> > +       if (!procdir || !procfs_rsrcs)
+> >                 return;
+> >
+> >         snprintf(name, sizeof(name), "%x", ent->type);
+> > @@ -176,7 +178,7 @@ void nubus_proc_add_rsrc(struct proc_dir_entry *pro=
+cdir,
+> >         char name[9];
+> >         unsigned char *data =3D (unsigned char *)ent->data;
+> >
+> > -       if (!procdir)
+> > +       if (!procdir || !procfs_rsrcs)
+> >                 return;
+> >
+> >         snprintf(name, sizeof(name), "%x", ent->type);
+>=20
+---1463811774-1418837779-1679613231=:7816--
