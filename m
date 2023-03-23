@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD776C5F95
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374AD6C5F9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCWGZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S230213AbjCWGZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCWGZA (ORCPT
+        with ESMTP id S230074AbjCWGZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:25:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E381ADFA;
-        Wed, 22 Mar 2023 23:24:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4EB62474;
-        Thu, 23 Mar 2023 06:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BD2C4339B;
-        Thu, 23 Mar 2023 06:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679552698;
-        bh=w9Ao7cH0pGPsEfJbtTzl3sq2ipsj2D5zZKW+SIl5uYE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SVAigotbftAI3PjqBv+vwwwbemPq/dqLgueuXaypEFFzqVxyTl0U+GhMdQI1Iu8t8
-         ALc6SLEFkFEulBp15Qv1nvSikWvsZI+SQIS9SuAb0GGGuNAML9fTbXWAVhKZj306bM
-         YrHstZpx6qWsYCDVnXn5OGOd37KCX1OIsedB5H8VqlnNwIkGooQIjbK8r4uEmhdhkS
-         iU6HIqVrARsdwJR8R5oFfpkhqh7y45/l7cj9kcHcn/i71CbCYN/xnNwSAwCFEIb7UO
-         j8fcPY+OUbKYsL7kNaXB7M/5E+vrrRJb8VdfJo74cLHSWLe3m2N9a7TRT1gJM2iX3i
-         c2PmBQf1RfX4A==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso21742077fac.4;
-        Wed, 22 Mar 2023 23:24:58 -0700 (PDT)
-X-Gm-Message-State: AO0yUKXOWEgBIJLuT1RF4vQ14pV+WEkUvHRWYTnCu6c2DvU2P89f5Rz7
-        lgE337nWDzCr80hlk0GqFKa5ro3jzK16xd8+6G8=
-X-Google-Smtp-Source: AKy350bUdkj7ZUbSk/lzBDCm+OuMdsZGjDqrN7Jo4LFIes+c0qHpmCIpgQYfswkEDwHj0mg68CXJ+bDPmAggHg3Ojno=
-X-Received: by 2002:a05:6870:ea86:b0:17e:2e88:40dc with SMTP id
- s6-20020a056870ea8600b0017e2e8840dcmr629978oap.11.1679552697824; Wed, 22 Mar
- 2023 23:24:57 -0700 (PDT)
+        Thu, 23 Mar 2023 02:25:09 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28611E29D;
+        Wed, 22 Mar 2023 23:25:06 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32N6OsN0051479;
+        Thu, 23 Mar 2023 01:24:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679552694;
+        bh=WG8t4T8UwxXdpzYbVy4h0wjL0ix8sZ+o9pwyH/fdReg=;
+        h=From:To:CC:Subject:Date;
+        b=J7ae0Rt1ApFvgddMHx+XUATrNMaNwk8srrH6Cgk+oH/xausnZ9yB3+cQdIeSSKdqW
+         6go1N1XVVdBa+FjOlDuVjzyibLDYYJSTOtIQcBLqbBUt3uYzQm+SaewL7vbgI2SLDD
+         4v9/mfLYA16hVd+RvHA5gAITWu6seTHiWChuJ0/A=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32N6Os5i110132
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Mar 2023 01:24:54 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
+ Mar 2023 01:24:54 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 23 Mar 2023 01:24:54 -0500
+Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32N6Osxe069731;
+        Thu, 23 Mar 2023 01:24:54 -0500
+Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
+        by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 32N6OqXq010546;
+        Thu, 23 Mar 2023 01:24:53 -0500
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v5 0/5]  Introduce PRU platform consumer API
+Date:   Thu, 23 Mar 2023 11:54:46 +0530
+Message-ID: <20230323062451.2925996-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230322085106.16629-1-mirsad.todorovac@alu.unizg.hr>
- <c93723aa-f01c-9f1e-c9c7-aa79f38390c1@infradead.org> <cb386732-7509-497d-8641-473ad853c9ed@alu.unizg.hr>
-In-Reply-To: <cb386732-7509-497d-8641-473ad853c9ed@alu.unizg.hr>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 23 Mar 2023 15:24:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARAS7DEtpS2HMK=a7egwRdj-uD9JhxsOcKpfpstiiFLhQ@mail.gmail.com>
-Message-ID: <CAK7LNARAS7DEtpS2HMK=a7egwRdj-uD9JhxsOcKpfpstiiFLhQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] scripts: merge_config: Fix typo in variable name.
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Mark Brown <broonie@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,90 +75,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 3:15=E2=80=AFAM Mirsad Goran Todorovac
-<mirsad.todorovac@alu.unizg.hr> wrote:
->
-> On 22. 03. 2023. 16:20, Randy Dunlap wrote:
-> >
-> >
-> > On 3/22/23 01:51, Mirsad Goran Todorovac wrote:
-> >> ${WARNOVERRIDE} was misspelled as ${WARNOVVERIDE}, which caused a shel=
-l
-> >> syntax error in certain paths of the script execution.
-> >>
-> >
-> > Fixes: 46dff8d7e381e ("scripts: merge_config: Add option to suppress wa=
-rning on overrides")
-> >
-> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> >
-> > Thanks.
->
-> Hi, Randy,
->
-> I think this time thanks go to the Heavens, for preserving my physical in=
-tegrity.
->
-> Though I don't know of a bike with ABS.
+Hi All,
+The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+(Programmable Real-Time Units, or PRUs) for program execution.
 
+There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+already been merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be: 
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
+In order to make usage of common PRU resources and allow the consumer drivers 
+to configure the PRU hardware for specific usage the PRU API is introduced.
 
-Applied to linux-kbuild/fixes,
-fixing another typo "Signed-of-by".
+This is the v5 of the old patch series[1]. This doesn't have any functional 
+changes, the old series has been rebased on linux-next.
 
+Changes from v4 [1] to v5:
+*) Addressed Roger's comment to change function argument in API 
+pruss_cfg_xfr_enable(). Instead of asking user to calcualte mask, now user
+will just provide the pru_type and mask will be calcualted inside the API.
+*) Moved enum pru_type from pru_rproc.c to include/linux/remoteproc/pruss.h
+in patch 4 / 5.
+*) Moved enum pruss_gpi_mode from patch 3/5 to patch 4/5 to introduce this
+enum in same patch as the API using it.
+*) Moved enum pruss_gp_mux_sel from patch 3/5 to patch 5/5 to introduce this
+enum in same patch as the API using it.
+*) Created new headefile drivers/soc/ti/pruss.h, private to PRUSS as asked by
+Roger. Moved all private definitions and pruss_cfg_read () / update ()
+APIs to this newly added headerfile.
+*) Renamed include/linux/pruss_driver.h to include/linux/pruss_internal.h as
+suggested by Andrew and Roger.
 
-You do not need to spell it out by yourself.
+Changes from v3 [2] to v4:
+*) Added my SoB tags in all patches as earlier SoB tags were missing in few
+patches.
+*) Added Roger's RB tags in 3 patches.
+*) Addressed Roger's comment in patch 4/5 of this series. Added check for 
+   invalid GPI mode in pruss_cfg_gpimode() API.
+*) Removed patch [5] from this series as that patch is no longer required.
+*) Made pruss_cfg_read() and pruss_cfg_update() APIs internal to pruss.c by
+   removing EXPORT_SYMBOL_GPL and making them static. Now these APIs are 
+   internal to pruss.c and PRUSS CFG space is not exposed.
+*) Moved APIs pruss_cfg_gpimode(), pruss_cfg_miirt_enable(), 
+   pruss_cfg_xfr_enable(), pruss_cfg_get_gpmux(), pruss_cfg_set_gpmux() to
+   pruss.c file as they are using APIs pruss_cfg_read / update. 
+   Defined these APIs in pruss.h file as other drivers use these APIs to 
+   perform respective operations.
 
-"git commit -s" will insert the Signed-off-by tag.
+Changes from v2 to v3:
+*) No functional changes, the old series has been rebased on linux-next (tag:
+next-20230306).
 
+This series depends on another series which is already merged in the remoteproc
+tree [3] and is part of v6.3-rc1. This series and the remoteproc series form 
+the PRUSS consumer API which can be used by consumer drivers to utilize the 
+PRUs.
 
+One example of the consumer driver is the PRU-ICSSG ethernet driver [4],which 
+depends on this series and the remoteproc series [3].
 
+[1] https://lore.kernel.org/all/20230313111127.1229187-1-danishanwar@ti.com/
+[2] https://lore.kernel.org/all/20230306110934.2736465-1-danishanwar@ti.com/
+[3] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
+[4] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+[5] https://lore.kernel.org/all/20230306110934.2736465-6-danishanwar@ti.com/
 
+Thanks and Regards,
+Md Danish Anwar
 
+Andrew F. Davis (1):
+  soc: ti: pruss: Add pruss_{request,release}_mem_region() API
 
+Suman Anna (2):
+  soc: ti: pruss: Add pruss_cfg_read()/update() API
+  soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+    XFR
 
-> >> Cc: Mark Brown <broonie@kernel.org>
-> >> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> >> Cc: linux-kbuild@vger.kernel.org
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Signed-of-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> >> ---
-> >>  scripts/kconfig/merge_config.sh | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_c=
-onfig.sh
-> >> index 32620de473ad..902eb429b9db 100755
-> >> --- a/scripts/kconfig/merge_config.sh
-> >> +++ b/scripts/kconfig/merge_config.sh
-> >> @@ -145,7 +145,7 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
-> >>              NEW_VAL=3D$(grep -w $CFG $MERGE_FILE)
-> >>              BUILTIN_FLAG=3Dfalse
-> >>              if [ "$BUILTIN" =3D "true" ] && [ "${NEW_VAL#CONFIG_*=3D}=
-" =3D "m" ] && [ "${PREV_VAL#CONFIG_*=3D}" =3D "y" ]; then
-> >> -                    ${WARNOVVERIDE} Previous  value: $PREV_VAL
-> >> +                    ${WARNOVERRIDE} Previous  value: $PREV_VAL
-> >>                      ${WARNOVERRIDE} New value:       $NEW_VAL
-> >>                      ${WARNOVERRIDE} -y passed, will not demote y to m
-> >>                      ${WARNOVERRIDE}
->
-> Best regards,
-> Mirsad
->
-> --
-> Mirsad Goran Todorovac
-> Sistem in=C5=BEenjer
-> Grafi=C4=8Dki fakultet | Akademija likovnih umjetnosti
-> Sveu=C4=8Dili=C5=A1te u Zagrebu
->
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
->
+Tero Kristo (2):
+  soc: ti: pruss: Add pruss_get()/put() API
+  soc: ti: pruss: Add helper functions to get/set PRUSS_CFG_GPMUX
 
+ drivers/remoteproc/pru_rproc.c                |  17 +-
+ drivers/soc/ti/pruss.c                        | 256 +++++++++++++++++-
+ drivers/soc/ti/pruss.h                        | 112 ++++++++
+ .../{pruss_driver.h => pruss_internal.h}      |  34 +--
+ include/linux/remoteproc/pruss.h              | 139 ++++++++++
+ 5 files changed, 516 insertions(+), 42 deletions(-)
+ create mode 100644 drivers/soc/ti/pruss.h
+ rename include/linux/{pruss_driver.h => pruss_internal.h} (58%)
 
---=20
-Best Regards
-Masahiro Yamada
+-- 
+2.25.1
+
