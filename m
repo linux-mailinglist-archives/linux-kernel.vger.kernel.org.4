@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30F26C5F64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2D86C5F65
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjCWGFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S231222AbjCWGFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbjCWGFW (ORCPT
+        with ESMTP id S230519AbjCWGFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:05:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DAE2798B;
-        Wed, 22 Mar 2023 23:05:11 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N4Tf5V008672;
-        Thu, 23 Mar 2023 06:05:01 GMT
+        Thu, 23 Mar 2023 02:05:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117DA27D6A;
+        Wed, 22 Mar 2023 23:05:15 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N5R2HK026440;
+        Thu, 23 Mar 2023 06:05:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=HmLgGGK+SC1hzdcz6sNNjZPTr9tf+vIrnp01aTPwjRw=;
- b=cX6Z3/GczNAHDAHWLAr2vgUprdUB80qVQildrHALS7SSa2koJRFNlkzefbG9Czul4yD8
- ZdVZCfh6XOi5JbaNdE33mHQhLSVpbisSXOaeJQ3B/kMt+P9M9/fnBODOjqvBMinzoDqa
- v1RHP5cWMcYEF1p06AfKzwqAjCJFShyPryeZRIz7XX/AWDjL0csskyMZLn+zJVkrhfyK
- rgeFAznMH7fLNEan4gSWwixfm2iZOMB7KsefQQsJSNPSkPRqoO208kHFCxBDscNvTLhV
- 4y3/U3p4IFjGdw81GVd8bNrTujIsh/MkgiDAdxxSnqlwQ0N97MWeZRntoGziOx9uCjaZ Bw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg3c99y6x-1
+ bh=yBdrDAGK6RvgHNOI0AC2BQtdfCDBR/i4Nml4F6ZZ1jg=;
+ b=KNpP6AgwJLAjUOeSkQw696W5lHX5x7E7ZoMFMTsB4zvFcktbvfh6MQrA5o/QCnatTvSz
+ O8yN5PtULK8c7AJt9+941uWcExMOAA4D+I5dNdctgq/tvXUxgfEoXuNxO6w4DJD5Iv3/
+ 5FonHw02Hvy+GFeRcBhIhm9lXf0i4Ny8kayAiMoC0Aa5erHHK6nz/38oGqnD+qEFkuzu
+ hKm9vDBjQ4RAm8RDm55Q4x8gytRLi25BHK7LZ98TXQsn7HYF037DRsjjOSqNRn/QxZdB
+ p0Rawb9Op8+/tj409p5TKp9rPg8Pk5qHTzne5xx3qwlXwv2rqG+IaECRpJHmmCyrY6aX jA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgfv68506-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 06:05:01 +0000
+        Thu, 23 Mar 2023 06:05:05 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32N650xx007439
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32N654o4028721
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 06:05:00 GMT
+        Thu, 23 Mar 2023 06:05:05 GMT
 Received: from taozha-gv.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 22 Mar 2023 23:04:55 -0700
+ 15.2.986.41; Wed, 22 Mar 2023 23:05:00 -0700
 From:   Tao Zhang <quic_taozha@quicinc.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -59,9 +59,9 @@ CC:     Tao Zhang <quic_taozha@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Hao Zhang <quic_hazha@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>
-Subject: [PATCH v3 05/11] coresight-tpdm: Add nodes to set trigger timestamp and type
-Date:   Thu, 23 Mar 2023 14:04:02 +0800
-Message-ID: <1679551448-19160-6-git-send-email-quic_taozha@quicinc.com>
+Subject: [PATCH v3 06/11] coresight-tpdm: Add node to set dsb programming mode
+Date:   Thu, 23 Mar 2023 14:04:03 +0800
+Message-ID: <1679551448-19160-7-git-send-email-quic_taozha@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
 References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
@@ -72,18 +72,18 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: w2Gq55t1HFJBqZvOwyLLjYG234eSFeLW
-X-Proofpoint-ORIG-GUID: w2Gq55t1HFJBqZvOwyLLjYG234eSFeLW
+X-Proofpoint-GUID: b64CTZQuXELtQYRld1EpfEQ45R7pM-as
+X-Proofpoint-ORIG-GUID: b64CTZQuXELtQYRld1EpfEQ45R7pM-as
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 bulkscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
- clxscore=1015 suspectscore=0 adultscore=0 impostorscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230045
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 impostorscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230046
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,163 +91,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nodes are needed to set or show the trigger timestamp and
-trigger type. This change is to add these nodes to achieve these
-function.
+Add node to set and show programming mode for TPDM DSB subunit.
+Once the DSB programming mode is set, it will be written to the
+register DSB_CR. Bit[10:9] of the DSB_CR register is used to set
+the DSB test mode.
 
 Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
 ---
- .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 ++++++
- drivers/hwtracing/coresight/coresight-tpdm.c       | 95 ++++++++++++++++++++++
- 2 files changed, 119 insertions(+)
+ .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 10 ++++
+ drivers/hwtracing/coresight/coresight-tpdm.c       | 62 ++++++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h       | 13 +++++
+ 3 files changed, 85 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-index 4a58e64..27ce681 100644
+index 27ce681..f13e282 100644
 --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
 +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-@@ -11,3 +11,27 @@ Description:
- 		Accepts only one of the 2 values -  1 or 2.
- 		1 : Generate 64 bits data
- 		2 : Generate 32 bits data
+@@ -35,3 +35,13 @@ Description:
+ 		Accepts only one of the 2 values -  0 or 1.
+ 		0 : Set the DSB trigger type to false
+ 		1 : Set the DSB trigger type to true
 +
-+What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_type
++What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_mode
 +Date:		March 2023
 +KernelVersion	6.3
 +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
 +Description:
-+		(Write) Set the trigger type of DSB tpdm. Read the trigger
-+		type of DSB tpdm.
++		(Write) Set the mode of DSB tpdm. Read the mode of DSB
++		tpdm.
 +
-+		Accepts only one of the 2 values -  0 or 1.
-+		0 : Set the DSB trigger type to false
-+		1 : Set the DSB trigger type to true
-+
-+What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_ts
-+Date:		March 2023
-+KernelVersion	6.3
-+Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-+Description:
-+		(Write) Set the trigger timestamp of DSB tpdm. Read the
-+		trigger timestamp of DSB tpdm.
-+
-+		Accepts only one of the 2 values -  0 or 1.
-+		0 : Set the DSB trigger type to false
-+		1 : Set the DSB trigger type to true
++		Accepts the value needs to be greater than 0.
 diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-index 104638d..e28cf10 100644
+index e28cf10..8cd822f 100644
 --- a/drivers/hwtracing/coresight/coresight-tpdm.c
 +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -20,6 +20,19 @@
+@@ -4,6 +4,7 @@
+  */
  
- DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+ #include <linux/amba/bus.h>
++#include <linux/bitfield.h>
+ #include <linux/bitmap.h>
+ #include <linux/coresight.h>
+ #include <linux/coresight-pmu.h>
+@@ -51,6 +52,32 @@ static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
+ 	return 0;
+ }
  
-+static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
-+							struct attribute *attr, int n)
++static void set_dsb_cycacc_mode(struct tpdm_drvdata *drvdata, u32 *val)
 +{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
++	u32 mode;
 +
-+	if (drvdata)
-+		if (drvdata->datasets & TPDM_PIDR0_DS_DSB)
-+			return attr->mode;
-+
-+	return 0;
++	mode = TPDM_DSB_MODE_CYCACC(drvdata->dsb->mode);
++	*val &= ~TPDM_DSB_TEST_MODE;
++	*val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
 +}
 +
- static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
++static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
++{
++	u32 mode;
++
++	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
++	*val &= ~TPDM_DSB_HPSEL;
++	*val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
++}
++
++static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
++{
++	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
++		*val |= TPDM_DSB_CR_MODE;
++	else
++		*val &= ~TPDM_DSB_CR_MODE;
++}
++
+ static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
  {
- 	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
-@@ -237,8 +250,90 @@ static struct attribute_group tpdm_attr_grp = {
+ 	if (drvdata->dsb->trig_type)
+@@ -72,6 +99,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+ 	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+ 
+ 	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
++	/* Set the cycle accurate mode */
++	set_dsb_cycacc_mode(drvdata, &val);
++	/* Set the byte lane for high-performance mode */
++	set_dsb_hpsel_mode(drvdata, &val);
++	/* Set the performance mode */
++	set_dsb_perf_mode(drvdata, &val);
+ 	/* Set trigger type */
+ 	set_trigger_type(drvdata, &val);
+ 	/* Set the enable bit of DSB control register to 1 */
+@@ -250,6 +283,34 @@ static struct attribute_group tpdm_attr_grp = {
  	.attrs = tpdm_attrs,
  };
  
-+static ssize_t dsb_trig_type_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
++static ssize_t dsb_mode_show(struct device *dev,
++				  struct device_attribute *attr,
++				  char *buf)
 +{
 +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
 +
-+	return sysfs_emit(buf, "%u\n",
-+			 (unsigned int)drvdata->dsb->trig_type);
++	return sysfs_emit(buf, "%lx\n",
++			 (unsigned long)drvdata->dsb->mode);
 +}
 +
-+/*
-+ * value 0: set trigger type as enablement
-+ * value 1: set trigger type as disablement
-+ */
-+static ssize_t dsb_trig_type_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf,
-+				      size_t size)
++static ssize_t dsb_mode_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf,
++				   size_t size)
 +{
 +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
 +	unsigned long val;
 +
-+	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
++	if ((kstrtoul(buf, 0, &val)) || val < 0)
 +		return -EINVAL;
 +
 +	spin_lock(&drvdata->spinlock);
-+	if (val)
-+		drvdata->dsb->trig_type = true;
-+	else
-+		drvdata->dsb->trig_type = false;
++	drvdata->dsb->mode = val & TPDM_MODE_ALL;
 +	spin_unlock(&drvdata->spinlock);
 +	return size;
 +}
-+static DEVICE_ATTR_RW(dsb_trig_type);
++static DEVICE_ATTR_RW(dsb_mode);
 +
-+static ssize_t dsb_trig_ts_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+
-+	return sysfs_emit(buf, "%u\n",
-+			 (unsigned int)drvdata->dsb->trig_ts);
-+}
-+
-+/*
-+ * value 0: set trigger timestamp as enablement
-+ * value 1: set trigger timestamp as disablement
-+ */
-+static ssize_t dsb_trig_ts_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf,
-+				      size_t size)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+	unsigned long val;
-+
-+	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
-+		return -EINVAL;
-+
-+	spin_lock(&drvdata->spinlock);
-+	if (val)
-+		drvdata->dsb->trig_ts = true;
-+	else
-+		drvdata->dsb->trig_ts = false;
-+	spin_unlock(&drvdata->spinlock);
-+	return size;
-+}
-+static DEVICE_ATTR_RW(dsb_trig_ts);
-+
-+static struct attribute *tpdm_dsb_attrs[] = {
-+	&dev_attr_dsb_trig_ts.attr,
-+	&dev_attr_dsb_trig_type.attr,
-+	NULL,
-+};
-+
-+static struct attribute_group tpdm_dsb_attr_grp = {
-+	.attrs = tpdm_dsb_attrs,
-+	.is_visible = tpdm_dsb_is_visible,
-+};
-+
- static const struct attribute_group *tpdm_attr_grps[] = {
- 	&tpdm_attr_grp,
-+	&tpdm_dsb_attr_grp,
- 	NULL,
- };
+ static ssize_t dsb_trig_type_show(struct device *dev,
+ 				     struct device_attribute *attr,
+ 				     char *buf)
+@@ -321,6 +382,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
+ static DEVICE_ATTR_RW(dsb_trig_ts);
  
+ static struct attribute *tpdm_dsb_attrs[] = {
++	&dev_attr_dsb_mode.attr,
+ 	&dev_attr_dsb_trig_ts.attr,
+ 	&dev_attr_dsb_trig_type.attr,
+ 	NULL,
+diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+index 68f33bd..8fee562 100644
+--- a/drivers/hwtracing/coresight/coresight-tpdm.h
++++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+@@ -15,11 +15,22 @@
+ 
+ /* Enable bit for DSB subunit */
+ #define TPDM_DSB_CR_ENA		BIT(0)
++/* Enable bit for DSB subunit perfmance mode */
++#define TPDM_DSB_CR_MODE		BIT(1)
+ /* Enable bit for DSB subunit trigger type */
+ #define TPDM_DSB_CR_TRIG_TYPE		BIT(12)
++
+ /* Enable bit for DSB subunit trigger timestamp */
+ #define TPDM_DSB_TIER_XTRIG_TSENAB		BIT(1)
+ 
++/* DSB programming modes */
++#define TPDM_DSB_MODE_CYCACC(val)	(val & GENMASK(2, 0))
++#define TPDM_DSB_MODE_PERF		BIT(3)
++#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
++#define TPDM_MODE_ALL			(0xFFFFFFF)
++#define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
++#define TPDM_DSB_HPSEL		GENMASK(6, 2)
++
+ /* TPDM integration test registers */
+ #define TPDM_ITATBCNTRL		(0xEF0)
+ #define TPDM_ITCNTRL		(0xF00)
+@@ -48,10 +59,12 @@
+ 
+ /**
+  * struct dsb_dataset - specifics associated to dsb dataset
++ * @mode:             DSB programming mode
+  * @trig_ts:          Enable/Disable trigger timestamp.
+  * @trig_type:        Enable/Disable trigger type.
+  */
+ struct dsb_dataset {
++	u32				mode;
+ 	bool			trig_ts;
+ 	bool			trig_type;
+ };
 -- 
 2.7.4
 
