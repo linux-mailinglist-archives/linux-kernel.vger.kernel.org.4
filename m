@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456FF6C6CBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:56:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946EF6C6CBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjCWP4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S232210AbjCWP4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjCWP4Q (ORCPT
+        with ESMTP id S232196AbjCWP4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:56:16 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021D21A0B
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:56:15 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id hf2so22922374qtb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679586974;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=73H5IIveVwCSuj8ISfgz0DD6tM9W3+Bkt6XVlPhAYGQ=;
-        b=BOTN3RHikvmNyJ/5BRIscfqCjptXrf8qpEubjPg0OC/Xwy+boUt94/+OfrbOvrjrzs
-         cJmWGbxdzfNwYKXLNjFeE4gMQoT6n7Ue/HEG5/LMoEeTKeSw/uGUVJVLhA+eCCAdPAw6
-         TtqrrK35mvYRbzkyskIxNy5mDJm9BfKY9K6UzVcc3DGVU9OzF+09jvq6Drjb5mZ2qmVt
-         HenjMS5dF/r4y3zFsqrBc6Pye1BCCpqXxrBcHNF0Eo2mmCOm0/3b/V5FU143KRmBza1U
-         0t4zXTHbwVZfvfVGehbwYOD9++M2yfXXjOlk6zzl04FgUWlZQ7+y/4hEPkd/CR7pqYbK
-         NovA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679586974;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73H5IIveVwCSuj8ISfgz0DD6tM9W3+Bkt6XVlPhAYGQ=;
-        b=OvFxkTtJ2l3Z3+9jnTI88PGWrPHasvTINrKhbehILiCqUKfc2scI8JfxSrbZgvbsgs
-         zsZCsfBGgngx0MGheaL60VmI6uP0j4et2ASjW2CFYMJN2fpzPu5nPGkqFcQ4Q2iHo9nF
-         i/fgM/thXtYHhEnOhyQ9xo/3zbzqZg+agW9lJB9LK4IxM624WxgTEarZnSBOTOgFiJwr
-         jkxApkJGg+6sqaykSSWsUBtcm2XYNgxNeNGxQN5gT8oyg5a6Fa0tF9DqC/lFhrg4iwGl
-         XeDzGfQYtbd7M6qkGDiQZyGXaAumxePBjdeetPV+2ResF0IoF/IpoI3hPMICO4CJl8DR
-         hP7w==
-X-Gm-Message-State: AO0yUKURM7QCLS82G4H9ozhHTXmYCva031OI/cUd3zrIeKbOC1qHn/RL
-        cV84BlfpCUDISaLikV2BKkykNy39sIXyeZLrY2A=
-X-Google-Smtp-Source: AK7set8ZHb51Enf0t/dIsgKw2woHO3ntBPTQ4bYWsu5XGHqtbaXdqba7YQaqZsTNXwWNIceHWF4QLA==
-X-Received: by 2002:ac8:5b87:0:b0:3b9:bc8c:c214 with SMTP id a7-20020ac85b87000000b003b9bc8cc214mr9815638qta.31.1679586974671;
-        Thu, 23 Mar 2023 08:56:14 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id 201-20020a3708d2000000b007456efa7f73sm8647826qki.85.2023.03.23.08.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 08:56:14 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:56:13 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe
- contexts
-Message-ID: <20230323155613.GC739026@cmpxchg.org>
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-5-yosryahmed@google.com>
+        Thu, 23 Mar 2023 11:56:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE91227A7;
+        Thu, 23 Mar 2023 08:56:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B54E2B82193;
+        Thu, 23 Mar 2023 15:56:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF10C433D2;
+        Thu, 23 Mar 2023 15:56:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A63aMhce"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1679586989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E0QDLAcWMz6ZWQvPCSBnzoIiYMLhelgbcARCDPPOWLE=;
+        b=A63aMhceMeMggmWfc1r72fOX8m28q7eHiq1pPxSfpctedpOcSEfTjKEPc4NstDyZLL39NB
+        zpVsWtSG/hAldFxNq52W742ew8XAvTrO6D29HZpCIGbCRQeHlN3L4e/e1vDfG4BcArU7gR
+        0F+SzR1yMXW0XdwaIQSDwaxsPnj0ytQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a8981c54 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 23 Mar 2023 15:56:28 +0000 (UTC)
+Date:   Thu, 23 Mar 2023 16:56:24 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        regressions@leemhuis.info, regressions@lists.linux.dev
+Subject: Re: [PATCH] riscv: require alternatives framework when selecting FPU
+ support
+Message-ID: <ZBx2qFFiaRSyJubo@zx2c4.com>
+References: <ZBruFRwt3rUVngPu@zx2c4.com>
+ <20230322120907.2968494-1-Jason@zx2c4.com>
+ <20230322124631.7p67thzeblrawsqj@orel>
+ <1884bd96-2783-4556-bc57-8b733758baff@spud>
+ <20230322192610.sad42xau33ye5ayn@orel>
+ <2a3b08ce-5ab1-41b6-ad58-edbeff7b1acb@spud>
+ <ad445951-3d13-4644-94d9-e0989cda39c3@spud>
+ <CAHmME9qEbUP7cq-iofN=ruSWhsHUva+qqavfEpNzDK_BjQVqxw@mail.gmail.com>
+ <af690061-f962-498e-b2df-d2e6119292cf@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230323040037.2389095-5-yosryahmed@google.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <af690061-f962-498e-b2df-d2e6119292cf@spud>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
-> @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
->  		return;
->  
->  	flush_next_time = jiffies_64 + 2*FLUSH_TIME;
-> -	cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
-> +	cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
+On Thu, Mar 23, 2023 at 02:49:34PM +0000, Conor Dooley wrote:
+> This would requiring picking up your patch Jason, but with an
+> "if !XIP_KERNEL" added to the select.
 
-How is it safe to call this with may_sleep=true when it's holding the
-stats_flush_lock?
+So the risk of making this all work is that we wind up forgetting to add
+`select alternatives if !xip` to various places that need it (fpu, kvm,
+maybe others? future others?), because it appears to work, thanks to the
+code in your patch.
 
->  	atomic_set(&stats_flush_threshold, 0);
->  	spin_unlock(&stats_flush_lock);
->  }
+But making it work is also probably a good thing, since we obviously
+want the fpu and maybe other things to work on xip kernels.
+
+So maybe we should get rid of the CONFIG_RISCV_ALTERNATIVES knob
+entirely, making it "always enabled", and then conditonalize the
+alternatives code to BUILD_BUG_ON when called with CONFIG_XIP_KERNEL=y.
+Then, this build bug will get hit immediately by
+riscv_has_extension_*(), which will then require your patch, which can
+run in a `if (IS_ENABLED(XIP_KERNEL))` block or similar.
+
+The result of that will be:
+- !xip kernels properly use the fast riscv_has_extension_*() code and
+  any alternatives code needed, since it's always selected.
+- xip kernels get a BUILD_BUG_ON if they use any alternatives-based code
+  that doesn't have a xip fallback yet.
+
+What do you think of that approach?
+
+A "lighter weight" version of that approach would be to just remove all of
+the `select RISCV_ALTERNATIVES` lines, and instead make
+RISCV_ALTERNATIVES specify `default !XIP_KERNEL`. That would more or
+less amount to the above too, though with weirder error cases.
+
+Jason
