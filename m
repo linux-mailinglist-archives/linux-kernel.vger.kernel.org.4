@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394356C701C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65536C7020
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjCWSTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S231428AbjCWSTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjCWSTW (ORCPT
+        with ESMTP id S229672AbjCWSTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:19:22 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CA1272C;
-        Thu, 23 Mar 2023 11:19:20 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id jl13so14674393qvb.10;
-        Thu, 23 Mar 2023 11:19:20 -0700 (PDT)
+        Thu, 23 Mar 2023 14:19:31 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19EA30EA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:19:27 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id w25so5038079qtc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679595560;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WAfyigCWWJOJ34y4Q8kXJB1893qBEHYU+zfH+4O1SR4=;
-        b=KBd11Cxo0MrhSMbuVLrogK+5iz5oMRz+fpvQyR9OSL01Dhu7YXPkBhJGQpCxWflSOd
-         EnFkE2sOh6EwxbicfPRavC4qbVxQZvsCq5BrB/E5SbvZIvVMJEVopZLLjqb636IAvVpi
-         xPofl8GhZvt0b39nMnCUNO0/dnR1FDFZVTJc+VYKRz6jjK8wDZVg0psDk/ClEoj4YU/P
-         meWqR3/PeIs9TNJrC+N1vMCnqflkXn+qZVDixML8RIO6VUqXJhQdGe69SZwZ2d4ju8RL
-         GmyKSbO8zvJQWzjxskDBYg6X2n4SuzLwdkNdjerWAeFjXqWcAVK/cAoOUV2EUE3RMhy3
-         NMUg==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679595566;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4UdIOBBpU5M34Q+dnxHktyTShJiu1SyYtXU+zhX+XRQ=;
+        b=iSci0p8JFRPXqHPEil3M1UZ/AptTFLyiH4nOONlx8jlszjb2lxcuRkMBw7UZXMYuIb
+         9VHiSPLwsHCGWKxBshnY3dxP8I+VjQfUKrOS8QxSItXdSt2WijBjz2KEim5klCxbUPhR
+         gr9geE8sgGsa6YxvHsaCLYHtCOhtZ6Cj5uxcAZqUHM/Oo9TpSV6LTpCjwajd0gTTy2/o
+         iGV78mzHEJs46abGoP8FjHVkdxrPvpdUU0X6sI4iRzWXH+1PxvpLLlNb42LXVJdJuGZu
+         4FeSqA110YAy7/7r+UTZpX1+gN+1sKQK2Ig4sSlYBcZ1rci0KNN0Hu5Nnn+hpheYoXSX
+         jdGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679595560;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1679595566;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WAfyigCWWJOJ34y4Q8kXJB1893qBEHYU+zfH+4O1SR4=;
-        b=VhtzlbZJujzuetXUXS/1Ckz/heaguu+rhcBnSZUEiWhoDnhwTpxit51RcNGbOGcwYA
-         orairNNIDB9fRP67vba3FXcB1J0UMO0kfXPr+LJIQJG4tnmYp5M7eVaZzTXZXusf7ljh
-         9fXC2OOj23tgk7yUihSauIk7orEJtEW6P5+A3oY8ch7D/xV+iSIXu81RHKR5lJYhdbAJ
-         UHQUG8HhgDlPiG5Q3oZ7stQ5Kamfl/6w8jMog0gD0Piqx7x0DkVuDn0cTnsd18CkQAVy
-         knWBVOMTH3ENs+2YPw1Ge15U9AJivQfN/I4TH7ZFZq0f7+YB4pZkAH+EM1oZSLG/TmDu
-         Rzgw==
-X-Gm-Message-State: AO0yUKWCiJhv0PVaDaGrH4IOOr70Q/DrRli5U0gkjXK5Dr57DYvKv3L3
-        drJE8LO24/7274uevUHdzPcIDIgZO08=
-X-Google-Smtp-Source: AK7set/5hSzhbznLShCN9mH4QgUT5ezCAKCkmXOabRf13w9fGSB3polcvM2IgawbjrsJnM0h5ju2Cw==
-X-Received: by 2002:a05:6214:29e1:b0:5ab:3328:d6e7 with SMTP id jv1-20020a05621429e100b005ab3328d6e7mr12390959qvb.10.1679595560090;
-        Thu, 23 Mar 2023 11:19:20 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id mk5-20020a056214580500b005dd8b93459csm33527qvb.52.2023.03.23.11.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 11:19:19 -0700 (PDT)
-Message-ID: <95eb709c-a91f-4390-30b2-9e81e4534e20@gmail.com>
-Date:   Thu, 23 Mar 2023 11:19:12 -0700
+        bh=4UdIOBBpU5M34Q+dnxHktyTShJiu1SyYtXU+zhX+XRQ=;
+        b=MizkvGMYFfi8fcaQ783GKElCRJxrdE3lEFu/TSrfpvFrj/UG6+k/h2bu+QOUO/6uk5
+         xkfm0E8OeN8lRrprMeepRkFyiQPxTDuMJ3aZz+nvFR1Io3m5r9KrF9OMfeyuj5CRcLYd
+         CcI6b2ap0AUILsr3YJXOVa6xa1Gvo1ZmRfxOIrjGF0UwY+3zKINmKZuksqsdeagGREWO
+         hYIN0K4ReuoOC4U8bHKZSiRYkRr7FFU3q6ivWbQpu0k9Ems9p/P2BMuna2HYryky5+SW
+         wsc4CpEKEJd67yUxZDfC3s33qpqSY6nfyp19LE2PzEI1emQXV2zLNfnXlMZQGhr1ysz1
+         zw0g==
+X-Gm-Message-State: AO0yUKWorqApK0JBkGCOuS3rhNMtuBnGPuN1EIueX7pBfys20LAOSUDo
+        6asxJXrFTUNThdVIVvs1PhevzQ==
+X-Google-Smtp-Source: AK7set9X6TOXaFdht8hm7kOrpFUZVVpedAsVNDkKxUnVmus8Zt4lWACuNapirPGhMz9HPMD31ZR6Hw==
+X-Received: by 2002:a05:622a:15d2:b0:3e3:8502:fbcb with SMTP id d18-20020a05622a15d200b003e38502fbcbmr394669qty.40.1679595566584;
+        Thu, 23 Mar 2023 11:19:26 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id f16-20020ac86ed0000000b003e390b48958sm1837405qtv.55.2023.03.23.11.19.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 11:19:26 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 14:19:25 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+Message-ID: <20230323181925.GA742010@cmpxchg.org>
+References: <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+ <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+ <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
+ <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
+ <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
+ <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com>
+ <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
+ <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com>
+ <20230323173343.GF739026@cmpxchg.org>
+ <CAJD7tkb_Zpp4PqFNBJ3__7t5eiYwuqaZc=08B1g=S_tMF+wgSQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/1] net: dsa: b53: mmap: add dsa switch ops
-Content-Language: en-US
-To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
-        jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230323170238.210687-1-noltari@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230323170238.210687-1-noltari@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+In-Reply-To: <CAJD7tkb_Zpp4PqFNBJ3__7t5eiYwuqaZc=08B1g=S_tMF+wgSQ@mail.gmail.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,27 +92,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 10:02, Álvaro Fernández Rojas wrote:
-> B53 MMAP switches have a MDIO Mux bus controller which should be used instead
-> of the default phy_read/phy_write ops used in the rest of the B53 controllers.
-> Therefore, in order to use the proper MDIO Mux bus controller we need to
-> replicate the default B53 DSA switch ops removing the phy_read/phy_write
-> entries.
+On Thu, Mar 23, 2023 at 11:09:30AM -0700, Yosry Ahmed wrote:
+> On Thu, Mar 23, 2023 at 10:33 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Thu, Mar 23, 2023 at 09:17:33AM -0700, Yosry Ahmed wrote:
+> > > On Thu, Mar 23, 2023 at 9:10 AM Shakeel Butt <shakeelb@google.com> wrote:
+> > > >
+> > > > On Thu, Mar 23, 2023 at 8:46 AM Shakeel Butt <shakeelb@google.com> wrote:
+> > > > >
+> > > > > On Thu, Mar 23, 2023 at 8:43 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > > >
+> > > > > > On Thu, Mar 23, 2023 at 8:40 AM Shakeel Butt <shakeelb@google.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, Mar 23, 2023 at 6:36 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > > > > > >
+> > > > > > > [...]
+> > > > > > > > > >
+> > > > > > > > > > > 2. Are we really calling rstat flush in irq context?
+> > > > > > > > > >
+> > > > > > > > > > I think it is possible through the charge/uncharge path:
+> > > > > > > > > > memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage(). I
+> > > > > > > > > > added the protection against flushing in an interrupt context for
+> > > > > > > > > > future callers as well, as it may cause a deadlock if we don't disable
+> > > > > > > > > > interrupts when acquiring cgroup_rstat_lock.
+> > > > > > > > > >
+> > > > > > > > > > > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() is only
+> > > > > > > > > > > done for root memcg. Why is mem_cgroup_threshold() interested in root
+> > > > > > > > > > > memcg usage? Why not ignore root memcg in mem_cgroup_threshold() ?
+> > > > > > > > > >
+> > > > > > > > > > I am not sure, but the code looks like event notifications may be set
+> > > > > > > > > > up on root memcg, which is why we need to check thresholds.
+> > > > > > > > >
+> > > > > > > > > This is something we should deprecate as root memcg's usage is ill defined.
+> > > > > > > >
+> > > > > > > > Right, but I think this would be orthogonal to this patch series.
+> > > > > > > >
+> > > > > > >
+> > > > > > > I don't think we can make cgroup_rstat_lock a non-irq-disabling lock
+> > > > > > > without either breaking a link between mem_cgroup_threshold and
+> > > > > > > cgroup_rstat_lock or make mem_cgroup_threshold work without disabling
+> > > > > > > irqs.
+> > > > > > >
+> > > > > > > So, this patch can not be applied before either of those two tasks are
+> > > > > > > done (and we may find more such scenarios).
+> > > > > >
+> > > > > >
+> > > > > > Could you elaborate why?
+> > > > > >
+> > > > > > My understanding is that with an in_task() check to make sure we only
+> > > > > > acquire cgroup_rstat_lock from non-irq context it should be fine to
+> > > > > > acquire cgroup_rstat_lock without disabling interrupts.
+> > > > >
+> > > > > From mem_cgroup_threshold() code path, cgroup_rstat_lock will be taken
+> > > > > with irq disabled while other code paths will take cgroup_rstat_lock
+> > > > > with irq enabled. This is a potential deadlock hazard unless
+> > > > > cgroup_rstat_lock is always taken with irq disabled.
+> > > >
+> > > > Oh you are making sure it is not taken in the irq context through
+> > > > should_skip_flush(). Hmm seems like a hack. Normally it is recommended
+> > > > to actually remove all such users instead of silently
+> > > > ignoring/bypassing the functionality.
+> >
+> > +1
+> >
+> > It shouldn't silently skip the requested operation, rather it
+> > shouldn't be requested from an incompatible context.
+> >
+> > > > So, how about removing mem_cgroup_flush_stats() from
+> > > > mem_cgroup_usage(). It will break the known chain which is taking
+> > > > cgroup_rstat_lock with irq disabled and you can add
+> > > > WARN_ON_ONCE(!in_task()).
+> > >
+> > > This changes the behavior in a more obvious way because:
+> > > 1. The memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage()
+> > > path is also exercised in a lot of paths outside irq context, this
+> > > will change the behavior for any event thresholds on the root memcg.
+> > > With proposed skipped flushing in irq context we only change the
+> > > behavior in a small subset of cases.
+> >
+> > Can you do
+> >
+> >         /* Note: stale usage data when called from irq context!! */
+> >         if (in_task())
+> >                 mem_cgroup_flush_stats()
+> >
+> > directly in the callsite? Maybe even include the whole callchain in
+> > the comment that's currently broken and needs fixing/removing.
+> 
+> Yeah, we can do that in mem_cgroup_usage(), which is the only context
+> that I am aware of that may flush from irq context. We can also add
+> WARN_ON_ONCE(!in_task()) in the rstat core flushing code to catch any
+> other code paths that we are not aware of -- which may result in a
+> deadlock, but hopefully if there is a violation it will be caught soon
+> enough.
 
-Did you try to implement b53_mmap_ops::phy_read16/phy_write16 and have 
-them return -EIO such that you do not fallback to the else path:
-
-                   ret = b53_read16(priv, B53_PORT_MII_PAGE(addr),
-                                    reg * 2, &value);
-
-The reason for the hang I believe is because the B53_PORT_MII_PAGE is 
-simply not mapped into the switch register space, and there is no logic 
-within the switch block to return an error when you read at that invalid 
-location.
-
-Re-implementing dsa_switch_ops is usually done when you have a very 
-different switch integration logic, ala bcm_sf2, here it seems a bit of 
-a tall order for simply not using the phy_read16/phy_write16 functions.
--- 
-Florian
+That sounds good to me, thanks!
 
