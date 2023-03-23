@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120436C6620
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B36C662A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjCWLGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        id S229951AbjCWLIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjCWLGj (ORCPT
+        with ESMTP id S231145AbjCWLI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:06:39 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBBE2D162;
-        Thu, 23 Mar 2023 04:06:37 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBEF11EC0716;
-        Thu, 23 Mar 2023 12:06:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679569595;
+        Thu, 23 Mar 2023 07:08:28 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F541FD6;
+        Thu, 23 Mar 2023 04:08:27 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 140B21C0E45; Thu, 23 Mar 2023 12:08:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1679569706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FnQaXPVQ/yAcYZ9LCUiXXIRRl46i/tjadULUWjr+Cqg=;
-        b=obmLCxOLJRnfDcEdzZzWr8nEWr5ldR74/92v+RnlkTvYgdxaSRW8aUnuydVR6pQO1kbvEk
-        9hC1U3CLFqPcIJ+p23rUWQ2FMNxXKl5pw6VkC/whmWNkGVZeK/Scd1EObYjZgULeDywyVx
-        xfzw/WeAoYECpO/YAK/VQ+6hEkLdYhM=
-Date:   Thu, 23 Mar 2023 12:06:35 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jongwoo Han <jongwooo.han@gmail.com>
-Cc:     tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/i5100: Fix typo in comment
-Message-ID: <20230323110635.GDZBwyu8J92Qyun6Pp@fat_crate.local>
-References: <20230302021120.56794-1-jongwooo.han@gmail.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=k5hKQ0F5IqpeLP7FipvyIh82TpmOBiR55uTJeJOjZmg=;
+        b=HO9K77TtTnbAMb5Za+OPE24h45qee6DG8hFbn7so3VwcFqvA/1HVWxnSBhjZ4oskgucixh
+        e+PS0mQJN/JY5YO7qXY5BG9ipiVN9fuK7G9BRyZIH3wuQIsAghsOje8R0/38bqot1C5S7W
+        XEdEvMk53wTa2HleZ96gsodpjC7CtEc=
+Date:   Thu, 23 Mar 2023 12:08:25 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux MediaTek <linux-mediatek@lists.infradead.org>,
+        Linux LEDs <linux-leds@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, Lee Jones <lee@kernel.org>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Subject: Re: [PATCH 0/3] Documentation fixes for MT6370 RGB
+Message-ID: <ZBwzKUem+Cg5GU0U@duo.ucw.cz>
+References: <20230319074903.13075-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="D24VC61xTd81s6wO"
 Content-Disposition: inline
-In-Reply-To: <20230302021120.56794-1-jongwooo.han@gmail.com>
+In-Reply-To: <20230319074903.13075-1-bagasdotme@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,33 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:11:20AM +0900, Jongwoo Han wrote:
-> Correct typo from 'preform' to 'perform' in comment.
-> 
-> Signed-off-by: Jongwoo Han <jongwooo.han@gmail.com>
-> ---
->  drivers/edac/i5100_edac.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/edac/i5100_edac.c b/drivers/edac/i5100_edac.c
-> index f5d82518c..8db680b6a 100644
-> --- a/drivers/edac/i5100_edac.c
-> +++ b/drivers/edac/i5100_edac.c
-> @@ -909,7 +909,7 @@ static void i5100_do_inject(struct mem_ctl_info *mci)
->  	 *
->  	 * The injection code don't work without setting this register.
->  	 * The register needs to be flipped off then on else the hardware
-> -	 * will only preform the first injection.
-> +	 * will only perform the first injection.
->  	 *
->  	 * Stop condition bits 7:4
->  	 * 1010 - Stop after one injection
-> -- 
 
-Applied, thanks.
+--D24VC61xTd81s6wO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Regards/Gruss,
-    Boris.
+On Sun 2023-03-19 14:49:00, Bagas Sanjaya wrote:
+> kernel test robot recently reported htmldocs warnings on documentation
+> for MT6370 RGB LED. So here are the fixes.
+>=20
+> Bagas Sanjaya (3):
+>   Documentation: leds: Add MT6370 doc to the toctree
+>   Documentation: leds: MT6370: Properly wrap hw_pattern chart
+>   Documentation: leds: MT6370: Use bullet lists for timing variables
+>=20
+>  Documentation/leds/index.rst           |  1 +
+>  Documentation/leds/leds-mt6370-rgb.rst | 42 +++++++++++++-------------
+>  2 files changed, 22 insertions(+), 21 deletions(-)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Series looks good to me.
+
+Acked-by: Pavel Machek <pavel@ucw.cz>
+
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--D24VC61xTd81s6wO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBwzKQAKCRAw5/Bqldv6
+8j/vAJ0WmSMJOhbk/I5/iFHaEdFTR8H20gCgniwKgLB/GP2U0jwW2klmXEF8xEc=
+=U7EG
+-----END PGP SIGNATURE-----
+
+--D24VC61xTd81s6wO--
