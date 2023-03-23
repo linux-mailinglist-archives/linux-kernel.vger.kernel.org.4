@@ -2,290 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2707D6C6A04
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013246C69F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbjCWNxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S231843AbjCWNw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjCWNw4 (ORCPT
+        with ESMTP id S231681AbjCWNwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:52:56 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FB428E63;
-        Thu, 23 Mar 2023 06:52:52 -0700 (PDT)
-Received: from koko.localdomain ([89.1.213.94]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mof1D-1qHA1O1nWz-00p4pQ; Thu, 23 Mar 2023 14:52:47 +0100
-From:   Maximilian Weigand <mweigand@mweigand.net>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Maximilian Weigand <mweigand@mweigand.net>,
-        Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH 6/6] Input: cyttsp5: implement proper sleep and wakeup procedures
-Date:   Thu, 23 Mar 2023 14:52:05 +0100
-Message-Id: <20230323135205.1160879-7-mweigand@mweigand.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230323135205.1160879-1-mweigand@mweigand.net>
-References: <20230323135205.1160879-1-mweigand@mweigand.net>
+        Thu, 23 Mar 2023 09:52:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF557ECD;
+        Thu, 23 Mar 2023 06:52:23 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y4so86971839edo.2;
+        Thu, 23 Mar 2023 06:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679579542;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hCM/asaxbLHdp2e/d8AVFh0bmUGqAzxZv/hf4ha4l9Y=;
+        b=pstVBkDnZrmssUIUYPZjpk78j5pcOe/MM4ApJ+Yu3jCuurIPGxpCrbOLxR0S4ssq+7
+         YO69iekwuVXT/hy/xGmfVE3jgGvj4NFBTk71kmjq9JC/lsPAmab78B7EjYBBG2VS5LeJ
+         qJcliefH9FqPYxhQLyVb804kpIyGUud27JhznW1tmUMvuJHKaQqOEhYeQJEzISmpynKL
+         qoT/X12DnPqa+pSP5aDBwxSssOqDBzjQkutyXJRaLz5C0NZUznnJp805jh5prRKQ4wNj
+         tYrP17M+XlJoXkBsJgTVUJxtl0KTm5wHaoQDJuGvs7CI0c70nMaAuAu8/86Zyu3aCeK1
+         hWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679579542;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hCM/asaxbLHdp2e/d8AVFh0bmUGqAzxZv/hf4ha4l9Y=;
+        b=OpOny3kPVxxroWsbTTXIKpf0l5baUs0QM7R6WyZhL6MCMdbhHrEQdZjHXa6FUqS/6i
+         R0WwT2SYMTDKBrk9VZO6XLE9lrPmqn1lQjNPQTuOuMWz810vPGLLhgGoSkI+sM0ow6IT
+         iRCryCEPtMedd3o2N7TC98BmEnuvugXKTrMSSlpONMonhIRHvFDhFm0jDI7xrTPe5kFB
+         /TbxPno0Fmnr88JbW4cyNSB8KW8Xzri4l9lLZ+whYUWWy0SuRRaLcil9NICicmteq7sG
+         uhkv1TSmAoLMw4+31dZ/ljn0YFvPs4TS6S366tM93ejvEudqCTDC0tlStZpc9XffmqQF
+         KjjQ==
+X-Gm-Message-State: AO0yUKV2Z+f1CCVwFMgCsdcRhVChETEBVNW7sqVzRurJJIs+b9rBEFO9
+        GOtlvYK8qQOJGAvU28GNSmzJj6kLQqI=
+X-Google-Smtp-Source: AK7set8/7bvQOIV2HCFliHXd5hevFPhZ2APdmoa3kx1pSVhz43v62G9Mz96w5R39l2XvFhyIFuT9Ug==
+X-Received: by 2002:a17:906:c01:b0:930:27c2:6d8d with SMTP id s1-20020a1709060c0100b0093027c26d8dmr10885715ejf.61.1679579541914;
+        Thu, 23 Mar 2023 06:52:21 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id v15-20020a170906858f00b0093229e527cdsm8248292ejx.42.2023.03.23.06.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 06:52:21 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 14:52:20 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "digetx@gmail.com" <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>
+Subject: Re: [PATCH v3] i2c: tegra: Share same DMA channel for RX and TX
+Message-ID: <ZBxZlNOhLyUZi1B+@orome>
+References: <20230322102413.52886-1-akhilrajeev@nvidia.com>
+ <db870e74-9d97-740a-9829-5fafc0bb0559@nvidia.com>
+ <SJ1PR12MB6339FC0B9BB57D1D2300D46CC0869@SJ1PR12MB6339.namprd12.prod.outlook.com>
+ <b9235dfc-10dc-1ed0-1510-fd98902491e3@nvidia.com>
+ <SJ1PR12MB63395F16F399E67733EED69BC0879@SJ1PR12MB6339.namprd12.prod.outlook.com>
+ <ZBwg2Rnc6d5EQ3pu@orome>
+ <SJ1PR12MB63391B10B3F73DE89A214486C0879@SJ1PR12MB6339.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:zzLyeqflRm7UGravOHiW9xcOiaMBdEHtUyUJZy+G19EFiSvwZEy
- bB1uFk0Icuov9zFJw5z94J7ZfVW46ZVUEh2+9+1PwidmBZu2lsEzBiXsECNj43pGOJoR/14
- l6beIwi8usfnUL0JTV5KAP1rCOoJtFJu7WXVLgZgnlhcYtlRz0SMWIXOUxWBGT387o4bSAb
- S0CBmfK1ip2o7cuE13Ivg==
-UI-OutboundReport: notjunk:1;M01:P0:dbSg3Nw2nDA=;psUiAgzFxzslLiHCkMxlFn64goY
- wlu+imSNWjE1s6slWUg6OJns53Pe8gnVrUdYlaIHM/a6+q1xoSNcb/Zg0MGsvvGjDAN/Ps2Vt
- XNVmglUZeusYMtIZZyRviCz21ZyfKSQwU4SChKboc0yqTW1SiUkK3a+KXbSheaDn7KUcIsDry
- NomUVJsDZgWmHu03+IF9HoYKpNnvXeX7e6h7jn04ihq4twrKm075QBwfVeD+Txgo3Sews9YN1
- gtvLdwgKImv5AL9xx3PDJZq4zHlZA9cM96aZgWJoM0oqeK1kvieEAgvs6VVFHn4x6hP/mHMhg
- KUGEMGU/ru4Fj25l5ktJVLqBKOEjhknOSkES7Il46ctAOGfRJBUY1UyL8O9xQzpE43qVMfKc6
- j/ynA9I8ulQjbWs8W/AoGVT94WsuMBAzY2YST3XJyU/9hR68UDUkIaMmQaazlO0//fO9a8Slp
- 8w6n9fwPDvFFGOHF32WJuq6m09sRukTk2EkrFDmny6kVg/FSOH21AjikQRTdzw+5h1ktpALzz
- Tj7gQqBwOjFL2GkE9q7Yh7M8H6lDKU7MYmstQkNYBVsMeOVe0cY9SrmmbqO690DxyRethv1iY
- d8ou9y/kcN30787xFt9rBQMtvqe6TYkH0JOvUs9POsLhgHBU+2Ll6rwYrbHWyztna/EqoHdBm
- hqSXjZy1keh61fCDM4V9+zeDfaAfD/MQsmZuY/CjPQ==
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CcE1zS+p41bOMhG1"
+Content-Disposition: inline
+In-Reply-To: <SJ1PR12MB63391B10B3F73DE89A214486C0879@SJ1PR12MB6339.namprd12.prod.outlook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The touchscreen can be put into a deep sleep state that prevents it from
-emitting touch irqs. Put the touchscreen into deep sleep during suspend
-if it is not marked as a wakeup source.
 
-This also fixes a problem with the touchscreen getting unresponsive after
-system resume because it pulled the interrupt line low during sleep in
-response to a touch event, thereby effectively disabling the interrupt
-handling (which triggers on the falling edge).
+--CcE1zS+p41bOMhG1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
-Reviewed-by: Alistair Francis <alistair@alistair23.me>
----
- drivers/input/touchscreen/cyttsp5.c | 129 +++++++++++++++++++++++++++-
- 1 file changed, 128 insertions(+), 1 deletion(-)
+On Thu, Mar 23, 2023 at 12:16:23PM +0000, Akhil R wrote:
+> , Mar 23, 2023 at 09:26:00AM +0000, Akhil R wrote:
+> > > > On 22/03/2023 12:00, Akhil R wrote:
+> > > > >> On 22/03/2023 10:24, Akhil R wrote:
+> > > > >>> Allocate only one DMA channel for I2C and share it for both TX =
+and
+> > RX
+> > > > >>> instead of using two different DMA hardware channels with the
+> > same
+> > > > >>> slave ID. Since I2C supports only half duplex, there is no impa=
+ct on
+> > > > >>> perf with this.
+> > > > >>>
+> > > > >>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > > > >>
+> > > > >> Just to confirm. This impacts all Tegra devices from Tegra20 to =
+the
+> > > > >> latest. Does this work for all Tegra and the different DMA contr=
+ollers
+> > > > >> that they have?
+> > > > >>
+> > > > > Yes, It should. I could see in the APB DMA driver that the same c=
+hannel
+> > > > > could be used for TX and RX and the direction is configured only =
+during
+> > > > > dma_prep_*() calls.
+> > > > > I did not test it on a Tegra with APB DMA, but since it works very
+> > similar
+> > > > > to GPC DMA there should not be any impact.
+> > > >
+> > > >
+> > > > OK. BTW, this does not apply cleanly on top of -next. It appears th=
+at
+> > > > this is based on top "i2c: tegra: Fix PEC support for SMBUS block r=
+ead"
+> > > > and that one needs to be applied first. This can be avoided if you =
+send
+> > > > as a series.
+> > > >
+> > > Oh. Okay. I used 'git am --3way' when I tried, and the conflict went
+> > unnoticed.
+> > > Shall I send a new version on top of -next?
+> > > The two patches were added in different contexts and that=E2=80=99s w=
+hy I did not
+> > > combine them as a series.
+> >=20
+> > It's usually best to combine them in a series even if they are in
+> > slightly different contexts. This is especially true if they cause
+> > conflicts between one another. If you send them as a series, you can
+> > resolve the conflicts yourself (you may not even have conflicts locally
+> > if you create the patches in the same branch), but if you send them
+> > separately the maintainer will end up having to resolve the conflicts
+> > (or apply in the right order).
+> >=20
+> > It's best if you resolve the conflicts because you know better than the
+> > maintainer (usually) or specify any dependencies to make it easier for
+> > the maintainer to do the right thing.
+> >=20
+> > But again, in the vast majority of cases, it's best to combine all the
+> > work on one driver in a single series before sending out.
+> >=20
+> Okay. Got it. I shall send a new patchset with both the patches.=20
+> Can I put the patchset as v1 or does it have to be something different?
+> Because this patch is in v3 and "i2c: tegra: Fix PEC support for SMBUS=20
+> block read" is v2 now.
 
-diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscreen/cyttsp5.c
-index 01dd10a596ab..3e8387f6347c 100644
---- a/drivers/input/touchscreen/cyttsp5.c
-+++ b/drivers/input/touchscreen/cyttsp5.c
-@@ -43,6 +43,7 @@
- #define HID_DESC_REG				0x1
- #define HID_INPUT_REG				0x3
- #define HID_OUTPUT_REG				0x4
-+#define HID_COMMAND_REG             0x5
- 
- #define REPORT_ID_TOUCH				0x1
- #define REPORT_ID_BTN				0x3
-@@ -68,6 +69,7 @@
- #define HID_APP_OUTPUT_REPORT_ID		0x2F
- #define HID_BL_RESPONSE_REPORT_ID		0x30
- #define HID_BL_OUTPUT_REPORT_ID			0x40
-+#define HID_RESPONSE_REPORT_ID      0xF0
- 
- #define HID_OUTPUT_RESPONSE_REPORT_OFFSET	2
- #define HID_OUTPUT_RESPONSE_CMD_OFFSET		4
-@@ -78,9 +80,15 @@
- #define HID_SYSINFO_BTN_MASK			GENMASK(7, 0)
- #define HID_SYSINFO_MAX_BTN			8
- 
-+#define HID_CMD_SET_POWER           0x8
-+
-+#define HID_POWER_ON                0x0
-+#define HID_POWER_SLEEP             0x1
-+
- #define CY_HID_OUTPUT_TIMEOUT_MS		200
- #define CY_HID_OUTPUT_GET_SYSINFO_TIMEOUT_MS	3000
- #define CY_HID_GET_HID_DESCRIPTOR_TIMEOUT_MS	4000
-+#define CY_HID_SET_POWER_TIMEOUT		500
- 
- /* maximum number of concurrent tracks */
- #define TOUCH_REPORT_SIZE			10
-@@ -100,6 +108,14 @@
- #define TOUCH_REPORT_USAGE_PG_MIN		0xFF010063
- #define TOUCH_COL_USAGE_PG			0x000D0022
- 
-+#define SET_CMD_LOW(byte, bits) \
-+	((byte) = (((byte) & 0xF0) | ((bits) & 0x0F)))
-+#define SET_CMD_HIGH(byte, bits)\
-+	((byte) = (((byte) & 0x0F) | ((bits) & 0xF0)))
-+#define SET_CMD_OPCODE(byte, opcode) SET_CMD_LOW(byte, opcode)
-+#define SET_CMD_REPORT_TYPE(byte, type) SET_CMD_HIGH(byte, ((type) << 4))
-+#define SET_CMD_REPORT_ID(byte, id) SET_CMD_LOW(byte, id)
-+
- /* System Information interface definitions */
- struct cyttsp5_sensing_conf_data_dev {
- 	u8 electrodes_x;
-@@ -179,6 +195,7 @@ struct cyttsp5_hid_desc {
- struct cyttsp5 {
- 	struct device *dev;
- 	struct completion cmd_done;
-+	struct completion cmd_command_done;
- 	struct cyttsp5_sysinfo sysinfo;
- 	struct cyttsp5_hid_desc hid_desc;
- 	u8 cmd_buf[CYTTSP5_PREALLOCATED_CMD_BUFFER];
-@@ -191,6 +208,7 @@ struct cyttsp5 {
- 	struct regmap *regmap;
- 	struct touchscreen_properties prop;
- 	struct regulator *vdd;
-+	bool is_wakeup_source;
- };
- 
- /*
-@@ -556,6 +574,84 @@ static int cyttsp5_hid_output_get_sysinfo(struct cyttsp5 *ts)
- 	return cyttsp5_get_sysinfo_regs(ts);
- }
- 
-+static int cyttsp5_enter_sleep(struct cyttsp5 *ts)
-+{
-+	int rc;
-+	u8 cmd[2];
-+	u16 crc;
-+
-+	memset(cmd, 0, sizeof(cmd));
-+
-+	SET_CMD_REPORT_TYPE(cmd[0], 0);
-+	SET_CMD_REPORT_ID(cmd[0], HID_POWER_SLEEP);
-+	SET_CMD_OPCODE(cmd[1], HID_CMD_SET_POWER);
-+
-+	rc = cyttsp5_write(ts, HID_COMMAND_REG, cmd, 2);
-+	if (rc) {
-+		dev_err(ts->dev, "Failed to write command %d", rc);
-+		return rc;
-+	}
-+
-+	rc = wait_for_completion_interruptible_timeout(&ts->cmd_command_done,
-+				msecs_to_jiffies(CY_HID_SET_POWER_TIMEOUT));
-+	if (rc <= 0) {
-+		dev_err(ts->dev, "HID output cmd execution timed out\n");
-+		rc = -ETIMEDOUT;
-+		return rc;
-+	}
-+
-+	/* validate */
-+	if ((ts->response_buf[2] != HID_RESPONSE_REPORT_ID)
-+			|| ((ts->response_buf[3] & 0x3) != HID_POWER_SLEEP)
-+			|| ((ts->response_buf[4] & 0xF) != HID_CMD_SET_POWER)) {
-+		rc = -EINVAL;
-+		dev_err(ts->dev, "Validation of the sleep response failed\n");
-+		return rc;
-+	}
-+
-+	return 0;
-+
-+}
-+
-+static int cyttsp5_wakeup(struct cyttsp5 *ts)
-+{
-+	int rc;
-+	u8 cmd[2];
-+	u16 crc;
-+
-+	memset(cmd, 0, sizeof(cmd));
-+
-+	SET_CMD_REPORT_TYPE(cmd[0], 0);
-+	SET_CMD_REPORT_ID(cmd[0], HID_POWER_ON);
-+	SET_CMD_OPCODE(cmd[1], HID_CMD_SET_POWER);
-+
-+	rc = cyttsp5_write(ts, HID_COMMAND_REG, cmd, 2);
-+	if (rc) {
-+		dev_err(ts->dev, "Failed to write command %d", rc);
-+		return rc;
-+	}
-+
-+	rc = wait_for_completion_interruptible_timeout(&ts->cmd_command_done,
-+				msecs_to_jiffies(CY_HID_SET_POWER_TIMEOUT));
-+	if (rc <= 0) {
-+		dev_err(ts->dev, "HID output cmd execution timed out\n");
-+		rc = -ETIMEDOUT;
-+		return rc;
-+	}
-+
-+	/* validate */
-+	if ((ts->response_buf[2] != HID_RESPONSE_REPORT_ID)
-+			|| ((ts->response_buf[3] & 0x3) != HID_POWER_ON)
-+			|| ((ts->response_buf[4] & 0xF) != HID_CMD_SET_POWER)) {
-+		rc = -EINVAL;
-+		dev_err(ts->dev, "Validation of the sleep response failed\n");
-+		return rc;
-+	}
-+
-+	return 0;
-+
-+}
-+
- static int cyttsp5_hid_output_bl_launch_app(struct cyttsp5 *ts)
- {
- 	int rc;
-@@ -670,6 +766,10 @@ static irqreturn_t cyttsp5_handle_irq(int irq, void *handle)
- 	case HID_BTN_REPORT_ID:
- 		cyttsp5_btn_attention(ts->dev);
- 		break;
-+	case HID_RESPONSE_REPORT_ID:
-+		memcpy(ts->response_buf, ts->input_buf, size);
-+		complete(&ts->cmd_command_done);
-+		break;
- 	default:
- 		/* It is not an input but a command response */
- 		memcpy(ts->response_buf, ts->input_buf, size);
-@@ -784,6 +884,7 @@ static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
- 	dev_set_drvdata(dev, ts);
- 
- 	init_completion(&ts->cmd_done);
-+	init_completion(&ts->cmd_command_done);
- 
- 	/* Power up the device */
- 	ts->vdd = devm_regulator_get(dev, "vdd");
-@@ -830,8 +931,11 @@ static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
- 		return error;
- 	}
- 
--	if (device_property_read_bool(dev, "wakeup-source"))
-+	if (device_property_read_bool(dev, "wakeup-source")) {
- 		device_init_wakeup(dev, true);
-+		ts->is_wakeup_source = true;
-+	} else
-+		ts->is_wakeup_source = false;
- 
- 	error = cyttsp5_startup(ts);
- 	if (error) {
-@@ -884,6 +988,29 @@ static const struct i2c_device_id cyttsp5_i2c_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, cyttsp5_i2c_id);
- 
-+static int __maybe_unused cyttsp5_suspend(struct device *dev)
-+{
-+	struct cyttsp5 *ts = dev_get_drvdata(dev);
-+
-+	if (!ts->is_wakeup_source)
-+		cyttsp5_enter_sleep(ts);
-+	return 0;
-+}
-+
-+static int __maybe_unused cyttsp5_resume(struct device *dev)
-+{
-+	struct cyttsp5 *ts = dev_get_drvdata(dev);
-+	struct i2c_client *client = to_i2c_client(dev);
-+	int error;
-+
-+	if (!ts->is_wakeup_source)
-+		cyttsp5_wakeup(ts);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(cyttsp5_pm, cyttsp5_suspend, cyttsp5_resume);
-+
- static struct i2c_driver cyttsp5_i2c_driver = {
- 	.driver = {
- 		.name = CYTTSP5_NAME,
--- 
-2.39.2
+Best to keep versioning. I'd go with making the combined series v4,
+which is probably the least confusing. You can technically also make a
+combined series where each patch is at a different version, but that
+would probably confuse people even more.
 
+Thierry
+
+--CcE1zS+p41bOMhG1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcWZEACgkQ3SOs138+
+s6EzDA//SdB03eh7tWga1ZsnAih5+Omq8AJYQIDmz+s5HtoaIRGPusBKVkK5yaJ3
+uJktcFq9kXRDaCQs3lryqnAdGqD4gEHJuJVh9jGJCkDzsO9NvuIiVfWDVy2GQRMW
+8Xpi5UpGu5HBelXx1rOFUP4kLPTp/4Br5zdatxqgCKn1eIucjVLQ/dVrthpmA6vf
+8oXwm73XD4f25YHfOnUdtQb+8aHNs7O4iB8xcAEg1F5K8B4/CIykorGEVrazXmUM
+mvNEevVeg/Dww+yr3oGgM+YRWnYkJUt8mmHOsBQcl42nR9JRRvdH0yS8RZ3QLcNZ
+cJbSe65tMbgvde0+nHznaUVdYn05sxoorYSwZR7RCWKFSWN0ffc9yNxh5HKiezpS
+QHO/eMl//NiAz6qoV0PCucW+d2ClY4sPIW8pxE3w8FmvXP9KR6yiavSa0eHYg9iT
+FW4KvW/Dbkjq1K4AoYaUp+hnnrUtNGmx4f4lvxWNyFVucOcXfZK5WHd9FvJf5f+B
+sSFQdvK8NFDOugtfXOPUN4NZQfHZz0f2OXASiQXlWWYGgIwyU0i6y5r1j4Hw6Kei
+3OhC2F5+J5qPUVpCl5CFFhx0TjRNpnT6aztrdJZkUPGO7fa1CMBjcZLyRevokwKJ
+RNFa2DOCXdJbSOKtU7ZPl4FNvnLZVyhwtpBUZlzIZddC+IAvpCE=
+=TrYq
+-----END PGP SIGNATURE-----
+
+--CcE1zS+p41bOMhG1--
