@@ -2,193 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34EF6C72AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F35A6C72B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjCWV76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S231303AbjCWWAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCWV7z (ORCPT
+        with ESMTP id S230075AbjCWWAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:59:55 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E266218ABC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so3511433pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679608793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBrPAsOPLA5SHIhVYbiPO9xPAXdatozqf1Me6tgID0s=;
-        b=K78rBeJU2xxEG+YystW3iiMULXg1fV6+fr73nqJbl1TNP1j6ur4vBJujIeqq8892AT
-         GIzt8YbORoR8k9CrFSlMV0QSvTYrs71zpuh87dSGeybHnxBcvOA10FX0U5GqIkToee5O
-         jZAy1tb/rofMRZDXlJsYNu30wy9lIWCdMBoONqcMldXhdBjuyoy+7B91W1BWuU15/StE
-         zwyaRcf8EYol9sOhMT59zP5il5iWFKQVMDVu9kj+csmKea74+PoM54gF/DayV9USQ8uj
-         KMzdKbVePN5/w2QOaQnWdYq95bdh/9w31/l/5GChT5iztIBXW6ZpzFiohBJJqqngARbj
-         xsVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679608793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kBrPAsOPLA5SHIhVYbiPO9xPAXdatozqf1Me6tgID0s=;
-        b=iJYr99lq1JMMTwBMgcd1SjbV/ozaazcibeqi444pOKHqeiC6YoJ9hVfIP7odcxc53k
-         4lC78lTf2Ayk7Py1sHzWoI336hmqxicLkbSNT0I2P8v+q+X0LsWQ1Hka7fdW1DRjPOrR
-         VR6cyKyGOa99mGx38rEV2R9vEVUGD71Uf7MvbK4RlCUTr6/l6SARg6+SmNVLP5HsGCay
-         Y+GKqIP3098s8elkTi5aBJSZDNPILayFz8psIl+PttTYkhbx3WJDDJok5MejbR2kVtz4
-         yzfW+B1r0p9h5YNDkleWxqoeTmdlzHw/e/R+cXVzze5CA3dOpi1rJv65m/r+VAEtoFNM
-         LiOg==
-X-Gm-Message-State: AAQBX9fN8uZwk/6qBim3+mse3tiT4Bcf2HNfX1oByaVn7NGLRpLfmAU8
-        iibR9dnxG1xRo/20Sv26PvzzTA==
-X-Google-Smtp-Source: AKy350YzVRVvcpp8D3CuzT1j94gNIfxCDTvQ6bNJTpCyd7aDek9aQq3yYiNBLy7HqI6QK3JfdK2nKQ==
-X-Received: by 2002:a17:902:e80f:b0:19d:af20:3fe8 with SMTP id u15-20020a170902e80f00b0019daf203fe8mr501695plg.21.1679608793077;
-        Thu, 23 Mar 2023 14:59:53 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id jj2-20020a170903048200b0019fea4bb887sm12868896plb.157.2023.03.23.14.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 14:59:52 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 14:59:48 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        jmattson@google.com, mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v4 11/18] KVM: x86/mmu: Add documentation of NUMA aware
- page table capability
-Message-ID: <ZBzL1Awe7S00dPUP@google.com>
-References: <20230306224127.1689967-1-vipinsh@google.com>
- <20230306224127.1689967-12-vipinsh@google.com>
+        Thu, 23 Mar 2023 18:00:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD372199F5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:59:59 -0700 (PDT)
+Received: from [192.168.2.179] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 950556603100;
+        Thu, 23 Mar 2023 21:59:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679608798;
+        bh=60wGBuJj45XCCI/s63PRczMsiWd8B2jtfeIEzwRScu8=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=Jz5fJubEMEXtOrf6sJBCf4YJWA2vEtn2rP3P1O9oLy7JGzXWG0Ck9gId5s90NQ/MD
+         oTP1If2L+r+OiCWIpxMDWW0zIGmKwBT2tXqtWXezuZqqOvr+aQyKZfFPis9xuCmQgz
+         5ZmoKh2JLWwplhchtXxiahcDDd4lY4/YPGIDZTkYe/ey7e0c44apS2Qolu+JEhUjD1
+         pwIQ3t+Lr9FRAXUiFNLf/jn4htGnYBjyS6ksv9Ss5QymatYdCDU33kFUEiWpNJnma9
+         upPvZUmk83Fe9VXj2M6DR9w4vqcB3DFAsk2a1EszJbtqfgmHsW3X2aQQqDiOgIO6gB
+         srwh2w1WMUBwg==
+Message-ID: <fafecfaf-a3c2-3ffb-b9e3-1f3d96b1318a@collabora.com>
+Date:   Fri, 24 Mar 2023 00:59:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306224127.1689967-12-vipinsh@google.com>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/2] drm/virtio: Support sync objects
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20230323190340.950875-1-dmitry.osipenko@collabora.com>
+ <20230323190340.950875-3-dmitry.osipenko@collabora.com>
+In-Reply-To: <20230323190340.950875-3-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:41:20PM -0800, Vipin Sharma wrote:
-> Add documentation for KVM_CAP_NUMA_AWARE_PAGE_TABLE capability and
-> explain why it is needed.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  Documentation/virt/kvm/api.rst | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 62de0768d6aa..7e3a1299ca8e 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7669,6 +7669,35 @@ This capability is aimed to mitigate the threat that malicious VMs can
->  cause CPU stuck (due to event windows don't open up) and make the CPU
->  unavailable to host or other VMs.
->  
-> +7.34 KVM_CAP_NUMA_AWARE_PAGE_TABLE
-> +------------------------------
+On 3/23/23 22:03, Dmitry Osipenko wrote:
+>  struct virtio_gpu_submit {
+> +	struct virtio_gpu_submit_post_dep *post_deps;
+> +	unsigned int num_out_syncobjs;
 > +
-> +:Architectures: x86
-> +:Target: VM
-> +:Returns: 0 on success, -EINVAL if vCPUs are already created.
-> +
-> +This capability allows userspace to enable NUMA aware page tables allocations.
+> +	struct drm_syncobj **in_syncobjs;
+> +	unsigned int num_in_syncobjs;
+> +	uint64_t *in_fence_ids;
+> +	unsigned int num_in_fence_ids;
 
-Call out that this capability overrides task mempolicies. e.g.
+The in_fence_ids actually doesn't belong to this patch. Missed to remove
+it on a rebase, will fix in v4.
 
-  This capability causes KVM to use a custom NUMA memory policy when
-  allocating page tables. Specifically, KVM will attempt to co-locate
-  page tables pages with the memory that they map, rather than following
-  the mempolicy of the current task.
+-- 
+Best regards,
+Dmitry
 
-> +NUMA aware page tables are disabled by default. Once enabled, prior to vCPU
-> +creation, any page table allocated during the life of a VM will be allocated
-
-The "prior to vCPU creation" part here is confusing because it sounds
-like you're talking about any page tables allocated before vCPU
-creation. Just delete that part and put it in a separate paragraph.
-
- KVM_CAP_NUMA_AWARE_PAGE_TABLE must be enabled before any vCPU is
- created, otherwise KVM will return -EINVAL.
-
-> +preferably from the NUMA node of the leaf page.
-> +
-> +Without this capability, default feature is to use current thread mempolicy and
-
-s/default feature is to/KVM will/
-
-> +allocate page table based on that.
-
-s/and allocate page table based on that./to allocate page tables./
-
-> +
-> +This capability is useful to improve page accesses by a guest. For example, an
-
-nit: Be more specific about how.
-
- This capability aims to minimize the cost of TLB misses when a vCPU is
- accessing NUMA-local memory, by reducing the number of remote memory
- accesses needed to walk KVM's page tables.
-
-> +initialization thread which access lots of remote memory and ends up creating
-> +page tables on local NUMA node, or some service thread allocates memory on
-> +remote NUMA nodes and later worker/background threads accessing that memory
-> +will end up accessing remote NUMA node page tables.
-
-It's not clear if these examples are talking about what happens when
-KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled or disabled.
-
-Also it's important to distinguish virtual NUMA nodes from physical NUMA
-nodes and where these "threads" are running. How about this:
-
- For example, when KVM_CAP_NUMA_AWARE_PAGE_TABLE is disabled and a vCPU
- accesses memory on a remote NUMA node and triggers a KVM page fault,
- KVM will allocate page tables to handle that fault on the node where
- the vCPU is running rather than the node where the memory is allocated.
- When KVM_CAP_NUMA_AWARE_PAGE_TABLE is enabled, KVM will allocate the
- page tables on the node where the memory is located.
-
- This is intended to be used in VM configurations that properly
- virtualize NUMA. i.e. VMs with one or more virtual NUMA nodes, each of
- which is mapped to a physical NUMA node. With this capability enabled
- on such VMs, any guest memory access to virtually-local memory will be
- translated through mostly[*] physically-local page tables, regardless
- of how the memory was faulted in.
-
- [*] KVM will fallback to allocating from remote NUMA nodes if the
- preferred node is out of memory. Also, in VMs with 2 or more NUMA
- nodes, higher level page tables will necessarily map memory across
- multiple physical nodes.
-
-> So, a multi NUMA node
-> +guest, can with high confidence access local memory faster instead of going
-> +through remote page tables first.
-> +
-> +This capability is also helpful for host to reduce live migration impact when
-> +splitting huge pages during dirty log operations. If the thread splitting huge
-> +page is on remote NUMA node it will create page tables on remote node. Even if
-> +guest is careful in making sure that it only access local memory they will end
-> +up accessing remote page tables.
-
-Please also cover the limitations of this feature:
-
- - Impact on remote memory accesses (more expensive).
- - How KVM handles NUMA node exhaustion.
- - How high-level page tables can span multiple nodes.
- - What KVM does if it can't determine the NUMA node of the pfn.
- - What KVM does for faults on GPAs that aren't backed by a pfn.
-
-> +
->  8. Other capabilities.
->  ======================
->  
-> -- 
-> 2.40.0.rc0.216.gc4246ad0f0-goog
-> 
