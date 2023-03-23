@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB286C622F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCAB6C622A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCWIrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S230074AbjCWIpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjCWIra (ORCPT
+        with ESMTP id S229526AbjCWIpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:47:30 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D2ABD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:47:28 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id x6so2944287ile.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679561247;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kw3ZQAxjNdASizR+OYS7EtovhtSucsPRdDKQ/E9foLg=;
-        b=GRWSDdCm9yKOK0bqoYMwuKK1+ptFDM0yuhrK/3OQfNEqA6U7MdIn39AyZgmx907tQC
-         8VAhvKMNe+polZfYfzU9oQRBiKK0IxdXvU3UuG+Pz/fnlorrwSpakukzLEbuCK9Xp9ag
-         WQstUZm+AFgqeXo2vgd86Xq6RuJgrz29BBNRQGilzWdb3NPLyxV5Dql4A0rNCpjvmFWp
-         yb4c/slpw81QyFFRxxGo+U8PIUYyzkriggJNIKbaF6wfHUG/O1rKd2H/9rxsxveIzGhR
-         1jUeZ7Y8V1JoeNge3uiTEGZ7YCGmGAcYkTqodfojYaVIjhGX8v3THqEG0/jcwS9Ty+yK
-         T8cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679561247;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kw3ZQAxjNdASizR+OYS7EtovhtSucsPRdDKQ/E9foLg=;
-        b=JJ0cGX5VrvbmKHeSQFzERfMUw4avNbp0Jvo2iwZBcg3ObxUpqUXonT/7ngJ23/lWYM
-         t8sKZQTMUy2k7FVsao5+0EXyDLYiUwKIrNAck6bbpqp4FMV3ypPv6f77x6HGLsx6Vh6d
-         mAMA+SEck8X/mMSc6IYAz0l0zpZBUnpHOjCAaRWJqebLR/LanQvQGcErBNGoS1qWq4+r
-         5RLbFPILNbCIxX5ppTJ2DbvCRXLBc7KtMwkonC+2K//NA7PShN0aEa4zjOGqWLfUauWp
-         69Bz3NXplSwyYD1ybLGeRmt+hy7UpVk0SMkDmVOPN983AW0kSu27qIRqfCu71ntuecWn
-         KFqQ==
-X-Gm-Message-State: AO0yUKUdTvAY1Tk/7YSHGTlOVrtkxuLfM9W1gU2kO3gSkxYfXazCm15n
-        HpwWmWZ9X3f+V6apYr5AzuCBlSiFZWx5IQ==
-X-Google-Smtp-Source: AK7set88q3i2JrwNmfiOYoV9tVwhzBWa2jSD3MTRpcNom5H1LLefaQB8TxFtSxigTTch0v5xQWz6Eg==
-X-Received: by 2002:a92:d98a:0:b0:325:b002:89b4 with SMTP id r10-20020a92d98a000000b00325b00289b4mr5390126iln.25.1679561247448;
-        Thu, 23 Mar 2023 01:47:27 -0700 (PDT)
-Received: from MBP (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
-        by smtp.gmail.com with ESMTPSA id j189-20020a0263c6000000b0039deb26853csm5915306jac.10.2023.03.23.01.47.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 01:47:27 -0700 (PDT)
-References: <20230303161906.831686-1-schspa@gmail.com>
- <20230303161906.831686-2-schspa@gmail.com> <m2sfdwnoi8.fsf@gmail.com>
- <87h6ub9a4w.ffs@tglx>
-User-agent: mu4e 1.8.10; emacs 29.0.60
-From:   Schspa Shi <schspa@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     longman@redhat.com, swboyd@chromium.org, linux@roeck-us.net,
-        wuchi.zero@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] debugobject: add unit test for static debug object
-Date:   Thu, 23 Mar 2023 16:44:21 +0800
-In-reply-to: <87h6ub9a4w.ffs@tglx>
-Message-ID: <m2a603onvq.fsf@gmail.com>
+        Thu, 23 Mar 2023 04:45:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16D7A4;
+        Thu, 23 Mar 2023 01:45:29 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D84136602069;
+        Thu, 23 Mar 2023 08:45:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679561128;
+        bh=FrNqR4ku0iKICaEUucsD1iDyufd8gS7yQCcBq8NLjCk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mqChyF7uL/gStwWj9TpKjP+j5o71cY5OBZNebYPh7P6kwx34jMlD5WWtRVPN4XPb5
+         vfakks7HMRI6hy/JZKXbfXXXBshusLjntR9j4Pw43Doa6Sj/HriSxwf7zeWp9Fcz7A
+         k1231kzPIhLonp6/0snl1BdCWOXinPxY77i/XVIHhky2DALcw/P/PysaodQ2gg3k+/
+         0/eRh0Ms/e/hDadxdM57Qk+KLuTVpIrIqnjAlqg4Eo2qnodGbJ6CU5pRfOKTCaqEFt
+         marVDCgmt4vBalqXcXgRDYTax6a0gt5uyZAm6bi8pkOJGf8T1iGhj9SCTnmgMKEwde
+         ggdmJUHl/I+dg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     airlied@gmail.com
+Cc:     daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wenst@chromium.org,
+        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 0/2] Panfrost: GPU Speed-binning support via OPP
+Date:   Thu, 23 Mar 2023 09:45:21 +0100
+Message-Id: <20230323084521.19689-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The OPP framework supports binning through the 'opp-supported-hw'
+devicetree property and some of the SoCs that are using Panfrost,
+namely ... MediaTek, are actually binned.
+This is especially seen in MT8186, but some other models do actually
+support the same.
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+This series adds basic binning support by simply checking (and reading)
+speed-bin from NVMEM (eFuse arrays, usually) and *if and only if* that
+is provided, adds the read value with devm_pm_opp_set_supported_hw().
 
-> On Thu, Mar 23 2023 at 11:16, Schspa Shi wrote:
->> Schspa Shi <schspa@gmail.com> writes:
->>>  MAINTAINERS                    |   5 ++
->>>  lib/Kconfig.debug              |  14 ++++
->>>  lib/Makefile                   |   2 +
->>>  lib/test_static_debug_object.c | 125 +++++++++++++++++++++++++++++++++
->>>  4 files changed, 146 insertions(+)
->>>  create mode 100644 lib/test_static_debug_object.c
->>
->> What do you think about this test case? Should we need it ? There are
->> some platform compatibility issues here that need a little optimization.
->
-> What does it buy over the existing self test. Nothing AFACIT aside of
-> extra code.
->
+This code expects to receive a value that is compatible with how the
+supported_hw checks work in OPP and it should never contain any kind
+of platform (or SoC) specific code, since Panfrost is a driver for a
+GPU that may be tied to different SoCs... and this is what this series
+provides.
 
-It checks the race of the is_static_object() call in the previous
-BUG. This test can used to make sure the new fix patch works. The
-existing self test have no ability to check this.
+Cheers!
 
-> Thanks,
->
->         tglx
+AngeloGioacchino Del Regno (2):
+  dt-bindings: gpu: mali-bifrost: Document nvmem for speedbin support
+  drm/panfrost: Add basic support for speed binning
 
+ .../bindings/gpu/arm,mali-bifrost.yaml        |  7 +++++
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c   | 30 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
 -- 
-BRs
-Schspa Shi
+2.40.0
+
