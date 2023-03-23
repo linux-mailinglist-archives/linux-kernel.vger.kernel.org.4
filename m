@@ -2,106 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D93A6C6811
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B346C680F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjCWMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S231535AbjCWMTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCWMTS (ORCPT
+        with ESMTP id S231526AbjCWMTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:19:18 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF3E27D54;
-        Thu, 23 Mar 2023 05:18:38 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id E794B5C021D;
-        Thu, 23 Mar 2023 08:18:35 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 08:18:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679573915; x=1679660315; bh=S5
-        J8p2Vi8Lq9WKpHfGz7SPZv0rwtdwDhT7zpOSz2Ai8=; b=foNrYKAsedHOJ8bf1H
-        HrXQH3liQ/ZFGu8ixsyJqi8tMW+XIyIEq/QS/JK/6sT6aLkeYQsqf4LiOhz5ODhB
-        lB0ImwoVjh8UsUD8BZF742MxbTMbJtoPQUehpKfD2X+RNDrX4bbc+DhTs8EGrQB0
-        NqHfCuiVMwYDRX0yBfJENpuY+ActQOlnz+HBQ/P75DGQuPnvEr/orO2PprfuxNMz
-        OsGVT5WhH7dRXp+t0HUu0n5hGZts+5SEVf4GA5P+IUl/2jRem0BigRDGhQeiyZ8u
-        ne0c2ELSHd/dWsfXuct/Ct3NlOH0/EmNxKFsz5+K7NtFKq3A1insTGzW7m8cKUrf
-        Eqdw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679573915; x=1679660315; bh=S5J8p2Vi8Lq9W
-        KpHfGz7SPZv0rwtdwDhT7zpOSz2Ai8=; b=jFkJMLAjUnn66tHhoGqTDAskf0Mpb
-        dOVrWU2Zq6dIllNLelfk2zT85k2gHMY0b2MP9KNzmZAIcXtf4o/4j8sC5k86RM75
-        u7V43JZS8VdKh1N8gvWhhpzqg5SMUgi9ogCciE5libzzJAjoMo99gb7QnkzOx9tM
-        wTdaiz394FBCcq0YP8gt8FaNmKlAMHaTdjCWKbpCA0YvHVvZw2UEpbVF/ptYephe
-        BinEaneUORefTSGSRIFI8t86i8zYTSl/SR12ahwCaPe19DwsGbNVFTol04KcN1Vr
-        f3vxxLwvsV6PCJOH+vJ2PtrSwt7ixPnbCzlHDuy8SD9ByG+EXOmu7Zpmg==
-X-ME-Sender: <xms:m0McZF3Vm7UhHt0cI37dRaQXVZWrFqCuX9LqMNAT_l3Vclmexlch7Q>
-    <xme:m0McZMGCvfQTUwIn9CN4lquJHPUeMXj_bK4C3UANViID05YLAkZfxcRrvE8hhafFD
-    Wt4yzoxcG6tGbitnKQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:m0McZF5qdlduZrQcvgn3EWqwWpkolof8X8uDhNYFPh6l5kJcf87jkg>
-    <xmx:m0McZC0qh3gu0RhvMe5ZPWzd2bBsihwOhoo-z6YCBU5W-Pn3uzMjBw>
-    <xmx:m0McZIEnMeWp2Vx9TzZpb4pw4k72rPIv78F4OPH5QTNvLcCXYljlTA>
-    <xmx:m0McZGamLMz4ZSLjcO5BgKmyRNSYK5bj597vvKEG5sG6jf-jKD0bHQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9442CB60086; Thu, 23 Mar 2023 08:18:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <56a3e16e-d686-440e-86b7-ee41f9d19fb1@app.fastmail.com>
-In-Reply-To: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
-References: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
-Date:   Thu, 23 Mar 2023 13:18:15 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Asahi Lina" <lina@asahilina.net>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2] rust: ioctl: Add ioctl number manipulation functions
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 08:19:12 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8395E2B2BF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:18:29 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id x33so14797192uaf.12
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:18:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1679573908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GUGGmJNIiB2tF8GpRaO2v6aJCn8Q0P89mXNxX4DzMis=;
+        b=mPuBjeJhfwjWVU2IiF589l1xztdu4iLvv5rYXSrDnDEmnOEfiaXr3e+6o21DzYJE6d
+         TLtJGe7ge2fz5OHM6vcRKkB/g2EBVZBkguKaL7J491mqY/k7sqn3fSj4HW0nW3/NvB8S
+         wrHnPIn9cbH+Ho2ekBbbo8KoaI7vNCQmWhyDxjnh5XXLzx5XFFeHFhi9pwsv+CypJv3V
+         aZU5xlXrc8pmPv1fAu8dCvL7E4OQ04FpN0t0EcS7UE9vqVHzROz4LXn2DSKws//RaUJr
+         cJ/U1kxwksVsO4tpBlDs6C8Zc/SDPt+TopdFtXa/7qhGmQd9ofI7MN/6uQ02tCpZZm6V
+         R9mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679573908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GUGGmJNIiB2tF8GpRaO2v6aJCn8Q0P89mXNxX4DzMis=;
+        b=E5LslAvFq3eTUi9nvDzHsOFplkwdWsvSsqgPz30GriE+9lbO9dBtB6ECdR/JifY/QP
+         8uMCK+gEY8s0t82QK8aZP0Z2+2qymlanIu3SiwFHKz0tVtKyXodxq5mkxaKzTZOEHndB
+         QmbnxKLBT2IiR12y8gTQrvtxh9qh42JjVJmcQLpqkOg3RFyZRLhQWMq8mrw+u1XXRgP+
+         bpwd143cJB36/rI0ef05DF15aUjOutYhRSS9Yy4d1rzbwdwxMZxtaH6+1P5bFmslTW8V
+         4KREFBrfcxkqyan8flLggX3mReB9oU+l0+WsCoet6bqHal62wfCy+Dt1CtSase81Hyp8
+         OTBQ==
+X-Gm-Message-State: AAQBX9fApqq1JUoxCjF6H/zugDGu7rDd46UYLZyJvYvngwHeEl3NvlAc
+        5MeuObbcTOEJH1yFj7ILwuiibMTOY1K5N/ItBcQw8Q==
+X-Google-Smtp-Source: AK7set9Ku140oLgFHLDCQ0mGT17Dc0+6TsKKP+riuE/qzlt8WH/QLk5OUjHO552MQkVQo+HaNEH3OYbtH5GCZ93/ARU=
+X-Received: by 2002:a05:6130:c0b:b0:755:9b3:fef8 with SMTP id
+ cg11-20020a0561300c0b00b0075509b3fef8mr5092826uab.2.1679573908493; Thu, 23
+ Mar 2023 05:18:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+In-Reply-To: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 23 Mar 2023 17:48:16 +0530
+Message-ID: <CAK9=C2XJtSG2d_nsyDv7kU1v7Jj0chdevqrMc0MpJswukcEABA@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023, at 13:08, Asahi Lina wrote:
-> Changes in v2:
-> - Changed from assert!() to build_assert!() (static_assert!() can't work here)
-...
-> +/// Build an ioctl number, analogous to the C macro of the same name.
-> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
-> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
-> +    core::assert!(nr <= bindings::_IOC_NRMASK);
-> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
+Hi Alex,
 
-Just to make sure: did you actually change it according
-to the changelog? It still looks like a runtime assertion
-to me, but I don't really understand any rust.
+On Thu, Mar 16, 2023 at 6:48=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> This patchset intends to improve tlb utilization by using hugepages for
+> the linear mapping.
+>
+> As reported by Anup in v6, when STRICT_KERNEL_RWX is enabled, we must
+> take care of isolating the kernel text and rodata so that they are not
+> mapped with a PUD mapping which would then assign wrong permissions to
+> the whole region: it is achieved by introducing a new memblock API.
+>
+> Another patch makes use of this new API in arm64 which used some sort of
+> hack to solve this issue: it was built/boot tested successfully.
+>
+> base-commit-tag: v6.3-rc1
+>
+> v8:
+> - Fix rv32, as reported by Anup
+> - Do not modify memblock_isolate_range and fixes comment, as suggested by=
+ Mike
+> - Use the new memblock API for crash kernel too in arm64, as suggested by=
+ Andrew
+> - Fix arm64 double mapping (which to me did not work in v7), but ends up =
+not
+>   being pretty at all, will wait for comments from arm64 reviewers, but
+>   this patch can easily be dropped if they do not want it.
+>
+> v7:
+> - Fix Anup bug report by introducing memblock_isolate_memory which
+>   allows us to split the memblock mappings and then avoid to map the
+>   the PUD which contains the kernel as read only
+> - Add a patch to arm64 to use this newly introduced API
+>
+> v6:
+> - quiet LLVM warning by casting phys_ram_base into an unsigned long
+>
+> v5:
+> - Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thanks
+>   Conor
+> - Add RB from Andrew
+>
+> v4:
+> - Rebase on top of v6.2-rc3, as noted by Conor
+> - Add Acked-by Rob
+>
+> v3:
+> - Change the comment about initrd_start VA conversion so that it fits
+>   ARM64 and RISCV64 (and others in the future if needed), as suggested
+>   by Rob
+>
+> v2:
+> - Add a comment on why RISCV64 does not need to set initrd_start/end that
+>   early in the boot process, as asked by Rob
+>
+> Alexandre Ghiti (4):
+>   riscv: Get rid of riscv_pfn_base variable
+>   mm: Introduce memblock_isolate_memory
+>   arm64: Make use of memblock_isolate_memory for the linear mapping
+>   riscv: Use PUD/P4D/PGD pages for the linear mapping
 
-      Arnd
+Kernel boot fine on RV64 but there is a failure which is still not
+addressed. You can see this failure as following message in
+kernel boot log:
+    0.000000] Failed to add a System RAM resource at 80200000
+
+Regards,
+Anup
+
+>
+>  arch/arm64/mm/mmu.c           | 25 +++++++++++------
+>  arch/riscv/include/asm/page.h | 19 +++++++++++--
+>  arch/riscv/mm/init.c          | 53 ++++++++++++++++++++++++++++-------
+>  arch/riscv/mm/physaddr.c      | 16 +++++++++++
+>  drivers/of/fdt.c              | 11 ++++----
+>  include/linux/memblock.h      |  1 +
+>  mm/memblock.c                 | 20 +++++++++++++
+>  7 files changed, 119 insertions(+), 26 deletions(-)
+>
+> --
+> 2.37.2
+>
