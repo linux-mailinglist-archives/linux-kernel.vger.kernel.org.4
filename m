@@ -2,241 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23AD6C62F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E836C62FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCWJMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S231265AbjCWJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCWJMF (ORCPT
+        with ESMTP id S231173AbjCWJM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:12:05 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D08193F0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:11:58 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j24so10747137wrd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:11:58 -0700 (PDT)
+        Thu, 23 Mar 2023 05:12:29 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42221C7FE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:12:24 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id d17so11204281wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679562716;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FFw6On5GWKP9Yx/iOzJZ3hP79avgSWRYu5AU8eAnFgg=;
-        b=XrOk5J0nOb+4Bwzoxv40TzazsK0MVkdhumyNdd2X20npfWaqd9fXxZXrjxFw3nvnYD
-         6f8UHlhCTaQm3r2aCP4bdOGtexK5xje6t2s6ihYfpwcwme/6JpaaEm4Cwm8G5Wo1UfJg
-         TwGGIA3TWc8BMxl2GHIrWdD5FOlffGfFVC7BBd4dzNvqXNLDq2uHUqARvfgo/TLztf2W
-         8gKgxl02UlNLZXMppw7giKePav+cv99pOPjJG8sTsXHz3BY2Vs7yR+YrY65CWc3Xbri/
-         ji5itVRKb9o7uC3I5bjPND6l9lLWaio5lcR4tgCG/DjYtF5ipjFwX7mYrRB397D36I7U
-         F2Xw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679562743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eFctY62Fu/oerMamaIjbU4d8HvtLi/rh0sE4EKaYOE4=;
+        b=36fYa/ni7ysZ5y5TDytFuzn2/ZhJ5cmxm21cABzySX6BmlX8zVq48bPOkprqHyTcJ5
+         zzg7Qf6tBUYt1Gybs3TN7FRJhcDVKCHmacgztIUPSFT0Af/qiHUD8HFfUK6o9xQqKS4e
+         lVI+iNooLMaKDC+qDdGmf6WM/wUInJxFAAlHmATXUaPTEg1f7ZU6SDcs2eE4CEYJHtOQ
+         EbXJU3FqtNVZwFhWKULQi7yo3ai6JEKf+tuWuHRWPBZZt11QEXWrA3hSLq2dgP3lW8EW
+         40QPG8ldYh7NuL7c5hO86kmzwRJXTzpw/aPZCcOlVhkXBwT3sI9Rj/T/P0u/7/8zaA2S
+         HzSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679562716;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FFw6On5GWKP9Yx/iOzJZ3hP79avgSWRYu5AU8eAnFgg=;
-        b=XTeWwTJ6ZTLd/RbYLjCvZQZm60GQxL0p2AmGZhvITcaAv95qrFwaZlB8V/zzxvmbEa
-         qJT6/APP/F2xUaIUKhLpPfoSWcKlpU0NzOqo2B/40jqEuZbU0bm5uEtFr/9Lq5uxY+5v
-         vim9/7Iq4A0+Srtu34VW/5kgNBdN3JZOOswAqoKBZCGxTx4JAzLBzMeWjxPsl8HZ86lY
-         7zZVLA5h1nUFI8Z4FPkNXQQ7KRlrEaUq2l9sQ5M43UX59wYkgx0JKZfe2KkInF+qgg+e
-         y2Q3KJvxQHFukSIbaur9XU5nfsGSa059VkJdIx52ILSMIi4fQiasmcJJMuiplS8rvRiB
-         hKXw==
-X-Gm-Message-State: AAQBX9eWAipOxpRwVRwP3kjT2sPh7/qwl7Hq+ykeHvBV5CpuKmW7zOow
-        d/lXmAl3M0esWZcOZyf3ocwmDw==
-X-Google-Smtp-Source: AKy350b92zCNadItJJq5B+JKgVLvHKVmzqOd2qkeIzALoHhVFAZA099EcknZzO4P7ASa8073zZYoaQ==
-X-Received: by 2002:a5d:5003:0:b0:2d7:a918:a2b7 with SMTP id e3-20020a5d5003000000b002d7a918a2b7mr2334209wrt.48.1679562716566;
-        Thu, 23 Mar 2023 02:11:56 -0700 (PDT)
-Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6082000000b002c6d0462163sm15607659wrt.100.2023.03.23.02.11.55
+        d=1e100.net; s=20210112; t=1679562743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFctY62Fu/oerMamaIjbU4d8HvtLi/rh0sE4EKaYOE4=;
+        b=cIRpuRUhxUFPHtp8EPk/bDmbJ2k5c8UIGhgAtMi2oZooevVSa/xqa6n/focFSv8nFI
+         VuaCq4GG4iqKZtlENVJmdKHHWulPeSllENUgc9H5aFuEb479dCF/Z7kH5jUI94kSlSbe
+         qImKjO2oS0dZ79XUVar/KwnBzkAOC0TBWkFWBtF/AlhlmawXNdQVXkJ2w6ueYgubQZlk
+         L+ehCit5toA1Uav9LgXMi+qV+vCd/v6hyec1KntDnBwmV78XeErb2WXkKKLui8iUi3Eo
+         KNz/iCtqXA+tt/rYAps1CdT4Ug6C3lfEIx/jfExcHmaPhyKLm6Wdz+Z9yifh/usSQyPi
+         r1tw==
+X-Gm-Message-State: AAQBX9cs56Hrd0y8y8nImpxVfEppxGwBCSh0totLBkYyKVexbT5a5Nh9
+        IFtARbrVNPTKY/bnGsIxrguAQw==
+X-Google-Smtp-Source: AKy350bIXyKctpx/1wqip3Rp2mheJwmbgFP+LGEPKZLQHpj9doYPwLwDb6cxO863qF14Dp5zVyQigg==
+X-Received: by 2002:a5d:4487:0:b0:2c5:a742:572f with SMTP id j7-20020a5d4487000000b002c5a742572fmr1950315wrq.49.1679562743221;
+        Thu, 23 Mar 2023 02:12:23 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfdb8d000000b002d2b117a6a6sm15687914wri.41.2023.03.23.02.12.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 02:11:56 -0700 (PDT)
-Message-ID: <6c0c9b5a-3499-b0b2-ae58-7d5b17039c6f@linaro.org>
-Date:   Thu, 23 Mar 2023 10:11:54 +0100
+        Thu, 23 Mar 2023 02:12:22 -0700 (PDT)
+Message-ID: <bd4aa2ad-4535-94ca-7630-846546ae3d82@baylibre.com>
+Date:   Thu, 23 Mar 2023 10:12:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] dt-bindings: i2c: Drop unneeded quotes
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Peter Rosin <peda@axentia.se>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230322173530.3971676-1-robh@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230322173530.3971676-1-robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
+ <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/2023 18:35, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+
+>> +static int tps6594_get_rdev_by_name(const char *regulator_name,
+>> +				    struct regulator_dev *rdevbucktbl[BUCK_NB],
+>> +				    struct regulator_dev *rdevldotbl[LDO_NB],
+>> +				    struct regulator_dev *dev)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i <= BUCK_NB; i++) {
+>> +		if (strcmp(regulator_name, buck_regs[i].name) == 0) {
+>> +			dev = rdevbucktbl[i];
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
+>> +		if (strcmp(regulator_name, ldo_regs[i].name) == 0) {
+>> +			dev = rdevldotbl[i];
+>> +			return 0;
+>> +		}
+>> +	}
+>> +	return -EINVAL;
+>> +}
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml | 4 ++--
-
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-
->   Documentation/devicetree/bindings/i2c/apple,i2c.yaml          | 4 ++--
->   Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml  | 2 +-
->   Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 4 ++--
->   Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml       | 4 ++--
->   Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml | 4 ++--
->   Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
->   .../devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml          | 4 ++--
->   8 files changed, 14 insertions(+), 14 deletions(-)
+>> +	for (i = 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
+>> +		irq_type = &tps6594_regulator_irq_types[i];
+>> +
+>> +		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+>> +		if (irq < 0)
+>> +			return -EINVAL;
+>> +
+>> +		irq_data[i].dev = tps->dev;
+>> +		irq_data[i].type = irq_type;
+>> +
+>> +		tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
+>> +					 rdevldotbl, rdev);
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> index 199a354ccb97..26bed558c6b8 100644
-> --- a/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/amlogic,meson6-i2c.yaml
-> @@ -2,8 +2,8 @@
->   # Copyright 2019 BayLibre, SAS
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/i2c/amlogic,meson6-i2c.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/i2c/amlogic,meson6-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Amlogic Meson I2C Controller
->   
-> diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> index 4ac61fec90e2..243da7003cec 100644
-> --- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/i2c/apple,i2c.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/i2c/apple,i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Apple/PASemi I2C controller
->   
-> diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> index ea2303c0e143..6adedd3ec399 100644
-> --- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> @@ -75,7 +75,7 @@ required:
->     - clocks
->   
->   allOf:
-> -  - $ref: "i2c-controller.yaml"
-> +  - $ref: i2c-controller.yaml
->     - if:
->         properties:
->           compatible:
-> diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> index 2e95cda7262a..7a675aa08c44 100644
-> --- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/i2c/cdns,i2c-r1p10.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/i2c/cdns,i2c-r1p10.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Cadence I2C controller
->   
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-> index 6e0a5686af04..f34cc7ad5a00 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
-> @@ -45,7 +45,7 @@ properties:
->   
->     i2c-parent:
->       description: phandle of the I2C bus that this multiplexer's master-side port is connected to
-> -    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    $ref: /schemas/types.yaml#/definitions/phandle
->   
->     mux-gpios:
->       description: list of GPIOs used to control the muxer
-> @@ -55,7 +55,7 @@ properties:
->     idle-state:
->       description: Value to set the muxer to when idle. When no value is given, it defaults to the
->         last value used.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->   
->   allOf:
->     - $ref: i2c-mux.yaml
-> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> index 0e88c85985b5..9f66a3bb1f80 100644
-> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Geni based QUP I2C Controller
->   
-> diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> index bf396e9466aa..94b75d9f66cd 100644
-> --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> @@ -90,7 +90,7 @@ properties:
->     st,syscfg-fmp:
->       description: Use to set Fast Mode Plus bit within SYSCFG when Fast Mode
->         Plus speed is selected by slave.
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->       items:
->         - items:
->             - description: phandle to syscfg
-> diff --git a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> index 1b598638d457..658ae92fa86d 100644
-> --- a/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/xlnx,xps-iic-2.00.a.yaml
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/i2c/xlnx,xps-iic-2.00.a.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/i2c/xlnx,xps-iic-2.00.a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Xilinx IIC controller
->   
+> This would be simpler and you wouldn't need this lookup function if the
+> regulator descriptions included their IRQ names, then you could just
+> request the interrupts while registering the regulators.
+I changed the code to follow your recommendations then now in case of a 
+multiphase buck, only one set of interrupt is requested.
+ex: multiphase buck1234 single buck5
+cat /proc/interrupts:
+563:          0          0  tps6594-0-0x4c   0 Edge      buck1_ov
+564:          0          0  tps6594-0-0x4c   1 Edge      buck1_uv
+565:          0          0  tps6594-0-0x4c   2 Edge      buck1_sc
+566:          0          0  tps6594-0-0x4c   3 Edge      buck1_ilim
+579:          0          0  tps6594-0-0x4c  16 Edge      buck5_ov
+580:          0          0  tps6594-0-0x4c  17 Edge      buck5_uv
+581:          0          0  tps6594-0-0x4c  18 Edge      buck5_sc
+582:          0          0  tps6594-0-0x4c  19 Edge      buck5_ilim
 
+buck2, buck3, buck4 are not associated to a regulator device because 
+buck1 registers control all the multiphase bucks (only one logic 
+regulator). Consequently the mapping for the associated interrupts does 
+not occur.
+I'm not sure it's the right option.
+Do you suggest to keep it like that for multiphase?
+Is it better to request all the interrupts anyway and map it to the same 
+rdev?
+
+> 
+>> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
+>> +						  tps6594_regulator_irq_handler,
+>> +						  IRQF_ONESHOT,
+>> +						  irq_type->irq_name,
+>> +						  &irq_data[i]);
+>> +		if (error) {
+>> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+>> +				irq_type->irq_name, irq, error);
+>> +			return error;
+>> +		}
+> 
+> This leaks all previously requested interrupts.
+I'm not sure to understand this sentence correctly. You mean all the 
+interrupts already requested are still allocated after the error occurs?
