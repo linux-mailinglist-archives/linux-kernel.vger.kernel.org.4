@@ -2,29 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AAB6C6726
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A2D6C6728
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCWLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S231530AbjCWLx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCWLxu (ORCPT
+        with ESMTP id S231276AbjCWLxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:53:50 -0400
-Received: from out-18.mta1.migadu.com (out-18.mta1.migadu.com [IPv6:2001:41d0:203:375::12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DFA35261
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:43 -0700 (PDT)
+        Thu, 23 Mar 2023 07:53:53 -0400
+Received: from out-30.mta1.migadu.com (out-30.mta1.migadu.com [IPv6:2001:41d0:203:375::1e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1C0303FF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:48 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679572421;
+        t=1679572426;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e28/Aphzssb7x3wtsuVlhO9EMFot1z8DPyozyjw+aCs=;
-        b=TuLVwMlPfRTu/gRt3GON+vXtXxPXWLk3U7HM1L2Aw4Q7lzZJ2A/xGInpNXmkW4T3vHvMC4
-        2j5LSzHo2XPKRipGBtjKRFmWmD3GYH1+9XEOADOXkBBUxC8JfbxXvxbDAAviO686tyejSX
-        94ket3Yl5552HzttE+aQ4IG845aaR9k=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PnSSHRcrR5kFgCbV0GetmQZQzrR6bOqKhnFTbrmqJ+c=;
+        b=j+4X/N4eLopB79ZdMGXuaOcK0ouHxUnTsHRW7JDtGWQVxZXIhAjI7mltW0RNM8gYxriLzF
+        krNoei2HM8DSfaRzrcjVEm7Ctrhy3mZc2NE9trRoAPm3EkujNDCzPCw6RLV2riXVWaLV2B
+        8d3ooR+Nu+IcxQ5VT4B6YDqCuAnvJkQ=
 From:   Cai Huoqing <cai.huoqing@linux.dev>
 To:     cai.huoqing@linux.dev
 Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
@@ -33,9 +34,11 @@ Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
         Dave Jiang <dave.jiang@intel.com>,
         Allen Hubbe <allenbh@gmail.com>, Frank Li <Frank.Li@nxp.com>,
         ntb@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] ntb_hw_amd: Remove redundant pci_clear_master
-Date:   Thu, 23 Mar 2023 19:53:33 +0800
-Message-Id: <20230323115336.12986-1-cai.huoqing@linux.dev>
+Subject: [PATCH 2/3] ntb: epf: Remove redundant pci_clear_master
+Date:   Thu, 23 Mar 2023 19:53:34 +0800
+Message-Id: <20230323115336.12986-2-cai.huoqing@linux.dev>
+In-Reply-To: <20230323115336.12986-1-cai.huoqing@linux.dev>
+References: <20230323115336.12986-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -68,24 +71,32 @@ And dev->is_busmaster is set to 0 in pci_disable_device.
 
 Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 ---
- drivers/ntb/hw/amd/ntb_hw_amd.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/ntb/hw/epf/ntb_hw_epf.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/ntb/hw/amd/ntb_hw_amd.c b/drivers/ntb/hw/amd/ntb_hw_amd.c
-index 730f2103b91d..855ff65f64a5 100644
---- a/drivers/ntb/hw/amd/ntb_hw_amd.c
-+++ b/drivers/ntb/hw/amd/ntb_hw_amd.c
-@@ -1194,7 +1194,6 @@ static int amd_ntb_init_pci(struct amd_ntb_dev *ndev,
+diff --git a/drivers/ntb/hw/epf/ntb_hw_epf.c b/drivers/ntb/hw/epf/ntb_hw_epf.c
+index 3ece49cb18ff..d80f205810a4 100644
+--- a/drivers/ntb/hw/epf/ntb_hw_epf.c
++++ b/drivers/ntb/hw/epf/ntb_hw_epf.c
+@@ -617,14 +617,11 @@ static int ntb_epf_init_pci(struct ntb_epf_dev *ndev,
+ 	ndev->db_reg = pci_iomap(pdev, ndev->db_reg_bar, 0);
+ 	if (!ndev->db_reg) {
+ 		ret = -EIO;
+-		goto err_dma_mask;
++		goto err_pci_regions;
+ 	}
+ 
  	return 0;
  
- err_dma_mask:
+-err_dma_mask:
 -	pci_clear_master(pdev);
- 	pci_release_regions(pdev);
+-
  err_pci_regions:
  	pci_disable_device(pdev);
-@@ -1209,7 +1208,6 @@ static void amd_ntb_deinit_pci(struct amd_ntb_dev *ndev)
  
- 	pci_iounmap(pdev, ndev->self_mmio);
+@@ -642,7 +639,6 @@ static void ntb_epf_deinit_pci(struct ntb_epf_dev *ndev)
+ 	pci_iounmap(pdev, ndev->peer_spad_reg);
+ 	pci_iounmap(pdev, ndev->db_reg);
  
 -	pci_clear_master(pdev);
  	pci_release_regions(pdev);
