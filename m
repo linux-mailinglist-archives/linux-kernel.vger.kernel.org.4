@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91716C6CF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4116C6CF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjCWQJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S231252AbjCWQJg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 12:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCWQJD (ORCPT
+        with ESMTP id S229864AbjCWQJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:09:03 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2100.outbound.protection.outlook.com [40.107.92.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB21EFEB;
-        Thu, 23 Mar 2023 09:09:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QkxrFRazlVvl8sWI35bJ8BQ8/o8FZ8nyQg8kFCN3yScy1Eq9/ZIgC0hcXW/wmrqbxpFQ19AeN9GqJJXywuJQiij6hsLyorYVtEOO2hPuTw7xs1Fe6Ypi+ji/OeQ9mHCKb7a4x87XX85s+F1bBlX0RIwMTpEuK4YE9kZKwBU0nL2Pxn2A+lD2JkUE1rt5GSp9Svk3A7GUDSnnW1PThHQrXb8bGdm4+XgAhe9SSXtibFDlWz5iEAYq4f/LSGOWVFsQuEn/0JxuSeWzc2ZEYA+/QUdoSyTxPLohQNVWt+6Q1iYRyxq5E8MJkEnZiAENUI+E5SJeYnk2Zls36w/qTiiHcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oHkefe7rzzxst438y1wzj87O+I8w/1oIK4EER73HAb8=;
- b=X57dAjvi7Rvhh0OJtzkiK8KhbvZZ7n+IGZoFPTACAWF1jqn1BVsSJtcJYUyZADr3NR9jUgKN4R/g1zo1Q+JWua6pJ8OV7gYf96Vbj5NnfcEieFTP9NPkQmf3j3ciO0LTMgDMYxP0MFrp0l09tHYJmLdSev/W0TF0h4+OESRitq95kRH/FDPcfnHZ96pKeCmmRcZyn2rSkdj2ccL6aSPJDlpr6EE7flWJqWd8nK3l/jfso7KmCP/tzQhhR3HNQ2aD4h0JQ9T5upF35PMSJ9q1TFFCCtR7tYymg06kEdkYPD9up/z4U5XHPJ1iwM4tDbRycdAOf5bdfqF6/YEfAtIyQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oHkefe7rzzxst438y1wzj87O+I8w/1oIK4EER73HAb8=;
- b=I0sV+lvCiZnb80IHohOZwqKlylPE08EvTeIpg+JY9M0T4Dw6gPfxOgbX1MGqq6Tf0WGsXBVPKeXlVBxAMyNJ6YI55lQ7IH6J2VNugv1gn1ZAxvLzt6kqSqE1ILWQLjFwdCIYHeA9DeKfkE+dtYTdVsQzPetxxk87LW9Tmj2ccW4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DS7PR13MB4654.namprd13.prod.outlook.com (2603:10b6:5:3a0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 16:08:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
- 16:08:58 +0000
-Date:   Thu, 23 Mar 2023 17:08:52 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/9] net: vlan: introduce skb_vlan_eth_hdr()
-Message-ID: <ZBx5lP9C+JHO/N05@corigine.com>
-References: <20230322233823.1806736-1-vladimir.oltean@nxp.com>
- <20230322233823.1806736-3-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322233823.1806736-3-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: AM4PR05CA0020.eurprd05.prod.outlook.com (2603:10a6:205::33)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+        Thu, 23 Mar 2023 12:09:32 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF1025293
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:09:21 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id n2so27202208qtp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:09:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679587760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gQHyP3S9dw/cqbaJrddb2xMuURjIwXSBfIn2tHX4yBQ=;
+        b=0pQxfibCeVzW5rReL2To20wlY+JxnYywdt2Q39cK8fX1pmmNLszHKpAHYErg6bNcSw
+         FiKRTCYvP9LbB0xfBNwy6jFEIX3cffZHdgOtJRCEVyARRco9gZdSjwsnUPnnnEPp4JSi
+         0tAokgZVfpicIOcnISQ2BK9nP0PJi5HJgBNrB/Bhl6TIJthX0ROH5ix+f6z9QxjzBZkb
+         4CGCbPglAcDI30v8cQLwE6ZrZFmABlKdjL8JoInaXVATJvTu63pZxATC2jq0w6X71zUW
+         tiOM2HGjYfId6DJOQGuubfSIC6qvGtdotrBVXe+Z9NGXRRjE12qvBXryyVEZvHSnhCuh
+         Ln2w==
+X-Gm-Message-State: AO0yUKXGSlXEiKlcy05X7pMyFIeb5O8hST+dpLddW5bWKShULGpanneL
+        3PSOOwWXrjOw5pmmsQ3aIIzzSGR7OvAd5nQE
+X-Google-Smtp-Source: AK7set+tmwWaIsAVQyBc/t7mPsjj8RZUHbqX9OB48p5KZ8R6NGY4uSC0cLKxCl1HIMoF10KnhqxBAQ==
+X-Received: by 2002:ac8:7f10:0:b0:3d2:52ad:dff3 with SMTP id f16-20020ac87f10000000b003d252addff3mr13767120qtk.17.1679587760709;
+        Thu, 23 Mar 2023 09:09:20 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05620a025100b00746b3eab0fdsm2802455qkn.44.2023.03.23.09.09.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 09:09:19 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-544b959a971so369164877b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:09:18 -0700 (PDT)
+X-Received: by 2002:a05:690c:3:b0:541:698b:7bdb with SMTP id
+ bc3-20020a05690c000300b00541698b7bdbmr2516607ywb.2.1679587758539; Thu, 23 Mar
+ 2023 09:09:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4654:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9e4da351-8c77-4e6a-9179-08db2bb8e8e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vL8d+YGIrIhKHaH0aEQBKK7TYviN75jKpIh/jfFCQoUYG5x2NIOZTZqJ58YgruSDLu33CiTxNDy3bKfwy4rWd2WH+jRoBbRCB+uSBRu+Ve6D42CMSYTXhV5iNKkM7GPn0Yuw9ICt2pPT22ADKVCx44j8ZKafMSnKZ1zw7WwETVRI+6B/EgH1LnG2y1iJCr8PZqeVF/OdA1OEW46v3nmJIEEBq5XuaRUfno3yuTNF0lBGwcXnazp/rF+MEnic1q0/4WEFn2hzjCelEUMh209P9xR1J+9Zt/ujd4hvqXWIx+P+QcFbPy8a/ifUSCZr/fkFd07XtWk8F2+wb5R1CZHtKDe8MPMzlONWl8S2yIt+1C++7PqnEhAezVLWEauPd7nqGTxTFJj/iYJBIUhrBymSzgwqNolgLuSuOXMVQr++cS6ibuc2/l5HQJGhiuDveVoTyJIAIvTJUxrCR+C3nUO0grW/E3Lr13yR38oV2yqmZwJZ3MmzfTAa1dw5ZvVLEtluzSMkczmGsqm/JE0UbBOjSSrx/L7OCVeWxlW4LMpm1Sf77ZlxVXRYtHuxahJWh+nR90YI1KnzStLh8DzqA8Vq5NCJRqYau+1M2RDE1dhsSTAg20ca3gqJe6cNRkypx1Vaz7nW+gjvYLaWXH273liA0USVplXLjvc1vY2BaQSvrubRyGRIyMQscAd1WPBAFFsK
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(376002)(396003)(39840400004)(136003)(451199018)(38100700002)(2906002)(478600001)(6486002)(2616005)(316002)(186003)(36756003)(86362001)(54906003)(4744005)(8676002)(66556008)(66476007)(6916009)(4326008)(66946007)(6666004)(8936002)(6512007)(6506007)(5660300002)(44832011)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WWS0XIAT0FscC4jj5qoyd+4CvFtS5r7PLzctd9Z3n0fvZht9w5y0pMAq+Hqg?=
- =?us-ascii?Q?fxMgYwFY5TSh5zg+MyfSoWQKPgGJqOnYAWHLRsgDkA0rkxnaRlL3j9GIZRL/?=
- =?us-ascii?Q?lCHJBrdilqUHLFHllOJkThuMaf7pWoaDvvojWRGrcidQ/VzZTgWNw2QoW9Hm?=
- =?us-ascii?Q?W8eEAPeWUZWIiGCfFfnQvVKeAZoZoBC3yn9Sd5TxJAl0kpSL/6izX+NAizXT?=
- =?us-ascii?Q?RV2jm5520Ox8/w/giNYyUZIrpThHxhjsuEDNZGC9KG/wdDcKJiiIoekx7h0Y?=
- =?us-ascii?Q?PMPFIH1WGNqqXe5izv0sIcgSAHidJp7blsoLYUMv4oMW2G6E+UHUQzTJ5R/H?=
- =?us-ascii?Q?yujTGGAIBniudX9xkxs1PoNRkiExWPX7IUD+7ywqA/42E4vI6EhPDJNFhwyk?=
- =?us-ascii?Q?dDmLtIqkUVTtcG+b7UcWqmnJoAqx0u1uT6ZItNNGBdM+b+PADYrY02kEbzZq?=
- =?us-ascii?Q?qM7JzKYYFzzjHlLyuL/kkedJX6IevX5cdpm8ca5lRH8ZWARJfwgaeirR5PWS?=
- =?us-ascii?Q?cqspJ1A6t6pF/Opm+KFPk6yUbYA8CMRWgam4tWxkOI6DKaUzQ04wN9UF82Bf?=
- =?us-ascii?Q?Z9etPrzlCO32dN+UXiG5wMiRXhvr4dSqEfTZsFPmJPrzVvpgNovRPEC34hM8?=
- =?us-ascii?Q?8THA5sokAANxGZsIuuDo6ol17bVBw173p0iCkspJ8fwV8KG8cISrGufiETpj?=
- =?us-ascii?Q?OJJce1qTxNGGd8vMUrX1xQqjPje6XakcNaqc371c90ucCL6CAasspdYM5Oge?=
- =?us-ascii?Q?ndNNRxqisxvI9LBlMxxsK8tem1Q2BHTucVciZbkQRtVyOKmd2+f3RtrGrh+u?=
- =?us-ascii?Q?iPqSnDs2bB6EluiDQM2p7zwTluwvnL5BmHL8U0w0bAZ78/cFpj0I5pxrNsiR?=
- =?us-ascii?Q?Y16E+LHcOMNEvA0ybvWS9n7EpCxyCVnClRfcaHFh/LYoMuNDUVwTJaPafPtw?=
- =?us-ascii?Q?JZvFGeiT7Qen/YWNf1y4CF/RKq+tKAkYva+KfbGB6gLN+IV8gSZkGuXVx/kc?=
- =?us-ascii?Q?3vGX/NrfY5EM4k5+U2hR+rSxj04Vn48byDIE0j7sNiz9vxzy8mj3VsfcHUzt?=
- =?us-ascii?Q?9/aPJUZVZS4SWYyqBsRgCwONukf6KAG1BG71mnYAJ8PNBF9cCHYdI5L6cTIo?=
- =?us-ascii?Q?FsyUB7JBGaPqxETfK+mC16k5KgZxxwTfH4zzgPjuN6jFkXpjXIPkq4H9wiy3?=
- =?us-ascii?Q?DBRuAZRT5OH44wtm73m4YG5yw9GIxCfqHJjMzDSQsxaUnHzjsWOz/8zJ/1dz?=
- =?us-ascii?Q?SV3Ra+y1PYl4OJ2xvSo7toNzJEvUhMDrVg4LCWHzRBja6EdxIKrwgPX5K7ft?=
- =?us-ascii?Q?wBbwqzOvxVREBjVnhjzK0SVJBLG1Q49+t8emCl5owXtC0k9iTnPAEbCtOhty?=
- =?us-ascii?Q?kIK+jViagEAEkti0YUbzFuwKclJwwvW4FRY1wpOjZEl1FdNNDJfQY3VMUzkm?=
- =?us-ascii?Q?LL5q1VnY7LahG0PmtUHmtEss1ZRuxhnmFquOOcV7h4OaMUNwC1o3UkV7/r1H?=
- =?us-ascii?Q?Or2zLIXUMNZMkLtjbzBtNnHtFxQBcjgu1cAwVc+wFnjuBXlN+LHjm2UuPni1?=
- =?us-ascii?Q?5morG9wTH6fybK+JUQ4naW+tQ8UNAymDg7FR4Q5rB16c7g5/q4NRHecJcrJ+?=
- =?us-ascii?Q?UF4Nk2G2PcAGqabD9gwMtNpktH/YJpEFKkbVEG0KVPwoyKC9TGFNk7ks0OXA?=
- =?us-ascii?Q?Cp/Naw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e4da351-8c77-4e6a-9179-08db2bb8e8e1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 16:08:58.6630
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: edtIRioT1YNjTacyYCFKySStBnuOo2B5vS1qn2l7FB8nkBPFzKPlhmL12FwJRloDIavHp8vp0evrFhv/ZFZ+1tmph32Rl59M6bMNRgC+3Qs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4654
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323113324.361991-1-b-kapoor@ti.com> <20230323135323.GA309305@hu-bjorande-lv.qualcomm.com>
+In-Reply-To: <20230323135323.GA309305@hu-bjorande-lv.qualcomm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 23 Mar 2023 17:09:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUF5x=nVMKFFffbbe6S2nGWzq2UZWX36JgyXBGLBVL1rw@mail.gmail.com>
+Message-ID: <CAMuHMdUF5x=nVMKFFffbbe6S2nGWzq2UZWX36JgyXBGLBVL1rw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: defconfig: Enable CAN PHY transceiver driver
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bhavya Kapoor <b-kapoor@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        dmitry.baryshkov@linaro.org, arnd@arndb.de,
+        krzysztof.kozlowski@linaro.org, geert+renesas@glider.be,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 01:38:16AM +0200, Vladimir Oltean wrote:
-> Similar to skb_eth_hdr() introduced in commit 96cc4b69581d ("macvlan: do
-> not assume mac_header is set in macvlan_broadcast()"), let's introduce a
-> skb_vlan_eth_hdr() helper which can be used in TX-only code paths to get
-> to the VLAN header based on skb->data rather than based on the
-> skb_mac_header(skb).
-> 
-> We also consolidate the drivers that dereference skb->data to go through
-> this helper.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+On Thu, Mar 23, 2023 at 2:53 PM Bjorn Andersson
+<quic_bjorande@quicinc.com> wrote:
+> On Thu, Mar 23, 2023 at 05:03:24PM +0530, Bhavya Kapoor wrote:
+> > Enable CAN PHY transceiver driver to be built as a module.
+>
+> Please use the commit message to describe why the driver should be
+> enabled. The patch and the subject already states clearly that the
+> driver is being enabled.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+And if no one has inspiration: I wouldn't mind "because it is needed
+for CAN-FD on the Renesas White-Hawk development board" ;-)
 
+> > --- a/arch/arm64/configs/defconfig
+> > +++ b/arch/arm64/configs/defconfig
+> > @@ -1292,6 +1292,7 @@ CONFIG_RESET_QCOM_PDC=m
+> >  CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+> >  CONFIG_RESET_TI_SCI=y
+> >  CONFIG_PHY_XGENE=y
+> > +CONFIG_PHY_CAN_TRANSCEIVER=m
+> >  CONFIG_PHY_SUN4I_USB=y
+> >  CONFIG_PHY_CADENCE_TORRENT=m
+> >  CONFIG_PHY_CADENCE_SIERRA=m
+
+For the actual change:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
