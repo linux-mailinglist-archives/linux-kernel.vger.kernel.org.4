@@ -2,128 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CFA6C61BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A413F6C61D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjCWIdD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 04:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
+        id S231610AbjCWIfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjCWIct (ORCPT
+        with ESMTP id S231454AbjCWIej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:32:49 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFCD26C36;
-        Thu, 23 Mar 2023 01:32:41 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id a5so4077646qto.6;
-        Thu, 23 Mar 2023 01:32:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679560359;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YVucm+Nx3T4AGOjFjk/QXSCmjrP9EM7XnrrzqizG/YY=;
-        b=YdokFKFBXgLmRCM17c94y0OLoa2//ObLiC137v/Ig6FCq5EYcwG7F2KybttQpGoLRm
-         Tl1M1Sa6VfpOFlIP1zHi1kiB6CAY2p9syCyqZioiwUH1REBUQYVM+wwjXmKGqpYO8VfT
-         39heEmUmMVGxY7Wyn/WWus0hOiEB+F4flwfgjmr9rqKGd+BWeabEH8sfgknERQ4bWMTG
-         aGz6ztqVvmKrIq+7NFnxrcgzvVUCykDZzolsi5iu8RYncJ9fK7KDgs0Vc8njmtkXrzQJ
-         p1D6CttkujQBIkc0OKpEowzuJqFYoH2h22wcvL1KXuF2iozbFEnan0crC3LMAXH4qlHB
-         R08w==
-X-Gm-Message-State: AO0yUKXyKCnadxzu0YozXFz3z9mu/pwNw7F5LmZOyF7d2A8jIWudhQpb
-        5sYAM5GLhsS2RNwOcoty1W0M3H6ZBXw0fQ==
-X-Google-Smtp-Source: AK7set+fqEIWnxqtgeRaBDrWadheJvQIwfqnf++vo3MwDkekb7F6ZsCe4ydy0/A7KLeuPJk4KczfZg==
-X-Received: by 2002:a05:622a:650:b0:3d7:b045:d39 with SMTP id a16-20020a05622a065000b003d7b0450d39mr9607697qtb.62.1679560359641;
-        Thu, 23 Mar 2023 01:32:39 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id t2-20020a374602000000b00746ac14e29asm2803176qka.5.2023.03.23.01.32.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 01:32:39 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5416698e889so382978597b3.2;
-        Thu, 23 Mar 2023 01:32:39 -0700 (PDT)
-X-Received: by 2002:a81:4312:0:b0:544:5fc7:f01f with SMTP id
- q18-20020a814312000000b005445fc7f01fmr1360520ywa.4.1679560358713; Thu, 23 Mar
- 2023 01:32:38 -0700 (PDT)
+        Thu, 23 Mar 2023 04:34:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B011411168;
+        Thu, 23 Mar 2023 01:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=c1df69K17FXpkAzRapSl7Wj8dTgXLgUCfCjKhSgSRjY=; b=da0PAncoO0I1y7/1tcUBLZx9rC
+        TA3Yp+nhgYwYLR7D3sfMDsN85DbYZWwOZP5nY8PXahJmBnrPDh73UsZKBhYM3tDiloc5oDqcxD2e+
+        QTUtwjPZPKxnDPBmmbFPcswUc+IUnAn+dhHjrI7QtEjsbyZh05CC3wWbOFZbfNgDBiDJAkk7zO83f
+        BUmRac2A4PI0qjLIsdX3dX9fFky9P8rVj6/dhi67x5kldGhgqSvjEfxuwaCO+FHALVOox7gtX00yt
+        4tScg5iVg1HGOefF3I1hDI9hYd3M5S8Cq3+fElSw8heQsgVTlSsfAGpB7tBtL1eQyrjhnsnsxzDzI
+        s7dzRm9w==;
+Received: from [2001:8b0:10b:5:b3d4:e39d:531b:642a] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pfGNS-003niM-8N; Thu, 23 Mar 2023 08:32:54 +0000
+Message-ID: <70628793e6777d07f27f43152df497e780925d18.camel@infradead.org>
+Subject: Re: [PATCH v16 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Borislav Petkov <bp@alien8.de>,
+        Usama Arif <usama.arif@bytedance.com>
+Cc:     tglx@linutronix.de, kim.phillips@amd.com, brgerst@gmail.com,
+        piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        gpiccoli@igalia.com, Sabin Rapan <sabrapan@amazon.com>
+Date:   Thu, 23 Mar 2023 08:32:49 +0000
+In-Reply-To: <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local>
+References: <20230321194008.785922-1-usama.arif@bytedance.com>
+         <20230321194008.785922-9-usama.arif@bytedance.com>
+         <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-OfhDvGzWdTo/3DFBTABU"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-References: <20230321065826.2044-1-wsa+renesas@sang-engineering.com> <79d945a4-e105-4bc4-3e73-64971731660e@omp.ru>
-In-Reply-To: <79d945a4-e105-4bc4-3e73-64971731660e@omp.ru>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Mar 2023 09:32:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUt_kTH3tnrdF=oKBLyjrstei8PLsyr+dFXVoPEyxTLAA@mail.gmail.com>
-Message-ID: <CAMuHMdUt_kTH3tnrdF=oKBLyjrstei8PLsyr+dFXVoPEyxTLAA@mail.gmail.com>
-Subject: Re: [PATCH net-next] sh_eth: remove open coded netif_running()
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
 
-On Wed, Mar 22, 2023 at 9:54 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
-> On 3/21/23 9:58 AM, Wolfram Sang wrote:
-> > It had a purpose back in the days, but today we have a handy helper.
->
->    Well, the is_opened flag doesn't get set/cleared at the same time as
-> __LINK_STATE_START. I'm not sure they are interchangeable...
->
-> > Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+--=-OfhDvGzWdTo/3DFBTABU
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-> > --- a/drivers/net/ethernet/renesas/sh_eth.c
-> > +++ b/drivers/net/ethernet/renesas/sh_eth.c
-> > @@ -2441,8 +2441,6 @@ static int sh_eth_open(struct net_device *ndev)
-> >
-> >       netif_start_queue(ndev);
-> >
-> > -     mdp->is_opened = 1;
-> > -
->
->    __LINK_STATE_START gets set before the ndo_open() method call, so
-> before the RPM call that enbales the clocks...
->
-> >       return ret;
-> >
-> >  out_free_irq:
-> > @@ -2565,7 +2563,7 @@ static struct net_device_stats *sh_eth_get_stats(struct net_device *ndev)
-> >       if (mdp->cd->no_tx_cntrs)
-> >               return &ndev->stats;
-> >
-> > -     if (!mdp->is_opened)
-> > +     if (!netif_running(ndev))
-> >               return &ndev->stats;
->
->    I guess mdp->is_opened is checked here to avoid reading the counter
-> regs when RPM hasn't been called yet to enable the clocks...
+T24gV2VkLCAyMDIzLTAzLTIyIGF0IDIzOjQ3ICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
+Cj4gCj4gKy5MdXNlX3Nldl9jcHVpZF8wYjoKPiArwqDCoMKgwqDCoMKgwqBjYWxsIHNldl9nZXRf
+Y3B1aWRfMGIKPiArwqDCoMKgwqDCoMKgwqB0ZXN0ICVlYXgsICVlYXgKPiArwqDCoMKgwqDCoMKg
+wqBqeiAxZgo+ICvCoMKgwqDCoMKgwqDCoG1vdmwgJWVheCwgJWVkeAo+ICvCoMKgwqDCoMKgwqDC
+oGptcCAuTHNldHVwX0FQCj4gKwoKQ2FuIHRoaXMgY29kZSBwYXRoIG5ldmVyIGJlIHRha2VuIGZv
+ciBicmluZ2luZyB1cCBDUFUwIGV2ZW4gYWZ0ZXIgYQpob3RwbHVnPyBJJ2QgcmF0aGVyIGhhdmUg
+LTEgYXMgdGhlIGVycm9yIGluZGljYXRpb24uCgo+IMKgLkx1c2VfY3B1aWRfMGI6Cj4gwqDCoMKg
+wqDCoMKgwqDCoG1vdsKgwqDCoMKgwqAkMHgwQiwgJWVheAo+IMKgwqDCoMKgwqDCoMKgwqB4b3Js
+wqDCoMKgwqAlZWN4LCAlZWN4Cj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9zZXYuYyBi
+L2FyY2gveDg2L2tlcm5lbC9zZXYuYwo+IGluZGV4IGNlMzcxZjYyMTY3Yi4uOTZmZjYzY2I1NjIy
+IDEwMDY0NAo+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9zZXYuYwo+ICsrKyBiL2FyY2gveDg2L2tl
+cm5lbC9zZXYuYwo+IEBAIC0xMTQyLDYgKzExNDIsMjQgQEAgdm9pZCBzbnBfc2V0X3dha2V1cF9z
+ZWNvbmRhcnlfY3B1KHZvaWQpCj4gwqDCoMKgwqDCoMKgwqDCoGFwaWMtPndha2V1cF9zZWNvbmRh
+cnlfY3B1ID0gd2FrZXVwX2NwdV92aWFfdm1nZXhpdDsKPiDCoH0KPiDCoAo+ICt1MzIgc2V2X2dl
+dF9jcHVpZF8wYih2b2lkKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgdTMyIGVheCwgZWR4Owo+ICsK
+PiArwqDCoMKgwqDCoMKgwqAvKiBSZXF1ZXN0IENQVUlEIDB4Ql9FRFggdGhyb3VnaCBHSENCIHBy
+b3RvY29sICovCj4gK8KgwqDCoMKgwqDCoMKgbmF0aXZlX3dybXNyKE1TUl9BTUQ2NF9TRVZfRVNf
+R0hDQiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKEdIQ0JfQ1BV
+SURfUkVRX0VEWCA8PCAzMCkgfCBHSENCX01TUl9DUFVJRF9SRVEsCj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDB4Yik7Cj4gK8KgwqDCoMKgwqDCoMKgVk1HRVhJVCgp
+Owo+ICsKPiArwqDCoMKgwqDCoMKgwqBuYXRpdmVfcmRtc3IoTVNSX0FNRDY0X1NFVl9FU19HSENC
+LCBlYXgsIGVkeCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICgoZWF4ICYgR0hDQl9NU1JfSU5G
+T19NQVNLKSA9PSBHSENCX01TUl9DUFVJRF9SRVNQKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqByZXR1cm4gZWR4Owo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArfQo+
+ICsKPiDCoGludCBfX2luaXQgc2V2X2VzX3NldHVwX2FwX2p1bXBfdGFibGUoc3RydWN0IHJlYWxf
+bW9kZV9oZWFkZXIgKnJtaCkKPiDCoHsKClBlcmhhcHMgcHV0IHRoaXMgaW4gaGVhZDY0LmMgc28g
+aXQgZ2V0cyBidWlsdCB3aXRoIC1wZyB3aGVuIG5lZWRlZD8gQW5kCnRoZW4geW91J2xsIHNwb3Qg
+dGhhdCB0aGUgb3RoZXIgZnVuY3Rpb25zIGluIHRoZXJlIGFyZSBtYXJrZWQgX19oZWFkIHRvCnB1
+dCB0aGVtIGluIC5oZWFkLnRleHQsIGFuZCBtYXliZSBmaW5kIHNvbWUgb3RoZXIgc3R1ZmYgdG8g
+Y2FyZ28tY3VsdAp0byBtYWtlIGl0IHNhZmUgdG8gcnVuIEMgY29kZSB0aGF0IGVhcmx5Li4uCg==
 
-Exactly, cfr. commit 7fa2955ff70ce453 ("sh_eth: Fix sleeping function
-called from invalid context").
 
-So you mean sh_eth_get_stats() can now be called after setting
-__LINK_STATE_START, but before RPM has enabled the clocks?
-Is there some protection against parallel execution of ndo_open()
-and get_stats()?
+--=-OfhDvGzWdTo/3DFBTABU
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-Gr{oetje,eeting}s,
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzIzMDgzMjQ5WjAvBgkqhkiG9w0BCQQxIgQguZMb8mt3
+0myHSMwFx6GvSt8Hz9fVZELmlH4FtyEzbhgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAnLjtWQW63x4dwXQK4kMah7IX2DCpS1H1G
+E+E6394qz51y1hQN179OccNGTEpXopldsJZWams0D31FMe4nO4ZRtc+c2hDB59OlPR/sYe8Bz6hX
+ryZs6g1pXoSc9UcyaQgZ0MTIpfQP7uJP75wt4S+PvXBwfiD2eqE9D/WmQEhIWRlC0NAnE0QgQOxn
+5yBYuT44IJ5ufgqO8IW437hntVWWBV1oqE0lzOTjfce8rEsg5Uex3nMMSPDlSRb6hP27L6fBw2DV
+wBKOgy2R+NvLdTIaQVHYEfe8zUQthELKvej8zxKrXCr2wcwsFfcNXIL++lnxg9o1HsahSf36zVrU
+xoJinYI6aaSshI3t1tOOxbzx0rlHd4RVg/SLPD/sj9hX+xoVJ0mcInd5FyF4zwq7rGho9hMPXtdD
+AoAtV3vFcfH9dLz6feY0T3MjWemKmZsGaW4EQ5hALsxyEZewyuNHjvrcLoqGtFZ69IiYJsxitUDR
+0Ug9S5Dc6FnwylOquborC1AqZgvUlGc7tP8tikERDH/MuWelYB/u/igpj6E+dIViolOshxjIteXK
+L28PEsch70nUkPu21SEFQHof7uFfGbGHZtvw9IzyUdXYxKy7TzhdhL5CZhlN6GfPXdJJMK18X2gh
+TVlpGTbLC6sHyq9j5fl7Kn9TUFA0JITibdBTUCJLdAAAAAAAAA==
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=-OfhDvGzWdTo/3DFBTABU--
