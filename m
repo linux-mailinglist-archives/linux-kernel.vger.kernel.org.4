@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6036C6216
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604BB6C6230
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbjCWIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S230023AbjCWIsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjCWIkM (ORCPT
+        with ESMTP id S229691AbjCWIsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:40:12 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62BF1B554
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:38:46 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-541a05e4124so383441397b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679560725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y1cIEqXClsIkjDNlYez3V926czPhumNF8sofNyJFFdA=;
-        b=eUTIHwb9gHiKe80gCXINbKnZwZKRxQ9pCErWt8YiVhFdExfyg6azrWWNruAziA3WY5
-         +Sm+oMyhOCxn4XhLzVHa3dDRskexRoUtiWfxEEZrpnGIHJdahOLjorgzYJtIhCAXoDdN
-         +NUGr6PHcKZdNqaAvXc25OCDVatxFA5JYhPWjS3P6Hiul3AsWzClzjlJwLYndxcYiX9K
-         JOjA0k+//SCJcc7whw5XEyvjpGrtLGzm+Vnno8YgalqgzgSqCfX7gIEd31dCMBrXfLnB
-         APxTJDnIXHpIL6v1Yy8Fe5unGJAi3tg53SBJPVLM6/qGdCsdlUDz8GHex+iycfgzQdE1
-         nSCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679560725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y1cIEqXClsIkjDNlYez3V926czPhumNF8sofNyJFFdA=;
-        b=Vv6Q6OmLmSaLqHpAEobPcveUs8p7MmotNCxU1l/TDaheGgfU4TV8RYet/6ZhCWQ06J
-         BbGv58dN9ltPtTcccrK9WvSbcF20oMnk9pmMbB1Mx2xXLW27Tv4zlZmBDrffGuiF8d2V
-         xLhf04iXgnz1t7Mbd1h5EQtYsrOQumSoQ+d3OtdLRWdx83j+uu/TMlxWbnNYP8BPFE2B
-         hppGNflgj0PJUuDGcPGOIlJbjSEibCtIexhGz3cGoajfJyuTAXpn3VcOOy7SpbiSeIBt
-         rkrsn0f+fu7KdT2Z3dPp7mwK6C4itCdltGlJ1oE7CNsxCarMNZszraAqFhScmumk+zuS
-         JGQA==
-X-Gm-Message-State: AAQBX9dve/Mf6gczZA2xg2kNN7Y7n1BNl0fU5Df1a5T6z7MgTxbVaDZK
-        OydxkZC9Xb/kK+kcH2o2i7W1ZAAiZv16i3N5aPhCBA==
-X-Google-Smtp-Source: AKy350YpQG1QeS/JHf1yz/+Mbi9pos/zlzsSJzy4Cm1WDOD9XB83zWfD4msAOPcBGwB9h63MVlcOeGakOFuzLin2Osw=
-X-Received: by 2002:a81:b603:0:b0:545:883a:544d with SMTP id
- u3-20020a81b603000000b00545883a544dmr730788ywh.9.1679560725079; Thu, 23 Mar
- 2023 01:38:45 -0700 (PDT)
+        Thu, 23 Mar 2023 04:48:08 -0400
+X-Greylist: delayed 513 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Mar 2023 01:48:07 PDT
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5741043D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:48:06 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4PhzKc5pn4z1sB77;
+        Thu, 23 Mar 2023 09:39:32 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4PhzKc4GBcz1qqlY;
+        Thu, 23 Mar 2023 09:39:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id ClzVfOsz3AGx; Thu, 23 Mar 2023 09:39:31 +0100 (CET)
+X-Auth-Info: Y+UMJ9JyeLs0U36Yyz5qoPqGiW5wfKK6b6F/ooNgPcoQtneAtR0Pa/OZWp7xmyaq
+Received: from hawking (unknown [81.95.8.244])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 23 Mar 2023 09:39:31 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nubus: Don't list card resources by default
+References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
+X-Yow:  I am a jelly donut.  I am a jelly donut.
+Date:   Thu, 23 Mar 2023 09:39:31 +0100
+In-Reply-To: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
+        (Finn Thain's message of "Thu, 23 Mar 2023 17:03:14 +1100")
+Message-ID: <mvmttybx3ng.fsf@linux-m68k.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20230323012929.10815-1-dipenp@nvidia.com> <20230323012929.10815-11-dipenp@nvidia.com>
-In-Reply-To: <20230323012929.10815-11-dipenp@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 23 Mar 2023 09:38:33 +0100
-Message-ID: <CACRpkdapq1cR5id3K3zASprmUbTmh+QixyUEZFjNqYZPjWw2qw@mail.gmail.com>
-Subject: Re: [PATCH V4 10/10] gpio: tegra186: Add Tegra234 hte support
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,17 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 2:29=E2=80=AFAM Dipen Patel <dipenp@nvidia.com> wro=
-te:
+On Mär 23 2023, Finn Thain wrote:
 
-> To enable timestamp support for the Tegra234, has_gte variable needs
-> to be set true.
->
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Checkpatch says "externs should be avoided in .c files" and if this one
+> appeared twice I would agree. But as it only appears once, I can't see
+> any advantage to putting it in a new .h file instead of the .c file...
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Anything wrong with declaring it in <linux/nubus.h>?
 
-Yours,
-Linus Walleij
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
