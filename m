@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AB96C645E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434146C6463
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCWKDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S230211AbjCWKEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWKDe (ORCPT
+        with ESMTP id S229775AbjCWKEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:03:34 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1846910D;
-        Thu, 23 Mar 2023 03:03:30 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 20so14632122lju.0;
-        Thu, 23 Mar 2023 03:03:30 -0700 (PDT)
+        Thu, 23 Mar 2023 06:04:13 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFBB1B9;
+        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id u10so96583plz.7;
+        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679565808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sy5b+KDY1QEJL7mnyP5vXspq/Ud8cBYsoJBHH7kWSZU=;
-        b=j3XpnyuUTBe2lZwJ4H+ijcbIAV8FMzJN14XtYuGKH10iU51z0wmSLVi/hZzbBRBVmZ
-         0wwPNnW1Hrdg3rFQhX9QfDIIcHXNIQMwlKE+DHxEqAScG3fz7X1SAygeUG614ywrt86m
-         sJMOF9L1gVrLfus+b5eZMUNkTZNPC0aJD2rUr2F18GqegdPfK6S5DxWl9LcFJ30ofAxu
-         i/b8tSmR3Tsj/pRVGElqQ1kVXHEdi39/vtwNBSDl3/NiV9epBAe7PNxwhCh+aAb294vY
-         RgluT40KZrAfa0/48NGJkUDn7JIjSIAiQicIT15rqKEg08F2O68L88Ul1OXxU9aCrFTk
-         FcQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679565808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679565851;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sy5b+KDY1QEJL7mnyP5vXspq/Ud8cBYsoJBHH7kWSZU=;
-        b=tVU42xw1EkUcLLzj9zgN07jpHS69WLdOcPz3OvAave0ASJCuGNrD/8Xuj/vN7X4hR2
-         J0zfkMRcME3eMbwBYPJIITXQepbKo7qdlj+cI1ndOkuNZCjKero0knmQXH4MiU52vd7/
-         PKS3c9asIg9W66O5g1K8A1PEfLXm2/kitdEB35TT3SJNCTHyqwQBqkarePqrd425h6b6
-         epk0ivHWz6ghl/TS9U6R9mzlZCZLgDy4FGxSnvsRFjju0pcaCZDE6UfrNcfoHFAXEmv9
-         ieeySmBIvN676RtMYYtbyiNDDyRZjsZO+9o26GJG6ooTRSCCxQ98NgdvMFaTzUOG15+y
-         U4Qw==
-X-Gm-Message-State: AO0yUKVxFw+wDQ/jpw9+1ycVzI3E6wgEnaKq+EzIHYJMUQde5Gy6loT8
-        EmvsN97Dh5IaWbguIFkCLx0=
-X-Google-Smtp-Source: AK7set8D18UAQZRnHt4bxilF6eKLnimanHWFyClpJP2tW69pSyEtG+Waz44EvJcPmBQ7szAYdYMF8g==
-X-Received: by 2002:a2e:7410:0:b0:2a0:4de2:db88 with SMTP id p16-20020a2e7410000000b002a04de2db88mr1843237ljc.44.1679565808245;
-        Thu, 23 Mar 2023 03:03:28 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id y26-20020a2e321a000000b002934febffe4sm2930024ljy.128.2023.03.23.03.03.27
+        bh=ltpiSqcH+iENGFwSc+EzcVWVTeVgKDyd1o+HaYuNOcU=;
+        b=FIioC87Qgiv41rTGncN6kO8GPo+zjlTucRfuJRVKL+d58lS8UPqiQ7sBQgx85CXvX/
+         xDpTrJ53x8grD8W5hyIaOcGxhjybW21yHhNdkvRxdXvvtGREri8VqmL5BAlYA+NPnaXJ
+         KeIxrd+bx0P5r43rNLosr8wP/8fbSyWLKgAD1r2QE1Hhw28duNWEb77VMeux6ZN0yp9s
+         0hjQbL5WO0/vHhw5VFm71JU7pR6XbPNo/vcyg8JEfIYteiR68oF+v/lNZWT6qQl7Hqg4
+         rmqk40vzLpb7RbSL2PdOixfn6jDBnG3lqP0jPsSLzWeOH5m+4CPQUo5nhlYXZh8U9Amr
+         Ksrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679565851;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ltpiSqcH+iENGFwSc+EzcVWVTeVgKDyd1o+HaYuNOcU=;
+        b=WceDks7056NqRpLNHLD2O1WAmequOJEnOHbGjlAZJSnEL2YIdbKej3cVl7LziSucKy
+         V0Nj408gszWwA6500ZLkO1MJtUNkRCS8GsA4jN7uH0WnY5RGs0hcsChv7iGooLLK8GRn
+         I7VddpVK77w3BANUrPNsDV8e0mUcL2kqZD0PKE3WT94pBDb5pcBRC6KHC6yxzNQUC4WJ
+         AbxTfn+5G4kaekTSCMoZDWSIEad7aRNL8I2TFIn6UNBt77Foh22MgT7Je07PgF7SLUkZ
+         WdPCHRyQYV/jMoJNW8jMlUpGdlTbZt7QgV6G8HLqBZPsVgYBHr6vw9vulZM5W//UyCn+
+         l/0Q==
+X-Gm-Message-State: AO0yUKXYyz2H9dc/PGLcF/ffTrEZt3SovTV+9zeoCKjblKjD2UStaLsM
+        ypleJdD/uz6kmisf3pPjM6g=
+X-Google-Smtp-Source: AK7set/Mj1KVx0fqxVGFpU3U+yREvqKy9bhqip47WBXgC2C1U+mkNZenaUb7bC6dl12PyGp6QC9udQ==
+X-Received: by 2002:a17:90b:1bcc:b0:23f:b35a:534e with SMTP id oa12-20020a17090b1bcc00b0023fb35a534emr7136143pjb.29.1679565851047;
+        Thu, 23 Mar 2023 03:04:11 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m2-20020a17090a7f8200b0023efa52d2b6sm930234pjl.34.2023.03.23.03.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:03:27 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 13:03:25 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
-Message-ID: <20230323100325.zltk7emftkyfgsef@mobilestation>
-References: <20230323034944.78357-1-cai.huoqing@linux.dev>
- <20230323034944.78357-5-cai.huoqing@linux.dev>
+        Thu, 23 Mar 2023 03:04:10 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     linyunsheng@huawei.com, kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn,
+        zhang.yunkai@zte.com.cn
+Subject: Re: [PATCH] rps: process the skb directly if rps cpu not changed
+Date:   Thu, 23 Mar 2023 10:04:06 +0000
+Message-Id: <20230323100406.36858-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ef94a525-c5f3-fa9f-d66d-d9dc62533e78@huawei.com>
+References: <ef94a525-c5f3-fa9f-d66d-d9dc62533e78@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323034944.78357-5-cai.huoqing@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -79,280 +75,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:49:41AM +0800, Cai Huoqing wrote:
-> From: Cai huoqing <cai.huoqing@linux.dev>
-> 
-> Add HDMA DebugFS support to show register information
+>On 2023/3/22 15:24, xu xin wrote:
+>> [So sorry, I made a mistake in the reply title]
+>> 
+>> On 2023/3/21 20:12, yang.yang29@zte.com.cn wrote:
+>>>> From: xu xin <xu.xin16@zte.com.cn>
+>>>>
+>>>> In the RPS procedure of NAPI receiving, regardless of whether the
+>>>> rps-calculated CPU of the skb equals to the currently processing CPU, RPS
+>>>> will always use enqueue_to_backlog to enqueue the skb to per-cpu backlog,
+>>>> which will trigger a new NET_RX softirq.
+>>>
+>>> Does bypassing the backlog cause out of order problem for packet handling?
+>>> It seems currently the RPS/RFS will ensure order delivery,such as:
+>>> https://elixir.bootlin.com/linux/v6.3-rc3/source/net/core/dev.c#L4485
+>>>
+>>> Also, this is an optimization, it should target the net-next branch:
+>>> [PATCH net-next] rps: process the skb directly if rps cpu not changed
+>>>
+>> 
+>> Well, I thought the patch would't break the effort RFS tried to avoid "Out of
+>> Order" packets. But thanks for your reminder, I rethink it again, bypassing the
+>> backlog from "netif_receive_skb_list" will mislead RFS's judging if all
+>> previous packets for the flow have been dequeued, where RFS thought all packets
+>> have been dealed with, but actually they are still in skb lists. Fortunately,
+>> bypassing the backlog from "netif_receive_skb" for a single skb is okay and won't
+>> cause OOO packets because every skb is processed serially by RPS and sent to the
+>> protocol stack as soon as possible.
+>
+>Suppose a lot of skbs have been queued to the backlog waiting to
+>processed and passed to the stack when current_cpu is not the same
+>as the target cpu,
 
-s/register information/registers content.
+Well.  I'm afraid that what we mean by current_cpu may be different. The
+"current_cpu" in my patch refers to the cpu NAPI poll is running on (Or
+the cpu that the skb origins from).
 
-> 
-> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-> ---
-> v7->v8:
->   1.Drop some unused field in dw_hdma_debugfs_entry.
-> 
-> v7 link:
->   https://lore.kernel.org/lkml/20230315012840.6986-5-cai.huoqing@linux.dev/
-> 
-> 
->  drivers/dma/dw-edma/Makefile             |   3 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 173 +++++++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
->  4 files changed, 199 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> 
-> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-> index b1c91ef2c63d..83ab58f87760 100644
-> --- a/drivers/dma/dw-edma/Makefile
-> +++ b/drivers/dma/dw-edma/Makefile
-> @@ -1,7 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
-> -dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-> +dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
-> +				   dw-hdma-v0-debugfs.o
->  dw-edma-objs			:= dw-edma-core.o	\
->  				   dw-edma-v0-core.o	\
->  				   dw-hdma-v0-core.o $(dw-edma-y)
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> index 22b7b0410deb..00b735a0202a 100644
-> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> @@ -11,6 +11,7 @@
->  #include "dw-edma-core.h"
->  #include "dw-hdma-v0-core.h"
->  #include "dw-hdma-v0-regs.h"
-> +#include "dw-hdma-v0-debugfs.h"
->  
->  enum dw_hdma_control {
->  	DW_HDMA_V0_CB					= BIT(0),
-> @@ -276,6 +277,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
->  /* HDMA debugfs callbacks */
->  static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
->  {
-> +	dw_hdma_v0_debugfs_on(dw);
->  }
->  
->  static const struct dw_edma_core_ops dw_hdma_v0_core = {
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-> new file mode 100644
-> index 000000000000..c1f2c61e941e
-> --- /dev/null
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-> @@ -0,0 +1,173 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023 Cai Huoqing
-> + * Synopsys DesignWare HDMA v0 debugfs
-> + *
-> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
-> + */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/bitfield.h>
-> +
-> +#include "dw-hdma-v0-debugfs.h"
-> +#include "dw-hdma-v0-regs.h"
-> +#include "dw-edma-core.h"
-> +
-> +#define REGS_ADDR(dw, name)						       \
-> +	({								       \
-> +		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
-> +									       \
-> +		(void __iomem *)&__regs->name;				       \
-> +	})
-> +
-> +#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
-> +	({								       \
-> +		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
-> +									       \
-> +		if (_dir == EDMA_DIR_READ)				       \
-> +			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
-> +		else							       \
-> +			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
-> +									       \
-> +		(void __iomem *)&__ch_regs->name;			       \
-> +	})
-> +
-> +#define CTX_REGISTER(dw, name, dir, ch) \
-> +	{#name, REGS_CH_ADDR(dw, name, dir, ch)}
-> +
+>then current_cpu is changed to be the same as the
+>target cpu, with your patch, new skb will be processed and passed to
+>the stack immediately, which may bypass the old skb in the backlog.
+>
+I think Nop, RFS procedure won't let target cpu switch into a new cpu
+if there are still old skbs in the backlog of last recorded cpu. So the
+target cpu of the new skb will never equal to current_cpu if old skb in the
+backlog.
+==========================================================================
+Let me draw the situation you described: At the time of T1, the app runs
+on cpu-0, so there are many packets queueing into the rxqueue-0 by RFS from
+CPU-1(suppose NAPI poll processing on cpu-1). Then, suddenly at the time of
+T2, the app tranfers to cpu-1, RFS know there are still old skb in rxqueue-0,
+so get_rps_cpu will not return a value of cpu-1, but cpu-0 instead.
 
-> +#define REGISTER(dw, name) \
-> +	{ dw, #name, REGS_ADDR(dw, name) }
+========================================================
+When T1, app runs on cpu-0:
+  APP
+-----------------------------
+|      |        |      |
+|cpu-0 |        |cpu-1 |
+|stack |        |stack |
+|      |        |      |
+   ^
+  |=|
+  |=|             | |
+  |=|             | |
+(rxqueue-0)      (rxqueue-1,empty)
+   ^<--
+       <--
+         <--
+	     <-- packet(poll on cpu1)
+			
+===========================================================
+When T2, app tranfer to cpu-1, target cpu is still on cpu-0:
+                  APP
+----------------------------
+|      |        |      |
+|cpu-0 |        |cpu-1 |
+|stack |        |stack |
+|      |        |      |
+   ^
+   |
+  |=|             | |
+  |=|             | |
+(rxqueue-0)      (rxqueue-2,empty)
+   ^<--
+       <--
+         <--
+            <-- packet(poll on cpu1)
 
-This macro appears to be unused. Please drop. Other than that the
-patch looks good.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+===================================
 
--Serge(y)
+Thanks for your reply.
 
-> +
-> +#define WRITE_STR				"write"
-> +#define READ_STR				"read"
-> +#define CHANNEL_STR				"channel"
-> +#define REGISTERS_STR				"registers"
-> +
-> +struct dw_hdma_debugfs_entry {
-> +	const char				*name;
-> +	void __iomem				*reg;
-> +};
-> +
-> +static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
-> +{
-> +	struct dw_hdma_debugfs_entry *entry = data;
-> +	void __iomem *reg = entry->reg;
-> +
-> +	*val = readl(reg);
-> +
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
-> +
-> +static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
-> +				       const struct dw_hdma_debugfs_entry ini[],
-> +				       int nr_entries, struct dentry *dent)
-> +{
-> +	struct dw_hdma_debugfs_entry *entries;
-> +	int i;
-> +
-> +	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
-> +			       GFP_KERNEL);
-> +	if (!entries)
-> +		return;
-> +
-> +	for (i = 0; i < nr_entries; i++) {
-> +		entries[i] = ini[i];
-> +
-> +		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
-> +					   &entries[i], &fops_x32);
-> +	}
-> +}
-> +
-> +static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
-> +				    u16 ch, struct dentry *dent)
-> +{
-> +	const struct dw_hdma_debugfs_entry debugfs_regs[] = {
-> +		CTX_REGISTER(dw, ch_en, dir, ch),
-> +		CTX_REGISTER(dw, doorbell, dir, ch),
-> +		CTX_REGISTER(dw, prefetch, dir, ch),
-> +		CTX_REGISTER(dw, handshake, dir, ch),
-> +		CTX_REGISTER(dw, llp.lsb, dir, ch),
-> +		CTX_REGISTER(dw, llp.msb, dir, ch),
-> +		CTX_REGISTER(dw, cycle_sync, dir, ch),
-> +		CTX_REGISTER(dw, transfer_size, dir, ch),
-> +		CTX_REGISTER(dw, sar.lsb, dir, ch),
-> +		CTX_REGISTER(dw, sar.msb, dir, ch),
-> +		CTX_REGISTER(dw, dar.lsb, dir, ch),
-> +		CTX_REGISTER(dw, dar.msb, dir, ch),
-> +		CTX_REGISTER(dw, watermark_en, dir, ch),
-> +		CTX_REGISTER(dw, control1, dir, ch),
-> +		CTX_REGISTER(dw, func_num, dir, ch),
-> +		CTX_REGISTER(dw, qos, dir, ch),
-> +		CTX_REGISTER(dw, ch_stat, dir, ch),
-> +		CTX_REGISTER(dw, int_stat, dir, ch),
-> +		CTX_REGISTER(dw, int_setup, dir, ch),
-> +		CTX_REGISTER(dw, int_clear, dir, ch),
-> +		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
-> +		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
-> +		CTX_REGISTER(dw, msi_watermark.lsb, dir, ch),
-> +		CTX_REGISTER(dw, msi_watermark.msb, dir, ch),
-> +		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
-> +		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
-> +		CTX_REGISTER(dw, msi_msgdata, dir, ch),
-> +	};
-> +	int nr_entries = ARRAY_SIZE(debugfs_regs);
-> +
-> +	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
-> +}
-> +
-> +static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-> +{
-> +	struct dentry *regs_dent, *ch_dent;
-> +	char name[16];
-> +	int i;
-> +
-> +	regs_dent = debugfs_create_dir(WRITE_STR, dent);
-> +
-> +	for (i = 0; i < dw->wr_ch_cnt; i++) {
-> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-> +
-> +		ch_dent = debugfs_create_dir(name, regs_dent);
-> +
-> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
-> +	}
-> +}
-> +
-> +static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-> +{
-> +	struct dentry *regs_dent, *ch_dent;
-> +	char name[16];
-> +	int i;
-> +
-> +	regs_dent = debugfs_create_dir(READ_STR, dent);
-> +
-> +	for (i = 0; i < dw->rd_ch_cnt; i++) {
-> +		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-> +
-> +		ch_dent = debugfs_create_dir(name, regs_dent);
-> +
-> +		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
-> +	}
-> +}
-> +
-> +static void dw_hdma_debugfs_regs(struct dw_edma *dw)
-> +{
-> +	struct dentry *regs_dent;
-> +
-> +	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
-> +
-> +	dw_hdma_debugfs_regs_wr(dw, regs_dent);
-> +	dw_hdma_debugfs_regs_rd(dw, regs_dent);
-> +}
-> +
-> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-> +{
-> +	if (!debugfs_initialized())
-> +		return;
-> +
-> +	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
-> +	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
-> +	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
-> +
-> +	dw_hdma_debugfs_regs(dw);
-> +}
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> new file mode 100644
-> index 000000000000..e6842c83777d
-> --- /dev/null
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2023 Cai Huoqing
-> + * Synopsys DesignWare HDMA v0 debugfs
-> + *
-> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
-> + */
-> +
-> +#ifndef _DW_HDMA_V0_DEBUG_FS_H
-> +#define _DW_HDMA_V0_DEBUG_FS_H
-> +
-> +#include <linux/dma/edma.h>
-> +
-> +#ifdef CONFIG_DEBUG_FS
-> +void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
-> +#else
-> +static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-> +{
-> +}
-> +#endif /* CONFIG_DEBUG_FS */
-> +
-> +#endif /* _DW_HDMA_V0_DEBUG_FS_H */
-> -- 
-> 2.34.1
-> 
+>> 
+>> If I'm correct, the code as follws can fix this.
+>> 
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>> @@ -5666,8 +5666,9 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
+>>         if (static_branch_unlikely(&rps_needed)) {
+>>                 struct rps_dev_flow voidflow, *rflow = &voidflow;
+>>                 int cpu = get_rps_cpu(skb->dev, skb, &rflow);
+>> +               int current_cpu = smp_processor_id();
+>>  
+>> -               if (cpu >= 0) {
+>> +               if (cpu >= 0 && cpu != current_cpu) {
+>>                         ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+>>                         rcu_read_unlock();
+>>                         return ret;
+>> @@ -5699,11 +5700,15 @@ void netif_receive_skb_list_internal(struct list_head *head)
+>>                 list_for_each_entry_safe(skb, next, head, list) {
+>>                         struct rps_dev_flow voidflow, *rflow = &voidflow;
+>>                         int cpu = get_rps_cpu(skb->dev, skb, &rflow);
+>> +                       int current_cpu = smp_processor_id();
+>>  
+>>                         if (cpu >= 0) {
+>>                                 /* Will be handled, remove from list */
+>>                                 skb_list_del_init(skb);
+>> -                               enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+>> +                               if (cpu != current_cpu)
+>> +                                       enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+>> +                               else
+>> +                                       __netif_receive_skb(skb);
+>>                         }
+>>                 }
+>> 
+>> 
+>> Thanks.
+>> 
+>>>>
+>>>> Actually, it's not necessary to enqueue it to backlog when rps-calculated
+>>>> CPU id equals to the current processing CPU, and we can call
+>>>> __netif_receive_skb or __netif_receive_skb_list to process the skb directly.
+>>>> The benefit is that it can reduce the number of softirqs of NET_RX and reduce
+>>>> the processing delay of skb.
+>>>>
+>>>> The measured result shows the patch brings 50% reduction of NET_RX softirqs.
+>>>> The test was done on the QEMU environment with two-core CPU by iperf3.
+>>>> taskset 01 iperf3 -c 192.168.2.250 -t 3 -u -R;
+>>>> taskset 02 iperf3 -c 192.168.2.250 -t 3 -u -R;
+>>>>
+>>>> Previous RPS:
+>>>> 		    	CPU0       CPU1
+>>>> NET_RX:         45          0    (before iperf3 testing)
+>>>> NET_RX:        1095         241   (after iperf3 testing)
+>>>>
+>>>> Patched RPS:
+>>>>                 CPU0       CPU1
+>>>> NET_RX:         28          4    (before iperf3 testing)
+>>>> NET_RX:         573         32   (after iperf3 testing)
+>>>
+>>> Sincerely.
+>>> Xu Xin
+>> .
+>> 
