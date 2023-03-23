@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD726C67D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791C86C67DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjCWMOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S231629AbjCWMOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjCWMON (ORCPT
+        with ESMTP id S230404AbjCWMOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:14:13 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE1426C2F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:53 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54184571389so391526517b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:53 -0700 (PDT)
+        Thu, 23 Mar 2023 08:14:15 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9268A27495
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:56 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5445009c26bso391114527b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573632;
+        d=linaro.org; s=google; t=1679573635;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NUhHXs8R1NOZ/R53KEOol5IeNGSDhjZDeG5ZzuZqONw=;
-        b=BGIMIGWqvwYafgFF8A9+5+Zg698xXFfNsuHAXSn4dk37zJwIvhFx9dOOJ2qKU1WsOp
-         s8p97JWF2o99XXKLYT8bjps7bFfyKI1KmpZi6WKZClT7q/ZV2uDCf3fv+szsrp96gU0/
-         wGMgBDvT9hXwGJWt88UAVlzcEw9pnIhVHBPKxDsE/IWf1X2omZld81b3m9ARCM8w6AIt
-         9hUKxj0nlVZGzkWPuS1AEOMOv4fctKFKM4dAQPThBmrd1SKNyEWR51k6aiSOZhD5rOAL
-         LJueHPvXD7VyWEX2hWKquuoy4et+SX7Tr+xTv6lvCI2ANYJxIBz82C1oybkX05Zmj6DM
-         MJcA==
+        bh=N7lgk6f+q2nEXeqkUqxHnazbXtEwKCKae3zY+1NYR88=;
+        b=dCCUMvk8tORlt404OScY7h/k1sjCR9SqoK+Pd9k+QQsZSPAFkp4p01ZaANHdc7xBxm
+         F7QNJxfsQgaqTz5Wj49ad+c3sBbKYw6RFYX2oz1eI8cIbFoeHDj4GhThLY2nxNzojico
+         sLoXWN/iHtiFFLgPtEhtqS8TcRLB9fguGM8/B5dQ1YWoMKRwECmPPR7aRzbJ7ScymT8B
+         lwMe/vybOwZHsNhKlsrRQlxlJBoX+RxTrFo3jIjo1vq3PgN/J/tb1QpCxnzszCgyrfbE
+         Hcg6mnnhFD/vZhOPFIC3rL9eq3hFJaDnroswNxlxLo7cdEdnNlHES2goA3V9wlQvLo2R
+         QBgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573632;
+        d=1e100.net; s=20210112; t=1679573635;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NUhHXs8R1NOZ/R53KEOol5IeNGSDhjZDeG5ZzuZqONw=;
-        b=a/c93dMill0M82gCwUaj9CPSfyVZ97mr1nf4DyiFjAvKQZIney3Zx2xfzbty/4g1Zr
-         0kujoi1xOMqy2WgyKToUWbvt4sigT/aowB25eedkZuzpIxvVmTYuiCVOSLCDOCTuqSeR
-         AKnvQKGmmlSV+ewLntkgyma6oH5BAiXy6/EttCG2diwRScrfz9FsCTJmT6EeBWPZnYyI
-         SDOk+bN2o+zCuSkFGEV2TjSkpoyU4I+BcHMQWZmWTNTw5ECmfq4KESgrd1d9yYdEVUZe
-         cPb0/GZvJqKYFV0atNy95fOG+VlFg37dpnn9xh+Z/D/BLVJISriVPLnPoR6Z1dDJGgEE
-         8q2g==
-X-Gm-Message-State: AAQBX9dwdqhQiCqPPSAkfUsRREXL/MOFsja9FU4UsZdaF77AhSeV8tRv
-        d/MgHZ4GaIqAS6A22bT7DewRpmly7Ws2poJwlr+7uG2tt1o5XheG
-X-Google-Smtp-Source: AKy350aoc3BnCD04/g3SIKEUr1A1baWFs1iFl/gJRxPCQoD99WPcXJEwWkaMbtO98JIhZVQG6NvsFgcVGi3qiNHQdz4=
-X-Received: by 2002:a81:b307:0:b0:544:6828:3c09 with SMTP id
- r7-20020a81b307000000b0054468283c09mr1833488ywh.0.1679573632392; Thu, 23 Mar
- 2023 05:13:52 -0700 (PDT)
+        bh=N7lgk6f+q2nEXeqkUqxHnazbXtEwKCKae3zY+1NYR88=;
+        b=WMk6Ns7WneMm1f/9yQb+IlRSWVEILV1qy/Tx3lNRvVU/A+hyqVQR6vXgFar6qAWYeq
+         nHSCqlL15dEWvdorwvSQkTJxaA9ii+Qt7vqWHNSDUwaP5skrFuLlSLAn60/NKaSKNH8h
+         oVDUiUe6qNcEl9CBYOaiwJ4TVKxynKNivkwz+7AtwkdfuXk/6MsS5Q/TpS/5Hr/PuTzb
+         PDFglJH4Gpv0oef9/1booW5n7R1TlvDdxt6//dacShhKmID1/bFaHCwM44mL/vAuIF3H
+         um9tSDpnumcdXfWQtf1XZr0EPl1XwTNP4+nrlPYOLOIOLYkmSQDEncjeQNQYdv1O8m8M
+         DhZQ==
+X-Gm-Message-State: AAQBX9d/J1aMdZzHCtRRQBlCL8bceDXHiYuQ8xNJZ+J/H8vh/UmJNOsS
+        pvm+zop2YbEDLQ4s8YVmxTqjNVexYW0Yxu40Gbd2QQ==
+X-Google-Smtp-Source: AKy350ab9pO/mcEnaUl/HDWXZ+Fnty7B9nPqyTX1tQTW/yxspuOWNB+4UF7majPChSEe/kPlAwb+LVwCezJ7W94X0hs=
+X-Received: by 2002:a81:b3c3:0:b0:545:343b:ecba with SMTP id
+ r186-20020a81b3c3000000b00545343becbamr1735106ywh.0.1679573635527; Thu, 23
+ Mar 2023 05:13:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230317064729.24407-1-yuzhe@nfschina.com>
-In-Reply-To: <20230317064729.24407-1-yuzhe@nfschina.com>
+References: <20230316120549.21486-1-rashmi.a@intel.com> <20230316120549.21486-2-rashmi.a@intel.com>
+In-Reply-To: <20230316120549.21486-2-rashmi.a@intel.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Mar 2023 13:13:16 +0100
-Message-ID: <CAPDyKFqzz_w3jwn_jSexFP15cNeym=rac3KcTbsoPo2OeiSGaw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: remove unnecessary (void*) conversions
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+Date:   Thu, 23 Mar 2023 13:13:19 +0100
+Message-ID: <CAPDyKFrte0nQYhZCD3FeMo7=z4PczhTi7C7Sp3=7fQ_QvcPbQg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] mmc: sdhci-of-arasan: Remove Intel Thunder Bay SOC support
+To:     rashmi.a@intel.com
+Cc:     michal.simek@xilinx.com, p.zabel@pengutronix.de,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vkoul@kernel.org, kishon@kernel.org, yuancan@huawei.com,
+        andriy.shevchenko@linux.intel.com, linux-phy@lists.infradead.org,
+        mgross@linux.intel.com, kris.pan@linux.intel.com,
+        adrian.hunter@intel.com, mahesh.r.vaidya@intel.com,
+        nandhini.srikandan@intel.com, vasavi.v.itha@intel.com,
+        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
+        mallikarjunappa.sangannavar@intel.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
@@ -66,11 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Mar 2023 at 07:48, Yu Zhe <yuzhe@nfschina.com> wrote:
+On Thu, 16 Mar 2023 at 13:06, <rashmi.a@intel.com> wrote:
 >
-> Pointer variables of void * type do not require type cast.
+> From: "A, Rashmi" <rashmi.a@intel.com>
 >
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> Remove Thunder Bay specific code as the product got cancelled
+> and there are no end customers or users.
+>
+> Signed-off-by: A, Rashmi <rashmi.a@intel.com>
+> Reviewed-by: Hunter, Adrian <adrian.hunter@intel.com>
 
 Applied for next, thanks!
 
@@ -79,61 +92,77 @@ Uffe
 
 
 > ---
->  drivers/mmc/core/debugfs.c  | 2 +-
->  drivers/mmc/core/host.c     | 2 +-
->  drivers/mmc/core/mmc_test.c | 6 +++---
->  3 files changed, 5 insertions(+), 5 deletions(-)
+>  drivers/mmc/host/sdhci-of-arasan.c | 29 +----------------------------
+>  1 file changed, 1 insertion(+), 28 deletions(-)
 >
-> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-> index fe6808771bc7..2c97b94aab23 100644
-> --- a/drivers/mmc/core/debugfs.c
-> +++ b/drivers/mmc/core/debugfs.c
-> @@ -246,7 +246,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 89c431a34c43..fbafc87266aa 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -193,13 +193,6 @@ static const struct sdhci_arasan_soc_ctl_map intel_lgm_sdxc_soc_ctl_map = {
+>         .hiword_update = false,
+>  };
 >
->  static int mmc_err_stats_show(struct seq_file *file, void *data)
->  {
-> -       struct mmc_host *host = (struct mmc_host *)file->private;
-> +       struct mmc_host *host = file->private;
->         const char *desc[MMC_ERR_MAX] = {
->                 [MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
->                 [MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
-> diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-> index 096093f7be00..76900f67c782 100644
-> --- a/drivers/mmc/core/host.c
-> +++ b/drivers/mmc/core/host.c
-> @@ -590,7 +590,7 @@ EXPORT_SYMBOL(mmc_alloc_host);
+> -static const struct sdhci_arasan_soc_ctl_map thunderbay_soc_ctl_map = {
+> -       .baseclkfreq = { .reg = 0x0, .width = 8, .shift = 14 },
+> -       .clockmultiplier = { .reg = 0x4, .width = 8, .shift = 14 },
+> -       .support64b = { .reg = 0x4, .width = 1, .shift = 24 },
+> -       .hiword_update = false,
+> -};
+> -
+>  static const struct sdhci_arasan_soc_ctl_map intel_keembay_soc_ctl_map = {
+>         .baseclkfreq = { .reg = 0x0, .width = 8, .shift = 14 },
+>         .clockmultiplier = { .reg = 0x4, .width = 8, .shift = 14 },
+> @@ -465,15 +458,6 @@ static const struct sdhci_pltfm_data sdhci_arasan_cqe_pdata = {
+>                         SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
+>  };
 >
->  static void devm_mmc_host_release(struct device *dev, void *res)
->  {
-> -       mmc_free_host(*(struct mmc_host **)res);
-> +       mmc_free_host(res);
->  }
+> -static const struct sdhci_pltfm_data sdhci_arasan_thunderbay_pdata = {
+> -       .ops = &sdhci_arasan_cqe_ops,
+> -       .quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN | SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC,
+> -       .quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+> -               SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN |
+> -               SDHCI_QUIRK2_STOP_WITH_TC |
+> -               SDHCI_QUIRK2_CAPS_BIT63_FOR_HS400,
+> -};
+> -
+>  #ifdef CONFIG_PM_SLEEP
+>  /**
+>   * sdhci_arasan_suspend - Suspend method for the driver
+> @@ -1150,12 +1134,6 @@ static struct sdhci_arasan_of_data sdhci_arasan_generic_data = {
+>         .clk_ops = &arasan_clk_ops,
+>  };
 >
->  struct mmc_host *devm_mmc_alloc_host(struct device *dev, int extra)
-> diff --git a/drivers/mmc/core/mmc_test.c b/drivers/mmc/core/mmc_test.c
-> index 156d34b2ed4d..0f6a563103fd 100644
-> --- a/drivers/mmc/core/mmc_test.c
-> +++ b/drivers/mmc/core/mmc_test.c
-> @@ -3045,7 +3045,7 @@ static LIST_HEAD(mmc_test_file_test);
+> -static const struct sdhci_arasan_of_data sdhci_arasan_thunderbay_data = {
+> -       .soc_ctl_map = &thunderbay_soc_ctl_map,
+> -       .pdata = &sdhci_arasan_thunderbay_pdata,
+> -       .clk_ops = &arasan_clk_ops,
+> -};
+> -
+>  static const struct sdhci_pltfm_data sdhci_keembay_emmc_pdata = {
+>         .ops = &sdhci_arasan_cqe_ops,
+>         .quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
+> @@ -1289,10 +1267,6 @@ static const struct of_device_id sdhci_arasan_of_match[] = {
+>                 .compatible = "intel,keembay-sdhci-5.1-sdio",
+>                 .data = &intel_keembay_sdio_data,
+>         },
+> -       {
+> -               .compatible = "intel,thunderbay-sdhci-5.1",
+> -               .data = &sdhci_arasan_thunderbay_data,
+> -       },
+>         /* Generic compatible below here */
+>         {
+>                 .compatible = "arasan,sdhci-8.9a",
+> @@ -1716,8 +1690,7 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
 >
->  static int mtf_test_show(struct seq_file *sf, void *data)
->  {
-> -       struct mmc_card *card = (struct mmc_card *)sf->private;
-> +       struct mmc_card *card = sf->private;
->         struct mmc_test_general_result *gr;
+>         if (of_device_is_compatible(np, "intel,keembay-sdhci-5.1-emmc") ||
+>             of_device_is_compatible(np, "intel,keembay-sdhci-5.1-sd") ||
+> -           of_device_is_compatible(np, "intel,keembay-sdhci-5.1-sdio") ||
+> -           of_device_is_compatible(np, "intel,thunderbay-sdhci-5.1")) {
+> +           of_device_is_compatible(np, "intel,keembay-sdhci-5.1-sdio")) {
+>                 sdhci_arasan_update_clockmultiplier(host, 0x0);
+>                 sdhci_arasan_update_support64b(host, 0x0);
 >
->         mutex_lock(&mmc_test_lock);
-> @@ -3079,8 +3079,8 @@ static int mtf_test_open(struct inode *inode, struct file *file)
->  static ssize_t mtf_test_write(struct file *file, const char __user *buf,
->         size_t count, loff_t *pos)
->  {
-> -       struct seq_file *sf = (struct seq_file *)file->private_data;
-> -       struct mmc_card *card = (struct mmc_card *)sf->private;
-> +       struct seq_file *sf = file->private_data;
-> +       struct mmc_card *card = sf->private;
->         struct mmc_test_card *test;
->         long testcase;
->         int ret;
 > --
-> 2.11.0
+> 2.17.1
 >
