@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52716C73F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1176A6C73F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjCWXRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S231281AbjCWXRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCWXRK (ORCPT
+        with ESMTP id S229586AbjCWXRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:17:10 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3D519C5F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:09 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id cu4so620918qvb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:09 -0700 (PDT)
+        Thu, 23 Mar 2023 19:17:38 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6D01A656
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:37 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so3631029pjz.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679613428;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ii1C/7JJiAWrr0n4Sj/e0pcYJ+z7V8KDh2zqZ2/fO3Q=;
-        b=D2S+nz909zw/Jul8nzDozG+ztDYl5MhyWiQB6ffeX9fBL8CYDAPIW2CoEuW5bLte3t
-         oDhnToir/u2VhgCGeymvvfuhCWOFjsN4NlBFx5QJZo8atBMMpwo5xJu+1yuZoKSn0lQB
-         YRcL/VYQIsg4eKvjw5XtR3zAXGWo16SnkR3clHP5VKu13+g6vWYdUTE2GOk4NRFKy5kg
-         WNBzGkf89ZiGw881bSdarc667K991sXSAM0Ja9NWBPftzEh3/+xjgxY5nvIuXs84f0Uj
-         pOQx375QK4eKwhh7OxZLuYOEfWMjmdPsCxv9cfNvLEpgd2Or/jQ9JPKfUOR1lPKfACvv
-         b7xQ==
+        d=google.com; s=20210112; t=1679613457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hiKl7sOY7EHCgJkdTfDH25K0RbHgHAGi3xzbRlPaCYU=;
+        b=LK5Bqyl6Jei1yT4nfUCL5iooEdHaIufcHgyU0dXuMm2U+ifJgKHjjYhxOi2LV9vCKO
+         43d3DLC79AjWw5gxyqPPNftmcCuVLrQBbzw8cge6wQs7WYmg2L2voJiqUO0go5+3Ez2w
+         6d8iAPow/xEUyTNK1Vd45EjTFgnP2/8ui7mMiYkXfREeVSp18uvkH4BP+zepvO89XjML
+         uvIOueSk+NfEoAEQs5HqhZ78OrWLlRHppFbJWYN2DZIxcijghVPteCPlH9yyCT+i+2ln
+         ykIQ81bbl9kd7qh8SBSp4OyrpprMvzDrCnTCzwrOVgZTYR4CnNku5ruY5x318F9EEWma
+         tiBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679613428;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ii1C/7JJiAWrr0n4Sj/e0pcYJ+z7V8KDh2zqZ2/fO3Q=;
-        b=GvhhINdxAKnHZi9HsdmySwXW0LFBZcTY0YXbBs3z7OD4HSR9Hh4hF2OrAdiWgrbNob
-         8BjoHBOxgiZfApgZO9hdg1pzeKL+Q+h67lWuyNDqSb8+MgBW9uz4XcPia7yMoztOZ50y
-         DSQKObAuNww+GZlBI6YwJ3itc7qmLkNvTAdDBuoTOOyU/SrNoBnr3/AZxuu3/I2Dg4BY
-         1V/i2moIpVmdSThYWJNT/JrY7iQT+yXu8srMwNccOxqtBN/LW0lyJE4IZk9ENG5XiZ1u
-         YIfurbtnXQorhOaYlMnOCC9+CtvQ29GUVvFuD14qwmK4/T9f5dfyAH7g8zvHZuDSJmp/
-         uaeQ==
-X-Gm-Message-State: AAQBX9duHAdKzMDErY4wi1XOe0nvw+Ycfj408Gl78jSn+dnqjvdg/fR9
-        phjawqXbsrfLqXaCND+1PGEj335Fvz0=
-X-Google-Smtp-Source: AKy350Z/8+JXK19M5r5CnO1BAWOlvIwPyCqvq5EUIS4g4FStNo8Tfj7GoatYtZaeUlOSekQkb2YphQ==
-X-Received: by 2002:a05:6214:2461:b0:5ac:b644:b4c5 with SMTP id im1-20020a056214246100b005acb644b4c5mr1223230qvb.47.1679613428071;
-        Thu, 23 Mar 2023 16:17:08 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id mf10-20020a0562145d8a00b005dd8b9345e8sm226560qvb.128.2023.03.23.16.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 16:17:07 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH] scripts/gdb: Bail early if there are no generic PD
-Date:   Thu, 23 Mar 2023 16:16:57 -0700
-Message-Id: <20230323231659.3319941-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1679613457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hiKl7sOY7EHCgJkdTfDH25K0RbHgHAGi3xzbRlPaCYU=;
+        b=BRQWY31wjtqYJ1WX/yzrvJ9HGzCY/vhFJ3vHY7e++htyTCD/EvIu1z76JXVmkmIQi/
+         xf3U2qmxzaOX2YbZEILJQUHd70ZbqrRHG5zwMkPvR+dVqPbpCKQtFZHRESYjDlMvcDbo
+         y+etXAYo23Uzlz9SmS4mRL0b2j1nz5pm5B3kIdhqdgjKlqGQrdQk3HBm//ylgz5ZX1D9
+         bKkKAJvvrhjJjfgP2gkM6cmRTeNnGvj0eqK7Hq5hYk1yTOM8c1gGHa9bdYH0EHAEhs9a
+         bnvzdbSgJItoq3O3/B0o6YC+3uU7QrEaW6vn0iGLwFHTaOjoJMVkLqSyST8EaW49Hep1
+         G3GA==
+X-Gm-Message-State: AAQBX9d72iuGwb2K4Aaj8eVAfI014ZErx6Yy5q6xtcHcWnOf0Q/olyqf
+        JwDc2nWX9Txs2kfY+QYx+Mp2o7o4n41WEOoKe9G/7E4w1jB1/PPwRHn4S5bF
+X-Google-Smtp-Source: AKy350aeaZ2CJVvWQpcxgwdGAqNrly5yV9TP3kXXP6KkQTCr5DrJaU71wjDo9NRyuP/HOv9oCIUM8gn6fSjoB4XL8sw=
+X-Received: by 2002:a17:90a:9295:b0:23c:fb7d:de70 with SMTP id
+ n21-20020a17090a929500b0023cfb7dde70mr231886pjo.7.1679613456794; Thu, 23 Mar
+ 2023 16:17:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230323204427.3594372-1-maskray@google.com>
+In-Reply-To: <20230323204427.3594372-1-maskray@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 23 Mar 2023 16:17:25 -0700
+Message-ID: <CAKwvOd=W49oqB7qg5Cv+MUVfQYixmdQY4FRSsMPTyecE9w0EzQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile: use -z pack-relative-relocs
+To:     Fangrui Song <maskray@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +72,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid generating an exception if there are no generic power domain(s)
-registered:
+Hi Fangrui,
+Thanks for the patches!
 
-(gdb) lx-genpd-summary
-domain                          status          children
-    /device                                             runtime status
-----------------------------------------------------------------------
-Python Exception <class 'gdb.error'>: No symbol "gpd_list" in current context.
-Error occurred in Python: No symbol "gpd_list" in current context.
-(gdb) quit
+On Thu, Mar 23, 2023 at 1:44=E2=80=AFPM Fangrui Song <maskray@google.com> w=
+rote:
+>
+> Commit 27f2a4db76e8 ("Makefile: fix GDB warning with CONFIG_RELR")
+> added --use-android-relr-tags to fix a GDB warning
+>
+> BFD: /android0/linux-next/vmlinux: unknown type [0x13] section `.relr.dyn=
+'
+>
+> The GDB warning has been fixed in version 11.2.
+>
+> The DT_ANDROID_RELR tag was deprecated since DT_RELR was standardized.
+> Thus, --use-android-relr-tags should be removed. While making the
+> change, replace --pack-dyn-relocs=3Drelr with -z pack-relative-relocs,
+> which is supported since LLD 15.
 
-Fixes: 8207d4a88e1e ("scripts/gdb: add lx-genpd-summary command")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- scripts/gdb/linux/genpd.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Looks like
+commit 4a8de2832a2a ("[ELF] Add -z pack-relative-relocs")
 
-diff --git a/scripts/gdb/linux/genpd.py b/scripts/gdb/linux/genpd.py
-index 39cd1abd8559..09f9b75cbcdd 100644
---- a/scripts/gdb/linux/genpd.py
-+++ b/scripts/gdb/linux/genpd.py
-@@ -5,7 +5,7 @@
- import gdb
- import sys
- 
--from linux.utils import CachedType
-+from linux.utils import CachedType, gdb_eval_or_none
- from linux.lists import list_for_each_entry
- 
- generic_pm_domain_type = CachedType('struct generic_pm_domain')
-@@ -70,6 +70,8 @@ Output is similar to /sys/kernel/debug/pm_genpd/pm_genpd_summary'''
-             gdb.write('    %-50s  %s\n' % (kobj_path, rtpm_status_str(dev)))
- 
-     def invoke(self, arg, from_tty):
-+        if linux.utils.gdb_eval_or_none("&gpd_list") is None:
-+            raise gdb.GdbError("No power domain(s) registered")
-         gdb.write('domain                          status          children\n');
-         gdb.write('    /device                                             runtime status\n');
-         gdb.write('----------------------------------------------------------------------\n');
--- 
-2.34.1
+>
+> As of today, GNU ld supports the latter option for x86 and powerpc64
+> ports and has no intention to support --pack-dyn-relocs=3Drelr. In the
+> absence of the glibc symbol version GLIBC_ABI_DT_RELR,
+> --pack-dyn-relocs=3Drelr and -z pack-relative-relocs are identical in
+> ld.lld.
 
+Won't this regress support for CONFIG_TOOLS_SUPPORT_RELR for LLD
+11-14? (which we still support, see Documentation/process/changes.rst;
+I guess we don't list LLD explicitly, but it's effectively under the
+llvm umbrella there).
+
+IIUC, looks like lld 7.0+ should support SHT_RELR based on looking at
+commit 11479daf2f06 ("lld: add experimental support for SHT_RELR sections."=
+)
+
+So we might want to invoke the linker twice, once with the new flag,
+and again with the old if we fail the first time?
+
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1057
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Da61=
+9b58721f0a03fd91c27670d3e4c2fb0d88f1e
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> ---
+>  Makefile                      | 2 +-
+>  scripts/tools-support-relr.sh | 3 +--
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index a2c310df2145..30c2edc35813 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1113,7 +1113,7 @@ LDFLAGS_vmlinux   +=3D -X
+>  endif
+>
+>  ifeq ($(CONFIG_RELR),y)
+> -LDFLAGS_vmlinux        +=3D --pack-dyn-relocs=3Drelr --use-android-relr-=
+tags
+> +LDFLAGS_vmlinux        +=3D -z pack-relative-relocs
+>  endif
+>
+>  # We never want expected sections to be placed heuristically by the
+> diff --git a/scripts/tools-support-relr.sh b/scripts/tools-support-relr.s=
+h
+> index cb55878bd5b8..58c2e8b02ce8 100755
+> --- a/scripts/tools-support-relr.sh
+> +++ b/scripts/tools-support-relr.sh
+> @@ -7,8 +7,7 @@ trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXIT
+>  cat << "END" | $CC -c -x c - -o $tmp_file.o >/dev/null 2>&1
+>  void *p =3D &p;
+>  END
+> -$LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr \
+> -  --use-android-relr-tags -o $tmp_file
+> +$LD $tmp_file.o -shared -Bsymbolic -z pack-relative-relocs -o $tmp_file
+>
+>  # Despite printing an error message, GNU nm still exits with exit code 0=
+ if it
+>  # sees a relr section. So we need to check that nothing is printed to st=
+derr.
+> --
+> 2.40.0.348.gf938b09366-goog
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
