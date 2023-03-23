@@ -2,270 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391DD6C70FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B956C7108
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjCWTVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S231245AbjCWTZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCWTVc (ORCPT
+        with ESMTP id S229738AbjCWTZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:21:32 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD2E188
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:16 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id ew6so28201364edb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679599275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5k6nQvr+OAnndWm5Fm48bRo3kejRzJbUnDprd7Qh5FQ=;
-        b=IplSCuy7Ci5TZrXducJfaeYesnruom2cYs74x5WP9HCfDT57vEDfBVZ+X7NyH7j79W
-         yXbmHDrP+L9GzimyTtFrzLuk9siC/JjDqQI6Ay1X1Y6M+mODmylo+0qejtICjEFW6nk7
-         VUBvyRC3fpFt5b3Jd705/z+DVOmq5LPVsjOo+/PK3QAn+nw7uwdIAdd9TnzNDGmwcr9S
-         MEkRfubcyn9zr2ZuWBWRRaqOzXo6UlDfhd8QQeENDVsy+5AggNIxWAMwyTSwMhETLnen
-         9vc3NYu/hSohZV4N7Hifc6fv4Ap+t5/o44UV1Yw+D8k6CH0yBtJEaVAIC14F2vsp71FF
-         H70A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679599275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5k6nQvr+OAnndWm5Fm48bRo3kejRzJbUnDprd7Qh5FQ=;
-        b=4F8tjgTsZu5d6nEq7ucU/kZFBOTfRqdvF/uOy7DL2iDwponUfNICWusMQcf4JRYle8
-         QcMNA8KHym4kv2uPTPXOZMG+KTr75rq65GsXhftT+cfiKnb+ZHEYBGR19EKUWV5naMfs
-         as8HXn/M+QsLsiKxklOUO3UBwb2dTIuUQaJYjrZr6ESmK0atADaMLE+tZK8e7PSxrHqg
-         UTULmrYJk7MwZIvwoMbyuTeK9ztRch4rkbUEdN27cdLVhKk17sbStO46LviC+bS70JXS
-         7ISjcv3nI31Gjd4cI5ziGFCXmOosIlM+g7+wW1ukMQSgHg0Jq0bDLWnSCsLx2RUJTJ0u
-         DTlA==
-X-Gm-Message-State: AAQBX9clPNTm/MFxepkDYPp0Q3CrDSvrMYFiACKjfp7GKb1QBMtyVICe
-        IPxeK/+4nUwrbfXdv12gCeo=
-X-Google-Smtp-Source: AKy350aT9RetWNYMtA/DMqLMcjWJycj9i8QSHZRi78UI2y3XtCDrFQeGuoiG9bJBi5veZc+ec4I+KA==
-X-Received: by 2002:a17:907:248c:b0:931:bbcf:eb6b with SMTP id zg12-20020a170907248c00b00931bbcfeb6bmr114330ejb.63.1679599274770;
-        Thu, 23 Mar 2023 12:21:14 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id lz24-20020a170906fb1800b009334309eda5sm7213127ejb.196.2023.03.23.12.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 12:21:14 -0700 (PDT)
-From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: [PATCH 1/1] mm: vmalloc: Remove a global vmap_blocks xarray
-Date:   Thu, 23 Mar 2023 20:21:11 +0100
-Message-Id: <20230323192111.1501308-1-urezki@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 23 Mar 2023 15:25:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7BB9030
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:25:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AI9Na0jQO+L/aW/rDOI7I80kGgx9ZT3rKsy4+WnEErNTDuSPPwNWNo1bYX/PZjwFjHdtYWLpLTBzPiku32my9U2BaV/dN4vYl31tyyMOMoJK8rda3qvUfst3NK6AZDhXfUSMN2gvpPTH1aov1Ce9HRzgxidNOxAsmY5ZWpYLkJqpsj0ApwpIy14WbrFK82gYWMol4AFY2R63/HtQkIZOsHFMcdIS9Gz/Pd7fvIZu8inxnjbnsrfyHIUARsPFrbtbxt1IetCNo+dBvMcxGeQ2hMmU1Hooop9LMXR5KR/k+nRtltJHrBPk4DNkpkHeUPfA5hsznuaDXpeuNGCyZbXJDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=heEHfuqXbSMQr2q/JbalmVXT5zz9HgWVUS/AwaVnLHQ=;
+ b=Ak6tdDDWGySI1929RNLS/l5Q/Nk7q1MgsU/lz9/+pe9vTXYo5U7UVQ+oxcQzcmkUAymA4Xtz0nZ589snGhIAxobRsqF5xAJznS4wAi/nH0COH8yhgbp37rZQKudTVQZ2B8pWSoyFGFxHGcjXdB/ytWDvzx6x64JkuS/VKE4Cz/Ge/UqBgRsqP9E+K/l2O1Qr+tdbs6kx78wQUefyJrbFMAGulUqQgZLVYawrhSym8vdfRuuu+4iVGZUWW3iWhmHK5VdgEbzCqLloY11352zYjpp8Ny0suFUo2FV8/8+/KbrDAFb2ph+qtAaEclnyap8BoNq4SjFlG7Zq3WlOT86C+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=heEHfuqXbSMQr2q/JbalmVXT5zz9HgWVUS/AwaVnLHQ=;
+ b=Wj1/n3UCQa80CZu1KmWDB9+NLu7+vtlpz9EsyHMoLvCo47myzO8pulBXU6GB6Q09owoubGym3oV6kFIXpndFna4kR/K2rAF/B7ijjEsJc/I2e1P2homTtzjC8UO4EJysiW/QCd42B9w7QCiBgXj+hGWjUEZBOEwUXqJQL/p0ZBg=
+Received: from DM5PR12MB1899.namprd12.prod.outlook.com (2603:10b6:3:113::21)
+ by IA0PR12MB8085.namprd12.prod.outlook.com (2603:10b6:208:400::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 19:24:47 +0000
+Received: from DM5PR12MB1899.namprd12.prod.outlook.com
+ ([fe80::a819:97aa:d313:274e]) by DM5PR12MB1899.namprd12.prod.outlook.com
+ ([fe80::a819:97aa:d313:274e%7]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
+ 19:24:47 +0000
+From:   "Clark, Felipe" <Felipe.Clark@amd.com>
+To:     "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>
+CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Koo, Anthony" <Anthony.Koo@amd.com>,
+        "Nagulendran, Iswara" <Iswara.Nagulendran@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] drm/display: Add missing OLED Vesa brightnesses
+ definitions
+Thread-Topic: [PATCH] drm/display: Add missing OLED Vesa brightnesses
+ definitions
+Thread-Index: AQHZXNgmD7+dfhPMoECf47qbaCoQa68HFukAgAGcr9A=
+Date:   Thu, 23 Mar 2023 19:24:47 +0000
+Message-ID: <DM5PR12MB189979B9FCBC8EC57F23B63997879@DM5PR12MB1899.namprd12.prod.outlook.com>
+References: <20230322160513.1438881-1-Rodrigo.Siqueira@amd.com>
+ <7cf3ae87-9d7e-a846-89c6-d267ca76472a@amd.com>
+In-Reply-To: <7cf3ae87-9d7e-a846-89c6-d267ca76472a@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=88347bde-6d37-49e4-93b0-f49d3aba537d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-03-23T18:38:20Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR12MB1899:EE_|IA0PR12MB8085:EE_
+x-ms-office365-filtering-correlation-id: 9447aeb1-5d28-450d-bc5e-08db2bd443be
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aEHeGeNDxoGwT8flmz+GgPiJVUt4B3ds6C7tez8lZ5pGHPiYjnw7meR7XaOgKfq9MD8Oxk3nBGGMBPssyr6arY1M+CipboKcMA5wfDHrUTsslWidRCunNG9UNJTiJj5cIjDlN+X7s920DXfzZiEGJd0T84w+o/vfcYKmSRxkRkVlmRlOiKNizmfHmpFzgxTxIYqzAD5AAg+SvwCw4xjjYuaDg91+45r8IQlS2f+O6bV3IW+udY12CkntcfZgZb/XtMPbXWkR9SB8KbdRlHg2Yf68kglTMfvB3+px25c1Jr7cwE3VMeA0WvD/z9rvbP79Juc9DJP0qXq7xTrpcYZ9JfHsJdMPqiqc5lcD4U7vhkwoRIPmVT9/AY8v/cN5Lq/oUGT+B55phOfdQITXXSY0eV1I+YCmuZ0Gadgx++Tgw3p0CudcwqVhzN3x3hdUTXjoh97O21qcZKKkVIR2iWExSHTMAb6C/HNZlJ4NYg1a/ZF6d6kelV7PGds82JH7G6fs2zNt/vAPp1xR9u5BdipoR1kT43zO1Q2TLJnF0MluzvTf98z/bNsr3DYofNpYQJg/zaDztV114YMlLG4/50eH3qoo3r+h1vnWrJhC49eDyYq/gPYNclbEhI9wlb2N+zMxC+0ZqtJ4zSY1lI5GCfKWHP5emNQQZqJVl7uaOboR9FeXDWWLhXSOQUcvkQTLyh/cx0e2jnwZFidshM/aqWYhtQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1899.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199018)(316002)(54906003)(38070700005)(33656002)(110136005)(478600001)(41300700001)(55016003)(2906002)(8936002)(5660300002)(122000001)(52536014)(66946007)(4326008)(76116006)(66556008)(66476007)(8676002)(38100700002)(64756008)(66446008)(6506007)(53546011)(26005)(86362001)(9686003)(186003)(7696005)(71200400001)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SkZUZ1RKTE9peDkxNFFTa2poRmY3cmdRMDdqUEFTL1RlWWdUSGRkSldsSUJS?=
+ =?utf-8?B?ajMyckVIVCtteGxPbjBLRzFhMGJvREJ5ZEZuakNQTVRBVnI5RzZMRk9tTXBM?=
+ =?utf-8?B?VVhKTFlINDc1bWRBNVAvd3MzVzA3VGl2anJjUFlCb2pOcDRxZzRKb0wzTkwr?=
+ =?utf-8?B?QlJIVGhNenlZL3Q0SEVyRmoxLzF4WVpqZTZQbk5SbFdoK2ExanVLR3Z6TFZz?=
+ =?utf-8?B?T0dUNjlrcSsxR1dLSVRFMmlBQjZJcE9tZEVXL2RKbFZQL2JEMXpJV09kVGZW?=
+ =?utf-8?B?QnpyR09jWG9rYitlNkJSdmpwR2RZdGJHcDZyYWpNRDBsUFFwdERJMUREWis4?=
+ =?utf-8?B?RExadTAwaGJiQndzWU5CUXEyMzloSWtJM3pzS21pWEVWSVJHS2gxUEtWNTIx?=
+ =?utf-8?B?Q2V2ZUZEaFlCVmR3Sktrc0lGamNhemhWZ3pWbThVL0dHR0hyR0FTKy8xYU4w?=
+ =?utf-8?B?a1dLQ0Nra0JncmQ2NnJqblRWZ2NhdEgxTFhiUldjVFNTM2prVzRheEVMaXpP?=
+ =?utf-8?B?VllabVE2bmQydmVTQVFmNE9CRk13eGlqSmhwUllUL2hSS0V5RVhHUDBDeW0r?=
+ =?utf-8?B?STB1N00xaWhUY1lPUWNpMUJVcmhMQVJwaXFOQ2tuTUlBZ0doQk5jaEZaUkh1?=
+ =?utf-8?B?NTRmK09kblUzd3pYOTZtRGxSb21MN3JudS83YmN5Sm4zL0crcEVXUnNCNXRm?=
+ =?utf-8?B?STJYMTZRblBLY1dDNUlxamdOY1VYUGxoR0hZcVAvSXRYYXRIcThZMGFqa1hW?=
+ =?utf-8?B?aENFWkE2UlFKcDlGZGxxMG5VeUlPcGN5V1BjM3E1L0swc1FxRURhSDNCSHd6?=
+ =?utf-8?B?bkU1UVFRcGJkdmVtcWVkRHA2bWVJaVJJdFA4QUh0MStwdE1JeDRteHJVNk9E?=
+ =?utf-8?B?R09lMHY2Rmg2Tm1lYmFraDZCRUxjTG52WFgrc3pCZ2tiOTA5TDloQ1NhWUpH?=
+ =?utf-8?B?WDdkclAyQkZHVFJiRmhoNXMwY2VXZ2RIMzFvT1FnOEFvTytFbExNU0MrbVRV?=
+ =?utf-8?B?MFl4dmhSZHZ2QS9EL1QvdVhZNWNzRmplaU9uUHpDcExsNVVsVHJpUFR2TG1S?=
+ =?utf-8?B?NTgvOVU5UVNKS0xsaTBMVVFhS1lHTGVyNjJJV1RXMzRYQ2pDK0ljL0owa1E3?=
+ =?utf-8?B?YnFVd3ZxMGlDbitlaUJTMDlBSjhTYjdZTzRzcC9wYzVkUUZNU3UyRTIwVDFw?=
+ =?utf-8?B?SmJaVjk4WS9vRk5oY2t4VHJIMzBEUC9TenZnWkovR3dmb3IxUStnTStJemlL?=
+ =?utf-8?B?dE5wcU1YVlg4b09Pd1JmMFFRMlJxc3NmQ0dtREJTMyttckwyZVR5aDJnL3NR?=
+ =?utf-8?B?L3A2RUVkd05WZU9PbmsxeHZ3OTFDS2RjdlJwMkxzU2RpOVovcnpVMk5OaXgz?=
+ =?utf-8?B?Yy8rU1pINHR5VGVBRjlwNlhiVVRmdGFLOWdtUmUyM0pLdVRsUDNDTEFhMHNW?=
+ =?utf-8?B?ZFQrRlQzLzkxWHJmNmo0ZWF1Q1NIc1hWcEc1bFdYS25xMG5RM1ZYc2NSS0lw?=
+ =?utf-8?B?ZkUwd2E3UFJBbEs5SnVRTytZMlZrenZ1cURNZU9ESWVFWTdZV1E2VC8xRW1l?=
+ =?utf-8?B?VHA1RGRzVi9yOVg3cUwzbFZLQVBWdnZhd1lDUlVDMW1teE1UYU5lRnNOZzEz?=
+ =?utf-8?B?KzJrYU1qQXlXNVhZN3VaWXl3V20rVStDNzdNVDcvTWtWZmIvUVJmNDRMRTQ1?=
+ =?utf-8?B?UlRXOURUcXZTZU9jTElUa3RsRkhVa3g5SG01MDNCZE9PTDRhK0VBSmdTdmdG?=
+ =?utf-8?B?U2Z4Ukl3SVQ5Z1d2bnlUV0lIK0ZtbkxlWkdPaXEwYVdYaWgvaUdJeHg3VUxu?=
+ =?utf-8?B?NnYxNE9yNnpGRzd3VGdRUmVieXU1UjkxRHVaY2UxTVBMZXpaZllCV0dQV3kx?=
+ =?utf-8?B?M0VpSzYyTkdQVGVPMC9NUWpjdU1Jd3pkS2xIQm1nNFVaQzM4OWZRVnZPRHNZ?=
+ =?utf-8?B?YVZsNUROVW9GTzNhYjdWUlgxY0hnNXJOdXdZdUFIVVBxVFU1WWZiUnJNajdE?=
+ =?utf-8?B?WjN2Q05rNGdmeWc3QlVsTkVja3JZc0haNnlHSENLbFFQTXpXRjZGc1k1WldD?=
+ =?utf-8?B?QUJDcXdOamVSQWpHRStZKzVObDVONGY1eGd5Mk1KWDRHd0hZNjZORnppWk14?=
+ =?utf-8?Q?2qBk=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1899.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9447aeb1-5d28-450d-bc5e-08db2bd443be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2023 19:24:47.2379
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4M3WYfsyg6OILIhYrp4H7O7fgJgwM/2mvgffV7CnF/cwpW15ocNx3Y/0ff72fb/2TIhUNKASpL/6cYIxWlY9ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8085
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A global vmap_blocks-xarray array can be contented under
-heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. The
-lock_stat shows that a "vmap_blocks.xa_lock" lock is a
-second in a top-list when it comes to contentions:
-
-<snip>
-----------------------------------------
-class name con-bounces contentions ...
-----------------------------------------
-vmap_area_lock:         2554079 2554276 ...
-  --------------
-  vmap_area_lock        1297948  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
-  vmap_area_lock        1256330  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
-  vmap_area_lock              1  [<00000000c95c05a7>] find_vm_area+0x16/0x70
-  --------------
-  vmap_area_lock        1738590  [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
-  vmap_area_lock         815688  [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
-  vmap_area_lock              1  [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
-
-vmap_blocks.xa_lock:    862689  862698 ...
-  -------------------
-  vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-  vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
-  -------------------
-  vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
-  vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-...
-<snip>
-
-that is a result of running vm_map_ram()/vm_unmap_ram() in
-a loop. The test creates 64(on 64 CPUs system) threads and
-each one maps/unmaps 1 page.
-
-After this change the "xa_lock" can be considered as a noise
-in the same test condition:
-
-<snip>
-...
-&xa->xa_lock#1:         10333 10394 ...
-  --------------
-  &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
-  &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-  --------------
-  &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-  &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
-...
-<snip>
-
-This patch does not fix vmap_area_lock/free_vmap_area_lock and
-purge_vmap_area_lock bottle-necks, it is rather a separate rework.
-
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- mm/vmalloc.c | 50 ++++++++++++++++++++++++++------------------------
- 1 file changed, 26 insertions(+), 24 deletions(-)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 978194dc2bb8..13b5342bed9a 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1911,6 +1911,7 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
- struct vmap_block_queue {
- 	spinlock_t lock;
- 	struct list_head free;
-+	struct xarray vmap_blocks;
- };
- 
- struct vmap_block {
-@@ -1927,25 +1928,18 @@ struct vmap_block {
- /* Queue of free and dirty vmap blocks, for allocation and flushing purposes */
- static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
- 
--/*
-- * XArray of vmap blocks, indexed by address, to quickly find a vmap block
-- * in the free path. Could get rid of this if we change the API to return a
-- * "cookie" from alloc, to be passed to free. But no big deal yet.
-- */
--static DEFINE_XARRAY(vmap_blocks);
--
--/*
-- * We should probably have a fallback mechanism to allocate virtual memory
-- * out of partially filled vmap blocks. However vmap block sizing should be
-- * fairly reasonable according to the vmalloc size, so it shouldn't be a
-- * big problem.
-- */
-+static struct vmap_block_queue *
-+addr_to_vbq(unsigned long addr)
-+{
-+	int cpu = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
-+	return &per_cpu(vmap_block_queue, cpu);
-+}
- 
--static unsigned long addr_to_vb_idx(unsigned long addr)
-+static unsigned long
-+addr_to_vb_va_start(unsigned long addr)
- {
--	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
--	addr /= VMAP_BLOCK_SIZE;
--	return addr;
-+	/* A start address of block an address belongs to. */
-+	return rounddown(addr, VMAP_BLOCK_SIZE);
- }
- 
- static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
-@@ -1953,7 +1947,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
- 	unsigned long addr;
- 
- 	addr = va_start + (pages_off << PAGE_SHIFT);
--	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
-+	BUG_ON(addr_to_vb_va_start(addr) != addr_to_vb_va_start(va_start));
- 	return (void *)addr;
- }
- 
-@@ -1970,7 +1964,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 	struct vmap_block_queue *vbq;
- 	struct vmap_block *vb;
- 	struct vmap_area *va;
--	unsigned long vb_idx;
- 	int node, err;
- 	void *vaddr;
- 
-@@ -2003,8 +1996,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 	bitmap_set(vb->used_map, 0, (1UL << order));
- 	INIT_LIST_HEAD(&vb->free_list);
- 
--	vb_idx = addr_to_vb_idx(va->va_start);
--	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-+	vbq = addr_to_vbq(va->va_start);
-+	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
- 	if (err) {
- 		kfree(vb);
- 		free_vmap_area(va);
-@@ -2021,9 +2014,11 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 
- static void free_vmap_block(struct vmap_block *vb)
- {
-+	struct vmap_block_queue *vbq;
- 	struct vmap_block *tmp;
- 
--	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
-+	vbq = addr_to_vbq(vb->va->va_start);
-+	tmp = xa_erase(&vbq->vmap_blocks, vb->va->va_start);
- 	BUG_ON(tmp != vb);
- 
- 	spin_lock(&vmap_area_lock);
-@@ -2135,6 +2130,7 @@ static void vb_free(unsigned long addr, unsigned long size)
- 	unsigned long offset;
- 	unsigned int order;
- 	struct vmap_block *vb;
-+	struct vmap_block_queue *vbq;
- 
- 	BUG_ON(offset_in_page(size));
- 	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
-@@ -2143,7 +2139,10 @@ static void vb_free(unsigned long addr, unsigned long size)
- 
- 	order = get_order(size);
- 	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
--	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
-+
-+	vbq = addr_to_vbq(addr);
-+	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start(addr));
-+
- 	spin_lock(&vb->lock);
- 	bitmap_clear(vb->used_map, offset, (1UL << order));
- 	spin_unlock(&vb->lock);
-@@ -3486,6 +3485,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
- {
- 	char *start;
- 	struct vmap_block *vb;
-+	struct vmap_block_queue *vbq;
- 	unsigned long offset;
- 	unsigned int rs, re, n;
- 
-@@ -3503,7 +3503,8 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
- 	 * Area is split into regions and tracked with vmap_block, read out
- 	 * each region and zero fill the hole between regions.
- 	 */
--	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-+	vbq = addr_to_vbq((unsigned long) addr);
-+	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start((unsigned long) addr));
- 	if (!vb)
- 		goto finished;
- 
-@@ -4272,6 +4273,7 @@ void __init vmalloc_init(void)
- 		p = &per_cpu(vfree_deferred, i);
- 		init_llist_head(&p->list);
- 		INIT_WORK(&p->wq, delayed_vfree_work);
-+		xa_init(&vbq->vmap_blocks);
- 	}
- 
- 	/* Import existing vmlist entries. */
--- 
-2.30.2
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhlbGxvIFJvZHJpZ28gYW5kIEhh
+cnJ5LA0KSSB3b3VsZCBsaWtlIHRvIHByb3Bvc2Ugc29tZSBjaGFuZ2VzIHRvIGtlZXAgdGhpcyBw
+YXRjaCBjb25zaXN0ZW50IHdpdGggdGhlIG5hbWluZyBzY2hlbWUgYW5kIGdlbmVyYWwgb3JnYW5p
+emF0aW9uIG9mIHRoZSBkcm1fZHAuaCBmaWxlLg0KDQojZGVmaW5lIERQX0VEUF9PTEVEX1ZFU0Ff
+QlJJR0hUTkVTU19PTiAgICAgIDB4ODANCkl0IHdvdWxkIGJlIGJldHRlciB0byB1c2UgdGhlICgx
+PDw3KSByZXByZXNlbnRhdGlvbiBmb3IgdGhpcyBiaXQgdG8gZm9sbG93IHRoZSBwYXR0ZXJuIGVz
+dGFibGlzaGVkIGJ5IHRoZSBvdGhlciBkZWZpbmVzIGluIHRoZSBmaWxlLiBBbHNvLCBhIG1vcmUg
+Z2VuZXJpYyBuYW1lIGZvciB0aGlzIG1hY3JvIHdvdWxkIGJlIERQX0VEUF9QQU5FTF9MVU1JTkFO
+Q0VfQ09OVFJPTF9FTkFCTEUuDQoNCiMgZGVmaW5lIERQX0VEUF9PTEVEX1ZFU0FfQ0FQICAgKDEg
+PDwgNCkNCkEgbW9yZSBnZW5lcmljIG5hbWUgZm9yIHRoaXMgbWFjcm8gd291bGQgYmUgRFBfRURQ
+X1BBTkVMX0xVTUlOQU5DRV9DT05UUk9MX0NBUEFCTEUNCg0KDQpJbiB0ZXJtcyBvZiB0aGUgZmls
+ZSBzdHJ1Y3R1cmUsIERQX0VEUF9QQU5FTF9MVU1JTkFOQ0VfQ09OVFJPTF9FTkFCTEUgc2hvdWxk
+IGFwcGVhciB1bmRlcm5lYXRoIHRoZSBkZWZpbml0aW9uIG9mIERQX0VEUF9CQUNLTElHSFRfTU9E
+RV9TRVRfUkVHSVNURVIuIFNpbWlsYXJseSwgRFBfRURQX1BBTkVMX0xVTUlOQU5DRV9DT05UUk9M
+X0NBUEFCTEUgc2hvdWxkIGFwcGVhciB1bmRlcm5lYXRoIHRoZSBkZWZpbml0aW9uIG9mIERQX0VE
+UF9HRU5FUkFMX0NBUF8yDQoNCkZvciBhIGNvbXBsZXRlIGRlZmluaXRpb24gb2YgdGhlIG1pbGxp
+bml0IGJhc2VkIGJyaWdodG5lc3MgY29udHJvbCBzcGVjaWZpY2F0aW9uIHRoZSBmb2xsb3dpbmcg
+c2hvdWxkIGFsc28gYmUgYWRkZWQ6DQojZGVmaW5lIERQX0VEUF9QQU5FTF9UQVJHRVRfTFVNSU5B
+TkNFX1ZBTFVFICAgICAweDczNA0KDQpIZXJlIGlzIGEgc3VnZ2VzdGVkIHBzZXVkby1wYXRjaCB3
+aXRoIGFsbCB0aGVzZSBjaGFuZ2VzOg0KDQojZGVmaW5lIERQX0VEUF9HRU5FUkFMX0NBUF8yICAg
+ICAgICAgICAgICAgMHg3MDMNCiAjIGRlZmluZSBEUF9FRFBfT1ZFUkRSSVZFX0VOR0lORV9FTkFC
+TEVEICAgICAgICAgICAgICAgKDEgPDwgMCkNCisjIGRlZmluZSBEUF9FRFBfUEFORUxfTFVNSU5B
+TkNFX0NPTlRST0xfRU5BQkxFICgxPDw3KQ0KDQojIGRlZmluZSBEUF9FRFBfRFlOQU1JQ19CQUNL
+TElHSFRfRU5BQkxFICAgICAgICAgICAgICAgKDEgPDwgNCkNCiAjIGRlZmluZSBEUF9FRFBfUkVH
+SU9OQUxfQkFDS0xJR0hUX0VOQUJMRSAgICAgICAgICAgICAgKDEgPDwgNSkNCiAjIGRlZmluZSBE
+UF9FRFBfVVBEQVRFX1JFR0lPTl9CUklHSFRORVNTICAgICAgICAgICAgICAgKDEgPDwgNikgLyog
+ZURQIDEuNCAqLw0KKyMgZGVmaW5lIERQX0VEUF9QQU5FTF9MVU1JTkFOQ0VfQ09OVFJPTF9FTkFC
+TEUgKDE8PDcpDQoNCiAjZGVmaW5lIERQX0VEUF9EQkNfTUlOSU1VTV9CUklHSFRORVNTX1NFVCAg
+IDB4NzMyDQogI2RlZmluZSBEUF9FRFBfREJDX01BWElNVU1fQlJJR0hUTkVTU19TRVQgICAweDcz
+Mw0KKyNkZWZpbmUgRFBfRURQX1BBTkVMX1RBUkdFVF9MVU1JTkFOQ0VfVkFMVUUgMHg3MzQNCg0K
+DQpUaGFuayB5b3UsDQpGZWxpcGUNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206
+IFdlbnRsYW5kLCBIYXJyeSA8SGFycnkuV2VudGxhbmRAYW1kLmNvbT4NClNlbnQ6IFdlZG5lc2Rh
+eSwgTWFyY2ggMjIsIDIwMjMgMjowMSBQTQ0KVG86IFNpcXVlaXJhLCBSb2RyaWdvIDxSb2RyaWdv
+LlNpcXVlaXJhQGFtZC5jb20+OyBhaXJsaWVkQGdtYWlsLmNvbTsgZGFuaWVsQGZmd2xsLmNoDQpD
+YzogYW1kLWdmeEBsaXN0cy5mcmVlZGVza3RvcC5vcmc7IEtvbywgQW50aG9ueSA8QW50aG9ueS5L
+b29AYW1kLmNvbT47IE5hZ3VsZW5kcmFuLCBJc3dhcmEgPElzd2FyYS5OYWd1bGVuZHJhbkBhbWQu
+Y29tPjsgQ2xhcmssIEZlbGlwZSA8RmVsaXBlLkNsYXJrQGFtZC5jb20+OyBkcmktZGV2ZWxAbGlz
+dHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQpTdWJqZWN0
+OiBSZTogW1BBVENIXSBkcm0vZGlzcGxheTogQWRkIG1pc3NpbmcgT0xFRCBWZXNhIGJyaWdodG5l
+c3NlcyBkZWZpbml0aW9ucw0KDQoNCg0KT24gMy8yMi8yMyAxMjowNSwgUm9kcmlnbyBTaXF1ZWly
+YSB3cm90ZToNCj4gQ2M6IEFudGhvbnkgS29vIDxhbnRob255Lmtvb0BhbWQuY29tPg0KPiBDYzog
+SXN3YXJhIE5lZ3VsZW5kcmFuIDxpc3dhcmEubmFndWxlbmRyYW5AYW1kLmNvbT4NCj4gQ2M6IEZl
+bGlwZSBDbGFyayA8ZmVsaXBlLmNsYXJrQGFtZC5jb20+DQo+IENjOiBIYXJyeSBXZW50bGFuZCA8
+SGFycnkuV2VudGxhbmRAYW1kLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogUm9kcmlnbyBTaXF1ZWly
+YSA8Um9kcmlnby5TaXF1ZWlyYUBhbWQuY29tPg0KDQpSZXZpZXdlZC1ieTogSGFycnkgV2VudGxh
+bmQgPGhhcnJ5LndlbnRsYW5kQGFtZC5jb20+DQoNCkhhcnJ5DQoNCj4gLS0tDQo+ICBpbmNsdWRl
+L2RybS9kaXNwbGF5L2RybV9kcC5oIHwgMiArKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0
+aW9ucygrKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZGlzcGxheS9kcm1fZHAuaA0K
+PiBiL2luY2x1ZGUvZHJtL2Rpc3BsYXkvZHJtX2RwLmggaW5kZXggNjMyMzc2YzI5MWRiLi5kMzBh
+OWIyZjQ1MGMgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvZHJtL2Rpc3BsYXkvZHJtX2RwLmgNCj4g
+KysrIGIvaW5jbHVkZS9kcm0vZGlzcGxheS9kcm1fZHAuaA0KPiBAQCAtOTc3LDYgKzk3Nyw4IEBA
+DQo+ICAjIGRlZmluZSBEUF9FRFBfQkFDS0xJR0hUX0ZSRVFfQVVYX1NFVF9DQVAgICAgICAgICAg
+ICgxIDw8IDUpDQo+ICAjIGRlZmluZSBEUF9FRFBfRFlOQU1JQ19CQUNLTElHSFRfQ0FQICAgICAg
+ICAgICAgICAgICAgICAgICAgKDEgPDwgNikNCj4gICMgZGVmaW5lIERQX0VEUF9WQkxBTktfQkFD
+S0xJR0hUX1VQREFURV9DQVAgICAgICAgICAgKDEgPDwgNykNCj4gKyNkZWZpbmUgRFBfRURQX09M
+RURfVkVTQV9CUklHSFRORVNTX09OICAgICAgMHg4MA0KPiArIyBkZWZpbmUgRFBfRURQX09MRURf
+VkVTQV9DQVAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICgxIDw8IDQpDQo+DQo+ICAj
+ZGVmaW5lIERQX0VEUF9HRU5FUkFMX0NBUF8yICAgICAgICAgICAgIDB4NzAzDQo+ICAjIGRlZmlu
+ZSBEUF9FRFBfT1ZFUkRSSVZFX0VOR0lORV9FTkFCTEVEICAgICAgICAgICAgICgxIDw8IDApDQoN
+Cg==
