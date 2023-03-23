@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321096C7129
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA80B6C712D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjCWTjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
+        id S231218AbjCWTkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCWTjw (ORCPT
+        with ESMTP id S231522AbjCWTkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:39:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEBACC11;
-        Thu, 23 Mar 2023 12:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ypydtE3oLX+IwCXZSmMkIoAHUeP4gcZHNPrwfPH1AHw=; b=Ra4fYq2gIVui3gAYJPzljk6ney
-        ozIA/8+lHf8luaaSnU12u3/ZPdY8cp3PruOv8aWuyrklYjMXuD3z0iTOz/nQ5GvUlVJN1u4yk51tt
-        3AyuICQ0P7lhZSUFHJoaiRw3B8da21yRXFpDmUAZvN0lc2G+xRc0dbhoTcEL0N3DWsbfBcPTljXma
-        kscTH7nLk5NOic0Cbcoq6KcWnoeECfe8p31GTtmirU60N9zG27mFVinYT28WAASiDdbFEdjvKjZog
-        nvXTMQnhfalezDMAqMsW4KmNpxnIDOdDm403yYWJW2m/JE0V+xWf+BOBcPbXCswnp08eoK4WXlxRz
-        MSkjlr7w==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfQmj-002qcr-1b;
-        Thu, 23 Mar 2023 19:39:41 +0000
-Date:   Thu, 23 Mar 2023 12:39:41 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, ye.xingchen@zte.com.cn,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, linmiaohe@huawei.com,
-        chi.minghao@zte.com.cn, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH V5 1/2] mm: compaction: move compaction sysctl to its own
- file
-Message-ID: <ZByq/TcnxYbeReJZ@bombadil.infradead.org>
-References: <202303221046286197958@zte.com.cn>
- <ZBq9uO6wLI1fX1x/@infradead.org>
- <8ff68064-3ec6-4aa2-2389-3568483a1bd4@suse.cz>
+        Thu, 23 Mar 2023 15:40:16 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A0420069;
+        Thu, 23 Mar 2023 12:40:15 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 877CF60A;
+        Thu, 23 Mar 2023 19:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 877CF60A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1679600414; bh=iQi8Bi9hacIn33KLkpIHUMRozKG0oaFhXdu49BmPO4k=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=k0FDr3OzJvgw2XqhhWd1E+YHjnJ0AUrhtyaUyDHHAw+k0FR4HqJBaXoY+3sEVbgQF
+         vF5oGSNrO6mX6ul+tg9Xv92MWo56Z0+oF6hIqBNOGq7DeBqt4RcMQF54B3YeX0EtmN
+         jFdtJ809hXRkOGpKI08CVbIVTlA/L3Y+luIFMg9GgE+/jUkpVc8Q0MYUv41ewex2ia
+         qBxcXulpBMhTTM2qDirqXJXSB4l4XtIIZaT1GakvDrRp8FCp+tv28m+g/u21wq6LU/
+         tJDrve0L9Qts0xBIy9uy30HFA0G6iGk0zqKPttP/6tBjyUoSTdAIMJVrvKU05I1fX1
+         qPBk0C4u1yCEw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
+In-Reply-To: <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
+References: <20230315211523.108836-1-corbet@lwn.net>
+ <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
+ <87cz4zb8xu.fsf@meer.lwn.net>
+ <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
+Date:   Thu, 23 Mar 2023 13:40:13 -0600
+Message-ID: <87v8ir9rz6.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ff68064-3ec6-4aa2-2389-3568483a1bd4@suse.cz>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 05:19:15PM +0100, Vlastimil Babka wrote:
-> On 3/22/23 09:35, Christoph Hellwig wrote:
-> > On Wed, Mar 22, 2023 at 10:46:28AM +0800, ye.xingchen@zte.com.cn wrote:
-> >> From: Minghao Chi <chi.minghao@zte.com.cn>
-> >> 
-> >> This moves all compaction sysctls to its own file.
-> > 
-> > So there's a whole lot of these 'move sysctrls to their own file'
-> > patches, but no actual explanation of why that is desirable.  Please
-> 
-> I think Luis started this initiative, maybe he can provide the canonical
-> reasoning :)
+Dave Hansen <dave.hansen@intel.com> writes:
 
-The kernel/sysctl.c is flooded now with commit log entries which
-describe a proper rationale, however some folks forget to also include
-similar rationale in new patches. I try to remind folks when I can,
-thanks for reminding them to continue to do that. That needs to be fixed
-in this patch. The summary is its hard to coordiante merge conflicts
-with all the syctls in one place, best to just put them where they are
-used.
+> On 3/23/23 11:48, Jonathan Corbet wrote:
+>> I could do the "fix up and send at the end of the merge window" trick
+>> with it.
+>
+> That would work for me.
+>
+>>  Or perhaps some of this should go via tip?  Suggestions welcome.
+>
+> Since we have so many branches, we'll still have to do the merges
+> between whatever branch carries the move and the actual doc-update branches.
+>
+> The end-of-the-merge-window is nice for us maintainers because we can
+> ask the submitters to do any rebasing.
 
-There is a small hidden penalty increase in size to the kernel with the
-sysctls moves today though and one for which Matthew Wilcox has recently asked
-for us to pause these moves until we can save more memory. The extra memory
-is caused by the extra empty struct ctl_table added to the end of the new
-array. The way to avoid that penalty is to deprecate all APIs in sysctl
-registation which deal with complex array structures. I have some some
-of that addressed on my sysctl-next tree (and merged on linux-next) but
-much more work is required to deprecate the older APIs. I was ready to
-pause the kernel/sysctl.c moves until those APIs are deprecated and we
-start having sysctl APIs which allow us to not have the empty array at
-the end. But as I thought about this just now, the use cases that move
-the sysctls where __init is used could benefit already in size.
+Now that I look...the only thing in linux-next currently that conflicts
+is the shadow-stack series; if that continues, it might not be necessary
+to do anything special.
 
-For this patch there seems to be a savings of 4 bytes:
+Thanks,
 
-$ ./scripts/bloat-o-meter vmlinux.old vmlinux
-add/remove: 1/0 grow/shrink: 1/2 up/down: 346/-350 (-4)
-Function                                     old     new   delta
-vm_compaction                                  -     320    +320
-kcompactd_init                               167     193     +26
-proc_dointvec_minmax_warn_RT_change          104      10     -94
-vm_table                                    2112    1856    -256
-Total: Before=19287558, After=19287554, chg -0.00%
-
-So I don't think we need to pause this move or others where are have savings.
-
-Minghao, can you fix the commit log, and explain how you are also saving
-4 bytes as per the above bloat-o-meter results?
-
-> > explain why we'd want to split code that is closely related, and now
-> > requires marking symbols non-static just to create a new tiny source
-> > file.
-> 
-> Hmm? I can see the opposite, at least in the compaction patch here. Related
-> code and variables are moved closer together, made static, declarations
-> removed from headers. It looks like an improvement to me.
-
-Glad this helps.
-
-  Luis
+jon
