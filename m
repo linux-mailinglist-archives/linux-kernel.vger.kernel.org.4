@@ -2,153 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479756C5BD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5452C6C5BD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjCWB0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S229972AbjCWB1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCWB0V (ORCPT
+        with ESMTP id S229480AbjCWB1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:26:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE02F06E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:26:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679534780; x=1711070780;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IU2WmXgC/7JP8q7+cH5YagdszJXHAsq9qVtFDzDLQi8=;
-  b=RiyVV8lPDfyXKLygpW5IAN027ppjBOqbxuHAgcZScGJeUHqjBRnsZwIC
-   QCB/Zf+PItjITbD0Zz0OxURHxVHz6xuGT+dYkKJc41Tp8UHSIAwhZd8RZ
-   IEwZ9TMrWn5x2BIY3m4i4VyJLbmZhwXFnFgvzj+OFI7EISuKLcRKA0LYN
-   kkzRODG/FStSxd4LvGvuubF7yjQzBWkPI+GPQi+lRCyyHFynm6YSgwjl0
-   TN7B3dRyV8Au9Kk8IU68DJq88nP0/6kuX9aXA9UFpazZDqGN8/Jgwfq1j
-   YyJr3XGexk9eAO4O8cEc9p8oV9Zqmu7fFPQKMe66IhmrFCkN94gAXhTY+
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338090480"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="338090480"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:26:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659390572"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="659390572"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 18:26:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pf9iN-000DoM-07;
-        Thu, 23 Mar 2023 01:26:03 +0000
-Date:   Thu, 23 Mar 2023 09:25:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound
- 6 equals destination size
-Message-ID: <202303230903.Wi6Knuqq-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 22 Mar 2023 21:27:02 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD6D2F075
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:26:58 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54476ef9caeso204829797b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 18:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679534818;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9N2HnRYrae+sksVu/QRqXOm2kRG5pCUILA+G4RL3KP4=;
+        b=oVuow6GNGDAbF85SsutVT0v2FAYa/hsAB+asR6DacVUBzcygDbpTgqT6vdXtHs/qQP
+         nl+KLJJpQn4DJmAUKgt6QbKmBfZ5dHVMHJLpf7kXsCyl/rinQ1KDLrsvQNzyXTyf+utg
+         9Znq0Up53ShivcXFIy68Mk4tKYs5U/LfYFR7BK3jxewQ1eCuL6CzGYysFIDa8ppeLG+Q
+         vviGX1hQvwATjCxNRLwu4MJyLrUiQtA5yrfewp1bsKZ9cRUPR2VgkqRlbOroB7mfeWm9
+         jijTDsNS1lQvYLznIR93Fwc7ajeXF7RCQk67NQTxAG0IWtCKfdDTgSp5xUm1XvGwEYLu
+         2a9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679534818;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9N2HnRYrae+sksVu/QRqXOm2kRG5pCUILA+G4RL3KP4=;
+        b=IS2/ZtBJjdZtf786RgCXRXIeNA4yd56uzAA+fohFXoDVja4ZfgYidhM4tvZOJTgG8Q
+         tudqdDS9tbf831UutwM8QnllPfvKQ4ZWaArw5u5+wJckUorpcU/zsnp87RHd2YXVqgVF
+         x6TXw1oA0bU5a0mZ8CRV9tLMzLtvGXDXAScyw0LH9YQR9owDn/HznppoprTLeyWYYnvs
+         DQFyly7O97xI+pm/nkbu+mnuSo7nUF0Tq4LFFU0EJTOUBb5UOJEySpF7NpPwYfb9BKls
+         CtEWUydoSz0nQ69guHP3+weWsuyiIEFqCLf9Q4EB7n83rvZuauZgLbxJXIolSjIUUf34
+         uFtQ==
+X-Gm-Message-State: AAQBX9esQGunQUAN0/ULlLr42z72cZcghzBW5+iTGFpI8Gg3MP9G2bYc
+        SMCtLXqatAA8LVKCpyplm+857a+hiWA=
+X-Google-Smtp-Source: AKy350ZAKPcOKD/Xpw0JOF1LdrDfRSndo4JbAlkozLFSiHMC/P3aitD5K0VXiaeLJw2hvq09vSAwvl6aHmQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ec03:0:b0:541:6975:2340 with SMTP id
+ j3-20020a81ec03000000b0054169752340mr998299ywm.6.1679534818051; Wed, 22 Mar
+ 2023 18:26:58 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:26:56 -0700
+In-Reply-To: <BYAPR21MB16884B3D0E15E501A7BB8E78D7869@BYAPR21MB1688.namprd21.prod.outlook.com>
+Mime-Version: 1.0
+References: <1677523568-50263-1-git-send-email-mikelley@microsoft.com>
+ <dce372bd-e63c-f24c-5b79-1ef65fd1e59a@intel.com> <BYAPR21MB16884B3D0E15E501A7BB8E78D7869@BYAPR21MB1688.namprd21.prod.outlook.com>
+Message-ID: <ZBuq4KjU2ekKk+iS@google.com>
+Subject: Re: [PATCH 1/1] x86/irq: Add hardcoded hypervisor interrupts to /proc/stat
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fff5a5e7f528b2ed2c335991399a766c2cf01103
-commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
-date:   8 weeks ago
-config: x86_64-sof-customedconfig-fuzz-defconfig (https://download.01.org/0day-ci/archive/20230323/202303230903.Wi6Knuqq-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, Mar 22, 2023, Michael Kelley (LINUX) wrote:
+> From: Dave Hansen <dave.hansen@intel.com> Sent: Wednesday, March 22, 2023 11:07 AM
+> > 
+> > On 2/27/23 10:46, Michael Kelley wrote:
+> > > diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
+> > > index 766ffe3..9f668d2 100644
+> > > --- a/arch/x86/kernel/irq.c
+> > > +++ b/arch/x86/kernel/irq.c
+> > > @@ -211,6 +211,13 @@ u64 arch_irq_stat_cpu(unsigned int cpu)
+> > >  #ifdef CONFIG_X86_MCE_THRESHOLD
+> > >  	sum += irq_stats(cpu)->irq_threshold_count;
+> > >  #endif
+> > > +#ifdef CONFIG_X86_HV_CALLBACK_VECTOR
+> > > +	sum += irq_stats(cpu)->irq_hv_callback_count;
+> > > +#endif
+> > > +#if IS_ENABLED(CONFIG_HYPERV)
+> > > +	sum += irq_stats(cpu)->irq_hv_reenlightenment_count;
+> > > +	sum += irq_stats(cpu)->hyperv_stimer0_count;
+> > > +#endif
+> > >  #ifdef CONFIG_X86_MCE
+> > >  	sum += per_cpu(mce_exception_count, cpu);
+> > >  	sum += per_cpu(mce_poll_count, cpu);
+> > 
+> > This seems fine, especially since arch_show_interrupts() has them.  But,
+> > what's with the "#if IS_ENABLED" versus the plain #ifdef?  Is there some
+> > difference I'm missing?  Why not just be consistent with the other code
+> > and use a plain #ifdef for both?
+> 
+> I'm following the coding pattern in arch_show_interrupts(), in irq_cpustat_t,
+> and most other places that test CONFIG_HYPERV.   Maybe all those existing
+> cases are a mis-application of Documentation/process/coding-style.rst
+> Section 21, which prefers "if (IS_ENABLED(CONFIG_HYPERV))" over
+> "#ifdef CONFIG_HYPERV".  "#if IS_ENABLED()" is not the same as
+> "if (IS_ENABLED())".  :-)
+> 
+>  Net, I don't have a strong preference either way.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230903.Wi6Knuqq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
->> drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound 6 equals destination size [-Werror=stringop-truncation]
-      60 |         strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/tbfind.c:61:9: error: 'strncpy' specified bound 8 equals destination size [-Werror=stringop-truncation]
-      61 |         strncpy(header.oem_table_id, oem_table_id, ACPI_OEM_TABLE_ID_SIZE);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/strncpy +60 drivers/acpi/acpica/tbfind.c
-
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  16  
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  17  /*******************************************************************************
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  18   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  19   * FUNCTION:    acpi_tb_find_table
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  20   *
-ba494beeaa69bc drivers/acpi/acpica/tbfind.c Bob Moore 2012-07-12  21   * PARAMETERS:  signature           - String with ACPI table signature
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  22   *              oem_id              - String with the table OEM ID
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  23   *              oem_table_id        - String with the OEM Table ID
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  24   *              table_index         - Where the table index is returned
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  25   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  26   * RETURN:      Status and table index
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  27   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  28   * DESCRIPTION: Find an ACPI table (in the RSDT/XSDT) that matches the
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  29   *              Signature, OEM ID and OEM Table ID. Returns an index that can
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  30   *              be used to get the table header or entire table.
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  31   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  32   ******************************************************************************/
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  33  acpi_status
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  34  acpi_tb_find_table(char *signature,
-67a119f990063f drivers/acpi/tables/tbfind.c Bob Moore 2008-06-10  35  		   char *oem_id, char *oem_table_id, u32 *table_index)
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  36  {
-ac0f06ebb815da drivers/acpi/acpica/tbfind.c Lv Zheng  2016-09-07  37  	acpi_status status = AE_OK;
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  38  	struct acpi_table_header header;
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  39  	u32 i;
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  40  
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  41  	ACPI_FUNCTION_TRACE(tb_find_table);
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  42  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  43  	/* Validate the input table signature */
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  44  
-6a0df32c22fdfc drivers/acpi/acpica/tbfind.c Bob Moore 2016-05-05  45  	if (!acpi_ut_valid_nameseg(signature)) {
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  46  		return_ACPI_STATUS(AE_BAD_SIGNATURE);
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  47  	}
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  48  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  49  	/* Don't allow the OEM strings to be too long */
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  50  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  51  	if ((strlen(oem_id) > ACPI_OEM_ID_SIZE) ||
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  52  	    (strlen(oem_table_id) > ACPI_OEM_TABLE_ID_SIZE)) {
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  53  		return_ACPI_STATUS(AE_AML_STRING_LIMIT);
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  54  	}
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  55  
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  56  	/* Normalize the input strings */
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  57  
-4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01  58  	memset(&header, 0, sizeof(struct acpi_table_header));
-a3ce7a8e0dd9ba drivers/acpi/acpica/tbfind.c Bob Moore 2019-04-08  59  	ACPI_COPY_NAMESEG(header.signature, signature);
-4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01 @60  	strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
-
-:::::: The code at line 60 was first introduced by commit
-:::::: 4fa4616e279df89baeb36287bbee83ab272edaed ACPICA: De-macroize calls to standard C library functions
-
-:::::: TO: Bob Moore <robert.moore@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Using IS_ENABLED() is mandatory because CONFIG_HYPERV is a tri-state, i.e. can
+be a module and thus #define CONFIG_HYPER_MODULE instead of CONFIG_HYPERV.
