@@ -2,59 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA286C5F41
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA7A6C5F44
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCWGAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S230157AbjCWGBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCWGAu (ORCPT
+        with ESMTP id S229463AbjCWGBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:00:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAEF2473E
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:00:49 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pfE04-0001NC-1K; Thu, 23 Mar 2023 07:00:36 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pfE02-0004PC-Hv; Thu, 23 Mar 2023 07:00:34 +0100
-Date:   Thu, 23 Mar 2023 07:00:34 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org
-Subject: Re: [PATCH net v1 6/6] net: dsa: microchip: ksz8: fix MDF
- configuration with non-zero VID
-Message-ID: <20230323060034.GF23237@pengutronix.de>
-References: <20230322143130.1432106-1-o.rempel@pengutronix.de>
- <20230322143130.1432106-7-o.rempel@pengutronix.de>
+        Thu, 23 Mar 2023 02:01:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BEAD1040F
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:01:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82A474B3;
+        Wed, 22 Mar 2023 23:02:18 -0700 (PDT)
+Received: from a077209.blr.arm.com (a077209.arm.com [10.162.40.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 091523F67D;
+        Wed, 22 Mar 2023 23:01:31 -0700 (PDT)
+From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH V2 0/3] selftests/mm: Fix virtual address range for
+Date:   Thu, 23 Mar 2023 11:31:18 +0530
+Message-Id: <20230323060121.1175830-1-chaitanyas.prakash@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230322143130.1432106-7-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,41 +42,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A typo in subject s/MDF/MDB
+When the virtual address range selftest is run on arm64 and x86 platforms,
+it is observed that both the low and high VA range iterations are skipped
+when the MAP_CHUNK_SIZE is set to 16GB. The MAP_CHUNK_SIZE is changed to
+1GB to resolve this issue, following which support for arm64 platform is
+added by changing the NR_CHUNKS_HIGH for aarch64 to accommodate up to 4PB
+of virtual address space allocation requests. Dynamic memory allocation
+of array holding addresses is introduced to prevent overflow of the stack.
+Finally, the overcommit_policy is set as OVERCOMMIT_ALWAYS to prevent the
+kernel from denying a memory allocation request based on a platform's
+physical memory availability.
 
-On Wed, Mar 22, 2023 at 03:31:30PM +0100, Oleksij Rempel wrote:
-> FID is directly mapped to VID. However, configuring a MAC address with a
-> VID != 0 resulted in incorrect configuration due to an incorrect bit
-> mask. This kernel commit fixed the issue by correcting the bit mask and
-> ensuring proper configuration of MAC addresses with non-zero VID.
-> 
-> Fixes: d23a5e18606c ("net: dsa: microchip: move ksz8->masks to ksz_common")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/dsa/microchip/ksz_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index 4929fb29ed06..74c56d05ab0b 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -404,7 +404,7 @@ static const u32 ksz8863_masks[] = {
->  	[VLAN_TABLE_VALID]		= BIT(19),
->  	[STATIC_MAC_TABLE_VALID]	= BIT(19),
->  	[STATIC_MAC_TABLE_USE_FID]	= BIT(21),
-> -	[STATIC_MAC_TABLE_FID]		= GENMASK(29, 26),
-> +	[STATIC_MAC_TABLE_FID]		= GENMASK(25, 22),
->  	[STATIC_MAC_TABLE_OVERRIDE]	= BIT(20),
->  	[STATIC_MAC_TABLE_FWD_PORTS]	= GENMASK(18, 16),
->  	[DYNAMIC_MAC_TABLE_ENTRIES_H]	= GENMASK(1, 0),
-> -- 
-> 2.30.2
-> 
-> 
-> 
+This series has been tested on 6.3.0-rc1 mainline kernel, both on arm64
+and x86 platforms.
+
+Changes in V2:
+
+- Changed subject line to start with "selftest/mm", to maintain
+  specificity.
+
+Changes in V1:
+
+https://lore.kernel.org/all/20230314042351.13134-1-chaitanyas.prakash@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org> 
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+ 
+Chaitanya S Prakash (3):
+  selftests/mm: Change MAP_CHUNK_SIZE
+  selftests/mm: Change NR_CHUNKS_HIGH for aarch64
+  selftests/mm: Set overcommit_policy as OVERCOMMIT_ALWAYS
+
+ tools/testing/selftests/mm/run_vmtests.sh     |  8 +++++++
+ .../selftests/mm/virtual_address_range.c      | 24 +++++++++++++------
+ 2 files changed, 25 insertions(+), 7 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.30.2
+
