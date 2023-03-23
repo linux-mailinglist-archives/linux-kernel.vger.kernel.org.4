@@ -2,101 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351626C5FFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619F66C5FFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjCWGwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S230177AbjCWGwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCWGwK (ORCPT
+        with ESMTP id S229553AbjCWGwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:52:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B642D14F
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:52:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id r11so82342597edd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679554328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dnm4wZIIGBJUM5ou0VD6Sn8yNcOFEKHAZVQNv/SjS+k=;
-        b=RmK1frKIkjVvuWGPZ1rgnEINhuP7jWE/E2Yo1zdF4Ki4xOVdBuPwNUbcABVkpRbBxD
-         A947o0KEbWyUFEvJBG+sJ5zp2+fsx0rC4UrkiWBE136HG5JeLXxw8NAVUuG02E0iPEy/
-         UhpyK4hsLgEgwm3K5iXWX3N0+zDjNYOQZNEg0lMvuy8OEcfBHnmHODG1kZyulo/tdOqx
-         KirG3fRovG0O7iKdhDOM53lNWywb+Hay+D6MZxzwE1oeh7hpHUdH3fp7XhgIzQiETCTv
-         go6i9dSMoaod35QVTzkQtMDvZadek/RhV9RTcRayxWoaZNI1LS7c/KIOHBwWmnUHV5Ko
-         w9Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679554328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dnm4wZIIGBJUM5ou0VD6Sn8yNcOFEKHAZVQNv/SjS+k=;
-        b=SMjwsw1tTKnNqdOd/WS0moRPRy9ZErDSa0Uw1e+F9KsH/BadoJ8Vdq6F8Zt3xzNmoH
-         e+IeVRhRvDnqzsGj7pZ7VwVL+fv+jO9lwYvAjOxpA+mNXmYHY+5gOEGOJnrTor2mhKRu
-         qv8tx7EAmIeJQPtjZGGd+gGOFE5CqUdJTFvTGIjPeeT/LriJ/jUfZP+NvxPR/rLzpwnv
-         ZmKhY+n9XxgEyj3zATEqK5/NzDpf5avaTAFdm2IxHhf+L/gvbSi79JI+LddLa7cl0xNp
-         Ve3v1sxvXV6Glx2xvu6g6YRNWXIRfd9JyHWhGZrDymCFXJNTKYb8cgHbfh+Y21kilDC+
-         7ehA==
-X-Gm-Message-State: AO0yUKVMMjutzoxyc/LPxxS3B8oOnopnuS7KvjyQTzbA6QT6xKz34I+4
-        cirtdRvDdFmi1fxaG/cLTLY82m0it8njWX8rArg=
-X-Google-Smtp-Source: AK7set8XhOPtFHczouViFH9gLeW8HlnzbmHouwapcy11GQ87D7fFlWevDg3qhu5r61dqh6Eu4ojnpw==
-X-Received: by 2002:aa7:d486:0:b0:500:40f4:f8 with SMTP id b6-20020aa7d486000000b0050040f400f8mr8933178edr.0.1679554327799;
-        Wed, 22 Mar 2023 23:52:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id u3-20020a50d503000000b004fcd78d1215sm8808439edi.36.2023.03.22.23.52.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 23:52:07 -0700 (PDT)
-Message-ID: <ea980e5c-3dc8-0fd6-8635-8f58a0745ac5@linaro.org>
-Date:   Thu, 23 Mar 2023 07:52:05 +0100
+        Thu, 23 Mar 2023 02:52:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACD72F06E
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679554335; x=1711090335;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pIw6Ymqw7Fay4qLUlViOBTDjhuoo3n1s+dcWnM/HsD0=;
+  b=I/l0DLjqu19W5GWqOur29+jBk7aL+fEGAR/xyrHOa7/q2Va1ZvlHaS4G
+   O2YQvs+xbfbmQ+2ni8tjNGUNGCBEpCF5bp/NQ5V0FYxx0sn7G2klgh+PB
+   MR1Vr230nGJRU3Jz2rcrKUwa2DZIpTgIbwfO3TtEWBCPawe9lUCOVqlck
+   L2XFWdi+drkiPru5eqA4IhHSEc98GLv8uk8dMLwkrMSzCmQzvxB1lnLwj
+   cWc8I7aogmaDVlqptAWbtf3QoDDl9PYmbB43bGDVoTZ13JJJDGfKwXsJM
+   T0ury7oI4ikIE8JKJD7WyGvogAc2cK/DDjaFAhFC4Rvm4l+EoXvs/ryLT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="341774867"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="341774867"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 23:52:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659472761"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="659472761"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 23:52:14 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfEo1-000E5T-1f;
+        Thu, 23 Mar 2023 06:52:13 +0000
+Date:   Thu, 23 Mar 2023 14:52:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/acpi] BUILD SUCCESS
+ 22767544e9763e82acb60c233051bc426381b61c
+Message-ID: <641bf716.Nt39TUwy4VSPgopK%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/3] arm64: dts: qcom: Split elish dts into common dtsi
- and elish-boe dts
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230323005925.23179-1-lujianhua000@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323005925.23179-1-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 01:59, Jianhua Lu wrote:
-> There are two panel variants of xiaomi-elish, BOE and CSOT panels.
-> In order to support both panels, so split elish dts into common dtsi
-> and elish-boe dts.
-> 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
-> Changes in v2:
->   - Remove sm8250-xiaomi-elish.dtb to avoid build failure.
-> 
-> Changes in v3:
->   - squash patch[3/4]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/acpi
+branch HEAD: 22767544e9763e82acb60c233051bc426381b61c  x86/ACPI/boot: Improve __acpi_acquire_global_lock
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+elapsed time: 720m
 
-Best regards,
-Krzysztof
+configs tested: 72
+configs skipped: 140
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230322   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230322   gcc  
+csky                 randconfig-r026-20230322   gcc  
+hexagon              randconfig-r004-20230322   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a004   clang
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r031-20230322   gcc  
+ia64                 randconfig-r032-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r015-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                 randconfig-r034-20230322   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r023-20230322   gcc  
+openrisc             randconfig-r033-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r013-20230322   gcc  
+parisc64                            defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r021-20230322   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230322   clang
+s390                 randconfig-r003-20230322   clang
+s390                 randconfig-r022-20230322   gcc  
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230322   gcc  
+sh                   randconfig-r036-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r014-20230322   gcc  
+sparc                randconfig-r035-20230322   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
