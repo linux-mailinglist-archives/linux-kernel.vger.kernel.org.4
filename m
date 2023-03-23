@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5639F6C7418
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080C36C741D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCWXgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S230495AbjCWXhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCWXgl (ORCPT
+        with ESMTP id S231307AbjCWXhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:36:41 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7EB24127;
-        Thu, 23 Mar 2023 16:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1679614599;
-        bh=LA5jBfp0rmzD1As+Zr0AF8LsPuTbDZTwOeZzx+XkVIU=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=CUnWljrOUvRugxlQ+41Zo9xhxD1A+CiOD7JqWkRAKnz8ZGWhGKZycb7HMlgAUmbEY
-         Rk0+ezZzUBn2QS78zmIqx6u46u96VOjBP9hhQp7Lil44iVRc3iPIEATVJcfnEkgtev
-         81QvDDjhkSfc2gu1Ql6BskLSm6FqOBvSusi1otYk=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BC8721286D37;
-        Thu, 23 Mar 2023 19:36:39 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id PG33SogVEtQA; Thu, 23 Mar 2023 19:36:39 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1679614599;
-        bh=LA5jBfp0rmzD1As+Zr0AF8LsPuTbDZTwOeZzx+XkVIU=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=CUnWljrOUvRugxlQ+41Zo9xhxD1A+CiOD7JqWkRAKnz8ZGWhGKZycb7HMlgAUmbEY
-         Rk0+ezZzUBn2QS78zmIqx6u46u96VOjBP9hhQp7Lil44iVRc3iPIEATVJcfnEkgtev
-         81QvDDjhkSfc2gu1Ql6BskLSm6FqOBvSusi1otYk=
-Received: from [153.66.160.227] (unknown [153.66.160.227])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1856E1286D27;
-        Thu, 23 Mar 2023 19:36:39 -0400 (EDT)
-Message-ID: <f2515dfb43cd4dd334ea2bda00f8576f69a40178.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 6.3-rc3
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 23 Mar 2023 19:36:37 -0400
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Thu, 23 Mar 2023 19:37:21 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3AC24C84
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:37:19 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id e65so277324ybh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1679614638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H5DqnFNdwoRsvRD9gY7AVflhKHmqWJvLpG3CELYJwy4=;
+        b=MvmzhjViCPcj6Nhc+3xUZBlHLNZc4r6lPParcd8U1SVaNbw7wKC7ctiSLNtETXsbZR
+         SfRHOqCYRqd1uqAwWuo9yiMFLI0eaNDRiZlTA6cLo/WgAikQelZ1tHGFpIZZPWcjT35o
+         RAn0baZ5sYIIGCdLt+R9DAyKHRnnJXL0EwkWhxKR9y3ewPQOPLqgHbZlIjayJV65Q4zv
+         5Lw4K4PXz4x9XgSVjgC27sSASSJW5nHoZurlVklnEY9HZZJhC9oqu0bxuU17lvaxiU3a
+         kl+1LdimUZ3SdVmvRmCVK2t7FT3bIF4MTO+fvC6g4axqIpSiLufJkJgHH86Rqinq42Ye
+         nNDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679614638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H5DqnFNdwoRsvRD9gY7AVflhKHmqWJvLpG3CELYJwy4=;
+        b=FWBDj1ELky+yeDNf0uC8t/G8zMCYfnA9H8y2c6HQuvm2l+JKx5KdZy1Z9kQyKStwpG
+         e09WC8wixntl8N2ogPg+U9bzeA4ocRBL42rLWdgUycvRmzjgv2VplkctPPnqMijqi/Un
+         xpG4sHqhpo68ZiPXoPXQQYDLHNWRt5Qc6aHynggUBChy8/dZfj8X8gK/wsLbSEEgoLd5
+         VvpD1MwZaytpfoXdYLkI8H+obWxEQRfqgoF53Bpu9at+iPJFdD9+PPO9aeHfBwrkqr5V
+         4YCMSNdn+mIs9Pn1RThKUQrR7szY7GEXNOEe4PHC84oK/3vuu4OGK4wdKoOf0YlqCzQT
+         o2og==
+X-Gm-Message-State: AAQBX9eN6EGEX3J8l3nBl/NKpaBDmc7uSOY3aFPxUTsmjNmKTu2M3WF7
+        18DmmC4ZNbWoF9rCVMrpwqyKwlV3ebl4zYX6mPJh
+X-Google-Smtp-Source: AKy350aKUo52lrEIhVqCcrwLfuJGssfxNEL6IV2NSjb63kt7Z52L3fpiOf67Jiyy9HPq6D2tt3ioTIkNycC6sWUe3fE=
+X-Received: by 2002:a05:6902:18c7:b0:b72:fff0:2f7f with SMTP id
+ ck7-20020a05690218c700b00b72fff02f7fmr715296ybb.4.1679614638263; Thu, 23 Mar
+ 2023 16:37:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com> <20230314081720.4158676-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230314081720.4158676-3-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 23 Mar 2023 19:37:07 -0400
+Message-ID: <CAHC9VhSPMs6k4zm0rACiZZYuB84Avg9t+AnGBH4F+iiLsNgzkg@mail.gmail.com>
+Subject: Re: [PATCH v8 2/6] ocfs2: Switch to security_inode_init_security()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,111 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Four small fixes, three in drivers.  The core fix adds a UFS device to
-an existing quirk to avoid a huge delay on boot.
+On Tue, Mar 14, 2023 at 4:18=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> In preparation for removing security_old_inode_init_security(), switch to
+> security_inode_init_security().
+>
+> Extend the existing ocfs2_initxattrs() to take the
+> ocfs2_security_xattr_info structure from fs_info, and populate the
+> name/value/len triple with the first xattr provided by LSMs.
+>
+> As fs_info was not used before, ocfs2_initxattrs() can now handle the cas=
+e
+> of replicating the behavior of security_old_inode_init_security(), i.e.
+> just obtaining the xattr, in addition to setting all xattrs provided by
+> LSMs.
+>
+> Supporting multiple xattrs is not currently supported where
+> security_old_inode_init_security() was called (mknod, symlink), as it
+> requires non-trivial changes that can be done at a later time. Like for
+> reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
+> not the first to set it, its xattr will be discarded; if it is the first,
+> it does not have xattrs to calculate the HMAC on).
+>
+> Finally, since security_inode_init_security(), unlike
+> security_old_inode_init_security(), returns zero instead of -EOPNOTSUPP i=
+f
+> no xattrs were provided by LSMs or if inodes are private, additionally
+> check in ocfs2_init_security_get() if the xattr name is set.
+>
+> If not, act as if security_old_inode_init_security() returned -EOPNOTSUPP=
+,
+> and set si->enable to zero to notify to the functions following
+> ocfs2_init_security_get() that no xattrs are available.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+> ---
+>  fs/ocfs2/namei.c |  2 ++
+>  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
+>  2 files changed, 28 insertions(+), 4 deletions(-)
 
-The patch is available here:
+Merged into lsm/next, thanks.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Joel Selvaraj (1):
-      scsi: core: Add BLIST_SKIP_VPD_PAGES for SKhynix H28U74301AMR
-
-Nilesh Javali (1):
-      scsi: qla2xxx: Perform lockless command completion in abort path
-
-Quinn Tran (1):
-      scsi: qla2xxx: Synchronize the IOCB count to be in order
-
-Yu Kuai (1):
-      scsi: scsi_dh_alua: Fix memleak for 'qdata' in alua_activate()
-
-And the diffstat:
-
- drivers/scsi/device_handler/scsi_dh_alua.c |  6 ++++--
- drivers/scsi/qla2xxx/qla_isr.c             |  3 ++-
- drivers/scsi/qla2xxx/qla_os.c              | 11 +++++++++++
- drivers/scsi/scsi_devinfo.c                |  1 +
- 4 files changed, 18 insertions(+), 3 deletions(-)
-
-With full diff below.
-
-James
-
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index 362fa631f39b..a226dc1b65d7 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -1145,10 +1145,12 @@ static int alua_activate(struct scsi_device *sdev,
- 	rcu_read_unlock();
- 	mutex_unlock(&h->init_mutex);
- 
--	if (alua_rtpg_queue(pg, sdev, qdata, true))
-+	if (alua_rtpg_queue(pg, sdev, qdata, true)) {
- 		fn = NULL;
--	else
-+	} else {
-+		kfree(qdata);
- 		err = SCSI_DH_DEV_OFFLINED;
-+	}
- 	kref_put(&pg->kref, release_port_group);
- out:
- 	if (fn)
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 030625ebb4e6..71feda2cdb63 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -1900,6 +1900,8 @@ qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
- 	}
- 
- 	req->outstanding_cmds[index] = NULL;
-+
-+	qla_put_fw_resources(sp->qpair, &sp->iores);
- 	return sp;
- }
- 
-@@ -3112,7 +3114,6 @@ qla25xx_process_bidir_status_iocb(scsi_qla_host_t *vha, void *pkt,
- 	}
- 	bsg_reply->reply_payload_rcv_len = 0;
- 
--	qla_put_fw_resources(sp->qpair, &sp->iores);
- done:
- 	/* Return the vendor specific reply to API */
- 	bsg_reply->reply_data.vendor_reply.vendor_rsp[0] = rval;
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 80c4ee9df2a4..bee1b8a82020 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -1865,6 +1865,17 @@ __qla2x00_abort_all_cmds(struct qla_qpair *qp, int res)
- 	for (cnt = 1; cnt < req->num_outstanding_cmds; cnt++) {
- 		sp = req->outstanding_cmds[cnt];
- 		if (sp) {
-+			/*
-+			 * perform lockless completion during driver unload
-+			 */
-+			if (qla2x00_chip_is_down(vha)) {
-+				req->outstanding_cmds[cnt] = NULL;
-+				spin_unlock_irqrestore(qp->qp_lock_ptr, flags);
-+				sp->done(sp, res);
-+				spin_lock_irqsave(qp->qp_lock_ptr, flags);
-+				continue;
-+			}
-+
- 			switch (sp->cmd_type) {
- 			case TYPE_SRB:
- 				qla2x00_abort_srb(qp, sp, res, &flags);
-diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
-index bc9d280417f6..3fcaf10a9dfe 100644
---- a/drivers/scsi/scsi_devinfo.c
-+++ b/drivers/scsi/scsi_devinfo.c
-@@ -234,6 +234,7 @@ static struct {
- 	{"SGI", "RAID5", "*", BLIST_SPARSELUN},
- 	{"SGI", "TP9100", "*", BLIST_REPORTLUN2},
- 	{"SGI", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
-+	{"SKhynix", "H28U74301AMR", NULL, BLIST_SKIP_VPD_PAGES},
- 	{"IBM", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
- 	{"SUN", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
- 	{"DELL", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
-
+--=20
+paul-moore.com
