@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A776C6291
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1910D6C6293
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjCWJCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S231415AbjCWJCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCWJCO (ORCPT
+        with ESMTP id S231173AbjCWJCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:02:14 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619BE19F12;
+        Thu, 23 Mar 2023 05:02:16 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926B419106;
         Thu, 23 Mar 2023 02:01:59 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id br6so26760787lfb.11;
-        Thu, 23 Mar 2023 02:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679562117;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TeKpxRkxGHsen3R9CE60PmIdGzFJliSRTZ2LQ26QvEE=;
-        b=Gg/R8XFM+7F7/j/PgljzMAp5BU8Xj20rWae2+5+eKcWsu28YVvHre0+6NjRkMUj0mZ
-         /7f8kSz0lyuxuVizN+q6CxpKFK3Fw8ikwqEsiYSfJPADbqQFXMcKDFwebAeGz+zNDazx
-         kT4y10HIj0r38eeWK2t5sS13fXMYM73eJsr/SURX6dem98P7msMcANOoGvuE/3hYA20u
-         yFg5xttuI+OFt8yMfnCZr36Wk7kexZIC1aiwxEt0Fye5tsrgCQvTHgm9+0ToHcJFYZDz
-         tJ+EKzYGVQtLnoLRUZR4oHRrDRS4Tjnpy80mhpTe62jsLBzN6Sfbrwhe/lbZeHZc0Npp
-         NnVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679562117;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeKpxRkxGHsen3R9CE60PmIdGzFJliSRTZ2LQ26QvEE=;
-        b=G3JrpNOPcd0chbcLSMIsIDA5eXDDxKTQMWSrhXSScvcggH41P+fhBsRtFfzjTO8PJr
-         Si9ZoU+1U4YvlBrD6ES8zw9EXTfGh6jTXKFcfQThUCJmHDV9CC3wDYTjyNdiTx5NJpm3
-         i+ztYQTJHBhLHBJKnQ5X7CxJbBlTwxN6q4betagfyV+62GkzsSx2o0BbfYzahNysiHHk
-         zQaWKTw+lM781JPWfwwlkW/QBpMFQdU6DUrDrBtF2IkxUsIfXtRjJWJphegOmKux40OW
-         h/LqX8nHZ2UZ1sMR0K6G92aj0QbdPT+oqwxkTR/zNDxWwWHgvrXIANqANQ1Cjzv7l1gp
-         H2Pg==
-X-Gm-Message-State: AO0yUKV3ab58nNzsaEyAu0Z4OjjiSU0zfUAp0TUFlPObpjr25ugNsqiC
-        4Vgx3zG1Q6CU3JvgxW4gQQwiRm3fT8A=
-X-Google-Smtp-Source: AKy350YkkEBi8AWyazctY5qpjTSz2ybeVQzPbXNM4hgPnAqNRKUOQdrSyQfxgEI7gCjoY/nOV3g9pA==
-X-Received: by 2002:a05:6512:218d:b0:4ea:f6f2:7a7f with SMTP id b13-20020a056512218d00b004eaf6f27a7fmr1654565lft.34.1679562117116;
-        Thu, 23 Mar 2023 02:01:57 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.74.111])
-        by smtp.gmail.com with ESMTPSA id r10-20020a056512102a00b004e7b84c6419sm2852967lfr.192.2023.03.23.02.01.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 02:01:56 -0700 (PDT)
-Subject: Re: [PATCH] usb: dwc3: host: remove dead code in dwc3_host_get_irq()
-To:     Mingxuan Xiang <mx_xiang@hust.edu.cn>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230323054232.1135734-1-mx_xiang@hust.edu.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <75332169-0249-c53d-962d-c5f3641a7980@gmail.com>
-Date:   Thu, 23 Mar 2023 12:01:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Phzlt0tnnz17KMk;
+        Thu, 23 Mar 2023 16:58:50 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 23 Mar
+ 2023 17:01:57 +0800
+Subject: Re: [PATCH] rps: process the skb directly if rps cpu not changed
+To:     xu xin <xu.xin.sc@gmail.com>, <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>,
+        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <xu.xin16@zte.com.cn>,
+        <yang.yang29@zte.com.cn>, <zhang.yunkai@zte.com.cn>
+References: <aadae1c0-9d50-d89d-d0ea-a300fa09682c@huawei.com>
+ <20230322072435.32813-1-xu.xin16@zte.com.cn>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <ef94a525-c5f3-fa9f-d66d-d9dc62533e78@huawei.com>
+Date:   Thu, 23 Mar 2023 17:01:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <20230323054232.1135734-1-mx_xiang@hust.edu.cn>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20230322072435.32813-1-xu.xin16@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 8:42 AM, Mingxuan Xiang wrote:
-
-> platform_get_irq() no longer returns 0, so there is no
-> need to check whether the return value is 0.
+On 2023/3/22 15:24, xu xin wrote:
+> [So sorry, I made a mistake in the reply title]
 > 
-> Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
-> ---
->  drivers/usb/dwc3/host.c | 3 ---
->  1 file changed, 3 deletions(-)
+> On 2023/3/21 20:12, yang.yang29@zte.com.cn wrote:
+>>> From: xu xin <xu.xin16@zte.com.cn>
+>>>
+>>> In the RPS procedure of NAPI receiving, regardless of whether the
+>>> rps-calculated CPU of the skb equals to the currently processing CPU, RPS
+>>> will always use enqueue_to_backlog to enqueue the skb to per-cpu backlog,
+>>> which will trigger a new NET_RX softirq.
+>>
+>> Does bypassing the backlog cause out of order problem for packet handling?
+>> It seems currently the RPS/RFS will ensure order delivery,such as:
+>> https://elixir.bootlin.com/linux/v6.3-rc3/source/net/core/dev.c#L4485
+>>
+>> Also, this is an optimization, it should target the net-next branch:
+>> [PATCH net-next] rps: process the skb directly if rps cpu not changed
+>>
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f6f13e7f1ba1..aa19c27344e6 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -57,9 +57,6 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
->  		goto out;
+> Well, I thought the patch would't break the effort RFS tried to avoid "Out of
+> Order" packets. But thanks for your reminder, I rethink it again, bypassing the
+> backlog from "netif_receive_skb_list" will mislead RFS's judging if all
+> previous packets for the flow have been dequeued, where RFS thought all packets
+> have been dealed with, but actually they are still in skb lists. Fortunately,
+> bypassing the backlog from "netif_receive_skb" for a single skb is okay and won't
+> cause OOO packets because every skb is processed serially by RPS and sent to the
+> protocol stack as soon as possible.
 
-   Shouldn't *goto* be dropped now?
+Suppose a lot of skbs have been queued to the backlog waiting to
+processed and passed to the stack when current_cpu is not the same
+as the target cpu, then current_cpu is changed to be the same as the
+target cpu, with your patch, new skb will be processed and passed to
+the stack immediately, which may bypass the old skb in the backlog.
 
->  	}
+> 
+> If I'm correct, the code as follws can fix this.
+> 
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -5666,8 +5666,9 @@ static int netif_receive_skb_internal(struct sk_buff *skb)
+>         if (static_branch_unlikely(&rps_needed)) {
+>                 struct rps_dev_flow voidflow, *rflow = &voidflow;
+>                 int cpu = get_rps_cpu(skb->dev, skb, &rflow);
+> +               int current_cpu = smp_processor_id();
 >  
-> -	if (!irq)
-> -		irq = -EINVAL;
-> -
->  out:
->  	return irq;
->  }
-
-MBR, Sergey
+> -               if (cpu >= 0) {
+> +               if (cpu >= 0 && cpu != current_cpu) {
+>                         ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+>                         rcu_read_unlock();
+>                         return ret;
+> @@ -5699,11 +5700,15 @@ void netif_receive_skb_list_internal(struct list_head *head)
+>                 list_for_each_entry_safe(skb, next, head, list) {
+>                         struct rps_dev_flow voidflow, *rflow = &voidflow;
+>                         int cpu = get_rps_cpu(skb->dev, skb, &rflow);
+> +                       int current_cpu = smp_processor_id();
+>  
+>                         if (cpu >= 0) {
+>                                 /* Will be handled, remove from list */
+>                                 skb_list_del_init(skb);
+> -                               enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+> +                               if (cpu != current_cpu)
+> +                                       enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
+> +                               else
+> +                                       __netif_receive_skb(skb);
+>                         }
+>                 }
+> 
+> 
+> Thanks.
+> 
+>>>
+>>> Actually, it's not necessary to enqueue it to backlog when rps-calculated
+>>> CPU id equals to the current processing CPU, and we can call
+>>> __netif_receive_skb or __netif_receive_skb_list to process the skb directly.
+>>> The benefit is that it can reduce the number of softirqs of NET_RX and reduce
+>>> the processing delay of skb.
+>>>
+>>> The measured result shows the patch brings 50% reduction of NET_RX softirqs.
+>>> The test was done on the QEMU environment with two-core CPU by iperf3.
+>>> taskset 01 iperf3 -c 192.168.2.250 -t 3 -u -R;
+>>> taskset 02 iperf3 -c 192.168.2.250 -t 3 -u -R;
+>>>
+>>> Previous RPS:
+>>> 		    	CPU0       CPU1
+>>> NET_RX:         45          0    (before iperf3 testing)
+>>> NET_RX:        1095         241   (after iperf3 testing)
+>>>
+>>> Patched RPS:
+>>>                 CPU0       CPU1
+>>> NET_RX:         28          4    (before iperf3 testing)
+>>> NET_RX:         573         32   (after iperf3 testing)
+>>
+>> Sincerely.
+>> Xu Xin
+> .
+> 
