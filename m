@@ -2,134 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129AF6C6965
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA8C6C696F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjCWNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S231206AbjCWNZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCWNXa (ORCPT
+        with ESMTP id S229600AbjCWNZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:23:30 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525A6421B;
-        Thu, 23 Mar 2023 06:23:28 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32NDN7ls117175;
-        Thu, 23 Mar 2023 08:23:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679577787;
-        bh=MJVj6U+Sml+yBBT4L4TySKHSpgVK26/7pJRTNZYUNCI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=S2/F2rKxBFhnWLNDjszFPkYhGwKY3/8bcZfrFsMe1B+DVpJJqWZxaeWU2XZI2unpt
-         j/yzIrlXHFGHTdqmY0NseuKhi+5TxVVZ6zTvnZhT9xDu9eIt/R5923lfYQ4gfe/+2y
-         4vbJE+2hcji2AiOOW77vS9ZqWORxsifq4DNPL0OY=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32NDN74Y094549
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Mar 2023 08:23:07 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
- Mar 2023 08:23:07 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 23 Mar 2023 08:23:07 -0500
-Received: from [172.24.145.199] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32NDN2DH029735;
-        Thu, 23 Mar 2023 08:23:03 -0500
-Message-ID: <2bfdd0ab-a73a-f1af-def1-0044cf8d4a01@ti.com>
-Date:   Thu, 23 Mar 2023 18:53:02 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 5/6] arm64: dts: ti: k3-am62a7-sk: Split vcc_3v3
- regulators
-Content-Language: en-US
-To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thu, 23 Mar 2023 09:25:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9049A421B;
+        Thu, 23 Mar 2023 06:25:43 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NBwu6E027980;
+        Thu, 23 Mar 2023 13:24:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=VwL2eHgiXbSpbcyOMi1Fm6CGpKEbs60ss+WPZnJK5Ik=;
+ b=XUOZb+O02s7yDbfd9owIe2KU+IxtepAYblP5hOfMaou9r1s62w4XYcd21Ay890Ch0UtZ
+ b3P6V74UYISN/vgI9gfJX4goA81aaSJ6+BrnqTltbxt9dViPahHFqwYh2ph/oHgOCuUs
+ cBuk/dBdRXe6yir7UjhPfJohLY53yu99IuZ0u/VvorW219jlSZERTnQz24NuopyuaJRv
+ f/R4+LqrQSLYvZjgJitqK439IVBWg+2l8kKrls150yN5+2GDZLbAW/9AVV53S7LOSmnA
+ XiauVMwmdc0qgxFAu2fBNR8kde+goodonXLhqI7dsBaHwnZoURHUBVQ40SKG6ndeV6av Ww== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pghqssfc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 13:24:08 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32NBrkW0000445;
+        Thu, 23 Mar 2023 13:24:07 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pghqssfab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 13:24:07 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NCFRdl006837;
+        Thu, 23 Mar 2023 13:24:03 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3pd4x667jt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 13:24:03 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NDO0Y524772868
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 13:24:00 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBC2C20040;
+        Thu, 23 Mar 2023 13:24:00 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD7DC2004D;
+        Thu, 23 Mar 2023 13:23:57 +0000 (GMT)
+Received: from [9.171.87.16] (unknown [9.171.87.16])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 13:23:57 +0000 (GMT)
+Message-ID: <95d5d0c434ef6c4cadc3fca34c4c0d3104becea8.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and
+ select it as necessary
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-References: <20230313-mcasp_upstream-v6-0-77685d7cbeb8@ti.com>
- <20230313-mcasp_upstream-v6-5-77685d7cbeb8@ti.com>
-From:   Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <20230313-mcasp_upstream-v6-5-77685d7cbeb8@ti.com>
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org
+Date:   Thu, 23 Mar 2023 14:23:57 +0100
+In-Reply-To: <21a828bae06b97b8ca806a6b76d867902b1e0e1f.camel@sipsolutions.net>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-2-schnelle@linux.ibm.com>
+         <21a828bae06b97b8ca806a6b76d867902b1e0e1f.camel@sipsolutions.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ILhJ9KxUcdZTNzZ4sWuhaur67a0wm06C
+X-Proofpoint-ORIG-GUID: mOBSc53Xq2jpq67qceMo9W2p8ZoZQ_8a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0 clxscore=1015
+ mlxscore=0 impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=449
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230098
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jai,
+On Tue, 2023-03-14 at 13:37 +0100, Johannes Berg wrote:
+> On Tue, 2023-03-14 at 13:11 +0100, Niklas Schnelle wrote:
+> > --- a/arch/um/Kconfig
+> > +++ b/arch/um/Kconfig
+> > @@ -56,6 +56,7 @@ config NO_IOPORT_MAP
+> > =20
+> >  config ISA
+> >  	bool
+> > +	depends on HAS_IOPORT
+> >=20
+>=20
+> config ISA here is already unselectable, and nothing ever does "select
+> ISA" (only in some other architectures), so is there much point in this?
+>=20
+> I'm not even sure why this exists at all.
 
-Thanks for the patch.
+You're right there's not much point and I dropped this for v4. I agree
+that probably the whole "config ISA" could be removed if it's always
+false anyway but that seems out of scope for this patch.
 
-On 15/03/23 14:33, Jai Luthra wrote:
-> VCC_3V3_MAIN is the output of LM5141-Q1, and it serves as an input to
-> TPS22965DSGT which produces VCC_3V3_SYS.
-I would suggest to put link to schematics too :
-Design docs: Link: https://www.ti.com/lit/zip/sprr459
-> 
-> Signed-off-by: Jai Luthra <j-luthra@ti.com>
-With that change,
-Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
+>=20
+> But anyway, adding a dependency to a always-false symbol doesn't make it
+> less always-false :-)
+>=20
+> Acked-by: Johannes Berg <johannes@sipsolutions.net> # for ARCH=3Dum
 
-Regards
-Devarsh
-> ---
->  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> index 5c9012141ee2..063e69e45163 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> @@ -76,10 +76,10 @@ vcc_5v0: regulator-1 {
->  		regulator-boot-on;
->  	};
->  
-> -	vcc_3v3_sys: regulator-2 {
-> +	vcc_3v3_main: regulator-2 {
->  		/* output of LM5141-Q1 */
->  		compatible = "regulator-fixed";
-> -		regulator-name = "vcc_3v3_sys";
-> +		regulator-name = "vcc_3v3_main";
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		vin-supply = <&vmain_pd>;
-> @@ -98,6 +98,17 @@ vdd_mmc1: regulator-3 {
->  		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
->  	};
->  
-> +	vcc_3v3_sys: regulator-4 {
-> +		/* output of TPS222965DSGT */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_3v3_sys";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc_3v3_main>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
->  	leds {
->  		compatible = "gpio-leds";
->  		pinctrl-names = "default";
-> 
+Thanks
+
+>=20
+>=20
+> Certainly will be nice to get rid of this cruft for architectures that
+> don't have it.
+>=20
+> johannes
+
+Yes, also, for s390 the broken NULL + port number access in the generic
+inb()/outb() currently causes the only remaining clang warning on
+defconfig builds.
