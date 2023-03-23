@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B3D6C6EB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1A56C6EBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbjCWRYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S231945AbjCWRYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjCWRYM (ORCPT
+        with ESMTP id S231149AbjCWRYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:24:12 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B184F2823C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:24:06 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id t10so863436edd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1679592245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWO1/jUFd4RJnO28yjlA8l9Qr4+du9+9sjmz8G/d7Jk=;
-        b=PLFpiDTtN+CiMt1ZibhiyF6XIqR6IGRFiHd3YLiatnXSMgCkKNPaIsTxDMAkxffeMN
-         h0Dlp1RxefC3IPQoUuOT6VsI5KVLAQhw8hBaO07GqAonBTZ8m2d2gEa7vTE4bk/QDnlI
-         iRTu0f1/pgNGSnh7TOFkMbEXJuf8VquDWuuiq0H4MXY6HQkF9S/6yfms/ZWdUU3hF2JK
-         ky5zwDZnoCBTSRRw1+E2CsbNrmDt9IDcB9ghag/t4XE9CLUvlcGtJN4vsAyC81Yh5cRv
-         yOVJAF5xc/b3SQfvmoU0jgyqWqQUmZO7hqddaCHE/ZXLMLDYaJi04ceD+jS2fFHY1lar
-         g1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWO1/jUFd4RJnO28yjlA8l9Qr4+du9+9sjmz8G/d7Jk=;
-        b=nar2lsjF1hNsnBIxw1aljnJD35vD40q4RzaAFjtVEE1fT62Ey5n8PhIwC/MlkSo9mD
-         DKNiPYybr/25d3aP5Uk70qFhJB3Z2gK7kWr2d6C+sUoOynfqumyKfSRJfs7S5lqCVPwZ
-         T8eaTh+AquJen0+1NR/VHW8NsW3HBopzNoFhEJFLqND5193of5y6tiASnPwXidjGczaZ
-         Cffmiqzn8HtpO0nfcEY9h2YGi1iUra+U6GFHXJTDYICaoEyg7sW7LE9L4o4aCiGr3z0O
-         g7qL5e2+hd6UTzsVttO7SobKiR7y4oLQO2QnIak7HtGxdMTahEtzeZ21rs1YXZeKyxZa
-         +Jbw==
-X-Gm-Message-State: AO0yUKXSrcsfA8vc+Z80EX/Pna7yo6XpzvBqMmPwBhzn1rZPhQXjgs+Q
-        dx+nG+8bjYmWGie+ociI+7YV/Q==
-X-Google-Smtp-Source: AK7set81fv7ZRLP4oUooBclsYYTpRvTEdvrCtqeHBgokhJImFboslLnFA2d4moFS9zFAO5kO0HRfDA==
-X-Received: by 2002:a17:906:9154:b0:930:bcee:eed with SMTP id y20-20020a170906915400b00930bcee0eedmr11196273ejw.9.1679592245178;
-        Thu, 23 Mar 2023 10:24:05 -0700 (PDT)
-Received: from localhost (cst-prg-89-179.cust.vodafone.cz. [46.135.89.179])
-        by smtp.gmail.com with ESMTPSA id ml23-20020a170906cc1700b0092ce8344078sm8956676ejb.33.2023.03.23.10.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:24:04 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 18:24:03 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] riscv: export cpu/freq invariant to scheduler
-Message-ID: <20230323172403.nfrtgm5vea4qvinu@orel>
-References: <20230323123924.3032174-1-suagrfillet@gmail.com>
+        Thu, 23 Mar 2023 13:24:37 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB226C33;
+        Thu, 23 Mar 2023 10:24:24 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 1331B378;
+        Thu, 23 Mar 2023 17:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1331B378
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1679592264; bh=//3s1kNIJ9QPM6gGRiXVa2F3NjAwTCsMDusmBfTtjFE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SFTbwfM0BbTQG2drexoM1kMwQ+S+ZKd03rJtU4NE0/XZOzcqs2uAjhVo+MLFYB/KQ
+         aEy9jPLFZHn5T6CFcbpPayks0UZV8J0jaajG/+vmd0YjdGcBKEr/mHwMI/aYRQstZ0
+         c5yMGGYu0B0SqF+si6WrK/rJKFy0DGyj4SQIF/yXGl4rGpWlBEh5AHwXn2g0kAGj6S
+         8vlDGldRZop4zJnofiuMmH/DW8vGszwir+KGp40dMAXbVjUFtw8ab5vWzZMBfobXBh
+         doIlJE4IAAE9HO7Pc/VRaeWpCrlWLG5jUelA8JsFmTOTJ16WYefDIffv1xFqbHWJnm
+         M8tVgHBj4homg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
+In-Reply-To: <165bd284-580d-df03-ab04-f5214b1e6be4@leemhuis.info>
+References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
+ <87a60frxk0.fsf@meer.lwn.net>
+ <d233a796-1cb8-a9b3-5a50-043dd2f98b3e@leemhuis.info>
+ <87edpomtzn.fsf@meer.lwn.net>
+ <165bd284-580d-df03-ab04-f5214b1e6be4@leemhuis.info>
+Date:   Thu, 23 Mar 2023 11:24:23 -0600
+Message-ID: <87jzz7creg.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323123924.3032174-1-suagrfillet@gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,63 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 08:39:24PM +0800, Song Shuai wrote:
-> RISC-V now manages CPU topology using arch_topology which provides
-> CPU capacity and frequency related interfaces to access the cpu/freq
-> invariant in possible heterogeneous or DVFS-enabled platforms.
-> 
-> Here adds topology.h file to export the arch_topology interfaces for
-> replacing the scheduler's constant-based cpu/freq invariant accounting.
-> 
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
-> changes from V1:
->   - fix the leading underscore and tidy the patch up 
-> ---
->  arch/riscv/include/asm/topology.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 arch/riscv/include/asm/topology.h
-> 
-> diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-> new file mode 100644
-> index 000000000000..727e8d163a3b
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/topology.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_RISCV_TOPOLOGY_H
-> +#define _ASM_RISCV_TOPOLOGY_H
-> +
-> +#include <linux/arch_topology.h>
-> +
-> +/* Replace task scheduler's default frequency-invariant accounting */
-> +#define arch_scale_freq_tick	topology_scale_freq_tick
-> +#define arch_set_freq_scale	topology_set_freq_scale
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-I was thinking all the right hand side would line up, which means
-the above two need additional tabs and so does topology_get_cpu_scale.
+> I currently can't really see the need for another book/top-level
+> directory and to be honest it's by far my least favorite solution among
+> the options on the table.
 
-> +#define arch_scale_freq_capacity	topology_get_freq_scale
-> +#define arch_scale_freq_invariant	topology_scale_freq_invariant
-> +
-> +/* Replace task scheduler's default cpu-invariant accounting */
-> +#define arch_scale_cpu_capacity	topology_get_cpu_scale
-> +
-> +/* Enable topology flag updates */
-> +#define arch_update_cpu_topology	topology_update_cpu_topology
-> +
-> +#include <asm-generic/topology.h>
+Well, it was just an idea that crossed my mind as I was thinking about
+this stuff...it doesn't appear to have inspired a lot of enthusiasm.  So
+never mind that for now, I guess...I reserve the right to come back to
+it in the future once we're getting overwhelmed by these things :)
 
-I'd also prefer a blank line here.
+> I'm taken back and forth between the other two options (e.g. put the
+> text in Documentation/admin-guide/ or
+> Documentation/admin-guide/tutorials/). Maybe I prefer the latter a
+> little bit more.
 
-> +#endif /* _ASM_RISCV_TOPOLOGY_H */
-> -- 
-> 2.20.1
->
+Let's just put it in admin-guide, I guess, though the fit feels a bit
+awkward.  If we get more tutorials, we can make a separate section in
+index.html, I don't think we need another subdirectory there at this
+point.
 
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Did you have further tweaks, or should I take v3?
 
 Thanks,
-drew
+
+jon
