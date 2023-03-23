@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB446C62EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACDB6C62EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjCWJLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S230455AbjCWJLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjCWJKs (ORCPT
+        with ESMTP id S230121AbjCWJLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:10:48 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD7B1A978
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:10:38 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso667586wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679562637;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q9t9Il4QCvc+OYsFCOq2Y2kM3JhY3Ymwzc544wPMKY=;
-        b=JAXG7TVxy3oUXnP5lw4wYb5eUI0PguXzTm0MUJRZOgGNg+x9sJrgIZfwXD8V6uJAlu
-         WT0ELZzwgjZWE2rZ34WVtUCDvXKHam0T5lPtLHmgTgp8/e+X6S/6KNHKqFnc8pPKdetw
-         vmYxxs4d+HE3pxtvWwA+3OF92i32upKk4N37YAiK8X0gi0GcRSywHiyEGx2eEzSoO6V9
-         cLqMWqKMJvceB5POvhgrb6SBGgT9jODoQno0y6IPsK/42icg50bW2/rhalI2bXBGFhy0
-         JcuFkp9O56MUzU/aDCQoKcMJR+0UFYuAc/HQTHCIW/umRJSObRIHc95BSAqGn+ouIdPi
-         osbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679562637;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Q9t9Il4QCvc+OYsFCOq2Y2kM3JhY3Ymwzc544wPMKY=;
-        b=irHavstvydzr1lTAA3/YfHaTy9qDhWLIYydDOYyugziQtKxcTBmF3M/mmkBavrsVDb
-         AONpuBEMTlTZyeY3N0MtxyaPyx4vPxarblmCHDe7ChyAFk/XyUWMSchZ5BEHAntwBHv+
-         YHCkMe/KiX6oS5ZN2UrC/DRx4VOZSNGaqIy8P33CInEL8ulx8h5icLTQ2zm2gML0S36R
-         /VMYaJmhp6InPAb+8yXFgE7k85dYgr90OEF3ocpcuM9R5LIk8lRPoTmQ0EfO6IJAeZ8F
-         Nhd8M8Mqb/E0zJZ/BcN6yJSrS/KJzz1C5XSDZ0IO/AMBeStwMBZGY+LS3iXhGGRkqAqP
-         xmRA==
-X-Gm-Message-State: AO0yUKUJA6Z0ou/fgo+6szY4RyUQcSXA1kUsYKTPp7XidyqS6FjUVIB4
-        zC6NGReonVuFgzEZ08kRG2rKng==
-X-Google-Smtp-Source: AK7set9xyYcinzWn6c0YukVAn7Jmk43wPs8OMq65solPUGlI33Pxd/Jqw8KMSSdh+BGnWmDSul5q8Q==
-X-Received: by 2002:a7b:cbc8:0:b0:3ed:34e6:df4c with SMTP id n8-20020a7bcbc8000000b003ed34e6df4cmr1732318wmi.16.1679562637271;
-        Thu, 23 Mar 2023 02:10:37 -0700 (PDT)
-Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id e7-20020a05600c4e4700b003ee91983003sm803157wmq.4.2023.03.23.02.10.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 02:10:36 -0700 (PDT)
-Message-ID: <f3429a2a-9796-e071-923e-3af8f20d0e91@linaro.org>
-Date:   Thu, 23 Mar 2023 10:10:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] media: dt-bindings: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
+        Thu, 23 Mar 2023 05:11:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139AE193F0;
+        Thu, 23 Mar 2023 02:11:09 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N4awRr012202;
+        Thu, 23 Mar 2023 09:11:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=Ls1+cbacZrVEKng9VlW2DlZLGTZ4GSURvUdjpUKmHqI=;
+ b=lwFr/Xq/pfeWmE+2oWQBLhgKtaRqCTdsdvqw0bxoaSVlCY4cwVrjhyVAXh/wFEK5n9Gc
+ 9WdjikoClCGADrBGm5NtE6N0NtIXWkhvsQjFHWy2edTbMw8SPupGdjE18Of6+XXV4soG
+ GVBXOPvoo5vqjUDGpDRSjKMKxOnPDgezlMHJt3N5XVd+/iCwL020pi0StIsJfas5iTSZ
+ 8BTwvPrzjOwlBegxU7LOVzKaivX1H+2p19YZ2hSiAPTtTvwNv7kItcqVEcIrWtUJWA4m
+ 47bDdlWjs48UMPAggitumvX+wkuMDjCSvgr8438c/MOAfz5pFtV9JG5Vcj/y0q0MlI7U sg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg9naha0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 09:11:04 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32N9B0s1021245;
+        Thu, 23 Mar 2023 09:11:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3pd6ckjf1y-1;
+        Thu, 23 Mar 2023 09:11:00 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32N9B0mN021239;
+        Thu, 23 Mar 2023 09:11:00 GMT
+Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 32N9B0MY021238;
+        Thu, 23 Mar 2023 09:11:00 +0000
+Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
+        id 3BE9C900889; Thu, 23 Mar 2023 14:40:59 +0530 (IST)
+From:   Viswanath Boma <quic_vboma@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joe Tessler <jrt@google.com>,
-        Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Benoit Parrot <bparrot@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20230320233944.2920964-1-robh@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230320233944.2920964-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vgarodia@quicinc.com,
+        quic_dikshita@quicinc.com
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Viswanath Boma <quic_vboma@quicinc.com>
+Subject: [PATCH v2] venus: Add support for min/max qp range.
+Date:   Thu, 23 Mar 2023 14:40:52 +0530
+Message-Id: <20230323091052.23318-1-quic_vboma@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pOkdxqbIZAept7sLX7-CSn3ygB9QWjJ8
+X-Proofpoint-ORIG-GUID: pOkdxqbIZAept7sLX7-CSn3ygB9QWjJ8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230068
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,517 +81,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2023 00:39, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml | 2 +-
->   .../bindings/media/allwinner,sun50i-h6-vpu-g2.yaml        | 4 ++--
->   .../devicetree/bindings/media/amlogic,axg-ge2d.yaml       | 4 ++--
->   .../devicetree/bindings/media/amlogic,gx-vdec.yaml        | 4 ++--
->   .../devicetree/bindings/media/amlogic,meson-ir-tx.yaml    | 4 ++--
+Currently QP range set from client is not communicated to video firmware.
+Add support for the QP range HFI to set the same to firmware.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+---
 
->   .../devicetree/bindings/media/i2c/chrontel,ch7322.yaml    | 4 ++--
->   .../devicetree/bindings/media/i2c/dongwoon,dw9768.yaml    | 6 +++---
->   .../devicetree/bindings/media/i2c/maxim,max9286.yaml      | 2 +-
->   .../devicetree/bindings/media/i2c/ovti,ov02a10.yaml       | 2 +-
->   .../devicetree/bindings/media/mediatek,mdp3-rdma.yaml     | 2 +-
->   .../bindings/media/mediatek,vcodec-subdev-decoder.yaml    | 4 ++--
->   .../devicetree/bindings/media/microchip,sama5d4-vdec.yaml | 4 ++--
->   .../devicetree/bindings/media/nxp,imx8mq-vpu.yaml         | 4 ++--
->   .../devicetree/bindings/media/qcom,msm8916-camss.yaml     | 4 ++--
->   .../devicetree/bindings/media/qcom,msm8916-venus.yaml     | 8 ++++----
->   .../devicetree/bindings/media/qcom,msm8996-camss.yaml     | 4 ++--
->   .../devicetree/bindings/media/qcom,msm8996-venus.yaml     | 4 ++--
->   .../devicetree/bindings/media/qcom,sc7180-venus.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sc7280-venus.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sdm660-camss.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sdm660-venus.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sdm845-camss.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml   | 4 ++--
->   .../devicetree/bindings/media/qcom,sdm845-venus.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sm8250-camss.yaml      | 4 ++--
->   .../devicetree/bindings/media/qcom,sm8250-venus.yaml      | 4 ++--
->   Documentation/devicetree/bindings/media/rc.yaml           | 2 +-
->   .../devicetree/bindings/media/rockchip,rk3568-vepu.yaml   | 4 ++--
->   Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 4 ++--
->   Documentation/devicetree/bindings/media/ti,cal.yaml       | 2 +-
->   30 files changed, 57 insertions(+), 57 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> index 53945c61325c..42dfe22ad5f1 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-> @@ -11,7 +11,7 @@ maintainers:
->     - Maxime Ripard <mripard@kernel.org>
->   
->   allOf:
-> -  - $ref: "rc.yaml#"
-> +  - $ref: rc.yaml#
->   
->   properties:
->     compatible:
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-> index 9d44236f2deb..a4f06bbdfe49 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun50i-h6-vpu-g2.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/allwinner,sun50i-h6-vpu-g2.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/allwinner,sun50i-h6-vpu-g2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Hantro G2 VPU codec implemented on Allwinner H6 SoC
->   
-> diff --git a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-> index e551be5e680e..f23fa6d06ad0 100644
-> --- a/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-> +++ b/Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
-> @@ -2,8 +2,8 @@
->   # Copyright 2020 BayLibre, SAS
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/amlogic,axg-ge2d.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/amlogic,axg-ge2d.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Amlogic GE2D Acceleration Unit
->   
-> diff --git a/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-> index b827edabcafa..55930f6107c9 100644
-> --- a/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-> +++ b/Documentation/devicetree/bindings/media/amlogic,gx-vdec.yaml
-> @@ -2,8 +2,8 @@
->   # Copyright 2019 BayLibre, SAS
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/amlogic,gx-vdec.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/amlogic,gx-vdec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Amlogic Video Decoder
->   
-> diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-> index 4432fea32650..377acce93423 100644
-> --- a/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-> +++ b/Documentation/devicetree/bindings/media/amlogic,meson-ir-tx.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/amlogic,meson-ir-tx.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/amlogic,meson-ir-tx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Amlogic Meson IR transmitter
->   
-> diff --git a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-> index af8ada55b3f2..4e69b6a7ffcc 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/i2c/chrontel,ch7322.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/i2c/chrontel,ch7322.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Chrontel HDMI-CEC Controller
->   
-> diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-> index 82d3d18c16a1..a0855d3b7577 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml
-> @@ -38,7 +38,7 @@ properties:
->     dongwoon,aac-mode:
->       description:
->         Indication of AAC mode select.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->       enum:
->         - 1    #  AAC2 mode(operation time# 0.48 x Tvib)
->         - 2    #  AAC3 mode(operation time# 0.70 x Tvib)
-> @@ -50,7 +50,7 @@ properties:
->       description:
->         Number of AAC Timing count that controlled by one 6-bit period of
->         vibration register AACT[5:0], the unit of which is 100 us.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->       default: 0x20
->       minimum: 0x00
->       maximum: 0x3f
-> @@ -59,7 +59,7 @@ properties:
->       description:
->         Indication of VCM internal clock dividing rate select, as one multiple
->         factor to calculate VCM ring periodic time Tvib.
-> -    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    $ref: /schemas/types.yaml#/definitions/uint32
->       enum:
->         - 0    #  Dividing Rate -  2
->         - 1    #  Dividing Rate -  1
-> diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> index 0c4213adbf6a..8df859136047 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> @@ -86,7 +86,7 @@ properties:
->         is 100000 micro volts
->   
->     maxim,gpio-poc:
-> -    $ref: '/schemas/types.yaml#/definitions/uint32-array'
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->       minItems: 2
->       maxItems: 2
->       description: |
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-> index 54df9d73dc86..763cebe03dc2 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-> @@ -88,7 +88,7 @@ properties:
->           properties:
->             link-frequencies: true
->             ovti,mipi-clock-voltage:
-> -            $ref: "/schemas/types.yaml#/definitions/uint32"
-> +            $ref: /schemas/types.yaml#/definitions/uint32
->               description:
->                 Definition of MIPI clock voltage unit. This entry corresponds to
->                 the link speed defined by the 'link-frequencies' property.
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> index 9cfc0c7d23e0..7032c7e15039 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> @@ -27,7 +27,7 @@ properties:
->       maxItems: 1
->   
->     mediatek,gce-client-reg:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->       items:
->         items:
->           - description: phandle of GCE
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index c4f20acdc1f8..20675f9ba3cd 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Mediatek Video Decode Accelerator With Multi Hardware
->   
-> diff --git a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-> index 4b77103ca913..59b805ca47c5 100644
-> --- a/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-> +++ b/Documentation/devicetree/bindings/media/microchip,sama5d4-vdec.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/microchip,sama5d4-vdec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Hantro G1 VPU codec implemented on Microchip SAMA5D4 SoCs
->   
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> index 7dc13a4b1805..3d58f02b0c5d 100644
-> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Hantro G1/G2 VPU codecs implemented on i.MX8M SoCs
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-> index 12ec3e1ea869..eb1499912c58 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,msm8916-camss.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,msm8916-camss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm CAMSS ISP
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-> index 2abb7d21c0d1..4ad42b8f19e6 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,msm8916-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,msm8916-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> @@ -47,7 +47,7 @@ properties:
->   
->       properties:
->         compatible:
-> -        const: "venus-decoder"
-> +        const: venus-decoder
->   
->       required:
->         - compatible
-> @@ -59,7 +59,7 @@ properties:
->   
->       properties:
->         compatible:
-> -        const: "venus-encoder"
-> +        const: venus-encoder
->   
->       required:
->         - compatible
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> index 6aeb3d6d02d5..8a10aa1cafc5 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,msm8996-camss.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,msm8996-camss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm CAMSS ISP
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-> index 29d0cb6c6ebe..213247a43ef2 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8996-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,msm8996-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,msm8996-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-> index 42ee3f06c6be..5128a254fd25 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sc7180-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sc7180-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-> index cf361dd9de08..eb9ce438dbe0 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sc7280-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sc7280-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sc7280-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-> index b28c8e17f158..0a109e126064 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sdm660-camss.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sdm660-camss.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sdm660-camss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm CAMSS ISP
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-> index 45e3f58f52bd..4a0a9ca33cad 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sdm660-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sdm660-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sdm660-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-> index f9a003882f84..1530ad0d80bd 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sdm845-camss.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sdm845-camss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm CAMSS ISP
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-> index 8edc8a2f43a5..d81c3ee53ed6 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus-v2.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sdm845-venus-v2.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sdm845-venus-v2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-> index 57d503373efe..1bf043c4c8fb 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sdm845-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sdm845-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sdm845-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-> index 07a2af12f37d..fa5073c0fd1e 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sm8250-camss.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sm8250-camss.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm CAMSS ISP
->   
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-> index 4b7a12523dcf..8c8141723524 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/qcom,sm8250-venus.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/qcom,sm8250-venus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Qualcomm Venus video encode and decode accelerators
->   
-> diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
-> index e732b7f3a635..6cecd7d941ca 100644
-> --- a/Documentation/devicetree/bindings/media/rc.yaml
-> +++ b/Documentation/devicetree/bindings/media/rc.yaml
-> @@ -18,7 +18,7 @@ properties:
->       description:
->         Specifies the scancode/key mapping table defined in-kernel for
->         the remote controller.
-> -    $ref: '/schemas/types.yaml#/definitions/string'
-> +    $ref: /schemas/types.yaml#/definitions/string
->       enum:
->         - rc-adstech-dvb-t-pci
->         - rc-alink-dtu-m
-> diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-> index 81b26eb4cd35..9d90d8d0565a 100644
-> --- a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-> +++ b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/rockchip,rk3568-vepu.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/rockchip,rk3568-vepu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Hantro G1 VPU encoders implemented on Rockchip SoCs
->   
-> diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> index 6cc4d3e5a61d..ee622a8ee1cc 100644
-> --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> @@ -2,8 +2,8 @@
->   
->   %YAML 1.2
->   ---
-> -$id: "http://devicetree.org/schemas/media/rockchip-vpu.yaml#"
-> -$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +$id: http://devicetree.org/schemas/media/rockchip-vpu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->   
->   title: Hantro G1 VPU codecs implemented on Rockchip SoCs
->   
-> diff --git a/Documentation/devicetree/bindings/media/ti,cal.yaml b/Documentation/devicetree/bindings/media/ti,cal.yaml
-> index 26b3fedef355..f1a940a110d2 100644
-> --- a/Documentation/devicetree/bindings/media/ti,cal.yaml
-> +++ b/Documentation/devicetree/bindings/media/ti,cal.yaml
-> @@ -47,7 +47,7 @@ properties:
->       maxItems: 1
->   
->     ti,camerrx-control:
-> -    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->       items:
->         - items:
->             - description: phandle to device control module
+since v1: addressed the review comments.
+
+ drivers/media/platform/qcom/venus/hfi_cmds.c  | 23 +++++++++++
+ .../media/platform/qcom/venus/hfi_helper.h    | 18 ++++++++
+ drivers/media/platform/qcom/venus/venc.c      | 41 +++++++++++++++----
+ 3 files changed, 74 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index 930b743f225e..bc3f8ff05840 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -1257,7 +1257,30 @@ pkt_session_set_property_4xx(struct hfi_session_set_property_pkt *pkt,
+ 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*tm);
+ 		break;
+ 	}
++	case HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE_V2: {
++		struct hfi_quantization_range_v2 *in = pdata, *range = prop_data;
++		u32 min_qp, max_qp;
++
++		min_qp = in->min_qp.qp_packed;
++		max_qp = in->max_qp.qp_packed;
+ 
++		/* We'll be packing in the qp, so make sure we
++		 * won't be losing data when masking
++		 */
++		if (min_qp > 0xff || max_qp > 0xff)
++			return -ERANGE;
++
++		range->min_qp.layer_id = 0xFF;
++		range->max_qp.layer_id = 0xFF;
++		range->min_qp.qp_packed = (min_qp & 0xFF) | ((min_qp & 0xFF) << 8) |
++			((min_qp & 0xFF) << 16);
++		range->max_qp.qp_packed = (max_qp & 0xFF) | ((max_qp & 0xFF) << 8) |
++			((max_qp & 0xFF) << 16);
++		range->min_qp.enable = 7;
++		range->max_qp.enable = 7;
++		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*range);
++		break;
++	}
+ 	case HFI_PROPERTY_CONFIG_VENC_MAX_BITRATE:
+ 	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER:
+ 	case HFI_PROPERTY_PARAM_BUFFER_ALLOC_MODE:
+diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+index d2d6719a2ba4..105792a68060 100644
+--- a/drivers/media/platform/qcom/venus/hfi_helper.h
++++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+@@ -487,6 +487,11 @@
+ #define HFI_PROPERTY_PARAM_VENC_SESSION_QP			0x2005006
+ #define HFI_PROPERTY_PARAM_VENC_MPEG4_AC_PREDICTION		0x2005007
+ #define HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE		0x2005008
++/*
++ * Note: HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE_V2 is
++ * specific to HFI_VERSION_6XX and HFI_VERSION_4XX only
++ */
++#define HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE_V2		0x2005009
+ #define HFI_PROPERTY_PARAM_VENC_MPEG4_TIME_RESOLUTION		0x2005009
+ #define HFI_PROPERTY_PARAM_VENC_MPEG4_SHORT_HEADER		0x200500a
+ #define HFI_PROPERTY_PARAM_VENC_MPEG4_HEADER_EXTENSION		0x200500b
+@@ -827,6 +832,19 @@ struct hfi_quantization_range {
+ 	u32 layer_id;
+ };
+ 
++struct hfi_quantization_v2 {
++	u32 qp_packed;
++	u32 layer_id;
++	u32 enable;
++	u32 reserved[3];
++};
++
++struct hfi_quantization_range_v2 {
++	struct hfi_quantization_v2 min_qp;
++	struct hfi_quantization_v2 max_qp;
++	u32 reserved[4];
++};
++
+ #define HFI_LTR_MODE_DISABLE	0x0
+ #define HFI_LTR_MODE_MANUAL	0x1
+ #define HFI_LTR_MODE_PERIODIC	0x2
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index cdb12546c4fa..b01da4c1d47a 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -617,6 +617,7 @@ static int venc_set_properties(struct venus_inst *inst)
+ 	struct hfi_idr_period idrp;
+ 	struct hfi_quantization quant;
+ 	struct hfi_quantization_range quant_range;
++	struct hfi_quantization_range_v2 quant_range_v2;
+ 	struct hfi_enable en;
+ 	struct hfi_ltr_mode ltr_mode;
+ 	struct hfi_intra_refresh intra_refresh = {};
+@@ -825,16 +826,40 @@ static int venc_set_properties(struct venus_inst *inst)
+ 	if (ret)
+ 		return ret;
+ 
+-	ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE;
+-	if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
+-		quant_range.min_qp = ctr->hevc_min_qp;
+-		quant_range.max_qp = ctr->hevc_max_qp;
++	if (inst->core->res->hfi_version == HFI_VERSION_4XX ||
++	    inst->core->res->hfi_version == HFI_VERSION_6XX) {
++		ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE_V2;
++
++		if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++			quant_range_v2.min_qp.qp_packed = ctr->hevc_min_qp;
++			quant_range_v2.max_qp.qp_packed = ctr->hevc_max_qp;
++		} else if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_VP8) {
++			quant_range_v2.min_qp.qp_packed = ctr->vp8_min_qp;
++			quant_range_v2.max_qp.qp_packed = ctr->vp8_max_qp;
++		} else {
++			quant_range_v2.min_qp.qp_packed = ctr->h264_min_qp;
++			quant_range_v2.max_qp.qp_packed = ctr->h264_max_qp;
++		}
++
++		ret = hfi_session_set_property(inst, ptype, &quant_range_v2);
+ 	} else {
+-		quant_range.min_qp = ctr->h264_min_qp;
+-		quant_range.max_qp = ctr->h264_max_qp;
++		ptype = HFI_PROPERTY_PARAM_VENC_SESSION_QP_RANGE;
++
++		if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_HEVC) {
++			quant_range.min_qp = ctr->hevc_min_qp;
++			quant_range.max_qp = ctr->hevc_max_qp;
++		} else if (inst->fmt_cap->pixfmt == V4L2_PIX_FMT_VP8) {
++			quant_range.min_qp = ctr->vp8_min_qp;
++			quant_range.max_qp = ctr->vp8_max_qp;
++		} else {
++			quant_range.min_qp = ctr->h264_min_qp;
++			quant_range.max_qp = ctr->h264_max_qp;
++		}
++
++		quant_range.layer_id = 0;
++		ret = hfi_session_set_property(inst, ptype, &quant_range);
+ 	}
+-	quant_range.layer_id = 0;
+-	ret = hfi_session_set_property(inst, ptype, &quant_range);
++
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.17.1
 
