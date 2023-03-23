@@ -2,84 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24806C68CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7CB6C68CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjCWMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S231706AbjCWMtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjCWMsA (ORCPT
+        with ESMTP id S229702AbjCWMth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:48:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D059B11168;
-        Thu, 23 Mar 2023 05:47:58 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id cy23so85934768edb.12;
-        Thu, 23 Mar 2023 05:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679575677;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xy8coyLpepNHuKEPO1GA817I3E2vGkE9UKdG0deMIVs=;
-        b=Fa1lfqKDyJxtYpaA+sxRydW/xXhHbzGCTrYauVRT81ZA20HibY/vMUt3VbGcoU2n2a
-         dvyxWYEXaYeP+BiJsr29fzBLvabUK/wrmYcKQbJPjAcPjhKgMGaiq0B5DiZl2jGrFSA+
-         lYWmG+Yl7e2yG5JDreMzBBFrlLE4uWkrwaCemdMCdyMLkT3n9XFi91QCO6W1x9jKwktu
-         0YDA3JtXIzG6GaUCUHp4OPavm42bj88z6N2RdQnS8oUUbdwgXWOfP5yROIM+KZi+DbZh
-         yhqgeL6+t+hJB+j3yc7+LYE/q7VZ5bxXHU/9A6rKWnHcKr5IdiY6TB8iNJjl3nsmdEK+
-         bDhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679575677;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xy8coyLpepNHuKEPO1GA817I3E2vGkE9UKdG0deMIVs=;
-        b=bXqN/majbvNW9CXWF3P4MaebfDJR4d2fekuMcRdT2vklI1Tm5L91ONDhUAvtXg/GhP
-         pWXKRr5nhZ+7xmB2aGR+5q/PcaoL7AIfQ3Fq9YShXy8evuTK//067dkesAukm2UrAyTl
-         NLb0mU4ELvIA48a42Tvco0IwxC//Vjlzrr+mDs4vcD3oD73e8v4HNM3zFR8z0M4N1sg7
-         cqpMJRGmQG0/Fw3rJcCTro6085OMWHVAyk27xWG5uILG8naOvEiZKq0Pp3ktWnXCIFIA
-         mzx4TnR4NRapOgSUtGFjfL5e4RPfkBEqM5TxIavTErGV9feuzw48JI8kgizHrYwPwRMX
-         0DlA==
-X-Gm-Message-State: AO0yUKWetRrYz0UXSKvCD7r4/7SflphroQXiD0R2KmnFfnIOneXZ0hxh
-        DW038BQVjxd70zsu/0f2zKc=
-X-Google-Smtp-Source: AK7set/2zdTJokXt0aHzwViNhJgBvXG4XSWqgbZnwRHWNaNvmKHknHliFX89JShBh9uygrz8oxOLig==
-X-Received: by 2002:a17:906:7cd3:b0:932:c1e2:9983 with SMTP id h19-20020a1709067cd300b00932c1e29983mr9267496ejp.15.1679575677062;
-        Thu, 23 Mar 2023 05:47:57 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170906044e00b0093204090617sm8351842eja.36.2023.03.23.05.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 05:47:56 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Thu, 23 Mar 2023 13:47:54 +0100
-To:     Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2 2/4] mm: vmalloc: use rwsem, mutex for vmap_area_lock
- and vmap_block->lock
-Message-ID: <ZBxKeqeBw9xrynRK@pc638.lan>
-References: <cover.1679209395.git.lstoakes@gmail.com>
- <6c7f1ac0aeb55faaa46a09108d3999e4595870d9.1679209395.git.lstoakes@gmail.com>
- <ZBkDuLKLhsOHNUeG@destitution>
- <ZBsAG5cpOFhFZZG6@pc636>
- <ZBs/MGH+xUAZXNTz@casper.infradead.org>
- <ZBtCl34dolg2YE+3@pc636>
- <ZBtTvdzgAmsGkQzV@pc636>
+        Thu, 23 Mar 2023 08:49:37 -0400
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (mail-zr0che01on2102.outbound.protection.outlook.com [40.107.24.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F57C1BAE8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3DflmH7vGsYk/PaHiv7tIP9uTgBGDPi/tWCH2kPkw5U=;
+ b=ahpl14Z/6ndRla83AkAx+D/xEDKENV4hLLBqti8/CyV7D/roQH85STyFNd1+rZ1Lof+YtYgiz1tROSb99LGV3m5PUh1LgpPB3dZCmlJBVe/L8rtnib7fKodvHfD+SRE7Typ24/TXDNPa8t1FYMbOPghJnhb1JDIBpZpWJPMSbIQ=
+Received: from DB6PR0202CA0027.eurprd02.prod.outlook.com (2603:10a6:4:a5::13)
+ by GV0P278MB0081.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:1e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
+ 2023 12:49:32 +0000
+Received: from DB5EUR01FT022.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:4:a5:cafe::e4) by DB6PR0202CA0027.outlook.office365.com
+ (2603:10a6:4:a5::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
+ Transport; Thu, 23 Mar 2023 12:49:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.79.220.33)
+ smtp.mailfrom=duagon.com; dkim=pass (signature was verified)
+ header.d=duagon.com;dmarc=pass action=none header.from=duagon.com;
+Received-SPF: Pass (protection.outlook.com: domain of duagon.com designates
+ 20.79.220.33 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.79.220.33; helo=de1-emailsignatures-cloud.codetwo.com; pr=C
+Received: from de1-emailsignatures-cloud.codetwo.com (20.79.220.33) by
+ DB5EUR01FT022.mail.protection.outlook.com (10.152.4.244) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Thu, 23 Mar 2023 12:49:31 +0000
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (104.47.22.105) by de1-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Thu, 23 Mar 2023 12:49:30 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=d2WYXKl4vXMbhdycIJkzMrNa/IhljnHsuhosak8o/bOnTubZfuG42C8zBlS7K3CWJeJ2MWprmqkCTyGvkLuC5sQEsfW4Te4zfn1VhSzc1hnwfWh43Dosc2DorHpk58y10eG34sN1K+3IWTw7TexQdCS2nPSFtVv8sPQgJh6l3AJziD7iB/aup2RID8z+I3OgtavJZxU4MsL9UsRBTkvcewu/mlTnpQXc+0ywGIwmwGJCuddq9U8t4vyOZ8r2MQD+9uBrsmTCdBnolgxpI1X3z7O0pphc4XFBaXSfHG6muo3BQRzboDPcBwlICuEKUqL7F3sCy8j2x4qk0ZuYcoF12w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3DflmH7vGsYk/PaHiv7tIP9uTgBGDPi/tWCH2kPkw5U=;
+ b=NM/XhM5ghBoYHai7We9ees4AaBqAPYZXWnn5bPIOPYoIRq/GoB3d/jdWRl7XKn8cJESNADxPWEYBJkWDk+PjELcHc14tsIyba4ZEL0oYfs3vcLGRU4ArrAicSDQAfJXD9fnwSUmG4S7WHrBg0E2Sn9V9PUkqjjBEyBpHTiH5U4l2nyc82Rb+YTf5SsnsasYL9eUJGBqh5IhjyyYhksRzmlUfS+fZq7G8z/xShLEQ3mV3AafuJxx8xzCqDwZ3j2vhfjtE/m05FHL/TuS8fcCSEyvSqvg1geIRWktJ2K1bApz41sEQR1m5Q6SAnCDkeDwM6P0Hy0LHUHeElfK5oh9LbQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 104.47.22.105) smtp.rcpttodomain=gmail.com smtp.mailfrom=duagon.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=duagon.com;
+ dkim=pass (signature was verified) header.d=duagon.com; arc=pass (0 oda=1
+ ltdi=1 spf=[1,1,smtp.mailfrom=duagon.com] dkim=[1,1,header.d=duagon.com]
+ dmarc=[1,1,header.from=duagon.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3DflmH7vGsYk/PaHiv7tIP9uTgBGDPi/tWCH2kPkw5U=;
+ b=ahpl14Z/6ndRla83AkAx+D/xEDKENV4hLLBqti8/CyV7D/roQH85STyFNd1+rZ1Lof+YtYgiz1tROSb99LGV3m5PUh1LgpPB3dZCmlJBVe/L8rtnib7fKodvHfD+SRE7Typ24/TXDNPa8t1FYMbOPghJnhb1JDIBpZpWJPMSbIQ=
+Received: from DU2PR04CA0305.eurprd04.prod.outlook.com (2603:10a6:10:2b5::10)
+ by ZR0P278MB0872.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:4f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 12:49:28 +0000
+Received: from DB5EUR01FT083.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:2b5:cafe::85) by DU2PR04CA0305.outlook.office365.com
+ (2603:10a6:10:2b5::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
+ Transport; Thu, 23 Mar 2023 12:49:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 104.47.22.105)
+ smtp.mailfrom=duagon.com; dkim=pass (signature was verified)
+ header.d=duagon.com;dmarc=pass action=none header.from=duagon.com;
+Received-SPF: Pass (protection.outlook.com: domain of duagon.com designates
+ 104.47.22.105 as permitted sender) receiver=protection.outlook.com;
+ client-ip=104.47.22.105; helo=CHE01-ZR0-obe.outbound.protection.outlook.com;
+ pr=C
+Received: from securemail.duagon.com (91.135.65.126) by
+ DB5EUR01FT083.mail.protection.outlook.com (10.152.5.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Thu, 23 Mar 2023 12:49:28 +0000
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (mail-zr0che01lp2105.outbound.protection.outlook.com [104.47.22.105])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by securemail.duagon.com (Postfix) with ESMTPS;
+        Thu, 23 Mar 2023 13:49:27 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EjlKrDVLNTvfWpCrci8mG9Txce3dYex4gnXC3A9hlPCTICy3SWXdJ0CKyWuk+57ACMqn7V7ZWjhiZybTOwaFiK66aNPyOkskkktuLNlrMq2lgt7Yf9D7TctE/HkDQ8OoPjOse4n9I2xJB6cyCNnWcnGTQONnCSaJNxBfIeeByM7tKvnbSUTbdBV4bPvTC4pOtcHqfl+ShBGVn5MWQsliu/Cx5sQXArd/JXkFeHk3hDqjDLwEHAYcuMxhPSjt8IGDhqTtHdCklsiJ/+yNxNNRj3pO1HHqyG8RanqC7C34ybdVqqADUhVVOZEscLUntfrikrFQZwLwqGbTIZE4bg6Ifg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3DflmH7vGsYk/PaHiv7tIP9uTgBGDPi/tWCH2kPkw5U=;
+ b=NFrht+8OOtf3Zw2Oh8KNSYNUENqRSG5cALuOqWjQxPXN/spS7EkzkO8WHnka4w1CaDBahWWsaxQD7S8lBg6iuO4i3vNcJEscBihdn8eIbbVJKR98Bwflm0iLm48A1vs7s2eqq4OQ7aTlY+jA97HREIOEHKTblvVHY8J98gR0Wk85Psc0dRp1yyV7ESyEHLs0dsKrWDtqHz5inqlPWJ32P0IpaFmARTXctbtP5aA7ocaRdYSyw1eUfBOiRltgHawkPih6ZpJKiTPVH5RPrX7dplnf9LhqwbGsxMXJODb6QAbCer6uAkqJYglj8vpf6YRSVxLSuj5aTEormvUwtW8dbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=duagon.com; dmarc=pass action=none header.from=duagon.com;
+ dkim=pass header.d=duagon.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=duagon.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3DflmH7vGsYk/PaHiv7tIP9uTgBGDPi/tWCH2kPkw5U=;
+ b=ahpl14Z/6ndRla83AkAx+D/xEDKENV4hLLBqti8/CyV7D/roQH85STyFNd1+rZ1Lof+YtYgiz1tROSb99LGV3m5PUh1LgpPB3dZCmlJBVe/L8rtnib7fKodvHfD+SRE7Typ24/TXDNPa8t1FYMbOPghJnhb1JDIBpZpWJPMSbIQ=
+Received: from ZRAP278MB0948.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:4b::5) by
+ GVAP278MB0796.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:46::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Thu, 23 Mar 2023 12:49:25 +0000
+Received: from ZRAP278MB0948.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d496:75f0:4c13:de8a]) by ZRAP278MB0948.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::d496:75f0:4c13:de8a%9]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 12:49:25 +0000
+From:   =?iso-8859-1?Q?Rodr=EDguez_Barbarin=2C_Jos=E9_Javier?= 
+        <JoseJavier.Rodriguez@duagon.com>
+To:     "morbidrsa@gmail.com" <morbidrsa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "jth@kernel.org" <jth@kernel.org>,
+        =?iso-8859-1?Q?Sanju=E1n_Garc=EDa=2C_Jorge?= 
+        <Jorge.SanjuanGarcia@duagon.com>,
+        =?iso-8859-1?Q?Rodr=EDguez_Barbarin=2C_Jos=E9_Javier?= 
+        <JoseJavier.Rodriguez@duagon.com>
+Subject: [PATCH 0/1] mcb-pci: fix memory overlapping on MCB devices
+Thread-Topic: [PATCH 0/1] mcb-pci: fix memory overlapping on MCB devices
+Thread-Index: AQHZXYXlKQbzhfxXZ06xT9vDRulROg==
+Date:   Thu, 23 Mar 2023 12:49:24 +0000
+Message-ID: <20230323124900.898035-1-josejavier.rodriguez@duagon.com>
+Accept-Language: es-ES, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=duagon.com;
+x-ms-traffictypediagnostic: ZRAP278MB0948:EE_|GVAP278MB0796:EE_|DB5EUR01FT083:EE_|ZR0P278MB0872:EE_|DB5EUR01FT022:EE_|GV0P278MB0081:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9d61abf-bf55-4699-08e0-08db2b9d0c65
+x-seppmail-processed: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: YusgxJQLESkJ+ttdJNEo2Afu4l81kNalRjqoA6NBsUBeCeCN4Mggo0dCO9utExQlJ55UBpsymq2BRSvRbAnrUrVJLlSmmWIQCSX4MyYfaCcoOEDW89V2bVnZUvqgLsOdtJYLNdZx0OBO4YiqWykuyt0C0oVtrNEszfYWCYvrpkZ9vStlUfkENXwgAvyocmiQYJXnztE9qEXz6htgVwInqs2sqSwUGglxMrj24P3Jpesinpj7M5MRWU9vLGTpDVAh+OU9U+vuZA0skATprVXKmtwQBHoqF4PhDln04NtEyOrZ+86vDEy1edLBHWaLws30SQDRZd1kZRGyKKQ1ZalZ6OXMXbHQN+MhmDDcGoM2q8Al/yLt1uCQJtZf6yC3ZZ5qoeLBKxb78E8xbSSaU+309MOqnI5ZRR64/ziEwRHXiQSqoe98443T6f3AmNtUF9agG4/Utrei/98jbU0qfSnA3+ve8R5vgpUNtqH0NDZvmoUTZbW/VfTcU0Gp4G+Ubhpkw4TwhVSxnrlja+KwS7P9Ki6pYt6e1f4FdZyBYosrpJYNd/HdogX1NRdQ3wwejVwkhEpNZKDy77XuturJ8nR/4tJydWJLer4kZU+D34aKunpf9YSZimW9e1TuTlE4axBYRlA5DampT+MA7KvQmewGu/9PMUQk0cuYghpeuPRzshmSod/VzkpsS4xt3oaB0zBvTbu7EN8DwphWsc64Y58bZw==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0948.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(39850400004)(396003)(136003)(376002)(366004)(346002)(451199018)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(41300700001)(8936002)(66946007)(5660300002)(2906002)(38070700005)(86362001)(36756003)(38100700002)(122000001)(6486002)(71200400001)(316002)(76116006)(91956017)(107886003)(6512007)(6506007)(1076003)(2616005)(478600001)(110136005)(54906003)(26005)(186003)(83380400001);DIR:OUT;SFP:1102;
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBtTvdzgAmsGkQzV@pc636>
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0796
+X-SM-outgoing: yes
+X-EOPAttributedMessage: 1
+X-MS-Exchange-SkipListedInternetSender: ip=[104.47.22.105];domain=CHE01-ZR0-obe.outbound.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR01FT083.eop-EUR01.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 792af1b8-68a5-4809-adcd-08db2b9d0831
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: GAG/z6P/jKGS5YDLM3ZPR4rbmMQMh3o9BRjfNfBfFXfld4C852wOhYuenNW6xK09isliNARdux+c562oYgCyguk0Lsib6qBwZYr6yPJKb6Yq0Rig2jfA6tI4IRgLhgsr6WUcreb8rML+8ICMBTyqWADSKFYJ2fL8HCFSdPi96rj6DIU+IibgmSokgnyjMvua+I9QwK+pOmyVlgj1IT36fctk+zVXMxPSJ56bz877kGSXJWBzv1vtmRE16T9UNsMvyukUeTQVtZ+q8XsmOf1ehpG7FOQjk2+czJqqHd1mBmFaII1xxIdyGGDpi3CFSVoN6rA9frQTOAL9SIxDaXg4ep9BsuwqTPAE+PgAKbqzmaGjvshVnTXGmDd9L6iacIxMSdP2SsfGBYLEhtkXxvXi7EAjrjhzSamKx4dds1bmYuWmKtcq35IrGsH9s6MAMKTSEIe4A9D7GKfREJmPHva3ZWRU4Us8qfHTBTIQBjT+e4Xepcut2Dn4rpkJaQNTdBHyxCcDMXXq0tnABKJi1yLTQuyqhPYbgvl17noTGVWCUrpIf4J1FUG+OHZ9gB/fgz5yD4VFT8B5+R9DQzYsDH1dWPcHNVro4av47Nx0IoeL9G39DnIs1uJUW8Abj4r4D8bk63Mr8xRXBL14omdD3ZPMgP9qcz1bh0GN950ugTocMfsP9D37vlUYnTnlDEQvyE4gqv09hTayrusgNXt54q4FHrlHHwsVh92QjVC3ltk0fYzns2Yk2ANw2wGmhawlL0o3fwsjZDsZv/45C5hQ8ZyF7tjHuUt+bpiNE2nXmi5RT2aLbRO5zMcFXjmuRfZtYXRpOnqegGWt/T/llXVePSBrxQE1aO/tJWJNIVi8voEzEqC7ow+hLFrA1NfIWs2vrN3v
+X-Forefront-Antispam-Report-Untrusted: CIP:91.135.65.126;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHE01-ZR0-obe.outbound.protection.outlook.com;PTR:mail-zr0che01lp2105.outbound.protection.outlook.com;CAT:NONE;SFS:(13230025)(39850400004)(396003)(136003)(376002)(346002)(5400799012)(451199018)(36840700001)(46966006)(8676002)(4326008)(41300700001)(8936002)(5660300002)(2906002)(34020700004)(32850700003)(82740400003)(156005)(36860700001)(86362001)(36756003)(7636003)(6486002)(316002)(107886003)(6512007)(6506007)(1076003)(70206006)(70586007)(2616005)(40480700001)(82310400005)(47076005)(478600001)(110136005)(54906003)(26005)(186003)(336012)(83380400001)(12100799024);DIR:OUT;SFP:1501;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0872
+X-CodeTwo-MessageID: 00ba1965-ea16-4d24-a0f3-6ea58d1e0d96.20230323124930@de1-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR01FT022.eop-EUR01.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 5d3be9f1-d402-4d04-4b48-08db2b9d0a2e
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n59YaJMXnLTaJFp3gMGOEtLyzvC/lMYSBDjMukqEp5LnKuMBhJFQqkM2NGmXIozvUXWXzBAlaZX7g+rtAZUJE7X5XjVqPCFkXZz1NAeXzni8Oyp19dp2//j87sLg+tAmE6VTlbRNZLCXRElYXEWjGKW6P6+OAGUvPwdBwPJgLOT4XXP1lFZ6Wl9lQab49j3MzMyrx56Z9hV24k8G95iTp3KVHjDcCeWNMjFPdVu/qd1+mrjzjiM24AtlyqXfFBzZfXt53WwG/MeleCBI2NEVsPsWl3N14As0ZWazOAa45d7Y+H+ng2dGZ6U5QnbNkLgU/tlxxE+Ye2H69APeRXqhW4j7zZ6YzI1FW/O4hxTmQfDRb46cbkzafZ/Ikf85EaDjvAFB2FxIJJlKDdQrNbD65B2oe9og2u4B7EP/U6B4q3cBrAoqno4WsV76VMY0P8ZqHcYw+H05RrG2TMxdllhNNRoPBh9Qun/7GQlbQ1jtgdbPiReIJTWuzet775My+mMRneXYu5Go3FRmI69icvRLwJgdv/6DdadHE/sMvKUcxD/HUN0aFfNE/phM9pR46a22fmIRqTmczATzKxLdJ7FDIUedX3QOMLccthg43ISZULbWfgmLr5TLmj+rcrwHBmVcVF0ZqC1tr8TTt8MUONmPW20GXCtrz2R9kRSRAWhI5Fw=
+X-Forefront-Antispam-Report: CIP:20.79.220.33;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:de1-emailsignatures-cloud.codetwo.com;PTR:de1-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230025)(346002)(39850400004)(136003)(376002)(396003)(451199018)(46966006)(36840700001)(54906003)(41300700001)(110136005)(86362001)(478600001)(8936002)(5660300002)(70586007)(82310400005)(70206006)(8676002)(4326008)(6486002)(316002)(2906002)(7636003)(7596003)(107886003)(6512007)(6506007)(1076003)(82740400003)(26005)(186003)(2616005)(496002)(36860700001)(336012)(83380400001)(40480700001)(36756003)(47076005);DIR:OUT;SFP:1102;
+X-OriginatorOrg: duagon.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 12:49:31.9927
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9d61abf-bf55-4699-08e0-08db2b9d0c65
+X-MS-Exchange-CrossTenant-Id: e5e7e96e-8a28-45d6-9093-a40dd5b51a57
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5e7e96e-8a28-45d6-9093-a40dd5b51a57;Ip=[20.79.220.33];Helo=[de1-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT022.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0081
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,328 +177,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 08:15:09PM +0100, Uladzislau Rezki wrote:
-> On Wed, Mar 22, 2023 at 07:01:59PM +0100, Uladzislau Rezki wrote:
-> > On Wed, Mar 22, 2023 at 05:47:28PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Mar 22, 2023 at 02:18:19PM +0100, Uladzislau Rezki wrote:
-> > > > Hello, Dave.
-> > > > 
-> > > > > 
-> > > > > I'm travelling right now, but give me a few days and I'll test this
-> > > > > against the XFS workloads that hammer the global vmalloc spin lock
-> > > > > really, really badly. XFS can use vm_map_ram and vmalloc really
-> > > > > heavily for metadata buffers and hit the global spin lock from every
-> > > > > CPU in the system at the same time (i.e. highly concurrent
-> > > > > workloads). vmalloc is also heavily used in the hottest path
-> > > > > throught the journal where we process and calculate delta changes to
-> > > > > several million items every second, again spread across every CPU in
-> > > > > the system at the same time.
-> > > > > 
-> > > > > We really need the global spinlock to go away completely, but in the
-> > > > > mean time a shared read lock should help a little bit....
-> > > > > 
-> > > > Could you please share some steps how to run your workloads in order to
-> > > > touch vmalloc() code. I would like to have a look at it in more detail
-> > > > just for understanding the workloads.
-> > > > 
-> > > > Meanwhile my grep agains xfs shows:
-> > > > 
-> > > > <snip>
-> > > > urezki@pc638:~/data/raid0/coding/linux-rcu.git/fs/xfs$ grep -rn vmalloc ./
-> > > 
-> > > You're missing:
-> > > 
-> > > fs/xfs/xfs_buf.c:                       bp->b_addr = vm_map_ram(bp->b_pages, bp->b_page_count,
-> > > 
-> > > which i suspect is the majority of Dave's workload.  That will almost
-> > > certainly take the vb_alloc() path.
-> > >
-> > Then it has nothing to do with vmalloc contention(i mean global KVA allocator), IMHO.
-> > Unless:
-> > 
-> > <snip>
-> > void *vm_map_ram(struct page **pages, unsigned int count, int node)
-> > {
-> > 	unsigned long size = (unsigned long)count << PAGE_SHIFT;
-> > 	unsigned long addr;
-> > 	void *mem;
-> > 
-> > 	if (likely(count <= VMAP_MAX_ALLOC)) {
-> > 		mem = vb_alloc(size, GFP_KERNEL);
-> > 		if (IS_ERR(mem))
-> > 			return NULL;
-> > 		addr = (unsigned long)mem;
-> > 	} else {
-> > 		struct vmap_area *va;
-> > 		va = alloc_vmap_area(size, PAGE_SIZE,
-> > 				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
-> > 		if (IS_ERR(va))
-> > 			return NULL;
-> > <snip>
-> > 
-> > number of pages > VMAP_MAX_ALLOC.
-> > 
-> > That is why i have asked about workloads because i would like to understand
-> > where a "problem" is. A vm_map_ram() access the global vmap space but it happens 
-> > when a new vmap block is required and i also think it is not a problem.
-> > 
-> > But who knows, therefore it makes sense to have a lock at workload.
-> > 
-> There is a lock-stat statistics for vm_map_ram()/vm_unmap_ram() test.
-> I did it on 64 CPUs system with running 64 threads doing mapping/unmapping
-> of 1 page. Each thread does 10 000 000 mapping + unmapping in a loop:
-> 
-> <snip>
-> root@pc638:/home/urezki# cat /proc/lock_stat
-> lock_stat version 0.4
-> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-> class name    con-bounces    contentions   waittime-min   waittime-max waittime-total   waittime-avg    acq-bounces   acquisitions   holdtime-min   holdtime-max holdtime-total   holdtime-avg
-> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-> 
-> vmap_area_lock:       2554079        2554276           0.06         213.61    11719647.67           4.59        2986513        3005712           0.05          67.02     3573323.37           1.19
->   --------------
->   vmap_area_lock        1297948          [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
->   vmap_area_lock        1256330          [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
->   vmap_area_lock              1          [<00000000c95c05a7>] find_vm_area+0x16/0x70
->   --------------
->   vmap_area_lock        1738590          [<00000000dd41cbaa>] alloc_vmap_area+0x1c7/0x910
->   vmap_area_lock         815688          [<000000009d927bf3>] free_vmap_block+0x4a/0xe0
->   vmap_area_lock              1          [<00000000c1d619d7>] __get_vm_area_node+0xd2/0x170
-> 
-> .....................................................................................................................................................................................................
-> 
-> vmap_blocks.xa_lock:        862689         862698           0.05          77.74      849325.39           0.98        3005156        3005709           0.12          31.11     1920242.82           0.64
->   -------------------
->   vmap_blocks.xa_lock         378418          [<00000000625a5626>] vm_map_ram+0x359/0x4a0
->   vmap_blocks.xa_lock         484280          [<00000000caa2ef03>] xa_erase+0xe/0x30
->   -------------------
->   vmap_blocks.xa_lock         576226          [<00000000caa2ef03>] xa_erase+0xe/0x30
->   vmap_blocks.xa_lock         286472          [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-> 
-> ....................................................................................................................................................................................................
-> 
-> free_vmap_area_lock:        394960         394961           0.05         124.78      448241.23           1.13        1514508        1515077           0.12          30.48     1179167.01           0.78
->   -------------------
->   free_vmap_area_lock         385970          [<00000000955bd641>] alloc_vmap_area+0xe5/0x910
->   free_vmap_area_lock           4692          [<00000000230abf7e>] __purge_vmap_area_lazy+0x10a/0x7d0
->   free_vmap_area_lock           4299          [<00000000eed9ff9e>] alloc_vmap_area+0x497/0x910
->   -------------------
->   free_vmap_area_lock         371734          [<00000000955bd641>] alloc_vmap_area+0xe5/0x910
->   free_vmap_area_lock          17007          [<00000000230abf7e>] __purge_vmap_area_lazy+0x10a/0x7d0
->   free_vmap_area_lock           6220          [<00000000eed9ff9e>] alloc_vmap_area+0x497/0x910
-> 
-> .....................................................................................................................................................................................................
-> 
-> purge_vmap_area_lock:        169307         169312           0.05          31.08       81655.21           0.48        1514794        1515078           0.05          67.73      912391.12           0.60
->   --------------------
->   purge_vmap_area_lock         166409          [<0000000050938075>] free_vmap_area_noflush+0x65/0x370
->   purge_vmap_area_lock           2903          [<00000000fb8b57f7>] __purge_vmap_area_lazy+0x47/0x7d0
->   --------------------
->   purge_vmap_area_lock         167511          [<0000000050938075>] free_vmap_area_noflush+0x65/0x370
->   purge_vmap_area_lock           1801          [<00000000fb8b57f7>] __purge_vmap_area_lazy+0x47/0x7d0
-> <snip>
-> 
-> alloc_vmap_area is a top and second one is xa_lock. But the test i have
-> done is pretty high concurrent scenario.
-> 
-<snip>
-From 32c38d239c6de3f1d3accf97d9d4944ecaa4bccd Mon Sep 17 00:00:00 2001
-From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Date: Thu, 23 Mar 2023 13:07:27 +0100
-Subject: [PATCH] mm: vmalloc: Remove global vmap_blocks xarray
+mcb-pci driver is allocating the memory region for the "chameleon table"
+with a fixed size of 0x200. This region is only use to do a initial
+parsing to discover the devices implemented as IP Cores.
 
-A global vmap_blocks-xarray array can be contented under
-heavy usage of the vm_map_ram()/vm_unmap_ram() APIs. Under
-stress test the lock-stat shows that a "vmap_blocks.xa_lock"
-lock is a second in a list when it comes to contentions:
+If the "chameleon table" is actually smalled than 0x200 and the first
+device offset happen to be within 0x200, a memory overlapping can ocurr.
 
-<snip>
-----------------------------------------
-class name con-bounces contentions ...
-----------------------------------------
+Here an extract of the memory overlapping when registering a 16z125 IP Core=
+:
+
+[   31.016972] 8250_men_mcb mcb0-16z125-0:0:0: can't request region for res=
+ource [mem 0xa8200100-0xa820010f]
+[   31.016994] 8250_men_mcb: probe of mcb0-16z125-0:0:0 failed with error -=
+16
+[   31.017010] 8250_men_mcb mcb0-16z125-1:0:0: can't request region for res=
+ource [mem 0xa8200110-0xa820011f]
+
+And here, the memory allocated for the chameleon table parsing:
+
+user@host:$ sudo /proc/iomem
 ...
-vmap_blocks.xa_lock:    862689 862698 ...
-  -------------------
-  vmap_blocks.xa_lock   378418    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
-  vmap_blocks.xa_lock   484280    [<00000000caa2ef03>] xa_erase+0xe/0x30
-  -------------------
-  vmap_blocks.xa_lock   576226    [<00000000caa2ef03>] xa_erase+0xe/0x30
-  vmap_blocks.xa_lock   286472    [<00000000625a5626>] vm_map_ram+0x359/0x4a0
+a8200000-a82001ff : mcb_pci
 ...
-<snip>
 
-that is a result of running vm_map_ram()/vm_unmap_ram() in
-a loop. The test creates 64(on 64 CPUs system) threads and
-each one maps/unmaps 1 page.
+This patch solves this problem by not allocating the memory region of the
+"chamelon table" that is only needed for parsing. Just do an ioremap instea=
+d.
 
-After this change the xa_lock is considered as noise in the
-same test condition:
+This patch is based on linux-next (next-20230323)
 
-<snip>
-...
-&xa->xa_lock#1:         10333 10394 ...
-  --------------
-  &xa->xa_lock#1        5349      [<00000000bbbc9751>] xa_erase+0xe/0x30
-  &xa->xa_lock#1        5045      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-  --------------
-  &xa->xa_lock#1        7326      [<0000000018def45d>] vm_map_ram+0x3a4/0x4f0
-  &xa->xa_lock#1        3068      [<00000000bbbc9751>] xa_erase+0xe/0x30
-...
-<snip>
+Javier Rodriguez (1):
+  mcb: Remove requesting memory region to avoid memory overlapping
 
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
----
- mm/vmalloc.c | 54 +++++++++++++++++++++++++++++-----------------------
- 1 file changed, 30 insertions(+), 24 deletions(-)
+ drivers/mcb/mcb-pci.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 978194dc2bb8..b1e549d152b2 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1911,6 +1911,7 @@ static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
- struct vmap_block_queue {
- 	spinlock_t lock;
- 	struct list_head free;
-+	struct xarray vmap_blocks;
- };
- 
- struct vmap_block {
-@@ -1927,25 +1928,22 @@ struct vmap_block {
- /* Queue of free and dirty vmap blocks, for allocation and flushing purposes */
- static DEFINE_PER_CPU(struct vmap_block_queue, vmap_block_queue);
- 
--/*
-- * XArray of vmap blocks, indexed by address, to quickly find a vmap block
-- * in the free path. Could get rid of this if we change the API to return a
-- * "cookie" from alloc, to be passed to free. But no big deal yet.
-- */
--static DEFINE_XARRAY(vmap_blocks);
--
--/*
-- * We should probably have a fallback mechanism to allocate virtual memory
-- * out of partially filled vmap blocks. However vmap block sizing should be
-- * fairly reasonable according to the vmalloc size, so it shouldn't be a
-- * big problem.
-- */
-+static struct vmap_block_queue *
-+addr_to_vbq(unsigned long addr)
-+{
-+	int cpu = (addr / VMAP_BLOCK_SIZE) % num_possible_cpus();
-+	return &per_cpu(vmap_block_queue, cpu);
-+}
- 
--static unsigned long addr_to_vb_idx(unsigned long addr)
-+static unsigned long
-+addr_to_vb_va_start(unsigned long addr)
- {
--	addr -= VMALLOC_START & ~(VMAP_BLOCK_SIZE-1);
--	addr /= VMAP_BLOCK_SIZE;
--	return addr;
-+	/* Check if aligned. */
-+	if (IS_ALIGNED(addr, VMAP_BLOCK_SIZE))
-+		return addr;
-+
-+	/* A start address of block an address belongs to. */
-+	return rounddown(addr, VMAP_BLOCK_SIZE);
- }
- 
- static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
-@@ -1953,7 +1951,7 @@ static void *vmap_block_vaddr(unsigned long va_start, unsigned long pages_off)
- 	unsigned long addr;
- 
- 	addr = va_start + (pages_off << PAGE_SHIFT);
--	BUG_ON(addr_to_vb_idx(addr) != addr_to_vb_idx(va_start));
-+	BUG_ON(addr_to_vb_va_start(addr) != addr_to_vb_va_start(va_start));
- 	return (void *)addr;
- }
- 
-@@ -1970,7 +1968,6 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 	struct vmap_block_queue *vbq;
- 	struct vmap_block *vb;
- 	struct vmap_area *va;
--	unsigned long vb_idx;
- 	int node, err;
- 	void *vaddr;
- 
-@@ -2003,8 +2000,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 	bitmap_set(vb->used_map, 0, (1UL << order));
- 	INIT_LIST_HEAD(&vb->free_list);
- 
--	vb_idx = addr_to_vb_idx(va->va_start);
--	err = xa_insert(&vmap_blocks, vb_idx, vb, gfp_mask);
-+	vbq = addr_to_vbq(va->va_start);
-+	err = xa_insert(&vbq->vmap_blocks, va->va_start, vb, gfp_mask);
- 	if (err) {
- 		kfree(vb);
- 		free_vmap_area(va);
-@@ -2021,9 +2018,11 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
- 
- static void free_vmap_block(struct vmap_block *vb)
- {
-+	struct vmap_block_queue *vbq;
- 	struct vmap_block *tmp;
- 
--	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
-+	vbq = addr_to_vbq(vb->va->va_start);
-+	tmp = xa_erase(&vbq->vmap_blocks, vb->va->va_start);
- 	BUG_ON(tmp != vb);
- 
- 	spin_lock(&vmap_area_lock);
-@@ -2135,6 +2134,7 @@ static void vb_free(unsigned long addr, unsigned long size)
- 	unsigned long offset;
- 	unsigned int order;
- 	struct vmap_block *vb;
-+	struct vmap_block_queue *vbq;
- 
- 	BUG_ON(offset_in_page(size));
- 	BUG_ON(size > PAGE_SIZE*VMAP_MAX_ALLOC);
-@@ -2143,7 +2143,10 @@ static void vb_free(unsigned long addr, unsigned long size)
- 
- 	order = get_order(size);
- 	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
--	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
-+
-+	vbq = addr_to_vbq(addr);
-+	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start(addr));
-+
- 	spin_lock(&vb->lock);
- 	bitmap_clear(vb->used_map, offset, (1UL << order));
- 	spin_unlock(&vb->lock);
-@@ -3486,6 +3489,7 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
- {
- 	char *start;
- 	struct vmap_block *vb;
-+	struct vmap_block_queue *vbq;
- 	unsigned long offset;
- 	unsigned int rs, re, n;
- 
-@@ -3503,7 +3507,8 @@ static void vmap_ram_vread(char *buf, char *addr, int count, unsigned long flags
- 	 * Area is split into regions and tracked with vmap_block, read out
- 	 * each region and zero fill the hole between regions.
- 	 */
--	vb = xa_load(&vmap_blocks, addr_to_vb_idx((unsigned long)addr));
-+	vbq = addr_to_vbq((unsigned long) addr);
-+	vb = xa_load(&vbq->vmap_blocks, addr_to_vb_va_start((unsigned long) addr));
- 	if (!vb)
- 		goto finished;
- 
-@@ -4272,6 +4277,7 @@ void __init vmalloc_init(void)
- 		p = &per_cpu(vfree_deferred, i);
- 		init_llist_head(&p->list);
- 		INIT_WORK(&p->wq, delayed_vfree_work);
-+		xa_init(&vbq->vmap_blocks);
- 	}
- 
- 	/* Import existing vmlist entries. */
--- 
-2.30.2
-<snip>
-
-Any thoughts patch?
-
-I do not consider it as a big improvement in performance. But, it tends
-to remove completely a contention on the "xa_lock" + it refactor slightly
-the per-cpu allocator. XFS workloads can be improved, though.
-
---
-Uladzislau Rezki
+--=20
+2.34.1
