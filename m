@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB726C6CC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23B36C6CD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjCWP7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
+        id S231969AbjCWQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbjCWP66 (ORCPT
+        with ESMTP id S232262AbjCWQAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:58:58 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AFDC641
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=kc9qNhC3gE7NKRhvm925TdOssXExtS9eEcMXrknzwck=; b=jrS3itjotS7JI2GnFTIdPfohrK
-        X+khFANTTsAXdTFyqqXzPQBYmzvPn99ZotipiKZeSklR/6CyPQYHXkajyW+WgdF99efMiWLnuC8H4
-        k/pABTuSRoRdV4LaH7IbShTCbnlUBDKFPTNCkdpw7HtVcrc4gnmmql7XZa+cS/5p5G4/egrDwkQ+A
-        lShueyyTeD8Zu09tgX/Msl72iNC0MirRGLHGePyThw6qM4Y+VidtHPfPq8Jx5v52IQ2hXxTQxDNxp
-        p+Cdsqw03uAch1ANnws+6pUetmTuuSE+vfa86djvcGjq00eEhZ2L+0uK7a0FYzqRqlqmiEQl0r/js
-        8c8gQ6kWnrQZs3NJwWn8s/0eFs3VQao6+xmKyeFPKxOXQLvvi+IiYbXuhYawQ3bEaQqIkP3ygggYP
-        AU2rbQm4eJdoUCbSIhWXa6k8/3rz10ZasRu6VXHGXIHMgQuVTF5bZPZ9QVMec3YdObqDcMcC5nKJ3
-        daEIO1gLruFWxo0QmYwcQ/Uyyj2loKU/Z/5JfUc+jXm6V/UnJQWPXy1DwZFxk7zgIyxbCbUc/ICNi
-        1cW/pPH9GxHgaeVVuY/e4p1VlC5pl/p3HXNMI8ya2/uu4yxTgDOCMc5KRbe9vKIINzumrV7TsSnAC
-        57xYzpc7vFRqbfEScH8eIh2/MF3xWvvEkilTeSbRM=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Latchesar Ionkov <lucho@ionkov.net>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        linux-kernel@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
-        v9fs-developer@lists.sourceforge.net
-Subject: Re: [V9fs-developer] [PATCH 0/5] Take 3 at async RPCs and no longer looping
- forever on signals
-Date:   Thu, 23 Mar 2023 16:58:51 +0100
-Message-ID: <19996551.RFHlWWcHjK@silver>
-In-Reply-To: <ZBb3ynXntaom/0hg@codewreck.org>
-References: <20230211075023.137253-1-asmadeus@codewreck.org>
- <Y+ttlog6sth3vPHJ@codewreck.org> <ZBb3ynXntaom/0hg@codewreck.org>
+        Thu, 23 Mar 2023 12:00:37 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A167325941
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:00:32 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id g19so1962418qts.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679587231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQQYR3tgoTZGjn44UlqD2Q/Bi/7ZZ0L1D2F+tNyu+vY=;
+        b=JUSYGg90JZTT6Yd13pjG6DLnrb2PDfmyEiLktcz2+MNdTX1qhs8SEmuA54OaIlpPJb
+         DxtqFpASEbLE1v0MWbPxSyp5iJvz/cWT8oHdtMYHkFXPLcVCi5GYkPZurEN1bWPwQDzC
+         weuJE2NJS7RteJovT2yARUM6DjWrj4KVVFVUPsqLMqvDhc6sSQI6Mvr+an7mCsZje+Ma
+         HzcrGuLfySAPmUsyXVd3Jh0ih8mkd/t0KaiLpkyblfIp5tKl5BXeCDVIuYG91jK7wKEU
+         fOndc7BtP6DmMZ+/1A5temMFZBDYv1b7xByaHD0exVuhFbacP6Sn5JBtcOlh09PvP/Ah
+         bUrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679587231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xQQYR3tgoTZGjn44UlqD2Q/Bi/7ZZ0L1D2F+tNyu+vY=;
+        b=fcAXgwEO46r6jKvksuDyfpKnED43gIXEi3hAFCiAYWXm+JK2agT6i11d6DtcB+qduu
+         ThEwT9eOMFKlvxNVJmMxwzPgO1a9tMn3ucJIjBsEShZne4Gx2OEIjTG4+enTFivvSY0W
+         cMmbf8dqeb6EBgr8e3Mkhf6IEI+uq4Y96/nWI+IiZIeaeRsIi4H0W9NE66XBeohC6B0n
+         G03aJdxzXmyfmC0x3Tfk5w381wAyLF3HmKqaC41BC/NUi1XkahHrNj8cH9TWkNFfMsfl
+         qKAohkz8WUr3ZMA2s0wE8nhL2pmZw9IJlZXgF0ZT//UAAqh4VPk5mrjw+dcYVDNm8Z7o
+         RecA==
+X-Gm-Message-State: AO0yUKW6VDgcN5QwrEFXykz8dzw/t4PGVFOH7/J5qvGHHqrv7xe1mjqx
+        jXnfTfzmzp4y24lFjfQyNRgw1Q==
+X-Google-Smtp-Source: AK7set87oFRPV+RhpgHybpu64glNPVjvktx8AzjXw+O057W6zUiIN3FRPNknFZPhV+tY70AZT6E7jg==
+X-Received: by 2002:a05:622a:182a:b0:3e3:90fa:c5d9 with SMTP id t42-20020a05622a182a00b003e390fac5d9mr5230973qtc.40.1679587231698;
+        Thu, 23 Mar 2023 09:00:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id j23-20020ac86657000000b003e0c29112b6sm7802610qtp.7.2023.03.23.09.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:00:31 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 12:00:30 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 6/7] workingset: memcg: sleep when flushing stats in
+ workingset_refault()
+Message-ID: <20230323160030.GD739026@cmpxchg.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-7-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323040037.2389095-7-yosryahmed@google.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday, March 19, 2023 12:53:46 PM CET Dominique Martinet wrote:
-> It's been a while but I didn't forget...
->=20
-> Dominique Martinet wrote on Tue, Feb 14, 2023 at 08:16:38PM +0900:
-> > > Yes, apparently it tries to write dirty pages of the mapped file and =
-keeps
-> > > hanging there [fs/9p/vfs_inode_dotl.c:586]:
-> >=20
-> > Yeah, it'd help to get the trace of the thread actually trying to do the
-> > IO, if it still exists.
-> > I had some hangs in the check that there are no flush in flight at some
-> > point, and I thought I fixed that, but I can't really see anywhere else
-> > that'd start hanging with this... it'll be clearer if I can reproduce.
->=20
-> I couldn't reproduce this one, but manually inspecting
-> p9_client_wait_flush again I noticed the wait_event_interruptible was
-> waiting on req->flushed_req->wq but looking at req->status in the
-> condition; that was an error.
-> Also, we have a ref on req->flushed_req but not on req, so
-> req->flushed_req wasn't safe.
->=20
-> I've changed the code to add a variable directly on req->flushed_req and
-> use it consistently, I'm not sure that's the problem you ran into but it
-> might help.
-> It's been a while but do you remember if that hang was consistently
-> happening on shutdown, or was it a one time thing?
->=20
-> Either way, I'd appreciate if you could try my 9p-test branch again:
-> https://github.com/martinetd/linux/commits/9p-test
->=20
->=20
-> With that said, I expect that p9_client_wait_req will cause hangs on
-> broken servers.
-> If connection drops hopefully the reqs will just be marked as error and
-> free the thread, but I can see syzbot complaining about yet another
-> thread stuck.. Well it's interruptible at least, and bails out on
-> ERESTARTSYS.
+On Thu, Mar 23, 2023 at 04:00:36AM +0000, Yosry Ahmed wrote:
+> In workingset_refault(), we call mem_cgroup_flush_stats_delayed() to
+> flush stats within an RCU read section and with sleeping disallowed.
+> Move the call to mem_cgroup_flush_stats_delayed() above the RCU read
+> section and allow sleeping to avoid unnecessarily performing a lot of
+> work without sleeping.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+> 
+> A lot of code paths call into workingset_refault(), so I am not
+> generally sure at all whether it's okay to sleep in all contexts or not.
+> Feedback here would be very helpful.
+> 
+> ---
+>  mm/workingset.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 042eabbb43f6..410bc6684ea7 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -406,6 +406,8 @@ void workingset_refault(struct folio *folio, void *shadow)
+>  	unpack_shadow(shadow, &memcgid, &pgdat, &eviction, &workingset);
+>  	eviction <<= bucket_order;
+>  
+> +	/* Flush stats (and potentially sleep) before holding RCU read lock */
+> +	mem_cgroup_flush_stats_delayed(true);
 
-I gave your current test branch some spins today.
+Btw, it might be a good time to rename this while you're in the
+area. delayed suggests this is using a delayed_work, but this is
+actually sometimes flushing directly from the callsite.
 
-And yes, the problem did not happen reliably each time, but consistently
-enough for me to reproduce it.
+What it's doing is ratelimited calls. A better name would be:
 
-With your latest test branch it appears to have mitigated the problem. Once=
- in
-a while on shutdown I see it blocking for few minutes, but recovering:
-
-[**    ] (2 of 3) A stop job is running for =E2=80=A6ave Random Seed (2min =
-36s / 10min)
-[  484.986388] INFO: task systemd-user-ru:8782 blocked for more than 120 se=
-conds.
-[  484.990150]       Tainted: G            E      6.3.0-rc2+ #63
-[  484.992553] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables =
-this message.
-[  484.993657] task:systemd-user-ru state:D stack:0     pid:8782  ppid:1   =
-   flags:0x00000004
-[  484.994863] Call Trace:
-[  484.995398]  <TASK>
-[  484.995866] __schedule (kernel/sched/core.c:5304 kernel/sched/core.c:662=
-2)=20
-[  484.996614] schedule (kernel/sched/core.c:6699 (discriminator 1))=20
-[  484.997283] d_alloc_parallel (./include/linux/spinlock.h:350 fs/dcache.c=
-:2626 fs/dcache.c:2707)=20
-[  484.998150] ? __pfx_default_wake_function (kernel/sched/core.c:6944)=20
-[  484.999213] __lookup_slow (fs/namei.c:1671)=20
-[  485.000006] walk_component (./include/linux/fs.h:773 fs/namei.c:1704 fs/=
-namei.c:1994)=20
-[  485.000805] path_lookupat (fs/namei.c:2451 fs/namei.c:2475)=20
-[  485.001594] filename_lookup (fs/namei.c:2504)=20
-[  485.002452] ? __check_object_size (mm/usercopy.c:196 mm/usercopy.c:251 m=
-m/usercopy.c:213)=20
-[  485.003523] ? strncpy_from_user (./include/asm-generic/access_ok.h:40 ./=
-arch/x86/include/asm/uaccess.h:551 lib/strncpy_from_user.c:138)=20
-[  485.004537] user_path_at_empty (fs/namei.c:2879)=20
-[  485.005508] do_faccessat (fs/open.c:484)=20
-[  485.006410] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/com=
-mon.c:80)=20
-[  485.007281] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:12=
-0)=20
-[  485.008495] RIP: 0033:0x7f7b4527d8f7
-[  485.009380] RSP: 002b:00007ffc9ee73c08 EFLAGS: 00000246 ORIG_RAX: 000000=
-0000000015
-[  485.011118] RAX: ffffffffffffffda RBX: 00007f7b44ee2608 RCX: 00007f7b452=
-7d8f7
-[  485.012831] RDX: 000000000000001c RSI: 0000000000000000 RDI: 00007f7b44e=
-da86b
-[  485.014560] RBP: 0000000000000003 R08: 0000000000000000 R09: 00007f7b453=
-60be0
-[  485.016246] R10: 00005571ade756c0 R11: 0000000000000246 R12: 00007ffc9ee=
-73cf8
-[  485.017937] R13: 00007ffc9ee73d18 R14: 00007f7b44ee2610 R15: 00000000000=
-00000
-[  485.019669]  </TASK>
-
-However that happens now before unmount rule is reached on shutdown?
-Previously it was hanging after the shutdown rule was reached. Does this ma=
-ke
-sense?
-
-> > Anyway, I found another bug, just running ./configure on a random proje=
-ct
-> > (picked coreutils tarball) fails with interrupted system call ?!
->=20
-> That other bug was weird, I could reproduce it reliably until I rebooted
-> the host because of an unrelated nfs bug on the host, and after reboot I
-> couldn't reproduce anymore.
-> I'll chalk it down to buggy host/weird happenstance, but something to
-> watch for if random EINTR happen again :/
-
-
-
+	mem_cgroup_flush_stats_ratelimited()
