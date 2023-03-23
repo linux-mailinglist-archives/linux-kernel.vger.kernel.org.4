@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E05E6C70E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA196C70D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCWTQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S231504AbjCWTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjCWTQN (ORCPT
+        with ESMTP id S229529AbjCWTPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:16:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F407E83E6;
-        Thu, 23 Mar 2023 12:16:11 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N42B8s016035;
-        Thu, 23 Mar 2023 19:16:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=8YqbOZ+zPszKRteZJwJzU3+KjVpZYfDq8pQt6ZMxOqQ=;
- b=c/2ZeS9Lq8bBFdeRAmuvtv7bUMPmDVAy1fB2Cg2h1ad+kKfXAf8pUSjWEyzAmMXV94Z5
- /M5G5bv9M2DJyKHYUk2D7eZBjIEhZZ/yNl7LAAjmIh2UZ+RiYZD8zpopLJnU6mgjtMEo
- rjNrQC0DDfaBabVaFeQ0jUoRhliTlocmIMVaWU22SvZzev+ultxZSbgHYxDq1S1PocTT
- y/Dj4pcNhBCEiZpkrTnOLwOuXK5EEkg+yn5RvB47uHLJRNKJ4MPEDJdI7AO6JrWshYXk
- lOmcijwNuDiVXkgtaXF53aLgeCfxPaPnG5ovGjBhFpqINVtu24LYycWVKJZtkciGSRpj xw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgfaxj6u4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 19:16:08 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NJG733002838
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 19:16:07 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 23 Mar 2023 12:16:06 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH v2 2/3] mailbox: omap: Use mbox_bind_client
-Date:   Thu, 23 Mar 2023 12:15:26 -0700
-Message-ID: <20230323191527.1472695-3-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230323191527.1472695-1-quic_eberman@quicinc.com>
-References: <20230323191527.1472695-1-quic_eberman@quicinc.com>
+        Thu, 23 Mar 2023 15:15:37 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEBC9001
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:15:27 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 31so6873765qvc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1679598927;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TqRCAEE7Ga0rL8a78rFY8PhrE0MOGxxeV4bDOfZzVMc=;
+        b=S6k0i2TM5bAtIS7AvbpLJbYQzCyiIVaB+BZkzZnP/XTAawaYa4ctKj6S1bSOB/qHey
+         mvmb2sscDcePb9cGO3P4o/5UtMjX8Fm30pkkA4pIXs84VNhDy/XAG+5mO8wuNohS0XHx
+         p9ejcRm4b0cYwOZjpm6bBlgZ+3xUVDUbL4Gd8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679598927;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TqRCAEE7Ga0rL8a78rFY8PhrE0MOGxxeV4bDOfZzVMc=;
+        b=qq5b7klnO4XsnvfGOEt2vhugMOqjSnLFWDP26XwAQk42WdRp6VfjMG14RWToq8qA9G
+         SwH6gPL7nvrbci5pu2XnjiwuxUjv5s/cbUjaFDevd/6Qp75jxwoedf/bmSpz0nprzKSx
+         i3KVEo/+33/iiK6REDHiGH/bS/9mPm64pYcbgxvlkQiVAREMZHjiOJ1upuFqDNjQnGZg
+         HvyrcNffPePZMZO/Sy4RrWFV301A1HktCb9iIKJqCDT1RXBcBn+HMBmqQZ7E7aniKAtA
+         sSBY+kx2QVCy6ajoIimfhhnOAPRekh0Iyr0FhxjE7w8aEHZVU5LFNS3+q3fe4op1/lKZ
+         hJDg==
+X-Gm-Message-State: AO0yUKXYjBTQwZTR/ymjCkGSrt1zOVKH6v3qj42wexEaJORLvT8ddvYq
+        Xs1y0sP4+ug64wZPv9eeRjFwaXejDiiseZ+zDUQ=
+X-Google-Smtp-Source: AK7set9Hf1zvg985ro2+Jiybh+qJfGNnuRk4LhnOMOXjoW4PV/wct8oFIcPyAiY02FuUqU0ZoTZLYQ==
+X-Received: by 2002:a05:6214:20a6:b0:5c2:7de9:ec97 with SMTP id 6-20020a05621420a600b005c27de9ec97mr10254822qvd.13.1679598927031;
+        Thu, 23 Mar 2023 12:15:27 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id oj9-20020a056214440900b005dd8b9345bbsm80603qvb.83.2023.03.23.12.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 12:15:26 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 19:15:26 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     paulmck@kernel.org, frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Zqiang as a RCU reviewer
+Message-ID: <20230323191526.GA628693@google.com>
+References: <20230323040729.145154-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1sPoIAR6C65FD0lVjBL4uL4DUAzPP1sy
-X-Proofpoint-ORIG-GUID: 1sPoIAR6C65FD0lVjBL4uL4DUAzPP1sy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-23_12,2023-03-23_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0
- adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=684 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230141
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323040729.145154-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use generic mbox_bind_client() to bind omap mailbox channel to a client.
+On Thu, Mar 23, 2023 at 12:07:29PM +0800, Zqiang wrote:
+> I have spent about two years studying and contributing to RCU,
+> and sharing RCU-related knowledge within my team, if possible,
+> please consider me as R ;-).
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-mbox_bind_client is identical to the replaced lines, except that it:
- - Does the operation under con_mutex which prevents possible races in
-   removal path
- - Sets TXDONE_BY_ACK if omap uses TXDONE_BY_POLL. omap uses
-   TXDONE_BY_IRQ, so this check is not applicable.
- - Calls chan->mbox->ops->startup, if available. omap doesn't have, so
-   this is not applicable.
+I am pulling this and the one adding Boqun for 6.4 based on discussion with Paul.
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- drivers/mailbox/omap-mailbox.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+Congrats. ;-)
 
-diff --git a/drivers/mailbox/omap-mailbox.c b/drivers/mailbox/omap-mailbox.c
-index 098c82d87137..dfe82a5ff403 100644
---- a/drivers/mailbox/omap-mailbox.c
-+++ b/drivers/mailbox/omap-mailbox.c
-@@ -417,8 +417,6 @@ struct mbox_chan *omap_mbox_request_channel(struct mbox_client *cl,
- 	struct device *dev = cl->dev;
- 	struct omap_mbox *mbox = NULL;
- 	struct omap_mbox_device *mdev;
--	struct mbox_chan *chan;
--	unsigned long flags;
- 	int ret;
- 
- 	if (!dev)
-@@ -441,23 +439,11 @@ struct mbox_chan *omap_mbox_request_channel(struct mbox_client *cl,
- 	if (!mbox || !mbox->chan)
- 		return ERR_PTR(-ENOENT);
- 
--	chan = mbox->chan;
--	spin_lock_irqsave(&chan->lock, flags);
--	chan->msg_free = 0;
--	chan->msg_count = 0;
--	chan->active_req = NULL;
--	chan->cl = cl;
--	init_completion(&chan->tx_complete);
--	spin_unlock_irqrestore(&chan->lock, flags);
--
--	ret = chan->mbox->ops->startup(chan);
--	if (ret) {
--		pr_err("Unable to startup the chan (%d)\n", ret);
--		mbox_free_channel(chan);
--		chan = ERR_PTR(ret);
--	}
-+	ret = mbox_bind_client(mbox->chan, cl);
-+	if (ret)
-+		return ERR_PTR(ret);
- 
--	return chan;
-+	return mbox->chan;
- }
- EXPORT_SYMBOL(omap_mbox_request_channel);
- 
--- 
-2.39.2
+thanks,
 
+ - Joel
+
+
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8d5bc223f305..b304d3c7b45b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17642,6 +17642,7 @@ R:	Steven Rostedt <rostedt@goodmis.org>
+>  R:	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>  R:	Lai Jiangshan <jiangshanlai@gmail.com>
+>  R:	Joel Fernandes <joel@joelfernandes.org>
+> +R:	Zqiang <qiang1.zhang@intel.com>
+>  L:	rcu@vger.kernel.org
+>  S:	Supported
+>  W:	http://www.rdrop.com/users/paulmck/RCU/
+> -- 
+> 2.25.1
+> 
