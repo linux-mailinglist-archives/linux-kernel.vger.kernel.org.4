@@ -2,192 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07096C68DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B066C68DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbjCWMu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S231952AbjCWMve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjCWMu5 (ORCPT
+        with ESMTP id S229738AbjCWMvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:50:57 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4012E26C36;
-        Thu, 23 Mar 2023 05:50:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VXW8Yg7X0Gcr12xUIz4+SK7LPDzzH9omhdaxUu8g3vPAB4LSfbN2oC441ao0ImdHNRPLMpQqvOSla7xSOw5WKp1T6zl3YliHZozuLtYpUzHKxDBwbej8M414oXUfXDZo/C715wKDEwvYeHP7mTnU0LCYn6hacsZIJ2v74FD2W6lvUWjKvXZdJylI0N0QsboL0lrGvqMZNB09zhiFyOj+uz8lK/rz5aU/AReQlUeSJAE7ZX0BDeOaVib0icPHM4OnwT+33RN0kcqjSrRfvQA5k9eAgxnKNwXpAvuiaQqCR2Yt6fSJE72NL4Hwv9AUAANer8Dnhkl+8g+OY8ieSBOhXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1DxY/plbPjFN9UNy2Q0QIl23W9JdAqjVnWMxO95S6bY=;
- b=PMIZ2z1yf3A4gNK39qyL7UQal+b5UW9fFF0fCMHrhQ2Wd0iOMmnapiQpIB+bFwuLRmA/8P4Ev/qSs6kG6EbTDShJVXEFfj8gKoaaSyqB+xF8YtMPJwH/VqsXz0egbr4Hb9aZckO8w/ySxNQI40HR4bQEJYMr6rVT3QcSQQ923TzB4nu2VdpTcY3AweEFM5GGNBZGdRaU+s+fz8VduZX4jYPG3J4lHESThlDC43Jdjf8ZQ5zCLEbtoAdOr6KEhZBsO4EvkkyslHoqROnCkn/HLauMlOdlmxbfLI91GuCs/3NLYO9wrzo9gWd4lM5FTKIqcfVq8V5Uvi/Rlxn1z8zs/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1DxY/plbPjFN9UNy2Q0QIl23W9JdAqjVnWMxO95S6bY=;
- b=suzs4OvscKaatTvD6F/tSLpgmGOfnIqg+8wAcS2fBEypsmAErSXmOhawmL1mlXjvMfGJ4qYMgHrIN3hPgJAHTUoK2aZGPhZ3bvXyWZQAxYXAoS7PQ20tKarAd0ZlxOs1VgNTDyC/ZZsKkkpxMAyStkfNn4UiIyXGwUJAkeM1KJ5M4TImun3NGsOLkkyXZ4cw8JJeIOQlPjUwe15p42qOersfvrTA5y8zVDYmLNQ/qR9ASmuuWICOtcLDjZD5jHgVAhPgLLHavsGDPVTd9p7YU9HKdwSwpOY77IiAC6UjilXjNXw8ixwUhr+I4tBYExBp4PxZ/yeSV51+DeDmHlsIRA==
-Received: from CY5PR14CA0008.namprd14.prod.outlook.com (2603:10b6:930:2::15)
- by BL1PR12MB5364.namprd12.prod.outlook.com (2603:10b6:208:314::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 12:50:53 +0000
-Received: from CY4PEPF0000C97A.namprd02.prod.outlook.com
- (2603:10b6:930:2:cafe::9e) by CY5PR14CA0008.outlook.office365.com
- (2603:10b6:930:2::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
- Transport; Thu, 23 Mar 2023 12:50:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000C97A.mail.protection.outlook.com (10.167.241.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.30 via Frontend Transport; Thu, 23 Mar 2023 12:50:52 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 23 Mar 2023
- 05:50:39 -0700
-Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 23 Mar
- 2023 05:50:29 -0700
-Message-ID: <3b1a1a8b-8113-6a80-1441-fb197fd992f0@nvidia.com>
-Date:   Thu, 23 Mar 2023 18:20:26 +0530
+        Thu, 23 Mar 2023 08:51:32 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5741C318
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:51:32 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b20so53121270edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679575890;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S7HvfwciuqSvsnKf4jcKZ3F5a7TDTuPwSv9a3Pc+zGg=;
+        b=Blvb+qIxtAHszQDyGJ9wWWfO62C7FWacM/wFm6iIcDCulFG692mp4FsLEdZEPE89Mj
+         fNJpuFFQdNBT8M0sfWgQcSnOnTfF41reSxE8Wblx3Ojk1if7jrs/X3hIgltkewYO/kmS
+         HWzlij8o9GTc/9ftjzuMl799AFLo65v8K7GrDoSjCFxdTWi32tpKTvLQutO4Vbm1qzBR
+         MzZVMVwDTzIbbvXMmN9Zcg5HacPBCjipEHWNTS1Jm8qkzWalzVVUtHq+TBEZ3JsKDieN
+         mklRzd3Ln6qNOXcXNwNdhLIZVsVLNWrf/aqpxkuyFrXO2Mm44W3DlZ+2uTLO6YrQx8iB
+         uhsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679575890;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7HvfwciuqSvsnKf4jcKZ3F5a7TDTuPwSv9a3Pc+zGg=;
+        b=EzLoIFaz4sIjryl6z3woPIikChWJoCO5OUPbbTnL2Wr05yxqh8rayHxEPr4cGhoDz3
+         LIujNeCrmLY91oJpE6hekggWDCvqWITeYduy74utk67A14o0ElyrCs8fTQzghiF08hWB
+         y1m2n3N9y5vteyqeSzQeJljXC2B46cZNcVUZwzy0Bh90AVb39+fu54liiQDgpByAX4Op
+         CSWymPX65WHqjtx7skCGjGjpfJvxHSnSGSiUNOfRD1d3p/lKWKPr2+UUYcQ/ECgscYgB
+         10jhGgtPIu2cG/l8T5m1NgmUBs5dJ98r/1hagEzUz5xGLvLFYs0eMBtMfT9sIlS/6vDW
+         FXFg==
+X-Gm-Message-State: AO0yUKWI1/er1z1Uur4qRkVtK4qHdpcn9crQgy2FFf9N57HH+Ia9Syo8
+        MutJn5xVGo9OHBPjuN/ru5Hl8Dwg4PiBZ7zA
+X-Google-Smtp-Source: AK7set9qXDi2SIgHgRXCuy4IkvI498IWpPdrcCUJ7fAtaWYPEZA0YvZ7hvjBwgihQmASGTvumocF0A==
+X-Received: by 2002:a17:906:ce5c:b0:933:4184:f0d7 with SMTP id se28-20020a170906ce5c00b009334184f0d7mr11469572ejb.69.1679575890296;
+        Thu, 23 Mar 2023 05:51:30 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.14.14])
+        by smtp.gmail.com with ESMTPSA id 22-20020a170906309600b0092f289b6fdbsm8587430ejv.181.2023.03.23.05.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 05:51:29 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 17:51:27 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+        Christian Gromm <christian.gromm@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] staging: most: fix line ending with '(' in dim2
+Message-ID: <ZBxLT4w0cKZ/aOZo@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set
- bandwidth
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        kernel test robot <lkp@intel.com>, <treding@nvidia.com>,
-        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>
-CC:     <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
-        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
-        <ishah@nvidia.com>, <bbasu@nvidia.com>,
-        Sumit Gupta <sumitg@nvidia.com>
-References: <20230320182441.11904-8-sumitg@nvidia.com>
- <202303211551.eBLRqnv0-lkp@intel.com>
- <dcf8b1a9-d0e3-510f-8dc3-5ef9eebb0696@nvidia.com>
- <5e0bb728-1cdd-6c16-b096-eb0934effe94@linaro.org>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <5e0bb728-1cdd-6c16-b096-eb0934effe94@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97A:EE_|BL1PR12MB5364:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0013c3f6-84eb-4334-4d7f-08db2b9d3c5a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cm0h+iofzQ7qkL89LZYQegCZyfQnk3VdeGLS4eSnochqEQCuh8B/KZ5Q7YvZYP+XC/nTwcKQ37mKVdqQ76lBcH8rXMb4Hmmm3Oef6/0944tgNgXigM/yxX96eZle3dKKEby/TkAQh3cgDv7nzKCaXwJs9yIqd3n7uUG63oHaL2zaV68GEMNThYUIumBMslpslF6qOTwNum9cTB7MF7eE9GYdXutT82/nImGLJkU2z9Bi4stmWtuhyRMU/sivziWGvHHmYoC8T+QRazRhG6XzpE/B3s8LgknS0iiNxH19cvxlaElNybkesT27/dnqhsNIKvhUkS0Vhfo3gkDRjZlQQ4LGyATVFL2XVEmL0EKvw2oSQwTqbDxvKpHrXWLsQkAE7Caqy6w4Dt8b1PXa6M+6PTE7Kr/hoSt2bJyXXjXs76Nfwu7MRd3ub6o5SV/nGa/rkTSKKTS5E9zf8e7My3LmftywGGWXDrovq18JgkckGwCC3+9w+pnRX1J/gih6DxdVQ30z4aw0LloYFcdtrdcOHcovkEInxpcfirR4SQ6uloTgiwRyhV5K6iaX2CKhvlW1t0FDQhZXyF0aUntmDXssLFR0IVQ7fN23AYALz9X0CyAbhkhcDjIChTXcfLcTePSKDDdygEz0R1jrcU62bAlqtviTAUCUEvS+MBNbfutGbDGCgNNmzu9hxvVtF6AbV/FZU7VyAQK9i7TSJcA0TwWipZiVN1F2stHI0hvARQnG5UlvXb6iV3AaOXsrC6HCqVjn/i7jYpRMsHEdCKi4w83dT2CaeFqR6mscFi2fJ2GIg9eMK4yNkNhSPp6oRfDFNKajfVTDroezkaMgFXFXUrL95tEaV63bcf6gT9yP3vcMOVc=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(396003)(136003)(451199018)(46966006)(40470700004)(36840700001)(31686004)(356005)(40480700001)(2906002)(40460700003)(83380400001)(478600001)(966005)(2616005)(336012)(186003)(16526019)(86362001)(31696002)(82310400005)(36756003)(316002)(16576012)(110136005)(54906003)(70206006)(8676002)(36860700001)(4326008)(70586007)(8936002)(426003)(47076005)(107886003)(6666004)(53546011)(26005)(7636003)(5660300002)(7416002)(41300700001)(82740400003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 12:50:52.3905
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0013c3f6-84eb-4334-4d7f-08db2b9d3c5a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97A.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5364
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Splitting function header to multiple lines because of 80 characters per
+line limit, results in ending the function call line with '('.
+This leads to CHECK reported by checkpatch.pl
 
+Move the function parameters right after the '(' in the function call
+line. Align the rest of the parameters to the opening parenthesis.
 
-On 22/03/23 23:21, Krzysztof Kozlowski wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 21/03/2023 12:49, Sumit Gupta wrote:
->>
->>
->> On 21/03/23 13:06, kernel test robot wrote:
->>> External email: Use caution opening links or attachments
->>>
->>>
->>> Hi Sumit,
->>>
->>> Thank you for the patch! Perhaps something to improve:
->>>
->>> [auto build test WARNING on robh/for-next]
->>> [also build test WARNING on krzk-mem-ctrl/for-next pci/next pci/for-linus]
->>> [cannot apply to tegra/for-next rafael-pm/linux-next linus/master v6.3-rc3 next-20230321]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
->>> patch link:    https://lore.kernel.org/r/20230320182441.11904-8-sumitg%40nvidia.com
->>> patch subject: [Patch v3 07/11] cpufreq: tegra194: add OPP support and set bandwidth
->>> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230321/202303211551.eBLRqnv0-lkp@intel.com/config)
->>> compiler: aarch64-linux-gcc (GCC) 12.1.0
->>> reproduce (this is a W=1 build):
->>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>           chmod +x ~/bin/make.cross
->>>           # https://github.com/intel-lab-lkp/linux/commit/fa31f117302fc7c15b5d9deeefb8c650554f503d
->>>           git remote add linux-review https://github.com/intel-lab-lkp/linux
->>>           git fetch --no-tags linux-review Sumit-Gupta/firmware-tegra-add-function-to-get-BPMP-data/20230321-024112
->>>           git checkout fa31f117302fc7c15b5d9deeefb8c650554f503d
->>>           # save the config file
->>>           mkdir build_dir && cp config build_dir/.config
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/cpufreq/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Link: https://lore.kernel.org/oe-kbuild-all/202303211551.eBLRqnv0-lkp@intel.com/
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>>> drivers/cpufreq/tegra194-cpufreq.c:397:5: warning: no previous prototype for 'tegra_cpufreq_init_cpufreq_table' [-Wmissing-prototypes]
->>>        397 | int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
->>>            |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>
->> Thank you for the report.
->>
->> Adding static to the function prototype fixes the warning.
->> Can we please squash the below change (or) please let me know if i need
->> to re-send the patch.
-> 
-> You must send new version which does not have warnings. The best if you
-> also build test your code before sending (it's kind of obvious except
-> that it is not).
-> 
-> Best regards,
-> Krzysztof
-> 
+Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+---
+ drivers/staging/most/dim2/hal.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Sorry, missed checking with "W=1". Will take care in v4.
-
-Thanks,
-Sumit
+diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
+index a5d40b5b138a..6abe3ab2b2cf 100644
+--- a/drivers/staging/most/dim2/hal.c
++++ b/drivers/staging/most/dim2/hal.c
+@@ -346,9 +346,8 @@ static void dim2_clear_ctram(void)
+ 		dim2_clear_ctr(ctr_addr);
+ }
+ 
+-static void dim2_configure_channel(
+-	u8 ch_addr, u8 type, u8 is_tx, u16 dbr_address, u16 hw_buffer_size,
+-	u16 packet_length)
++static void dim2_configure_channel(u8 ch_addr, u8 type, u8 is_tx, u16 dbr_address,
++				   u16 hw_buffer_size, u16 packet_length)
+ {
+ 	dim2_configure_cdt(ch_addr, dbr_address, hw_buffer_size, packet_length);
+ 	dim2_configure_cat(MLB_CAT, ch_addr, type, is_tx ? 1 : 0);
+-- 
+2.34.1
 
