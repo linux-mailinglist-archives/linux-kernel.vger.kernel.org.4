@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808AA6C5E7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8A96C5E83
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCWFKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S230086AbjCWFLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCWFKV (ORCPT
+        with ESMTP id S229843AbjCWFL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:10:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B951EFC6;
-        Wed, 22 Mar 2023 22:10:20 -0700 (PDT)
+        Thu, 23 Mar 2023 01:11:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4472C2CC53;
+        Wed, 22 Mar 2023 22:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E34BE623EB;
-        Thu, 23 Mar 2023 05:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4EACFC433A4;
-        Thu, 23 Mar 2023 05:10:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AD854CE201F;
+        Thu, 23 Mar 2023 05:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29C5C433EF;
+        Thu, 23 Mar 2023 05:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679548219;
-        bh=5Ci4fSBv262mq9/QZFWd0DUIJ/u9QOz238jcTR8fk6o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Bvj9SbxQ6L/c2Hep6dSUcxDaWgZbzeD4MrLaxXXtwrmcKF+rdkJhbtkpIOjIuLgRd
-         pslep+HX+h7d+0iMNOe/ymZiyYYGJvyOh7ih3RTL/+XX6tXp4LKqt8/fI9kdquCxVV
-         i7gXi0jVjcOd9H3ogDBYVcWV1Ojorosvx+GF4F8ECoruEAjAhVNQgl7XBvUvmiIgZP
-         ya/eRzIwe6Qo6u0EYnY6nO++GpmaC1P8R6JU1Pfw0tziJhijI60Ta0OR07Xa6y56NN
-         GeHDNcKpFYtYD9KhAt37BlQdrYvwDdgikmWTmyjGrLMvNeUYusjLWEeWkHDoO5xZRC
-         sGbOdTpRL0vKg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 355B4E4F0D7;
-        Thu, 23 Mar 2023 05:10:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1679548272;
+        bh=fVqUN29p/Hv8Pi5OCwM2X5y2k52PxnaMlxks8rgWa78=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=uyzqjg+4N7IJmP9rMbVpXdIuJICEiJLj4uPozBUocqCAOCdAZCkjPUktWDUSQiv+L
+         QiA4lihVU+ya3tF31eDfi0gWhvlJdGhWtf3U3/v5P8bSuVuBx8MLdb1gTedzdNKXxW
+         0WKD28NcbDRWhBI+J522Gq4i+a3CPCXAu0x5aXQqjjocq5sNuy+Jaq++5S87XyxcIq
+         b0izdzpJiOVDAuydfJHFESBoQrd7xDrS34nncNfV+bdIUoiaC/OS8TgdTNQQjObPko
+         s0qk6OZHAgkknNF0baZfkYv2cAZGqRxYmEZVp3hS2LcOwA5ukqiHwvQd/bl/l3Nf0B
+         H5Q4/XxFtvXkg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 82F341540398; Wed, 22 Mar 2023 22:11:12 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 22:11:12 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Message-ID: <43b7534f-15ee-4cd7-a205-fa16fdb1ab14@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230323144411.0edde523@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] liquidio: remove unused IQ_INSTR_MODE_64B function
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167954821921.28676.7103831036112762133.git-patchwork-notify@kernel.org>
-Date:   Thu, 23 Mar 2023 05:10:19 +0000
-References: <20230321184811.1827306-1-trix@redhat.com>
-In-Reply-To: <20230321184811.1827306-1-trix@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323144411.0edde523@canb.auug.org.au>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,28 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 21 Mar 2023 14:48:11 -0400 you wrote:
-> clang with W=1 reports
-> drivers/net/ethernet/cavium/liquidio/request_manager.c:43:19: error:
->   unused function 'IQ_INSTR_MODE_64B' [-Werror,-Wunused-function]
-> static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
->                   ^
-> This function and its macro wrapper are not used, so remove them.
+On Thu, Mar 23, 2023 at 02:44:11PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> [...]
+> The following commit is also in the mm tree as a different commit (but
+> the same patch):
+> 
+>   d70e2ecbc726 ("instrumented.h: Fix all kernel-doc format warnings")
+> 
+> This is commit
+> 
+> in the mm tree
+> 
+>   fa7596e30b4f ("instrumented.h: fix all kernel-doc format warnings")
+> 
+> (and tommorow it will be commit
+> 
+>   ce5e77e7b2cc ("instrumented.h: fix all kernel-doc format warnings")
+> 
+> in the mm tree)
 
-Here is the summary with links:
-  - liquidio: remove unused IQ_INSTR_MODE_64B function
-    https://git.kernel.org/netdev/net-next/c/603c3345589d
+Andrew, do you want to keep this one, or would you rather that I carry it?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I am good either way.
 
-
+							Thanx, Paul
