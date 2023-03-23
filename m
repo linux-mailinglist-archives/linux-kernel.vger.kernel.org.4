@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9436C6827
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3795B6C6833
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjCWMYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S231360AbjCWMZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjCWMYk (ORCPT
+        with ESMTP id S231376AbjCWMYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:24:40 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F5E2106;
-        Thu, 23 Mar 2023 05:24:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 64F76420CF;
-        Thu, 23 Mar 2023 12:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1679574277;
-        bh=evK26XP+VWwN+ankkNlXWjHyFQ7pC9PLQ5q3VGomw9U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=t02o3GeQPXL0bByZ8BwP4gEYEhQCU8L9pPgT5HtN9qmkj8W437StJDAGC10zyWenZ
-         5RN4UI3G6/pRAhpEkopeB9oDY9d3ELPgmzmovmA4VX6EzjJD/FSAMQr5ADEEEFrRN5
-         A+DhqvArcDpZUk2u7FZwJ1TwbXD0GsxlBrftOJlOyCz4fyQyrvB1RO/kFLBlwkjorl
-         3b2/epzJ/+t/msptCCSKLsjMPndnx+ZlDfrHx+i100jAT7GYLdZog9LP7bdgKk0Dz3
-         KnjcNHkgkwro0oZ7W3NvXM43fuO2UKLtcJnntu3S6qfDecw+FET616stujadtu6LO+
-         7I0eGTKRwpM1g==
-Message-ID: <1fad33a2-cba4-8ae9-0966-67ea24177149@asahilina.net>
-Date:   Thu, 23 Mar 2023 21:24:31 +0900
+        Thu, 23 Mar 2023 08:24:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABCC26CFA;
+        Thu, 23 Mar 2023 05:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679574286; x=1711110286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=hdELLoi3Y38QEaItXzUyqQG5Ep4EpLLrnUbgP0dSIQs=;
+  b=ChSx1ZvdBGeMrvclGTBA/VlGL/X8XU1A4+F2ft3lQHAydbc6c0cN+9In
+   XuaRYoBVneFxA6oG37hmHgwu3FUmHRI4DjV90GtGXxuj2zWJFOv6gzCSk
+   gWKuAgoBflpJ7yKb6AThHusLFiJ0FBKJOJHcBUiru3PdTUQo57UXvDk0r
+   M+TFu53c4nC3845VP06+A6rNdJZhlAUw4PEdoeGN/sgL8QSrnDL59OuFh
+   7QW2sQ94QVFMs/uUjH0SuRiwvXP/xqRibbpUmPMbMm+ViNlm6ejyJ164v
+   UjSNQVbWyATlcNgVUQ98894/6yYeUnOUmIhn398BAfJn4gxZmlQ1o2+/N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319859561"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="319859561"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 05:24:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="793000027"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="793000027"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Mar 2023 05:24:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pfJzn-007VQ1-14;
+        Thu, 23 Mar 2023 14:24:43 +0200
+Date:   Thu, 23 Mar 2023 14:24:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH v1 2/2] ACPI: SPCR: Amend indentation
+Message-ID: <ZBxFC6prEE5p4Wu1@smile.fi.intel.com>
+References: <20230322102258.27390-1-andriy.shevchenko@linux.intel.com>
+ <20230322102258.27390-2-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0imGNb8pETxdJmjJ9cSJQedeb=w2dcG6huDB=SpL-ufqA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] rust: ioctl: Add ioctl number manipulation functions
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-References: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
- <56a3e16e-d686-440e-86b7-ee41f9d19fb1@app.fastmail.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <56a3e16e-d686-440e-86b7-ee41f9d19fb1@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0imGNb8pETxdJmjJ9cSJQedeb=w2dcG6huDB=SpL-ufqA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,27 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 21.18, Arnd Bergmann wrote:
-> On Thu, Mar 23, 2023, at 13:08, Asahi Lina wrote:
->> Changes in v2:
->> - Changed from assert!() to build_assert!() (static_assert!() can't work here)
-> ...
->> +/// Build an ioctl number, analogous to the C macro of the same name.
->> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
->> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
->> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
->> +    core::assert!(nr <= bindings::_IOC_NRMASK);
->> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
+On Wed, Mar 22, 2023 at 07:50:55PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Mar 22, 2023 at 11:26 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+
+...
+
+> > 2) Remove double spaces for consistency.
 > 
-> Just to make sure: did you actually change it according
-> to the changelog? It still looks like a runtime assertion
-> to me, but I don't really understand any rust.
+> I don't quite agree with this.
+> 
+> Double spaces after a period are recognized as end-of-sentence markers
+> by some editors (notably vi), so if they have been used intentionally,
+> I see no reason to replace them.
 
-Umm... I'm not sure what happened there.
+For the sake of consistency. There places in very same file which do not
+follow this. I can invert and add a space to the rest. Do you prefer that?
+The reasoning will be kept the same, though.
 
-Sorry, I'll resend it. I ran into some unrelated pain with bindgen 
-versions while trying to compile-test this, and along the way I must 
-have somehow dropped the actual v2 change...
+-- 
+With Best Regards,
+Andy Shevchenko
 
-~~ Lina
 
