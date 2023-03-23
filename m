@@ -2,96 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1016C6999
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592476C69A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjCWNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S231718AbjCWNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjCWNey (ORCPT
+        with ESMTP id S231571AbjCWNg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:34:54 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EC528D04
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:34:51 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id v4-20020a05600c470400b003ee4f06428fso1111553wmo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:34:51 -0700 (PDT)
+        Thu, 23 Mar 2023 09:36:26 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C92917C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:36:22 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id ek18so86680064edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:36:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679578489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qo6P5WDnhoMfi3lKTlvIX6M6cZHaujHpVvQIbrEWH0Y=;
-        b=j9Fm4p2c81n9IIu0neqEAPqcST5ZuZprU3xOybNhBR5T3b1LoR0wrL01Y9VHUJJjWy
-         2tR59ZZ4TiorD7up6HQ+SFtDPdfM2n3dd3bGhrqRo7YCE1RK3b8lSmOQXmjuybSjAHfm
-         K2fsgq1i5r1Kx32/gCMmBQE5klSMRbT1Kp+/SuG6jHzeixlwIMdMGhMKi0pL3pqsFTqx
-         maniGPfFSvW6IeNOWXHLWu3o4Bkj0PcP25+Dw3MWkZcbvHALl7njDrwA+bO2SBinGPh5
-         asxt7PbSXJkWp7RL1kshG2CLGV01QS9HfkO60sqIbQXQaEfyzyesod5qvshbxkqu0INP
-         SMsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679578489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1679578580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qo6P5WDnhoMfi3lKTlvIX6M6cZHaujHpVvQIbrEWH0Y=;
-        b=WYLdaPZbSJeWn37kjLFZ/luGBZCu5p7pak5TPOu1utMShWbLcr8SSkIWs89Q+UmpZ5
-         uimCdb/0vih5veTMVyWV2emQCglFdXby7V5bqmKIC6CT8KVzKWh0kAZ2hvylDpzIz/Wn
-         QHw/e2fCfxjyJaeElsRpkzn/ed6zKxC98sQI0s3ZMSWIL6FXWQFq29rqJjlb9gCspXcN
-         i2/Ob4GCXoyCWcYW28GkQHxXChFIXCSJdy/QGiCVK43QTi4iqcztU8w9NqdsFZ+M0bQx
-         5PBCPPV/t/ELisxPa+E7Rpiul0ccEarCA48nT7D6IWm4ohVycwdsuW93IeNMiaANo0wy
-         Da5w==
-X-Gm-Message-State: AO0yUKXwwor2kqSaZKDDZ3X+jpjjVdbmQQBizR+sL4QFJSHe1d/Sh7Vx
-        /ctvHvjS75M90ii0B4sMNZ4=
-X-Google-Smtp-Source: AK7set9alsrOQ0GuGSNJ+hEsgcjZ26COmLBvvu3y32blCStZkGuBrJLqaf/DpmpQy5hOatwdZzCMTw==
-X-Received: by 2002:a05:600c:c85:b0:3ea:f883:53ea with SMTP id fj5-20020a05600c0c8500b003eaf88353eamr2485491wmb.7.1679578489513;
-        Thu, 23 Mar 2023 06:34:49 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003ed243222adsm1853621wmi.42.2023.03.23.06.34.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 06:34:49 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 16:34:43 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 0/4] staging: rtl8192e: code cleanup patches
-Message-ID: <090ee842-46d0-4f35-bf00-68a3e1393b72@kili.mountain>
-References: <cover.1679573474.git.kamrankhadijadj@gmail.com>
- <alpine.DEB.2.22.394.2303231408000.2866@hadrien>
- <alpine.DEB.2.22.394.2303231408410.2866@hadrien>
+        bh=EuE0cJjbmK+/BhJwvJMFWgBmHM9057+RC8AkvA4HkKU=;
+        b=DcDiKscPNUA4W1/GbdqN5BhxUIYoz9Wmqq3Xmd1C+DUMMpURN79kep/XyUMFs7O6WW
+         MdqSEoZEpJh6K1uDYGXqCYwtqPCRXnq1QLfTpNV4Eo1IgdgOLTpM3R2PdOsbI+hV2kfK
+         QVD9wZK3LA17mTvY76ITqoPHiau96K56j+TNrZ6a3QUQ5L79xAReQuBw7n00P8VHIWWm
+         neNib3URA3K2d5FtCKba9hlgjdkmZkjza+ySCPA7jYZFPPJYNEHu2p+u2TV4VmmjgEJS
+         llW6op2xvHlxZkcr/ECLM2jHofYIAEetci4tarDdc6n3marMfQcOD5Xx5wNyNvIJNjGD
+         lz0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679578580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EuE0cJjbmK+/BhJwvJMFWgBmHM9057+RC8AkvA4HkKU=;
+        b=7BH3la0WugTYxiDT6fb7BXqREfqKm2OokDRQUU90SjWJ6D9rGplixbaaycivBePNhx
+         PaYFzU8fQR8vJx0FwZCnCNLeMB0JFLCHDqaZPVz7p8ngSxX1h3K8+jYbneGXXcBZjl6V
+         zA/YASqThygCFpjbuiL4v807vGERrCnQIqUZm9MGYi4L4g5eARiVlZLsuDWtzZvwopLA
+         9jI35oeYE3Z0wsmpZz4/Q81YOQWJ46g6ZZeZilmvHtQ8duAnptGmNmh72Bs1Lih/KJXw
+         g4g3RPvHPDH3lf+qXuqpw4j73Pr47RTG5EXf1NJjSg2sR6HQ7VkoD95xtvqeZvtVuDOP
+         zAmA==
+X-Gm-Message-State: AO0yUKWCTO8svvLZ35u4Xq6IgjbDPQxNvyByzMl7w5AFAOsKaRiqGUfm
+        btqHi03tkQ9r1uRuyQEKHLHUdZZgq2pH9wa0OQW1RQ==
+X-Google-Smtp-Source: AK7set/b903mZdRoPNoYVhLFO+mUgHONws3mpu+Ax6aYZzzVndV1mWTWBDnS8VjbuXo0x7feM2DBl3f475JvT0qkzkM=
+X-Received: by 2002:a50:d4c5:0:b0:500:5463:35de with SMTP id
+ e5-20020a50d4c5000000b00500546335demr5382302edj.8.1679578580439; Thu, 23 Mar
+ 2023 06:36:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2303231408410.2866@hadrien>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+ <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com> <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+In-Reply-To: <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Mar 2023 06:35:44 -0700
+Message-ID: <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:08:58PM +0100, Julia Lawall wrote:
-> 
-> 
-> On Thu, 23 Mar 2023, Julia Lawall wrote:
-> 
+On Wed, Mar 22, 2023 at 11:33=E2=80=AFPM Shakeel Butt <shakeelb@google.com>=
+ wrote:
+>
+> On Wed, Mar 22, 2023 at 10:15=E2=80=AFPM Yosry Ahmed <yosryahmed@google.c=
+om> wrote:
 > >
+> [...]
+> > > Couple of questions:
+> > >
+> > > 1. What exactly is cgroup_rstat_lock protecting? Can we just remove i=
+t
+> > > altogether?
 > >
-> > On Thu, 23 Mar 2023, Khadija Kamran wrote:
+> > I believe it protects the global state variables that we flush into.
+> > For example, for memcg, it protects mem_cgroup->vmstats.
 > >
-> > > Fix several cleanup issues reported by checkpatch.pl in module
-> > > staging/rtl8192e in file rtllib_rx.c
-> >
-> > Why is it resent?
-> 
-> OK, I see, sorry for the noise.
+> > I tried removing the lock and allowing concurrent flushing on
+> > different cpus, by changing mem_cgroup->vmstats to use atomics
+> > instead, but that turned out to be a little expensive. Also,
+> > cgroup_rstat_lock is already contended by different flushers
+> > (mitigated by stats_flush_lock on the memcg side). If we remove it,
+> > concurrent flushers contend on every single percpu lock instead, which
+> > also seems to be expensive.
+>
+> We should add a comment on what it is protecting. I think block rstat
+> are fine but memcg and bpf would need this.
 
-I'm still confused...  :P
+I think it also protects the cpu base stats flushed by cgroup_base_stat_flu=
+sh().
 
-regards,
-dan carpenter
+I will add a comment in the next version.
 
+>
+> >
+> > > 2. Are we really calling rstat flush in irq context?
+> >
+> > I think it is possible through the charge/uncharge path:
+> > memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage(). I
+> > added the protection against flushing in an interrupt context for
+> > future callers as well, as it may cause a deadlock if we don't disable
+> > interrupts when acquiring cgroup_rstat_lock.
+> >
+> > > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() is only
+> > > done for root memcg. Why is mem_cgroup_threshold() interested in root
+> > > memcg usage? Why not ignore root memcg in mem_cgroup_threshold() ?
+> >
+> > I am not sure, but the code looks like event notifications may be set
+> > up on root memcg, which is why we need to check thresholds.
+>
+> This is something we should deprecate as root memcg's usage is ill define=
+d.
+
+Right, but I think this would be orthogonal to this patch series.
+
+>
+> >
+> > Even if mem_cgroup_threshold() does not flush memcg stats, the purpose
+> > of this patch is to make sure the rstat flushing code itself is not
+> > disabling interrupts; which it currently does for any unsleepable
+> > context, even if it is interruptible.
+>
+> Basically I am saying we should aim for VM_BUG_ON(!in_task()) in the
+> flush function rather than adding should_skip_flush() which does not
+> stop potential new irq flushers.
+
+I wanted to start with VM_BUG_ON(!in_task()) but I wasn't sure that
+all contexts that call rstat flushing are not in irq contexts. I added
+should_skip_flush() so that if there are existing flushers in irq
+context, or new flushers are added, we are protected against a
+deadlock.
+
+We can change should_skip_flush() to have a WARN_ON_ONCE(!in_task())
+to alert in this case. If you prefer removing should_skip_flush() and
+just adding VM_BUG_ON(!in_task()) we can do that, but personally I was
+not confident enough that we have no code paths today that may attempt
+flushing from irq context.
