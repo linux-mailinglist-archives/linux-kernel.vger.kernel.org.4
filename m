@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A926C6BF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD8A6C6BF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjCWPKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S231976AbjCWPMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjCWPKt (ORCPT
+        with ESMTP id S231524AbjCWPMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:10:49 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DB428215
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:09:51 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id w25so4295066qtc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:09:51 -0700 (PDT)
+        Thu, 23 Mar 2023 11:12:07 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6979319C44;
+        Thu, 23 Mar 2023 08:11:35 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id k37so15252806lfv.0;
+        Thu, 23 Mar 2023 08:11:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679584181;
+        d=gmail.com; s=20210112; t=1679584291;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tb1BxFDMWIwYyE3mGYT4kIpa6dwDU7IN2Q3Lg+kVDaU=;
-        b=Ebzo+rx6WkXL2yPi+RAyOVTZV4s2Ap4yztsDrMTjIwFdNFp5i5x6mRi1t8L+cIIgn2
-         DiiXxWk0etnqtk88O/PZtQGZObhI0so0tih4bi7l7bxb/UmRQmXjKXKm6dab7gL+ZHYE
-         A3N6KwKH6AXjZTdMC1IGG2GSJ/mvsVCeP1rqVA3R1CYsjmA27fbnyHOOhsUjjQ+h9K2I
-         JJABexmxQ5+5njH4T8fe4VpCYPmlAS4w0aaKU0e2EBg5GoOVVMIM5AY9MtMHTvwnKbEr
-         uTMNUMhGzJKfFWSmESM4MwNu3bbMOynVKJ2HqvvCAtRE9LGX6sp8k3Wrrbs4JuNllD6F
-         hvLQ==
+        bh=09gF+ci4EZ7xKNHFBN4nQXrjScsnzrqt/YgXpgBpcd0=;
+        b=Mu76RFZOyAfrq9LEOuqynAliFMXq6UNacOyT2uAPTpnq5G3H+re0Cx4K/gGwiBMVIi
+         c/cB37JF5RoQfM4k+LLFb0flTYpNLJD1E9OqFxtJc9XNGb0f6Chyw3Ax/hYXAsgNQEmM
+         hPkLk/8WJgpOVjkfW2By4WK6f18UAW+IynBO9hIT17PcpBC79JaazKDFsOnZr2I104Mh
+         VSB05qI7RSyU3URsvUBR8qornl8zwj0iyQgPOIpbCqaq0vqoPbaClmMYGGUOgLuevuOT
+         kWOtDMygByiviB7puF3lgqpj2y4ovP3fvmPiV2jzjaRFe43U7jLJwRdZycaz7ztObeHH
+         B6Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679584181;
+        d=1e100.net; s=20210112; t=1679584291;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tb1BxFDMWIwYyE3mGYT4kIpa6dwDU7IN2Q3Lg+kVDaU=;
-        b=ObH5gcE1XGpmjx1puytx9tjHYzj50uJAtCe+BI8sF4mrtjNwNwY+gwa6jpvO760Qol
-         a5Svg22uA2gNFk8Z86Pamlg4oSiT1uqhXE9vLDN9FWo3IzxqzDNaRp8aa8XR+l+pdoJj
-         SQSDHScc+3mC7TuukAXk5bQsGJGOAsrW+ztTm6jNS/HmQ9gsK/I4qNtVGdOsdpL5jgo0
-         vLF2tJSfB1Ykh4f/+/szCX/ssuMSJ9nHFzOMsiDn7U+I6NbX50FoKgCrYUgHSny3/EAB
-         dB7KRtbWolEbkJsQiG3l7FxhkRRKe+AeqD+6SzPc6yXQnO2sRBCWYC7Qpnl7s7qbft2H
-         SD5Q==
-X-Gm-Message-State: AO0yUKVYdEJOiOvowtHW7x9dTsWMCysfgHDhhEDatg1w69J2XjlmrDhT
-        A6ujhG2CkiLg2VsaOL3o2/xmfA==
-X-Google-Smtp-Source: AK7set+ZusE2fmFm6/Avhfr7T0zw3l5ZYr9SvDabG59zJ1eq1hXswlFQZPpQ4C6OqSJmlfiW/hZNCA==
-X-Received: by 2002:a05:622a:1456:b0:3d4:17dc:3fed with SMTP id v22-20020a05622a145600b003d417dc3fedmr11131376qtx.46.1679584181015;
-        Thu, 23 Mar 2023 08:09:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id h23-20020ac85157000000b003b848759ed8sm11834276qtn.47.2023.03.23.08.09.40
+        bh=09gF+ci4EZ7xKNHFBN4nQXrjScsnzrqt/YgXpgBpcd0=;
+        b=jyklPVTD9e1NT+fbnv834QqdaGjqeJhnHEc2IdaXf1f1vThUcHZDqm4lH9ZNByDKuu
+         VGj3BTV5xb6M19zoUsaeLVZEZyz105QuA2Kq6Gtp0p4p8EBWtWqzsQagzUj4NfZV30br
+         FcWLEqjXnqO8nAdje1O5IaL0cG6EWWMhCjO5RT/mwNcs1K0jG1L2lSM/ebZZg4lmR4vQ
+         eGqGO8SHGG3JFDxoUSOqzKND6TiXrqmFQSMy4UHVhLg9cVCDqZo75mMfyxGyDaBq70O6
+         Y4rDLA2L69ImOw05ObZTuPxGqvVyQP13J5AzQMcdh5avxjcoKwKscd0iHucuoAp674DX
+         B92w==
+X-Gm-Message-State: AO0yUKUMh9fCpgAzme4oNJfcStit5L548xwiE3a/jd6xwHeY2zAht21a
+        7R2KYY6MHBNt9xtKpyb8lW8=
+X-Google-Smtp-Source: AK7set8+y6nFsaRhX1UdZartcuOV9lCKqA6Fzy/bfBfHkNjRTDXtDL4DUFOei4x0Jj1AQNWUtFdkzA==
+X-Received: by 2002:ac2:4c39:0:b0:4ea:e688:a04a with SMTP id u25-20020ac24c39000000b004eae688a04amr2864973lfq.66.1679584291452;
+        Thu, 23 Mar 2023 08:11:31 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id w19-20020ac24433000000b004eb00c0d417sm150066lfl.130.2023.03.23.08.10.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 08:09:40 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:09:39 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        surenb@google.com, brauner@kernel.org, chris@chrisdown.name
-Subject: Re: [PATCH v2 3/3] sched/psi: allow unprivileged polling of N*2s
- period
-Message-ID: <20230323150939.GA737760@cmpxchg.org>
-References: <20230323103350.40569-1-cerasuolodomenico@gmail.com>
- <20230323103350.40569-4-cerasuolodomenico@gmail.com>
+        Thu, 23 Mar 2023 08:10:47 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 18:10:22 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 15/16] dt-bindings: net: dwmac: Simplify MTL
+ queue props dependencies
+Message-ID: <20230323151022.q5h6rf3azbncfid3@mobilestation>
+References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
+ <20230313225103.30512-16-Sergey.Semin@baikalelectronics.ru>
+ <20230317205604.GA2723387-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323103350.40569-4-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230317205604.GA2723387-robh@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:33:50AM +0100, Domenico Cerasuolo wrote:
-> @@ -151,6 +151,14 @@ struct psi_trigger {
->  
->  	/* Deferred event(s) from previous ratelimit window */
->  	bool pending_event;
-> +
-> +	/* Used to differentiate destruction action*/
-> +	enum psi_aggregators aggregator;
-> +};
-> +
-> +struct trigger_info {
-> +	struct list_head triggers;
-> +	u32 nr_triggers[NR_PSI_STATES - 1];
->  };
->  
->  struct psi_group {
-> @@ -186,8 +194,7 @@ struct psi_group {
->  	struct mutex trigger_lock;
->  
->  	/* Configured polling triggers */
-> -	struct list_head triggers;
-> -	u32 nr_triggers[NR_PSI_STATES - 1];
-> +	struct trigger_info trig_info[NR_PSI_AGGREGATORS];
->  	u32 poll_states;
->  	u64 poll_min_period;
+On Fri, Mar 17, 2023 at 03:56:04PM -0500, Rob Herring wrote:
+> On Tue, Mar 14, 2023 at 01:51:02AM +0300, Serge Semin wrote:
+> > Currently the Tx/Rx queues properties interdependencies are described by
+> > means of the pattern: "if: required: X, then: properties: Y: false, Z:
+> > false, etc". Due to very unfortunate MTL Tx/Rx queue DT-node design the
+> > resultant sub-nodes schemas look very bulky and thus hard to read. The
+> > situation can be improved by using the "allOf:/oneOf: required: X,
+> > required: Y, etc" pattern instead thus getting shorter and a bit easier to
+> > comprehend constructions.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> > 
+> > Note the solution can be shortened out a bit further by replacing the
+> > single-entry allOf statements with just the "not: required: etc" pattern.
+> > But in order to do that the DT-schema validation tool must be fixed like
+> > this:
+> > 
+> > --- a/meta-schemas/nodes.yaml	2021-02-08 14:20:56.732447780 +0300
+> > +++ b/meta-schemas/nodes.yaml	2021-02-08 14:21:00.736492245 +0300
+> > @@ -22,6 +22,7 @@
+> >      - unevaluatedProperties
+> >      - deprecated
+> >      - required
+> > +    - not
+> >      - allOf
+> >      - anyOf
+> >      - oneOf
+> 
 
-Thanks for trying out this variant, but I think this is grouping up
-unrelated things, and that makes the code more difficult to understand
-and maintan.
+> This should be added regardless. Can you send a patch to devicetree-spec 
+> or a GH PR. But I'd skip using that here for now because then we require 
+> a new version of dtschema.
 
-The *only* thing that's shared between those two is the
-update_triggers() part. trig_info[PSI_AVGS] doesn't use trigger_lock.
-It also doesn't use poll_task, poll_wait, poll_wakeup, poll_scheduled,
-poll_min_period, polling_next_update and polling_until. All these
-things are specific to the rt polling thread.
+Ok. I'll send the patch to the devicetree-spec mailing list.
 
-The rename in the previous version is a bit churny, but it's justified
-in order to keep unrelated things separate / make it obvious which
-parts belong together, and who is reading and writing which fields.
+* Note meta-schemas/base.yaml will be fixed in the similar way.
 
-So my vote would be on the previous version.
+-Serge(y)
+
+> 
+> Rob
