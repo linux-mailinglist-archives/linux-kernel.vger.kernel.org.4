@@ -2,234 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E326C6A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429BA6C6A53
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCWOAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 10:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        id S231656AbjCWOAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjCWN76 (ORCPT
+        with ESMTP id S230109AbjCWOAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:59:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA84F29E3C;
-        Thu, 23 Mar 2023 06:59:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B10D34B3;
-        Thu, 23 Mar 2023 07:00:08 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 388833F6C4;
-        Thu, 23 Mar 2023 06:59:22 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 13:59:19 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Thu, 23 Mar 2023 10:00:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40692D69;
+        Thu, 23 Mar 2023 06:59:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EAEA626D8;
+        Thu, 23 Mar 2023 13:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DA7C433D2;
+        Thu, 23 Mar 2023 13:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679579967;
+        bh=Xx6aCo/KDs7Wn5LTuwfnYkfEn/pZE0mmK2yroXA82DE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kOu0OMCKTfmegNRaADT8nLtHPXaJEZF6CN+xiipR4gNzge+APePvjXTBMtCNsNj1j
+         iW/aEvOcQugIfybquBJS5jVv2R1cSU/zpGvfRW6AnA7AGCzxxDA9Xnt01B/5HXbv0e
+         q0dVwkAPRuvLhmuJFG6lTXtQVnvsoBdEpYroQ+hGncqE4z/A4OhYgNB1JOd02HCD14
+         9Vp65wHFkjeMuIgitZMPt3KAfETRrrpUrtkfKhuUKa/fpRG85EmHXYslCBd+EE7eYw
+         b31fhTQujwndov5Y2oplP7WVRKh1iVd9OtHMXNliLxv88pv8xcS5YknW58lBZtipcU
+         1hyxXdfxWo1Pg==
+Date:   Thu, 23 Mar 2023 13:59:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/3] regulator: axp20x: Add support for AXP313a
- variant
-Message-ID: <20230323135919.4e21f587@donnerap.cambridge.arm.com>
-In-Reply-To: <CAGb2v649yQVcNn7uv1eKtnEDnb=D4X9yGYB1eOC3zeAe+encFg@mail.gmail.com>
-References: <20230120184500.1899814-1-martin.botka@somainline.org>
-        <20230120184500.1899814-4-martin.botka@somainline.org>
-        <CAGb2v649yQVcNn7uv1eKtnEDnb=D4X9yGYB1eOC3zeAe+encFg@mail.gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v2 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+Message-ID: <75a40be0-8eaa-4c9b-87dc-382c2a2af439@sirena.org.uk>
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-3-zhuyinbo@loongson.cn>
+ <68b6034f-8305-4854-a4c9-962be988ade7@sirena.org.uk>
+ <9b7aff76-eff4-3b82-d7af-a723fbf21a32@loongson.cn>
+ <9917d619-1104-4040-bb6f-c564fcf72806@sirena.org.uk>
+ <5c281b1a-b6a7-c62e-6247-5d82ebd5e0d6@loongson.cn>
+ <f7811b40-80a3-4985-b92d-1df3e28a0935@sirena.org.uk>
+ <2337f45f-c513-1b10-ccfc-766363c5fd02@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hopd+e5dk7Smme6h"
+Content-Disposition: inline
+In-Reply-To: <2337f45f-c513-1b10-ccfc-766363c5fd02@loongson.cn>
+X-Cookie: A lie in time saves nine.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 Jan 2023 01:24:18 +0800
-Chen-Yu Tsai <wens@csie.org> wrote:
 
-Hi,
+--hopd+e5dk7Smme6h
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Sat, Jan 21, 2023 at 2:45 AM Martin Botka
-> <martin.botka@somainline.org> wrote:
-> >
-> > The AXP313a is your typical I2C controlled PMIC, although in a lighter
-> > fashion compared to the other X-Powers PMICs: it has only three DCDC
-> > rails, three LDOs, and no battery charging support.
-> >
-> > The AXP313a datasheet does not describe a register to change the DCDC
-> > switching frequency, and talks of it being fixed at 3 MHz. The BSP
-> > driver hints at a register being able to change that, but we haven't
-> > verified that, so leave that one out. It can be added later, if needed
-> > and/or required.  
-> 
-> The datasheet released by MangoPi says this isn't configurable. The
-> thing that is configurable is spread-spectrum operation, and mode
-> switching between fixed PWM and hybrid PFM/PWM. So just drop the
-> DCDC frequency stuff and use the default code path.
+On Thu, Mar 23, 2023 at 08:46:19PM +0800, zhuyinbo wrote:
 
-The default code path is fatal to the driver, so we can't really do this.
-axp20x_set_dcdc_freq is *always* called, even when the property is missing,
-in this case the frequency will just be 0.
-If we don't specify the variant ID in the switch/case, we get an error and
-the driver bails out with -EINVAL.
-So the minimal implementation would be:
-	case AXP313A_ID:
-		return 0;
-To be a bit more robust and catch cases where people try to specify some
-DCDC frequency, I added this extra check for 3MHz or 0 (no property).
+> I think add following change and that issue what you said will can be
+> fixed,=A0=A0 in addition, the spin_lock
 
-> > The third LDO, RTCLDO, is fixed, and cannot even be turned on or off,
-> > programmatically. On top of that, its voltage is customisable (either
-> > 1.8V or 3.3V), which we cannot describe easily using the existing
-> > regulator wrapper functions. This should be fixed properly, using
-> > regulator-{min,max}-microvolt in the DT, but this requires more changes
-> > to the code. As some other PMICs (AXP2xx, AXP803) seem to paper over the
-> > same problem as well, we follow suit here and pretend it's a fixed 1.8V
-> > regulator. A proper fix can follow later. The BSP code seems to ignore
-> > this regulator altogether.
-> >
-> > Describe the AXP313A's voltage settings and switch registers, how the
-> > voltages are encoded, and connect this to the MFD device via its
-> > regulator ID.
-> >
-> > Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > ---
-> >  drivers/regulator/axp20x-regulator.c | 60 ++++++++++++++++++++++++++++
-> >  1 file changed, 60 insertions(+)
-> >
-> > diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-> > index d260c442b788..3087bc98694f 100644
-> > --- a/drivers/regulator/axp20x-regulator.c
-> > +++ b/drivers/regulator/axp20x-regulator.c
-> > @@ -134,6 +134,11 @@
-> >  #define AXP22X_PWR_OUT_DLDO4_MASK      BIT_MASK(6)
-> >  #define AXP22X_PWR_OUT_ALDO3_MASK      BIT_MASK(7)
-> >
-> > +#define AXP313A_DCDC1_NUM_VOLTAGES     107
-> > +#define AXP313A_DCDC23_NUM_VOLTAGES    88
-> > +#define AXP313A_DCDC_V_OUT_MASK                GENMASK(6, 0)
-> > +#define AXP313A_LDO_V_OUT_MASK         GENMASK(4, 0)
-> > +
-> >  #define AXP803_PWR_OUT_DCDC1_MASK      BIT_MASK(0)
-> >  #define AXP803_PWR_OUT_DCDC2_MASK      BIT_MASK(1)
-> >  #define AXP803_PWR_OUT_DCDC3_MASK      BIT_MASK(2)
-> > @@ -638,6 +643,48 @@ static const struct regulator_desc axp22x_drivevbus_regulator = {
-> >         .ops            = &axp20x_ops_sw,
-> >  };
-> >
-> > +static const struct linear_range axp313a_dcdc1_ranges[] = {
-> > +       REGULATOR_LINEAR_RANGE(500000,   0,  70,  10000),
-> > +       REGULATOR_LINEAR_RANGE(1220000, 71,  87,  20000),
-> > +       REGULATOR_LINEAR_RANGE(1600000, 88, 106, 100000),
-> > +};
-> > +
-> > +static const struct linear_range axp313a_dcdc2_ranges[] = {
-> > +       REGULATOR_LINEAR_RANGE(500000,   0, 70, 10000),
-> > +       REGULATOR_LINEAR_RANGE(1220000, 71, 87, 20000),
-> > +};
-> > +
-> > +/*
-> > + * This is deviating from the datasheet. The values here are taken from the
-> > + * BSP driver and have been confirmed by measurements.
-> > + */
-> > +static const struct linear_range axp313a_dcdc3_ranges[] = {
-> > +       REGULATOR_LINEAR_RANGE(500000,   0,  70, 10000),
-> > +       REGULATOR_LINEAR_RANGE(1220000, 71, 102, 20000),
-> > +};
-> > +
-> > +static const struct regulator_desc axp313a_regulators[] = {
-> > +       AXP_DESC_RANGES(AXP313A, DCDC1, "dcdc1", "vin1",
-> > +                       axp313a_dcdc1_ranges, AXP313A_DCDC1_NUM_VOLTAGES,
-> > +                       AXP313A_DCDC1_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> > +                       AXP313A_OUTPUT_CONTROL, BIT(0)),
-> > +       AXP_DESC_RANGES(AXP313A, DCDC2, "dcdc2", "vin2",
-> > +                       axp313a_dcdc2_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-> > +                       AXP313A_DCDC2_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> > +                       AXP313A_OUTPUT_CONTROL, BIT(1)),
-> > +       AXP_DESC_RANGES(AXP313A, DCDC3, "dcdc3", "vin3",
-> > +                       axp313a_dcdc3_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-> > +                       AXP313A_DCDC3_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> > +                       AXP313A_OUTPUT_CONTROL, BIT(2)),
-> > +       AXP_DESC(AXP313A, LDO1, "ldo1", "vin1", 500, 3500, 100,
-> > +                AXP313A_ALDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-> > +                AXP313A_OUTPUT_CONTROL, BIT(3)),  
-> 
-> The datasheet says this one is called ALDO1 ...
-> 
-> > +       AXP_DESC(AXP313A, LDO2, "ldo2", "vin1", 500, 3500, 100,
-> > +                AXP313A_DLDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-> > +                AXP313A_OUTPUT_CONTROL, BIT(4)),  
-> 
-> ... and this one DLDO1.
+> was also not needed. =A0 Do you think so?
 
-Fixed.
+> @@ -101,8 +101,10 @@ static int loongson_spi_setup(struct spi_device *spi)
+> =A0=A0=A0=A0=A0=A0=A0 if (spi->chip_select >=3D spi->master->num_chipsele=
+ct)
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;
+>=20
+> +=A0=A0=A0=A0=A0=A0 loongson_spi->hz =3D 0;
+> +=A0=A0=A0=A0=A0=A0 loongson_spi->mode &=3D SPI_NO_CS;
+> +
+> =A0=A0=A0=A0=A0=A0=A0 spin_lock(&loongson_spi->lock);
+> -=A0=A0=A0=A0=A0=A0 loongson_spi_update_state(loongson_spi, spi, NULL);
 
+Looks plausible, yes - I'd need to see the full thing to verify.
 
-> > +       AXP_DESC_FIXED(AXP313A, RTC_LDO, "rtc-ldo", "vin1", 1800),
-> > +};
-> > +
-> >  /* DCDC ranges shared with AXP813 */
-> >  static const struct linear_range axp803_dcdc234_ranges[] = {
-> >         REGULATOR_LINEAR_RANGE(500000,
-> > @@ -1040,6 +1087,15 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
-> >                 def = 3000;
-> >                 step = 150;
-> >                 break;
-> > +       case AXP313A_ID:
-> > +               /* The DCDC PWM frequency seems to be fixed to 3 MHz. */
-> > +               if (dcdcfreq != 3000000 && dcdcfreq != 0) {
-> > +                       dev_err(&pdev->dev,
-> > +                               "DCDC frequency on AXP313a is fixed to 3 MHz.\n");
-> > +                       return -EINVAL;
-> > +               }
-> > +
-> > +               return 0;  
-> 
-> As mentioned above, please drop this.
+--hopd+e5dk7Smme6h
+Content-Type: application/pgp-signature; name="signature.asc"
 
-As mentioned above, we need at least the variant ID and a "return 0;". Do
-you want me to drop the extra checks as well? Doesn't really hurt, and
-provides extra info in case people try something stupid.
+-----BEGIN PGP SIGNATURE-----
 
-> Besides the bits mentioned above, this looks OK.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQcWzkACgkQJNaLcl1U
+h9Bw+wf/XNyR7ESc8fPT04EUVUWhp/ceY3nyKOZEaDOUZIOWhVq3cNo2U88/r1XL
+/GtgW9HLC0nWRKJZkJCe7zaRNpeyYtOVuBeZWNRvOFmnIVhHg9xYbtsXw9/TGm/n
+g92V+3dAEhc1xhgkKrSJ3qGIRrjfTW/kXvf8o6YAzqJxcYWzyVZDixMMUbOWyH4z
+Es3GRqWbyuHG7VmBdPkh9wwh8nc18a3VPHgWSsCm/5FVUkIYIDqdxHVghWnjbyt6
+vqbXBgKv1mO68rkp1EXukKLsQu4/4LNgbvOscQCqyvPkQmb5L+gua196bmkFX4yf
+DddW3tcJqKkzttDsx6GSiM7fJh7pEQ==
+=s27+
+-----END PGP SIGNATURE-----
 
-Thanks!
-Andre
-
-> 
-> >         default:
-> >                 dev_err(&pdev->dev,
-> >                         "Setting DCDC frequency for unsupported AXP variant\n");
-> > @@ -1232,6 +1288,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
-> >                 drivevbus = of_property_read_bool(pdev->dev.parent->of_node,
-> >                                                   "x-powers,drive-vbus-en");
-> >                 break;
-> > +       case AXP313A_ID:
-> > +               regulators = axp313a_regulators;
-> > +               nregulators = AXP313A_REG_ID_MAX;
-> > +               break;
-> >         case AXP803_ID:
-> >                 regulators = axp803_regulators;
-> >                 nregulators = AXP803_REG_ID_MAX;
-> > --
-> > 2.39.0
-> >  
-
+--hopd+e5dk7Smme6h--
