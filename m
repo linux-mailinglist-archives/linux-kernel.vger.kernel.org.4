@@ -2,124 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E0E6C619C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87B56C619E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjCWI0J convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 04:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S231407AbjCWI0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjCWI0E (ORCPT
+        with ESMTP id S231419AbjCWI0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:26:04 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3648230B3F;
-        Thu, 23 Mar 2023 01:25:53 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id r5so25696328qtp.4;
-        Thu, 23 Mar 2023 01:25:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679559952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YLwa8WskLyA8HRsaKD+rmyXpE99G5zG0nLdln1xHQs8=;
-        b=TNMKF0V5tmOBoxaqMcVrKlZJKxUhHwG42vHE72qT2F5wOSP/42kTPD4p3OUYgtKWl0
-         /U+0nKrEVkCzLlvBCo62V862orLyxgW0CvBfpWnylNkavfJvE8PjwfWWUMRYhFM75NVM
-         iWCQpWeBS3roXsedDqsgPG0J60lcsJILMne8V0VIPBj75k0IpiRFWONFIa9gfkxVIkPS
-         4Dl4cj/CsuHZW9xClIIEmJhDbmPXLg6A8eRKexIeD5WIw3NPxzdHh3cJHcsyr0CbPh1t
-         pjxoK5yICJTRwsucZ3QIoutfUL55mL9tGQXnBBNiB+uwGI/j4tifX2riivmC+WuTy/9n
-         ZpKQ==
-X-Gm-Message-State: AO0yUKVkyHIhaMZKQHEQs+gxXZal/MZv2vRmh5WKZEt0yIwcd6f3UWmG
-        kSSLasaLEhl14s/ONpIWk1EALFhqTUPkPQ==
-X-Google-Smtp-Source: AK7set+MzqZEiIaqkd4Cs+SmPUkl2Ofj2n7GOQQNJRbcQAp44BSlBSdiWmd8tfI1gbno9ZvDFjfgnQ==
-X-Received: by 2002:a05:622a:13d1:b0:3db:9289:6949 with SMTP id p17-20020a05622a13d100b003db92896949mr8044624qtk.3.1679559951982;
-        Thu, 23 Mar 2023 01:25:51 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id y3-20020a37f603000000b0074382b756c2sm12809242qkj.14.2023.03.23.01.25.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 01:25:50 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-544b959a971so348549777b3.3;
-        Thu, 23 Mar 2023 01:25:50 -0700 (PDT)
-X-Received: by 2002:a81:4424:0:b0:52f:184a:da09 with SMTP id
- r36-20020a814424000000b0052f184ada09mr1197947ywa.2.1679559949876; Thu, 23 Mar
- 2023 01:25:49 -0700 (PDT)
+        Thu, 23 Mar 2023 04:26:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FA8311EC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679559979; x=1711095979;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=slcLUz41oieHKl403ncZ/2N6dQ0gNUhDFGlW1RsgMzg=;
+  b=amAADU/GtEFjgEC/g948Ezc0kunctspSEkrg/WfGBDwsDnryFtDsqeda
+   sMysRaQkIXh8q9ZSAXFZM2/xZc0IfFcfzg3eMxkl86tpPW5VYsgVZFo0d
+   SLDFz9Lh/nu1yQYVvtwkvz+iIdjgQG4WCVIyKfTfdh3eqazriamYu01s2
+   0cJXkflKQqRA0Ms9lXbWQ9hHzsqxfQJ/bicUnqDndp+KQSI7e+ZPlsZMs
+   iK4DpRanCPIqGfPqTcnwAbvBMrsv3SYqaGBZEUCTsxN55ibR0ETwNAQJ5
+   AP+vgHaVORe90pvymyt8Hr7G6DvCz6+g/5b27U/gS16gRwPgoQmsCAXqY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="404315695"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="404315695"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 01:26:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659510597"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="659510597"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2023 01:26:18 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfGH3-000EAB-0t;
+        Thu, 23 Mar 2023 08:26:17 +0000
+Date:   Thu, 23 Mar 2023 16:26:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ 5fbff260755750559aa12a30f6fa7f8a863666f1
+Message-ID: <641c0d1f.hdQMyShYM0IUCwjG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <67261c513706241d479b8b4cf46eb4e6fb0417ba.1679387262.git.geert+renesas@glider.be>
- <ZBneELQuakjva1xa@casper.infradead.org> <6320abf6-0898-361b-d5f6-bcc58306f55c@intel.com>
- <ZBsw9lRbJU4c2wLD@casper.infradead.org>
-In-Reply-To: <ZBsw9lRbJU4c2wLD@casper.infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Mar 2023 09:25:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW1ed0ns=Xb-ug=wfUuBTU1Pr0V6Deds1GkSb_f-Ac3Xw@mail.gmail.com>
-Message-ID: <CAMuHMdW1ed0ns=Xb-ug=wfUuBTU1Pr0V6Deds1GkSb_f-Ac3Xw@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: Fix undefined init_cache_node_node() for NUMA
- and !SMP
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: 5fbff260755750559aa12a30f6fa7f8a863666f1  Documentation/x86: Explain the state component permission for guests
 
-On Wed, Mar 22, 2023 at 5:47 PM Matthew Wilcox <willy@infradead.org> wrote:
-> On Wed, Mar 22, 2023 at 09:16:55AM -0700, Dave Hansen wrote:
-> > On 3/21/23 09:40, Matthew Wilcox wrote:
-> > > On Tue, Mar 21, 2023 at 09:30:59AM +0100, Geert Uytterhoeven wrote:
-> > >> -#if (defined(CONFIG_NUMA) && defined(CONFIG_MEMORY_HOTPLUG)) || defined(CONFIG_SMP)
-> > >> +#if defined(CONFIG_NUMA) || defined(CONFIG_SMP)
-> > > I'm amused by the thought of CONFIG_NUMA without CONFIG_SMP.
-> > > Is it possible to have one node with memory and a single CPU, then
-> > > another node with memory and no CPU?
-> >
-> > It's _possible_ for sure, just unlikely.  The most likely place these
-> > days is probably a teensy tiny VM that just happens to have some
-> > performance-differentiated memory exposed to it for some reason.  Maybe
-> > it's got a slice of slow PMEM or fast High-Bandwidth memory for whatever
-> > reason.
->
-> Right, you can construct such a system, but do we support the CONFIG
-> options of NUMA enabled and SMP disabled?  It seems so niche that we
-> shouldn't be spending time testing that combination.
+elapsed time: 724m
 
-SH has been using this for a long time.
+configs tested: 78
+configs skipped: 4
 
-It's supported. Dave just forgot to update the #ifdef around the
-definition of init_cache_node_node() when updating an #ifdef around
-a code block that contains one of the callers.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-P.S. To me, this discussion reminds me of the old discussion about
-     discontigmem without NUMA. Yes, not all systems are PCs with
-     contiguous memory on a single fast bus ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230322   gcc  
+csky                 randconfig-r026-20230322   gcc  
+hexagon              randconfig-r004-20230322   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a004   clang
+i386                          randconfig-a006   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a016   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r031-20230322   gcc  
+ia64                 randconfig-r032-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r015-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r034-20230322   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r023-20230322   gcc  
+openrisc             randconfig-r033-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r013-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r021-20230322   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230322   clang
+s390                 randconfig-r003-20230322   clang
+s390                 randconfig-r022-20230322   gcc  
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230322   gcc  
+sh                   randconfig-r036-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r014-20230322   gcc  
+sparc                randconfig-r035-20230322   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
