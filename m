@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAE36C6729
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D756C672D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjCWLxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S231815AbjCWLyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjCWLxw (ORCPT
+        with ESMTP id S231775AbjCWLyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:53:52 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1489A34C10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:45 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8A91D1C0E52; Thu, 23 Mar 2023 12:53:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1679572423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fiiMdIZOFv7MsJRF3rynwKCkciwOFsuLIsr2DLMMX+Y=;
-        b=jaWSK/c1sd20l8YItKp23v0CDUBVoTaaR0sQRlQsLelVZyaYzb3UXroiizoFnqlwWVfvuW
-        AOLL6wBSgIgXYbQsE+r7JPZCVDQNGh0CIxWE7pi+ij0tOcWw9Tirs3JRu+F9usvY4QixRx
-        noKcuW+0tsjrkriVb4fxmyZ0+xG76KE=
-Date:   Thu, 23 Mar 2023 12:53:43 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org
-Subject: Re: [PATCH 00/10] sched: EEVDF using latency-nice
-Message-ID: <ZBw9x1iJkUwXjBBf@duo.ucw.cz>
-References: <20230306132521.968182689@infradead.org>
+        Thu, 23 Mar 2023 07:54:07 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082EE35EDE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:59 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eh3so85233275edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1679572438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEX3oAejBbS136aFLc2hCm49xsCfS2Jd421gnkE/ZzM=;
+        b=Bi/AtRbguFiM/ehBvhhvJ84eM+gT6UM9brFqUYyd/pd+8dxEU1aeUMUnjVfxPzHt2w
+         Fp45DnjMJpgUcBdFclYz6OpmS/r1zRhAJWegrkQMDHMHxDm11clJAfS+s64NQ2EVfoEg
+         S5zowwjyv73aIVx0OWo7Iw6sBOdXNscK4YsuBk0g77DfojOfZrsyvwz9f14cJP+d1Hc9
+         +wmrpPlgouYdjUPvh+sIAOaXCToRinpqDMuZzLHkjaSetPd5VpJ8FxMgA/SQ9MSFL3N2
+         v9eWkkTMIdzej3oAnQva4huZwk7gDZDNbpe88ySz/8qJhug9Bxn4WQkXfAakG/56IRpQ
+         Btbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679572438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gEX3oAejBbS136aFLc2hCm49xsCfS2Jd421gnkE/ZzM=;
+        b=BT7acRhD9e2hwkAG4knq1PuR2w2CcfFdMsecdSnEP5I18E5wR4W1ybeXxwT0Mkad+F
+         27uI/q8AsckfoAZOWiplY6le4Xv22US2xM5UHbR3luxBzWgivWRW67f94YXAn0U2KjGU
+         HZLSU6w/G4FjJv5SGitvCLluv34ofubAfQcDd57NOOIDqOMSYbWOTWmerMiFyp1HD/RT
+         zwGMDmF/DYxofIQgABzfaTfd6IXuZN5PJgQ6QOYDCrg5VDXgmeYQti0NT7LsAVWP7OeF
+         EEUk+4wUuEQt7BziUNjYMxooZ/gXQs2eCb06kAkhgNO9uhX0EZVlbmT4mxDeeMacrBKQ
+         fSVg==
+X-Gm-Message-State: AO0yUKXD4VFyzRpC7PTQk7K4mw5OJ3HpX/s/bgdiaJ04j4rVPcJeVdce
+        017lf1qWXRqghqKLpGeUvEN8Iw==
+X-Google-Smtp-Source: AK7set8J+4fEvtk4IiTjukniZrJazpfLI8lSlj7qq5kp1qfD9/gM/cBqQ6fhR0LoSNcoiZyQ6SMAqg==
+X-Received: by 2002:a17:906:3612:b0:933:2f77:ca78 with SMTP id q18-20020a170906361200b009332f77ca78mr10376372ejb.28.1679572438286;
+        Thu, 23 Mar 2023 04:53:58 -0700 (PDT)
+Received: from fedora.. (ip-095-222-150-251.um34.pools.vodafone-ip.de. [95.222.150.251])
+        by smtp.gmail.com with ESMTPSA id r5-20020a1709064d0500b00923f05b2931sm8510047eju.118.2023.03.23.04.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 04:53:57 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v10 0/3] Add support for Maxim MAX735x/MAX736x variants
+Date:   Thu, 23 Mar 2023 12:53:52 +0100
+Message-Id: <20230323115356.2602042-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="UoNxk7nC57HeTEdI"
-Content-Disposition: inline
-In-Reply-To: <20230306132521.968182689@infradead.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,37 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v10:
+- Small updates to dt-bindings
+- Make vdd-supply optional
+- Drop MAX7357 enhanced mode configuration
 
---UoNxk7nC57HeTEdI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v9:
+- Fix 'then' not aligned with 'if' in dt-bindings
+- Split enhanced mode configuration into separate patch
+- Add MAX7357/MAX7358 register definitions
+- Rename config register defines
+- Update comments and explain non default config being applied on MAX7357
+- Check for I2C_FUNC_SMBUS_WRITE_BYTE_DATA functionality
 
-Hi!
+v8:
+- Move allOf in dt-binding and use double negation
 
-> Ever since looking at the latency-nice patches, I've wondered if EEVDF wo=
-uld
-> not make more sense, and I did point Vincent at some older patches I had =
-for
-> that (which is here his augmented rbtree thing comes from).
+v7:
+- Reworked the commit message, comments and renamed a struct
+  field. No functional change.
 
-Link for context: https://lwn.net/Articles/925371/ . "EEVDF" is not
-commonly known acronym :-).
+v6:
+- Fix typo in dt-bindings
 
-BR,								Pavel
+v5:
+- Remove optional and make vdd-supply mandatory
 
+v4:
+- Add missing maxitems dt-bindings property
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+v3:
+- Merge dt-bindings into i2c-mux-pca954x.yaml
 
---UoNxk7nC57HeTEdI
-Content-Type: application/pgp-signature; name="signature.asc"
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
 
------BEGIN PGP SIGNATURE-----
+Patrick Rudolph (3):
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  i2c: muxes: pca954x: Add regulator support
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBw9xwAKCRAw5/Bqldv6
-8vl2AKC9IiQHcjyXtzjITzarV20BXUVgeQCfVRC1MxBg5GhWipTiKw/XUyMSOnM=
-=YVmv
------END PGP SIGNATURE-----
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 43 ++++++++-
+ drivers/i2c/muxes/Kconfig                     |  6 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 95 +++++++++++++++++--
+ 3 files changed, 130 insertions(+), 14 deletions(-)
 
---UoNxk7nC57HeTEdI--
+-- 
+2.39.1
+
