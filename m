@@ -2,155 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFFE6C6FEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679046C6FF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjCWSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S231289AbjCWSFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCWSEs (ORCPT
+        with ESMTP id S231263AbjCWSFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:04:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CCFEC78
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:46 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i5so43521134eda.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679594685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/cf+dDkaWjCdhFGTseyhJ1TYIdXnZViE1IHL8Z04nLU=;
-        b=SeEtrJingXLDxc2TLzv7QBF2wfL9DQ94O+dSKlQ4Ti1iZ+X7K20WRqUzmjh7K/A8EL
-         P0LDt6aU89zBgxG5p+bF/KuZuYm8Wel4E9VdPD1UpeVwpe5sHUYo8Og/sDimHTcn/vhC
-         6zXSKMO94wdRcSdkPJZRiQ2s6oSClGyReWh50=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679594685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/cf+dDkaWjCdhFGTseyhJ1TYIdXnZViE1IHL8Z04nLU=;
-        b=xXkYqyFt9di67WrvqYXjWomaxRhRBW9BqH5nSDmeKUtSL53sru/WzYyevajMSrpV0E
-         SrzBaShZ4L4+j/ONrKlxHfQJ3eZ7/sxbHOfa04hWgBq9tqp4ssu4ITziRwpMEeuVrhd+
-         B46GN3VoVbof3MYwR0ZAERot8QGZQi6fuNoJ1DLroJziIkgIyuipaDgvnuBFWSUxntzn
-         g7e86rIQYcuqUPrhC7atdgRGakA2h0aUnqCxUfZWEv/SJvnknlvNTPBLHhXmJxa8qYLI
-         fjjQ1N6d0vX7op0fwUh+a9Y99lHbMhrr6uZJtPxzij7V+etW0ipaL3b/ANkiZC55KKsV
-         6oJA==
-X-Gm-Message-State: AO0yUKXU+hw2Uxx5+85uP9xWygzoP6t00lm7pRlZyQwfNlPSaoIst0js
-        CQQqvvX/LzObIB2B560qx57/JPnd5zQSSCoUcDYtEg==
-X-Google-Smtp-Source: AK7set9umXlsMTS8ZPbS0zZ/p8POI+3LORmJMg26YS3sBCII+B7DR9C2aWyxa61IFmxeXaGUiPuGLA==
-X-Received: by 2002:a17:906:15d5:b0:8b1:7e23:5041 with SMTP id l21-20020a17090615d500b008b17e235041mr11717762ejd.39.1679594684742;
-        Thu, 23 Mar 2023 11:04:44 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id ja21-20020a170907989500b0093338259b2bsm7456365ejc.207.2023.03.23.11.04.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 11:04:44 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id o12so90392298edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:43 -0700 (PDT)
-X-Received: by 2002:a17:906:2c04:b0:931:6e39:3d0b with SMTP id
- e4-20020a1709062c0400b009316e393d0bmr5389177ejh.15.1679594683563; Thu, 23 Mar
- 2023 11:04:43 -0700 (PDT)
+        Thu, 23 Mar 2023 14:05:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A463DA270;
+        Thu, 23 Mar 2023 11:05:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2888E6284F;
+        Thu, 23 Mar 2023 18:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B43C433D2;
+        Thu, 23 Mar 2023 18:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679594730;
+        bh=0865JfiFypru3FJc8vbsQvn4GQFZBP1qlUEDcWCh/Yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OKs6VHVlxFd3kssyCa5WNZh9bqaD/EUq+z3FJehHT9Sk6YUwbBMf7LWnHIpcaAZ6B
+         XA92fwloEDTSnzwb0ry4iBWzHLPTitwI6Hoy/2hS+t9UPG8VHYM2HIURbcu/taKksj
+         KORCAzG7IAsoFSb4UOJyTAwGqQUjQA5WTda5zDaA=
+Date:   Thu, 23 Mar 2023 19:05:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ye Xiang <xiang.ye@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
+Subject: Re: [PATCH v6 1/6] usb: Add support for Intel LJCA device
+Message-ID: <ZByU4tbhkhnF4kMw@kroah.com>
+References: <20230323172113.1231050-1-xiang.ye@intel.com>
+ <20230323172113.1231050-2-xiang.ye@intel.com>
 MIME-Version: 1.0
-References: <20230320210724.GB1434@sol.localdomain> <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
- <ZBlJJBR7dH4/kIWD@slm.duckdns.org> <CAHk-=wh0wxPx1zP1onSs88KB6zOQ0oHyOg_vGr5aK8QJ8fuxnw@mail.gmail.com>
- <ZBulmj3CcYTiCC8z@slm.duckdns.org>
-In-Reply-To: <ZBulmj3CcYTiCC8z@slm.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 23 Mar 2023 11:04:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgT2TJO6+B=Pho1VOtND-qC_d1PM1FC-Snf+sRpLhR=hg@mail.gmail.com>
-Message-ID: <CAHk-=wgT2TJO6+B=Pho1VOtND-qC_d1PM1FC-Snf+sRpLhR=hg@mail.gmail.com>
-Subject: Re: [GIT PULL] fsverity fixes for v6.3-rc4
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, fsverity@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Nathan Huckleberry <nhuck@google.com>,
-        Victor Hsieh <victorhsieh@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323172113.1231050-2-xiang.ye@intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 6:04=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Thanks for the pointers. They all seem plausible symptoms of work items
-> getting bounced across slow cache boundaries. I'm off for a few weeks so
-> can't really dig in right now but will get to it afterwards.
+On Fri, Mar 24, 2023 at 01:21:08AM +0800, Ye Xiang wrote:
+> +config USB_LJCA
+> +	tristate "Intel La Jolla Cove Adapter support"
+> +	select AUXILIARY_BUS
+> +	depends on USB
+> +	help
+> +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
+> +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
+> +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
+> +	  functionality of the device.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called ljca.
 
-So just as a gut feeling, I suspect that one solution would be to
-always *start* the work on the local CPU (where "local" might be the
-same, or at least a sibling).
+That's a very generic name for a USB driver, why not "usb_ljca"?
 
-The only reason to migrate to another CPU would be if the work is
-CPU-intensive, and I do suspect that is commonly not really the case.
+> +struct ljca_dev {
+> +	struct usb_device *udev;
 
-And I strongly suspect that our WQ_CPU_INTENSIVE flag is pure garbage,
-and should just be gotten rid of, because what could be considered
-"CPU intensive" in under one situation might not be CPU intensive in
-another one, so trying to use some static knowledge about it is just
-pure guess-work.
+You didn't remove this like you said you would :(
 
-The different situations might be purely contextual things ("heavy
-network traffic when NAPI polling kicks in"), but it might also be
-purely hardware-related (ie "this is heavy if we don't have CPU hw
-acceleration for crypto, but cheap if we do").
-
-So I really don't think it should be some static decision, either
-through WQ_CPU_INTENSIVE _or_ through "WQ_UNBOUND means schedule on
-first available CPU".
-
-Wouldn't it be much nicer if we just noticed it dynamically, and
-WQ_UNBOUND would mean that the workqueue _can_ be scheduled on another
-CPU if it ends up being advantageous?
-
-And we actually kind of have that dynamic flag already, in the form of
-the scheduler. It might even be explicit in the context of the
-workqueue (with "need_resched()" being true and the workqueue code
-itself might notice it and explicitly then try to spread it out), but
-with preemption it's more implicit and maybe it needs a bit of
-tweaking help.
-
-So that's what I mean by "start the work as local CPU work" - use that
-as the baseline decision (since it's going to be the case that has
-cache locality), and actively try to avoid spreading things out unless
-we have an explicit reason to, and that reason we could just get from
-the scheduler.
-
-The worker code already has that "wq_worker_sleeping()" callback from
-the scheduler, but that only triggers when a worker is going to sleep.
-I'm saying that the "scheduler decided to schedule out a worker" case
-might be used as a "Oh, this is CPU intensive, let's try to spread it
-out".
-
-See what I'm trying to say?
-
-And yes, the WQ_UNBOUND case does have a weak "prefer local CPU" in
-how it basically tends to try to pick the current CPU unless there is
-some active reason not to (ie the whole "wq_select_unbound_cpu()"
-code), but I suspect that is then counter-acted by the fact that it
-will always pick the workqueue pool by node - so the "current CPU"
-ends up probably being affected by what random CPU that pool was
-running on.
-
-An alternative to any scheduler interaction thing might be to just
-tweak "first_idle_worker()". I get the feeling that that choice is
-just horrid, and that is another area that could really try to take
-locality into account. insert_work() realyl seems to pick a random
-worker from the pool - which is fine when the pool is per-cpu, but
-when it's the unbound "random node" pool, I really suspect that it
-might be much better to try to pick a worker that is on the right cpu.
-
-But hey, I may be missing something. You know this code much better than I =
-do.
-
-                  Linus
