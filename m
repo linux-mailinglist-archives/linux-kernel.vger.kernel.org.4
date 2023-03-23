@@ -2,122 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECBA6C65AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDD36C65AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjCWKuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S230393AbjCWKvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWKuG (ORCPT
+        with ESMTP id S231224AbjCWKuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:50:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFA51CBFC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:49:16 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x3so84463443edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679568555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jdmMkNYxmngZXiNYiht2ilt6fUvVv06Iyevz/3gM66w=;
-        b=knL6YRcg5zsmePbOUt885QbvljOR9/ZH2VAfHYCS9NPtcEA99FIDn2aGyVoKH45TDP
-         kY4TGvy1bFecBjHRiAzkZqafAk48jM42rPImDiVazQJ1K4uPnxp2X3H7l8YDR3vrKiaG
-         bAhM3d45FMUaRUrZC/m5sz7RaK9Qq7EF0ndRb90gi0nndmoIde+euM2opzWTF0AVBNzf
-         a6Kz7mgcLQzsLr5usmDkLqwLp8e2IO1FKBVUFCOSaq4hBEHR3RjyptFflQ7DOr7ctz1q
-         6/+HA/yeiJUsx+d7tW+lmhylYdCBCGLRQI8MBYWB/0ecazdd0cphn8d2J3Jc2ePY4AAt
-         uFYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679568555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jdmMkNYxmngZXiNYiht2ilt6fUvVv06Iyevz/3gM66w=;
-        b=Q7G98tPlD1uBv4IoRYx0UXiNv4BPvOX8lJnxdhEt6YhhCYNrTedxYnC95ZO/cFBS0U
-         CEJlvC2xSvplo6Xqbi6MczAYb9Y7qLOQld57WeCv9U12lvIo4O03MIVS5ppvoUmPvWzT
-         PaFYgjtWYx6v7owQcU8fDlbqOHILw7T+eZ2prOpa+dD+1K1ZKqNSgcqF98UcIIcTMonb
-         HVF+GlRp84oMhPUH4xAWWwrncyGcxWRuFY+J/qsNvd9m24vNgtjJCd0jZY57mudfHTRF
-         ncJ/zEgMBaP2KqLl21BqNMVsrez9vd/CKSkmRKJFmc1cvy0u4NP8GXFwP4t+774njyce
-         FKxw==
-X-Gm-Message-State: AO0yUKWrZmLPP52tMDQhSgoQJmJm4r6jHZNYBFVERwiCdrURJrbk787k
-        lLcUjqW2IpCB35HqAJcvtGrGnA==
-X-Google-Smtp-Source: AK7set+NsAafWsPdCnhOJpdiMsM9t3ZFahPLZkyds6zcH6FQTKUdAj8NfgayvaoFiyTcm1PQimdckg==
-X-Received: by 2002:a05:6402:64e:b0:4fc:709f:7abd with SMTP id u14-20020a056402064e00b004fc709f7abdmr9636033edx.2.1679568554775;
-        Thu, 23 Mar 2023 03:49:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a665:ed1e:3966:c991? ([2a02:810d:15c0:828:a665:ed1e:3966:c991])
-        by smtp.gmail.com with ESMTPSA id v4-20020a509544000000b004fb402a2a37sm9079721eda.33.2023.03.23.03.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 03:49:14 -0700 (PDT)
-Message-ID: <9614782e-0d78-e8f2-a438-452cfa86f80b@linaro.org>
-Date:   Thu, 23 Mar 2023 11:49:12 +0100
+        Thu, 23 Mar 2023 06:50:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE06F35262
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:49:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A1964B3;
+        Thu, 23 Mar 2023 03:50:17 -0700 (PDT)
+Received: from [10.57.55.121] (unknown [10.57.55.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 116003F766;
+        Thu, 23 Mar 2023 03:49:31 -0700 (PDT)
+Message-ID: <4c7578af-d384-95e6-fa92-7082dfa0df6d@arm.com>
+Date:   Thu, 23 Mar 2023 10:49:30 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: sm8450: remove invalid reg-names
- from ufs node
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 5/9] coresight: Dynamically add connections
+To:     Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     coresight@lists.linaro.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230310160610.742382-1-james.clark@arm.com>
+ <20230310160610.742382-6-james.clark@arm.com>
+ <c468a656-036f-df45-0c5e-034a73ed727a@arm.com>
+ <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-scsi@vger.kernel.org
-References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
- <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-7-3ead1e418fe4@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-7-3ead1e418fe4@linaro.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CAJ9a7Vg1EebruGT0irGE6sgk-Rs39-ptX_N3U=NkG3OsQeuBFQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 11:25, Neil Armstrong wrote:
-> Fixes the following DT bindings check error:
-> ufshc@1d84000: Unevaluated properties are not allowed ('reg-names' was unexpected)
+
+
+On 21/03/2023 17:56, Mike Leach wrote:
+> Hi James
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 -
->  1 file changed, 1 deletion(-)
+> On Thu, 16 Mar 2023 at 17:12, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> On 10/03/2023 16:06, James Clark wrote:
+>>> Add a function for adding connections dynamically. This also removes
+>>> the 1:1 mapping between port number and the index into the connections
+>>> array. The only place this mapping was used was in the warning for
+>>> duplicate output ports, which has been replaced by a search. Other
+>>> uses of the port number already use the port member variable.
+>>>
+>>> Being able to dynamically add connections will allow other devices like
+>>> CTI to re-use the connection mechanism despite not having explicit
+>>> connections described in the DT.
+>>>
+>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>> ---
+>>>   .../hwtracing/coresight/coresight-platform.c  | 77 ++++++++++++++-----
+>>>   include/linux/coresight.h                     |  7 +-
+>>>   2 files changed, 64 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+>>> index c77238cdf448..16553f7dde12 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-platform.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+>>> @@ -27,8 +27,9 @@ static int coresight_alloc_conns(struct device *dev,
+>>>                                struct coresight_platform_data *pdata)
+>>>   {
+>>>       if (pdata->nr_outconns) {
+>>> -             pdata->out_conns = devm_kcalloc(dev, pdata->nr_outconns,
+>>> -                                         sizeof(*pdata->out_conns), GFP_KERNEL);
+>>> +             pdata->out_conns = devm_krealloc_array(
+>>> +                     dev, pdata->out_conns, pdata->nr_outconns,
+>>
+>> super minor nit:
+>>                 pdata->out_conns = devm_krealloc_array(dev,
+>>
+>>
+>>> +                     sizeof(*pdata->out_conns), GFP_KERNEL | __GFP_ZERO);
+>>>               if (!pdata->out_conns)
+>>>                       return -ENOMEM;
+>>>       }
+>>> @@ -36,6 +37,48 @@ static int coresight_alloc_conns(struct device *dev,
+>>>       return 0;
+>>>   }
+>>>
+>>> +/*
+>>> + * Add a connection in the first free slot, or realloc
+>>> + * if there is no space. @conn's contents is copied into the new slot.
+>>> + *
+>>> + * If the output port is already assigned on this device, return -EINVAL
+>>> + */
+>>> +int coresight_add_conn(struct device *dev,
+>>> +                    struct coresight_platform_data *pdata,
+>>> +                    const struct coresight_connection *conn)
+>>> +{
+>>> +     int ret;
+>>> +     struct coresight_connection *free_conn = NULL;
+>>> +     struct coresight_connection *i;
+>>> +
+>>> +     /*
+>>> +      * Search for a free slot, and while looking for one, warn
+>>> +      * on any existing duplicate output port.
+>>> +      */
+>>> +     for (i = pdata->out_conns; i < pdata->out_conns + pdata->nr_outconns;
+>>> +          ++i) {
+>>
+>> minor nit: I see why you have gone against using "i" as index into
+>> the array. But I think having that as the index is still better
+>> readable.
+>>
+>>         for (i = 0; i < pdata->nr_outconns; i++) {
+>>                 struct coresight_connection *c = &pdata->out_conns[i];
+>>
+>>> +             if (i->remote_fwnode && conn->port != -1 &&
+>>> +                 i->port == conn->port) {
+>>> +                     dev_warn(dev, "Duplicate output port %d\n", i->port);
+>>> +                     return -EINVAL;
+>>> +             }
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index ef9bae2e6acc..8ecc48c7c5ef 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -3996,7 +3996,6 @@ ufs_mem_hc: ufshc@1d84000 {
->  				     "jedec,ufs-2.0";
->  			reg = <0 0x01d84000 0 0x3000>,
->  			      <0 0x01d88000 0 0x8000>;
-> -			reg-names = "std", "ice";
+> This code assumes that slots are filled sequentially and that it is
+> not possible to release slots out of order - i.e. if we find a free
+> slot, there is not a match in a later slot.
+> I can't think how this could happen but a comment to confirm this
+> might be needed here.
+> 
+> When we had 1:1 port / array index then this check was guaranteed
+>> Mike
 
-This is also part of:
-https://lore.kernel.org/linux-arm-msm/20230308155838.1094920-8-abel.vesa@linaro.org/#Z31arch:arm64:boot:dts:qcom:sm8450.dtsi
-but I actually wonder whether you just missed some binding patch?
+I thought about this but I couldn't see an issue here. The loop always
+runs to the end even if a free slot is found so it should find
+duplicates in any order. Unless I'm missing some other edge case?
 
-Best regards,
-Krzysztof
-
+> 
+> 
+> 
+>>> +             if (!i->remote_fwnode && !free_conn)
+>>> +                     free_conn = i;
+>>> +     }
+>>> +
+>>> +     if (!free_conn) {
+>>
+>> and:
+>>         /* No free slots */
+>>         if (i == pdata->nr_outconns) {
+>>
+>>> +             pdata->nr_outconns++;
+>>> +             ret = coresight_alloc_conns(dev, pdata);
+>>> +             if (ret)
+>>> +                     return ret;
+>>> +             free_conn = &pdata->out_conns[pdata->nr_outconns - 1];
+>>> +     }
+>>> +
+>>
+>> and:
+>>         pdata->out_conns[i] = *conn;
+>>
+>>
+>> Otherwise looks good to me.
+>>
+>> Suzuki
+>>
+>>
+> 
+> 
+> --
+> Mike Leach
+> Principal Engineer, ARM Ltd.
+> Manchester Design Centre. UK
