@@ -2,201 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B806C5FE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948D36C5FE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjCWGoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S229800AbjCWGpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjCWGoR (ORCPT
+        with ESMTP id S230186AbjCWGpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:44:17 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452F2DE5C;
-        Wed, 22 Mar 2023 23:44:13 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id v1so13207511wrv.1;
-        Wed, 22 Mar 2023 23:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679553852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMt6IiIj1g/DqQnbQSAvbNGtbOJm5tLZxMcMsHALdIk=;
-        b=GhmjoBqZnTla9JBkjF1UZtu8wu6QjffqlHVeeBSYX2nsCx2EjNUPd9PoBLsyD6Fvay
-         PUDva7C4NGKsmwEbwBCxAOGd9EL87aiHG+kQudl9u9UlFpmv9e/4RjhfDSdSVwnwvcBm
-         baBY0/IoZRR49XX2VcDjY1RfhNbEJkmSxuN/ffwm0Mm67KsM6hDo5BFwoP77jL1yua9J
-         37n9J27adgwFwke7WNhN8IzlQlAPD55U+bklIM3krb05IsmeD8vkf20E9UygrsGyoZ9R
-         Tc00rBGRQW6lUANqYbvaQ+qdXnh/WeUiS1MpV6MziUy55YOmt4caiqeTmvENycbM24So
-         ACTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679553852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XMt6IiIj1g/DqQnbQSAvbNGtbOJm5tLZxMcMsHALdIk=;
-        b=W5cLQhdJmNdBQFo4dCPZRzzfHVmnCtu87sXroPeqtE9YeMV1cc/z+ivQbJDda1Hisg
-         bRfqOZ3t2ocelhXtNDjee/t/sT5wBBkEkFqBpwfJcdqpbfgLGuCj+oqV2Km09DbuGnbP
-         VV2EH3ti2QOcLDxDMqhSeRopRUq0hse+Vl8t4JnUoFXtdq4s1obEzROVGoAe41O6JZbg
-         aFLv93oiPcalDWm8/2QL9Fs2jHPr8jJEWHzoVPRJ/RkR4rzS7VpsZWQA69R298UOzh2g
-         4YQFrdq2aLfPelYT6eqYRisugHM6qu660WZlCO6Tz2JKNgfEKzrqJ1oelaaiKJfGs//B
-         lL7w==
-X-Gm-Message-State: AAQBX9ce29FazUbaPs1XJmeEzWhkhOAkZ2I7xblP0TDrknIThigvQv8a
-        j0mHaTBPWvs9eNrK63LdQ64=
-X-Google-Smtp-Source: AKy350ZGd5btCaPavQ2r8rRtJiNmG4yjfpo1Ok0NUgSUne0wsPU91oXttK7RYC1dOoDQRW6+1/L2hg==
-X-Received: by 2002:adf:ee84:0:b0:2ce:ae54:1592 with SMTP id b4-20020adfee84000000b002ceae541592mr1469269wro.38.1679553851918;
-        Wed, 22 Mar 2023 23:44:11 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05600c474400b003edc9a5f98asm845384wmo.44.2023.03.22.23.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 23:44:10 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 06:44:10 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jiri Olsa <jolsa@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v7 4/4] mm: vmalloc: convert vread() to vread_iter()
-Message-ID: <ff630c2e-42ff-42ec-9abb-38922d5107ec@lucifer.local>
-References: <cover.1679511146.git.lstoakes@gmail.com>
- <941f88bc5ab928e6656e1e2593b91bf0f8c81e1b.1679511146.git.lstoakes@gmail.com>
- <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
+        Thu, 23 Mar 2023 02:45:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7B82E0F4;
+        Wed, 22 Mar 2023 23:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679553916; x=1711089916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A6mO3eZa9srZD0TwB6Z9CiOjfI3r19eFRufP6HLE7HM=;
+  b=HUzhp1t1FBraVoM1KMG5rR+3p+VTyTEB+nsJFXuwAPFodqVYV37yjIiy
+   KfzZOThYsZgC77zFY9/8cZRosJRWWE8InxUV1cmvwDNxmuTOnFZimhJOS
+   kTk+QtzYKogcajQ9/ZvV1LXdhuMmx2/XQ1e+FEdkXTjKlHNI8QfvOG6yi
+   8hx+p86ZbxS6JsduPlWQ1MmfIK6wAn1mZpjPMO6bPdTGymmluGIlfk+Jf
+   rbP/3XPBto15IibhPsGQ/gooVYMMFBpyTTMNIb4dQTXiI4EcIWJXrLnI6
+   Omfsi/CEhjdd5PA+x6qxIh819s1rOg+KQXek9av24FI93GkakkLAOt+5r
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319800782"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="319800782"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 23:45:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="632275854"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="632275854"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Mar 2023 23:45:14 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfEhF-000E5A-19;
+        Thu, 23 Mar 2023 06:45:13 +0000
+Date:   Thu, 23 Mar 2023 14:44:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 7/9] clk: hisilicon: Migrate devm APIs
+Message-ID: <202303231400.ccfrqXUI-lkp@intel.com>
+References: <20230322164201.2454771-8-mmyangfl@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBu+2cPCQvvFF/FY@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230322164201.2454771-8-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:52:09AM +0800, Baoquan He wrote:
-> On 03/22/23 at 06:57pm, Lorenzo Stoakes wrote:
-> > Having previously laid the foundation for converting vread() to an iterator
-> > function, pull the trigger and do so.
-> >
-> > This patch attempts to provide minimal refactoring and to reflect the
-> > existing logic as best we can, for example we continue to zero portions of
-> > memory not read, as before.
-> >
-> > Overall, there should be no functional difference other than a performance
-> > improvement in /proc/kcore access to vmalloc regions.
-> >
-> > Now we have eliminated the need for a bounce buffer in read_kcore_iter(),
-> > we dispense with it, and try to write to user memory optimistically but
-> > with faults disabled via copy_page_to_iter_nofault(). We already have
-> > preemption disabled by holding a spin lock. We continue faulting in until
-> > the operation is complete.
->
-> I don't understand the sentences here. In vread_iter(), the actual
-> content reading is done in aligned_vread_iter(), otherwise we zero
-> filling the region. In aligned_vread_iter(), we will use
-> vmalloc_to_page() to get the mapped page and read out, otherwise zero
-> fill. While in this patch, fault_in_iov_iter_writeable() fault in memory
-> of iter one time and will bail out if failed. I am wondering why we
-> continue faulting in until the operation is complete, and how that is done.
+Hi David,
 
-This is refererrring to what's happening in kcore.c, not vread_iter(),
-i.e. the looped read/faultin.
+Thank you for the patch! Yet something to improve:
 
-The reason we bail out if failt_in_iov_iter_writeable() is that would
-indicate an error had occurred.
+[auto build test ERROR on 6015b1aca1a233379625385feb01dd014aca60b5]
 
-The whole point is to _optimistically_ try to perform the operation
-assuming the pages are faulted in. Ultimately we fault in via
-copy_to_user_nofault() which will either copy data or fail if the pages are
-not faulted in (will discuss this below a bit more in response to your
-other point).
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/clk-hisilicon-Rename-Hi3798CV200-to-Hi3798/20230323-004453
+base:   6015b1aca1a233379625385feb01dd014aca60b5
+patch link:    https://lore.kernel.org/r/20230322164201.2454771-8-mmyangfl%40gmail.com
+patch subject: [PATCH v7 7/9] clk: hisilicon: Migrate devm APIs
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230323/202303231400.ccfrqXUI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8d88e46ef325130e4dd516ce36e3e0484bc52230
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/clk-hisilicon-Rename-Hi3798CV200-to-Hi3798/20230323-004453
+        git checkout 8d88e46ef325130e4dd516ce36e3e0484bc52230
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/hisilicon/
 
-If this fails, then we fault in, and try again. We loop because there could
-be some extremely unfortunate timing with a race on e.g. swapping out or
-migrating pages between faulting in and trying to write out again.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303231400.ccfrqXUI-lkp@intel.com/
 
-This is extremely unlikely, but to avoid any chance of breaking userland we
-repeat the operation until it completes. In nearly all real-world
-situations it'll either work immediately or loop once.
+All error/warnings (new ones prefixed by >>):
 
->
-> If we look into the failing point in vread_iter(), it's mainly coming
-> from copy_page_to_iter_nofault(), e.g page_copy_sane() checking failed,
-> i->data_source checking failed. If these conditional checking failed,
-> should we continue reading again and again? And this is not related to
-> memory faulting in. I saw your discussion with David, but I am still a
-> little lost. Hope I can learn it, thanks in advance.
->
+   In file included from include/linux/device.h:15,
+                    from drivers/clk/hisilicon/clk-hi3620.c:14:
+   drivers/clk/hisilicon/clk-hi3620.c: In function 'clk_register_hisi_mmc':
+>> drivers/clk/hisilicon/clk-hi3620.c:435:35: error: 'clks' undeclared (first use in this function); did you mean 'clk'?
+     435 |                         __func__, clks[i].name);
+         |                                   ^~~~
+   include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/clk/hisilicon/clk-hi3620.c:434:17: note: in expansion of macro 'dev_err'
+     434 |                 dev_err(dev, "%s: failed to register clock %s\n",
+         |                 ^~~~~~~
+   drivers/clk/hisilicon/clk-hi3620.c:435:35: note: each undeclared identifier is reported only once for each function it appears in
+     435 |                         __func__, clks[i].name);
+         |                                   ^~~~
+   include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/clk/hisilicon/clk-hi3620.c:434:17: note: in expansion of macro 'dev_err'
+     434 |                 dev_err(dev, "%s: failed to register clock %s\n",
+         |                 ^~~~~~~
+>> drivers/clk/hisilicon/clk-hi3620.c:435:40: error: 'i' undeclared (first use in this function)
+     435 |                         __func__, clks[i].name);
+         |                                        ^
+   include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/clk/hisilicon/clk-hi3620.c:434:17: note: in expansion of macro 'dev_err'
+     434 |                 dev_err(dev, "%s: failed to register clock %s\n",
+         |                 ^~~~~~~
+>> drivers/clk/hisilicon/clk-hi3620.c:436:24: warning: returning 'int' from a function with return type 'struct clk_hw *' makes pointer from integer without a cast [-Wint-conversion]
+     436 |                 return ret;
+         |                        ^~~
+--
+   drivers/clk/hisilicon/clk-hix5hd2.c: In function 'hix5hd2_clk_register_complex':
+   drivers/clk/hisilicon/clk-hix5hd2.c:260:46: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     260 |         struct hix5hd2_complex_clock *clks = clocks;
+         |                                              ^~~~~~
+>> drivers/clk/hisilicon/clk-hix5hd2.c:300:31: error: 'data->clk_data' is a pointer; did you mean to use '->'?
+     300 |                 data->clk_data.clks[clks[i].id] = clk;
+         |                               ^
+         |                               ->
 
-Actually neither of these are going to happen. page_copy_sane() checks the
-sanity of the _source_ pages, and the 'sanity' is defined by whether your
-offset and length sit within the (possibly compound) folio. Since we
-control this, we can arrange for it never to happen.
 
-i->data_source is checking that it's an output iterator, however we would
-already have checked this when writing ELF headers at the bare minimum, so
-we cannot reach this point with an invalid iterator.
+vim +435 drivers/clk/hisilicon/clk-hi3620.c
 
-Therefore it is not possible either cause a failure. What could cause a
-failure, and what we are checking for, is specified in copyout_nofault()
-(in iov_iter.c) which we pass to the iterate_and_advance() macro. Now we
-have a fault-injection should_fail_usercopy() which would just trigger a
-redo, or copy_to_user_nofault() returning < 0 (e.g. -EFAULT).
+   399	
+   400	static struct clk_hw *
+   401	clk_register_hisi_mmc(struct device *dev, const struct hisi_mmc_clock *mmc_clk,
+   402			      void __iomem *base)
+   403	{
+   404		struct clk_mmc *mclk;
+   405		struct clk_init_data init;
+   406		int ret;
+   407	
+   408		mclk = devm_kzalloc(dev, sizeof(*mclk), GFP_KERNEL);
+   409		if (!mclk)
+   410			return ERR_PTR(-ENOMEM);
+   411	
+   412		init.name = mmc_clk->name;
+   413		init.ops = &clk_mmc_ops;
+   414		init.flags = mmc_clk->flags;
+   415		init.parent_names = (mmc_clk->parent_name ? &mmc_clk->parent_name : NULL);
+   416		init.num_parents = (mmc_clk->parent_name ? 1 : 0);
+   417		mclk->hw.init = &init;
+   418	
+   419		mclk->id = mmc_clk->id;
+   420		mclk->clken_reg = base + mmc_clk->clken_reg;
+   421		mclk->clken_bit = mmc_clk->clken_bit;
+   422		mclk->div_reg = base + mmc_clk->div_reg;
+   423		mclk->div_off = mmc_clk->div_off;
+   424		mclk->div_bits = mmc_clk->div_bits;
+   425		mclk->drv_reg = base + mmc_clk->drv_reg;
+   426		mclk->drv_off = mmc_clk->drv_off;
+   427		mclk->drv_bits = mmc_clk->drv_bits;
+   428		mclk->sam_reg = base + mmc_clk->sam_reg;
+   429		mclk->sam_off = mmc_clk->sam_off;
+   430		mclk->sam_bits = mmc_clk->sam_bits;
+   431	
+   432		ret = devm_clk_hw_register(dev, &mclk->hw);
+   433		if (ret) {
+   434			dev_err(dev, "%s: failed to register clock %s\n",
+ > 435				__func__, clks[i].name);
+ > 436			return ret;
+   437		}
+   438	
+   439		return &mclk->hw;
+   440	}
+   441	
 
-This code is confusing as this function returns the number of bytes _not
-copied_ rather than copied. I have tested this to be sure by the way :)
-
-Therefore the only way for a failure to occur is for memory to not be
-faulted in and thus the loop only triggers in this situation. If we fail to
-fault in pages for any reason, the whole operation aborts so this should
-cover all angles.
-
-> ......
-> > diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-> > index 08b795fd80b4..25b44b303b35 100644
-> > --- a/fs/proc/kcore.c
-> > +++ b/fs/proc/kcore.c
-> ......
-> > @@ -507,13 +503,30 @@ read_kcore_iter(struct kiocb *iocb, struct iov_iter *iter)
-> >
-> >  		switch (m->type) {
-> >  		case KCORE_VMALLOC:
-> > -			vread(buf, (char *)start, tsz);
-> > -			/* we have to zero-fill user buffer even if no read */
-> > -			if (copy_to_iter(buf, tsz, iter) != tsz) {
-> > -				ret = -EFAULT;
-> > -				goto out;
-> > +		{
-> > +			const char *src = (char *)start;
-> > +			size_t read = 0, left = tsz;
-> > +
-> > +			/*
-> > +			 * vmalloc uses spinlocks, so we optimistically try to
-> > +			 * read memory. If this fails, fault pages in and try
-> > +			 * again until we are done.
-> > +			 */
-> > +			while (true) {
-> > +				read += vread_iter(iter, src, left);
-> > +				if (read == tsz)
-> > +					break;
-> > +
-> > +				src += read;
-> > +				left -= read;
-> > +
-> > +				if (fault_in_iov_iter_writeable(iter, left)) {
-> > +					ret = -EFAULT;
-> > +					goto out;
-> > +				}
-> >  			}
-> >  			break;
-> > +		}
-> >  		case KCORE_USER:
-> >  			/* User page is handled prior to normal kernel page: */
-> >  			if (copy_to_iter((char *)start, tsz, iter) != tsz) {
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
