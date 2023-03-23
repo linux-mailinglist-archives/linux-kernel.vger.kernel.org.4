@@ -2,84 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455BF6C65D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0ADE6C65E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjCWKyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S231575AbjCWK5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjCWKxn (ORCPT
+        with ESMTP id S231358AbjCWK5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:53:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B8C01FCB;
-        Thu, 23 Mar 2023 03:53:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C4DF1570;
-        Thu, 23 Mar 2023 03:53:55 -0700 (PDT)
-Received: from a077209.blr.arm.com (a077209.arm.com [10.162.40.145])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AD0E13F766;
-        Thu, 23 Mar 2023 03:53:08 -0700 (PDT)
-From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/5] selftests/mm: Run hugetlb testcases of va switch
-Date:   Thu, 23 Mar 2023 16:22:43 +0530
-Message-Id: <20230323105243.2807166-6-chaitanyas.prakash@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
-References: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+        Thu, 23 Mar 2023 06:57:12 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AD7269F;
+        Thu, 23 Mar 2023 03:56:56 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 45FB15FD0A;
+        Thu, 23 Mar 2023 13:56:54 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679569014;
+        bh=8eddXPC/awXNoMqy6byR3Hi8fDvqg6PVzKfliU62rbA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=HbdKtnpY6qlblx62oixH39Ew4smcAa1Z2EYZ5iWp5IvqSmrGl6W/M/ck5O5NcDOEz
+         nhygucMMWj6ONBE/ULSVny/z7m2blwKv+LJ6OCUDWNdb/yPHvufLIqtt/ZTN+DtoLt
+         crW33coG0gIoCz0g6z0SOaiIxl68kpKpiC3847/G/NZqD5GSICYYODd9pWAeXkSg2i
+         5Mt3UNyr8xD/WPjbQ9MkTWHomVCLpNLHdZ/eMYT/TS9qP7lxUOkFXLI357xxDRD7mK
+         35xNtUrwkQgCkzEDXhXgwKBsBAAsuyV0cD0/R4dkmwPJcS2oU3bsDbANmDxRLWlRPx
+         wPsssu8PZhR+A==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 13:56:52 +0300 (MSK)
+Message-ID: <15e9ac56-bedc-b444-6d9a-8a1355e32eaf@sberdevices.ru>
+Date:   Thu, 23 Mar 2023 13:53:40 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v5 0/2] allocate multiple skbuffs on tx
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <f0b283a1-cc63-dc3d-cc0c-0da7f684d4d2@sberdevices.ru>
+ <2e06387d-036b-dde2-5ddc-734c65a2f50d@sberdevices.ru>
+ <20230323104800.odrkkiuxi3o2l37q@sgarzare-redhat>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230323104800.odrkkiuxi3o2l37q@sgarzare-redhat>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/23 09:00:00 #20997914
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The va_high_addr_switch selftest is used to test mmap across 128TB
-boundary. It divides the selftest cases into two main categories on
-the basis of size. One set is used to create mappings that are multiples
-of PAGE_SIZE while the other creates mappings that are multiples of
-HUGETLB_SIZE.
 
-In order to run the hugetlb testcases the binary must be appended with
-"--run-hugetlb" but the file that used to run the test only invokes the
-binary, thereby completely skipping the hugetlb testcases. Hence, the
-required statement has been added.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org 
-Signed-off-by: Chaitanya S Prakash <chaitanyas.prakash@arm.com>
----
- tools/testing/selftests/mm/va_high_addr_switch.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+On 23.03.2023 13:48, Stefano Garzarella wrote:
+> On Thu, Mar 23, 2023 at 01:01:40PM +0300, Arseniy Krasnov wrote:
+>> Hello Stefano,
+>>
+>> thanks for review!
+> 
+> You're welcome!
+> 
+>>
+>> Since both patches are R-b, i can wait for a few days, then send this
+>> as 'net-next'?
+> 
+> Yep, maybe even this series could have been directly without RFC ;-)
 
-diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
-index 3056788a27ac..45cae7cab27e 100644
---- a/tools/testing/selftests/mm/va_high_addr_switch.sh
-+++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
-@@ -52,3 +52,7 @@ check_test_requirements()
- 
- check_test_requirements
- ./va_high_addr_switch
-+
-+# In order to run hugetlb testcases, "--run-hugetlb" must be appended
-+# to the binary.
-+./va_high_addr_switch --run-hugetlb
--- 
-2.30.2
+"directly", You mean 'net' tag? Of just without RFC, like [PATCH v5]. In this case 
+it will be merged to 'net' right?
 
+Thanks, Arseniy
+> 
+> Thanks,
+> Stefano
+> 
