@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECCF6C5CAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D466C5CAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 03:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjCWCbP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 22 Mar 2023 22:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S230101AbjCWCdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 22:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjCWCbM (ORCPT
+        with ESMTP id S229597AbjCWCdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 22:31:12 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69E42915F;
-        Wed, 22 Mar 2023 19:31:11 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32N2UeMA2008354, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32N2UeMA2008354
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 23 Mar 2023 10:30:40 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 23 Mar 2023 10:30:55 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 23 Mar 2023 10:30:54 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 23 Mar 2023 10:30:54 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: RE: [PATCH v3 8/9] wifi: rtw88: Add support for the SDIO based RTL8822CS chipset
-Thread-Topic: [PATCH v3 8/9] wifi: rtw88: Add support for the SDIO based
- RTL8822CS chipset
-Thread-Index: AQHZW3PnroPpugYXrk+3JrIcpBnVFK8Hp+yw
-Date:   Thu, 23 Mar 2023 02:30:54 +0000
-Message-ID: <b3c2311082be40f7bc7ac9ae0c6bb8e5@realtek.com>
-References: <20230320213508.2358213-1-martin.blumenstingl@googlemail.com>
- <20230320213508.2358213-9-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230320213508.2358213-9-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 22 Mar 2023 22:33:09 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1D32CC53;
+        Wed, 22 Mar 2023 19:33:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VeSSihz_1679538780;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VeSSihz_1679538780)
+          by smtp.aliyun-inc.com;
+          Thu, 23 Mar 2023 10:33:04 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] fs/buffer: Remove redundant assignment to err
+Date:   Thu, 23 Mar 2023 10:32:59 +0800
+Message-Id: <20230323023259.6924-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Variable 'err' set but not used.
 
+fs/buffer.c:2613:2: warning: Value stored to 'err' is never read.
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Tuesday, March 21, 2023 5:35 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Larry Finger <Larry.Finger@lwfinger.net>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v3 8/9] wifi: rtw88: Add support for the SDIO based RTL8822CS chipset
-> 
-> 
-> Wire up RTL8822CS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8822C chipset code.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4589
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Remove unused out label.
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+ fs/buffer.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-> ---
-> Changes since v2:
-> - sort includes alphabetically as suggested by Ping-Ke
-> - add missing #include "main.h" (after it has been removed from sdio.h
->   in patch 2 from this series)
-> 
-> Changes since v1:
-> - use /* ... */ style for copyright comments
-> 
-> 
-
-[...]
+diff --git a/fs/buffer.c b/fs/buffer.c
+index d759b105c1e7..b3eb905f87d6 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -2580,7 +2580,7 @@ int block_truncate_page(struct address_space *mapping,
+ 	struct inode *inode = mapping->host;
+ 	struct page *page;
+ 	struct buffer_head *bh;
+-	int err;
++	int err = 0;
+ 
+ 	blocksize = i_blocksize(inode);
+ 	length = offset & (blocksize - 1);
+@@ -2593,9 +2593,8 @@ int block_truncate_page(struct address_space *mapping,
+ 	iblock = (sector_t)index << (PAGE_SHIFT - inode->i_blkbits);
+ 	
+ 	page = grab_cache_page(mapping, index);
+-	err = -ENOMEM;
+ 	if (!page)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	if (!page_has_buffers(page))
+ 		create_empty_buffers(page, blocksize, 0);
+@@ -2609,7 +2608,6 @@ int block_truncate_page(struct address_space *mapping,
+ 		pos += blocksize;
+ 	}
+ 
+-	err = 0;
+ 	if (!buffer_mapped(bh)) {
+ 		WARN_ON(bh->b_size != blocksize);
+ 		err = get_block(inode, iblock, bh, 0);
+@@ -2633,12 +2631,11 @@ int block_truncate_page(struct address_space *mapping,
+ 
+ 	zero_user(page, offset, length);
+ 	mark_buffer_dirty(bh);
+-	err = 0;
+ 
+ unlock:
+ 	unlock_page(page);
+ 	put_page(page);
+-out:
++
+ 	return err;
+ }
+ EXPORT_SYMBOL(block_truncate_page);
+-- 
+2.20.1.7.g153144c
 
