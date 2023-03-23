@@ -2,222 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3586C6DD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F726C6DE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjCWQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S232371AbjCWQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjCWQiq (ORCPT
+        with ESMTP id S232369AbjCWQjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:38:46 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE13A84F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:37:00 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id ek18so89426258edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:37:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679589415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zI1OjhppbjxP5gm//hDBy+RdPuj4ToAxdCG6kel4DWE=;
-        b=A+p59gcSMpaGuinyKCOkPl7rgUJJ70UmgDqUkVTD3B9rgQ7uHV6j0HDtHmK2b6R8J+
-         2/W1xAnGe9EtNhtO3J4UWlZYNadlYe/pQgiFRbc72HImcZJAX4zF33moW/GMZWhD5z2r
-         9tIEbrowrjIaYTkv6X9H/wnQxjsoPpkwT4hqIqavlmqQ6bRyNCx8YthG45c3lvwquAjs
-         2MQdXNkp0JfThOZdK+pUJdSsddDI72vGYhy7ZNth5151+8iycOuvjTfc1vGbgovDUghT
-         XGmNOxuIyQvAxdyTwpxdf/mtm1jm2UDm0hbpIGDh2ACT1/fVvTSV9URC48IavjDL6qaO
-         +aoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zI1OjhppbjxP5gm//hDBy+RdPuj4ToAxdCG6kel4DWE=;
-        b=KJbialLQyBGqizYPqnUw9/J7pfKrKGjtoOrF6tt7tmSGx55eMbNeVEfYtcd4iKYlGg
-         H65FaOOLug9yXt9WwYyzvmE8RCBa0x0nDVF/IF0zD5jDw6yTm7hVSjzmvDWZujK91+Ma
-         cduMAstxwVazHvvdyDdvX6hmBkBTm7eQnUGyt4DOYG40mqrjvSp/xLfkxsb/JYzk8Ps0
-         nbIcvKLK59UM4FmnIBIi2ZNb8oJ3ScME6cxW680/S9cclfB+pZD6ug+xDcnCZjF1L6pB
-         OrfOpEs/srdTgQ0UTNfH0oo1Erg80rEXHDvKxLDPsoc+dB1PeIpkQzesOta/qRXijNzf
-         Bmnw==
-X-Gm-Message-State: AO0yUKUiSjrlentj271SY+88qvThO16Td/X5PIDsGwnUOT2cpOK4rBgF
-        V5IZsnxMR/dqPZ+/r+Hw1VCG/KeUG7d28ieBg2Sziw==
-X-Google-Smtp-Source: AK7set/zgDFAhT/AM8a6Iyv/UQT+nfT7sT7yCYOdcZTocVNNSH5tLAORJonWRVtQoR3BIHOfcuMdY9wtMzm3fWoaxJM=
-X-Received: by 2002:a17:906:bccd:b0:8b1:28f6:8ab3 with SMTP id
- lw13-20020a170906bccd00b008b128f68ab3mr5657477ejb.15.1679589415489; Thu, 23
- Mar 2023 09:36:55 -0700 (PDT)
+        Thu, 23 Mar 2023 12:39:11 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EF835EF8;
+        Thu, 23 Mar 2023 09:37:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EDCF75C00BA;
+        Thu, 23 Mar 2023 12:36:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 23 Mar 2023 12:36:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679589401; x=1679675801; bh=E4
+        if9a3f9X77bOqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=g6/3/dAPpfW7mZxRyV
+        jPOpRzoyHXVPTKrALp/6Zwe9xO10hFRBcAvyZBM2dEjgYOK6hbiHF9bjSYJnWIT1
+        wylR3m+93h12OQAGpv5Lf9/gNEFez2Ptzd3HIC3pDoU1s8GC31LpE0CfmszvhIv0
+        3OklsofQDnBz3CGwMygcgs2lBOiGnJP1PJYGbkxemSIEP43Cx+YTeYD0rS3reD1k
+        rWyJfDhqc3JllW5a4/Lpe16UFPI2P0qEWXgH/niYJG8NKDsm0FLs7nBSEM7OLiO7
+        UQ9BGLry/ceQugSHSnjRSQ7Zd/QFs6mso1RWbMSe06G4yAXWripOvAWfCPI1W0KW
+        /1Ng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679589401; x=1679675801; bh=E4if9a3f9X77b
+        OqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=f7pdvdHCS5EL5R+baqKkwkuQa5f8G
+        UOzxn6XsttwT0bX91cNI16WTUD787PcZ9N+MZW8lmNjSpExH/MG1c5aT0BfV8bFY
+        76kmdLfLewjpc8fBRmVWsCZKmpUXC7Oor0co5mTlQh8slQdyE3EaMQMlB9RYC0iC
+        qoiCAa4PxGNmLjPFP7PqGarH+xJufg8s3kAg9DD4EzD4XxRaCSnz6J3iSH7iXp46
+        hPuSmcarS7w7EHjMzgMpdRlfGZ42A7IHEMcD91M9rHJJdmIZzvcNI/NdsLOIcCd7
+        gQ07OG+n6yDvxH8zhK1a5HAY9tFk22A21HB5YJFC4kPoPN+bFEuKAeU/w==
+X-ME-Sender: <xms:GYAcZHvRlh92ce2nlDK0uguK8ZvXANlPy5NmN5XVfxPIA0zCxeI8mQ>
+    <xme:GYAcZIfPxQKW2_xqbBciptLp86l3JI4Ynzf8TCd4QBAqdK7bjEEe_a6zIlxmpBJep
+    cMIvgYFfz_6ZcRK0cE>
+X-ME-Received: <xmr:GYAcZKz-gEDOXL1E_Za4TxYfMWnklLV1yHT2dpRtjl9Lyd0IH7WQDlN4YI9RfPpO2I60B6_K2ZrYQKDVvR3SpeOmBM9KIug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:GYAcZGNjLo9mhGVw_9lWJto-Wf-giSOmya4wa_v8DmRdrG1QdnpXBA>
+    <xmx:GYAcZH8Hk1nukBpZy9jJv0BsViw9_scgz8WFJvDIi3GB32EGrGhGUQ>
+    <xmx:GYAcZGXnUMjfr3ZrNmfcYsbzQCldaNTfXKlHc4J5Nfet_9nAACwjtQ>
+    <xmx:GYAcZLQWr1de6_fr9of5v4tTBxCm-YoY7V_mgoCHwc5kZ3NR8y1TlA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 12:36:41 -0400 (EDT)
+Date:   Thu, 23 Mar 2023 17:36:39 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230323163639.xtwpid2uunwnzai4@houat>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
- <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
- <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
- <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
- <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
- <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
- <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com>
- <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
- <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com> <CALvZod7saq910u4JxnuY4C7EwiK5vgNF=-Bv+236RprUOQdkjw@mail.gmail.com>
-In-Reply-To: <CALvZod7saq910u4JxnuY4C7EwiK5vgNF=-Bv+236RprUOQdkjw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 23 Mar 2023 09:36:19 -0700
-Message-ID: <CAJD7tkb8oHoK5RW96tEXjY9iyJpMXfGAvnFw1rG-5Sr+Mpubdg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="siftfz462ycziuwe"
+Content-Disposition: inline
+In-Reply-To: <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 9:29=E2=80=AFAM Shakeel Butt <shakeelb@google.com> =
-wrote:
+
+--siftfz462ycziuwe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> On 3/23/23 14:29, Maxime Ripard wrote:
+> > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> >=20
+> > This is the description of what was happening:
+> > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
 >
-> On Thu, Mar 23, 2023 at 9:18=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
-> >
-> > On Thu, Mar 23, 2023 at 9:10=E2=80=AFAM Shakeel Butt <shakeelb@google.c=
-om> wrote:
-> > >
-> > > On Thu, Mar 23, 2023 at 8:46=E2=80=AFAM Shakeel Butt <shakeelb@google=
-.com> wrote:
-> > > >
-> > > > On Thu, Mar 23, 2023 at 8:43=E2=80=AFAM Yosry Ahmed <yosryahmed@goo=
-gle.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 23, 2023 at 8:40=E2=80=AFAM Shakeel Butt <shakeelb@go=
-ogle.com> wrote:
-> > > > > >
-> > > > > > On Thu, Mar 23, 2023 at 6:36=E2=80=AFAM Yosry Ahmed <yosryahmed=
-@google.com> wrote:
-> > > > > > >
-> > > > > > [...]
-> > > > > > > > >
-> > > > > > > > > > 2. Are we really calling rstat flush in irq context?
-> > > > > > > > >
-> > > > > > > > > I think it is possible through the charge/uncharge path:
-> > > > > > > > > memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_=
-usage(). I
-> > > > > > > > > added the protection against flushing in an interrupt con=
-text for
-> > > > > > > > > future callers as well, as it may cause a deadlock if we =
-don't disable
-> > > > > > > > > interrupts when acquiring cgroup_rstat_lock.
-> > > > > > > > >
-> > > > > > > > > > 3. The mem_cgroup_flush_stats() call in mem_cgroup_usag=
-e() is only
-> > > > > > > > > > done for root memcg. Why is mem_cgroup_threshold() inte=
-rested in root
-> > > > > > > > > > memcg usage? Why not ignore root memcg in mem_cgroup_th=
-reshold() ?
-> > > > > > > > >
-> > > > > > > > > I am not sure, but the code looks like event notification=
-s may be set
-> > > > > > > > > up on root memcg, which is why we need to check threshold=
-s.
-> > > > > > > >
-> > > > > > > > This is something we should deprecate as root memcg's usage=
- is ill defined.
-> > > > > > >
-> > > > > > > Right, but I think this would be orthogonal to this patch ser=
-ies.
-> > > > > > >
-> > > > > >
-> > > > > > I don't think we can make cgroup_rstat_lock a non-irq-disabling=
- lock
-> > > > > > without either breaking a link between mem_cgroup_threshold and
-> > > > > > cgroup_rstat_lock or make mem_cgroup_threshold work without dis=
-abling
-> > > > > > irqs.
-> > > > > >
-> > > > > > So, this patch can not be applied before either of those two ta=
-sks are
-> > > > > > done (and we may find more such scenarios).
-> > > > >
-> > > > >
-> > > > > Could you elaborate why?
-> > > > >
-> > > > > My understanding is that with an in_task() check to make sure we =
-only
-> > > > > acquire cgroup_rstat_lock from non-irq context it should be fine =
-to
-> > > > > acquire cgroup_rstat_lock without disabling interrupts.
-> > > >
-> > > > From mem_cgroup_threshold() code path, cgroup_rstat_lock will be ta=
-ken
-> > > > with irq disabled while other code paths will take cgroup_rstat_loc=
-k
-> > > > with irq enabled. This is a potential deadlock hazard unless
-> > > > cgroup_rstat_lock is always taken with irq disabled.
-> > >
-> > > Oh you are making sure it is not taken in the irq context through
-> > > should_skip_flush(). Hmm seems like a hack. Normally it is recommende=
-d
-> > > to actually remove all such users instead of silently
-> > > ignoring/bypassing the functionality.
-> >
-> > It is a workaround, we simply accept to read stale stats in irq
-> > context instead of the expensive flush operation.
-> >
-> > >
-> > > So, how about removing mem_cgroup_flush_stats() from
-> > > mem_cgroup_usage(). It will break the known chain which is taking
-> > > cgroup_rstat_lock with irq disabled and you can add
-> > > WARN_ON_ONCE(!in_task()).
-> >
-> > This changes the behavior in a more obvious way because:
-> > 1. The memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage()
-> > path is also exercised in a lot of paths outside irq context, this
-> > will change the behavior for any event thresholds on the root memcg.
-> > With proposed skipped flushing in irq context we only change the
-> > behavior in a small subset of cases.
-> >
-> > I think we can skip flushing in irq context for now, and separately
-> > deprecate threshold events for the root memcg. When that is done we
-> > can come back and remove should_skip_flush() and add a VM_BUG_ON or
-> > WARN_ON_ONCE instead. WDYT?
-> >
-> > 2. mem_cgroup_usage() is also used when reading usage from userspace.
-> > This should be an easy workaround though.
->
-> This is a cgroup v1 behavior and to me it is totally reasonable to get
-> the 2 second stale root's usage. Even if you want to skip flushing in
-> irq, do that in the memcg code and keep VM_BUG_ON/WARN_ON_ONCE in the
-> rstat core code. This way we will know if other subsystems are doing
-> the same or not.
+> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
+> when root_device_register() is used is not because root_device_unregister=
+()
+> would not trigger the unwinding - but rather because DRM code on top of t=
+his
+> device keeps the refcount increased?
 
-We can do that. Basically in mem_cgroup_usage() have:
+There's a difference of behaviour between a root_device and any device
+with a bus: the root_device will only release the devm resources when
+it's freed (in device_release), but a bus device will also do it in
+device_del (through bus_remove_device() -> device_release_driver() ->
+device_release_driver_internal() -> __device_release_driver() ->
+device_unbind_cleanup(), which are skipped (in multiple places) if
+there's no bus and no driver attached to the device).
 
-/* Some useful comment */
-if (in_task())
-    mem_cgroup_flush_stats();
+It does affect DRM, but I'm pretty sure it will affect any framework
+that deals with device hotplugging by deferring the framework structure
+until the last (userspace) user closes its file descriptor. So I'd
+assume that v4l2 and cec at least are also affected, and most likely
+others.
 
-and in cgroup_rstat_flush() have:
-WARN_ON_ONCE(!in_task());
+> If this is the case, then it sounds like a DRM specific issue to me.
 
-I am assuming VM_BUG_ON is not used outside mm code.
+I mean, I guess. One could also argue that it's because IIO doesn't
+properly deal with hotplugging. I'm not sure how that helps. Those are
+common helpers which should accommodate every framework, and your second
+patch breaks the kunit tests for DRM anyway.
 
-The only thing that worries me is that if there is another unlikely
-path somewhere that flushes stats in irq context we may run into a
-deadlock. I am a little bit nervous about not skipping flushing if
-!in_task() in cgroup_rstat_flush().
+> Whether it is a feature or bug is beyond my knowledge. Still, I would
+> not say using the root_device_[un]register() in generic code is not
+> feasible - unless all other subsytems have similar refcount handling.
+>=20
+> Sure thing using root_device_register() root_device_unregister() in DRM d=
+oes
+> not work as such. This, however, does not mean the generic kunit helpers
+> should use platform_devices to force unwinding?
+
+platform_devices were a quick way to get a device that would have a bus
+and a driver bound to fall into the right patch above. We probably
+shouldn't use platform_devices and a kunit_device sounds like the best
+idea, but the test linked in the original mail I pointed you to should
+work with whatever we come up with. It works with multiple (platform,
+PCI, USB, etc) buses, so the mock we create should behave like their
+real world equivalents.
+
+Maxime
+
+--siftfz462ycziuwe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZByAFwAKCRDj7w1vZxhR
+xZYoAQD0EfI8ZCSq1KpU73P+V49HUzeC9ingQ95MQn3oUWcu3wD9HQRLsSfxvM7A
+K3Xa8SyESe39WCse9VZjO2fd9YvqoQM=
+=9U43
+-----END PGP SIGNATURE-----
+
+--siftfz462ycziuwe--
