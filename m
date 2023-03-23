@@ -2,91 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845506C726F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787B46C7271
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjCWVjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S229618AbjCWVkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjCWVj1 (ORCPT
+        with ESMTP id S231495AbjCWVj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:39:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1A7212B9;
-        Thu, 23 Mar 2023 14:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5736628D9;
-        Thu, 23 Mar 2023 21:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F247AC433D2;
-        Thu, 23 Mar 2023 21:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679607561;
-        bh=2wm98QIcutJIPgtolx5FVuBVp/ZTzCYN6ELSU1GVJ+E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VgfIv3JLWTq1Cz8h4wTsFvDi6OnP3/tmT4HLn/sDHRSwuw1Lh9uv94rv3Uk6+Gg2x
-         vdpEUmUvTnYVYjoYEQQwgs3zUDGQGN+cJAdX64WlTWAtSdz9iuCCGnPRYT7+w7FhDV
-         YmFMz8UlLL1t00HS+ZDBRTDUDNUY67y9ZHsbXXoG0Z3fVs42+xUfN24H3zjXlyEp2w
-         ahesitRXao4kQ9t2c0tl6w+nGOu4h/fVQRi+b2tR67EUc0PoTR0Wf0jzXA4sfKVj89
-         OsYxSqKzOiLUjPMTOVwmniCt6Ozt6O8DOFZmaDBww0V4LCP6GRzqgMuHERN44zIUNg
-         yFnMpSuswvY6g==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] f2fs: get out of a repeat loop when getting a locked data page
-Date:   Thu, 23 Mar 2023 14:39:19 -0700
-Message-Id: <20230323213919.1876157-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+        Thu, 23 Mar 2023 17:39:57 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE631DBBC;
+        Thu, 23 Mar 2023 14:39:34 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A822B68B05; Thu, 23 Mar 2023 22:39:30 +0100 (CET)
+Date:   Thu, 23 Mar 2023 22:39:30 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/4] Use dma_default_coherent for devicetree default
+ coherency
+Message-ID: <20230323213930.GA7730@lst.de>
+References: <20230321110813.26808-1-jiaxun.yang@flygoat.com> <20230323072944.GA18524@lst.de> <60D7FE31-D708-4495-949F-3F64DDC11377@flygoat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <60D7FE31-D708-4495-949F-3F64DDC11377@flygoat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=216050
+On Thu, Mar 23, 2023 at 09:07:31PM +0000, Jiaxun Yang wrote:
+> 
+> 
+> > 2023年3月23日 07:29，Christoph Hellwig <hch@lst.de> 写道：
+> > 
+> > The series looks fine to me.  How should we merge it?
+> 
+> Perhaps go through dma-mapping tree?
 
-Somehow we're getting a page which has a different mapping.
-Let's avoid the infinite loop.
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/data.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index bf51e6e4eb64..80702c93e885 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
- {
- 	struct address_space *mapping = inode->i_mapping;
- 	struct page *page;
--repeat:
-+
- 	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
- 	if (IS_ERR(page))
- 		return page;
- 
- 	/* wait for read completion */
- 	lock_page(page);
--	if (unlikely(page->mapping != mapping)) {
--		f2fs_put_page(page, 1);
--		goto repeat;
--	}
--	if (unlikely(!PageUptodate(page))) {
-+	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
- 		f2fs_put_page(page, 1);
- 		return ERR_PTR(-EIO);
- 	}
--- 
-2.40.0.348.gf938b09366-goog
-
+Is patch a 6.3 candidate or should all of it go into 6.4?
