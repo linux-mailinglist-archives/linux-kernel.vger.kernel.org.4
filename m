@@ -2,171 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDCD6C6EBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C3C6C6EC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbjCWRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S232005AbjCWRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWRY4 (ORCPT
+        with ESMTP id S231822AbjCWRZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:24:56 -0400
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F552686C;
-        Thu, 23 Mar 2023 10:24:52 -0700 (PDT)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 8D76675C90;
-        Thu, 23 Mar 2023 17:24:50 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 733B060AE0;
-        Thu, 23 Mar 2023 17:24:50 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id X4If3C_OIL3F; Thu, 23 Mar 2023 17:24:50 +0000 (UTC)
-Received: from [192.168.48.17] (host-184-164-23-94.dyn.295.ca [184.164.23.94])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id 834B460ADC;
-        Thu, 23 Mar 2023 17:24:49 +0000 (UTC)
-Message-ID: <fd810b7f-5520-1054-735f-8434a237c6e4@interlog.com>
-Date:   Thu, 23 Mar 2023 13:24:48 -0400
+        Thu, 23 Mar 2023 13:25:11 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4902689
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:25:09 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id l27so13116894wrb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fungible.com; s=google; t=1679592308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibZehAMU95QClUuNoAJiAG9Xi+jaU1H+meb4jOWGkvI=;
+        b=AQmsj3kxE5fcbMyPL49KBLJiR9dS/o8sI/0QCe9HwVJD0JitvR2v2bbXRolFAaz9hp
+         zWWx0yLcYfgAlpAxaJ0jUY2kia2UQ/X/HFF5JzceuF/aEEmbr2g3rlW6U4nAB4uGl7Lu
+         rUGLQWZtiAQ/j/EgPPcYZIuzwZwPmBs/cSJcU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679592308;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ibZehAMU95QClUuNoAJiAG9Xi+jaU1H+meb4jOWGkvI=;
+        b=qz2jVdnFE/npg1gb1R/LQA/yC8d1H0NxXFj/picRmIgp4Hfr+MCLN7Ycu1exorkuUc
+         Xqv4QP+w+f7UseJ/DSBRUjApZ4cHEeCRuL1hj0xuHdbjjPxz7pCv0wcku5L5VQO6yu9g
+         eo1qegnt7Lqd5ZR8/DCbVg8aA67jREZyjnFkwMRkHpBIFeOwQlgmUUFrpPqxZhZhZEkl
+         6qn1eLr+zWpEGfScJ3PILRttZqkTjBD/zHHrurIrqw02GYrAnhTuSPSC4YiUUzeuSPz8
+         Bp+BBOWhFTMqZwBPVDWdhCO03M/AdGrtZb71WFMQj4zwr32RaVf3W7KhuIti2+b/KMy6
+         6zXA==
+X-Gm-Message-State: AAQBX9fo+4otc1pAUDehi6JyWEeV+bteEpGPS11SFOb02d5oS7r382At
+        ZCAuLTeShz/cObSqr14y4WJrGyhGIy1vKvDZ/D2edw==
+X-Google-Smtp-Source: AKy350auvmdyBglcTfV86qYfWUmp7zJ4yneypHrnpQYCgYYkY1qt4i6NnbUZrQQy/EJj4CrUmqewHs30B0Bkh6nQLtA=
+X-Received: by 2002:a5d:48c9:0:b0:2d5:bc78:15f3 with SMTP id
+ p9-20020a5d48c9000000b002d5bc7815f3mr795212wrs.10.1679592307818; Thu, 23 Mar
+ 2023 10:25:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH 0/5]scsi:scsi_debug: Add error injection for single device
-Content-Language: en-CA
-To:     John Garry <john.g.garry@oracle.com>,
-        "haowenchao (C)" <haowenchao2@huawei.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linfeilong@huawei.com, louhongxiang@huawei.com
-References: <20230323115601.178494-1-haowenchao2@huawei.com>
- <b5f8240e-f46a-b83b-ed16-66c2d8c5571f@oracle.com>
- <c9d213e2-5ab4-0db2-f87a-247519debbbb@huawei.com>
- <750a4b24-6122-6faa-fed4-25e3167ea376@oracle.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <750a4b24-6122-6faa-fed4-25e3167ea376@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230323090314.22431-1-cai.huoqing@linux.dev> <20230323090314.22431-4-cai.huoqing@linux.dev>
+In-Reply-To: <20230323090314.22431-4-cai.huoqing@linux.dev>
+From:   Dimitris Michailidis <d.michailidis@fungible.com>
+Date:   Thu, 23 Mar 2023 10:24:55 -0700
+Message-ID: <CAOkoqZk0GRRZb5PyZdQ8THK+oZ+b9PKYUR8jRf2f2e8imEPaGQ@mail.gmail.com>
+Subject: Re: [PATCH 4/8] net/fungible: Remove redundant pci_clear_master
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Dariusz Marcinkiewicz <reksio@newterm.pl>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        Brett Creeley <brett.creeley@amd.com>, drivers@pensando.io,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Jian Shen <shenjian15@huawei.com>, Hao Lan <lanhao@huawei.com>,
+        Jie Wang <wangjie125@huawei.com>,
+        Long Li <longli@microsoft.com>, Jiri Pirko <jiri@resnulli.us>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-23 12:25, John Garry wrote:
-> On 23/03/2023 13:13, haowenchao (C) wrote:
->> On 2023/3/23 20:40, John Garry wrote:
->>> On 23/03/2023 11:55, Wenchao Hao wrote:
->>>> The original error injection mechanism was based on scsi_host which
->>>> could not inject fault for a single SCSI device.
->>>>
->>>> This patchset provides the ability to inject errors for a single
->>>> SCSI device. Now we supports inject timeout errors, queuecommand
->>>> errors, and hostbyte, driverbyte, statusbyte, and sense data for
->>>> specific SCSI Command.
->>>
->>> There is already a basic mechanism to generate errors - like timeouts - on 
->>> "nth" command. Can you say why you want this new interface? What special 
->>> scenarios are you trying to test/validate (which could not be achieved based 
->>> on the current mechanism)?
->>>
->>
->> I am testing a new error handle policy which is based on single scsi_device
->> without set host to RECOVERY. So I need a method to generate errors for
->> single SCSI devices.
->>
->> While we can not generate errors for single device with current mechanism
->> because it is designed for host-wide error generation.
->>
->>> With this series we would have 2x methods to inject errors, which is less 
->>> than ideal, and they seem to possibly conflict as well, e.g. I set timeout 
->>> for nth command via current interface and then use the new interface to set 
->>> timeout for some other cadence. What behavior to expect ...?
->>
->> I did not take this issue in consideration. I now assume the users would
->> not use these 2 methods at same time.
->>
->> What's more, I don not know where to write the usage of this newly added
->> interface, maybe we can explain these in doc?
-> 
-> sysfs entries are described in Documentation/ABI, but please don't add elaborate 
-> programming interfaces in sysfs files (like in these patches) - a sysfs file 
-> should be just for reading or writing a single value
+On Thu, Mar 23, 2023 at 2:04=E2=80=AFAM Cai Huoqing <cai.huoqing@linux.dev>=
+ wrote:
+>
+> Remove pci_clear_master to simplify the code,
+> the bus-mastering is also cleared in do_pci_disable_device,
+> like this:
+> ./drivers/pci/pci.c:2197
+> static void do_pci_disable_device(struct pci_dev *dev)
+> {
+>         u16 pci_command;
+>
+>         pci_read_config_word(dev, PCI_COMMAND, &pci_command);
+>         if (pci_command & PCI_COMMAND_MASTER) {
+>                 pci_command &=3D ~PCI_COMMAND_MASTER;
+>                 pci_write_config_word(dev, PCI_COMMAND, pci_command);
+>         }
+>
+>         pcibios_disable_device(dev);
+> }.
+> And dev->is_busmaster is set to 0 in pci_disable_device.
+>
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 
-Hi,
-Maybe this link might help for scsi_debug documentation:
-     https://doug-gilbert.github.io/scsi_debug.html
-
-And rather than sysfs for complicated, per (pseudo_ device
-settings, perhaps we could think about a SCSI mechanism like
-the "Unit Attention" mode page [0x0] which is vendor specific
-and used by Seagate and WDC for this sort of thing.
-A framework is already in the scsi_debug driver to change
-some mode page settings:
-
-# sdparm /dev/sg0
-     /dev/sg0: Linux     scsi_debug        0191
-Read write error recovery mode page:
-   AWRE          1  [cha: n, def:  1]
-   ARRE          1  [cha: n, def:  1]
-   PER           0  [cha: n, def:  0]
-Caching (SBC) mode page:
-   WCE           1  [cha: y, def:  1]
-   RCD           0  [cha: n, def:  0]
-Control mode page:
-   SWP           0  [cha: n, def:  0]
-Informational exceptions control mode page:
-   EWASC         0  [cha: n, def:  0]
-   DEXCPT        1  [cha: n, def:  1]
-   MRIE          0  [cha: y, def:  0]
-
-As can be seen WCE and MRIE are changeable, so
-
-# sdparm --clear=WCE /dev/sg0
-# sdparm --get=WCE /dev/sg0
-     /dev/sg0: Linux     scsi_debug        0191
-WCE           0  [cha: y, def:  1]
+Acked-by: Dimitris Michailidis <dmichail@fungible.com>
 
 
-Doug Gilbert
-
-
->>> I'm not saying that I am a huge fan of the current inject mechanism, but at 
->>> the very least you need to provide more justification for this series.
->>>>>
->>>> The first patch add an sysfs interface to add and inquiry single
->>>> device's error injection info; the second patch defined how to remove
->>>> an injection which has been added. The following 3 patches use the
->>>> injection info and generate the related error type.
->>>>
->>>> Wenchao Hao (5):
->>>>    scsi:scsi_debug: Add sysfs interface to manage scsi devices' error
->>>>      injection
->>>>    scsi:scsi_debug: Define grammar to remove added error injection
->>>>    scsi:scsi_debug: timeout command if the error is injected
->>>>    scsi:scsi_debug: Return failed value if the error is injected
->>>>    scsi:scsi_debug: set command's result and sense data if the error is
->>>>      injected
->>>>
->>>>   drivers/scsi/scsi_debug.c | 296 ++++++++++++++++++++++++++++++++++++++
->>>>   1 file changed, 296 insertions(+)
->>>>
->>>
->>>
->>
-> 
-
+> ---
+>  drivers/net/ethernet/fungible/funcore/fun_dev.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/fungible/funcore/fun_dev.c b/drivers/ne=
+t/ethernet/fungible/funcore/fun_dev.c
+> index 3680f83feba2..a7fbd4cd560a 100644
+> --- a/drivers/net/ethernet/fungible/funcore/fun_dev.c
+> +++ b/drivers/net/ethernet/fungible/funcore/fun_dev.c
+> @@ -746,7 +746,6 @@ void fun_dev_disable(struct fun_dev *fdev)
+>         bitmap_free(fdev->irq_map);
+>         pci_free_irq_vectors(pdev);
+>
+> -       pci_clear_master(pdev);
+>         pci_disable_device(pdev);
+>
+>         fun_unmap_bars(fdev);
+> @@ -821,7 +820,6 @@ int fun_dev_enable(struct fun_dev *fdev, struct pci_d=
+ev *pdev,
+>  disable_admin:
+>         fun_disable_admin_queue(fdev);
+>  free_irq_mgr:
+> -       pci_clear_master(pdev);
+>         bitmap_free(fdev->irq_map);
+>  free_irqs:
+>         pci_free_irq_vectors(pdev);
+> --
+> 2.34.1
+>
