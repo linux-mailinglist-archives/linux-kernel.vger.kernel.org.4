@@ -2,182 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766526C70B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6296A6C70C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjCWTGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S231786AbjCWTHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjCWTGc (ORCPT
+        with ESMTP id S231740AbjCWTGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:06:32 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAB4633475;
-        Thu, 23 Mar 2023 12:06:15 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 416C920FC0F0;
-        Thu, 23 Mar 2023 12:06:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 416C920FC0F0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679598375;
-        bh=S8OIOLUkRs5CBqJ2LYBXQxLSyKFNFEQS/E/TUK8EqMU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XnLSeKH0mm6cBni98TS1qnpvJMydCDHzFlXP+uwHPBOwrx7c7e1Hlo2DfpDtnETWr
-         k4jNmpso/FRIMfmOxIFLCShwaTuWYXjbgLebyBLV0fqLLdQLX4DinvqGvSyf3rgzES
-         vXaJ9H3GW3BHmPpML/kbpTY4mRA8wefD5tVKtdto=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, brauner@kernel.org,
-        akpm@linux-foundation.org, ebiederm@xmission.com,
-        keescook@chromium.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: [RESEND PATCH v8 02/11] tracing/user_events: Track fork/exec/exit for mm lifetime
-Date:   Thu, 23 Mar 2023 12:06:01 -0700
-Message-Id: <20230323190610.251-3-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230323190610.251-1-beaub@linux.microsoft.com>
-References: <20230323190610.251-1-beaub@linux.microsoft.com>
+        Thu, 23 Mar 2023 15:06:55 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF1833CD0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:06:39 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id n14so1417933qta.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1679598399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=36prM9A8zaos5+TFGUPURrGIGK3rNGaMKQIdDwsgBJ8=;
+        b=oGgSIfZLaTXDTewLg4spU3ovWYFoauE33eFdHx4itMmXU+XmM0v/Z20Y/MLovTSywj
+         EcZJwhY7Y631lmzB4aEy8bsQEaPczWrFQ5YqrLLripRcy74B/zC7uXw77rO/S2Xxv+pq
+         PvB5VMGjHl/Ld7jykVIwh0q3cVdHApNiqij63kpN5GoVOrCHlC4TQBYLp8gAXGDSTPCU
+         N6PV1+scZ93dXYUusou13accFYlemFWeePxpmib6hNezb5xWUASwc82Cz+jPbBncawZ+
+         cBOIWRnYPJm6Wuxz77ZEAkUry1DYSKblccijSAMEim3937Ltf0ySXzzzMy1LMRjJgB2z
+         4BiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679598399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=36prM9A8zaos5+TFGUPURrGIGK3rNGaMKQIdDwsgBJ8=;
+        b=Qd6f4wayVuS1XVBiRdIY4GYMFyCGYv4TGvy/n3zYgPxQiVohtLgEDMrdTmd5v7pC0u
+         xYVNAve5wYGqg2CrdI3FLLY11XOeBiF8IhwLXqV5+VuzdD9IrmAviBy0aPYPxTG9wgXD
+         rF4b4Zlpd5GKAa1dVFOaQBilqySluCfqFnITDO+hSL7C92ZkTYJ1xHVh5F185wHmCHdr
+         V0lcH7JrBuAZugGig6KZLoXNFn5hEgALxGEo1mzRzfqvDRrCSZCEvA1ruGisI6SKqtV/
+         1/kMJpaxEYtvEoluveeIAu5C9eakNtJUd4iZg0t6NAqhD6t2tnim0k8yniVsQYNoA6fZ
+         d8qA==
+X-Gm-Message-State: AO0yUKVNC84aSR9h4RmcZRea5leDpYQkJSGiNUZBMtk+wdeqTC6+TTUC
+        KJgkxie4GUNcZd50+vHwqRaD7K+oQ5xH9suPesBjDA==
+X-Google-Smtp-Source: AK7set8xglclw5J5YcCeT1fPB6BezanDOekVyCKLGlb5fhybCh7Nxl4wyle7XuSUGfSvYoBnjT5I23feCbkyRPB5Lhk=
+X-Received: by 2002:a05:622a:1a02:b0:3e3:f70f:fb13 with SMTP id
+ f2-20020a05622a1a0200b003e3f70ffb13mr170171qtb.6.1679598398835; Thu, 23 Mar
+ 2023 12:06:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230323171904.14444-1-krckatom@amazon.de> <CA+CK2bDEPvQnMqv7R9JZybsNWbaMdHOPA0vKs501Txsu2OewKQ@mail.gmail.com>
+In-Reply-To: <CA+CK2bDEPvQnMqv7R9JZybsNWbaMdHOPA0vKs501Txsu2OewKQ@mail.gmail.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Thu, 23 Mar 2023 15:06:02 -0400
+Message-ID: <CA+CK2bAPSeEmQk6uazxSn3k7kWf0f6D6z+3BdHdWJPZXFBBg9w@mail.gmail.com>
+Subject: Re: [PATCH] mm: Be less noisy during memory hotplug
+To:     Tomas Krcka <krckatom@amazon.de>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During tracefs discussions it was decided instead of requiring a mapping
-within a user-process to track the lifetime of memory descriptors we
-should hook the appropriate calls. Do this by adding the minimal stubs
-required for task fork, exec, and exit. Currently this is just a NOP.
-Future patches will implement these calls fully.
+On Thu, Mar 23, 2023 at 2:37=E2=80=AFPM Pasha Tatashin
+<pasha.tatashin@soleen.com> wrote:
+>
+> On Thu, Mar 23, 2023 at 1:19=E2=80=AFPM Tomas Krcka <krckatom@amazon.de> =
+wrote:
+> >
+> > Turn a pr_info() into a pr_debug() to prevent dmesg spamming on systems
+> > where memory hotplug is a frequent operation.
+> >
+> > Fixes: 966cf44f637e ("mm: defer ZONE_DEVICE page initialization to the =
+point where we init pgmap")
+> >
+> > Suggested-by: Jan H. Sch=C3=B6nherr <jschoenh@amazon.de>
+> > Signed-off-by: Tomas Krcka <krckatom@amazon.de>
+>
+> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- fs/exec.c                   |  2 ++
- include/linux/sched.h       |  5 +++++
- include/linux/user_events.h | 18 ++++++++++++++++++
- kernel/exit.c               |  2 ++
- kernel/fork.c               |  2 ++
- 5 files changed, 29 insertions(+)
+Can you please specify what you mean by frequent hotplug: wow frequent
+is it and what is the usecase?
 
-diff --git a/fs/exec.c b/fs/exec.c
-index ab913243a367..d1c83e0dbae5 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -65,6 +65,7 @@
- #include <linux/syscall_user_dispatch.h>
- #include <linux/coredump.h>
- #include <linux/time_namespace.h>
-+#include <linux/user_events.h>
- 
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -1856,6 +1857,7 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	current->fs->in_exec = 0;
- 	current->in_execve = 0;
- 	rseq_execve(current);
-+	user_events_execve(current);
- 	acct_update_integrals(current);
- 	task_numa_free(current, false);
- 	return retval;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 853d08f7562b..a8e683b4291c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -69,6 +69,7 @@ struct sighand_struct;
- struct signal_struct;
- struct task_delay_info;
- struct task_group;
-+struct user_event_mm;
- 
- /*
-  * Task state bitmask. NOTE! These bits are also
-@@ -1522,6 +1523,10 @@ struct task_struct {
- 	union rv_task_monitor		rv[RV_PER_TASK_MONITORS];
- #endif
- 
-+#ifdef CONFIG_USER_EVENTS
-+	struct user_event_mm		*user_event_mm;
-+#endif
-+
- 	/*
- 	 * New fields for task_struct should be added above here, so that
- 	 * they are included in the randomized portion of task_struct.
-diff --git a/include/linux/user_events.h b/include/linux/user_events.h
-index 13689589d36e..3d747c45d2fa 100644
---- a/include/linux/user_events.h
-+++ b/include/linux/user_events.h
-@@ -11,4 +11,22 @@
- 
- #include <uapi/linux/user_events.h>
- 
-+#ifdef CONFIG_USER_EVENTS
-+struct user_event_mm {
-+};
-+#endif
-+
-+static inline void user_events_fork(struct task_struct *t,
-+				    unsigned long clone_flags)
-+{
-+}
-+
-+static inline void user_events_execve(struct task_struct *t)
-+{
-+}
-+
-+static inline void user_events_exit(struct task_struct *t)
-+{
-+}
-+
- #endif /* _LINUX_USER_EVENTS_H */
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 15dc2ec80c46..e2aaaa81b281 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -68,6 +68,7 @@
- #include <linux/kprobes.h>
- #include <linux/rethook.h>
- #include <linux/sysfs.h>
-+#include <linux/user_events.h>
- 
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -816,6 +817,7 @@ void __noreturn do_exit(long code)
- 
- 	coredump_task_exit(tsk);
- 	ptrace_event(PTRACE_EVENT_EXIT, code);
-+	user_events_exit(tsk);
- 
- 	validate_creds_for_do_exit(tsk);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9f7fe3541897..180f6d86fbad 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -97,6 +97,7 @@
- #include <linux/io_uring.h>
- #include <linux/bpf.h>
- #include <linux/stackprotector.h>
-+#include <linux/user_events.h>
- 
- #include <asm/pgalloc.h>
- #include <linux/uaccess.h>
-@@ -2502,6 +2503,7 @@ static __latent_entropy struct task_struct *copy_process(
- 
- 	trace_task_newtask(p, clone_flags);
- 	uprobe_copy_process(p, clone_flags);
-+	user_events_fork(p, clone_flags);
- 
- 	copy_oom_score_adj(clone_flags, p);
- 
--- 
-2.25.1
-
+Thanks,
+Pasha
