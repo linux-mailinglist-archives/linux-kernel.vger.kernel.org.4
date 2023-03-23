@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963826C6DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080AB6C6DBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCWQfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S232320AbjCWQfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjCWQex (ORCPT
+        with ESMTP id S230040AbjCWQfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:34:53 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDA336FD2;
-        Thu, 23 Mar 2023 09:33:36 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id bz27so15491665qtb.1;
-        Thu, 23 Mar 2023 09:33:36 -0700 (PDT)
+        Thu, 23 Mar 2023 12:35:32 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1ED2B2A3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:34:01 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n19so3754077wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:34:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679589213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9E1Pujm25vbd+wCzOHa90qVSx2qCib+x3xrMIOc8Nw=;
-        b=CDlsTyn+SvkcnchV7JrbV4yYAEz6+m/OzY+yUiD8+iLFQmemD67LTwWWAdZXpVzkYP
-         rDfUP9522BA5PQ+0pnn2viGFziMct9D0Va5lZj8MV0eultvmGbc6IdKWbRdGnmF293by
-         vR4o+DH9TNp4PKFQ16zCyJtV8hwWB2ZP8t+wgLtaCLwMrGUTZL99vdg60hpVdMfpp4u6
-         khw6hzgj0gzLVhhb/UY91IXhz1yo0Kx2Fm8CZjK2JyaPyBkAldFOtG2gRvnkFzCqB/P4
-         OaN160Ep59YkIUHpJVS7Fs9Lm5shmmY0fZVzqjtAM5U8aHKC+YefDepWohfJQGOyG68h
-         rRIw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679589238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T02CoPQSjHJPYyXwCzD6p0CGnIKFhz0kSb8bJB6ht4Y=;
+        b=EUVRSjxbLKVq8hDCxjrO+6jyd+BmL2kHZodwrBzrSopYstJqfGNjdbsvfTB3pLT1mh
+         0s/EBYsmGU7UR8u/QAmRPbRZ/TyjvS1nigC+yHT23S1G4PW83MoLc3GPDkiiozO4jAqD
+         xQHlG/ubsdOA92CkNvn8QVIpVgwWZJuLsif2ynfXI8532m2W7/tuMJaf/kEm+uysZTcL
+         5BMB36hsZQ+Eoiy08zwZgkKsoPwVqUdWs2mNmdVesyjBqx9xdUThaS87VTdwdtkZtXF9
+         z2GVeNjd8QlQufpj7rP0/zEqZ1v01nCy0GxdRayI5Gr8Txk8tMrh41ci/YHrrW0XNB5/
+         ccOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9E1Pujm25vbd+wCzOHa90qVSx2qCib+x3xrMIOc8Nw=;
-        b=j79jS9Uz4vkpSkzb6fuv/5060/XD069fsQHdQ+eeH/TTrO2yAn034ZLJOtsuromhau
-         tUugStkjO92FSnRDFmjPmD6OaYa6ArUVTaiOBn+K4O/FCRp1nsyAmhPQyd80C5NdZVwF
-         YE5BhfCD3fJxvKbHdV/io+7PgPmbi0ybqQBukNfjDJlIJBy3XEofUe9bxZ1Tp88R+Kuk
-         iOKJtO08lu2iaCoWdPit4Qc100l2WzFl8eoCkqAu/SccZ4qnkVK3LCnkQVTOr12fH8bA
-         83/lwTy70A/2WK5uPNDBUuKF3eKl3P+VnI6gWqZRoX3k6Al6cKky5HZb5f2jMTFh3fWm
-         vNNA==
-X-Gm-Message-State: AO0yUKUPR+fdliBxC18Hkpp3Ks0rCMoxNYy3ZEYsVQHZxNOfZ1mA0Euz
-        TSq0Bvwg0GC3b944c+YcfMU=
-X-Google-Smtp-Source: AK7set9UiTBv9/Svgrn5aQuc43LRC/Ea1ZlXgpL1NC+fGuRb6aJl8oXQOcbmmocMtLN80r/9y+e3qQ==
-X-Received: by 2002:a05:622a:13cc:b0:3da:a657:db7b with SMTP id p12-20020a05622a13cc00b003daa657db7bmr13374186qtk.35.1679589212935;
-        Thu, 23 Mar 2023 09:33:32 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id ay16-20020a05620a179000b007461e8efacbsm13502365qkb.69.2023.03.23.09.33.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 09:33:32 -0700 (PDT)
-Message-ID: <3766b93e-6325-5901-2e7b-f66374565781@gmail.com>
-Date:   Thu, 23 Mar 2023 09:33:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next 8/9] net: dsa: update TX path comments to not
- mention skb_mac_header()
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        d=1e100.net; s=20210112; t=1679589238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T02CoPQSjHJPYyXwCzD6p0CGnIKFhz0kSb8bJB6ht4Y=;
+        b=YaujTERGsm4BaRMYSBl9BHqFVKU9j0hN+Z9DRFI+LYKFhNT9VDEhNKb77bW1rFvFqB
+         kP0EkaAQxd3tFysrPw550M+AUddBohglC1JkfVn/Ye9Zc7YYCd7zdSVjVwwY3CUhLY/8
+         QuccHcYipbOdgB9bPdsIobCw13PCTiigEyPH269Twe6HZyLPfIujxXtAHuaRNgcL7Ok/
+         R1oIPzhGTUg043Eval1v5rRCnTd4/d7nRKXIXMaTrRXSam78/IK/RI8b15poQcXsV9aN
+         SrGvZcMYuRe9F8RV14MzSv5tGUL79W4OmdS4hDkNqi0qSRLvzisK0mjeObg8zEufQxgI
+         WZuQ==
+X-Gm-Message-State: AO0yUKUM3ujxkGcIHlg5ecJfV3A7NCNalFQ/swvRw7Mj/ugy2SnmLHTM
+        qb6kFwvT8noq0XMiqEBmrRgD3Q==
+X-Google-Smtp-Source: AK7set8Aj3DqH142gpbpe2Stg7uZNFfdNostTY7WbhAwUM7bAKFCiIArytMk9L+BB1rZ2e67txdRnQ==
+X-Received: by 2002:a7b:cd0d:0:b0:3ed:df74:bac7 with SMTP id f13-20020a7bcd0d000000b003eddf74bac7mr171034wmj.21.1679589237974;
+        Thu, 23 Mar 2023 09:33:57 -0700 (PDT)
+Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05600c1c0900b003ee6aa4e6a9sm2550735wms.5.2023.03.23.09.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:33:57 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <20230322233823.1806736-1-vladimir.oltean@nxp.com>
- <20230322233823.1806736-9-vladimir.oltean@nxp.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230322233823.1806736-9-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH -fixes 0/2] Fixes for dtb mapping
+Date:   Thu, 23 Mar 2023 17:33:45 +0100
+Message-Id: <20230323163347.182895-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,21 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 16:38, Vladimir Oltean wrote:
-> Once commit 6d1ccff62780 ("net: reset mac header in dev_start_xmit()")
-> will be reverted, it will no longer be true that skb->data points at
-> skb_mac_header(skb) - since the skb->mac_header will not be set - so
-> stop saying that, and just say that it points to the MAC header.
-> 
-> I've reviewed vlan_insert_tag() and it does not *actually* depend on
-> skb_mac_header(), so reword that to avoid the confusion.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+We used to map the dtb differently between early_pg_dir and
+swapper_pg_dir which caused issues when we referenced addresses from
+the early mapping with swapper_pg_dir (reserved_mem): move the dtb mapping
+to the fixmap region in patch 1, which allows to simplify dtb handling in
+patch 2.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+base-commit-tag: v6.3-rc3
 
-  }
+Alexandre Ghiti (2):
+  riscv: Move early dtb mapping into the fixmap region
+  riscv: Do not set initial_boot_params to the linear address of the dtb
+
+ Documentation/riscv/vm-layout.rst |  6 +--
+ arch/riscv/include/asm/fixmap.h   |  8 +++
+ arch/riscv/include/asm/pgtable.h  |  8 ++-
+ arch/riscv/kernel/setup.c         |  6 +--
+ arch/riscv/mm/init.c              | 82 ++++++++++++++-----------------
+ 5 files changed, 54 insertions(+), 56 deletions(-)
 
 -- 
-Florian
+2.37.2
 
