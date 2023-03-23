@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663556C7364
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E080D6C7354
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCWWxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S231500AbjCWWvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjCWWxT (ORCPT
+        with ESMTP id S231460AbjCWWvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:53:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D440F2ED62
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:03 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5458dde029bso752397b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:53:03 -0700 (PDT)
+        Thu, 23 Mar 2023 18:51:23 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC0E2CC59
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:20 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso3446465pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679611982;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6+Qn6EJMHI+3I/L2O6DcxdAJ0N7a/1zdIIWx5jxJMI=;
-        b=lPRzXXsmxANtqW5g73lEWfTE9t87KJhwBulJ2jb4CXk1fhH834elw1IMt+G2RURXet
-         uS2wvECcsZveg4IYcaPYOJKetzv9Figak4PRmehi0PaUJ8oFmgOi3kylQRF0ELdh/GKi
-         xmAsx0GT54177CJ1ns9ILiUH+rowuFK+5N8+l3XEoO7xDB006uypOuUYK0qFKP1d0qyi
-         nP7pFMSVzP68WM1fuLgJmJlePpq+r4YABvtBxXg+UlVFHJLmsWGlgrqft3CZO2gsXznf
-         DrREFzhQte4JrGxlovC6qHX0nLzs4RtFEsANSt/CKLgnHgLcnydvfTSE78QgKaojbTM+
-         PFVQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679611880; x=1682203880;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E0OX40ehjV5gIkQr/Q9nraxMiJdzGjqFLifP7n6ggXk=;
+        b=TTqPzThDGMupB/gagrp+rTbV3eHSKSSrLjeATpLujyP3BjQhyLVdJPW0nFqfh7lx4X
+         /tL5/prrRpFJnHz7NO9yWbSZYuEIbhgoUu+hIfGI0YCk0HO1n6FyPw4xLxD9b87pvVSL
+         CK4W5AVwxkz0p8kq6QRhUEa31VKANW6YLLR5YwZwnuwvYDUbDeFzkaD1tIbclly1k12L
+         ahS0F94a0rnpiFBIxQyHIiS7ylZ5k+o/htcVsn/9Ucp/a9U4M5NJTvX5L1BCfVR3S3RX
+         8wl5iIN2tmHyYrx+Vw8BnXwd2RfKOSW3OFEYaEwQz3LNenf0o4ch+tpXJBuJgtXi4Taf
+         1V+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679611982;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6+Qn6EJMHI+3I/L2O6DcxdAJ0N7a/1zdIIWx5jxJMI=;
-        b=BF5odyYT5Q5PuLpSjrQm8U1q8st/wv9W0cG+b0nVPRqf0RBl0IQdsJDKr3wOxvwntF
-         GfKK7L5IX8tTDXle1Sy2WNyVEiLs4MBJmHVes9pAznLxwaE5uH69f4H5VYnOFCvhzL5j
-         Lzdm+ZkRfK7cXTIXihyxQi4xTQJzyPlniSiGllbP+qwJexLdRcZX6SJ4Zlk0bCp9Bv++
-         Szw9t/TwDbt7qpfLXt2Qq9QcKAkV0uvWlHxN8TyKZPsiDWT+aat1frhXCisK6f2S1lHc
-         dsSjSXJAZusdoP7RvNnZ/rFbPQatO+vIR+HSak5MtuPUiEkYgW4NZ5u+I+PDjNIZv6hV
-         4lxg==
-X-Gm-Message-State: AAQBX9frMV2wjPtFmmtsvih6Jtww/AC2XGmGNOrgZidTG0jsA8eGRnIO
-        ON2OsihoHsI3hwVEneZkPD1fxkEdc5Y=
-X-Google-Smtp-Source: AKy350aD3v+u24+02eF93jNscPBMXl81ZfnIUCEHD8aAAK+EKBKMkSSJWX59LqWYUu8CYTMAdDRJuuk3J2A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:af5d:0:b0:541:8285:b25 with SMTP id
- x29-20020a81af5d000000b0054182850b25mr78379ywj.10.1679611981974; Thu, 23 Mar
- 2023 15:53:01 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 15:50:34 -0700
-In-Reply-To: <20230322013731.102955-1-minipli@grsecurity.net>
-Mime-Version: 1.0
-References: <20230322013731.102955-1-minipli@grsecurity.net>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <167949641597.2215962.13042575709754610384.b4-ty@google.com>
-Subject: Re: [PATCH v4 0/6] KVM: MMU: performance tweaks for heavy CR0.WP users
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Mathias Krause <minipli@grsecurity.net>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679611880; x=1682203880;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0OX40ehjV5gIkQr/Q9nraxMiJdzGjqFLifP7n6ggXk=;
+        b=m4DtUebK2PYC9CiybMTlehVje6Sma+BfBW2DNqGIS1xiCDxh1dzQFOaEU5zH/hI5uK
+         +VqSYDGXv1V/MphpRjeQpZflIgsJ5uHTpO5LmTyeqIKrEHgLeUgcdgVHNEP9DDH/1cFX
+         eN3yZpbMg3UH+nwYC2WdZWmuPQww1LvVRQ8Hog/vLujpD57tvBECu943cv605pDqih1Q
+         PTymZFgcj1THESQ7+5LThgV77xYQDmw18RYXVzuxbqWQqGe0cl1eFnxjimlAxc7chb/6
+         t0Xwfo8pKjCwqafJZwLNHz0VxqmrBkxn3i/ojF2SwK7r0kBYNjZIC8NacwjVGc+ExpPn
+         hAHw==
+X-Gm-Message-State: AAQBX9c8fH2pWeWTwTffJpjUNVl9KG2iQzk8VjVnDebDHRtJ7SbUAc8f
+        wFWB0gmqprx4jUhosxiYF270Wg==
+X-Google-Smtp-Source: AKy350YwB4kYOrekaxdEpI+hPuVho+rJnXECPnSPxRKXmlcV0fNHAsS4nvedwv84jZJ4QD01oSfi+Q==
+X-Received: by 2002:a17:903:788:b0:1a1:bf37:7c2e with SMTP id kn8-20020a170903078800b001a1bf377c2emr225398plb.4.1679611879706;
+        Thu, 23 Mar 2023 15:51:19 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b0019b9a075f1fsm12871828plb.80.2023.03.23.15.51.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 15:51:19 -0700 (PDT)
+Message-ID: <6c507b78-35fb-fe23-51f0-e5bb754679d0@kernel.dk>
+Date:   Thu, 23 Mar 2023 16:51:17 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RESEND v3] nbd_genl_status: null check for nla_nest_start
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Michal Kubecek <mkubecek@suse.cz>
+References: <20230323193032.28483-1-mkoutny@suse.com>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230323193032.28483-1-mkoutny@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Mar 2023 02:37:25 +0100, Mathias Krause wrote:
-> v3: https://lore.kernel.org/kvm/20230201194604.11135-1-minipli@grsecurity.net/
+On 3/23/23 1:30 PM, Michal Koutný wrote:
+> From: Navid Emamdoost <navid.emamdoost@gmail.com>
 > 
-> This series is the fourth iteration of resurrecting the missing pieces of
-> Paolo's previous attempt[1] to avoid needless MMU roots unloading.
+> nla_nest_start may fail and return NULL. The check is inserted, and
+> errno is selected based on other call sites within the same source code.
+> Update: removed extra new line.
+> v3 Update: added release reply, thanks to Michal Kubecek for pointing
+> out.
+
+Josef? Looks straight forward to me, though it's not clear (to me) how
+this can be triggered and hence how important it is.
+
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+> Reviewed-by: Michal Kubecek <mkubecek@suse.cz>
+> Link: https://lore.kernel.org/r/20190911164013.27364-1-navid.emamdoost@gmail.com/
+> ---
 > 
-> It's incorporating Sean's feedback to v3 and rebased on top of
-> kvm-x86/next, namely commit d8708b80fa0e ("KVM: Change return type of
-> kvm_arch_vm_ioctl() to "int"").
-> 
-> [...]
+> I'm resending the patch because there was apparent consensus of its
+> inclusion and it seems it was only overlooked. Some people may care
+> about this because of CVE-2019-16089.
 
-Applied 1 and 5 to kvm-x86 mmu, and the rest to kvm-x86 misc, thanks!
+Anyone can file a CVE, and in fact they are often filed as some kind
+of silly trophy. Whether a CVE exists or not has ZERO bearing on
+whether a bug is worth fixing.
 
-[1/6] KVM: x86/mmu: Avoid indirect call for get_cr3
-      https://github.com/kvm-x86/linux/commit/2fdcc1b32418
-[2/6] KVM: x86: Do not unload MMU roots when only toggling CR0.WP with TDP enabled
-      https://github.com/kvm-x86/linux/commit/01b31714bd90
-[3/6] KVM: x86: Ignore CR0.WP toggles in non-paging mode
-      https://github.com/kvm-x86/linux/commit/e40bcf9f3a18
-[4/6] KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
-      https://github.com/kvm-x86/linux/commit/74cdc836919b
-[5/6] KVM: x86/mmu: Fix comment typo
-      https://github.com/kvm-x86/linux/commit/50f13998451e
-[6/6] KVM: VMX: Make CR0.WP a guest owned bit
-      https://github.com/kvm-x86/linux/commit/fb509f76acc8
+So please don't mix CVEs into any of this, they don't matter one bit.
+Never have, and never will. What's important is how the bug can be
+triggered.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+-- 
+Jens Axboe
+
+
