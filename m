@@ -2,93 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8199A6C685F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FB56C6864
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjCWMcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S229964AbjCWMdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjCWMcN (ORCPT
+        with ESMTP id S229913AbjCWMdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:32:13 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CC924C84
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:32:09 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id n17so14834761uaj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679574728; x=1682166728;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e7njpxHsBp6Zpf7USz1qoQfmvdgTSOIgFyvT8AM89S0=;
-        b=mETt/7fL6sCVOGgSUC4X42zdsee75/cOYiPkOOc5LOqxbCxCUIAYoltj3gZ18uG0/m
-         oqO9tRdCzdGMbghra0/eT/po0Rn06U6aHiaK6teZLWr4A3vK4wq5qkuZuBcLKkE24SBr
-         3DzXRppzZikj8q245oczt5JYJOCM3bn6ToWEF3Xf0McSnW8Dg2SS4EPCdQgOj4V8IRZv
-         AqvvKOtr2ksbZYxByWF05aSoTYNuL6vgr0wpdk5B21du8+pl9tG5mN5cawYllUW5m8OH
-         Lfm1tB/9j8fipCoxzpIJ3RaqLpHZpfW/z7jS8Z/MYwV86XFC+1UxQn4z9/veZ9ewKpgA
-         N9zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679574728; x=1682166728;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7njpxHsBp6Zpf7USz1qoQfmvdgTSOIgFyvT8AM89S0=;
-        b=eqtBDvcvJPBw4odH7zVlIIvlshoIB/7g/qJz8B7stfNWNOV85rutwEPmBYdDSNB0jr
-         CtJow07Qd9EPoLckhOVv7gfDEm+P6PhrRQkdH88lkJKZkE/ZCeUMHUzmbfb/uzSA5l9W
-         6ALtnV1gX+kTNCIM5VG9TrkZlIr7C+SC9+O0C+BOuMVxsR7hqTDcu9p6TrzA5k38hPB1
-         3V8vwOrFsqfAIcSC2Qc65D9lxWqf0wH9jqPUp1jzbh8CtkJ+P/vXjk+55XHfLHueF0M2
-         TXh8EwcVAd6UX8M4mp3vm+GI5BEYdQSO/3PgBEeVc/suc3NV+IVxXV3KQg3zWfbN8ysQ
-         NDnA==
-X-Gm-Message-State: AO0yUKUnZIXWIMC/VpRbI8IjSqXElWiaACZO9bba4rT5nXgRcrRSgsHi
-        GU/oudtx9DJNWzzbw2W3JjIBMXuxrvMEYz7BkAMpHNL/yvMBTsBW
-X-Google-Smtp-Source: AK7set9GUaTS0WQA6zj4s6oFOTMi3x+SlwBDmNRW1jDzCFtFHeEdv4OaBc3otAZ9GOnxMc5mngJt92AE+1yxY4lcAkY=
-X-Received: by 2002:a1f:2850:0:b0:431:f19e:fdd with SMTP id
- o77-20020a1f2850000000b00431f19e0fddmr1740727vko.1.1679574728470; Thu, 23 Mar
- 2023 05:32:08 -0700 (PDT)
+        Thu, 23 Mar 2023 08:33:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D7912848
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:32:59 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfK7b-00081j-6X; Thu, 23 Mar 2023 13:32:47 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfK7Y-00699f-Aw; Thu, 23 Mar 2023 13:32:44 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfK7X-00Fn7U-Kh; Thu, 23 Mar 2023 13:32:43 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v1] ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
+Date:   Thu, 23 Mar 2023 13:32:42 +0100
+Message-Id: <20230323123242.3763673-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:abe:488:0:b0:35e:bef9:d1e0 with HTTP; Thu, 23 Mar 2023
- 05:32:08 -0700 (PDT)
-From:   Naruenapang Naruepai <naruenapang.napa@gmail.com>
-Date:   Thu, 23 Mar 2023 12:32:08 +0000
-Message-ID: <CAD93zBBzZ2j8zOUhwr4CRtq4bUF_D5ARwQpLkcf3zQdRAniDzA@mail.gmail.com>
-Subject: Adolfo Yarhi Gumez
-To:     linux kernel <linux-kernel@vger.kernel.org>,
-        lionel perez <lionel.perez@305miamirealty.com>,
-        liperez21 <liperez21@gmail.com>,
-        lisa reinstetle <lisa.reinstetle@kw.com>,
-        lisa <lisa@lisaperrysells.com>, lisa <lisa@mycfrp.com>,
-        lisa <lisa@sofldreamhome.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BODY_SINGLE_URI,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SHORT_SHORTNER,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        SUSPICIOUS_RECIPS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:944 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  2.5 SUSPICIOUS_RECIPS Similar addresses in recipient list
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [naruenapang.napa[at]gmail.com]
-        *  2.5 SORTED_RECIPS Recipient list is sorted by address
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  1.1 SHORT_SHORTNER Short body with little more than a link to a
-        *      shortener
-        *  0.3 BODY_SINGLE_URI Message body is only a URI
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://onlsp.app.link/TIC74xhSnyb
+This commit introduces Power over Data Line (PoDL) Power Source
+Equipment (PSE) regulator nodes to the PRTT1C devicetree. The addition
+of these nodes enables support for PoDL in PRTT1C devices, allowing
+power delivery and data transmission over a single twisted pair.
+
+The new PoDL PSE regulator nodes provide voltage capability information
+of the current board design, which can be used as a hint for system
+administrators when configuring and managing power settings. This
+update enhances the versatility and simplifies the power management of
+PRTT1C devices while ensuring compatibility with connected Powered
+Devices (PDs).
+
+After applying this patch, the power delivery can be controlled from
+user space with a patched [1] ethtool version using the following commands:
+  ethtool --set-pse t1l2 podl-pse-admin-control enable
+to enable power delivery, and
+  ethtool --show-pse t1l2
+to display the PoDL PSE settings.
+
+By integrating PoDL PSE support into the PRTT1C devicetree, users can
+benefit from streamlined power and data connections in their
+deployments, improving overall system efficiency and reducing cabling
+complexity.
+
+[1] https://lore.kernel.org/all/20230317093024.1051999-1-o.rempel@pengutronix.de/
+
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ arch/arm/boot/dts/stm32mp151a-prtt1c.dts | 32 ++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
+index 58bb05a8c685..ca0d3329cfd7 100644
+--- a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
++++ b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
+@@ -23,6 +23,18 @@ clock_sja1105: clock-sja1105 {
+ 		clock-frequency = <25000000>;
+ 	};
+ 
++	pse_t1l1: ethernet-pse-1 {
++		compatible = "podl-pse-regulator";
++		pse-supply = <&reg_t1l1>;
++		#pse-cells = <0>;
++	};
++
++	pse_t1l2: ethernet-pse-2 {
++		compatible = "podl-pse-regulator";
++		pse-supply = <&reg_t1l2>;
++		#pse-cells = <0>;
++	};
++
+ 	mdio0: mdio {
+ 		compatible = "virtual,mdio-gpio";
+ 		#address-cells = <1>;
+@@ -32,6 +44,24 @@ mdio0: mdio {
+ 
+ 	};
+ 
++	reg_t1l1: regulator-pse-t1l1 {
++		compatible = "regulator-fixed";
++		regulator-name = "pse-t1l1";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		gpio = <&gpiog 13 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	reg_t1l2: regulator-pse-t1l2 {
++		compatible = "regulator-fixed";
++		regulator-name = "pse-t1l2";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		gpio = <&gpiog 14 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
+ 	wifi_pwrseq: wifi-pwrseq {
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpiod 8 GPIO_ACTIVE_LOW>;
+@@ -92,6 +122,7 @@ t1l1_phy: ethernet-phy@7 {
+ 		reset-gpios = <&gpiog 12 GPIO_ACTIVE_LOW>;
+ 		reset-assert-us = <10>;
+ 		reset-deassert-us = <35>;
++		pses = <&pse_t1l1>;
+ 	};
+ 
+ 	/* TI DP83TD510E */
+@@ -102,6 +133,7 @@ t1l2_phy: ethernet-phy@10 {
+ 		reset-gpios = <&gpiog 11 GPIO_ACTIVE_LOW>;
+ 		reset-assert-us = <10>;
+ 		reset-deassert-us = <35>;
++		pses = <&pse_t1l2>;
+ 	};
+ 
+ 	/* Micrel KSZ9031 */
+-- 
+2.30.2
+
