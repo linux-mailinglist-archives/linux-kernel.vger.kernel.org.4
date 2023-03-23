@@ -2,77 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F7A6C5DD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 05:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8C86C5DE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 05:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjCWEQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 00:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S229752AbjCWE0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 00:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjCWEQB (ORCPT
+        with ESMTP id S229461AbjCWEZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 00:16:01 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0323035BE
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 21:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1679544921; bh=amePZAswCZxnH0HeDHnJFI+gYZgT7zu0jXMkYntGVqE=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=I23woQEI4sc/sCfZ4ELvool5T+tNHo0ty69z/W+kUdjfs/7NROrQIAC4fMANAAlv+
-         2X6eXvju2xkd2PtUC/ZLwYJkqNw5TgyDJXXZLfbZJRH40vu+pvjQOb1gOpis/Rvh/i
-         BdOtEOuPlzxq1wY8WO772T0Wx+Lq5FUAuu4QYHjU=
-Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Thu, 23 Mar 2023 05:15:21 +0100 (CET)
-X-EA-Auth: MqpSBc+VIot+UUjG5z9STlJgrWHjIBGzlEqbIKY79KgmtCwouDOtNFJrNhCxglWEJd+gf/ccKY2TkkvhxmO0sXsACRkL8WTt
-Date:   Thu, 23 Mar 2023 09:44:59 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
-        outreachy@lists.linux.dev,
-        Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2] staging: most: fix line ending with '('
-Message-ID: <ZBvSQxgiFffWsoef@ubun2204.myguest.virtualbox.org>
-References: <ZBsYYAc1Ue/JnUAm@khadija-virtual-machine>
- <061a2fea-b3da-551d-f6d2-0da30b0ac879@infradead.org>
+        Thu, 23 Mar 2023 00:25:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B873AD31;
+        Wed, 22 Mar 2023 21:25:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0106B4B3;
+        Wed, 22 Mar 2023 21:26:39 -0700 (PDT)
+Received: from [10.162.40.16] (a077893.blr.arm.com [10.162.40.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C720E3F766;
+        Wed, 22 Mar 2023 21:25:50 -0700 (PDT)
+Message-ID: <f7e24b0c-3e33-755a-65c9-2ee78d5a79ec@arm.com>
+Date:   Thu, 23 Mar 2023 09:55:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <061a2fea-b3da-551d-f6d2-0da30b0ac879@infradead.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V9 00/10] arm64/perf: Enable branch stack sampling
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+ <655ff114-99d2-4612-9167-cc8688f2b6b2@sirena.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <655ff114-99d2-4612-9167-cc8688f2b6b2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 08:12:23AM -0700, Randy Dunlap wrote:
-> Hi--
+Hello Mark,
+
+On 3/22/23 00:32, Mark Brown wrote:
+> On Wed, Mar 15, 2023 at 10:44:34AM +0530, Anshuman Khandual wrote:
+>> This series enables perf branch stack sampling support on arm64 platform
+>> via a new arch feature called Branch Record Buffer Extension (BRBE). All
+>> relevant register definitions could be accessed here.
+>>
+>> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 > 
-> And FTR, I still haven't found anything in coding-style.rst that says that
-> lines should not end with an open parenthesis.  Did I overlook it?
+> While looking at another feature I noticed that HFGITR_EL2 has two traps
+> for BRBE instructions, nBRBINJ and nBRBIALL which trap BRB INJ and BRB
+> IALL.  Even if we don't use those right now does it make sense to
 
-Hi Randy,
-You are correct. I did not find anything clear or obvious that calls out not
-ending the lines with a '(' symbol. 
-I think the other guideline from the coding style is to align the overrunning
-argument list in the next lines such that they match the arg1 after '('. So, I
-think that may be the reason why checkpatch is coded to catch such lines.
+Right, current branch stack sampling experiments have been on EL2 host itself.
 
-Regards,
-Deepak.
+> document a requirement for those traps to be disabled now in case we
+> need them later, and do so during EL2 setup for KVM guests?  That could
+> always be done incrementally.
+Unlike all other instruction trap enable fields in SYS_HFGITR_EL2, these BRBE
+instructions ones are actually inverted in semantics i.e the particular fields
+need to be set for these traps to be disabled in EL2.
+
+SYS_HFGITR_EL2.nBRBIALL
+SYS_HFGITR_EL2.nBRBINJ
+
+By default entire SYS_HFGITR_EL2 is set as cleared during init and that would
+prevent a guest from using BRBE.
+
+init_kernel_el()
+	init_el2()
+		init_el2_state()
+			__init_el2_fgt()
+				........
+				msr_s   SYS_HFGITR_EL2, xzr
+				........
+
+I guess something like the following (untested) needs to be done, to enable
+BRBE in guests.
+
+diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+index 037724b19c5c..309708127a2a 100644
+--- a/arch/arm64/include/asm/el2_setup.h
++++ b/arch/arm64/include/asm/el2_setup.h
+@@ -161,6 +161,15 @@
+        msr_s   SYS_HFGWTR_EL2, x0
+        msr_s   SYS_HFGITR_EL2, xzr
+ 
++       mrs     x1, id_aa64dfr0_el1
++       ubfx    x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
++       cbz     x1, .Lskip_brbe_\@
++       mov     x0, xzr
++       orr     x0, x0, #HFGITR_EL2_nBRBIALL
++       orr     x0, x0, #HFGITR_EL2_nBRBINJ
++       msr_s   SYS_HFGITR_EL2, x0
++
++.Lskip_brbe_\@:
+        mrs     x1, id_aa64pfr0_el1             // AMU traps UNDEF without AMU
+        ubfx    x1, x1, #ID_AA64PFR0_EL1_AMU_SHIFT, #4
+        cbz     x1, .Lskip_fgt_\@
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index b3bc03ee22bd..3b939c42f3b8 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -527,6 +527,9 @@
+ #define SYS_HFGITR_EL2                 sys_reg(3, 4, 1, 1, 6)
+ #define SYS_HACR_EL2                   sys_reg(3, 4, 1, 1, 7)
+ 
++#define        HFGITR_EL2_nBRBIALL             (BIT(56))
++#define HFGITR_EL2_nBRBINJ             (BIT(55))
++
+ #define SYS_TTBR0_EL2                  sys_reg(3, 4, 2, 0, 0)
+ #define SYS_TTBR1_EL2                  sys_reg(3, 4, 2, 0, 1)
+ #define SYS_TCR_EL2                    sys_reg(3, 4, 2, 0, 2)
+
 
 > 
-> Thanks.
+> I've got a patch adding the definition of that register to sysreg which
+> I should be sending shortly, no need to duplicate that effort.
 
+Sure, I assume you are moving the existing definition for SYS_HFGITR_EL2 along
+with all its fields from ../include/asm/sysreg.h to ../tools/sysreg. Right, it
+makes sense.
 
+- Anshuman
