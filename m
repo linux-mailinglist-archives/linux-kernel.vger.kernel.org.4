@@ -2,92 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A87D6C72D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10C16C72D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjCWWNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S231254AbjCWWNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCWWNi (ORCPT
+        with ESMTP id S231272AbjCWWNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:13:38 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5537D9B;
-        Thu, 23 Mar 2023 15:13:25 -0700 (PDT)
-Received: from [127.0.0.1] (dynamic-046-114-209-225.46.114.pool.telefonica.de [46.114.209.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DDEE1EC063F;
-        Thu, 23 Mar 2023 23:13:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679609603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1rG8Vo4uESEgIx6SljIpoKKCeAOrhkkAIKpnzeWXL7Q=;
-        b=iPuzgHJVUpBL5WXk4EVNvM5/Y2kYnz6B/KvW1lguZhVDRAWBHwCJRS1mNsBn5uFmsfy4tI
-        lHrVnIk5xoFbkNCn/uc2rm0k4zGAgUugzFit6aQS0LJakDs5tvWfS/DF8un8OUnuyFwp7Z
-        CJ/hNYhTyXd7JvC7BEQfZecCVBK6Yf4=
-Date:   Thu, 23 Mar 2023 23:13:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "usama.arif@bytedance.com" <usama.arif@bytedance.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "arjan@linux.intel.com" <arjan@linux.intel.com>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "liangma@liangbit.com" <liangma@liangbit.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
-        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Rapan, Sabin" <sabrapan@amazon.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v16 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
-User-Agent: K-9 Mail for Android
-In-Reply-To: <19ec60aa-fa11-c44e-a6d1-9583f2e7707a@amd.com>
-References: <20230321194008.785922-1-usama.arif@bytedance.com> <20230321194008.785922-9-usama.arif@bytedance.com> <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local> <2c3dd773-31ca-d4b1-78a2-b39f3785c7c5@amd.com> <751f572f940220775054dc09324b20b929d7d66d.camel@amazon.co.uk> <19ec60aa-fa11-c44e-a6d1-9583f2e7707a@amd.com>
-Message-ID: <5D59D19F-8085-4638-96A2-4DCE00D2217E@alien8.de>
+        Thu, 23 Mar 2023 18:13:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3020DB2;
+        Thu, 23 Mar 2023 15:13:38 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id b18so149476ybp.1;
+        Thu, 23 Mar 2023 15:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679609617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MNLrgArOYbeC4SneqmgBNc1s6gwTuQ/uP6VwFa/0H38=;
+        b=gaSXIjvrGd4p1I+90z0qIe/ppdfjcoNWoqpiyzUQtje0tIz8lu5Vh0wdIUivcp3y09
+         sVV8NNSxdKvmY3JeRQCkmMQfNYg9j8R43aHQoIUR5egBlBIgaPkkcVTPSGoxSsnrenRg
+         tM9HWWQH2tg7+eRLewopJDwK8/Ea2diROibsU0RzQnHLgqgtzhlM99AYxVipZXgHmBt+
+         8teCy5IHGDgfMzegUIPzZ1MgmrRx3rFTTyN1Qtw+sv89xipeV1LmjCwtrCjHhqpfcOyu
+         UxBLJCqskJy1Q1dXLEgYm0oXyYYqNbEqxxU2BAMGaFunpC12cqr9DLSoFKk+NRIYSAIc
+         Khjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679609617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MNLrgArOYbeC4SneqmgBNc1s6gwTuQ/uP6VwFa/0H38=;
+        b=VYfKdp1L99EY+OlRYnZbT/HmvGIieA29cu5f2l6EjItn6L4jaYEqlCMgZ15Rej11A6
+         g6fHKuJR2FXP3jfbmLoYwC/aVEs5EjbS+g705N8lKmdvZmOS3+6+At8o5C5hsnRXOjSk
+         kvgSPU8xxf51pb4FSk8Pc/YB7MtDHmOXNkiNyUBdfUMIpOHjkyBBdVUIjwrLAUKLQuq4
+         fMusxxstXI3YTiw1Nem6Z/oVhWkV4txhOmkBVJhALKIQcPyFzF6BcUoshaMJRyC0cYGg
+         SNIAlC0tpm6FgCZlJ+OaiVVetJL0IJz990YWcgvZdvfTaW8RwVGs3EXZnZo0tlSndW0s
+         2x3g==
+X-Gm-Message-State: AAQBX9dNd8p/fgOpsTZxyvPtuGBGzV65zzoNyXYTiTlQPE4gHdq+xlT4
+        kTda0KBgkIwxyFbuxFKzn7+8DycpJbz9rucq20w=
+X-Google-Smtp-Source: AKy350YWI+lZhJiHEgeW3Tf4/FHJBn7kHOLUoZlvkirdwDO2Lt1Zojj7duygzJyNrZsTvbbz1EQFK5dlI8srlK8P3zs=
+X-Received: by 2002:a05:6902:102b:b0:b46:4a5e:3651 with SMTP id
+ x11-20020a056902102b00b00b464a5e3651mr83113ybt.9.1679609617305; Thu, 23 Mar
+ 2023 15:13:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20230323121804.2249605-1-noltari@gmail.com> <20230323121804.2249605-3-noltari@gmail.com>
+ <ee867960-91bb-659b-a87b-6c04613608c5@gmail.com> <AM0PR02MB55242C94846EE5598CDA44A2BD879@AM0PR02MB5524.eurprd02.prod.outlook.com>
+ <c54fe984-371a-da06-6dcf-da239a26bd5f@gmail.com>
+In-Reply-To: <c54fe984-371a-da06-6dcf-da239a26bd5f@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Thu, 23 Mar 2023 23:13:26 +0100
+Message-ID: <CAKR-sGe3dwv846fE1-JMgGsB01Ybs6LWYTrZs5hP1xc+o+dc7A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] net: dsa: b53: mdio: add support for BCM53134
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Paul Geurts <paul.geurts@prodrive-technologies.com>,
+        "jonas.gorski@gmail.com" <jonas.gorski@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On March 23, 2023 7:28:38 PM GMT+01:00, Tom Lendacky <thomas=2Elendacky@amd=
-=2Ecom> wrote:
+El jue, 23 mar 2023 a las 22:02, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
 >
->I agree=2E But once it's there, someone somewhere in the future may look =
-and go, oh, I can call this=2E So I think it either needs a nice comment ab=
-ove it about how it is currently used/called and what to do if it needs to =
-be called from someplace other than head_64=2ES or the MSR needs to be save=
-d/restored=2E
+> On 3/23/23 13:10, Paul Geurts wrote:
+> >> -----Original Message-----
+> >> From: Florian Fainelli <f.fainelli@gmail.com>
+> >> Sent: donderdag 23 maart 2023 17:43
+> >> To: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>; Paul Geurts
+> >> <paul.geurts@prodrive-technologies.com>; jonas.gorski@gmail.com;
+> >> andrew@lunn.ch; olteanv@gmail.com; davem@davemloft.net;
+> >> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+> >> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> >> netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> >> kernel@vger.kernel.org
+> >> Subject: Re: [PATCH 2/2] net: dsa: b53: mdio: add support for BCM53134
+> >>
+> >> On 3/23/23 05:18, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> >>> From: Paul Geurts <paul.geurts@prodrive-technologies.com>
+> >>>
+> >>> Add support for the BCM53134 Ethernet switch in the existing b53 dsa
+> >> driver.
+> >>> BCM53134 is very similar to the BCM58XX series.
+> >>>
+> >>> Signed-off-by: Paul Geurts <paul.geurts@prodrive-technologies.com>
+> >>> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> >>> ---
+> >>>    drivers/net/dsa/b53/b53_common.c | 53
+> >> +++++++++++++++++++++++++++++++-
+> >>>    drivers/net/dsa/b53/b53_mdio.c   |  5 ++-
+> >>>    drivers/net/dsa/b53/b53_priv.h   |  9 +++++-
+> >>>    3 files changed, 64 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/net/dsa/b53/b53_common.c
+> >>> b/drivers/net/dsa/b53/b53_common.c
+> >>> index 1f9b251a5452..aaa0813e6f59 100644
+> >>> --- a/drivers/net/dsa/b53/b53_common.c
+> >>> +++ b/drivers/net/dsa/b53/b53_common.c
+> >>> @@ -1282,6 +1282,42 @@ static void b53_adjust_link(struct dsa_switch
+> >> *ds, int port,
+> >>>     if (is63xx(dev) && port >=3D B53_63XX_RGMII0)
+> >>>             b53_adjust_63xx_rgmii(ds, port, phydev->interface);
+> >>>
+> >>> +   if (is53134(dev) && phy_interface_is_rgmii(phydev)) {
+> >>
+> >> Why is not this in the same code block as the one for the is531x5() de=
+vice like
+> >> this:
+> >>
+> >> diff --git a/drivers/net/dsa/b53/b53_common.c
+> >> b/drivers/net/dsa/b53/b53_common.c
+> >> index 59cdfc51ce06..1c64b6ce7e78 100644
+> >> --- a/drivers/net/dsa/b53/b53_common.c
+> >> +++ b/drivers/net/dsa/b53/b53_common.c
+> >> @@ -1235,7 +1235,7 @@ static void b53_adjust_link(struct dsa_switch *d=
+s,
+> >> int port,
+> >>                                 tx_pause, rx_pause);
+> >>           b53_force_link(dev, port, phydev->link);
+> >>
+> >> -       if (is531x5(dev) && phy_interface_is_rgmii(phydev)) {
+> >> +       if ((is531x5(dev) || is53134(dev)) &&
+> >> phy_interface_is_rgmii(phydev)) {
+> >>                   if (port =3D=3D dev->imp_port)
+> >>                           off =3D B53_RGMII_CTRL_IMP;
+> >>                   else
+> >>
+> >> Other than that, LGTM!
+> >> --
+> >> Florian
+> >
+> > I think the only reason is that the BCM53134 does not support the
+> > RGMII_CTRL_TIMING_SEL bit, which is set in the original block. I agree
+> > Putting a if statement around
+> > rgmii_ctrl |=3D RGMII_CTRL_TIMING_SEL;
+> > would prevent a lot of code duplication. _however_, after looking at it=
+ again,
+> > I don=E2=80=99t think the device does not support the bit. When looking=
+ at the datasheet,
+> > The same bit in the this register is called BYPASS_2NS_DEL. It's very u=
+ncommon
+> > For Broadcom to make such a change in the register interface, so maybe =
+they
+> > Just renamed it. Do you think this could be the same bit?
+>
+> Yes, I think this is exactly the same bit, just named differently. What
+> strikes me as odd is that neither of the 53115, 53125 or 53128 which are
+> guarded by the is531x5() conditional have it defined.
 
-Or it could be __init and get discarded when the system is up=2E
+If this is true then we can safely add 53134 to is531x5() conditional
+and reuse the existing code.
 
---=20
-Sent from a small device: formatting sucks and brevity is inevitable=2E 
+> --
+> Florian
+>
+
+--
+=C3=81lvaro
