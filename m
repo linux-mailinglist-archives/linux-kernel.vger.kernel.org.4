@@ -2,196 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AD36C5C2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245BE6C5C32
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 02:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCWBgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 21:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S229863AbjCWBhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 21:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjCWBge (ORCPT
+        with ESMTP id S229713AbjCWBhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 21:36:34 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A1618A9F;
-        Wed, 22 Mar 2023 18:36:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PhnxR2kYSz4f405s;
-        Thu, 23 Mar 2023 09:36:27 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiAbrRtk9ZaYFQ--.45131S3;
-        Thu, 23 Mar 2023 09:36:29 +0800 (CST)
-Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
- sync_thread in action_store"
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, logang@deltatee.com,
-        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
-        song@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Marc Smith <msmith626@gmail.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
- <20230322064122.2384589-2-yukuai1@huaweicloud.com>
- <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
- <d1d27b2a-96ec-319e-4690-64e781c9a473@huaweicloud.com>
- <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <31e7f59e-579a-7812-632d-059ed0a6d441@huaweicloud.com>
-Date:   Thu, 23 Mar 2023 09:36:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 22 Mar 2023 21:37:02 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B814218A9F;
+        Wed, 22 Mar 2023 18:37:01 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so460783pjt.5;
+        Wed, 22 Mar 2023 18:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679535421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+nLoNSamCdcaSuM8a5raHPPptoIUI/NpNVM0KOw2DY=;
+        b=igo+EYJZj9Np8pmWxTIn1kf2XAEW2zxstGeyuKelxBCvfczgFrvrCzyb+kYTqsyTK9
+         p0Fivn8BjAiA58T466deaGhokx2UXFJQDDANtf9WrLVKU7DzP1DZd+2ZpQsqQBbm1+dk
+         hCESdEfZ4NEsBAGmRrnW+eZrV946jVwdlm43vgDX9e8qrEoNLT1+mW6cDtCWxYiuU71A
+         AQkoVx8zHRZjfyV1G2Zi1QsDdrG1z0Fe6hChGJ8H84GZb+EzxC+n5ASBWnxLAgD628YJ
+         +RAWaOpCa6mQFIXfyxrtN2hhtcLxGRsX0fqJS0p6S5hPKsayjWTOi0nH410x2wa0gGIZ
+         ZLFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679535421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+nLoNSamCdcaSuM8a5raHPPptoIUI/NpNVM0KOw2DY=;
+        b=WWir4/OY10NfzhR3xmArMCroaXkbyLpD7o4AE/bG/Bp0nwqU2JdTcWc/CSfcsJF9JB
+         qiHqEJ8YHatxSRmHkAqJjMCftVBcydOhsFAaxo4oFhBaKHlyxXjQQ0p2yvIH7PjldpdY
+         73YbSRVaeV4gHNY1W1AKevtZ1JD1UxUS0bsxXgn+3s/ZyQNWgwNGS+SbJVEKbvBnqM2d
+         UX4+fQqAETpGnzOJfrQ7r7XbAIsWsmkflkHa1puuBgGxu/NpoWoJGqUaxB1m7BegRtn2
+         Ck/In1CX9uzoJcxO32OoKWeisco94PRE83wMi9VrJM8P4O9iQAYS/lXgBXgfu8pB5QFy
+         /1zg==
+X-Gm-Message-State: AO0yUKUC2sI/CUjwwS3SyWzTUNnOhELkqi9xVykJg/8nhDEqMUcI2F1l
+        +QLuBUAa4ZCvGYQEdGEHGH4=
+X-Google-Smtp-Source: AK7set8Uogh7PBV2UJKv6iAnGMwOTFkAHfIjqn/Z6asXmPCu4qRi/1TxsnLRD96NHYtfEdj7PVTuwg==
+X-Received: by 2002:a05:6a20:89a8:b0:dc:4369:16a4 with SMTP id h40-20020a056a2089a800b000dc436916a4mr945762pzg.19.1679535421067;
+        Wed, 22 Mar 2023 18:37:01 -0700 (PDT)
+Received: from DESKTOP-HTCHK5O.localdomain ([219.254.222.254])
+        by smtp.gmail.com with ESMTPSA id t13-20020a62ea0d000000b005a87d636c70sm10652102pfh.130.2023.03.22.18.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 18:37:00 -0700 (PDT)
+From:   Sangsup Lee <k1rh4.lee@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sangsup lee <k1rh4.lee@gmail.com>
+Subject: [PATCH v2] misc: fastrpc: Fix a Use after-free-bug by race condition
+Date:   Thu, 23 Mar 2023 10:36:55 +0900
+Message-Id: <20230323013655.366-1-k1rh4.lee@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiAbrRtk9ZaYFQ--.45131S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF15ZFyruryrAF48KrWfXwb_yoWrAFWUp3
-        yfA3W3J3ykKrW8AFyjyw10qFyrXw1Ut39xJrn3GFy3Aw1YyryIqay3XFWq9FZ8ArZ5Cw1j
-        vF1rGa95ZryYyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=1.4 required=5.0 tests=KHOP_HELO_FCRDNS,MAY_BE_FORGED,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Sangsup lee <k1rh4.lee@gmail.com>
 
-在 2023/03/22 22:32, Guoqing Jiang 写道:
->>> Could you explain how the same work can be re-queued? Isn't the 
->>> PENDING_BIT
->>> is already set in t3? I believe queue_work shouldn't do that per the 
->>> comment
->>> but I am not expert ...
->>
->> This is not related to workqueue, it is just because raid10
->> reinitialize the work that is already queued, 
-> 
-> I am trying to understand the possibility.
-> 
->> like I discribed later in t3:
->>
->> t2:
->> md_check_recovery:
->>  INIT_WORK -> clear pending
->>  queue_work -> set pending
->>   list_add_tail
->> ...
->>
->> t3: -> work is still pending
->> md_check_recovery:
->>  INIT_WORK -> clear pending
->>  queue_work -> set pending
->>   list_add_tail -> list is corrupted
-> 
-> First, t2 and t3 can't be run in parallel since reconfig_mutex must be 
-> held. And if sync_thread existed,
-> the second process would unregister and reap sync_thread which means the 
-> second process will
-> call INIT_WORK and queue_work again.
-> 
-> Maybe your description is valid, I would prefer call work_pending and 
-> flush_workqueue instead of
-> INIT_WORK and queue_work.
+This patch adds mutex_lock for fixing an Use-after-free bug.
+fastrpc_req_munmap_impl can be called concurrently in multi-threded environments.
+The buf which is allocated by list_for_each_safe can be used after another thread frees it.
 
-This is not enough, it's right this can avoid list corruption, but the
-worker function md_start_sync just register a sync_thread, and
-md_do_sync() can still in progress, hence this can't prevent a new
-sync_thread to start while the old one is not done, some other problems
-like deadlock can still be triggered.
+Signed-off-by: Sangsup lee <k1rh4.lee@gmail.com>
+---
+ V1 -> V2: moving the locking to ioctl.
 
->> Of course, our 5.10 and mainline are the same,
->>
->> there are some tests:
->>
->> First the deadlock can be reporduced reliably, test script is simple:
->>
->> mdadm -Cv /dev/md0 -n 4 -l10 /dev/sd[abcd]
-> 
-> So this is raid10 while the previous problem was appeared in raid456, I 
-> am not sure it is the same
-> issue, but let's see.
+ drivers/misc/fastrpc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Ok, I'm not quite familiar with raid456 yet, however, the problem is
-still related to that action_store hold mutex to unregister sync_thread,
-right?
-
->> Then, the problem MD_RECOVERY_RUNNING can be cleared can't be reporduced
->> reliably, usually it takes 2+ days to triggered a problem, and each time
->> problem phenomenon can be different, I'm hacking the kernel and add
->> some BUG_ON to test MD_RECOVERY_RUNNING in attached patch, following
->> test can trigger the BUG_ON:
-> 
-> Also your debug patch obviously added large delay which make the 
-> calltrace happen, I doubt
-> if user can hit it in real life. Anyway, will try below test from my side.
-> 
->> mdadm -Cv /dev/md0 -e1.0 -n 4 -l 10 /dev/sd{a..d} --run
->> sleep 5
->> echo 1 > /sys/module/md_mod/parameters/set_delay
->> echo idle > /sys/block/md0/md/sync_action &
->> sleep 5
->> echo "want_replacement" > /sys/block/md0/md/dev-sdd/state
->>
->> test result:
->>
->> [  228.390237] md_check_recovery: running is set
->> [  228.391376] md_check_recovery: queue new sync thread
->> [  233.671041] action_store unregister success! delay 10s
->> [  233.689276] md_check_recovery: running is set
->> [  238.722448] md_check_recovery: running is set
->> [  238.723328] md_check_recovery: queue new sync thread
->> [  238.724851] md_do_sync: before new wor, sleep 10s
->> [  239.725818] md_do_sync: delay done
->> [  243.674828] action_store delay done
->> [  243.700102] md_reap_sync_thread: running is cleared!
->> [  243.748703] ------------[ cut here ]------------
->> [  243.749656] kernel BUG at drivers/md/md.c:9084!
-> 
-> After your debug patch applied, is L9084 points to below?
-> 
-> 9084                                 mddev->curr_resync = MaxSector;
-
-In my environment, it's a BUG_ON() that I added in md_do_sync:
-
-9080  skip:
-9081         /* set CHANGE_PENDING here since maybe another update is 
-needed,
-9082         ┊* so other nodes are informed. It should be harmless for 
-normal
-9083         ┊* raid */
-9084         BUG_ON(!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery));
-9085         set_mask_bits(&mddev->sb_flags, 0,
-9086                 ┊     BIT(MD_SB_CHANGE_PENDING) | 
-BIT(MD_SB_CHANGE_DEVS));
-
-> 
-> I don't understand how it triggers below calltrace, and it has nothing 
-> to do with
-> list corruption, right?
-
-Yes, this is just a early BUG_ON() to detect that if MD_RECOVERY_RUNNING
-is cleared while sync_thread is still in progress.
-
-Thanks,
-Kuai
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 93ebd174d848..aa1cf0e9f4ed 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1901,7 +1901,9 @@ static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
+ 		err = fastrpc_req_mmap(fl, argp);
+ 		break;
+ 	case FASTRPC_IOCTL_MUNMAP:
++		mutex_lock(&fl->mutex);
+ 		err = fastrpc_req_munmap(fl, argp);
++		mutex_unlock(&fl->mutex);
+ 		break;
+ 	case FASTRPC_IOCTL_MEM_MAP:
+ 		err = fastrpc_req_mem_map(fl, argp);
+-- 
+2.25.1
 
