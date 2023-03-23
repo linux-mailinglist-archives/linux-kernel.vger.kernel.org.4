@@ -2,94 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAE36C7299
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01166C729A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjCWVvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S230377AbjCWVwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjCWVvt (ORCPT
+        with ESMTP id S229618AbjCWVwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:51:49 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48021EBEC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:51:36 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id h8so684496ede.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679608295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m9tjYpRfGyQ0DWCdxSWns8C9usJ6/6Y+ugnz5Vzrwjo=;
-        b=J4wHRsgSNxdEFohPGGD/N2T8lvaduJlaGU0d4KTn73o7459Sw3xLGjKoDLSEBP7Aic
-         W+4ILEs4ilbQ4y7NA3IRevPoEMlsT/gvpeROdFxVC4wwYJskbk6mbouh83ABOMpBOEaj
-         zbnHPK68MHL2iLk98KpvdNa/CbPghhZZR4iuE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679608295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m9tjYpRfGyQ0DWCdxSWns8C9usJ6/6Y+ugnz5Vzrwjo=;
-        b=NqZ0CRnr6amKQFRGo4QruMIbSr9sbNwa1uTV7LoE0+XbMHiZMXcjYkypC7UYKc8hWp
-         Ox+rpjGe90Y9Jy7wIDe04X8hTqNkshtIAWGw1wqGb71Tpj8ywG5UbceA0+4M8Th9nN7G
-         MGTmqSqgwKzzxp3BY/2m1VrJq0EpeiEXGbN7HmGLU/fmDDC2SeqgWZ/cvN/8u9F2yJu/
-         qMg6X50nM6vQEAiX0H7ylGSYfFXETr4VUEHsCGve7ZRnspunWz9tb/LhbhaCC6pNtWpW
-         p72Xp9jHS04kHbO9E/A5XnCy8nobzEs/r583QkeBrm/8GwmCfb6GiF7cBsq1hsCgSy+S
-         AdXg==
-X-Gm-Message-State: AAQBX9dD5gMuriRiuz23o22hgBewAnA2ylUHMtam57eXMb5LXCLSR5Hb
-        PbjwemEAMmqsiqISRszc3T0xXhqxdTjlIBLawyVixg==
-X-Google-Smtp-Source: AKy350ZeY6vnMgPfnlIdW5Q2fXVoqnBS5c/dnvZMimX5b4BsALx7rr45APENfXnyh7jDPRjApBMHgQ==
-X-Received: by 2002:a17:906:a0d1:b0:93d:d396:8e1 with SMTP id bh17-20020a170906a0d100b0093dd39608e1mr435272ejb.73.1679608294808;
-        Thu, 23 Mar 2023 14:51:34 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id b26-20020a170906195a00b00930a4e5b46bsm9161066eje.211.2023.03.23.14.51.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 14:51:34 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id ek18so721947edb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:51:34 -0700 (PDT)
-X-Received: by 2002:a17:907:2c66:b0:931:faf0:3db1 with SMTP id
- ib6-20020a1709072c6600b00931faf03db1mr4152130ejc.4.1679608293841; Thu, 23 Mar
- 2023 14:51:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323184537.749868-1-agruenba@redhat.com>
-In-Reply-To: <20230323184537.749868-1-agruenba@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 23 Mar 2023 14:51:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whms=0Cvmk946a0Pebv1YLWiuYCjyVy6yNeBp55+R8sMw@mail.gmail.com>
-Message-ID: <CAHk-=whms=0Cvmk946a0Pebv1YLWiuYCjyVy6yNeBp55+R8sMw@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix for v6.3-rc4
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+        Thu, 23 Mar 2023 17:52:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD7FE051
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 14:52:07 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLW3bM025477;
+        Thu, 23 Mar 2023 21:51:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=PjFeBO5a8NgjVi0hamlYgvtmMCtvdU0G5ONnEB5Vl0U=;
+ b=YjGFBeDUfXsX7LL0q0YqVtSQ2Hr9uCKwmD8ci7W4AkuutjnaBCDp9c8jNXcw5/r5zqLG
+ 7JQ3vqrZdylbazgYfytWa8sDZXtdmLrvQcVK6HMWWw2qk3rAAoUp3vKLrnkXDbQD0D4p
+ 2EduoQ0eq+YDfD02F7KCFncO6Jg7MpOXyNgGyIGguJ5GQZMAW+PAbH+MMxfwdRqR9vCW
+ ftKOyvzha1H1gIh6q0LhpWPLLY347BTit66isTOu0hICVPmXZ8xVa9YhoQSXFDKsBKRo
+ nY6ItIKdg95xjM1OI1/Mepx00ELx2009LwhF4QQGJoUUDL/2CECBkmSwxTVsqPY9jfl3 Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgxs1rfrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 21:51:43 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32NLoCeu016695;
+        Thu, 23 Mar 2023 21:51:42 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgxs1rfqp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 21:51:42 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLL6tW014154;
+        Thu, 23 Mar 2023 21:51:40 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3pgxksr0k0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 21:51:40 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NLpbTo22807262
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 21:51:37 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B9D9920043;
+        Thu, 23 Mar 2023 21:51:37 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 397BF2004D;
+        Thu, 23 Mar 2023 21:51:37 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 21:51:37 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 064DE600A5;
+        Fri, 24 Mar 2023 08:51:32 +1100 (AEDT)
+Message-ID: <ee39474effb15c0a82e8ae115caf77fe8a1d1d33.camel@linux.ibm.com>
+Subject: Re: perf tools power9 JSON files build breakage on ubuntu 18.04
+ cross build
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sukadev Bhattiprolu <sukadev@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Date:   Fri, 24 Mar 2023 08:51:31 +1100
+In-Reply-To: <CAP-5=fX-0giZxATOVXO5PmCD6yfhoGMb4_vMcWAQLnSq=+DMhQ@mail.gmail.com>
+References: <ZBxP77deq7ikTxwG@kernel.org>
+         <CAP-5=fX-0giZxATOVXO5PmCD6yfhoGMb4_vMcWAQLnSq=+DMhQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GV87z2IIGbFcpkx1J0ZXZv9IFIJZyW4p
+X-Proofpoint-GUID: DW58xbobw5jycRQXmITClSHj_mYuGpa6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-23_13,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 clxscore=1011 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303230156
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:45=E2=80=AFAM Andreas Gruenbacher
-<agruenba@redhat.com> wrote:
->
-> From: Linus Torvalds <torvalds@linux-foundation.org>
+On Thu, 2023-03-23 at 08:50 -0700, Ian Rogers wrote:
+> On Thu, Mar 23, 2023 at 6:11=E2=80=AFAM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >=20
+> > Exception processing pmu-events/arch/powerpc/power9/other.json
+> > Traceback (most recent call last):
+> > =C2=A0 File "pmu-events/jevents.py", line 997, in <module>
+> > =C2=A0=C2=A0=C2=A0 main()
+> > =C2=A0 File "pmu-events/jevents.py", line 979, in main
+> > =C2=A0=C2=A0=C2=A0 ftw(arch_path, [], preprocess_one_file)
+> > =C2=A0 File "pmu-events/jevents.py", line 935, in ftw
+> > =C2=A0=C2=A0=C2=A0 ftw(item.path, parents + [item.name], action)
+> > =C2=A0 File "pmu-events/jevents.py", line 933, in ftw
+> > =C2=A0=C2=A0=C2=A0 action(parents, item)
+> > =C2=A0 File "pmu-events/jevents.py", line 514, in preprocess_one_file
+> > =C2=A0=C2=A0=C2=A0 for event in read_json_events(item.path, topic):
+> > =C2=A0 File "pmu-events/jevents.py", line 388, in read_json_events
+> > =C2=A0=C2=A0=C2=A0 events =3D json.load(open(path), object_hook=3DJsonE=
+vent)
+> > =C2=A0 File "/usr/lib/python3.6/json/__init__.py", line 296, in load
+> > =C2=A0=C2=A0=C2=A0 return loads(fp.read(),
+> > =C2=A0 File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
+> > =C2=A0=C2=A0=C2=A0 return codecs.ascii_decode(input, self.errors)[0]
+> > UnicodeDecodeError: 'ascii' codec can't decode byte 0xc2 in
+> > position 55090: ordinal not in range(128)
+> > =C2=A0 CC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /tmp/build/perf/tests/expr.o
+> > pmu-events/Build:35: recipe for target '/tmp/build/perf/pmu-
+> > events/pmu-events.c' failed
+> > make[3]: *** [/tmp/build/perf/pmu-events/pmu-events.c] Error 1
+> > make[3]: *** Deleting file '/tmp/build/perf/pmu-events/pmu-
+> > events.c'
+> > Makefile.perf:679: recipe for target '/tmp/build/perf/pmu-
+> > events/pmu-events-in.o' failed
+> > make[2]: *** [/tmp/build/perf/pmu-events/pmu-events-in.o] Error 2
+> > make[2]: *** Waiting for unfinished jobs....
+> >=20
+> >=20
+> > Now jevents is an opt-out feature so I'm noticing these problems.
+> >=20
+> > A similar fix for s390 was accepted today:
+>=20
+> The JEVENTS_ARCH=3Dall make option builds the s390 files even on x86.
+> I'm confused as to why that's been working before these fixes.
 
-Wat?
+This is the non-breaking space in the file (UTF8 C2 A0). Telling Python
+to decode with UTF8 would work (note it's breaking with the 'ascii'
+codec). Setting the environment variable LC_CTYPE=3D"C.UTF-8" sets the
+default, or the script can specify explicitly.
 
->   git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git gfs2-=
-v6.3-rc3-fix
-
--ENOSUCHTAG
-
-> for you to fetch changes up to 260595b439776c473cc248f0de63fe78d964d849:
-
-.. and no such commit available in any other tag or branch either.
-
-Did you forget to push out?
-
-                    Linus
+But I also doubt the NBS was intentional in the first place.
