@@ -2,164 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0569D6C6BC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87E06C6BE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjCWPBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S231730AbjCWPG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbjCWPAy (ORCPT
+        with ESMTP id S229863AbjCWPG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:00:54 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D31728E76
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:00:42 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230323150039euoutp01d7816eb2a329cbe272b3559624dcbb28~PFGv4WXdl1682616826euoutp01k
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230323150039euoutp01d7816eb2a329cbe272b3559624dcbb28~PFGv4WXdl1682616826euoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679583640;
-        bh=Icol1NVQVqXWLETTQ6qBuGxVjyUvKpu5FRVxPfMJI5w=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=a0wEK/WILT2l2yTo7hODi6knqNCGLVGsWm1o9nnVOFmazylpeSUowNYKpW9hbmAdx
-         8MhSHQbumCLTtm3Gs9WPa0wNGb01fXT7Mcczv+AaVg7lusT0RJwGXhJk1wBUP3Dwa3
-         tpo78MbYZkTmwvgVEYiKrAgK892rDgTohFlCd9qc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230323150039eucas1p2c7b2e1906656e2f9285fe5c95907c5c9~PFGvm1TmA2995529955eucas1p2N;
-        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 28.11.09503.7996C146; Thu, 23
-        Mar 2023 15:00:39 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230323150039eucas1p26720ff35cb61c319cf3689f2f692f720~PFGvHi8AG2042820428eucas1p2e;
-        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230323150039eusmtrp27e05b1483f2166f1785c5879c94b1e57~PFGvG7Gmy2667426674eusmtrp2p;
-        Thu, 23 Mar 2023 15:00:39 +0000 (GMT)
-X-AuditID: cbfec7f2-ea5ff7000000251f-bc-641c6997ca0e
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1A.39.09583.6996C146; Thu, 23
-        Mar 2023 15:00:39 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230323150038eusmtip1bb56ea103192735c274ede4a1e924d2e~PFGu3--cZ1265912659eusmtip1b;
-        Thu, 23 Mar 2023 15:00:38 +0000 (GMT)
-Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 23 Mar 2023 15:00:37 +0000
-Message-ID: <fbf5bc8a-6c82-a43e-dd96-8a9d2b7d3bf4@samsung.com>
-Date:   Thu, 23 Mar 2023 16:00:37 +0100
+        Thu, 23 Mar 2023 11:06:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210C81D93C;
+        Thu, 23 Mar 2023 08:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679583937; x=1711119937;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=NRSv9gOc0x/VgqfLhMHGJjqUnf/j3n0l8K1tj1NvpZg=;
+  b=J9j9BvQ3LDKUQZfWmjK4PLBVWPgli6CsvyztUYwdLoxplGn9/YYnVv00
+   RkjVdgEVaaVB2MXJbEp3qqqRWhac/Mf4afl1Z8TiyltvfxYZu4EeHKyX5
+   9dyj+oLqbwryPFpKgclxg8bRgiyaq/bolXrIHJ5J561DsHMxTg/7PHfDY
+   /r4xJPI042/Lj3nmY042aB9nBinrePOiMNb54wHk9MCjIZYGzw7sH/9oG
+   EsXJU2Y3NR7de7tXq/tkZ/N6n9uixP1vzRNTVs8rdTC0kt5qGYjHbTvOk
+   qRpwXWn304cJN8fIjJ2pDwQPKZcN1AglFbVyNPrltBMnkaZF9lMHWS1Tc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="404415380"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="404415380"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 08:01:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="714847021"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="714847021"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2023 08:01:31 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 08:01:31 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 08:01:30 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 23 Mar 2023 08:01:30 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 23 Mar 2023 08:01:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mLDDkknHwt1xlku9PC4/rOL8Hq5KKtM/Afv0Eh5D11wOMmxV6LlEkX5YlRglarqGRuo/83gHaJeJB1f4En9pFL2VxdxkBFjhOKkn36wWI+nlfNCyrD0AybOwe/d8XLze6BwPKxgGLLdyf2i0vfE8M1lhGgTUA2PmSdoi/GLSizu2ayFn8cYWJI0fGy42pVp9VTuB/q7xtMXWzlflwIoS4X92JF9N7clPPg0NAbD1n5W6mQCpbeaKdH7nIr++wfOHW0AP+ONLfN2wuSbrTNgHr5LCkGw1ZDh6I5810Is+tkZELabfFXZHCRrrXpoCQBLL0AYCpspAB34LY5ImSAfBQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V7x4/ujsFOMupBxd+h8NE3RBHNfApF/BzeVVztVmvSo=;
+ b=NiJPKpvJDh6BI68KkZNEMfKjw7LSozAaKDai951eirrzVuO6gG32h0qOe1/TXeRGCNm1R+6uvvE43Ll4y8p/GJS54dAdfR1O7WWtxp92UUe4NerdAsXPfOVIn+ionpn3sPg6gHxzcHtcdjjKVbnOYuAtiKb0YZafpyC6JQ8iBv4ODXorUzFIGJtIf8U/bfpwdKOws6eMuj5rQJnFVwcDYLN3LYBukRZqcl4/V8QngQrmqJXoR7JYz1FVTJJih3MI03jRn5ucpnStLxyGZKNNftheoEtU7WDTHlVHygk+8f6y2+uZ5aPl3+zm4ezii+iXXMDfCDYjCbCZlDxehGxOnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by SJ0PR11MB5920.namprd11.prod.outlook.com (2603:10b6:a03:42e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 15:01:28 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::2629:fb12:6221:3745]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::2629:fb12:6221:3745%5]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 15:01:28 +0000
+Date:   Thu, 23 Mar 2023 08:01:25 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        "Borislav Petkov" <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, <david@redhat.com>,
+        <mwilck@suse.com>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        "Ben Hutchings" <benh@debian.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <20230323150125.35e5nwtrez46dv4b@ldmartin-desk2.lan>
+References: <Y5gI/3crANzRv22J@bombadil.infradead.org>
+ <Y5hRRnBGYaPby/RS@alley>
+ <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
+ <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+ <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+ <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
+ <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
+ <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
+X-ClientProxiedBy: SJ0PR03CA0092.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::7) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.8.0
-Subject: Re: [RFC v2 0/5] remove page_endio()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <senozhatsky@chromium.org>, <viro@zeniv.linux.org.uk>,
-        <axboe@kernel.dk>, <brauner@kernel.org>,
-        <akpm@linux-foundation.org>, <minchan@kernel.org>,
-        <hubcap@omnibond.com>, <martin@omnibond.com>, <mcgrof@kernel.org>,
-        <devel@lists.orangefs.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <ZBtSevjWLybE6S07@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.110.32.65]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7djPc7rTM2VSDPaeUrOYs34Nm8Xqu/1s
-        Fq8Pf2K02L95CpNF+90+Jou9t7Qt9uw9yWJxedccNot7a/6zWpxc/5/Z4saEp4wWy76+Z7fY
-        vXERm8X5v8dZLX7/mMPmwO8xu+Eii8fmFVoel8+Wemxa1cnmsenTJHaPEzN+s3g0TL3F5vHr
-        9h1Wj8+b5Dw2PXnLFMAVxWWTkpqTWZZapG+XwJXRfeQHY8FVnoqVy44zNjC2c3UxcnJICJhI
-        zN3zirGLkYtDSGAFo8SDDwfZIZwvjBInzm5kBKkSEvjMKDH9qhFMx54jd9kgipYzSrxbep8V
-        rqh7tjREYiejxKu2xywgCV4BO4mDf6aygdgsAqoSLS3vmCHighInZz4BquHgEBWIknjxugwk
-        LCygK3FxTydYK7OAuMStJ/OZQEpEBDQk3mwxAhnPLNDDLLFo7S6wVjYBLYnGTnaQck6g2yY9
-        WMUO0aop0br9N5QtL7H97RxmiPsVJSbdfM8KYddKnNpyiwlkpoTAPU6Jb+cPskAkXCSWNt+H
-        KhKWeHV8CzuELSPxfyfIPSB2tcTTG7+ZIZpbGCX6d65nAzlIQsBaou9MDkSNo8SezedZIcJ8
-        EjfeCkLcwycxadt05gmMqrOQAmIWko9nIXlhFpIXFjCyrGIUTy0tzk1PLTbMSy3XK07MLS7N
-        S9dLzs/dxAhMf6f/Hf+0g3Huq496hxiZOBgPMUpwMCuJ8LoxS6QI8aYkVlalFuXHF5XmpBYf
-        YpTmYFES59W2PZksJJCeWJKanZpakFoEk2Xi4JRqYFK5Munvw7ke7WpXNDg1G5si1rrXhJ3l
-        kvw0Revb9oVuDFz7RW+UJL8x3b/sSuzCFN6U53MbE8y8zl5dNCHmq4rC6gP8ov1PpDu443n2
-        l12/3trGvMHctir5Y7iJ06kd32YuWDingqH1rqvfj4afS6WfNiwSNdyQVu26LN7xek2IWbag
-        h6D896mTJPZ22LBvnLRj8osvFbxPH66S9lyVMfNges/8GI81T47Ha+4wEV7Q+Emut0rmzKGP
-        7/SPtTT+YAmIkavcF6je26i07QpzWqWI0EnBpWGZgcFbGg/fVzkauWB2gu1FSYdHuWft2h94
-        H1hgev3+09QzrX+Dp3SrBCUqBQfz7zny/znnnQnMr5RYijMSDbWYi4oTAde99cruAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xu7rTM2VSDKbsYbSYs34Nm8Xqu/1s
-        Fq8Pf2K02L95CpNF+90+Jou9t7Qt9uw9yWJxedccNot7a/6zWpxc/5/Z4saEp4wWy76+Z7fY
-        vXERm8X5v8dZLX7/mMPmwO8xu+Eii8fmFVoel8+Wemxa1cnmsenTJHaPEzN+s3g0TL3F5vHr
-        9h1Wj8+b5Dw2PXnLFMAVpWdTlF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eT
-        kpqTWZZapG+XoJfRfeQHY8FVnoqVy44zNjC2c3UxcnJICJhI7Dlyl62LkYtDSGApo8Tsc19Y
-        IRIyEp+ufGSHsIUl/lzrgir6yCjRMv0EM4Szk1FizYJDbCBVvAJ2Egf/TAWzWQRUJVpa3jFD
-        xAUlTs58wgJiiwpESTy9cwgsLiygK3FxTydYnFlAXOLWk/lMXYwcHCICGhJvthiBzGcW6GGW
-        mD9rKiPEsh2MEq17r7CAFLEJaEk0doJdxwn0wqQHq9gh5mhKtG7/DWXLS2x/O4cZ4gNFiUk3
-        30N9Vivx+e8zxgmMorOQnDcLyRmzkIyahWTUAkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmb
-        GIGpY9uxn1t2MK589VHvECMTB+MhRgkOZiURXjdmiRQh3pTEyqrUovz4otKc1OJDjKbAMJrI
-        LCWanA9MXnkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUwMymwC
-        TpNn7j6sZ8lplHKrTqX15ur7P77v+rnkrcqXpR/fXJPkOXIyfEPPRYuz979NtKlLeF9591cG
-        44pOPYG2dXGeZjLHv8zdEKZ47PrZctNFK0tT5r2yefBm/c2TKUlnH00VnnHLnU1JM9VxnhCP
-        s0RTcBf3motOn53W7xEurPnRd2bWdNm6Rw6HFnZkvNrgNee2WnpOVcmhfwomqr07Ln+awhMu
-        zrz8mo7pgqspWY2H1k5ZmNx4t/4af1bMSsVlbrs39Tq///Tm1nPZBbtCusTsvI/kJRpXVkrf
-        a3VjsZrwQjf8xEN9Jw+t3vn84k4++s/dnktzsote1jPrY2uotWj5lPNXpE7YLih68hslluKM
-        REMt5qLiRACWM9NJpgMAAA==
-X-CMS-MailID: 20230323150039eucas1p26720ff35cb61c319cf3689f2f692f720
-X-Msg-Generator: CA
-X-RootMTR: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c
-References: <CGME20230322135015eucas1p2ff980e76159f0ceef7bf66934580bd6c@eucas1p2.samsung.com>
-        <20230322135013.197076-1-p.raghav@samsung.com>
-        <ZBtSevjWLybE6S07@casper.infradead.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ0PR11MB5920:EE_
+X-MS-Office365-Filtering-Correlation-Id: db4dc473-a820-43ff-7538-08db2baf7a73
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0fJ0MWcVtqlE4oY1YxDCxnWPoSFdPgyMZsJFZH+BbRmCMdjRu4HcEimgnkEBf/ErsnXRSXmd1NVAiGi/9ShnafumQt/vcoGd6/TJBDNTzpLZdeHzW0RpwZo83HDz4DbhYJmmUzjznxS+/idtcof9UQckDKaUAfN/w9a/cMv+3XkAWS8t8GpGrLf/9j1GBfJkutTQsjuD8d/wGmeZ3hzV7WjByzaK1L6GPEPfhuuMbxx8+vLpFrsiab7BNIQwARQqPt/0FqD3fzR/iXFGKkP1YECjcED5TuDVxFVVGwLgYrW+9ASGKR0CuP6IjrtigTqQFlC4qA/E5jTLr7ZM/RhO985yqE8euQTkuKyUQ7tpiOcdckpiVkWvN/B3wWp1efWHx4STrHy45irgXR3dGPX3UZYpwlkAeopdiXRuCD7/7k3dZ76xjTbFoFPF6TZXOOE4CQpVjlDeGfNe7LOl5UvQPhZK639TezkrmGTINrABslIqe9NETfHs/wGoOiNmSS9ALvnUFApNw+s3R5REJjwUFRfT/bAkjGhyFJzbgr7Ynn9upXD5lcQcdrTahnO3211hCU+iHxjpimlxMyux96GTLCLjgFDVl9iBxtMxYPH2VPSmX91JRK0BKmqs3dkvXL1zk/XoEiRSdHYN1D/iVGc/Sg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(376002)(396003)(136003)(346002)(451199018)(83380400001)(2906002)(478600001)(54906003)(6666004)(9686003)(186003)(1076003)(6512007)(316002)(36756003)(6486002)(26005)(6506007)(38100700002)(82960400001)(86362001)(8936002)(66556008)(66476007)(7416002)(66946007)(6916009)(8676002)(4326008)(41300700001)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NdWUKt6aRlgN10KOZx7FenbSx++N0tMOPylTSs+gu1vndxP36unOoXilJ1KP?=
+ =?us-ascii?Q?d3zWfLTg7j2SrNP3vFt+JT7+WmLZsxg4Wa+wqVrsCwFLyZhjpZ3D5t7kuc6f?=
+ =?us-ascii?Q?yb3Y4ihKkaKT+dV0tPPYRpFI3e6XvqXbNZXLkJBiRmHoZvE2q4ly7Z1LxB/6?=
+ =?us-ascii?Q?Vjif0OzZjfDtiC6TBvBDvyeoYj8kyywxxvp/oJp0i/5bIbEDDuiQhpst/i9J?=
+ =?us-ascii?Q?l/Y3WNiBS72lVbd7yg9LHK9ldQtXclERHI6E/sjPmMpesJ9UEHliBxzegWNu?=
+ =?us-ascii?Q?+dw4JUyCwMVwbHvHQA8B4MFzq+moVH+YXiHfzUEacFt6SYr5rEoVhA+5jCoU?=
+ =?us-ascii?Q?2hoUgf6ViO4Ts9nesVqvhbZd84OlA4wLtcVFNY69rNvnneh/iL5u5F0TryhV?=
+ =?us-ascii?Q?8SdPCAs2TLL5uSM1KdWgvzm0b1uANAQdeO5cDroCEH8YVO9CrgciLAiLSE8b?=
+ =?us-ascii?Q?rG8okp7O+AVFxGA2iL5uD/+udrb3qdc1giDr94ULiKuV/bil+esd6Flrsszz?=
+ =?us-ascii?Q?l8RsaYAHxKdC7J19LPFDC2PVvwNu7tUQYO6S34ggOn2vOd5We9SKtfgXs3lV?=
+ =?us-ascii?Q?9lw6rDq0bL0eklPwswAhMxYWMS5D5BADLoYOarzoUT/S1+BdHNoaClA1DJvM?=
+ =?us-ascii?Q?9pgh9CHwibunmi0bYYCBwxeQwyj+xdZJUGliuE6yaqKScQLJArQYGa0JJWwu?=
+ =?us-ascii?Q?vMUR+ZLC12TJ3ojDghyRVAkZDTzrTAvD/1zxlaALrXPvWWB5HDzbKd+Kpmq4?=
+ =?us-ascii?Q?71735t07MmUx2ROyNmpabFw24SnAo6kEjQeoKTlRcGiL/UGLIb4Gh2vXZ/MP?=
+ =?us-ascii?Q?0DH7zAZNJ5KKqp/i9g5a4snjHiWbrTciJsntWxCyDnN/MDwTmFnuP5Zccbo0?=
+ =?us-ascii?Q?Jyr1gNwsDK9NeavczUWPhpEBWpBeZMv7yhV0wFWblTTSKJ2TsGLnbiO/9fPm?=
+ =?us-ascii?Q?d6eT7P43t6OOkrHB+naSPqFT2sNvgpGRJRzxUdT01W1zv8CAovcPMt0na7J8?=
+ =?us-ascii?Q?u5wnvOZWeT1/Pz41lma1eLXx1u8T6APBt0amO8EaHbeB/MhU5WE2MJ8YGRfX?=
+ =?us-ascii?Q?PpZxKpGH7ASq4VNzn4ahRyOamFJ3hqvZ2aPDdRXz1/sG32NgnqjqQbDcrEZ+?=
+ =?us-ascii?Q?oink8vLAJIWNiOvj+LVRuJRJME/5/a5ldd31OwG+EYH+obFatFFo8CMkrLDG?=
+ =?us-ascii?Q?/q0QLc9RGfmNt1d8pYYZhU1zewbe9qJcuHyl1GhkzaF44wLY2FcRBQoqDcTE?=
+ =?us-ascii?Q?vx9T0ZwWfp5Sx4e9oVBaTtcArBQjHiMRqrY5k0/qK3QyhP98kF6FFe60NY/n?=
+ =?us-ascii?Q?6ScvnKy37oZrwAY5XVj8+9Apvl8nZUbOqtA7GOlvoAiJUVVNHrav9yY1IgSD?=
+ =?us-ascii?Q?5R+LeT//04sKsBV9JzZIHMTR3u5q0mqYmhwfoUxwx+bByt6VwZrSvg/iXHH6?=
+ =?us-ascii?Q?ItcGq+zYgTD43VAATaskF+Iqu1cG0lW30VNTF+KEoPZKPJ4kt1vF/uQFLOq1?=
+ =?us-ascii?Q?SAzNmtSlTtMLP4shuEC9RtEVm9gVoeaPLoub2F/0Ko2o0cHwgu2k/YTzObg7?=
+ =?us-ascii?Q?BIsOKsAbzBIsroqr+ydvH9tKaKsr69YH+eEIv70wNu1IzbOuSh1zzkA7aGGZ?=
+ =?us-ascii?Q?lw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: db4dc473-a820-43ff-7538-08db2baf7a73
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 15:01:28.0308
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ErfPn+wmkVM/fye+14ibWyKn7L2cs7MGG1V6pUWo02zE9ZMr93A/NRgCs2WrFLb0s8vK03+2kjVirL6tmhzpl1ldmXdPgmZfuKLap1aSWgE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5920
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Open questions:
->> - Willy pointed out that the calls to folio_set_error() and
->>   folio_clear_uptodate() are not needed anymore in the read path when an
->>   error happens[2]. I still don't understand 100% why they aren't needed
->>   anymore as I see those functions are still called in iomap. It will be
->>   good to put that rationale as a part of the commit message.
-> 
-> page_endio() was generic.  It needed to handle a lot of cases.  When it's
-> being inlined into various completion routines, we know which cases we
-> need to handle and can omit all the cases which we don't.
-> 
-> We know the uptodate flag is clear.  If the uptodate flag is set,
-> we don't call the filesystem's read path.  Since we know it's clear,
-> we don't need to clear it.
-> 
-Got it.
+On Wed, Mar 22, 2023 at 03:31:59PM -0700, Luis Chamberlain wrote:
+>On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
+>> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
+>> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
+>> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
+>> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+>> > > > > Yes, the -EINVAL error is strange. It is returned also in
+>> > > > > kernel/module/main.c on few locations. But neither of them
+>> > > > > looks like a good candidate.
+>> > > >
+>> > > > OK I updated to next-20230119 and I don't see the issue now.
+>> > > > Odd. It could have been an issue with next-20221207 which I was
+>> > > > on before.
+>> > > >
+>> > > > I'll run some more test and if nothing fails I'll send the fix
+>> > > > to Linux for rc5.
+>> > >
+>> > > Jeesh it just occured to me the difference, which I'll have to
+>> > > test next, for next-20221207 I had enabled module compression
+>> > > on kdevops with zstd.
+>> > >
+>> > > You can see the issues on kdevops git log with that... and I finally
+>> > > disabled it and the kmod test issue is gone. So it could be that
+>> > > but I just am ending my day so will check tomorrow if that was it.
+>> > > But if someone else beats me then great.
+>> > >
+>> > > With kdevops it should be a matter of just enabling zstd as I
+>> > > just bumped support for next-20230119 and that has module decompression
+>> > > disabled.
+>> >
+>> > So indeed, my suspcions were correct. There is one bug with
+>> > compression on debian:
+>> >
+>> > - gzip compressed modules don't end up in the initramfs
+>> >
+>> > There is a generic upstream kmod bug:
+>> >
+>> >  - modprobe --show-depends won't grok compressed modules so initramfs
+>> >    tools that use this as Debian likely are not getting module dependencies
+>> >    installed in their initramfs
+>>
+>> are you sure you have the relevant compression setting enabled
+>> in kmod?
+>>
+>> $ kmod --version
+>> kmod version 30
+>> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
+>
+>Debian has:
+>
+>kmod version 30
+>+ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
 
-> We don't need to set the error flag.  Only some filesystems still use
-> the error flag, and orangefs isn't one of them.  I'd like to get rid
-> of the error flag altogether, and I've sent patches in the past which
-> get us a lot closer to that desired outcome.  Not sure we're there yet.
-> Regardless, generic code doesn't check the error flag.
+	   ^ so... mind the minus :). It doesn't support zlib.
 
-Thanks for the explanation. I think found the series you are referring here.
+Change your kernel config to either compress the modules as xz or zstd.
 
-https://lore.kernel.org/linux-mm/20220527155036.524743-1-willy@infradead.org/#t
 
-I see orangefs is still setting the error flag in orangefs_read_folio(), so
-it should be removed at some point?
+Lucas De Marchi
 
-I also changed mpage to **not set** the error flag in the read path. It does beg
-the question whether block_read_full_folio() and iomap_finish_folio_read() should
-also follow the suit.
-
---
-Pankaj
+>
+>> $ modprobe --show-depends ext4
+>> insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/jbd2/jbd2.ko.zst insmod
+>> /lib/modules/6.1.12-1-MANJARO/kernel/fs/mbcache.ko.zst insmod
+>> /lib/modules/6.1.12-1-MANJARO/kernel/lib/crc16.ko.zst insmod
+>> /lib/modules/6.1.12-1-MANJARO/kernel/arch/x86/crypto/crc32c-intel.ko.zst
+>> insmod /lib/modules/6.1.12-1-MANJARO/kernel/crypto/crc32c_generic.ko.zst
+>> insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/ext4/ext4.ko.zst
+>
+>Perhaps this was related to the above gzip issue in debian then.
+>
+>I'm hoping will have a bit more time than me to verify.
+>
+>  Luis
