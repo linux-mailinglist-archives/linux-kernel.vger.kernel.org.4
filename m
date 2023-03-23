@@ -2,122 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5816C70F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10276C70F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjCWTUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S230179AbjCWTVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjCWTUQ (ORCPT
+        with ESMTP id S230491AbjCWTVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:20:16 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4AEEFA1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:20:14 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x3so91155369edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:20:14 -0700 (PDT)
+        Thu, 23 Mar 2023 15:21:02 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F2210AA3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:20:41 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso23475582ybi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679599213;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jRIhiCMIYhlzOxpqNUvBzZ/DfwkIA0+Cejq18uIa0y0=;
-        b=lRY8iaHw69WCs1URcFv4/laikeuajycokc36F6FdzbOd+szHEuJtUPQSc3rAvyEBd8
-         PhzFu9iGZhI6tQcgvCbQ4Vtg8s4zM/Ft0ublnHympVGRZz4y6kjCaZaMZWX7+OBkmR76
-         tusUCSPQ66ntZcNhbTRUbVEAfAUEPPKs+vsEn5Y8q2e3gw+RWFUkmC2+rkk/B2MRWulA
-         9aWfqWwV7l5uqkigskT8iz1Val+oWI2IUFtNRaWpWtizZ6PxfFsmc5ADQ8eeTycaE3cZ
-         HSFVC2L/WeKZsETyk3wJR366nK8+0Lwn/ygS+1vzDBNXhVIYy+uM/oq3oahKUwS09DmP
-         royw==
+        d=google.com; s=20210112; t=1679599240;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=d3Ygo29HYRm3r7ZSnu2K3ZnOjsSgQ+xD3MacSkCFgS8=;
+        b=iUAc5tfex5LyNmXTVNc19Y6VwkI/2zG9eofeKpxBN8iEnKFaM8vqW0NZxUIDZ0tHoj
+         LLOmK2wjtTYJPHjaPWMCF4GG8JTYPDgXvWX26l4EpWSpgs0QUzkkM2qJJbzvHswgeZrl
+         iwwdZDNDf5ZHmsNrZ8nIwdrII6LE6LM84jV65trxNPs/s0stFz+ckmwUf7WY0n850V5k
+         Vf5ho+bv6kxf3yAupz/smWefIZSeiERMOrI32Qy6ZcF7gvL/de4iSOugo6shXZLLN28n
+         n6aYYqmdB2K5fyHbRuFMkk+O0raJp8x1VDirkFjgz2kAlnlQxXgUmD+hR+ZhSG5lYMtS
+         5eGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679599213;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jRIhiCMIYhlzOxpqNUvBzZ/DfwkIA0+Cejq18uIa0y0=;
-        b=54kfkk9LEAh/z+RfGRAFObZrNDVAhUxpMG/tJen7Xm3Euw2PDvR4L4MsNrbRq9APU3
-         TwGpld1+lJZq0uhsmZxhpsH0yl5rhFdomMTkh64MIxFcX25IUyvoyzvBU7a75DN5lC8c
-         08WyOQ/8L40E4GxWCGNTYllJqGCRQAdz+wDKJMJ88fzIpXcDLY1ivq01ayM4oKD7ipHr
-         0P/LdNqptk4Q1e4xreh5LbaHG0hS2/W/W3KdtiHqBpQ+CI59vs8mPpH6jV8hfVIaT4Ru
-         JfFzWfbLE1TW2nD+/bDdZ5+u/Qgqf3mkztzW4Oxb4gsBPQpZYLUxeV/cZnUX8X+L/y2d
-         ne8w==
-X-Gm-Message-State: AAQBX9d0NlTtBk0cOlLNhH/d88DU/ZUXPXvAQlSnPEN5AadbY5rIjwIW
-        r+zJ3ls1A/bp2PDZ0SnpX/o=
-X-Google-Smtp-Source: AKy350bv2nW0ssSW58xZk/A1hVR6vQGpLcJ1lDh0NrD7/70XHYAWOJKVIw/lFQwMBDo6Wl2JAZ8PLg==
-X-Received: by 2002:a17:907:8c0e:b0:930:bc07:3bf7 with SMTP id ta14-20020a1709078c0e00b00930bc073bf7mr207842ejc.5.1679599213094;
-        Thu, 23 Mar 2023 12:20:13 -0700 (PDT)
-Received: from khadija-virtual-machine.localdomain ([39.41.14.14])
-        by smtp.gmail.com with ESMTPSA id ia9-20020a170907a06900b00932b3e2c015sm8161409ejc.51.2023.03.23.12.20.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 12:20:12 -0700 (PDT)
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] staging: rtl8192e: remove blank lines after '{'
-Date:   Fri, 24 Mar 2023 00:20:02 +0500
-Message-Id: <303a41480220a6c31cee91d40ece40b3fae3bddf.1679598576.git.kamrankhadijadj@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1679598576.git.kamrankhadijadj@gmail.com>
-References: <cover.1679598576.git.kamrankhadijadj@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1679599240;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d3Ygo29HYRm3r7ZSnu2K3ZnOjsSgQ+xD3MacSkCFgS8=;
+        b=w3CpPV3qKe0g79sqQuqshtBE5rvszm5Bsy4kka176HFEGgu4FsgJz+h1bo3LAkIAca
+         rN7k78eDHOPU6aQJBRfP6bE34SBPnAY/XbKnrEc8RCalnP0VqgxhQDlnsH9T9+o1lYEm
+         txl5b89lU7WvSL01paMGSNchs+zBxnXC4S7jhgiT+jU09gPFqJef6MQqXhEKV+TT33Zi
+         a3o7xpONjSbY4M251wzDmafCsCvcne/TvSw4I3CbKo9fo0E61ryoA5Iak+vX+KrogDBs
+         aLxScM0Gdvl+P1Q/oJK2B1Khf7VgNA13gzJurIx35ZNr7qCsVdqgUxoWF873BPQAxQH+
+         77hA==
+X-Gm-Message-State: AAQBX9dtTA7bHJgkx1dUyIp9kPKCtj3A7H0XiYmvKYHaMG9PHFs3Cu+j
+        I/o+U9eVBCd1ZlWda4ECsST2QZk2of+C
+X-Google-Smtp-Source: AKy350bQ1eTuQEXiZXBU3mqF5sZzIUe6iOnP0mTgtKF+ZocPhgkpYLBQ4rOziJ51eEKUXPKkoJot9mx6Sw+r
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e705:3a3d:46e5:fb50])
+ (user=irogers job=sendgmr) by 2002:a25:c750:0:b0:b45:e545:7c50 with SMTP id
+ w77-20020a25c750000000b00b45e5457c50mr2453134ybe.0.1679599240436; Thu, 23 Mar
+ 2023 12:20:40 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 12:20:19 -0700
+Message-Id: <20230323192028.135759-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v2 0/9] Update Intel events and make optane events dynamic
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Edward Baker <edward.baker@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        perry.taylor@intel.com, caleb.biggers@intel.com,
+        samantha.alt@intel.com, weilin.wang@intel.com
+Cc:     Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary blank lines after an open brace as reported by
-checkpatch.pl
+Update events from:
+https://github.com/intel/perfmon/pull/62
 
-"CHECK: Blank lines aren't necessary after an open brace '{'"
+Add new #has_optane literal to allow optane metrics to be dynamic in
+how optane events are enabled. Update CLX, ICX and SPR for this using
+this PR:
+https://github.com/intel/perfmon/pull/63
 
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
- drivers/staging/rtl8192e/rtllib_rx.c | 4 ----
- 1 file changed, 4 deletions(-)
+Ian Rogers (9):
+  perf vendor events: Broadwell v27 events
+  perf vendor events: Broadwellde v9 events
+  perf vendor events: Broadwellx v20 events
+  perf vendor events: Haswell v33 events
+  perf vendor events: Haswellx v27 events
+  perf vendor events: Jaketown v23 events
+  perf vendor events: Sandybridge v19 events
+  perf metrics: Add has_optane literal
+  perf vendor events: Update metrics to detect optane memory at runtime
 
-diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-index f627dfe66d90..b649d02dc5c8 100644
---- a/drivers/staging/rtl8192e/rtllib_rx.c
-+++ b/drivers/staging/rtl8192e/rtllib_rx.c
-@@ -1167,7 +1167,6 @@ static int rtllib_rx_decrypt(struct rtllib_device *ieee, struct sk_buff *skb,
- 	if (crypt && !(fc & RTLLIB_FCTL_WEP) && !ieee->open_wep) {
- 		if (/*ieee->ieee802_1x &&*/
- 		    rtllib_is_eapol_frame(ieee, skb, hdrlen)) {
--
- 			/* pass unencrypted EAPOL frames even if encryption is
- 			 * configured
- 			 */
-@@ -1207,7 +1206,6 @@ static void rtllib_rx_check_leave_lps(struct rtllib_device *ieee, u8 unicast,
- 				      u8 nr_subframes)
- {
- 	if (unicast) {
--
- 		if (ieee->state == RTLLIB_LINKED) {
- 			if (((ieee->link_detect_info.NumRxUnicastOkInPeriod +
- 			    ieee->link_detect_info.NumTxOkInPeriod) > 8) ||
-@@ -1552,7 +1550,6 @@ static u8 qos_oui[QOS_OUI_LEN] = { 0x00, 0x50, 0xF2 };
- static int rtllib_verify_qos_info(struct rtllib_qos_information_element
- 				     *info_element, int sub_type)
- {
--
- 	if (info_element->elementID != QOS_ELEMENT_ID)
- 		return -1;
- 	if (info_element->qui_subtype != sub_type)
-@@ -2696,7 +2693,6 @@ static void rtllib_rx_mgt(struct rtllib_device *ieee,
- 		ieee->last_rx_ps_time = jiffies;
- 
- 	switch (WLAN_FC_GET_STYPE(le16_to_cpu(header->frame_ctl))) {
--
- 	case RTLLIB_STYPE_BEACON:
- 		netdev_dbg(ieee->dev, "received BEACON (%d)\n",
- 			   WLAN_FC_GET_STYPE(le16_to_cpu(header->frame_ctl)));
+ .../pmu-events/arch/x86/broadwell/cache.json  | 296 +++++-----
+ .../arch/x86/broadwell/floating-point.json    |   7 +
+ .../arch/x86/broadwell/frontend.json          |  18 +-
+ .../pmu-events/arch/x86/broadwell/memory.json | 248 ++++-----
+ .../arch/x86/broadwell/pipeline.json          |  22 +-
+ .../arch/x86/broadwell/uncore-other.json      |   2 +-
+ .../arch/x86/broadwellde/cache.json           | 105 ++--
+ .../arch/x86/broadwellde/floating-point.json  |  45 +-
+ .../arch/x86/broadwellde/frontend.json        |  18 +-
+ .../arch/x86/broadwellde/memory.json          |  64 ++-
+ .../arch/x86/broadwellde/pipeline.json        |  79 +--
+ .../arch/x86/broadwellde/uncore-cache.json    |  72 +--
+ .../arch/x86/broadwellde/uncore-memory.json   | 256 ++++++++-
+ .../arch/x86/broadwellde/uncore-other.json    |  27 +-
+ .../arch/x86/broadwellde/uncore-power.json    |  10 +-
+ .../pmu-events/arch/x86/broadwellx/cache.json |  16 +-
+ .../arch/x86/broadwellx/frontend.json         |  18 +-
+ .../arch/x86/broadwellx/pipeline.json         |  20 +-
+ .../arch/x86/broadwellx/uncore-cache.json     | 156 ++----
+ .../x86/broadwellx/uncore-interconnect.json   |  84 +--
+ .../arch/x86/broadwellx/uncore-memory.json    | 522 +++++++++---------
+ .../arch/x86/broadwellx/uncore-other.json     |  44 +-
+ .../arch/x86/broadwellx/uncore-power.json     |  10 +-
+ .../arch/x86/cascadelakex/clx-metrics.json    |  10 +-
+ .../pmu-events/arch/x86/haswell/cache.json    |  38 +-
+ .../pmu-events/arch/x86/haswell/memory.json   |  38 +-
+ .../pmu-events/arch/x86/haswell/pipeline.json |   8 +
+ .../pmu-events/arch/x86/haswellx/cache.json   |   2 +-
+ .../arch/x86/haswellx/pipeline.json           |   8 +
+ .../arch/x86/haswellx/uncore-cache.json       |  16 +-
+ .../arch/x86/haswellx/uncore-other.json       |   6 +-
+ .../arch/x86/icelakex/icx-metrics.json        |  10 +-
+ .../arch/x86/jaketown/pipeline.json           |   8 +
+ tools/perf/pmu-events/arch/x86/mapfile.csv    |  14 +-
+ .../arch/x86/sandybridge/pipeline.json        |   8 +
+ .../arch/x86/sapphirerapids/spr-metrics.json  |  10 +-
+ tools/perf/util/expr.c                        |  19 +
+ 37 files changed, 1323 insertions(+), 1011 deletions(-)
+
 -- 
-2.34.1
+2.40.0.348.gf938b09366-goog
 
