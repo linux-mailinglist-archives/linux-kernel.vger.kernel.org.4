@@ -2,172 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2D06C5FBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EE66C5FBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjCWGan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S229728AbjCWGc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCWGal (ORCPT
+        with ESMTP id S229500AbjCWGc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:30:41 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A6A1E29D;
-        Wed, 22 Mar 2023 23:30:40 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id c10so14298738qtj.10;
-        Wed, 22 Mar 2023 23:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679553039;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UhAsUoztmuqWCk/RtYU7Y/jxMQ5MJV8LTqU+TgYM9HY=;
-        b=hwDGhhlh6syM0F4yaWNb8x1cpO/Jc4yO+gXKVUvY6q3eRVhOeToTLDRFyTxLvYylWE
-         6xNKez48OYQ3qfZxVu/hJ0XcPi/OYZNBEnsGUL1C6enfahBISDGHQLY++i5KxWR1/orN
-         85e28RzplkD4xs2jZbmeN5M9FcH056ug8Ux6i/eaOkd71Kl/DruZynOoQPoal4QtVhtf
-         rIyfhMZwt43j1yK7UyvflW+dm6jN1CCYbKAMeRsvCC8LdZ9ZZ3AUKlbjFpMXCFVnX2a/
-         nFBAZHbF49e5M76jyK6R4fpFCSC8Q9puthy9E1jsYgtKB+bev0dxIM3Z9iuAMUO1laYP
-         xPPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679553039;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UhAsUoztmuqWCk/RtYU7Y/jxMQ5MJV8LTqU+TgYM9HY=;
-        b=fYmkuipiEDjuoTGHuqAFBQ0CF/6Mv1Oc0BCibbDrIL6YJgi9MyqLU8dI6h6WUoLnks
-         /h41/QlFf2Tbwn9nxyDqy2n6Gf30Ss4+73sI1JXm1KpMTvT+VdunnTCH8xuNUXJKYHzL
-         T7FzLhCOX13ddsvPX++roJFfH0SqYyPBm5DTq+ZOHNgfSSGc05jSt2mA40lFD+7AFKJd
-         f/W0RmmLIA63y14CPpc8DA7FkB7iBKJlzRskaSTMyB6PmHKfXdy14O4mtTB6mL+XOb5c
-         ISLj+6MtCYSyFdZ0zPaVAykpWN+w9tN21A1fw/hH7z/p3TpV3JBjEV9qVEd1Do8Gjsdu
-         TdZw==
-X-Gm-Message-State: AO0yUKXWJ+VOWSRV35g4Xufle7tZfEHntrGvyvnK5hh7EXeVzdtR7gOl
-        8L621OUZEKQ4WiJpvTdI3cY=
-X-Google-Smtp-Source: AK7set+0KKR4/NmJEyqFywo22jUgVMyDBi0HZWSJWqGnddEUGYnPWIYZiLAjObxr23aJ7Gi4gO4F8A==
-X-Received: by 2002:a05:622a:103:b0:3e1:5060:5c8f with SMTP id u3-20020a05622a010300b003e150605c8fmr10159361qtw.33.1679553039284;
-        Wed, 22 Mar 2023 23:30:39 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05620a22ab00b0074583bda590sm12668492qkh.10.2023.03.22.23.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 23:30:38 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1F28A27C0054;
-        Thu, 23 Mar 2023 02:30:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 23 Mar 2023 02:30:38 -0400
-X-ME-Sender: <xms:DfIbZC9lYqPVL80QXhH3ktDG-LsjzmRrvw1AefDd-LGAl9F864bk2Q>
-    <xme:DfIbZCtrF0nvn7Ongo8hKSvsLO-Mb9su-RoLEERyuF5WzooTpo9fbyKUOPnQuYvOx
-    OTxsUm4x9zr93mc4A>
-X-ME-Received: <xmr:DfIbZICbRTbmpjRkBsbGdpknEeB0G1djOTm76p9OmuprhsEzdnvfx4NYqWaOSwo6ucti6tjifyzakLzo9oMuOBipcVtFs9xnY2w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:DfIbZKehO0R-rQVDEW-n6rz0ktcrf2wWHI9ifT4SIV5cKMATyfhPSg>
-    <xmx:DfIbZHOi17Q9_FlgceWWbdG_BQTZwaOA7weaaMbuNoYw__i2VU7Owg>
-    <xmx:DfIbZEkZrrj2REwG5vTHYiXoa_oLrbw2hqTT7dSjy2mg77N89MHFSA>
-    <xmx:DfIbZAhkkgDT5lI95X66r3BKKE415vZ6mr-ejrkoH8csde3oO2gOrA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 02:30:37 -0400 (EDT)
-Date:   Wed, 22 Mar 2023 23:30:35 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v2 3/5] rust: add pin-init API
-Message-ID: <ZBvyCwPcpTnk2R7h@Boquns-Mac-mini.local>
-References: <20230321194934.908891-1-y86-dev@protonmail.com>
- <20230321194934.908891-4-y86-dev@protonmail.com>
+        Thu, 23 Mar 2023 02:32:56 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8685120;
+        Wed, 22 Mar 2023 23:32:55 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PhwWQ4S5Nz4f3k5b;
+        Thu, 23 Mar 2023 14:32:50 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+S8htk_pqkFQ--.47155S3;
+        Thu, 23 Mar 2023 14:32:52 +0800 (CST)
+Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
+ sync_thread in action_store"
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Yu Kuai <yukuai1@huaweicloud.com>, logang@deltatee.com,
+        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
+        song@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        Marc Smith <msmith626@gmail.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
+ <20230322064122.2384589-2-yukuai1@huaweicloud.com>
+ <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
+ <d1d27b2a-96ec-319e-4690-64e781c9a473@huaweicloud.com>
+ <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
+ <31e7f59e-579a-7812-632d-059ed0a6d441@huaweicloud.com>
+ <3fc2a539-e4cc-e057-6cf0-da7b3953be6e@linux.dev>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
+Date:   Thu, 23 Mar 2023 14:32:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321194934.908891-4-y86-dev@protonmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <3fc2a539-e4cc-e057-6cf0-da7b3953be6e@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDX0R+S8htk_pqkFQ--.47155S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrWUWr18CF4rKr1kKFWfZrb_yoW8KFW3pF
+        WfG3Z8Xw4kAw4Iya4jvw1Iqa4Fvw4jvrWUGr95Ga4kJ345GrWIqFy8ua1DuayDXrZ7Aa12
+        vayrtFs3Za95u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=1.4 required=5.0 tests=KHOP_HELO_FCRDNS,MAY_BE_FORGED,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 07:50:00PM +0000, Benno Lossin wrote:
-[...]
-> +/// # Syntax
-> +///
-> +/// As already mentioned in the examples above, inside of `pin_init!` a `struct` initializer with
-> +/// the following modifications is expected:
-> +/// - Fields that you want to initialize in-place have to use `<-` instead of `:`.
-> +/// - In front of the initializer you can write `&this in` to have access to a [`NonNull<Self>`]
-> +///   pointer named `this` inside of the initializer.
-> +///
-> +/// For instance:
-> +///
-> +/// ```rust
-> +/// # use kernel::pin_init;
-> +/// # use macros::pin_data;
-> +/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
-> +/// #[pin_data]
-> +/// struct Buf {
-> +///     ptr: *mut u8,
-> +///     buf: [u8; 64],
+Hi,
 
-Say we have an extra field,
+在 2023/03/23 11:50, Guoqing Jiang 写道:
 
-           a: u8,
+> Combined your debug patch with above steps. Seems you are
+> 
+> 1. add delay to action_store, so it can't get lock in time.
+> 2. echo "want_replacement"**triggers md_check_recovery which can grab lock
+>      to start sync thread.
+> 3. action_store finally hold lock to clear RECOVERY_RUNNING in reap sync 
+> thread.
+> 4. Then the new added BUG_ON is invoked since RECOVERY_RUNNING is cleared
+>      in step 3.
 
-> +///     #[pin]
-> +///     pin: PhantomPinned,
-> +/// }
-> +/// pin_init!(&this in Buf {
-> +///     buf: [0; 64],
-> +///     ptr: unsafe { addr_of_mut!((*this.as_ptr()).buf).cast() },
+Yes, this is exactly what I did.
 
-And I think we want to disallow:
+> sync_thread can be interrupted once MD_RECOVERY_INTR is set which means 
+> the RUNNING
+> can be cleared, so I am not sure the added BUG_ON is reasonable. And 
+> change BUG_ON
 
-           a: unsafe { (*addr_of!(*this.as_ptr().buf))[0] }
+I think BUG_ON() is reasonable because only md_reap_sync_thread can
+clear it, md_do_sync will exit quictly if MD_RECOVERY_INTR is set, but
+md_do_sync should not see that MD_RECOVERY_RUNNING is cleared, otherwise
+there is no gurantee that only one sync_thread can be in progress.
 
-, right? Because we don't want `pin_init!` to provide any initialization
-order guarantee? If so, maybe add one or two sentences to call it out.
+> like this makes more sense to me.
+> 
+> +BUG_ON(!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
+> +!test_bit(MD_RECOVERY_INTR, &mddev->recovery));
 
-If not sure, I think we can leave it as it is, until someone really uses
-this pattern ;-)
+I think this can be reporduced likewise, md_check_recovery clear
+MD_RECOVERY_INTR, and new sync_thread triggered by echo
+"want_replacement" won't set this bit.
 
-Regards,
-Boqun
+> 
+> I think there might be racy window like you described but it should be 
+> really small, I prefer
+> to just add a few lines like this instead of revert and introduce new 
+> lock to resolve the same
+> issue (if it is).
 
-> +///     pin: PhantomPinned,
-> +/// });
-> +/// ```
-> +///
-> +/// [`try_pin_init!`]: kernel::try_pin_init
-> +/// [`NonNull<Self>`]: core::ptr::NonNull
-> +#[macro_export]
-> +macro_rules! pin_init {
-> +    ($(&$this:ident in)? $t:ident $(::<$($generics:ty),* $(,)?>)? {
-> +        $($fields:tt)*
-> +    }) => {
-> +        $crate::try_pin_init!(
-> +            @this($($this)?),
-> +            @type_name($t),
-> +            @typ($t $(<$($generics),*>)?),
-> +            @fields($($fields)*),
-> +            @error(::core::convert::Infallible),
-> +        )
-> +    };
-> +}
-> +
-[...]
+The new lock that I add in this patchset is just try to synchronize idle
+and forzen from action_store（patch 3), I can drop it if you think this
+is not necessary.
+
+The main changes is patch 4, new lines is not much and I really don't
+like to add new flags unless we have to, current code is already hard
+to understand...
+
+By the way, I'm concerned that drop the mutex to unregister sync_thread
+might not be safe, since the mutex protects lots of stuff, and there
+might exist other implicit dependencies.
+
+> 
+> TBH, I am reluctant to see the changes in the series, it can only be 
+> considered
+> acceptable with conditions:
+> 
+> 1. the previous raid456 bug can be fixed in this way too, hopefully Marc 
+> or others
+>      can verify it.
+> 2. pass all the tests in mdadm
+
+I already test this patchset with mdadm, If there are reporducer for
+raid456 bug, I can try to verify it myself.
+
+Thanks,
+Kuai
+> 
+> Thanks,
+> Guoqing
+> .
+> 
+
