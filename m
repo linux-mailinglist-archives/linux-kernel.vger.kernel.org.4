@@ -2,474 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A49E6C5B32
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6616C5B42
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjCWALD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
+        id S230467AbjCWAMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCWAKv (ORCPT
+        with ESMTP id S230211AbjCWAM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:10:51 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65B233447
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:10:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VeS0V4I_1679530197;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VeS0V4I_1679530197)
-          by smtp.aliyun-inc.com;
-          Thu, 23 Mar 2023 08:09:58 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] erofs: use separate xattr parsers for listxattr/getxattr
-Date:   Thu, 23 Mar 2023 08:09:49 +0800
-Message-Id: <20230323000949.57608-9-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
-References: <20230323000949.57608-1-jefflexu@linux.alibaba.com>
+        Wed, 22 Mar 2023 20:12:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F80434F4D;
+        Wed, 22 Mar 2023 17:11:57 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j11so25583982lfg.13;
+        Wed, 22 Mar 2023 17:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679530309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nYCkHAsN3JrF68S01DrynayfL1Jyb7WCod+z/Y3H2No=;
+        b=UReGMPhbM2n9pWALFzS1ncK2UDdmdcBDjv/VT2DMUe6/7gh85hvxWUuv7VNGDdxUkw
+         bwWVoGbj9DofIhFE5Oi4/LRu2cQsrvXYmhqrT4t1v3UIU57DtU4kCLRXH5VQ5Or2Mj8H
+         9scxNqBrU17PRtN67nR5XOVdOnwgP8twk1WHnnKYiupozmblhhRK0M8B8uKSIo+NqYqb
+         8pty7I8ttBkVKGNix0CJ1YtUEkO0W4aO2asoYHfISz0a/hvrcT1siikRVU7arTi8ycI0
+         DZuEHJNwNLBELo0bTTYlYdI94mjET6TVPuHvD3md2OtjchjDszjTEMjUVKkdu/bLPYQV
+         Zclg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679530309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nYCkHAsN3JrF68S01DrynayfL1Jyb7WCod+z/Y3H2No=;
+        b=bLc3ziV5pLt5g48FfDcuEZTvFSI9vWnyGiyFsfz1vF4ttT0k7xe69asikzN7v4wkHM
+         g0j9wbeuTTHyossctAo7rPq66/K1eJ+9LdZ6B/CUU9QmSyCTjZe5M0n1cWH5auEhjXSh
+         AuR4rX2T7zvC58K7Sbq+YyizKqvg5BPoH17ur5DPw+6bH5ZAzw+jQRXcnJFfhACt/TXs
+         EdkF/A8me07WNVA0MjT1eYbi1Q6lV0QUqWAMB2c1m8ij+0eQMaHnDVGquVlQ+QjCzY0H
+         oZ3jS2A2SPZUP5OCyMq6w6yzODr5KwHI5zeHdN4Iqibk8hi4Uh0X1QvEyZ2oWEMfh7Gv
+         2drQ==
+X-Gm-Message-State: AO0yUKWKVh/G5uiuAqrST1WErgBPB50jscp0Z2UEvvBkZrU/z7BSmeN6
+        DgGn9o3FHjgGiuRP7bsKSj0=
+X-Google-Smtp-Source: AKy350bDuYFrnVk394IZKDlUf38O/h63IIdgWnxEF5JXKF4nDJRgmGsB2j8L2Iqx3XraDJb6ZG1suQ==
+X-Received: by 2002:a19:ee13:0:b0:4dd:9e4a:4c3b with SMTP id g19-20020a19ee13000000b004dd9e4a4c3bmr2545136lfb.17.1679530308868;
+        Wed, 22 Mar 2023 17:11:48 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id o15-20020ac2434f000000b004dd6c325311sm2747359lfl.248.2023.03.22.17.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 17:11:48 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 03:11:46 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Elad Nachman <enachman@marvell.com>
+Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 8/8] PCI: dwc: Introduce region limit from DT
+Message-ID: <20230323001146.xbqbav2fu2qelsub@mobilestation>
+References: <20230313124016.17102-1-enachman@marvell.com>
+ <20230313124016.17102-9-enachman@marvell.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313124016.17102-9-enachman@marvell.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a callback styled xattr parser, i.e. xattr_foreach(), which is
-shared among listxattr and getxattr.  Convert it to two separate xattr
-parsers for listxattr and getxattr.
+On Mon, Mar 13, 2023 at 02:40:16PM +0200, Elad Nachman wrote:
+> From: Elad Nachman <enachman@marvell.com>
+> 
+> Allow dts override of region limit for SOCs with older Synopsis
+> Designware PCIe IP but with greater than 32-bit address range support,
+> such as the Armada 7020/7040/8040 family of SOCs by Marvell,
+> when the DT file places the PCIe window above the 4GB region.
+> The Synopsis Designware PCIe IP in these SOCs is too old to specify the
+> highest memory location supported by the PCIe, but practically supports
+> such locations. Allow these locations to be specified in the DT file.
+> DT property is called num-regionmask , and can range between 33 and 64.
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/xattr.c | 347 ++++++++++++++++++++++-------------------------
- 1 file changed, 159 insertions(+), 188 deletions(-)
+The implemented algorithm doesn't prevents you from specifying the
+outbound MW base above 4GB. It prevents you from overflowing the limit
+address which is of the 32-bits width only for the chips older v4.60a
+and if the INCREASE_REGION_SIZE IP-core synthesize parameter is set to
+zero.
 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 196b2eb59e29..eac5b7b69691 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -24,6 +24,7 @@ struct erofs_xattr_iter {
- 	struct qstr name;
- 	struct dentry *dentry;
- 	struct inode *inode;
-+	unsigned int remaining; /* size of inline xattrs to be iterated */
- 	bool getxattr;
- };
- 
-@@ -144,153 +145,6 @@ static int erofs_init_inode_xattrs(struct inode *inode)
- 	return ret;
- }
- 
--/*
-- * the general idea for these return values is
-- * if    0 is returned, go on processing the current xattr;
-- *       1 (> 0) is returned, skip this round to process the next xattr;
-- *    -err (< 0) is returned, an error (maybe ENOXATTR) occurred
-- *                            and need to be handled
-- */
--struct xattr_iter_handlers {
--	int (*entry)(struct erofs_xattr_iter *it, struct erofs_xattr_entry *entry);
--	int (*name)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		    unsigned int len);
--	int (*alloc_buffer)(struct erofs_xattr_iter *it, unsigned int value_sz);
--	void (*value)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		      unsigned int len);
--};
--
--/*
-- * Regardless of success or failure, `xattr_foreach' will end up with
-- * `ofs' pointing to the next xattr item rather than an arbitrary position.
-- */
--static int xattr_foreach(struct erofs_xattr_iter *it,
--			 const struct xattr_iter_handlers *op,
--			 unsigned int *tlimit)
--{
--	struct erofs_xattr_entry entry;
--	unsigned int value_sz, processed, slice;
--	int err;
--
--	/* 0. fixup blkaddr, ofs, ipage */
--	err = erofs_xattr_iter_fixup(it);
--	if (err)
--		return err;
--
--	/*
--	 * 1. read xattr entry to the memory,
--	 *    since we do EROFS_XATTR_ALIGN
--	 *    therefore entry should be in the page
--	 */
--	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
--	if (tlimit) {
--		unsigned int entry_sz = erofs_xattr_entry_size(&entry);
--
--		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
--		if (*tlimit < entry_sz) {
--			DBG_BUGON(1);
--			return -EFSCORRUPTED;
--		}
--		*tlimit -= entry_sz;
--	}
--
--	it->ofs += sizeof(struct erofs_xattr_entry);
--	value_sz = le16_to_cpu(entry.e_value_size);
--
--	/* handle entry */
--	err = op->entry(it, &entry);
--	if (err) {
--		it->ofs += entry.e_name_len + value_sz;
--		goto out;
--	}
--
--	/* 2. handle xattr name (ofs will finally be at the end of name) */
--	processed = 0;
--
--	while (processed < entry.e_name_len) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      entry.e_name_len - processed);
--
--		/* handle name */
--		err = op->name(it, processed, it->kaddr + it->ofs, slice);
--		if (err) {
--			it->ofs += entry.e_name_len - processed + value_sz;
--			goto out;
--		}
--
--		it->ofs += slice;
--		processed += slice;
--	}
--
--	/* 3. handle xattr value */
--	processed = 0;
--
--	if (op->alloc_buffer) {
--		err = op->alloc_buffer(it, value_sz);
--		if (err) {
--			it->ofs += value_sz;
--			goto out;
--		}
--	}
--
--	while (processed < value_sz) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      value_sz - processed);
--		op->value(it, processed, it->kaddr + it->ofs, slice);
--		it->ofs += slice;
--		processed += slice;
--	}
--
--out:
--	/* xattrs should be 4-byte aligned (on-disk constraint) */
--	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
--	return err < 0 ? err : 0;
--}
--
--static int xattr_entrymatch(struct erofs_xattr_iter *it,
--			    struct erofs_xattr_entry *entry)
--{
--	return (it->index != entry->e_name_index ||
--		it->name.len != entry->e_name_len) ? -ENOATTR : 0;
--}
--
--static int xattr_namematch(struct erofs_xattr_iter *it,
--			   unsigned int processed, char *buf, unsigned int len)
--{
--	return memcmp(buf, it->name.name + processed, len) ? -ENOATTR : 0;
--}
--
--static int xattr_checkbuffer(struct erofs_xattr_iter *it,
--			     unsigned int value_sz)
--{
--	int err = it->buffer_size < value_sz ? -ERANGE : 0;
--
--	it->buffer_ofs = value_sz;
--	return !it->buffer ? 1 : err;
--}
--
--static void xattr_copyvalue(struct erofs_xattr_iter *it,
--			    unsigned int processed,
--			    char *buf, unsigned int len)
--{
--	memcpy(it->buffer + processed, buf, len);
--}
--
--static const struct xattr_iter_handlers find_xattr_handlers = {
--	.entry = xattr_entrymatch,
--	.name = xattr_namematch,
--	.alloc_buffer = xattr_checkbuffer,
--	.value = xattr_copyvalue
--};
--
- static bool erofs_xattr_user_list(struct dentry *dentry)
- {
- 	return test_opt(&EROFS_SB(dentry->d_sb)->opt, XATTR_USER);
-@@ -367,62 +221,178 @@ static inline const struct xattr_handler *erofs_xattr_handler(unsigned int idx)
- 		xattr_handler_map[idx] : NULL;
- }
- 
--static int xattr_entrylist(struct erofs_xattr_iter *it,
--			   struct erofs_xattr_entry *entry)
-+/*
-+ * the general idea for these return values is
-+ * if    0 is returned, go on processing the current xattr;
-+ *       1 (> 0) is returned, skip this round to process the next xattr;
-+ *    -err (< 0) is returned, an error (maybe ENOXATTR) occurred
-+ *                            and need to be handled
-+ */
-+typedef int (*erofs_xattr_body_handler)(struct erofs_xattr_iter *it,
-+					unsigned int processed,
-+					char *buf, unsigned int len);
-+
-+static int erofs_xattr_namematch(struct erofs_xattr_iter *it,
-+		unsigned int processed, char *buf, unsigned int len)
-+{
-+	return memcmp(buf, it->name.name + processed, len) ? -ENOATTR : 0;
-+}
-+
-+static int erofs_xattr_copy(struct erofs_xattr_iter *it,
-+		unsigned int unused, char *buf, unsigned int len)
-+{
-+	memcpy(it->buffer + it->buffer_ofs, buf, len);
-+	it->buffer_ofs += len;
-+	return 0;
-+}
-+
-+static int erofs_xattr_body(struct erofs_xattr_iter *it, unsigned int len,
-+			    erofs_xattr_body_handler handler)
-+{
-+	unsigned int slice, processed = 0;
-+
-+	while (processed < len) {
-+		int err = erofs_xattr_iter_fixup_aligned(it);
-+		if (err)
-+			return err;
-+
-+		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
-+			      len - processed);
-+		err = handler(it, processed, it->kaddr + it->ofs, slice);
-+		if (err) {
-+			it->ofs += len - processed;
-+			return err;
-+		}
-+
-+		it->ofs += slice;
-+		processed += slice;
-+	}
-+	return 0;
-+}
-+
-+static int erofs_xattr_check_entry(struct erofs_xattr_iter *it)
- {
--	unsigned int prefix_len;
-+	int err;
-+
-+	err = erofs_xattr_iter_fixup(it);
-+	if (err)
-+		return err;
-+
-+	if (it->remaining) {
-+		struct erofs_xattr_entry *entry = it->kaddr + it->ofs;
-+		unsigned int entry_sz = erofs_xattr_entry_size(entry);
-+		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
-+		if (it->remaining < entry_sz) {
-+			DBG_BUGON(1);
-+			return -EFSCORRUPTED;
-+		}
-+		it->remaining -= entry_sz;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Regardless of success or failure, erofs_[get|list]xattr_foreach() will end up
-+ * with `ofs' pointing to the next xattr item rather than an arbitrary position.
-+ */
-+static int erofs_listxattr_foreach(struct erofs_xattr_iter *it)
-+{
-+	struct erofs_xattr_entry entry;
-+	const struct xattr_handler *h;
- 	const char *prefix;
-+	unsigned int value_sz, prefix_len, name_sz;
-+	int err;
- 
--	const struct xattr_handler *h =
--		erofs_xattr_handler(entry->e_name_index);
-+	err = erofs_xattr_check_entry(it);
-+	if (err)
-+		return err;
- 
--	if (!h || (h->list && !h->list(it->dentry)))
--		return 1;
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	value_sz = le16_to_cpu(entry.e_value_size);
-+
-+	h = erofs_xattr_handler(entry.e_name_index);
-+	if (!h || (h->list && !h->list(it->dentry))) {
-+		it->ofs += entry.e_name_len + value_sz;
-+		goto out;
-+	}
- 
- 	prefix = xattr_prefix(h);
- 	prefix_len = strlen(prefix);
-+	name_sz = prefix_len + entry.e_name_len + 1;
- 
- 	if (!it->buffer) {
--		it->buffer_ofs += prefix_len + entry->e_name_len + 1;
--		return 1;
-+		it->buffer_ofs += name_sz;
-+		it->ofs += entry.e_name_len + value_sz;
-+		goto out;
- 	}
--
--	if (it->buffer_ofs + prefix_len
--		+ entry->e_name_len + 1 > it->buffer_size)
-+	if (it->buffer_ofs + name_sz > it->buffer_size)
- 		return -ERANGE;
- 
- 	memcpy(it->buffer + it->buffer_ofs, prefix, prefix_len);
- 	it->buffer_ofs += prefix_len;
--	return 0;
--}
- 
--static int xattr_namelist(struct erofs_xattr_iter *it,
--			  unsigned int processed, char *buf, unsigned int len)
--{
--	memcpy(it->buffer + it->buffer_ofs, buf, len);
--	it->buffer_ofs += len;
-+	/* 2. handle xattr name (err can't be 1 or ENOATTR) */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_copy);
-+	if (err)
-+		return err;
-+
-+	it->buffer[it->buffer_ofs++] = '\0';
-+	it->ofs += value_sz;
-+out:
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
- 	return 0;
- }
- 
--static int xattr_skipvalue(struct erofs_xattr_iter *it,
--			   unsigned int value_sz)
-+static int erofs_getxattr_foreach(struct erofs_xattr_iter *it)
- {
--	it->buffer[it->buffer_ofs++] = '\0';
--	return 1;
--}
-+	struct erofs_xattr_entry entry;
-+	unsigned int value_sz;
-+	int err;
- 
--static const struct xattr_iter_handlers list_xattr_handlers = {
--	.entry = xattr_entrylist,
--	.name = xattr_namelist,
--	.alloc_buffer = xattr_skipvalue,
--	.value = NULL
--};
-+	err = erofs_xattr_check_entry(it);
-+	if (err)
-+		return err;
-+
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	value_sz = le16_to_cpu(entry.e_value_size);
-+
-+	if (it->index != entry.e_name_index || it->name.len != entry.e_name_len) {
-+		it->ofs += entry.e_name_len + value_sz;
-+		err = -ENOATTR;
-+		goto out;
-+	}
-+
-+	/* 2. handle xattr name */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_namematch);
-+	if (err) {
-+		it->ofs += value_sz;
-+		goto out;
-+	}
-+
-+	/* 3. handle xattr value */
-+	if (!it->buffer) {
-+		it->buffer_ofs = value_sz;
-+		it->ofs += value_sz;
-+		goto out; /* err == 0 */
-+	}
-+	if (it->buffer_size < value_sz)
-+		return -ERANGE;
-+
-+	/* no need updating ofs on error (err can't be 1 or ENOATTR) */
-+	err = erofs_xattr_body(it, value_sz, erofs_xattr_copy);
-+out:
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
-+	return err < 0 ? err : 0;
-+}
- 
- static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
--	const struct xattr_iter_handlers *op;
--	unsigned int xattr_header_sz, remaining;
-+	unsigned int xattr_header_sz;
- 	erofs_off_t pos;
- 	int ret;
- 
-@@ -440,11 +410,12 @@ static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- 	if (IS_ERR(it->kaddr))
- 		return PTR_ERR(it->kaddr);
- 
--	remaining = vi->xattr_isize - xattr_header_sz;
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
--	while (remaining) {
--		ret = xattr_foreach(it, op, &remaining);
-+	it->remaining = vi->xattr_isize - xattr_header_sz;
-+	while (it->remaining) {
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
-@@ -455,12 +426,9 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
- 	struct super_block *const sb = it->sb;
--	const struct xattr_iter_handlers *op;
- 	unsigned int i, xsid;
- 	int ret = -ENOATTR;
- 
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
- 	for (i = 0; i < vi->xattr_shared_count; ++i) {
- 		xsid = vi->xattr_shared_xattrs[i];
- 		it->blkaddr = EROFS_SB(sb)->xattr_blkaddr +
-@@ -470,7 +438,10 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- 		if (IS_ERR(it->kaddr))
- 			return PTR_ERR(it->kaddr);
- 
--		ret = xattr_foreach(it, op, NULL);
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
--- 
-2.19.1.6.gb485710b
+In other words you must make sure that dma-ranges/ranges entries size
+when combined with the source address doesn't cause the limit address
+overflow (4GB boundary cross in your case). For instance, you want to
+map 0x1F0000000 CPU-address region of 512MB size to 0x0 PCIe address. In
+that case you'd specify the ranges property like this:
+< ranges = <0x82000000 0 0 0x1 0xf0000000 0 0x20000000>;
+The CPU-base address is ok since iATU always supports 64-bit base
+addresses. But after you add 0x20000000 to 0x1f0000000 you'll get the
+4GB boundary overflow (0x210000000) which can't be described with the
+32-bit limit address CSR. In this particular case the maximum range
+size you can specify is 0x10000000 (256MB).
 
+Anyway judging by the patch content you do nothing but hacking the
+ranges entries sanity check procedure which I don't think is a good
+thing to do.
+
+-Serge(y)
+
+> 
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+> v4:
+>    1) Fix blank lines removal / addition
+> 
+>    2) Remove usage of variable with same name as dt binding property
+> 
+>  drivers/pci/controller/dwc/pcie-designware.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 53a16b8b6ac2..9773c110c733 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -735,8 +735,10 @@ static void dw_pcie_link_set_max_speed(struct dw_pcie *pci, u32 link_gen)
+>  void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  {
+>  	int max_region, ob, ib;
+> -	u32 val, min, dir;
+> +	u32 val, min, dir, ret;
+>  	u64 max;
+> +	struct device *dev = pci->dev;
+> +	struct device_node *np = dev->of_node;
+>  
+>  	val = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT);
+>  	if (val == 0xFFFFFFFF) {
+> @@ -781,7 +783,13 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  		dw_pcie_writel_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT, 0xFFFFFFFF);
+>  		max = dw_pcie_readl_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT);
+>  	} else {
+> -		max = 0;
+> +		/* Allow dts override of region limit for older IP with above 32-bit support: */
+> +		ret = of_property_read_u32(np, "num-regionmask", &val);
+> +		if (!ret && val > 32) {
+> +			max = GENMASK(val - 33, 0);
+> +			dev_info(pci->dev, "Overriding region limit to %u bits\n", val);
+> +		} else
+> +			max = 0;
+>  	}
+>  
+>  	pci->num_ob_windows = ob;
+> -- 
+> 2.17.1
+> 
+> 
