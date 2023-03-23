@@ -2,146 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329F96C69B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976716C69B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCWNk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
+        id S231245AbjCWNlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjCWNkY (ORCPT
+        with ESMTP id S229463AbjCWNln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:40:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8753CC05
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:40:23 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679578821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=wz8CZAPcIfmrZ68A0HMjB0hfrt/dOSiXceUwjv9ZVHg=;
-        b=liS1kq1aSyvDxntjynw9h90Z9glCIIx9ZM5NF1O8hS1S0JhBwZt4p4SbG1BLe/iSQe1IIb
-        SaG5rp7vIalY65mlQh5QbKYzFrp4cX3mMjociX3mPu7XtEDGTgkIAfSJXsh0XSYkfhOLy7
-        qAhufqQy7P/TM75Ut10U54gQT6DKuGVuGRJi/9v0KBfYhNrXIBvAnNyalKNLQfLURvFcS0
-        b+2QA9/uQ7ANUS0ozlB5Bi2+c38+k4KcgTtViGuL1wOGTZVzXBDdthPaxyBrGiW9uJyUUb
-        Ug/vNZlhLsae49TYzIsVl+LmhfieUHY0xaRue2C2ToHEApmQ+uazDerJlhOEsQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679578821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=wz8CZAPcIfmrZ68A0HMjB0hfrt/dOSiXceUwjv9ZVHg=;
-        b=6UW0OIf1XpOZkmfsnjU4cE+ydQLhXYnwjA/x72JHaL5QNLXW2Nom5VF4+yLeLV3UuDU+/a
-        RoVe5n3QfM4z2ZCw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 07/18] printk: nobkl: Add buffer management
-In-Reply-To: <ZBndaSUFd4ipvKwj@alley>
-Date:   Thu, 23 Mar 2023 14:44:43 +0106
-Message-ID: <87y1nna8po.fsf@jogness.linutronix.de>
+        Thu, 23 Mar 2023 09:41:43 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F3B25E3A
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:41:43 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NDPCGx014111;
+        Thu, 23 Mar 2023 08:41:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=JlYzuzf3smpHHEx5583JSCrSZZLYGTCZLpAkAm8m6r8=;
+ b=hWxvb43MwLijKUiD7Zp0qwDmAsboIA2cbxbG7iY0FI7Nv0clktxvvH6Q5ggNjyQg2ZGS
+ 2nP4krTKMwcxyaYsRumIOFRiIhI1M+GfUJWP/PMX8/y4yOqFxtFQSDqjfRkQCj1YX/qG
+ Oo7wSA0N3+17PzOxkt/Fw117tz7oloxxWtNZeF7iw6bBWh6WHr+9fZElWJyYJF1gI5TV
+ JfcvZ/gwZbfEywdqPW/g4hXvAzQTq/peYUbvRX9MwiAN4JWYasD1DQCEx9kmi9sbmaji
+ zY/u1CbfL7CnDjNEPZmfA0w5mCuQuc82G2l+fOunFuYkhEvHyzZQ2wvSvSGYpBQSVSoe Cw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pdaq36uxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 08:41:40 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 23 Mar
+ 2023 08:41:38 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Thu, 23 Mar 2023 08:41:38 -0500
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CC00B45;
+        Thu, 23 Mar 2023 13:41:38 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <lee@kernel.org>
+CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mfd: arizona-spi: Add missing MODULE_DEVICE_TABLE
+Date:   Thu, 23 Mar 2023 13:41:38 +0000
+Message-ID: <20230323134138.834369-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-ORIG-GUID: x1XMeva1wr4UEmh4wATIkngZP-gYrxTM
+X-Proofpoint-GUID: x1XMeva1wr4UEmh4wATIkngZP-gYrxTM
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-21, Petr Mladek <pmladek@suse.com> wrote:
->> +static __ref void cons_context_set_pbufs(struct cons_context *ctxt)
->> +{
->> +	struct console *con = ctxt->console;
->> +
->> +	/* Thread context or early boot? */
->> +	if (ctxt->thread)
->> +		ctxt->pbufs = con->thread_pbufs;
->> +	else if (!con->pcpu_data)
->> +		ctxt->pbufs = &early_cons_ctxt_data.pbufs;
->> +	else
->> +		ctxt->pbufs = &(this_cpu_ptr(con->pcpu_data)->pbufs);
->
-> What exactly do we need the per-CPU buffers for, please?
-> Is it for an early boot or panic or another scenario?
+This patch adds missing MODULE_DEVICE_TABLE definition
+which generates correct modalias for automatic loading
+of this driver when it is built as a module.
 
-In case of hostile takeovers, the panic context needs to have a buffer
-that the previous context (on another CPU) will not scribble
-in. Currently, hostile takeovers only occur during panics. In early boot
-there is only 1 CPU.
+Fixes: 3f65555c417c ("mfd: arizona: Split of_match table into I2C and SPI versions")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/mfd/arizona-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> I would expect that per-console buffer should be enough.
-> The per-console atomic lock should define who owns
-> the per-console buffer. The buffer must be accessed
-> carefully because any context could loose the atomic lock.
+diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
+index da05b966d48c6..02cf4f3e91d76 100644
+--- a/drivers/mfd/arizona-spi.c
++++ b/drivers/mfd/arizona-spi.c
+@@ -277,6 +277,7 @@ static const struct of_device_id arizona_spi_of_match[] = {
+ 	{ .compatible = "cirrus,cs47l24", .data = (void *)CS47L24 },
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, arizona_spi_of_match);
+ #endif
+ 
+ static struct spi_driver arizona_spi_driver = {
+-- 
+2.30.2
 
-A context will string-print its message into the buffer. During the
-string-print it cannot check if it is still the owner. Another CPU may
-be already actively printing on that console.
-
-> Why is kthread special?
-
-I believe the idea was that the kthread is not bound to any CPU. But
-since migration must be disabled when acquiring the console, there is no
-purpose for the kthread to have its own buffer. I will remove it.
-
-> The per-CPU buffer actually looks dangerous. It might
-> be used by more NOBKL consoles. How is the access synchronized
-> please? By console_list_lock? It is not obvious to me.
-
-Each console has its own set of per-CPU buffers (con->pcpu_data).
-
-> On the contrary, we might need 4 static buffers for the early
-> boot. For example, one atomic console might start printing
-> in the normal context. Second atomic console might use
-> the same static buffer in IRQ context. But the first console
-> will not realize it because it did not loose the per-CPU
-> atomic lock when the CPU handled the interrupt..
-> Or is this handled another way, please?
-
-You are correct! Although I think 3 initdata static buffers should
-suffice. (2 if the system does not support NMI).
-
-
-Your feedback points out that we are allocating a lot of extra memory
-for the rare case of a hostile takeover from another CPU when in
-panic. I suppose it would be enough to have a single dedicated panic
-buffer to use in this case.
-
-With all that in mind, we would have 3 initdata early buffers, a single
-panic buffer, and per-console buffers. So the function would look
-something like this:
-
-static __ref void cons_context_set_pbufs(struct cons_context *ctxt)
-{
-	struct console *con = ctxt->console;
-
-	if (atomic_read(&panic_cpu) == smp_processor_id())
-		ctxt->pbufs = &panic_ctxt_data.pbufs;
-	else if (con->pbufs)
-		ctxt->pbufs = con->pbufs;
-	else
-		ctxt->pbufs = &early_cons_ctxt_data[early_nbcon_nested].pbufs;
-}
-
-It should be enough to increment @early_nbcon_nested in cons_get_wctxt()
-and decrement it in a new cons_put_wctxt() that is called after
-cons_atomic_flush_con().
-
-
-Originally in tglx's design, hostile takeovers were allowed at any time,
-which requires the per-CPU data per console. His idea was that the
-policy about hostile takeovers should be implemented outside the nbcons
-framework. However, with this newly proposed change in order to avoid
-per-CPU buffers for every console, we are adding an implicit rule that
-hostile takeovers only occur at panic. Maybe it is ok to hard-code this
-particular policy. It would certainly save significant buffer space and
-I not sure if hostile takeovers make sense outside of a panic context.
-
-John
