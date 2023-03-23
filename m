@@ -2,246 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581546C5F75
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7ED6C5F7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjCWGGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
+        id S230217AbjCWGHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCWGGU (ORCPT
+        with ESMTP id S230471AbjCWGHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:06:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B29228862;
-        Wed, 22 Mar 2023 23:05:58 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N4A9AW014933;
-        Thu, 23 Mar 2023 06:05:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=PABeRwgm7smZILa6KOy469iBjz3t9AmX/db4PxWe2ms=;
- b=e1gUzYR5vLDr3M63Rs5cd3deFt0MhCwbsVSxj1X4SutB0cqLxekH/7guX59VQmLjCjuA
- Kw9tv3T7aJhteX3qsFLKT7ONDP36gNVjp8zxLLcUCRRYeVjQMr7//GTCzGUGRVhDt2is
- xGr7h0uEx4MH8BJv+gY2/lulUyw9/lq0pcKg9prPzq/IrxDhamoRyblZMpZLB9LXrG0j
- czpXuUF83uApksyspWpFHYmEhCYjSmCILCD92gH95yodo2QS7RPLt65V009V9Wo3brVT
- gKyStvRH7lbDvVMVKkU1vzESSDfT9EldcM/Zaf7Spv3UyfGiLAcutyiBPv+pXmzAklsI 3w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg64k1ek8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 06:05:40 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32N65Ujd007814
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 06:05:30 GMT
-Received: from taozha-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 22 Mar 2023 23:05:25 -0700
-From:   Tao Zhang <quic_taozha@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Tao Zhang <quic_taozha@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>
-Subject: [PATCH v3 11/11] coresight-tpdm: Add nodes for dsb msr support
-Date:   Thu, 23 Mar 2023 14:04:08 +0800
-Message-ID: <1679551448-19160-12-git-send-email-quic_taozha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
+        Thu, 23 Mar 2023 02:07:47 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4282943F;
+        Wed, 22 Mar 2023 23:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FsJcZuyDRudl5a65Qm6qb+jGPQAhs4XAQxs+KbrT4vOeh5iY1Qq0IvCIiu3S6s/vlybuI8uT3MzrxD3658h2srGAalvCGlPhJT3AJb2QhQ3iZrBDhridmpjtSOOvrIPcSz0YAXpLUYeEb/YeKTvHHBWGGDwCmk49PCxu+vKcjzG7+w2QKOAWi6tVghk3r49dufcs4HZqnp6uiQ/7jIa4a51SirefjA1CNdRqjsw7hT5jcnhjz7Ef9OlwPlWxfGXt1wQvjtl7B0mCNyeO/CBkY+CiTb7/3GK7R5oR6DfYPCZbTeV1uxdlBxDPKTLiDoJpeyNP45Crd1UOD9gce2SbSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yGld+I35hPJRNFcN8vH6fVVUs83bzladWC0hU5OulaI=;
+ b=nqe441P3NYT5HFAdYikfsAXiNQtlkM9+Cck1dHZdWQvTW2bVl6OHNSIc6adU/+hWGMF8cLJtupYtwsos4una4sc4jg5Jvvq6kMBiwyVI5JGesFkJ0SVJU2GxiWDkCiUAU7HJtdwCqFe7ucEo+LN3s3hFpK4j5B42GSpEIc6yzZ7U3tEEbGINvPGRyhHXAeLPKFZD3bKDof+n9GuvueVPA/DEmFOCgfg4P/vsGih4zRZ/ZM1w2lZavns4E3lFuAcrljVZm6ldkdLyGa7/7Ppnhm0REKNG+GsRRI3+CWgoIYF5V9k+jZeZU5aZPT0JfhO5G7cnh5T6yZ+gcLVomi7+Ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yGld+I35hPJRNFcN8vH6fVVUs83bzladWC0hU5OulaI=;
+ b=Bxt8B1jE29THMHDQbHzz0hsU4y4QqTEbBuKki1VZZFwx3owjOIV7DU19H7Dq33V3Umajty/cQU2CvDeUpz7vxPf1ZuU6vqG6nMWLqxbIBKmI9MzuWAe/Xy/j7omdLxsUP1YKfDtJs8AGTBZ6kPjsa+xIch/2UmyM4qZ2Sg8U21c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
+ CH3PR12MB7571.namprd12.prod.outlook.com (2603:10b6:610:147::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.38; Thu, 23 Mar 2023 06:07:07 +0000
+Received: from DS7PR12MB6214.namprd12.prod.outlook.com
+ ([fe80::93a1:b268:8b07:9253]) by DS7PR12MB6214.namprd12.prod.outlook.com
+ ([fe80::93a1:b268:8b07:9253%5]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 06:07:06 +0000
+Message-ID: <acfe667f-f598-ba6f-7723-ad5c55bc746d@amd.com>
+Date:   Thu, 23 Mar 2023 11:36:49 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH kernel 0/2] PreventHostIBS feature for SEV-ES and SNP
+ guests
+From:   Manali Shukla <manali.shukla@amd.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, seanjc@google.com,
+        pbonzini@redhat.com, jpoimboe@kernel.org,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        sandipan.das@amd.com, jmattson@google.com, thomas.lendacky@amd.com,
+        nikunj@amd.com, ravi.bangoria@amd.com, eranian@google.com,
+        irogers@google.com, kvm@vger.kernel.org, x86@kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Manali Shukla <manali.shukla@amd.com>
+References: <20230206060545.628502-1-manali.shukla@amd.com>
+ <786f4d69-85c6-a581-1187-2fe8a49cf7e6@amd.com>
+In-Reply-To: <786f4d69-85c6-a581-1187-2fe8a49cf7e6@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0198.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e9::7) To DS7PR12MB6214.namprd12.prod.outlook.com
+ (2603:10b6:8:96::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cva3ww9Jog-1kc5F2-X2iqKmsu6TIqNo
-X-Proofpoint-ORIG-GUID: cva3ww9Jog-1kc5F2-X2iqKmsu6TIqNo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- clxscore=1015 priorityscore=1501 adultscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230046
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|CH3PR12MB7571:EE_
+X-MS-Office365-Filtering-Correlation-Id: 657e5f24-84c2-4b3d-54f4-08db2b64d459
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nRmDrN5h9iod5WqkefQSuvIIljTUhgWRAXc8TUSycsRjIQxd0moP8C8mzcoWTbc9RgP0T7kbMhlMAdX/sjuIEJazRq9rnigfSaVbmJ6UjkT1wBrq/AGlqASRssEFshMi7rDaYsM4Wc6HFJQRWZlAXYYdQXanHujs6MrxkCkPwH7p3EZMjlutbMHUlt7MT83S2N+gcOvkX3dAcHT/4nMGzNHFbbLe7d1N+d3GcCx9U1HX/4UC9Q6kzR6g899yD29MyJ44qDptgNCucKWf5W9CKtDopgaxnU5PFAj/VrgYmeAFXrO902/Av4BFrQe8lGbG9vJV1Vq4DG6gHvuCPddLb7qscTy/V+adscgRjImLehY7+eb3hGLMJ6hNh1KEodYYwsdWyGKtaSOcrmAHAVehOUdRX/Iq5FRjjUVNq3EwrsLyDwjjIDrDGMw2PIl/DzIXt9h5Mu2hREDSu4k1mPSZDT8458UiIdHCZ9fdTv6etizTIehRv1DYaD053ki0eOYLj5wFWcfxb/uyqrbO07p+fAm9JJWeVg/SHAcriqCK/miX2NHDxmDCaqQy9ZY/KTQpLACni/Y/WAigOI251TrmAAO8XMQ6fN34sPNRf0H1BzvvvRYLrGIkKobpja8P+N5+SYupjzSxbe724ZoSw/zX6PVaptTvDoLkbcJ7GokvP1ekJ7c+gnQTC6b4CSBmwb28IeF66+V7bpOG7nVNr0ZHIIfRxoXtxmQJIJz3RNRtN+U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(346002)(376002)(39860400002)(136003)(451199018)(2906002)(44832011)(7416002)(5660300002)(41300700001)(8936002)(86362001)(36756003)(31696002)(38100700002)(83380400001)(6512007)(26005)(478600001)(6506007)(53546011)(6666004)(6486002)(31686004)(66946007)(66556008)(66476007)(186003)(2616005)(8676002)(4326008)(6916009)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEZKQmtOUDJtbEVHKzBTQ2M3dmp1VjN3bUg5OFJZNHVzZjRCYXJTSk1YYjJC?=
+ =?utf-8?B?RmJmV1czcll6MFV4MUxOQXd4cVdNR2hORFZGWCt0TE10UzVQeW9lTFJZN3M5?=
+ =?utf-8?B?MlM4MDNuSE05Tmx0d043eUFvYlB6Vml5RlV1Y0VOUEJyTUhkd2VNaWFwY1lT?=
+ =?utf-8?B?NlJJaCt4WmE0OXdESnJkaVNBMTlyMmg5WEFuYXBaNURkN2gzOHVWT05oQUo1?=
+ =?utf-8?B?Mm4zYnRkdTFrVzUrYkVkakFBb0dVdEZqdHpYVjdOWkgydVpuTHdYaTNTYU04?=
+ =?utf-8?B?WENpTGcrVlByek5IUjUrL2JZc3dtd081RDVDQUduK0xoKzRKc3ZpUWVVYXJu?=
+ =?utf-8?B?MkpoVGhEN0hKVW05dDM0NWh2K3Mvei9wOEZyN05lbFpMa1o1dnFTcWZ4WlJL?=
+ =?utf-8?B?bzFJMjZwR3I2c09JbjhVVnBSVXpGaU4ybzlNcVdrVE9RMjdoOUFQMW1BVUdC?=
+ =?utf-8?B?eUF0UVUxOUZZYWpuVDhsTjRyMlU0QU1RSk9XRGN0M3FjSVNPYVpDMWpyWjdq?=
+ =?utf-8?B?Z0JQSnZ1S2ZPYkV1VHRsZWUvU1B1TUxrRTMweDE5czBBRE1DdlFReHJoaksv?=
+ =?utf-8?B?ek5VWGVQRTR0dWpkNVdVUVVvazczSE4rcVo5TXpHbExYUVJvNU02cUJKYUYy?=
+ =?utf-8?B?VXpCNG1IZ09iV2x2UVBaejYwVHhCNjNZWFpKcTQyd05nNEtndXFmZ1FuMFRI?=
+ =?utf-8?B?WTM0NHRORkFWMXpvY3BUZk1FRVhQcHowUk5MUW92SzcrK1YwN1c0N2hENDJi?=
+ =?utf-8?B?Y2ZQQlhtMGNuK1djem5DQmFEd01UVThKZTkvdjJ2QStCci9rdzYyK0FBRjg5?=
+ =?utf-8?B?TnJxekxRbU0wMlUvRTlDNVRkL29DUU5wbGNjN2NlbjRkYkQrd1lRM0djejRO?=
+ =?utf-8?B?MHRzQTBPOS9xS1FwZ1RBd0lLdmVReDBjWHJjTUMxWHB6eGVwbHFDc2h3YjFW?=
+ =?utf-8?B?YlBjaWFKN0VpUVRsWUFzM3ZiNEhWWmcrbDdjaFBvUmdyQmJnb3B2Ny9jR0Zt?=
+ =?utf-8?B?djhMaXdaQXV0SmFNTnJCSGNhRVZ1L2hNc3RSelVpeUgzelpqd2Y1OEJSSXNq?=
+ =?utf-8?B?d1UreDBMRmh5MUpWSlIrem9BZm1TRnV4ck5LTXMyQmFUaTFWMXkxbWJhakJN?=
+ =?utf-8?B?VFg2UE0zNTJTWGE0VXViaDZUZHlJUkc3b2ZNS1I2ckFIV1BKNGsyd2d6U0l6?=
+ =?utf-8?B?QmRoYU9UcWlPQmhsYjU4TWJtMG5MUHdvNklyN3poNUV2UWtyUTZKc2lCdFI5?=
+ =?utf-8?B?eTMrV2FVUXNraTk1Vlo5ZWVVdVhCYlk2MHVRcTlGNkJqaGNjSVdBNnBUbU16?=
+ =?utf-8?B?Z1M4U2YwdVJCZEt4UEhmTFZRQmp2RDIxTFllcmxEQU1JOFc2RDZzd1hXSUxI?=
+ =?utf-8?B?UzhSdXRTeTVRcjBCTVFGWldJd3dRTmlIQkFiY1JyaEh2ZzlNc0VwQnhSZlZi?=
+ =?utf-8?B?aS9kaS90cW1nSDgwaDB1dk42SEVoRnlMQUtVMWdRbkZzSGRTY3FnTS9oV1J2?=
+ =?utf-8?B?R2JZUnRZVXVrQ21uTmdVTnBMRDBoUGkyZnUvbHVSTlBycTN3d0lVU1NVNGxi?=
+ =?utf-8?B?U2szSDVNZDhjL0RyRUVHN2tZTE1KQkIxOXpsVnJkVWdXSXNYQVJ2K1hvZExz?=
+ =?utf-8?B?MWNLeUp5VkhvRWpXbkFmOW1uVSthTG5RNXdMYWN4MUZQZVJzU3BJZGg4c2VP?=
+ =?utf-8?B?TnJrVGhTbm1vZ1ZFVTRyWjEvMVRGTStQQm5pd05iNnRoQTg0ZVhxV1FkdkNy?=
+ =?utf-8?B?bG1EVkpyVE15b2xyVFp0OGpOU0d4QkowS2RMd0NzYmlRVEhTWlFHRUxFaVN4?=
+ =?utf-8?B?NHpGMlZZUWN0N1F6Y3JCR0VjcXhSbFF6TEJobm9ESktRbWhiSFkwenBzT3hq?=
+ =?utf-8?B?c0NpMTFIWmM0TkdSaHBNeCtqbFFzaS9BaythSWtyTExzU2tLNkdiZTlNakJB?=
+ =?utf-8?B?emtBZ1hVeGloZlZvaEhCRDBWanU2ZDBGcHFydGFDVEFPZWNic0dJTXcvNG1M?=
+ =?utf-8?B?VE9nYzdOQ3ljcFpzWVhUZmdoNW1mL0lRS1lPNFJsbzRtbCt2QjJuMHBVVmlG?=
+ =?utf-8?B?UHVtZU9EY3BSK3VjZTFjazZnYjEvMERIY1hZNmxPeVk2R2xnamtVNy81dDhN?=
+ =?utf-8?Q?YQJawZkt1ewk9G+wOuCtCAuY/?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 657e5f24-84c2-4b3d-54f4-08db2b64d459
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 06:07:06.7573
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a450DiOEe6zhBuooRAprvxbtepjte65/U3ng+xWdh6Y3GivCv8prLenD44MSBnd+qKzggiJG3iBiiNSF2201AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7571
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the nodes for DSB subunit MSR(mux select register) support.
-The TPDM MSR (mux select register) interface is an optional
-interface and associated bank of registers per TPDM subunit.
-The intent of mux select registers is to control muxing structures
-driving the TPDM’s’ various subunit interfaces.
 
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
----
- .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 12 +++++
- drivers/hwtracing/coresight/coresight-tpdm.c       | 53 ++++++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpdm.h       | 17 ++++---
- 3 files changed, 75 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-index 60ff660..6bdba7d 100644
---- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-+++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-@@ -143,3 +143,15 @@ Description:
- 		Accepts only one of the 2 values -  0 or 1.
- 		0 : Set the DSB pattern type to false
- 		1 : Set the DSB pattern type to true
-+
-+What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_msr
-+Date:		March 2023
-+KernelVersion	6.3
-+Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-+Description:
-+		(Write) Set the MSR(mux select register) of DSB tpdm. Read
-+		the MSR(mux select register) of DSB tpdm.
-+
-+		Accepts the following two values.
-+		value 1: Index number of MSR register
-+		value 2: The value need to be written
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-index c740681..5aaee06 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.c
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -42,6 +42,14 @@ static int tpdm_init_datasets(struct tpdm_drvdata *drvdata)
- 						    sizeof(*drvdata->dsb), GFP_KERNEL);
- 			if (!drvdata->dsb)
- 				return -ENOMEM;
-+			if (!of_property_read_u32(drvdata->dev->of_node,
-+					   "qcom,dsb_msr_num", &drvdata->dsb->msr_num)) {
-+				drvdata->dsb->msr = devm_kzalloc(drvdata->dev,
-+					(drvdata->dsb->msr_num * sizeof(*drvdata->dsb->msr)),
-+					GFP_KERNEL);
-+					if (!drvdata->dsb->msr)
-+						return -ENOMEM;
-+				}
- 		} else
- 			memset(drvdata->dsb, 0, sizeof(struct dsb_dataset));
- 
-@@ -769,6 +777,50 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(dsb_trig_ts);
- 
-+static ssize_t dsb_msr_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+	unsigned int i;
-+	ssize_t size = 0;
-+
-+	if (drvdata->dsb->msr_num == 0)
-+		return -EINVAL;
-+
-+	spin_lock(&drvdata->spinlock);
-+	for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
-+		size += sysfs_emit_at(buf, size,
-+				  "%u 0x%x\n", i, drvdata->dsb->msr[i]);
-+	}
-+	spin_unlock(&drvdata->spinlock);
-+
-+	return size;
-+}
-+
-+static ssize_t dsb_msr_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf,
-+				  size_t size)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+	unsigned int num, val;
-+	int nval;
-+
-+	if (drvdata->dsb->msr_num == 0)
-+		return -EINVAL;
-+
-+	nval = sscanf(buf, "%u %x", &num, &val);
-+	if ((nval != 2) || (num >= (drvdata->dsb->msr_num - 1)))
-+		return -EINVAL;
-+
-+	spin_lock(&drvdata->spinlock);
-+	drvdata->dsb->msr[num] = val;
-+	spin_unlock(&drvdata->spinlock);
-+	return size;
-+}
-+static DEVICE_ATTR_RW(dsb_msr);
-+
- static struct attribute *tpdm_dsb_attrs[] = {
- 	&dev_attr_dsb_mode.attr,
- 	&dev_attr_dsb_edge_ctrl.attr,
-@@ -781,6 +833,7 @@ static struct attribute *tpdm_dsb_attrs[] = {
- 	&dev_attr_dsb_trig_patt_mask.attr,
- 	&dev_attr_dsb_trig_ts.attr,
- 	&dev_attr_dsb_trig_type.attr,
-+	&dev_attr_dsb_msr.attr,
- 	NULL,
- };
- 
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-index f9d4dd9..1872f26 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.h
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-@@ -18,6 +18,7 @@
- #define TPDM_DSB_XPMR(n)	(0x7E8 + (n * 4))
- #define TPDM_DSB_EDCR(n)	(0x808 + (n * 4))
- #define TPDM_DSB_EDCMR(n)	(0x848 + (n * 4))
-+#define TPDM_DSB_MSR(n)		(0x980 + (n * 4))
- 
- /* Enable bit for DSB subunit */
- #define TPDM_DSB_CR_ENA		BIT(0)
-@@ -92,17 +93,19 @@
-  * @trig_type:        Enable/Disable trigger type.
-  */
- struct dsb_dataset {
--	u32				mode;
--	u32				edge_ctrl[TPDM_DSB_MAX_EDCR];
--	u32				edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
--	u32				patt_val[TPDM_DSB_MAX_PATT];
--	u32				patt_mask[TPDM_DSB_MAX_PATT];
-+	u32			mode;
-+	u32			edge_ctrl[TPDM_DSB_MAX_EDCR];
-+	u32			edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
-+	u32			patt_val[TPDM_DSB_MAX_PATT];
-+	u32			patt_mask[TPDM_DSB_MAX_PATT];
- 	bool			patt_ts;
- 	bool			patt_type;
--	u32				trig_patt_val[TPDM_DSB_MAX_PATT];
--	u32				trig_patt_mask[TPDM_DSB_MAX_PATT];
-+	u32			trig_patt_val[TPDM_DSB_MAX_PATT];
-+	u32			trig_patt_mask[TPDM_DSB_MAX_PATT];
- 	bool			trig_ts;
- 	bool			trig_type;
-+	u32			msr_num;
-+	u32			*msr;
- };
- 
- /**
--- 
-2.7.4
+On 3/15/2023 10:33 AM, Manali Shukla wrote:
+> On 2/6/2023 11:35 AM, Manali Shukla wrote:
+>> Adds support for PreventHostIBS feature for SEV-ES and SNP guests.
+>> Currently, the hypervisor is able to inspect instruction based samples
+>> from the guest and gather execution information.  With enablement of
+>> PreventHostIBS feature, SEV-ES and SNP guests may choose to disallow
+>> use of instruction based sampling by the hypervisor in order to limit
+>> the information gathered about their execution.  (More information in
+>> Section 15.36.17 APM Volume 2)
+>>
+>> While implementing this feature, unknown NMIs were being seen. On
+>> further investigation, a race was found effecting the IBS FETCH/OP
+>> MSR.
+>>
+>> ENABLE bit and VALID bit for IBS_FETCH_CTL are contained in the same
+>> MSR and same is the case with IBS_OP_CTL.
+>>
+>> Consider the following scenario:
+>> - The IBS MSR which has ENABLE bit set and VALID bit clear is read.
+>> - During the process of clearing the ENABLE bit and writing the IBS
+>>   MSR to disable IBS, an IBS event can occur that sets the VALID bit.
+>> - The write operation on IBS MSR can clear the newly set VALID bit.
+>> - Since this situation is occurring in the CLGI/STGI window
+>>   (PreventHostIBS window), the actual NMI is not taken.
+>> - Once VMRUN is issued, it will exit with VMEXIT_NMI and as soon as
+>>   STGI is executed, the pending NMI will trigger.
+>> - The IBS NMI handler checks for the VALID bit to determine if the NMI
+>>   is generated because of IBS.
+>> - Since VALID bit is now clear, it doesn't recognize that an IBS event
+>>   is occurred which in turn generates the dazed and confused unknown
+>>   NMI messages.
+>>
+>> Per-cpu ibs_flags which indicates whether PreventHostIBS window is
+>> active/inactive are added to avoid the above mentioned race.
+>>
+>> An active PreventHostIBS window is set before calling VMRUN and
+>> cleared after STGI. PreventHostIBS window check is added to
+>> perf_ibs_handle_irq(), to avoid unknown NMIs and treat them as handled
+>> when window is active.
+>>
+>> There are 2 patches in this series.
+>> 1) Add amd_prevent_hostibs_window() function to set per-cpu ibs_flags
+>> based on an active/inactive PreventHostIBS window.
+>> 2) Enable PreventHostIBS for SEV-ES and SNP guests.
+>>
+>> Testing done:
+>> - Executed program symbols in guest are not captured in host when
+>>   PreventHostIBS feature is enabled.
+>> - Generated 1000+ NMIs using cpuid command, no unknown NMIs are seen
+>>   after enablement of PreventHostIBS feature.
+>>
+>> Qemu commandline to enable PreventHostIBS on guest.
+>>
+>> qemu-system-x86_64 -enable-kvm -cpu EPYC-v4,+nohostibs \ ..
+>>
+>> Manali Shukla (2):
+>>   perf/x86/amd: Add amd_prevent_hostibs_window() to set per-cpu
+>>     ibs_flags
+>>   KVM: SEV: PreventHostIBS enablement for SEV-ES and SNP guest
+>>
+>>  arch/x86/events/amd/ibs.c          | 64 ++++++++++++++++++++++++++++++
+>>  arch/x86/include/asm/cpufeatures.h |  1 +
+>>  arch/x86/include/asm/perf_event.h  | 20 ++++++++++
+>>  arch/x86/kvm/svm/sev.c             | 10 +++++
+>>  arch/x86/kvm/svm/svm.c             | 39 +++++++++++++++++-
+>>  arch/x86/kvm/svm/svm.h             |  1 +
+>>  6 files changed, 133 insertions(+), 2 deletions(-)
+>>
+> 
+> A gentle reminder for the review.
+> 
+> -Manali
 
+A gentle reminder for the review.
+
+-Manali
