@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDE36C6C04
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7976C6C0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjCWPPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S232022AbjCWPQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjCWPPC (ORCPT
+        with ESMTP id S231594AbjCWPQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:15:02 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972D29001;
-        Thu, 23 Mar 2023 08:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679584501; x=1711120501;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eeRabBK6QPfoQ8luPUQT5zoPHyjCVC0mZMDpYDE/5Fg=;
-  b=WrIMxlmkThg+4MSMrMzKLcY64wHrGRRl0UWxvjQTC+lOpfr/6QM0+wyF
-   JZWc2Hqkvsl+vkBYs74I7U8Wh8d7I1HmVhDr09Ouv4mb+QWHKqxLAWrt+
-   WfPknh7tlZ0s67p3xg3FMrfRHzDTAta5pI0RXKn4rbGgB5crknUj9fwll
-   T7LKy3uC8qoyVkSV4l87qhNHvYoOFWL6FGsa/qJNYBpCdm3a2yCGsQvfS
-   jvWi5V++qeTTtE8J0pGTp12DNGYMsaiJombIeQv3N7NQQZPq1Vh9TQTw8
-   EV5lF0c/AT0+xL+t6To5QJJjR7ZxJAqc5K3s5fwIhIQ18SgcSnFVfuXIg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="323378828"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="323378828"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 08:14:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="746746088"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="746746088"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Mar 2023 08:14:38 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D34ECD0; Thu, 23 Mar 2023 17:15:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v1 1/1] device property: Remove unused struct net_device forward declaration
-Date:   Thu, 23 Mar 2023 17:15:19 +0200
-Message-Id: <20230323151519.58479-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Thu, 23 Mar 2023 11:16:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D965430F0;
+        Thu, 23 Mar 2023 08:16:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D719B82166;
+        Thu, 23 Mar 2023 15:16:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD38CC433D2;
+        Thu, 23 Mar 2023 15:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679584577;
+        bh=UAGXMd7qHQxvTeJ3ngAjhXp0j0EEZ5bXpvg6k1yIYuc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GvRkr1o1RIzXOG5vuSqux6xLPrE3g6IOAmh2G92oDA0OvmhjPf/VTembJirigwo5K
+         rozJO50LKhXPv296i/HSI8VQuHVWMxQ78O0bkdAQkImpySnLpfYgP5YbpJS3zBLB3i
+         9kCY5kqo/a9uTGgOrEy5Kl+AJ/XpAlNzrxq3idlxUKRBgP7DW6TZZavtUP0x5vOUWO
+         iXR4lm3IwiaTLdkeXF/qXz6MM6uIJg0fEViwKBA0a7NaefK772uKgzVz+b5gFRk5se
+         ZY5mnD0XOrOqs/zRATFDt/P0BxBdLhdnBvTl0T3nDKZMAl4xbnKH9D4Pd3AuSxRle+
+         58sFa7tuUB27A==
+Date:   Thu, 23 Mar 2023 15:16:11 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux MediaTek <linux-mediatek@lists.infradead.org>,
+        Linux LEDs <linux-leds@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 1/3] Documentation: leds: Add MT6370 doc to the toctree
+Message-ID: <20230323151611.GP2673958@google.com>
+References: <20230319074903.13075-1-bagasdotme@gmail.com>
+ <20230319074903.13075-2-bagasdotme@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230319074903.13075-2-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no users in the property.h for the struct net_device.
-Remove the latter for good.
+On Sun, 19 Mar 2023, Bagas Sanjaya wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/property.h | 1 -
- 1 file changed, 1 deletion(-)
+> Commit 4ba9df04b7ac66 ("docs: leds: Add MT6370 RGB LED pattern document")
+> adds documentation for Mediatek MT6370 RGB LED device, but forgets to
+> include it to leds toctree index.
+>
+> Add the missing entry.
+>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303182310.tB1mUzU7-lkp@intel.com/
+> Fixes: 4ba9df04b7ac66 ("docs: leds: Add MT6370 RGB LED pattern document")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/leds/index.rst | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/property.h b/include/linux/property.h
-index ee9cc1710d82..1dff38e930fc 100644
---- a/include/linux/property.h
-+++ b/include/linux/property.h
-@@ -16,7 +16,6 @@
- #include <linux/types.h>
- 
- struct device;
--struct net_device;
- 
- enum dev_prop_type {
- 	DEV_PROP_U8,
--- 
-2.40.0.1.gaa8946217a0b
+Applied, thanks
 
+--
+Lee Jones [李琼斯]
