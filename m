@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FB86C7401
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3DF6C7405
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjCWXZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S230350AbjCWX3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjCWXZb (ORCPT
+        with ESMTP id S229576AbjCWX3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:25:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028486192;
-        Thu, 23 Mar 2023 16:25:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 23 Mar 2023 19:29:04 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F51F20A22;
+        Thu, 23 Mar 2023 16:29:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F30A62813;
-        Thu, 23 Mar 2023 23:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB38C433A0;
-        Thu, 23 Mar 2023 23:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679613929;
-        bh=4Ynyp+S9BGcwrttvmGqGTVkG9UhEwnTOcUptS58xcI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sP5/ZKwa6Umt3kpD6VyvTT5hdhT4RW6gecV7Vz2a8Hqr43gxXegzTHsSG5bZ9cdS1
-         8Avk7eaLemhg9arURoRRBA8xH9YAqtLRirB6sKeIbzqU569YuKIxSQNopXfhWXA93M
-         xwHTc6ZmxBioqxLf+5QehjpHEsX/GHIz5BVJzJ9DiqDmbA536QVV0L+vgDIFnigRRw
-         /xyEykUNJEsxMwS1fm6oouxJ8JjxYeh0DWK6Jsbe7jU6dNh/jnebq0EBKIgCJ3XsPB
-         K5diqlp12n+NkBvuzopEMNswpJcG15XKO0TxntF8XtSmAOFKL96GMhndDAyr37wOKs
-         JP6U6VbrV9z9w==
-Received: by mail-lf1-f44.google.com with SMTP id j11so29821693lfg.13;
-        Thu, 23 Mar 2023 16:25:28 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eJgtBubHIlj3i3OgOIzeuOTV59cRmYkhRuV0XPZZoBdMf5vkoZ
-        j2Z8/We1N/xRSDKYwypCzZ2RDxRklPUkBm3NXw==
-X-Google-Smtp-Source: AKy350bWHhQk1T3i2SqgUwf/TTiR6ou0itybGLCJUXytufGSnho4rPHLFcQzemcdLX6NIoPVcTsCovZ4emivLFiFZb4=
-X-Received: by 2002:ac2:5639:0:b0:4dd:9931:c555 with SMTP id
- b25-20020ac25639000000b004dd9931c555mr273032lff.0.1679613926916; Thu, 23 Mar
- 2023 16:25:26 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjM3w71GNz4x4r;
+        Fri, 24 Mar 2023 10:29:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679614141;
+        bh=zWVOtnubuGpY6vM9+cJnPLaBmkjmhGS9e/x0/5G1C+I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ubiZSTbQ8wcpirrFumdM0QUwX1zaz4o+CJ2vQ3VbF4eoBjOHeBeK2SDEdUf/dt2Ml
+         xYpmNLZ3uHlqDIgduFIM7qlFw4BuXsdYKCCZOwGWw/JLUn5RA4qIDQqQ1/mnY2RbQA
+         bjI9l3AahxlPEzuyr2m/zX142qC/4vH/o5M36S2lr7nMpRkpBvNaPMzaetOwgoc3Z5
+         lNyfLSGtaN8m1Df7SNRlU72JdeaosRseIgfHVdNszmofW4lVkowO86+I/WDXeDCI9D
+         RDf+sCdcK98pfccRY5g/pHl5PDTIbQqO8mP8CktVFgklcRM5hmUNHDp9KLTR12HhPu
+         T1YsL9VArT4Hg==
+Date:   Fri, 24 Mar 2023 10:29:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the mm-hotfixes tree
+Message-ID: <20230324102900.79c916a2@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230321121859.2355-1-nancy.lin@mediatek.com> <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
-In-Reply-To: <17831605-5c9d-9c92-d190-04f91060ace4@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 24 Mar 2023 07:25:15 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com>
-Message-ID: <CAAOTY_8ZAxVSLnJ1u5snsRgkszV7ixwhjUS2nDimE_Lpj=cUCA@mail.gmail.com>
-Subject: Re: [PATCH v30 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     "Nancy.Lin" <nancy.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        krzysztof.kozlowski+dt@linaro.org, Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        CK Hu <ck.hu@mediatek.com>, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        clang-built-linux@googlegroups.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        singo.chang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Vcky3fmO4BLW/46bCgeRaVd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Angelo:
+--Sig_/Vcky3fmO4BLW/46bCgeRaVd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2023=E5=B9=B43=E6=9C=8823=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:5=
-8=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Il 21/03/23 13:18, Nancy.Lin ha scritto:
-> > The hardware path of vdosys1 with DPTx output need to go through by sev=
-eral modules, such as, OVL_ADAPTOR and MERGE.
-> >
-> > Add DRM and these modules support by the patches below:
-> >
->
-> I've tested v30 again on MT8173, MT8192 and MT8195 based Chromebooks.
-> Green light from me.
+Hi all,
 
-I'm curious about how you build code and test on Chromebooks. Do you
-build in cros environment or pure linux
-(https://archlinuxarm.org/platforms/armv8/mediatek/acer-chromebook-r13).
-I've a MT8183 based Chromebook (HP 11a) and I've tried to run a
-upstream kernel on it. cros is too heavy for me and I doubt I could
-use it. I've tried the pure linux and could boot up with console, but
-display does not work. If you use the pure linux environment, could
-you share how it works?
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-Regards,
-Chun-Kuang.
+  016d18d82af3 ("mm/damon/paddr: fix folio_nr_pages() after folio_put() in =
+damon_pa_mark_accessed_or_deactivate()")
+  0cc5b461e3bc ("ocfs2: fix data corruption after failed write")
+  167d82643156 ("migrate_pages: move split folios processing out of migrate=
+_pages_batch()")
+  7a7e4a99aff3 ("mailmap: correct Dikshita Agarwal's Qualcomm email address=
+")
+  915ff6b52bad ("mm/damon/paddr: fix folio_size() call after folio_put() in=
+ damon_pa_young()")
+  a57f94e7f291 ("migrate_pages: try migrate in batch asynchronously firstly=
+")
+  ae79a7c87113 (".mailmap: add Alexandre Ghiti personal email address")
+  dd1a9198be28 ("mailmap: updates for Jarkko Sakkinen")
+  e0af0b9623f5 ("migrate_pages: fix deadlock in batched migration")
+  f7f9c033b80b ("mm/userfaultfd: propagate uffd-wp bit when PTE-mapping the=
+ huge zeropage")
+  f8585f589496 ("mm: teach mincore_hugetlb about pte markers")
 
->
-> Chun-Kuang, can you please pick it?
->
-> Thanks!
-> Angelo
->
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Vcky3fmO4BLW/46bCgeRaVd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc4LwACgkQAVBC80lX
+0GwEvAf/RLRFJpaeYW1lggy6ohsA/pFJ8dNimAF0/I5AisuuvwliFAkdni8acFV4
+V01JAKIdKsxAiuVtYK892Czpg+LAgbs0Ovdfifgb1rM5JUe8wqkiY92v2piwOVRl
+2ndFLj+O226CeGTFPZUWgEwOtojgnDzP6SjCJ+he3kq6jY+RiIFlxhi4w7qdWoLw
+uJHOMbdkx8jgh4M2UR/4oyX/lf69cWrO0rQPxmZkSuULL8SVYmOzKehUTXMDRhLq
+l1po8gaiNigZkY2qPnK3BTv43yKBQxUgTG6pfhYrMPWsnRytNUm4b0BQEyWBr7GV
+MOaCHGXO9jrR8JNGNhasMAiMbIhlvQ==
+=rHgj
+-----END PGP SIGNATURE-----
+
+--Sig_/Vcky3fmO4BLW/46bCgeRaVd--
