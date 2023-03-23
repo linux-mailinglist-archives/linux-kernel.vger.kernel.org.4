@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE9D6C671C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9F86C671F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbjCWLwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S231759AbjCWLwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCWLwB (ORCPT
+        with ESMTP id S231636AbjCWLwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:52:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AC543524B;
-        Thu, 23 Mar 2023 04:51:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCF564B3;
-        Thu, 23 Mar 2023 04:52:40 -0700 (PDT)
-Received: from [10.57.53.151] (unknown [10.57.53.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D9943F766;
-        Thu, 23 Mar 2023 04:51:53 -0700 (PDT)
-Message-ID: <e578790c-4794-5609-16e8-15d63082760e@arm.com>
-Date:   Thu, 23 Mar 2023 11:51:51 +0000
+        Thu, 23 Mar 2023 07:52:45 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255EE3401E;
+        Thu, 23 Mar 2023 04:52:43 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id BCAA7C0006;
+        Thu, 23 Mar 2023 11:52:36 +0000 (UTC)
+Message-ID: <67ba29ff-b03d-2d24-a844-7ae25ddca447@ghiti.fr>
+Date:   Thu, 23 Mar 2023 12:52:36 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 02/11] coresight-tpda: Add DSB dataset support
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 2/4] mm: Introduce memblock_isolate_memory
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        James Clark <james.clark@arm.com>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1679551448-19160-3-git-send-email-quic_taozha@quicinc.com>
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+ <20230316131711.1284451-3-alexghiti@rivosinc.com>
+ <ZBN4Hoo99DNd5wKx@kernel.org> <efe1ef6b-b1c2-8d5b-82b7-3cd64053643e@ghiti.fr>
+ <ZBibYDR0h1UeL6L5@kernel.org>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <ZBibYDR0h1UeL6L5@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,180 +56,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 06:03, Tao Zhang wrote:
-> Read the DSB element size from the device tree. Set the register
-> bit that controls the DSB element size of the corresponding port.
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->   drivers/hwtracing/coresight/coresight-tpda.c | 58 ++++++++++++++++++++++++++++
->   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
->   2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c b/drivers/hwtracing/coresight/coresight-tpda.c
-> index f712e11..8dcfc4a 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpda.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
-> @@ -21,6 +21,47 @@
->   
->   DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->   
-> +/* Search and read element data size from the TPDM node in
-> + * the devicetree. Each input port of TPDA is connected to
-> + * a TPDM. Different TPDM supports different types of dataset,
-> + * and some may support more than one type of dataset.
-> + * Parameter "inport" is used to pass in the input port number
-> + * of TPDA, and it is set to 0 in the recursize call.
-> + * Parameter "parent" is used to pass in the original call.
-> + */
 
-I am still not clear why we need to do this recursively ?
-
-> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
-> +			   struct coresight_device *csdev, int inport, bool parent)
-
-Please could we renamse csdev => tpda_dev
-
-> +{
-> +	static int nr_inport;
-> +	int i;
-> +	struct coresight_device *in_csdev;
-
-similarly tpdm_dev ?
-
-Could we not add a check here to see if the dsb_esize[inport] is already
-set and then bail out, reading this over and over ?
-
-> +
-> +	if (inport > (TPDA_MAX_INPORTS - 1))
-> +		return -EINVAL;
-> +
-> +	if (parent)
-> +		nr_inport = inport;
-> +
-> +	for (i = 0; i < csdev->pdata->nr_inconns; i++) {
-> +		in_csdev = csdev->pdata->in_conns[i].remote_dev;
-
-Please note, the names of the structure field might change in the
-next version of James' series
-
-> +		if (!in_csdev)
-> +			break;
-> +
-> +		if (parent)
-> +			if (csdev->pdata->in_conns[i].port != inport)
-> +				continue;
-> +
-> +		if (in_csdev && strstr(dev_name(&in_csdev->dev), "tpdm")) {
-
-Isn't there a better way to distinguish a device to be TPDM ? May be we
-could even add a source_sub_type - SOURCE_TPDM instead of using
-SOURCE_OTHERS ? Do you expect other sources to be connected to TPDA?
-e.g., STMs ?
-
-> +			of_property_read_u32(in_csdev->dev.parent->of_node,
-> +					"qcom,dsb-element-size", &drvdata->dsb_esize[nr_inport]);
-> +			break;
-> +		}
-> +		tpda_set_element_size(drvdata, in_csdev, 0, false);
-
-What is the point of this ? Is this for covering the a TPDA connected to
-another TPDA ?
-
-e.g., { TPDM0, TPDM1 } -> TPDA0 -> TPDA1 ?
-
-And you want to figure out the DSB size of TPDM0 when you want to enable
-TPDA1 ? How do you choose between that size of TPDM0 vs TPDM1 ?
-
-Please add a proper documentation for this function ? If TPDA0 is in the
-the path, it should have been enabled before you reach TPDA1. Thus,
-the dsb_esize array must have been initialised for TPDA0 and thus, you
-could simply read it from the dsb_esize[] of TPDA0.
-You could always look at the device_type and sub_type to detect a
-TPDA{0} connected into TPDA{1}
+On 3/20/23 18:44, Mike Rapoport wrote:
+> On Mon, Mar 20, 2023 at 11:54:14AM +0100, Alexandre Ghiti wrote:
+>> Hi Mike,
+>>
+>> On 3/16/23 21:12, Mike Rapoport wrote:
+>>> Hi Alexandre,
+>>>
+>>> On Thu, Mar 16, 2023 at 02:17:09PM +0100, Alexandre Ghiti wrote:
+>>>> This function allows to split a region in memblock.memory and will be
+>>>> useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
+>>>> allows to isolate the kernel text/rodata and then avoid to map those
+>>>> regions with a PUD/P4D/PGD.
+>>> Sorry I've missed it last time. The changelog is fine in the context of
+>>
+>> No worries :)
+>>
+>>
+>>> this series, but if you look at it as a part of memblock changelog it
+>>> doesn't provide enough background on why memblock_isolate_memory() is
+>>> useful.
+>>>
+>>> Can you please add more context so it would be self explanatory?
+>>
+>> What about: "memblock.memory contains the list of memory regions and a
+>> memory region can cover memory that will be mapped with different
+>> permissions. So to ease the mapping process, allow to isolate those regions
+>> by introducing a new function called memblock_isolate_memory. This will be
+>> used in arch specific code to isolate the kernel text/rodata regions when
+>> STRICT_KERNEL_RWX is enabled so that we avoid mapping them with PUD/P4D/PGD
+>> mappings."
+> With this change
+>
+> ... STRICT_KERNEL_RWX is enabled so that they can be mapped with base pages.
 
 
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   /* Settings pre enabling port control register */
->   static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
->   {
-> @@ -37,6 +78,18 @@ static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
->   	u32 val;
->   
->   	val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
-> +	/*
-> +	 * Configure aggregator port n DSB data set element size
-> +	 * Set the bit to 0 if the size is 32
-> +	 * Set the bit to 1 if the size is 64
-> +	 */
-> +	if (drvdata->dsb_esize[port] == 32)
-> +		val &= ~TPDA_Pn_CR_DSBSIZE;
-> +	else if (drvdata->dsb_esize[port] == 64)
-> +		val |= TPDA_Pn_CR_DSBSIZE;
-> +	else
-> +		dev_err(drvdata->dev,
-> +			"DSB data size input from port[%d] is invalid\n", port);
-
-WARN_ON_ONCE() and abort the enable opration ? Or say, "fallback to 
-32bit or 64bit" if one of them is a safer option ? Please don't
-leave it unknown.
-
->   	/* Enable the port */
->   	val |= TPDA_Pn_CR_ENA;
->   	writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
-> @@ -57,6 +110,11 @@ static void __tpda_enable(struct tpda_drvdata *drvdata, int port)
->   static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
->   {
->   	struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +	int ret;
-> +
-> +	ret = tpda_set_element_size(drvdata, csdev, inport, true);
-> +	if (ret)
-> +		return ret;
->   
->   	spin_lock(&drvdata->spinlock);
->   	if (atomic_read(&csdev->refcnt[inport]) == 0)
-> diff --git a/drivers/hwtracing/coresight/coresight-tpda.h b/drivers/hwtracing/coresight/coresight-tpda.h
-> index 0399678..9ec5870 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpda.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpda.h
-> @@ -10,6 +10,8 @@
->   #define TPDA_Pn_CR(n)		(0x004 + (n * 4))
->   /* Aggregator port enable bit */
->   #define TPDA_Pn_CR_ENA		BIT(0)
-> +/* Aggregator port DSB data set element size bit */
-> +#define TPDA_Pn_CR_DSBSIZE		BIT(8)
->   
->   #define TPDA_MAX_INPORTS	32
->   
-> @@ -23,6 +25,7 @@
->    * @csdev:      component vitals needed by the framework.
->    * @spinlock:   lock for the drvdata value.
->    * @enable:     enable status of the component.
-> + * @dsb_esize:   DSB element size
-
-Please state, must be 32 or 64.
-
->    */
->   struct tpda_drvdata {
->   	void __iomem		*base;
-> @@ -30,6 +33,7 @@ struct tpda_drvdata {
->   	struct coresight_device	*csdev;
->   	spinlock_t		spinlock;
->   	u8			atid;
-> +	u32			dsb_esize[TPDA_MAX_INPORTS];
-
-Couldn't this be u8 ?
+Actually they will get mapped with PMD mappings :) I'll just append: "or 
+PMD mapping" to your sentence above if that's ok with you.
 
 
-Suzuki
+>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
->   };
->   
->   #endif  /* _CORESIGHT_CORESIGHT_TPDA_H */
 
+Thanks for your review,
+
+Alex
+
+
+>
+>> Thanks,
+>>
+>> Alex
+>>
+>>
+>>>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>>> Reviewed-by: Anup Patel <anup@brainfault.org>
+>>>> Tested-by: Anup Patel <anup@brainfault.org>
+>>>> ---
+>>>>    include/linux/memblock.h |  1 +
+>>>>    mm/memblock.c            | 20 ++++++++++++++++++++
+>>>>    2 files changed, 21 insertions(+)
+>>>>
+>>>> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+>>>> index 50ad19662a32..2f7ef97c0da7 100644
+>>>> --- a/include/linux/memblock.h
+>>>> +++ b/include/linux/memblock.h
+>>>> @@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
+>>>>    int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
+>>>>    int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
+>>>>    int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
+>>>> +int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
+>>>>    void memblock_free_all(void);
+>>>>    void memblock_free(void *ptr, size_t size);
+>>>> diff --git a/mm/memblock.c b/mm/memblock.c
+>>>> index 25fd0626a9e7..e8c651a37012 100644
+>>>> --- a/mm/memblock.c
+>>>> +++ b/mm/memblock.c
+>>>> @@ -805,6 +805,26 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+>>>>    	return 0;
+>>>>    }
+>>>> +/**
+>>>> + * memblock_isolate_memory - isolate given range in memblock.memory
+>>>> + * @base: base of range to isolate
+>>>> + * @size: size of range to isolate
+>>>> + *
+>>>> + * Isolates the given range in memblock.memory so that it does not share any
+>>>> + * region with other ranges.
+>>>> + *
+>>>> + * Return:
+>>>> + * 0 on success, -errno on failure.
+>>>> + */
+>>>> +
+>>>> +int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
+>>>> +{
+>>>> +	int start_rgn, end_rgn;
+>>>> +
+>>>> +	return memblock_isolate_range(&memblock.memory, base, size,
+>>>> +				      &start_rgn, &end_rgn);
+>>>> +}
+>>>> +
+>>>>    static int __init_memblock memblock_remove_range(struct memblock_type *type,
+>>>>    					  phys_addr_t base, phys_addr_t size)
+>>>>    {
+>>>> -- 
+>>>> 2.37.2
+>>>>
