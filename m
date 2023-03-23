@@ -2,71 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B3B6C6FE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFFE6C6FEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjCWSDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
+        id S231248AbjCWSEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCWSDN (ORCPT
+        with ESMTP id S231220AbjCWSEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:03:13 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AE81287F;
-        Thu, 23 Mar 2023 11:03:11 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id D941F44A;
-        Thu, 23 Mar 2023 18:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D941F44A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679594591; bh=+xHHWQp8VXbDvAJBU4F2A9md5mJ9aPYLwDogCK11j40=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ngXfyF8kIpi28nfKM9CzDsGW2P0coVdaYmX4c29ISSY6TRre9q8bBTZ0t/rNmO9a7
-         o0zpAhPm4hnzCCJLB2cCqPd/aHSoYLbtAAnp4K4Z4cCPz6xpMnm93hGVZwY+Xu0JO9
-         btlvkmmhT6SEaKPM+sqaac7WpUFtyncacKZz4HMXIoGPIJmVW9jcxgpY4xPp2J3vKK
-         s85ViORlQiOIGxgLJFqkj7166Fr1jh3uxJnqvdfr1Qgz5g+NUZHIYcTGaNp7/E9nQY
-         ifmz518iIIhPkM4IltITlMN4TCPu/tokX8esbOuER5jpvDaOS4+uLwqWKxMJivMrBS
-         gQZXFTuIaNo3Q==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH] Documentation/x86: Update split lock documentation
-In-Reply-To: <20230315225722.104607-1-tony.luck@intel.com>
-References: <20230315225722.104607-1-tony.luck@intel.com>
-Date:   Thu, 23 Mar 2023 12:03:10 -0600
-Message-ID: <87ttybbb1d.fsf@meer.lwn.net>
+        Thu, 23 Mar 2023 14:04:48 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CCFEC78
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:46 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i5so43521134eda.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679594685;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/cf+dDkaWjCdhFGTseyhJ1TYIdXnZViE1IHL8Z04nLU=;
+        b=SeEtrJingXLDxc2TLzv7QBF2wfL9DQ94O+dSKlQ4Ti1iZ+X7K20WRqUzmjh7K/A8EL
+         P0LDt6aU89zBgxG5p+bF/KuZuYm8Wel4E9VdPD1UpeVwpe5sHUYo8Og/sDimHTcn/vhC
+         6zXSKMO94wdRcSdkPJZRiQ2s6oSClGyReWh50=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679594685;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/cf+dDkaWjCdhFGTseyhJ1TYIdXnZViE1IHL8Z04nLU=;
+        b=xXkYqyFt9di67WrvqYXjWomaxRhRBW9BqH5nSDmeKUtSL53sru/WzYyevajMSrpV0E
+         SrzBaShZ4L4+j/ONrKlxHfQJ3eZ7/sxbHOfa04hWgBq9tqp4ssu4ITziRwpMEeuVrhd+
+         B46GN3VoVbof3MYwR0ZAERot8QGZQi6fuNoJ1DLroJziIkgIyuipaDgvnuBFWSUxntzn
+         g7e86rIQYcuqUPrhC7atdgRGakA2h0aUnqCxUfZWEv/SJvnknlvNTPBLHhXmJxa8qYLI
+         fjjQ1N6d0vX7op0fwUh+a9Y99lHbMhrr6uZJtPxzij7V+etW0ipaL3b/ANkiZC55KKsV
+         6oJA==
+X-Gm-Message-State: AO0yUKXU+hw2Uxx5+85uP9xWygzoP6t00lm7pRlZyQwfNlPSaoIst0js
+        CQQqvvX/LzObIB2B560qx57/JPnd5zQSSCoUcDYtEg==
+X-Google-Smtp-Source: AK7set9umXlsMTS8ZPbS0zZ/p8POI+3LORmJMg26YS3sBCII+B7DR9C2aWyxa61IFmxeXaGUiPuGLA==
+X-Received: by 2002:a17:906:15d5:b0:8b1:7e23:5041 with SMTP id l21-20020a17090615d500b008b17e235041mr11717762ejd.39.1679594684742;
+        Thu, 23 Mar 2023 11:04:44 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id ja21-20020a170907989500b0093338259b2bsm7456365ejc.207.2023.03.23.11.04.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 11:04:44 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id o12so90392298edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:04:43 -0700 (PDT)
+X-Received: by 2002:a17:906:2c04:b0:931:6e39:3d0b with SMTP id
+ e4-20020a1709062c0400b009316e393d0bmr5389177ejh.15.1679594683563; Thu, 23 Mar
+ 2023 11:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230320210724.GB1434@sol.localdomain> <CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com>
+ <ZBlJJBR7dH4/kIWD@slm.duckdns.org> <CAHk-=wh0wxPx1zP1onSs88KB6zOQ0oHyOg_vGr5aK8QJ8fuxnw@mail.gmail.com>
+ <ZBulmj3CcYTiCC8z@slm.duckdns.org>
+In-Reply-To: <ZBulmj3CcYTiCC8z@slm.duckdns.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 23 Mar 2023 11:04:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgT2TJO6+B=Pho1VOtND-qC_d1PM1FC-Snf+sRpLhR=hg@mail.gmail.com>
+Message-ID: <CAHk-=wgT2TJO6+B=Pho1VOtND-qC_d1PM1FC-Snf+sRpLhR=hg@mail.gmail.com>
+Subject: Re: [GIT PULL] fsverity fixes for v6.3-rc4
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, fsverity@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Victor Hsieh <victorhsieh@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony Luck <tony.luck@intel.com> writes:
-
-> commit b041b525dab9 ("x86/split_lock: Make life miserable for split
-> lockers") added a delay and serialization of cplit locks. Commit
-> 727209376f49 ("x86/split_lock: Add sysctl to control the misery mode")
-> provided a sysctl to turn off the misery.
+On Wed, Mar 22, 2023 at 6:04=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
 >
-> Update the split lock documentation to describe the current state of
-> the code.
->
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> ---
->  Documentation/x86/buslock.rst | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> Thanks for the pointers. They all seem plausible symptoms of work items
+> getting bounced across slow cache boundaries. I'm off for a few weeks so
+> can't really dig in right now but will get to it afterwards.
 
-Applied (with the typo pointed out by Fenghua fixed), thanks.
+So just as a gut feeling, I suspect that one solution would be to
+always *start* the work on the local CPU (where "local" might be the
+same, or at least a sibling).
 
-jon
+The only reason to migrate to another CPU would be if the work is
+CPU-intensive, and I do suspect that is commonly not really the case.
+
+And I strongly suspect that our WQ_CPU_INTENSIVE flag is pure garbage,
+and should just be gotten rid of, because what could be considered
+"CPU intensive" in under one situation might not be CPU intensive in
+another one, so trying to use some static knowledge about it is just
+pure guess-work.
+
+The different situations might be purely contextual things ("heavy
+network traffic when NAPI polling kicks in"), but it might also be
+purely hardware-related (ie "this is heavy if we don't have CPU hw
+acceleration for crypto, but cheap if we do").
+
+So I really don't think it should be some static decision, either
+through WQ_CPU_INTENSIVE _or_ through "WQ_UNBOUND means schedule on
+first available CPU".
+
+Wouldn't it be much nicer if we just noticed it dynamically, and
+WQ_UNBOUND would mean that the workqueue _can_ be scheduled on another
+CPU if it ends up being advantageous?
+
+And we actually kind of have that dynamic flag already, in the form of
+the scheduler. It might even be explicit in the context of the
+workqueue (with "need_resched()" being true and the workqueue code
+itself might notice it and explicitly then try to spread it out), but
+with preemption it's more implicit and maybe it needs a bit of
+tweaking help.
+
+So that's what I mean by "start the work as local CPU work" - use that
+as the baseline decision (since it's going to be the case that has
+cache locality), and actively try to avoid spreading things out unless
+we have an explicit reason to, and that reason we could just get from
+the scheduler.
+
+The worker code already has that "wq_worker_sleeping()" callback from
+the scheduler, but that only triggers when a worker is going to sleep.
+I'm saying that the "scheduler decided to schedule out a worker" case
+might be used as a "Oh, this is CPU intensive, let's try to spread it
+out".
+
+See what I'm trying to say?
+
+And yes, the WQ_UNBOUND case does have a weak "prefer local CPU" in
+how it basically tends to try to pick the current CPU unless there is
+some active reason not to (ie the whole "wq_select_unbound_cpu()"
+code), but I suspect that is then counter-acted by the fact that it
+will always pick the workqueue pool by node - so the "current CPU"
+ends up probably being affected by what random CPU that pool was
+running on.
+
+An alternative to any scheduler interaction thing might be to just
+tweak "first_idle_worker()". I get the feeling that that choice is
+just horrid, and that is another area that could really try to take
+locality into account. insert_work() realyl seems to pick a random
+worker from the pool - which is fine when the pool is per-cpu, but
+when it's the unbound "random node" pool, I really suspect that it
+might be much better to try to pick a worker that is on the right cpu.
+
+But hey, I may be missing something. You know this code much better than I =
+do.
+
+                  Linus
