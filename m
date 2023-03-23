@@ -2,47 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435686C70E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113B26C70EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 20:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCWTRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 15:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S231319AbjCWTRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 15:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCWTRH (ORCPT
+        with ESMTP id S229708AbjCWTRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 15:17:07 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7171146BD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 12:17:05 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id fQQnplsmuTpvffQQnp31ME; Thu, 23 Mar 2023 20:17:03 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 23 Mar 2023 20:17:03 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <84b81ceb-1c7f-0dac-1988-0a9c0af2757c@wanadoo.fr>
-Date:   Thu, 23 Mar 2023 20:17:01 +0100
+        Thu, 23 Mar 2023 15:17:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583549000;
+        Thu, 23 Mar 2023 12:17:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A951B8220F;
+        Thu, 23 Mar 2023 19:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99678C433EF;
+        Thu, 23 Mar 2023 19:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679599046;
+        bh=t2fKFQycO5bMhtMShqAmTqjWXbmR7ABgwZ9hE9vbbO8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sv9hDyvA+CJBvCs2nrf3nppcKC97c95IbuTArMW9F2m4z3CmaNXXQYyOozwm/5hUS
+         6mpHk4LewEl5Q8E67w/vpahxuk2+hi5oPpAsrsEnUFvPYQqcJ3DJ/q+8ihyfAKUKP9
+         J7HllZQzFrNterW6trCzi3QmBuBXzrX2rw1e5wA9a98HXUZOaG+oFJuGUQUP+xOG3I
+         bfVj58P1n/iX/M33ssg7d/CSyM/bpfEC02jeYrYoC9YPusbtnfSQhRdGHXvI5+1Rpy
+         Jt6C5+ZEyc9sF5MQGkW7AVlkJ3uP/VHTM5vbu+qRVPNVbCAST5XlXOt7oNfs/EbOsk
+         l3dwiYKMAntGw==
+Date:   Thu, 23 Mar 2023 19:17:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Saalim Quadri <danascape@gmail.com>, alsa-devel@alsa-project.org,
+        daniel.baluta@nxp.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH] ASoC: dt-bindings: alc5632: Convert to dtschema
+Message-ID: <4a553ab8-4cd3-4ce4-8225-20f43b70a5be@sirena.org.uk>
+References: <1a2e0f7a-771f-5590-fc54-b9dbf059a925@linaro.org>
+ <20230323171111.17393-1-danascape@gmail.com>
+ <5e0ca610-70b2-90fd-45b8-6b0da089eb4c@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] usb: pci-quirks: Remove a useless initialization
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <3850d93ff40ed12f4724621a540fb5993c0a0fa9.1679434951.git.christophe.jaillet@wanadoo.fr>
- <a3c703152d89a2c6b34b31f0158f84ba504e24d8.1679434951.git.christophe.jaillet@wanadoo.fr>
- <ZBx/DeY4rwX+4zg8@kroah.com>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <ZBx/DeY4rwX+4zg8@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7CQC/ouNR9GP9b1L"
+Content-Disposition: inline
+In-Reply-To: <5e0ca610-70b2-90fd-45b8-6b0da089eb4c@linaro.org>
+X-Cookie: A lie in time saves nine.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,38 +60,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Le 23/03/2023 à 17:32, Greg Kroah-Hartman a écrit :
-> On Tue, Mar 21, 2023 at 10:43:10PM +0100, Christophe JAILLET wrote:
->> 'info' is memset()'ed a few lines below and is not use in the between.
->>
->> There is no need to initialize one of its field to false here.
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/usb/host/pci-quirks.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
->> index 6b741327d2c4..46f2412dcb40 100644
->> --- a/drivers/usb/host/pci-quirks.c
->> +++ b/drivers/usb/host/pci-quirks.c
->> @@ -208,7 +208,6 @@ static void usb_amd_find_chipset_info(void)
->>   {
->>   	unsigned long flags;
->>   	struct amd_chipset_info info;
->> -	info.need_pll_quirk = false;
-> Why not just change the line above it to:
-> 	struct amd_chipset_info info = { };
-> and drop the call to memset entirely?
+--7CQC/ouNR9GP9b1L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I find an explicit memset() more readable, but it's mostly a matter of 
-taste.
+On Thu, Mar 23, 2023 at 08:08:33PM +0100, Krzysztof Kozlowski wrote:
+> On 23/03/2023 18:11, Saalim Quadri wrote:
 
-I'll send a v2.
+> > I have a doubt, for the maintainers list, is it required to include all the names of the subsystem maintainer
+> > in the yaml too? As for this codec, there are 4, shall I include the names of all of them or the one to whom the
 
-CJ
+> Depends, choose one or two names, maybe the most active.
 
+Note that the binding should have maintainers for the specific binding,
+not the kernel subsystem.
 
-> thanks,
->
-> greg k-h
+--7CQC/ouNR9GP9b1L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQcpaMACgkQJNaLcl1U
+h9BsEwf+Nx+o3rV+MH36b07ERBsVKvXQ6FnQ8HOLP5a2hTkgLHsrsA5DabtTZL2n
+C0ljaxQnG9Zshd2NXFLJo9fUQQV7pY/P00ChOR1xj6pYmGuo5rUNBgUJDOv815T/
+tMeE8doM4fB1VtDB+N00BKQ/mwQNmi2IegqyfsFAUXrq2BXEkFU+QusiyVjV2Kds
+YA8qCHEU08XOeR1Atx5fobkG5e3+4jzPXkdb7RJWwqBj37UxAKkP4Gro1FAHg3R3
+p1rujZCF96UHOmNNexX42a8Fnx7PvVSKTM9r94qsKPXtwEBzABc2GwhXnYgEf+hh
+oGfSbBgbFmixgevj37S8rj0UcwBbqQ==
+=h6F7
+-----END PGP SIGNATURE-----
+
+--7CQC/ouNR9GP9b1L--
