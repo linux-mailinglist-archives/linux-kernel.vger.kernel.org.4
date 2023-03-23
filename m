@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52156C7206
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EC26C7208
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 21:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjCWU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 16:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S231327AbjCWU7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 16:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjCWU6q (ORCPT
+        with ESMTP id S231530AbjCWU7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 16:58:46 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9532E53
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:31 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53d277c1834so416526557b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:31 -0700 (PDT)
+        Thu, 23 Mar 2023 16:59:25 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB21823669
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:59 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5456249756bso120987907b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679605109;
+        d=chromium.org; s=google; t=1679605138;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uXG2m3AhU8tFazET94PFq/bMhgtfxarcttWvDXsnJsI=;
-        b=NpUUIM1JGopohZ2thu3r504DXU6g6dF0rDoiLjw1E/OsjkZBca2tfGJnJoZz9RjnTF
-         AFg2eAYkqmAXQm5QsdBPniI1HaomOESb5Sau8496tnOHthVbUngL+g10l7IPesfHwHe5
-         Im/eofIkFz1HbzpvmbPWzq1LznRxw4R5NouCU=
+        bh=siTlddsD9BwLsdvAOrWrUYDt/REtWPoX/LdY9MShx4A=;
+        b=iHGPN+ikd54NOrXt+zRiYtHPOxzn3WEKtp4WBumXwJ/SJevgu7Ake2/NIqvA9mlTVp
+         tMQGPi21Wq7PvzQMlCS3QLdAj53DCez7pZlBTnozDWnhvi0mGxkkh8+d/Paawqjh2V7r
+         w4joz/X/Kt7AnRAivbWJu5QIy0wVrPk92jEVw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679605109;
+        d=1e100.net; s=20210112; t=1679605138;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uXG2m3AhU8tFazET94PFq/bMhgtfxarcttWvDXsnJsI=;
-        b=A33bsrfCn29OTJbi+H15dh4NcN+opqTYTgHM642SAB26tzvZSl/bwibA94LarGV3RU
-         YAvOO4iMjY5lvhO2zH+Dpx3Np69D/JllJciQLfmn+wQXupUXWRWG1jU8bo+l6YA/3ce/
-         zpbEJu/Oa9vHJ0Q3QUFBSswia2BlwDUAWWweMNFE2qKBjrDRSUfgI5UOBb8PWhvxVNlM
-         jdzqE7D0TiScLuL5msDnqPbZP07pHD47CMmtGt86dGW6DgLDrNNBq1Yx4MpqFbW3xH0r
-         cco6iLxKkaYfRuNisGf/GTEQyRT8rEYewjww2SF4rPMbgpf0+9Lz79IQ6tEWwTlbkinO
-         /QLA==
-X-Gm-Message-State: AAQBX9eu8Ruwws4O+IDXq3xAl1FHSY/fX2vaOgQvUYuqcBkiCjVIEGt+
-        YbZCnPKTJPVoPQ6yPMROHfKB9CPTvrV6Fv0/wuE=
-X-Google-Smtp-Source: AKy350aAC8NwPtk19mVrAD6XazIhXTISUQmhTljQ4VoiO/yRNDZ3qRt9m2NkcU6MJDTOkjLT9rqHfA==
-X-Received: by 2002:a81:8416:0:b0:53c:5b6f:f5e6 with SMTP id u22-20020a818416000000b0053c5b6ff5e6mr5140557ywf.12.1679605108787;
-        Thu, 23 Mar 2023 13:58:28 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id o19-20020a81ef13000000b00545a0818500sm38546ywm.144.2023.03.23.13.58.26
+        bh=siTlddsD9BwLsdvAOrWrUYDt/REtWPoX/LdY9MShx4A=;
+        b=YE5gV99k7YX6DQz9rxuTS23x38fRqr2aFM3VpE/jp3Sbx+ZxPDDbVwLJNTTvOy6FM5
+         2c1+mohY5+mtOELFkyA8gV19Y3LeEU3Wg6lEY9PPxeQzAZIDHKCJ2bXSBFWfLygW8uc6
+         gTg39kdzPHTXbySOH+HAh9IB4fLsbaTdfa/zfiZ6HhTEdogNUdp/CswmL/CBWIjGAYtn
+         NfWo4aPD2BzdCUBOK98AiffiormO10W1XGq3ZqK29dkcxNSsOkvMRe7o6S+UupaBG1Ch
+         4e5CHaVxUhAX/nY1vapUPrOmQXZtavSBy5h4z/viFdgdRkoyMQLs6H1oP2lpBUjADYJ8
+         QtaQ==
+X-Gm-Message-State: AAQBX9cxhZvjLjqc1iGkWc72wHGApUcZlFWe9DmCGDj4Wezj3zXzdAwq
+        +eQgw5FFCRnnmbOuLXAqj5Y0bIyDf9kokkbe8zM=
+X-Google-Smtp-Source: AKy350bWuLWZxNZUirWCWbdYEhjalyX97gZPM4Rno+X+rSNXMPj8z92QyYb5gdGTlMBGG1PIART3nA==
+X-Received: by 2002:a81:8144:0:b0:545:4df7:e6d8 with SMTP id r65-20020a818144000000b005454df7e6d8mr4692389ywf.37.1679605138317;
+        Thu, 23 Mar 2023 13:58:58 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id m123-20020a0dca81000000b00545a08184d1sm39539ywd.97.2023.03.23.13.58.57
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 13:58:26 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5418d54d77bso416101177b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:26 -0700 (PDT)
-X-Received: by 2002:a81:b149:0:b0:544:b7ff:b0df with SMTP id
- p70-20020a81b149000000b00544b7ffb0dfmr2598921ywh.2.1679605105763; Thu, 23 Mar
- 2023 13:58:25 -0700 (PDT)
+        Thu, 23 Mar 2023 13:58:57 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id k17so15689483ybm.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:58:57 -0700 (PDT)
+X-Received: by 2002:a05:6902:70d:b0:b45:5cbe:48b3 with SMTP id
+ k13-20020a056902070d00b00b455cbe48b3mr18602ybt.0.1679605137060; Thu, 23 Mar
+ 2023 13:58:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230315035508.2874915-1-treapking@chromium.org>
-In-Reply-To: <20230315035508.2874915-1-treapking@chromium.org>
+References: <20230315035508.2874915-1-treapking@chromium.org> <20230315035508.2874915-2-treapking@chromium.org>
+In-Reply-To: <20230315035508.2874915-2-treapking@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 23 Mar 2023 13:58:14 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VxKO6y38nDUmppRseC7kP1cJCUEMkbUPMY1d8LzKe4ZA@mail.gmail.com>
-Message-ID: <CAD=FV=VxKO6y38nDUmppRseC7kP1cJCUEMkbUPMY1d8LzKe4ZA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drm/bridge: ps8640: Skip redundant bridge enable
+Date:   Thu, 23 Mar 2023 13:58:46 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vqw3x20YH5oBVQuNmNvbApE79kZw8U0J3tJ2cPgha1_Q@mail.gmail.com>
+Message-ID: <CAD=FV=Vqw3x20YH5oBVQuNmNvbApE79kZw8U0J3tJ2cPgha1_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/bridge: ps8640: Add a cache for EDID
 To:     Pin-yen Lin <treapking@chromium.org>
 Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -89,25 +89,20 @@ Hi,
 On Tue, Mar 14, 2023 at 8:55=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
 > wrote:
 >
-> Skip the drm_bridge_chain_pre_enable call when the bridge is already
-> pre_enabled. This make pre_enable and post_disable (thus
-> pm_runtime_get/put) symmetric.
+> When there are multiple EDID reads, the bridge will be repeatedly
+> enabled and disabled. Add a cache for EDID to speed this up.
 >
-> Fixes: 46f206304db0 ("drm/bridge: ps8640: Rework power state handling")
 > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > Reviewed-by: Robert Foss <rfoss@kernel.org>
 > Reviewed-by: Douglas Anderson <dianders@chromium.org>
 > ---
 >
-> (no changes since v1)
+> Changes in v2:
+> - Remove the NULL assignment in ps8640_remove
 >
->  drivers/gpu/drm/bridge/parade-ps8640.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/gpu/drm/bridge/parade-ps8640.c | 60 +++++++++++++++-----------
+>  1 file changed, 36 insertions(+), 24 deletions(-)
 
-Even though this could go in drm-misc-fixes, doing so would cause a
-conflict with patch #2 in this series which is not a fix. Since I
-don't believe this is massively urgent, I've landed both in
-drm-misc-next to avoid needing to involve more senior folks to do
-fancy stuff:
+Landed in drm-misc-next:
 
-845e730eaf36 drm/bridge: ps8640: Skip redundant bridge enable
+6a17b4d1b52f drm/bridge: ps8640: Add a cache for EDID
