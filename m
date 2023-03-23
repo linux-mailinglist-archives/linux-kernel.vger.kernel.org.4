@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD346C6E05
+	by mail.lfdr.de (Postfix) with ESMTP id 5F49E6C6E06
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjCWQp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S232442AbjCWQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjCWQpC (ORCPT
+        with ESMTP id S231924AbjCWQpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:45:02 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78526BDC5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:16 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so89494192edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:16 -0700 (PDT)
+        Thu, 23 Mar 2023 12:45:04 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0649FC14B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:20 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b20so56541849edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:44:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679589856;
+        d=linaro.org; s=google; t=1679589858;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4p58Lw+agHASsKfJ6aDJH9J3fw9PY/7V6UBtha5qnBQ=;
-        b=mkSLbSGc8DserzlRocfmGovK4CVXM9wFX93zf+RwrfRNWUdp0Aqb3/jH+3ZaNQ99Mu
-         5pnqk8ZX63k1t+viVUk0gpVnV4uNs+fEL6HN7KBXrplCxQSWeBe+qV8rUHCuZCVMfaUJ
-         UCmEeyBAG8reHjZxRR+Uk1XhfRgn/00G0CNcSpQfjbGGoeNF/kyd5/CbsnC+e7IoKdo6
-         8JzuammEipu17QgSECVds5BEVRGVaL0mooaiJqUw+B6oO2CWoShT5kq9DFIZ3jTg1n+2
-         1WaNZ7pGrmOJhHD7qg9vPhIorYzlbU8fynb98St6KupzEuMSjsPbYpaE4hzjlEHyIKqq
-         OIdQ==
+        bh=2ylgpuVGeZBO2/cPigFjTck4l8oNGf5kwYVPeLJ7mYo=;
+        b=dacXY7BgXtYyAS8zIpvXAvcqNaLtsWu7+lJTg+KFrpJT1Z5K5gYJ6Y4K6BD2huGCa9
+         5vhnXieE415UGVwoecZOfFSqsXshhfWe0aJYOC40tSvBgxuWU7W7QimqqscSY0hOKA1C
+         f6B73Y3wVgs2Ck9zYnrKTG9/A2JgGhG/WfrOGxzOUzclZKUb9GAOC0mSYqjcjbWB54IR
+         v5g1bq5pz25hcf0I0nckMSeP97SFjcdBMrvximAgZa4ZNKFcCC4KOZgOv1zRYkk2ZEIx
+         lofDYwd6dqtHaVtcjzex+63NchJQ9oGh/C9orGbqSyPyTwEX21yljYRSH/KlBeg0JoWE
+         HiUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679589856;
+        d=1e100.net; s=20210112; t=1679589858;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4p58Lw+agHASsKfJ6aDJH9J3fw9PY/7V6UBtha5qnBQ=;
-        b=sFiTL4XP/AaoXPz0XE2b/S7o7Jp5ITli9zF2Cvb+f9FAUvEp/jXqRvD+B1xjsVhnXE
-         wRuvN8jzqhVFHF3ASQAfAEwcuHEPGrOHarif7en9QoTbZKp0KoBloIIG/pe6kM8rCB3Y
-         9nDpqUj2MS18+FIehDGW3oLkaYkkw8UXYYQvqHhQsQo1aWVmBip0ALwBsoF2ChTDy8Fl
-         6zbhpjaFz2WA28TaA4ZOYLaVXEF9ujuQK7/2NyPUk9NbKjJSoe7Bn1qnuVrKY1ppyq/Y
-         yLPgnL986c8YDBFEetZdDtOZUShoxNVSap23R42NDKoCuS8TW98027ovTECsjUQ+LMSJ
-         41ng==
-X-Gm-Message-State: AO0yUKW/LY+EsTyfCruILu6T0OKRHFsZ8CzVZorLJENxUxBD+2IgseeD
-        vLUFoYrJOz/kQfovQM2vvckonw==
-X-Google-Smtp-Source: AK7set/1iEUyO0rmlFJ0I7ZZcuxj1Fi1IMkDzUKyo1qAoN5vycDXyk/M6lvLxoh02t6QggEmrhoOiA==
-X-Received: by 2002:a17:906:6d4e:b0:8b8:c06e:52d8 with SMTP id a14-20020a1709066d4e00b008b8c06e52d8mr11481150ejt.36.1679589855954;
-        Thu, 23 Mar 2023 09:44:15 -0700 (PDT)
+        bh=2ylgpuVGeZBO2/cPigFjTck4l8oNGf5kwYVPeLJ7mYo=;
+        b=qXj9KvQo4/UnsGYYC8U5zOtHDHFqCbnbbIv7YkoGNI6TpdEV9qak5xRuz1RpWxcxIX
+         ZU91X4mWjs86GMSgfeEwBChTj6WlteQFxiOSuUo8H9RohRIaInUNJdiP0NNOg0nlL2qe
+         vbGKIDqSedGe7gKXa6UJbkro4ug3EJDZrHiTv/FtP2jIT6BHNlSZ0JDCLEZ5vRgHlIRe
+         8dcu+XdfuTfsuAVm9IcR5CwCJhA/VlJo1zSUQNoDcqU8bKjPhrjLqngRJdmljQuLgTtH
+         CLgNqaDXqRiK7i/8j+ctkfUEYCJ837r4HW844CwgSLFCPU0Iw/ubQrMspy7sUHzb0agl
+         Tnmw==
+X-Gm-Message-State: AO0yUKWIhR/QeHS1Uc2YOzktqhkooiwbfAvv0+Y9euY3uEzzfaaptyV/
+        hbavBRooAbSDdGdNcqw537PtTg==
+X-Google-Smtp-Source: AK7set8PJ6DrVeZ74exAstkDNXg0vgDtpg5//VFYMzxKWQ4tvmjHT43tXBzHbo9OovNiaKw/g+ELLw==
+X-Received: by 2002:a17:906:b0b:b0:930:f149:7865 with SMTP id u11-20020a1709060b0b00b00930f1497865mr10714465ejg.21.1679589858511;
+        Thu, 23 Mar 2023 09:44:18 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id m10-20020a50998a000000b004e48f8df7e2sm9542187edb.72.2023.03.23.09.44.14
+        by smtp.gmail.com with ESMTPSA id m10-20020a50998a000000b004e48f8df7e2sm9542187edb.72.2023.03.23.09.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 09:44:15 -0700 (PDT)
+        Thu, 23 Mar 2023 09:44:16 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
@@ -57,9 +57,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         johan+linaro@kernel.org, steev@kali.org,
         dmitry.baryshkov@linaro.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 2/4] ASoC: qcom: sdw: do not restart soundwire ports for every prepare
-Date:   Thu, 23 Mar 2023 16:44:01 +0000
-Message-Id: <20230323164403.6654-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 3/4] ASoC: codecs: wsa883x: mute/unmute PA in correct sequence
+Date:   Thu, 23 Mar 2023 16:44:02 +0000
+Message-Id: <20230323164403.6654-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
 References: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
@@ -74,33 +74,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-unpreparing/disabling and preparing/reenabling soundwire ports is not required
-for every prepare call, this add lots of click and pop noise if we do this in
-middle of playback or capture.
+In the current setup the PA is left unmuted even when the
+Soundwire ports are not started streaming. This can lead to click
+and pop sounds during start.
+There is a same issue in the reverse order where in the PA is
+left unmute even after the data stream is stopped, the time
+between data stream stopping and port closing is long enough
+to accumulate DC on the line resulting in Click/Pop noise
+during end of stream.
+
+Moving the mute/unmute to trigger stop/start respectively seems to
+help a lot with this Click/Pop issues reported on this Codec.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/sdw.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ sound/soc/codecs/wsa883x.c | 36 +++++++++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/sound/soc/qcom/sdw.c b/sound/soc/qcom/sdw.c
-index 10249519a39e..1a41419c7eb8 100644
---- a/sound/soc/qcom/sdw.c
-+++ b/sound/soc/qcom/sdw.c
-@@ -32,11 +32,8 @@ int qcom_snd_sdw_prepare(struct snd_pcm_substream *substream,
- 		return 0;
- 	}
+diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+index c609cb63dae6..b83b5b0d4bab 100644
+--- a/sound/soc/codecs/wsa883x.c
++++ b/sound/soc/codecs/wsa883x.c
+@@ -1204,9 +1204,6 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
+ 			break;
+ 		}
  
--	if (*stream_prepared) {
--		sdw_disable_stream(sruntime);
--		sdw_deprepare_stream(sruntime);
--		*stream_prepared = false;
--	}
-+	if (*stream_prepared)
-+		return 0;
+-		snd_soc_component_write_field(component, WSA883X_DRE_CTL_1,
+-					      WSA883X_DRE_GAIN_EN_MASK,
+-					      WSA883X_DRE_GAIN_FROM_CSR);
+ 		if (wsa883x->port_enable[WSA883X_PORT_COMP])
+ 			snd_soc_component_write_field(component, WSA883X_DRE_CTL_0,
+ 						      WSA883X_DRE_OFFSET_MASK,
+@@ -1219,9 +1216,6 @@ static int wsa883x_spkr_event(struct snd_soc_dapm_widget *w,
+ 		snd_soc_component_write_field(component, WSA883X_PDM_WD_CTL,
+ 					      WSA883X_PDM_EN_MASK,
+ 					      WSA883X_PDM_ENABLE);
+-		snd_soc_component_write_field(component, WSA883X_PA_FSM_CTL,
+-					      WSA883X_GLOBAL_PA_EN_MASK,
+-					      WSA883X_GLOBAL_PA_ENABLE);
  
- 	ret = sdw_prepare_stream(sruntime);
- 	if (ret)
+ 		break;
+ 	case SND_SOC_DAPM_PRE_PMD:
+@@ -1341,10 +1335,38 @@ static int wsa883x_digital_mute(struct snd_soc_dai *dai, int mute, int stream)
+ 	return 0;
+ }
+ 
++static int wsa883x_trigger(struct snd_pcm_substream *s, int cmd,
++			   struct snd_soc_dai *dai)
++{
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++	case SNDRV_PCM_TRIGGER_RESUME:
++	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++		wsa883x_digital_mute(dai, false, 0);
++		break;
++	case SNDRV_PCM_TRIGGER_STOP:
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++		wsa883x_digital_mute(dai, true, 0);
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int wsa883x_startup(struct snd_pcm_substream *stream,
++			   struct snd_soc_dai *dai)
++{
++	return wsa883x_digital_mute(dai, true, 0);
++}
++
+ static const struct snd_soc_dai_ops wsa883x_dai_ops = {
++	.startup = wsa883x_startup,
+ 	.hw_params = wsa883x_hw_params,
+ 	.hw_free = wsa883x_hw_free,
+-	.mute_stream = wsa883x_digital_mute,
++	.trigger = wsa883x_trigger,
+ 	.set_stream = wsa883x_set_sdw_stream,
+ };
+ 
 -- 
 2.21.0
 
