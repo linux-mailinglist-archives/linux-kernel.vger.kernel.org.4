@@ -2,44 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F301F6C63E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A891F6C63DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCWJmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S230154AbjCWJk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjCWJm2 (ORCPT
+        with ESMTP id S231222AbjCWJjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:42:28 -0400
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB751A952;
-        Thu, 23 Mar 2023 02:42:25 -0700 (PDT)
-X-QQ-mid: bizesmtp81t1679564275tucju5hh
-Received: from localhost.localdomain ( [113.200.76.118])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Mar 2023 17:37:54 +0800 (CST)
-X-QQ-SSF: 01400000002000B0E000B00A0000000
-X-QQ-FEAT: oAZ4GxcAC/U4hZiQyDBn8H5sWH7ScPQ86jUr7hjTo2DIrIVN/YIU2iiZ1kRJw
-        +y7k5jY/d+3MuGGGhRuStbii8CIK4GvxIim8ngThprC70S6NaorS/pRTM5wFOfqjEPqlD3H
-        hbvBDEMwjG3OtO53qCnwE+xzU14hpgyTeAOy90CBnbGOgCFBtNPgHmono8DxpsPXhKaRHFA
-        /McrbzMwOgtepFDmmUOlWBqeCBuSFNqCm9xqyRSi17WGJ0BSlClCmKSSFPf2z1NaJiU9Ud/
-        nP7ag8lJyZqesef1WuxW/pympfs9FZWBwB4uC6QTlF1mu4t78XY6hGlhd+/6iVlU4xKJG5w
-        hRaa4F8ZtAHDNu37OGFreVYn4/wGDoIKLKWfgGKdl22VbAnSfMlKC7ntcNCCw==
-X-QQ-GoodBg: 2
-From:   gouhao@uniontech.com
-To:     viro@zeniv.linux.org.uk, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fs/buffer: adjust the order of might_sleep() in __getblk_gfp()
-Date:   Thu, 23 Mar 2023 17:37:52 +0800
-Message-Id: <20230323093752.17461-1-gouhao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 23 Mar 2023 05:39:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE118ABD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679564326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wv8z0Oa+BNXMxQvoR0WkvQh5FJ+53xDgUpA+wdsZMxA=;
+        b=iRZY6bgbzK3d4bFz9j4jYJgF6Ik/180i0pXZNSK7lNXWsveannAbqUpWgIEbKk70H8xRVH
+        KyLILTHfsOTR1Qin0LXCF5NAMh4wFxfP3Bvj38zaajcS8KprdWElBY5jpH7iMdAYVTyqyp
+        GiYyQFc6s3jUuKWiV5s5pu2ABAcSySw=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-14-debJF5AxNEaLQqdaKy18yQ-1; Thu, 23 Mar 2023 05:38:43 -0400
+X-MC-Unique: debJF5AxNEaLQqdaKy18yQ-1
+Received: by mail-qv1-f71.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so10546101qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679564323;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wv8z0Oa+BNXMxQvoR0WkvQh5FJ+53xDgUpA+wdsZMxA=;
+        b=N8xmZHTj9XR85Lm6CkIac2aj+kpNDME7BS0Se083/XoJVTYgd8Btg9EH1dvDk5pE4c
+         sFccyrig4kP+jnQu+iG/53zNw2sCGiRZF0pitloMEgbalOMkWENUdTdHOMBCz9Lq2VTs
+         y8XOLtBLwrGpXt48tZpw4LVr3rUP2tS+SfVjYC/Db/ctbWjfBYbg5HasrVcPGnEZ3rD7
+         v7nyyL8sW+g5lk398zbX5C5OzOMo4VaN4lKn2Hq3hcU8DnOlNap8U2fbFHrwUyBKqJfi
+         k6te9BIolnUaoCFbT19gv+Nt6GCDk9GS3TtwHPDryfDZiC0LnR7F6gqd7GlRcInSnxaH
+         OQMA==
+X-Gm-Message-State: AO0yUKWn3xfDTaTqsqqoXL5CsueXGWMulJNGehUXfDtC1GlHOVrEyBVP
+        WW/wXA25W5NX4mGGiyIVNtXxqOJMA9RHf7beMURAiznlflyzO7c+g1QUHp1U7Wq8Z3MMDwIj0BC
+        yp+1Ixf1C2p0W1eLYn0/bFIiz
+X-Received: by 2002:a05:622a:284:b0:3bf:d238:6ca with SMTP id z4-20020a05622a028400b003bfd23806camr8824074qtw.68.1679564323363;
+        Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
+X-Google-Smtp-Source: AK7set99g4T9mj3o49CpahBOOAtxidRMSqg1u94nbjZpIXaZjWImk48PhBoKMemZZJq1z4EVJUoSbQ==
+X-Received: by 2002:a05:622a:284:b0:3bf:d238:6ca with SMTP id z4-20020a05622a028400b003bfd23806camr8824056qtw.68.1679564323068;
+        Thu, 23 Mar 2023 02:38:43 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id b21-20020ac85415000000b003995f6513b9sm11310043qtq.95.2023.03.23.02.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:38:42 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 10:38:37 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, stefanha@redhat.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/8] vhost-vdpa: use bind_mm/unbind_mm device callbacks
+Message-ID: <20230323093837.xdv7wkhzizgnihcy@sgarzare-redhat>
+References: <20230321154228.182769-1-sgarzare@redhat.com>
+ <20230321154228.182769-3-sgarzare@redhat.com>
+ <CACGkMEtq8PWL01WBL2Ve-Yr=ZO+su73tKuOh1EBLagkrLdiCaQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+In-Reply-To: <CACGkMEtq8PWL01WBL2Ve-Yr=ZO+su73tKuOh1EBLagkrLdiCaQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,35 +84,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gou Hao <gouhao@uniontech.com>
+On Thu, Mar 23, 2023 at 11:01:39AM +0800, Jason Wang wrote:
+>On Tue, Mar 21, 2023 at 11:42 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> When the user call VHOST_SET_OWNER ioctl and the vDPA device
+>> has `use_va` set to true, let's call the bind_mm callback.
+>> In this way we can bind the device to the user address space
+>> and directly use the user VA.
+>>
+>> The unbind_mm callback is called during the release after
+>> stopping the device.
+>>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> ---
+>>
+>> Notes:
+>>     v3:
+>>     - added `case VHOST_SET_OWNER` in vhost_vdpa_unlocked_ioctl() [Jason]
+>>     v2:
+>>     - call the new unbind_mm callback during the release [Jason]
+>>     - avoid to call bind_mm callback after the reset, since the device
+>>       is not detaching it now during the reset
+>>
+>>  drivers/vhost/vdpa.c | 31 +++++++++++++++++++++++++++++++
+>>  1 file changed, 31 insertions(+)
+>>
+>> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+>> index 7be9d9d8f01c..20250c3418b2 100644
+>> --- a/drivers/vhost/vdpa.c
+>> +++ b/drivers/vhost/vdpa.c
+>> @@ -219,6 +219,28 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>>         return vdpa_reset(vdpa);
+>>  }
+>>
+>> +static long vhost_vdpa_bind_mm(struct vhost_vdpa *v)
+>> +{
+>> +       struct vdpa_device *vdpa = v->vdpa;
+>> +       const struct vdpa_config_ops *ops = vdpa->config;
+>> +
+>> +       if (!vdpa->use_va || !ops->bind_mm)
+>> +               return 0;
+>> +
+>> +       return ops->bind_mm(vdpa, v->vdev.mm);
+>> +}
+>> +
+>> +static void vhost_vdpa_unbind_mm(struct vhost_vdpa *v)
+>> +{
+>> +       struct vdpa_device *vdpa = v->vdpa;
+>> +       const struct vdpa_config_ops *ops = vdpa->config;
+>> +
+>> +       if (!vdpa->use_va || !ops->unbind_mm)
+>> +               return;
+>> +
+>> +       ops->unbind_mm(vdpa);
+>> +}
+>> +
+>>  static long vhost_vdpa_get_device_id(struct vhost_vdpa *v, u8 __user *argp)
+>>  {
+>>         struct vdpa_device *vdpa = v->vdpa;
+>> @@ -709,6 +731,14 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+>>         case VHOST_VDPA_RESUME:
+>>                 r = vhost_vdpa_resume(v);
+>>                 break;
+>> +       case VHOST_SET_OWNER:
+>> +               r = vhost_dev_set_owner(d);
+>
+>Nit:
+>
+>I'd stick to the current way of passing the cmd, argp to
+>vhost_dev_ioctl() and introduce a new switch after the
+>vhost_dev_ioctl().
+>
+>In this way, we are immune to any possible changes of dealing with
+>VHOST_SET_OWNER in vhost core.
 
-If 'bh' is found in cache, just return directly.
-might_sleep() is only required on slow paths.
+Good point, I'll change in v4.
 
-Signed-off-by: Gou Hao <gouhao@uniontech.com>
----
- fs/buffer.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+>
+>Others look good.
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 9e1e2add541e..e13eff504fb5 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -1371,10 +1371,11 @@ __getblk_gfp(struct block_device *bdev, sector_t block,
- {
- 	struct buffer_head *bh = __find_get_block(bdev, block, size);
- 
-+	if (bh)
-+		return bh;
-+
- 	might_sleep();
--	if (bh == NULL)
--		bh = __getblk_slow(bdev, block, size, gfp);
--	return bh;
-+	return __getblk_slow(bdev, block, size, gfp);
- }
- EXPORT_SYMBOL(__getblk_gfp);
- 
--- 
-2.20.1
+Thanks,
+Stefano
 
