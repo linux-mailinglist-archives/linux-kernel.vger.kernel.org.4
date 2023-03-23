@@ -2,78 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5F66C5E8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEF86C5E96
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCWFOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S229865AbjCWFPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjCWFOh (ORCPT
+        with ESMTP id S229702AbjCWFPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:14:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753471815C;
-        Wed, 22 Mar 2023 22:14:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1094A623EE;
-        Thu, 23 Mar 2023 05:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EB3C433D2;
-        Thu, 23 Mar 2023 05:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679548475;
-        bh=TnjZCeJI5b3jMHKYCdpYkBRkO+Paeps2Jyb4HkRRQ4s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pvAdSmDoH41n+055xbz5GvMexPPvayVlPt5OaE9ad19cUO2t3GqfBkctkcx93tefG
-         EQEyAEZfntwG6i10YI7O7YaRqVRe40sMga0NK7vtPS6QbvPtelt8oXQHjBrqzegqKk
-         sAwfCMKINJFZU0+vpK37ftCdsOhKhEWR08Kn1jWpookkbJU+uuq8WiB9qWlc4l6Lnm
-         ZWLOJRGlK0Si/IjtcL19Ew1YKYnDJGSS0V0LKsA0NrsEOsRN+E+mx+N/nLisgRxrej
-         fmiElReLPGvhLpb2TP+jqWXDXJ3T7m1mkfoASs2PoVWuLphgX5QUfxlhH3m1zFuPW3
-         grWg++yspy7tQ==
-Date:   Wed, 22 Mar 2023 22:14:33 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net 2/3] net: dsa: mt7530: move lowering TRGMII driving
- to mt7530_setup()
-Message-ID: <20230322221433.21c3e9f0@kernel.org>
-In-Reply-To: <20230320190520.124513-2-arinc.unal@arinc9.com>
-References: <20230320190520.124513-1-arinc.unal@arinc9.com>
-        <20230320190520.124513-2-arinc.unal@arinc9.com>
+        Thu, 23 Mar 2023 01:15:48 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2AA1F5C4
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:15:43 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ew6so18732472edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679548542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YiBnEdYy6Aid4dyiIRb9ptP+TZS4JSWAxv3bvFBhfG4=;
+        b=KjytUVYDmXDoW1kHgbDCbvCLYfxK+63b9aN2H7qBDtgtsxUI5OrZu53Lwl+GZnw0aJ
+         01ArWTb9RVmWC495n9DxCFBjmF0qY/lqyeeIAVSiAn/aUnYfvmYR3QRULUpzpOBma5HJ
+         1+ytefxZiq0W1QKk5BPSDY7oYrkC4lDmQhAqbKsHhetsX6cK5fJcoZErFKGhWuRXhxyI
+         p2BcFq4WozSFWYwoA28WxVcjRBVpqMyGmKeVHUGeck+Via4SQbj3gRnZsH2+wmdGGYqJ
+         m3bky+4aHeeGT/A27qicrKyfuYVue8fxY0dpOhHe+LAcLJLzrkBD+xp1/xz5qYKXjWiw
+         GJsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679548542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YiBnEdYy6Aid4dyiIRb9ptP+TZS4JSWAxv3bvFBhfG4=;
+        b=giyc6KIog5qe0TzRiY9Fhf8THbqMqieF31A7RDK1ON96ZMA0ZieHMK464jHp3P70Yz
+         EKNY2+lKcqdqqSdbrRXW/q2VJwbzQRg8gO7J+1trZtHkQL31RR/y4FFNxtyUsfll6Ydk
+         8+F/CaENruS+MbD61JtznMUeeo3p/dHmtmGKgxxRalz1aQWOtpcNliBKAl0vlSOb4DkE
+         kbi9Y+8nC8lRGRfcXF92KcgawnEeZ/vs4c3ZMkr//NIuvhjgwr14s3cE4f28+JM270LI
+         bd5YCHkbbj+GUlndj0aJRn0VdCpmFN05NMumHEcOLRa1Ki0yeS8+MuN4QuYcIXbnVpS4
+         6NzA==
+X-Gm-Message-State: AO0yUKVGcB1/6YmxmtZoyVHWrO7tr2gL6I8XIOctvVepOITaN3rdmNA7
+        1mDPyB/WI420NJuYsnF6FD0rT+YgS6gDFeOnXKkSXA==
+X-Google-Smtp-Source: AK7set9TkrVPoLwQATRu8u0oZvp5iDQj4vlxVo1OOqJOjETFOQd+b3oLzlntqCqCIUZCsCp2Y1/BhRjHZ4ki+1aUb4w=
+X-Received: by 2002:a17:906:aac9:b0:927:912:6baf with SMTP id
+ kt9-20020a170906aac900b0092709126bafmr4297724ejb.15.1679548542233; Wed, 22
+ Mar 2023 22:15:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+In-Reply-To: <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 22 Mar 2023 22:15:05 -0700
+Message-ID: <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 22:05:19 +0300 arinc9.unal@gmail.com wrote:
-> I asked this before, MT7530 DSA driver maintainers, please explain the code
-> I mentioned on the second paragraph.
-> 
-> I intend to send a patch to remove the maintainers, Sean Wang, Landen Chao
-> DENG Qingfang, listed on the MAINTAINERS file and change the status to
-> orphan if none of them respond to this question or review the patches.
+On Wed, Mar 22, 2023 at 9:29=E2=80=AFPM Shakeel Butt <shakeelb@google.com> =
+wrote:
+>
+> On Wed, Mar 22, 2023 at 9:00=E2=80=AFPM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
+> > Currently, when sleeping is not allowed during rstat flushing, we hold
+> > the global rstat lock with interrupts disabled throughout the entire
+> > flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+> > having interrupts disabled throughout is dangerous.
+> >
+> > For some contexts, we may not want to sleep, but can be interrupted
+> > (e.g. while holding a spinlock or RCU read lock). As such, do not
+> > disable interrupts throughout rstat flushing, only when holding the
+> > percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+> > interrupts disabled to a series of O(# cgroups) durations.
+> >
+> > Furthermore, if a cpu spinning waiting for the global rstat lock, it
+> > doesn't need to spin with interrupts disabled anymore.
+> >
+> > If the caller of rstat flushing needs interrupts to be disabled, it's u=
+p
+> > to them to decide that, and it should be fine to hold the global rstat
+> > lock with interrupts disabled. There is currently a single context that
+> > may invoke rstat flushing with interrupts disabled, the
+> > mem_cgroup_flush_stats() call in mem_cgroup_usage(), if called from
+> > mem_cgroup_threshold().
+> >
+> > To make it safe to hold the global rstat lock with interrupts enabled,
+> > make sure we only flush from in_task() contexts. The side effect of tha=
+t
+> > we read stale stats in interrupt context, but this should be okay, as
+> > flushing in interrupt context is dangerous anyway as it is an expensive
+> > operation, so reading stale stats is safer.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>
+> Couple of questions:
+>
+> 1. What exactly is cgroup_rstat_lock protecting? Can we just remove it
+> altogether?
 
-Sounds fair. 
+I believe it protects the global state variables that we flush into.
+For example, for memcg, it protects mem_cgroup->vmstats.
+
+I tried removing the lock and allowing concurrent flushing on
+different cpus, by changing mem_cgroup->vmstats to use atomics
+instead, but that turned out to be a little expensive. Also,
+cgroup_rstat_lock is already contended by different flushers
+(mitigated by stats_flush_lock on the memcg side). If we remove it,
+concurrent flushers contend on every single percpu lock instead, which
+also seems to be expensive.
+
+> 2. Are we really calling rstat flush in irq context?
+
+I think it is possible through the charge/uncharge path:
+memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usage(). I
+added the protection against flushing in an interrupt context for
+future callers as well, as it may cause a deadlock if we don't disable
+interrupts when acquiring cgroup_rstat_lock.
+
+> 3. The mem_cgroup_flush_stats() call in mem_cgroup_usage() is only
+> done for root memcg. Why is mem_cgroup_threshold() interested in root
+> memcg usage? Why not ignore root memcg in mem_cgroup_threshold() ?
+
+I am not sure, but the code looks like event notifications may be set
+up on root memcg, which is why we need to check thresholds.
+
+Even if mem_cgroup_threshold() does not flush memcg stats, the purpose
+of this patch is to make sure the rstat flushing code itself is not
+disabling interrupts; which it currently does for any unsleepable
+context, even if it is interruptible.
