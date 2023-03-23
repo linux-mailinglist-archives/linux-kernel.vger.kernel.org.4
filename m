@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5EE6C6F99
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBEF6C6F9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjCWRpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S230098AbjCWRpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCWRpE (ORCPT
+        with ESMTP id S229499AbjCWRpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:45:04 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FA63AAE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:45:02 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id c19so27507599qtn.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679593501;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+aviwg+yLbOH7NuEkcwn79zl3PJ/u1Tvv20Vv8v5PYI=;
-        b=Ug+/n7OA7vIk6CMZwgcqzI8bs9/jzQ3aXxHAVSn71Uha9aPr5cP43W/yGEGYZ4aVzI
-         nRzr/OWkG/p2AJRdrEfK7jt+QefO3dqFLZmzC2o7yDGU+eUA+gz/kjs2L8B0La1Gc1LI
-         8Mzwnbvz3LDcgFSxBb1Q7jKVWFW8rkARg4KvaCfrbTJ8liGMgclWK5Pk5niHuHDFwMnD
-         u9q8AHabM1aK6ChvRLnkzzKwu0Htxjo1KFvkhUcEQdJMugteLph0g3FhvvndniQUUqSQ
-         Z5Gdia1v5GVX/4DbUzkEgsYnh7/39YANHFHyUYRc0uiZodcF7XKErFZO2QQi21jP4rgN
-         6M6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679593501;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+aviwg+yLbOH7NuEkcwn79zl3PJ/u1Tvv20Vv8v5PYI=;
-        b=Nx9NygfbNl5ky0hJMbUBvxuwisBGWXV9FnYTcIqIC2SA/Es6io8mv4ByQL8AyG3DFF
-         pFkLM5v2mHeOpbsX+Y/X/B/eZxiklUuEfbrZRAop39UtWw+7bYpDC0HJ1gBHRjvoU2xd
-         xkK68iw2QpZRBUh/76yxXvG3U8z/1XilGwMnHcaJcn3kLf1cDtTUpcCxWdrfpObMOwTV
-         GWFpjavazUif69TYj+X3vqxEuHKejbw3DkbGcLnxgP+/6LwbzTXzqhmzWs3JXaKIXnZF
-         jNffP1MFyO6PEtXFo5bS+OB8QHHk2/lKfFEJtr1OsiR6HvNRg0L3k2F2+riRcmpcmbS7
-         pU7g==
-X-Gm-Message-State: AO0yUKUd1fWdZgA1gu7iL5qRAk2OvzsmkEY9bluAYIaCtZBb/zfVMG7o
-        rAnFYz2s9eKQ7D2IDj0X87JFLg==
-X-Google-Smtp-Source: AK7set+GkGAJP/6ZaSGzw4g30W301lZ5o/7gxo/UhQDvCoYd9ncyFnk6K9iT4ZtPqwbSOgthY/rzSw==
-X-Received: by 2002:a05:622a:28d:b0:3de:6964:7bff with SMTP id z13-20020a05622a028d00b003de69647bffmr10942384qtw.20.1679593501062;
-        Thu, 23 Mar 2023 10:45:01 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac86710000000b003ba2a15f93dsm5321291qtp.26.2023.03.23.10.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:45:00 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 13:44:59 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        brauner@kernel.org, chris@chrisdown.name
-Subject: Re: [PATCH v2 3/3] sched/psi: allow unprivileged polling of N*2s
- period
-Message-ID: <20230323174459.GH739026@cmpxchg.org>
-References: <20230323103350.40569-1-cerasuolodomenico@gmail.com>
- <20230323103350.40569-4-cerasuolodomenico@gmail.com>
- <CAJuCfpFh0iL0cE8V3dh-HkDx3-20Kyo+ZAt0vnqvOzA33HwnFg@mail.gmail.com>
+        Thu, 23 Mar 2023 13:45:41 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0463AAE;
+        Thu, 23 Mar 2023 10:45:40 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N5m0Hh012881;
+        Thu, 23 Mar 2023 12:45:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=PODMain02222019;
+ bh=4zZwoU/ke6dQ47Fpxm1JOoGRUjkQ68oE18bTPBtGnSQ=;
+ b=n5SeMFeSWfjHR72rba5hOWcSboS2zdP1AeKv9THzzFBSlcPEJ12a/DByd5il3XUnlqLb
+ C1yKny3Da/mHqTT0DG4dOXwrf3J7Joftn6iPX5sBNznD7MWz29/phFDD4wt+LPnYdmhO
+ ac8C+BVv2zDzY8UXai1s++DWFP+fOulUqD1cWkeaxdvYFRVJ1oTLQFNkgG9OM+SeaKWD
+ E2nbA6g4UGVTgTp3yaiAv6h6GiXVlX0nVcNW28B8Rj5CytKZwq0icldAWqrz278lJ2Z1
+ cSEvzBo77CWcnfFm/aSN8K39N0sKDmjEoTsZRRrakj2dmfeugTLLb0Kmuxbf/77YXWGG Ug== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pf7tj597b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:45:33 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 23 Mar
+ 2023 12:45:31 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Thu, 23 Mar 2023 12:45:31 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C4E80B06;
+        Thu, 23 Mar 2023 17:45:31 +0000 (UTC)
+Date:   Thu, 23 Mar 2023 17:45:31 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH] regulator: wm8994: Use PROBE_FORCE_SYNCHRONOUS
+Message-ID: <20230323174531.GM68926@ediswmail.ad.cirrus.com>
+References: <CGME20230323083330eucas1p1f7e3f9beb5ba168c6b13374d74c158f0@eucas1p1.samsung.com>
+ <20230323083312.199189-1-m.szyprowski@samsung.com>
+ <20230323114035.GL68926@ediswmail.ad.cirrus.com>
+ <CAD=FV=UYO1KaoAZ7o5cA83SC1VHRomvJfaXVWyYPKrEZHyNNjg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFh0iL0cE8V3dh-HkDx3-20Kyo+ZAt0vnqvOzA33HwnFg@mail.gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=UYO1KaoAZ7o5cA83SC1VHRomvJfaXVWyYPKrEZHyNNjg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: BOPtBcpPpYEA3VAHEFh4VZ5WuTIQKaDu
+X-Proofpoint-GUID: BOPtBcpPpYEA3VAHEFh4VZ5WuTIQKaDu
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 09:55:11AM -0700, Suren Baghdasaryan wrote:
-> On Thu, Mar 23, 2023 at 3:34 AM Domenico Cerasuolo
-> > @@ -1254,16 +1262,19 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
-> >  }
-> >
-> >  struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > -                       char *buf, enum psi_res res)
-> > +                       char *buf, enum psi_res res, struct file *file)
-> >  {
-> >         struct psi_trigger *t;
-> >         enum psi_states state;
-> >         u32 threshold_us;
-> > +       bool privileged;
-> >         u32 window_us;
-> >
-> >         if (static_branch_likely(&psi_disabled))
-> >                 return ERR_PTR(-EOPNOTSUPP);
-> >
-> > +       privileged = cap_raised(file->f_cred->cap_effective, CAP_SYS_RESOURCE);
+On Thu, Mar 23, 2023 at 09:53:18AM -0700, Doug Anderson wrote:
+> On Thu, Mar 23, 2023 at 4:40 AM Charles Keepax
+> If my analysis is correct, there's still potential to run into similar
+> problems even with PROBE_FORCE_SYNCHRONOUS. I don't think that
+> mfd_add_devices() is _guaranteed_ to finish probing all the
+> sub-devices by the time it returns. Specifically, imagine that
+> wm8994_ldo_probe() tries to get a GPIO that that system hasn't made
+> available yet. Potentially the system could return -EPROBE_DEFER there
+> and that would put the LDO on the deferred probe list. Doing so won't
+> cause mfd_add_devices() to fail. Now we'll end up with a dummy
+> regulator again. Admittedly most cases GPIO providers probe really
+> early and so this argument is a bit of a stretch, but I guess the
+> point is that there's no official guarantee that mfd_add_devices()
+> will finish probing all sub-devices so it's not ideal to rely on.
+> Also, other drivers with a similar pattern might have other reasons to
+> -EPROBE_DEFER.
 > 
-> I missed one detail here. We are moving the cap check from open() to
-> write(). That might break potential users which open the file from a
-> process with that cap and then pass that FD to an unprivileged process
-> to create the trigger by writing to that file. I'm not aware of any
-> use of such a pattern but it is possible there are such users.
-> With this change such users would have to delegate trigger creation to
-> the privileged process too and the received FD would be used only for
-> polling. IMHO that's a safer pattern because triggers are created by
-> the privileged process.
+> These types of issues are the same ones I faced with DP AUX bus and
+> the solutions were never super amazing...
+> 
+> One solution we ended up with for the DP AUX bus was to add a
+> "done_probing" callback argument to devm_of_dp_aux_populate_bus().
+> This allowed the parent to be called back when all the children were
+> done probing. This implementation is easier for DP AUX bus than it
+> would be in the generic MFD case, but conceivably it would be possible
+> there too?
+> 
+> Another possible solution is to somehow break the driver up into more
+> sub-drivers. Essentially, you have a top-level "wm8994" that's not
+> much more than a container. Then you create a new-sub-device and
+> relegate anything that needs the regulators to the new sub-device. The
+> new sub-device can just -EPROBE_DEFER until it detects that the
+> regulators have finished probing. I ended up doing stuff like this for
+> "ti-sn65dsi86.c" using the Linux aux bus (not to be confused with the
+> DP Aux bus) and it was a bit odd but worked OK.
 
-Oh, it's checking file->f_cred, which is set up at open(). So if the
-opener is privileged, the write can be delegated to an unprivileged
-process.
+Yes I believe you are correct, there is still an issue here,
+indeed a quick test suggests I can still cause this by forcing a
+probe defer in the regulator driver.
 
-But I agree that this is subtle and could use a comment.
+I think really the best place to look at this would be at the
+regulator level. It is fine if mfd_add_devices passes, the problem
+really is that the regulator core doesn't realise the regulator is
+going to be arriving, and thus returns a dummy regulator, rather
+than returning EPROBE_DEFER. If it did the MFD driver would probe
+defer at the point of requesting the regulator, which would all
+make sense.
 
-This was a usecase specifically requested by Christian, actually.
+I will see if I can find some time to think about that further
+but very unlikely to happen this week.
+
+Thanks,
+Charles
