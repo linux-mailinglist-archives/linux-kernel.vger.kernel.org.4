@@ -2,120 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D9D6C64FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1D96C64FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbjCWK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S231528AbjCWK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCWK0L (ORCPT
+        with ESMTP id S231433AbjCWK10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:26:11 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80131CF4D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:25:36 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id i9so19859758wrp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679567135;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iaQACbxWFe/pP0PYdcE2NPjjd/o5GOPyZh6BOGAwiP8=;
-        b=EDK/OC2gr0VhTqb/8cfkz3D7WlMPMQM2ELils/2BJph5U5K9iidkuqoUxZlw2Rh4yY
-         bG9nXl3bN8p8ByXNnmUizw7VxwxiBMaFatQ+QWA25ecnX8/EvkWtD1qcL6FpEOZlvnYR
-         +xXKkFPGzURm1L4waqYLeX9UhOuOT3swffCfg/GmLq0qa1q7bk/Ng/0EV8WUnS+G8AXF
-         LfT0kd80T66ZOC5MG/60vWfd0UC2E2zAJ0zP1F9NUpF1IXB5ZbmaYYbC+YBQ7NEA1XMt
-         uFCH47IhPi3S2YE2gzbkBClbF/PAUwlHbpmJ1w+7vZSAOQStcKGGz+EZvu0JdKwZXyzX
-         sPug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679567135;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iaQACbxWFe/pP0PYdcE2NPjjd/o5GOPyZh6BOGAwiP8=;
-        b=k+x3I4MS1Sfds7Vlud4kkGh1wNzLCgBlqZdXXx8p43vFvEZ0iqn7P5pNOLpoROb8N2
-         WNI4CiDR3RKdzCSkWzPIXcJqBGFXO6uxRN9a0q1wGUCzRq41EpGUbk0hCVLU7Nf8kUS5
-         NvMCm3J8MLEP66FGpsVO69j0pfpYEgGQNDPiDYPPdZLtya5unZ+R4O6ciNTkNzc0Nf+Z
-         CV35JVZbAKkShDZlc+9HffZ3BOnKyyRQXR9aAJkGMU3fQCudNEl7lVNfTGP/LshfuWEe
-         CrP0mL7T+hLE0AiOBIy6FQAxPhHyvSpBiRFtyfhZ6wEZ27w7s16NjNbhAQ8UQWcHX8h6
-         8Kiw==
-X-Gm-Message-State: AAQBX9enaIJ+BwPF4XPL6pnRlZYU6VJdyrKXHTwwb+gxQEI9vehy9+yk
-        vRNxa42qVyPqKDOvRYl4+ULGTA==
-X-Google-Smtp-Source: AKy350bCeDHpSVI8xLS6NQ/SiOOsVX2JYPYHUtQ3vn3tZY3Uc4D9P3VP7wUr81eOPMcUs86Lve47yw==
-X-Received: by 2002:a5d:49c3:0:b0:2d9:5608:ee0 with SMTP id t3-20020a5d49c3000000b002d956080ee0mr1808899wrs.69.1679567135399;
-        Thu, 23 Mar 2023 03:25:35 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e23-20020a5d5957000000b002cfefa50a8esm15753530wri.98.2023.03.23.03.25.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:25:34 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 23 Mar 2023 11:25:23 +0100
-Subject: [PATCH 8/8] arm64: dts: qcom: sm8450: fix pcie1 gpios properties
- name
+        Thu, 23 Mar 2023 06:27:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F111B566;
+        Thu, 23 Mar 2023 03:26:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AB35B8206D;
+        Thu, 23 Mar 2023 10:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901AEC433EF;
+        Thu, 23 Mar 2023 10:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679567160;
+        bh=qjuVbo/YQInc7QDqTNTVbV1FjCw1Zls8gRxxXRbt/QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kK2s1NGslXJ89GkgaX3rOCRWahxTMYA8/zrlC+4tBPZp3ktan8xpDiP4Mb/hcl/6w
+         GnaXDpKbUP+EZGb0X5WEcLfz5hjV7+cM/o7WJEKKfwFhRuUnMFRYSOu0nyghblJpq0
+         8P0qfUEdtLIywvFVxzqUW9zJmXMftzrB/OYnabfw=
+Date:   Thu, 23 Mar 2023 11:25:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <ZBwpNcd/A15/Azjr@kroah.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <12ea1d68-2a3c-0aa7-976c-7bd3eef35239@fi.rohmeurope.com>
+ <ZBwUp/fRIjQZtjF7@kroah.com>
+ <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-8-3ead1e418fe4@linaro.org>
-References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
-In-Reply-To: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-scsi@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the final "s" to the pgio properties and fix the invalid "enable"
-name to the correct "wake", checked against the HDK8450 schematics.
+On Thu, Mar 23, 2023 at 11:20:33AM +0200, Matti Vaittinen wrote:
+> On 3/23/23 10:58, Greg Kroah-Hartman wrote:
+> > On Thu, Mar 23, 2023 at 07:17:40AM +0000, Vaittinen, Matti wrote:
+> > > On 3/22/23 20:57, Greg Kroah-Hartman wrote:
+> > > > On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
+> > > > > Hi Greg,
+> > > > > 
+> > > > > Thanks for looking at this.
+> > > > > 
+> > > > > On 3/22/23 14:07, Greg Kroah-Hartman wrote:
+> > > > > > On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
+> 
+> > > I am very conservative what comes to adding unit tests due to the huge
+> > > inertia they add to any further development. I usually only add tests to
+> > > APIs which I know won't require changing (I don't know such in-kernel
+> > > APIs)
+> > 
+> > So anything that is changing doesn't get a test?
+> 
+> No. I think you misread me. I didn't say I don't like adding tests to code
+> which changes. I said, I don't like adding tests to APIs which change.
 
-Fixes: bc6588bc25fb ("arm64: dts: qcom: sm8450: add PCIe1 root device")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Then you should not be writing any in-kernel tests as all of our APIs
+change all the time.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 8ecc48c7c5ef..d964d3fbe20c 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1908,8 +1908,8 @@ pcie1: pci@1c08000 {
- 			phys = <&pcie1_lane>;
- 			phy-names = "pciephy";
- 
--			perst-gpio = <&tlmm 97 GPIO_ACTIVE_LOW>;
--			enable-gpio = <&tlmm 99 GPIO_ACTIVE_HIGH>;
-+			perst-gpios = <&tlmm 97 GPIO_ACTIVE_LOW>;
-+			wake-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_default_state>;
+>  If you only test
+> > things that don't change then no tests fail, and so, why have the test
+> > at all?
+> 
+> Because implementation cascading into functions below an API may change even
+> if the API stays unchanged.
 
--- 
-2.34.1
+Then it needs to be fixed.
 
+> > On the contrary, tests should be used to verify things that are changing
+> > all the time, to ensure that we don't break things.
+> 
+> This is only true when your test code stays valid. Problem with excessive
+> amount of tests is that more we have callers for an API, harder changing
+> that API becomes. I've seen a point where people stop fixing "unimportant"
+> things just because the amount of work fixing all impacted UT-cases would
+> take. I know that many things went wrong before that project ended up to the
+> point - but what I picked up with me is that carelessly added UTs do really
+> hinder further development.
+
+Again, in-kernel apis change at any moment.  I just changed one that was
+over 15 years old.  Don't get stuck into thinking that you can only
+write tests for stuff that is "stable" as nothing in the kernel is
+"stable" and can change at any point in time.  You fix up all the
+in-kernel users of the api, and the tests, and all is good.  That's how
+kernel development works.
+
+>  That's why we need
+> > them, not to just validate that old code still is going ok.
+> > 
+> > The driver core is changing, and so, I would love to see tests for it to
+> > ensure that I don't break anything over time.  That should NOT slow down
+> > development but rather, speed it up as it ensures that things still work
+> > properly.
+> 
+> I agree that there are cases where UTs are very handy and can add confidence
+> that things work as intended. Still, my strong opinion is that people should
+> consider what parts of code are really worth testing - and how to do the
+> tests so that the amount of maintenance required by the tests stays low.
+> It's definitely _not fun_ to do refactoring for minor improvement when 400+
+> unit-test cases break. It's a point when many developers start seeing fixing
+> this minor culprit much less important... And when people stop fixing minor
+> things ... major things start to be just around the corner.
+
+If people stop fixing minor things then the kernel development process
+is dead.  Based on all the changes that go into it right now, we are far
+from having that problem.
+
+So write valid tests, if we get to the point where we have too much of a
+problem fixing up the tests than the real users of apis, then we can
+revisit it.  But for now, that's not an issue.
+
+And again, remember, and api can, and will, change at any moment in
+time, you can never know what will be "stable" as we do not have such a
+thing.
+
+thanks,
+
+greg k-h
