@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AE46C6937
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196D96C6944
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjCWNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S229600AbjCWNNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjCWNLW (ORCPT
+        with ESMTP id S230132AbjCWNNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:11:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8B83803A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:11:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 785E6626BB
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F7DCC433EF;
-        Thu, 23 Mar 2023 13:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679577074;
-        bh=/OLefhFZ4sSoFTXhUzU6IaDDgb/f3Tybtx2GNklSFZk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rWLRPOUFKadadg9y9Kg4aDNA6PX2eyrslleiTSZd8Rl5a+9bAFVMsuLgeDg9I8lSn
-         nFVrfMFfHNMFzOtW6Dn0AF/FxudZs20bErVZ6Ya62L5K2rnkth6rcF5MohGU2rpGir
-         0RKcqhwRySwxc2LXv7JW4XvwrIAtctgmdKslZ7tGHSWIIirCJ2vzl7BgCpbw8yHeTF
-         U9BgvtDM/EjFikFXXAuQ4qo4L39x7X9u+S7lE9zryn0NgG8SD2cPQAsvU+646ZyyI+
-         N/UrMv/RsDStFMphC+/DjFtaOZE+LYOQT4TEXBVxPDrguuF7vUPgNZwRS53wJGoLyf
-         Pq+dE+zAL5RSw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id F13B64052D; Thu, 23 Mar 2023 10:11:11 -0300 (-03)
-Date:   Thu, 23 Mar 2023 10:11:11 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Sukadev Bhattiprolu <sukadev@linux.vnet.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: perf tools power9 JSON files build breakage on ubuntu 18.04 cross
- build
-Message-ID: <ZBxP77deq7ikTxwG@kernel.org>
+        Thu, 23 Mar 2023 09:13:07 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372862105
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:13:05 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id t17-20020a05600c451100b003edc906aeeaso1801933wmo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679577183;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=juhp9OBUsPann54i4wUeJoNbrt/MgaPH7KWeZa71+xE=;
+        b=jNzxhh+kAMOJUnJAJiZlm8CqqNjJB84FeneV/bsFBFNkwsv5ewzKW99RwM/+yo+dWD
+         O5M7PoVQ+HmSm0Fp7TUSM4WUmaCD/M9RquYD/SYCw+xZ3DF85LQBhq6DffN9QsAzPSiz
+         +SXGeH8zvrCymDFBZtcQHoWfSF5M0GCyh2Yk8xunJZ3oUEoj5sOSwvola6tWm9KPAExx
+         wppVx0YrDi/ArfaymWwbqT75kwaGW9d3Z9Vn8zQPyMtL5GoGAHwYOoySoOmjx3hdS1VP
+         UJk4RORne+G8ZcUQqELIerD3KaGhrzSzjw76MslFrWinmJXZ+hINTJ/vsGD5S7LbjbfF
+         VXWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679577183;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=juhp9OBUsPann54i4wUeJoNbrt/MgaPH7KWeZa71+xE=;
+        b=K14qQBM72ZRQQUG++ZGEBZf/memGJLHoZjlIo1SCGIs8bMXx6lUBKREMVghoqdaXm/
+         6N1OOvK2YprjjDRrtBMNvJQA+SMqlIKPkG9r6cef4EZtpJZMpmjiGVSHg43zEW1GnxIy
+         VGXW/3VN2yzSDMKkfzfXayaechpNQu8CzZyeiGWddRkMGv8bDZ+lz/KhPKCjbhcUDoLK
+         51MOfDxyZtaGobIX4egw2TW/2uPimT1Dh7TkIoniB23/AsmURQggtlIqv1MJNS6Rf1um
+         IpItwQVPFqX6qSTXX/lSWqcR/21Xj0DDXnDRaqRMEXMtrpinm5Kd9vJXFd0svTwX6OBz
+         h28w==
+X-Gm-Message-State: AO0yUKVQqbJI+Hr58zptoHVlPX7yaOAW9Gy3u5atQAaTL8BrLajtMzCM
+        j8ZHN5yq7TOJrK3HAv5zVZ7vOIoODGQewkJY2v/6WQ==
+X-Google-Smtp-Source: AK7set9AOlKnA/7JArDu4NZy/tacv+1Jc1By+62lRGQ2qjTDOfxTCEOmbDcLbYSrwaVOaWhWVZPiKA==
+X-Received: by 2002:a1c:f709:0:b0:3ed:c763:2765 with SMTP id v9-20020a1cf709000000b003edc7632765mr2405501wmh.7.1679577183642;
+        Thu, 23 Mar 2023 06:13:03 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:e25a:65de:379a:3899? ([2a01:e0a:982:cbb0:e25a:65de:379a:3899])
+        by smtp.gmail.com with ESMTPSA id v4-20020a05600c470400b003ee8ab8d6cfsm1825918wmo.21.2023.03.23.06.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 06:13:03 -0700 (PDT)
+Message-ID: <006bf3bf-ab9a-4a08-3ba5-fa23ff4ea05a@linaro.org>
+Date:   Thu, 23 Mar 2023 14:13:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 6/8] arm64: dts: qcom: sm8450: remove invalid npl clock in
+ vamacro node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-scsi@vger.kernel.org
+References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
+ <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-6-3ead1e418fe4@linaro.org>
+ <35e3aa8b-ccff-25fa-42da-d8934ef366c6@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <35e3aa8b-ccff-25fa-42da-d8934ef366c6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exception processing pmu-events/arch/powerpc/power9/other.json
-Traceback (most recent call last):
-  File "pmu-events/jevents.py", line 997, in <module>
-    main()
-  File "pmu-events/jevents.py", line 979, in main
-    ftw(arch_path, [], preprocess_one_file)
-  File "pmu-events/jevents.py", line 935, in ftw
-    ftw(item.path, parents + [item.name], action)
-  File "pmu-events/jevents.py", line 933, in ftw
-    action(parents, item)
-  File "pmu-events/jevents.py", line 514, in preprocess_one_file
-    for event in read_json_events(item.path, topic):
-  File "pmu-events/jevents.py", line 388, in read_json_events
-    events = json.load(open(path), object_hook=JsonEvent)
-  File "/usr/lib/python3.6/json/__init__.py", line 296, in load
-    return loads(fp.read(),
-  File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
-    return codecs.ascii_decode(input, self.errors)[0]
-UnicodeDecodeError: 'ascii' codec can't decode byte 0xc2 in position 55090: ordinal not in range(128)
-  CC      /tmp/build/perf/tests/expr.o
-pmu-events/Build:35: recipe for target '/tmp/build/perf/pmu-events/pmu-events.c' failed
-make[3]: *** [/tmp/build/perf/pmu-events/pmu-events.c] Error 1
-make[3]: *** Deleting file '/tmp/build/perf/pmu-events/pmu-events.c'
-Makefile.perf:679: recipe for target '/tmp/build/perf/pmu-events/pmu-events-in.o' failed
-make[2]: *** [/tmp/build/perf/pmu-events/pmu-events-in.o] Error 2
-make[2]: *** Waiting for unfinished jobs....
+On 23/03/2023 11:47, Krzysztof Kozlowski wrote:
+> On 23/03/2023 11:25, Neil Armstrong wrote:
+>> Fixes the following DT bindings check error:
+>> codec@33f0000: clocks: [[137, 57, 1], [137, 102, 1], [137, 103, 1], [137, 70, 1]] is too long
+>> codec@33f0000: clock-names: 'oneOf' conditional failed, one must be fixed:
+>> 	        ['mclk', 'macro', 'dcodec', 'npl'] is too long
+>>
+>> The implementation was checked and this npl clock isn't used for the VA macro.
+>>
+> 
+> This does not look correct. DTS looks good, you miss some patches in
+> your tree.
 
+I'm based on today's linux-next, while the other lpass macros uses the npl clock,
+the lpass vamacro bindings doesn't document the npl clock.
 
-Now jevents is an opt-out feature so I'm noticing these problems.
+And I found no fixes whatsover to add the npl clock to bindings.
 
-A similar fix for s390 was accepted today:
+Neil
 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-https://lore.kernel.org/r/20230323122532.2305847-1-tmricht@linux.ibm.com
-https://lore.kernel.org/r/ZBwkl77/I31AQk12@osiris
--- 
-
-- Arnaldo
