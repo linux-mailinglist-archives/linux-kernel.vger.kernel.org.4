@@ -2,395 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC97D6C6ADA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F5D6C6ADE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 15:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjCWOYY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 10:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S231265AbjCWOZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 10:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjCWOYV (ORCPT
+        with ESMTP id S230021AbjCWOZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:24:21 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA32A729E;
-        Thu, 23 Mar 2023 07:24:19 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id y4so87427439edo.2;
-        Thu, 23 Mar 2023 07:24:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679581457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tY531RhqcoJTBIocjTJZ1DrLxlwhaNsGlqm2ULam2GA=;
-        b=VGOKa+hP5vyNyRTkJoWy/BDoVsimilbC8WvhKDZuifQ6HkUkwihOMAHbwu0UrbjXP3
-         ZQTAuROzj4VeBA4QA0eRLqzFXLys362CFZcy3ChGvUYBQHSzv1FLTuCTYr1cCrVgJ0e0
-         CKs3aGokb1jjF0xsGUf5D8jf3iNmbIVzNlJBjXGEwygMJuRCVglSw6CKPwndNUsUIW0N
-         JZRdbvrcCzl8lND+tkjCaTDH+8SOHmw33rCJ6XOUqVEm7pyjDWJ9eLwggpE5ckwwuxpL
-         yuNxI0myhsap9LX9g1KnHXPG6gmzlfBIF2luqOxn5mFAgXxzd5T7/kCho6me1W6ExmWG
-         ZQxg==
-X-Gm-Message-State: AO0yUKV9APmLWm7H2zarPQHthO7iJCmg2DMvszClzdXa8Kj+VcErqPfU
-        8ZbEL6NfI5ZIAZMtZkvSBWK7SHdbFEEz9A==
-X-Google-Smtp-Source: AK7set8ZN1OpK5rEHgnQ3GhPVtbHdxxuQxvyyJtrCKcyMsoZohrhHW460NXhy9czoPFaG5dFcdbmrw==
-X-Received: by 2002:a17:906:da81:b0:93b:a133:f7e6 with SMTP id xh1-20020a170906da8100b0093ba133f7e6mr6225533ejb.46.1679581457559;
-        Thu, 23 Mar 2023 07:24:17 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090629c400b0092fdb0b2e5dsm8790631eje.93.2023.03.23.07.24.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 07:24:16 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso1949046wmo.0;
-        Thu, 23 Mar 2023 07:24:16 -0700 (PDT)
-X-Received: by 2002:a7b:ce16:0:b0:3ed:7664:6d82 with SMTP id
- m22-20020a7bce16000000b003ed76646d82mr767087wmc.1.1679581455819; Thu, 23 Mar
- 2023 07:24:15 -0700 (PDT)
+        Thu, 23 Mar 2023 10:25:29 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371A115164
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 07:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=esQYDR8RvRVxr4tfb08WOmArP4yRodEb4gH8l2VFF9k=; b=R17l5mZSlfy9RDyfxYENuuc0Eg
+        BRd8jzmzmTb45svJc6FP5if/vIptc8BnXhnyqtFg0Ja5Nh2aK0ScLStt9m5l8808fDkm7+k8bW3Tz
+        bYxMhiK2XRBD70jev1souCggOQStYx34/gQI6H1joQXC4Ix7ti+I0Kb7XnYAvOeFmyDTnELaxAcW/
+        Xjhfq7V2NePdlKLosYeovlh/X9XQiHGYkrbH7kIgNO27SRtf4WgiFR4AIvanUccXPxMl6xifLxaHj
+        HQtQN463Izdabi8nEwr1ckkAWyQ2UUzIJ0+rgx+HmpLRiFYVSOUu05dJxC0bjYrvF9auNJgkbYjnt
+        hDeBjkpw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pfLrx-0040Xi-H9; Thu, 23 Mar 2023 14:24:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5E04A30030F;
+        Thu, 23 Mar 2023 15:24:40 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 44F002420A88A; Thu, 23 Mar 2023 15:24:40 +0100 (CET)
+Date:   Thu, 23 Mar 2023 15:24:40 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
+Message-ID: <20230323142440.GC2512024@hirez.programming.kicks-ass.net>
+References: <20230301141744.16063-1-anna-maria@linutronix.de>
+ <20230301141744.16063-17-anna-maria@linutronix.de>
 MIME-Version: 1.0
-References: <20230120184500.1899814-1-martin.botka@somainline.org>
- <20230120184500.1899814-3-martin.botka@somainline.org> <CAGb2v6607ErP=Jr_-LC_iE2yVLgW0PF+8mpv=AQNSsVreZ42iA@mail.gmail.com>
- <20230323135904.05174c13@donnerap.cambridge.arm.com>
-In-Reply-To: <20230323135904.05174c13@donnerap.cambridge.arm.com>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Thu, 23 Mar 2023 22:24:04 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65WXtnm8O1ZL-0RT7vXew833=hzTDfFvEPH8j-wA8egGQ@mail.gmail.com>
-Message-ID: <CAGb2v65WXtnm8O1ZL-0RT7vXew833=hzTDfFvEPH8j-wA8egGQ@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] mfd: axp20x: Add support for AXP313a PMIC
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301141744.16063-17-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 9:59 PM Andre Przywara <andre.przywara@arm.com> wrote:
->
-> On Sat, 28 Jan 2023 01:40:34 +0800
-> Chen-Yu Tsai <wens@csie.org> wrote:
->
-> Hi Chen-Yu,
->
-> thanks for the review!
->
-> > On Sat, Jan 21, 2023 at 2:45 AM Martin Botka
-> > <martin.botka@somainline.org> wrote:
-> > >
-> > > The AXP313a is a PMIC chip produced by X-Powers, it can be connected via
-> > > an I2C bus.
-> > > The name AXP1530 seems to appear as well, and this is what is used in
-> > > the BSP driver. From all we know it's the same chip, just a different
-> > > name. However we have only seen AXP313a chips in the wild, so go with
-> > > this name.
-> > >
-> > > Compared to the other AXP PMICs it's a rather simple affair: just three
-> > > DCDC converters, three LDOs, and no battery charging support.
-> > >
-> > > Describe the regmap and the MFD bits, along with the registers exposed
-> > > via I2C. Eventually advertise the device using the new compatible
-> > > string.
-> > >
-> > > Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > > ---
-> > >  drivers/mfd/axp20x-i2c.c   |  2 ++
-> > >  drivers/mfd/axp20x.c       | 61 ++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/axp20x.h | 32 ++++++++++++++++++++
-> > >  3 files changed, 95 insertions(+)
-> > >
-> > > diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
-> > > index f49fbd307958..f061177cb18e 100644
-> > > --- a/drivers/mfd/axp20x-i2c.c
-> > > +++ b/drivers/mfd/axp20x-i2c.c
-> > > @@ -63,6 +63,7 @@ static const struct of_device_id axp20x_i2c_of_match[] = {
-> > >         { .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
-> > >         { .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
-> > >         { .compatible = "x-powers,axp223", .data = (void *)AXP223_ID },
-> > > +       { .compatible = "x-powers,axp313a", .data = (void *)AXP313A_ID},
-> > >         { .compatible = "x-powers,axp803", .data = (void *)AXP803_ID },
-> > >         { .compatible = "x-powers,axp806", .data = (void *)AXP806_ID },
-> > >         { },
-> > > @@ -76,6 +77,7 @@ static const struct i2c_device_id axp20x_i2c_id[] = {
-> > >         { "axp209", 0 },
-> > >         { "axp221", 0 },
-> > >         { "axp223", 0 },
-> > > +       { "axp313a", 0 },
-> > >         { "axp803", 0 },
-> > >         { "axp806", 0 },
-> > >         { },
-> > > diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-> > > index 01a6bbb6d266..ff15775f3c27 100644
-> > > --- a/drivers/mfd/axp20x.c
-> > > +++ b/drivers/mfd/axp20x.c
-> > > @@ -39,6 +39,7 @@ static const char * const axp20x_model_names[] = {
-> > >         "AXP221",
-> > >         "AXP223",
-> > >         "AXP288",
-> > > +       "AXP313a",
-> > >         "AXP803",
-> > >         "AXP806",
-> > >         "AXP809",
-> > > @@ -154,6 +155,24 @@ static const struct regmap_range axp806_writeable_ranges[] = {
-> > >         regmap_reg_range(AXP806_REG_ADDR_EXT, AXP806_REG_ADDR_EXT),
-> > >  };
-> > >
-> > > +static const struct regmap_range axp313a_writeable_ranges[] = {
-> > > +       regmap_reg_range(AXP313A_ON_INDICATE, AXP313A_IRQ_STATE),
-> > > +};
-> > > +
-> > > +static const struct regmap_range axp313a_volatile_ranges[] = {
-> > > +       regmap_reg_range(AXP313A_ON_INDICATE, AXP313A_IRQ_STATE),
-> >
-> > Why set the whole range as volatile? Why bother with a cache then?
->
-> Fixed.
->
-> >
-> > > +};
-> > > +
-> > > +static const struct regmap_access_table axp313a_writeable_table = {
-> > > +       .yes_ranges = axp313a_writeable_ranges,
-> > > +       .n_yes_ranges = ARRAY_SIZE(axp313a_writeable_ranges),
-> > > +};
-> > > +
-> > > +static const struct regmap_access_table axp313a_volatile_table = {
-> > > +       .yes_ranges = axp313a_volatile_ranges,
-> > > +       .n_yes_ranges = ARRAY_SIZE(axp313a_volatile_ranges),
-> > > +};
-> > > +
-> > >  static const struct regmap_range axp806_volatile_ranges[] = {
-> > >         regmap_reg_range(AXP20X_IRQ1_STATE, AXP20X_IRQ2_STATE),
-> > >  };
-> > > @@ -272,6 +291,15 @@ static const struct regmap_config axp288_regmap_config = {
-> > >         .cache_type     = REGCACHE_RBTREE,
-> > >  };
-> > >
-> > > +static const struct regmap_config axp313a_regmap_config = {
-> > > +       .reg_bits = 8,
-> > > +       .val_bits = 8,
-> > > +       .wr_table = &axp313a_writeable_table,
-> > > +       .volatile_table = &axp313a_volatile_table,
-> > > +       .max_register = AXP313A_IRQ_STATE,
-> > > +       .cache_type = REGCACHE_RBTREE,
-> > > +};
-> > > +
-> > >  static const struct regmap_config axp806_regmap_config = {
-> > >         .reg_bits       = 8,
-> > >         .val_bits       = 8,
-> > > @@ -415,6 +443,16 @@ static const struct regmap_irq axp288_regmap_irqs[] = {
-> > >         INIT_REGMAP_IRQ(AXP288, BC_USB_CHNG,            5, 1),
-> > >  };
-> > >
-> > > +static const struct regmap_irq axp313a_regmap_irqs[] = {
-> > > +       INIT_REGMAP_IRQ(AXP313A, PEK_RIS_EDGE,          0, 7),
-> > > +       INIT_REGMAP_IRQ(AXP313A, PEK_FAL_EDGE,          0, 6),
-> > > +       INIT_REGMAP_IRQ(AXP313A, PEK_SHORT,             0, 5),
-> > > +       INIT_REGMAP_IRQ(AXP313A, PEK_LONG,              0, 4),
-> > > +       INIT_REGMAP_IRQ(AXP313A, DCDC3_V_LOW,           0, 3),
-> > > +       INIT_REGMAP_IRQ(AXP313A, DCDC2_V_LOW,           0, 2),
-> > > +       INIT_REGMAP_IRQ(AXP313A, DIE_TEMP_HIGH,         0, 0),
-> > > +};
-> > > +
-> > >  static const struct regmap_irq axp803_regmap_irqs[] = {
-> > >         INIT_REGMAP_IRQ(AXP803, ACIN_OVER_V,            0, 7),
-> > >         INIT_REGMAP_IRQ(AXP803, ACIN_PLUGIN,            0, 6),
-> > > @@ -548,6 +586,17 @@ static const struct regmap_irq_chip axp288_regmap_irq_chip = {
-> > >
-> > >  };
-> > >
-> > > +static const struct regmap_irq_chip axp313a_regmap_irq_chip = {
-> > > +       .name                   = "axp313a_irq_chip",
-> > > +       .status_base            = AXP313A_IRQ_STATE,
-> > > +       .ack_base               = AXP313A_IRQ_STATE,
-> > > +       .unmask_base            = AXP313A_IRQ_EN,
-> > > +       .init_ack_masked        = true,
-> > > +       .irqs                   = axp313a_regmap_irqs,
-> > > +       .num_irqs               = ARRAY_SIZE(axp313a_regmap_irqs),
-> > > +       .num_regs               = 1,
-> > > +};
-> > > +
-> > >  static const struct regmap_irq_chip axp803_regmap_irq_chip = {
-> > >         .name                   = "axp803",
-> > >         .status_base            = AXP20X_IRQ1_STATE,
-> > > @@ -676,6 +725,12 @@ static const struct mfd_cell axp152_cells[] = {
-> > >         },
-> > >  };
-> > >
-> > > +static struct mfd_cell axp313a_cells[] = {
-> > > +       {
-> > > +               .name = "axp20x-regulator",
-> >
-> > Lee asked for MFD_CELL_NAME() in v7 here.
->
-> Fixed.
->
-> > Could you also add the power button cell? This would make it an actual
-> > MFD, and also complete, since that is the only other function this
-> > PMIC has. Or at least add a note mentioning it. Implementing it will
->
-> Done.
->
-> > require a device that actually routes that pin out. AFAICT the MangoPi
-> > doesn't.
-> >
-> > > +       },
-> > > +};
-> > > +
-> > >  static const struct resource axp288_adc_resources[] = {
-> > >         DEFINE_RES_IRQ_NAMED(AXP288_IRQ_GPADC, "GPADC"),
-> > >  };
-> > > @@ -892,6 +947,12 @@ int axp20x_match_device(struct axp20x_dev *axp20x)
-> > >                 axp20x->regmap_irq_chip = &axp288_regmap_irq_chip;
-> > >                 axp20x->irq_flags = IRQF_TRIGGER_LOW;
-> > >                 break;
-> > > +       case AXP313A_ID:
-> > > +               axp20x->nr_cells = ARRAY_SIZE(axp313a_cells);
-> > > +               axp20x->cells = axp313a_cells;
-> > > +               axp20x->regmap_cfg = &axp313a_regmap_config;
-> > > +               axp20x->regmap_irq_chip = &axp313a_regmap_irq_chip;
-> > > +               break;
-> > >         case AXP803_ID:
-> > >                 axp20x->nr_cells = ARRAY_SIZE(axp803_cells);
-> > >                 axp20x->cells = axp803_cells;
-> > > diff --git a/include/linux/mfd/axp20x.h b/include/linux/mfd/axp20x.h
-> > > index 2058194807bd..12e4fc3e8391 100644
-> > > --- a/include/linux/mfd/axp20x.h
-> > > +++ b/include/linux/mfd/axp20x.h
-> > > @@ -17,6 +17,7 @@ enum axp20x_variants {
-> > >         AXP221_ID,
-> > >         AXP223_ID,
-> > >         AXP288_ID,
-> > > +       AXP313A_ID,
-> > >         AXP803_ID,
-> > >         AXP806_ID,
-> > >         AXP809_ID,
-> > > @@ -91,6 +92,17 @@ enum axp20x_variants {
-> > >  #define AXP22X_ALDO3_V_OUT             0x2a
-> > >  #define AXP22X_CHRG_CTRL3              0x35
-> > >
-> > > +#define AXP313A_ON_INDICATE            0x00
-> > > +#define AXP313A_OUTPUT_CONTROL         0x10
-> > > +#define AXP313A_DCDC1_CONRTOL          0x13
-> > > +#define AXP313A_DCDC2_CONRTOL          0x14
-> > > +#define AXP313A_DCDC3_CONRTOL          0x15
-> > > +#define AXP313A_ALDO1_CONRTOL          0x16
-> > > +#define AXP313A_DLDO1_CONRTOL          0x17
-> >
-> > Please also add register 0x1a (note, some bits of this are volatile)
-> > and implement power off with bit 7. The current axp_power_off()
-> > function will not work for this PMIC.
->
-> Ah, good catch, thanks. Though I guess this will be unused (on 64-bit
-> SoCs), since PSCI poweroff takes precedence due to its higher firmware
-> priority.
-> Fixed anyway, need to test this with a hacked priority value.
->
-> Though the volatility of this register is a bit questionable, isn't it? It
-> just seems to apply to the poweroff and reset bits, that are self-reset.
-> Nobody cares for the former, and we don't use the reset (yet). I added it
-> to the volatile range anyway.
->
-> > This PMIC also supports software-triggered reset with bit 6 in the same
-> > register. This function would be nice to have, however there's no related
-> > code in the mfd driver right now, since IIRC none of the other ones had
-> > this.
->
-> What would be the use case? Who would trigger that reset? I guess it might
-> be more useful for management firmware like crust?
+On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
 
-That, or implementing system reset if PSCI/crust isn't available? PMIC reset
-would be more thorough than the SoC watchdog reset, where you could have
-regulators left in a state incorrect for BROM execution (such as storage
-power disabled).
+> diff --git a/kernel/time/timer_migration.h b/kernel/time/timer_migration.h
+> new file mode 100644
+> index 000000000000..ceb336e705df
+> --- /dev/null
+> +++ b/kernel/time/timer_migration.h
+> @@ -0,0 +1,123 @@
+> +#ifndef _KERNEL_TIME_MIGRATION_H
+> +#define _KERNEL_TIME_MIGRATION_H
+> +
+> +/* Per group capacity. Must be a power of 2! */
+> +#define TMIGR_CHILDS_PER_GROUP 8
+> +
+> +/**
+> + * struct tmigr_event - a timer event associated to a CPU
+> + * @nextevt:	The node to enqueue an event in the parent group queue
+> + * @cpu:	The CPU to which this event belongs
+> + * @ignore:	Hint whether the event could be ignored; it is set when
+> + *		CPU or group is active;
+> + */
+> +struct tmigr_event {
+> +	struct timerqueue_node	nextevt;
+> +	unsigned int		cpu;
+> +	int			ignore;
+> +};
+> +
+> +/**
+> + * struct tmigr_group - timer migration hierarchy group
+> + * @lock:		Lock protecting the event information
+> + * @cpus:		Array with CPUs which are member of group; required for
+> + *			sibling CPUs; used only when level == 0
 
+That's 32 bytes wasted for every group that isn't 0, maybe stick on the
+end and conditionally allocate? Also, afaict it is only ever used during
+setup, and as such should not be placed in a hot line, unless you've
+done that explicitly as padding, in which case it needs a comment to
+that effect.
 
-ChenYu
+Also, since it's setup only, why can't you match against:
 
-> > > +#define AXP313A_OUTPUT_MONITOR         0x1d
-> >
-> > Not sure why you need this?
->
-> Removed.
->
-> > > +#define AXP313A_IRQ_EN                 0x20
-> > > +#define AXP313A_IRQ_STATE              0x21
-> > > +
-> > >  #define AXP806_STARTUP_SRC             0x00
-> > >  #define AXP806_CHIP_ID                 0x03
-> > >  #define AXP806_PWR_OUT_CTRL1           0x10
-> > > @@ -322,6 +334,16 @@ enum {
-> > >         AXP22X_REG_ID_MAX,
-> > >  };
-> > >
-> > > +enum {
-> > > +       AXP313A_DCDC1 = 0,
-> > > +       AXP313A_DCDC2,
-> > > +       AXP313A_DCDC3,
-> > > +       AXP313A_LDO1,
-> >
-> > This is called ALDO1 in the datasheet ...
-> >
-> > > +       AXP313A_LDO2,
-> >
-> > ... and this one DLDO1.
-> >
-> > You already have the registers named that way, so you might as well
-> > fix the names here as well.
->
-> Fixed.
->
-> Thanks,
-> Andre
->
-> >
-> >
-> > Thanks
-> > ChenYu
-> >
-> > > +       AXP313A_RTC_LDO,
-> > > +       AXP313A_REG_ID_MAX,
-> > > +};
-> > > +
-> > >  enum {
-> > >         AXP806_DCDCA = 0,
-> > >         AXP806_DCDCB,
-> > > @@ -548,6 +570,16 @@ enum axp288_irqs {
-> > >         AXP288_IRQ_BC_USB_CHNG,
-> > >  };
-> > >
-> > > +enum axp313a_irqs {
-> > > +       AXP313A_IRQ_DIE_TEMP_HIGH,
-> > > +       AXP313A_IRQ_DCDC2_V_LOW = 2,
-> > > +       AXP313A_IRQ_DCDC3_V_LOW,
-> > > +       AXP313A_IRQ_PEK_LONG,
-> > > +       AXP313A_IRQ_PEK_SHORT,
-> > > +       AXP313A_IRQ_PEK_FAL_EDGE,
-> > > +       AXP313A_IRQ_PEK_RIS_EDGE,
-> > > +};
-> > > +
-> > >  enum axp803_irqs {
-> > >         AXP803_IRQ_ACIN_OVER_V = 1,
-> > >         AXP803_IRQ_ACIN_PLUGIN,
-> > > --
-> > > 2.39.0
-> > >
->
+  per_cpu_ptr(&tmigr_cpu, cpu)->parent
+
+?
+
+> + * @parent:		Pointer to parent group
+> + * @list:		List head that is added to per level tmigr_level_list
+
+Also setup only?
+
+> + * @level:		Hierarchy level of group
+> + * @numa_node:		Is set to numa node when level < tmigr_crossnode_level;
+> + *			otherwise it is set to NUMA_NO_NODE; Required for setup
+> + *			only
+> + * @num_childs:		Counter of group childs; Required for setup only
+> + * @num_cores:		Counter of cores per group; Required for setup only when
+> + *			level == 0 and siblings exist
+
+Also setup only, move the end?
+
+> + * @migr_state:		State of group (see struct tmigr_state)
+> + * @childmask:		childmask of group in parent group; is set during setup
+> + *			never changed; could be read lockless
+> + * @events:		Timer queue for child events queued in the group
+> + * @groupevt:		Next event of group; it is only reliable when group is
+> + *			!active (ignore bit is set when group is active)
+> + * @next_expiry:	Base monotonic expiry time of next event of group;
+> + *			Used for racy lockless check whether remote expiry is
+> + *			required; it is always reliable
+
+This is basically leftmost of @events? A racy lockless check sorta
+implies not reliable, comment is confusing.
+
+Also, isn't this identical to @groupevt.nextevt.expiry ?
+
+> + */
+> +struct tmigr_group {
+> +	raw_spinlock_t		lock;
+> +	unsigned int		cpus[TMIGR_CHILDS_PER_GROUP];
+> +	struct tmigr_group	*parent;
+> +	struct list_head	list;
+> +	unsigned int		level;
+> +	unsigned int		numa_node;
+> +	unsigned int		num_childs;
+> +	unsigned int		num_cores;
+> +	atomic_t		*migr_state;
+
+Per the other email; why isn't this:
+
+	union tmigr_state	migr_state;
+
+?
+
+> +	u32			childmask;
+> +	struct timerqueue_head	events;
+> +	struct tmigr_event	groupevt;
+> +	u64			next_expiry;
+> +};
+> +
+> +/**
+> + * struct tmigr_cpu - timer migration per CPU group
+> + * @lock:	Lock protecting tmigr_cpu group information
+> + * @online:	Indicates wheter CPU is online
+
+What I'm missing is *why* we're keeping this state. I suspect you need
+serialization on tmigr_cpu->lock between hotplug and something.
+
+> + * @idle:	Indicates wheter CPU is idle in timer migration hierarchy
+> + * @remote:	Is set when timers of CPU are expired remote
+
+How are these not the same? When idle timers are expired remote, no?
+
+> + * @tmgroup:	Pointer to parent group
+> + * @childmask:	childmask of tmigr_cpu in parent group
+> + * @cpuevt:	CPU event which could be queued into parent group
+> + * @wakeup:	Stores the first timer when the timer migration hierarchy is
+> + *		completely idle and remote expiry was done; is returned to
+> + *		timer code when tmigr_cpu_deactive() is called and group is
+> + *		idle; afterwards a reset to KTIME_MAX is required;
+> + */
+> +struct tmigr_cpu {
+> +	raw_spinlock_t		lock;
+> +	int			online;
+> +	int			idle;
+> +	int			remote;
+> +	struct tmigr_group	*tmgroup;
+> +	u32			childmask;
+> +	struct tmigr_event	cpuevt;
+> +	u64			wakeup;
+> +};
+> +
+> +/**
+> + * union tmigr_state - state of tmigr_group
+> + * @state:	Combined version of the state - only used for atomic
+> + * 		read/cmpxchg function
+> + * @struct:	Splitted version of the state - only use the struct members to
+> + *		update information to stay independant of endianess
+> + */
+> +union tmigr_state {
+> +	u32 state;
+> +	/**
+> +	 * struct - splitted state of tmigr_group
+> +	 * @active:	Contains each childmask bit of active childs
+> +	 * @migrator:	Contains childmask of child which is migrator
+> +	 * @seq:	Seqence number to prevent race when update in child
+> +	 *		group are propagated in wrong order (especially when
+> +	 *		migrator changes are involved)
+> +	 */
+> +	struct {
+> +		u8	active;
+> +		u8	migrator;
+
+So childmask is the bit set in either of these masks, but it is u32
+elsewhere and u8 here. Surely if the target type is u8, then it is best
+to keep it consistently u8 elsewhere too, no?
+
+> +		u16	seq;
+> +	} __packed;
+> +};
