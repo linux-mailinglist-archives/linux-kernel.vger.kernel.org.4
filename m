@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA8A6C6238
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F736C623A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 09:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCWIuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 04:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S230259AbjCWIvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 04:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCWIuR (ORCPT
+        with ESMTP id S229563AbjCWIvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 04:50:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF57EFF08;
-        Thu, 23 Mar 2023 01:50:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF21866030A0;
-        Thu, 23 Mar 2023 08:50:14 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679561415;
-        bh=QIBKAQHW32VhrQ9F/PA56aH9RAmzOMMZUYdACgC+B1s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Mwb4QJCI2JydeBqPu+fOE24Rn80hslFg1H3yZVG6Mhns6XSWMHJ1r6OC5UtsP/aOP
-         S0wC8esmqkzea/hgPtOuJWom4aQaMLjQYTQcH4Q/bhtSJSgxfNGi/AO0NZEzeAU0Tt
-         yzEaukHMhNaceaaAPH7ytDvVqsW2nSq+7g17lXBkzl8HgG6X97kGQWIgC1qVWkHFLa
-         guSexaIYVwMv350ogss0M7cQPMgCOh95Pl46W1KSjPZqN8yHfhdbSUXWJqCbysSWrK
-         PJhD38qF5Ooyg5kbu/r4W6EWiDdt8qTtiMOBLQRchnBfgwaAvIPhGb0uoNCqZI3QjQ
-         zTMOX9XDbeFHQ==
-Message-ID: <5202922d-9cc3-8aac-4193-ee463b255846@collabora.com>
-Date:   Thu, 23 Mar 2023 09:50:12 +0100
+        Thu, 23 Mar 2023 04:51:33 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDD44489
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 01:51:31 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 6DBD85FD0B;
+        Thu, 23 Mar 2023 11:51:28 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679561488;
+        bh=YDvbblAgwTRBmzIxLGewYzkOUOnDQBgkWvoHPBkQDtA=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=ebJFJlmdXCYScBMmCSo6WTrLtZBjRMoCO+u0CMOoM802u3SFIULROeR+RFnWn1hf1
+         rtOiGFyZZjk7p2l8k7FNDc63F6JRfGFLbCqjngcoUxFw+83ollCASR4sFoTNhyAFs1
+         Mek81Rddp5ezIdfI20OI27TVRY7Lm1ZlXmauPKc6UzTXwA10xL/cB+XGFaoULDq5nC
+         03gkEam+HGVQHUa7HZsfmQQ/M5904DJluiwUiHwERd9UiMFiKV0+i9Nzqit4plDxeu
+         wFIYzazDtsSQpWxP7+napp6UmrOFVyXIgfd1X3j/3H9rbhOaZiwqB5UhNoFgxUKUqb
+         rIKsWWU8mMEwg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 11:51:27 +0300 (MSK)
+Date:   Thu, 23 Mar 2023 11:51:25 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Rob Herring <robh@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <akpm@linux-foundation.org>
+CC:     <apw@canonical.com>, <joe@perches.com>, <dwaipayanray1@gmail.com>,
+        <lukas.bulwahn@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <rockosov@gmail.com>
+Subject: Re: [PATCH v3] checkpatch: add missing bindings license check
+Message-ID: <20230323085125.e2evhw262fru4i4z@CAB-WSD-L081021>
+References: <20230320203350.13696-1-ddrokosov@sberdevices.ru>
+ <20230321215337.GA1656483-robh@kernel.org>
+ <20230322102607.5rac7lmy5w653jen@CAB-WSD-L081021>
+ <CAL_Jsq+-YJsBO+LuPJ=ZQ=eb-monrwzuCppvReH+af7hYZzNaQ@mail.gmail.com>
+ <20230322141444.abwirejgfbeer7lr@CAB-WSD-L081021>
+ <CAL_JsqJa-McFEorLr6ZWNqaEtjG8Oi2rNJ3hGwb2Xk3jvqMZgQ@mail.gmail.com>
+ <20230322145620.ksia76spsi7f6wxc@CAB-WSD-L081021>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] media: mediatek: vcodec: Remove decoder 'dma-ranges'
- conditon when set dma mask
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Yong Wu <yong.wu@mediatek.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230323083810.21912-1-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230323083810.21912-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230322145620.ksia76spsi7f6wxc@CAB-WSD-L081021>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/23 05:59:00 #20997558
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +72,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/03/23 09:38, Yunfei Dong ha scritto:
-> After commit f1ad5338a4d5("of: Fix "dma-ranges" handling for bus controllers"),
-> the dma-ranges is not allowed in decoder dts node. But the driver still need
-> to set dma mask, remove "dma-ranges" condition in prob function.
+Rob, Krzysztof, Andrew,
+
+Sorry for one more ping. I don't understand the status for this
+patchset. If you don't mind, let's discuss solution which will be okay
+for all maintainers.
+
+What we have for now:
+    - Krzysztof acked v3 patchset
+    - Andrew applied it to mm-unstable
+    - Rob didn't agree with the current approach.
+
+I would be grateful if you can share your opinion. And we will be on the
+same page.
+
+On Wed, Mar 22, 2023 at 05:56:20PM +0300, Dmitry Rokosov wrote:
+> On Wed, Mar 22, 2023 at 09:36:40AM -0500, Rob Herring wrote:
+> > On Wed, Mar 22, 2023 at 9:15 AM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > >
+> > > On Wed, Mar 22, 2023 at 08:40:21AM -0500, Rob Herring wrote:
+> > > > On Wed, Mar 22, 2023 at 5:26 AM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > > > >
+> > > > > Hello Rob, thank you for the comments. Please find my thoughts below.
+> > > > >
+> > > > > On Tue, Mar 21, 2023 at 04:53:37PM -0500, Rob Herring wrote:
+> > > > > > On Mon, Mar 20, 2023 at 11:33:50PM +0300, Dmitry Rokosov wrote:
+> > > > > > > All headers from 'include/dt-bindings/' must be verified by checkpatch
+> > > > > > > together with Documentation bindings, because all of them are part of
+> > > > > > > the whole DT bindings system.
+> > > > > > >
+> > > > > > > The requirement is dual licensed and matching pattern:
+> > > > > > >     /GPL-2\.0(?:-only|-or-later|\+)? (?:OR|or) BSD-2-Clause/
+> > > > > >
+> > > > > > This is not correct. The headers can and should be licensed like the dts
+> > > > > > files which are (unfortunately) all over the place and differ from the
+> > > > > > bindings.
+> > > > > >
+> > > > > > Also, GPL-2.0-or-later is neither desired nor encouraged.
+> > > > >
+> > > > > Sorry, I'm little bit confused. Let's discuss correct way.
+> > > > >
+> > > > > We had such discussion in another review.
+> > > > >
+> > > > > https://lore.kernel.org/all/20230313201259.19998-4-ddrokosov@sberdevices.ru/
+> > > > >
+> > > > > Krzysztof has mentioned that Documentation yaml bindings schemas and
+> > > > > include bindings headers should have the same license by default.
+> > > >
+> > > > By default is the key. Logically, headers are part of the binding
+> > > > definition. However, they are included by dts files, so IMO their
+> > > > license should align with dts files. If you don't yet have any dts
+> > > > files, then yes, "GPL-2.0-only OR BSD-2-Clause" is what you should
+> > > > use.
+> > > >
+> > > > > And checkpath must check not only Documentation schema (previous
+> > > > > implementation), but 'include bindings' as well:
+> > > > >
+> > > > > From Krzysztof at https://lore.kernel.org/all/9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org/:
+> > > >
+> > > > Checkpatch has no way of knowing about the dts file part, so it can't
+> > > > tell you what license.
+> > > >
+> > > > Even as-is, checkpatch is wrong sometimes. If you convert a binding
+> > > > (that defaulted to GPL-2.0-only) to schema, you can't just relicense
+> > > > it dual licensed.
+> > > >
+> > > > >
+> > > > > ---
+> > > > > >>>>> @@ -0,0 +1,20 @@
+> > > > > >>>>> +/* SPDX-License-Identifier: GPL-2.0+ */
+> > > > > >>>>
+> > > > > >>>> I found in changelog:
+> > > > > >>>> "fix license issue, it's GPL-2.0+ only in the current version"
+> > > > > >>>> and I do not understand.
+> > > > > >>>>
+> > > > > >>>> The license is wrong, so what did you fix?
+> > > > > >>>>
+> > > > > >>>
+> > > > > >>> Sorry don't get you. Why is it wrong?
+> > > > > >>
+> > > > > >> Run checkpatch - it will tell you why wrong. The license is not correct.
+> > > > > >> This is part of binding and should be the same as binding.
+> > > > > >>
+> > > > > >
+> > > > > > I always run checkpatch before sending the next patch series. Checkpatch
+> > > > > > doesn't highlight this problem:
+> > > > > >
+> > > > > > --------------
+> > > > > > $ rg SPDX a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
+> > > > > > 32:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > > > > 111:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > > > > 188:+/* SPDX-License-Identifier: GPL-2.0+ */
+> > > > > > 294:+/* SPDX-License-Identifier: GPL-2.0+ */
+> > > > > >
+> > > > > > $ ./scripts/checkpatch.pl --strict a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
+> > > > > > total: 0 errors, 0 warnings, 0 checks, 259 lines checked
+> > > > >
+> > > > > Hmm, my bad, that's something to fix/improve in checkpatch.
+> > > > > ---
+> > > > >
+> > > > > Actually, I agree with Krzysztof that checkpatch should verify 'include
+> > > > > bindings', but looks like there is misunderstanding which license pattern
+> > > > > we have to use.
+> > > > >
+> > > > > Rob, could you please share your thoughts if possible? Which one pattern
+> > > > > we have to base on? GPL-2.0-only without 'later' suffix? Or you totally
+> > > > > disagree that checkpatch is responsible for 'include bindings'
+> > > > > verification?
+> > > >
+> > > > I think we could do this:
+> > > >
+> > > > Schemas should be: GPL-2.0-only OR BSD-2-Clause
+> > > > Headers should be: GPL-2.0-only OR .*
+> > > >
+> > > > Perhaps the 2nd term can be constrained to "(MIT|BSD-[23]-Clause)",
+> > > > but I haven't looked at what variations exist in the headers. It may
+> > > > be too varied that we can only check for "OR". We don't want to
+> > > > encourage folks to blindly relicense things because checkpatch says
+> > > > so. If you are copying an existing header and modifying it, then you
+> > > > keep the original license (unless you have rights to change it).
+> > >
+> > > Yes, if we are thinking in the such terms, when bindings are part of
+> > > device tree source, it's one option to make the same license for both of
+> > > them. But usually developer creates bindings definition in the first.
+> > 
+> > No, most often they are copied from something else. Any tool can't
+> > know what the source (and its license) is and actively telling users
+> > to do something different is bad.
+> > 
+> > I imagine writing the schema is the last thing because upstream
+> > requires it and downstream doesn't.
+> > 
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
-> Reference series:
-> [1]: v5 of this series is present by Yong Wu.
->       20230307023507.13306-1-yong.wu@mediatek.com
-> ---
->   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 24 +++++++++++++------
->   1 file changed, 17 insertions(+), 7 deletions(-)
+> Maybe checkpatch strict rules would allow developers to double confirm
+> licenses in the copied files...
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> index bba7b932f4fa..2c3a4c2cdaee 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> @@ -137,6 +137,20 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
->   	return 0;
->   }
->   
-> +static int mtk_vcodec_dec_set_dma_mask(struct device *dev)
-> +{
-> +	int ret = 0;
-> +
-> +	return !(of_device_is_compatible(dev->of_node, "mediatek,mt8173-vcodec-dec") ||
-> +	       of_device_is_compatible(dev->of_node, "mediatek,mt8183-vcodec-dec"));
+> > > After that, developer or other contributor creates device tree nodes.
+> > > Also different device tree sources (for differnt boards as an example)
+> > > can have different licenses.
+> > 
+> > I'm sure there are combinations of dts files and headers with
+> > incompatible licenses. A tool to check that would be nice. Just need
+> > to generate a list of all input files perhaps with the preprocessor
+> > dependency generation and then get the licenses for all the files.
+> > 
+> 
+> Are you talking about some make rule like 'dt_bindings_check' or part of
+> 'dtb_check'?
+> 
+> > > Maybe it's better option to make license dependency between dts and
+> > > bindings when bindings have a first priority and dts should have the
+> > > same license or dual license, because bindings are the primary from the
+> > > git history point of view.
+> > 
+> > dts files are too far gone to define any rule in checkpatch. Binding
+> > files are not because there's really only 2 variations since all the
+> > existing bindings are just kernel default license (GPL-2.0-only).
+> > 
+> > > OR
+> > >
+> > > Make default value of bindings as suggested in the patchset (maybe
+> > > without +/or-later) and show notice log from the checkpatch, like:
+> > >
+> > > '''
+> > > DT binding documents should be licensed (GPL-2.0-only OR BSD-2-Clause)
+> > > For special cases ask 'devicetree@vger.kernel.org' directly
+> > 
+> > For special cases, ask your lawyer...
+> > 
+> > > '''
+> > >
+> > > And handle all exceptions during LKML review, as Krzysztof suggested
+> > > before.
+> > >
+> > > What do you think about above approaches?
+> > 
+> > I laid out what the options are already.
+> > 
+> 
+> I don't get your position, sorry. By adding GPL-2.0 OR .* pattern rule
+> we are just checking GPL licensed of bindings, it's not enough.
+> 
+> Different licenses in the *new* yaml schemas and *new* bindings are bad
+> idea, aren't?
+> 
+> If we introduce strict rules (read as 'suggestion') to checkpatch, the
+> world will be better. Because new bindings will be aligned with schemas
+> by license. The dual license, incompatible licenses with dts files are
+> already existed, it doens't solve this problem. But as a next step we
+> can expand dtb_check make rule and analyse dts license issues in
+> preprocessor execution time.
+> 
+> > >
+> > > Krzysztof, please share your opinion as well.
+> > >
+> > > For sure, current checkpatch behaviour is wrong, it doesn't help to
+> > > understand all mentioned interlacements.
+> > 
+> > checkpatch is suggestions or possible issues in many cases. It's not
+> > absolute nor completely accurate to begin with.
+> > 
+> > Rob
+> 
+> -- 
+> Thank you,
+> Dmitry
 
-Like that, you're never reaching the code below...
-
-Anyway, at a first glance, it looked like you were sending the same commit twice,
-but then I noticed... so... I would propose to change the commit title(s) to follow
-this format:
-
-media: mediatek: vcodec: enc: Set DMA mask only for MT8173 and MT8183
-
-(but then, why mt8173/83 and not the others? this deserves an explanation...)
-
-
-Regards,
-Angelo
-
+-- 
+Thank you,
+Dmitry
