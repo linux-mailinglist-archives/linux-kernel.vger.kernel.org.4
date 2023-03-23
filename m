@@ -2,258 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A762C6C6A12
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57E06C6A16
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjCWNyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S231910AbjCWNzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 09:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjCWNyZ (ORCPT
+        with ESMTP id S231915AbjCWNyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:54:25 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6954CE07A;
-        Thu, 23 Mar 2023 06:54:17 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id x22-20020a056830409600b0069b30fb38f7so12150533ott.5;
-        Thu, 23 Mar 2023 06:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679579656;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QjOvv/ZPDbSli/SQ67teItUX/ZV6UdqvrawXfnsTP9c=;
-        b=fABtsO48pFpSWP4FcJ3dhrQvnIbnb6omivu7xuuBdoBA4dAX6OWqKUf4WBRar8getR
-         uUDMYAy1h2w23MXumxi25yo+48vMiJEIn5x8S1NDp366vvkhUGWs+owx8UORr2HoHxlB
-         ykH2TgdVhWu5Fksfm3zSNiK49GwWe2X3eh6MX118M+k0gIdAaLNdDqMqn75WkLB4TfR0
-         r9/ieRqMhlAB9Kw0+rhmW7lPPju/rMRdNh0TgpA3bu3aA0pl3Qbg/wT4E4pMSI3LEu2y
-         yN7mf0oNFNDE0wW+qiibGf6aTFeFcMYFoCHx22IFdOen1v8Yj2+ioZPS7pS0fo1NhOXY
-         mGtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679579656;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QjOvv/ZPDbSli/SQ67teItUX/ZV6UdqvrawXfnsTP9c=;
-        b=qhIZ4zhWHp+oI6YwbqRP/+LQcodSDBy8yhAqSAmDZMQNyarCUGvPe0VXZ4GYubpKko
-         V/LKadxUN+9iAZFGIa+kGiG0uSjA8g1K77hJtUGj6NKNty8TZjidkR3QPgFVxK3EKfMk
-         STfpTEY9FimaBSJR2yseyIN2LefkjNeNrD8tGVDolGWXc2zMbnA1QfN/JglR0lEvVkvZ
-         hz0G963kg4zgoK27Qdx9E2PyGCGC23RSRzsfuDeDRwa4A2doPJpOQ1UPNkugLAIBl0p5
-         rxoojBotrQYZrpQuAIOUgvCEEq4qlrAf8Ac3D/G4611Vihq37lcNLzeZxgLL+wX2eENv
-         ltnA==
-X-Gm-Message-State: AO0yUKUcyg+cpM2L5hMOD1p90tEpVW/nx5lFjQyDNzeHhzjqQ++IHkDb
-        N1LlDzR0Aquz+SwDIvEb/0D8hFY4AuZ9lMOq308=
-X-Google-Smtp-Source: AK7set+pjqtGtPO6GLHBGh9hBOwDRWaRvZoOvDszymMlwhM38Q5UfQVowYMdv7Wz5SBe768rCFIMjR8hTTsUyroJSF4=
-X-Received: by 2002:a05:6830:1483:b0:68b:cd1e:1ef1 with SMTP id
- s3-20020a056830148300b0068bcd1e1ef1mr2274617otq.7.1679579656288; Thu, 23 Mar
- 2023 06:54:16 -0700 (PDT)
+        Thu, 23 Mar 2023 09:54:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EDD199C9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 06:54:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41668B82142
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 13:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC88C433D2;
+        Thu, 23 Mar 2023 13:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679579681;
+        bh=YN3pd5fa+PABp2NpDPUc5U8fZzNOy4moYU5bs9sls9k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j0ikepir2a4P6A5QIXaDyC5op/5TG0l/bm+uANGiOdsLVO5NCliC56Pxj7aPJ72kv
+         NVwEOhgI+HwWqSN0tnk1vEHyeREGjnq/Z/BWlgZcKjma4eEDrc6H/pO9MIQLihFaPc
+         2+h5m0JtOvmXmLkOuV8fC7Kzj1rTUeGRKTp2ctiZkz2XXdqydC5K6QYKmNv1mvLhqZ
+         efJuGJRmrNyQo9EU43ctAu61zs7SbFcJwce51llkGvZsvez78msOYTSUDwQxAI2q6O
+         bROFjq2zaMng+TMs9r6V8vf1dhaEgAuYji9QhFXcCKuuXX6Usf13rsXUHso22TJy4d
+         waC0AR3lbc2KA==
+Date:   Thu, 23 Mar 2023 13:54:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?5rKI5LiA6LaF?= <zhuning0077@gmail.com>
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, perex@perex.cz, posteuca@mutex.one,
+        tiwai@suse.com, yangxiaohua <yangxiaohua@everest-semi.com>,
+        Zhu Ning <zhuning@everest-semi.com>
+Subject: Re: [PATCH 3/4] ASoC: amd: acp: Add machine driver that enables
+ sound for systems with a ES8336 codec
+Message-ID: <42b02a34-1b96-4699-8b0d-3610c5376a7c@sirena.org.uk>
+References: <CANPLYpD8Ty9QjMf3vs9n8wCCFyaHiiRpYM-b3kNGiA0r3q+sEg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230322224403.35742-1-robdclark@gmail.com> <b9fb81f1-ac9e-cf3f-5cf4-f2d972d3ed3d@amd.com>
-In-Reply-To: <b9fb81f1-ac9e-cf3f-5cf4-f2d972d3ed3d@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 23 Mar 2023 06:54:05 -0700
-Message-ID: <CAF6AEGvMwZCLntfYeH3Vg_Z7kYynqdVrinp+pmcbREksK1WGMA@mail.gmail.com>
-Subject: Re: [RFC] drm/scheduler: Unwrap job dependencies
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8VlENQAJDfsfHDVY"
+Content-Disposition: inline
+In-Reply-To: <CANPLYpD8Ty9QjMf3vs9n8wCCFyaHiiRpYM-b3kNGiA0r3q+sEg@mail.gmail.com>
+X-Cookie: A lie in time saves nine.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 12:35=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 22.03.23 um 23:44 schrieb Rob Clark:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Container fences have burner contexts, which makes the trick to store a=
-t
-> > most one fence per context somewhat useless if we don't unwrap array or
-> > chain fences.
->
-> Mhm, we intentionally kept them not unwrapped since this way they only
-> occupy one fence slot.
->
-> But it might be better to unwrap them if you add many of those dependenci=
-es.
->
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> > tbh, I'm not sure why we weren't doing this already, unless there is
-> > something I'm overlooking
-> >
-> >   drivers/gpu/drm/scheduler/sched_main.c | 43 +++++++++++++++++--------=
--
-> >   1 file changed, 28 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/s=
-cheduler/sched_main.c
-> > index c2ee44d6224b..f59e5335afbb 100644
-> > --- a/drivers/gpu/drm/scheduler/sched_main.c
-> > +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> > @@ -41,20 +41,21 @@
-> >    * 4. Entities themselves maintain a queue of jobs that will be sched=
-uled on
-> >    *    the hardware.
-> >    *
-> >    * The jobs in a entity are always scheduled in the order that they w=
-ere pushed.
-> >    */
-> >
-> >   #include <linux/kthread.h>
-> >   #include <linux/wait.h>
-> >   #include <linux/sched.h>
-> >   #include <linux/completion.h>
-> > +#include <linux/dma-fence-unwrap.h>
-> >   #include <linux/dma-resv.h>
-> >   #include <uapi/linux/sched/types.h>
-> >
-> >   #include <drm/drm_print.h>
-> >   #include <drm/drm_gem.h>
-> >   #include <drm/gpu_scheduler.h>
-> >   #include <drm/spsc_queue.h>
-> >
-> >   #define CREATE_TRACE_POINTS
-> >   #include "gpu_scheduler_trace.h"
-> > @@ -665,41 +666,27 @@ void drm_sched_job_arm(struct drm_sched_job *job)
-> >       sched =3D entity->rq->sched;
-> >
-> >       job->sched =3D sched;
-> >       job->s_priority =3D entity->rq - sched->sched_rq;
-> >       job->id =3D atomic64_inc_return(&sched->job_id_count);
-> >
-> >       drm_sched_fence_init(job->s_fence, job->entity);
-> >   }
-> >   EXPORT_SYMBOL(drm_sched_job_arm);
-> >
-> > -/**
-> > - * drm_sched_job_add_dependency - adds the fence as a job dependency
-> > - * @job: scheduler job to add the dependencies to
-> > - * @fence: the dma_fence to add to the list of dependencies.
-> > - *
-> > - * Note that @fence is consumed in both the success and error cases.
-> > - *
-> > - * Returns:
-> > - * 0 on success, or an error on failing to expand the array.
-> > - */
-> > -int drm_sched_job_add_dependency(struct drm_sched_job *job,
-> > -                              struct dma_fence *fence)
-> > +static int _add_dependency(struct drm_sched_job *job, struct dma_fence=
- *fence)
->
-> Please keep the drm_sched_job_ prefix here even for static functions.
-> The symbol _add_dependency just sucks in a backtrace, especially when
-> it's tail optimized.
->
-> >   {
-> >       struct dma_fence *entry;
-> >       unsigned long index;
-> >       u32 id =3D 0;
-> >       int ret;
-> >
-> > -     if (!fence)
-> > -             return 0;
-> > -
-> >       /* Deduplicate if we already depend on a fence from the same cont=
-ext.
-> >        * This lets the size of the array of deps scale with the number =
-of
-> >        * engines involved, rather than the number of BOs.
-> >        */
-> >       xa_for_each(&job->dependencies, index, entry) {
-> >               if (entry->context !=3D fence->context)
-> >                       continue;
-> >
-> >               if (dma_fence_is_later(fence, entry)) {
-> >                       dma_fence_put(entry);
-> > @@ -709,20 +696,46 @@ int drm_sched_job_add_dependency(struct drm_sched=
-_job *job,
-> >               }
-> >               return 0;
-> >       }
-> >
-> >       ret =3D xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, GF=
-P_KERNEL);
-> >       if (ret !=3D 0)
-> >               dma_fence_put(fence);
-> >
-> >       return ret;
-> >   }
-> > +
-> > +/**
-> > + * drm_sched_job_add_dependency - adds the fence as a job dependency
-> > + * @job: scheduler job to add the dependencies to
-> > + * @fence: the dma_fence to add to the list of dependencies.
-> > + *
-> > + * Note that @fence is consumed in both the success and error cases.
-> > + *
-> > + * Returns:
-> > + * 0 on success, or an error on failing to expand the array.
-> > + */
-> > +int drm_sched_job_add_dependency(struct drm_sched_job *job,
-> > +                              struct dma_fence *fence)
->
-> Maybe name the new function drm_sched_job_unwrap_add_dependency or
-> something like this.
->
-> I need to double check, but I think for some cases we don't need or
-> don't even want this in the driver.
 
-I'd be curious to know the cases where you don't want this.. one thing
-I was thinking about, what if you have a container fence with two
-contained fences.  One is on the same ctx as the job, one is not but
-signals sooner.  You end up artificially waiting on both, which seems
-sub-optimal.
+--8VlENQAJDfsfHDVY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anyways, I can make this a new entrypoint which unwraps, and/or rename
-the internal static function, if we think this is a good idea.
+On Thu, Mar 23, 2023 at 09:56:56AM +0800, =E6=B2=88=E4=B8=80=E8=B6=85 wrote:
 
-BR,
--R
+> > Yes, for example consider a critical notification - the system
+> > may wish to ensure it is audible even if the user has taken off
+> > their headphones for some reason.
 
-> Christian.
->
-> > +{
-> > +     struct dma_fence_unwrap iter;
-> > +     struct dma_fence *f;
-> > +     int ret =3D 0;
-> > +
-> > +     dma_fence_unwrap_for_each (f, &iter, fence) {
-> > +             ret =3D _add_dependency(job, f);
-> > +             if (ret)
-> > +                     break;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> >   EXPORT_SYMBOL(drm_sched_job_add_dependency);
-> >
-> >   /**
-> >    * drm_sched_job_add_resv_dependencies - add all fences from the resv=
- to the job
-> >    * @job: scheduler job to add the dependencies to
-> >    * @resv: the dma_resv object to get the fences from
-> >    * @usage: the dma_resv_usage to use to filter the fences
-> >    *
-> >    * This adds all fences matching the given usage from @resv to @job.
-> >    * Must be called with the @resv lock held.
->
+> In practice the speaker and the headphone are conflicting devices, see
+> https://github.com/alsa-project/alsa-ucm-conf/blob/master/ucm2/Intel/sof-=
+essx8336/HiFi.conf
+
+That's a particular UCM configuration that someone has created, someone
+with a different set of use cases might create a different UCM setup (or
+not use UCM at all).  This is a large part of the point of having use
+case configuration in userspace.
+
+> There is no such situation, and the system doesn't produce sound from spe=
+aker
+> when headphones are plugged in. The user may manually open speaker using
+> amixer sset 'Speaker' on or pavucontrol.
+
+Again, you're describing a specific configuration - someone might want
+to do something different.
+
+> The GPIO thing on Huawei Intel platform is too complicated, they use two =
+GPIOs
+> for headphone and speaker, and the headphone GPIO is inverted, which mean=
+s low
+> means on and high means off. Luckily there should be only one hardware co=
+nfig
+> for the AMD acp3x platform GPIO and you may just choose the correct one.
+
+There being two different GPIOs sounds like it just allows the headphone
+and speaker to be controlled separately - that seems more flexible, not
+a problem?
+
+--8VlENQAJDfsfHDVY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQcWhsACgkQJNaLcl1U
+h9AN5gf/RQqA84CKvfzCVkUU7Gd3CL1ND9/ZkZ1k/a4lEqn0Rpq99tbk1hCUuFvq
+2jAhp8Sd0XtxLl8FO4WqQxpiIxWMs1Vkp5Hwz0N+Admm4yvfjnX8UUf9GULKqbNb
+2dSarPGe7SASIjJl2YWa8L4H2HSgGOoAe8TNaY5o3CZafqWVRCZXEuX5QCzDm260
+fVN5vgAQjqG+IJoYz2uBLSPp2snzCM+L+yB1nZeMxEsTVLgSmXyyM/KWHVEdOzvJ
+FxYrFITGKsk2ejLd2p+QuYIk0t0EPEQxWL59Ti/BHk7kiQbskwQEKNJuNDO8fb6G
+RhHDDOMZChSuipICfkUAOsAt/sCPiQ==
+=+n6T
+-----END PGP SIGNATURE-----
+
+--8VlENQAJDfsfHDVY--
