@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88D16C72CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DA86C72CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjCWWMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:12:19 -0400
+        id S231241AbjCWWMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:12:30 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCWWMQ (ORCPT
+        with ESMTP id S231231AbjCWWM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:12:16 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFD9231FB;
-        Thu, 23 Mar 2023 15:12:15 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id y5so135253ybu.3;
-        Thu, 23 Mar 2023 15:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679609534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Fdp+ighw/1wg0cIoSJhwoYdek5fqfASCf/bj+B2gh0=;
-        b=fdUl2bFkdwwTPS9bdH+qMqYr30cln3V+bctT7mAl7m2aRSq71X/kk43rMfUfQeIh7h
-         QtteficrXd13gUhENtJ4W6CIntT3CFz/EgtjJ5dCRP/arL52za4n2hezjqqHbtldCBRJ
-         LDi+3fqTZTufjCTb00/rb+h3ZKGt+ZopU18bIhR12c1O8En3W2EIvb084IgGBB8aKbjO
-         GdkR7nocuRBuRFjIO+NbWbngCLUjdItdBR25HwtmiQGgMRE7KETWsvTU//V/FVsX9Ksp
-         +9yJYsBCY5jf0qAveO7xhruU0M1Di3HvgXnUBQ7V/xhxQya4sLPZZk/K5IK8ZWm93hsj
-         Ziqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679609534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Fdp+ighw/1wg0cIoSJhwoYdek5fqfASCf/bj+B2gh0=;
-        b=BEEx4u/zu25NpM9AjyQageXnvRH/TIq4T3jnNWnrN/QCamp7b+5cfKXhuEOxSPMba2
-         9JaBytb/DR4j5TUrKG8vTZp+Eqzf7Sf3YChtN5efG5t3ZonPGpeccAckdSZKVFMCm6Ba
-         IVSDpQGrNesTpULk/kPkxdcRJ5pEyN6375mMplA9jgjtIPaMzqiizeEDMyNQDrTqhDai
-         cZCakLhAnsGVIjAE54RnaLbA5IDhtW8T7Vt/2bhhBF7PWb7Ae2Yr+cXUTmmXiK5Lr9Zz
-         u7tul+Gv1qpxC9wocasq1r5ytQaMWs3ID0++3TQBczUiAP6PJe+02XxcTMhVluVEJvIs
-         D4Pw==
-X-Gm-Message-State: AAQBX9cuEavSqldA0i/P0vrYAsunN2eFMo0P3n+q/qFM5xtyObyaBSr5
-        MTqTNOYD/A0znZdMo1Oxw/uho9qSITrchouGB4w=
-X-Google-Smtp-Source: AKy350atNl6gt1/g58lpm2WdHRcRezCukGclqZZteRuX1vj2pRLqmtwoD6/OAZBq8rMZv/1Z7l5oBqfaW0oDoejzTtQ=
-X-Received: by 2002:a25:e054:0:b0:b6b:d3f3:45af with SMTP id
- x81-20020a25e054000000b00b6bd3f345afmr2260928ybg.1.1679609534158; Thu, 23 Mar
- 2023 15:12:14 -0700 (PDT)
+        Thu, 23 Mar 2023 18:12:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCCF233DA;
+        Thu, 23 Mar 2023 15:12:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679609541; x=1711145541;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EnfZCJwEr26LuV84t2yJLMX9tU08wBX0EGiJmK5z7Uc=;
+  b=Ra8yaGKyEd5PCEIdN/T9g864K96sBJFy9n800Y/uhI6Qv8hVZQq5dRz0
+   6d30ktYdwGAdYPoGbBcn17M4yAtJQy0iIRZgCbzhwiL+vtKBTpXbZ7TsO
+   x/BeG/PSvy+acbbxtGuBHWZgmC6kjbN5JuTOOukBUkAiqMAfaA4uk+c+t
+   wXoSIVops39q4hTabMwFYPG7UDIwirjuOPzh7B8w9X58EuPjPs6iSLeEB
+   0NcI1O5G9/TETWcgNXg7Wvt2uTPU5Ceym1MiG9U6GBK+1K/mYJ/YmsDwg
+   t6WeT2GTdKlPd4lnn+Uf72Crs8JMcJilc1ACwO0wA0VlMzIF+gPpHdYLc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="319297868"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="319297868"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 15:12:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="659806468"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="659806468"
+Received: from jball6-mobl.amr.corp.intel.com (HELO [10.209.105.116]) ([10.209.105.116])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 15:12:17 -0700
+Message-ID: <1e1bec34-36bd-a719-7d3b-23ab268f7092@intel.com>
+Date:   Thu, 23 Mar 2023 15:12:16 -0700
 MIME-Version: 1.0
-References: <20230323121804.2249605-1-noltari@gmail.com> <20230323121804.2249605-3-noltari@gmail.com>
- <ee867960-91bb-659b-a87b-6c04613608c5@gmail.com> <AM0PR02MB55242C94846EE5598CDA44A2BD879@AM0PR02MB5524.eurprd02.prod.outlook.com>
-In-Reply-To: <AM0PR02MB55242C94846EE5598CDA44A2BD879@AM0PR02MB5524.eurprd02.prod.outlook.com>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Thu, 23 Mar 2023 23:12:03 +0100
-Message-ID: <CAKR-sGfjV6=7UHJguv-E6WKcSPEO8igdG97ieMQrqK3Sr09pFA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] net: dsa: b53: mdio: add support for BCM53134
-To:     Paul Geurts <paul.geurts@prodrive-technologies.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        "jonas.gorski@gmail.com" <jonas.gorski@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1678111292.git.kai.huang@intel.com>
+ <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
+ <20230308222738.GA3419702@ls.amr.corp.intel.com>
+ <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
+ <20230313234916.GC3922605@ls.amr.corp.intel.com>
+ <a62497059fc3f31706a532b822d6c966bd981468.camel@intel.com>
+ <5c4a28c8-f17d-7395-cc63-3cbd9b31befb@intel.com>
+ <a02f304ea0e62180e07e2eb63eaf2411b702c672.camel@intel.com>
+ <141def31-dcbb-70ae-2935-4fb06a986036@intel.com>
+ <6be93d78e01906ff5c3714005170d761e5b40d41.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <6be93d78e01906ff5c3714005170d761e5b40d41.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,95 +96,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-El jue, 23 mar 2023 a las 21:10, Paul Geurts
-(<paul.geurts@prodrive-technologies.com>) escribi=C3=B3:
->
-> > -----Original Message-----
-> > From: Florian Fainelli <f.fainelli@gmail.com>
-> > Sent: donderdag 23 maart 2023 17:43
-> > To: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>; Paul Geurts
-> > <paul.geurts@prodrive-technologies.com>; jonas.gorski@gmail.com;
-> > andrew@lunn.ch; olteanv@gmail.com; davem@davemloft.net;
-> > edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> > robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> > netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [PATCH 2/2] net: dsa: b53: mdio: add support for BCM53134
-> >
-> > On 3/23/23 05:18, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> > > From: Paul Geurts <paul.geurts@prodrive-technologies.com>
-> > >
-> > > Add support for the BCM53134 Ethernet switch in the existing b53 dsa
-> > driver.
-> > > BCM53134 is very similar to the BCM58XX series.
-> > >
-> > > Signed-off-by: Paul Geurts <paul.geurts@prodrive-technologies.com>
-> > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > > ---
-> > >   drivers/net/dsa/b53/b53_common.c | 53
-> > +++++++++++++++++++++++++++++++-
-> > >   drivers/net/dsa/b53/b53_mdio.c   |  5 ++-
-> > >   drivers/net/dsa/b53/b53_priv.h   |  9 +++++-
-> > >   3 files changed, 64 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/net/dsa/b53/b53_common.c
-> > > b/drivers/net/dsa/b53/b53_common.c
-> > > index 1f9b251a5452..aaa0813e6f59 100644
-> > > --- a/drivers/net/dsa/b53/b53_common.c
-> > > +++ b/drivers/net/dsa/b53/b53_common.c
-> > > @@ -1282,6 +1282,42 @@ static void b53_adjust_link(struct dsa_switch
-> > *ds, int port,
-> > >     if (is63xx(dev) && port >=3D B53_63XX_RGMII0)
-> > >             b53_adjust_63xx_rgmii(ds, port, phydev->interface);
-> > >
-> > > +   if (is53134(dev) && phy_interface_is_rgmii(phydev)) {
-> >
-> > Why is not this in the same code block as the one for the is531x5() dev=
-ice like
-> > this:
-> >
-> > diff --git a/drivers/net/dsa/b53/b53_common.c
-> > b/drivers/net/dsa/b53/b53_common.c
-> > index 59cdfc51ce06..1c64b6ce7e78 100644
-> > --- a/drivers/net/dsa/b53/b53_common.c
-> > +++ b/drivers/net/dsa/b53/b53_common.c
-> > @@ -1235,7 +1235,7 @@ static void b53_adjust_link(struct dsa_switch *ds=
-,
-> > int port,
-> >                                tx_pause, rx_pause);
-> >          b53_force_link(dev, port, phydev->link);
-> >
-> > -       if (is531x5(dev) && phy_interface_is_rgmii(phydev)) {
-> > +       if ((is531x5(dev) || is53134(dev)) &&
-> > phy_interface_is_rgmii(phydev)) {
-> >                  if (port =3D=3D dev->imp_port)
-> >                          off =3D B53_RGMII_CTRL_IMP;
-> >                  else
-> >
-> > Other than that, LGTM!
-> > --
-> > Florian
->
-> I think the only reason is that the BCM53134 does not support the
-> RGMII_CTRL_TIMING_SEL bit, which is set in the original block. I agree
-> Putting a if statement around
-> rgmii_ctrl |=3D RGMII_CTRL_TIMING_SEL;
-> would prevent a lot of code duplication. _however_, after looking at it a=
-gain,
-> I don=E2=80=99t think the device does not support the bit. When looking a=
-t the datasheet,
-> The same bit in the this register is called BYPASS_2NS_DEL. It's very unc=
-ommon
-> For Broadcom to make such a change in the register interface, so maybe th=
-ey
-> Just renamed it. Do you think this could be the same bit?
+On 3/23/23 15:09, Huang, Kai wrote:
+> 1) In TDH.SYS.INIT, ask TDX module team to return TDX_RND_NO_ENTROPY instead of
+> TDX_SYS_BUSY when running out of entropy.
+> 
+> 2) In TDH.SYS.KEY.CONFIG, ask TDX module to return TDX_RND_NO_ENTROPY instead of
+> TDX_KEY_GENERATION_FAILED when running out of entropy.  Whether
+> TDX_KEY_GENERATION_FAILED should be still kept is  up to TDX module team
+> (because it looks running concurrent PCONFIGs is also related).
+> 
+> 3) Ask TDX module to always return TDX_RND_NO_ENTROPY in _ALL_ SEAMCALLs and
+> keep this behaviour for future TDX modules too.
 
-What happens if you add that bit on your device? It doesn't work?
-I will try with my device and see what happens when I add it...
+Yes, that's all fine.
 
->
-> ---
-> Paul
+> 4) In the common seamcall(), retry on TDX_RND_NO_ENTROPY.
+> 
+> In terms of how many times to retry, I will use a fixed value for now, similar
+> to the kernel code below:
+> 
+> #define RDRAND_RETRY_LOOPS      10
 
---
-=C3=81lvaro
+Heck, you could even just use RDRAND_RETRY_LOOPS directly.  It's
+hard(er) to bikeshed your choice of a random number that you didn't even
+pick.
