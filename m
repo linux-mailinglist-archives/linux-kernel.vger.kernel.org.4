@@ -2,190 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35656C7030
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AFB6C7046
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjCWS2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S231364AbjCWSdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCWS2r (ORCPT
+        with ESMTP id S231241AbjCWSdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:28:47 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32A10AB8;
-        Thu, 23 Mar 2023 11:28:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fDzSJRXkOHD5fm9OdAVJIrn3OQ+xGPYOnIEjEI+XAjyxeKfAP/5+fkvukanBk7SgqHw6nlsMxojJeVh7ho+v4ejw9BZPnINn409FsYQEEkodO0O2Q0M26vBzDvDm7oDmpOM5LgfYJ8CyCofe+Pp5Lsmg4nkBgK/I5CbMYCyzbva+6jFv+qr55FHU00dczZJnXm029TDq9Bn3d+qDdFflret0rJBhbrrSc/aaRBfZZ7DqFQ6i+Tw44Kq52UjXotE56aRn/2/6gEwHeOSPuoO0GglS16S/wAROeyiMbUzmchD6BqrE02XWWiok7OpR42pfYK46ZHFnNBJ0As+SmjyLTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wl227QzWtprzs2Acd+G561gMA+OsNwnDcjRriI5KEM0=;
- b=I+luw208awt8LMCmzTTG/EXlsMNzea6KXRrduKRlRYC55Bn0iKDRNkChqr+WXLeRHk6JODF3pogtG5Eljq91TA1O258ZLchaPLIlj/L1EN4uAzCu8mKI6RIKR7TuG97WGZd1or5S0Yn6QDEjMI08D/zxwq785BBZP+3bpAotKQ+6vlVXQVHgn2be0DpKxDotVf0HiaT/lOEpmQDySwJ7ArLt4m4KpHY+5j4/RtVnRUdYVEWnqgTjTEYWT+ukV+dhROEmvUUJ/9AL6A/4O0IUouov5U1viwtYogUawRG3wfDwuc7LK//HSYPaN/n+GpO1+gsBKwsCvB5OGN+dRCkajQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wl227QzWtprzs2Acd+G561gMA+OsNwnDcjRriI5KEM0=;
- b=2udb98OBPLsaoCHM+qe4oCn6oV9o8sbpyHFfeu3zAKb8mWhXS4juusU5UZpwgdysimRg14lDvKj8SatVlIKaxdg/OxskduFB/I0Mq/jkIu9KulsQ/KxF/JeThQDJ5Pv+XcJ4AbNfwVempvSkz3hc5lZ+0ePa3DfQAvQkJvD6eMI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by MN2PR12MB4536.namprd12.prod.outlook.com (2603:10b6:208:263::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Thu, 23 Mar
- 2023 18:28:42 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::5b56:bf13:70be:ea60]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::5b56:bf13:70be:ea60%6]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 18:28:42 +0000
-Message-ID: <19ec60aa-fa11-c44e-a6d1-9583f2e7707a@amd.com>
-Date:   Thu, 23 Mar 2023 13:28:38 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v16 8/8] x86/smpboot: Allow parallel bringup for SEV-ES
-To:     "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "usama.arif@bytedance.com" <usama.arif@bytedance.com>,
-        "bp@alien8.de" <bp@alien8.de>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "brgerst@gmail.com" <brgerst@gmail.com>,
-        "arjan@linux.intel.com" <arjan@linux.intel.com>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "simon.evans@bytedance.com" <simon.evans@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "fam.zheng@bytedance.com" <fam.zheng@bytedance.com>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "liangma@liangbit.com" <liangma@liangbit.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "punit.agrawal@bytedance.com" <punit.agrawal@bytedance.com>,
-        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "piotrgorski@cachyos.org" <piotrgorski@cachyos.org>,
-        "gpiccoli@igalia.com" <gpiccoli@igalia.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Rapan, Sabin" <sabrapan@amazon.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-References: <20230321194008.785922-1-usama.arif@bytedance.com>
- <20230321194008.785922-9-usama.arif@bytedance.com>
- <20230322224735.GAZBuFh9ld6FuYEyoH@fat_crate.local>
- <2c3dd773-31ca-d4b1-78a2-b39f3785c7c5@amd.com>
- <751f572f940220775054dc09324b20b929d7d66d.camel@amazon.co.uk>
-Content-Language: en-US
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <751f572f940220775054dc09324b20b929d7d66d.camel@amazon.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR14CA0022.namprd14.prod.outlook.com
- (2603:10b6:610:60::32) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Thu, 23 Mar 2023 14:33:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5DD2594B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679596311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OQhuytQNa//R38jUclcb8GrjXYgITp5dQj88746r1Bo=;
+        b=b6zXtLek7YQEFY2lH6YdZJdZwqTWoyghLlMbLvs4Ct+CCfuwQDbkRKFSzDf26zXCskPbAl
+        mKJYcJiRFX1oYC4FNzs9V/7mM62fFlaErO7qpM1T9Z6DjeVr3hcUu+rO9E69P4L90jxxdb
+        A6SvqvsUPdWiE0w/lfYp6GWJhIqMVlI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-9-jG0VQoFBNlGhwNdtiujJMw-1; Thu, 23 Mar 2023 14:31:42 -0400
+X-MC-Unique: jG0VQoFBNlGhwNdtiujJMw-1
+Received: by mail-wm1-f72.google.com with SMTP id u6-20020a05600c19c600b003ed7cb98a8dso1337350wmq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:31:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679596301;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OQhuytQNa//R38jUclcb8GrjXYgITp5dQj88746r1Bo=;
+        b=tlwFrZ7ic2s/Mi2JHTMXg0X+qQgwRo8T52o0pn3beJv2c6/cfekn28Lrlfs+zzdWtv
+         2GT1AGS1xIuBdXew+ArAvLe6HI+/uWtuxDC7AgwbsuHaxeV9OUIaz5ldHiHT/UVZt9DW
+         nYYvrdgeVWTbWRZ3nkmtim6uufF+IFX31KPRxTSPNpHjCKVQMo8qzFTPzLEdwAT+CKN7
+         qP0yBii45h33F71/z/qKrTvYTJ9nntq2imUhrdVGscDRaqHJzbn34GGNBPWBf4ttnd54
+         o7GJyQr+U3FbSXd5gWp6hK7Nu6FEIep1tQDQEAbw3fKhJzZM8dzVwJzuYxFaPKhBvHsU
+         vqeQ==
+X-Gm-Message-State: AAQBX9dt018EdhjwJAfgnIyId8fvITNIKtjpEV7wcrkoZORXWQ8sxLrT
+        xCPod4xaELUeIO5g2TRPRBCztd0+kJhvHeS+MUkq4C3ZMuJM7j4lzNIeAP8iywRxdbbkU+5syJW
+        8aOqyKM0wS9IefrebY+WSRQQP
+X-Received: by 2002:adf:ee4e:0:b0:2d2:f3e3:115d with SMTP id w14-20020adfee4e000000b002d2f3e3115dmr104108wro.59.1679596301182;
+        Thu, 23 Mar 2023 11:31:41 -0700 (PDT)
+X-Google-Smtp-Source: AKy350akLKxXWb1wSOfhINrcngkAYQLWnw4Bp2RUkomUFDjjiyXwtTV3jYctLuET3Ky7jfggPrYKfQ==
+X-Received: by 2002:adf:ee4e:0:b0:2d2:f3e3:115d with SMTP id w14-20020adfee4e000000b002d2f3e3115dmr104063wro.59.1679596300886;
+        Thu, 23 Mar 2023 11:31:40 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id s17-20020a5d4251000000b002d1801018e2sm16702552wrr.63.2023.03.23.11.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 11:31:39 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+In-Reply-To: <20230323174129.GA2753619@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
+ <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+ <xhsmhmt45c703.mognet@vschneid.remote.csb>
+ <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
+ <xhsmhbkkjcu4q.mognet@vschneid.remote.csb>
+ <20230323174129.GA2753619@hirez.programming.kicks-ass.net>
+Date:   Thu, 23 Mar 2023 18:31:37 +0000
+Message-ID: <xhsmh8rfncoae.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|MN2PR12MB4536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 42f9d9e4-52a8-4570-1a69-08db2bcc6dd9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Pu/INOTsl8/YVKgz5vShmTDkF5PkPJtig4WiH5t/dLzCUaMHKsYBI57pgqDkX9MIA9q4EAe3RfBLD655vQBqcjMCyhno7BKcChPLW2F3WOamkdHou8B4OTdwO6DAM4jcWcUnR5tBuD7uOHY/IyRPpP6vf41xEOtT+5Dty3wGvtLk+bjbrlFncTJHB+rk1dMorXGzCfjcPB27ZLUh9RfEPuJUkpD2edK69Hs5LMrqBwuL7n7LoCj4LJS3PP8QYEYsKiq2R34g+0DHAHMaPgj/2EIL+D/GjOk5av3GW09xePmwMUVeVQiQ53Yxa02MuJi/SiJtd4dNMm8DP3dPciPLj1PaPiO5+BEhdBMqByxLSJLYM1hItjiVglxaeyNWjGYTH4TVbVE4VFntqupCp4fJ89Um1eXR+8owvQp30voh3lRLukaN0sdTfvJdJqGMUCCgGw/8T+vhRb5OnrTMS2/VX1Zq5KdbOzGKqX+6PUNlaoZHBPVOyECCGbSAZtwlNgM217ymNjzlZ5elej7hfY3nQjL/EZPPTGP3amyvoKy3Y45a1xIXI1erWRmMrDoKOVJ2Ar8B9Z7P7pTztNosarjYgDgAg2/IHjErhySDyWkS8km+FGOaky3qXbqewkEtLxq6eVPO0XpsbOUBXyePqkelr4TJJHF+U561UvmvWnWx7T0lq5fezcphi+S6wbNo6I7mx5Pr6LdZqnAfviW/xmdAzy0Q/6HkStPA101JjqY/0Rs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(396003)(376002)(136003)(346002)(451199018)(31686004)(8936002)(66946007)(66476007)(66556008)(41300700001)(4326008)(8676002)(86362001)(36756003)(38100700002)(6512007)(6506007)(53546011)(31696002)(26005)(83380400001)(2616005)(186003)(6666004)(316002)(478600001)(6486002)(54906003)(110136005)(5660300002)(2906002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c2N1N29mcU11TkJXd3ZqbnZkQVg2RmVPcURIWTZ0S2M1TEM2aW5POTFIS0pY?=
- =?utf-8?B?Nmk5ekg0Und6QUp2azFmRDQxb0pOYnR1dDJjbHVXeFJHUFQ4N21KMDAya1Vw?=
- =?utf-8?B?OTZVbllSWGJVeG1HOWhvRjNyUjM4UlJWamtlSWdkVmJ3enR1aFRyNmRjNkw4?=
- =?utf-8?B?c0h4cm9Id3p0SWQxclNOUFRDQXY3VnIveTJZeDhaaDhGa2kydEdZSjQ5K2E1?=
- =?utf-8?B?VkUzUmloL3p2dmRGN3VsVndXSmVxU2hrN2JNYjM5cSt1bWVJUy81ODQvRnN2?=
- =?utf-8?B?QUFmVzJuUEVzUm1GN1BjZlFzbDVEbmo2VlpWeFlSZDFUc1o0cFF6bUFsOHEw?=
- =?utf-8?B?amRXaW55T3NJWG5KZFRUZjh1UGx6cUM3VzQzeXRBb0YrUUx5dmhKL1dKNnA5?=
- =?utf-8?B?bUYyc0NxVi9scmwzRU1QSXE0OWJIQVp3MEVsSUFacVpMQi9GbGM0aENzZ2pV?=
- =?utf-8?B?YWR1UEVxdy92OXV4a3E4aVlURDYzNDdrTmFraEJ5U1g0aWExTzI3VnlqT1FF?=
- =?utf-8?B?eGF6aFRkajBzZnA3eWNQempYN2JVZkVqTXBFUkhNa214R0FNZ1R1QzdnMkZL?=
- =?utf-8?B?dnpDRlE5UlNYV0tKMEloeVVLNGVJd0RqeU5BR1ZsaXl4V0dVMGl1dXZwS2hI?=
- =?utf-8?B?VHErL2RxMFE3OHZoZUZVd3EvS3Q3R2pNRjhxMnA5UytWcHFEay9lbVNtdzdv?=
- =?utf-8?B?RkZZRUZsMDJpeWtwVVZRUTJYdHp2NEJaUjE0WDJ6aGVyaEl3QWJsRFJkdUZn?=
- =?utf-8?B?UEUxOWFwaW8rNDFTWjRZbnByWmpHR2M5MTNqNHdFV2ZoKyt6Zm9FUlBxS0Zl?=
- =?utf-8?B?OFR3R3dUMklFYitOSFQ0R0xJWWh6YzZ3Nk42ZUtmNkFIOTB1a0RnMnNHbUlQ?=
- =?utf-8?B?d25oMlVJZ3FIQ2xGdEcyQ29QZHZMVFpDb2N5YWxmekFsL2w3ZXplOGlKdTdk?=
- =?utf-8?B?TGo0ck1LYnZUcUFXbnlSUm1IM014dXYvN2w2MzRaUmdpeFlVYS9CUWg1Qzlj?=
- =?utf-8?B?cDdvWkttSHE3U252TE40elBHWm8xQjRoNXNmL1NLdkZaWjc5cjBOS0dvd2JB?=
- =?utf-8?B?ZFk5amdRRGJrVmpaZXlZYWRhSStyM05zVkdzd2ZWSUdWNGg5RlAreHJydnlw?=
- =?utf-8?B?MUZjT25rYlFpSUpPaS90bGFCbktpd1ZHRUZQNVFwWDRPR1plQ0plUzhGSVA1?=
- =?utf-8?B?Wmg5aW5mWDJYc3dtOERJWHBGUDRuUThCVGtwZXpZRkJjZTVuSUpkMHJ0K1Zy?=
- =?utf-8?B?OC9JSFhLVXFTZTIwandXM0ZiWjNMS2pDME12alhRdGxPMWk2NmFrN0d3bXB6?=
- =?utf-8?B?S291cktOMlI5cEROZHFidU45Ny9BclR0RVFuWHNPT0Y2R21sTnpqbmp6TUl5?=
- =?utf-8?B?VUZTS01yWFlOOS9SNENlSHBwTXpGamQvaHdDM2x5NEJtSUZuRGpEK2QwRW5N?=
- =?utf-8?B?UkI0N1NrSG1OdWtsaGpEeGVidkZMeXdkNHhYSGppcnF3dFFPakQ4dkdvWjhr?=
- =?utf-8?B?MjlaVVp6dVVocFlkVDQvYWJMZFJUdkVYdUR1ZHhZUUh3cCs2QThIUHdmQm9p?=
- =?utf-8?B?NDlWOC9JcldWN0xVNUNrZ1lIZmNYLy9RbDRUcngweG1HNkZ3ekVjM2VMWHk4?=
- =?utf-8?B?bTVRLys1OHRwYUNEdHB6b0UycDRKNFNzL0pMR0t3SjdRUUpJRXV4dFA4YlJK?=
- =?utf-8?B?bVdtTXAxblpwL3dzVTZZWHBXa3luQWZESUlnQzNqMnRiTmdsSzlzSTFURGcr?=
- =?utf-8?B?TkVhS0xrakhuZjR0OWF3RVh1SGtRQXNZOXc1UFpXSUhxUll2OU1vSXY4aFJn?=
- =?utf-8?B?UUdCaGRuWnJuaVJ0ai9teG5Oc2JMcjFvQVFxMjlXWXVkaUV0SGpPT1pPVjZN?=
- =?utf-8?B?M1hlWUV3QVRIVFMvZys5NE1Qc1dyL0YzVmZHejVTd1hVQTUySnJLUk5uV2hP?=
- =?utf-8?B?Nndtdm91M1M1ckw1QWJzOXRLR1h2bWY1cG9nZXJqVkxvRjdEMnhSM0hEdkRs?=
- =?utf-8?B?NndSWVFvVHc3cEVmUkovWmpvYThlQ3lpN2cvenptYjFHcVA0TW5wd0Z4TmlV?=
- =?utf-8?B?VGF1eVdQb2N3WTVnNkZDRDEwWlVHQmFOREJLVTlmdVpCQU82ZjRCeVo5QnRs?=
- =?utf-8?Q?kM0jJttCjvFiemv5KGDMfg/Lh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42f9d9e4-52a8-4570-1a69-08db2bcc6dd9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 18:28:42.0886
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Kf7Bw4+8wyD+HUjouyRiRcHD800WtQJoOts/crp+KvmJcJc1Z2xrdgcQtwaJ3GY4vpUrkJvCKQgdXTOZK59TVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4536
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 10:34, Woodhouse, David wrote:
-> On Thu, 2023-03-23 at 08:16 -0500, Tom Lendacky wrote:
->>
->> Maybe call this sev_early_get_cpuid_0b() or such to imply that the MSR
->> protocol is being used and only retrieving / returning edx.
-> 
-> Or indeed sev_early_get_apicid() since that's what it's actually doing,
-> and the caller doesn't care *how*.
+On 23/03/23 18:41, Peter Zijlstra wrote:
+> On Thu, Mar 23, 2023 at 04:25:25PM +0000, Valentin Schneider wrote:
+>> On 22/03/23 15:04, Peter Zijlstra wrote:
+>> > @@ -798,14 +794,20 @@ static void smp_call_function_many_cond(
+>> >  		}
+>> >  
+>> >  		/*
+>> > +		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+>> > +		 * will be traced with func==generic_smp_call_function_single_ipi().
+>> > +		 */
+>> > +		trace_ipi_send_cpumask(cfd->cpumask_ipi, _RET_IP_, func);
+>> 
+>> I just got a trace pointing out this can emit an event even though no IPI
+>> is sent if e.g. the cond_func predicate filters all CPUs in the argument
+>> mask:
+>> 
+>>   ipi_send_cpumask:     cpumask= callsite=on_each_cpu_cond_mask+0x3c callback=flush_tlb_func+0x0
+>> 
+>> Maybe something like so on top?
+>> 
+>> ---
+>> diff --git a/kernel/smp.c b/kernel/smp.c
+>> index ba5478814e677..1dc452017d000 100644
+>> --- a/kernel/smp.c
+>> +++ b/kernel/smp.c
+>> @@ -791,6 +791,8 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+>>  			}
+>>  		}
+>>  
+>> +		if (!nr_cpus)
+>> +			goto local;
+>
+> Hmm, this isn't right. You can get nr_cpus==0 even though it did add
+> some to various lists but never was first.
+>
 
-Sounds good.
+Duh, glanced over that.
 
-> 
->> Also, since it is a function now and can be used at any point, the current
->> GHCB MSR should be saved on entry and restored on exit.
-> 
-> Well, I don't know that it should be callable at any point. This is
-> only supposed to be called from head_64.S.
+> But urgh, even if we were to say count nr_queued we'd never get the mask
+> right, because we don't track which CPUs have the predicate matched,
+> only those we need to actually send an IPI to :/
+>
+> Ooh, I think we can clear those bits from cfd->cpumask, arguably that's
+> a correctness fix too, because the 'run_remote && wait' case shouldn't
+> wait on things we didn't queue.
+>
 
-I agree. But once it's there, someone somewhere in the future may look and 
-go, oh, I can call this. So I think it either needs a nice comment above 
-it about how it is currently used/called and what to do if it needs to be 
-called from someplace other than head_64.S or the MSR needs to be 
-saved/restored.
+Yeah, that makes sense to me. Just one tiny suggestion below.
 
-Thanks,
-Tom
+> Hmm?
+>
+>
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -728,9 +728,9 @@ static void smp_call_function_many_cond(
+>  	int cpu, last_cpu, this_cpu = smp_processor_id();
+>  	struct call_function_data *cfd;
+>  	bool wait = scf_flags & SCF_WAIT;
+> +	int nr_cpus = 0, nr_queued = 0;
+>  	bool run_remote = false;
+>  	bool run_local = false;
+> -	int nr_cpus = 0;
+>  
+>  	lockdep_assert_preemption_disabled();
+>  
+> @@ -772,8 +772,10 @@ static void smp_call_function_many_cond(
+>  		for_each_cpu(cpu, cfd->cpumask) {
+>  			call_single_data_t *csd = per_cpu_ptr(cfd->csd, cpu);
+>  
+> -			if (cond_func && !cond_func(cpu, info))
+> +			if (cond_func && !cond_func(cpu, info)) {
+> +				__cpumask_clear_cpu(cpu, cfd->cpumask);
+>  				continue;
+> +			}
+>  
+>  			csd_lock(csd);
+>  			if (wait)
+> @@ -789,13 +791,15 @@ static void smp_call_function_many_cond(
+>  				nr_cpus++;
+>  				last_cpu = cpu;
+>  			}
+> +			nr_queued++;
+>  		}
+>  
+>  		/*
+>  		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+>  		 * will be traced with func==generic_smp_call_function_single_ipi().
+>  		 */
+> -		trace_ipi_send_cpumask(cfd->cpumask_ipi, _RET_IP_, func);
+> +		if (nr_queued)
 
-> 
-> 
-> 
-> 
-> 
-> Amazon Development Centre (London) Ltd. Registered in England and Wales with registration number 04543232 with its registered office at 1 Principal Place, Worship Street, London EC2A 2FA, United Kingdom.
-> 
-> 
-> 
+With your change to cfd->cpumask, we could ditch nr_queued and make this
+
+                if (!cpumask_empty(cfd->cpumask))
+
+since cfd->cpumask now only contains CPUs that have had a CSD queued.
+
+> +			trace_ipi_send_cpumask(cfd->cpumask, _RET_IP_, func);
+>  
+>  		/*
+>  		 * Choose the most efficient way to send an IPI. Note that the
+
