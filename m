@@ -2,114 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788606C743D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA80A6C743F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 00:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjCWXo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 19:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S231206AbjCWXq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 19:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjCWXoY (ORCPT
+        with ESMTP id S229508AbjCWXq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 19:44:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CF27EFE;
-        Thu, 23 Mar 2023 16:44:19 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 23:44:15 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1679615057;
-        bh=RI5ocGFEEsxcupBslhNsOWQFWljVe9IxGeY5B4BEkzY=;
+        Thu, 23 Mar 2023 19:46:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0532201C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 16:46:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6393262906
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A21C433D2;
+        Thu, 23 Mar 2023 23:46:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679615184;
+        bh=c6QPeB80q9C6lJ8ZYENe4qJTNGL5v9atXIzxW8tPIuE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ktXoOzQGOa2NPonXMcMgpQ8sh1OAkTFV/BQ3EYAxbxYkoLCqxLRGPbDIm7PD5GObt
-         vypxz4uUAcs3wZSH6HgK6Kv9vuveU3zSiwpC1x4AORHfrqQPBkDUhcxTTSrK7d5+6Q
-         gAFWEJrBYcBIiEMGHnCcwHQyrh1K5uevjGKuIAcA=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] tools/nolibc: x86_64: add stackprotector support
-Message-ID: <fc50ed30-4152-4806-9eed-09a8b164afe6@t-8ch.de>
-References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
- <20230223-nolibc-stackprotector-v2-8-4c938e098d67@weissschuh.net>
- <ZBy0ZNYcHFlZWN32@1wt.eu>
+        b=oX3mRy9yzTNA7RomAvUE/dxLlsp/pfSAr1P+feV4iffih+/Gq7gge8hY/55UuQcHK
+         Btan7uoTrlOJLud1+8Pd5tXWfvloYVSHPY0yTT4prkyDiPm3U06TaraTwrBOe2eKs5
+         +W85JbXD1O6D+LiLRHxW9ggzWWPybTqV2oQ+hc30MYli6RLygOIeP/OE3GU1W6yln8
+         S7WFE5+lDInvQDLx60JMhSKbZS1Vx3AwQgeYoY165ZTPO768/hwW5xWBGr4EvwWDDz
+         b+yyzHibz1qjNNGec3QPTrxj6VhGVaUsjRqDu+JZuY7LrrPHASb9zNTtnPw+LSP+xF
+         SwzreOjjydOXw==
+Date:   Thu, 23 Mar 2023 16:46:22 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     "hch@infradead.org" <hch@infradead.org>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "hans@owltronix.com" <hans@owltronix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        "chao@kernel.org" <chao@kernel.org>
+Subject: Re: [RFC PATCH] f2fs: preserve direct write semantics when buffering
+ is forced
+Message-ID: <ZBzkzg+lr+TOXZcW@google.com>
+References: <20230220122004.26555-1-hans.holmberg@wdc.com>
+ <ZBhisCo7gTitmKeO@infradead.org>
+ <ZBzPYwcoLXkFngz8@google.com>
+ <402cc90ce5defa81c937c3fcd09de1f6497459ee.camel@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBy0ZNYcHFlZWN32@1wt.eu>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <402cc90ce5defa81c937c3fcd09de1f6497459ee.camel@wdc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+On 03/23, Damien Le Moal wrote:
+> On Thu, 2023-03-23 at 15:14 -0700, Jaegeuk Kim wrote:
+> > On 03/20, Christoph Hellwig wrote:
+> > > On Mon, Feb 20, 2023 at 01:20:04PM +0100, Hans Holmberg wrote:
+> > > > A) Supporting proper direct writes for zoned block devices would
+> > > > be the best, but it is currently not supported (probably for
+> > > > a good but non-obvious reason). Would it be feasible to
+> > > > implement proper direct IO?
+> > > 
+> > > I don't think why not.  In many ways direct writes to zoned devices
+> > > should be easier than non-direct writes.
+> > > 
+> > > Any comments from the maintainers why the direct I/O writes to
+> > > zoned
+> > > devices are disabled?  I could not find anything helpful in the
+> > > comments
+> > > or commit logs.
+> > 
+> > The direct IO wants to overwrite the data on the same block address,
+> > while
+> > zoned device does not support it?
+> 
+> Surely that is not the case with LFS mode, doesn't it ? Otherwise, even
+> buffered overwrites would have an issue.
 
-On Thu, Mar 23, 2023 at 09:19:48PM +0100, Willy Tarreau wrote:
-> On Mon, Mar 20, 2023 at 03:41:08PM +0000, Thomas WeiÃŸschuh wrote:
-> > Enable the new stackprotector support for x86_64.
-> (...)
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 8f069ebdd124..543555f4cbdc 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -80,6 +80,8 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
-> >  			$(call cc-option,-mstack-protector-guard=global) \
-> >  			$(call cc-option,-fstack-protector-all)
-> >  CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
-> > +CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
-> > +CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
-> >  CFLAGS_s390 = -m64
-> >  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
-> >  		$(call cc-option,-fno-stack-protector) \
-> 
-> This change is making it almost impossible for me to pass external CFLAGS
-> without forcefully disabling the automatic detection of stackprot. I need
-> to do it for some archs (e.g. "-march=armv5t -mthumb") or even to change
-> optimization levels.
-> 
-> I figured that the simplest way to recover that functionality for me
-> consists in using a dedicated variable to assign stack protector per
-> supported architecure and concatenating it to the per-arch CFLAGS like
-> this:
-> 
->   diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
->   index 543555f4cbdc..bbce57420465 100644
->   --- a/tools/testing/selftests/nolibc/Makefile
->   +++ b/tools/testing/selftests/nolibc/Makefile
->   @@ -79,13 +79,13 @@ endif
->    CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
->                           $(call cc-option,-mstack-protector-guard=global) \
->                           $(call cc-option,-fstack-protector-all)
->   -CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
->   -CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
->   -CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
->   +CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
->   +CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
->   +CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
->    CFLAGS_s390 = -m64
->    CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
->                   $(call cc-option,-fno-stack-protector) \
->   -               $(CFLAGS_$(ARCH))
->   +               $(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
->    LDFLAGS := -s
->    
->    help:
-> 
-> And now with this it works again for me on all archs, with all of them
-> showing "SKIPPED" for the -fstackprotector line except i386/x86_64 which
-> show "OK".
-> 
-> Are you OK with this approach ? And if so, do you want to respin it or
-> do you want me to retrofit it into your 3 patches that introduce this
-> change (it's easy enough so I really don't care) ?
+Zoned device only supports LFS mode.
 
-Looks good to me.
-
-If nothing else needs to be changed feel free to fix it up on your side.
-
-Thanks,
-Thomas
+> 
