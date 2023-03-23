@@ -2,117 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C988D6C6D05
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D7A6C6D08
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCWQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S231774AbjCWQLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjCWQLd (ORCPT
+        with ESMTP id S231709AbjCWQLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:11:33 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2126.outbound.protection.outlook.com [40.107.92.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5E024CBB;
-        Thu, 23 Mar 2023 09:11:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m7U4K12rbFdddcE/zxDViPxM+Ows6kOyPd4rVpo3mG2XKLwidy2WPjSWBAE/2X63PjoY7dOk1ViCRB7pJm7cM8aIKq6e6EcBm+6NSR0pP43SCjvYxTJAiA2F8o9KBjlYh6EuyI0T39D7QI+HqLzD343jIGcWZsGuoH36XhVZrwfweESzdx4F7AD286SwR4sGc+QYdziFGILcvfOS7SY72+oH/N3V8nGFoFmcKJU8OouEEizGlI1XRRO0zu5sdOZznDyxGsEtjw311V9VYTucnmd6DH0l6u4Tk7nmj9iLxfOxI9pmLwg016ZxdoqJIS4L9eeUb773pWk36g87NeUtFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=26bO0K0A4TLKrdpl/ISrQzk3AJUA0si9ePVoHGTIfb8=;
- b=gfRpsLC9f5muxOLloa0XWOm1V/+Aeqbehb/h7530cWEjOb8KLxXIat/K9arFy2QALy+j7l7XYCF87/mDf1FP6UsR74oW/Cwcw9p6EI/rLMZbezcGbxfaSxAiEvJIz+7PIKJL5Wu0KquLT9AgTHw5CcBGuPDbdmU7STlpaQiZraKKpor1vyhHjyzTo7c+k0Nnku6PkKX4Pv0NpDeu+Li4218Lgj3t9FXO7+zxWegC41VxZRJYU/HjA9JU40RrEilCMB8j6njITzQjXeead0S0drusPawS4j3bBAKtktUWnB4N0GqT6nz1RXjhBkIgWlxbsipAc4Slrpoh9BphvZtKbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=26bO0K0A4TLKrdpl/ISrQzk3AJUA0si9ePVoHGTIfb8=;
- b=o7Z119MkdGrFvCDok2w41Kp/CYL+5CiF/bmty6lR9MSIm+mF598SbLi8LYFGPgr9gACcDfSvJVzkX8+B9ptoBPk1ZMHz2UcTUexguyzsn1tLZ3KViLkWZ/tw/+kkyz8FsjT/nACC9ZajIonP8Shwy6aieGS5PtuaghRpLmwaZD4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DS7PR13MB4654.namprd13.prod.outlook.com (2603:10b6:5:3a0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
- 2023 16:11:28 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
- 16:11:27 +0000
-Date:   Thu, 23 Mar 2023 17:11:21 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 5/9] net: dsa: tag_ksz: do not rely on
- skb_mac_header() in TX paths
-Message-ID: <ZBx6KXoosEVuZZhD@corigine.com>
-References: <20230322233823.1806736-1-vladimir.oltean@nxp.com>
- <20230322233823.1806736-6-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322233823.1806736-6-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: AM9P250CA0005.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 23 Mar 2023 12:11:36 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF2D734315;
+        Thu, 23 Mar 2023 09:11:31 -0700 (PDT)
+Received: from [192.168.2.39] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6CDBB20FBE82;
+        Thu, 23 Mar 2023 09:11:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6CDBB20FBE82
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679587891;
+        bh=tx2cEB9GJm5+/OdRlhz52+qKRfsxPBtxTkKK5gBk9rY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D0fDDhKbyTZ1n0mKv4XsiPv/YNR7QQQ41GxJ2NKkoXjynXP03g+x+g1vuCONT4Nfv
+         Eu6L8TvTykhJNyY3rB1zGs5yT6TC2iJJSBFgOgOMLc3Ti2vciP+G4BGaDAjlqyDdXF
+         SbZx4gfuY/G6dIN/nUvhIkuomFZ47Qjh7n6FsN3k=
+Message-ID: <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
+Date:   Thu, 23 Mar 2023 17:11:26 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4654:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25ab5a86-f87d-4ea4-369f-08db2bb941de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /WVpZoPzGfbExhAcyv2Zy8rPWF0/2/AqSm3wDmnHYc4Mfzj45y6BjrjPboxfKz2IA02akd+WWzKF47SQrRoSyvMNwLfONcPpY2yXjrL4fOpR5H1CRpiAOO3/ltKzAoCtr8aALmvVekmnLQ5AqOLJ3OhS9tk9OkJrEZe6e2UkdzdNWyRCNGeWCRVu4KYws/5uCKXfgcK3kvMFHLnXsLAfrxdj8en0IEPpbLKC1ZLB8fzuIjxUJLeaLQ3cBA8a5NtUNXDndUfVYq/kpfQFhFTj3SxnJLc6kydeXR9W95JSDPimVS2BmAXRuykIjfWWr84YMDJks1QagMOPyNqMXVcNs6HeCqViucCRYV7h4BVrhp+cOagoKJyU649FEhHAWjA7tbpyuCcWYvSTGxBygCUacbTwJUTCqnxamucMf03qoGQiScAXV4pGWrglcy9MjLQlGcRTEMW8RxyMwpGxSFNINhzP6wo2Y0eg+yXT6iyaKzp3OxEsEIWxT3Y4XCWD1Gene4UilvlMxcTx2uca4L0jVTqhuLdB3MA949gDCb83EkZ3URcyDme5mMjDcuryG76Xsy4bQ6GsKu6S3/Kn8LbyABcR4m0/YJoviJTH9Vzb4Xs7VXbvlkCtNmjcPwIhw26N9Ww2J5ZP4jxf56rMJVGB85HIf+kIsA8ML/uIJuUIfubEbjH/G/3pUJJKV8t7jlUA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(376002)(396003)(39840400004)(136003)(451199018)(38100700002)(2906002)(478600001)(6486002)(2616005)(316002)(186003)(36756003)(86362001)(54906003)(4744005)(8676002)(66556008)(66476007)(6916009)(4326008)(66946007)(6666004)(8936002)(6512007)(6506007)(5660300002)(44832011)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0zXEsL55YWu07BWTg6ypyaUm9yGMJxco3/Bo9g537S0RJmvkSowl2m2vKMzp?=
- =?us-ascii?Q?GNa3zR/PS1r510VKkGMRwp505pm5Ioo+DNamaRIOuCuLiCAuQe5KcWEAXGtd?=
- =?us-ascii?Q?2lH6xELxVpcU+SuzvV2zVy0mh5aSwCV+YrQc3lCeuJXacOAFnk9NWbgn0LaP?=
- =?us-ascii?Q?T4mwi3RBvO+/o+j7hH8j/Vuw5R3vxW8ncFauuGapO1QHOoRPrwi2mx79FDFI?=
- =?us-ascii?Q?qZsCSEOKH+POa7qJFJs0OZmvbIf6x16R9bM4zxHpNggICGBeBuN3jZ8Il5UU?=
- =?us-ascii?Q?Z1nUjPqvgl0Eoqr3uKmfSCEi9IAzwglYGQ+F+GNzAWtI0+2IYpy9Tj1VIwVp?=
- =?us-ascii?Q?qXsoXPQj/SqGOc8T4c8evKzoGB8Y1I2z2aVhFMjOuZIRL1MHCws0CXJVCAlY?=
- =?us-ascii?Q?z29kSz1m3JfJnDisypaVywb8ZkFoCGjvo+zyOq8gQ+/HoBFamOiBKDkf+ceH?=
- =?us-ascii?Q?6/+pL2TC4FRleeNPK0cnrpkWW9qCChmcObzyUYZ5kdqyuWlcD5J4vdcvmrUK?=
- =?us-ascii?Q?lm7ATTt5/GFUKbZkUKhimGm+BoPYPXlMrzJGrUpfqAc85Q/gpRQng7PBgA9F?=
- =?us-ascii?Q?Q7nG+EsnHR32OhEkg0lWvAJgPQ7aSLhsR80JXVjGVJiWpHIeE2ee4JIiPVmk?=
- =?us-ascii?Q?u+Zvg5EdZIm949eFqgcn5sYwsAmSh8vZ/tX2HUT7L1zyfKJUN0D3XE0V522a?=
- =?us-ascii?Q?rFUomTfkfn7PiSazPYva2UvL2IgRhKA2mio7s0MIlwRsj6q7eK55Z09NqIf3?=
- =?us-ascii?Q?fAbH7gWe9JgpyxEz9lrbWDzbRBdVbIoZHC41uqpZ8sYRndQJZ2g+ooa1HJpo?=
- =?us-ascii?Q?bQmxr1DhlHHvIzVdEPWpBs15eMxxsjTiA4+Kgt2M3UMKaOyV4f8kppr39NCF?=
- =?us-ascii?Q?uZmvTsvCwifWxxUWpfKCOu7PGec+V6hbg3EuK3tSnyl4GSrCSoIz+N/tg9nZ?=
- =?us-ascii?Q?5xQ8b8dmyKTo2G2WjsXv6zvjyM3jce4Zr1ehwbfIsdaS9HVFaazBudW1p8Cb?=
- =?us-ascii?Q?eMVUc/QAMznxui9qpo9/XHlf2sjM6yKLAaSowSmhyx8E2JisgeFLcUIXJAVu?=
- =?us-ascii?Q?JTsl6cxeEPeKxGf9hfjpPZ4hiptoXEC9xhB2jWO5M3N7bBNiwSItosFMUq6b?=
- =?us-ascii?Q?MJDhKVZafaJwR2BHrK07a+f9298X57DeBflNSOJM+//QgOXnIaLSEgmx2f5u?=
- =?us-ascii?Q?F7Als2WAz0gY9gQ1Dw0bvPCM1Q8QSUbThbv0CKZOBPmWNeTSwGKyeBaDXWIi?=
- =?us-ascii?Q?HwI6IbXU2SSB/LCsF7E9tjhb7hWcmxfLH/CtrPCb76HYzImSTuLLJcfMD4Y8?=
- =?us-ascii?Q?ShwSAtOwBh5UcNOCuuSqrGzP5yVIeiDYNbxeW0f4Z/syF9ez/VQx3YwQlM7F?=
- =?us-ascii?Q?cIhEbAgyP9N3YUuqI0kbBZ0BSweFjUofQApmXZVWAGIQqul1gRw91W6NLqGt?=
- =?us-ascii?Q?XBjhImBLKUmgOuZZe+2jvHJbcCwK1mYFTbvIZR+2v6xUO0S9OCJQqzmi1IJg?=
- =?us-ascii?Q?VtFT3taRFqUhD2Y0t4FX2iK8n2vQyNCam7mWpW11oDZqVez4X5Ri/GDXu2yL?=
- =?us-ascii?Q?VFsbp0a5tZraersjK/E/mGQZ/1EWZTtFEF5dgQ/aoOm/xwnag88tMmnYn/54?=
- =?us-ascii?Q?WtH9eimJceMpEd+gjav5eaNG/fjzSrX4EAtLm5QZReyaFtJw/cBLtcSXMPbV?=
- =?us-ascii?Q?43wTgA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25ab5a86-f87d-4ea4-369f-08db2bb941de
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 16:11:27.8658
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4+2zKmFLH7f+aeztEkAB+gd3DRi9sqqDctbFDtFNRpX4cGRGOExV5NFl1J2x56g8T3J0Wi68ekbIGB9xPLfyz8ANyh2Fzl5F++XdRKImXIM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4654
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
+ <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
+ <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
+ <20230322181541.GEZBtFzRAMcH9BAzUe@fat_crate.local>
+ <ecf005b1-ddb9-da4c-4526-28df4806426c@linux.microsoft.com>
+ <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,14 +64,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 01:38:19AM +0200, Vladimir Oltean wrote:
-> skb_mac_header() will no longer be available in the TX path when
-> reverting commit 6d1ccff62780 ("net: reset mac header in
-> dev_start_xmit()"). As preparation for that, let's use skb_eth_hdr() to
-> get to the Ethernet header's MAC DA instead, helper which assumes this
-> header is located at skb->data (assumption which holds true here).
+On 3/23/2023 4:23 PM, Borislav Petkov wrote:
+> On Thu, Mar 23, 2023 at 03:46:22PM +0100, Jeremi Piotrowski wrote:
+>> Not at all. Just to be clear: this lights up all the same bits of SNP
+>> as it does on bare-metal, none of it is emulated away. On bare-metal the
+>> hypervisor underneath the SNP guest is unencrypted as well. Here the stack
+>> is: L0 (Hyper-V), L1 (KVM) and L2 (SNP guest).
 > 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Yeah, I talked to folks after sending that email yesterday. Apparently
+> it is ok to do that without compromising SNP guest security but I, in my
+> eternal paranoia, somehow don't have the warm and fuzzy feeling about
+> it.
+> 
+>> ... The communication channel between L2 guest and PSP is secured
+>> using keys that the PSP injects into the SNP guest's address space at
+>> launch time.
+> 
+> Yeah, all the levels below L2 are required to do it set up env properly
+> so that L2 SNP guests can run.
+> 
+>> Honestly, I find it pretty cool that you can stuff a whole extra hypervisor
+>> underneath the SNP guest,
+> 
+> Whatever floats your boat. :-)
+> 
+> As long as it doesn't mess up my interrupt setup code with crazy hacks.
+> 
+>> Not sure I follow you here. The quoted paragraph talks about what the L1
+>> VM (KVM) sees. The L1 VM needs to issue PSP commands to bring up an L2 SNP
+>> guest, and later the L1 VM relays SNP guest commands to the PSP. The
+>> PSP commands are multiplexed to the physical PSP by the L0 hypervisor
+>> (Hyper-V).
+>>
+>> So Hyper-V exposes a PSP to the L1 VM because it is needed and it is
+>> compatible with the existing Linux driver that handles the PSP. The way
+>> it is exposed (ACPI table) follows how it was specified by AMD.
+> 
+> No no, it was specified by Microsoft architects.
+> > So, that same interface to the PSP can be done by L0 emulating
+> a standard ACPI device for the KVM L1 HV and then L1 can use the normal
+> ACPI interrupt #9.
+> 
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+That same interface is exposed by physical hardware+firmware to the underlying
+Hyper-V. So it wasn't a matter of Microsoft architects coming up with a
+guest-host interface but rather exposing the virtual hardware in the same
+way as on a physical server.
+
+> What's the need for supplying all that other gunk like destination ID,
+> interrupt vector and so on?
+
+I'm not sure what drove the design decisions that led to the interface looking
+the way it does.
+What I can do is put in the work to map it into kernel constructs in the most
+native way possible and in a way that doesn't look or feel like a crazy hack.
+
+> 
+> Thx.
+> 
 
