@@ -2,146 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8E26C629F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103576C62A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjCWJEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S231524AbjCWJE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjCWJD4 (ORCPT
+        with ESMTP id S231550AbjCWJEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:03:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C786C1BAC8;
-        Thu, 23 Mar 2023 02:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679562233; x=1711098233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pfEd7PgZgr1Enscty5HN6t0iA9hWqdaXMHbtn/VGXDE=;
-  b=EQtWeyABmSX8woix394JzYCZHr9aXm42jqXXIPuPmKp5rq3gDAUd39+o
-   zwuTWo/j15FHuZ0S6xmzIjZaNGUO4x1sfQhOBJCATVEUhP1EpS1Q08+bD
-   EEEq31N4lYTTCS7mzFq8QC6Rhd9PpEPhvWTaApXkXlBctL3Iscf1wUb1b
-   sPBSTYg77S0ltAuWjhsYf2npZUSc7+tYhNnVclqgnJZHc7/uFOx/av/i9
-   zSxhujgSVkJRQS5pUsxP/j0YuVS1A3y61MQPxhMuGcnQjPFFrHNj3HMa0
-   3Kito3D/Q8mMfB34EU2aFpupQxcrj8CcCWxZq+31do8ZaM1o5qi8u0/vS
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,283,1673938800"; 
-   d="asc'?scan'208";a="217613551"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Mar 2023 02:03:52 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 23 Mar 2023 02:03:44 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 23 Mar 2023 02:03:41 -0700
-Date:   Thu, 23 Mar 2023 09:03:23 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor@kernel.org>, <hal.feng@starfivetech.com>
-CC:     Hal Feng <hal.feng@starfivetech.com>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 19/21] riscv: dts: starfive: Add initial StarFive
- JH7110 device tree
-Message-ID: <6ce5b897-f1c2-4b58-9353-9d9e881ad237@spud>
-References: <20230320103750.60295-1-hal.feng@starfivetech.com>
- <20230320103750.60295-20-hal.feng@starfivetech.com>
- <60359574-8bce-40f2-99db-6d81f6e6c5c3@spud>
+        Thu, 23 Mar 2023 05:04:14 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E187E1DB85
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:04:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso1282555pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679562247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OjcZplfqBfGxkesm/SQ2YHNMoUVOYWANADhv4EwbVKw=;
+        b=hoFy1YlM+Ou4lh0YKLuMnMSIdbLbE14MqBS1SC7KjUNh2kF/qIvdI94Q/6Pf6fQYgD
+         SLOV7FX4N/holaDTDjRHZYO5HjilL5W6VQ/vdCtKhXubLcAQBRhJvxnItxYn4W3Eoqkn
+         qGZdnJtgtBoUwyYEJUkd/ZhRZ16fPJiij1SSdyQrqqoAWQ5/R8L774dQwWWPYDjV444G
+         8sUCpfgwE2HbjBA/hwPluQ53d9VYOftWc/jM7PE8763T7HywEa+7U8M+nzXd2hsKbyWq
+         eYeA5Z65UH7hAE1wRhvXz2D9i6gGDFXwp+uXSIZ3X4415fvat6tbxl4r5ewZEaIsLvZW
+         ga5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679562247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OjcZplfqBfGxkesm/SQ2YHNMoUVOYWANADhv4EwbVKw=;
+        b=1w4xv7RNK99vBlFOfaQJgEA50GzB6Mv164f83tX9g5vjX7TjZbARwxyTIbCIq7VTIt
+         MIjYk28Km55oVuj3ExHFmF2ifst+2GmHT+v/vtD/FaWaviUq0FOpqPY7t/PMkYHl5bwN
+         MNvM0UYz4T5RyMzwYl3PhLEx8IV0veV9/zj2i2g1muUHF9u3zudAQiQdceZkD4OiZ2O2
+         n+qI2bbbQcHnceK4VwMaEAkKcFBd3eA1/4uDaWDvGf5jzGV7cbpDSyW8uDInvhyLbdzG
+         +9yf8jU5r9nfZD/aUaxDFDW89036aDUz0SCXvSgqolcW9r0st6P4hwuZvpImJ2ThT8vV
+         VbMw==
+X-Gm-Message-State: AO0yUKUCXwsrTCaKk01I8DRHpy9MnR7CfrNeUfXIZ0+0TeHDT/82BthA
+        eKBQYld8o14Tc1MlN9qaZi0=
+X-Google-Smtp-Source: AK7set/oTTiOrApmUymSuNVVr+CSlC/dlZSzh452dlK3gzZb5t+MSmqd5fk4C8IAizbPWqksg3qEQQ==
+X-Received: by 2002:a17:903:247:b0:19a:9880:175f with SMTP id j7-20020a170903024700b0019a9880175fmr6518482plh.51.1679562247398;
+        Thu, 23 Mar 2023 02:04:07 -0700 (PDT)
+Received: from ubuntu.localdomain ([117.207.139.205])
+        by smtp.gmail.com with ESMTPSA id q8-20020a656848000000b005034a57b963sm11277116pgt.58.2023.03.23.02.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:04:06 -0700 (PDT)
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: [PATCH 1/3] Staging: greybus: Convert macro gpio_chip_to_gb_gpio_controller to an inline function
+Date:   Thu, 23 Mar 2023 02:03:34 -0700
+Message-Id: <92e39b9957a1863d13fc5ce9e346e99c68550fa3.1679558269.git.sumitraartsy@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1679558269.git.sumitraartsy@gmail.com>
+References: <cover.1679558269.git.sumitraartsy@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Kj0I/hLRt9/h7AYV"
-Content-Disposition: inline
-In-Reply-To: <60359574-8bce-40f2-99db-6d81f6e6c5c3@spud>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Kj0I/hLRt9/h7AYV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Convert 'gpio_chip_to_gb_gpio_controller' from a macro to a static
+inline function, to make the relevant types apparent in the
+definition and to benefit from the type checking performed by
+the compiler at call sites.
 
-On Wed, Mar 22, 2023 at 10:02:40PM +0000, Conor Dooley wrote:
-> On Mon, Mar 20, 2023 at 06:37:48PM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> >=20
-> > Add initial device tree for the JH7110 RISC-V SoC by StarFive
-> > Technology Ltd.
-> >=20
-> > Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
->=20
-> > +		S7_0: cpu@0 {
-> > +			compatible =3D "sifive,s7", "riscv";
-> > +			reg =3D <0>;
-> > +			d-cache-block-size =3D <64>;
-> > +			d-cache-sets =3D <64>;
-> > +			d-cache-size =3D <8192>;
-> > +			d-tlb-sets =3D <1>;
-> > +			d-tlb-size =3D <40>;
-> > +			device_type =3D "cpu";
-> > +			i-cache-block-size =3D <64>;
-> > +			i-cache-sets =3D <64>;
-> > +			i-cache-size =3D <16384>;
-> > +			i-tlb-sets =3D <1>;
-> > +			i-tlb-size =3D <40>;
-> > +			mmu-type =3D "riscv,sv39";
-> > +			next-level-cache =3D <&ccache>;
-> > +			riscv,isa =3D "rv64imac_zba_zbb";
-> > +			tlb-split;
-> > +			status =3D "disabled";
->=20
-> Jess pointed out on IRC that this S7 entry looks wrong as it is claiming
-> that the S7 has an mmu. I didn't go looking back in the history of
-> u74-mc core complex manuals, but the latest version does not show an mmu
-> for the S7.
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
+ drivers/staging/greybus/gpio.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-BTW Hal, if the dt-binding stuff is okay with Emil, I can just remove
-the mmu here if you confirm it is a mistake rather than you needing to
-resubmit to remove it.
+diff --git a/drivers/staging/greybus/gpio.c b/drivers/staging/greybus/gpio.c
+index d729b922a750..2a115a8fc263 100644
+--- a/drivers/staging/greybus/gpio.c
++++ b/drivers/staging/greybus/gpio.c
+@@ -41,8 +41,11 @@ struct gb_gpio_controller {
+ 	struct irq_chip		irqc;
+ 	struct mutex		irq_lock;
+ };
+-#define gpio_chip_to_gb_gpio_controller(chip) \
+-	container_of(chip, struct gb_gpio_controller, chip)
++
++static inline struct gb_gpio_controller *gpio_chip_to_gb_gpio_controller(struct gpio_chip *chip)
++{
++	return container_of(chip, struct gb_gpio_controller, chip);
++}
+ 
+ static struct gpio_chip *irq_data_to_gpio_chip(struct irq_data *d)
+ {
+-- 
+2.25.1
 
-Cheers,
-Conor.
-
---Kj0I/hLRt9/h7AYV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBwV2gAKCRB4tDGHoIJi
-0mosAQC0tTdSuLZs5V6/bJW0odHWJ3cmDx/Sya5mfwta/QgwXAD/YImkx/axtw7b
-1SczMbwlvay1eA/viVfufOvLXfk5XQ0=
-=2Nu6
------END PGP SIGNATURE-----
-
---Kj0I/hLRt9/h7AYV--
