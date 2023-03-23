@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162236C6672
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBFB6C6679
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjCWLWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S231394AbjCWL0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjCWLWb (ORCPT
+        with ESMTP id S231166AbjCWL0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:22:31 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EED125B1;
-        Thu, 23 Mar 2023 04:22:25 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D65D124DEAE;
-        Thu, 23 Mar 2023 19:22:22 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Mar
- 2023 19:22:23 +0800
-Received: from [192.168.60.143] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Mar
- 2023 19:22:22 +0800
-Message-ID: <d2dd7d2c-8469-c3a9-5ecd-9c1a22caee2c@starfivetech.com>
-Date:   Thu, 23 Mar 2023 19:22:21 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 6/6] media: starfive: Add Starfive Camera Subsystem
- driver
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        "Todor Tomov" <todor.too@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Eugen Hristev" <eugen.hristev@collabora.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
- <20230310120553.60586-7-jack.zhu@starfivetech.com>
- <20230312124339.GD2545@pendragon.ideasonboard.com>
- <650b6882-ea02-e4c8-1f73-9e5bdeab290d@starfivetech.com>
- <20230321175626.GD20234@pendragon.ideasonboard.com>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <20230321175626.GD20234@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        Thu, 23 Mar 2023 07:26:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4182C649;
+        Thu, 23 Mar 2023 04:26:16 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9fhsi012465;
+        Thu, 23 Mar 2023 11:26:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=xoje3N/M3YiHI7gHX+8r9SYjAJQE4s6xSGAisoOTOWw=;
+ b=FuoohEil1GcdFM0P5mJuYEd4oC3MxFw+XYvhhiZgCs35BqC5QLoiVoLbCcTmOLENe0W5
+ 1aliHJHZEiBAAC3M/4+yoAM98POx9gxzvRXMhgDuVxx6xT4gt6FkE49z9ue+k/hmqViJ
+ BVrJ4c3BQzXeZWqYGwMlABCjwuQ34w1eV7L8MHXrSnuw096gNJf21WsRM8QVAIkpUeer
+ WTSWkUwwp1jttQs+LacILhdQS1pz40WcMSNqBat5WwNyn+84wmSsjgLCJLrw4CzzMk6u
+ DHHNJCi5ttT+FanEi1H5qhvW10ILFgdf6uryhZpbTYD5vTv0gCe+gjQPgIiYLZHoWs9n 5Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgmc2javn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 11:26:10 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9QxWd017855;
+        Thu, 23 Mar 2023 11:26:08 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6f8j0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 11:26:08 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NBQ5CG27198198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 11:26:05 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF3EE20043;
+        Thu, 23 Mar 2023 11:26:05 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 023B520040;
+        Thu, 23 Mar 2023 11:26:05 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.109.241.16])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 11:26:04 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: [next-20230322] Kernel WARN at kernel/workqueue.c:3182 (rcutorture)
+Message-Id: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+Date:   Thu, 23 Mar 2023 16:55:54 +0530
+Cc:     linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iUE4C630IDqL7XBPTaUONAr9MgdWcVdJ
+X-Proofpoint-ORIG-GUID: iUE4C630IDqL7XBPTaUONAr9MgdWcVdJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,215 +83,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While running rcutorture tests from LTP on an IBM Power10 server booted =
+with
+6.3.0-rc3-next-20230322 following warning is observed:
+
+[ 3629.242831] ------------[ cut here ]------------
+[ 3629.242835] WARNING: CPU: 8 PID: 614614 at kernel/workqueue.c:3182 =
+__flush_work.isra.44+0x44/0x370
+[ 3629.242845] Modules linked in: rcutorture(-) torture vmac =
+poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc =
+ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc =
+snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt =
+crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache =
+netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq =
+zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod =
+bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem =
+papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod =
+t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse =
+[last unloaded: ltp_uaccess(O)]
+[ 3629.242911] CPU: 8 PID: 614614 Comm: modprobe Tainted: G O =
+6.3.0-rc3-next-20230322 #1
+[ 3629.242917] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 =
+0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+[ 3629.242923] NIP: c00000000018c204 LR: c00000000022306c CTR: =
+c0000000002233c0
+[ 3629.242927] REGS: c0000005c14e3880 TRAP: 0700 Tainted: G O =
+(6.3.0-rc3-next-20230322)
+[ 3629.242932] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> =
+CR: 48002222 XER: 0000000a
+[ 3629.242943] CFAR: c00000000018c5b0 IRQMASK: 0=20
+[ 3629.242943] GPR00: c00000000022306c c0000005c14e3b20 c000000001401200 =
+c00800000c4419e8=20
+[ 3629.242943] GPR04: 0000000000000001 0000000000000001 0000000000000011 =
+fffffffffffe0000=20
+[ 3629.242943] GPR08: c000000efe9a8300 0000000000000001 0000000000000000 =
+c00800000c42afe0=20
+[ 3629.242943] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.242943] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 =
+c000000002abb368=20
+[ 3629.242943] GPR28: c00800000c440f58 0000000000000000 c00800000c4419e8 =
+c00800000c443400=20
+[ 3629.242987] NIP [c00000000018c204] __flush_work.isra.44+0x44/0x370
+[ 3629.242993] LR [c00000000022306c] cleanup_srcu_struct+0x6c/0x1e0
+[ 3629.242998] Call Trace:
+[ 3629.243000] [c0000005c14e3b20] [c00800000c440f58] =
+srcu9+0x0/0xfffffffffffef0a8 [rcutorture] (unreliable)
+[ 3629.243009] [c0000005c14e3bb0] [c00000000022306c] =
+cleanup_srcu_struct+0x6c/0x1e0
+[ 3629.243015] [c0000005c14e3c50] [c000000000223428] =
+srcu_module_notify+0x68/0x180
+[ 3629.243021] [c0000005c14e3c90] [c00000000019a1e0] =
+notifier_call_chain+0xc0/0x1b0
+[ 3629.243027] [c0000005c14e3cf0] [c00000000019ad24] =
+blocking_notifier_call_chain+0x64/0xa0
+[ 3629.243033] [c0000005c14e3d30] [c00000000024a4c8] =
+sys_delete_module+0x1f8/0x3c0
+[ 3629.243039] [c0000005c14e3e10] [c000000000037480] =
+system_call_exception+0x140/0x350
+[ 3629.243044] [c0000005c14e3e50] [c00000000000d6a0] =
+system_call_common+0x160/0x2e4
+[ 3629.243050] --- interrupt: c00 at 0x7fff8cd39558
+[ 3629.243054] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: =
+0000000000000000
+[ 3629.243057] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243062] MSR: 800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+[ 3629.243072] IRQMASK: 0=20
+[ 3629.243072] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 =
+000000013df30ec8=20
+[ 3629.243072] GPR04: 0000000000000800 000000000000000a 1999999999999999 =
+0000000000000000=20
+[ 3629.243072] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243072] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 =
+000000010d80a648=20
+[ 3629.243072] GPR16: 0000000000000000 0000000000000001 0000000000000000 =
+000000010d80a428=20
+[ 3629.243072] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 =
+000000013df304f0=20
+[ 3629.243072] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 =
+0000000000000000=20
+[ 3629.243072] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 =
+000000013df30e60=20
+[ 3629.243115] NIP [00007fff8cd39558] 0x7fff8cd39558
+[ 3629.243118] LR [000000010d800398] 0x10d800398
+[ 3629.243121] --- interrupt: c00
+[ 3629.243123] Code: 89292e39 f821ff71 e94d0c78 f9410068 39400000 =
+69290001 0b090000 fbc10080 7c7e1b78 e9230018 7d290074 7929d182 =
+<0b090000> 7c0802a6 fb810070 f80100a0=20
+[ 3629.243138] ---[ end trace 0000000000000000 ]=E2=80=94
+
+Followed by following traces:
+
+[ 3629.243149] ------------[ cut here ]------------
+[ 3629.243152] WARNING: CPU: 8 PID: 614614 at kernel/rcu/srcutree.c:663 =
+cleanup_srcu_struct+0x11c/0x1e0
+[ 3629.243159] Modules linked in: rcutorture(-) torture vmac =
+poly1305_generic chacha_generic chacha20poly1305 n_gsm pps_ldisc =
+ppp_synctty ppp_async ppp_generic serport slcan can_dev slip slhc =
+snd_hrtimer snd_seq snd_seq_device snd_timer snd soundcore pcrypt =
+crypto_user n_hdlc dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache =
+netfs brd overlay exfat vfat fat btrfs blake2b_generic xor raid6_pq =
+zstd_compress xfs loop sctp ip6_udp_tunnel udp_tunnel libcrc32c dm_mod =
+bonding rfkill tls sunrpc kmem device_dax nd_pmem nd_btt dax_pmem =
+papr_scm pseries_rng libnvdimm vmx_crypto ext4 mbcache jbd2 sd_mod =
+t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp ibmveth fuse =
+[last unloaded: ltp_uaccess(O)]
+[ 3629.243217] CPU: 8 PID: 614614 Comm: modprobe Tainted: G W O =
+6.3.0-rc3-next-20230322 #1
+[ 3629.243222] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 =
+0xf000006 of:IBM,FW1030.00 (NH1030_026) hv:phyp pSeries
+[ 3629.243227] NIP: c00000000022311c LR: c0000000002230d8 CTR: =
+c0000000002233c0
+[ 3629.243230] REGS: c0000005c14e3910 TRAP: 0700 Tainted: G W O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243235] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> =
+CR: 28002228 XER: 0000000a
+[ 3629.243245] CFAR: c0000000008040c0 IRQMASK: 0=20
+[ 3629.243245] GPR00: c0000000002230b8 c0000005c14e3bb0 c000000001401200 =
+0000000000000040=20
+[ 3629.243245] GPR04: 0000000000000040 0000000000000040 0000000000000011 =
+fffffffffffe0000=20
+[ 3629.243245] GPR08: ffffffffffffffff 0000000000000001 0000000000000000 =
+c00800000c42afe0=20
+[ 3629.243245] GPR12: c0000000002233c0 c000000effff6700 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243245] GPR24: c00800000c443400 c00800000c440f60 c00800000c4418c8 =
+c000000002bdabe0=20
+[ 3629.243245] GPR28: c00800000c440f58 c000000002bdbe00 0000000000000040 =
+c009fffffeb8c500=20
+[ 3629.243288] NIP [c00000000022311c] cleanup_srcu_struct+0x11c/0x1e0
+[ 3629.243293] LR [c0000000002230d8] cleanup_srcu_struct+0xd8/0x1e0
+[ 3629.243298] Call Trace:
+[ 3629.243300] [c0000005c14e3bb0] [c0000000002230b8] =
+cleanup_srcu_struct+0xb8/0x1e0 (unreliable)
+[ 3629.243306] [c0000005c14e3c50] [c000000000223428] =
+srcu_module_notify+0x68/0x180
+[ 3629.243312] [c0000005c14e3c90] [c00000000019a1e0] =
+notifier_call_chain+0xc0/0x1b0
+[ 3629.243318] [c0000005c14e3cf0] [c00000000019ad24] =
+blocking_notifier_call_chain+0x64/0xa0
+[ 3629.243324] [c0000005c14e3d30] [c00000000024a4c8] =
+sys_delete_module+0x1f8/0x3c0
+[ 3629.243329] [c0000005c14e3e10] [c000000000037480] =
+system_call_exception+0x140/0x350
+[ 3629.243335] [c0000005c14e3e50] [c00000000000d6a0] =
+system_call_common+0x160/0x2e4
+[ 3629.243341] --- interrupt: c00 at 0x7fff8cd39558
+[ 3629.243344] NIP: 00007fff8cd39558 LR: 000000010d800398 CTR: =
+0000000000000000
+[ 3629.243348] REGS: c0000005c14e3e80 TRAP: 0c00 Tainted: G W O =
+(6.3.0-rc3-next-20230322)
+[ 3629.243353] MSR: 800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 28008282 XER: 00000000
+[ 3629.243363] IRQMASK: 0=20
+[ 3629.243363] GPR00: 0000000000000081 00007fffe99fd9c0 00007fff8ce07300 =
+000000013df30ec8=20
+[ 3629.243363] GPR04: 0000000000000800 000000000000000a 1999999999999999 =
+0000000000000000=20
+[ 3629.243363] GPR08: 00007fff8cd98160 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 3629.243363] GPR12: 0000000000000000 00007fff8d5fcb50 000000010d80a650 =
+000000010d80a648=20
+[ 3629.243363] GPR16: 0000000000000000 0000000000000001 0000000000000000 =
+000000010d80a428=20
+[ 3629.243363] GPR20: 000000010d830068 0000000000000000 00007fffe99ff2f8 =
+000000013df304f0=20
+[ 3629.243363] GPR24: 0000000000000000 00007fffe99ff2f8 000000013df30ec8 =
+0000000000000000=20
+[ 3629.243363] GPR28: 0000000000000000 000000013df30e60 000000013df30ec8 =
+000000013df30e60=20
+[ 3629.243407] NIP [00007fff8cd39558] 0x7fff8cd39558
+[ 3629.243410] LR [000000010d800398] 0x10d800398
+[ 3629.243413] --- interrupt: c00
+[ 3629.243415] Code: 419dffa4 e93a0078 39400001 552907be 2f890000 =
+7d20579e 0b090000 e95a0078 e91a0080 39200001 7fa85000 7d204f9e =
+<0b090000> 7f23cb78 4bfffd65 0b030000=20
+[ 3629.243430] ---[ end trace 0000000000000000 ]=E2=80=94
+
+These warnings are repeated few times. The LTP test is marked as PASS.
+
+Git bisect point to the following patch
+commit f46a5170e6e7d5f836f2199fe82cdb0b4363427f
+    srcu: Use static init for statically allocated in-module srcu_struct
 
 
-On 2023/3/22 1:56, Laurent Pinchart wrote:
-> Hi Jack,
-> 
-> On Tue, Mar 21, 2023 at 08:56:34PM +0800, Jack Zhu wrote:
->> On 2023/3/12 20:43, Laurent Pinchart wrote:
->> > Hi Jack,
->> > 
->> > Thank you for the patch.
->> > 
->> > I'll do a partial review here as the patch is huge and I'm lacking time
->> > at the moment.
->> 
->> Thank you for the review and your time.
->> 
->> > On Fri, Mar 10, 2023 at 08:05:53PM +0800, Jack Zhu wrote:
->> >> Add the driver for Starfive Camera Subsystem found on
->> >> Starfive JH7110 SoC. It is used for handing image sensor
->> >> data.
->> >> 
->> >> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
->> >> ---
->> >>  drivers/media/platform/Kconfig                |    1 +
->> >>  drivers/media/platform/Makefile               |    1 +
->> >>  drivers/media/platform/starfive/Kconfig       |   18 +
->> >>  drivers/media/platform/starfive/Makefile      |   14 +
->> >>  drivers/media/platform/starfive/stf_camss.c   |  728 +++++++++
->> >>  drivers/media/platform/starfive/stf_camss.h   |  104 ++
->> >>  drivers/media/platform/starfive/stf_common.h  |  149 ++
->> >>  drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
->> >>  drivers/media/platform/starfive/stf_isp.h     |  183 +++
->> >>  .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 ++++++++++++++++
->> >>  drivers/media/platform/starfive/stf_video.c   | 1286 ++++++++++++++++
->> >>  drivers/media/platform/starfive/stf_video.h   |   89 ++
->> >>  drivers/media/platform/starfive/stf_vin.c     | 1314 +++++++++++++++++
->> >>  drivers/media/platform/starfive/stf_vin.h     |  194 +++
->> >>  .../media/platform/starfive/stf_vin_hw_ops.c  |  357 +++++
->> >>  include/uapi/linux/stf_isp_ioctl.h            |  127 ++
->> >>  16 files changed, 6930 insertions(+)
->> >>  create mode 100644 drivers/media/platform/starfive/Kconfig
->> >>  create mode 100644 drivers/media/platform/starfive/Makefile
->> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.c
->> >>  create mode 100644 drivers/media/platform/starfive/stf_camss.h
->> >>  create mode 100644 drivers/media/platform/starfive/stf_common.h
->> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
->> >>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
->> >>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
->> >>  create mode 100644 drivers/media/platform/starfive/stf_video.c
->> >>  create mode 100644 drivers/media/platform/starfive/stf_video.h
->> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.c
->> >>  create mode 100644 drivers/media/platform/starfive/stf_vin.h
->> >>  create mode 100644 drivers/media/platform/starfive/stf_vin_hw_ops.c
->> >>  create mode 100644 include/uapi/linux/stf_isp_ioctl.h
-> 
-> [snip]
-> 
->> >> diff --git a/drivers/media/platform/starfive/stf_camss.c b/drivers/media/platform/starfive/stf_camss.c
->> >> new file mode 100644
->> >> index 000000000000..525f2d80c5eb
->> >> --- /dev/null
->> >> +++ b/drivers/media/platform/starfive/stf_camss.c
->> >> @@ -0,0 +1,728 @@
-> 
-> [snip]
-> 
->> >> +/*
->> >> + * stfcamss_find_sensor - Find a linked media entity which represents a sensor
->> >> + * @entity: Media entity to start searching from
->> >> + *
->> >> + * Return a pointer to sensor media entity or NULL if not found
->> >> + */
->> >> +struct media_entity *stfcamss_find_sensor(struct media_entity *entity)
->> > 
->> > From a camss point of view, the source is the csi2rx. You shouldn't
->> > need to access the sensor directly, only the csi2rx. If you think you
->> > have a need to access the sensor, please explain why and we can discuss
->> > it.
->> 
->> need to use format and bpp of sensor to configure isp HW.
-> 
-> You can obtain the same information from the ISP sink pad:
-> 
-> 
-> +----------+       +------------+       +-----------+
-> |          |       |            |       |           | 
-> | Sensor [0| ----> |0] csi2rx [1| ----> |0]   ISP   |
-> |          |       |            |       |           |
-> +----------+       +------------+       +-----------+
-> 
-> (I'm not entirely sure if the csi2rx and ISP pad numbers are correct,
-> but that's the idea.)
-> 
-> The csi2rx can't modify the format (size and bpp), so the format on the
-> sensor's pad 0, csi2rx pad 0, csi2rx pad 1 and ISP pad 0 must be
-> identical.
-> 
-> In isp_sensor_fmt_to_index(), the ISP driver doesn't need to get the
-> format from the sensor, it can use the format on ISP pad 0 instead.
-> 
-> In video_enum_framesizes(), the ISP driver shouldn't look at the format
-> on the ISP input at all, it must enumerate all sizes that the video node
-> supports, regardless of what is connected to its input.
-> 
-> video_enum_frameintervals() should be dropped, the ISP itself has no
-> notion of frame interval. Userspace can query and configure the frame
-> rate from the sensor subdev directly.
-> 
-> In video_pipeline_s_fmt(), the ISP driver shouldn't look at the format
-> on the ISP input at all either. It must accept any format supported by
-> the ISP. It's only when starting streaming that the pipeline is
-> validated to make sure the formats configured on all subdevs match. I
-> recommend reading https://git.ideasonboard.org/doc/mc-v4l2.git for an
-> overview of how Media Controller-based drivers should behave. The
-> documentation describes how the API is meant to be used from userspace,
-> but the operating principles apply to driver development too.
-> 
-> video_subscribe_event() and video_unsubscribe_event() should also be
-> dropped, events from the sensor can be accessed by userspace on the
-> sensor subdev directly.
-> 
-> vin_set_stream() should call .s_stream() on the csi2rx, not the sensor.
-> The csi2rx .s_stream() handler will forward the call to the sensor.
-> 
-
-OK, will fix. Thank you for your comment.
-
->> >> +{
->> >> +	struct media_pad *pad;
->> >> +
->> >> +	while (1) {
->> >> +		if (!entity->pads)
->> >> +			return NULL;
->> >> +
->> >> +		pad = &entity->pads[0];
->> >> +		if (!(pad->flags & MEDIA_PAD_FL_SINK))
->> >> +			return NULL;
->> >> +
->> >> +		pad = media_pad_remote_pad_first(pad);
->> >> +		if (!pad || !is_media_entity_v4l2_subdev(pad->entity))
->> >> +			return NULL;
->> >> +
->> >> +		entity = pad->entity;
->> >> +
->> >> +		if (entity->function == MEDIA_ENT_F_CAM_SENSOR)
->> >> +			return entity;
->> >> +	}
->> >> +}
-> 
-> [snip]
-> 
->> >> diff --git a/include/uapi/linux/stf_isp_ioctl.h b/include/uapi/linux/stf_isp_ioctl.h
->> >> new file mode 100644
->> >> index 000000000000..3f302ef235d2
->> >> --- /dev/null
->> >> +++ b/include/uapi/linux/stf_isp_ioctl.h
->> >> @@ -0,0 +1,127 @@
-> 
-> [snip]
-> 
->> >> +enum _STF_ISP_IOCTL {
->> > 
->> > Device-specific ioctls are allowed, but they must all be clearly
->> > documented.
->> 
->> OK, I will add annotations for these ioctls.
->> 
->> > 
->> >> +	STF_ISP_IOCTL_LOAD_FW = BASE_VIDIOC_PRIVATE + 1,
->> > 
->> > Why can't you use the Linux kernel firmware API ?
->> 
->> The ioctl is used for loading config file, it is different from
->> the Linux kernel firmware API. I will rename it.
-> 
-> Could you explain what the config file is used for ?
-
-used for debugging. It's not necessary. I will drop it.
-
-> 
->> >> +	STF_ISP_IOCTL_DMABUF_ALLOC,
->> >> +	STF_ISP_IOCTL_DMABUF_FREE,
->> >> +	STF_ISP_IOCTL_GET_HW_VER,
->> > 
->> > Not used, drop them.
->> 
->> OK, will drop them.
->> 
->> > 
->> >> +	STF_ISP_IOCTL_REG,
->> > 
->> > Setting registers from userspace isn't allowed. No exception.
->> 
->> OK, will fix.
->> 
->> > 
->> >> +	STF_ISP_IOCTL_SHADOW_LOCK,
->> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK,
->> >> +	STF_ISP_IOCTL_SHADOW_UNLOCK_N_TRIGGER,
->> >> +	STF_ISP_IOCTL_SET_USER_CONFIG_ISP,
->> > 
->> > I'm not sure what these ioctls do exactly as documentation is missing,
->> > but I don't think they are the right API. Please describe the problem
->> > you're trying to solve, and we'll find a good API.
->> 
->> These were used for debugging, I will drop them. Thanks.
->> 
->> >> +	STF_ISP_IOCTL_MAX
->> >> +};
-> 
-> [snip]
-> 
+Thanks
+- Sachin=
