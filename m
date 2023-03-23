@@ -2,291 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A616C725A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F19D6C7263
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 22:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjCWVan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 17:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S230456AbjCWViW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 17:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCWVaj (ORCPT
+        with ESMTP id S229752AbjCWViU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 17:30:39 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11416BDC9;
-        Thu, 23 Mar 2023 14:30:38 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id bk5so7977111oib.6;
-        Thu, 23 Mar 2023 14:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679607037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yYGawMaA5C9I8og6thwq+8ahieODy/UxjYv744M7Lsg=;
-        b=fqEBzCibuTy1u7D82n6S4fav5cTjcJ23V97Sk6kFjjSMEVXnUf5FzEMIjlJZggk0tb
-         RUwB+C5pPWNspWTo+0FYKKq7TW91va8rQg68/I7BAYIFYYMykqTwvCnlrIr5OuE2FTjR
-         2igatK31JrJmNKovUnU/wWOvYZhd17XGr3eZjJqJbluQZbKTMyKFxP20Rz4+7xoUdcc6
-         h/Szlzh2glnSZd92WkIo70de/07202kqssrfn962mYLsqCwl6nGkd7G655dK453BHzsL
-         bIZqE+slN7eO7/aOoaox5IyQUbCNffxCZdp67VKA2+59HcTKk6uL4P7mN+kAKJ++qqqC
-         t4uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679607037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yYGawMaA5C9I8og6thwq+8ahieODy/UxjYv744M7Lsg=;
-        b=gQSH2jrWL8HMzoXg7jgo1Nf9mFf7AywQ745GgridHqW7o4FC+Dwjk46IoW3mi6taLp
-         QBfLND2vqVUQQWv7/apn0Q1XImiu58t59TY/qY8u51Vr4Jjc1nD+R0HXFJVPcbxnjmqd
-         ROrCnsJst3QbZDuF+KWQdS4pbSr660CFcj14bBGTpLcaJqLaRMy9DNYSXtCyuBHufzEP
-         kKnvg3Bmwowu4oYNSTeLTfewHjauOfEqSi8ayCgmfbA6y/18SmP/BoiUVXxKLseazziJ
-         HcAgZNlhAkbTxaiiIcK6p/7VnDhWt3swTxoaaUkVkRf1zSClF/t0TeiKK69E5ApRjY+z
-         wXwQ==
-X-Gm-Message-State: AO0yUKWY8Ber2/c+ibxxZ++QMYUdayxNGnl2GM3T9wRHlFWBJt7pGaHw
-        naPvJrcqrcyHsbNWAUu2kFRAXEBeaQbclrO/jO0=
-X-Google-Smtp-Source: AK7set+lQIOQZa6G3yJgfeNWvhx4ZPw9QfSfPP4xMRabuyGwu/M0+lIKerUid2CsL2yKUuudaarY5sPyNjfYKO1ILwk=
-X-Received: by 2002:a54:4716:0:b0:384:1e6a:bf10 with SMTP id
- k22-20020a544716000000b003841e6abf10mr36512oik.5.1679607035826; Thu, 23 Mar
- 2023 14:30:35 -0700 (PDT)
+        Thu, 23 Mar 2023 17:38:20 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D41E26B8;
+        Thu, 23 Mar 2023 14:38:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H45gABeuK7IiFCzjW100x+vQY+9T0V23A7AGgEYIZBcAE/OvwsQFo8dEQhFzVZBrVNH1z/jDuZyIpH2RcN561jrOe/RNqEjVhVA6eN+aTEnrCIsyUWFxzheP7DDJ2qy32ttd9TZ9Rlc1hb+Ogg+Ml6bR1MpY/JvzQ/JPPVpKxoAc+xIM3BXjHDb6hlvoJCigwAaDe94uCepnjL8GnUzJsd8oURrlPKvy2zzUbBbHBQiir7bnJ48TbuHFzgGV7wpVOcE83sPl+gBD0tc+/8rPSUB2WACD4iYeTqDWpiUUUhn3KIpct40FRYXe4DcKIOII/Lfkd/GM2ma8eTdXt+j5QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hJ6p1MUywn9zav2DD2FF3gP4Q6zmxUS3UtMtpB9Dvwo=;
+ b=RFhY8z8Njv6EtGio/49GDIHo5P3NAPi2nk0KNxtf0zjoNRycamXFzBGCmCc/bW0ohOa8IGVfwvR5KR8ggbbb7qlo3nCqHUWnXeXNZniZqlUp0UacenQGCE3GBxWHIeFxRlAuH4GdJrJtRRAM1VY3fVJl0qbQHOygnMxBrZZ/Zyxr8UvmGZ76GGAsWTgfx02HMzsqnstnSivij7UrItOaBQgOa/es9jwDT1b16/3n76zrOps/HFPvf5UBJH8f3n0sfr/djQJ5nZvckFYwLj5UqQopVeIHjTfsKUITDPedVRbz5Kg5qpPvFXKZHPmJp3+m0yhzBUqQSOhuawniVD/Gkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hJ6p1MUywn9zav2DD2FF3gP4Q6zmxUS3UtMtpB9Dvwo=;
+ b=3UgWZXo4Ez7+S5G8AVFbhE74kUs+PpeyB413UYCUaYtSpijtB9CbA5sfECsvMRbVrOoaoiIvuskxoIZNA8kpuJai5BDdoUmBVOukxbrIPasbrGFOD0w8H9YQBj0aNPjnLKSLBwHHs2VbRrbsBMsw9axNbfiDoNpzr5fmDzN38kY=
+Received: from DM6PR11CA0028.namprd11.prod.outlook.com (2603:10b6:5:190::41)
+ by PH8PR12MB7376.namprd12.prod.outlook.com (2603:10b6:510:214::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 21:38:15 +0000
+Received: from DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::ea) by DM6PR11CA0028.outlook.office365.com
+ (2603:10b6:5:190::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
+ Transport; Thu, 23 Mar 2023 21:38:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT029.mail.protection.outlook.com (10.13.173.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.22 via Frontend Transport; Thu, 23 Mar 2023 21:38:15 +0000
+Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 23 Mar
+ 2023 16:38:14 -0500
+From:   Terry Bowman <terry.bowman@amd.com>
+To:     <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>
+CC:     <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: [PATCH v2 0/5] cxl/pci: Add support for RCH RAS error handling
+Date:   Thu, 23 Mar 2023 16:38:03 -0500
+Message-ID: <20230323213808.398039-1-terry.bowman@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230322224403.35742-1-robdclark@gmail.com> <b9fb81f1-ac9e-cf3f-5cf4-f2d972d3ed3d@amd.com>
- <CAF6AEGvMwZCLntfYeH3Vg_Z7kYynqdVrinp+pmcbREksK1WGMA@mail.gmail.com> <e2fa296b-9b71-a41b-d37d-33f0fac2cd4e@amd.com>
-In-Reply-To: <e2fa296b-9b71-a41b-d37d-33f0fac2cd4e@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 23 Mar 2023 14:30:24 -0700
-Message-ID: <CAF6AEGvdVca_mnZVo9He9oKVfYp84e_kOPWaxX+K5aV4Es9kcQ@mail.gmail.com>
-Subject: Re: [RFC] drm/scheduler: Unwrap job dependencies
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT029:EE_|PH8PR12MB7376:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7c6e527-a192-4d77-9955-08db2be6e8eb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rP3qwz7ZD7gh8IkEVt3u0rjDsg1wACQyjlUYvhu7EGBwS2wh9cYUzCkqrB6dtthMcH8aqKD/9pd+oYgFpoVGstooqG30e5GdzdNRVhhoRlbG1rPG+7sow4burbSRjh3UEvddEH35kyfxEMvJGGzk2gXinitNeGSNiCIEaT8DH/ttV19/opLXHgZFbys6sIz0dYOwfBK+F1ZK+Goe4TYGeLC3eNu61T3afKmH1S1DHmJh/Ots1hQVWwGGdQQo/nqq609Z/eHbP6XAf9hh9POdO5bzk+/0m0LgRIx7apR2UmOwjN8XQNK+Y9QJktUW4vNUCKYMdH9bjTOXZ4+LjMrLrDcbKIHo+IMO3cjx2bCfZAFbedWbCctqv/c42TCt37MJWTdXnNRjGjasGqdoVAFtT1ycsp6qqv+d7El/HPDSJXJJneoRtrKJPLP/hAJYinTDRFoyrA0aWRmXPFbiq5/REqHhsd5GMSauZKQLK4En8/iV6hAXZNJcwAHdIwtUUqEJl0J23tircMxlObxJgBgdoyk+PbIk0pT8FWSt7APN1igZAZ96pdfDhcHwaU3WuDjFllb71GgJT76GsASm8hyRry1AoedWnol/WfLPnAl9kt8qwEuKN9bgzdw9YWFkNLZrRfbcKuW5a0vZmCesDUE2yYLqqaurx3wjYMyJ5NI4AbepjguUsr2y1CeBPYsA37CvMrsBcyhMVNvtcEQBHEQtEnIaAO5S9Nmkcix7zz2K/Z0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199018)(40470700004)(36840700001)(46966006)(40460700003)(36860700001)(8676002)(4326008)(70586007)(70206006)(54906003)(6636002)(41300700001)(5660300002)(7416002)(44832011)(82740400003)(26005)(47076005)(426003)(81166007)(1076003)(8936002)(6666004)(16526019)(316002)(186003)(478600001)(83380400001)(2616005)(336012)(966005)(7696005)(110136005)(36756003)(82310400005)(86362001)(40480700001)(2906002)(921005)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 21:38:15.2502
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7c6e527-a192-4d77-9955-08db2be6e8eb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7376
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 7:03=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 23.03.23 um 14:54 schrieb Rob Clark:
-> > On Thu, Mar 23, 2023 at 12:35=E2=80=AFAM Christian K=C3=B6nig
-> > <christian.koenig@amd.com> wrote:
-> >> Am 22.03.23 um 23:44 schrieb Rob Clark:
-> >>> From: Rob Clark <robdclark@chromium.org>
-> >>>
-> >>> Container fences have burner contexts, which makes the trick to store=
- at
-> >>> most one fence per context somewhat useless if we don't unwrap array =
-or
-> >>> chain fences.
-> >> Mhm, we intentionally kept them not unwrapped since this way they only
-> >> occupy one fence slot.
-> >>
-> >> But it might be better to unwrap them if you add many of those depende=
-ncies.
-> >>
-> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >>> ---
-> >>> tbh, I'm not sure why we weren't doing this already, unless there is
-> >>> something I'm overlooking
-> >>>
-> >>>    drivers/gpu/drm/scheduler/sched_main.c | 43 +++++++++++++++++-----=
-----
-> >>>    1 file changed, 28 insertions(+), 15 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm=
-/scheduler/sched_main.c
-> >>> index c2ee44d6224b..f59e5335afbb 100644
-> >>> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> >>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> >>> @@ -41,20 +41,21 @@
-> >>>     * 4. Entities themselves maintain a queue of jobs that will be sc=
-heduled on
-> >>>     *    the hardware.
-> >>>     *
-> >>>     * The jobs in a entity are always scheduled in the order that the=
-y were pushed.
-> >>>     */
-> >>>
-> >>>    #include <linux/kthread.h>
-> >>>    #include <linux/wait.h>
-> >>>    #include <linux/sched.h>
-> >>>    #include <linux/completion.h>
-> >>> +#include <linux/dma-fence-unwrap.h>
-> >>>    #include <linux/dma-resv.h>
-> >>>    #include <uapi/linux/sched/types.h>
-> >>>
-> >>>    #include <drm/drm_print.h>
-> >>>    #include <drm/drm_gem.h>
-> >>>    #include <drm/gpu_scheduler.h>
-> >>>    #include <drm/spsc_queue.h>
-> >>>
-> >>>    #define CREATE_TRACE_POINTS
-> >>>    #include "gpu_scheduler_trace.h"
-> >>> @@ -665,41 +666,27 @@ void drm_sched_job_arm(struct drm_sched_job *jo=
-b)
-> >>>        sched =3D entity->rq->sched;
-> >>>
-> >>>        job->sched =3D sched;
-> >>>        job->s_priority =3D entity->rq - sched->sched_rq;
-> >>>        job->id =3D atomic64_inc_return(&sched->job_id_count);
-> >>>
-> >>>        drm_sched_fence_init(job->s_fence, job->entity);
-> >>>    }
-> >>>    EXPORT_SYMBOL(drm_sched_job_arm);
-> >>>
-> >>> -/**
-> >>> - * drm_sched_job_add_dependency - adds the fence as a job dependency
-> >>> - * @job: scheduler job to add the dependencies to
-> >>> - * @fence: the dma_fence to add to the list of dependencies.
-> >>> - *
-> >>> - * Note that @fence is consumed in both the success and error cases.
-> >>> - *
-> >>> - * Returns:
-> >>> - * 0 on success, or an error on failing to expand the array.
-> >>> - */
-> >>> -int drm_sched_job_add_dependency(struct drm_sched_job *job,
-> >>> -                              struct dma_fence *fence)
-> >>> +static int _add_dependency(struct drm_sched_job *job, struct dma_fen=
-ce *fence)
-> >> Please keep the drm_sched_job_ prefix here even for static functions.
-> >> The symbol _add_dependency just sucks in a backtrace, especially when
-> >> it's tail optimized.
-> >>
-> >>>    {
-> >>>        struct dma_fence *entry;
-> >>>        unsigned long index;
-> >>>        u32 id =3D 0;
-> >>>        int ret;
-> >>>
-> >>> -     if (!fence)
-> >>> -             return 0;
-> >>> -
-> >>>        /* Deduplicate if we already depend on a fence from the same c=
-ontext.
-> >>>         * This lets the size of the array of deps scale with the numb=
-er of
-> >>>         * engines involved, rather than the number of BOs.
-> >>>         */
-> >>>        xa_for_each(&job->dependencies, index, entry) {
-> >>>                if (entry->context !=3D fence->context)
-> >>>                        continue;
-> >>>
-> >>>                if (dma_fence_is_later(fence, entry)) {
-> >>>                        dma_fence_put(entry);
-> >>> @@ -709,20 +696,46 @@ int drm_sched_job_add_dependency(struct drm_sch=
-ed_job *job,
-> >>>                }
-> >>>                return 0;
-> >>>        }
-> >>>
-> >>>        ret =3D xa_alloc(&job->dependencies, &id, fence, xa_limit_32b,=
- GFP_KERNEL);
-> >>>        if (ret !=3D 0)
-> >>>                dma_fence_put(fence);
-> >>>
-> >>>        return ret;
-> >>>    }
-> >>> +
-> >>> +/**
-> >>> + * drm_sched_job_add_dependency - adds the fence as a job dependency
-> >>> + * @job: scheduler job to add the dependencies to
-> >>> + * @fence: the dma_fence to add to the list of dependencies.
-> >>> + *
-> >>> + * Note that @fence is consumed in both the success and error cases.
-> >>> + *
-> >>> + * Returns:
-> >>> + * 0 on success, or an error on failing to expand the array.
-> >>> + */
-> >>> +int drm_sched_job_add_dependency(struct drm_sched_job *job,
-> >>> +                              struct dma_fence *fence)
-> >> Maybe name the new function drm_sched_job_unwrap_add_dependency or
-> >> something like this.
-> >>
-> >> I need to double check, but I think for some cases we don't need or
-> >> don't even want this in the driver.
-> > I'd be curious to know the cases where you don't want this.. one thing
-> > I was thinking about, what if you have a container fence with two
-> > contained fences.  One is on the same ctx as the job, one is not but
-> > signals sooner.  You end up artificially waiting on both, which seems
-> > sub-optimal.
->
-> Well resv objects don't contain other containers for example.
+This patchset adds error handling support for restricted CXL host (RCH)
+downstream ports. This is necessary because RCH downstream ports are
+implemented in RCRBs and report protocol errors through a root complex
+event collector (RCEC). The RCH error reporting flow is not currently
+supported by the CXL driver and will be added by this patchset.
 
-I suppose I have the explicit sync case more in mind, where the
-dependent fence ends up being a chain or array (if userspace is
-merging fence fd's).
+This patchset uses an updated subject line and is a continuation of:
+https://lore.kernel.org/all/20221021185615.605233-1-terry.bowman@amd.com/
 
-> Then we also have an use case in amdgpu where fence need to be
-> explicitly waited for even when they are from the same ctx as the job
-> because otherwise we wouldn't see everything cache coherent.
+The first patch discovers the RCH dport AER and RAS registers. These will
+be mapped later and used in CXL driver error logging.
 
-This was the kinda weird case I wanted to make sure I wasn't breaking.
-I remember seeing something fly by for this, but can't find it now or
-remember what amdgpu's solution was..
+The second patch exports cper_mem_err_unpack(). cper_mem_err_unpack() is a
+dependency for using the cper_print_aer() AER trace logging.
 
-> On the other hand we currently handle that amdgpu use case differently
-> and the extra overhead of unwrapping fences even if they can't be
-> containers is probably negligible.
->
-> > Anyways, I can make this a new entrypoint which unwraps, and/or rename
-> > the internal static function, if we think this is a good idea.
->
-> If you think that's unnecessary keeping your original approach is fine
-> with me as well.
+The third patch exports cper_print_aer(). cper_print_aer() is used for
+CXL AER error logging because it provides a common format for logging
+into dmesg.
 
-I'm going to assume unnecessary until someone speaks up with their
-weird specific case ;-)
+The fourth patch is AER port driver changes for forwarding RCH errors to
+the RCiEP RCH handler.
 
-BR,
--R
+The fifth patch maps the AER and RAS registers. This patch also adds the
+RCH handler for logging downstream port AER and RAS information. 
 
-> Regards,
-> Christian.
->
-> >
-> > BR,
-> > -R
-> >
-> >> Christian.
-> >>
-> >>> +{
-> >>> +     struct dma_fence_unwrap iter;
-> >>> +     struct dma_fence *f;
-> >>> +     int ret =3D 0;
-> >>> +
-> >>> +     dma_fence_unwrap_for_each (f, &iter, fence) {
-> >>> +             ret =3D _add_dependency(job, f);
-> >>> +             if (ret)
-> >>> +                     break;
-> >>> +     }
-> >>> +
-> >>> +     return ret;
-> >>> +}
-> >>>    EXPORT_SYMBOL(drm_sched_job_add_dependency);
-> >>>
-> >>>    /**
-> >>>     * drm_sched_job_add_resv_dependencies - add all fences from the r=
-esv to the job
-> >>>     * @job: scheduler job to add the dependencies to
-> >>>     * @resv: the dma_resv object to get the fences from
-> >>>     * @usage: the dma_resv_usage to use to filter the fences
-> >>>     *
-> >>>     * This adds all fences matching the given usage from @resv to @jo=
-b.
-> >>>     * Must be called with the @resv lock held.
->
+This is based on cxl/next commit
+e686c32590f4 ("dax/kmem: Fix leak of memory-hotplug resources")'
+
+Robert Richter (1):
+  cxl/pci: Forward RCH downstream port-detected errors to the CXL.mem
+    dev handler
+
+Terry Bowman (4):
+  cxl/pci: Add RCH downstream port AER and RAS register discovery
+  efi/cper: Export cper_mem_err_unpack() for CXL logging
+  pci/aer: Export cper_print_aer() for CXL driver logging
+  cxl/pci: Add RCH downstream port error logging
+
+ drivers/cxl/core/pci.c      | 126 +++++++++++++++++++++++---
+ drivers/cxl/core/regs.c     |  94 +++++++++++++++++---
+ drivers/cxl/cxl.h           |  18 ++++
+ drivers/cxl/mem.c           | 173 +++++++++++++++++++++++++++++++++---
+ drivers/firmware/efi/cper.c |   1 +
+ drivers/pci/pcie/aer.c      |  46 ++++++++++
+ 6 files changed, 423 insertions(+), 35 deletions(-)
+
+-- 
+2.34.1
+
