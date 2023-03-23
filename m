@@ -2,82 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8DE6C6406
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921266C6412
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 10:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjCWJuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 05:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
+        id S230302AbjCWJxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 05:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCWJte (ORCPT
+        with ESMTP id S231180AbjCWJwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:49:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5487C166CF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/W5NnIHjIshco1Dms/7I2CftD5GwAfzEK2tg2IdKDk8=; b=eDK2Bn5maCj5G9cOHauh+Xnt1g
-        TPZl4ylHTcNkYc3k3u9wE4ut6cD5VMjBe6AFsVIJzDz/6Zfs5zr3MF9f339i+LcrUs4GBggIZRTC/
-        Ar6w6nktocoNseCmrCrDZyH7U7mtmlSuxSrfI4Sow+m59wNk7r48mkOPhLLjEB2dIEDaKmz1gXA05
-        KI/rNkzX4dmWoYEW5SBjkGxBy6tPTSbdIjuMWvOXk4g3URngWXLogb1FLD1lQIIin3R+MhBy7L8aj
-        9F2ZGKOl2WUXMYZWIfM/EWeRDoIs1oNpvTBmFvzMuouUPnpaldn9W7K0DKFKpRV6ij3YlV/F4bl1V
-        /HgFhYpg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfHXk-004pM1-2O;
-        Thu, 23 Mar 2023 09:47:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E199E300237;
-        Thu, 23 Mar 2023 10:47:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 95742200C937C; Thu, 23 Mar 2023 10:47:35 +0100 (CET)
-Date:   Thu, 23 Mar 2023 10:47:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
-Message-ID: <20230323094735.GC2508414@hirez.programming.kicks-ass.net>
-References: <20230301141744.16063-1-anna-maria@linutronix.de>
- <20230301141744.16063-17-anna-maria@linutronix.de>
+        Thu, 23 Mar 2023 05:52:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9636635ED9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679565014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XERu7jFbdY1Uu35G9bxCU6ajLW1FJ5w92clS/0dwz/w=;
+        b=RtmiUK3D8eWXxtflAkIp+HuEP++vacv5GBhagWsycFOSNg189oOeufwdZZt9JUkb+jVj0b
+        jU+Wpvu9pktndQhwIKE8wF19Gd9UwbnM3ekfBJIYwkwPd0CnCec8ScARLsFuNv1f2Cw4xi
+        sWBZ5WEQOIkUm1sxYCe+b0tJwe1vTuk=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-Tp1A1ydvMj-JjEL0bSgfkQ-1; Thu, 23 Mar 2023 05:50:12 -0400
+X-MC-Unique: Tp1A1ydvMj-JjEL0bSgfkQ-1
+Received: by mail-qv1-f71.google.com with SMTP id pr2-20020a056214140200b005b3ed9328a3so10598129qvb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 02:50:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679565012;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XERu7jFbdY1Uu35G9bxCU6ajLW1FJ5w92clS/0dwz/w=;
+        b=kYZX1O3lciH00yFRWP1/DwfRAardqbxg/1fD53gLvmSfVqFdYXgefH9+amUhMNocRH
+         t8Yk/IyebQG0tiTkD2xr57aMwlQGIzOnjboEqDC79FlMchC8Ppd0Bw4VLfkRewKQSyqr
+         DlIti+AICoA+4j0PV/bgGk6WxIrx92H1Th7fK45yMt1VsOOS+X31+3u7dknyiYpHzhtb
+         yBht9MP5gQDJf/71bw16r675QhaeyKqJuxbHpHEXxMShfTo1wIXeoJ/STu2EW4eCcZGg
+         /G7Bzav8BPEeGXJBxKNmIWIOaPV1sNFuUFqOK9I5+RJVHob1JDFK6/DDGYEfNBIc/eeh
+         d0vQ==
+X-Gm-Message-State: AO0yUKVYpqxC21lGpKBsyJetj1gsoOU4/nA3JykKW0uVgp0UKkdVc2nQ
+        9cmxGYwjoU1vomqjYnYEWvHZD6Rk5l3rUcTdu5zT6dtNnMMn3S9I8k44V2v3u/gnLwndF2qD/vT
+        ix7xPpftzOtsN0WEVxuWv7dNS
+X-Received: by 2002:a05:6214:23c7:b0:56e:abb8:b656 with SMTP id hr7-20020a05621423c700b0056eabb8b656mr7134167qvb.7.1679565012267;
+        Thu, 23 Mar 2023 02:50:12 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+QwTH7mkA2d88CDuEA5u4qe58JMiq4f/fwPX1oT/BguD3EV9srXmDNSfnJZru9uKMxtXB43w==
+X-Received: by 2002:a05:6214:23c7:b0:56e:abb8:b656 with SMTP id hr7-20020a05621423c700b0056eabb8b656mr7134160qvb.7.1679565011978;
+        Thu, 23 Mar 2023 02:50:11 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05620a048400b007468bf8362esm7179339qkr.66.2023.03.23.02.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 02:50:11 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 10:50:06 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        stefanha@redhat.com, linux-kernel@vger.kernel.org,
+        eperezma@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 8/8] vdpa_sim: add support for user VA
+Message-ID: <20230323095006.jvbbdjvkdvhzcehz@sgarzare-redhat>
+References: <20230321154804.184577-1-sgarzare@redhat.com>
+ <20230321154804.184577-4-sgarzare@redhat.com>
+ <CACGkMEtbrt3zuqy9YdhNyE90HHUT1R=HF-YRAQ6b4KnW_SdZ-w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230301141744.16063-17-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEtbrt3zuqy9YdhNyE90HHUT1R=HF-YRAQ6b4KnW_SdZ-w@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
+On Thu, Mar 23, 2023 at 11:42:07AM +0800, Jason Wang wrote:
+>On Tue, Mar 21, 2023 at 11:48 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> The new "use_va" module parameter (default: true) is used in
+>> vdpa_alloc_device() to inform the vDPA framework that the device
+>> supports VA.
+>>
+>> vringh is initialized to use VA only when "use_va" is true and the
+>> user's mm has been bound. So, only when the bus supports user VA
+>> (e.g. vhost-vdpa).
+>>
+>> vdpasim_mm_work_fn work is used to serialize the binding to a new
+>> address space when the .bind_mm callback is invoked, and unbinding
+>> when the .unbind_mm callback is invoked.
+>>
+>> Call mmget_not_zero()/kthread_use_mm() inside the worker function
+>> to pin the address space only as long as needed, following the
+>> documentation of mmget() in include/linux/sched/mm.h:
+>>
+>>   * Never use this function to pin this address space for an
+>>   * unbounded/indefinite amount of time.
+>
+>I wonder if everything would be simplified if we just allow the parent
+>to advertise whether or not it requires the address space.
+>
+>Then when vhost-vDPA probes the device it can simply advertise
+>use_work as true so vhost core can use get_task_mm() in this case?
 
-> +	group->num_childs = 0;
-k
-> +	 * To prevent inconsistent states, active childs needs to be active
-> +	 * in new parent as well. Inactive childs are already marked
-> +	 * inactive in parent group.
-> +	 */
+IIUC set user_worker to true, it also creates the kthread in the vhost
+core (but we can add another variable to avoid this).
 
-> +			/* There are no childs that needs to be connected */
+My biggest concern is the comment in include/linux/sched/mm.h.
+get_task_mm() uses mmget(), but in the documentation they advise against
+pinning the address space indefinitely, so I preferred in keeping
+mmgrab() in the vhost core, then call mmget_not_zero() in the worker
+only when it is running.
 
-s/childs/children/ and s/needs/need/
+In the future maybe mm will be used differently from parent if somehow
+it is supported by iommu, so I would leave it to the parent to handle
+this.
 
-The child needs ...
-The children need ...
+Thanks,
+Stefano
 
