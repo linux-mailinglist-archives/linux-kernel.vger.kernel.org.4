@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58C56C69E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FF46C69E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 14:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjCWNtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 09:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjCWNto (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231720AbjCWNto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 23 Mar 2023 09:49:44 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29931BF3;
-        Thu, 23 Mar 2023 06:49:42 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9c7VF012773;
-        Thu, 23 Mar 2023 13:49:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tiJIvhSMcmuYRxWaz3r/96shZ0YPRflIp+RPKVv0cgk=;
- b=SQsaqvpXZISeuUhweleScm5ohD3Ux+e2rJ9K9+/yhNuovgi8aDdH3zEj7VSuAJ+ii9xa
- Sz2myH+25VkxrITPyXj+9IjXMDh/ioLEuXL/lKFmyKW9A7YqQ3JY2PtVkRL4lWzYsyJq
- dauv2yNrimyvD3UVuQVRU02mL7GUgx9haGgIfleyerv1D30mASX+B/rciUZaBXH3HgZa
- d49kmGeMziTjhm2PyOqVuL2CUoS6VrOB0FWkR0VUQf39qfGlre88kuprC3rPLS+KlWCj
- LGnosdY66fXHy/waxbx2URceYOvIRoMa7fs11IZTvzQfcitMk5hQ4ll+FvuIrgjcUfkX yw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgm9x8jsf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:49:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NDnZAJ013552
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 13:49:35 GMT
-Received: from [10.50.6.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Mar
- 2023 06:49:31 -0700
-Message-ID: <d1dae530-bd44-577c-e317-b1c09b0301a4@quicinc.com>
-Date:   Thu, 23 Mar 2023 19:19:27 +0530
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229600AbjCWNtm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Mar 2023 09:49:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03B11BF3;
+        Thu, 23 Mar 2023 06:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679579381; x=1711115381;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GKZ5Q6PC9RVV67Um5+ppCnF8L4AO5uGcX7XeCD3ye9c=;
+  b=RB8eocesOl/0Oo1a9HN/kEKReuarZ4OKCGNwovYwaPJkK49EtPxzNfaE
+   Y5YurbwQ4HzkXF7VKb6HPYRjG2PKHnOdDgQnzWZJRI36xmao159sfxmGK
+   lrroeTkFcdBlTfdTY1Z99/95pjThI8Rsrn5eKwZcrVRrqddcqtdWJ1Oe/
+   bYGLj3dB5IJzwX57pt83Ky6FvIrLMhOpaIlX3rs4BodF1vY2WwX3KkViK
+   rM9ce/qdZ2YJPxDjKh0UDqb5vcTULrALUgb9iixuVjnpzEARqVbyq5W60
+   lLd+BJyDcNr6sNKlTcFccyJMbzQtcrMklhRSVSwzxXWVM1Yr8t0lOUJap
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="425770759"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="425770759"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 06:49:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="682317493"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="682317493"
+Received: from jball6-mobl.amr.corp.intel.com (HELO [10.209.105.116]) ([10.209.105.116])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 06:49:29 -0700
+Message-ID: <141def31-dcbb-70ae-2935-4fb06a986036@intel.com>
+Date:   Thu, 23 Mar 2023 06:49:28 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V1 2/4] dt-bindings: soc: qcom,mpm-sleep-counter: Add the
- dtschema
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <576e53a1d0ef218536da976102b4cc207436ec1d.1679403696.git.quic_schowdhu@quicinc.com>
- <fc46c48d-2de0-ba3a-08b0-a09526bd9e26@linaro.org>
- <e88d9482-4858-7042-7148-142ed9ebb6ad@quicinc.com>
- <859ec5d4-4cb6-1d8a-33b6-91df071e07a1@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <859ec5d4-4cb6-1d8a-33b6-91df071e07a1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1678111292.git.kai.huang@intel.com>
+ <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
+ <20230308222738.GA3419702@ls.amr.corp.intel.com>
+ <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
+ <20230313234916.GC3922605@ls.amr.corp.intel.com>
+ <a62497059fc3f31706a532b822d6c966bd981468.camel@intel.com>
+ <5c4a28c8-f17d-7395-cc63-3cbd9b31befb@intel.com>
+ <a02f304ea0e62180e07e2eb63eaf2411b702c672.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <a02f304ea0e62180e07e2eb63eaf2411b702c672.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6moZO2YWwhlDV0CpwPloEUSrwI998dKx
-X-Proofpoint-ORIG-GUID: 6moZO2YWwhlDV0CpwPloEUSrwI998dKx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=984 adultscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 bulkscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230105
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,51 +94,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/15/23 04:10, Huang, Kai wrote:
+> I can do.  Just want to make sure do you want to retry TDX_SYS_BUSY, or retry
+> TDX_RND_NO_ENTROPY (if we want to ask TDX module guys to change to return this
+> value)?
 
+I'll put it this way:
 
-On 3/22/2023 9:59 PM, Krzysztof Kozlowski wrote:
-> On 22/03/2023 14:46, Souradeep Chowdhury wrote:
->>>> +      - const: qcom,mpm2-sleep-counter
->>>
->>> SoC specific compatible.
->>>
->>
->> This is a generic Module Power Manager Sleep Counter which is present in
->> all Qcom Socs, so SoC specific compatible is not given here.
-> 
-> Not really a good reason and it is actually very difficult to verify
-> this. If I understand correctly any moment FW can change and this will
-> stop being valid, so no.
+	Linux is going to treat TDX_SYS_BUSY like a Linux bug and assume
+	Linux is doing something wrong.  It'll mostly mean that
+	users will see something nasty and may even cause Linux to give
+	up on TDX.  In other words, the TDX module shouldn't use
+	TDX_SYS_BUSY for things that aren't Linux's fault.
 
-Ack
+> Also, even we retry either TDX_SYS_BUSY or TDX_RND_NO_ENTROPY in common
+> seamcall() code, it doesn't handle the TDH.SYS.KEY.CONFIG, because sadly this
+> SEAMCALL returns a different error code:
 > 
->>
->>>> +
->>>> +  reg:
->>>> +    items:
->>>> +      - description: MPM Sleep Counter Base
->>>
->>> just maxItems: 1
->>>
->>
->> Ack
->>>> +
->>>> +  clock-frequency:
->>>> +    description: Frequency for the sleep counter
->>>
->>> Since this does not have clocks, what frequency you are setting here?
->>
->> Module Power Manager(MPM) Sleep Counter is a clock that starts ticking
->> from Primary Boot Loader(PBL) Stage. This is usually a 32 Khz clock and
->> the frequency for the same is stored here.
-> 
-> You just said all devices have the same MPM, so I would argue that all
-> devices have the same clock.
-> 
-> Anyway, this is a legacy property.
+> TDX_KEY_GENERATION_FAILED       Failed to generate a random key. This is
+>                                 typically caused by an entropy error of the
+>                                 CPU's random number generator, and may
+>                                 be impacted by RDSEED, RDRAND or PCONFIG
+>                                 executing on other LPs. The operation should be
+>                                 retried.
 
-Ack. Will drop clock frequency.
-> 
-> Best regards,
-> Krzysztof
-> 
+Sounds like we should just replace TDX_KEY_GENERATION_FAILED with
+TDX_RND_NO_ENTROPY in cases where key generation fails because of a lack
+of entropy.
