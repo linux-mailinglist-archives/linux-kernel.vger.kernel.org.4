@@ -2,104 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245E16C64BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9196F6C64EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjCWKWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S231439AbjCWK0O convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 06:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjCWKWg (ORCPT
+        with ESMTP id S231336AbjCWKZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:22:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2164D52B;
-        Thu, 23 Mar 2023 03:22:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6496EB82055;
-        Thu, 23 Mar 2023 10:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7136C433D2;
-        Thu, 23 Mar 2023 10:22:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679566953;
-        bh=1nfT8Rc7boLFxMEOqe2mpQaNUrd14bwQB4DnxjJCq1g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pR7xEzh+c16R6uPuvPSBbyL9NhyC5n8pzkVPj8qllPuMGPZ1Qgbn5g02VESrPSxrD
-         Y0on6jmc1Md4itsbfAwy6SjHmzEOV9iiSN5uSiFgERjImMJ3K3aWXU7CvvoqXMaDbZ
-         6IrYeVOG+IbEF9gKHCuMhqxOHpohSt3Pl526riDA=
-Date:   Thu, 23 Mar 2023 11:21:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <ZBwoRgc2ICBJX/Lq@kroah.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323101216.w56kz3rudlj23vab@houat>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 06:25:47 -0400
+Received: from mail.cbkipa.net (gw.cbidc.co.kr [1.246.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30C67AF
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:25:32 -0700 (PDT)
+Received: by mail.cbkipa.net (Postfix, from userid 500)
+        id D6727A0C65; Thu, 23 Mar 2023 19:33:00 +0900 (KST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: ****
+X-Spam-Status: No, score=4.3 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FROM_MISSP_REPLYTO,FROM_MISSP_SPF_FAIL,RCVD_IN_MSPIKE_H2,SPF_FAIL,
+        SPF_HELO_FAIL,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL autolearn=no
+        autolearn_force=no version=3.4.6
+Received: from [100.91.31.202] (unknown [223.225.98.186])
+        by mail.cbkipa.net (Postfix) with ESMTPA id 471DAA0B11;
+        Thu, 23 Mar 2023 19:32:52 +0900 (KST)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?b?QVRFTkNJw5NO?=
+To:     Recipients <education@mail.cbkipa.net>
+From:   Sistemas administrador <education@mail.cbkipa.net>
+Date:   Thu, 23 Mar 2023 15:52:31 +0530
+Reply-To: sistemassadmins@mail2engineer.com
+Message-Id: <20230323103300.D6727A0C65@mail.cbkipa.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:12:16AM +0100, Maxime Ripard wrote:
-> On Wed, Mar 22, 2023 at 07:57:10PM +0100, Greg Kroah-Hartman wrote:
-> > > > > +/**
-> > > > > + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
-> > > > > + * @test: The test context object
-> > > > > + *
-> > > > > + * This allocates a fake struct &device to create a mock for a KUnit
-> > > > > + * test. The device will also be bound to a fake driver. It will thus be
-> > > > > + * able to leverage the usual infrastructure and most notably the
-> > > > > + * device-managed resources just like a "real" device.
-> > > > 
-> > > > What specific "usual infrastructure" are you wanting to access here?
-> > > > 
-> > > > And again, if you want a fake device, make a virtual one, by just
-> > > > calling device_create().
-> > > > 
-> > > > Or are you wanting to do "more" with that device pointer than
-> > > > device_create() can give you?
-> > > 
-> > > Personally, I was (am) only interested in devm_ unwinding. I guess the
-> > > device_create(), device_add(), device_remove()... (didn't study this
-> > > sequence in details so sorry if there is errors) could've been sufficient
-> > > for me. I haven't looked how much of the code that there is for 'platform
-> > > devices' should be duplicated to support that sequence for testability
-> > > purposes.
-> > 
-> > Any device can access devm_ code, there's no need for it to be a
-> > platform device at all.
-> 
-> Sure but the resources are only released if the device is part of a bus,
-> so it can't be a root_device (or bare device) either
+ATENCIÓN;
 
-The resources are not cleaned up when the device is freed no matter if
-it's on a bus or not?  If so, then that's a bug that needs to be fixed,
-and tested :)
+Su buzón ha superado el límite de almacenamiento, que es de 5 GB definidos por el administrador, quien actualmente está ejecutando en 10.9GB, no puede ser capaz de enviar o recibir correo nuevo hasta que vuelva a validar su buzón de correo electrónico. Para revalidar su buzón de correo, envíe la siguiente información a continuación:
 
-thanks,
+nombre:
+Nombre de usuario:
+contraseña:
+Confirmar contraseña:
+E-mail:
+teléfono:
 
-greg k-h
+Si usted no puede revalidar su buzón, el buzón se deshabilitará!
+
+Disculpa las molestias.
+Código de verificación:WEB.ADMIN@Correo.ES:@WEBMAIL.ES
+Correo Soporte Técnico © 2023
+
+¡gracias
+Sistemas administrador
