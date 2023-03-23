@@ -2,94 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82CB6C6C7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B336C6C7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjCWPno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 11:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S231320AbjCWPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbjCWPnk (ORCPT
+        with ESMTP id S231979AbjCWPnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:43:40 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7892E83C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:43:37 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d7-20020a25adc7000000b00953ffdfbe1aso23260987ybe.23
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 08:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679586216;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tc2iPBU2KSJFkzxb2sQbDiu+LwsDFdSxiGWatUbS05w=;
-        b=CEKjaXe5dn+F4SbhnSOGLc8mTN3sBWz87pIPOiCQKgScvO9lKaDeaqaOYkHLG8NI1q
-         n/bPh8nRog+5af7eSNzZDjMdiL7ckixtoZ8MYe6zZaFX7c2TWoUx6yrFFzMiWpVksAAx
-         zyRJqojv0RPAL4HtOgUtq8K79dX029ODJ9RhOErESRTnXqObi/JSaLTkvkHNZyxNIiSr
-         MSAKHrbEmCkgZe/Ob0uvLIlEim9HuPxc5hELWVhIZjHK+plWNjCgfH7WIIRsCAHf4NRA
-         eSWz36yJXeq6UlJSJ6maDiXI+aORwaweljkrdAWkrNc4uHlqpX8slWPPZWK3/ETKDDLu
-         Lnhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679586216;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tc2iPBU2KSJFkzxb2sQbDiu+LwsDFdSxiGWatUbS05w=;
-        b=Pt+bkQ0rXMctIwTkKljSKaowe8E1QyQI4uY9cvG498jJ2n084EIYnKgT9U5DyQtCSu
-         9gcV3pVcldku8PaPYzWBx5luXvJnZrRNo+Q05UNNgXCT0H7JSoTGWcVMSAjiPOgy3Ivy
-         hh1oDNkuhalGg02Fo/VLNbaOjR4kd7R/gcFwzEU451bUGtMpuw0WTSs3AUBBDfru14G7
-         vJavfoC3TQfscQ0up+pDe8H/3f/aPa1RYzguKRgbver70U8ogf1zyrVQagfLPCFmIr0q
-         D7mpzJQoU9XT4VGJ8SdGGnXMbHUThPptcJW8MfbXGM6T/gWYmVjqK3enBWcbM8CP0yXA
-         PoaQ==
-X-Gm-Message-State: AAQBX9dY4uR7Xbgl6vIAIrSK26JgiNqcvYRGtnkfVHD9txmunGzQgoSV
-        tL4hCKGC2eFopbIk7LtAoRLtQwcOMm4=
-X-Google-Smtp-Source: AKy350YGOGNLURvgby8o5NPWBgXIsl6iMozZdSCFZUWI+zn/AIumyHyXxX96aYe6Bq6Glb/5Vwo0D/t/w3U=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1106:b0:b76:ae61:b68b with SMTP id
- o6-20020a056902110600b00b76ae61b68bmr489889ybu.5.1679586216308; Thu, 23 Mar
- 2023 08:43:36 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 08:43:34 -0700
-In-Reply-To: <20230207123713.3905-2-wei.w.wang@intel.com>
-Mime-Version: 1.0
-References: <20230207123713.3905-1-wei.w.wang@intel.com> <20230207123713.3905-2-wei.w.wang@intel.com>
-Message-ID: <ZBxzphnyLPwBimKL@google.com>
-Subject: Re: [PATCH v2 1/2] KVM: destruct kvm_io_device while unregistering it
- from kvm_io_bus
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wei Wang <wei.w.wang@intel.com>
-Cc:     pbonzini@redhat.com, mhal@rbox.co, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 11:43:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A420576;
+        Thu, 23 Mar 2023 08:43:49 -0700 (PDT)
+Received: from [192.168.10.28] (unknown [39.37.168.222])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1255366030F9;
+        Thu, 23 Mar 2023 15:43:40 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679586227;
+        bh=fqcMKt1oBSR5L6Q8opsI63fwItnsnZyiV5drCHsNuLI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=eNbPAtfwrGZFe7FIs6NljH+Y1y7/jks83wQi/OH9fQ0zixOK+wI9UClTwQVKgnOGr
+         19s+YgE9ZDx1bwb/p6VvFqAJ6+9pmfSO9CaE5q6VXmA0bA91I1S1c7EwTkNvDiUsk2
+         nNd22mJ30PPDaPc3iO+aBQxrgpIpCwI5rVZV2z8+2wccfYlXzhop17Rrxf0FyUUtuP
+         qQ3nrOkV8K53MEiJGKaDU4YjuO9Ejv5ic9Yzdwi+7RZss6u97Mc+Sgpj2qVh7Akp8x
+         m0RAN3N7TOqFKofqXaGy8nTgauWoeZKf5ABJ/GURFa9ahLP4PpXOO3s7PjE6LWpvQg
+         HWq1+QR76EXzQ==
+Message-ID: <996c14d4-6dcc-7d14-cf76-d8fbea0a9040@collabora.com>
+Date:   Thu, 23 Mar 2023 20:43:36 +0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 1/7] userfaultfd: Add UFFD WP Async support
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+ <20230309135718.1490461-2-usama.anjum@collabora.com> <ZBNr4nohj/Tw4Zhw@x1n>
+ <1b78ee32-003d-5645-c223-619b66d41733@collabora.com> <ZBoEpkq66ZxHFr8A@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZBoEpkq66ZxHFr8A@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023, Wei Wang wrote:
-> Current usage of kvm_io_device requires users to destruct it with an extra
-> call of kvm_iodevice_destructor after the device gets unregistered from
-> kvm_io_bus. This is not necessary and can cause errors if a user forgot
-> to make the extra call.
+On 3/22/23 12:25 AM, Peter Xu wrote:
+> Hi, Muhammad,
 > 
-> Simplify the usage by combining kvm_iodevice_destructor into
-> kvm_io_bus_unregister_dev. This reduces LOCs a bit for users and can
-> avoid the leakage of destructing the device explicitly.
+> On Tue, Mar 21, 2023 at 05:21:15PM +0500, Muhammad Usama Anjum wrote:
+>> Thank you so much for the patch. I've tested hugetlb mem. This patch is
+>> working fine for hugetlb shmem:
+>> *shmid = shmget(2, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
+>> mem = shmat(*shmid, 0, 0);
+>>
+>> I've found slight issue with hugetlb mem which has been mmaped:
+>> mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+>> 	   MAP_ANONYMOUS | MAP_HUGETLB | MAP_PRIVATE, -1, 0);
+>> The issue is that even after witting to this memory, the wp flag is still
+>> present there and memory doesn't appear to be dirty when it should have
+>> been dirty. The temporary fix is to write to memory and write protect the
+>> memory one extra time.
+> 
+> I looked into this today and found it's an existing bug that can trigger
+> with sync mode too.. as long as protection applied to unpopulated hugetlb
+> private mappings, then write to it.
+> 
+> I've sent a fix for it here and have you copied:
+> 
+> https://lore.kernel.org/linux-mm/20230321191840.1897940-1-peterx@redhat.com/T/#u
+> 
+> Please have a look and see whether it also fixes your issue.
+Thanks for sending the patch. I've replied on the sent patch.
 
-The changelog should really call out that coalesced_mmio_ops and ioeventfd_ops
-are the only kvm_io_device_ops instances that implement ->destructor.  Without
-that info, this change looks super dangerous as it's not obvious other paths won't
-end up with a use-after-free.
+> 
+> PS: recently I added a warning in commit c2da319c2e2789 and that can indeed
+> capture this one when verifying using pagemap.  I'd guess your dmesg should
+> also contain something dumped.
+I didn't had debug_vm config enabled. I've enabled it now. I'm getting only
+the following stack trace in failure scenario:
 
-Paolo, if/when you take this, can you tack on something like:
+ok 1 Hugetlb shmem testing: all new pages must not be written (dirty) 0
+ok 2 Hugetlb shmem testing: all pages must be written (dirty) 1 512 0 512
+ok 3 Hugetlb mem testing: all new pages must not be written (dirty) 0
+[   10.086540] ------------[ cut here ]------------
+[   10.087758] WARNING: CPU: 0 PID: 175 at
+arch/x86/include/asm/pgtable.h:313 pagemap_scan_hugetlb_entry+0x19c/0x230
+[   10.090208] Modules linked in:
+[   10.091059] CPU: 0 PID: 175 Comm: pagemap_ioctl Not tainted
+6.3.0-rc3-next-20230320-00010-gdc395ccf1882 #88
+[   10.093224] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.16.0-debian-1.16.0-5 04/01/2014
+[   10.095879] RIP: 0010:pagemap_scan_hugetlb_entry+0x19c/0x230
+[   10.097497] Code: 89 ca 41 89 c2 29 c8 4c 01 c2 49 39 d2 41 0f 43 c0 e9
+53 ff ff ff 48 83 e2 9f 89 c7 31 ed 49 89 d1 83 e7 02 0f 84 30 ff ff ff
+<0f> 0b 31 ff e9 27 ff ff ff 48 83 e2 9f 44 89 c0 bf 01 00 00 00 bd
+[   10.102528] RSP: 0018:ffffb6cd80303d10 EFLAGS: 00010202
+[   10.104002] RAX: 8000000000000ce7 RBX: 00007fcc84000000 RCX:
+0000000000200000
+[   10.105989] RDX: 80000002f7c00c87 RSI: 0000000000000001 RDI:
+0000000000000002
+[   10.108043] RBP: 0000000000000000 R08: 0000000000000200 R09:
+80000002f7c00c87
+[   10.110004] R10: ffffa08541e3220c R11: 0000000000000000 R12:
+ffffa08541562420
+[   10.112335] R13: ffffb6cd80303e70 R14: 00007fcc84000000 R15:
+ffffffff8eae1520
+[   10.114688] FS:  00007fcc8454b740(0000) GS:ffffa0886fc00000(0000)
+knlGS:0000000000000000
+[   10.116960] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   10.118187] CR2: 00007fcc84000000 CR3: 0000000102838000 CR4:
+0000000000750ef0
+[   10.119628] PKRU: 55555554
+[   10.120184] Call Trace:
+[   10.120730]  <TASK>
+[   10.121206]  __walk_page_range+0xbe/0x1b0
+[   10.122048]  walk_page_range+0x15f/0x1a0
+[   10.122869]  do_pagemap_cmd+0x239/0x390
+[   10.123672]  __x64_sys_ioctl+0x8b/0xc0
+[   10.124462]  do_syscall_64+0x3a/0x90
+[   10.125227]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[   10.126326] RIP: 0033:0x7fcc8464bbab
+[   10.127066] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00
+00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05
+<89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+[   10.130868] RSP: 002b:00007fff9b864240 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[   10.132412] RAX: ffffffffffffffda RBX: 0000000000001000 RCX:
+00007fcc8464bbab
+[   10.133880] RDX: 00007fff9b8642c0 RSI: 00000000c0586610 RDI:
+0000000000000003
+[   10.135328] RBP: 00007fff9b864320 R08: 0000000000000001 R09:
+0000000000000000
+[   10.136790] R10: 00007fff9b864217 R11: 0000000000000246 R12:
+0000000000000000
+[   10.138285] R13: 00007fff9b8644f8 R14: 0000000000409df0 R15:
+00007fcc84862020
+[   10.139729]  </TASK>
+[   10.140197] ---[ end trace 0000000000000000 ]---
+not ok 4 Hugetlb mem testing: all pages must be written (dirty) 0
+-2072900416 0 512
 
-Note, coalesced_mmio_ops and ioeventfd_ops are the only instances of
-kvm_io_device_ops that implement a destructor, all other callers of
-kvm_io_bus_unregister_dev() are unaffected by this change.
+> 
+> Thanks,
+> 
 
-> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> ---
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+-- 
+BR,
+Muhammad Usama Anjum
