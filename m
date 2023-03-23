@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB856C6532
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71156C6534
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjCWKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S230025AbjCWKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjCWKew (ORCPT
+        with ESMTP id S229917AbjCWKgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:34:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194543B23B;
-        Thu, 23 Mar 2023 03:31:17 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F315B6600880;
-        Thu, 23 Mar 2023 10:31:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679567473;
-        bh=+nm2bNNzHBVf9VlMG8H7LfVJnc2HYpp4Jv5fZk9O/P0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DmcXxUHsBgzcjkPlqCyk9JvYYX0h/4JWd1Yv3VEttg902d9MkJzptLUJji4fhsKOK
-         GncwT/heO9DpacKfQEdTh+6I8oRR17JiT9tIxPRO6fLHBYy+fUHzbnpbJq0XfU98Eb
-         laKTbSQhEboyfk3tJz8OC3Va5Pinz9gKnlXrGKWhHz9CFB9Kb5hiDK9KbY1plYATfg
-         i+ZasWGE7SUHph8GGuNbXY+2Psi9TNtsD2NEbe/4mw3MS9ZgDxDulvNupUDqPrxtbo
-         oEzpqLwF3n/2bqtJCo90JAWVMtqVlVa9Xmea6c5ER62ow71xaFs3DSglMmCViTPr29
-         Feulyon4prtOQ==
-Date:   Thu, 23 Mar 2023 11:31:09 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     airlied@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        steven.price@arm.com, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org,
-        alyssa.rosenzweig@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        wenst@chromium.org, matthias.bgg@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 00/12] Panfrost: Improve and add MediaTek SoCs
- support
-Message-ID: <20230323113109.0a611095@collabora.com>
-In-Reply-To: <0800ffeb-c7c4-1671-173e-1529b8eeb12c@collabora.com>
-References: <20230316102041.210269-1-angelogioacchino.delregno@collabora.com>
-        <0800ffeb-c7c4-1671-173e-1529b8eeb12c@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Thu, 23 Mar 2023 06:36:03 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A9F2CC53;
+        Thu, 23 Mar 2023 03:32:07 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 3705E20011;
+        Thu, 23 Mar 2023 10:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679567526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=En1dwiDW/nnta459jp55SHmclo/QOWmQxsSNcw/FvxU=;
+        b=dhqqOVVb41Em6WHFrbOqQ4Eqg9sBnbqbDXsnbyYjQehXUbpP9A769e6ODNsqGKwO8tAMPQ
+        mY26w6DciCiCiN0xJsRdirMMjc/zTluHn2SiXP/6RGqGWGl1IFEmh+uZ2KqLcSGG31Stm1
+        Gbc5XUaTBHF3w1vY3AqZUDMiaAWXb6NkjuMteblY/5XIBGxtGXr0WDGWBki50P7LPtFB/n
+        xfGAfdU46HACaBDFRuO0PUCoJwX7SVwcGE7kI0y7I2QuP+zPXUDjg+pUP+kMzOIB8gOqjg
+        Hd/tm4SBMXIT4p3QKydSVaX4zEZiDjfwXfCu2WWNsj2EoMzzUiytDD6HvWUevA==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
+Date:   Thu, 23 Mar 2023 11:31:50 +0100
+Message-Id: <20230323103154.264546-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,79 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 09:24:06 +0100
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-wrote:
+Hi,
 
-> Il 16/03/23 11:20, AngeloGioacchino Del Regno ha scritto:
-> > Changes in v5:
-> >   - Changed minItems for power-domain-names in base schema as
-> >     suggested by Rob
-> > 
-> > Changes in v4:
-> >   - Refactored power-domains and power-domain-names exclusions as
-> >     suggested by Krzysztof
-> >   - Small changes in MT8192 bindings addition
-> > 
-> > Changes in v3:
-> >   - Changed MT8186 bindings to declare only two power domains
-> >   - Added a commit introducing MT8186 specific platform data to
-> >     panfrost_drv
-> > 
-> > Changes in v2:
-> >   - Add power-domain-names commit from Chen-Yu to the series
-> >   - Kept sram-supply in base schema, overridden for non-MediaTek
-> >   - Added Reviewed-by tags from Steven Price to the driver commits
-> >     (as released in reply to v1's cover letter - thanks!)
-> > 
-> > This series adds support for new MediaTek SoCs (MT8186/MT8192/MT8195)
-> > and improves MT8183 support: since the mtk-regulator-coupler driver
-> > was picked, it is now useless for Panfrost to look for, and manage,
-> > two regulators (GPU Vcore and GPU SRAM) on MediaTek;
-> > 
-> > The aforementioned driver will take care of keeping the voltage
-> > relation (/constraints) of the two regulators on its own when a
-> > voltage change request is sent to the Vcore, solving the old time
-> > issue with not working DVFS on Panfrost+MediaTek (due to devfreq
-> > supporting only single regulator).
-> > 
-> > In the specific case of MT8183, in order to not break the ABI, it
-> > was necessary to add a new compatible for enabling DVFS.
-> > 
-> > Alyssa Rosenzweig (3):
-> >    drm/panfrost: Increase MAX_PM_DOMAINS to 5
-> >    drm/panfrost: Add the MT8192 GPU ID
-> >    drm/panfrost: Add mediatek,mt8192-mali compatible
-> > 
-> > AngeloGioacchino Del Regno (9):
-> >    dt-bindings: gpu: mali-bifrost: Split out MediaTek power-domains
-> >      variation
-> >    dt-bindings: gpu: mali-bifrost: Set power-domains maxItems to 5
-> >    dt-bindings: gpu: mali-bifrost: Fix power-domain-names validation
-> >    dt-bindings: gpu: mali-bifrost: Add sub-schema for MT8192's power
-> >      domains
-> >    dt-bindings: gpu: mali-bifrost: Add new MT8183 compatible
-> >    dt-bindings: gpu: mali-bifrost: Add support for MediaTek MT8186
-> >    dt-bindings: gpu: mali-bifrost: Add compatible for MT8195 SoC
-> >    drm/panfrost: Add new compatible for Mali on the MT8183 SoC
-> >    drm/panfrost: Add support for Mali on the MT8186 SoC
-> > 
-> >   .../bindings/gpu/arm,mali-bifrost.yaml        | 80 ++++++++++++++++++-
-> >   drivers/gpu/drm/panfrost/panfrost_device.h    |  2 +-
-> >   drivers/gpu/drm/panfrost/panfrost_drv.c       | 37 +++++++++
-> >   drivers/gpu/drm/panfrost/panfrost_gpu.c       |  8 ++
-> >   4 files changed, 123 insertions(+), 4 deletions(-)
-> >   
-> 
-> Hello maintainers,
-> 
-> this series is fully tested, fully reviewed and fully ready.
-> 
-> Can anyone please pick it ASAP, so that we can finally get GPU support
-> on MediaTek SoCs (including lots of Chromebooks)?
+I have a system where I need to handle an HDLC interface.
 
-Queued to drm-misc-next.
+The HDLC data are transferred using a TDM bus on which a PEF2256 is
+present. The PEF2256 transfers data from/to the TDM bus to/from E1 line.
+This PEF2256 is also connected to a PowerQUICC SoC for the control path
+and the TDM is connected to the SoC (QMC component) for the data path.
 
-Thanks,
+From the HDLC driver, I need to handle data using the QMC and carrier
+detection using the PEF2256 (E1 line carrier).
 
-Boris
+The HDLC driver consider the PEF2256 as a generic PHY.
+So, the design is the following:
+
++----------+          +-------------+              +---------+
+| HDLC drv | <-data-> | QMC channel | <-- TDM -->  | PEF2256 |
++----------+          +-------------+              |         | <--> E1
+   ^   +---------+     +---------+                 |         |
+   +-> | Gen PHY | <-> | PEF2256 | <- local bus -> |         |
+       +---------+     | PHY drv |                 +---------+
+                       +---------+
+
+In order to implement this, I had to:
+ 1 - Extend the generic PHY API to support get_status() and notification
+     on status change.
+ 2 - Introduce a new kind of generic PHY named "basic phy". This PHY
+     familly can provide a link status in the get_status() data.
+ 3 - Support the PEF2256 PHY as a "basic phy"
+
+The purpose of this RFC series is to discuss this design.
+
+The QMC driver code is available on linux-next. In this series:
+- patch 1: driver HDLC using the QMC channel
+- patch 2: Extend the generic PHY API
+- patch 3: Use the "basic phy" in the HDLC driver
+- patch 4: Implement the PEF2256 PHY driver
+
+I did 2 patches for the HDLC driver in order to point the new PHY family
+usage in the HDLC driver. In the end, these two patches will be squashed
+and the bindings will be added.
+
+Hope to have some feedback on this proposal.
+
+Best regards,
+Hervé
+
+Herve Codina (4):
+  net: wan: Add support for QMC HDLC
+  phy: Extend API to support 'status' get and notification
+  net: wan: fsl_qmc_hdlc: Add PHY support
+  phy: lantiq: Add PEF2256 PHY support
+
+ drivers/net/wan/Kconfig                 |  12 +
+ drivers/net/wan/Makefile                |   1 +
+ drivers/net/wan/fsl_qmc_hdlc.c          | 558 ++++++++++++++++++++++++
+ drivers/phy/lantiq/Kconfig              |  15 +
+ drivers/phy/lantiq/Makefile             |   1 +
+ drivers/phy/lantiq/phy-lantiq-pef2256.c | 131 ++++++
+ drivers/phy/phy-core.c                  |  88 ++++
+ include/linux/phy/phy-basic.h           |  27 ++
+ include/linux/phy/phy.h                 |  89 +++-
+ 9 files changed, 921 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/wan/fsl_qmc_hdlc.c
+ create mode 100644 drivers/phy/lantiq/phy-lantiq-pef2256.c
+ create mode 100644 include/linux/phy/phy-basic.h
+
+-- 
+2.39.2
+
