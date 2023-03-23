@@ -2,210 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7ED6C5F7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262236C5F84
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjCWGHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S229830AbjCWGPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjCWGHr (ORCPT
+        with ESMTP id S229379AbjCWGPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:07:47 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4282943F;
-        Wed, 22 Mar 2023 23:07:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FsJcZuyDRudl5a65Qm6qb+jGPQAhs4XAQxs+KbrT4vOeh5iY1Qq0IvCIiu3S6s/vlybuI8uT3MzrxD3658h2srGAalvCGlPhJT3AJb2QhQ3iZrBDhridmpjtSOOvrIPcSz0YAXpLUYeEb/YeKTvHHBWGGDwCmk49PCxu+vKcjzG7+w2QKOAWi6tVghk3r49dufcs4HZqnp6uiQ/7jIa4a51SirefjA1CNdRqjsw7hT5jcnhjz7Ef9OlwPlWxfGXt1wQvjtl7B0mCNyeO/CBkY+CiTb7/3GK7R5oR6DfYPCZbTeV1uxdlBxDPKTLiDoJpeyNP45Crd1UOD9gce2SbSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yGld+I35hPJRNFcN8vH6fVVUs83bzladWC0hU5OulaI=;
- b=nqe441P3NYT5HFAdYikfsAXiNQtlkM9+Cck1dHZdWQvTW2bVl6OHNSIc6adU/+hWGMF8cLJtupYtwsos4una4sc4jg5Jvvq6kMBiwyVI5JGesFkJ0SVJU2GxiWDkCiUAU7HJtdwCqFe7ucEo+LN3s3hFpK4j5B42GSpEIc6yzZ7U3tEEbGINvPGRyhHXAeLPKFZD3bKDof+n9GuvueVPA/DEmFOCgfg4P/vsGih4zRZ/ZM1w2lZavns4E3lFuAcrljVZm6ldkdLyGa7/7Ppnhm0REKNG+GsRRI3+CWgoIYF5V9k+jZeZU5aZPT0JfhO5G7cnh5T6yZ+gcLVomi7+Ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yGld+I35hPJRNFcN8vH6fVVUs83bzladWC0hU5OulaI=;
- b=Bxt8B1jE29THMHDQbHzz0hsU4y4QqTEbBuKki1VZZFwx3owjOIV7DU19H7Dq33V3Umajty/cQU2CvDeUpz7vxPf1ZuU6vqG6nMWLqxbIBKmI9MzuWAe/Xy/j7omdLxsUP1YKfDtJs8AGTBZ6kPjsa+xIch/2UmyM4qZ2Sg8U21c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- CH3PR12MB7571.namprd12.prod.outlook.com (2603:10b6:610:147::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.38; Thu, 23 Mar 2023 06:07:07 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::93a1:b268:8b07:9253]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::93a1:b268:8b07:9253%5]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
- 06:07:06 +0000
-Message-ID: <acfe667f-f598-ba6f-7723-ad5c55bc746d@amd.com>
-Date:   Thu, 23 Mar 2023 11:36:49 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH kernel 0/2] PreventHostIBS feature for SEV-ES and SNP
- guests
-From:   Manali Shukla <manali.shukla@amd.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, seanjc@google.com,
-        pbonzini@redhat.com, jpoimboe@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        sandipan.das@amd.com, jmattson@google.com, thomas.lendacky@amd.com,
-        nikunj@amd.com, ravi.bangoria@amd.com, eranian@google.com,
-        irogers@google.com, kvm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Manali Shukla <manali.shukla@amd.com>
-References: <20230206060545.628502-1-manali.shukla@amd.com>
- <786f4d69-85c6-a581-1187-2fe8a49cf7e6@amd.com>
-In-Reply-To: <786f4d69-85c6-a581-1187-2fe8a49cf7e6@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0198.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::7) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+        Thu, 23 Mar 2023 02:15:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5A010A96;
+        Wed, 22 Mar 2023 23:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679552115; x=1711088115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K+tsOStEKSUmWTrSxW8kyIQZ2eMLpgKoXdX9PkiVDnE=;
+  b=fZiGnkMNZHTfuqQ6dTlJjSOm71yU2Hb75qE6UF2ZiCZxBoLnHJRsGbZX
+   HezYzUkVwfj/A5wiry4XkI3srYgzqTK9KSps+yvmyrsoBc7moCJzvhCGY
+   FjsI6S5MPgetq7avza2ivQxugdEg/JiEqUuG3U6OgjvCH2PLEHdMIUwXt
+   yXXOJc7dWzcsLGq+qOm1j99sJiXIQnljp/AQ25+/LSl5WGDifsKQoq2Zd
+   6fEyFCEaKNlrswZQAvLqooDC2XF0gmu+JQwRCl7+UHAQA4zNco9cKj1bM
+   Cn+tbVU9PiTJ2ijsDaN2rq7y6+1q9v95HqA/E/d5DEsVmW5b+fWy5yrNF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="327785202"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="327785202"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 23:15:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="746598086"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="746598086"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Mar 2023 23:15:12 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfEEC-000E2S-0C;
+        Thu, 23 Mar 2023 06:15:12 +0000
+Date:   Thu, 23 Mar 2023 14:14:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, David Yang <mmyangfl@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 6/9] clk: hisilicon: Convert to platform_driver
+Message-ID: <202303231426.GOJVQoEn-lkp@intel.com>
+References: <20230322164201.2454771-7-mmyangfl@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|CH3PR12MB7571:EE_
-X-MS-Office365-Filtering-Correlation-Id: 657e5f24-84c2-4b3d-54f4-08db2b64d459
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nRmDrN5h9iod5WqkefQSuvIIljTUhgWRAXc8TUSycsRjIQxd0moP8C8mzcoWTbc9RgP0T7kbMhlMAdX/sjuIEJazRq9rnigfSaVbmJ6UjkT1wBrq/AGlqASRssEFshMi7rDaYsM4Wc6HFJQRWZlAXYYdQXanHujs6MrxkCkPwH7p3EZMjlutbMHUlt7MT83S2N+gcOvkX3dAcHT/4nMGzNHFbbLe7d1N+d3GcCx9U1HX/4UC9Q6kzR6g899yD29MyJ44qDptgNCucKWf5W9CKtDopgaxnU5PFAj/VrgYmeAFXrO902/Av4BFrQe8lGbG9vJV1Vq4DG6gHvuCPddLb7qscTy/V+adscgRjImLehY7+eb3hGLMJ6hNh1KEodYYwsdWyGKtaSOcrmAHAVehOUdRX/Iq5FRjjUVNq3EwrsLyDwjjIDrDGMw2PIl/DzIXt9h5Mu2hREDSu4k1mPSZDT8458UiIdHCZ9fdTv6etizTIehRv1DYaD053ki0eOYLj5wFWcfxb/uyqrbO07p+fAm9JJWeVg/SHAcriqCK/miX2NHDxmDCaqQy9ZY/KTQpLACni/Y/WAigOI251TrmAAO8XMQ6fN34sPNRf0H1BzvvvRYLrGIkKobpja8P+N5+SYupjzSxbe724ZoSw/zX6PVaptTvDoLkbcJ7GokvP1ekJ7c+gnQTC6b4CSBmwb28IeF66+V7bpOG7nVNr0ZHIIfRxoXtxmQJIJz3RNRtN+U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(346002)(376002)(39860400002)(136003)(451199018)(2906002)(44832011)(7416002)(5660300002)(41300700001)(8936002)(86362001)(36756003)(31696002)(38100700002)(83380400001)(6512007)(26005)(478600001)(6506007)(53546011)(6666004)(6486002)(31686004)(66946007)(66556008)(66476007)(186003)(2616005)(8676002)(4326008)(6916009)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEZKQmtOUDJtbEVHKzBTQ2M3dmp1VjN3bUg5OFJZNHVzZjRCYXJTSk1YYjJC?=
- =?utf-8?B?RmJmV1czcll6MFV4MUxOQXd4cVdNR2hORFZGWCt0TE10UzVQeW9lTFJZN3M5?=
- =?utf-8?B?MlM4MDNuSE05Tmx0d043eUFvYlB6Vml5RlV1Y0VOUEJyTUhkd2VNaWFwY1lT?=
- =?utf-8?B?NlJJaCt4WmE0OXdESnJkaVNBMTlyMmg5WEFuYXBaNURkN2gzOHVWT05oQUo1?=
- =?utf-8?B?Mm4zYnRkdTFrVzUrYkVkakFBb0dVdEZqdHpYVjdOWkgydVpuTHdYaTNTYU04?=
- =?utf-8?B?WENpTGcrVlByek5IUjUrL2JZc3dtd081RDVDQUduK0xoKzRKc3ZpUWVVYXJu?=
- =?utf-8?B?MkpoVGhEN0hKVW05dDM0NWh2K3Mvei9wOEZyN05lbFpMa1o1dnFTcWZ4WlJL?=
- =?utf-8?B?bzFJMjZwR3I2c09JbjhVVnBSVXpGaU4ybzlNcVdrVE9RMjdoOUFQMW1BVUdC?=
- =?utf-8?B?eUF0UVUxOUZZYWpuVDhsTjRyMlU0QU1RSk9XRGN0M3FjSVNPYVpDMWpyWjdq?=
- =?utf-8?B?Z0JQSnZ1S2ZPYkV1VHRsZWUvU1B1TUxrRTMweDE5czBBRE1DdlFReHJoaksv?=
- =?utf-8?B?ek5VWGVQRTR0dWpkNVdVUVVvazczSE4rcVo5TXpHbExYUVJvNU02cUJKYUYy?=
- =?utf-8?B?VXpCNG1IZ09iV2x2UVBaejYwVHhCNjNZWFpKcTQyd05nNEtndXFmZ1FuMFRI?=
- =?utf-8?B?WTM0NHRORkFWMXpvY3BUZk1FRVhQcHowUk5MUW92SzcrK1YwN1c0N2hENDJi?=
- =?utf-8?B?Y2ZQQlhtMGNuK1djem5DQmFEd01UVThKZTkvdjJ2QStCci9rdzYyK0FBRjg5?=
- =?utf-8?B?TnJxekxRbU0wMlUvRTlDNVRkL29DUU5wbGNjN2NlbjRkYkQrd1lRM0djejRO?=
- =?utf-8?B?MHRzQTBPOS9xS1FwZ1RBd0lLdmVReDBjWHJjTUMxWHB6eGVwbHFDc2h3YjFW?=
- =?utf-8?B?YlBjaWFKN0VpUVRsWUFzM3ZiNEhWWmcrbDdjaFBvUmdyQmJnb3B2Ny9jR0Zt?=
- =?utf-8?B?djhMaXdaQXV0SmFNTnJCSGNhRVZ1L2hNc3RSelVpeUgzelpqd2Y1OEJSSXNq?=
- =?utf-8?B?d1UreDBMRmh5MUpWSlIrem9BZm1TRnV4ck5LTXMyQmFUaTFWMXkxbWJhakJN?=
- =?utf-8?B?VFg2UE0zNTJTWGE0VXViaDZUZHlJUkc3b2ZNS1I2ckFIV1BKNGsyd2d6U0l6?=
- =?utf-8?B?QmRoYU9UcWlPQmhsYjU4TWJtMG5MUHdvNklyN3poNUV2UWtyUTZKc2lCdFI5?=
- =?utf-8?B?eTMrV2FVUXNraTk1Vlo5ZWVVdVhCYlk2MHVRcTlGNkJqaGNjSVdBNnBUbU16?=
- =?utf-8?B?Z1M4U2YwdVJCZEt4UEhmTFZRQmp2RDIxTFllcmxEQU1JOFc2RDZzd1hXSUxI?=
- =?utf-8?B?UzhSdXRTeTVRcjBCTVFGWldJd3dRTmlIQkFiY1JyaEh2ZzlNc0VwQnhSZlZi?=
- =?utf-8?B?aS9kaS90cW1nSDgwaDB1dk42SEVoRnlMQUtVMWdRbkZzSGRTY3FnTS9oV1J2?=
- =?utf-8?B?R2JZUnRZVXVrQ21uTmdVTnBMRDBoUGkyZnUvbHVSTlBycTN3d0lVU1NVNGxi?=
- =?utf-8?B?U2szSDVNZDhjL0RyRUVHN2tZTE1KQkIxOXpsVnJkVWdXSXNYQVJ2K1hvZExz?=
- =?utf-8?B?MWNLeUp5VkhvRWpXbkFmOW1uVSthTG5RNXdMYWN4MUZQZVJzU3BJZGg4c2VP?=
- =?utf-8?B?TnJrVGhTbm1vZ1ZFVTRyWjEvMVRGTStQQm5pd05iNnRoQTg0ZVhxV1FkdkNy?=
- =?utf-8?B?bG1EVkpyVE15b2xyVFp0OGpOU0d4QkowS2RMd0NzYmlRVEhTWlFHRUxFaVN4?=
- =?utf-8?B?NHpGMlZZUWN0N1F6Y3JCR0VjcXhSbFF6TEJobm9ESktRbWhiSFkwenBzT3hq?=
- =?utf-8?B?c0NpMTFIWmM0TkdSaHBNeCtqbFFzaS9BaythSWtyTExzU2tLNkdiZTlNakJB?=
- =?utf-8?B?emtBZ1hVeGloZlZvaEhCRDBWanU2ZDBGcHFydGFDVEFPZWNic0dJTXcvNG1M?=
- =?utf-8?B?VE9nYzdOQ3ljcFpzWVhUZmdoNW1mL0lRS1lPNFJsbzRtbCt2QjJuMHBVVmlG?=
- =?utf-8?B?UHVtZU9EY3BSK3VjZTFjazZnYjEvMERIY1hZNmxPeVk2R2xnamtVNy81dDhN?=
- =?utf-8?Q?YQJawZkt1ewk9G+wOuCtCAuY/?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 657e5f24-84c2-4b3d-54f4-08db2b64d459
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 06:07:06.7573
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a450DiOEe6zhBuooRAprvxbtepjte65/U3ng+xWdh6Y3GivCv8prLenD44MSBnd+qKzggiJG3iBiiNSF2201AA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7571
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230322164201.2454771-7-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi David,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on 6015b1aca1a233379625385feb01dd014aca60b5]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/clk-hisilicon-Rename-Hi3798CV200-to-Hi3798/20230323-004453
+base:   6015b1aca1a233379625385feb01dd014aca60b5
+patch link:    https://lore.kernel.org/r/20230322164201.2454771-7-mmyangfl%40gmail.com
+patch subject: [PATCH v7 6/9] clk: hisilicon: Convert to platform_driver
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230323/202303231426.GOJVQoEn-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f551034776d2c5eb0495634bd2f8bde5c4743f92
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/clk-hisilicon-Rename-Hi3798CV200-to-Hi3798/20230323-004453
+        git checkout f551034776d2c5eb0495634bd2f8bde5c4743f92
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/hisilicon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303231426.GOJVQoEn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/clk/hisilicon/clk-hix5hd2.c: In function 'hix5hd2_clk_register_complex':
+>> drivers/clk/hisilicon/clk-hix5hd2.c:260:46: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     260 |         struct hix5hd2_complex_clock *clks = clocks;
+         |                                              ^~~~~~
 
 
-On 3/15/2023 10:33 AM, Manali Shukla wrote:
-> On 2/6/2023 11:35 AM, Manali Shukla wrote:
->> Adds support for PreventHostIBS feature for SEV-ES and SNP guests.
->> Currently, the hypervisor is able to inspect instruction based samples
->> from the guest and gather execution information.  With enablement of
->> PreventHostIBS feature, SEV-ES and SNP guests may choose to disallow
->> use of instruction based sampling by the hypervisor in order to limit
->> the information gathered about their execution.  (More information in
->> Section 15.36.17 APM Volume 2)
->>
->> While implementing this feature, unknown NMIs were being seen. On
->> further investigation, a race was found effecting the IBS FETCH/OP
->> MSR.
->>
->> ENABLE bit and VALID bit for IBS_FETCH_CTL are contained in the same
->> MSR and same is the case with IBS_OP_CTL.
->>
->> Consider the following scenario:
->> - The IBS MSR which has ENABLE bit set and VALID bit clear is read.
->> - During the process of clearing the ENABLE bit and writing the IBS
->>   MSR to disable IBS, an IBS event can occur that sets the VALID bit.
->> - The write operation on IBS MSR can clear the newly set VALID bit.
->> - Since this situation is occurring in the CLGI/STGI window
->>   (PreventHostIBS window), the actual NMI is not taken.
->> - Once VMRUN is issued, it will exit with VMEXIT_NMI and as soon as
->>   STGI is executed, the pending NMI will trigger.
->> - The IBS NMI handler checks for the VALID bit to determine if the NMI
->>   is generated because of IBS.
->> - Since VALID bit is now clear, it doesn't recognize that an IBS event
->>   is occurred which in turn generates the dazed and confused unknown
->>   NMI messages.
->>
->> Per-cpu ibs_flags which indicates whether PreventHostIBS window is
->> active/inactive are added to avoid the above mentioned race.
->>
->> An active PreventHostIBS window is set before calling VMRUN and
->> cleared after STGI. PreventHostIBS window check is added to
->> perf_ibs_handle_irq(), to avoid unknown NMIs and treat them as handled
->> when window is active.
->>
->> There are 2 patches in this series.
->> 1) Add amd_prevent_hostibs_window() function to set per-cpu ibs_flags
->> based on an active/inactive PreventHostIBS window.
->> 2) Enable PreventHostIBS for SEV-ES and SNP guests.
->>
->> Testing done:
->> - Executed program symbols in guest are not captured in host when
->>   PreventHostIBS feature is enabled.
->> - Generated 1000+ NMIs using cpuid command, no unknown NMIs are seen
->>   after enablement of PreventHostIBS feature.
->>
->> Qemu commandline to enable PreventHostIBS on guest.
->>
->> qemu-system-x86_64 -enable-kvm -cpu EPYC-v4,+nohostibs \ ..
->>
->> Manali Shukla (2):
->>   perf/x86/amd: Add amd_prevent_hostibs_window() to set per-cpu
->>     ibs_flags
->>   KVM: SEV: PreventHostIBS enablement for SEV-ES and SNP guest
->>
->>  arch/x86/events/amd/ibs.c          | 64 ++++++++++++++++++++++++++++++
->>  arch/x86/include/asm/cpufeatures.h |  1 +
->>  arch/x86/include/asm/perf_event.h  | 20 ++++++++++
->>  arch/x86/kvm/svm/sev.c             | 10 +++++
->>  arch/x86/kvm/svm/svm.c             | 39 +++++++++++++++++-
->>  arch/x86/kvm/svm/svm.h             |  1 +
->>  6 files changed, 133 insertions(+), 2 deletions(-)
->>
-> 
-> A gentle reminder for the review.
-> 
-> -Manali
+vim +/const +260 drivers/clk/hisilicon/clk-hix5hd2.c
 
-A gentle reminder for the review.
+   255	
+   256	static int
+   257	hix5hd2_clk_register_complex(struct device *dev, const void *clocks, int nums,
+   258				     struct hisi_clock_data *data)
+   259	{
+ > 260		struct hix5hd2_complex_clock *clks = clocks;
+   261		void __iomem *base = data->base;
+   262		int i;
+   263	
+   264		for (i = 0; i < nums; i++) {
+   265			struct hix5hd2_clk_complex *p_clk;
+   266			struct clk *clk;
+   267			struct clk_init_data init;
+   268	
+   269			p_clk = kzalloc(sizeof(*p_clk), GFP_KERNEL);
+   270			if (!p_clk)
+   271				return -ENOMEM;
+   272	
+   273			init.name = clks[i].name;
+   274			if (clks[i].type == TYPE_ETHER)
+   275				init.ops = &clk_ether_ops;
+   276			else
+   277				init.ops = &clk_complex_ops;
+   278	
+   279			init.flags = 0;
+   280			init.parent_names =
+   281				(clks[i].parent_name ? &clks[i].parent_name : NULL);
+   282			init.num_parents = (clks[i].parent_name ? 1 : 0);
+   283	
+   284			p_clk->ctrl_reg = base + clks[i].ctrl_reg;
+   285			p_clk->ctrl_clk_mask = clks[i].ctrl_clk_mask;
+   286			p_clk->ctrl_rst_mask = clks[i].ctrl_rst_mask;
+   287			p_clk->phy_reg = base + clks[i].phy_reg;
+   288			p_clk->phy_clk_mask = clks[i].phy_clk_mask;
+   289			p_clk->phy_rst_mask = clks[i].phy_rst_mask;
+   290			p_clk->hw.init = &init;
+   291	
+   292			clk = clk_register(NULL, &p_clk->hw);
+   293			if (IS_ERR(clk)) {
+   294				kfree(p_clk);
+   295				pr_err("%s: failed to register clock %s\n",
+   296				       __func__, clks[i].name);
+   297				return PTR_ERR(p_clk);
+   298			}
+   299	
+   300			data->clk_data.clks[clks[i].id] = clk;
+   301		}
+   302	
+   303		return 0;
+   304	}
+   305	
 
--Manali
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
