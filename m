@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A45E6C6FF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E192E6C6FFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 19:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjCWSHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 14:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S229794AbjCWSI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 14:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCWSHi (ORCPT
+        with ESMTP id S229991AbjCWSI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 14:07:38 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7A2EC78
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:07:37 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-544f7c176easo264201917b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:07:37 -0700 (PDT)
+        Thu, 23 Mar 2023 14:08:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7B6E388
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:08:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eg48so90357800edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 11:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679594856;
+        d=google.com; s=20210112; t=1679594903;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D74n7gh2e+yraGRRHuwIsY16XgTeKkTUvC50d4zORpo=;
-        b=eYFC2WMp4wycqzmZ+KFoGjc33WDvdgzLq2458qsW7p9MfDn+RZahgcn1K1ZqfAuTi4
-         3QGsVqv8NsLPTskBqBB43v2v6JJWajEIJCL6YkBTs9xC+1LQQY1YjGUmRwkd3psPYK8P
-         zhHP9tWS+5YStH3s8k2YjeZkouNHhcZX8QARBE0Wg/oFIx5S6IDjwrYC7r13L6qDPrYr
-         Q51EyOdYVtFmhxM/8AksLjgrSslIbrHR3ph7NmcwZOfbjD/cdGW3ZsMNGSguNB6RwSgM
-         vXL2vcm5PS/obhyjvUNcPGRiu3MuKfvYju7QC48MFj+1n3ZZtXZ5I5SKntegBVYhDbyY
-         qqOg==
+        bh=GVEQ3jjBhRvvdROqbmTd0ErWpAgtFM7LpI2zkeVM6nc=;
+        b=iSMmzvR4nUOgFdPoIuMVdAVhXTbAdbYo7pLETlxOCbMwcNRovtBt/22dPXrSySYxbp
+         zJCQTHhPo4PFrUR62vtMimmYSgiWTsqB9tSiqzOg0nSraK9/nvwtvh334JEH2rWJQ6FS
+         97I4Xoiz7o/cACMu+o9beDqaksw/PavmXjFklptwSOqiOI8p/ig5E0vc2DDXoFcGspgE
+         dju0BzbOVvGZNQp11KXGu3UcBpKdWla8vD/e/4gAeirBuUxilCcora4A4l+Yn/h2OwD4
+         6M/kCw/eev/Mgj2sy4Ebimfd+9ZQNukVrkyECwua5LZ1YLU4Qdfjw8d4Qq5KqMIfy9SZ
+         h7Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679594856;
+        d=1e100.net; s=20210112; t=1679594903;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D74n7gh2e+yraGRRHuwIsY16XgTeKkTUvC50d4zORpo=;
-        b=SkY8vauMBfJI3qcDpSXlQw/agjVh28+hP8dx2azoxguBtdvBouZv9jd31GNBLNlNZc
-         3NvCJ2xIOaulf7RerhNYBv/BGTu/eCKZTCSFcRwtovpxiX6fHIKYv3+G2Es5uy4/icMR
-         xwuxvNGqKj73vN4b4aocgGxrJeXVRzpGuQ6TG4ZLLAnvEYmFoQgs2pM8nTZlY0IAI3/D
-         fIbU4CR17OJl5IbYI2KSyGaEZHosGKiK6qqbKYHeZZALCynMMlmZtdocH27n+wTdRlf4
-         1IOQfhR2hLqHrnhBQTGw96QHRMNkwsd+vPmEkVKu99kdFx3kqZCsmxnGe0xSFsCxNDcT
-         6d9w==
-X-Gm-Message-State: AAQBX9fc8w33LqzCY3ntyRgerlxx6mOf3m/Z5+MKoBVV0Q8FLdacRUeD
-        xqo9nmSXXv5iZ6+QqDqLnysuYKSObeSrPAFA33L4KQ==
-X-Google-Smtp-Source: AKy350Z3rfj1sZgDPPKwtizx5xtZ1y5MNFjZi81s4k5EzTEK7PjU0Q8aPkkYh0TYZwedcyG/BVlor44vR0mmaXWilH4=
-X-Received: by 2002:a81:ad57:0:b0:545:64d7:5086 with SMTP id
- l23-20020a81ad57000000b0054564d75086mr2380325ywk.1.1679594856179; Thu, 23 Mar
- 2023 11:07:36 -0700 (PDT)
+        bh=GVEQ3jjBhRvvdROqbmTd0ErWpAgtFM7LpI2zkeVM6nc=;
+        b=KSrlVVLZ/FXOFcVT0yQ66GePSN26rB1qh/flT0Tz/z1Fu6uIVaR2oho3PZcX0IDP1x
+         KCiH//kqJPFI/4mDzSqZd9FdJ3lQx+Ad9vIuRnoUucAflt1zZu21EStnS7gtfrS0Ay0f
+         oU44PO9EvVRyldGLBKVqgRld8eO/CcizCWzgu9UrKMaXF64fW0hazTv0CvcLcOJ8wK+3
+         ghdfRiiC0EfpqSqgVRW7wB4uop187kkybnUlpVP+cHdt8EpWfKEqyn7ggJxv7ED1npfW
+         ahbhyAKOrx86LYv9Oz75sagJv0p1co6U3p8FMlvgCCQIVeBmwcTkzvLH07BfkXmSSHoP
+         0UuA==
+X-Gm-Message-State: AO0yUKVF7DdsCyu5hMcrZL10yyY6TaMIBCrFfQufp1Gtu65RI0JPPQyZ
+        YCkF8yH9Hl7EWyOFGRMqnZomQB0QiRtNpKQCqKh19w==
+X-Google-Smtp-Source: AK7set9uzu0+uLVYPeW1/TKT07Y1C8fU/op63gdiSoakbq07Xp2dmMzhQ0EX2/+iZXC1dLM/RK6moL4HGFXShEgJUAY=
+X-Received: by 2002:a17:906:aac9:b0:927:912:6baf with SMTP id
+ kt9-20020a170906aac900b0092709126bafmr5401952ejb.15.1679594903374; Thu, 23
+ Mar 2023 11:08:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230323103350.40569-1-cerasuolodomenico@gmail.com>
- <20230323103350.40569-4-cerasuolodomenico@gmail.com> <CAJuCfpFh0iL0cE8V3dh-HkDx3-20Kyo+ZAt0vnqvOzA33HwnFg@mail.gmail.com>
- <20230323174459.GH739026@cmpxchg.org>
-In-Reply-To: <20230323174459.GH739026@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 23 Mar 2023 11:07:25 -0700
-Message-ID: <CAJuCfpFxzYKRkLg2m_T5ee+y-XLyYM6OKPKPXSi3rN4Lrr194Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] sched/psi: allow unprivileged polling of N*2s period
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-5-yosryahmed@google.com> <20230323155613.GC739026@cmpxchg.org>
+ <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com> <20230323172732.GE739026@cmpxchg.org>
+In-Reply-To: <20230323172732.GE739026@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 23 Mar 2023 11:07:47 -0700
+Message-ID: <CAJD7tkbtHhzOytu3hfN8tjdAyNq0BZXYN8TEipS4NTApUzkL7w@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe contexts
 To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        brauner@kernel.org, chris@chrisdown.name
+Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
@@ -73,48 +82,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:45=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
+On Thu, Mar 23, 2023 at 10:27=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
 g> wrote:
 >
-> On Thu, Mar 23, 2023 at 09:55:11AM -0700, Suren Baghdasaryan wrote:
-> > On Thu, Mar 23, 2023 at 3:34=E2=80=AFAM Domenico Cerasuolo
-> > > @@ -1254,16 +1262,19 @@ int psi_show(struct seq_file *m, struct psi_g=
-roup *group, enum psi_res res)
-> > >  }
+> On Thu, Mar 23, 2023 at 09:01:12AM -0700, Yosry Ahmed wrote:
+> > On Thu, Mar 23, 2023 at 8:56=E2=80=AFAM Johannes Weiner <hannes@cmpxchg=
+.org> wrote:
 > > >
-> > >  struct psi_trigger *psi_trigger_create(struct psi_group *group,
-> > > -                       char *buf, enum psi_res res)
-> > > +                       char *buf, enum psi_res res, struct file *fil=
-e)
-> > >  {
-> > >         struct psi_trigger *t;
-> > >         enum psi_states state;
-> > >         u32 threshold_us;
-> > > +       bool privileged;
-> > >         u32 window_us;
+> > > On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
+> > > > @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
+> > > >               return;
+> > > >
+> > > >       flush_next_time =3D jiffies_64 + 2*FLUSH_TIME;
+> > > > -     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
+> > > > +     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
 > > >
-> > >         if (static_branch_likely(&psi_disabled))
-> > >                 return ERR_PTR(-EOPNOTSUPP);
-> > >
-> > > +       privileged =3D cap_raised(file->f_cred->cap_effective, CAP_SY=
-S_RESOURCE);
+> > > How is it safe to call this with may_sleep=3Dtrue when it's holding t=
+he
+> > > stats_flush_lock?
 > >
-> > I missed one detail here. We are moving the cap check from open() to
-> > write(). That might break potential users which open the file from a
-> > process with that cap and then pass that FD to an unprivileged process
-> > to create the trigger by writing to that file. I'm not aware of any
-> > use of such a pattern but it is possible there are such users.
-> > With this change such users would have to delegate trigger creation to
-> > the privileged process too and the received FD would be used only for
-> > polling. IMHO that's a safer pattern because triggers are created by
-> > the privileged process.
+> > stats_flush_lock is always called with trylock, it is only used today
+> > so that we can skip flushing if another cpu is already doing a flush
+> > (which is not 100% correct as they may have not finished flushing yet,
+> > but that's orthogonal here). So I think it should be safe to sleep as
+> > no one can be blocked waiting for this spinlock.
 >
-> Oh, it's checking file->f_cred, which is set up at open(). So if the
-> opener is privileged, the write can be delegated to an unprivileged
-> process.
->
-> But I agree that this is subtle and could use a comment.
->
-> This was a usecase specifically requested by Christian, actually.
+> I see. It still cannot sleep while the lock is held, though, because
+> preemption is disabled. Make sure you have all lock debugging on while
+> testing this.
 
-Ah, great!
+Thanks for pointing this out, will do.
+
+>
+> > Perhaps it would be better semantically to replace the spinlock with
+> > an atomic test and set, instead of having a lock that can only be used
+> > with trylock?
+>
+> It could be helpful to clarify what stats_flush_lock is protecting
+> first. Keep in mind that locks should protect data, not code paths.
+>
+> Right now it's doing multiple things:
+>
+> 1. It protects updates to stats_flush_threshold
+> 2. It protects updates to flush_next_time
+> 3. It serializes calls to cgroup_rstat_flush() based on those ratelimits
+>
+> However,
+>
+> 1. stats_flush_threshold is already an atomic
+>
+> 2. flush_next_time is not atomic. The writer is locked, but the reader
+>    is lockless. If the reader races with a flush, you could see this:
+>
+>                                         if (time_after(jiffies, flush_nex=
+t_time))
+>         spin_trylock()
+>         flush_next_time =3D now + delay
+>         flush()
+>         spin_unlock()
+>                                         spin_trylock()
+>                                         flush_next_time =3D now + delay
+>                                         flush()
+>                                         spin_unlock()
+>
+>    which means we already can get flushes at a higher frequency than
+>    FLUSH_TIME during races. But it isn't really a problem.
+>
+>    The reader could also see garbled partial updates, so it needs at
+>    least READ_ONCE and WRITE_ONCE protection.
+>
+> 3. Serializing cgroup_rstat_flush() calls against the ratelimit
+>    factors is currently broken because of the race in 2. But the race
+>    is actually harmless, all we might get is the occasional earlier
+>    flush. If there is no delta, the flush won't do much. And if there
+>    is, the flush is justified.
+>
+> In summary, it seems to me the lock can be ditched altogether. All the
+> code needs is READ_ONCE/WRITE_ONCE around flush_next_time.
+
+Thanks a lot for this analysis. I agree that the lock can be removed
+with proper READ_ONCE/WRITE_ONCE, but I think there is another purpose
+of the lock that we are missing here.
+
+I think one other purpose of the lock is avoiding a thundering herd
+problem on cgroup_rstat_lock, particularly from reclaim context, as
+mentioned by the log of  commit aa48e47e3906 ("memcg: infrastructure
+to flush memcg stats").
+
+While testing, I did notice that removing this lock indeed causes a
+thundering herd problem if we have a lot of concurrent reclaimers. The
+trylock makes sure we abort immediately if someone else is flushing --
+which is not ideal because that flusher might have just started, and
+we may end up reading stale data anyway.
+
+This is why I suggested replacing the lock by an atomic, and do
+something like this if we want to maintain the current behavior:
+
+static void __mem_cgroup_flush_stats(void)
+{
+    ...
+    if (atomic_xchg(&ongoing_flush, 1))
+        return;
+    ...
+    atomic_set(&ongoing_flush, 0)
+}
+
+Alternatively, if we want to change the behavior and wait for the
+concurrent flusher to finish flushing, we can maybe spin until
+ongoing_flush goes back to 0 and then return:
+
+static void __mem_cgroup_flush_stats(void)
+{
+    ...
+    if (atomic_xchg(&ongoing_flush, 1)) {
+        /* wait until the ongoing flusher finishes to get updated stats */
+        while (atomic_read(&ongoing_flush) {};
+        return;
+    }
+    /* flush the stats ourselves */
+    ...
+    atomic_set(&ongoing_flush, 0)
+}
+
+WDYT?
