@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E936C67E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0B36C67DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCWMPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S230257AbjCWMPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjCWMOf (ORCPT
+        with ESMTP id S231358AbjCWMOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:14:35 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C4124C80
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:06 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id z83so24493048ybb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:06 -0700 (PDT)
+        Thu, 23 Mar 2023 08:14:31 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1B22211B
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:04 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id p203so24448299ybb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:14:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573641;
+        d=linaro.org; s=google; t=1679573644;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBcr6rGUQpq73pjYT7vRUWqGDW5Dr38jLB7HJdT5cIo=;
-        b=voEb/826RcZ3kwUnJrKKb5X0HAbeEHDo9gxIa7fYVS2TgYVRFp8uQLGPf5rqZHl+hL
-         Q/TNwsas90BLJQRUYzSmNUUVS1mlzjMMyIrkLWAYkIFqrjIX5nNAqZzEX6SwnOjt4tiz
-         Lt3fG2Sx0aV86xTqdDs4TZZsEveXVz9psGjGoSLn3Uo4f2v0FRGNfLff+FeaGmdlHkiN
-         fgA8epD3GnmWQDOPB9sJtcPHg2XvO/2/LrRw/UY9Pn0KdQZikvonson8U2c4q4ZFEqRk
-         hbgu+3nxxqgPSw7s/Ajwzp/0lb9xvCHwZKVkXItCgf1MMGU6p8GmU6//bqu4XYYJVixI
-         Bgpg==
+        bh=BblPANZjqA7wQOrQWqZUuSoux+eP/PZ5C5O715+EVfs=;
+        b=pLQeB1LB5bE9yn2Blg4HQ/e5b161vpKYwJOanB+jqJjmB71hGXdcA3onsRb7tKAJ07
+         LhJWQeJVnNalIoQiLoLaTE2gLjxbi8naVzTq4P39Zin/0d2HGrSsls58YWiYzqezxR07
+         LGeRO3X0zmEvJAVoXY8A5JuMaA7hXW3YI1E0Lf8puVxU2Y5kRkgGzqpM4O6q8ObcuNG7
+         nnWvMHpDlUtAqLHTvqS/FF2m420mHrS/LsX1VciG8rAM9v0fCa0syAkbsMJ0MTuZVbnx
+         zEBkDYs+k6nBLPeodoAs/tDrIoxF8m914owO75sVFfhoRB7WDbC2ZinBczeqeOReCb9E
+         K6Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573641;
+        d=1e100.net; s=20210112; t=1679573644;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CBcr6rGUQpq73pjYT7vRUWqGDW5Dr38jLB7HJdT5cIo=;
-        b=NW3VjCNQYOmaEoaTUImS25dwP3O4wee7871tF37aCke6N1y9RjnDuh1j9dxxZDyLMK
-         Le8R546YSVz5xPlhc2YmQJxDKlaXJbhwO5fygSe16wiEA/2EbEgQmvif0bYMlxjCUbVm
-         JwJ32v6MsYRACg1z8kQM+k4B0Ud2PuA3tH1X1AXAxNjP4KSOMBoeu1MJG7ktPUa/fraK
-         +U9vU3hf+F4xAslwOLm3V8LpP9ndTHWlBBh2c2EZ6afU1UrunAwOVs0xyabsU+UFHlp3
-         5ejt2El82oq0mmIUzkSjMm7c+oR/H4iAFjX3lQ+CDGKbbsYmgNy/cv8r6J8Bl/zBLJsy
-         rLLA==
-X-Gm-Message-State: AAQBX9dSrqMxfeGSBgR+orKuai0a13nUrabL8zU+VO9/SNqJwzQdArVG
-        nJqyD8u4p0IoZN5VcZFrIVzVV9v0YtyIFwTE7HjWYg==
-X-Google-Smtp-Source: AKy350a5HqJ3Do5D8FQMtsU4FwpW2pRvPpCLBVv/YVEXdN/L2HtAIv5Arz6/7Km/jGditdZo9mvd1J5GFyhyQUTw4+I=
-X-Received: by 2002:a05:6902:1689:b0:b75:8ac3:d5d9 with SMTP id
- bx9-20020a056902168900b00b758ac3d5d9mr948334ybb.3.1679573641152; Thu, 23 Mar
- 2023 05:14:01 -0700 (PDT)
+        bh=BblPANZjqA7wQOrQWqZUuSoux+eP/PZ5C5O715+EVfs=;
+        b=iE6U0S+gZqB1HP8yiQovStXT4S4sXom6/wNBUkF2nP7Xu799wAI/bEWKzgpM0qxpJV
+         qV43wm6/mNhdIw/F1GCeeURqbxN5xmiVuUCaRHtXf2n6q/3BATWvXn6Gfd95G78Pk/jl
+         ri0f/UVpZrFot1hoyAgR2+gVIAFjCfkUbHnn4vDmI15ZPW+r5C/So+1uTBjrwKoL8jNp
+         Udzn3gsciX/6QItkIf5sXdqMd5D6Ylu9xbsyNUv0u30yshs/2Kv6C5o+rNKyHWIzMbHy
+         9Ws2UGlzL6ULttgtPbvQ/7dKdwJJim9R/8oxGUkuUvLIUTfMMYfI3wIshNW7N1aoXlHL
+         QDrQ==
+X-Gm-Message-State: AAQBX9cFHHrTCelBWkewPKJkzUMZxCyGjl82lnKc77SomuQLIVaf9Cca
+        hrYUdDX7co9TLXF6RMm6xH++kjydN3/lu5C/xmkxJw==
+X-Google-Smtp-Source: AKy350YMS4DKKbzOJ1NaznFTshAbP8PVkuBNSowg2uyFogxyMYHXQw8ASfzfJpKHhm1OLyjqQOUELhjS30llPxzCZ5U=
+X-Received: by 2002:a25:bb44:0:b0:b6e:b924:b96f with SMTP id
+ b4-20020a25bb44000000b00b6eb924b96fmr1930276ybk.3.1679573644543; Thu, 23 Mar
+ 2023 05:14:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230319164744.1707169-1-trix@redhat.com>
-In-Reply-To: <20230319164744.1707169-1-trix@redhat.com>
+References: <20230319173006.30455-1-robh@kernel.org>
+In-Reply-To: <20230319173006.30455-1-robh@kernel.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Mar 2023 13:13:25 +0100
-Message-ID: <CAPDyKFqfdYKXwaCbT6_hBsX1ZxeVtNivZBQmh3gA8554F944hA@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdricoh_cs: remove unused sdricoh_readw function
-To:     Tom Rix <trix@redhat.com>
-Cc:     saschasommer@freenet.de, nathan@kernel.org,
-        ndesaulniers@google.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date:   Thu, 23 Mar 2023 13:13:28 +0100
+Message-ID: <CAPDyKFqFkNNVMvYShNGQkC4S3KEMDPR2pTHxRCuzjtpW1Joe+w@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: mmc: fujitsu: Add Socionext Synquacer
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
@@ -67,16 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 19 Mar 2023 at 17:47, Tom Rix <trix@redhat.com> wrote:
+On Sun, 19 Mar 2023 at 18:30, Rob Herring <robh@kernel.org> wrote:
 >
-> clang with W=1 reports
-> drivers/mmc/host/sdricoh_cs.c:104:28: error: unused function
->   'sdricoh_readw' [-Werror,-Wunused-function]
-> static inline unsigned int sdricoh_readw(struct sdricoh_host *host,
->                            ^
-> This function is not used, so remove it.
+> Add support for Socionext Synquacer SDHCI. This binding has been in use for
+> some time.
 >
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> The interrupts were not documented. The driver only uses the first
+> interrupt, but the DT and example have 2 interrupts. The 2nd one is
+> unknown. "dma-coherent" was also not documented, but is used on Synquacer.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
 Applied for next, thanks!
 
@@ -85,28 +86,45 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/sdricoh_cs.c | 8 --------
->  1 file changed, 8 deletions(-)
+> v2:
+>  - Rebase on conversion done by Kunihiko
+> ---
+>  .../bindings/mmc/fujitsu,sdhci-fujitsu.yaml       | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/mmc/host/sdricoh_cs.c b/drivers/mmc/host/sdricoh_cs.c
-> index 76a8cd3a186f..57b8c1a96756 100644
-> --- a/drivers/mmc/host/sdricoh_cs.c
-> +++ b/drivers/mmc/host/sdricoh_cs.c
-> @@ -101,14 +101,6 @@ static inline void sdricoh_writel(struct sdricoh_host *host, unsigned int reg,
+> diff --git a/Documentation/devicetree/bindings/mmc/fujitsu,sdhci-fujitsu.yaml b/Documentation/devicetree/bindings/mmc/fujitsu,sdhci-fujitsu.yaml
+> index 73d747e917f3..430b62899397 100644
+> --- a/Documentation/devicetree/bindings/mmc/fujitsu,sdhci-fujitsu.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fujitsu,sdhci-fujitsu.yaml
+> @@ -14,9 +14,13 @@ allOf:
 >
->  }
+>  properties:
+>    compatible:
+> -    enum:
+> -      - fujitsu,mb86s70-sdhci-3.0
+> -      - socionext,f-sdh30-e51-mmc
+> +    oneOf:
+> +      - items:
+> +          - const: socionext,synquacer-sdhci
+> +          - const: fujitsu,mb86s70-sdhci-3.0
+> +      - enum:
+> +          - fujitsu,mb86s70-sdhci-3.0
+> +          - socionext,f-sdh30-e51-mmc
 >
-> -static inline unsigned int sdricoh_readw(struct sdricoh_host *host,
-> -                                        unsigned int reg)
-> -{
-> -       unsigned int value = readw(host->iobase + reg);
-> -       dev_vdbg(host->dev, "rb %x 0x%x\n", reg, value);
-> -       return value;
-> -}
-> -
->  static inline void sdricoh_writew(struct sdricoh_host *host, unsigned int reg,
->                                          unsigned short value)
->  {
+>    reg:
+>      maxItems: 1
+> @@ -29,6 +33,11 @@ properties:
+>        - const: iface
+>        - const: core
+>
+> +  dma-coherent: true
+> +
+> +  interrupts:
+> +    maxItems: 2
+> +
+>    resets:
+>      maxItems: 1
+>
 > --
-> 2.27.0
+> 2.39.2
 >
