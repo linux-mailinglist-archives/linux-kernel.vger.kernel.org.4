@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1D96C64FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 696FB6C6505
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjCWK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S230257AbjCWK37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjCWK10 (ORCPT
+        with ESMTP id S231336AbjCWK3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:27:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F111B566;
-        Thu, 23 Mar 2023 03:26:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AB35B8206D;
-        Thu, 23 Mar 2023 10:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901AEC433EF;
-        Thu, 23 Mar 2023 10:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679567160;
-        bh=qjuVbo/YQInc7QDqTNTVbV1FjCw1Zls8gRxxXRbt/QU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kK2s1NGslXJ89GkgaX3rOCRWahxTMYA8/zrlC+4tBPZp3ktan8xpDiP4Mb/hcl/6w
-         GnaXDpKbUP+EZGb0X5WEcLfz5hjV7+cM/o7WJEKKfwFhRuUnMFRYSOu0nyghblJpq0
-         8P0qfUEdtLIywvFVxzqUW9zJmXMftzrB/OYnabfw=
-Date:   Thu, 23 Mar 2023 11:25:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <ZBwpNcd/A15/Azjr@kroah.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <12ea1d68-2a3c-0aa7-976c-7bd3eef35239@fi.rohmeurope.com>
- <ZBwUp/fRIjQZtjF7@kroah.com>
- <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
+        Thu, 23 Mar 2023 06:29:21 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377A21C5BB;
+        Thu, 23 Mar 2023 03:27:08 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 2138B40002;
+        Thu, 23 Mar 2023 10:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679567227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Bb2LaA5oKhmmtAZYLmsiQ/YaU0jciVROXMb0QSlP0Wg=;
+        b=VxFDk1btpm3I+lY27gnNS2ZFS9MfFuK69w+dHpGJzWzpWR45gsxG/km5LiGA2wHJLBaLg5
+        VK+K97/DL86knDX6Mke46XFjzerXEVRH/Zb93FgpPBaY8F7wk6J1AgSvyMu1tzuk8dHWz6
+        xrEgKll+w/M4VK1OG85PKzR2sOgHEFTx9oc+ivV39IX8d7A+Kx1+d0/2wBwB2dPZ3ZQdte
+        O+duzsRYbMcdgNBtMQpKLou3uaJu7N2ahGwixQe8z+OWcf1e6cGnb37vdxOxH8ZCklBNVI
+        VeYlf21rudf7mc+B1N60Wt0NTfnjRYXw13T+M37jn2YthgvBxNvOGQ6CArHBmg==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [RFC PATCH 0/4] Hi,
+Date:   Thu, 23 Mar 2023 11:26:51 +0100
+Message-Id: <20230323102655.264115-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:20:33AM +0200, Matti Vaittinen wrote:
-> On 3/23/23 10:58, Greg Kroah-Hartman wrote:
-> > On Thu, Mar 23, 2023 at 07:17:40AM +0000, Vaittinen, Matti wrote:
-> > > On 3/22/23 20:57, Greg Kroah-Hartman wrote:
-> > > > On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
-> > > > > Hi Greg,
-> > > > > 
-> > > > > Thanks for looking at this.
-> > > > > 
-> > > > > On 3/22/23 14:07, Greg Kroah-Hartman wrote:
-> > > > > > On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
-> 
-> > > I am very conservative what comes to adding unit tests due to the huge
-> > > inertia they add to any further development. I usually only add tests to
-> > > APIs which I know won't require changing (I don't know such in-kernel
-> > > APIs)
-> > 
-> > So anything that is changing doesn't get a test?
-> 
-> No. I think you misread me. I didn't say I don't like adding tests to code
-> which changes. I said, I don't like adding tests to APIs which change.
+I have a system where I need to handle an HDLC interface.
 
-Then you should not be writing any in-kernel tests as all of our APIs
-change all the time.
+The HDLC data are transferred using a TDM bus on which a PEF2256 is
+present. The PEF2256 transfers data from/to the TDM bus to/from E1 line.
+This PEF2256 is also connected to a PowerQUICC SoC for the control path
+and the TDM is connected to the SoC (QMC component) for the data path.
 
->  If you only test
-> > things that don't change then no tests fail, and so, why have the test
-> > at all?
-> 
-> Because implementation cascading into functions below an API may change even
-> if the API stays unchanged.
+From the HDLC driver, I need to handle data using the QMC and carrier
+detection using the PEF2256 (E1 line carrier).
 
-Then it needs to be fixed.
+The HDLC driver consider the PEF2256 as a generic PHY.
+So, the design is the following:
 
-> > On the contrary, tests should be used to verify things that are changing
-> > all the time, to ensure that we don't break things.
-> 
-> This is only true when your test code stays valid. Problem with excessive
-> amount of tests is that more we have callers for an API, harder changing
-> that API becomes. I've seen a point where people stop fixing "unimportant"
-> things just because the amount of work fixing all impacted UT-cases would
-> take. I know that many things went wrong before that project ended up to the
-> point - but what I picked up with me is that carelessly added UTs do really
-> hinder further development.
++----------+          +-------------+              +---------+
+| HDLC drv | <-data-> | QMC channel | <-- TDM -->  | PEF2256 |
++----------+          +-------------+              |         | <--> E1
+   ^   +---------+     +---------+                 |         |
+   +-> | Gen PHY | <-> | PEF2256 | <- local bus -> |         |
+       +---------+     | PHY drv |                 +---------+
+                       +---------+
 
-Again, in-kernel apis change at any moment.  I just changed one that was
-over 15 years old.  Don't get stuck into thinking that you can only
-write tests for stuff that is "stable" as nothing in the kernel is
-"stable" and can change at any point in time.  You fix up all the
-in-kernel users of the api, and the tests, and all is good.  That's how
-kernel development works.
+In order to implement this, I had to:
+ 1 - Extend the generic PHY API to support get_status() and notification
+     on status change.
+ 2 - Introduce a new kind of generic PHY named "basic phy". This PHY
+     familly can provide a link status in the get_status() data.
+ 3 - Support the PEF2256 PHY as a "basic phy"
 
->  That's why we need
-> > them, not to just validate that old code still is going ok.
-> > 
-> > The driver core is changing, and so, I would love to see tests for it to
-> > ensure that I don't break anything over time.  That should NOT slow down
-> > development but rather, speed it up as it ensures that things still work
-> > properly.
-> 
-> I agree that there are cases where UTs are very handy and can add confidence
-> that things work as intended. Still, my strong opinion is that people should
-> consider what parts of code are really worth testing - and how to do the
-> tests so that the amount of maintenance required by the tests stays low.
-> It's definitely _not fun_ to do refactoring for minor improvement when 400+
-> unit-test cases break. It's a point when many developers start seeing fixing
-> this minor culprit much less important... And when people stop fixing minor
-> things ... major things start to be just around the corner.
+The purpose of this RFC series is to discuss this design.
 
-If people stop fixing minor things then the kernel development process
-is dead.  Based on all the changes that go into it right now, we are far
-from having that problem.
+The QMC driver code is available on linux-next. In this series:
+- patch 1: driver HDLC using the QMC channel
+- patch 2: Extend the generic PHY API
+- patch 3: Use the "basic phy" in the HDLC driver
+- patch 4: Implement the PEF2256 PHY driver
 
-So write valid tests, if we get to the point where we have too much of a
-problem fixing up the tests than the real users of apis, then we can
-revisit it.  But for now, that's not an issue.
+I did 2 patches for the HDLC driver in order to point the new PHY family
+usage in the HDLC driver. In the end, these two patches will be squashed
+and the bindings will be added.
 
-And again, remember, and api can, and will, change at any moment in
-time, you can never know what will be "stable" as we do not have such a
-thing.
+Hope to have some feedback on this proposal.
 
-thanks,
+Best regards,
+Hervé
 
-greg k-h
+Herve Codina (4):
+  net: wan: Add support for QMC HDLC
+  phy: Extend API to support 'status' get and notification
+  net: wan: fsl_qmc_hdlc: Add PHY support
+  phy: lantiq: Add PEF2256 PHY support
+
+ drivers/net/wan/Kconfig                 |  12 +
+ drivers/net/wan/Makefile                |   1 +
+ drivers/net/wan/fsl_qmc_hdlc.c          | 558 ++++++++++++++++++++++++
+ drivers/phy/lantiq/Kconfig              |  15 +
+ drivers/phy/lantiq/Makefile             |   1 +
+ drivers/phy/lantiq/phy-lantiq-pef2256.c | 131 ++++++
+ drivers/phy/phy-core.c                  |  88 ++++
+ include/linux/phy/phy-basic.h           |  27 ++
+ include/linux/phy/phy.h                 |  89 +++-
+ 9 files changed, 921 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/wan/fsl_qmc_hdlc.c
+ create mode 100644 drivers/phy/lantiq/phy-lantiq-pef2256.c
+ create mode 100644 include/linux/phy/phy-basic.h
+
+-- 
+2.39.2
+
