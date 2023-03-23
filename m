@@ -2,164 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9F86C671F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4FB6C6723
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 12:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbjCWLwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 07:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S231724AbjCWLxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 07:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjCWLwp (ORCPT
+        with ESMTP id S231312AbjCWLx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 07:52:45 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255EE3401E;
-        Thu, 23 Mar 2023 04:52:43 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id BCAA7C0006;
-        Thu, 23 Mar 2023 11:52:36 +0000 (UTC)
-Message-ID: <67ba29ff-b03d-2d24-a844-7ae25ddca447@ghiti.fr>
-Date:   Thu, 23 Mar 2023 12:52:36 +0100
+        Thu, 23 Mar 2023 07:53:28 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5B0305E1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 04:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679572407; x=1711108407;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4QSY9JbIyAF8A3xDusjcKiqqb8z3LBAAESkZ1hn3NYM=;
+  b=Gf1jvx2jMsiK7XxQwULyLDYkbvu0YUreIfdUrCc+YBjPPRclmw02mvYn
+   pzhZ9hwp8TPTw5ZbIR5bBTW5/qmWiWqUzX8VRxScugIRPiLGH/wDCW1fo
+   24ky6JzIkhmb1i/Lf8he6VYCRe+X2AlIeENWyaf/o0YBa+AnsOX4kM1Nf
+   KvPxr9N9ev/KJW9wyRQLxMTP3p8sdbsGnIf7+bldIbYk89oWBcUppLG0J
+   /MVnA7IKhHxPfrXYlFOx4K5ThO1zfujfMhWiElKMLzDZD1+RIa3owFFPv
+   14WD64VhZo9wopUB2xr1gt1qLRxuEETBCKEJU/Zt7Kd3RbNljjRzgG43b
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="402032884"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="402032884"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 04:53:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="806224076"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="806224076"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Mar 2023 04:53:24 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfJVU-000EJh-0c;
+        Thu, 23 Mar 2023 11:53:24 +0000
+Date:   Thu, 23 Mar 2023 19:53:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 9d29d8e36cd6448966d83ab1acf946a2df3c2833
+Message-ID: <641c3da1.0wAenUhx/lbAnos8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 2/4] mm: Introduce memblock_isolate_memory
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
- <20230316131711.1284451-3-alexghiti@rivosinc.com>
- <ZBN4Hoo99DNd5wKx@kernel.org> <efe1ef6b-b1c2-8d5b-82b7-3cd64053643e@ghiti.fr>
- <ZBibYDR0h1UeL6L5@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <ZBibYDR0h1UeL6L5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 9d29d8e36cd6448966d83ab1acf946a2df3c2833  locking/rwbase: Mitigate indefinite writer starvation.
 
-On 3/20/23 18:44, Mike Rapoport wrote:
-> On Mon, Mar 20, 2023 at 11:54:14AM +0100, Alexandre Ghiti wrote:
->> Hi Mike,
->>
->> On 3/16/23 21:12, Mike Rapoport wrote:
->>> Hi Alexandre,
->>>
->>> On Thu, Mar 16, 2023 at 02:17:09PM +0100, Alexandre Ghiti wrote:
->>>> This function allows to split a region in memblock.memory and will be
->>>> useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
->>>> allows to isolate the kernel text/rodata and then avoid to map those
->>>> regions with a PUD/P4D/PGD.
->>> Sorry I've missed it last time. The changelog is fine in the context of
->>
->> No worries :)
->>
->>
->>> this series, but if you look at it as a part of memblock changelog it
->>> doesn't provide enough background on why memblock_isolate_memory() is
->>> useful.
->>>
->>> Can you please add more context so it would be self explanatory?
->>
->> What about: "memblock.memory contains the list of memory regions and a
->> memory region can cover memory that will be mapped with different
->> permissions. So to ease the mapping process, allow to isolate those regions
->> by introducing a new function called memblock_isolate_memory. This will be
->> used in arch specific code to isolate the kernel text/rodata regions when
->> STRICT_KERNEL_RWX is enabled so that we avoid mapping them with PUD/P4D/PGD
->> mappings."
-> With this change
->
-> ... STRICT_KERNEL_RWX is enabled so that they can be mapped with base pages.
+elapsed time: 728m
 
+configs tested: 96
+configs skipped: 4
 
-Actually they will get mapped with PMD mappings :) I'll just append: "or 
-PMD mapping" to your sentence above if that's ok with you.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r003-20230322   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r004-20230322   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r002-20230322   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r011-20230322   clang
+arm                  randconfig-r046-20230322   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r003-20230322   clang
+arm64                randconfig-r004-20230322   clang
+csky         buildonly-randconfig-r001-20230322   gcc  
+csky         buildonly-randconfig-r006-20230322   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r045-20230322   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r006-20230322   gcc  
+mips                 randconfig-r035-20230322   gcc  
+mips                 randconfig-r036-20230322   gcc  
+nios2        buildonly-randconfig-r005-20230322   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r014-20230322   gcc  
+openrisc             randconfig-r031-20230322   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r034-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r013-20230322   gcc  
+powerpc              randconfig-r015-20230322   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r002-20230322   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r001-20230322   gcc  
+sparc                randconfig-r016-20230322   gcc  
+sparc64              randconfig-r032-20230322   gcc  
+sparc64              randconfig-r033-20230322   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r012-20230322   gcc  
 
->
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-
-Thanks for your review,
-
-Alex
-
-
->
->> Thanks,
->>
->> Alex
->>
->>
->>>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->>>> Reviewed-by: Anup Patel <anup@brainfault.org>
->>>> Tested-by: Anup Patel <anup@brainfault.org>
->>>> ---
->>>>    include/linux/memblock.h |  1 +
->>>>    mm/memblock.c            | 20 ++++++++++++++++++++
->>>>    2 files changed, 21 insertions(+)
->>>>
->>>> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
->>>> index 50ad19662a32..2f7ef97c0da7 100644
->>>> --- a/include/linux/memblock.h
->>>> +++ b/include/linux/memblock.h
->>>> @@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
->>>>    int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
->>>>    int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
->>>>    int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
->>>> +int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
->>>>    void memblock_free_all(void);
->>>>    void memblock_free(void *ptr, size_t size);
->>>> diff --git a/mm/memblock.c b/mm/memblock.c
->>>> index 25fd0626a9e7..e8c651a37012 100644
->>>> --- a/mm/memblock.c
->>>> +++ b/mm/memblock.c
->>>> @@ -805,6 +805,26 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
->>>>    	return 0;
->>>>    }
->>>> +/**
->>>> + * memblock_isolate_memory - isolate given range in memblock.memory
->>>> + * @base: base of range to isolate
->>>> + * @size: size of range to isolate
->>>> + *
->>>> + * Isolates the given range in memblock.memory so that it does not share any
->>>> + * region with other ranges.
->>>> + *
->>>> + * Return:
->>>> + * 0 on success, -errno on failure.
->>>> + */
->>>> +
->>>> +int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
->>>> +{
->>>> +	int start_rgn, end_rgn;
->>>> +
->>>> +	return memblock_isolate_range(&memblock.memory, base, size,
->>>> +				      &start_rgn, &end_rgn);
->>>> +}
->>>> +
->>>>    static int __init_memblock memblock_remove_range(struct memblock_type *type,
->>>>    					  phys_addr_t base, phys_addr_t size)
->>>>    {
->>>> -- 
->>>> 2.37.2
->>>>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
