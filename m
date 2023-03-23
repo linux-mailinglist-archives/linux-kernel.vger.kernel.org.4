@@ -2,184 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057666C646D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2E86C6475
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCWKHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S231150AbjCWKJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCWKHx (ORCPT
+        with ESMTP id S230236AbjCWKJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:07:53 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FC911A;
-        Thu, 23 Mar 2023 03:07:52 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id B45E3320091E;
-        Thu, 23 Mar 2023 06:07:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 23 Mar 2023 06:07:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1679566067; x=1679652467; bh=RblL6dUXbHKVKjlWP7JvMod56DsSWn6tJf5
-        9H9jjOmE=; b=mQVgBPkYc+VxFHo7RvOF8NxLcfSYDwxTGyRcwYUmUEXkDAtGtMY
-        x67WfLlMsIMPyQACggvooS0BvVN917tgHdj3CAAhQisZTcKtUMErdBDAvTyGPqkw
-        vk0oPoGN8iK1p/IvfH+zxTmrOEkUNVV2jHOAT+kb/HSzGhjtn2MG+5sD6wP+gFp5
-        qdX85yzTPw20WiuP08EaGFkDjfURtttaaLlHwlvxfSnSkb9wgf1QFMORVl0zKssv
-        EqH233cs078wtjTVuplmhm3hfIu1x1FIdRN6mEeXmXDPd84MnLdeVDRCBgxmyJSg
-        Za6EKm1djL5AyD4AS2BhPDXhdDh7l75yI9g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679566067; x=1679652467; bh=RblL6dUXbHKVKjlWP7JvMod56DsSWn6tJf5
-        9H9jjOmE=; b=N89kIBnxfyKQtevzWOgKY/rIphGp4XESBJl6Ar8gb07Gd9i6f0t
-        1ntBFWmNgLfB7FY5gPzh9kCdBbflU3j6fa7d8TP1SCgeS8oY8NMsODRAQqQOMKv/
-        4se+g+BnOqic+zabSD0bDc2qCPqSoyUyhQW3tNPL2+7QKli0PLOKMEHtVv3Hxg0s
-        twTfH0bd/vdE2Ph8xgQ9braPO7B3XjmOqqzg7lBhzycyNcbzz3j3s7G1kUTav7Rc
-        jjBw3i1JzgzjAtYV5XEWBK3D1ugw9LULLN7df66cMmPH7RT34cqnYbVuw3Go1dzl
-        aPW9n+/rsJCJQioPydiLkclUPdY9OD/axFA==
-X-ME-Sender: <xms:8yQcZDcQnGaTC4OFRVBLi5wUAZBAsRCVFqePBH-iWzvMbfL_K082mg>
-    <xme:8yQcZJNtrtMUr_RGuXShShb3J1-Trt3CXZoYNbePY0-aVsxlTi4_prgqL2AnXNKHX
-    voymzWIYrXTS4kWnOQ>
-X-ME-Received: <xmr:8yQcZMgRm0wl9YOsTn3pJ6It-qaKkyukq_b1zOUWERJX4wRthOHptcUS9TgaxbPzyr2pvYNXhJxTR3_lC5IgKsx-DdWXqS0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
-    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:8yQcZE-uQwmjdRZ76kgj1r8TPXnockXqTpdgOZ5GuN9wujZoXHtnMw>
-    <xmx:8yQcZPv1gy_oBH_iqETUpC9qVqbWfQo6JgmAS_ZcmAgHjkX9F1JyDA>
-    <xmx:8yQcZDHaebgqmeg5COoe3JLn2oraiOVeD8aNxIOnU0ohacJc5ZrdJA>
-    <xmx:8yQcZDDzhJnYuGYsqeoZ-HRQSt67OfgazFsnaGosuSu7YlPyOLeBrw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 06:07:46 -0400 (EDT)
-Date:   Thu, 23 Mar 2023 11:07:44 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230323100744.qirdtwsd327apau7@houat>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <CABVgOS=KUg+18wJe=O29tgOB0tQghAk030kONEm5fOzJHgKLgw@mail.gmail.com>
+        Thu, 23 Mar 2023 06:09:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB551BC2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679566117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RLBcg29XUCu1+kYYG+PtK55vjaoLFQBbgTgfCZzS4Vs=;
+        b=Tzwt3T94YRSE0mRHwH8dfoRumeZVl6LLuEnnZbisCl54aP9rygE2Boxc4NhDRpGcne19TQ
+        XSvmRpxRAdLv3dkzVvVNUp2JC7INHk1iJYl8eUdz0aoQZfGhzbutfP4hj7L9ZlvVn05W1t
+        kRv/Gp7ZvOo3EPkAf6+FOnqHaoXtqFw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-593-RYMSjxTbNxyAqkxMO31wfA-1; Thu, 23 Mar 2023 06:08:36 -0400
+X-MC-Unique: RYMSjxTbNxyAqkxMO31wfA-1
+Received: by mail-wm1-f71.google.com with SMTP id e5-20020a05600c4e4500b003edc5824521so790500wmq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:08:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679566115;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RLBcg29XUCu1+kYYG+PtK55vjaoLFQBbgTgfCZzS4Vs=;
+        b=Yd0ErpAf7aavnfGbdjB5JMZ7h2drLU9MdM8sGZTPSQbY7BCmHvOMn26EBISjf9f2RO
+         XQDxanhNfnsmjcOL6WvbrYRSYhbwnLO2OfSDwIsNxXDVT7FNyhYhshpzBa24x9mUql7R
+         jcTwWuFPlUZywAoRum1JJLw/jSn1MdzicNf57S4fjLdPJ0YRhLLxgvqRAM/hI4sakljR
+         BG/Zdt8OzYM0fBkFLRuGNl3Xq+wOYwa4m/KeLUOS5789Ejq7xxa2kuFp7ZI2XyI1bVIG
+         vmQQ531tML47yO9ol6hr2uRYwxltsDXuUjTHLwYqydvxhAI+6PcxAojhZAhPKTe6kV7y
+         CEEw==
+X-Gm-Message-State: AO0yUKXwiEcRg4n5SRoWR19e/rYhjTSYYt+vqVSMOeikhiZCgIlRDXt5
+        RE3koM7nfLBmvQ3ol4UMdZtUrvc52vwAKyao/DmpcbpXKJxt4JD9I/Ea+I8AF2+NGpOpBvBjncp
+        3n0ufNQnxm8dDhvH0s0A5VmL5
+X-Received: by 2002:a1c:7c18:0:b0:3ed:8bef:6a04 with SMTP id x24-20020a1c7c18000000b003ed8bef6a04mr1883875wmc.27.1679566115197;
+        Thu, 23 Mar 2023 03:08:35 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9bc21wrJK7xQQoRd4pawnIt9I/cVi1HljMz2Obi1RCPQ6qGXT37FPjPQ9kjIcu56uWiTFHcQ==
+X-Received: by 2002:a1c:7c18:0:b0:3ed:8bef:6a04 with SMTP id x24-20020a1c7c18000000b003ed8bef6a04mr1883855wmc.27.1679566114864;
+        Thu, 23 Mar 2023 03:08:34 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id be6-20020a05600c1e8600b003e7f1086660sm1415780wmb.15.2023.03.23.03.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 03:08:34 -0700 (PDT)
+Message-ID: <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
+Date:   Thu, 23 Mar 2023 11:08:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOS=KUg+18wJe=O29tgOB0tQghAk030kONEm5fOzJHgKLgw@mail.gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, Yang Shi <shy828301@gmail.com>,
+        kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220203182641.824731-1-shy828301@gmail.com>
+ <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+In-Reply-To: <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On 23.03.23 10:52, Vlastimil Babka wrote:
+> On 2/3/22 19:26, Yang Shi wrote:
+>> The syzbot reported the below BUG:
+>>
+>> kernel BUG at include/linux/page-flags.h:785!
+>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+>> CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+>> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+>> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+>> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+>> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+>> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+>> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   page_mapcount include/linux/mm.h:837 [inline]
+>>   smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+>>   smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+>>   smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+>>   walk_pmd_range mm/pagewalk.c:128 [inline]
+>>   walk_pud_range mm/pagewalk.c:205 [inline]
+>>   walk_p4d_range mm/pagewalk.c:240 [inline]
+>>   walk_pgd_range mm/pagewalk.c:277 [inline]
+>>   __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+>>   walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+>>   smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+>>   smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+>>   show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+>>   seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+>>   seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+>>   vfs_read+0x1b5/0x600 fs/read_write.c:479
+>>   ksys_read+0x12d/0x250 fs/read_write.c:619
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> RIP: 0033:0x7faa2af6c969
+>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+>> RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+>> RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+>> RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+>> R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+>> R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+>>   </TASK>
+>> Modules linked in:
+>> ---[ end trace 24ec93ff95e4ac3d ]---
+>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+>> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+>> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+>> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+>> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+>> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+>> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>
+>> The reproducer was trying to reading /proc/$PID/smaps when calling
+>> MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+>> for partial THP.  It may trigger the below race:
+>>
+>>           CPU A                         CPU B
+>>           -----                         -----
+>> smaps walk:                      MADV_FREE:
+>> page_mapcount()
+>>    PageCompound()
+>>                                   split_huge_page()
+>>    page = compound_head(page)
+>>    PageDoubleMap(page)
+>>
+>> When calling PageDoubleMap() this page is not a tail page of THP anymore
+>> so the BUG is triggered.
+>>
+>> This could be fixed by elevated refcount of the page before calling
+>> mapcount, but it prevents from counting migration entries, and it seems
+>> overkilling because the race just could happen when PMD is split so all
+>> PTE entries of tail pages are actually migration entries, and
+>> smaps_account() does treat migration entries as mapcount == 1 as Kirill
+>> pointed out.
+>>
+>> Add a new parameter for smaps_account() to tell this entry is migration
+>> entry then skip calling page_mapcount().  Don't skip getting mapcount for
+>> device private entries since they do track references with mapcount.
+>>
+>> Pagemap also has the similar issue although it was not reported.  Fixed
+>> it as well.
+>>
+>> Fixes: e9b61f19858a ("thp: reintroduce split_huge_page()")
+>> Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+>> Acked-by: David Hildenbrand <david@redhat.com>
+>> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>> Cc: Jann Horn <jannh@google.com>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: <stable@vger.kernel.org>
+>> Signed-off-by: Yang Shi <shy828301@gmail.com>
+>> ---
+>> v4: * s/Treated/Treat per David
+>>      * Collected acked-by tag from David
+>> v3: * Fixed the fix tag, the one used by v2 was not accurate
+>>      * Added comment about the risk calling page_mapcount() per David
+>>      * Fix pagemap
+>> v2: * Added proper fix tag per Jann Horn
+>>      * Rebased to the latest linus's tree
+>>
+>>   fs/proc/task_mmu.c | 38 ++++++++++++++++++++++++++++++--------
+>>   1 file changed, 30 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>> index 18f8c3acbb85..bc2f46033231 100644
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
+>>   }
+>>   
+>>   static void smaps_account(struct mem_size_stats *mss, struct page *page,
+>> -		bool compound, bool young, bool dirty, bool locked)
+>> +		bool compound, bool young, bool dirty, bool locked,
+>> +		bool migration)
+>>   {
+>>   	int i, nr = compound ? compound_nr(page) : 1;
+>>   	unsigned long size = nr * PAGE_SIZE;
+>> @@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+>>   	 * page_count(page) == 1 guarantees the page is mapped exactly once.
+>>   	 * If any subpage of the compound page mapped with PTE it would elevate
+>>   	 * page_count().
+>> +	 *
+>> +	 * The page_mapcount() is called to get a snapshot of the mapcount.
+>> +	 * Without holding the page lock this snapshot can be slightly wrong as
+>> +	 * we cannot always read the mapcount atomically.  It is not safe to
+>> +	 * call page_mapcount() even with PTL held if the page is not mapped,
+>> +	 * especially for migration entries.  Treat regular migration entries
+>> +	 * as mapcount == 1.
+>>   	 */
+>> -	if (page_count(page) == 1) {
+>> +	if ((page_count(page) == 1) || migration) {
+> 
+> Since this is now apparently a CVE-2023-1582 for whatever RHeasons...
+> 
+> wonder if the patch actually works as intended when
+> (page_count() || migration) is in this particular order and not the other one?
 
-On Thu, Mar 23, 2023 at 03:30:34PM +0800, David Gow wrote:
-> I think the questions we therefore need to answer are:
-> - Do we specifically need a platform_device (or, any other specific
-> device struct), or would any old struct device work? I can see why we
-> would need a platform device for cases where we're testing things like
-> device-tree properties (or, in the future, having e.g. USB-specific
-> helpers which create usb_device). Most tests just use
-> root_device_register() thus far, though.
-> - What helpers do we need to make creating, using, and cleaning up
-> these devices as simple as possible.
->=20
-> I think that in this particular case, we don't actually need a struct
-> platform_device. Replacing these helpers with simple calls to
-> root_device_register() and root_device_unregister() seems to work fine
-> with this patch series for me. (It does break the
-> drm_test_managed_run_action test, though.) So I don't think having
-> these helpers actually help this series at the moment.
+Only the page_mapcount() call to a page that should be problematic, not 
+the page_count() call. There might be the rare chance of the page 
+getting remove due to memory offlining... but we're still holding the 
+page table lock with the migration entry, so we should be protected 
+against that.
 
-I'm not sure that a root_device is a good option, see below.
+Regarding the CVE, IIUC the main reason for the CVE should be 
+RHEL-specific -- which behaves differently than other code bases; for 
+other code bases, it's just a way to trigger a BUG_ON as described here.
 
-> That being said, if they used the KUnit resource system to
-> automatically clean up the device when the test is finished (or
-> otherwise exits), that would seem like a real advantage. The clk and
-> drm examples both do this, and I'm hoping to add an API to make it
-> even simpler going forward. (With the work-in-progress API described
-> here[1], the whole thing should boil down to "struct device *dev =3D
-> root_device_register(name); kunit_defer(root_device_unregister,
-> dev);".)
+-- 
+Thanks,
 
-Oh, yes, please make it happen :)
+David / dhildenb
 
-The current API is a bit of a pain compared to other managed APIs like
-devm or drmm.
-
-> So, I guess we have three cases we need to look at:
-> - A test just needs any old struct device. Tests thus far have
-> hardcoded, or had their own wrappers around root_device_register() for
-> this.
-> - A test needs a device attached to a bus (but doesn't care which
-> bus). Thus far, people have used struct platform_device for this (see
-> the DRM helpers, which use a platform device for managed resource
-> tests[2]). Maybe the right solution here is something like a struct
-> kunit_device?
-> - A test needs a device attached to a specific bus. We'll probably
-> need some more detailed faking of that bus. This covers cases like
-> having fake USB devices, devicetree integration, etc.
-
-Yeah, from the current discussion on the IIO and clk patchsets, and what
-we've done in DRM, I guess there's two major use cases:
-
-  * You test an (isolated) function that takes a device as an argument.
-    Here you probably don't really care about what the device is as long
-    as you can provide one. This is what is being done for the DRM
-    helpers at the moment, even though it's not really isolated. The
-    device is essentially mocked. This could be your points 1 and 2.
-
-  * You want to probe the driver with a fake context. The device and
-    drivers are very much real, but the device tree (or whatever) is
-    mocked. This is what the clocks patches from Stephen are doing. This
-    could be covered by your point 3.
-
-> I'd suggest that, for the majority of cases which only care about the
-> first case, let's just use root_device_register() directly, or have a
-> thin wrapper like the old root_device-based version of the DRM
-> helpers[3]. This will probable serve us well enough while we work out
-> how to handle the other two cases properly (which is already being
-> looked at for the CLK/DeviceTree patches and the DRM stuff).
-
-I disagree, and I think your cases 1 and 2 should be merged. We were
-initially using a root_device in DRM. We had to switch to
-platform_device (but actually any device attached to a bus) because a
-root device isn't attached to a bus and thus the devm resources are
-never freed.
-
-When a function takes a device as an argument, there's a good chance
-that it will use devm nowadays, so we ended up exhausting resources
-pools (like IDs iirc) when running a lot of tests in sequence.
-
-So yeah, I think you can't just assume that a root device will do even
-for a true unit test that would test an isolated function. It either
-needs to be tied to a bus, or we need to force the devm resource release
-when the root device is removed somehow.
-
-Maxime
