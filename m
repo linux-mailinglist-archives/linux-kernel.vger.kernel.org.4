@@ -2,152 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7DC6C5FFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980A86C6001
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 07:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjCWGxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 02:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S230122AbjCWGxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 02:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCWGxQ (ORCPT
+        with ESMTP id S229791AbjCWGxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 02:53:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2F01F5C2
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 23:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679554395; x=1711090395;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LkmXmhPtGZNTEhBMNAt6qfVftjmFFatoRL7Vub6a3Ow=;
-  b=RH53jucwS2vNawio5COcvTfhgxnTaKJRL20WauCu7G7om/1mGj07wqFN
-   xYkUoIFtiQzy9fOY2PiVF7ZmeXQ5fcD2Z75aTrz0mBhrW1aJisylJbwAt
-   lTYhasKJGrYOcOur3P2B1g+xLo4M8sVwzO7dSjU5wgRx6VWStAYtufXdv
-   Dka/9QcYzrOHg4RreeMtginMCApNKbpSNXw67TLF3kJY9cLvPHLQa1Xhd
-   PlZp0TNaJI4clE0kbaeBgGE/MGLg5/pouOoWR3kik7IaD71DpsytLoQMN
-   WkKNKO/nn061285uvTTFYEk8+lovpO2/D6f1ZTzC6+t2+aCGgCtI/zIj8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="319801705"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="319801705"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 23:53:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="928112812"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="928112812"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Mar 2023 23:53:14 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfEoz-000E5i-2S;
-        Thu, 23 Mar 2023 06:53:13 +0000
-Date:   Thu, 23 Mar 2023 14:52:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 89d7971eb2318595bc3b6ab7c5caede112c302ff
-Message-ID: <641bf722.n4cYEctW0nQ9WhZx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 23 Mar 2023 02:53:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894F21F5C2;
+        Wed, 22 Mar 2023 23:53:20 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N6KDpa016196;
+        Thu, 23 Mar 2023 06:53:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=2b/5067R9GHcy29L7fsJhopZDL7DjzKE9imXFmh9BrY=;
+ b=mHeSVT3BslTA6jzuzvCq1F/UQQkrZR3kUGUreWCafnkQ8R1hqLpw3W1/ZMJMA8fNPtC0
+ utT+uiiUG8i6XxLfX7nb59BiaLvDfOgNes2/XdBcq0oZvcdRYvQQ1pK9L2/7o+D5EdPa
+ cYoK9XR6c8ZhQhrDjryfaAxo6w2mGO9dsnnA6HqFl/a+Uz0aR7mqzTuHBMBeET3b4gPL
+ ec3Vhl5HZX48OysXWQhdCDxwLkEgQMScWye16Ud/3WSM+PUw6oClEErKy6AVU8P+fd1g
+ Tuz0MQ+jg9i2RojsbKYXEqdb+6A5zXXSNMKOMzvHqxCzeBl40w33Amx2H8c9FW4Irg+g pA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pg3c9a22c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 06:53:12 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32N6rBHI009152
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 06:53:11 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Wed, 22 Mar 2023 23:53:05 -0700
+Date:   Thu, 23 Mar 2023 12:23:01 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v3 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Message-ID: <20230323065300.GB19800@varda-linux.qualcomm.com>
+References: <cover.1679479634.git.quic_varada@quicinc.com>
+ <e34d8eddc1dda8bb0ff840a7dd18ca4dd6c62d22.1679479634.git.quic_varada@quicinc.com>
+ <c52a329d-8683-de82-9b55-209b99ac36c0@linaro.org>
+ <20230323063705.GA19800@varda-linux.qualcomm.com>
+ <a8c3f324-0231-2180-8464-a3bfc663f743@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a8c3f324-0231-2180-8464-a3bfc663f743@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NA7dAzEcAnRdzB5xSAN5Zb_fXrFfX3BR
+X-Proofpoint-ORIG-GUID: NA7dAzEcAnRdzB5xSAN5Zb_fXrFfX3BR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ clxscore=1015 suspectscore=0 adultscore=0 impostorscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230052
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 89d7971eb2318595bc3b6ab7c5caede112c302ff  x86: Simplify one-level sysctl registration for itmt_kern_table
+On Thu, Mar 23, 2023 at 07:42:37AM +0100, Krzysztof Kozlowski wrote:
+> On 23/03/2023 07:37, Varadarajan Narayanan wrote:
+> > On Wed, Mar 22, 2023 at 10:52:44PM +0100, Krzysztof Kozlowski wrote:
+> >> On 22/03/2023 11:44, Varadarajan Narayanan wrote:
+> >>> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+> >>>
+> >>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >>>
+> >>> ---
+> >>>  Changes in v2:
+> >>> 	- Updated sections missed in previous patch
+> >>> ---
+> >>>  .../bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 22 ++++++++++++++++++++++
+> >>>  1 file changed, 22 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> >>> index e81a382..beae44c 100644
+> >>> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> >>> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> >>> @@ -21,6 +21,7 @@ properties:
+> >>>      enum:
+> >>>        - qcom,ipq6018-qmp-usb3-phy
+> >>>        - qcom,ipq8074-qmp-usb3-phy
+> >>> +      - qcom,ipq9574-qmp-usb3-phy
+> >>>        - qcom,msm8996-qmp-usb3-phy
+> >>>        - qcom,msm8998-qmp-usb3-phy
+> >>>        - qcom,qcm2290-qmp-usb3-phy
+> >>> @@ -204,6 +205,27 @@ allOf:
+> >>>          compatible:
+> >>>            contains:
+> >>>              enum:
+> >>> +              - qcom,ipq9574-qmp-usb3-phy
+> >>> +    then:
+> >>> +      properties:
+> >>> +        clocks:
+> >>> +          maxItems: 2
+> >>
+> >> toplevel defines minItems as 3, so are you sure this works? Did you test it?
+> >
+> > Yes, this is tested. Able to do I/O.
+>
+> Bindings do not impact on whether you can or can not do IO, so I meant
+> tested as DTS is compliant with bindings. I assume it was not, so please
+> test bindings and DTS before sending new version.
+> see Documentation/devicetree/bindings/writing-schema.rst for instructions
 
-elapsed time: 720m
+Sorry. Misunderstood the question. Yes, I ran make dtbs_check and
+got these messages. But couldn't relate them with the
+minItems/maxItems mismatch...
 
-configs tested: 72
-configs skipped: 140
+	phy@7d000: clocks: [[8, 93], [8, 102]] is too short
+	phy@7d000: clock-names: ['aux', 'cfg_ahb'] is too short
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Will fix it now. Thanks for the clarification.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230322   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r024-20230322   gcc  
-csky                 randconfig-r026-20230322   gcc  
-hexagon              randconfig-r004-20230322   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a004   clang
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r031-20230322   gcc  
-ia64                 randconfig-r032-20230322   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r015-20230322   gcc  
-mips                             allmodconfig   gcc  
-mips                 randconfig-r034-20230322   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r023-20230322   gcc  
-openrisc             randconfig-r033-20230322   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r013-20230322   gcc  
-parisc64                            defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r021-20230322   gcc  
-riscv                randconfig-r042-20230322   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230322   clang
-s390                 randconfig-r003-20230322   clang
-s390                 randconfig-r022-20230322   gcc  
-s390                 randconfig-r044-20230322   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r016-20230322   gcc  
-sh                   randconfig-r036-20230322   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r014-20230322   gcc  
-sparc                randconfig-r035-20230322   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                               rhel-8.3   gcc  
+> > We only have 2 items. Is it ok change the minItems to 2?
+>
+> Yes, because you must update top level (and maybe other) constraints to
+> correct ones. Just test the code...
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Ok.
+
+Thanks
+Varada
+
+>
+>
+> Best regards,
+> Krzysztof
+>
