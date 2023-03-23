@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84816C6484
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F306C648D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjCWKO2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 23 Mar 2023 06:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S231211AbjCWKPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjCWKOZ (ORCPT
+        with ESMTP id S229997AbjCWKPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:14:25 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFE5193F3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:14:22 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id n2so25955140qtp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:14:22 -0700 (PDT)
+        Thu, 23 Mar 2023 06:15:02 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA5E1A485;
+        Thu, 23 Mar 2023 03:15:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ek18so84162056edb.6;
+        Thu, 23 Mar 2023 03:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679566499;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3dA8ydvuA/WaWBfApBoDiSPygU9WQclAtBqZTzXYAyw=;
+        b=TjPlwTNo/orl5t5bVDpRZec4X8IxUGIUtVAJOBLVIsNi3J6yrU6l2CVd16qmGliCmV
+         4AWEgN/2viyAzUvGQAJKHBvdVqzZtL1+kBGT1K5Xhi59wa6zdCqvc1IGeUxfCQVOpXd/
+         FpxYwRMk6QAnFhhDcFKsMk+Olr2gTLRSRJe8craht8vaM06TVBbl5jg5tyWpqqLUxYCO
+         TU4gKZ6fGRBWF2jf3KNvOJjliGnhiW/MJRzRamnhhbfyVXpGRZgWuGV8A/H6i6j63hMA
+         KNO9lZS5P6iIc7cRigE9dbiMrSDh8jcfGahl+SN0gJwnfH8jgOX1tAlEBd51a4FFj4nD
+         F8hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679566461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679566499;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wQfQAaEd8e3pdT6SieYAlbXKlZL1zLEjWeZ5UGtmAuM=;
-        b=c3xSH/CuT9RTEeM2+ghJ9bdOvDQduZ5JCFZJYLtmgaG4TpRagzKJgsXKMHgWHOL+sy
-         XG7R1CTX+469ylvYAhcOByPEH8U8RuENW15HJGoWUa1RhlGHCfgFAwiwasvGaiJg2NdS
-         YCPJhbYLnG2F3R6Cu3eb1iHg+S+7sbhhzr+bm1GIUxwJtjhoIgqK7HIzttqoVovx7LaC
-         OhvCcivL+aQ4hLO80e0Wytq/Z5+gYgHEzJ2D661Ax0pJTReSJ9sZv6oO9BG8S7EA1aMh
-         Iin5RS6u1KfEY2bA8MX6FLAc82+WvqkppAouh0fEhGGlhDNrAsM0mVvu5JH9Pt5HzyrF
-         /VLg==
-X-Gm-Message-State: AO0yUKV2fWEcZYffJ7KqPjnojfLpzppdhV/i8lXsDc9jCCGSPCbCNMgz
-        QX+GzGoFAFZo4SjUGms1GtZlpbyZMs2XrA==
-X-Google-Smtp-Source: AK7set82fCaVxPr4oRr4wAJGaANjkge2nWoPOHsPT5QIaTMKrS5F31T44yfNK1kv4GVrGfRBZcJkWA==
-X-Received: by 2002:a05:622a:1a98:b0:3e3:7c78:9ec4 with SMTP id s24-20020a05622a1a9800b003e37c789ec4mr11230291qtc.21.1679566461066;
-        Thu, 23 Mar 2023 03:14:21 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id d184-20020a3768c1000000b0074688c36facsm7490907qkc.56.2023.03.23.03.14.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 03:14:20 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536af432ee5so387391717b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:14:20 -0700 (PDT)
-X-Received: by 2002:a81:b149:0:b0:544:bb1e:f9cf with SMTP id
- p70-20020a81b149000000b00544bb1ef9cfmr1602754ywh.4.1679566459959; Thu, 23 Mar
- 2023 03:14:19 -0700 (PDT)
+        bh=3dA8ydvuA/WaWBfApBoDiSPygU9WQclAtBqZTzXYAyw=;
+        b=CJSJFeizck34qJ4wDSAHs8kztiAFHWLLXxvB6W+eEJQbg9tcnLFJU85Pm1wzkK6x/R
+         t39ZrNvJG+hK5wUspx9N2Z/laSJeDYVlsoTCA02xITQkz5ZtnImLO2DhAyKDS0VWgPUj
+         X92iUAKso9F8OvO1df0AhkANWid5DQ6pD//BkpAXerZ/8Vgf1J3vPuyqDQMhJS3UVUzD
+         3hCr0CEHpNkYeIjAGcOQPpc2tIQ+x6FkXVVDaQIP2M95In/az+0NMoXGrI1iWnj70Gbr
+         TB58ToF2Ot4/jfOK+Wf5RYXv07OshZcHFHqf1b06VSMzMCtVJ+GoQqqH8tnKCavMYY0v
+         rFiA==
+X-Gm-Message-State: AO0yUKVBkkf6leY/xwyEw0CHsFWFBrJc4usxSF4qCvBDPjUTZigma0vq
+        bz17XSroaED4VumTszV1qafy6X2OD/A=
+X-Google-Smtp-Source: AK7set+K+/unjZLyY3xnuTerkikW2195nmRVJS9iuB+6xAitd4cGPffhlnrZwVnoBlXhdvCcZhG3QA==
+X-Received: by 2002:a17:906:18a1:b0:92f:43a2:bf7d with SMTP id c1-20020a17090618a100b0092f43a2bf7dmr10092447ejf.73.1679566499512;
+        Thu, 23 Mar 2023 03:14:59 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id i4-20020a170906850400b0093018c7c07dsm8361948ejx.82.2023.03.23.03.14.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 03:14:59 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:14:57 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
+        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
+        ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v3 02/11] memory: tegra: add interconnect support for
+ DRAM scaling in Tegra234
+Message-ID: <ZBwmoZJAEgzc+VEK@orome>
+References: <20230320182441.11904-1-sumitg@nvidia.com>
+ <20230320182441.11904-3-sumitg@nvidia.com>
 MIME-Version: 1.0
-References: <20230323100624.337354-1-b-kapoor@ti.com>
-In-Reply-To: <20230323100624.337354-1-b-kapoor@ti.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Mar 2023 11:14:08 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWF0yGwM5hk=o+te2fPw-G8XhGZ6TGfF-KvnVnasPjKNQ@mail.gmail.com>
-Message-ID: <CAMuHMdWF0yGwM5hk=o+te2fPw-G8XhGZ6TGfF-KvnVnasPjKNQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: Enable CAN PHY transceiver driver
-To:     Bhavya Kapoor <b-kapoor@ti.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        quic_bjorande@quicinc.com, dmitry.baryshkov@linaro.org,
-        arnd@arndb.de, krzysztof.kozlowski@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FGn3JdHJT1ZVxORw"
+Content-Disposition: inline
+In-Reply-To: <20230320182441.11904-3-sumitg@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhavya,
 
-On Thu, Mar 23, 2023 at 11:06 AM Bhavya Kapoor <b-kapoor@ti.com> wrote:
-> Enable CAN PHY transceiver driver to be built as a module.
->
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+--FGn3JdHJT1ZVxORw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for your patch!
-(I wanted to send a similar patch soon ;-)
+On Mon, Mar 20, 2023 at 11:54:32PM +0530, Sumit Gupta wrote:
+[...]
+> diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
+[...]
+> +static int tegra234_mc_icc_set(struct icc_node *src, struct icc_node *dst)
+> +{
+> +	struct tegra_mc *mc = icc_provider_to_tegra_mc(dst->provider);
+> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
+> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
+> +	const struct tegra_mc_client *pclient = src->data;
+> +	struct tegra_bpmp_message msg;
+> +	struct tegra_bpmp *bpmp;
+> +	int ret;
+> +
+> +	/*
+> +	 * Same Src and Dst node will happen during boot from icc_node_add().
+> +	 * This can be used to pre-initialize and set bandwidth for all clients
+> +	 * before their drivers are loaded. We are skipping this case as for us,
+> +	 * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
+> +	 */
+> +	if (src->id == dst->id)
+> +		return 0;
+> +
+> +	bpmp = of_tegra_bpmp_get();
+> +	if (IS_ERR(bpmp)) {
+> +		ret = PTR_ERR(bpmp);
+> +		return ret;
+> +	}
 
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -368,6 +368,7 @@ CONFIG_REALTEK_PHY=y
->  CONFIG_ROCKCHIP_PHY=y
->  CONFIG_DP83867_PHY=y
->  CONFIG_VITESSE_PHY=y
-> +CONFIG_PHY_CAN_TRANSCEIVER=m
+Irrespective of Whether we end up doing the BPMP lookup via
+tegra_bpmp_get() or of_tegra_bpmp_get(), I think we should resolve at
+probe time and cache the result, since this function can get called
+multiple times and the lookup is a rather heavy operation.
 
-This doesn't look like the right spot to insert this?
+Thierry
 
-Based on "make savedefconfig", I'd say:
+--FGn3JdHJT1ZVxORw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-     CONFIG_PHY_XGENE=y
-   +CONFIG_PHY_CAN_TRANSCEIVER=m
-     CONFIG_PHY_SUN4I_USB=y
+-----BEGIN PGP SIGNATURE-----
 
->  CONFIG_CAN_FLEXCAN=m
->  CONFIG_CAN_RCAR=m
->  CONFIG_CAN_RCAR_CANFD=m
-> --
-> 2.34.1
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcJqEACgkQ3SOs138+
+s6E48BAAgKA1povzoTBUTaZIIbXSLlYXE1lnamtot8dMIFOrfAXaRc3i9AcPQ3gM
+eSVszZtSL1ARSVMQjvTCEvg3kNuzQioBk6rdspuQ7j/I0P8TjXNadrQe0M0uVwdp
+fKnDBTAxYDIjAP0jTezBUE5hA6SaxWumnpNZrNqL9mmoAbQGeBXeqrfcbhb/I54H
+1g6dqNjHnOyiESk7pvCcMf8CFaSG8BT3OqVyPhc5Vst4yLtqztPFBdmx9gzXJ6HN
+zr1/oeYiu+nzya1gRhga+4SM3L6IvAWIbj0TqoE+5QTzZt2ccFlw+wbwlC4K8pLJ
+pU0LE56UbwM42D+yMLA/DsWOi4r8zL+A432JrXk5464P018X+I/dYKnmlg/0nWAR
+zqyVv4nQxY46DOwfPH6mUnl/02J4GHJGYJ7E980APnUgkObOX15NNvh6Xat6Go7v
+kf3S/byknRohkjE7kbaUm1Ys/79RTvwLTIVU005zAT5wjpVyU6qTXDg0kA5AaF2d
+HtvnSratQkv9kDyoEiqC7dwPXeEez1HWdbY+sZ/sKccEonME1o/hmGFdAZaxYnlV
+/fhhl9DKUQt9eordK1gEb95qN8t+ksxi8m+LnadsPbFrLIxcA8OwTOm2BPWxFy1P
+blYrmZF1mFMk4RS7f7oamceSXxdBut1rQBC4f85ZxzJzcB6Zamg=
+=9mRi
+-----END PGP SIGNATURE-----
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--FGn3JdHJT1ZVxORw--
