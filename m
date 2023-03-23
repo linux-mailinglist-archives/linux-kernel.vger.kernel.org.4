@@ -2,53 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412CB6C68AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFF46C68BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjCWMno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S231925AbjCWMp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjCWMnc (ORCPT
+        with ESMTP id S229990AbjCWMpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:43:32 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC4A26C0E
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 05:43:31 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D8ED1EC0666;
-        Thu, 23 Mar 2023 13:43:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679575410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=K9/n1rpAwWFTZEJX1IfhukaW5XPdU+nWAbh6D9porq0=;
-        b=nrqNQ33NtT7l7CzSbB7aCBMDOTqEvqWLVPXSD5X14u8yn87ok8XDAIJmfZJMhFz6bAxt9q
-        ERkh/4ZJF5si3nVU4Cmv3JD656voKZjP4WzeBqHK+1qfv6tsn7OxIf3vVrSmUS3Iokwe7c
-        HbajBiKvPygMagiGPuQ+3U52OEcMRO8=
-Date:   Thu, 23 Mar 2023 13:43:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v4 05/12] x86/xen: set MTRR state when running as Xen PV
- initial domain
-Message-ID: <20230323124324.GHZBxJbOW1fvHOgiQ1@fat_crate.local>
-References: <20230306163425.8324-1-jgross@suse.com>
- <20230306163425.8324-6-jgross@suse.com>
+        Thu, 23 Mar 2023 08:45:22 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CBE298DF;
+        Thu, 23 Mar 2023 05:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679575521; x=1711111521;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z034CEWDZWzBHQVHZYtVHoLpxMyCoA3kXaDvrv1Q98w=;
+  b=XR4GbRRxOLhhGzwBKbILpOX2956u5kEKM+CllvviJ4Jy3MIGM93tW+TZ
+   mSkinGjVbUsmmlOF8Or0B+wAS0kdxXGh9OigJWr3C+UrE63ERJ79538Nt
+   hJczlBfMoR2s4il6/2qlHSll8Y8SXvoUq0g//i6PjhuyKr2VZ9UMZ+HJ0
+   LkQBmAOfb7uG5K1lsRJ9HFUO1SEz2mJZolQn8KdCyyuWVMXWoXHh8G3kg
+   t2Z0Bc7kiFCbnNPz9/wyrA/YxWexLzaedr5iinOnLE//A7O3rkPxkMVuD
+   TeO6DUipnZurcsVfb9HlHeEgjifMzkAXnClXpSYht2/X5cUHrrrNW3Ov7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338196404"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="338196404"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 05:45:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="632383474"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="632383474"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 23 Mar 2023 05:45:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pfKJU-007VlG-0v;
+        Thu, 23 Mar 2023 14:45:04 +0200
+Date:   Thu, 23 Mar 2023 14:45:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-acpi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [PATCH v14 03/10] drm/display: Add Type-C switch helpers
+Message-ID: <ZBxJz4ESBocICA/L@smile.fi.intel.com>
+References: <20230322104639.221402-1-treapking@chromium.org>
+ <20230322104639.221402-4-treapking@chromium.org>
+ <ZBrgD61p/p17IOJL@smile.fi.intel.com>
+ <87edpg7nub.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230306163425.8324-6-jgross@suse.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <87edpg7nub.fsf@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,22 +104,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:34:18PM +0100, Juergen Gross wrote:
-> +	for (reg = 0; reg < MTRR_MAX_VAR_RANGES; reg++) {
-> +		op.u.read_memtype.reg = reg;
-> +		if (HYPERVISOR_platform_op(&op))
-> +			break;
-> +
-> +		/*
-> +		 * Only called in dom0, which has all RAM PFNs mapped at
-> +		 * RAM MFNs, and all PCI space etc. is identity mapped.
-> +		 * This means we can treat MFN == PFN regarding MTTR settings.
-								^^^^
+On Wed, Mar 22, 2023 at 06:27:56PM +0200, Jani Nikula wrote:
+> On Wed, 22 Mar 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > On Wed, Mar 22, 2023 at 06:46:32PM +0800, Pin-yen Lin wrote:
+> >> +#ifdef CONFIG_DRM_DISPLAY_DP_TYPEC_HELPER
+> >
+> > Ah, maybe this should use IS_REACHABLE() ?
+> 
+> Personally, I think IS_REACHABLE() is a build-time band-aid solution to
+> a problem that should be solved in Kconfig. :p
+> 
+> I think it always means there's a configuration combo that shouldn't
+> exist, and it's a surprise to the user when they've configured
+> something, Kconfig has deemed it a valid configuration, but they don't
+> get the feature they want.
+> 
+> As a user, how would they even debug that case? Double check configs,
+> don't see anything wrong.
 
-"MTRR"
+Usual pairing is 'imply FOO' in Kconfig & 'IS_REACHEABLE(CONFIG_FOO)' in the
+code. And I believe it's not an abnormal.
 
 -- 
-Regards/Gruss,
-    Boris.
+With Best Regards,
+Andy Shevchenko
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
