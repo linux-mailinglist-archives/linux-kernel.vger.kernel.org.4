@@ -2,56 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C64F6C6E5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA35A6C6E68
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjCWRFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S231718AbjCWRIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCWRFG (ORCPT
+        with ESMTP id S230494AbjCWRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:05:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9540D90;
-        Thu, 23 Mar 2023 10:05:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 592B32F4;
-        Thu, 23 Mar 2023 10:05:48 -0700 (PDT)
-Received: from [10.57.53.151] (unknown [10.57.53.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26EC53F766;
-        Thu, 23 Mar 2023 10:05:01 -0700 (PDT)
-Message-ID: <0d6faa00-c630-c739-6a0a-c5cf858a04fa@arm.com>
-Date:   Thu, 23 Mar 2023 17:04:59 +0000
+        Thu, 23 Mar 2023 13:08:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6DB166E8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679591235;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c9eDk+/tnvTqWMhnO7a3EwIKBIFD2a091m9Yulpg6oU=;
+        b=VJTZ0Fk65PCX39vwp4opvsJogRDuar0GFft5yDMGGBHFiuvM913CMM0+BMsWV3WLmi5gWk
+        l+G8n/naGQvahu+O3LtiyobktiTFUtJyMG7wgOwVCf+3egPLnE4DkT0FQnu4y17LEZAVyD
+        UWEP4ejzITT/JgdLiafDmbVbEvr1mQI=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-79-EDsIXo9kNSa-OIBBI7W6ig-1; Thu, 23 Mar 2023 13:07:14 -0400
+X-MC-Unique: EDsIXo9kNSa-OIBBI7W6ig-1
+Received: by mail-il1-f197.google.com with SMTP id n17-20020a056e02141100b003259a56715bso6938104ilo.15
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:07:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679591233;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c9eDk+/tnvTqWMhnO7a3EwIKBIFD2a091m9Yulpg6oU=;
+        b=gskuBWgfBSre+qnrSEMlsdL0SJ3d90txoMD3mXWj7GcSzwJLeeVdz57orMvppTVwHt
+         Q+tREmZT8E6Dy4JXqHrglM0mmAKB1dsnfLRKFvCWg6uCFyVc7KDrnE4IPw0lb3MBuZm2
+         DbTVtE+VuTM1RgsWfrtZLjeD+sIuKsrrYqhc386CZVCQjQXxHImphsLlcAC5ez0v3fYe
+         EGw46exgfesVObi4qcBgGBQmHlZYa57V/LOXlmYPUWYh3pP6M1rhyW9+Tql6+xBm1fs5
+         2zwFooPvMPNUpm9AGo0zdrTvqu2RFEGCgYtiMqQ3KmJrWdHFG6Y0xr/gsN28abSHrphQ
+         u74g==
+X-Gm-Message-State: AO0yUKWiYv2N8iGlOf9ap2FMRxXJsmuPjOxwvpvDNc9mJcVNKfvnF0gZ
+        ppA9VIqi60c5H7Qf1Rnga3qFqg4Y9JfDQaxEGuTpOTNPqSzkMFcOzWT88xQg9upG1N6a32DrGIz
+        W4x8x7fPN9j0fxY8LgruEySKn
+X-Received: by 2002:a05:6602:25d1:b0:717:ce6a:188a with SMTP id d17-20020a05660225d100b00717ce6a188amr6886671iop.18.1679591233168;
+        Thu, 23 Mar 2023 10:07:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8F2AMXeqAhZshi9Oq4fupBpf++R+QMGkiYPDpgH6ZyCaheH2Kvo0IXF3JECuBPa9n1EEYjdw==
+X-Received: by 2002:a05:6602:25d1:b0:717:ce6a:188a with SMTP id d17-20020a05660225d100b00717ce6a188amr6886655iop.18.1679591232729;
+        Thu, 23 Mar 2023 10:07:12 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id y10-20020a5e920a000000b00758c0c89df5sm1089722iop.13.2023.03.23.10.07.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 10:07:11 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:07:09 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     Dominik Behr <dbehr@google.com>, Dominik Behr <dbehr@chromium.org>,
+        linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        upstream@semihalf.com, dtor@google.com, jgg@ziepe.ca,
+        kevin.tian@intel.com, cohuck@redhat.com, abhsahu@nvidia.com,
+        yishaih@nvidia.com, yi.l.liu@intel.com, kvm@vger.kernel.org,
+        libvir-list@redhat.com
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the
+ user-space
+Message-ID: <20230323110709.6cc80b8c.alex.williamson@redhat.com>
+In-Reply-To: <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
+References: <20230307220553.631069-1-jaz@semihalf.com>
+        <20230307164158.4b41e32f.alex.williamson@redhat.com>
+        <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+        <20230308104944.578d503c.alex.williamson@redhat.com>
+        <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+        <20230308130619.3736cf18.alex.williamson@redhat.com>
+        <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
+        <20230308163803.6bfc2922.alex.williamson@redhat.com>
+        <CAH76GKP+W9JUvQpqvjLHADMeRORPUf0d8vn5gCgE5fjxz0YkPQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v3 07/11] coresight-tpdm: Add nodes for dsb edge control
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-8-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1679551448-19160-8-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,333 +92,327 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 06:04, Tao Zhang wrote:
-> Add the nodes to set value for DSB edge control and DSB edge
-> control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
-> resgisters to configure edge control. DSB edge detection control
-> 00: Rising edge detection
-> 01: Falling edge detection
-> 10: Rising and falling edge detection (toggle detection) > And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
-> configure mask. Eight 32 bit registers providing DSB interface
-> edge detection mask control.
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  26 ++++
->   drivers/hwtracing/coresight/coresight-tpdm.c       | 142 ++++++++++++++++++++-
->   drivers/hwtracing/coresight/coresight-tpdm.h       |  14 ++
->   3 files changed, 181 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index f13e282..094d624 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -45,3 +45,29 @@ Description:
->   		tpdm.
->   
->   		Accepts the value needs to be greater than 0.
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
-> +Date:		March 2023
-> +KernelVersion	6.3
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the edge control of DSB tpdm. Read the
-> +		edge control of DSB tpdm.
+On Thu, 9 Mar 2023 14:41:23 +0100
+Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
 
-Could we not say :
-	Read / Write a set of the edge control registers of the DSB in
-         TPDM
+> czw., 9 mar 2023 o 00:38 Alex Williamson <alex.williamson@redhat.com>
+> napisa=C5=82(a):
+> >
+> > On Wed, 8 Mar 2023 14:44:28 -0800
+> > Dominik Behr <dbehr@google.com> wrote:
+> > =20
+> > > On Wed, Mar 8, 2023 at 12:06=E2=80=AFPM Alex Williamson
+> > > <alex.williamson@redhat.com> wrote: =20
+> > > >
+> > > > On Wed, 8 Mar 2023 10:45:51 -0800
+> > > > Dominik Behr <dbehr@chromium.org> wrote:
+> > > > =20
+> > > > > It is the same interface as other ACPI events like AC adapter LID=
+ etc
+> > > > > are forwarded to user-space.
+> > > > >  ACPI events are not particularly high frequency like interrupts.=
+ =20
+> > > >
+> > > > I'm not sure that's relevant, these interfaces don't proclaim to
+> > > > provide isolation among host processes which manage behavior relati=
+ve
+> > > > to accessories.  These are effectively system level services.  It's=
+ only
+> > > > a very, very specialized use case that places a VMM as peers among =
+these
+> > > > processes.  Generally we don't want to grant a VMM any privileges b=
+eyond
+> > > > what it absolutely needs, so letting a VMM managing an assigned NIC
+> > > > really ought not to be able to snoop host events related to anything
+> > > > other than the NIC. =20
+> > > How is that related to the fact that we are forwarding VFIO-PCI events
+> > > to netlink? Kernel does not grant any privileges to VMM.
+> > > There are already other ACPI events on netlink. The implementer of the
+> > > VMM can choose to allow VMM to snoop them or not.
+> > > In our case our VMM (crosvm) does already snoop LID, battery and AC
+> > > adapter events so the guest can adjust its behavior accordingly.
+> > > This change just adds another class of ACPI events that are forwarded
+> > > to netlink. =20
+> >
+> > That's true, it is the VMM choice whether to allow snooping netlink,
+> > but this is being proposed as THE solution to allow VMMs to receive
+> > ACPI events related to vfio assigned devices.  If the solution
+> > inherently requires escalating the VMM privileges to see all netlink
+> > events, that's a weakness in the proposal.  As noted previously,
+> > there's also no introspection here, the VMM can't know whether it
+> > should listen to netlink for ACPI events or include AML related to a
+> > GPE for the device.  It cannot determine if either the kernel supports
+> > this feature or if the device has an ACPI companion that can generate
+> > these events. =20
+>=20
+> To be precise the VMM doesn't listen to all netlink events: it listens
+> only to "acpi_event" family and acpi related multicast group, which
+> means it listens to all events generated through
+> acpi_bus_generate_netlink_event.
+>=20
+> Before sending this patch I thought about using eventfd instead
+> netalink which will actually provide a channel associated with a given
+> device and therefore such notifications will be received only by the
+> VMM associated with such a device. Nevertheless, it seems like eventfd
+> will allow to signalize events happening (notify on a given device)
+> but is not capable of sending any payload so in our case there is no
+> room for propagating notification value via eventfd. Maybe there is
+> other mechanism eventfd-like which will allow to achieve above?
 
-> +
-> +		Accepts the following three values.
+Reading an eventfd returns an 8-byte value, we generally only use it
+as a counter, but it's been discussed previously and IIRC, it's possible
+to use that value as a notification value.
 
-This is a bit confusing, at least to me. This could either mean,
-a single write of values 1-3 are accepted.
+> If there is no such mechanism, maybe instead of using existing acpi
+> netlink events, which are associated with "acpi_event" netlink family
+> and acpi multicast group, we could create per vfio-pci a different
+> netlink family or probably reuse "acpi_event" family but use different
+> multicast group, so each device will have dedicated netlink family.
+> Does it seem reasonable?
+>=20
+> > =20
+> > > > =20
+> > > > > > > > What sort of ACPI events are we expecting to see here and w=
+hat does user space do with them? =20
+> > > > > The use we are looking at right now are D-notifier events about t=
+he
+> > > > > GPU power available to mobile discrete GPUs.
+> > > > > The firmware notifies the GPU driver and resource daemon to
+> > > > > dynamically adjust the amount of power that can be used by the GP=
+U.
+> > > > > =20
+> > > > > > The proposed interface really has no introspection, how does th=
+e VMM
+> > > > > > know which devices need ACPI tables added "upfront"?  How do th=
+ese
+> > > > > > events factor into hotplug device support, where we may not be =
+able to
+> > > > > > dynamically inject ACPI code into the VM? =20
+> > > > >
+> > > > > The VMM can examine PCI IDs and the associated firmware node of t=
+he
+> > > > > PCI device to figure out what events to expect and what ACPI tabl=
+e to
+> > > > > generate to support it but that should not be necessary. =20
+> > > >
+> > > > I'm not entirely sure where your VMM is drawing the line between th=
+e VM
+> > > > and management tools, but I think this is another case where the
+> > > > hypervisor itself should not have privileges to examine the host
+> > > > firmware tables to build its own.  Something like libvirt would be
+> > > > responsible for that. =20
+> > > Yes, but that depends on the design of hypervisor and VMM and is not
+> > > related to this patch. =20
+> >
+> > It is very much related to this patch if it proposes an interface to
+> > solve a problem which is likely not compatible with the security model
+> > of other VMMs.  We need a single solution to support all VMMs.
+> > =20
+> > > > =20
+> > > > > A generic GPE based ACPI event forwarder as Grzegorz proposed can=
+ be
+> > > > > injected at VM init time and handle any notification that comes l=
+ater,
+> > > > > even from hotplug devices. =20
+> > > >
+> > > > It appears that forwarder is sending the notify to a specific ACPI
+> > > > device node, so it's unclear to me how that becomes boilerplate AML
+> > > > added to all VMs.  We'll need to notify different devices based on
+> > > > different events, right? =20
+> > > Valid point. The notifications have a "scope" ACPI path.
+> > > In my experience these events are consumed without looking where they
+> > > came from but I believe the patch can be extended to
+> > > provide ACPI path, in your example "_SB.PCI0.GPP0.PEGP" instead of
+> > > generic vfio_pci which VMM could use to translate an equivalent ACPI
+> > > path in the guest and pass it to a generic ACPI GPE based notifier via
+> > > shared memory. Grzegorz could you chime in whether that would be
+> > > possible? =20
+> >
+> > So effectively we're imposing the host ACPI namespace on the VM, or at
+> > least a mapping between the host and VM namespace?  The generality of
+> > this is not improving. =20
+>=20
+> Yes, in the example VMM implementation we have mapping between the
+> host pci device address and guest pci device. Therefore VMM knows,
+> based on device name (BDF) sent via netlink, to which guest device
+> this notification should be propagated. The boilerplate AML is added
+> to each vfio-pci device which belongs to VMM and each vfio-pci device
+> has associated pre-allocated GPE so the VMM knows which GPE should be
+> triggered to replicate notification for a given device. BTW this is
+> only current WIP VMM implementation - this could probably be optimized
+> if needed.
+>=20
+> Handling hotplug devices is more problematic. I see that the kernel
+> provides some runtime ACPI patching mechanism:
+> https://www.kernel.org/doc/html/latest/firmware-guide/acpi/method-customi=
+zing.html
+> (which I never tried) but not even sure how VMM could take advantage
+> of it. BTW this realized me that the same problem with hotplug applies
+> to other vfio-pci use-cases e.g. runtime PM, which relies on guest
+> virtual ACPI method:
+> https://patchwork.kernel.org/project/linux-pm/patch/20220829114850.4341-5=
+-abhsahu@nvidia.com/.
+> Generating virtual ACPI content for hotplug devices seems like a more
+> generic issue.
 
-> +		value 1: Start EDCR register number
-> +		value 2: End EDCR register number
-> +		value 3: The value need to be written
+I don't think this is an equivalent case, the AML object is at the
+slot, not the device and the direction is reversed.  The VMM can
+implement PCI slot power control regardless of the host capabilities.
+This is more like ACPI eject behavior, the guest triggers an event
+which is processed by the VMM to perform an action.  The VMM doesn't
+need to dynamically add slot power control capabilities based on the
+features of the plugged device.
 
-But you really mean to say, the writes must be of the following format
-	<integer1> <integer2> <integer3>
+> > > > > > The acpi_bus_generate_netlink_event() below really only seems t=
+o form a
+> > > > > > u8 event type from the u32 event.  Is this something that could=
+ be
+> > > > > > provided directly from the vfio device uAPI with an ioeventfd, =
+thus
+> > > > > > providing introspection that a device supports ACPI event notif=
+ications
+> > > > > > and the ability for the VMM to exclusively monitor those events=
+, and
+> > > > > > only those events for the device, without additional privileges=
+? =20
+> > > > >
+> > > > > From what I can see these events are 8 bit as they come from ACPI.
+> > > > > They also do not carry any payload and it is up to the receiving
+> > > > > driver to query any additional context/state from the device.
+> > > > > This will work the same in the VM where driver can query the same
+> > > > > information from the passed through PCI device.
+> > > > > There are multiple other netflink based ACPI events forwarders wh=
+ich
+> > > > > do exactly the same thing for other devices like AC adapter, lid/=
+power
+> > > > > button, ACPI thermal notifications, etc.
+> > > > > They all use the same mechanism and can be received by user-space
+> > > > > programs whether VMMs or others. =20
+> > > >
+> > > > But again, those other receivers are potentially system services, n=
+ot
+> > > > an isolated VM instance operating in a limited privilege environmen=
+t.
+> > > > IMO, it's very different if the host display server has access to l=
+id
+> > > > or power events than it is to allow some arbitrary VM that happens =
+to
+> > > > have an unrelated assigned device that same privilege. =20
+> > > Therefore these VFIO related ACPI events could be received by a system
+> > > service via this netlink event and selectively forwarded to VMM if
+> > > such is a desire of whoever implements the userspace.
+> > > This is outside the scope of this patch. In our case our VMM does
+> > > receive these LID, AC or battery events. =20
+> >
+> > But this is backwards, we're presupposing the choice to use netlink
+> > based on the convenience of one VMM, which potentially creates
+> > obstacles, maybe even security isolation issues for other VMMs.  The
+> > method of delivering ACPI events to a VMM is very much within the scope
+> > of this proposal.  Thanks,
+> >
+> > Alex
+> > =20
+>=20
+> regarding:
+> > > > On my laptop, I see multiple _GPE scopes, each apparently very uniq=
+ue
+> > > > to the devices:
+> > > >
+> > > >    Scope (_GPE)
+> > > >    {
+> > > >        Method (_L0C, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >            Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+> > > >        }
+> > > >
+> > > >        Method (_L0D, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+> > > >        }
+> > > >
+> > > >        Method (_L0F, 0, Serialized)  // _Lxx: Level-Triggered GPE, =
+xx=3D0x00-0xFF
+> > > >        {
+> > > >             Notify (\_SB.PCI0.GPP0.PEGP, 0x81) // Information Change
+> > > >         }
+> > > >     }
+> > > >
+> > > >     Scope (_GPE)
+> > > >     {
+> > > >         Method (_L19, 0, NotSerialized)  // _Lxx: Level-Triggered G=
+PE, xx=3D0x00-0xFF
+> > > >         {
+> > > >             Notify (\_SB.PCI0.GP17, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GP17.XHC0, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GP17.XHC1, 0x02) // Device Wake
+> > > >             Notify (\_SB.PWRB, 0x02) // Device Wake
+> > > >         }
+> > > >
+> > > >         Method (_L08, 0, NotSerialized)  // _Lxx: Level-Triggered G=
+PE, xx=3D0x00-0xFF
+> > > >         {
+> > > >            Notify (\_SB.PCI0.GP18, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP0, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP1, 0x02) // Device Wake
+> > > >             Notify (\_SB.PCI0.GPP5, 0x02) // Device Wake
+> > > >         }
+> > > >     }
+> > > >
+> > > > At least one more even significantly more extensive, calling methods
+> > > > that interact with OpRegions.  So how does a simple stub of a
+> > > > GPE block replicate this sort of behavior in the host AML?  Thanks,=
+ =20
+>=20
+> The simple stub of GPE block will work to replicate the ACPI
+> notification only: as mentioned earlier GPE handler will be generated
+> per-vfio device so in your example if let assume that only:
+> - \_SB.PCI0.GPP0.PEGP
+> - \_SB.PCI0.GP17.XHC1
+> will be pass-through to the guest, the generated AML code for VM will
+> look more-less like below:
+>=20
+>         Scope (_GPE)
+>         {
+>             Method (_E00, 0, NotSerialized)
+>             {
+>                 Local0 =3D  \_SB.PCI0.GPP0.PEGP.NOTY
+>                 Notify ( \_SB.PCI0.GPP0.PEGP, Local0)
+>             }
+>         }
+>         Scope (_GPE)
+>         {
+>             Method (_E01, 0, NotSerialized)
+>             {
+>                 Local0 =3D\_SB.PCI0.GP17.XHC1.NOTY
+>                 Notify (\_SB.PCI0.GP17.XHC1, Local0)
+>             }
+>         }
+>=20
+> So each pass-through device will have associated GPE (0 for
+> \_SB.PCI0.GPP0.PEGP and 1 for \_SB.PCI0.GP17.XHC1). The path in Notify
+> could actually be different and related to guest pci hierarchy (but
+> associated to those host devices). Please also note that in this case
+> we use GPE in order to "inform" guest about notification coming and we
+> do not try to replicate host GPE scope description.
+>=20
+> Above we assumed that other devices (like \_SB.PCI0.GPP0/1) are not
+> pass-through to the guest and notification are handled in host as
+> usual (they are not binded to pci-vfio) and there is no need to
+> generate AML code, allocate GPE for them and so on.
 
-where :
-		<integer1> : Start EDCR ...
-		....
-	
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl_mask
-> +Date:		March 2023
-> +KernelVersion	6.3
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the edge control mask of DSB tpdm. Read
-> +		the edge control mask of DSB tpdm.
-> +
-> +		Accepts the following three values.
-> +		value 1: Start EDCMR register number
-> +		value 2: End EDCMR register number
-> +		value 3: The value need to be written
+I'm pretty lost here.  The GPE code to read the notify value and relay
+it to another AML object is relatively trivial, but that other AML
+object needs to do something of some significance with that notify.
+Minimally, it seems like the AML would need to establish the companion
+relationship with the device so that a driver in the guest receives
+that notify.  What does that look like, and can it be pre-seeded in the
+AML regardless of whether the device is cold- or hot-plugged into the
+VM?  Some specific examples would be useful.  It's not clear to me that
+there isn't significant out-of-band effort required to understand and
+replicate AML from host to guest to make this useful, so the generality
+of this feature is hard to grasp.  Thanks,
 
-Similarly here.
-
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index 8cd822f..2a0b36c 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -88,7 +88,14 @@ static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
->   
->   static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   {
-> -	u32 val;
-> +	u32 val, i;
-> +
-> +	for (i = 0; i < TPDM_DSB_MAX_EDCR; i++)
-> +		writel_relaxed(drvdata->dsb->edge_ctrl[i],
-> +			   drvdata->base + TPDM_DSB_EDCR(i));
-> +	for (i = 0; i < TPDM_DSB_MAX_EDCMR; i++)
-> +		writel_relaxed(drvdata->dsb->edge_ctrl_mask[i],
-> +			   drvdata->base + TPDM_DSB_EDCMR(i));
->   
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->   	/* Set trigger timestamp */
-> @@ -311,6 +318,137 @@ static ssize_t dsb_mode_store(struct device *dev,
->   }
->   static DEVICE_ATTR_RW(dsb_mode);
->   
-> +static ssize_t dsb_edge_ctrl_show(struct device *dev,
-> +				       struct device_attribute *attr,
-> +				       char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	ssize_t size = 0;
-> +	int i;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	for (i = 0; i < TPDM_DSB_MAX_EDCR; i++) {
-> +		size += sysfs_emit_at(buf, size,
-> +				  "Index:0x%x Val:0x%x\n", i,
-> +				  drvdata->dsb->edge_ctrl[i]);
-> +	}
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +
-> +/*
-> + * value 1: Start EDCR register number
-> + * value 2: End EDCR register number
-> + * value 3: The value need to be written
-> + * The EDCR registers can include up to 16 32-bit registers, and each
-> + * one can be configured to control up to 16 edge detections(2 bits
-> + * control one edge detection). So a total 256 edge detections can be
-> + * configured. So the starting number(value 1) and ending number(value 2)
-> + * cannot be greater than 256, and value 1 should be less than value 2.
-> + * The following values are the rage of value 3.
-> + * 0 - Rising edge detection
-> + * 1 - Falling edge detection
-> + * 2 - Rising and falling edge detection (toggle detection)
-> + */
-> +static ssize_t dsb_edge_ctrl_store(struct device *dev,
-> +					struct device_attribute *attr,
-> +					const char *buf,
-> +					size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long start, end, edge_ctrl;
-> +	uint32_t val;
-> +	int i, index, bit, reg;
-> +
-> +	if (sscanf(buf, "%lx %lx %lx", &start, &end, &edge_ctrl) != 3)
-> +		return -EINVAL;
-> +	if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES) ||
-> +	    edge_ctrl > 0x2)
-> +		return -EPERM;
-
-	Isn't it an error to provide start > end ?
-
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	for (i = start; i <= end; i++) {
-> +		/*
-> +		 * The 32-bit register has 32 bits(NUM_OF_BITS).
-> +		 * Each one register can be configured to control 16
-> +		 * (NUM_OF_BITS / 2) edge detectioins.
-> +		 */
-
-		/*
-		 * Each DSB Edge control line requires 2bits.
-		 * Thus we have 16 lines in a 32bit word.
-		 */
-
-Could we please define something like:
-
-#define EDCRS_PER_WORD			16
-#define EDCR_TO_WORD_IDX(r)		((r) / EDCRS_PER_WORD)
-#define EDCR_TO_WORD_SHIFT(r)		((r) % EDCRS_PER_WORD)
-#define EDCR_TO_WORD_MASK(r)		(0x3 << EDCR_TO_WORD_SHIFT((r)))
-
-> +		reg = i / (NUM_OF_BITS / 2);
-> +		index = i % (NUM_OF_BITS / 2);
-> +		bit = index * 2;
-> +
-
-	reg = EDCR_TO_WORD_IDX(i);
-	mask = EDCR_TO_WORD_MASK(i);
-	
-	val &= ~mask;
-	val |= FIELD_PREP(mask, edge_ctrl);
-
-> +		val = drvdata->dsb->edge_ctrl[reg];
-> +		val &= ~GENMASK((bit + 1), bit);
-> +		val |= (edge_ctrl << bit);
-
-
-> +		drvdata->dsb->edge_ctrl[reg] = val;
-> +	}
-> +	spin_unlock(&drvdata->spinlock);
-> +
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_edge_ctrl);
-> +
-> +static ssize_t dsb_edge_ctrl_mask_show(struct device *dev,
-> +					    struct device_attribute *attr,
-> +					    char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	ssize_t size = 0;
-> +	int i;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	for (i = 0; i < TPDM_DSB_MAX_EDCR / 2; i++) {
-
-Why is this not `i < TPDM_DSB_MAX_EDCMR` ?
-
-> +		size += sysfs_emit_at(buf, size,
-> +				  "Index:0x%x Val:0x%x\n", i,
-> +				  drvdata->dsb->edge_ctrl_mask[i]);
-> +	}
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +
-> +/*
-> + * value 1: Start EDCMR register number
-> + * value 2: End EDCMR register number
-> + * value 3: The value need to be written
-> + */
-> +static ssize_t dsb_edge_ctrl_mask_store(struct device *dev,
-> +					     struct device_attribute *attr,
-> +					     const char *buf,
-> +					     size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long start, end, val;
-> +	u32 set;
-> +	int i, index, reg;
-> +
-> +	if (sscanf(buf, "%lx %lx %lx", &start, &end, &val) != 3)
-> +		return -EINVAL;
-> +	if ((start >= TPDM_DSB_MAX_LINES) || (end >= TPDM_DSB_MAX_LINES)
-> +		|| (val & ~1UL))
-> +		return -EPERM;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	for (i = start; i <= end; i++) {
-> +		/*
-> +		 * The 32-bit register has 32 bits(NUM_OF_BITS).
-> +		 * Each one register can be configured to control 32
-> +		 * (NUM_OF_BITS) edge detectioin masks.
-
-minor nit: detection.
-
-You could simply say:
-		/*
-		 * There is 1 bit per DSB Edge Control line.
-		 * Thus we have 32 lines in a 32bit word.
-		 */
-	 	reg = i / 32;
-
-> +		reg = i / NUM_OF_BITS;
-> +		index = (i % NUM_OF_BITS);
-> +
-> +		set = drvdata->dsb->edge_ctrl_mask[reg];
-> +		if (val)
-> +			set |= BIT(index);
-> +		else
-> +			set &= ~BIT(index);
-> +		drvdata->dsb->edge_ctrl_mask[reg] = set;
-> +	}
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_edge_ctrl_mask);
-> +
->   static ssize_t dsb_trig_type_show(struct device *dev,
->   				     struct device_attribute *attr,
->   				     char *buf)
-> @@ -383,6 +521,8 @@ static DEVICE_ATTR_RW(dsb_trig_ts);
->   
->   static struct attribute *tpdm_dsb_attrs[] = {
->   	&dev_attr_dsb_mode.attr,
-> +	&dev_attr_dsb_edge_ctrl.attr,
-> +	&dev_attr_dsb_edge_ctrl_mask.attr,
->   	&dev_attr_dsb_trig_ts.attr,
->   	&dev_attr_dsb_trig_type.attr,
->   	NULL,
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> index 8fee562..342ef23 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -12,6 +12,8 @@
->   /* DSB Subunit Registers */
->   #define TPDM_DSB_CR		(0x780)
->   #define TPDM_DSB_TIER		(0x784)
-> +#define TPDM_DSB_EDCR(n)	(0x808 + (n * 4))
-> +#define TPDM_DSB_EDCMR(n)	(0x848 + (n * 4))
->   
->   /* Enable bit for DSB subunit */
->   #define TPDM_DSB_CR_ENA		BIT(0)
-> @@ -31,6 +33,8 @@
->   #define TPDM_DSB_TEST_MODE		GENMASK(11, 9)
->   #define TPDM_DSB_HPSEL		GENMASK(6, 2)
->   
-> +#define NUM_OF_BITS		32
-
-Please don't use such generic names. Instead define TPDM specific
-helper definitions. See above.
-
-
-Suzuki
-
-
-> +
->   /* TPDM integration test registers */
->   #define TPDM_ITATBCNTRL		(0xEF0)
->   #define TPDM_ITCNTRL		(0xF00)
-> @@ -57,14 +61,24 @@
->   #define TPDM_PIDR0_DS_IMPDEF	BIT(0)
->   #define TPDM_PIDR0_DS_DSB	BIT(1)
->   
-> +#define TPDM_DSB_MAX_LINES	256
-> +/* MAX number of EDCR registers */
-> +#define TPDM_DSB_MAX_EDCR	16 > +/* MAX number of EDCMR registers */
-> +#define TPDM_DSB_MAX_EDCMR	8
-> +
->   /**
->    * struct dsb_dataset - specifics associated to dsb dataset
->    * @mode:             DSB programming mode
-> + * @edge_ctrl:        Save value for edge control
-> + * @edge_ctrl_mask:   Save value for edge control mask
->    * @trig_ts:          Enable/Disable trigger timestamp.
->    * @trig_type:        Enable/Disable trigger type.
->    */
->   struct dsb_dataset {
->   	u32				mode;
-> +	u32				edge_ctrl[TPDM_DSB_MAX_EDCR];
-> +	u32				edge_ctrl_mask[TPDM_DSB_MAX_EDCMR];
->   	bool			trig_ts;
->   	bool			trig_type;
->   };
+Alex
 
