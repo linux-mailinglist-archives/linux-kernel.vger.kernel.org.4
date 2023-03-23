@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD65F6C5EEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E5C6C5EE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 06:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCWFcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 01:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S230471AbjCWFcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 01:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjCWFcX (ORCPT
+        with ESMTP id S230467AbjCWFcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 01:32:23 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246D82BF12
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:21 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o11so21336423ple.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:21 -0700 (PDT)
+        Thu, 23 Mar 2023 01:32:01 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9635C31BCD
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:23 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id kq3so8919736plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 22:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679549479;
+        d=bytedance.com; s=google; t=1679549482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ihxW9QIYwW7geYYIsi25taexnQY98X1VOl5aytZk5u4=;
-        b=kIURKCtRiCNlA/czcj4Vbbn/aPsD7HY6PBQRckQpSqqq6tcuS8WO695O85xiYDI7IN
-         mj7F/qgUN6n/E4wc+SBODKr2dmT6S0Mxa6W6VLKt+s0eEF+lZkTQOyBVOT0F0s3DWh48
-         OAfvD8YdDYpxZ0m5mG39Suz/wYhEJcgo88I8+odM8Cr8qlmKUH63CnuPgiMCzWsVS5ap
-         ghhRHepFPg99tHTLSyjPQHFnCFcjbbPBJ0V8+fd86fp4ep5JDV6PpOZV6G//DkAFLYAt
-         lV3qsnaZk9q8KMlbZbmRM7g+gpjuhaG0dZ3CkhJLEkwk5CKYb8yc0jvlPmAVEMPhc9BP
-         CmOg==
+        bh=QcDeLFrXedHSKuPyT2iyCEdMTIpqJ+T19wOg244Ts4I=;
+        b=W9SSFngkB1ECAtiQ37iuP109gTcmletw6vq+zRxp/NRGzpExnhGsK4kPrjj1ak5b4L
+         aeyffW2TlZUySj70RZs94gUF8zv5FdUiHpxw15qAr9fH0T05eV+3IiKo4jC8gWqa8YLa
+         C8kTUg6jzQNubyAjSltIJFxWsVlc+4h+aIUvW50QX7Q25sCZj/FO5DpLggKQ0Zelmlj4
+         JLQavFZ9OYxOYqJK22eDQHcjDTrs3xbkJBLEkNO5E/KweCY+9fTUSkHmbs7CRWVKEo5f
+         3nf9rgKyv8tVgNS3os7wQGnVJgwRKAuN0q0f6TRupP3UlA9jIH0YdL7GfJhPp4ZuNSxJ
+         b4ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679549479;
+        d=1e100.net; s=20210112; t=1679549482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ihxW9QIYwW7geYYIsi25taexnQY98X1VOl5aytZk5u4=;
-        b=MCQStOKVHhqb845bUs5DKMXQLdSeyV70EZGg/hYcgesVvwJ30mhlCIRLnt0vdWzBMU
-         pKSVYClU1ZJqTq3GG+CN3DhJGNPodikKzzUy+WUwt1k1f/Ai3lS0zrmZ3+idzeVyZw4H
-         vIXbBNnH5cVdRebsdOH4JX6Mf7ZjXnnOaUASKuvU0ECP8U7R3lIdQYSG9DGQYjNn4b/B
-         MZ8IaCAcgVQvnl0dPWp9XZQC1oUeUe39QT+EYsJC9xX61DOofksncCVP1A7IEZeRv/uZ
-         8e7Uw3o0+Wli/5oskood/k4Vmx8Cym5lv1o8O4DSKv05eZzUVAq3qBGs5Z+Xh0eoP1Bf
-         vLWA==
-X-Gm-Message-State: AO0yUKULMXD87+KTt/T6BM6EiXdJmYbGW9qkt8VT0Wkbfqwh2RRT5E18
-        Hx3aPa8RMaIj1wQfcS+TI29ATZSbFZMw5b+VGQ==
-X-Google-Smtp-Source: AK7set/rK1IzdrgpYvMrOwIGj0imNxvmORDT1PEdqXmLYJZSB+GB946artKH/vVbtgf7Sl8zcspYaQ==
-X-Received: by 2002:a05:6a20:ba87:b0:d9:949e:a72 with SMTP id fb7-20020a056a20ba8700b000d9949e0a72mr1560552pzb.60.1679549479099;
-        Wed, 22 Mar 2023 22:31:19 -0700 (PDT)
+        bh=QcDeLFrXedHSKuPyT2iyCEdMTIpqJ+T19wOg244Ts4I=;
+        b=z4VQNziPIDW33eFUuzDtYlXG+WSqYSiipwuqznLducSuUjMk4McuIZewSbgwZd/rrE
+         G/T4CpQ+x2mKVJAr9tpd/IKAr4psGCpLwztnVYLfs7r3gtlV1Ex6YmAOJwVZfG1Rw4EI
+         OigHIfQmSNSE1JdokNDZvtFL9V03qo/nAYb9u4QwlwciC138xPCJQPbcSgzc94PjBeKc
+         dNA9ZsXqSDLP0n1Hdo8Ly7Hq/F5hrM41rD12cF6A9cxFYcS9lhA5JK6cCNG76fdque4r
+         d0Cs/j8zaqsDdiZDKmY4JoeEbbM4evWOIxqYSnQUSup2MZhdt+p5tk55EpNGQ/0cJtfe
+         Sszw==
+X-Gm-Message-State: AO0yUKUTkt/zlsu4GqS79O+BUW7Ky9YOBFjjqs5w6Kr2spcas13yYWyL
+        HDsJznXSu2rWIGjBY6X6MBSaiN+OJM/LUK5A2A==
+X-Google-Smtp-Source: AK7set9KoMFWejw0t85RtGlQlLYW/5xOSmETgUY/U6P6XwnLX9ftzVzlJwYDeP8nlrUp5808h9g2CQ==
+X-Received: by 2002:a17:90b:1e42:b0:23d:39e0:13b with SMTP id pi2-20020a17090b1e4200b0023d39e0013bmr6254179pjb.43.1679549482181;
+        Wed, 22 Mar 2023 22:31:22 -0700 (PDT)
 Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id p14-20020a62ab0e000000b0062505afff9fsm10953459pff.126.2023.03.22.22.31.18
+        by smtp.gmail.com with ESMTPSA id d9-20020a17090a6a4900b0023c8a23005asm431804pjm.49.2023.03.22.22.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 22:31:18 -0700 (PDT)
+        Wed, 22 Mar 2023 22:31:22 -0700 (PDT)
 From:   Xie Yongji <xieyongji@bytedance.com>
 To:     mst@redhat.com, jasowang@redhat.com, tglx@linutronix.de, hch@lst.de
 Cc:     virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 02/11] vdpa: Add set/get_vq_affinity callbacks in vdpa_config_ops
-Date:   Thu, 23 Mar 2023 13:30:34 +0800
-Message-Id: <20230323053043.35-3-xieyongji@bytedance.com>
+Subject: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity spreading mechanism
+Date:   Thu, 23 Mar 2023 13:30:35 +0800
+Message-Id: <20230323053043.35-4-xieyongji@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230323053043.35-1-xieyongji@bytedance.com>
 References: <20230323053043.35-1-xieyongji@bytedance.com>
@@ -71,94 +71,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This introduces set/get_vq_affinity callbacks in
-vdpa_config_ops to support virtqueue affinity
-management for vdpa device drivers.
+To support interrupt affinity spreading mechanism,
+this makes use of group_cpus_evenly() to create
+an irq callback affinity mask for each virtqueue
+of vdpa device. Then we will unify set_vq_affinity
+callback to pass the affinity to the vdpa device driver.
 
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/virtio/virtio_vdpa.c | 28 ++++++++++++++++++++++++++++
- include/linux/vdpa.h         | 13 +++++++++++++
- 2 files changed, 41 insertions(+)
+ drivers/virtio/virtio_vdpa.c | 68 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-index d7f5af62ddaa..f72696b4c1c2 100644
+index f72696b4c1c2..f3826f42b704 100644
 --- a/drivers/virtio/virtio_vdpa.c
 +++ b/drivers/virtio/virtio_vdpa.c
-@@ -337,6 +337,32 @@ static const char *virtio_vdpa_bus_name(struct virtio_device *vdev)
- 	return dev_name(&vdpa->dev);
+@@ -13,6 +13,7 @@
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <linux/uuid.h>
++#include <linux/group_cpus.h>
+ #include <linux/virtio.h>
+ #include <linux/vdpa.h>
+ #include <linux/virtio_config.h>
+@@ -272,6 +273,66 @@ static void virtio_vdpa_del_vqs(struct virtio_device *vdev)
+ 		virtio_vdpa_del_vq(vq);
  }
  
-+static int virtio_vdpa_set_vq_affinity(struct virtqueue *vq,
-+				       const struct cpumask *cpu_mask)
++static void default_calc_sets(struct irq_affinity *affd, unsigned int affvecs)
 +{
-+	struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vq->vdev);
-+	struct vdpa_device *vdpa = vd_dev->vdpa;
-+	const struct vdpa_config_ops *ops = vdpa->config;
-+	unsigned int index = vq->index;
-+
-+	if (ops->set_vq_affinity)
-+		return ops->set_vq_affinity(vdpa, index, cpu_mask);
-+
-+	return 0;
++	affd->nr_sets = 1;
++	affd->set_size[0] = affvecs;
 +}
 +
-+static const struct cpumask *
-+virtio_vdpa_get_vq_affinity(struct virtio_device *vdev, int index)
++static struct cpumask *
++create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
 +{
-+	struct vdpa_device *vdpa = vd_get_vdpa(vdev);
-+	const struct vdpa_config_ops *ops = vdpa->config;
++	unsigned int affvecs = 0, curvec, usedvecs, i;
++	struct cpumask *masks = NULL;
 +
-+	if (ops->get_vq_affinity)
-+		return ops->get_vq_affinity(vdpa, index);
++	if (nvecs > affd->pre_vectors + affd->post_vectors)
++		affvecs = nvecs - affd->pre_vectors - affd->post_vectors;
 +
-+	return NULL;
++	if (!affd->calc_sets)
++		affd->calc_sets = default_calc_sets;
++
++	affd->calc_sets(affd, affvecs);
++
++	if (!affvecs)
++		return NULL;
++
++	masks = kcalloc(nvecs, sizeof(*masks), GFP_KERNEL);
++	if (!masks)
++		return NULL;
++
++	/* Fill out vectors at the beginning that don't need affinity */
++	for (curvec = 0; curvec < affd->pre_vectors; curvec++)
++		cpumask_setall(&masks[curvec]);
++
++	for (i = 0, usedvecs = 0; i < affd->nr_sets; i++) {
++		unsigned int this_vecs = affd->set_size[i];
++		int j;
++		struct cpumask *result = group_cpus_evenly(this_vecs);
++
++		if (!result) {
++			kfree(masks);
++			return NULL;
++		}
++
++		for (j = 0; j < this_vecs; j++)
++			cpumask_copy(&masks[curvec + j], &result[j]);
++		kfree(result);
++
++		curvec += this_vecs;
++		usedvecs += this_vecs;
++	}
++
++	/* Fill out vectors at the end that don't need affinity */
++	if (usedvecs >= affvecs)
++		curvec = affd->pre_vectors + affvecs;
++	else
++		curvec = affd->pre_vectors + usedvecs;
++	for (; curvec < nvecs; curvec++)
++		cpumask_setall(&masks[curvec]);
++
++	return masks;
 +}
 +
- static const struct virtio_config_ops virtio_vdpa_config_ops = {
- 	.get		= virtio_vdpa_get,
- 	.set		= virtio_vdpa_set,
-@@ -349,6 +375,8 @@ static const struct virtio_config_ops virtio_vdpa_config_ops = {
- 	.get_features	= virtio_vdpa_get_features,
- 	.finalize_features = virtio_vdpa_finalize_features,
- 	.bus_name	= virtio_vdpa_bus_name,
-+	.set_vq_affinity = virtio_vdpa_set_vq_affinity,
-+	.get_vq_affinity = virtio_vdpa_get_vq_affinity,
- };
+ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 				struct virtqueue *vqs[],
+ 				vq_callback_t *callbacks[],
+@@ -282,9 +343,15 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 	struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vdev);
+ 	struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+ 	const struct vdpa_config_ops *ops = vdpa->config;
++	struct irq_affinity default_affd = { 0 };
++	struct cpumask *masks;
+ 	struct vdpa_callback cb;
+ 	int i, err, queue_idx = 0;
  
- static void virtio_vdpa_release_dev(struct device *_d)
-diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-index 43f59ef10cc9..e52c9a37999c 100644
---- a/include/linux/vdpa.h
-+++ b/include/linux/vdpa.h
-@@ -250,6 +250,15 @@ struct vdpa_map_file {
-  *				@vdev: vdpa device
-  *				Returns the iova range supported by
-  *				the device.
-+ * @set_vq_affinity:		Set the affinity of virtqueue (optional)
-+ *				@vdev: vdpa device
-+ *				@idx: virtqueue index
-+ *				@cpu_mask: the affinity mask
-+ *				Returns integer: success (0) or error (< 0)
-+ * @get_vq_affinity:		Get the affinity of virtqueue (optional)
-+ *				@vdev: vdpa device
-+ *				@idx: virtqueue index
-+ *				Returns the affinity mask
-  * @set_group_asid:		Set address space identifier for a
-  *				virtqueue group (optional)
-  *				@vdev: vdpa device
-@@ -340,6 +349,10 @@ struct vdpa_config_ops {
- 			   const void *buf, unsigned int len);
- 	u32 (*get_generation)(struct vdpa_device *vdev);
- 	struct vdpa_iova_range (*get_iova_range)(struct vdpa_device *vdev);
-+	int (*set_vq_affinity)(struct vdpa_device *vdev, u16 idx,
-+			       const struct cpumask *cpu_mask);
-+	const struct cpumask *(*get_vq_affinity)(struct vdpa_device *vdev,
-+						 u16 idx);
++	masks = create_affinity_masks(nvqs, desc ? desc : &default_affd);
++	if (!masks)
++		return -ENOMEM;
++
+ 	for (i = 0; i < nvqs; ++i) {
+ 		if (!names[i]) {
+ 			vqs[i] = NULL;
+@@ -298,6 +365,7 @@ static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ 			err = PTR_ERR(vqs[i]);
+ 			goto err_setup_vq;
+ 		}
++		ops->set_vq_affinity(vdpa, i, &masks[i]);
+ 	}
  
- 	/* DMA ops */
- 	int (*set_map)(struct vdpa_device *vdev, unsigned int asid,
+ 	cb.callback = virtio_vdpa_config_cb;
 -- 
 2.20.1
 
