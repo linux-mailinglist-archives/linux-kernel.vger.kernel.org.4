@@ -2,250 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9E36C653C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B746C6544
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjCWKhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S231232AbjCWKiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjCWKgK (ORCPT
+        with ESMTP id S229589AbjCWKhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:36:10 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AEA2B633;
-        Thu, 23 Mar 2023 03:32:16 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 2AD012000D;
-        Thu, 23 Mar 2023 10:32:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679567534;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0oqGErMkj5FkUfonUc1n/rq79xcUyJMxSW3w/JRA1mw=;
-        b=hrTbObETasuAWWQIvVmLlZSNu41RaG0vbCmb57cFoR1aOhMM+TCOY9krwYw4Y1cvbzLF7H
-        4j6C9jrD52fDEbctVDFqjJ1cRVVycdP4GRidAqFQs0d4kF/wXcDuwyPCVRzMJbQQKDTeoG
-        LZLIcSWZVk6utH9u0iR1f14oDWN13rytMBl/zGJ2UzhwmfqA3wn55wDEjVnKg6hZMYc9+J
-        vQPvdWv4jwcig+Z7SrRXL5yZ89VXCzjOjHOxpfgnrwxIMY+vMGKr8VMJs3M7xyt0pVrABe
-        IrWZuy4Jf8LBiONcX3v9LE16O8KAUsFubXaQNKN4rwF8tf10lxIbB9iPI/cjAw==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [RFC PATCH 4/4] phy: lantiq: Add PEF2256 PHY support
-Date:   Thu, 23 Mar 2023 11:31:54 +0100
-Message-Id: <20230323103154.264546-5-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230323103154.264546-1-herve.codina@bootlin.com>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
+        Thu, 23 Mar 2023 06:37:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60671E5F9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:34:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62817B82051
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0505AC4339C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:34:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679567649;
+        bh=fJu4buwju+aXou8+VwqF0BZQbX9HcKk4lN1aVLiCobw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NP9BcpC4iG0ZV2MbmZH201WUnV5YSjsNTzxzICfbYcfldnPbkMcSeoWyUZJdclUxs
+         Gdyi6fsjL1ZTy0CvRoDbdNswtoqm5CrhVMuRNxe4wIKs+40r102n6rAIfrIIDsVCK7
+         fOb+aZd7Ip7FWY90GVQ8dR4RCneXuLQb0FLc1i4u2rP16O5334F23+oJ5Go8UlevtL
+         L7CqIvlNFxDuwoDmdYaQstPnNPVRUzdDfJABFD+Eq8z+/N7QjcmwajdurFBQ6Mbq56
+         zXDfmmD0NpdKHebsDQZodGxq2z1SwmMVO+kPMS8QlfApKiBGJ12iDUIJIdMPFrSyxe
+         DuEUGQTWh5lYQ==
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5419d4c340aso387105487b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 03:34:08 -0700 (PDT)
+X-Gm-Message-State: AAQBX9c8O85Fmv8LifM/XTOmVdNaIIxBpO2zPTO9ISjOLzaSY0UbIT9L
+        CQbnokenqeAftHpXQ5+mpq+h/uPL6PBcSr3hoI4=
+X-Google-Smtp-Source: AKy350YPEjHVSAhmQPCXnKtsgwqbKyg8CBncmUaehuSDRZziR65QgWO4mv97VCOV/F7KkCRmjNdFTCgBA1Z28mbqmKU=
+X-Received: by 2002:a81:4505:0:b0:544:5042:324a with SMTP id
+ s5-20020a814505000000b005445042324amr1624643ywa.3.1679567647951; Thu, 23 Mar
+ 2023 03:34:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323083553.16864-1-cai.huoqing@linux.dev> <20230323102952.GD2130371@linux.intel.com>
+In-Reply-To: <20230323102952.GD2130371@linux.intel.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Thu, 23 Mar 2023 12:33:41 +0200
+X-Gmail-Original-Message-ID: <CAFCwf13Xi+w6OiR=_6Lqu9LPBfpmr-0deLUMkqsXsjXD0iKqNg@mail.gmail.com>
+Message-ID: <CAFCwf13Xi+w6OiR=_6Lqu9LPBfpmr-0deLUMkqsXsjXD0iKqNg@mail.gmail.com>
+Subject: Re: [PATCH] accel/habanalabs: Remove redundant pci_clear_master
+To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Tomer Tayar <ttayar@habana.ai>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lantiq PEF2256, is a framer and line interface component designed to
-fulfill all required interfacing between an analog E1/T1/J1 line and the
-digital PCM system highway/H.100 bus.
-
-The PHY support allows to provide the PEF2556 as a generic PHY and to
-use the PHY API to retrieve the E1 line carrier status from the PHY
-consumer.
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- drivers/phy/lantiq/Kconfig              |  15 +++
- drivers/phy/lantiq/Makefile             |   1 +
- drivers/phy/lantiq/phy-lantiq-pef2256.c | 131 ++++++++++++++++++++++++
- 3 files changed, 147 insertions(+)
- create mode 100644 drivers/phy/lantiq/phy-lantiq-pef2256.c
-
-diff --git a/drivers/phy/lantiq/Kconfig b/drivers/phy/lantiq/Kconfig
-index c4df9709d53f..c87881255458 100644
---- a/drivers/phy/lantiq/Kconfig
-+++ b/drivers/phy/lantiq/Kconfig
-@@ -2,6 +2,21 @@
- #
- # Phy drivers for Lantiq / Intel platforms
- #
-+config PHY_LANTIQ_PEF2256
-+	tristate "Lantiq PEF2256 PHY"
-+	depends on MFD_PEF2256
-+	select GENERIC_PHY
-+	help
-+	  Enable support for the Lantiq PEF2256 (FALC56) PHY.
-+	  The PEF2256 is a framer and line interface between analog E1/T1/J1
-+	  line and a digital PCM bus.
-+	  This PHY support allows to consider the PEF2256 as a PHY.
-+
-+	  If unsure, say N.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called phy-lantiq-pef2256.
-+
- config PHY_LANTIQ_VRX200_PCIE
- 	tristate "Lantiq VRX200/ARX300 PCIe PHY"
- 	depends on SOC_TYPE_XWAY || COMPILE_TEST
-diff --git a/drivers/phy/lantiq/Makefile b/drivers/phy/lantiq/Makefile
-index 7c14eb24ab73..6e501d865620 100644
---- a/drivers/phy/lantiq/Makefile
-+++ b/drivers/phy/lantiq/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_PHY_LANTIQ_PEF2256)	+= phy-lantiq-pef2256.o
- obj-$(CONFIG_PHY_LANTIQ_RCU_USB2)	+= phy-lantiq-rcu-usb2.o
- obj-$(CONFIG_PHY_LANTIQ_VRX200_PCIE)	+= phy-lantiq-vrx200-pcie.o
-diff --git a/drivers/phy/lantiq/phy-lantiq-pef2256.c b/drivers/phy/lantiq/phy-lantiq-pef2256.c
-new file mode 100644
-index 000000000000..1a1a4f66c102
---- /dev/null
-+++ b/drivers/phy/lantiq/phy-lantiq-pef2256.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * PEF2256 phy support
-+ *
-+ * Copyright 2023 CS GROUP France
-+ *
-+ * Author: Herve Codina <herve.codina@bootlin.com>
-+ */
-+
-+#include <linux/phy/phy.h>
-+#include <linux/mfd/pef2256.h>
-+#include <linux/module.h>
-+#include <linux/notifier.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+struct pef2256_phy {
-+	struct phy *phy;
-+	struct pef2256 *pef2256;
-+	struct device *dev;
-+	struct atomic_notifier_head event_notifier_list;
-+	struct notifier_block nb;
-+};
-+
-+static int pef2256_carrier_notifier(struct notifier_block *nb, unsigned long action,
-+				    void *data)
-+{
-+	struct pef2256_phy *pef2256 = container_of(nb, struct pef2256_phy, nb);
-+
-+	switch (action) {
-+	case PEF2256_EVENT_CARRIER:
-+		return atomic_notifier_call_chain(&pef2256->event_notifier_list,
-+						  PHY_EVENT_STATUS,
-+						  NULL);
-+	default:
-+		break;
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int pef2256_phy_atomic_notifier_register(struct phy *phy, struct notifier_block *nb)
-+{
-+	struct pef2256_phy *pef2256 = phy_get_drvdata(phy);
-+
-+	return atomic_notifier_chain_register(&pef2256->event_notifier_list, nb);
-+}
-+
-+static int pef2256_phy_atomic_notifier_unregister(struct phy *phy, struct notifier_block *nb)
-+{
-+	struct pef2256_phy *pef2256 = phy_get_drvdata(phy);
-+
-+	return atomic_notifier_chain_unregister(&pef2256->event_notifier_list, nb);
-+}
-+
-+static int pef2256_phy_init(struct phy *phy)
-+{
-+	struct pef2256_phy *pef2256 = phy_get_drvdata(phy);
-+
-+	ATOMIC_INIT_NOTIFIER_HEAD(&pef2256->event_notifier_list);
-+
-+	pef2256->nb.notifier_call = pef2256_carrier_notifier;
-+	return pef2256_register_event_notifier(pef2256->pef2256, &pef2256->nb);
-+}
-+
-+static int pef2256_phy_exit(struct phy *phy)
-+{
-+	struct pef2256_phy *pef2256 = phy_get_drvdata(phy);
-+
-+	return pef2256_unregister_event_notifier(pef2256->pef2256, &pef2256->nb);
-+}
-+
-+static int pef2256_phy_get_status(struct phy *phy, union phy_status *status)
-+{
-+	struct pef2256_phy *pef2256 = phy_get_drvdata(phy);
-+
-+	status->basic.link_is_on = pef2256_get_carrier(pef2256->pef2256);
-+	return 0;
-+}
-+
-+static const struct phy_ops pef2256_phy_ops = {
-+	.owner = THIS_MODULE,
-+	.init = pef2256_phy_init,
-+	.exit = pef2256_phy_exit,
-+	.get_status = pef2256_phy_get_status,
-+	.atomic_notifier_register = pef2256_phy_atomic_notifier_register,
-+	.atomic_notifier_unregister = pef2256_phy_atomic_notifier_unregister,
-+};
-+
-+static int pef2256_phy_probe(struct platform_device *pdev)
-+{
-+	struct phy_provider *provider;
-+	struct pef2256_phy *pef2256;
-+
-+	pef2256 = devm_kzalloc(&pdev->dev, sizeof(*pef2256), GFP_KERNEL);
-+	if (!pef2256)
-+		return -ENOMEM;
-+
-+	pef2256->dev = &pdev->dev;
-+	pef2256->pef2256 = dev_get_drvdata(pef2256->dev->parent);
-+
-+	pef2256->phy = devm_phy_create(pef2256->dev, NULL, &pef2256_phy_ops);
-+	if (IS_ERR(pef2256->phy))
-+		return PTR_ERR(pef2256->phy);
-+
-+	phy_set_drvdata(pef2256->phy, pef2256);
-+	pef2256->phy->attrs.mode = PHY_MODE_BASIC;
-+
-+	provider = devm_of_phy_provider_register(pef2256->dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(provider);
-+}
-+
-+static const struct of_device_id pef2256_phy_of_match[] = {
-+	{ .compatible = "lantiq,pef2256-phy" },
-+	{} /* sentinel */
-+};
-+MODULE_DEVICE_TABLE(of, pef2256_phy_of_match);
-+
-+static struct platform_driver pef2256_phy_driver = {
-+	.driver = {
-+		.name = "lantiq-pef2256-phy",
-+		.of_match_table = pef2256_phy_of_match,
-+	},
-+	.probe = pef2256_phy_probe,
-+};
-+module_platform_driver(pef2256_phy_driver);
-+
-+MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
-+MODULE_DESCRIPTION("PEF2256 PHY driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
-
+On Thu, Mar 23, 2023 at 12:29=E2=80=AFPM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Thu, Mar 23, 2023 at 04:35:49PM +0800, Cai Huoqing wrote:
+> > Remove pci_clear_master to simplify the code,
+> > the bus-mastering is also cleared in do_pci_disable_device,
+> > like this:
+> > ./drivers/pci/pci.c:2197
+> > static void do_pci_disable_device(struct pci_dev *dev)
+> > {
+> >       u16 pci_command;
+> >
+> >       pci_read_config_word(dev, PCI_COMMAND, &pci_command);
+> >       if (pci_command & PCI_COMMAND_MASTER) {
+> >               pci_command &=3D ~PCI_COMMAND_MASTER;
+> >               pci_write_config_word(dev, PCI_COMMAND, pci_command);
+> >       }
+> >
+> >       pcibios_disable_device(dev);
+> > }.
+> > And dev->is_busmaster is set to 0 in pci_disable_device.
+> >
+> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> LGTM
+>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+>
+Applied to -next
+Thanks,
+Oded
