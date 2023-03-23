@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8DC6C6473
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2496C6479
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjCWKIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231179AbjCWKLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCWKIv (ORCPT
+        with ESMTP id S230236AbjCWKLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:08:51 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7809811A;
-        Thu, 23 Mar 2023 03:08:50 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id h8so84023463ede.8;
-        Thu, 23 Mar 2023 03:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679566129;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NGAuq1vj2Az8BeSIwxE6OVDA/Cv51CPyVJAXOIa5Vuw=;
-        b=OOX/X+HlYB7eQPs76GFdPpZy1ayHbuh8C2ASVmqG7AI4UVM4ZTwmWm/S55CF3OCkvs
-         RIzx03EpXXuTutIIuOsEvndGkpQwdMpwPPzZ1uVYQ+ZTfKiqtq80YSgy/l7GsurwZd/A
-         RaD9+Yd/rCAZaYRghLOWakcm8P7f2iYeibVKrIDeIQ7yx4G9T4w/eQ6pYaJU+J26FeH2
-         NSM38Q945dqvmnc4Miz1Jh728wV4bXBjo4QQ5E3YN67VO5aXjBYmTmKzrCT0cmQvyPfk
-         NAGG2dxu9BOzwvMSIDRskr3voLcB635tcSPzMbTukJAsbLBvGJ60yN/CQtQZG3XDi8b7
-         O7nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679566129;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NGAuq1vj2Az8BeSIwxE6OVDA/Cv51CPyVJAXOIa5Vuw=;
-        b=ZENZBkaJZ/6urB/NbnWUQBUxer3cPsJ+XM2XLmZ0Sda1wL2OpK6ewf93T7vgeRPrY4
-         +2/3DoEwRk3MxssWx0ohYLO0XPXvH5/4aGGO/e0s8vz4dTEIk62GS6fsRiopvLoq+Uf0
-         cNtueL0zF/RLfAz8CKGlsg/rYj7ECRCaBby+gpHna6izCMzaFdbr1wy4+M+1BlP8xrvK
-         PzUUIAv22uYDFVxxaSVPTwqrqek3mHfeyKBrJoQWDIe1VK7y+ujrSrsXG1h5isX8IJaj
-         C5sIKoo8JxNShXtpceo7vNkOMh4R6D9dLIos+/3Dj8hr/PkutLkSgB+Kw0Q9ZK4bokcb
-         avhg==
-X-Gm-Message-State: AO0yUKXvdwMm1g8QCZQwm7eoAiXi7EYwrI8XxGmCz/iZrSksAb5bdXU9
-        X34i1eHfQmTqK6NiTcgCZD2a1VcyMW4=
-X-Google-Smtp-Source: AK7set/e+lCIB7EqMESTFCG6SmJknH91+J8loFEApNYlA1GuhCbTcoqYH/DrnRCYxVie/7foo0EACw==
-X-Received: by 2002:aa7:d84d:0:b0:4ef:9bf0:7177 with SMTP id f13-20020aa7d84d000000b004ef9bf07177mr9364747eds.9.1679566128974;
-        Thu, 23 Mar 2023 03:08:48 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id u3-20020a50d503000000b004fcd78d1215sm9041451edi.36.2023.03.23.03.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:08:48 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 11:08:46 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 01/11] firmware: tegra: add function to get BPMP data
-Message-ID: <ZBwlLmPlBgC5tYTD@orome>
-References: <20230320182441.11904-1-sumitg@nvidia.com>
- <20230320182441.11904-2-sumitg@nvidia.com>
+        Thu, 23 Mar 2023 06:11:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B7012CEA;
+        Thu, 23 Mar 2023 03:11:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F2F61FDB6;
+        Thu, 23 Mar 2023 10:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679566300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eIVf6X9+8w7hFkVIs+NEITGJgY3dPy4ZtkDYRI94iS4=;
+        b=pv0xanWEkShhW8d9mi9xUUKWZCzV5wq1QxwI5LK3zM7ugLCnEb7SJgXrfzjJqROaYC5sJ5
+        Hh3IyZK3OVFNWwkuYDnF/mxRh88kIlYIs8pWCxQIMwvSrsmN0MJjmdQ9C33HY+UxxYEn9T
+        Orjb3Mv3szzbF0HcmYf1LhgpbYPDtiw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679566300;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eIVf6X9+8w7hFkVIs+NEITGJgY3dPy4ZtkDYRI94iS4=;
+        b=sRexLaKzDUTT7eODp4EQ1BU8/ZK30x6HSerOZZzUI2XzbAWEE0gnj8gw7SMh+Gc+Auys0i
+        Th5K7lmGXZuxdpBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C993132C2;
+        Thu, 23 Mar 2023 10:11:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EawSFtwlHGTTYAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 23 Mar 2023 10:11:40 +0000
+Message-ID: <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
+Date:   Thu, 23 Mar 2023 11:11:40 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r6ApTD5EBx3VpHtc"
-Content-Disposition: inline
-In-Reply-To: <20230320182441.11904-2-sumitg@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220203182641.824731-1-shy828301@gmail.com>
+ <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
+ <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,48 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/23/23 11:08, David Hildenbrand wrote:
+> On 23.03.23 10:52, Vlastimil Babka wrote:
+>> On 2/3/22 19:26, Yang Shi wrote:
+>>> --- a/fs/proc/task_mmu.c
+>>> +++ b/fs/proc/task_mmu.c
+>>> @@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
+>>>   }
+>>>   
+>>>   static void smaps_account(struct mem_size_stats *mss, struct page *page,
+>>> -		bool compound, bool young, bool dirty, bool locked)
+>>> +		bool compound, bool young, bool dirty, bool locked,
+>>> +		bool migration)
+>>>   {
+>>>   	int i, nr = compound ? compound_nr(page) : 1;
+>>>   	unsigned long size = nr * PAGE_SIZE;
+>>> @@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+>>>   	 * page_count(page) == 1 guarantees the page is mapped exactly once.
+>>>   	 * If any subpage of the compound page mapped with PTE it would elevate
+>>>   	 * page_count().
+>>> +	 *
+>>> +	 * The page_mapcount() is called to get a snapshot of the mapcount.
+>>> +	 * Without holding the page lock this snapshot can be slightly wrong as
+>>> +	 * we cannot always read the mapcount atomically.  It is not safe to
+>>> +	 * call page_mapcount() even with PTL held if the page is not mapped,
+>>> +	 * especially for migration entries.  Treat regular migration entries
+>>> +	 * as mapcount == 1.
+>>>   	 */
+>>> -	if (page_count(page) == 1) {
+>>> +	if ((page_count(page) == 1) || migration) {
+>> 
+>> Since this is now apparently a CVE-2023-1582 for whatever RHeasons...
+>> 
+>> wonder if the patch actually works as intended when
+>> (page_count() || migration) is in this particular order and not the other one?
+> 
+> Only the page_mapcount() call to a page that should be problematic, not 
+> the page_count() call. There might be the rare chance of the page 
 
---r6ApTD5EBx3VpHtc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oh right, page_mapcount() vs page_count(), I need more coffee.
 
-On Mon, Mar 20, 2023 at 11:54:31PM +0530, Sumit Gupta wrote:
-> Add new function 'of_tegra_bpmp_get()' which can be
-> used by other drivers like MC to get BPMP data without
-> adding any property in respective drivers DT node.
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/firmware/tegra/bpmp.c | 38 +++++++++++++++++++++++++++++++++++
->  include/soc/tegra/bpmp.h      |  5 +++++
->  2 files changed, 43 insertions(+)
+> getting remove due to memory offlining... but we're still holding the 
+> page table lock with the migration entry, so we should be protected 
+> against that.
+> 
+> Regarding the CVE, IIUC the main reason for the CVE should be 
+> RHEL-specific -- which behaves differently than other code bases; for 
+> other code bases, it's just a way to trigger a BUG_ON as described here.
 
-Sorry for not noticing this earlier, but can we not resolve the BPMP
-using the existing tegra_bpmp_get()? That requires the presence of the
-nvidia,bpmp property, but since we're adding new functionality here
-that's not a problem.
-
-Thierry
-
---r6ApTD5EBx3VpHtc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQcJS4ACgkQ3SOs138+
-s6EvWA//eWb9KTOc3+VL6SIY2YLcp+/47Jg/5r8MVpHI0BwBmah2YohmvE3oUOsj
-A7zy1BJWxGrK8aw+8xXc7+osx29toqEpgI3gqEwMFvylowKPVDWL1x9+bNdYIIf6
-J8lRBpn/nG5dcL0GAx7qNIRrWZMWJbMTGUOY8TgaGLpodEaGQ5EMDuUmZBeWkPft
-asHwDuTP/fFK+dlvjCg5eabRwjfl85LoPzbq4yj0iUfY38BPZ69/ZKTHY1XIUtyS
-VfciS8Es5jDIc5gWFO67NuyPWIxygE8ceH01OJay1Oa9gE8mF+62w6yXfysiYMo9
-DV9UbxdaoKG7+Pp8+VM81Gcei+KReL5bLwiNZWhEMLdg2UOwRq6OX8SSVB8JVI/K
-INZlS+S/q6vvMhbLOy2KGQ6VgFzyDDrngpe9cXXjs6t1w/oyLouNt01MXL5//qw8
-Nl/eQCB0JLUY5JWJ4U2RbhWfFOfBDGQwCzRjv38PeAjsHNdmaLdD7amq/FZQ2cjI
-AP4tHe0q3YL2eaNJapKd7Juvz4A8guLmbxf3N/IE3Wr+4pn22OTdZm56C4z/aiEq
-zErjvkhiSJmvherwpqIDEuwGbFO7R10iR5E78icEE3il7Dxi40OYp3VmZ88wW+MT
-PnKWtpdtP14tGzvsmOpKDdZwlPJ9HFlFXKZbF9W1kLNyrb62/nY=
-=Y8ba
------END PGP SIGNATURE-----
-
---r6ApTD5EBx3VpHtc--
+That's good to know so at least my bogus mail was useful for that, thanks!
