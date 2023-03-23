@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0156C6C72E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16686C72FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 23:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjCWWTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 18:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S231438AbjCWWUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 18:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjCWWTU (ORCPT
+        with ESMTP id S231531AbjCWWUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 18:19:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA311E5EF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 15:19:19 -0700 (PDT)
-Received: from [192.168.2.179] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 677B86603101;
-        Thu, 23 Mar 2023 22:19:17 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679609958;
-        bh=13qVgcP+l402P7/bUsTCXjHnBiBLeTZcTgT6kSPNWb0=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Uf3/eNdZhGOsKSWW+wFFZJ6SCAGucTcsjedMz7X0kGqPhoroFdQpqSfN58NCXdNHM
-         XHuuJLFzA63hNuh/hylex9xAK/fp4qMWcqJPuFnE3c0pYA0546tyH987EBn50LW+6b
-         LP7MKjL7rJgPKL+wf3lBrrvoqB0QdKoKbbFoD7XJrL+SqdLt8ikeV7eXzoGyyFBw51
-         OUnvBc0xOovAoDYoSp8+OHZDHtatjo9Lgt9HdSNYbRB2vjzH/G/5P9LbmeCKHLH2VY
-         xqHRzJXXkRNTMa3lQ88ScL1Tk0ATT5lmktMYO6hR21pFMPFgtKw52ZDuonSmVQFhuK
-         6sVMtc+lR6Stw==
-Message-ID: <be12c081-61a9-f476-7afe-b1bb78c35dea@collabora.com>
-Date:   Fri, 24 Mar 2023 01:19:15 +0300
+        Thu, 23 Mar 2023 18:20:04 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF63320D3F;
+        Thu, 23 Mar 2023 15:20:02 -0700 (PDT)
+Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
+        by ms.lwn.net (Postfix) with ESMTPA id 670CE60A;
+        Thu, 23 Mar 2023 22:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 670CE60A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1679610002; bh=uJ3G9x9Oc+8gANJ7IStVIIXmDT9uCREH515n9V/IsQI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TFj34R/CSPOrMPhLbV673AOSIIXwpBK2m3pJWW7qh9ZjGUyUKvRF4BtECRPGm2+a1
+         q0v0AewLZfCa1qiPTA5N6DKG9aqtlfgAGKQJ6HMt8AfjymrYiyFS59SNzDaZsGQrDS
+         s/bIGI7tJinLprk0wJs+lAeuJZAvI5wadaVlmSbXYvQ8IAaNMNPYESd0TV7lYRwTNU
+         FVd2B/mV+WjpGHnk6xEoPlxCdHGW+oZ3cz8TORdVAkCbRiqphrfayy1waTunA2wviL
+         J22BYFJQhIzJ8EHHyfDUj24vs58HIrDWfodFNRQ3mTJ//cqhdTBqhQchBEjR3SaHZr
+         x+HcR5ammNF7A==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 0/6] Documentation: arch reorg (continued)
+Date:   Thu, 23 Mar 2023 16:19:42 -0600
+Message-Id: <20230323221948.352154-1-corbet@lwn.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/2] drm/virtio: Support sync objects
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20230323190340.950875-1-dmitry.osipenko@collabora.com>
- <20230323190340.950875-3-dmitry.osipenko@collabora.com>
- <CAF6AEGs28wzuXc3w+qYvcUH+dT271w=dtxmzKfR6zgHqXqjMzQ@mail.gmail.com>
- <889ce0e7-f61a-ed0a-35d5-1a9290521d49@collabora.com>
-In-Reply-To: <889ce0e7-f61a-ed0a-35d5-1a9290521d49@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +47,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 00:51, Dmitry Osipenko wrote:
-> On 3/24/23 00:18, Rob Clark wrote:
-> ...
->>> +static int
->>> +virtio_gpu_parse_deps(struct virtio_gpu_submit *submit)
->>> +{
->>> +       struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
->>> +       struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
->>> +       size_t syncobj_stride = exbuf->syncobj_stride;
->>> +       struct drm_syncobj **syncobjs;
->>> +       int ret = 0, i;
->>> +
->>> +       if (!submit->num_in_syncobjs)
->>> +               return 0;
->>> +
->>> +       syncobjs = kcalloc(submit->num_in_syncobjs, sizeof(*syncobjs),
->>> +                          GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
->> I *think*, assuming I'm reading where this is called correctly (kinda
->> wish git would show more lines of context by default) that these don't
->> need to be NOWARN|NORETRY (same for post_deps).  I guess you inherited
->> this from drm/msm, where I appear to have forgotten to update the
->> syncobj path in commit f0de40a131d9 ("drm/msm: Reorder lock vs submit
->> alloc").  I don't see anything obvious that would require NORETRY, but
->> lockdep should be able to tell you otherwise if needed.
-> 
-> The NORETRY should prevent waking up OOM killer, it shouldn't help with
-> lockdep. Nothing prevents userspace from giving a big number of
-> num_in_syncobjs. But perhaps indeed not very practical to care about
-> this case, given that other similar memalloc paces of execbuffer_ioctl()
-> aren't using NORETRY. Alright, let's drop it in v4.
-> 
+This series builds on top of the documentation reorganization posted at
 
-Although no, there is only a kvmalloc_array() in the code and vmalloc
-uses NOWARN and NORETRY flags implicitly. May be better switch to use
-kvmalloc everywhere, for consistency. Technically, vmalloc shouldn't
-ever be needed for a submit code path and kmalloc should be enough. On
-the other hand, vmalloc acts like kmalloc until there is no enough
-contig memory.
+    https://lore.kernel.org/lkml/20230315211523.108836-1-corbet@lwn.net/
+
+it adds several more architectures (the relatively inactive ones) to the
+new arch/ directory.  This series goes on top of the previous one.
+
+The cover letter from that series provides the motivation for this work:
+
+    The top-level Documentation/ directory, despite the efforts of the last
+    few years, is still a mess; there is too much stuff there, making it
+    harder to find anything.  We do not organize our source directories
+    that way, and for good reasons.
+
+Jonathan Corbet (6):
+  docs: zh_CN: create the architecture-specific top-level directory
+  docs: move xtensa documentation under Documentation/arch/
+  docs: move sparc documentation under Documentation/arch/
+  docs: move superh documentation under Documentation/arch/
+  docs: move openrisc documentation under Documentation/arch/
+  docs: move nios2 documentation under Documentation/arch/
+
+ Documentation/arch/index.rst                           | 10 +++++-----
+ Documentation/{ => arch}/nios2/features.rst            |  0
+ Documentation/{ => arch}/nios2/index.rst               |  0
+ Documentation/{ => arch}/nios2/nios2.rst               |  0
+ Documentation/{ => arch}/openrisc/features.rst         |  0
+ Documentation/{ => arch}/openrisc/index.rst            |  0
+ Documentation/{ => arch}/openrisc/openrisc_port.rst    |  0
+ Documentation/{ => arch}/openrisc/todo.rst             |  0
+ Documentation/{ => arch}/sh/booting.rst                |  0
+ Documentation/{ => arch}/sh/features.rst               |  0
+ Documentation/{ => arch}/sh/index.rst                  |  0
+ Documentation/{ => arch}/sh/new-machine.rst            |  0
+ Documentation/{ => arch}/sh/register-banks.rst         |  0
+ Documentation/{ => arch}/sparc/adi.rst                 |  0
+ Documentation/{ => arch}/sparc/console.rst             |  0
+ Documentation/{ => arch}/sparc/features.rst            |  0
+ Documentation/{ => arch}/sparc/index.rst               |  0
+ Documentation/{ => arch}/sparc/oradax/dax-hv-api.txt   |  0
+ Documentation/{ => arch}/sparc/oradax/oracle-dax.rst   |  0
+ Documentation/{ => arch}/xtensa/atomctl.rst            |  0
+ Documentation/{ => arch}/xtensa/booting.rst            |  0
+ Documentation/{ => arch}/xtensa/features.rst           |  0
+ Documentation/{ => arch}/xtensa/index.rst              |  0
+ Documentation/{ => arch}/xtensa/mmu.rst                |  0
+ .../translations/zh_CN/{arch.rst => arch/index.rst}    | 10 +++++-----
+ .../translations/zh_CN/{ => arch}/openrisc/index.rst   |  4 ++--
+ .../zh_CN/{ => arch}/openrisc/openrisc_port.rst        |  4 ++--
+ .../translations/zh_CN/{ => arch}/openrisc/todo.rst    |  4 ++--
+ Documentation/translations/zh_CN/index.rst             |  2 +-
+ MAINTAINERS                                            |  4 ++--
+ arch/sh/Kconfig.cpu                                    |  2 +-
+ arch/xtensa/include/asm/initialize_mmu.h               |  2 +-
+ drivers/sbus/char/oradax.c                             |  2 +-
+ 33 files changed, 22 insertions(+), 22 deletions(-)
+ rename Documentation/{ => arch}/nios2/features.rst (100%)
+ rename Documentation/{ => arch}/nios2/index.rst (100%)
+ rename Documentation/{ => arch}/nios2/nios2.rst (100%)
+ rename Documentation/{ => arch}/openrisc/features.rst (100%)
+ rename Documentation/{ => arch}/openrisc/index.rst (100%)
+ rename Documentation/{ => arch}/openrisc/openrisc_port.rst (100%)
+ rename Documentation/{ => arch}/openrisc/todo.rst (100%)
+ rename Documentation/{ => arch}/sh/booting.rst (100%)
+ rename Documentation/{ => arch}/sh/features.rst (100%)
+ rename Documentation/{ => arch}/sh/index.rst (100%)
+ rename Documentation/{ => arch}/sh/new-machine.rst (100%)
+ rename Documentation/{ => arch}/sh/register-banks.rst (100%)
+ rename Documentation/{ => arch}/sparc/adi.rst (100%)
+ rename Documentation/{ => arch}/sparc/console.rst (100%)
+ rename Documentation/{ => arch}/sparc/features.rst (100%)
+ rename Documentation/{ => arch}/sparc/index.rst (100%)
+ rename Documentation/{ => arch}/sparc/oradax/dax-hv-api.txt (100%)
+ rename Documentation/{ => arch}/sparc/oradax/oracle-dax.rst (100%)
+ rename Documentation/{ => arch}/xtensa/atomctl.rst (100%)
+ rename Documentation/{ => arch}/xtensa/booting.rst (100%)
+ rename Documentation/{ => arch}/xtensa/features.rst (100%)
+ rename Documentation/{ => arch}/xtensa/index.rst (100%)
+ rename Documentation/{ => arch}/xtensa/mmu.rst (100%)
+ rename Documentation/translations/zh_CN/{arch.rst => arch/index.rst} (77%)
+ rename Documentation/translations/zh_CN/{ => arch}/openrisc/index.rst (79%)
+ rename Documentation/translations/zh_CN/{ => arch}/openrisc/openrisc_port.rst (97%)
+ rename Documentation/translations/zh_CN/{ => arch}/openrisc/todo.rst (88%)
 
 -- 
-Best regards,
-Dmitry
+2.39.2
 
