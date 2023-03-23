@@ -2,248 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6FD6C6E29
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30946C6E25
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjCWQwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S232411AbjCWQwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjCWQwj (ORCPT
+        with ESMTP id S231926AbjCWQwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:52:39 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD49D9EFE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:52:35 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id eh3so89596273edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679590354;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VOHurpH2QBVwThGFlZ8crYEQpG4K5Nj3qYdrgtUjem4=;
-        b=kMaWqgzR2vvNtaGPfonHpApcQDQuX605YFrobGccymTC1kzhDvZj3uzUwY/OGu1ojC
-         JSsawrHWC2d9REN3PawI0wk2z84JKtSMJGNAcW3qeVKuZ/FcofM5K0fzLaNcGJMRKo//
-         bYSp9T2JFuLa93mdHlpQEHWZgonpp5svFktD/LhmLFo8bG7LR64XMrKzIJG5Xjnzppx2
-         EoThWl3HouEyGSMwNEv79uwgbweYttltY124sshwnzdRlWfX0zQ9veQCVY4S1ap4ew8P
-         jVbECrk69bG41wCMNi+NeC0pFUfs7PpUdqglwIj85HadF5SaiBJvLfxWVBRe05eYplnK
-         dqjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679590354;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VOHurpH2QBVwThGFlZ8crYEQpG4K5Nj3qYdrgtUjem4=;
-        b=xuyNxuZrauxJ0amJcbChFH49VL2ZFX7Jsvbbf7mxZrr03OqSgrYJu2tvk3MmLzObp6
-         Zt92ytEdXd2IOIdGCsrw50LbM3GW6VSTxxVo6VhaOhJ2Qj76ESMZcNbdFIjkBt9RwbBp
-         b5mmtFb7Qo+iVtJ6Gq+2WJhDC2Ld/lXYxDWL3eVo0dOeRw6mxZBwY6ISUfJnIHrCncV4
-         4gT81Zp/C6IjYiikzZy1jg0pZlGuXZ9m5kb6g4Z9epdoU7V+kpQIPrlKhdD4wWg5/5GJ
-         YwfdRMu7VKh0ig+223fxaXhalJ9yBu2EW3HoBh22Q3YW5qzFjCocyDNJc4VdB1LGns2H
-         oeUg==
-X-Gm-Message-State: AO0yUKWe447jaNzPwTsO4M9287Zwt9VU5jhQBS3vbiFqcwmg2HDkwzB+
-        oIBFlVRt3s5jSdXHVNHXqtS9OwjqrX4yR5dkLyTEvQ==
-X-Google-Smtp-Source: AK7set+U3wM4AVKZXmpx06Cmy/94BK6HfVYrrB+ArtsuCtgA+szuZwv9dwe3eDhDdUiOyZgzCIEBm2GbYXOT5dk+zAM=
-X-Received: by 2002:a17:906:344d:b0:933:7658:8b44 with SMTP id
- d13-20020a170906344d00b0093376588b44mr5407827ejb.15.1679590354122; Thu, 23
- Mar 2023 09:52:34 -0700 (PDT)
+        Thu, 23 Mar 2023 12:52:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D47DA;
+        Thu, 23 Mar 2023 09:52:31 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 17:52:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679590349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=FB+gp/52L/e/3HLibUapo04FK7VuLMzRq9iLfC2ifGw=;
+        b=1Wnv7ClRE/cylYVg2H+QBF2KdRA91kAMmZSmN9KxwLPkGAODiY8YWUTxPLmeZ2Uu04BtQu
+        sAEpeP6L2V1eKAvVmfWFgwJxmBuSjEiFG+GOSow0QHkY4l1FsR10JKsrnCi2357Ep32yiY
+        MhFM0eLnxb/JHZtnMR8P3Og5/r8uwh2tyR8uoBEbDJK8WtGuJDiU7w7rHJ4DlDgZkvLXH7
+        kcExAfNyJXiKFrKaJYIH24HHyziAt2EdvCqej6yx97tNPZvA4XcWVX9XGT/1YL1TJKCPwH
+        aalsiXam27ZkmH5Lioga1EKoXPyDW1N2SbZ+LpnUHxTWJe2r/2mmb+Os0ntxKw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679590349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=FB+gp/52L/e/3HLibUapo04FK7VuLMzRq9iLfC2ifGw=;
+        b=tPOK4XlnqERujDtT33mpBQMGUrmlaCIKAXG3Diw+GkOOj2YtDCc4QfEJqCpPQ+e401gjGR
+        q+QPVmHCsyG3qSAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v6.3-rc3-rt5
+Message-ID: <20230323165228.X-6qUJBI@linutronix.de>
 MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <CALvZod7e7dMmkhKtXPAxmXjXQoTyeBf3Bht8HJC8AtWW93As3g@mail.gmail.com>
- <CAJD7tkbziGh+6hnMysHkoNr_HGBKU+s1rSGj=gZLki0ALT-jLg@mail.gmail.com>
- <CALvZod5GT=bZsLXsG500pNkEJpMB1o2KJau4=r0eHB-c8US53A@mail.gmail.com>
- <CAJD7tkY6Wf2OWja+f-JeFM5DdMCyLzbXxZ8KF0MjcYOKri-vtA@mail.gmail.com>
- <CALvZod5mJBAQ5adym7UNEruL-tOOOi+Y_ZiKsfOYqXPmGVPUEA@mail.gmail.com>
- <CAJD7tkYWo_aB7a4SHXNQDHwcaTELonOk_Vd8q0=x8vwGy2VkYg@mail.gmail.com>
- <CALvZod7f9Rejb_WrZ+Ajegz-NsQ7iPQegRDMdk5Ya0a0w=40kg@mail.gmail.com>
- <CALvZod7-6F84POkNetA2XJB-24wms=5q_s495NEthO8b63rL4A@mail.gmail.com>
- <CAJD7tkbGCgk9VkGdec0=AdHErds4XQs1LzJMhqVryXdjY5PVAg@mail.gmail.com>
- <CALvZod7saq910u4JxnuY4C7EwiK5vgNF=-Bv+236RprUOQdkjw@mail.gmail.com>
- <CAJD7tkb8oHoK5RW96tEXjY9iyJpMXfGAvnFw1rG-5Sr+Mpubdg@mail.gmail.com> <CALvZod5USCtNtnPuYRbRv_psBCNytQWWQ592TFsJLfrLpyLJmw@mail.gmail.com>
-In-Reply-To: <CALvZod5USCtNtnPuYRbRv_psBCNytQWWQ592TFsJLfrLpyLJmw@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 23 Mar 2023 09:51:57 -0700
-Message-ID: <CAJD7tkad5NbqjXZ1qLaNx1g-FYsrv-BVLcNinycFStG_Bu0_zw@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 9:45=E2=80=AFAM Shakeel Butt <shakeelb@google.com> =
-wrote:
->
-> On Thu, Mar 23, 2023 at 9:37=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
-m> wrote:
-> >
-> > On Thu, Mar 23, 2023 at 9:29=E2=80=AFAM Shakeel Butt <shakeelb@google.c=
-om> wrote:
-> > >
-> > > On Thu, Mar 23, 2023 at 9:18=E2=80=AFAM Yosry Ahmed <yosryahmed@googl=
-e.com> wrote:
-> > > >
-> > > > On Thu, Mar 23, 2023 at 9:10=E2=80=AFAM Shakeel Butt <shakeelb@goog=
-le.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 23, 2023 at 8:46=E2=80=AFAM Shakeel Butt <shakeelb@go=
-ogle.com> wrote:
-> > > > > >
-> > > > > > On Thu, Mar 23, 2023 at 8:43=E2=80=AFAM Yosry Ahmed <yosryahmed=
-@google.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Mar 23, 2023 at 8:40=E2=80=AFAM Shakeel Butt <shakeel=
-b@google.com> wrote:
-> > > > > > > >
-> > > > > > > > On Thu, Mar 23, 2023 at 6:36=E2=80=AFAM Yosry Ahmed <yosrya=
-hmed@google.com> wrote:
-> > > > > > > > >
-> > > > > > > > [...]
-> > > > > > > > > > >
-> > > > > > > > > > > > 2. Are we really calling rstat flush in irq context=
-?
-> > > > > > > > > > >
-> > > > > > > > > > > I think it is possible through the charge/uncharge pa=
-th:
-> > > > > > > > > > > memcg_check_events()->mem_cgroup_threshold()->mem_cgr=
-oup_usage(). I
-> > > > > > > > > > > added the protection against flushing in an interrupt=
- context for
-> > > > > > > > > > > future callers as well, as it may cause a deadlock if=
- we don't disable
-> > > > > > > > > > > interrupts when acquiring cgroup_rstat_lock.
-> > > > > > > > > > >
-> > > > > > > > > > > > 3. The mem_cgroup_flush_stats() call in mem_cgroup_=
-usage() is only
-> > > > > > > > > > > > done for root memcg. Why is mem_cgroup_threshold() =
-interested in root
-> > > > > > > > > > > > memcg usage? Why not ignore root memcg in mem_cgrou=
-p_threshold() ?
-> > > > > > > > > > >
-> > > > > > > > > > > I am not sure, but the code looks like event notifica=
-tions may be set
-> > > > > > > > > > > up on root memcg, which is why we need to check thres=
-holds.
-> > > > > > > > > >
-> > > > > > > > > > This is something we should deprecate as root memcg's u=
-sage is ill defined.
-> > > > > > > > >
-> > > > > > > > > Right, but I think this would be orthogonal to this patch=
- series.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > I don't think we can make cgroup_rstat_lock a non-irq-disab=
-ling lock
-> > > > > > > > without either breaking a link between mem_cgroup_threshold=
- and
-> > > > > > > > cgroup_rstat_lock or make mem_cgroup_threshold work without=
- disabling
-> > > > > > > > irqs.
-> > > > > > > >
-> > > > > > > > So, this patch can not be applied before either of those tw=
-o tasks are
-> > > > > > > > done (and we may find more such scenarios).
-> > > > > > >
-> > > > > > >
-> > > > > > > Could you elaborate why?
-> > > > > > >
-> > > > > > > My understanding is that with an in_task() check to make sure=
- we only
-> > > > > > > acquire cgroup_rstat_lock from non-irq context it should be f=
-ine to
-> > > > > > > acquire cgroup_rstat_lock without disabling interrupts.
-> > > > > >
-> > > > > > From mem_cgroup_threshold() code path, cgroup_rstat_lock will b=
-e taken
-> > > > > > with irq disabled while other code paths will take cgroup_rstat=
-_lock
-> > > > > > with irq enabled. This is a potential deadlock hazard unless
-> > > > > > cgroup_rstat_lock is always taken with irq disabled.
-> > > > >
-> > > > > Oh you are making sure it is not taken in the irq context through
-> > > > > should_skip_flush(). Hmm seems like a hack. Normally it is recomm=
-ended
-> > > > > to actually remove all such users instead of silently
-> > > > > ignoring/bypassing the functionality.
-> > > >
-> > > > It is a workaround, we simply accept to read stale stats in irq
-> > > > context instead of the expensive flush operation.
-> > > >
-> > > > >
-> > > > > So, how about removing mem_cgroup_flush_stats() from
-> > > > > mem_cgroup_usage(). It will break the known chain which is taking
-> > > > > cgroup_rstat_lock with irq disabled and you can add
-> > > > > WARN_ON_ONCE(!in_task()).
-> > > >
-> > > > This changes the behavior in a more obvious way because:
-> > > > 1. The memcg_check_events()->mem_cgroup_threshold()->mem_cgroup_usa=
-ge()
-> > > > path is also exercised in a lot of paths outside irq context, this
-> > > > will change the behavior for any event thresholds on the root memcg=
-.
-> > > > With proposed skipped flushing in irq context we only change the
-> > > > behavior in a small subset of cases.
-> > > >
-> > > > I think we can skip flushing in irq context for now, and separately
-> > > > deprecate threshold events for the root memcg. When that is done we
-> > > > can come back and remove should_skip_flush() and add a VM_BUG_ON or
-> > > > WARN_ON_ONCE instead. WDYT?
-> > > >
-> > > > 2. mem_cgroup_usage() is also used when reading usage from userspac=
-e.
-> > > > This should be an easy workaround though.
-> > >
-> > > This is a cgroup v1 behavior and to me it is totally reasonable to ge=
-t
-> > > the 2 second stale root's usage. Even if you want to skip flushing in
-> > > irq, do that in the memcg code and keep VM_BUG_ON/WARN_ON_ONCE in the
-> > > rstat core code. This way we will know if other subsystems are doing
-> > > the same or not.
-> >
-> > We can do that. Basically in mem_cgroup_usage() have:
-> >
-> > /* Some useful comment */
-> > if (in_task())
-> >     mem_cgroup_flush_stats();
-> >
-> > and in cgroup_rstat_flush() have:
-> > WARN_ON_ONCE(!in_task());
-> >
-> > I am assuming VM_BUG_ON is not used outside mm code.
-> >
-> > The only thing that worries me is that if there is another unlikely
-> > path somewhere that flushes stats in irq context we may run into a
-> > deadlock. I am a little bit nervous about not skipping flushing if
-> > !in_task() in cgroup_rstat_flush().
->
-> I think it is a good thing. We will find such scenarios and fix those
-> instead of hiding them forever or keeping the door open for new such
-> scenarios.
+Dear RT folks!
 
-Sure, I can do that in the next version. I will include a patch that
-adds an in_task() check to mem_cgroup_usage() before this one. Since
-BUG_ON() is discouraged and VM_BUG_ON() is mm specific, I guess we are
-left with WARN_ON_ONCE() for the rstat core code, right?
+I'm pleased to announce the v6.3-rc3-rt5 patch set. 
 
-Thanks Shakeel. Any other thoughts I should address for the next version?
+Changes since v6.3-rc3-rt4:
+
+  - Small updates to the printk series.
+
+  - Mel Gorman reported that LTP's dio_truncate does not complete on
+    PREEMPT_RT because rw_semaphore and rwlock_t locks are always unfair
+    to writers. This has been changed by forcing the reader into to slow
+    path and so allowing the writer to obtain the lock.
+
+  - Crystal Wood reported that a filesystem (XFS) may deadlock while
+    flushing during schedule. This has been mitigated by flushing IO
+    before blocking on a lock.
+    As a side effect, there will be more flushed IO with RTMUTEX
+    debugging enabled because here the fast-path fails always (in order
+    to use the slowpath for testing).
+
+  - The TPM and zram patch was slightly altered while they have been
+    reposted.
+
+Known issues:
+	None.
+
+The delta patch against v6.3-rc3-rt4 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6.3-rc3-rt4-rt5.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.3-rc3-rt5
+
+The RT patch against v6.3-rc3 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6.3-rc3-rt5.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches-6.3-rc3-rt5.tar.xz
+
+Sebastian
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 5d778ea926f3f..513e0d1c349a6 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -53,7 +53,7 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
+ #ifdef CONFIG_PREEMPT_RT
+ /*
+  * Flushes previous write operations to chip so that a subsequent
+- * ioread*()s won't stall a cpu.
++ * ioread*()s won't stall a CPU.
+  */
+ static inline void tpm_tis_flush(void __iomem *iobase)
+ {
+diff --git a/include/linux/console.h b/include/linux/console.h
+index ae4bbec59eea8..1e9d5bc8fa76e 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -490,21 +490,21 @@ static inline bool console_is_registered(const struct console *con)
+ 	hlist_for_each_entry(con, &console_list, node)
+ 
+ #ifdef CONFIG_PRINTK
++extern enum cons_prio cons_atomic_enter(enum cons_prio prio);
++extern void cons_atomic_exit(enum cons_prio prio, enum cons_prio prev_prio);
+ extern bool console_can_proceed(struct cons_write_context *wctxt);
+ extern bool console_enter_unsafe(struct cons_write_context *wctxt);
+ extern bool console_exit_unsafe(struct cons_write_context *wctxt);
+ extern bool console_try_acquire(struct cons_write_context *wctxt);
+ extern bool console_release(struct cons_write_context *wctxt);
+-extern enum cons_prio cons_atomic_enter(enum cons_prio prio);
+-extern void cons_atomic_exit(enum cons_prio prio, enum cons_prio prev_prio);
+ #else
++static inline enum cons_prio cons_atomic_enter(enum cons_prio prio) { return CONS_PRIO_NONE; }
++static inline void cons_atomic_exit(enum cons_prio prio, enum cons_prio prev_prio) { }
+ static inline bool console_can_proceed(struct cons_write_context *wctxt) { return false; }
+ static inline bool console_enter_unsafe(struct cons_write_context *wctxt) { return false; }
+ static inline bool console_exit_unsafe(struct cons_write_context *wctxt) { return false; }
+ static inline bool console_try_acquire(struct cons_write_context *wctxt) { return false; }
+ static inline bool console_release(struct cons_write_context *wctxt) { return false; }
+-static inline enum cons_prio cons_atomic_enter(enum cons_prio prio) { return CONS_PRIO_NONE; }
+-static inline void cons_atomic_exit(enum cons_prio prio, enum cons_prio prev_prio) { }
+ #endif
+ 
+ extern int console_set_on_cmdline;
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 728f434de2bbf..c1bc2cb1522cb 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -23,6 +23,7 @@
+ #include <linux/sched/rt.h>
+ #include <linux/sched/wake_q.h>
+ #include <linux/ww_mutex.h>
++#include <linux/blkdev.h>
+ 
+ #include <trace/events/lock.h>
+ 
+@@ -1700,6 +1701,12 @@ static __always_inline int __rt_mutex_lock(struct rt_mutex_base *lock,
+ 	if (likely(rt_mutex_cmpxchg_acquire(lock, NULL, current)))
+ 		return 0;
+ 
++	/*
++	 * If we are going to sleep and we have plugged IO queued, make sure to
++	 * submit it to avoid deadlocks.
++	 */
++	blk_flush_plug(current->plug, true);
++
+ 	return rt_mutex_slowlock(lock, NULL, state);
+ }
+ #endif /* RT_MUTEX_BUILD_MUTEX */
+diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
+index c201aadb93017..96042dca2fd97 100644
+--- a/kernel/locking/rwbase_rt.c
++++ b/kernel/locking/rwbase_rt.c
+@@ -72,15 +72,6 @@ static int __sched __rwbase_read_lock(struct rwbase_rt *rwb,
+ 	int ret;
+ 
+ 	raw_spin_lock_irq(&rtm->wait_lock);
+-	/*
+-	 * Allow readers, as long as the writer has not completely
+-	 * acquired the semaphore for write.
+-	 */
+-	if (atomic_read(&rwb->readers) != WRITER_BIAS) {
+-		atomic_inc(&rwb->readers);
+-		raw_spin_unlock_irq(&rtm->wait_lock);
+-		return 0;
+-	}
+ 
+ 	/*
+ 	 * Call into the slow lock path with the rtmutex->wait_lock
+@@ -143,6 +134,14 @@ static __always_inline int rwbase_read_lock(struct rwbase_rt *rwb,
+ 	if (rwbase_read_trylock(rwb))
+ 		return 0;
+ 
++	if (state != TASK_RTLOCK_WAIT) {
++		/*
++		 * If we are going to sleep and we have plugged IO queued,
++		 * make sure to submit it to avoid deadlocks.
++		 */
++		blk_flush_plug(current->plug, true);
++	}
++
+ 	return __rwbase_read_lock(rwb, state);
+ }
+ 
+diff --git a/kernel/locking/ww_rt_mutex.c b/kernel/locking/ww_rt_mutex.c
+index d1473c624105c..472e3622abf09 100644
+--- a/kernel/locking/ww_rt_mutex.c
++++ b/kernel/locking/ww_rt_mutex.c
+@@ -67,6 +67,11 @@ __ww_rt_mutex_lock(struct ww_mutex *lock, struct ww_acquire_ctx *ww_ctx,
+ 			ww_mutex_set_context_fastpath(lock, ww_ctx);
+ 		return 0;
+ 	}
++	/*
++	 * If we are going to sleep and we have plugged IO queued, make sure to
++	 * submit it to avoid deadlocks.
++	 */
++	blk_flush_plug(current->plug, true);
+ 
+ 	ret = rt_mutex_slowlock(&rtm->rtmutex, ww_ctx, state);
+ 
+diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
+index fb363b495ce92..6631fd70542f9 100644
+--- a/kernel/printk/internal.h
++++ b/kernel/printk/internal.h
+@@ -58,6 +58,16 @@ __printf(1, 0) int vprintk_deferred(const char *fmt, va_list args);
+ 
+ bool printk_percpu_data_ready(void);
+ 
++/*
++ * The printk_safe_enter()/_exit() macros mark code blocks using locks that
++ * would lead to deadlock if an interrupting context were to call printk()
++ * while the interrupted context was within such code blocks.
++ *
++ * When a CPU is in such a code block, an interrupting context calling
++ * printk() will only log the new message to the lockless ringbuffer and
++ * then trigger console printing using irqwork.
++ */
++
+ #define printk_safe_enter_irqsave(flags)	\
+ 	do {					\
+ 		__printk_safe_enter(&flags);	\
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index f733204f33ee5..e2466366d4f84 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -318,10 +318,6 @@ static int __down_trylock_console_sem(unsigned long ip)
+ 	int lock_failed;
+ 	unsigned long flags;
+ 
+-	/* Semaphores are not NMI-safe. */
+-	if (in_nmi())
+-		return 1;
+-
+ 	/*
+ 	 * Here and in __up_console_sem() we need to be in safe mode,
+ 	 * because spindump/WARN/etc from under console ->lock will
+@@ -3150,6 +3146,10 @@ void console_unblank(void)
+ 	 * In that case, attempt a trylock as best-effort.
+ 	 */
+ 	if (oops_in_progress) {
++		/* Semaphores are not NMI-safe. */
++		if (in_nmi())
++			return;
++
+ 		if (down_trylock_console_sem() != 0)
+ 			return;
+ 	} else
+@@ -3210,8 +3210,12 @@ void console_flush_on_panic(enum con_flush_mode mode)
+ 	 * that messages are flushed out.  As this can be called from any
+ 	 * context and we don't want to get preempted while flushing,
+ 	 * ensure may_schedule is cleared.
++	 *
++	 * Since semaphores are not NMI-safe, the console lock must be
++	 * ignored if the panic is in NMI context.
+ 	 */
+-	console_trylock();
++	if (!in_nmi())
++		console_trylock();
+ 	console_may_schedule = 0;
+ 
+ 	if (mode == CONSOLE_REPLAY_ALL) {
+@@ -3226,7 +3230,8 @@ void console_flush_on_panic(enum con_flush_mode mode)
+ 		}
+ 		console_srcu_read_unlock(cookie);
+ 	}
+-	console_unlock();
++	if (!in_nmi())
++		console_unlock();
+ }
+ 
+ /*
+diff --git a/kernel/printk/printk_safe.c b/kernel/printk/printk_safe.c
+index 9cd33cddef9fc..5c1470bd60bcb 100644
+--- a/kernel/printk/printk_safe.c
++++ b/kernel/printk/printk_safe.c
+@@ -24,6 +24,7 @@ static DEFINE_PER_CPU(struct printk_context, printk_context) = {
+ /* Can be preempted by NMI. */
+ void __printk_safe_enter(unsigned long *flags)
+ {
++	WARN_ON_ONCE(in_nmi());
+ 	local_lock_irqsave(&printk_context.cpu, *flags);
+ 	this_cpu_inc(printk_context.recursion);
+ }
+@@ -31,6 +32,7 @@ void __printk_safe_enter(unsigned long *flags)
+ /* Can be preempted by NMI. */
+ void __printk_safe_exit(unsigned long *flags)
+ {
++	WARN_ON_ONCE(in_nmi());
+ 	this_cpu_dec(printk_context.recursion);
+ 	local_unlock_irqrestore(&printk_context.cpu, *flags);
+ }
+diff --git a/localversion-rt b/localversion-rt
+index ad3da1bcab7e8..0efe7ba1930e1 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt4
++-rt5
