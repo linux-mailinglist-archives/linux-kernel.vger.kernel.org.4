@@ -2,94 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA4A6C644C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7182C6C644F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 11:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCWKBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 06:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S229997AbjCWKBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 06:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCWKAq (ORCPT
+        with ESMTP id S230274AbjCWKBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 06:00:46 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A653EBDEA;
-        Thu, 23 Mar 2023 03:00:04 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N4wNPH023252;
-        Thu, 23 Mar 2023 04:59:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=9JgvNgkPqkgRi6AnnSC6Vys13XuiVMKrTr777lGgXL4=;
- b=A47k0i+Pq27Oyh7dFtM7wPuo7+YYnqNxHUG0yO06i3TXQUTS2FBpydZ2M4yyFan0PeFE
- 3mBsxYtpwXT/78pxKq4e2SVhedeGkzOA/DFQClo//XsgibcRtloW374CmsiDjfv9HquG
- nMpP2Y0rqnyeGPBUWJinJaZlZ6JDpT63IxnKUPje68RfUeh5XPVqqgZmZLy/ZOKmgo3U
- vf5sEogg3hc331Qa4OfaCv0MQPwGh475VAqb/TuDXtE5AZ9YAU39x/R5pxG0IAYkSUbk
- 82SByOYRypSs6Y8LGalFoAdfGz8EZq1s+XZJGbY/GGFeyFxlkly8B4frFKTjI4a4nJul bg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pf7tj4f2u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 04:59:51 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 23 Mar
- 2023 04:59:49 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Thu, 23 Mar 2023 04:59:49 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AD67611AD;
-        Thu, 23 Mar 2023 09:59:49 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 09:59:49 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [RESEND PATCH v2] ASoC: dt-bindings: wlf,wm8994: Convert to
- dtschema
-Message-ID: <20230323095949.GK68926@ediswmail.ad.cirrus.com>
-References: <20230322193541.827291-1-krzysztof.kozlowski@linaro.org>
+        Thu, 23 Mar 2023 06:01:23 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678112CF6;
+        Thu, 23 Mar 2023 03:01:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bi9so26915737lfb.12;
+        Thu, 23 Mar 2023 03:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679565677;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C2cd905ZoLiKel3mCZ0Fwtfw+cLv261/aTIvnI8JCEU=;
+        b=a1Dor71CR8r5pF15Szq6H8LfViMKitHFgFKoc86TbtGlaa+WD8YMRXRtsxo/6P3mN0
+         JkKzTiHEzQhyk0jGfvmJY0i0IpGcrH4qTgVQgQ8pwLR2LDeCuVDCpef/hh0dkj68wB8y
+         kVQLQpTut9gyf8ZQ4wWLUM1XlEh5admmvpgcXMEYrm6gm2xRtCorxLIUkv4/FdB7u1J1
+         DIN4HADbbKtTX4052tV2V4UZScnYVhaoIdq36Ftd6YCZcUt+Rhq5veuVCR4QZXHAkvS0
+         Us1dv6KNYyGyhx/ACSEGUicECBy9QGLk7mXJcpwEHTYDo4S/BN8TYpUhmzNjZ8Pd3bs6
+         pbIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679565677;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2cd905ZoLiKel3mCZ0Fwtfw+cLv261/aTIvnI8JCEU=;
+        b=6mrfjIjph0f/v+ocBZopiF/Ace9PiqR4xK44+uj3BasXOMtnrqqHTznPIHUvqJnDnw
+         ggk/TIBfyTXPasDsELLD5EetOPTVkwXCvPwll8DowY5QXJJ0d2SF8arAlzHfZDfi8Gba
+         /oy2GMSOTTICyZWxJU0i2c36jvPvoN3kqpMH0nazN50+FjCyuoMP8FdeRDTqvN6tcAHT
+         7DFFaxchvolqS5Dq87Qo5SQAvskPXveM0wZWoNgczCdRSWDQxNMsNmebqHGUbzUT6kXt
+         GB0ImDh8EZFkTfciyT0qLFlwkxiLEUl8wk8JSvX5xTDxL0nCksyy9qBDCmt8CcTRT2Fz
+         7Hpw==
+X-Gm-Message-State: AO0yUKWJMb4/F3bWpzTdfXVoK4xJyDCiNFVdkNn45ZCjnNiv6TeeVKhI
+        NemxlXJQTjzRLMwQxSuNH7A=
+X-Google-Smtp-Source: AK7set8lP9RoZ40YO56sP/zWLegHq3ygSgjiUnuEVmsgugWLm/m57lN8YNiApRh6AI2bqSUL3lm1ow==
+X-Received: by 2002:ac2:5d45:0:b0:4dd:b479:1c9b with SMTP id w5-20020ac25d45000000b004ddb4791c9bmr2336138lfd.26.1679565676817;
+        Thu, 23 Mar 2023 03:01:16 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id v18-20020a056512097200b004db4c79d845sm2861272lft.184.2023.03.23.03.01.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 03:01:16 -0700 (PDT)
+Message-ID: <91c8dc84-8eae-15d9-3d55-976c2c806421@gmail.com>
+Date:   Thu, 23 Mar 2023 12:01:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230322193541.827291-1-krzysztof.kozlowski@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: 6qABHI4z29TTzFVbmsHgbjMOQLWECsOQ
-X-Proofpoint-GUID: 6qABHI4z29TTzFVbmsHgbjMOQLWECsOQ
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <12ea1d68-2a3c-0aa7-976c-7bd3eef35239@fi.rohmeurope.com>
+ <ZBwUp/fRIjQZtjF7@kroah.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+In-Reply-To: <ZBwUp/fRIjQZtjF7@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 08:35:41PM +0100, Krzysztof Kozlowski wrote:
-> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
-> schema.
-> 
-> Changes against original binding:
-> 1. Add missing LDO1VDD-supply and LDO2VDD-supply.
-> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
->    gpiolib already looks for both variants).
-> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
->    Arndale board with Exynos5250 these are being supplied by internal
->    LDOs.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> ---
+On 3/23/23 10:58, Greg Kroah-Hartman wrote:
+> On Thu, Mar 23, 2023 at 07:17:40AM +0000, Vaittinen, Matti wrote:
+>> On 3/22/23 20:57, Greg Kroah-Hartman wrote:
+>>> On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
+>>>> Hi Greg,
+>>>>
+>>>> Thanks for looking at this.
+>>>>
+>>>> On 3/22/23 14:07, Greg Kroah-Hartman wrote:
+>>>>> On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+>>>> The biggest thing for me is that I don't like the idea of creating own 'test
+>>>> device' in <add subsystem here> while we already have some in DRM (or
+>>>> others). Thus, I do see value in adding generic helpers for supporting
+>>>> running KUnit tests on devm_* APIs. Hence it'd be good to have _some_
+>>>> support for it.
+>>>
+>>> I agree, let's use a virtual device and a virtual bus (you can use the
+>>> auxbus code for this as that's all there for this type of thing)
+>>
+>> Hm. The auxiliary_devices require parent. What would be the best way to
+>> deal with that in KUnit tests?
+> 
+> If you use NULL as the parent, it goes into the root.
 
-Thanks,
-Charles
+As far as I read this is not the case with auxiliary devices. Judging 
+the docs they were intended to be representing some part of a (parent) 
+device. I see the auxiliary_device_init() has explicit check for parent 
+being populated:
+
+int auxiliary_device_init(struct auxiliary_device *auxdev)
+{
+         struct device *dev = &auxdev->dev;
+
+         if (!dev->parent) {
+                 pr_err("auxiliary_device has a NULL dev->parent\n");
+                 return -EINVAL;
+         }
+
+As I wrote in another mail, I thought of using a root_device for this 
+IIO test as was suggested by David. To tell the truth, implementing a 
+kunit bus device is starting to feel a bit overwhelming... I started 
+just adding a driver for a light sensor, ended up adding a helper for 
+IIO gain-time-scale conversions and I am slightly reluctant to going the 
+extra-extra mile of adding some UT infrastructure in the context of this 
+driver work...
+
+Well, let's see. Maybe I change my mind after a good night's sleep :)
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
