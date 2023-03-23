@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030DB6C6D64
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B19B6C6D71
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 17:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbjCWQZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 12:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S231722AbjCWQ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 12:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjCWQZk (ORCPT
+        with ESMTP id S231334AbjCWQ0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 12:25:40 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27215F9;
-        Thu, 23 Mar 2023 09:25:35 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 17F065C00D1;
-        Thu, 23 Mar 2023 12:25:35 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 12:25:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1679588735; x=1679675135; bh=qxKKz/kyF1TthF7ot89fFndWn2k6FT/VRNs
-        F2VMynU4=; b=T7ajMC4n8Egg4i6pv1PVXwLCLWuIZ6HT0xtDfSh/QE0OEeTs0RY
-        UNk9O0+vdmIIqjYYjjz17GDEbUCmj30e/mzNFouK0b0bAXl2aQXTwlCG/uoTurok
-        v2rZip8XGC1XTc0YOXrxUG2lLAAnocWYoxkufSpOmVH86UYN/aZYOibTAeX2hQhC
-        hi0e3bzbRSttv6EdHBtj+ykn8ZT9dHOhef/Ua5+DoovF1mW34C/PMklrgwPlsaF4
-        FoDSKfVuyFjYNcMxnJdEAJSSSf9ibKIAlL7K3Y+naqD1hpDm90S2gD3QcC56PLhm
-        LS8Yi84XTZG7M5x2ted7xJJe7rTWlAnwKYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679588735; x=1679675135; bh=qxKKz/kyF1TthF7ot89fFndWn2k6FT/VRNs
-        F2VMynU4=; b=Q0vOIsm6Df12ys0R6M6gIUMGuo9llFfTDtiL420+2PWhivw70dO
-        lnIXuJUTX082E6J0xXcpTVYXhlIE/xzhDW1P06xuwuXgjTeMe4nda0BKX68/v5ny
-        Aeou8FHVSEdwFcXW0MmFG8cLq8LiOA+U3iNp4khqUW0zSKkWIDWadBcBucq15SK/
-        E+O3JosIAgkRI4/yGXlzF603p/gBZedrM89TjKVR3Ju3KHZl79vrMMbmBailS9HD
-        I2elw1adwG/FM1rukX9MeW07V4VBVTPDgIN/A1GjuB4VgYFwotF1jDWOwsoQ/UqZ
-        5nrvy92l0JE1qoyrXEMJylUwu5qbt9IaGIQ==
-X-ME-Sender: <xms:fn0cZHFELVcAdJhevtB87iUU843AouiT3MHfgUI7M-l4hxze_JzecA>
-    <xme:fn0cZEXG5ScfqPb-U-I72xb0rYKBnyxgpFBkaTCSx-4lYHRUPabnzUIVpOhAvlzwh
-    02jDkVDI3tgRfcAsdg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:fn0cZJLB8wHVti2l62q_wAe6huPY4UYOp7u2VLJ6YioDLhGgyZnB3Q>
-    <xmx:fn0cZFEDLigrUXtZfNyUvHFWVKScIYF_Lu_0hM4dLx1NixpagcBr5A>
-    <xmx:fn0cZNXzgfv2LrmRvqCkV597p4O-6GQvgFQuH8rFnXw6IxJkFEuy6Q>
-    <xmx:f30cZOXObjR-9qIqS96ihHUu3-72ky2n6ouTNk8l4b3ZRvNg1s_zjQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 96890B60086; Thu, 23 Mar 2023 12:25:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <c3ad3f6a-39a0-4d33-af11-10593e884917@app.fastmail.com>
-In-Reply-To: <CAMuHMdWkV0Ls+hXUB2+2h-2+6s-h5Ufep1BfC--VT27E4Hk=Ng@mail.gmail.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-16-schnelle@linux.ibm.com>
- <20230316161442.GV9667@google.com>
- <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
- <97b5a5c3-d20f-4201-8deb-1d34e7edee6c@app.fastmail.com>
- <CAMuHMdWkV0Ls+hXUB2+2h-2+6s-h5Ufep1BfC--VT27E4Hk=Ng@mail.gmail.com>
-Date:   Thu, 23 Mar 2023 17:25:14 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 23 Mar 2023 12:26:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC20113F4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679588734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rf1EargHhjBzXfO07IgMLtInuWGSM9rCL6OoPVE8vbA=;
+        b=Mz2Pv64YQ0sSR6Myj4znjH8HJN/gehooaIdPGsuPAI3fquzqLel7vIm6K+ODrakOzK6+ZM
+        dFfu0ItLtTvUwwef4FDS8a5RbAMioKObk9XoZ2lXl4z1MFmZzLdb5rCADDZL6lyntc6Il/
+        B9Y1mh8NuqTknuxr0isL/nfK+wR3FjA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-467-ZHtn27cXPfamo2FbNVDDoA-1; Thu, 23 Mar 2023 12:25:29 -0400
+X-MC-Unique: ZHtn27cXPfamo2FbNVDDoA-1
+Received: by mail-wm1-f69.google.com with SMTP id i3-20020a05600c354300b003edfa408811so1268928wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 09:25:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679588728;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rf1EargHhjBzXfO07IgMLtInuWGSM9rCL6OoPVE8vbA=;
+        b=g6mqb+HaegMbFxY/PGGvFjiW8nnP6iDUSVXDIU2O4nLHdR4GT98AxjTq51qG04YAIQ
+         ziONALcQgztfUmZx5JcSPy4odjQ4KBJZ1YkZK0q7Z6svv7082mEcW30pKuI72XlwJ9Ci
+         ZD+qBPRlMWlNB+y7QZYhQ4AhIIksLWAfzpqmT8JjFohNPHRikRkUl5mlSkOepCC9v1L2
+         NSMITRKCQdg7Nqf8lHSBMPH8JLTB55wBzq9m3A/yZswkbzT1N4p8EEI6LOt0w3GfD0pg
+         8RtRaI+MOnlyYaqY5rAhevewOrcMIwM+u/LAPg+AJsjil6ihPpnXdmm4nHQM21ygcocI
+         wkEg==
+X-Gm-Message-State: AAQBX9fbtzut7lOX6J4B9q5ZWS6cWpy1FpbAQ8ptTKo7MMFr7JsMs1fV
+        /Jg7ZrHf/8uyGMeNr+8wYBzvOqpq4XUV9yfNrhnaUpZikr6bLu4RREemXksY8sdERPLeRCtcVzl
+        9mVORKwUBUSbol+TP0VLW45Aa
+X-Received: by 2002:a5d:4568:0:b0:2c7:e5f:e0e0 with SMTP id a8-20020a5d4568000000b002c70e5fe0e0mr2967369wrc.65.1679588728477;
+        Thu, 23 Mar 2023 09:25:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z2pOP19Ooh7wiG9F4iyBZnUcLGOtnlVl1iiXTySJV6QCXnwRVxEdgZiRrRO9IHVKHT4hkvPQ==
+X-Received: by 2002:a5d:4568:0:b0:2c7:e5f:e0e0 with SMTP id a8-20020a5d4568000000b002c70e5fe0e0mr2967333wrc.65.1679588728212;
+        Thu, 23 Mar 2023 09:25:28 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id d10-20020adfe88a000000b002c70e60abd4sm16586783wrm.2.2023.03.23.09.25.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:25:27 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
+In-Reply-To: <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
+References: <20230307143558.294354-1-vschneid@redhat.com>
+ <20230307143558.294354-8-vschneid@redhat.com>
+ <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
+ <xhsmhmt45c703.mognet@vschneid.remote.csb>
+ <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
+Date:   Thu, 23 Mar 2023 16:25:25 +0000
+Message-ID: <xhsmhbkkjcu4q.mognet@vschneid.remote.csb>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023, at 17:11, Geert Uytterhoeven wrote:
-> On Thu, Mar 23, 2023 at 2:32=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->> On Thu, Mar 23, 2023, at 13:42, Niklas Schnelle wrote:
->
-> Through an immutable branch, else all dependencies have to wait
-> for v6.5?
+On 22/03/23 15:04, Peter Zijlstra wrote:
+> @@ -798,14 +794,20 @@ static void smp_call_function_many_cond(
+>  		}
+>  
+>  		/*
+> +		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+> +		 * will be traced with func==generic_smp_call_function_single_ipi().
+> +		 */
+> +		trace_ipi_send_cpumask(cfd->cpumask_ipi, _RET_IP_, func);
 
-Sure, will do. I suspect that there will still be something
-left behind that doesn't make it into 6.4, so the final bit
-(dropping broken inb/outb implementations) will have to be
-6.5 material anyway, but at least we can aim on getting most
-of it into 6.4.
+I just got a trace pointing out this can emit an event even though no IPI
+is sent if e.g. the cond_func predicate filters all CPUs in the argument
+mask:
 
-     Arnd
+  ipi_send_cpumask:     cpumask= callsite=on_each_cpu_cond_mask+0x3c callback=flush_tlb_func+0x0
+
+Maybe something like so on top?
+
+---
+diff --git a/kernel/smp.c b/kernel/smp.c
+index ba5478814e677..1dc452017d000 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -791,6 +791,8 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 			}
+ 		}
+ 
++		if (!nr_cpus)
++			goto local;
+ 		/*
+ 		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+ 		 * will be traced with func==generic_smp_call_function_single_ipi().
+@@ -804,10 +806,10 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 		 */
+ 		if (nr_cpus == 1)
+ 			send_call_function_single_ipi(last_cpu);
+-		else if (likely(nr_cpus > 1))
++		else
+ 			send_call_function_ipi_mask(cfd->cpumask_ipi);
+ 	}
+-
++local:
+ 	if (run_local && (!cond_func || cond_func(this_cpu, info))) {
+ 		unsigned long flags;
+ 
+
