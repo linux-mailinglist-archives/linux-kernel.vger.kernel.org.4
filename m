@@ -2,194 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635D46C67B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAF06C67AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCWMJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjCWMJB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230072AbjCWMJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 23 Mar 2023 08:09:01 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC59269E;
-        Thu, 23 Mar 2023 05:08:59 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id C95AD421F5;
-        Thu, 23 Mar 2023 12:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1679573336;
-        bh=sYPq8DVDqYDKIlu8xuvRRYDZkcKq3MJzONMmKDC0UM4=;
-        h=From:Date:Subject:To:Cc;
-        b=b5r9D30nX6KXu9h9G5IiPVFFfIWwAYiP84ipgYGlmyVxNPiAoEMl+Mp2qj0vyS1NK
-         bP67cZcyyUX1L+WbQAmENjtiqzVzjt1rhn0U+Lxvvz2Fpor1Sm8Cih3cUZhzNUPixh
-         u0up56pJmVYi7pNoledGlPqPuz1duVnFMhMWC4XvfGnqXklxAbtogJ/XE4PWHLThMm
-         rWzjIvJ6gSXq+Sg2OxMHMCF013HVxMWjYiUuvTFqK9FlIh7pVVBF4TKrUmIURnmgvm
-         Pyc7VsWZDicDZFE2te2a8iegBSqeuvXwW6Vhgoqwn8h5wT1x04r76nsVq0fkfPgEsL
-         GymOeIrun/HUw==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Thu, 23 Mar 2023 21:08:47 +0900
-Subject: [PATCH v2] rust: ioctl: Add ioctl number manipulation functions
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229563AbjCWMI7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 23 Mar 2023 08:08:59 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5375A46B6;
+        Thu, 23 Mar 2023 05:08:58 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id s8so27120909lfr.8;
+        Thu, 23 Mar 2023 05:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679573336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xzgI+B9ASfOGNYBH0IR4jXCQ7CKwmiqjpGUIbZHwnnc=;
+        b=LFKNwiWKSW7Ndn5zWY0V3TIVkQO7LGJoUbnGfHAzF6WG24W5M+VIvRUapx+q+WFgqu
+         SiyZaq1BBzTjpH26yZ1+BD5RLXxCxh8nNjMJnF+CGTYpFdCpXcRkYajpbGkw1zfSivqo
+         5IbuF/edaVAQ5qWwJFUnXpaJhfGHvvtuN3Idj9qkPciVMZV3kF20JpRrP/irEPtV356v
+         YTIncCqa+BiKhDPKRbdtpvbYACV7gZI35YJAvAl+ch2HBhVuntntMdOtTX6Nz6EXUFm7
+         +TzPJp7JG42UcAAjUTqqvbbhAuK3aC9XyJgPsXIeicQ66tAIUXpg+pjastRoG67dkUgj
+         f+vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679573336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xzgI+B9ASfOGNYBH0IR4jXCQ7CKwmiqjpGUIbZHwnnc=;
+        b=Z8eHpdCJ+GeDWSdryqygS/svudkg4BpbiVZDq82TjfBNaAUZwqVShysGCYKEKDL6ws
+         qcKxLqxfwSIPbPeT74CGfpXRZM8yQL4t0T3VGHD5iO2LX1drPqxW7Spon+3Wv7rAF8NM
+         y0/+t1sBi+P4waR83p24niqw+hdq2PXToWadsMAX9wr4JpiOZh+dbkKjR/BZlMkBTNRv
+         Cl1wd4xv4GlUzRgrE3m8FkMZZLA3XlWtHm3ijlivtiFX8HysNLN4+oxkeb7AafuyZtN5
+         iFq7CvQWKUhcy0yJ9YpMfBtUAt/rg4l83Ne8HtJ03DNN2m9LpkUB35JcHJjO96ePcv3J
+         CNlA==
+X-Gm-Message-State: AO0yUKXQ0v2ZgYR2TEQ6Q75u9e8LL5j2/9iHI5tPXTk6+VZMRup4rLqw
+        20m14uYeK82j5PtqkWw4kWQ=
+X-Google-Smtp-Source: AK7set+84k7eBxJAPoHl2JzEu70ox/d+Ysoy3SdQ5Tz3UrPm6eVSvg55ypTOmhgj5bq6t2O+AVvFgA==
+X-Received: by 2002:a05:6512:249:b0:4b4:e14a:ec7d with SMTP id b9-20020a056512024900b004b4e14aec7dmr3143131lfo.17.1679573336526;
+        Thu, 23 Mar 2023 05:08:56 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id p19-20020a19f013000000b004eaf9ef5e7asm422577lfc.226.2023.03.23.05.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 05:08:56 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 15:08:53 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 14/16] dt-bindings: net: dwmac: Use flag
+ definition instead of booleans
+Message-ID: <20230323120853.wse2pvknvznawxpk@mobilestation>
+References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
+ <20230313225103.30512-15-Sergey.Semin@baikalelectronics.ru>
+ <faf70823-f87b-ba50-ac72-3552de1cc7e3@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
-X-B4-Tracking: v=1; b=H4sIAE5BHGQC/22NQQ6CMBBFr2K6tkqnYNSV9zAsBhjoJKSQTiEaw
- t1tWbt8P//lbUooMIl6njYVaGXhySeA80m1Dv1AmrvECgqwBUCpwyJR89TGUWMFRW+psYh3lYQ
- GhXQT0LcuK8O8XI933iEf5kA9f47au07sWOIUvkd8NXn921mNNroyJXT2VuHDli8UdDyyx4unq
- Op933+pCs51yQAAAA==
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arch@vger.kernel.org,
-        Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679573333; l=4141;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=sYPq8DVDqYDKIlu8xuvRRYDZkcKq3MJzONMmKDC0UM4=;
- b=F+5I18tAITjTn4Cl9G85fDVFPqZZZOIJ9kK2woOoY4IUVIUPjhN/89l3WByg3T6/jNMqzVfVB
- pA27X5lTLFrB2tQUr0JyeTRlIAVG8n7i3ab8VbRAwvS48DYggKDKJ4S
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <faf70823-f87b-ba50-ac72-3552de1cc7e3@linaro.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add simple 1:1 wrappers of the C ioctl number manipulation functions.
-Since these are macros we cannot bindgen them directly, and since they
-should be usable in const context we cannot use helper wrappers, so
-we'll have to reimplement them in Rust. Thankfully, the C headers do
-declare defines for the relevant bitfield positions, so we don't need
-to duplicate that.
+On Thu, Mar 16, 2023 at 09:09:37AM +0100, Krzysztof Kozlowski wrote:
+> On 13/03/2023 23:51, Serge Semin wrote:
+> > Currently some of the boolean properties defined in the DT-schema are
+> > marked to have the basic boolean type meanwhile the rest referencing the
+> > /schemas/types.yaml#/definitions/flag schema. For the sake of unification
+> > let's convert the first group to referencing the pre-defined flag schema.
+> > Thus bindings will look a bit more coherent and the DT-bindings
+> > maintainers will have a better control over the booleans defined in the
+> > schema (if ever needed).
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  .../devicetree/bindings/net/snps,dwmac.yaml   | 45 ++++++++++++-------
+> >  1 file changed, 30 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > index 69be39d55403..a863b5860566 100644
+> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > @@ -120,11 +120,13 @@ properties:
+> >          maximum: 12
+> >  
+> >        snps,rx-sched-sp:
+> > -        type: boolean
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> >          description: Strict priority
+> 
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
-Changes in v2:
-- Changed from assert!() to build_assert!() (static_assert!() can't work
-  here)
-- Link to v1: https://lore.kernel.org/r/20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net
----
- rust/bindings/bindings_helper.h |  3 +-
- rust/kernel/ioctl.rs            | 64 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |  1 +
- 3 files changed, 67 insertions(+), 1 deletion(-)
+> If ever touching this, it should be other way -> boolean.
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 75d85bd6c592..aef60f300be0 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -6,8 +6,9 @@
-  * Sorted alphabetically.
-  */
- 
--#include <linux/slab.h>
-+#include <linux/ioctl.h>
- #include <linux/refcount.h>
-+#include <linux/slab.h>
- 
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
-new file mode 100644
-index 000000000000..6cd8e5738b91
---- /dev/null
-+++ b/rust/kernel/ioctl.rs
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#![allow(non_snake_case)]
-+
-+//! ioctl() number definitions
-+//!
-+//! C header: [`include/asm-generic/ioctl.h`](../../../../include/asm-generic/ioctl.h)
-+
-+/// Build an ioctl number, analogous to the C macro of the same name.
-+const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-+    core::assert!(dir <= bindings::_IOC_DIRMASK);
-+    core::assert!(ty <= bindings::_IOC_TYPEMASK);
-+    core::assert!(nr <= bindings::_IOC_NRMASK);
-+    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-+
-+    (dir << bindings::_IOC_DIRSHIFT)
-+        | (ty << bindings::_IOC_TYPESHIFT)
-+        | (nr << bindings::_IOC_NRSHIFT)
-+        | ((size as u32) << bindings::_IOC_SIZESHIFT)
-+}
-+
-+/// Build an ioctl number for an argumentless ioctl.
-+pub const fn _IO(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_NONE, ty, nr, 0)
-+}
-+
-+/// Build an ioctl number for an read-only ioctl.
-+pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for an write-only ioctl.
-+pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for a read-write ioctl.
-+pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(
-+        bindings::_IOC_READ | bindings::_IOC_WRITE,
-+        ty,
-+        nr,
-+        core::mem::size_of::<T>(),
-+    )
-+}
-+
-+/// Get the ioctl direction from an ioctl number.
-+pub const fn _IOC_DIR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
-+}
-+
-+/// Get the ioctl type from an ioctl number.
-+pub const fn _IOC_TYPE(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
-+}
-+
-+/// Get the ioctl number from an ioctl number.
-+pub const fn _IOC_NR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
-+}
-+
-+/// Get the ioctl size from an ioctl number.
-+pub const fn _IOC_SIZE(nr: u32) -> usize {
-+    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 223564f9f0cc..7610b18ee642 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -30,6 +30,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
- mod allocator;
- mod build_assert;
- pub mod error;
-+pub mod ioctl;
- pub mod prelude;
- pub mod print;
- mod static_assert;
+Ok. I'll drop the patch then.
 
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230224-rust-ioctl-a520f3eb3aa8
+-Serge(y)
 
-Thank you,
-~~ Lina
-
+> 
+> Best regards,
+> Krzysztof
+> 
