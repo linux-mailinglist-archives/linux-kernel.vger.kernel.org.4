@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3A56C5B4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A037E6C5B56
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 01:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCWASd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Mar 2023 20:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S230141AbjCWAWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Mar 2023 20:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCWASb (ORCPT
+        with ESMTP id S229499AbjCWAWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Mar 2023 20:18:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADB119
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Mar 2023 17:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679530663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSegs/F/HLoYtMQB109vZlwrTGVYOoKZXOG+DxwqFiw=;
-        b=GkdGbgfbzore2Sx812nQLiX8rZUwJFDuK4/qLgL7zW7UqIc4gLKf3MZtK0mAEE7PYvlkov
-        kaw1rrIpPEZxqlU3SJYVdANgEYjOpGBGtA7azJ1VgI2g8BY/W7hMTfC91jT4e4a2EWOCjG
-        Ixx9tSDMYnlAWHp+fNPAR0iUyWX/49M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-efND3qEnOFeiV3szBBL7Ww-1; Wed, 22 Mar 2023 20:17:39 -0400
-X-MC-Unique: efND3qEnOFeiV3szBBL7Ww-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 813D9101A531;
-        Thu, 23 Mar 2023 00:17:39 +0000 (UTC)
-Received: from localhost (ovpn-12-97.pek2.redhat.com [10.72.12.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B84951731B;
-        Thu, 23 Mar 2023 00:17:38 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 08:17:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Philipp Rudo <prudo@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>
-Subject: Re: [PATCH] kexec: Support purgatories with .text.hot sections
-Message-ID: <ZBuan2/9CVPffy9a@MiWiFi-R3L-srv>
-References: <20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org>
- <ZBsSBr87al9ccG96@home.goodmis.org>
- <CANiDSCt_wvaHBq-Yss0QaKTtefBhWwtahFO8_jw6CPSvBwbbMg@mail.gmail.com>
- <ZBsWFOb9wDGSwRSW@MiWiFi-R3L-srv>
- <20230322110002.120cf674@gandalf.local.home>
+        Wed, 22 Mar 2023 20:22:01 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F354B2D69;
+        Wed, 22 Mar 2023 17:22:00 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso366057pjb.0;
+        Wed, 22 Mar 2023 17:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679530920;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Ew/jPNlIE4OVZf16YBuF35hJ9UHUXMnnNtrgoWeDu0=;
+        b=WiYaMhZ04v5QuGOplmNmgMo6AI2VD6E7Pby2WsO8odIaTJfCLBapcjfc8ShwxJHvPJ
+         cCxH6BqubAhmYZYyChHhqdOh5D0Tqeu7YRVy3DLb4SXTXq/u0FWxmBMOmX2Q2HaIFpRm
+         ZnszruorLJSwCumgC1/4LQt6KmMWMsDQcQk0h3VV3WDRNQWVpfS5oTrZtHzjneyQhveO
+         OiD8zZvXA1tc3QRKLKdaG0F6ahLiXTrz3/5nwdAOQPT5Wt80SJsA+4aV8Wni6/x5Y/vj
+         YN2/IioGzT9+ggurrmxcsd1GhzD9WWucTOjOxsZw/WWh7kIiSjhhBubluu/l2iNP2L+V
+         VCEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679530920;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Ew/jPNlIE4OVZf16YBuF35hJ9UHUXMnnNtrgoWeDu0=;
+        b=x/B1vcTtpd5GGDEkg244GooepJRWOi9WdAYsI5x8+Oq4Z14qCsD670Rf6LapHSCTxo
+         IrdR4uIHu6GTsiq3wf/o0V+ftPnjlY3o2jkpNEbl12LmTW3Ge0KtCswScwj3YrCvdQoW
+         4SPsA0oMDgFjY+NwVZmBH5XFxvnBNtIMZ78zaMk10PBMUXTNAtR0oWG41EK47qlsITKG
+         vQqNwfVp2zAodmzbusWXkKaM31UrwbuCmQLpLYONwkgqx/Emp3Bxviy+YyvNyN95yQku
+         mR6nnN3Na2RTq1EVLg3vWNxdovd11j3Fep/FdAH97D7rqurl6GQI1KALMlRhOBt8iwHX
+         uvnw==
+X-Gm-Message-State: AO0yUKXmIcVPe1cRgQEXuR8NRRPRY78qIjqmG8/3uccuyR8ftolMBqeB
+        J3bQjEZLwEPIjSQtic2AmyaJD5JkUJPDhA==
+X-Google-Smtp-Source: AK7set8+3ET1jExl9th2b8YaVrcRPXoMCfOTxbHleY8lh23anpTzho3rf76+fDfZcHZvi2RmMmZvuQ==
+X-Received: by 2002:a05:6a20:c510:b0:c7:5cb6:2ff7 with SMTP id gm16-20020a056a20c51000b000c75cb62ff7mr1296482pzb.22.1679530920392;
+        Wed, 22 Mar 2023 17:22:00 -0700 (PDT)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id d22-20020a63fd16000000b00502f9fba637sm10199103pgh.68.2023.03.22.17.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 17:21:59 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 08:21:53 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] arm64: dts: qcom: Move elish dts to common dtsi
+Message-ID: <ZBuboZi7iJrovuWv@Gentoo>
+References: <20230322171555.2154-1-lujianhua000@gmail.com>
+ <ad39709b-5e1a-8659-8bbd-cb28e2e6366a@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322110002.120cf674@gandalf.local.home>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <ad39709b-5e1a-8659-8bbd-cb28e2e6366a@linaro.org>
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/22/23 at 11:00am, Steven Rostedt wrote:
-> On Wed, 22 Mar 2023 22:52:04 +0800
-> Baoquan He <bhe@redhat.com> wrote:
+On Wed, Mar 22, 2023 at 07:08:52PM +0100, Krzysztof Kozlowski wrote:
+> On 22/03/2023 18:15, Jianhua Lu wrote:
+> > There are two panel variants of xiaomi-elish, BOE and CSOT panels.
+> > In order to support both panels, so move elish dts to common dtsi.
+> > 
+> > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> > ---
+> > Changes in v2:
+> >   - Remove sm8250-xiaomi-elish.dtb to avoid build failure.
+> > 
+> >  arch/arm64/boot/dts/qcom/Makefile                             | 1 -
+> >  ...m8250-xiaomi-elish.dts => sm8250-xiaomi-elish-common.dtsi} | 4 ----
+> >  2 files changed, 5 deletions(-)
+> >  rename arch/arm64/boot/dts/qcom/{sm8250-xiaomi-elish.dts => sm8250-xiaomi-elish-common.dtsi} (99%)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> > index 1a29403400b7..8d2b3c57a4a8 100644
+> > --- a/arch/arm64/boot/dts/qcom/Makefile
+> > +++ b/arch/arm64/boot/dts/qcom/Makefile
+> > @@ -183,7 +183,6 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-hdk.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
+> > -dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish.dtb
 > 
-> > When you resne patch, please fix Philipp's mail adress as
-> > 'Philipp Rudo <prudo@redhat.com>' if he should know this. He has joined
-> > Redhat.
+> This builds, but it is a loss of functionality. Instead the board should
+> be renamed here to one of your final namings, e.g. boe.
+Acked
 > 
-> But I thought redhat *was* IBM? ;-)
-
-That's interesting questioin, maybe yes on capital operation, but no
-from company operation and management, in an engineer's eyes.
-
+> Best regards,
+> Krzysztof
+> 
