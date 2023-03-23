@@ -2,165 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420066C6E4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2148F6C6E4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjCWRAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S230321AbjCWRAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCWRAM (ORCPT
+        with ESMTP id S231558AbjCWRAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:00:12 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8A9C5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:00:10 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3ee75104d2cso56605e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679590809;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sUol+gIMtQKOAhQw7QtvtbIC1bGcoAW2dXKwXzWBXXk=;
-        b=VhgGPN+FX34nPVJ2xN7eJA3bE4E2emohZVQj1Kx9AUAwGR/CDotHCQ1aNhlH6NML5l
-         z3V80shFdB3FJFo8AU1xtBqgnQJbRuXParGdRlle+LO3t67m0AFTjKpvbCqHHAD/RugC
-         QnCpG2jEtNpFZ6DaUlPrI4pAVyC3oR90pF0uD1OWq6VDnaG2f7x3JzGhhNsP0iITpQR3
-         XKn1berfUSIR19KymwD53IiGSIAUBtpbl3XKcrCrGe8YCLIPsUGF+/SDH8q2JxujhdgH
-         FPJxgPqhk7zajBxu8zMd64nSBy7pOvxAfY2PA1obWvR27GgJIN0eBhoMA6z06PxAAp0J
-         AXMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679590809;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sUol+gIMtQKOAhQw7QtvtbIC1bGcoAW2dXKwXzWBXXk=;
-        b=NtX8524sD/vQZmjBkGqroBbBoE+y4t+znJjj59y3Co/AYDl59WcWrpKpgqFCgE1Iaj
-         CGZhTCgdcie/dM5MOno4g6JbOiT+Axx6uiXHfzi0cE1VhXx7Er6tjHXJcDx0X1Cmzv0p
-         6ukn+onmWyLVEexxiYuQJfYRSa7r3zpwooLLf5SzorgWjKGUQa4fyQTxMg6U8U2pjOF5
-         DIV/3amiJvKMBO+d7UvWTF6770VvnoZv08PVic5D6qpbNhT7PLIpEBTSIBf86yz8Fdjp
-         PQjWcQ1DgeDow7aFpp2WfJ9wSDvwE4O74Qeo/3x2xCl5XDcgMw+4ZZvChYoAUp7FhATS
-         80WA==
-X-Gm-Message-State: AO0yUKW8/8fBvi6FmegHfQtPfYP+y0QKXcsfrEHkNUCEgED5AqvS/1+L
-        r8LVZHki1FCk4mXE5z7rF2e8PhBvJmHjNEVtzj0o1Q==
-X-Google-Smtp-Source: AK7set+Y7Ldly5Y4VeSE1EqYooqWVCaAA1+Kc8LoxIex2/a5eMFbubGBgcd57S5UlfxTKfsR2KDvD9pGGNGDORDed+k=
-X-Received: by 2002:a05:600c:5102:b0:3ed:353e:a8a7 with SMTP id
- o2-20020a05600c510200b003ed353ea8a7mr483322wms.2.1679590808808; Thu, 23 Mar
- 2023 10:00:08 -0700 (PDT)
+        Thu, 23 Mar 2023 13:00:50 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBE361AE
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:00:48 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230323170047euoutp026b4f2dc68e60f7810733b5e49e668120~PGvn8q76Z1604616046euoutp02T
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:00:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230323170047euoutp026b4f2dc68e60f7810733b5e49e668120~PGvn8q76Z1604616046euoutp02T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679590847;
+        bh=KhR26IKDTGtCPfo2iRK0w4LATJSZVVan6rtbsXI97Xs=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=VhxwiY//HGoqIcdHDTpfynMA7hg9qJOJTPAfFOpnAi5DxSpZ7a6rftfp8V6o3BOwh
+         N4VdfIrTuRX8j/RU5yRXC1i/SLxEt4KGipqmHCQ6D1TvbLYBlwuELi5XWtNIUcWJ7P
+         EhgLGlglcHkor6vpJYwopfgMKrdF1b8Rt9sZh12Y=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230323170046eucas1p2be73fce85d27d3d549f951b73199b244~PGvnj7FQy0142501425eucas1p2Z;
+        Thu, 23 Mar 2023 17:00:46 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 90.97.09503.EB58C146; Thu, 23
+        Mar 2023 17:00:46 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230323170046eucas1p2483ab0fcc3d6bc56d4b6d09143bbadda~PGvnR85750549005490eucas1p2V;
+        Thu, 23 Mar 2023 17:00:46 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230323170046eusmtrp2c0784afec1c036d7224753fa3e4b1a78~PGvnRYlY83094130941eusmtrp2d;
+        Thu, 23 Mar 2023 17:00:46 +0000 (GMT)
+X-AuditID: cbfec7f2-ea5ff7000000251f-d1-641c85beb634
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id DE.CA.08862.EB58C146; Thu, 23
+        Mar 2023 17:00:46 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230323170045eusmtip21846d4d89acf39c5afeb3c4bbb617f52~PGvmwisT50260002600eusmtip2N;
+        Thu, 23 Mar 2023 17:00:45 +0000 (GMT)
+Message-ID: <a5d567b6-a067-c3e2-e500-e459cf47851f@samsung.com>
+Date:   Thu, 23 Mar 2023 18:00:45 +0100
 MIME-Version: 1.0
-References: <20230322223801.1451827-1-irogers@google.com>
-In-Reply-To: <20230322223801.1451827-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 23 Mar 2023 09:59:57 -0700
-Message-ID: <CAP-5=fW_8FEsrvYxR8wXcGJR3WFfepmfrZFcaPsHwE+ugTB9Pg@mail.gmail.com>
-Subject: Re: [PATCH] perf vendor events: Sandybridge and version number minor updates
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Edward Baker <edward.baker@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/4] mm/mmap/vma_merge: extend invariants, avoid
+ invalid res, vma
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <17b6fc3edc46c4b33aa93b9ef17a63a3a76f4b5f.1679431180.git.lstoakes@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7djP87r7WmVSDHqOyVrMWb+GzeLr+l/M
+        FtsbHrBbXN41h83i3pr/rBZ3vs1jt9iwsoHJYnZjH6PF3ts32Cx+/5jD5sDlsXPWXXaPzSu0
+        PDZ9msTucWLGbxaPzUvqPT4+vcXi8X7fVTaPMwuOsHt83iQXwBnFZZOSmpNZllqkb5fAldGz
+        7BdrwW+Vik8PvrE3ME6R7WLk5JAQMJHYsn8jexcjF4eQwApGiWOHGpggnC+MEpcafjNCOJ8Z
+        JXYs/cTSxcgB1vKigQ0ivpxRYuX/o1AdHxklOmY1s4HM5RWwkzh2cx4riM0ioCqx5e0XVoi4
+        oMTJmU9YQGxRgRSJiTM2MIEMFRaIkpg3wx0kzCwgLnHryXywmSIC7YwSc5Z1MIM4zALPGSW+
+        Ny5gBKliEzCU6HrbBbaMUyBSYtr/kywQ3fISzVtngzVICPRzSkzeOIEZ4mwXiWu/6iCeFpZ4
+        dXwLO4QtI/F/J8Q2CZBtC37fh3ImMEo0PL/FCFFlLXHn3C82kEHMApoS63fpQ4QdJWa072aH
+        mM8nceOtIMQNfBKTtk2HWssr0dEmBFGtJjHr+Dq4tQcvXGKewKg0CylYZiH5fxaSb2Yh7F3A
+        yLKKUTy1tDg3PbXYMC+1XK84Mbe4NC9dLzk/dxMjMI2d/nf80w7Gua8+6h1iZOJgPMQowcGs
+        JMLrxiyRIsSbklhZlVqUH19UmpNafIhRmoNFSZxX2/ZkspBAemJJanZqakFqEUyWiYNTqoEp
+        7uqHu5wJUhqnohieuv+9Ee+lMdncyLD4RodBwrPNcTO++obUdtSHPZNgmLZx58qru400Vr1Y
+        fbPB5HvCtS2elyxT38tZvdp1IaN1Wccmsd+xtx/JT9TSumopsXPJxkSdXUx3Hh3PjqqLfBtb
+        GycYp2wRXq+n/S3MyleuX/ypVvL/qFXL08I0RDcZK8z2LAm++2CR82IXvU0BRYd3mrMJyvzZ
+        L+KWq7am9T5TcGYUd/mBSdvXdxWwHY31Ebs2N/fd3zvTeAIf5HQqn5RfmL5yrQDnBMeNiwT3
+        cXMUz52t+EB3xdfi9wZH5/sdXT1nucbTNxO43b/OMJ6x/8RV7gtr9GzMhRUlU5vr9xp/4g1V
+        YinOSDTUYi4qTgQA8xHO0dIDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xe7r7WmVSDNbc5bOYs34Nm8XX9b+Y
+        LbY3PGC3uLxrDpvFvTX/WS3ufJvHbrFhZQOTxezGPkaLvbdvsFn8/jGHzYHLY+esu+wem1do
+        eWz6NInd48SM3ywem5fUe3x8eovF4/2+q2weZxYcYff4vEkugDNKz6Yov7QkVSEjv7jEVina
+        0MJIz9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL6Nn2S/Wgt8qFZ8efGNvYJwi28XI
+        wSEhYCLxooGti5GTQ0hgKaPEmaMFILaEgIzEyWkNrBC2sMSfa11ANVxANe8ZJU6sb2cGSfAK
+        2EkcuzkPrIhFQFViy9svrBBxQYmTM5+wgNiiAikSE5deZgPZJSwQJTFvhjtImFlAXOLWk/lM
+        IDNFBNoZJZY9O8UGkXjOKPFmJTvEshZGifdPZjGBJNgEDCW63naBFXEKREpM+3+SBaLBTKJr
+        axcjhC0v0bx1NvMERqFZSO6YhWThLCQts5C0LGBkWcUoklpanJueW2yoV5yYW1yal66XnJ+7
+        iREYtduO/dy8g3Heq496hxiZOBgPMUpwMCuJ8LoxS6QI8aYkVlalFuXHF5XmpBYfYjQFBsZE
+        ZinR5Hxg2sgriTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamA6xsHW
+        ZbXZgbWyT4v98ZUNs1sWFcYriTN1uh/fLfjc40dIQfEjgwwv3nVSdpELrz1WWPYs78fmL9fj
+        RT0fTf0YJHY76ei+/RF1urue1a91582543f9WaRyxMQddhyhXR/2Js320XnZu6/ddPWeH9Od
+        xDI0Ny7wr0+ukcsJLVauWfPvxEttXyOjhy+YnjAt8mKOKA//u0CLU8DFpHDNagdr6XPCjgfv
+        s60ve1PQkKOX+eTL3F+n36U3dZ2xuaR0NdzPf4vwnLSZe6Uv33nFf8WkMMa6S+6Yf6F3i15m
+        7bTXK1oehYu6cnC+fThhvr22cFDpnBXzFQX8tEUOdHv9X/jT2qPBs+xWAd8JjrKPqkosxRmJ
+        hlrMRcWJAIjFDMNjAwAA
+X-CMS-MailID: 20230323170046eucas1p2483ab0fcc3d6bc56d4b6d09143bbadda
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230323170046eucas1p2483ab0fcc3d6bc56d4b6d09143bbadda
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230323170046eucas1p2483ab0fcc3d6bc56d4b6d09143bbadda
+References: <cover.1679431180.git.lstoakes@gmail.com>
+        <17b6fc3edc46c4b33aa93b9ef17a63a3a76f4b5f.1679431180.git.lstoakes@gmail.com>
+        <CGME20230323170046eucas1p2483ab0fcc3d6bc56d4b6d09143bbadda@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 3:38=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
+On 21.03.2023 21:45, Lorenzo Stoakes wrote:
+> Previously, vma was an uninitialised variable which was only definitely
+> assigned as a result of the logic covering all possible input cases - for
+> it to have remained uninitialised, prev would have to be NULL, and next
+> would _have_ to be mergeable.
 >
-> Add BR_MISP_EXEC.INDIRECT to Sandybridge. Update version numbers based on=
-:
-> https://github.com/intel/perfmon/pull/62
-> which didn't modify the generated perf json.
+> We now reuse vma to assign curr and next, so to be absolutely explicit,
+> ensure this variable is _always_ assigned, and while we're at it remove the
+> redundant assignment of both res and vma (if prev is NULL then we simply
+> assign to NULL).
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> In addition, we absolutely do rely on addr == curr->vm_start should curr
+> exist, so assert as much.
+>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-I've spotted a mistake with this and will resend.
+This patch has been merged into today's linux next-20230323 as commit 
+6426bbcc76be ("mm/mmap/vma_merge: extend invariants, avoid invalid res, 
+vma").
 
-Thanks,
-Ian
+Unfortunately it breaks booting of some ARM 32bit machines, like Samsung 
+Exynos5422-based Odroid XU3 board. This shortened log shows the issue:
+
+Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+8<--- cut here ---
+Unhandled fault: page domain fault (0x01b) at 0xb6f03010
+[b6f03010] *pgd=b5e84835
+Internal error: : 1b [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 2 PID: 1 Comm: init Not tainted 6.3.0-rc1-00296-g6426bbcc76be #6445
+Hardware name: Samsung Exynos (Flattened Device Tree)
+PC is at vma_merge+0xa0/0x728
+LR is at vma_merge+0x294/0x728
+pc : [<c02b08a8>]    lr : [<c02b0a9c>]    psr: a0000013
+...
+Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 4f11406a  DAC: 00000051
+...
+Process init (pid: 1, stack limit = 0x5219a5c7)
+Stack: (0xf0835e30 to 0xf0836000)
+...
+  vma_merge from mprotect_fixup+0xc8/0x290
+  mprotect_fixup from do_mprotect_pkey.constprop.0+0x210/0x338
+  do_mprotect_pkey.constprop.0 from ret_fast_syscall+0x0/0x1c
+Exception stack(0xf0835fa8 to 0xf0835ff0)
+...
+---[ end trace 0000000000000000 ]---
+note: init[1] exited with irqs disabled
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+Reverting it on top of linux-next, together with 183b2bced4c9 
+("mm/mmap/vma_merge: init cleanup, be explicit about the non-mergeable 
+case"), which depends on this patch, fixes the boot issue.
+
 
 > ---
->  tools/perf/pmu-events/arch/x86/mapfile.csv         | 14 +++++++-------
->  .../pmu-events/arch/x86/sandybridge/pipeline.json  |  8 ++++++++
->  2 files changed, 15 insertions(+), 7 deletions(-)
+>   mm/mmap.c | 19 ++++++++++++++-----
+>   1 file changed, 14 insertions(+), 5 deletions(-)
 >
-> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-=
-events/arch/x86/mapfile.csv
-> index 9abebe50ae0d..41d755d570e6 100644
-> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> @@ -2,26 +2,26 @@ Family-model,Version,Filename,EventType
->  GenuineIntel-6-(97|9A|B7|BA|BF),v1.19,alderlake,core
->  GenuineIntel-6-BE,v1.19,alderlaken,core
->  GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
-> -GenuineIntel-6-(3D|47),v26,broadwell,core
-> -GenuineIntel-6-56,v7,broadwellde,core
-> -GenuineIntel-6-4F,v19,broadwellx,core
-> +GenuineIntel-6-(3D|47),v27,broadwell,core
-> +GenuineIntel-6-56,v9,broadwellde,core
-> +GenuineIntel-6-4F,v20,broadwellx,core
->  GenuineIntel-6-55-[56789ABCDEF],v1.17,cascadelakex,core
->  GenuineIntel-6-9[6C],v1.03,elkhartlake,core
->  GenuineIntel-6-5[CF],v13,goldmont,core
->  GenuineIntel-6-7A,v1.01,goldmontplus,core
->  GenuineIntel-6-A[DE],v1.01,graniterapids,core
-> -GenuineIntel-6-(3C|45|46),v32,haswell,core
-> -GenuineIntel-6-3F,v26,haswellx,core
-> +GenuineIntel-6-(3C|45|46),v33,haswell,core
-> +GenuineIntel-6-3F,v27,haswellx,core
->  GenuineIntel-6-(7D|7E|A7),v1.17,icelake,core
->  GenuineIntel-6-6[AC],v1.19,icelakex,core
->  GenuineIntel-6-3A,v23,ivybridge,core
->  GenuineIntel-6-3E,v22,ivytown,core
-> -GenuineIntel-6-2D,v22,jaketown,core
-> +GenuineIntel-6-2D,v23,jaketown,core
->  GenuineIntel-6-(57|85),v10,knightslanding,core
->  GenuineIntel-6-A[AC],v1.01,meteorlake,core
->  GenuineIntel-6-1[AEF],v3,nehalemep,core
->  GenuineIntel-6-2E,v3,nehalemex,core
-> -GenuineIntel-6-2A,v18,sandybridge,core
-> +GenuineIntel-6-2A,v19,sandybridge,core
->  GenuineIntel-6-(8F|CF),v1.11,sapphirerapids,core
->  GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
->  GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v55,skylake,core
-> diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json b/t=
-ools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> index 54454e5e262c..ecaf94ccc9c7 100644
-> --- a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> +++ b/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-> @@ -210,6 +210,14 @@
->          "SampleAfterValue": "200003",
->          "UMask": "0xc4"
->      },
-> +    {
-> +        "BriefDescription": "Speculative mispredicted indirect branches"=
-,
-> +        "EventCode": "0x89",
-> +        "EventName": "BR_MISP_EXEC.INDIRECT",
-> +        "PublicDescription": "Counts speculatively miss-predicted indire=
-ct branches at execution time. Counts for indirect near CALL or JMP instruc=
-tions (RET excluded).",
-> +        "SampleAfterValue": "200003",
-> +        "UMask": "0xe4"
-> +    },
->      {
->          "BriefDescription": "Not taken speculative and retired mispredic=
-ted macro conditional branches.",
->          "EventCode": "0x89",
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6361baf75601..7aec49c3bc74 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -911,7 +911,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>   {
+>   	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+>   	pgoff_t vma_pgoff;
+> -	struct vm_area_struct *curr, *next, *res = NULL;
+> +	struct vm_area_struct *curr, *next, *res;
+>   	struct vm_area_struct *vma, *adjust, *remove, *remove2;
+>   	int err = -1;
+>   	bool merge_prev = false;
+> @@ -940,14 +940,18 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>   		/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
+>   		next = vma_lookup(mm, end);
+>   
+> -	/* verify some invariant that must be enforced by the caller */
+> +	/*
+> +	 * By default, we return prev. Cases 3, 4, 8 will instead return next
+> +	 * and cases 3, 8 will also update vma to point at next.
+> +	 */
+> +	res = vma = prev;
+> +
+> +	/* Verify some invariant that must be enforced by the caller. */
+>   	VM_WARN_ON(prev && addr <= prev->vm_start);
+> -	VM_WARN_ON(curr && end > curr->vm_end);
+> +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+>   	VM_WARN_ON(addr >= end);
+>   
+>   	if (prev) {
+> -		res = prev;
+> -		vma = prev;
+>   		vma_start = prev->vm_start;
+>   		vma_pgoff = prev->vm_pgoff;
+>   		/* Can we merge the predecessor? */
+> @@ -958,6 +962,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>   			vma_prev(vmi);
+>   		}
+>   	}
+> +
+>   	/* Can we merge the successor? */
+>   	if (next && mpol_equal(policy, vma_policy(next)) &&
+>   	    can_vma_merge_before(next, vm_flags,
+> @@ -998,6 +1003,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+>   			adj_start = -(prev->vm_end - addr);
+>   			err = dup_anon_vma(next, prev);
+>   		} else {
+> +			/*
+> +			 * Note that cases 3 and 8 are the ONLY ones where prev
+> +			 * is permitted to be (but is not necessarily) NULL.
+> +			 */
+>   			vma = next;			/* case 3 */
+>   			vma_start = addr;
+>   			vma_end = next->vm_end;
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
