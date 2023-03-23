@@ -2,155 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C9E6C6ECC
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB816C6ED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjCWR1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S232200AbjCWR36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 13:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbjCWR1g (ORCPT
+        with ESMTP id S232156AbjCWR34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:27:36 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5472A166CF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:34 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id oe8so1595203qvb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:27:34 -0700 (PDT)
+        Thu, 23 Mar 2023 13:29:56 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F7D9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:29:55 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-17ebba88c60so1742262fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 10:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679592453;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z/h2YRuqxkbq2WVy9rSukgPkz7MffMXHVCaEQ8JsfSI=;
-        b=0b1sytAcRxnizGxvw+p+lkYnbDhWMhQxrXGPJPm5sHacyMrIEdNLQJWaWguMuI6iRT
-         gIob4qZ61pz7VHAvob8ln+eERCrG8SD695iKZx3xXdVhxJf2AK68WpjLNHTbfR1+mL/h
-         W7T8K7/p+oIhtsGd2HUyWvFwIy6iY8DRoXXxq5zUNE26HtDLdvCeI65VKxv5w/6Cz/WF
-         fEPo60DJZK/R6TZ+NZeMzWnHn7sJXOyNF2qPFslVrcEcKc1n5cSCHU1BEimYAOU8AJaR
-         A2BbTJLzfny7Nv4w5tfJ4xLxwqSSQOmSgthksXW6BG1tzizPpqODzSDd5+8QtbLdZvtY
-         p2Tw==
+        d=google.com; s=20210112; t=1679592594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p/Cvh6M1r+8t9YmN0xsnFRU8Cu+NaJyAtAc6yU9dLYU=;
+        b=ITEGXpfXQYlwF1ZlUJqNVbyn5oz3Unj5kCXCIUKV9FtlDKgj/MKt8yqd4wGFjuDGE6
+         umYSxCBhrSaovhC+Q1KH84l8P4DpDmlKG1poNllSF8PUyChV2Iq77B+U8xCMOfRRMfRD
+         uypL2yUxgPh/cL0NT5BoKqju6JFL8+pJJywJdsxVsTLZxn/kdrxwyTbnbZudK4+2ZLoh
+         mwroSbbB5HAZRdHAJ3Vm/sZ9JSRnGJIhHRwpYkVSMURH5BccLWrCpjCsejlDESDALnFS
+         sEKW6QM4gClq1vLuZF/+eRH9oJDhjlIm5TJQUrBrsy3Qg2hTNNjYpOB1g3WFjoejNJCh
+         8tMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679592453;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/h2YRuqxkbq2WVy9rSukgPkz7MffMXHVCaEQ8JsfSI=;
-        b=cry8afJRuej1/uuJpN5yLP4Ruu2zpK1zT85mCiE81EeI1J4LpeV+NrwH9/hmnbGwV6
-         Djm3kQCpv8wc4ePRAZHjglb/0RF8MII5md2mtPKGIwoWZLKOAdZsIQHDOKSKsBJoAYdC
-         Tx6nmbQjmzS2FFPYtBnDBJ+yZcs1ZILbQs7IZcvVscXCxYIqEShFZMlSyTncvtaA+oWL
-         RSCCQHwVLpMHE3e9IwOBVD/eH4g7PRsPg7/2E3mZIUsakgPjRwcpzOCqbDDiPql9U+5R
-         CmGsSDh2QtlzXKPopPQw0l6zzITIAGeoXyaXQMkx7IaJvY6iBziSFfcnS8LMjLZzEfXa
-         +ozQ==
-X-Gm-Message-State: AO0yUKVoIExKRKx9Bf0HjpWRPSlSg/VS1BHLFNW3bD4XAGWE/jPOA91d
-        5d8ahqxUFALZqZss8EzpElmQOg==
-X-Google-Smtp-Source: AK7set8dWjwTTSIaOdmksX5IwKh8t2lW/W7AGyyEyTnTU89teSPpKydWtKCANGNduWs4VknW+c/exA==
-X-Received: by 2002:a05:6214:5010:b0:56b:fb30:49c6 with SMTP id jo16-20020a056214501000b0056bfb3049c6mr12890918qvb.50.1679592453212;
-        Thu, 23 Mar 2023 10:27:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id 123-20020a370581000000b007456df35859sm9126833qkf.74.2023.03.23.10.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:27:32 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 13:27:32 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 4/7] memcg: sleep during flushing stats in safe
- contexts
-Message-ID: <20230323172732.GE739026@cmpxchg.org>
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-5-yosryahmed@google.com>
- <20230323155613.GC739026@cmpxchg.org>
- <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1679592594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p/Cvh6M1r+8t9YmN0xsnFRU8Cu+NaJyAtAc6yU9dLYU=;
+        b=cUrPOCjQQpzMzeyuaStHWkCJAm2xcAA7zhTWMdMdJbqFHsXQ4TFAFnF+HYzwiFZLEs
+         NOjE8AsyKAFZFRhlxJYwnY+JdktxUoIa3mCcaQX2/Io2k0t/ds0BBNaOePTG1LeF1TPw
+         CoxRaIcOigLJ/gjl6/9RuPcUkI1JDLKtPXtSdVUrO4t4PfuM/bsC8tvo5EcgRnXek4FF
+         ei9GBmgSvD99jM2pWN4DnEXtOWbUOBvOIWaQu/oKvDAJd7qOYWIGXtcHqT7jyffixfF1
+         C9CgsVkJqFJBY1rTK4YM99ZijF2MuQkvqVUnUzd02X29BKV+vmI4ecRxygAVKz3006cx
+         iAlQ==
+X-Gm-Message-State: AAQBX9d1TVvePq1Sqlfazgmg4/F5hIeUw1grH/f/FVIvshNlTynT+h0X
+        Zb+z2uulYmxNStauoCvNhb/NPB3nbEt/GYhuimkVgA==
+X-Google-Smtp-Source: AKy350Zy/cokVvM0uGfHQy9c8KeBEWsqK7Ev8r8j7/PJ+j9WCYex3Jlo91uy/qg8+X8wpllAbT1829ggwBNmNoxIMIA=
+X-Received: by 2002:a05:6871:8e9c:b0:177:b393:4009 with SMTP id
+ zq28-20020a0568718e9c00b00177b3934009mr50638oab.4.1679592594300; Thu, 23 Mar
+ 2023 10:29:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJD7tkZ7Dz9myftc9bg7jhiaOYcn7qJ+V4sxZ_2kfnb+k=zhJQ@mail.gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230308100414.37114-1-jiahao.os@bytedance.com>
+ <4972a8be-d300-a66e-7fac-a83f11b56fbf@bytedance.com> <CAEXW_YRG0Bw4U1+zOPpjRPQEeKNDMrs7x-ZE-W00aifn7heG4g@mail.gmail.com>
+ <CA+HDTgT0sjt38E4-2uQs_2t1GSsYFDqz3porOx-WQbt8x9hhXw@mail.gmail.com> <0e569d64-ce35-2176-5d41-faa6997480ef@bytedance.com>
+In-Reply-To: <0e569d64-ce35-2176-5d41-faa6997480ef@bytedance.com>
+From:   Vineeth Pillai <vineethrp@google.com>
+Date:   Thu, 23 Mar 2023 13:29:43 -0400
+Message-ID: <CA+HDTgSg+LTCTGu2_TeJwahNk3fO50Zj1DMuJmBTxPGe1RRQgA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/core: Minor optimize
+ pick_next_task() when core-sched enable
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>, mingo@redhat.com,
+        peterz@infradead.org, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org,
+        Josh Don <joshdon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 09:01:12AM -0700, Yosry Ahmed wrote:
-> On Thu, Mar 23, 2023 at 8:56 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Thu, Mar 23, 2023 at 3:03=E2=80=AFAM Hao Jia <jiahao.os@bytedance.com> w=
+rote:
+
+> > The other issue was - we don't update core rbtree when vruntime changes=
+ and
+> > this can cause starvation of cookied task if there are more than one ta=
+sk with
+> > the same cookie on an rq.
 > >
-> > On Thu, Mar 23, 2023 at 04:00:34AM +0000, Yosry Ahmed wrote:
-> > > @@ -644,26 +644,26 @@ static void __mem_cgroup_flush_stats(void)
-> > >               return;
-> > >
-> > >       flush_next_time = jiffies_64 + 2*FLUSH_TIME;
-> > > -     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, false);
-> > > +     cgroup_rstat_flush(root_mem_cgroup->css.cgroup, may_sleep);
+>
+> If I understand correctly, when a cookied task is enqueued, the
+> difference delta1 between its vruntime and min_vruntime is very large.
+>
+> Another task with the same cookie is very actively dequeuing and
+> enqueuing, and the difference delta2 between its vruntime and
+> min_vruntime is always smaller than delta1?
+> I'm not sure if this is the case?
+
+This case I was mentioning is about tasks that are continuously running
+and hence always in the runqueue. sched_core_enqueue/dequeue is
+not called and hence their position in the core rbtree is static while cfs
+rbtree positions change as vruntime progresses.
+
+BTW, this is a separate issue than the one you are targeting with this
+fix. I just thought of mentioning it here as well..
+
+> >> Yeah, this is an absolute no-no, it makes the overhead of the second r=
+b
+> >> tree unconditional.
 > >
-> > How is it safe to call this with may_sleep=true when it's holding the
-> > stats_flush_lock?
-> 
-> stats_flush_lock is always called with trylock, it is only used today
-> so that we can skip flushing if another cpu is already doing a flush
-> (which is not 100% correct as they may have not finished flushing yet,
-> but that's orthogonal here). So I think it should be safe to sleep as
-> no one can be blocked waiting for this spinlock.
+> > I agree. Could we keep it conditional by enqueuing 0-cookied tasks only=
+ when
+> > coresched is enabled, just like what we do for cookied tasks? This is s=
+till an
+> > overhead where we have two trees storing all the runnable tasks but in
+> > different order. We would also need to populate core rbtree from cfs rb=
+tree
+> > on coresched enable and empty the tree on coresched disable.
+> >
+>
+> I'm not sure if the other way is reasonable, I'm trying to provide a
+> function for each scheduling class to find a highest priority non-cookie
+> task.
+>
+> For example fair_sched_class, we can use rq->cfs_tasks to traverse the
+> search. But this search may take a long time, maybe we need to limit the
+> number of searches.
 
-I see. It still cannot sleep while the lock is held, though, because
-preemption is disabled. Make sure you have all lock debugging on while
-testing this.
+Yes, it can be time consuming based on the number of cgroups and tasks
+that are runnable. You could probably take some performance numbers to
+see how worse it is.
 
-> Perhaps it would be better semantically to replace the spinlock with
-> an atomic test and set, instead of having a lock that can only be used
-> with trylock?
+We could also have some optimization like marking a runqueue having
+non-cookied tasks and then do the search only if it is marked. I haven't
+thought much about it, but search could be optimized hopefully.
 
-It could be helpful to clarify what stats_flush_lock is protecting
-first. Keep in mind that locks should protect data, not code paths.
-
-Right now it's doing multiple things:
-
-1. It protects updates to stats_flush_threshold
-2. It protects updates to flush_next_time
-3. It serializes calls to cgroup_rstat_flush() based on those ratelimits
-
-However,
-
-1. stats_flush_threshold is already an atomic
-
-2. flush_next_time is not atomic. The writer is locked, but the reader
-   is lockless. If the reader races with a flush, you could see this:
-
-					if (time_after(jiffies, flush_next_time))
-	spin_trylock()
-        flush_next_time = now + delay
-        flush()
-        spin_unlock()
-					spin_trylock()
-					flush_next_time = now + delay
-					flush()
-					spin_unlock()
-
-   which means we already can get flushes at a higher frequency than
-   FLUSH_TIME during races. But it isn't really a problem.
-
-   The reader could also see garbled partial updates, so it needs at
-   least READ_ONCE and WRITE_ONCE protection.
-
-3. Serializing cgroup_rstat_flush() calls against the ratelimit
-   factors is currently broken because of the race in 2. But the race
-   is actually harmless, all we might get is the occasional earlier
-   flush. If there is no delta, the flush won't do much. And if there
-   is, the flush is justified.
-
-In summary, it seems to me the lock can be ditched altogether. All the
-code needs is READ_ONCE/WRITE_ONCE around flush_next_time.
+Thanks,
+Vineeth
