@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC2D6C6820
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9436C6827
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 13:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjCWMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 08:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S231179AbjCWMYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 08:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjCWMXs (ORCPT
+        with ESMTP id S230121AbjCWMYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:23:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48811BEC;
-        Thu, 23 Mar 2023 05:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bkZg0fteEv+ot3llQzJst6tGw3eyrfkN8Eh1a5WHKwU=; b=iebeCD1ikKCkOLi2Kft79o/EpL
-        HMA54VQybdeErM4GIeYLu3XCznsTdTk8XlMk+yqVHpdkGLk0EwRnQhw1666LK2hRoyG4ptxuZrP8y
-        DY5Rd7sdL6HWnn1aePKytB+WqSkUfxldpLag6fT5q55gmQLqE1ySDK6T5OkNKaKWY0+O/gk87sdvg
-        urSaKqpmufPn5BZrOZFHbI9KSGtxRDNnGYGA6DBNgsBrMh7OpVvqZvudqs0Cn7D080p8efg0x9ol6
-        o3SJ6PhjM6jmYlojSj+vgrS/0EGym6LDS4ui3k9TEMX3e1zXJnfAWEGf+/zIyU8IgapGgnw/DrRz1
-        2QTJmtRA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pfJyf-003wNM-F2; Thu, 23 Mar 2023 12:23:33 +0000
-Date:   Thu, 23 Mar 2023 12:23:33 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     gouhao@uniontech.com
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/buffer: adjust the order of might_sleep() in
- __getblk_gfp()
-Message-ID: <ZBxExR3/4bphAUpF@casper.infradead.org>
-References: <20230323093752.17461-1-gouhao@uniontech.com>
+        Thu, 23 Mar 2023 08:24:40 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F5E2106;
+        Thu, 23 Mar 2023 05:24:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 64F76420CF;
+        Thu, 23 Mar 2023 12:24:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1679574277;
+        bh=evK26XP+VWwN+ankkNlXWjHyFQ7pC9PLQ5q3VGomw9U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=t02o3GeQPXL0bByZ8BwP4gEYEhQCU8L9pPgT5HtN9qmkj8W437StJDAGC10zyWenZ
+         5RN4UI3G6/pRAhpEkopeB9oDY9d3ELPgmzmovmA4VX6EzjJD/FSAMQr5ADEEEFrRN5
+         A+DhqvArcDpZUk2u7FZwJ1TwbXD0GsxlBrftOJlOyCz4fyQyrvB1RO/kFLBlwkjorl
+         3b2/epzJ/+t/msptCCSKLsjMPndnx+ZlDfrHx+i100jAT7GYLdZog9LP7bdgKk0Dz3
+         KnjcNHkgkwro0oZ7W3NvXM43fuO2UKLtcJnntu3S6qfDecw+FET616stujadtu6LO+
+         7I0eGTKRwpM1g==
+Message-ID: <1fad33a2-cba4-8ae9-0966-67ea24177149@asahilina.net>
+Date:   Thu, 23 Mar 2023 21:24:31 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323093752.17461-1-gouhao@uniontech.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] rust: ioctl: Add ioctl number manipulation functions
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+References: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
+ <56a3e16e-d686-440e-86b7-ee41f9d19fb1@app.fastmail.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <56a3e16e-d686-440e-86b7-ee41f9d19fb1@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,12 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 05:37:52PM +0800, gouhao@uniontech.com wrote:
-> From: Gou Hao <gouhao@uniontech.com>
+On 23/03/2023 21.18, Arnd Bergmann wrote:
+> On Thu, Mar 23, 2023, at 13:08, Asahi Lina wrote:
+>> Changes in v2:
+>> - Changed from assert!() to build_assert!() (static_assert!() can't work here)
+> ...
+>> +/// Build an ioctl number, analogous to the C macro of the same name.
+>> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
+>> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
+>> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
+>> +    core::assert!(nr <= bindings::_IOC_NRMASK);
+>> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
 > 
-> If 'bh' is found in cache, just return directly.
-> might_sleep() is only required on slow paths.
+> Just to make sure: did you actually change it according
+> to the changelog? It still looks like a runtime assertion
+> to me, but I don't really understand any rust.
 
-You're missing the point.  The caller can't know whether the slow or
-fast path will be taken.  So it must _never_ call this function if it
-cannot sleep.
+Umm... I'm not sure what happened there.
+
+Sorry, I'll resend it. I ran into some unrelated pain with bindgen 
+versions while trying to compile-test this, and along the way I must 
+have somehow dropped the actual v2 change...
+
+~~ Lina
+
