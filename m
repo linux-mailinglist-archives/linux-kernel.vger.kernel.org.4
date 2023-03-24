@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1986C7E5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 477976C7E5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjCXNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S231712AbjCXNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjCXNAz (ORCPT
+        with ESMTP id S231308AbjCXNB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:00:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2D74C2B;
-        Fri, 24 Mar 2023 06:00:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BACBA62A69;
-        Fri, 24 Mar 2023 13:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CE51C433D2;
-        Fri, 24 Mar 2023 13:00:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679662854;
-        bh=Nqt8dM+hpeNv7xex2w5Jz9mlfv7En+rUD6nOArTbrfU=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=XkKdty1KmqYf+xr4pULB63a49jwFSz4wikXpfMiszyg4CgKW0p77VNs5zWqZEz3lu
-         cdCIUBrHc3ifEaDSsSMDD2CTU4va2HM7d+AiuIN36n65sAUaeZWMVIDDGyulMem9Gt
-         /WFOzSD6Iv+YXF6HMYt5C6zqSzJqKSSFFoW4wkPZf9al9/qKAMY2Gxy5dfIOQJ9tOU
-         P+t41lHJTvvGJGjHOWneU/mfB9AJ2LSO3J070RQw1+vNsgu7KlKxK2TDWYnS23unpN
-         5gmxn8fossduhJP5Acn1t+pKP66j0TSJfVDt4SrUtBHnKFF6aSQQd114xb8TLdP5MK
-         34uFFsJWzNeFA==
-Date:   Fri, 24 Mar 2023 14:00:50 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Yangfl <mmyangfl@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] HID: kye: Add support for all kye tablets
-In-Reply-To: <CAAXyoMPMbYCV7br9DJn_KCq68RLnimockqU0uvsO8maT3ROxTA@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2303241400340.1142@cbobk.fhfr.pm>
-References: <20230207043318.23842-1-mmyangfl@gmail.com> <nycvar.YFH.7.76.2303101506030.1142@cbobk.fhfr.pm> <CAAXyoMPMbYCV7br9DJn_KCq68RLnimockqU0uvsO8maT3ROxTA@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 24 Mar 2023 09:01:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D002C1F930
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:01:58 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfh3H-0001HZ-53; Fri, 24 Mar 2023 14:01:51 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfh39-006O5F-EK; Fri, 24 Mar 2023 14:01:43 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfh38-008wqg-My; Fri, 24 Mar 2023 14:01:42 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com,
+        Hillf Danton <hdanton@sina.com>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] can: j1939: prevent deadlock by moving j1939_sk_errqueue()
+Date:   Fri, 24 Mar 2023 14:01:41 +0100
+Message-Id: <20230324130141.2132787-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023, Yangfl wrote:
+This commit addresses a deadlock situation that can occur in certain
+scenarios, such as when running data TP/ETP transfer and subscribing to
+the error queue while receiving a net down event. The deadlock involves
+locks in the following order:
 
-> > > This series refactor kye tablet descriptor fixup routine, by using a
-> > > template and filling parameters on the fly, and add support for all
-> > > possible kye tablets.
-> > > ---
-> > > v2: fix missing rsize assignment
-> > > v3: fix geometry
-> > > v4: split patches
-> > >
-> > > David Yang (4):
-> > >   HID: kye: Rewrite tablet descriptor fixup routine
-> > >   HID: kye: Generate tablet fixup descriptors on the fly
-> > >   HID: kye: Sort kye devices
-> > >   HID: kye: Add support for all kye tablets
-> > >
-> > >  drivers/hid/hid-ids.h    |   9 +-
-> > >  drivers/hid/hid-kye.c    | 917 +++++++++++++++++----------------------
-> > >  drivers/hid/hid-quirks.c |  14 +-
-> > >  3 files changed, 414 insertions(+), 526 deletions(-)
-> >
-> > Now queued in hid.git#for-6.4/kye, thanks David.
-> >
-> > --
-> > Jiri Kosina
-> > SUSE Labs
-> >
-> 
-> Thanks. But seems you missed the last patch.
+3
+  j1939_session_list_lock ->  active_session_list_lock
+  j1939_session_activate
+  ...
+  j1939_sk_queue_activate_next -> sk_session_queue_lock
+  ...
+  j1939_xtp_rx_eoma_one
 
-Weird. Right you are. I have now fixed that. Thanks for catching it,
+2
+  j1939_sk_queue_drop_all  ->  sk_session_queue_lock
+  ...
+  j1939_sk_netdev_event_netdown -> j1939_socks_lock
+  j1939_netdev_notify
 
+1
+  j1939_sk_errqueue -> j1939_socks_lock
+  __j1939_session_cancel -> active_session_list_lock
+  j1939_tp_rxtimer
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&priv->active_session_list_lock);
+                               lock(&jsk->sk_session_queue_lock);
+                               lock(&priv->active_session_list_lock);
+  lock(&priv->j1939_socks_lock);
+
+The solution implemented in this commit is to move the
+j1939_sk_errqueue() call out of the active_session_list_lock context,
+thus preventing the deadlock situation.
+
+Reported-by: syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com
+Fixes: 5b9272e93f2e ("can: j1939: extend UAPI to notify about RX status")
+Co-developed-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ net/can/j1939/transport.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index fce9b9ebf13f..fb92c3609e17 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -1124,8 +1124,6 @@ static void __j1939_session_cancel(struct j1939_session *session,
+ 
+ 	if (session->sk)
+ 		j1939_sk_send_loop_abort(session->sk, session->err);
+-	else
+-		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
+ }
+ 
+ static void j1939_session_cancel(struct j1939_session *session,
+@@ -1140,6 +1138,9 @@ static void j1939_session_cancel(struct j1939_session *session,
+ 	}
+ 
+ 	j1939_session_list_unlock(session->priv);
++
++	if (!session->sk)
++		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
+ }
+ 
+ static enum hrtimer_restart j1939_tp_txtimer(struct hrtimer *hrtimer)
+@@ -1253,6 +1254,9 @@ static enum hrtimer_restart j1939_tp_rxtimer(struct hrtimer *hrtimer)
+ 			__j1939_session_cancel(session, J1939_XTP_ABORT_TIMEOUT);
+ 		}
+ 		j1939_session_list_unlock(session->priv);
++
++		if (!session->sk)
++			j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
+ 	}
+ 
+ 	j1939_session_put(session);
 -- 
-Jiri Kosina
-SUSE Labs
+2.30.2
 
