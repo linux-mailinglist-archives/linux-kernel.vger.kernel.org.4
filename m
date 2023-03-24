@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA926C7D70
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630B96C7D77
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjCXLr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S231623AbjCXLs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCXLrY (ORCPT
+        with ESMTP id S230021AbjCXLss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:47:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D17212B1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:47:23 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679658441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KDPHyC6kWyePMtKLTpdAD+GT0kcy5lpaGKk40vT9Trk=;
-        b=pYBaWSXTO+Wz8eDa1FUSKeX9XRTcRQiGR+tn0DaBZaj2pSQTCpNciw284AfXoUL43F9/pV
-        ZOLFU7nwE/quHO0F/ujK2j9/zEHeD3HdpaL210Mc/1M7FdJZ3el8yttzJ7i5vac/ID3MFm
-        wySJqyLXZNpqqqLQjb/IU/8eqp1/CndsZSgnYrYSbhZJ746MDVQ8yJRQpvfi1jPB/zpVOM
-        YgnnRtaecElUEyVKkHOnWdGISCEUpK/RlIbSKRs79znEqHpzkOzefb9JTMgZ5b1AIwe0C7
-        6UOiqpAsvC0RbYOX2EZ7f/wtsT0JpFP5DGnM4zBa/Z9NqH2V2VUsw+l+0fMFBQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679658441;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KDPHyC6kWyePMtKLTpdAD+GT0kcy5lpaGKk40vT9Trk=;
-        b=p7MsW3zN+G0mjBxUNC5rQL58AdcZjYToNkx+sxTQB3HC9GmzxCrXtkkXG+pbPo6AYvg4le
-        wr4fyU/kQ4RsauCw==
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/microcode: move @microcode_mutex definition near usage
-Date:   Fri, 24 Mar 2023 11:47:20 +0000
-Message-Id: <20230324114720.1756466-1-john.ogness@linutronix.de>
+        Fri, 24 Mar 2023 07:48:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A800272D;
+        Fri, 24 Mar 2023 04:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679658527; x=1711194527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Agnq49hm9Z5LVKQlvI7cyxmsUfGXQDYTkHF95rmm7IM=;
+  b=JZK3T1sKvALC1YRoxEz4qHWky/81ET0/VfG5x3QmPafbLfNw1Zu5/2vG
+   TJe37ODdjOfapjQ3NiMb78NpvyHaaittCr/Wz47j/4oyoVHCRq7CIVOuv
+   F1EvyZGq2YYpqi8TA7mYM99+iKhL4Vho3CP+1RxWogl+g9QVJ1DIPJKpx
+   u8lslCtsDxlUkAIAMPM5GIxxa8ARdqzjBASinmZQo5p3f2OZX9EtYOdIP
+   +eAD/vuEpa/j/d6AySyoRn5p/e5bVsPl4I9AQcYGC0pvMdzYc8oLlp2am
+   5pq64gdUSVWp4KsIIJJTUMSTMsF1end2vB9NgQKHy5nx9a/TyyLCoxSTz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320152546"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="320152546"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:48:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="793411392"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="793411392"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Mar 2023 04:48:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pffuV-007t0P-2b;
+        Fri, 24 Mar 2023 13:48:43 +0200
+Date:   Fri, 24 Mar 2023 13:48:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
+ for CMR, IOR, and IDR
+Message-ID: <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
+References: <cover.1679605919.git.william.gray@linaro.org>
+ <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,67 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_MICROCODE_LATE_LOADING is not enabled, the compiler warns:
+On Thu, Mar 23, 2023 at 05:25:28PM -0400, William Breathitt Gray wrote:
+> The 104-quad-8 driver buffers the device configuration states
+> separately, however each device has only three control registers: CMR,
+> IOR, and IDR. Refactoring to buffer the states of these control
+> registers rather than each configuration separately results in succinct
+> code that more closely matches what is happening on the device.
 
-'microcode_mutex' defined but not used
+...
 
-Since reload_store() is the only function using this mutex, move the
-mutex definititon there. Then it is also within the #ifdef block for
-CONFIG_MICROCODE_LATE_LOADING.
+> +static void quad8_control_register_update(struct quad8 *const priv, u8 *const buf,
+> +					  const size_t channel, const u8 val, const u8 field)
+> +{
+> +	u8p_replace_bits(&buf[channel], val, field);
+> +	iowrite8(buf[channel], &priv->reg->channel[channel].control);
+> +}
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- arch/x86/kernel/cpu/microcode/core.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+How did you compile this?
+Due to nature of *_replace_bits() this may only be a macro.
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 7a329e561354..e7b8f7ad105d 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -49,20 +49,6 @@ bool initrd_gone;
- 
- LIST_HEAD(microcode_cache);
- 
--/*
-- * Synchronization.
-- *
-- * All non cpu-hotplug-callback call sites use:
-- *
-- * - microcode_mutex to synchronize with each other;
-- * - cpus_read_lock/unlock() to synchronize with
-- *   the cpu-hotplug-callback call sites.
-- *
-- * We guarantee that only a single cpu is being
-- * updated at any particular moment of time.
-- */
--static DEFINE_MUTEX(microcode_mutex);
--
- struct ucode_cpu_info		ucode_cpu_info[NR_CPUS];
- 
- struct cpu_info_ctx {
-@@ -465,6 +451,20 @@ static int microcode_reload_late(void)
- 	return ret;
- }
- 
-+/*
-+ * Synchronization.
-+ *
-+ * All non cpu-hotplug-callback call sites use:
-+ *
-+ * - microcode_mutex to synchronize with each other;
-+ * - cpus_read_lock/unlock() to synchronize with
-+ *   the cpu-hotplug-callback call sites.
-+ *
-+ * We guarantee that only a single cpu is being
-+ * updated at any particular moment of time.
-+ */
-+static DEFINE_MUTEX(microcode_mutex);
-+
- static ssize_t reload_store(struct device *dev,
- 			    struct device_attribute *attr,
- 			    const char *buf, size_t size)
+That's what LKP is telling about I think.
 
-base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
+
 -- 
-2.30.2
+With Best Regards,
+Andy Shevchenko
+
 
