@@ -2,111 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7026C8754
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:13:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDA16C8758
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjCXVNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S230271AbjCXVOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjCXVNX (ORCPT
+        with ESMTP id S231580AbjCXVOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:13:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FF446BD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:13:10 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.2.20])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6490660206A;
-        Fri, 24 Mar 2023 21:13:06 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679692389;
-        bh=txaOnhLH2D4ccynBeXElhufAFanFILa3bH1kjnNZJZs=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=JDEQbwquT419PgvuTeM/GUJzyJ9wfI32yh38MsDe1BWnDpI9euwMvGNmXd32pk10x
-         0qbJ4CDBKFSpSX62yN8dlQOD1FyHPjE9+y86tUm9+F2FrFwpXOPqmtjO/Yn9WzUM7k
-         6BUhprovL1Av+YDtR/cAWzclrH+XmFQLn9Mbs4cXhf7b0qUgMV4r437skabiA5KL0o
-         myjBLJZjo/02bkjRDweJ8d48cyMb0eenTr7OfJviYfXlRWxKJIp+Tw4icvdbG+jbt+
-         Lmi4W47lDX8Z6vDxjW0/cQ7elNSDGgckYQZCKT8gL/YPS8V0juzb70A/N6ExKTpptW
-         pPKkAANs5xPqQ==
-Message-ID: <eab20109-ffa2-461c-92ff-3eec4fa5c8a8@collabora.com>
-Date:   Sat, 25 Mar 2023 02:12:55 +0500
+        Fri, 24 Mar 2023 17:14:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E71CDDA;
+        Fri, 24 Mar 2023 14:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=UqmSnaARsVlunnEmxrrJ9WDls/RPk2SXuv1lTe4E1dw=; b=uhM3XUaVQ+S23qekRBBOLWrA+j
+        dNC0QsDIew21OU/LKUx/LzASKD30+9j0q7dyI4o9n6px/5HyeK9lw3a8//U/aQNRbLC+t7D8f3jKs
+        2s4rSJAkR5Ez6XNUZaayOEkiQLEhNf6A3yM3Ts4N6bzzdPKIXLusJ41XEsal9VPBwSLFE+uF7yGpi
+        J20/atqKBNbRpY5kNskg7TBnSJ7V32NzJVRiSKT4CNQlYT++yc5momtkiV1Am/xMbAAjD0gUCRDue
+        FerXlrrIMsLcHIi0coq7sPxgRaKhEbAPo9qHa7M2LQNoYRG5VPFI2rPRksbWxvSTcogbZCCrWfuAI
+        H3bKglow==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pfojj-005cuz-2k;
+        Fri, 24 Mar 2023 21:14:11 +0000
+Date:   Fri, 24 Mar 2023 14:14:11 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        fan.ni@samsung.com, vincent.fu@samsung.com,
+        a.manzanares@samsung.com, colin.i.king@gmail.com
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted
+ allocations
+Message-ID: <ZB4SoxgM6vydrxrj@bombadil.infradead.org>
+References: <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+ <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+ <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+ <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+ <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
+ <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/sysfs: make more kobj_type structures constant
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230324-b4-kobj_type-damon2-v1-1-48ddbf1c8fcf@weissschuh.net>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230324-b4-kobj_type-damon2-v1-1-48ddbf1c8fcf@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 8:35 PM, Thomas Weißschuh wrote:
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
+On Fri, Mar 24, 2023 at 01:28:51PM -0700, Linus Torvalds wrote:
+> On Fri, Mar 24, 2023 at 1:00 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On the modules side of things we can be super defensive on the second
+> > vmalloc allocation defensive [0] but other than this the initial kread
+> > also needs care too.
 > 
-> Take advantage of this to constify the structure definition to prevent
-> modification at runtime.
+> Please don't re-implement semaphores. They are a *classic* concurrency limiter.
 > 
-> These structures were not constified in
-> commit e56397e8c40d ("mm/damon/sysfs: make kobj_type structures constant")
-> as they didn't exist when that patch was written.
+> In fact, probably *THE* classic one.
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> So just do something like this instead:
+> 
+>    --- a/kernel/module/main.c
+>    +++ b/kernel/module/main.c
+>    @@ -2937,6 +2937,11 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+>         return load_module(&info, uargs, 0);
+>     }
+> 
+>    +#define CONCURRENCY_LIMITER(name, n) \
+>    +    struct semaphore name = __SEMAPHORE_INITIALIZER(name, n)
+>    +
+>    +static CONCURRENCY_LIMITER(module_loading_concurrency, 50);
+>    +
+>     SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs,
+> int, flags)
+>     {
+>         struct load_info info = { };
+>    @@ -2955,8 +2960,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const
+> char __user *, uargs, int, flags)
+>                       |MODULE_INIT_COMPRESSED_FILE))
+>                 return -EINVAL;
+> 
+>    +    err = down_killable(&module_loading_concurrency);
+>    +    if (err)
+>    +            return err;
+>         len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+>                                        READING_MODULE);
+>    +    up(&module_loading_concurrency);
+>         if (len < 0)
+>                 return len;
+> 
+> NOTE! Entirely untested. Surprise surprise.
 
-> ---
->  mm/damon/sysfs-schemes.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-> index 3cdad5a7f936..50cf89dcd898 100644
-> --- a/mm/damon/sysfs-schemes.c
-> +++ b/mm/damon/sysfs-schemes.c
-> @@ -384,7 +384,7 @@ static struct attribute *damon_sysfs_scheme_filter_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filter);
->  
-> -static struct kobj_type damon_sysfs_scheme_filter_ktype = {
-> +static const struct kobj_type damon_sysfs_scheme_filter_ktype = {
->  	.release = damon_sysfs_scheme_filter_release,
->  	.sysfs_ops = &kobj_sysfs_ops,
->  	.default_groups = damon_sysfs_scheme_filter_groups,
-> @@ -503,7 +503,7 @@ static struct attribute *damon_sysfs_scheme_filters_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filters);
->  
-> -static struct kobj_type damon_sysfs_scheme_filters_ktype = {
-> +static const struct kobj_type damon_sysfs_scheme_filters_ktype = {
->  	.release = damon_sysfs_scheme_filters_release,
->  	.sysfs_ops = &kobj_sysfs_ops,
->  	.default_groups = damon_sysfs_scheme_filters_groups,
-> 
-> ---
-> base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
-> change-id: 20230324-b4-kobj_type-damon2-0238ee9e8d8c
-> 
-> Best regards,
+I'll give it a good wack thanks.
 
--- 
-BR,
-Muhammad Usama Anjum
+But it still begs the question if *other* vmalloc user-interfacing
+places need similar practices. It's not just system calls that use it
+willy nilly but anything that could in the end use it. Surely a lot of
+"issues" could only happen in an insane pathological use case, but it's
+a generic thing to keep in mind in the end.
+
+> I'm a tiny bit worried about deadlocks here, so somebody needs to make
+> sure that the kernel_read_file_from_fd() case cannot possibly in turn
+> cause a "request_module()" recursion.
+
+Automount on a path where the module lies in a path for a modue not
+loaded yet triggering a kernel module autoload is the only thing
+I can think of that could cause that, but that just calls userspace
+modprobe. And I think that'd be an insane setup.
+
+> We most definitely have had module recursion before, but I *think*
+> it's always just in the module init function (ie one module requests
+> another when ithe mod->init() function is called).
+
+Since you up() right after the kernel_read_file_from_fd() we would not
+be racing module inits with this. If however we place the up() after
+the load_module() then that does incur that recurssion possibilty.
+
+> I think by the time we have opened the module file descriptors and are
+> just reading the data, we should be ok and the above would never
+> deadlock, but I want people to at least think about it.
+> 
+> Of course, with that "max 50 concurrent loaders" limit, maybe it's
+> never an issue anyway. Even if you get a recursion a few deep, at most
+> you just wait for somebody else to get out of their loaders. Unless
+> *everybody* ends up waiting on some progress.
+
+Yeah, these certainly are pathalogical corner cases. I'm more interested
+in solving doing something sane for 1000 CPUs or 2000 CPUs for now, even
+if the issue was the kernel (not userspace) to blame (and even if those
+use cases are being fixed now like the queued up linux-next ACPI
+CPU frequency modules per CPU).
+
+  Luis
