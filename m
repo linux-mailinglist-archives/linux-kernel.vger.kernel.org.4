@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453E56C7637
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EF46C7639
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjCXDUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S230157AbjCXD3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXDUq (ORCPT
+        with ESMTP id S229484AbjCXD3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:20:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA50520D31;
-        Thu, 23 Mar 2023 20:20:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382F912FC;
-        Thu, 23 Mar 2023 20:21:24 -0700 (PDT)
-Received: from [10.162.40.17] (unknown [10.162.40.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B32133F67D;
-        Thu, 23 Mar 2023 20:20:35 -0700 (PDT)
-Message-ID: <4665d03f-b801-679c-0b52-c426404284b9@arm.com>
-Date:   Fri, 24 Mar 2023 08:50:32 +0530
+        Thu, 23 Mar 2023 23:29:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDEA212A4;
+        Thu, 23 Mar 2023 20:28:59 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PjSJn5BpGzSp8n;
+        Fri, 24 Mar 2023 11:25:29 +0800 (CST)
+Received: from localhost.localdomain (10.67.174.95) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 24 Mar 2023 11:28:57 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH] perf ftrace: Make system wide the default target for latency subcommand
+Date:   Fri, 24 Mar 2023 03:27:02 +0000
+Message-ID: <20230324032702.109964-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V9 00/10] arm64/perf: Enable branch stack sampling
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <655ff114-99d2-4612-9167-cc8688f2b6b2@sirena.org.uk>
- <f7e24b0c-3e33-755a-65c9-2ee78d5a79ec@arm.com>
- <4d93a3de-c86d-454b-8a43-b24e62ea3be7@sirena.org.uk>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <4d93a3de-c86d-454b-8a43-b24e62ea3be7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.95]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If no target is specified for 'latency' subcommand, the execution fails
+because - 1 (invalid value) is written to set_ftrace_pid tracefs file.
+Make system wide the default target, which is the same as the default
+behavior of 'trace' subcommand.
 
+Before the fix:
 
-On 3/23/23 18:24, Mark Brown wrote:
-> On Thu, Mar 23, 2023 at 09:55:47AM +0530, Anshuman Khandual wrote:
->> On 3/22/23 00:32, Mark Brown wrote:
-> 
->>> document a requirement for those traps to be disabled now in case we
->>> need them later, and do so during EL2 setup for KVM guests?  That could
->>> always be done incrementally.
-> 
->> Unlike all other instruction trap enable fields in SYS_HFGITR_EL2, these BRBE
->> instructions ones are actually inverted in semantics i.e the particular fields
->> need to be set for these traps to be disabled in EL2.
-> 
-> Right, for backwards compatibility all newly added fields are trap by
-> default.
+  # perf ftrace latency -T schedule
+  failed to set ftrace pid
 
-Okay
+After the fix:
 
-> 
->> SYS_HFGITR_EL2.nBRBIALL
->> SYS_HFGITR_EL2.nBRBINJ
-> 
->> By default entire SYS_HFGITR_EL2 is set as cleared during init and that would
->> prevent a guest from using BRBE.
-> 
-> It should prevent the host as well shouldn't it? 
+  # perf ftrace latency -T schedule
+  ^C#   DURATION     |      COUNT | GRAPH                                          |
+       0 - 1    us |          0 |                                                |
+       1 - 2    us |          0 |                                                |
+       2 - 4    us |          0 |                                                |
+       4 - 8    us |       2828 | ####                                           |
+       8 - 16   us |      23953 | ########################################       |
+      16 - 32   us |        408 |                                                |
+      32 - 64   us |        318 |                                                |
+      64 - 128  us |          4 |                                                |
+     128 - 256  us |          3 |                                                |
+     256 - 512  us |          0 |                                                |
+     512 - 1024 us |          1 |                                                |
+       1 - 2    ms |          4 |                                                |
+       2 - 4    ms |          0 |                                                |
+       4 - 8    ms |          0 |                                                |
+       8 - 16   ms |          0 |                                                |
+      16 - 32   ms |          0 |                                                |
+      32 - 64   ms |          0 |                                                |
+      64 - 128  ms |          0 |                                                |
+     128 - 256  ms |          4 |                                                |
+     256 - 512  ms |          2 |                                                |
+     512 - 1024 ms |          0 |                                                |
+       1 - ...   s |          0 |                                                |
 
-In a EL2 host environment, BRBE is being enabled either in EL2 (kernel/hv) or
-in EL0 (user space), it never gets enabled on EL1. Moreover BRBIALL/BRBINJ
-instructions are always executed while being inside EL2 (kernel/hv). Hence how
-could these instructions cause trap in EL2 ?
+Fixes: 53be50282269 ("perf ftrace: Add 'latency' subcommand")
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ tools/perf/builtin-ftrace.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> 
->> I guess something like the following (untested) needs to be done, to enable
->> BRBE in guests.
-> 
->> +       mrs     x1, id_aa64dfr0_el1
->> +       ubfx    x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
->> +       cbz     x1, .Lskip_brbe_\@
->> +       mov     x0, xzr
->> +       orr     x0, x0, #HFGITR_EL2_nBRBIALL
->> +       orr     x0, x0, #HFGITR_EL2_nBRBINJ
->> +       msr_s   SYS_HFGITR_EL2, x0
->> +
->> +.Lskip_brbe_\@:
-> 
-> Yes, looks roughly what I'd expect.
+diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+index d7fe00f66b83..fb1b66ef2e16 100644
+--- a/tools/perf/builtin-ftrace.c
++++ b/tools/perf/builtin-ftrace.c
+@@ -1228,10 +1228,12 @@ int cmd_ftrace(int argc, const char **argv)
+ 		goto out_delete_filters;
+ 	}
+ 
++	/* Make system wide (-a) the default target. */
++	if (!argc && target__none(&ftrace.target))
++		ftrace.target.system_wide = true;
++
+ 	switch (subcmd) {
+ 	case PERF_FTRACE_TRACE:
+-		if (!argc && target__none(&ftrace.target))
+-			ftrace.target.system_wide = true;
+ 		cmd_func = __cmd_ftrace;
+ 		break;
+ 	case PERF_FTRACE_LATENCY:
+-- 
+2.30.GIT
 
-I could send an stand alone patch after your latest series [1], which disables
-BRBINJ/BRBIALL instruction trap in EL2 to enable BRBE usage in the guest.
-
-https://lore.kernel.org/all/20230306-arm64-fgt-reg-gen-v3-2-decba93cbaab@kernel.org/T/
-
-> 
->>> I've got a patch adding the definition of that register to sysreg which
->>> I should be sending shortly, no need to duplicate that effort.
-> 
->> Sure, I assume you are moving the existing definition for SYS_HFGITR_EL2 along
->> with all its fields from ../include/asm/sysreg.h to ../tools/sysreg. Right, it
->> makes sense.
-> 
-> No fields at the minute but yes, like the other conversions.
-
-Sure.
