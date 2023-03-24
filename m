@@ -2,80 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA366C762E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A306C7632
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjCXDPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S230021AbjCXDR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjCXDPS (ORCPT
+        with ESMTP id S229508AbjCXDRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:15:18 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE57AF3B;
-        Thu, 23 Mar 2023 20:15:17 -0700 (PDT)
-Received: from pride-PowerEdge-R740.. ([172.16.0.254])
-        (user=u201912584@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 32O3E84U023389-32O3E84V023389
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 24 Mar 2023 11:14:14 +0800
-From:   SongJingyi <u201912584@hust.edu.cn>
-To:     Yangbo Lu <yangbo.lu@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        SongJingyi <u201912584@hust.edu.cn>,
-        Dan Carpenter <error27@gmail.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ptp_qoriq: fix memory leak in probe()
-Date:   Fri, 24 Mar 2023 11:14:06 +0800
-Message-Id: <20230324031406.1895159-1-u201912584@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
+        Thu, 23 Mar 2023 23:17:24 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A660BB476;
+        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id a16so396931pjs.4;
+        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679627843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oE8IT0eGLP+ltAmGkmnTbIjUwhB1iQPb5PUuFNWEi9s=;
+        b=Pp3xF9Mhs/4s45yE2SBIVEuLySI+7hw5n3scAveYYwy3B21GGwAKMSU6qwEmOKh3WA
+         WKYNY5pftKtyDqtRQnkBBSbPUatg3CMLkXWufkLSDCWF8odKTX4ZzHlTSmzJT2aDtuCE
+         Y7b19A1uPpy3HZ+uBZUqpxFX4hJlEUwdEcp6Y6dx8/jH0oi7RC5ycbjgX3DtDGOofjxk
+         22l8IAmUkmCBPvbdr/i0Okevx8cL9SKiuo6sMhS9Fxm51uw4qWmVKoFkGbs+A7B0obRY
+         hq43UkLNgYGlkUIVjA+aO3Hpdy1EiG+jtuVKTJuvlwhA5eW8HUWW5+12N8E5IWnxWOH+
+         T8Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679627843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oE8IT0eGLP+ltAmGkmnTbIjUwhB1iQPb5PUuFNWEi9s=;
+        b=mAsP8eoykR+O5Afvay5QN2WJCEAcEZGvVswQpQyMqLEfVoyKARRVxaTDmo5TGwHxw+
+         6igwcf6aAsj3zFZXBTqenjE3G8EadoxIuSl/v+ch4DGChO1sDb8Sstf6r8DNHYWU0Mbr
+         9J9BHTz/p06Lj28e+KqPRGUrOjH58A9gKStblLSCyuFJN/XCX5c19aK7cH9wnFBzUdb7
+         MGlSZAr7dDPy3lyX6/WRie5gVQ0iE7wSOsdDiswu0YHBVGv1SsysvpDEjeFUmTT3611q
+         u51esAQylR3nDSQPqAc2hSkXdJMWUYXsz0EU1m73Mpx8o4m4YQ0VUIlD0jdxe97x/JAl
+         8igg==
+X-Gm-Message-State: AAQBX9cLadgGxkijay9gIKNUr7KF2CpWn6T0QAnsoV/aZeGPNEV7UFb9
+        hGLhrNPwWv+3tnIH5yjnaco=
+X-Google-Smtp-Source: AKy350YJdGQw0BVjrs2To1PdWcsP2zUH4n7egCn+AwfaKoeoRP+uhcW2oB4ECvCQtq3GlK4zy3w2qw==
+X-Received: by 2002:a17:903:120b:b0:1a0:42d4:e38a with SMTP id l11-20020a170903120b00b001a042d4e38amr1624786plh.11.1679627843131;
+        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
+Received: from localhost.localdomain ([218.66.91.195])
+        by smtp.gmail.com with ESMTPSA id f21-20020a170902ab9500b001a076568da9sm12960984plr.216.2023.03.23.20.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 20:17:22 -0700 (PDT)
+From:   xiaoshoukui <xiaoshoukui@gmail.com>
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoshoukui <xiaoshoukui@gmail.com>,
+        xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+Subject: [PATCH] btrfs: ioctl: fix inaccurate determination of exclusive_operation
+Date:   Thu, 23 Mar 2023 23:16:11 -0400
+Message-Id: <20230324031611.98986-1-xiaoshoukui@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: u201912584@hust.edu.cn
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch complains that:
-drivers/ptp/ptp_qoriq.c ptp_qoriq_probe()
-warn: 'base' from ioremap() not released.
+with fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD enter
+btrfs_ioctl_add_dev function , exclusive_operation will be classified
+as in paused balance operation. After return from btrfs_ioctl_add_dev,
+exclusive_operation will be restore to BTRFS_EXCLOP_BALANCE_PAUSED which
+is not its original state.
 
-Fix this by revising the parameter from 'ptp_qoriq->base' to 'base'.
-This is only a bug if ptp_qoriq_init() returns on the
-first -ENODEV error path.
-For other error paths ptp_qoriq->base and base are the same.
-And this change makes the code more readable.
-
-Fixes: 7f4399ba405b ("ptp_qoriq: fix NULL access if ptp dt node missing")
-Signed-off-by: SongJingyi <u201912584@hust.edu.cn>
-Reviewed-by: Dan Carpenter <error27@gmail.com>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Signed-off-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
 ---
- drivers/ptp/ptp_qoriq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/ioctl.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ptp/ptp_qoriq.c b/drivers/ptp/ptp_qoriq.c
-index 61530167efe4..350154e4c2b5 100644
---- a/drivers/ptp/ptp_qoriq.c
-+++ b/drivers/ptp/ptp_qoriq.c
-@@ -637,7 +637,7 @@ static int ptp_qoriq_probe(struct platform_device *dev)
- 	return 0;
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index a0ef1a1784c7..aab5fdb9445c 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -2629,7 +2629,7 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
+ 	}
  
- no_clock:
--	iounmap(ptp_qoriq->base);
-+	iounmap(base);
- no_ioremap:
- 	release_resource(ptp_qoriq->rsrc);
- no_resource:
+ 	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_DEV_ADD)) {
+-		if (!btrfs_exclop_start_try_lock(fs_info, BTRFS_EXCLOP_DEV_ADD))
++		if (fs_info->exclusive_operation != BTRFS_EXCLOP_BALANCE_PAUSED)
+ 			return BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
+ 
+ 		/*
+@@ -2637,8 +2637,9 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
+ 		 * change the exclusive op type and remember we should bring
+ 		 * back the paused balance
+ 		 */
++		spin_lock(&fs_info->super_lock);
+ 		fs_info->exclusive_operation = BTRFS_EXCLOP_DEV_ADD;
+-		btrfs_exclop_start_unlock(fs_info);
++		spin_unlock(&fs_info->super_lock);
+ 		restore_op = true;
+ 	}
+ 
 -- 
-2.34.1
+2.20.1
 
