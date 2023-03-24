@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B3C6C8820
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58F06C8827
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjCXWKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S232394AbjCXWLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjCXWKw (ORCPT
+        with ESMTP id S232233AbjCXWLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:10:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A830125AE;
-        Fri, 24 Mar 2023 15:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C2562CDB;
-        Fri, 24 Mar 2023 22:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A34AC433D2;
-        Fri, 24 Mar 2023 22:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679695820;
-        bh=7NwS0U01MV0dfXKZoaLQ2hFmYS51CthUEOZmKxykaMI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hClVYetXTib/837YePQUK5+XtDS+o/RD51zAHlmROciMRK8ibiL57HjFIDhpFG/hF
-         xAALL+OkPw+0YEpZpUl7205PKFvgmuJImIr3cqxmkn72Ut6UCMNjljzzM4jVZgs5Hk
-         DZE7wdnE2C/dGgUoTd0pC6xZQ3C4ldBhcJ9tmBJKfIe0h4lIr5nnaUE8g+NnZsqlDN
-         DpWkddNLe2h+oDEvl5Z84MXxCUc377wSNzB2YxN0tllgTKnLlBJCnaxqfi6LjYDbgi
-         c6i8l1nu40jIaJQKchJ7eCSlpJr84hsnM5Xy7S0QGCHMtEqrXmbD5xRnfT0h+4iS2b
-         Rkjvhio+9m8sw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 63A65E52505;
-        Fri, 24 Mar 2023 22:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 24 Mar 2023 18:11:06 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9673320544;
+        Fri, 24 Mar 2023 15:10:36 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id ca2-20020a056830610200b006a11ab58c3fso954332otb.4;
+        Fri, 24 Mar 2023 15:10:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679695832;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fEZB0Nh/4O/z/XC92VKOaEMymhD7WgSbKx5bfGMzpjo=;
+        b=a6zxQiGAwCfZdkJpOYG+7nWpnTsubLe2SytfDE0PnTFSHJ9gJLWZuecwBKVIpd4jBD
+         yrp1Do8zBkVRXGkIgIh7I0+qnM4IKumriz67c7xt0Quyhe83xQtv18bijHb0C+54AUyS
+         ETO+jhFF8+E0R3FIURzoqEMYx59TYllkApEn2oO56Ajki/eiGGtccEUxqWuSDmBOcg/8
+         iHaQl6rsthmAkfysLoHHKR+slJLjpN104RtVV12vhb4NY6ItJ1LuHQuERVUjrKH5+DZC
+         61il5K9VEyY2CYXG0xANT2g4AVLA/XNg2yEAi+oRsGm8LiE68vcnLlWLB9bYk8RGux3y
+         oT0w==
+X-Gm-Message-State: AO0yUKXP49E71naKqVTc0ytqvpBJr40GRAvVENLn8F0lf1hEhBrwON6I
+        ZR5Vw2gTjxSrW/pFpNGb7g==
+X-Google-Smtp-Source: AK7set9vW0zHsHlJLlEylX6XKKkb0rXZiJfoBOVqeOno3AFH8R3gs0Y/UTdHNrqBt92x+oWHzPN07w==
+X-Received: by 2002:a05:6830:1db6:b0:69f:91eb:87da with SMTP id z22-20020a0568301db600b0069f91eb87damr2486443oti.16.1679695832134;
+        Fri, 24 Mar 2023 15:10:32 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80f9:92f0:b372:78c0:69c1:66d6])
+        by smtp.gmail.com with ESMTPSA id n16-20020a9d6f10000000b0069fa641bd25sm2976890otq.8.2023.03.24.15.10.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 15:10:31 -0700 (PDT)
+Received: (nullmailer pid 69197 invoked by uid 1000);
+        Fri, 24 Mar 2023 22:10:29 -0000
+Date:   Fri, 24 Mar 2023 17:10:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 01/10] dt: bindings: clock: add mtmips SoCs clock device
+ tree binding documentation
+Message-ID: <20230324221029.GA64664-robh@kernel.org>
+References: <d598f5f8-f998-2a31-bb21-97e641793dda@linaro.org>
+ <120663a9-aecf-4a43-d1fb-779cd52802c6@arinc9.com>
+ <3d2b8a1a-99c9-f53e-4bb3-a8b938e2672f@linaro.org>
+ <543ad00d-4171-ed02-0d31-676c6b003e54@arinc9.com>
+ <82f517b5-6697-3379-8d71-163b0d17735d@linaro.org>
+ <d640a929-b6a0-1552-e66a-3a7bbabbc69f@arinc9.com>
+ <2150938b-5433-6f51-c404-2c0f6976f864@linaro.org>
+ <1c279b0a-c814-2fe3-0432-2aa6b3dff16e@arinc9.com>
+ <9f8e7a74-35c6-6db5-4960-1efa79a23983@linaro.org>
+ <6ed317bc-ce3a-2da2-1d96-f0ea8ff0b48c@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next V17 0/7] riscv: Add GENERIC_ENTRY support
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167969582040.16091.14731927626105849742.git-patchwork-notify@kernel.org>
-Date:   Fri, 24 Mar 2023 22:10:20 +0000
-References: <20230222033021.983168-1-guoren@kernel.org>
-In-Reply-To: <20230222033021.983168-1-guoren@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <6ed317bc-ce3a-2da2-1d96-f0ea8ff0b48c@arinc9.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Tue, 21 Feb 2023 22:30:14 -0500 you wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Mar 21, 2023 at 12:02:47PM +0300, Arınç ÜNAL wrote:
+> On 21.03.2023 12:01, Krzysztof Kozlowski wrote:
+> > On 21/03/2023 09:53, Arınç ÜNAL wrote:
+> > > > 
+> > > > I do not see how choosing one variant for compatibles having two
+> > > > variants of prefixes, complicates things. Following this argument
+> > > > choosing "ralink" also complicates!
+> > > 
+> > > The idea is to make every compatible string of MTMIPS to have the ralink
+> > > prefix so it's not mediatek on some schemas and ralink on others. Simpler.
+> > 
+> > Which is an ABI break, so you cannot do it.
 > 
-> The patches convert riscv to use the generic entry infrastructure from
-> kernel/entry/*. Some optimization for entry.S with new .macro and merge
-> ret_from_kernel_thread into ret_from_fork.
-> 
-> The 1,2 are the preparation of generic entry. 3~7 are the main part
-> of generic entry.
-> 
-> [...]
+> No, both strings stay on the driver, it's the schemas that will only keep
+> ralink.
 
-Here is the summary with links:
-  - [-next,V17,1/7] compiler_types.h: Add __noinstr_section() for noinstr
-    (no matching commit)
-  - [-next,V17,2/7] riscv: ptrace: Remove duplicate operation
-    https://git.kernel.org/riscv/c/8574bf8d0ddd
-  - [-next,V17,3/7] riscv: entry: Add noinstr to prevent instrumentation inserted
-    https://git.kernel.org/riscv/c/d0db02c62879
-  - [-next,V17,4/7] riscv: entry: Convert to generic entry
-    https://git.kernel.org/riscv/c/f0bddf50586d
-  - [-next,V17,5/7] riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
-    https://git.kernel.org/riscv/c/0bf298ad2b61
-  - [-next,V17,6/7] riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
-    https://git.kernel.org/riscv/c/ab9164dae273
-  - [-next,V17,7/7] riscv: entry: Consolidate general regs saving/restoring
-    https://git.kernel.org/riscv/c/45b32b946a97
+But you are adding one of the strings to the driver, right? Still an ABI 
+break, but only if you have an old kernel and new DT. That can be 
+somewhat mitigated with a stable backport of the new id, but still an 
+ABI break.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Rob
