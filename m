@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396746C86D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4809E6C86D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjCXU0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
+        id S231908AbjCXU0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjCXU0m (ORCPT
+        with ESMTP id S229921AbjCXU0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:26:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A001BAF2;
-        Fri, 24 Mar 2023 13:26:37 -0700 (PDT)
+        Fri, 24 Mar 2023 16:26:40 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9801CAF9;
+        Fri, 24 Mar 2023 13:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1679689591; i=w_armin@gmx.de;
-        bh=iBwcc9Yx9rNUnbmKzEiEQczbMJUikxgDl+84KQ+TaMc=;
+        t=1679689593; i=w_armin@gmx.de;
+        bh=6wlZo2xanf4kDtHfqBasjPU5Ds+RDX/QpSs/lo8nd3c=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=bZusCgVqqvjz9PVIOZtmG+JPZj2CK/4ZTrp33vSdPDCxEreJMXgou0FtssiE0N0Y1
-         hNWEkelkCsrkC3uC/LaLvwU/Ub5zdZAohvPZ6LXh81PtQNT809nsNatLOeGEhD7h4T
-         Xt1ZYjnhvPpNSzvpwXzi6meGeXCxqbh3/LgCGLPZqQOsc2GO2p2TqqcC2nSG/aB2gp
-         alQAnn8OUjX5Kxf9EFRMVJJQ5u9j5GlYP5L2yZkgY38CVFvrnUJZBRegja5WGNf89O
-         UaYz3brtOxTDE+wQ0l5sZq8ioS3lhJdnRfihIWSoGmI1QltkXk+AmxGNzKg9YqaZfZ
-         6kiBUufmQKhvg==
+        b=nrbT56XNYRYqCKmOZoWucUxx1In/KAgdMWbDJ04ws6uDUW0EVP2goztWojjRgdhF9
+         Wcia+U4gSSeIVD9n7RZQCagRn2FAobCvg/oFfIyLyAWVpgWpyrAMOjwJWqPrT3P0gF
+         /sVIBfR4htC5dDYH6/0FPGKjVKmnTvX5aiQvvn5EWBafmvmSCwK2sam/bQ7qzZl7vL
+         63avB/w+rdYX5fQNlmT2YI8/gUFU2+3K2QTjru6wMdF62oIACg0BcT6frEdBaao4vh
+         xfIQOGdPLH8bncWh5tXIfd+P1NQmq4M+rVvQmh/7bqFtl0lxnXk+IpPbYHg6aJVRPn
+         QzpJPN0QA9X9g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MC30P-1plcLK2G45-00CRBo; Fri, 24 Mar 2023 21:26:31 +0100
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Mof9P-1qHftp3zK5-00p5e2; Fri, 24 Mar 2023 21:26:33 +0100
 From:   Armin Wolf <W_Armin@gmx.de>
 To:     rafael@kernel.org, lenb@kernel.org
 Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] ACPI: EC: Limit explicit removal of query handlers to custom query handlers
-Date:   Fri, 24 Mar 2023 21:26:26 +0100
-Message-Id: <20230324202628.76966-2-W_Armin@gmx.de>
+Subject: [PATCH v3 2/3] ACPI: EC: Fix oops when removing custom query handlers
+Date:   Fri, 24 Mar 2023 21:26:27 +0100
+Message-Id: <20230324202628.76966-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230324202628.76966-1-W_Armin@gmx.de>
 References: <20230324202628.76966-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2ij0/krkURmRj6a63ZT1bdR+W0yrB6Cqe37dgn3hdvawhyroSfm
- 14UMQKm0JXaWPIpnkSS7aK5btkKmoBLa9McnkbEyHSbcXDTxoJrl77LRUuGALmLByEzmpaE
- R3iGF3eHQquWApSeZn1/KuFs6w/bcOgDTxj0/lxOCaD0E1IoH9Wo39Frvd7cATzOvt5fu5Q
- cYNJNZbS920cv1mD3wOyA==
-UI-OutboundReport: notjunk:1;M01:P0:vxnn8PaQXUY=;DPaNlF7qzJNDDfjL6hDG1temh6E
- JoSdMbgWrMHeXI6XGO93I8+ZF5FRxxf46nP4ZhXjj3zHj3ZdOFW6pH8jRMQo1MAOjToJdwokC
- 5SCc838D1HxzYZeTNPcoWCDZE4GzB1i/q0ZRhkIV+owhCfqgETKfrgqxJVZgcso6bjUpJA4lC
- Uw4+cS7FAmbaK9iDaOU+c16a7YQTAlV7EHu/pIr7UbIfrVhFQLpE76fvk8Ja3zIG7jZMcilzB
- 7mrWASvNRCmjtkDqiFuqccpfIaHLr00bS38PrTju6sxZxKW+qlXzS3zmdInc3YcUaR/4r7R2O
- Nz/h0UIL469w2fnObbjJxZv8akX0wQa5wzMkwutCU/ChVelC0Vlr1zSl/Sl5bIh0EiqjItHHd
- nzGMdMYVOstnxS1URlgjJcRbLFvfdw+GE161wWl9nMGfnZY5fVO3ZccNj+Q1U47v/h05sKh72
- LpOimQIDt3LnqQXjhIzAvtd9mpY2uwLjvFXQhFMc4YT+umdECUAzHgHJq6Rj9dX9slyY+nPD+
- Uls2bX8PodmAU7F404xdFXJRO9ccxbd7tijg1lTGcu6EAhfGpNwiKogsbvfrzrB10zpFtWFB4
- log0/TTOgI9kEZGZyXf3SkQdDsfu8fBX4g6IwSwLqYGQ19w/X4l6vwX1P/JbE8ToiqwnlgB7T
- J7TPz9zUSSzaFQY/2Aqi8vTQ/ijF0KxhctddadhXDz/ON+tZz0sop/lYNvRJ6GxjxiCt2Y9Zq
- 1CHCpTCtgZ7E+oB+2T5vl5Cq977VYFBf/0q6Mttyj4+ls2vz9BTsRpWd1MMRCtwYJu+/TRfnJ
- UqISKu1R6uqDLyjv0qUUOpwnVywwKuIO9dqXIHa6nLGkVd+H/E1HXkMW14/6ssF9is45EBxf2
- Dz2sB+ljAVWp60p+baJDfbocThzHd3S+OmzQ9BcFH0z49heVj+EvVMzaatz/j+9vcseeLFH/A
- Ab6H/0UMk4t5aJu6wnJDHfW55/w=
+X-Provags-ID: V03:K1:dC54eEAF45WHEdv420PbB5TkLeb16RrxtmkJEM2R8RRRjtRikov
+ L9JtDBs/XpqFDpq1AMx4lh3lYz8ixhBJ0D4v3p9ajXtX0sRCoIDf7n0NhScllsZtFi79I+R
+ dxpZwg8E2WSqjaJtG38/8ZWFBRbOXBbWbPkIzfKehQXCuUHOx5BOh5Hq5Eb2n7bgb1th1O/
+ VZxTqlSlOOSg6DOlS5xRQ==
+UI-OutboundReport: notjunk:1;M01:P0:gL62lcIRjBI=;8SrmOv4vicIkxI0p42bkhqbBhpV
+ F/Qvx3QU2X7RG+srW+CVgNgVZGUeH+VpGVAizzI2orhvvDjoBW5YLgKeNXxRCbgFAmF1jiXac
+ NXN5SJ9Q1OMapTELciCcQGBey/4INNwRoDZjt5SquDIpTTdTjVkILG/4dbWOi2wVVX/45Zd+M
+ hG52V20cLUjPQIpMWoJaJ3w7VAxb2RhvCt+PM363033aVztVxKBP97J1A59E2tdHdwarWV7By
+ EdchowyP4CJLOxF5Ye4uEjySyvF1e3plwDeN2GQBNRUnmvro0PsWDC2X4Ozky9yOkzWKy0brn
+ Tvhp/R9fgLr/3pia556r2qWdWD3n9rjAPFL/dkvLt2qHnc02KmYij7I5+cwB49xd0Ezong/V2
+ 8RnbOEK4xPMyvwX5caauIKvKisWM6z8YQKZd0qJ/gBOqjuQXqZCRpEfchw/xT1w3eHBvNIKb8
+ pkub1rwuHyAo0/IWN0b2hVd6sFWW5XG69QMxut9ecE9+alRbJ2t4ncRQWIyFhlqzb6qbcWrnD
+ h/Tk1uBzdvgV887bo7+c6Lk0anddLKM1d6y7EnuTZ1Z4CgAyZ7Vqa+Wnv4lA72WuqF8x1mXg5
+ u7b0zrK8f6Ab62lrTN2X2og1QBlizUbbwB52QksIHWOpV4yaI0/FTkfwvxrjpqWMd92qvAyRb
+ NY9wasPRjkVtDdpLn43syNwm1cg/tmZsTI/cZFOavdq9G8Qz8jfwR+GONwUZ8XG1aTpX9gdbF
+ 849dsvsTcxH9SlOViAqbTwZt6VMkC3kqoOYikIBQfGKibA8To3BMJZvlkld7AZTxLq+J+o++a
+ fVk7A1vf/x6X8D7xB8JvfNIVmhcZRGoeJ0YRv/1J6AhVP+9TCJNFZeVA87dw2X4985f9/bWPA
+ 115SOzr4VLgJ64XzUGOZsWNmO32ryfgT/vgEhqXdJFbUyXVJKBXkQumsPZONoSTsJJkFE9Zaf
+ 3dZdiHH/xNX/n3UASd4EKgY0eKw=
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -69,74 +69,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the ACPI spec part 5.6.4.1.2, EC query handlers discovered
-thru ACPI should not be removed when a driver removes his custom query
-handler. On the Acer Travelmate 4002WLMi for example, such a query
-handler is used as a fallback to handle the EC SMBus alert when no driver
-is present.
-Change acpi_ec_remove_query_handlers() so that only custom query
-handlers are removed then remove_all is false. Query handlers discovered
-thru ACPI will still get removed when remove_all is true, which happens
-on device removal. Also add a simple check to ensure that
-acpi_ec_add_query_handler() is always called with either handle or func
-being set, since custom query handlers are detected based whether
-handlers->func is set or not.
+When removing custom query handlers, the handler might still
+be used inside the EC query workqueue, causing a kernel oops
+if the module holding the callback function was already unloaded.
 
-Tested on a Acer Travelmate 4002WLMi.
+Fix this by flushing the EC query workqueue when removing
+custom query handlers.
+
+Tested on a Acer Travelmate 4002WLMi
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/acpi/ec.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/acpi/ec.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
-index 105d2e795afa..f84905dbd8ca 100644
+index f84905dbd8ca..4ae017391533 100644
 =2D-- a/drivers/acpi/ec.c
 +++ b/drivers/acpi/ec.c
-@@ -1083,9 +1083,12 @@ int acpi_ec_add_query_handler(struct acpi_ec *ec, u=
-8 query_bit,
- 			      acpi_handle handle, acpi_ec_query_func func,
- 			      void *data)
+@@ -1132,6 +1132,7 @@ static void acpi_ec_remove_query_handlers(struct acp=
+i_ec *ec,
+ void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit)
  {
--	struct acpi_ec_query_handler *handler =3D
--	    kzalloc(sizeof(struct acpi_ec_query_handler), GFP_KERNEL);
-+	struct acpi_ec_query_handler *handler;
-+
-+	if (!handle && !func)
-+		return -EINVAL;
-
-+	handler =3D kzalloc(sizeof(*handler), GFP_KERNEL);
- 	if (!handler)
- 		return -ENOMEM;
-
-@@ -1097,6 +1100,7 @@ int acpi_ec_add_query_handler(struct acpi_ec *ec, u8=
- query_bit,
- 	kref_init(&handler->kref);
- 	list_add(&handler->node, &ec->list);
- 	mutex_unlock(&ec->mutex);
-+
- 	return 0;
+ 	acpi_ec_remove_query_handlers(ec, false, query_bit);
++	flush_workqueue(ec_query_wq);
  }
- EXPORT_SYMBOL_GPL(acpi_ec_add_query_handler);
-@@ -1109,9 +1113,15 @@ static void acpi_ec_remove_query_handlers(struct ac=
-pi_ec *ec,
+ EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
 
- 	mutex_lock(&ec->mutex);
- 	list_for_each_entry_safe(handler, tmp, &ec->list, node) {
--		if (remove_all || query_bit =3D=3D handler->query_bit) {
-+		/* When remove_all is false, we only remove custom query handlers
-+		 * which have handler->func set. This is done to preserve query
-+		 * handlers discovered thru ACPI, as they should continue handling
-+		 * EC queries.
-+		 */
-+		if (remove_all || (handler->func && handler->query_bit =3D=3D query_bit=
-)) {
- 			list_del_init(&handler->node);
- 			list_add(&handler->node, &free_list);
-+
- 		}
- 	}
- 	mutex_unlock(&ec->mutex);
 =2D-
 2.30.2
 
