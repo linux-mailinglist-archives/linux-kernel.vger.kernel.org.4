@@ -2,80 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBBA6C7752
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10C06C774C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjCXF0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 01:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S231669AbjCXF0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjCXFZe (ORCPT
+        with ESMTP id S231453AbjCXFZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 01:25:34 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0DD11C5BC
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8PuRO
-        ycIaintbBO8Gz+e23AedvlGXHAFLlGqQ+rvl0Q=; b=lq37kYFvwhX1c9BBZkA4I
-        3/u3EDrSg6Jei/jrFeaLaVAt2B+OfiC/36VUKZewyMfGSCJKMr8X8qqwy4lKJhav
-        1lucxZODgXx+vqHr6g8OyXIip6XHZv9qDSvgRtV8yfEq923akVBEgZe+kygpX6AH
-        ldRahxf8g6Zk/ExBf56A0Y=
-Received: from localhost.localdomain (unknown [113.105.127.219])
-        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wAH1eHxMx1k5BH_AA--.26874S2;
-        Fri, 24 Mar 2023 13:24:03 +0800 (CST)
-From:   Hongbin Ji <jhb_ee@163.com>
-To:     rppt@kernel.org
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hongbin Ji <jhb_ee@163.com>
-Subject: [PATCH] memblock: Correct calculation method for overflowing range @size
-Date:   Fri, 24 Mar 2023 13:23:51 +0800
-Message-Id: <20230324052351.31106-1-jhb_ee@163.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 24 Mar 2023 01:25:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5342B2A1;
+        Thu, 23 Mar 2023 22:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lWW9PVqLe3/9juBXgwjKTyYaGeIui89h/DnPHia9ygk=; b=BxO6iQ99W+zTHMj2QHBCJhGl15
+        q2lXUF+oqg6ib8AW/SChw/d0ZLzn9mqj7zeWtH0gc4MM7QQAoCoCwUqrs8CdCsr27PoAGg3v1GeuB
+        KcE1XYPW+8FsVeyMjCd80rsK54rorbS+xJHi4oeVf1HTk7/bMW86B0lzUQvvgTu1W2k9srGTITdZJ
+        yt2ZKy09k5+Q4TGwJ5kg+CtzH9LREQI7oBpV8UOhXJ1/EbPKUy+xK8gV3w0xffrrD/kM6KL8bz+lq
+        WbrAU8ndKYKWnuT+ypDt5ImkJn7Zds3deyagHbLOjySro1phDTGHS26b0yG8JmnR+d9yr6593h8va
+        vOAuQEaQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pfZuc-004bi4-ET; Fri, 24 Mar 2023 05:24:26 +0000
+Date:   Fri, 24 Mar 2023 05:24:26 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     aloktiagi <aloktiagi@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [RFC v3 3/3] file, epoll: Implement do_replace() and
+ eventpoll_replace()
+Message-ID: <ZB00Cvib+jyqCR5C@casper.infradead.org>
+References: <20230324051526.963702-1-aloktiagi@gmail.com>
+ <20230324051526.963702-3-aloktiagi@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAH1eHxMx1k5BH_AA--.26874S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF18Wr1UJFyxZry5Xw17trb_yoWfCrb_Wa
-        18tr4xCw1kJr4YkrySv3y0kF4Iq3yftF95ZF17Jr17ZFW5J3WrW3WxWryxX390k3WUX398
-        Ca1DWry7ZF1fKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtq2NJUUUUU==
-X-Originating-IP: [113.105.127.219]
-X-CM-SenderInfo: 5mkesvrh6rljoofrz/1tbiShA4fGI0XGYvewABsn
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324051526.963702-3-aloktiagi@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When memblock users to specify range where @base + @size overflows
-and automatically cap it at maximum, The new size should be
-PHYS_ADDR_MAX - @base + 1.
+On Fri, Mar 24, 2023 at 05:15:26AM +0000, aloktiagi wrote:
+> diff --git a/include/linux/eventpoll.h b/include/linux/eventpoll.h
+> index 3337745d81bd..38904fce3840 100644
+> --- a/include/linux/eventpoll.h
+> +++ b/include/linux/eventpoll.h
+> @@ -25,6 +25,8 @@ struct file *get_epoll_tfile_raw_ptr(struct file *file, int tfd, unsigned long t
+>  /* Used to release the epoll bits inside the "struct file" */
+>  void eventpoll_release_file(struct file *file);
+>  
+> +void eventpoll_replace_file(struct file *toreplace, struct file *file);
+> +
+>  /*
+>   * This is called from inside fs/file_table.c:__fput() to unlink files
+>   * from the eventpoll interface. We need to have this facility to cleanup
+> @@ -53,6 +55,22 @@ static inline void eventpoll_release(struct file *file)
+>  	eventpoll_release_file(file);
+>  }
+>  
+> +
+> +/*
+> + * This is called from fs/file.c:do_replace() to replace a linked file in the
+> + * epoll interface with a new file received from another process. This is useful
+> + * in cases where a process is trying to install a new file for an existing one
+> + * that is linked in the epoll interface
+> + */
+> +static inline void eventpoll_replace(struct file *toreplace, struct file *file)
+> +{
+> +	/*
+> +	 * toreplace is the file being replaced. Install the new file for the
+> +	 * existing one that is linked in the epoll interface
+> +	 */
+> +	eventpoll_replace_file(toreplace, file);
+> +}
 
-Assuming that base is 0, PHYS_ADDR_MAX is 0xff, which is 255 in decimal,
-then @size should be 256 instead of 255
+Why do we have both eventpoll_replace() and eventpoll_replace_file()?
+They seem identical?
 
-Signed-off-by: Hongbin Ji <jhb_ee@163.com>
----
- mm/memblock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/include/linux/file.h b/include/linux/file.h
+> index 39704eae83e2..80e56b2b44fb 100644
+> --- a/include/linux/file.h
+> +++ b/include/linux/file.h
+> @@ -36,6 +36,7 @@ struct fd {
+>  	struct file *file;
+>  	unsigned int flags;
+>  };
+> +
+>  #define FDPUT_FPUT       1
+>  #define FDPUT_POS_UNLOCK 2
+>  
 
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 25fd0626a9e7..f1683d1dae65 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -169,7 +169,7 @@ static enum memblock_flags __init_memblock choose_memblock_flags(void)
- /* adjust *@size so that (@base + *@size) doesn't overflow, return new size */
- static inline phys_addr_t memblock_cap_size(phys_addr_t base, phys_addr_t *size)
- {
--	return *size = min(*size, PHYS_ADDR_MAX - base);
-+	return *size = min(*size, PHYS_ADDR_MAX - base + 1);
- }
- 
- /*
--- 
-2.34.1
-
+You should drop this hunk of the patch.
