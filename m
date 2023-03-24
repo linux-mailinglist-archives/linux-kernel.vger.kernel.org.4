@@ -2,65 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44946C81BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F8E6C81C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjCXPrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S232257AbjCXPs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjCXPrB (ORCPT
+        with ESMTP id S229472AbjCXPs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:47:01 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DCA1BD8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:46:57 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5416698e889so40437747b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:46:57 -0700 (PDT)
+        Fri, 24 Mar 2023 11:48:27 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAD3420E;
+        Fri, 24 Mar 2023 08:48:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aVcrghQ+ch5y5pYgYkpe+1AlbigfHFxcy1zt4BWg0MBnBoE5m1oL3cTeO/rveJTqm5qcMZKYmPbwfFlb2r/rlwDsGCaslB4YyzdfzPzddbN1tYDRUELH6PCA33+Y0rinKVIBvfavq8JrT1VxT8836i6LQR5RKf9wUfBG2Yj5Ut8uZktqGaRgIwiVcYzZvB6KQSS4HW5RfDi+vq6N/ArAbmbjujbd/UqIlvxgvbaszZWNj+2825ASSsLirMrlUXoTQyUYjBVJ/WG8IywCwQMoESzRX7Sf4kChtkautl+pjwPrMnB9L5/RVT412tbI9q3bnsXklNUpnvCnnoyYaDHR0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ivd+Mz6/E8kVGKy52Sc2XUcOBx100CaMcMWYoD9q49o=;
+ b=PiUHB6buG8gtuQuA9j7nUfSe2WMCgN/idrMfke4DF+Hyvs7+WTp/rnf/6i/Rk2vKDafW2F1LhqyWFzN742V/uyAok1i50ZezwKM5z9qqW0KFEwp2zy3pODtDozs3FOzcSqKhoosdKmV1EE7jQBqZa/ah7bAqYgxg49OCxHwf0CmPSuJ5iRojrVQKr2569vnVAgRanfUG8azrnrhXMadRd6UGrZtXQMK0bgewxaYKvIaQcO2Bd4XM2rFWLeXQqAE7E1dR7O+Sgi6KVCHet4pvZufIxAyjFtVTCsrXMP3W/OhpZm3o5ecTyS/fJAIkwxpJaXUZ6rSVI53j46bNGHztsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679672817;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbMU26KvuDhxRgS5BOOObuB6VM/WTbVMpAKkjnkzln4=;
-        b=tDh/YhuOk5MCCESde0mwLUN2BM1Dl78t7pzTqGBP9gGT6jOMYEpc+CRHwZX5mzF8k8
-         G3yLu/rV1fzHghME0JzOx5ym1akTHmDTITeWXNib3v8Girj/HudNG0P3TRI6UkSD8LYa
-         ohvdkjbro+niCkywe81tZrIVijZfwEFwlzEEoKz8DJAR5vYY6W9GtvRvS7dkQy9NEolC
-         CHjWutu/1tUWd8Q/iODL4HUNL0U+VshrMfE1bGDkbYL8iro6rEfRXrli2843wuaF0ibK
-         pLrdgjdb7P4RdOR0e4XVJmJQosMHFo6mcEgsCbw0pZQFBhZfdzVqOHIjFmREgMdXWaql
-         aDrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672817;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NbMU26KvuDhxRgS5BOOObuB6VM/WTbVMpAKkjnkzln4=;
-        b=LL1RQ5+4TR38wfk9/ia5PBa62Toeg4FNNCWkSP5C76TpiCImm7YZukp9QFf2kCGoXE
-         Ub13xX81vAImq1Trsx0IvN5v7QTXzLDNzaFYp/tLaJVXRDFbBW7LZLqDiz9B7g+EPjFi
-         K2Zz6f5eu33/LjMKBUHQLMqtUqOpbtQksVHZsZHvAvPw3nvZc4sR0RZznF6jApVlecI1
-         5IWtylSp018VfIN0QNHg9BYG3fLpegeAnK2idNgYRn7W3YtjLs3FRFErCXgksgcLSRoC
-         H3R2ZpgmgEY9i+lvws5o1KyhPaMiZ1+Eg3ayXLI26Cnf5f58tPod43JLFjOgtKreoNHe
-         08fA==
-X-Gm-Message-State: AAQBX9cmwFH17zgg3v2CWZvfflHqASbXT8bRTsjOjpnZhxRsEbVcHk9K
-        62bq2iuul5CwEd37yWW/8lWR67JKbT2xHzmR0eEH6Q==
-X-Google-Smtp-Source: AKy350ZrRmEOfSH9HdqIpxODwcFPtiWHoT78R7Alcg8WWhH4HeDKnIqzoPGfqP55wsLi0hO4jXGqCNIiHfxxN53t7AM=
-X-Received: by 2002:a81:ae23:0:b0:52b:fd10:4809 with SMTP id
- m35-20020a81ae23000000b0052bfd104809mr1306472ywh.0.1679672815533; Fri, 24 Mar
- 2023 08:46:55 -0700 (PDT)
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ivd+Mz6/E8kVGKy52Sc2XUcOBx100CaMcMWYoD9q49o=;
+ b=guhrvQgEjr5Z6qc9MGsKNV991ldRdZdep0lb3utFwSfGMosupqrbzFY4xs1u/HGSymkTiG93wTexRabCi2Ym75+PwBBdKm3z0dsA35kYOBP0a2JH1ycmYIJ6yiMefymimSam3LnQZUb2syxXRY3F4HfyaEHfYnM85c3XOuxUtq0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by DM4PR10MB7506.namprd10.prod.outlook.com
+ (2603:10b6:8:18b::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.39; Fri, 24 Mar
+ 2023 15:48:23 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
+ 15:48:23 +0000
+Date:   Fri, 24 Mar 2023 08:48:18 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael@kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 4/7] mfd: ocelot-spi: Change the regmap stride to reflect
+ the real one
+Message-ID: <ZB3GQpdd/AicB84K@euler>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+ <20230324093644.464704-5-maxime.chevallier@bootlin.com>
+ <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
+ <20230324134817.50358271@pc-7.home>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324134817.50358271@pc-7.home>
+X-ClientProxiedBy: SJ2PR07CA0006.namprd07.prod.outlook.com
+ (2603:10b6:a03:505::18) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-References: <CGME20230324132858eucas1p25cdd6af81a14bf40474f58fa16d087f5@eucas1p2.samsung.com>
- <20230317064729.24407-1-yuzhe@nfschina.com> <5b555935-5657-3f38-8a55-906dd32ad052@samsung.com>
-In-Reply-To: <5b555935-5657-3f38-8a55-906dd32ad052@samsung.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 24 Mar 2023 16:46:19 +0100
-Message-ID: <CAPDyKFotp50rbyFqBzk28iXFVqUnXry5XzyA-jrBKVrDW3_a-A@mail.gmail.com>
-Subject: Re: [PATCH] mmc: core: remove unnecessary (void*) conversions
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Yu Zhe <yuzhe@nfschina.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|DM4PR10MB7506:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e36c2b0-b72b-4657-0203-08db2c7f32ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K3HiGTMjbhJcZqgVUMAPCgNy2td/to9ba5iHnDNa71A8yRhKog7AMnaEoWizXtG9Ap2nPK+LzmoEAIFO1iSYl3d0IZm8HgJN7e6cYT8wYFqNRsO1o2v0386D+XunA+eKGdrlxuqFhmbXDt0ofpiLuqKDevS61hcG1s5IX2brlSDCmglBkL3Y81V1SdGyuyPnw9mybcEacPG3Yli0NCUaaN6oBALGdVzPaK+vkUk37L3v7a7VD7VepzyNvJNR73lXp+VyPNPMrAh4ndvioVo3pMqNjZO4Y4+Hk1ONx8++YYKWTybMV7kE1AZjL/rZLb1JFFNFwE00W9+znGZmlty76UfUxWN9TENlt4EbNwf/gpOLpaAJYB87zJFMzZU4yqm6Iwj1NoXuNKycZdxLRnUQGSMNbPgmqr8XiJppeglzdExpGAVzNzugOOVDozhXd9BMMdEpIJmWo+9ySIxrMtY9gJDKjbg5NPx8Dv4zeDSXVje4ciBG/VIk3lB+qtOCjrrqckrkr4/Y/TPBr5ic6Lciy3Men6rghqrdDV25UCymDhefWHwJErrqntPyvmKYP6JHdbLWeslz0Gpai0Fvs8g5VSbkJna2/ZGji4O2vr3SfEM51VsmRUNyOFTW6AMVxrdK43ZWWQTz1/FQsyj1tABZQQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(376002)(396003)(39830400003)(366004)(346002)(451199018)(8676002)(6916009)(4326008)(66946007)(66556008)(41300700001)(8936002)(66476007)(38100700002)(9686003)(6512007)(6506007)(86362001)(83380400001)(186003)(26005)(6666004)(54906003)(6486002)(33716001)(316002)(478600001)(2906002)(7416002)(44832011)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UjR/Ds/M/gYIEjkxiUCcwbrTLDoVZ5gbXSyYAx71nfoQnEHuIY5PO3IM0K8a?=
+ =?us-ascii?Q?7lIH0cZVUuZ40KGr7eHy3QXveHNQo7SQO3Tru4+UBv0gVPdf+4N0Zajp16HN?=
+ =?us-ascii?Q?25GybsAFtBgW74hPZKoa4k+SzRspxnWNjiua0ZvZYz7yeHXA9m+OGbTd0woj?=
+ =?us-ascii?Q?EQWuOM2prqGg/RMDcm7j2RF6PvHfWf08Q79JnXHTK9E53etB/UTWQTs8z5PG?=
+ =?us-ascii?Q?pbVI6g+Q/YuE7HKir86TVT325L7Vbu08NZQKpz9IxpK4BjarUqpGDEoY1+JY?=
+ =?us-ascii?Q?4193YHMmhLUBBiY4xEwz714FoIkqHtmqMpeYNE/WzyKys2n4l0sDTiL7xmCU?=
+ =?us-ascii?Q?XdQUFC0gEYlokS0STSAmCr53HubQZ9FZSL+QAbwXfyoe+LA7J8S8II+L4J2l?=
+ =?us-ascii?Q?HMs33IWsOrrnoqiH7XnBqULZ1I3iGnTJrOLgmwtRAaDpquXx3YzOvT0k/VWk?=
+ =?us-ascii?Q?FpH9hrBms0ZXnht6jk5piKNy7WeuGhwvdsdNUq2S4+YbZcUaMfsITBETnkXN?=
+ =?us-ascii?Q?37OWvmwESoUUxU05aHnOOeNaUuVAl0IjkQS3akDyUeVA3uKfNDsILrcxHp0W?=
+ =?us-ascii?Q?+nE3kOXQoWruP7cADlaihFsbfUTJsjfsfcAwPnKU86XlOt+IddLPPqpBimit?=
+ =?us-ascii?Q?MYp+mFMDC3r9URQJizioKjSddkkZ7suCjU/oKrcTYArWiDtABSwfmX8FzJgK?=
+ =?us-ascii?Q?d2x+tZzJv1GJWPjf2S1XjZZB8G7qLk/zYf4GaFZnsrjfJUxCF/UzpgmisV2f?=
+ =?us-ascii?Q?bHvNyfDbFHkgBZOejCDVy/3W+JY99PFMUVHSvGGNNB70EnXVlT5zOXZ5VQiJ?=
+ =?us-ascii?Q?qTALnnEwIuihRaK/iPRG9xr9YsTLqXePcd0RLRCxlFz2yeWwJs8JV9ZrK7c3?=
+ =?us-ascii?Q?srVt3o/LPysqKqgvg+F4/LngMIAV7fUIyaMqS2XuN8zJVHDhaJR/To/DyupF?=
+ =?us-ascii?Q?KNwPz3UlJCqchMUG6dnUNiULhJkQjZWQuLW+yxvBGBgQhH5lm6HfXReRM87C?=
+ =?us-ascii?Q?3taXFp8XkY+0hmiiZnTiIQJge8jkKHKBTVs20041SMwflEU9/wccC3Tt4Q1c?=
+ =?us-ascii?Q?v21yyGI4SkCw963NOT1j7pZbsUItMtW/ptbjQPKnPpBCuZy4MWB7xMqtZYuM?=
+ =?us-ascii?Q?DOMjG0vY8EaU50K3qw7yAor9rCgqpSrTvzh34T/CGUsW0S9L7ENSbRba1GGk?=
+ =?us-ascii?Q?Uekpo3cV5zl1HSqxk/ZWiAxQ0L/4vZMs2AvQKMf4SxL4M9XttQiCYG7LJoF8?=
+ =?us-ascii?Q?nrIq5ekWOi+LjTUyEELY3ZjXs6UHEDX3NLlwmAFPq4Df+BqEl9AptQjAlMd6?=
+ =?us-ascii?Q?+Pr04dtzlC2ahpKt77oErnKazEO9woFFkZ6/cPgSAsJvFxywyfSxa/rUZ2QE?=
+ =?us-ascii?Q?3FtYMQoePLa/7ucTmDlXL+LjXheVcsiBcGFAMl7/8deOdvYltGecq3jRIWG6?=
+ =?us-ascii?Q?ybcCFTWMOyjlR9AAf1wqEh2VGG5oo+XCT4ZVWftrzGeRdEGQ+VUOBVVZt/1u?=
+ =?us-ascii?Q?MoGoSB++eTYZUeZkC8ARRc1bm4BZ20snN1oM61uMRmavOzkY3oRIjybMj/Yi?=
+ =?us-ascii?Q?qWJGSACbLyHFtvN7an21xoHoYJx1PopEq1FRZU2lkm2cqo0tYC0fJoI3dDm+?=
+ =?us-ascii?Q?rdpfyGkWA6ueVJpPFwbivxI=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e36c2b0-b72b-4657-0203-08db2c7f32ba
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 15:48:22.9232
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tmYnBx8gPOilGL0Rsn3ClyhxzzwkDqRdvIuCNjpw54QI+RuoKwLgLL2qXcMQsNLYZw6rNPhhFutco04yzDjs3YGb5DIugvmeEMc199HDJRg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB7506
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,71 +126,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 at 14:28, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->
-> On 17.03.2023 07:47, Yu Zhe wrote:
-> > Pointer variables of void * type do not require type cast.
-> >
-> > Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
-> > ---
-> >   drivers/mmc/core/debugfs.c  | 2 +-
-> >   drivers/mmc/core/host.c     | 2 +-
-> >   drivers/mmc/core/mmc_test.c | 6 +++---
-> >   3 files changed, 5 insertions(+), 5 deletions(-)
-> ...
-> > diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-> > index 096093f7be00..76900f67c782 100644
-> > --- a/drivers/mmc/core/host.c
-> > +++ b/drivers/mmc/core/host.c
-> > @@ -590,7 +590,7 @@ EXPORT_SYMBOL(mmc_alloc_host);
-> >
-> >   static void devm_mmc_host_release(struct device *dev, void *res)
-> >   {
-> > -     mmc_free_host(*(struct mmc_host **)res);
-> > +     mmc_free_host(res);
->
-> The above chunk is wrong and causes following regression on today's
-> Linux next-20230324:
->
-> Unable to handle kernel paging request at virtual address 0000000000001020
-> Mem abort info:
-> meson-gx-mmc ffe07000.mmc: allocated mmc-pwrseq
-> ...
-> [0000000000001020] user address but active_mm is swapper
-> Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> Modules linked in:
-> CPU: 3 PID: 10 Comm: kworker/u12:0 Not tainted 6.3.0-rc3-next-20230324+
-> #13452
-> Hardware name: Khadas VIM3 (DT)
-> Workqueue: events_unbound async_run_entry_fn
-> pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : mmc_pwrseq_free+0x1c/0x38
-> lr : devm_mmc_host_release+0x1c/0x34
-> ...
-> Call trace:
->   mmc_pwrseq_free+0x1c/0x38
->   devm_mmc_host_release+0x1c/0x34
->   release_nodes+0x5c/0x90
->   devres_release_all+0x8c/0xdc
->   device_unbind_cleanup+0x18/0x68
->   really_probe+0x11c/0x2b4
->   __driver_probe_device+0x78/0xe0
->   driver_probe_device+0xd8/0x160
->   __device_attach_driver+0xb8/0x138
->   bus_for_each_drv+0x84/0xe0
->   __device_attach_async_helper+0xb0/0xd4
->   async_run_entry_fn+0x34/0xe0
->   process_one_work+0x288/0x5c0
->   worker_thread+0x74/0x450
->   kthread+0x124/0x128
->   ret_from_fork+0x10/0x20
-> Code: f9000bf3 aa0003f3 f9424c00 b4000080 (f9401000)
-> ---[ end trace 0000000000000000 ]---
->
-> Ulf: do You want me to send a partial revert or will you handle it by
-> dropping this patch?
+Hi Maxime,
 
-Thanks for the report, I will simply drop the patch!
+On Fri, Mar 24, 2023 at 01:48:17PM +0100, Maxime Chevallier wrote:
+> Hello Andrew,
+> 
+> On Fri, 24 Mar 2023 13:11:07 +0100
+> Andrew Lunn <andrew@lunn.ch> wrote:
+> 
+> > On Fri, Mar 24, 2023 at 10:36:41AM +0100, Maxime Chevallier wrote:
+> > > When used over SPI, the register addresses needs to be translated,
+> > > compared to when used over MMIO. The translation consists in
+> > > applying an offset with reg_base, then downshifting the registers
+> > > by 2. This actually changes the register stride from 4 to 1.
+> > > 
+> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > > ---
+> > >  drivers/mfd/ocelot-spi.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+> > > index 2d1349a10ca9..107cda0544aa 100644
+> > > --- a/drivers/mfd/ocelot-spi.c
+> > > +++ b/drivers/mfd/ocelot-spi.c
+> > > @@ -124,7 +124,7 @@ static int ocelot_spi_initialize(struct device
+> > > *dev) 
+> > >  static const struct regmap_config ocelot_spi_regmap_config = {
+> > >  	.reg_bits = 24,
+> > > -	.reg_stride = 4,
+> > > +	.reg_stride = 1,
+> > >  	.reg_shift = REGMAP_DOWNSHIFT(2),
+> > >  	.val_bits = 32,  
+> > 
+> > This does not look like a bisectable change? Or did it never work
+> > before?
+> 
+> Actually this works in all cases because of "regmap: check for alignment
+> on translated register addresses" in this series. Before this series,
+> I think using a stride of 1 would have worked too, as any 4-byte-aligned
+> accesses are also 1-byte aligned.
+> 
+> But that's also why I need review on this, my understanding is that
+> reg_stride is used just as a check for alignment, and I couldn't test
+> this ocelot-related patch on the real HW, so please take it with a
+> grain of salt :(
 
-Kind regards
-Uffe
+You're exactly right. reg_stride wasn't used anywhere in the
+ocelot-spi path before this patch series. When I build against patch 3
+("regmap: allow upshifting register addresses before performing
+operations") ocelot-spi breaks.
+
+[    3.207711] ocelot-soc spi0.0: error -EINVAL: Error initializing SPI bus
+
+When I build against the whole series, or even just up to patch 4 ("mfd:
+ocelot-spi: Change the regmap stride to reflect the real one")
+functionality returns.
+
+If you keep patch 4 and apply it before patch 2, everything should
+work.
+
+Sorry for the bug. Thanks for the fix. And I'm glad I'm not the only one
+taking advantage of the "reg_shift" regmap operation! I thought I'd be
+the only one.
+
+
+Let me know if you want me to take any action on this fix.
+
+
+Colin
