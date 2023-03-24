@@ -2,66 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3F76C7548
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887B76C754C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbjCXCAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S231228AbjCXCDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCXCAr (ORCPT
+        with ESMTP id S229734AbjCXCDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:00:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9354418B1C;
-        Thu, 23 Mar 2023 19:00:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33B136292E;
-        Fri, 24 Mar 2023 02:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F1CC433EF;
-        Fri, 24 Mar 2023 02:00:44 +0000 (UTC)
-Date:   Thu, 23 Mar 2023 22:00:42 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, jolsa@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 0/7] Refactor ftrace direct call APIs
-Message-ID: <20230323220042.40ec4904@gandalf.local.home>
-In-Reply-To: <20230323194355.3f714774@gandalf.local.home>
-References: <20230321140424.345218-1-revest@chromium.org>
-        <20230323194355.3f714774@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 23 Mar 2023 22:03:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F62E5BBA;
+        Thu, 23 Mar 2023 19:03:39 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so273002pjb.0;
+        Thu, 23 Mar 2023 19:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679623419;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PY/nCrDiW8SdcBN3F88jY3M7fLY4heof/m4P0yCEwhw=;
+        b=HL6A8izR0CkeHjxLTeXacguhkCInW7j8vtFgwkEVI+52gmedURua9uXjCQYd1au7M4
+         J3wKLc5Aaxr4n8OrTW1aboOPukXGln1bEfbkxmfXkRn6g27aVMLkRw5UTMCDUUiMzrLu
+         gA2qhSRF0DeHSKKS0Lfj2/OFgFLPQj+/W3uFZOJ8HKZ7Ef709sX3NmbybV0tVgYjcqo9
+         LNtgR9a6IG8ul2Ht2ssRrjooLeqB4noIZg0Q/C4ZOaho+LB9gK7sfrhgZK+tSwqccjaS
+         rxmjuwkEYAujP00mwv527Ch8lZwee8c/QiAm7yaggQs3brArDtQ01NmWgzttubBCX+Rj
+         nd7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679623419;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PY/nCrDiW8SdcBN3F88jY3M7fLY4heof/m4P0yCEwhw=;
+        b=dvBp75ORt/Olu0HfTL2fG/INKpCxjzPWW4j7KwxH5+xCAU+SiFbOlWuSkdN3S+eOuM
+         MLbVK54zdmF9mHqcCuc33kauy3cGFSyDHmq2Z39QaBsCza8lYuqfUPvsnHWBfhff8Elf
+         dURF4yF5kRoRp1VLG5ucOdcOuoTdtq3R2Vx1Yie2/caQdoP0CWlBSsCEJE+5stRsAww0
+         gWbGIzWbMHWn9z6zzVZ5qZoDkXyQaBuysnHkR9t2KRSzjIJms9y22MbzPgBDf5QGPRTm
+         6bEmUMeJFZ5IZex8gfyyjnYQ7dEitCnMKs8wdd1tjtfMR8+LbABZXZfDg8wEODlyBxvT
+         9+vw==
+X-Gm-Message-State: AAQBX9daTbRA9T3eyTkDuh44oVTbfZVUcvAmkS4piduIkswXhnV4pxPf
+        KlMlkEokFIQNCKwX4QJLKVrxE2AOiBc=
+X-Google-Smtp-Source: AKy350ZD0neSEhm9l4wbQl8oOrRyXw/6xPTWV3RJomuHrjMjhShTzuTfX1vJE/M1K2wU8G/JnpV8sw==
+X-Received: by 2002:a17:902:ec86:b0:1a0:7425:4b73 with SMTP id x6-20020a170902ec8600b001a074254b73mr1258132plg.4.1679623418972;
+        Thu, 23 Mar 2023 19:03:38 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id p6-20020a1709028a8600b00194c2f78581sm12941481plo.199.2023.03.23.19.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 19:03:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 23 Mar 2023 16:03:36 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Haifeng Xu <haifeng.xu@shopee.com>, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpuset: Clean up cpuset_node_allowed
+Message-ID: <ZB0E+C2nao2mKlbJ@slm.duckdns.org>
+References: <9953284e-05da-56b0-047d-ecf18aa53892@redhat.com>
+ <20230228083537.102665-1-haifeng.xu@shopee.com>
+ <299c9c34-0c07-ae52-61d7-6332f35c6245@redhat.com>
+ <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e71c2bf-9ee3-4ada-e9d9-acb6e422e9af@redhat.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 19:43:55 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sat, Mar 18, 2023 at 05:30:46PM -0400, Waiman Long wrote:
+> On 3/17/23 21:35, Waiman Long wrote:
+> > On 2/28/23 03:35, Haifeng Xu wrote:
+> > > Commit 002f290627c2 ("cpuset: use static key better and convert to
+> > > new API")
+> > > has used __cpuset_node_allowed() instead of cpuset_node_allowed() to
+> > > check
+> > > whether we can allocate on a memory node. Now this function isn't
+> > > used by
+> > > anyone, so we can do the follow things to clean up it.
+> > > 
+> > > 1. remove unused codes
+> > > 2. rename __cpuset_node_allowed() to cpuset_node_allowed()
+> > > 3. update comments in mm/page_alloc.c
+> > > 
+> > > Suggested-by: Waiman Long <longman@redhat.com>
+> > > Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+...
+> It turns out that cpuset_node_allowed() isn't used anywhere except in
+> cpuset.h. So it should be OK to remove the alternate cpuset_node_allowed()
+> function.
+> 
+> Acked-by: Waiman Long <longman@redhat.com>
 
-> Since that commit only contains the updates for the direct trampolines that
-> ARM64 needs, and I'm not going to rebase that branch, you can just merge it
-> into the ARM64 tree so that you can base your changes on it. Make sure you
-> merge that commit, not the branch, as I have more tracing specific patches
-> on top of that commit.
+Applied to cgroup/for-6.4.
 
-I just made it easier for you. I created a signed tag: trace-direct-v6.3-rc3
+Thanks.
 
-So just pull from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-
-tag: trace-direct-v6.3-rc3
-
--- Steve
+-- 
+tejun
