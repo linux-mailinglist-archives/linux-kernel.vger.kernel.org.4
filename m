@@ -2,569 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7724A6C7F6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C09DC6C7F57
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjCXOBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        id S232069AbjCXOAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjCXOAg (ORCPT
+        with ESMTP id S232070AbjCXOAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:00:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4263F1C584
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679666366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=smNOzrmtxEHaBz/HHvXcG8qhls2CG5fdhXftGx1RU8s=;
-        b=jHfHzWcmNH368KleGuLFDWHMXlLU4uiXBTU43dUS+B5rZDq6NebHRFSR/mbqiksoYOzpzl
-        a4k11tb7+PFLLXYaB9vnQAiXwnFXayTdHKDJmzzYzpf7RI0HLjHLvCWzHyuDLEwO4c5C+v
-        rvaOihlLD8TgKx2o+x6GedCCc5BlM0Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-wcqBFSVDM3qjrlF5O2baWQ-1; Fri, 24 Mar 2023 09:59:22 -0400
-X-MC-Unique: wcqBFSVDM3qjrlF5O2baWQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 24 Mar 2023 10:00:15 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F02E1BAE8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:59:49 -0700 (PDT)
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CD922817234;
-        Fri, 24 Mar 2023 13:59:21 +0000 (UTC)
-Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CEA44140EBF4;
-        Fri, 24 Mar 2023 13:59:19 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Bernd Schubert <bschubert@ddn.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V4 17/17] block: ublk_drv: apply io_uring FUSED_CMD for supporting zero copy
-Date:   Fri, 24 Mar 2023 21:58:08 +0800
-Message-Id: <20230324135808.855245-18-ming.lei@redhat.com>
-In-Reply-To: <20230324135808.855245-1-ming.lei@redhat.com>
-References: <20230324135808.855245-1-ming.lei@redhat.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8CA7A4166C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:59:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1679666379;
+        bh=0CzCezUBFius1/QvCjfVKLrX7WEPXSwgwzTCxhDCoiA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qCS/UYShWWjYuJUvfsWa0wZfBAz++eP8q3/uuyMzQE6UymynpR/k+3ZP7G3OhQ+IR
+         VJVjGR3TpTyVLYfTbFEJachqmC3rzEQS6JsE8Ecrad3RMSECIZutCHxQ1eHUxzxTEQ
+         +8OrsiALQyVBbd/+bxsPs8hdItxnoJ55bvuKbQvOhQLnxpMXaMnRFnR2E25T1DC3HH
+         auJ8JG0bXb/Ixdf19v/32NeojMFyPw9fwNYfxanTXNJDyZAyJWkDXMQTNIZkXCGz9C
+         dqOTYKIoDtWhdNnYeWS0qRe95NCHzJfz1lQ5ZiWrhSfoUkrXmFcyzOilhKZAMmo5Dc
+         Gsava+tZTrtGQ==
+Received: by mail-qv1-f71.google.com with SMTP id v8-20020a0ccd88000000b005c1927d1609so1041544qvm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:59:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679666378;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0CzCezUBFius1/QvCjfVKLrX7WEPXSwgwzTCxhDCoiA=;
+        b=VF39DkfZJPtF7FnA58cWF1idvBA3L+e9oKwRQCBQ5ZHzLv9D24m86aKYXn05pQC5eG
+         LFemeV4Y2JQj0U4vte4eO1VLYfA7nmSc8CVNlOamdWNNJ0oZcaPv78uSqYrfK8Cl5xux
+         a+VSOYnKqEHr5sxm5D4tSIxcqT4voA7t0abcVqSmNFNzEExQrQWousgUn//ebUc4LN38
+         gjD/AiWIWuLQ32cuGLINTq6AuankB2TZHG33ej3OjSLcCiAoCtO2IEGjrAwhpNNdjdh3
+         S+idD/FBS5YjBjFkJfEdJ2xC6ZhbzA7DxV/Gsjpohjdmwyjye5nNsDsrvavYx/Fi8a3H
+         Yu5Q==
+X-Gm-Message-State: AO0yUKX+tdJqQgDDHbZal8tB4yNYjlblVP9zT1ipWSoVjxukhFmRV4Hp
+        mM8PtGdYQPvpvKkq4v+kf9MQ8kIjG3YfOc1XW6ILPTzxtntG4icwMT7bEkUne/fVi2zdObfimRZ
+        qJHnCTUESO38J+KUXHYGfzSLsKgsAWaC2ns8hg1/OYrp5IwItZHGY/EcIOQ==
+X-Received: by 2002:a37:a8cf:0:b0:745:8c04:2777 with SMTP id r198-20020a37a8cf000000b007458c042777mr503411qke.13.1679666377807;
+        Fri, 24 Mar 2023 06:59:37 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+fYwdhVgyb9GNd32TrH8t4Pv6a28VQzyoEpE+xeNGm/T2XLuOweT5dKvtRVRvgDmnoGhBHVQhMCfEkxFGjGIU=
+X-Received: by 2002:a37:a8cf:0:b0:745:8c04:2777 with SMTP id
+ r198-20020a37a8cf000000b007458c042777mr503392qke.13.1679666377512; Fri, 24
+ Mar 2023 06:59:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230324022819.2324-1-samin.guo@starfivetech.com> <20230324022819.2324-7-samin.guo@starfivetech.com>
+In-Reply-To: <20230324022819.2324-7-samin.guo@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 24 Mar 2023 14:59:21 +0100
+Message-ID: <CAJM55Z8_W9yOcL+yGAwB-qanD_-bbf16VjCP66P_xDFW6-c+3A@mail.gmail.com>
+Subject: Re: [PATCH v8 6/6] net: stmmac: starfive_dmac: Add phy interface settings
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apply io_uring fused command for supporting zero copy:
+On Fri, 24 Mar 2023 at 03:30, Samin Guo <samin.guo@starfivetech.com> wrote:
+>
+> dwmac supports multiple modess. When working under rmii and rgmii,
+> you need to set different phy interfaces.
+>
+> According to the dwmac document, when working in rmii, it needs to be
+> set to 0x4, and rgmii needs to be set to 0x1.
+>
+> The phy interface needs to be set in syscon, the format is as follows:
+> starfive,syscon: <&syscon, offset, shift>
+>
+> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> ---
+>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> index ef5a769b1c75..84690c8f0250 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> @@ -13,6 +13,10 @@
+>
+>  #include "stmmac_platform.h"
+>
+> +#define STARFIVE_DWMAC_PHY_INFT_RGMII  0x1
+> +#define STARFIVE_DWMAC_PHY_INFT_RMII   0x4
+> +#define STARFIVE_DWMAC_PHY_INFT_FIELD  0x7U
+> +
+>  struct starfive_dwmac {
+>         struct device *dev;
+>         struct clk *clk_tx;
+> @@ -44,6 +48,43 @@ static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+>                 dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+>  }
+>
+> +static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +       struct starfive_dwmac *dwmac = plat_dat->bsp_priv;
+> +       struct regmap *regmap;
+> +       unsigned int args[2];
+> +       unsigned int mode;
+> +
+> +       switch (plat_dat->interface) {
+> +       case PHY_INTERFACE_MODE_RMII:
+> +               mode = STARFIVE_DWMAC_PHY_INFT_RMII;
+> +               break;
+> +
+> +       case PHY_INTERFACE_MODE_RGMII:
+> +       case PHY_INTERFACE_MODE_RGMII_ID:
+> +               mode = STARFIVE_DWMAC_PHY_INFT_RGMII;
+> +               break;
+> +
+> +       default:
+> +               dev_err(dwmac->dev, "unsupported interface %d\n",
+> +                       plat_dat->interface);
+> +               return -EINVAL;
+> +       }
+> +
+> +       regmap = syscon_regmap_lookup_by_phandle_args(dwmac->dev->of_node,
+> +                                                     "starfive,syscon",
+> +                                                     2, args);
+> +       if (IS_ERR(regmap)) {
+> +               dev_err(dwmac->dev, "syscon regmap failed.\n");
+> +               return -ENXIO;
+> +       }
+> +
+> +       /* args[0]:offset  args[1]: shift */
+> +       return regmap_update_bits(regmap, args[0],
+> +                                 STARFIVE_DWMAC_PHY_INFT_FIELD << args[1],
+> +                                 mode << args[1]);
+> +}
+> +
+>  static int starfive_dwmac_probe(struct platform_device *pdev)
+>  {
+>         struct plat_stmmacenet_data *plat_dat;
+> @@ -89,6 +130,12 @@ static int starfive_dwmac_probe(struct platform_device *pdev)
+>         plat_dat->bsp_priv = dwmac;
+>         plat_dat->dma_cfg->dche = true;
+>
+> +       err = starfive_dwmac_set_mode(plat_dat);
+> +       if (err) {
+> +               dev_err(&pdev->dev, "dwmac set mode failed.\n");
+> +               return err;
+> +       }
 
-1) init the fused cmd buffer(io_mapped_buf) in ublk_map_io(), and deinit it
-in ublk_unmap_io(), and this buffer is immutable, so it is just fine to
-retrieve it from concurrent fused command.
+Usually it's better to keep all error messages at the same "level".
+Like this you'll get two error messages if
+syscon_regmap_lookup_by_phandle_args fails. So I'd suggest moving this
+message into the starfive_dwmac_set_mode function and while you're at
+it you can do
 
-1) add sub-command opcode of UBLK_IO_FUSED_SUBMIT_IO for retrieving this
-fused cmd(zero copy) buffer
+err = regmap_update_bits(...);
+if (err)
+  return dev_err_probe(dwmac->dev, err, "error setting phy mode\n");
 
-2) call io_fused_cmd_start_slave_req() to provide buffer to slave request and
-submit slave request; meantime setup complete callback via this API, once slave
-request is completed, the complete callback is called for freeing the buffer
-and completing the fused command
+Also the file is called dwmac-starfive.c, so I'd expect the patch
+header to be "net: stmmac: dwmac-starfive: Add phy interface
+settings".
 
-Also request reference is held during fused command lifetime, and this way
-guarantees that request buffer won't be freed until all inflight fused commands
-are completed.
+/Emil
 
-userspace(only implement sqe128 fused command):
-
-	https://github.com/ming1/ubdsrv/tree/fused-cmd-zc-v2
-
-liburing test(only implement normal sqe fused command: two 64byte SQEs)
-
-	https://github.com/ming1/liburing/commits/fused_cmd_miniublk
-
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- Documentation/block/ublk.rst  | 126 ++++++++++++++++++++--
- drivers/block/ublk_drv.c      | 191 ++++++++++++++++++++++++++++++++--
- include/uapi/linux/ublk_cmd.h |   6 +-
- 3 files changed, 302 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/block/ublk.rst b/Documentation/block/ublk.rst
-index 1713b2890abb..d6b46455ca4d 100644
---- a/Documentation/block/ublk.rst
-+++ b/Documentation/block/ublk.rst
-@@ -297,18 +297,126 @@ with specified IO tag in the command data:
-   ``UBLK_IO_COMMIT_AND_FETCH_REQ`` to the server, ublkdrv needs to copy
-   the server buffer (pages) read to the IO request pages.
- 
--Future development
--==================
-+- ``UBLK_IO_FUSED_SUBMIT_IO``
-+
-+  Used for implementing zero copy feature.
-+
-+  It has to been the master command of io_uring fused command. This command
-+  submits the generic slave IO request with io buffer provided by our master
-+  command, and won't be completed until the slave request is done.
-+
-+  The provided buffer is represented as ``io_uring_bvec_buf``, which is
-+  actually ublk request buffer's reference, and the reference is shared &
-+  read-only, so the generic slave request can retrieve any part of the buffer
-+  by passing buffer offset & length.
- 
- Zero copy
-----------
-+=========
-+
-+What is zero copy?
-+------------------
-+
-+When application submits IO to ``/dev/ublkb*``, userspace buffer(direct io)
-+or page cache buffer(buffered io) or kernel buffer(meta io often) is used
-+for submitting data to ublk driver, and all kinds of these buffers are
-+represented by bio/bvecs(ublk request buffer) finally. Before supporting
-+zero copy, data in these buffers has to be copied to ublk server userspace
-+buffer before handling WRITE IO, or after handing READ IO, so that ublk
-+server can handle IO for ``/dev/ublkb*`` with the copied data.
-+
-+The extra copy between ublk request buffer and ublk server userspace buffer
-+not only increases CPU utilization(such as pinning pages, copy data), but
-+also consumes memory bandwidth, and the cost could be very big when IO size
-+is big. It is observed that ublk-null IOPS may be increased to ~5X if the
-+extra copy can be avoided.
-+
-+So zero copy is very important for supporting high performance block device
-+in userspace.
-+
-+Technical requirements
-+----------------------
-+
-+- ublk request buffer use
-+
-+ublk request buffer is represented by bio/bvec, which is immutable, so do
-+not try to change bvec via buffer reference; data can be read from or
-+written to the buffer according to buffer direction, but bvec can't be
-+changed
-+
-+- buffer lifetime
-+
-+Ublk server borrows ublk request buffer for handling ublk IO, ublk request
-+buffer reference is used. Reference can't outlive the referent buffer. That
-+means all request buffer references have to be released by ublk server
-+before ublk driver completes this request, when request buffer ownership
-+is transferred to upper layer(FS, application, ...).
-+
-+Also after ublk request is completed, any page belonging to this ublk
-+request can not be written or read any more from ublk server since it is
-+one block device from kernel viewpoint.
-+
-+- buffer direction
-+
-+For ublk WRITE request, ublk request buffer should only be accessed as data
-+source, and the buffer can't be written by ublk server
-+
-+For ublk READ request, ublk request buffer should only be accessed as data
-+destination, and the buffer can't be read by ublk server, otherwise kernel
-+data is leaked to ublk server, which can be unprivileged application.
-+
-+- arbitrary size sub-buffer needs to be retrieved from ublk server
-+
-+ublk is one generic framework for implementing block device in userspace,
-+and typical requirements include logical volume manager(mirror, stripped, ...),
-+distributed network storage, compressed target, ...
-+
-+ublk server needs to retrieve arbitrary size sub-buffer of ublk request, and
-+ublk server needs to submit IOs with these sub-buffer(s). That also means
-+arbitrary size sub-buffer(s) can be used to submit IO multiple times.
-+
-+Any sub-buffer is actually one reference of ublk request buffer, which
-+ownership can't be transferred to upper layer if any reference is held
-+by ublk server.
-+
-+Why slice isn't good for ublk zero copy
-+---------------------------------------
-+
-+- spliced page from ->splice_read() can't be written
-+
-+ublk READ request can't be handled because spliced page can't be written to, and
-+extending splice for ublk zero copy isn't one good solution [#splice_extend]_
-+
-+- it is very hard to meet above requirements  wrt. request buffer lifetime
-+
-+splice/pipe focuses on page reference lifetime, but ublk zero copy pays more
-+attention to ublk request buffer lifetime. If is very inefficient to respect
-+request buffer lifetime by using all pipe buffer's ->release() which requires
-+all pipe buffers and pipe to be kept when ublk server handles IO. That means
-+one single dedicated ``pipe_inode_info`` has to be allocated runtime for each
-+provided buffer, and the pipe needs to be populated with pages in ublk request
-+buffer.
-+
-+
-+io_uring fused command based zero copy
-+--------------------------------------
-+
-+io_uring fused command includes one master command(uring command) and one
-+generic slave request. The master command is responsible for submitting
-+slave request with provided buffer from ublk request, and master command
-+won't be completed until the slave request is completed.
-+
-+Typical ublk IO handling includes network and FS IO, so it is usual enough
-+for io_uring net & fs to support IO with provided buffer from master command.
- 
--Zero copy is a generic requirement for nbd, fuse or similar drivers. A
--problem [#xiaoguang]_ Xiaoguang mentioned is that pages mapped to userspace
--can't be remapped any more in kernel with existing mm interfaces. This can
--occurs when destining direct IO to ``/dev/ublkb*``. Also, he reported that
--big requests (IO size >= 256 KB) may benefit a lot from zero copy.
-+Once master command is submitted successfully, ublk driver guarantees that
-+the ublk request buffer won't be gone away since slave request actually
-+grabs the buffer's reference. This way also guarantees that multiple
-+concurrent fused commands associated with same request buffer works fine,
-+as the provided buffer reference is shared & read-only.
- 
-+Also buffer usage direction flag is passed to master command from userspace,
-+so ublk driver can validate if it is legal to use buffer with requested
-+direction.
- 
- References
- ==========
-@@ -323,4 +431,4 @@ References
- 
- .. [#stefan] https://lore.kernel.org/linux-block/YoOr6jBfgVm8GvWg@stefanha-x1.localdomain/
- 
--.. [#xiaoguang] https://lore.kernel.org/linux-block/YoOr6jBfgVm8GvWg@stefanha-x1.localdomain/
-+.. [#splice_extend] https://lore.kernel.org/linux-block/CAHk-=wgJsi7t7YYpuo6ewXGnHz2nmj67iWR6KPGoz5TBu34mWQ@mail.gmail.com/
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 979444647831..9b6e11ef1fc3 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -74,10 +74,15 @@ struct ublk_rq_data {
- 	 *   successfully
- 	 */
- 	struct kref ref;
-+	bool allocated_bvec;
-+	struct io_uring_bvec_buf buf[0];
- };
- 
- struct ublk_uring_cmd_pdu {
--	struct ublk_queue *ubq;
-+	union {
-+		struct ublk_queue *ubq;
-+		struct request *req;
-+	};
- };
- 
- /*
-@@ -565,6 +570,69 @@ static size_t ublk_copy_user_pages(const struct request *req,
- 	return done;
- }
- 
-+/*
-+ * The built command buffer is immutable, so it is fine to feed it to
-+ * concurrent io_uring fused commands
-+ */
-+static int ublk_init_zero_copy_buffer(struct request *rq)
-+{
-+	struct ublk_rq_data *data = blk_mq_rq_to_pdu(rq);
-+	struct io_uring_bvec_buf *imu = data->buf;
-+	struct req_iterator rq_iter;
-+	unsigned int nr_bvecs = 0;
-+	struct bio_vec *bvec;
-+	unsigned int offset;
-+	struct bio_vec bv;
-+
-+	if (!ublk_rq_has_data(rq))
-+		goto exit;
-+
-+	rq_for_each_bvec(bv, rq, rq_iter)
-+		nr_bvecs++;
-+
-+	if (!nr_bvecs)
-+		goto exit;
-+
-+	if (rq->bio != rq->biotail) {
-+		int idx = 0;
-+
-+		bvec = kvmalloc_array(sizeof(struct bio_vec), nr_bvecs,
-+				GFP_NOIO);
-+		if (!bvec)
-+			return -ENOMEM;
-+
-+		offset = 0;
-+		rq_for_each_bvec(bv, rq, rq_iter)
-+			bvec[idx++] = bv;
-+		data->allocated_bvec = true;
-+	} else {
-+		struct bio *bio = rq->bio;
-+
-+		offset = bio->bi_iter.bi_bvec_done;
-+		bvec = __bvec_iter_bvec(bio->bi_io_vec, bio->bi_iter);
-+	}
-+	imu->bvec = bvec;
-+	imu->nr_bvecs = nr_bvecs;
-+	imu->offset = offset;
-+	imu->len = blk_rq_bytes(rq);
-+
-+	return 0;
-+exit:
-+	imu->bvec = NULL;
-+	return 0;
-+}
-+
-+static void ublk_deinit_zero_copy_buffer(struct request *rq)
-+{
-+	struct ublk_rq_data *data = blk_mq_rq_to_pdu(rq);
-+	struct io_uring_bvec_buf *imu = data->buf;
-+
-+	if (data->allocated_bvec) {
-+		kvfree(imu->bvec);
-+		data->allocated_bvec = false;
-+	}
-+}
-+
- static inline bool ublk_need_map_req(const struct request *req)
- {
- 	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE;
-@@ -575,11 +643,23 @@ static inline bool ublk_need_unmap_req(const struct request *req)
- 	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_READ;
- }
- 
--static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
-+static int ublk_map_io(const struct ublk_queue *ubq, struct request *req,
- 		struct ublk_io *io)
- {
- 	const unsigned int rq_bytes = blk_rq_bytes(req);
- 
-+	if (ublk_support_zc(ubq)) {
-+		int ret = ublk_init_zero_copy_buffer(req);
-+
-+		/*
-+		 * The only failure is -ENOMEM for allocating fused cmd
-+		 * buffer, return zero so that we can requeue this req.
-+		 */
-+		if (unlikely(ret))
-+			return 0;
-+		return rq_bytes;
-+	}
-+
- 	/*
- 	 * no zero copy, we delay copy WRITE request data into ublksrv
- 	 * context and the big benefit is that pinning pages in current
-@@ -599,11 +679,17 @@ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
- }
- 
- static int ublk_unmap_io(const struct ublk_queue *ubq,
--		const struct request *req,
-+		struct request *req,
- 		struct ublk_io *io)
- {
- 	const unsigned int rq_bytes = blk_rq_bytes(req);
- 
-+	if (ublk_support_zc(ubq)) {
-+		ublk_deinit_zero_copy_buffer(req);
-+
-+		return rq_bytes;
-+	}
-+
- 	if (ublk_need_unmap_req(req)) {
- 		struct iov_iter iter;
- 		struct iovec iov;
-@@ -687,6 +773,12 @@ static inline struct ublk_uring_cmd_pdu *ublk_get_uring_cmd_pdu(
- 	return (struct ublk_uring_cmd_pdu *)&ioucmd->pdu;
- }
- 
-+static inline struct ublk_uring_cmd_pdu *ublk_get_uring_fused_cmd_pdu(
-+		struct io_uring_cmd *ioucmd)
-+{
-+	return (struct ublk_uring_cmd_pdu *)&ioucmd->fused.pdu;
-+}
-+
- static inline bool ubq_daemon_is_dying(struct ublk_queue *ubq)
- {
- 	return ubq->ubq_daemon->flags & PF_EXITING;
-@@ -742,6 +834,7 @@ static inline void __ublk_complete_rq(struct request *req)
- 
- 	return;
- exit:
-+	ublk_deinit_zero_copy_buffer(req);
- 	blk_mq_end_request(req, res);
- }
- 
-@@ -1347,6 +1440,67 @@ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
- 	return NULL;
- }
- 
-+static void ublk_fused_cmd_done_cb(struct io_uring_cmd *cmd)
-+{
-+	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_fused_cmd_pdu(cmd);
-+	struct request *req = pdu->req;
-+	struct ublk_queue *ubq = req->mq_hctx->driver_data;
-+
-+	ublk_put_req_ref(ubq, req);
-+	io_uring_cmd_done(cmd, cmd->fused.data.slave_res, 0);
-+}
-+
-+static inline bool ublk_check_fused_buf_dir(const struct request *req,
-+		unsigned int flags)
-+{
-+	flags &= IO_URING_F_FUSED;
-+
-+	if (req_op(req) == REQ_OP_READ && flags == IO_URING_F_FUSED_BUF_DEST)
-+		return true;
-+
-+	if (req_op(req) == REQ_OP_WRITE && flags == IO_URING_F_FUSED_BUF_SRC)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int ublk_handle_fused_cmd(struct io_uring_cmd *cmd,
-+		struct ublk_queue *ubq, int tag, unsigned int issue_flags)
-+{
-+	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_fused_cmd_pdu(cmd);
-+	struct ublk_device *ub = cmd->file->private_data;
-+	struct ublk_rq_data *data;
-+	struct request *req;
-+
-+	if (!ub)
-+		return -EPERM;
-+
-+	if (!(issue_flags & IO_URING_F_FUSED))
-+		goto exit;
-+
-+	req = __ublk_check_and_get_req(ub, ubq, tag, 0);
-+	if (!req)
-+		goto exit;
-+
-+	pr_devel("%s: qid %d tag %u request bytes %u, issue flags %x\n",
-+			__func__, tag, ubq->q_id, blk_rq_bytes(req),
-+			issue_flags);
-+
-+	if (!ublk_check_fused_buf_dir(req, issue_flags))
-+		goto exit_put_ref;
-+
-+	pdu->req = req;
-+	data = blk_mq_rq_to_pdu(req);
-+	io_fused_cmd_start_slave_req(cmd, !(issue_flags & IO_URING_F_UNLOCKED),
-+			data->buf, ublk_fused_cmd_done_cb);
-+	return -EIOCBQUEUED;
-+
-+exit_put_ref:
-+	ublk_put_req_ref(ubq, req);
-+exit:
-+	return -EINVAL;
-+}
-+
- static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	struct ublksrv_io_cmd *ub_cmd = (struct ublksrv_io_cmd *)cmd->cmd;
-@@ -1362,6 +1516,10 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
- 			ub_cmd->result);
- 
-+	if ((issue_flags & IO_URING_F_FUSED) &&
-+			cmd_op != UBLK_IO_FUSED_SUBMIT_IO)
-+		return -EOPNOTSUPP;
-+
- 	if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
- 		goto out;
- 
-@@ -1369,7 +1527,12 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 	if (!ubq || ub_cmd->q_id != ubq->q_id)
- 		goto out;
- 
--	if (ubq->ubq_daemon && ubq->ubq_daemon != current)
-+	/*
-+	 * The fused command reads the io buffer data structure only, so it
-+	 * is fine to be issued from other context.
-+	 */
-+	if ((ubq->ubq_daemon && ubq->ubq_daemon != current) &&
-+			(cmd_op != UBLK_IO_FUSED_SUBMIT_IO))
- 		goto out;
- 
- 	if (tag >= ubq->q_depth)
-@@ -1392,6 +1555,9 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 		goto out;
- 
- 	switch (cmd_op) {
-+	case UBLK_IO_FUSED_SUBMIT_IO:
-+		return ublk_handle_fused_cmd(cmd, ubq, tag, issue_flags);
-+
- 	case UBLK_IO_FETCH_REQ:
- 		/* UBLK_IO_FETCH_REQ is only allowed before queue is setup */
- 		if (ublk_queue_ready(ubq)) {
-@@ -1721,11 +1887,14 @@ static void ublk_align_max_io_size(struct ublk_device *ub)
- 
- static int ublk_add_tag_set(struct ublk_device *ub)
- {
-+	int zc = !!(ub->dev_info.flags & UBLK_F_SUPPORT_ZERO_COPY);
-+	struct ublk_rq_data *data;
-+
- 	ub->tag_set.ops = &ublk_mq_ops;
- 	ub->tag_set.nr_hw_queues = ub->dev_info.nr_hw_queues;
- 	ub->tag_set.queue_depth = ub->dev_info.queue_depth;
- 	ub->tag_set.numa_node = NUMA_NO_NODE;
--	ub->tag_set.cmd_size = sizeof(struct ublk_rq_data);
-+	ub->tag_set.cmd_size = struct_size(data, buf, zc);
- 	ub->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
- 	ub->tag_set.driver_data = ub;
- 	return blk_mq_alloc_tag_set(&ub->tag_set);
-@@ -1941,12 +2110,18 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *cmd)
- 	 */
- 	ub->dev_info.flags &= UBLK_F_ALL;
- 
-+	/*
-+	 * NEED_GET_DATA doesn't make sense any more in case that
-+	 * ZERO_COPY is requested. Another reason is that userspace
-+	 * can read/write io request buffer by pread()/pwrite() with
-+	 * each io buffer's position.
-+	 */
-+	if (ub->dev_info.flags & UBLK_F_SUPPORT_ZERO_COPY)
-+		ub->dev_info.flags &= ~UBLK_F_NEED_GET_DATA;
-+
- 	if (!IS_BUILTIN(CONFIG_BLK_DEV_UBLK))
- 		ub->dev_info.flags |= UBLK_F_URING_CMD_COMP_IN_TASK;
- 
--	/* We are not ready to support zero copy */
--	ub->dev_info.flags &= ~UBLK_F_SUPPORT_ZERO_COPY;
--
- 	ub->dev_info.nr_hw_queues = min_t(unsigned int,
- 			ub->dev_info.nr_hw_queues, nr_cpu_ids);
- 	ublk_align_max_io_size(ub);
-diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
-index d1a6b3dc0327..c4f3465399cf 100644
---- a/include/uapi/linux/ublk_cmd.h
-+++ b/include/uapi/linux/ublk_cmd.h
-@@ -44,6 +44,7 @@
- #define	UBLK_IO_FETCH_REQ		0x20
- #define	UBLK_IO_COMMIT_AND_FETCH_REQ	0x21
- #define	UBLK_IO_NEED_GET_DATA	0x22
-+#define	UBLK_IO_FUSED_SUBMIT_IO	0x23
- 
- /* only ABORT means that no re-fetch */
- #define UBLK_IO_RES_OK			0
-@@ -85,10 +86,7 @@ static inline __u64 ublk_pos(__u16 q_id, __u16 tag, __u32 offset)
- 		((((__u64)tag) << UBLK_BUF_SIZE_BITS) + offset);
- }
- 
--/*
-- * zero copy requires 4k block size, and can remap ublk driver's io
-- * request into ublksrv's vm space
-- */
-+/* io_uring fused command based zero copy */
- #define UBLK_F_SUPPORT_ZERO_COPY	(1ULL << 0)
- 
- /*
--- 
-2.39.2
-
+>         err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>         if (err) {
+>                 stmmac_remove_config_dt(pdev, plat_dat);
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
