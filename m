@@ -2,148 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC2B6C86DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2216C86E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjCXUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S232082AbjCXUhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjCXUej (ORCPT
+        with ESMTP id S230015AbjCXUg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:34:39 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A711717B;
-        Fri, 24 Mar 2023 13:34:39 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id bf30so2143862oib.12;
-        Fri, 24 Mar 2023 13:34:39 -0700 (PDT)
+        Fri, 24 Mar 2023 16:36:59 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24241E1F0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:36:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 204-20020a2514d5000000b00a3637aea9e1so2873907ybu.17
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679690217;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qzKYx9+8XUagIX7RdKAagq2FCOW5fF+xAmlNYR7ouU4=;
+        b=WMrEWpz4Ed42D//eOGu7mGUIaIpRFSmKiDePya/QhjcJpHFkNYQiKjpkE/VcDX4Zej
+         cZS0KKxqCQW/2F6OX1cMrMrwm5duf9BdMZwgSZjRHEW5YDKYvbW4cIuraB5caLCoVVcv
+         Cel3FYIbiZEbO4C+FVKdsZfJL0f3QCvhNDeyH+oth5zMiOlEe4dGn8Eidg4Yy5OUM/kq
+         t1nBqQbNKqaNtp8sid8XTZq0iTzhoJNFj5rR8Pd1e+7vKizLtrCcfFvqKhjiVs+WvsR5
+         FuocCmgAnGmAnneKsbK2edjVbJNzTeBtWPDeN487He24pDhCnJxADZMo8IibhMGcmyHo
+         FjVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679690078;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9FU1okYjNaTTvHlzFDbnyfTKzLx7kyIZ/RZ3UO1QI8=;
-        b=roWwwSktPCVljTsiLoEIA6kZ2uuHQKnxVvUuZhVyj8noVmMPVZvpiRkZ3AFz+XZBxx
-         h6Urqs5n5+WLPYR81HOD/e2ugNyW4acVCjSTX/mZH0xJYj2CnqgRZdBtiScVhOaeNBAh
-         UpudSxCR1c+4uNgZwacf/TPMm/gaxw776iQXvEY9nMte4hPLLGmIbsjvhskTINswKgmL
-         rPKSag7u9gcyxQSi0a5dG6r6+QC23iKbx9YTclKe4FxpviXJ4znxiTcdkF31hk0Cca6w
-         wEozSrwKTp9utZoDxkCE1N3eDhaQKrNYlAWUHOVcDW/TsToAcXBMrJBQDhqFxpIgj+Vc
-         KskA==
-X-Gm-Message-State: AO0yUKVi2DAfu/5GvGX0DUZtGDgB0sbCtgtj7blfJ9QLyoHC7lVvM7KN
-        fCYwcGeMy5XUcTKiJyL+dg==
-X-Google-Smtp-Source: AK7set/KwOyEyWEDcM3nn+7L9qghYTCY+NGAz+QDvS2Y+PVAuwKAhkaFRH+XuAdy/7QN1kftkUbYSg==
-X-Received: by 2002:a05:6808:1a22:b0:387:1ac9:17d with SMTP id bk34-20020a0568081a2200b003871ac9017dmr2055119oib.40.1679690078303;
-        Fri, 24 Mar 2023 13:34:38 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e17-20020a544f11000000b0038778d9d8efsm1529641oiy.56.2023.03.24.13.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:34:38 -0700 (PDT)
-Received: (nullmailer pid 2459085 invoked by uid 1000);
-        Fri, 24 Mar 2023 20:34:37 -0000
-Date:   Fri, 24 Mar 2023 15:34:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bharat Bhushan <bbhushan2@marvell.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI
- watchdog driver
-Message-ID: <20230324203437.GA2439497-robh@kernel.org>
-References: <20230324145652.19221-1-bbhushan2@marvell.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324145652.19221-1-bbhushan2@marvell.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1679690217;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qzKYx9+8XUagIX7RdKAagq2FCOW5fF+xAmlNYR7ouU4=;
+        b=fKnEeZ7tKzNLwqjRLevq9V4nMW3NEEOfqCqrqYyVUw+UTguK/5E5W3HfxWmGzEHDs/
+         O5hR7w12ULSLYTSFqbGsG6BSi9jMz1FKIevTesdMoAKjJlGWRvZvFl0JbCedS2p/G54m
+         P6Pt/rVl4FAzTkC9KCw2gf8+mQr170gwWwSn9YIx3ktzgZd+54OWQDJEer7VwAIYliu0
+         y4MzrBw6eDIDzzSNNtXgv7cpr+pquiOVIKo+fS8giw9zat1w/I1ocVGstcUVR/fNeXsB
+         +MSoJSf4ZGfuRZdAIb53TkiaQybt+Q067TO125GYn2CLGCvUJDLZe0VOTH3W68sjw69j
+         rryg==
+X-Gm-Message-State: AAQBX9cbE7wxssFdXqMHmcIf2ob8Yk9Y2g7Am5JcFkKNd89T36OG/0sC
+        wDhonbuE9lgjWcefMzeC6BA/aJ4+PgI=
+X-Google-Smtp-Source: AKy350YgWsdlh5FPhrckUQqr+3LeU27bBrvg8jPen196T35No2Cibzes+gLiRNS0Qvs5eEMdKmCwAD1HkCY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1006:b0:b78:4b00:775f with SMTP id
+ w6-20020a056902100600b00b784b00775fmr330567ybt.4.1679690217136; Fri, 24 Mar
+ 2023 13:36:57 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 13:36:55 -0700
+In-Reply-To: <20230221163655.920289-3-mizhang@google.com>
+Mime-Version: 1.0
+References: <20230221163655.920289-1-mizhang@google.com> <20230221163655.920289-3-mizhang@google.com>
+Message-ID: <ZB4J54V16GQdcTrz@google.com>
+Subject: Re: [PATCH v3 02/13] KVM: selftests: x86: Add a working xstate data structure
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Chao Gao <chao.gao@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 08:26:51PM +0530, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell octeonTX2
-> GTI watchdog driver.
-> 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
->  .../watchdog/marvel-octeontx2-wdt.yaml        | 43 +++++++++++++++++++
-
-The comics?
-
-Use compatible string for filename.
-
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
-> new file mode 100644
-> index 000000000000..586b3c1bd780
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/marvel-octeontx2-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell OcteonTX2 GTI watchdog
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-
-Drop quotes
-
-> +
-> +maintainers:
-> +  - Bharat Bhushan <bbhushan2@marvell.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mrvl,octeontx2-gti-wdt
-
-'mrvl' is deprecated. Use 'marvell'
-
-> +
-> +  reg:
-> +    maxItems: 2
-
-Need to define what each entry is.
-
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 36
-
-Need to define what each entry is. How does the h/w have a variable 
-number of interrupts?
-
-> +
-> +required:
-> + - compatible
-> + - reg
-> + - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    watch-dog@802000040000 {
-
-watchdog@...
-
-> +      compatible = "mrvl,octeontx2-gti-wdt";
-> +      reg = <0x8020 0x40000 0x0 0x20000>;
-> +      interrupts = <0 38 1>, /* Core-0 */
-> +                   <0 39 1>; /* Core-1 */
-> +    };
-> +
-> +...
-> -- 
-> 2.17.1
-> 
+Please omit the "x86:" from the shortlog.  I'm not necessarily against capturing
+the arch somewhere in the shortlog for KVM selftests changes, but I want the
+community as a whole to make a concious decision on if and how to do it.  I.e. I
+don't want a bunch of ad hoc versions popping up because we'll end up with a mess.
+E.g. I personally think three levels of scope is too much, and would rather do
+something like "KVM: x86/selftests:" or "KVM: selftests/x86:".
