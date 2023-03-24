@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869766C7477
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9996C747B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjCXAUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S231652AbjCXAUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbjCXATu (ORCPT
+        with ESMTP id S231183AbjCXATz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:19:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE612D148;
-        Thu, 23 Mar 2023 17:19:44 -0700 (PDT)
+        Thu, 23 Mar 2023 20:19:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628242DE43;
+        Thu, 23 Mar 2023 17:19:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0BA7B821CB;
-        Fri, 24 Mar 2023 00:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F655C433A4;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50419CE23E7;
+        Fri, 24 Mar 2023 00:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB24C433A7;
         Fri, 24 Mar 2023 00:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679617181;
-        bh=CyI2x+E6wMeERtsPHUF/+GOvXVfY6z2JZMMsSarhSLI=;
+        bh=Kuzm8Bj8iVO+o7GdhoPvUAfNWxPS8pezXjecL0pzOgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UkDVJd8No6s7ukbT7sfNiUaDEYE3eq3U0X7dM3eEWUKY3SmlKyafcpOQBRf665Q78
-         BYL+i9XhxHCsMfQ9wtGa5mqWFz0vc57gjbHg6PimsNdHIq/DCc1KXmyZ0nD/2fOfD3
-         P4q+2TFGrkDCVN2hu4kWz2K2S1icmXON9VSrVCv/W3rTrCSeVPtf0G1cfOXVV2Foia
-         DP9rB+sYeqQi3+ocq8JY4EHNhXiSq43ACZRKBml1Y3GM5mcrKx5qAv2unJcuxwH/E/
-         v562+4FFHgJDaIhBJpCBJdyKBfbp4GNDcBZhM+Ch/8z4/iGyDl1MQUhqb6JbovPkw1
-         GjAGxcWT84DTw==
+        b=pgOlU74jyJQT+/HmpEyFq20STsjbFdQzqCPGC+G0Jnl6thtH7jZqaHglhAy2wMbUX
+         0moIAiZvsoam0bE/n93phwLkCwtKWLfFsC0ohfGeFHyw1Ox84Kouu5yWSxZQKr/K8s
+         47EVYY/oLK7TEHrtCyr5rNCfNF05qDr4mMFBdKFdl0H9sqxCwzdEmMkmWQYPNguRBy
+         hEedKx4E44MSLSc+l3XykylX3llMevP+VLxVGo+8znBAj49DShOhS03GC7uoMgi5ua
+         S30IP49k438xZpKdlDQjyRv8FmvjlkyV2DZb9t4gN1AP49zPHNY2aq7xeygqgObQdF
+         uUh6tTbQZz22g==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id A0E1615403A0; Thu, 23 Mar 2023 17:19:40 -0700 (PDT)
+        id A533D15403A1; Thu, 23 Mar 2023 17:19:40 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, hch@lst.de,
         "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH RFC rcu 07/19] srcu: Move ->lock initialization after srcu_usage allocation
-Date:   Thu, 23 Mar 2023 17:19:26 -0700
-Message-Id: <20230324001938.3443499-7-paulmck@kernel.org>
+Subject: [PATCH RFC rcu 08/19] srcu: Move ->lock from srcu_struct to srcu_usage
+Date:   Thu, 23 Mar 2023 17:19:27 -0700
+Message-Id: <20230324001938.3443499-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
 References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
@@ -56,49 +56,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, both __init_srcu_struct() in CONFIG_DEBUG_LOCK_ALLOC=y kernels
-and init_srcu_struct() in CONFIG_DEBUG_LOCK_ALLOC=n kernel initialize
-the srcu_struct structure's ->lock before the srcu_usage structure has
-been allocated.  This of course prevents the ->lock from being moved
-to the srcu_usage structure, so this commit moves the initialization
-into the init_srcu_struct_fields() after the srcu_usage structure has
-been allocated.
+This commit moves the ->lock field from the srcu_struct structure to
+the srcu_usage structure to reduce the size of the former in order to
+improve cache locality.
 
+Suggested-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
 ---
- kernel/rcu/srcutree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/srcutree.h | 11 +++++---
+ kernel/rcu/srcutree.c    | 56 ++++++++++++++++++++--------------------
+ 2 files changed, 35 insertions(+), 32 deletions(-)
 
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index 69d49de87b67..6fe5743c1179 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -66,13 +66,13 @@ struct srcu_usage {
+ 						/* First node at each level. */
+ 	int srcu_size_state;			/* Small-to-big transition state. */
+ 	struct mutex srcu_cb_mutex;		/* Serialize CB preparation. */
++	spinlock_t __private lock;		/* Protect counters and size state. */
+ };
+ 
+ /*
+  * Per-SRCU-domain structure, similar in function to rcu_state.
+  */
+ struct srcu_struct {
+-	spinlock_t __private lock;		/* Protect counters and size state. */
+ 	struct mutex srcu_gp_mutex;		/* Serialize GP work. */
+ 	unsigned int srcu_idx;			/* Current rdr array element. */
+ 	unsigned long srcu_gp_seq;		/* Grace-period seq #. */
+@@ -129,7 +129,6 @@ struct srcu_struct {
+ #define SRCU_STATE_SCAN2	2
+ 
+ #define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+-	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
+ 	.srcu_gp_seq_needed = -1UL,								\
+ 	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
+ 	.srcu_sup = &usage_name,								\
+@@ -167,7 +166,9 @@ struct srcu_struct {
+  */
+ #ifdef MODULE
+ # define __DEFINE_SRCU(name, is_static)								\
+-	static struct srcu_usage name##_srcu_usage;						\
++	static struct srcu_usage name##_srcu_usage = {						\
++		.lock = __SPIN_LOCK_UNLOCKED(name.lock),					\
++	};											\
+ 	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
+ 	extern struct srcu_struct * const __srcu_struct_##name;					\
+ 	struct srcu_struct * const __srcu_struct_##name						\
+@@ -175,7 +176,9 @@ struct srcu_struct {
+ #else
+ # define __DEFINE_SRCU(name, is_static)								\
+ 	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
+-	static struct srcu_usage name##_srcu_usage;						\
++	static struct srcu_usage name##_srcu_usage = {						\
++		.lock = __SPIN_LOCK_UNLOCKED(name.lock),					\
++	};											\
+ 	is_static struct srcu_struct name =							\
+ 		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
+ #endif
 diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 6b6d92fe41cf..f6f37e34a1e0 100644
+index f6f37e34a1e0..579c43ff0f4b 100644
 --- a/kernel/rcu/srcutree.c
 +++ b/kernel/rcu/srcutree.c
-@@ -240,6 +240,8 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
- 		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
+@@ -103,7 +103,7 @@ do {										\
+ 
+ #define spin_trylock_irqsave_rcu_node(p, flags)					\
+ ({										\
+-	bool ___locked = spin_trylock_irqsave(&ACCESS_PRIVATE(p, lock), flags);	\
++	bool ___locked = spin_trylock_irqsave(&ACCESS_PRIVATE(p, lock), flags); \
+ 										\
+ 	if (___locked)								\
+ 		smp_mb__after_unlock_lock();					\
+@@ -241,7 +241,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
  	if (!ssp->srcu_sup)
  		return -ENOMEM;
-+	if (!is_static)
-+		spin_lock_init(&ACCESS_PRIVATE(ssp, lock));
+ 	if (!is_static)
+-		spin_lock_init(&ACCESS_PRIVATE(ssp, lock));
++		spin_lock_init(&ACCESS_PRIVATE(ssp->srcu_sup, lock));
  	ssp->srcu_sup->srcu_size_state = SRCU_SIZE_SMALL;
  	ssp->srcu_sup->node = NULL;
  	mutex_init(&ssp->srcu_sup->srcu_cb_mutex);
-@@ -285,7 +287,6 @@ int __init_srcu_struct(struct srcu_struct *ssp, const char *name,
- 	/* Don't re-initialize a lock while it is held. */
- 	debug_check_no_locks_freed((void *)ssp, sizeof(*ssp));
- 	lockdep_init_map(&ssp->dep_map, name, key, 0);
--	spin_lock_init(&ACCESS_PRIVATE(ssp, lock));
- 	return init_srcu_struct_fields(ssp, false);
- }
- EXPORT_SYMBOL_GPL(__init_srcu_struct);
-@@ -302,7 +303,6 @@ EXPORT_SYMBOL_GPL(__init_srcu_struct);
+@@ -314,7 +314,7 @@ EXPORT_SYMBOL_GPL(init_srcu_struct);
   */
- int init_srcu_struct(struct srcu_struct *ssp)
+ static void __srcu_transition_to_big(struct srcu_struct *ssp)
  {
--	spin_lock_init(&ACCESS_PRIVATE(ssp, lock));
- 	return init_srcu_struct_fields(ssp, false);
+-	lockdep_assert_held(&ACCESS_PRIVATE(ssp, lock));
++	lockdep_assert_held(&ACCESS_PRIVATE(ssp->srcu_sup, lock));
+ 	smp_store_release(&ssp->srcu_sup->srcu_size_state, SRCU_SIZE_ALLOC);
  }
- EXPORT_SYMBOL_GPL(init_srcu_struct);
+ 
+@@ -328,13 +328,13 @@ static void srcu_transition_to_big(struct srcu_struct *ssp)
+ 	/* Double-checked locking on ->srcu_size-state. */
+ 	if (smp_load_acquire(&ssp->srcu_sup->srcu_size_state) != SRCU_SIZE_SMALL)
+ 		return;
+-	spin_lock_irqsave_rcu_node(ssp, flags);
++	spin_lock_irqsave_rcu_node(ssp->srcu_sup, flags);
+ 	if (smp_load_acquire(&ssp->srcu_sup->srcu_size_state) != SRCU_SIZE_SMALL) {
+-		spin_unlock_irqrestore_rcu_node(ssp, flags);
++		spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ 		return;
+ 	}
+ 	__srcu_transition_to_big(ssp);
+-	spin_unlock_irqrestore_rcu_node(ssp, flags);
++	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ }
+ 
+ /*
+@@ -369,9 +369,9 @@ static void spin_lock_irqsave_sdp_contention(struct srcu_data *sdp, unsigned lon
+ 
+ 	if (spin_trylock_irqsave_rcu_node(sdp, *flags))
+ 		return;
+-	spin_lock_irqsave_rcu_node(ssp, *flags);
++	spin_lock_irqsave_rcu_node(ssp->srcu_sup, *flags);
+ 	spin_lock_irqsave_check_contention(ssp);
+-	spin_unlock_irqrestore_rcu_node(ssp, *flags);
++	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, *flags);
+ 	spin_lock_irqsave_rcu_node(sdp, *flags);
+ }
+ 
+@@ -383,9 +383,9 @@ static void spin_lock_irqsave_sdp_contention(struct srcu_data *sdp, unsigned lon
+  */
+ static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
+ {
+-	if (spin_trylock_irqsave_rcu_node(ssp, *flags))
++	if (spin_trylock_irqsave_rcu_node(ssp->srcu_sup, *flags))
+ 		return;
+-	spin_lock_irqsave_rcu_node(ssp, *flags);
++	spin_lock_irqsave_rcu_node(ssp->srcu_sup, *flags);
+ 	spin_lock_irqsave_check_contention(ssp);
+ }
+ 
+@@ -404,13 +404,13 @@ static void check_init_srcu_struct(struct srcu_struct *ssp)
+ 	/* The smp_load_acquire() pairs with the smp_store_release(). */
+ 	if (!rcu_seq_state(smp_load_acquire(&ssp->srcu_gp_seq_needed))) /*^^^*/
+ 		return; /* Already initialized. */
+-	spin_lock_irqsave_rcu_node(ssp, flags);
++	spin_lock_irqsave_rcu_node(ssp->srcu_sup, flags);
+ 	if (!rcu_seq_state(ssp->srcu_gp_seq_needed)) {
+-		spin_unlock_irqrestore_rcu_node(ssp, flags);
++		spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ 		return;
+ 	}
+ 	init_srcu_struct_fields(ssp, true);
+-	spin_unlock_irqrestore_rcu_node(ssp, flags);
++	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ }
+ 
+ /*
+@@ -774,7 +774,7 @@ static void srcu_gp_start(struct srcu_struct *ssp)
+ 		sdp = per_cpu_ptr(ssp->sda, get_boot_cpu_id());
+ 	else
+ 		sdp = this_cpu_ptr(ssp->sda);
+-	lockdep_assert_held(&ACCESS_PRIVATE(ssp, lock));
++	lockdep_assert_held(&ACCESS_PRIVATE(ssp->srcu_sup, lock));
+ 	WARN_ON_ONCE(ULONG_CMP_GE(ssp->srcu_gp_seq, ssp->srcu_gp_seq_needed));
+ 	spin_lock_rcu_node(sdp);  /* Interrupts already disabled. */
+ 	rcu_segcblist_advance(&sdp->srcu_cblist,
+@@ -864,7 +864,7 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+ 	mutex_lock(&ssp->srcu_sup->srcu_cb_mutex);
+ 
+ 	/* End the current grace period. */
+-	spin_lock_irq_rcu_node(ssp);
++	spin_lock_irq_rcu_node(ssp->srcu_sup);
+ 	idx = rcu_seq_state(ssp->srcu_gp_seq);
+ 	WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
+ 	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+@@ -875,7 +875,7 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+ 	gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
+ 	if (ULONG_CMP_LT(ssp->srcu_gp_seq_needed_exp, gpseq))
+ 		WRITE_ONCE(ssp->srcu_gp_seq_needed_exp, gpseq);
+-	spin_unlock_irq_rcu_node(ssp);
++	spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 	mutex_unlock(&ssp->srcu_gp_mutex);
+ 	/* A new grace period can start at this point.  But only one. */
+ 
+@@ -924,15 +924,15 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+ 	mutex_unlock(&ssp->srcu_sup->srcu_cb_mutex);
+ 
+ 	/* Start a new grace period if needed. */
+-	spin_lock_irq_rcu_node(ssp);
++	spin_lock_irq_rcu_node(ssp->srcu_sup);
+ 	gpseq = rcu_seq_current(&ssp->srcu_gp_seq);
+ 	if (!rcu_seq_state(gpseq) &&
+ 	    ULONG_CMP_LT(gpseq, ssp->srcu_gp_seq_needed)) {
+ 		srcu_gp_start(ssp);
+-		spin_unlock_irq_rcu_node(ssp);
++		spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 		srcu_reschedule(ssp, 0);
+ 	} else {
+-		spin_unlock_irq_rcu_node(ssp);
++		spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 	}
+ 
+ 	/* Transition to big if needed. */
+@@ -975,7 +975,7 @@ static void srcu_funnel_exp_start(struct srcu_struct *ssp, struct srcu_node *snp
+ 	spin_lock_irqsave_ssp_contention(ssp, &flags);
+ 	if (ULONG_CMP_LT(ssp->srcu_gp_seq_needed_exp, s))
+ 		WRITE_ONCE(ssp->srcu_gp_seq_needed_exp, s);
+-	spin_unlock_irqrestore_rcu_node(ssp, flags);
++	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ }
+ 
+ /*
+@@ -1064,7 +1064,7 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
+ 		else if (list_empty(&ssp->work.work.entry))
+ 			list_add(&ssp->work.work.entry, &srcu_boot_list);
+ 	}
+-	spin_unlock_irqrestore_rcu_node(ssp, flags);
++	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
+ }
+ 
+ /*
+@@ -1621,17 +1621,17 @@ static void srcu_advance_state(struct srcu_struct *ssp)
+ 	 */
+ 	idx = rcu_seq_state(smp_load_acquire(&ssp->srcu_gp_seq)); /* ^^^ */
+ 	if (idx == SRCU_STATE_IDLE) {
+-		spin_lock_irq_rcu_node(ssp);
++		spin_lock_irq_rcu_node(ssp->srcu_sup);
+ 		if (ULONG_CMP_GE(ssp->srcu_gp_seq, ssp->srcu_gp_seq_needed)) {
+ 			WARN_ON_ONCE(rcu_seq_state(ssp->srcu_gp_seq));
+-			spin_unlock_irq_rcu_node(ssp);
++			spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 			mutex_unlock(&ssp->srcu_gp_mutex);
+ 			return;
+ 		}
+ 		idx = rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq));
+ 		if (idx == SRCU_STATE_IDLE)
+ 			srcu_gp_start(ssp);
+-		spin_unlock_irq_rcu_node(ssp);
++		spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 		if (idx != SRCU_STATE_IDLE) {
+ 			mutex_unlock(&ssp->srcu_gp_mutex);
+ 			return; /* Someone else started the grace period. */
+@@ -1645,10 +1645,10 @@ static void srcu_advance_state(struct srcu_struct *ssp)
+ 			return; /* readers present, retry later. */
+ 		}
+ 		srcu_flip(ssp);
+-		spin_lock_irq_rcu_node(ssp);
++		spin_lock_irq_rcu_node(ssp->srcu_sup);
+ 		rcu_seq_set_state(&ssp->srcu_gp_seq, SRCU_STATE_SCAN2);
+ 		ssp->srcu_n_exp_nodelay = 0;
+-		spin_unlock_irq_rcu_node(ssp);
++		spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 	}
+ 
+ 	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) == SRCU_STATE_SCAN2) {
+@@ -1732,7 +1732,7 @@ static void srcu_reschedule(struct srcu_struct *ssp, unsigned long delay)
+ {
+ 	bool pushgp = true;
+ 
+-	spin_lock_irq_rcu_node(ssp);
++	spin_lock_irq_rcu_node(ssp->srcu_sup);
+ 	if (ULONG_CMP_GE(ssp->srcu_gp_seq, ssp->srcu_gp_seq_needed)) {
+ 		if (!WARN_ON_ONCE(rcu_seq_state(ssp->srcu_gp_seq))) {
+ 			/* All requests fulfilled, time to go idle. */
+@@ -1742,7 +1742,7 @@ static void srcu_reschedule(struct srcu_struct *ssp, unsigned long delay)
+ 		/* Outstanding request and no GP.  Start one. */
+ 		srcu_gp_start(ssp);
+ 	}
+-	spin_unlock_irq_rcu_node(ssp);
++	spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 
+ 	if (pushgp)
+ 		queue_delayed_work(rcu_gp_wq, &ssp->work, delay);
 -- 
 2.40.0.rc2
 
