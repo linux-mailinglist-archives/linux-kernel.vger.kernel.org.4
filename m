@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B9B6C7DB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622586C7DBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjCXMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S231153AbjCXMIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCXMH5 (ORCPT
+        with ESMTP id S230061AbjCXMIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:07:57 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF91690;
-        Fri, 24 Mar 2023 05:07:54 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id o82so393064qka.11;
-        Fri, 24 Mar 2023 05:07:54 -0700 (PDT)
+        Fri, 24 Mar 2023 08:08:48 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA4610AA3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:08:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id s8so1950499lfr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679659674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uac8Kh/o+Tug0oTL30CPwJA5sImQaH1bVzzLo3Tmkqw=;
-        b=dncRQqBm+KfBkOB06hQC6ieBgEVchNabJRNmbBUkrSqQR+7UiHq8RIAdH8nvJ/psZY
-         0y6fzrdkEKRTCDAbgupyIc5cmm/RChXJw8vNW5lSSwuYZxo5uSOGPlfSaSWtcFJ0RBba
-         hS80zJrycdrNmYtbZZihTHn9YhjA5ydUqrTWW+SK4fybpMpK4X5s2WJa6B5oJEumOnHb
-         fdUF0TK+WMI4xxjq69D5E5bKaepcDleVDrhztzo3WHWmxh3pUy7+yjhynrRP1JhdAm/w
-         TmnLQWUXw936jIFXeNwW4NqhdpSN/x/EioTKM7AlZhpisddISrEgeM1EhfFsODbBo7vM
-         J03w==
+        d=linaro.org; s=google; t=1679659725; x=1682251725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FKWvw7b+JAS44FVyD0FLI3tZGRETXw2/xRa06dfHw0k=;
+        b=afr9y2A1iS13xzsG4ZbEpuOwpHzB94ZjEYQ8femJ88V1SChdcim0pr/d5rq1pZ0ENH
+         9NMtrGFFOPc5Hby8mA7uqg9Hwq1c0LoHr5h9OlTI/y6TWpCAfYRKLuYzRgo/ZldDhEhP
+         K4/CgRvzYaY0dtiGaiBC0qD5kLhzYigv7P53TQ8NNJ29f6HSfrHpTdADqPCXVBqpDW9c
+         Z4vw8hoaoVDz9Y1/gUfxR6t0qH+d1mMKaB9UtZC3K4tE9Ll8ni1C1dbVV8MJlHkb7w2j
+         UmGHqjdywccrNSa0vAQhwzeqXDQP8ic7E5S6/4eHmLbe03/pPu3mm0uYV1hiJIWzY0Ks
+         ECsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679659674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uac8Kh/o+Tug0oTL30CPwJA5sImQaH1bVzzLo3Tmkqw=;
-        b=lA12WOXHylVasPPNhPba21mGNGCghXEJnCbu/RnibufaK3Xtb9Z4CJkPQWslFmYvxn
-         4wM/MtK7P6Xa9pU2n7lxqWj92mtG8+kJjzHZlGVlqjmKuPj6VJZoBGOdlsCWsfS5jR4G
-         Ri0sySHDGJrxJHQeIPD6S6W/jPUo9AzkdQof4P/wogf0E0I/LeVtMUKnTTTxj7Yh2WOe
-         xqpp8mhoUmer9xWKv4bgwWFT2NxysFDnnvkPGZWrT+WlbWUJ+xJ3Le7KqJeJP6rvF9hi
-         zI3W5XM16v7wtm5NTf00ZjqBqR1FGJ6/ryL55oHoaYKW1XmiV7g1/ChDQyMSPA6K4IAl
-         9tuA==
-X-Gm-Message-State: AO0yUKUv2cwU25XevZltg37koAJ3l3eGFllj/F46FFAqxT/1SOy00Fqe
-        ltp0SeEnfvvAv+9U/XJrRfCPq/nStncS5Gq56f3VEkkHACg=
-X-Google-Smtp-Source: AK7set+hA7Md34qSQbqtlIEkKZTUuWiDtYN+rawC5fnaUMZCORcDxBVLBkigAd6PEhw0f/iEiqUOVqw6jStzk8oUPxI=
-X-Received: by 2002:a05:620a:4154:b0:745:32ab:4d2a with SMTP id
- k20-20020a05620a415400b0074532ab4d2amr442790qko.14.1679659673937; Fri, 24 Mar
- 2023 05:07:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679659725; x=1682251725;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKWvw7b+JAS44FVyD0FLI3tZGRETXw2/xRa06dfHw0k=;
+        b=weKLvKGup3eSJaGMXYevWdAOMwlNJkazhh6hml3J3K7eE6peZMB+I6NN9t1cPrnu/N
+         reNBJXDzifSpVIQlkKLprePeD78p20zck64xMJ7rvG0en58FesJFOpSJBNJc/3jREQuV
+         qMbdzkQoL/GChIpWv/7++V0XtZB3GssEAfGMzt2uV5nNaTFI1UQ1SG/GuKFzjsC1QaRm
+         mJiNfY0J/dasxyuWZIF4nIlNwPsJhJXYVKcqhI+A41k2tCWC9G7091HAgF77CAfD5ko7
+         YNAhzrPlZL8po9ymW6aMgDdbarLzb69JQACXqT1JUV/XFdbXY9kuufLOFzSUJFmM7v9C
+         by5w==
+X-Gm-Message-State: AAQBX9cCk5yeFuVfqS0QGn8A8tTJSQmuwZZdtI8mnx80dMQ5RtZX38UG
+        J7LuwCJJtW1hoapoemSfBbX5+Q==
+X-Google-Smtp-Source: AKy350a+AxVBqGyixTZ2LohqdfaVCcjTRMp0giVBa0/MZtDLKCnA5uRBslMBZXkINHhhFKF4sl/OMg==
+X-Received: by 2002:ac2:52b9:0:b0:4d2:c70a:fdfa with SMTP id r25-20020ac252b9000000b004d2c70afdfamr538404lfm.4.1679659725083;
+        Fri, 24 Mar 2023 05:08:45 -0700 (PDT)
+Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id h8-20020a197008000000b004dc6070e121sm3329137lfc.83.2023.03.24.05.08.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 05:08:44 -0700 (PDT)
+Message-ID: <7b26e32d-6f3e-4e1f-33a7-0a994ae8526d@linaro.org>
+Date:   Fri, 24 Mar 2023 14:08:35 +0200
 MIME-Version: 1.0
-References: <20230323205733.20763-1-asmaa@nvidia.com>
-In-Reply-To: <20230323205733.20763-1-asmaa@nvidia.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 Mar 2023 14:07:18 +0200
-Message-ID: <CAHp75Vd4m79RhG-_KLRNzr0SPzphG07fOiTWwmGCfx8Lz=+6Vg@mail.gmail.com>
-Subject: Re: [PATCH v1] gpio: mmio: fix calculation of bgpio_bits
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 1/2] dt-bindings: dma: Add support for SM6115 and QCS2290
+ SoCs
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com, vkoul@kernel.org,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org
+References: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,42 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:57=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wr=
-ote:
->
-> If the "ngpios" property is specified, bgpio_bits is calculated
-> as the round up value of ngpio. At the moment, the only requirement
-> specified is that the round up value must be a multiple of 8 but
-> it should also be a power of 2 because we provide accessors based
-> on the bank size in bgpio_setup_accessors().
+Hi Bhupesh,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+On 3/20/23 09:12, Bhupesh Sharma wrote:
+> Add new compatible for BAM DMA engine version v1.7.4 which is
+> found on Qualcomm SM6115 and QCS2290 SoCs.
+> 
+> While at it, also update qcom,bam-dma bindings to add comments
+> which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
+> This provides an easy reference for identifying the actual BAM DMA
+> version available on Qualcomm SoCs.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  drivers/gpio/gpio-mmio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-> index b52a3dd511ca..74fdf0d87b2c 100644
-> --- a/drivers/gpio/gpio-mmio.c
-> +++ b/drivers/gpio/gpio-mmio.c
-> @@ -623,7 +623,7 @@ int bgpio_init(struct gpio_chip *gc, struct device *d=
-ev,
->         if (ret)
->                 gc->ngpio =3D gc->bgpio_bits;
->         else
-> -               gc->bgpio_bits =3D round_up(gc->ngpio, 8);
-> +               gc->bgpio_bits =3D roundup_pow_of_two(round_up(gc->ngpio,=
- 8));
->
->         ret =3D bgpio_setup_io(gc, dat, set, clr, flags);
->         if (ret)
-> --
-> 2.30.1
->
+>   Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> index f1ddcf672261..4c8536df98fe 100644
+> --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> @@ -20,8 +20,10 @@ properties:
+>         - qcom,bam-v1.3.0
+>           # MSM8974, APQ8074 and APQ8084
+>         - qcom,bam-v1.4.0
+> -        # MSM8916 and SDM845
+> +        # MSM8916, SDM845, SM8150 and SM8250
+>         - qcom,bam-v1.7.0
+> +        # SM6115 and QRB2290
+> +      - qcom,bam-v1.7.4
+>   
+>     clocks:
+>       maxItems: 1
 
+apparently it's a good time to implement a switch in compatible values
+similar to the one done for QCE:
 
---=20
-With Best Regards,
-Andy Shevchenko
+https://lore.kernel.org/linux-arm-msm/20230222172240.3235972-6-vladimir.zapolskiy@linaro.org/
+
+If this is done in the nearest time, then new platfrom QCE changes
+can be seamlessly added after the next merge window, also the change
+in the compatible values model shall resolve multiple technical
+concerns including the one above about 1/1 change in the series.
+
+--
+Best wishes,
+Vladimir
