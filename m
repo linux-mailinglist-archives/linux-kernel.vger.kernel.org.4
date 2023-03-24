@@ -2,63 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5386C8100
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8B46C8104
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjCXPRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S231898AbjCXPSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCXPRV (ORCPT
+        with ESMTP id S231878AbjCXPSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:17:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBE4131;
-        Fri, 24 Mar 2023 08:17:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 24 Mar 2023 11:18:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0199CA0B;
+        Fri, 24 Mar 2023 08:18:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D912D1FEF6;
-        Fri, 24 Mar 2023 15:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679671038; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bwervvL2VqoJp7Lysjwx0FFEhlsKTjSqVYYrPqe2D7Q=;
-        b=TgmwsbLl+DA5Nt70AmZzlhUhFnz2I8NZtHoXA9KZt0n0xrFCGQ/YcA+FBZzx5Gd9YKiOCI
-        bHaGK3KdSJtjWhbFYpt8xp9g3zTgsEdqgjVpEmsD/3IKuaTKEB23gX1Z7Zdt3DkXUwoRe5
-        7mksq3ezMiaJva+j+TCZ+oYN/uUqCH0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BAF4138ED;
-        Fri, 24 Mar 2023 15:17:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EG8sHf6+HWQUZwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 24 Mar 2023 15:17:18 +0000
-Date:   Fri, 24 Mar 2023 16:17:17 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/5] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Message-ID: <20230324151717.hawuy5gs6cnxql55@blackpad>
-References: <20230321004829.2012847-1-zi.yan@sent.com>
- <20230321004829.2012847-3-zi.yan@sent.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75B9C62B74;
+        Fri, 24 Mar 2023 15:18:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6113C433D2;
+        Fri, 24 Mar 2023 15:18:10 +0000 (UTC)
+Message-ID: <68ba7b3f-57f5-3969-5036-2c8d08273548@xs4all.nl>
+Date:   Fri, 24 Mar 2023 16:18:09 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="exvxtogrhnfaw26c"
-Content-Disposition: inline
-In-Reply-To: <20230321004829.2012847-3-zi.yan@sent.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     David Laight <David.Laight@ACULAB.COM>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        "tfiga@chromium.org" <tfiga@chromium.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "ming.qian@nxp.com" <ming.qian@nxp.com>,
+        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
+        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
+        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
+        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
+        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
+        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
+        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
+ <20230313135916.862852-3-benjamin.gaignard@collabora.com>
+ <20230313181155.GC22646@pendragon.ideasonboard.com>
+ <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
+ <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
+ <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
+ <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
+ <20230319233358.GD20234@pendragon.ideasonboard.com>
+ <f085aa9225c573df906bdc7ff032a8fd591b18b3.camel@ndufresne.ca>
+ <20230322150153.GO20234@pendragon.ideasonboard.com>
+ <2d6480e36ce061a63440d1e11d52b02e57ba746d.camel@ndufresne.ca>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <2d6480e36ce061a63440d1e11d52b02e57ba746d.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 24/03/2023 16:14, Nicolas Dufresne wrote:
+> Le mercredi 22 mars 2023 à 17:01 +0200, Laurent Pinchart a écrit :
+>> On Wed, Mar 22, 2023 at 10:50:52AM -0400, Nicolas Dufresne wrote:
+>>> Hi Laurent,
+>>>
+>>> Le lundi 20 mars 2023 à 01:33 +0200, Laurent Pinchart a écrit :
+>>>>> The typical usage is that applications allocate N buffers with the
+>>>>> VIDIOC_REQBUFS ioctl, and in most cases that's all they use.
+>>>>
+>>>> Note that once we get DELETE_BUF (or DELETE_BUFS) support I'd like to
+>>>> encourage applications to use the new API, and deprecate REQBUFS
+>>>> (dropping it isn't on my radar, as it would take forever before no
+>>>> userspace uses it anymore).
+>>>
+>>> I was wondering if you can extend on this. I'm worried the count semantic might
+>>> prevent emulating it over create_bufs() ops, but if that works, did you meant to
+>>> emulate it so driver no longer have to implement reqbufs() if they have
+>>> create_bufs() ?
+>>
+>> For drivers it should be fairly simply, as the reqbufs and create_bufs
+>> ioctl handlers should just point to the corresponding videobuf2 helpers.
+>>
+>> What I meant is that I'd like to encourage userspace to use the
+>> VIDIOC_CREATE_BUFS ioctl instead of VIDIOC_REQBUFS.
+>>
+> 
+> I'm not sure what rationale I can give implementer to "encourage" them to use a
+> more complex API that needs to copy over the FMT (which has just been set),
+> specially in the initial pre-allocation case. For most, CREATE_BUFS after SMT
+> will look like a very redundant and counter intuitive thing. Maybe you have a
+> more optimistic view on the matter ? Or you have a better idea how we could give
+> a meaning to having a fmt there on the initial case where the allocation matches
+> the queue FMT ?
 
---exvxtogrhnfaw26c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I wouldn't mind if we can make a much nicer CREATE_BUFS variant with just the
+size instead of a format. That was in hindsight a really bad idea, terrible
+over-engineering.
 
-Hello.
+Regards,
 
-On Mon, Mar 20, 2023 at 08:48:26PM -0400, Zi Yan <zi.yan@sent.com> wrote:
-> @@ -5746,8 +5746,8 @@ static void *make_alloc_exact(unsigned long addr, u=
-nsigned int order,
->  		struct page *page =3D virt_to_page((void *)addr);
->  		struct page *last =3D page + nr;
-> =20
-> -		split_page_owner(page, 1 << order);
-> -		split_page_memcg(page, 1 << order);
-> +		split_page_owner(page, 1 << order, 1);
-> +		split_page_memcg(page, 1 << order, 1);
-
-I think here should be
-
-> +		split_page_owner(page, order, 0);
-> +		split_page_memcg(page, 1 << order, 1);
-
-because I was wondering why split_page_memcg() doesn't use orders too?
-(E.g. it wouldn't work well if nr % new_new !=3D 0).
-
-Thanks,
-Michal
-
---exvxtogrhnfaw26c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZB2++wAKCRAkDQmsBEOq
-uZYWAQCFTMigwoG6hG2bxKjAJtYDo8OWh0BZq1aPs9LM+QVdBwEAvayit0OXGxQ2
-MDrtNVNB0nXobbi8EK0m4EAaSr9tCQA=
-=FNxP
------END PGP SIGNATURE-----
-
---exvxtogrhnfaw26c--
+	Hans
