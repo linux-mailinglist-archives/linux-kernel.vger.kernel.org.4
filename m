@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DEE6C82EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD556C82ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjCXRJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S231976AbjCXRKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjCXRJE (ORCPT
+        with ESMTP id S229505AbjCXRKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:09:04 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAA320694
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:09:02 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54574d6204aso24520767b3.15
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679677742;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G2GLLrk0eutYOPX5sTRYTvo2Y+x3Tvp07KFj4spklwk=;
-        b=JJ8Pg3hkjve4IazlZIeqwGj9EtpZSaYftwdJPK92EMdH3yOMC3MEOCWZQxJVqiEAhw
-         z5X2O7Ip468i1Yf/l9QX3dzHdWE1CRO5nroYps7gecyUX9H0l1Y/dKB0LO669Cu34cSH
-         TsXw8mLONzFVZv8wdXGr9EPqDRdg/05FCVYmIHVkZCtulSfgl/S9PPQuZb/Rgg5BiBuz
-         Yk5rM6KiWEIHbTKp4G7wqPsiyOOb2y3I8hsKuewEtj8OHdS9OmmNbWBEPOUCUSKrMmsm
-         xqgW5eRsg7AJkgKv27fNm+yHtEu5TLDBwzO3jxxM4MFjqq6Gb1vfdXzLbRSPq5pxWdqW
-         2ZBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679677742;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G2GLLrk0eutYOPX5sTRYTvo2Y+x3Tvp07KFj4spklwk=;
-        b=ebeeewG3uK2f+spp0JdyF6t/heDVB3dQzLnVFG3e4Aah6kLhwtj0t9BzK06uGkQ5zL
-         568gTWzMtokfa4Ckbbr/wyM19ocvuAeiUVCkAdzaL+gxBTIeH5OeBjNGiehsnrSMRV9b
-         ojnaeBVcivhGWvbB3Oh710vGeCGfPTpYWpPh8CNcMUz4CcWeSYIMqKFtQawdaRnXWUrE
-         HYCH0iEEPlt6gSXp/OrOwo+8Q31Fue98fyYPo/Yt6UeVfV/11jcngTv8mvkOMf2Wwzm8
-         bAvKyk2M3nmCLHvVJCV3ru968rYyUNfffATXcXqWL/aMjEBN1cqCAojaympmQ9rk7kF6
-         jf/w==
-X-Gm-Message-State: AAQBX9dS3sQnUs2tXORLGGAUhSv8sNjkwLIRmh6buRaKmgGboUe5xjyG
-        EFDFDPCrmi8TKhfuW8vnhrDOcB8BJxc=
-X-Google-Smtp-Source: AKy350ZQ0OSWdgontMVSEWYCTNjXgWYYUP2nzy1s2WGmxt+AwTFMd0BdSY7Rjr+RpV0xGOMR5bDM6WnZrgE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:e054:0:b0:b6b:d3f3:45af with SMTP id
- x81-20020a25e054000000b00b6bd3f345afmr3611653ybg.1.1679677741957; Fri, 24 Mar
- 2023 10:09:01 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 10:09:00 -0700
-In-Reply-To: <20230110175057.715453-2-pgonda@google.com>
-Mime-Version: 1.0
-References: <20230110175057.715453-1-pgonda@google.com> <20230110175057.715453-2-pgonda@google.com>
-Message-ID: <ZB3ZLFCgqYxekE6U@google.com>
-Subject: Re: [PATCH V6 1/7] KVM: selftests: sparsebit: add const where appropriate
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Roth <michael.roth@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 13:10:14 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5E3B212BD;
+        Fri, 24 Mar 2023 10:10:13 -0700 (PDT)
+Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 301FA20FC447;
+        Fri, 24 Mar 2023 10:10:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 301FA20FC447
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679677813;
+        bh=bgmIaw8wMSWsss3W40BPK0PE6LwvUlJau2CCprtxb5E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ApLRO3o9k0dlJ9d76y1Wc0ezRYgX7lkHSFHT0b0W3AVxDVbYjkE+0L20p6ZqCiAND
+         AclxT9+NdVy9U0QBpsJwdUDbIsT9vV2MFj2DmzBIz5nOB/WshsW4k/NdkL9ivJKLii
+         8nMzoS7XjfpVUgq4kjpdEKqE6J92EjCBr85yCf5g=
+Message-ID: <c8458bfa-0985-f6a5-52a3-ef96c7669fe6@linux.microsoft.com>
+Date:   Fri, 24 Mar 2023 18:10:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
+ <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
+ <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
+ <20230322181541.GEZBtFzRAMcH9BAzUe@fat_crate.local>
+ <ecf005b1-ddb9-da4c-4526-28df4806426c@linux.microsoft.com>
+ <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
+ <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
+ <20230323163450.GGZBx/qpnclFnMaf7e@fat_crate.local>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <20230323163450.GGZBx/qpnclFnMaf7e@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I suggest this for the shortlog
-
-  KVM: selftests: Make sparsebit structs const where appropriate
-
-Three deep scopes are a net negative IMO.  Too much of the shortlog is consumed
-by the scope, and very few patches are actually capable of such precision, i.e.
-touch more than a single area.
-
-On Tue, Jan 10, 2023, Peter Gonda wrote:
-> From: Michael Roth <michael.roth@amd.com>
+On 3/23/2023 5:34 PM, Borislav Petkov wrote:
+> On Thu, Mar 23, 2023 at 05:11:26PM +0100, Jeremi Piotrowski wrote:
+>> That same interface is exposed by physical hardware+firmware to the underlying
+>> Hyper-V.
 > 
-> Subsequent patches will introduce an encryption bitmap in kvm_util that
+> Let me see if I understand it correctly: Hyper-V *baremetal* is using
+> the same ASPT spec to to talk to the *physical* PSP device?
+> 
 
-protected memory, not encryption
+Yes
 
-> would be useful to allow tests to access in read-only fashion. This
-> will be done via a const sparsebit*. To avoid warnings or the need to
-> add casts everywhere, add const to the various sparsebit functions that
-> are applicable for read-only usage of sparsebit.
+> Is that ASPT interface to talk to the PSP used by the L0 hypervisor?
+> 
+
+Yes (unless I am mistaken, this is the same statement as above).
+
+> Or does the L0 HV have a normal driver, similar to the Linux one,
+> without the functionality this ASPT spec provides?
+> 
+The L0 HV relies on the ASPT spec/interface to map registers and setup
+interrupts and then uses a protocol driver to handle the PSP command set
+(like the Linux one).
+
+>> So it wasn't a matter of Microsoft architects coming up with a
+>> guest-host interface but rather exposing the virtual hardware in the same
+>> way as on a physical server.
+> 
+> So if you want to expose the same interface to the L1 guest, why isn't
+> Hyper-V emulating an ACPI device just like any other functionality? Why
+> does it need to reach into the interrupt handling internals?
+> 
+
+The primary stack for nested SNP support is Hyper-V-on-Hyper-V. 
+By exposing the PSP device to the L1 guest in the same way (as the L0),
+everything can done in the exact same way as on bare-metal.
+
+I just really want nested SNP support to work in KVM-on-Hyper-V as well so
+that's why I'm adding support for these things.
+
+Also: if Linux were to run bare-metal on that hardware it would need to be
+able to handle the PSP through the ASPT interface as well.
+
+> I'd expect that the L0 HV would emulate a PSP device, the L1 would
+> simply load the Linux PSP device driver and everything should just work.
+> 
+> What's the point of that alternate access at all?
+> 
+
+So it's actually great that you made me ask around because I learned something that
+will help:
+
+Since the AMD PSP is a privileged device, there is a desire to not have to trust the
+ACPI stack, and instead rely fully on static ACPI tables for discovery and configuration.
+This also applies to the AMD IOMMU. If you look at iommu_setup_intcapxt() in
+drivers/iommu/amd/init.c, it does exactly the things that are needed to setup the
+PSP interrupt too. Here's a link to the patch that added that:
+https://lore.kernel.org/all/20201111144322.1659970-3-dwmw2@infradead.org/#t
+
+So my plan now is to post a v4 with proper irq_domain handling.
+Ok Thomas?
+
+Best wishes,
+Jeremi
