@@ -2,164 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB406C82C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1AD6C82D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjCXRCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S231772AbjCXREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbjCXRCs (ORCPT
+        with ESMTP id S230043AbjCXREm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:02:48 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2067.outbound.protection.outlook.com [40.107.223.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C61E3A0;
-        Fri, 24 Mar 2023 10:02:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IEfsuiwTdUY7SiE9eVM8IIIp4KzHKHO74fNiDhvbE1HOrxx3UucVJcho3lh6TQpR33Pe8x65aEj2k2la7d8eCn1CluRIUj0WcSPFQTTlxGDcBFnip1hzCRw56YoEU/erToevs1kTruPz3BftkwweYE6/8dMEKditwAlAMjE9aAX4CSnRiCIDG3JWM/I9Yk0uH9nD8QciKDT7Wr8jaIcU2LNFwxpz0fuPnkOfWsU7lp49/XT7BjUVM1u5GWNNeL2V50YTyZIu1unoMJfWE06mj7VDtXPJbEdbgo/EzM67PH1DsJ1bFqT8v2EWS9xW/U5fs81x+v+FAAm3qY17Lx7UZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d9PQCHWDHdGkLou1UviUd8lskvK6zdaVw5DvphFLPzk=;
- b=QyHSFK5LXCXqcpP7yf4eVomloZroe35xZJ1Ag24+JnhXzw/N+30aW5VcELnk/qAD+BF7j1E1idLJirmYss9avenO8kNjSn1slUfCg3qlxZXlyIWVUhE2N6k3uql70OIXjcgv6Y/hvbHqhYnfxsjGzJqpIf7PeOOAxPI7DNuLdSjLJTi5wLqhdJoQ5JW/FNQHI2nc5HsoO+ZoKak+v9ETyA46fTzyK2XWTVg2MiWJNwnWvBVB1DJzD9OU31JLQ4I7GWoMyFJX2N8RxRHp6NrsAwwepAM8kUqzVW988WXlZvyZRIAdg77fAfaYWJeXp/r1blK9L+5cSf53U4FQ3QRd4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d9PQCHWDHdGkLou1UviUd8lskvK6zdaVw5DvphFLPzk=;
- b=EhJFIP0dg3iF+1b4rdN7FbfjeCxgc34qd6x1FU0qyyI3bUFm9/W++VjGErrn1b/PM5GpIGcx1MuJ52RGAJRyiwyeLfzCMyFWV/Q2BM8rLdTAVglBXs2KxGRMzskAmQ3IfTxILqelHRZE2r335KhzbOMEB2rzT189Pfd5SDKB/2kdqK5n8GxvodlNX+ln7WgzgBsQU//gUGrx+jeYD8jXUSjqT2o84ZZNgHVO7bxi+zp2Gu9uSFGOQomPfYEEiBRDAFBiTMsVarAI8Fkc/2luNjwsZ/KdSHmJooo+txcCRf+35gnkyipxwcYab4MSaUw3EUxwpv5SVi00mbbvIhwJfQ==
-Received: from BN7PR06CA0052.namprd06.prod.outlook.com (2603:10b6:408:34::29)
- by CH3PR12MB7691.namprd12.prod.outlook.com (2603:10b6:610:151::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
- 2023 17:02:45 +0000
-Received: from BL02EPF00010207.namprd05.prod.outlook.com
- (2603:10b6:408:34:cafe::38) by BN7PR06CA0052.outlook.office365.com
- (2603:10b6:408:34::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38 via Frontend
- Transport; Fri, 24 Mar 2023 17:02:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF00010207.mail.protection.outlook.com (10.167.241.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.30 via Frontend Transport; Fri, 24 Mar 2023 17:02:45 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 24 Mar 2023
- 10:02:29 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 24 Mar
- 2023 10:02:29 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Fri, 24 Mar 2023 10:02:28 -0700
-Date:   Fri, 24 Mar 2023 10:02:27 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>
-Subject: Re: [PATCH v5 2/4] iommufd: Add iommufd_access_replace() API
-Message-ID: <ZB3Xo576l33OH/S/@Asurada-Nvidia>
-References: <cover.1679559476.git.nicolinc@nvidia.com>
- <2c3fa7a21373ee10af7cc9f8c370945a08341930.1679559476.git.nicolinc@nvidia.com>
- <BN9PR11MB5276E7E2BA88DD54DC5EE99A8C849@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 24 Mar 2023 13:04:42 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C61218143;
+        Fri, 24 Mar 2023 10:04:40 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id p15so2987829ybl.9;
+        Fri, 24 Mar 2023 10:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679677479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OCml8ofHkG4IJBqfeB4qxjYnRBtbT44nbe68PiLxTPs=;
+        b=ij2aYC/ryVpmzlhdEZDgf28UIkh0gi0xYpyVvmQMjCEO740X7LTByCdazsSV31299g
+         56aYs06cFw2OjirLKkdAXdnrHKRKZafCHejxP6YK/VncdWokErnEKtd2GAQNIzBWuIbC
+         pZn7jRnUtTHVpYvPAnOzl0LaRutv81bg6VdzR6LzTv6H9tEKD/AJPXG+fGLIX8B1VsRQ
+         GpaNSz1z+oQO73z2GTvmNJsyv9AnGIy0Argo768CKfB7WSo8dAftVZptpl+jl1wJIh+2
+         mXsbLXGGIXKQZ70qVbca17+YkVhiRvcDrNrka9soak+bWWZxAtmM3G/pTf5oA89fBZQU
+         kEYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679677479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OCml8ofHkG4IJBqfeB4qxjYnRBtbT44nbe68PiLxTPs=;
+        b=WBDOZI24IKLvCE2bWwHmGM16ja0VS79zgABtE2fih1fy69uecIKzwQKL3PRV+1qKoc
+         pMu0uGiFZlDrqaKV/MCE61BMqd9mREYXzjAgiT8FbctrHqGqK2BQ8Esyn0ygC5PvxTEG
+         /3QBJz4TDxjZBcVDFugK+yRMoVCPbb2gx/MePSjPtQzTmTuorD1USoku30wgvnCCih+R
+         Nh8gZUZrCqlUMNnOTDp+INjvGJVoTxPjnub3pwmiMgwLFQtAMu40t7nlP+m2w36BRVIG
+         +2ScbHieyhxzQoUf3LXMRLySWlyO5im6Db/TfeOAwEhBOyaqnOoPRpoJ3oOfE+U3zenP
+         v2yA==
+X-Gm-Message-State: AAQBX9cEVS8WpTOXHcg6eTD2+LqoLYCDJoeQq0kuhGEundCAgnvEdx7P
+        JLMxfh9mtKj5kO/OI9yBlUFkpchigW/xE3kTGvs=
+X-Google-Smtp-Source: AKy350ZGKQtAjmvy0J+9VFX9K82hGdPosFNx9dCq7HdlxXs3TSaAciZYPOka2rTFFTYx6ITGcUSaqdxMUTk4MW98OCs=
+X-Received: by 2002:a05:6902:1501:b0:b4c:9333:2a2 with SMTP id
+ q1-20020a056902150100b00b4c933302a2mr1412557ybu.9.1679677479349; Fri, 24 Mar
+ 2023 10:04:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276E7E2BA88DD54DC5EE99A8C849@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010207:EE_|CH3PR12MB7691:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7abbd983-d4c5-4670-79ac-08db2c8996bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iyvl2AaPF8Z5eyCnJMV0FOcEpLWN1OTjoujhpDjPtdZ0S6bNpwlI7RNRv+K2fJbqRiwqfJKmKfzelxKiw8RwWh6RZPJvUQ2cRozNq7gDrY7/IYZCDXBdaN6pn6EALC2RhwUg2m93mIw/osWYoGto4YPY7WGwPFRqluTHhFyfBREwWBjO89zWuj51uf1HVA8a5q9JkdN7CLtM6uKLbe91c6w6yWZNa3DuxNFbwY77fQOjAfVK+DwHa3e4QrcVs7jqt7XsbysAx8PzTiMtY/uI70e9C46tmzO4DoEJgvPgUFQLPjPf779oJTVhAw5TVAuBClziNRJSFwz8BeSuxITIsQBImHWa6/T7vkuoEFPoHwTXBgOTCSec12JWbvdhIqwI7HRBU6tipUsE+b0O2/sD7ISUGpLVa0dD8kdcPjOHG3ZsiitFibes6QqCCJZ6Tyks/3Cfzg2QBpdzYCP2uXZgYhfJmruE3B7qX1ure8o+IzJdYru7AmVnsAO8cMEOyXOeMfgVr2byYqJrqqtRc/NO6fLSoQ69JzTsdQkOlxzMbCCnSWRDxEyqJYO+wV7wSLIW0atZ2E3z1jSo0IbO2eTO2UCAY8LyzsvIh05BAFROypd/JHj8Ev1mTPaBDc6SWs8GevfhmOmRVkjpS3OoFOm+bc513tFGkEcm9ltnR7+t2kTs6Rkc4cgO++8FtY4LFarH56irJpVv15yVoP2pYHAE9A==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(46966006)(36840700001)(7416002)(186003)(8676002)(8936002)(5660300002)(54906003)(478600001)(70206006)(4326008)(6916009)(86362001)(41300700001)(47076005)(26005)(356005)(9686003)(82740400003)(7636003)(40480700001)(336012)(426003)(83380400001)(316002)(2906002)(70586007)(82310400005)(55016003)(33716001)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 17:02:45.2101
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7abbd983-d4c5-4670-79ac-08db2c8996bc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010207.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7691
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:ba8c:b0:490:be1c:c35a with HTTP; Fri, 24 Mar 2023
+ 10:04:38 -0700 (PDT)
+In-Reply-To: <20230324153602.66a8841d@xps-13>
+References: <20230323124510.2484808-1-noltari@gmail.com> <20230323124510.2484808-2-noltari@gmail.com>
+ <20230324104020.54754079@xps-13> <CAKR-sGcbRRjqt3raXHcvfCfKFDfFWsuu+C7XW3qFckawMsqe4w@mail.gmail.com>
+ <20230324114911.19e00ae1@xps-13> <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
+ <20230324144559.3473c537@xps-13> <CAKR-sGdxFbMZYGcDnWHW9SU=6hchZMi75=BjGtDen_Ws1keORg@mail.gmail.com>
+ <20230324153602.66a8841d@xps-13>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Fri, 24 Mar 2023 18:04:38 +0100
+Message-ID: <CAKR-sGegBo2M-+mHZknWBJhmgHtT21Lsd=W==5zU-raja6aJuA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new binding
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jaime Liao <jaimeliao@mxic.com.tw>,
+        YouChing <ycllin@mxic.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 03:02:46AM +0000, Tian, Kevin wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Thursday, March 23, 2023 4:33 PM
-> >
-> > +int iommufd_access_replace(struct iommufd_access *access, u32 ioas_id)
-> > +{
-> > +     struct iommufd_ioas *new_ioas;
-> > +
-> > +     mutex_lock(&access->ioas_lock);
-> > +     if (!access->ioas) {
-> >               mutex_unlock(&access->ioas_lock);
-> > -             iommufd_put_object(obj);
-> > -             return rc;
-> > +             return -ENOENT;
-> > +     }
-> > +     if (access->ioas->obj.id == ioas_id) {
-> > +             mutex_unlock(&access->ioas_lock);
-> > +             return 0;
-> >       }
-> > -     iommufd_ref_to_users(obj);
-> >
-> > +     new_ioas = iommufd_access_change_pt(access, ioas_id);
-> > +     if (IS_ERR(new_ioas)) {
-> > +             mutex_unlock(&access->ioas_lock);
-> > +             return PTR_ERR(new_ioas);
-> > +     }
-> > +     __iommufd_access_detach(access);
-> >       access->ioas = new_ioas;
-> >       access->ioas_unpin = new_ioas;
-> 
-> Above three lines can be moved into iommufd_access_change_pt():
-> 
->         If (access->ioas)
->                 __iommufd_access_detach(access);
->         access->ioas = new_ioas;
->         access->ioas_unpin = new_ioas;
-> 
-> Then both attach/replace can end by calling the common function.
+Hi Miqu=C3=A8l,
 
-OK. Will do that in v6.
+2023-03-24 15:36 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
+> Hi =C3=81lvaro,
+>
+> + YouChing and Jaime from Macronix
+> TLDR for them: there is a misbehavior since Mason added block
+> protection support. Just checking if the blocks are protected seems to
+> misconfigure the chip entirely, see below. Any hints?
 
-Thanks
-Nicolin
+Could it be that the NAND is stuck expecting a read 0x00 command which
+isn=E2=80=99t sent after getting the features?
+
+>
+> noltari@gmail.com wrote on Fri, 24 Mar 2023 15:15:47 +0100:
+>
+>> Hi Miqu=C3=A8l,
+>>
+>> 2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
+>> > Hi =C3=81lvaro,
+>> >
+>> > noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
+>> >
+>> >> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
+>> >> (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+>> >> >
+>> >> > Hi =C3=81lvaro,
+>> >> >
+>> >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
+>> >> >
+>> >> > > Hi Miqu=C3=A8l,
+>> >> > >
+>> >> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
+>> >> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+>> >> > > >
+>> >> > > > Hi =C3=81lvaro,
+>> >> > > >
+>> >> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
+>> >> > > >
+>> >> > > > > Add new "mxic,disable-block-protection" binding documentation=
+.
+>> >> > > > > This binding allows disabling block protection support for
+>> >> > > > > those
+>> >> > > > > devices not
+>> >> > > > > supporting it.
+>> >> > > > >
+>> >> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmai=
+l.com>
+>> >> > > > > ---
+>> >> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3
+>> >> > > > > +++
+>> >> > > > >  1 file changed, 3 insertions(+)
+>> >> > > > >
+>> >> > > > > diff --git
+>> >> > > > > a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> >> > > > > b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> >> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
+>> >> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> >> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> >> > > > > @@ -16,6 +16,9 @@ in children nodes.
+>> >> > > > >  Required NAND chip properties in children mode:
+>> >> > > > >  - randomizer enable: should be "mxic,enable-randomizer-otp"
+>> >> > > > >
+>> >> > > > > +Optional NAND chip properties in children mode:
+>> >> > > > > +- block protection disable: should be
+>> >> > > > > "mxic,disable-block-protection"
+>> >> > > > > +
+>> >> > > >
+>> >> > > > Besides the fact that nowadays we prefer to see binding
+>> >> > > > conversions
+>> >> > > > to
+>> >> > > > yaml before adding anything, I don't think this will fly.
+>> >> > > >
+>> >> > > > I'm not sure exactly what "disable block protection" means, we
+>> >> > > > already have similar properties like "lock" and
+>> >> > > > "secure-regions",
+>> >> > > > not
+>> >> > > > sure they will fit but I think it's worth checking.
+>> >> > >
+>> >> > > As explained in 2/2, commit 03a539c7a118 introduced a regression
+>> >> > > on
+>> >> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix
+>> >> > > MX30LF1G18AC
+>> >> > > which hangs the device.
+>> >> > >
+>> >> > > This is the log with block protection disabled:
+>> >> > > [    0.495831] bcm6368_nand 10000200.nand: there is not valid map=
+s
+>> >> > > for
+>> >> > > state default
+>> >> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID=
+:
+>> >> > > 0xf1
+>> >> > > [    0.511526] nand: Macronix MX30LF1G18AC
+>> >> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size=
+:
+>> >> > > 2048, OOB size: 64
+>> >> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> >> > > [    0.535912] Bad block table found at page 65472, version 0x01
+>> >> > > [    0.544268] Bad block table found at page 65408, version 0x01
+>> >> > > [    0.954329] 9 fixed-partitions partitions found on MTD device
+>> >> > > brcmnand.0
+>> >> > > ...
+>> >> > >
+>> >> > > This is the log with block protection enabled:
+>> >> > > [    0.495095] bcm6368_nand 10000200.nand: there is not valid map=
+s
+>> >> > > for
+>> >> > > state default
+>> >> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID=
+:
+>> >> > > 0xf1
+>> >> > > [    0.510772] nand: Macronix MX30LF1G18AC
+>> >> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size=
+:
+>> >> > > 2048, OOB size: 64
+>> >> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> >> > > [    0.539687] Bad block table not found for chip 0
+>> >> > > [    0.550153] Bad block table not found for chip 0
+>> >> > > [    0.555069] Scanning device for bad blocks
+>> >> > > [    0.601213] CPU 1 Unable to handle kernel paging request at
+>> >> > > virtual
+>> >> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
+>> >> > > *** Device hangs ***
+>> >> > >
+>> >> > > Enabling macronix_nand_block_protection_support() makes the devic=
+e
+>> >> > > unable to detect the bad block table and hangs it when trying to
+>> >> > > scan
+>> >> > > for bad blocks.
+>> >> >
+>> >> > Please trace nand_macronix.c and look:
+>> >> > - are the get_features and set_features really supported by the
+>> >> >   controller driver?
+>> >>
+>> >> This is what I could find by debugging:
+>> >> [    0.494993] bcm6368_nand 10000200.nand: there is not valid maps fo=
+r
+>> >> state default
+>> >> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>> >> 0xf1
+>> >> [    0.512077] nand: Macronix MX30LF1G18AC
+>> >> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>> >> 2048, OOB size: 64
+>> >> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> >> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> >> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
+>> >> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
+>> >> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> >> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D
+>> >> 0x00
+>> >> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> >> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D
+>> >> 0x00
+>> >> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> >> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D
+>> >> 0x00
+>> >> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
+>> >> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D
+>> >> 0x00
+>> >> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_param=3D=
+[00
+>> >> 00 00 00] -> 0
+>> >> [    0.602341] macronix_nand_block_protection_support:
+>> >> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
+>> >> [    0.610548] macronix_nand_block_protection_support: !=3D
+>> >> MXIC_BLOCK_PROTECTION_ALL_LOCK
+>> >> [    0.624760] Bad block table not found for chip 0
+>> >> [    0.635542] Bad block table not found for chip 0
+>> >> [    0.640270] Scanning device for bad blocks
+>> >>
+>> >> I don't know how to tell if get_features / set_features is really
+>> >> supported...
+>> >
+>> > Looks like your driver does not support exec_op but the core provides =
+a
+>> > get/set_feature implementation.
+>>
+>> According to Florian, low level should be supported on brcmnand
+>> controllers >=3D 4.0
+>> Also:
+>> https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddbb20bf7=
+5689372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_map_par=
+t.h#L1597
+>
+> Just to be sure, you're using a mainline controller driver, not this
+> one?
+
+Yes, this was just to prove that the HW I=E2=80=99m using has get/set featu=
+res support.
+I=E2=80=99m using OpenWrt, so it=E2=80=99s linux v5.15 driver.
+
+>
+>> >
+>> >>
+>> >> > - what is the state of the locking configuration in the chip when
+>> >> > you
+>> >> >   boot?
+>> >>
+>> >> Unlocked, I guess...
+>> >> How can I check that?
+>> >
+>> > It's in your dump, the chip returns 0, meaning it's all unlocked,
+>> > apparently.
+>>
+>> Well, I can read/write the device if block protection isn=E2=80=99t disa=
+bled,
+>> so I guess we can confirm it=E2=80=99s unlocked=E2=80=A6
+>>
+>> >
+>> >> > - is there anything that locks the device by calling mxic_nand_lock=
+()
+>> >> > ?
+>> >
+>> > So nobody locks the device I guess? Did you add traces there?
+>>
+>> It doesn=E2=80=99t get to the point that it enabled the lock/unlock func=
+tions
+>> since it fails when checking if feature is 0x38, so there=E2=80=99s no p=
+oint
+>> in adding those traces=E2=80=A6
+>
+> Right, it returns before setting these I guess.
+>
+>>
+>> >
+>> >> > - finding no bbt is one thing, hanging is another, where is it
+>> >> > hanging
+>> >> >   exactly? (offset in nand/ and line in the code)
+>> >>
+>> >> I've got no idea...
+>> >
+>> > You can use ftrace or just add printks a bit everywhere and try to get
+>> > closer and closer.
+>>
+>> I think that after trying to get the feature it just start reading
+>> nonsense from the NAND and at some point it hangs due to that garbage=E2=
+=80=A6
+>
+> It should refuse to mount the device somehow, but in no case the kernel
+> should hang.
+
+Yes, I think that this is a side effect (maybe a different bug somewhere el=
+se).
+
+>
+>> Is it posible that the NAND starts behaving like this after getting
+>> the feature due to some specific config of my device?
+>>
+>> >
+>> > I looked at the patch, I don't see anything strange. Besides, I have a
+>> > close enough datasheet and I don't see what could confuse the device.
+>> >
+>> > Are you really sure this patch is the problem? Is the WP pin wired on
+>> > your design?
+>>
+>> There=E2=80=99s no WP pin in brcmnand controllers < 7.0
+>
+> What about the chip?
+
+Maybe it has a GPIO controlling that, but I don=E2=80=99t have that info=E2=
+=80=A6
+
+>
+> Thanks,
+> Miqu=C3=A8l
+>
