@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DD56C7749
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 721AA6C7751
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjCXF0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 01:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S231728AbjCXF0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjCXFZa (ORCPT
+        with ESMTP id S231231AbjCXFZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 01:25:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02582A9AE;
-        Thu, 23 Mar 2023 22:24:28 -0700 (PDT)
+        Fri, 24 Mar 2023 01:25:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F6A1A949;
+        Thu, 23 Mar 2023 22:24:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98EFCB8227A;
-        Fri, 24 Mar 2023 05:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE6FC433EF;
-        Fri, 24 Mar 2023 05:24:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEA94B822EF;
+        Fri, 24 Mar 2023 05:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2BAC4339B;
+        Fri, 24 Mar 2023 05:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679635466;
-        bh=1zRPyaaLaKChlaF3HiLNG8L4a1+H9YMBeM142XTaxBY=;
+        s=k20201202; t=1679635473;
+        bh=nw8UNJG7nUuciviQays7D2+1DNRt50wOuGp0YNt2kts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OaMe0O8Y/VqFyvv8P3AJ1JWfaNX6fUglLOJcj3uiMUNqxbjm8gr3zQzueLpQbru3k
-         epbhwOHrXR1omZCGUJ46MWgrzi5JVVVUMbEvFwbZBHTNJoP1R3O3Rt357nnca+/Y50
-         MazCC6m/TE6Wk5itsz2kNTymFFE6Ee7czzfdznGtRIDbRXKkKdT8k8Q69UUznV4zMY
-         kNNQO5IhLe22jyNOezzwMTCICskwDUKeXENIxmLxZ4yPWLQaCW5OKBlzmo+od0rKRh
-         WosyWZZ35ErgkBKSd9iQE6LbvHpmmzi5D05v0zIQAi4gdnhM3ArvsglzNbBv6+vb9z
-         9Y8re2b10Yv7w==
+        b=A3CqxCMwJfZzwcOy2cHw6Hy5i4tjtq0LLAqlPpMCz7gceY63zG9+sMCnohgsmNBDp
+         BJhwe+zNosK9oTtSQJ6sMo8h6vZQi3bv8P4VussUYnMpuK3aiMI/SN4BS8qQdBSpx1
+         N4o7L4cp676/LUwaSYP8a8XIhiZKbu5cpIY6aX1ykFXPd7EcB0LPOc/C0J/4Xdezpm
+         9EkSoLPcIlsQkrS8IVNKy0jHHPFeCeWECsgynPY3be9ACBDzng19Lmp+cOjgPEHoQ5
+         w6mtefVg74Z8gmKTE2K06WnOiAV3JoECw5bbt0ivWjt7dfAgLQyScbiZeeTkqm48hH
+         er1kCT3TasZWQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -55,16 +55,16 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-mm@kvack.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
         sparclinux@vger.kernel.org
-Subject: [PATCH v2 13/14] sparc: reword ARCH_FORCE_MAX_ORDER prompt and help text
-Date:   Fri, 24 Mar 2023 08:22:32 +0300
-Message-Id: <20230324052233.2654090-14-rppt@kernel.org>
+Subject: [PATCH v2 14/14] xtensa: reword ARCH_FORCE_MAX_ORDER prompt and help text
+Date:   Fri, 24 Mar 2023 08:22:33 +0300
+Message-Id: <20230324052233.2654090-15-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230324052233.2654090-1-rppt@kernel.org>
 References: <20230324052233.2654090-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,22 +80,23 @@ describe this configuration option.
 Update both to actually describe what this option does.
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/sparc/Kconfig | 16 +++++++++-------
+ arch/xtensa/Kconfig | 16 +++++++++-------
  1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index e3242bf5a8df..959e43a1aaca 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -270,15 +270,17 @@ config ARCH_SPARSEMEM_DEFAULT
- 	def_bool y if SPARC64
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 3eee334ba873..3c6e5471f025 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -772,15 +772,17 @@ config HIGHMEM
+ 	  If unsure, say Y.
  
  config ARCH_FORCE_MAX_ORDER
 -	int "Maximum zone order"
 +	int "Order of maximal physically contiguous allocations"
- 	default "12"
+ 	default "10"
  	help
 -	  The kernel memory allocator divides physically contiguous memory
 -	  blocks into "zones", where each zone is a power of two number of
@@ -112,8 +113,8 @@ index e3242bf5a8df..959e43a1aaca 100644
 +
 +	  Don't change if unsure.
  
- if SPARC64 || COMPILE_TEST
- source "kernel/power/Kconfig"
+ endmenu
+ 
 -- 
 2.35.1
 
