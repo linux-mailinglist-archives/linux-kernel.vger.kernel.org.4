@@ -2,81 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2216C86E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06136C86E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjCXUhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S232123AbjCXUhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCXUg7 (ORCPT
+        with ESMTP id S230015AbjCXUhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:36:59 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24241E1F0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:36:57 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 204-20020a2514d5000000b00a3637aea9e1so2873907ybu.17
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679690217;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qzKYx9+8XUagIX7RdKAagq2FCOW5fF+xAmlNYR7ouU4=;
-        b=WMrEWpz4Ed42D//eOGu7mGUIaIpRFSmKiDePya/QhjcJpHFkNYQiKjpkE/VcDX4Zej
-         cZS0KKxqCQW/2F6OX1cMrMrwm5duf9BdMZwgSZjRHEW5YDKYvbW4cIuraB5caLCoVVcv
-         Cel3FYIbiZEbO4C+FVKdsZfJL0f3QCvhNDeyH+oth5zMiOlEe4dGn8Eidg4Yy5OUM/kq
-         t1nBqQbNKqaNtp8sid8XTZq0iTzhoJNFj5rR8Pd1e+7vKizLtrCcfFvqKhjiVs+WvsR5
-         FuocCmgAnGmAnneKsbK2edjVbJNzTeBtWPDeN487He24pDhCnJxADZMo8IibhMGcmyHo
-         FjVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679690217;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qzKYx9+8XUagIX7RdKAagq2FCOW5fF+xAmlNYR7ouU4=;
-        b=fKnEeZ7tKzNLwqjRLevq9V4nMW3NEEOfqCqrqYyVUw+UTguK/5E5W3HfxWmGzEHDs/
-         O5hR7w12ULSLYTSFqbGsG6BSi9jMz1FKIevTesdMoAKjJlGWRvZvFl0JbCedS2p/G54m
-         P6Pt/rVl4FAzTkC9KCw2gf8+mQr170gwWwSn9YIx3ktzgZd+54OWQDJEer7VwAIYliu0
-         y4MzrBw6eDIDzzSNNtXgv7cpr+pquiOVIKo+fS8giw9zat1w/I1ocVGstcUVR/fNeXsB
-         +MSoJSf4ZGfuRZdAIb53TkiaQybt+Q067TO125GYn2CLGCvUJDLZe0VOTH3W68sjw69j
-         rryg==
-X-Gm-Message-State: AAQBX9cbE7wxssFdXqMHmcIf2ob8Yk9Y2g7Am5JcFkKNd89T36OG/0sC
-        wDhonbuE9lgjWcefMzeC6BA/aJ4+PgI=
-X-Google-Smtp-Source: AKy350YgWsdlh5FPhrckUQqr+3LeU27bBrvg8jPen196T35No2Cibzes+gLiRNS0Qvs5eEMdKmCwAD1HkCY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1006:b0:b78:4b00:775f with SMTP id
- w6-20020a056902100600b00b784b00775fmr330567ybt.4.1679690217136; Fri, 24 Mar
- 2023 13:36:57 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 13:36:55 -0700
-In-Reply-To: <20230221163655.920289-3-mizhang@google.com>
-Mime-Version: 1.0
-References: <20230221163655.920289-1-mizhang@google.com> <20230221163655.920289-3-mizhang@google.com>
-Message-ID: <ZB4J54V16GQdcTrz@google.com>
-Subject: Re: [PATCH v3 02/13] KVM: selftests: x86: Add a working xstate data structure
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Chao Gao <chao.gao@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 16:37:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6B61F905;
+        Fri, 24 Mar 2023 13:37:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D55CB82608;
+        Fri, 24 Mar 2023 20:37:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7BCC4339C;
+        Fri, 24 Mar 2023 20:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679690257;
+        bh=aWXxTpUzVdWKwRyaJyc6kpA5qikK8OgfqGObFSQG9Q0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Ex8Z9pZ4OL5wCGHQ7yY3D0VQ48EbuxFK9fk474Er+4+ws+7Jp/erWuSkCqiCPWMmE
+         1l5PLpiJ0S2+1GHj+XrtQgOW+IRFYM3hw3MfT9RAEfE1hyqBDPEv0A7X/Wnlid04hK
+         h7RnFqtuSKcGFEsPKfMSv8sYX8qH16qDX0+VrNwoxgMYyWNiTTj7o4716W9zwqPlVS
+         wbdj4daIe8ACFK6VBgAy8CbBzrXSWudcHoai4xuh/dw3AD0wyErUyd0LfkrnfyczJQ
+         6jDpnioFT9MtJzzXp6un/63S+Emx91/ro/D/8yNhrtSt8W2ryQ8rCa5+m366Eqlw01
+         UtfA3opoi6EUA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+In-Reply-To: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+Subject: Re: (subset) [RFC 0/7] Introduce a generic regmap-based MDIO
+ driver
+Message-Id: <167969025376.2727723.12829947448375375074.b4-ty@kernel.org>
+Date:   Fri, 24 Mar 2023 20:37:33 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please omit the "x86:" from the shortlog.  I'm not necessarily against capturing
-the arch somewhere in the shortlog for KVM selftests changes, but I want the
-community as a whole to make a concious decision on if and how to do it.  I.e. I
-don't want a bunch of ad hoc versions popping up because we'll end up with a mess.
-E.g. I personally think three levels of scope is too much, and would rather do
-something like "KVM: x86/selftests:" or "KVM: selftests/x86:".
+On Fri, 24 Mar 2023 10:36:37 +0100, Maxime Chevallier wrote:
+> When the Altera TSE PCS driver was initially introduced, there were
+> comments by Russell that the register layout looked very familiar to the
+> existing Lynx PCS driver, the only difference being that the TSE PCS
+> driver is memory-mapped whereas the Lynx PCS driver sits on an MDIO bus.
+> 
+> Since then, I've sent a followup to create a wrapper around Lynx, that
+> would create a virtual MDIO bus driver that would translate the mdio
+> operations to mmio operations [1].
+> 
+> [...]
+
+Applied to
+
+   broonie/regmap.git for-next
+
+Thanks!
+
+[1/7] regmap: add a helper to translate the register address
+      commit: 3f58f6dc4d92ed6fae4a4da0d5b091e00ec10fa8
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
