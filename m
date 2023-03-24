@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27496C8173
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0026C8162
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjCXPiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S231958AbjCXPhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbjCXPhx (ORCPT
+        with ESMTP id S229472AbjCXPhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:37:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8481E9E3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679672209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=reoAM7f+Ql0t7teTIED97nCtpsbVHLsQxA9mgF0KDac=;
-        b=bFYuR7hF1KJNT3DhgJkC8CQMwaMD8LkztP4INrcOpyTXyPiTG1cfr75DfJCpRhjHLIt3h8
-        2MVsV9aYJJ0WftNfqs6nUWEvfTdRLqlWgR8iLlMokfeGV95vuGpVgj9IXNzTOAIQd6XupQ
-        JViWEHp4KwlAVahOh1MHlsLG3RthFKo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-lo5G6hGrPCCJEZMeDvjQqA-1; Fri, 24 Mar 2023 11:36:48 -0400
-X-MC-Unique: lo5G6hGrPCCJEZMeDvjQqA-1
-Received: by mail-ed1-f69.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so3744808edh.14
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:36:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672206;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=reoAM7f+Ql0t7teTIED97nCtpsbVHLsQxA9mgF0KDac=;
-        b=f27QGOZHL0hJmJQbitVX1HJp9Ajv+KOVvFoPDmOO81dpX9i+j3FOFDlQPhH6cBqXq8
-         LxLeY7+fhLllAoI3IBYFJG8gTSTAuoL0fjCoq7Y230iQKEzB/NwNgcJK0jXJjg3Ddn6c
-         as6Jgb7BM9AMksQI55G/Xf0HMRvJmnRG1jayrwUiZLd7z7wL899yQ5/UBAl4v3C8AKIR
-         wvaTCVs3tnqZKZPmvZX6mCE8o6TFMhITr6zWYBtOHJ5IHCBnGQGp8FaXMx34NxUJ745F
-         wKwAf9R8bICoEYPmYLfmgI373O+hwisCvAbdze82tbyJ1m9Ur9J9mvzSyWZhafH53zt7
-         NE3g==
-X-Gm-Message-State: AAQBX9c4lvIbnUici6kfVcULCYpZc20yHvq+/C5SNl2QOhDfBE9XX759
-        Ev/A8MY1jJfKeYaxxpcdXKz3rvIPwxUceVLeSL5vwkyHxYXwdE6+F1Ur/+msiQ8wtSY7e0znjVA
-        Up97ENYVTLHXKEhTjludBSxyw
-X-Received: by 2002:a05:6402:1002:b0:501:c547:2135 with SMTP id c2-20020a056402100200b00501c5472135mr3055023edu.36.1679672206666;
-        Fri, 24 Mar 2023 08:36:46 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b+KdvTwnSlwUHcwfB5Dr3iyF2TswJnUvHzIhq2f2NvqKi7QHj4nw34d7o5dhOk+zWrmvdj3w==
-X-Received: by 2002:a05:6402:1002:b0:501:c547:2135 with SMTP id c2-20020a056402100200b00501c5472135mr3055009edu.36.1679672206395;
-        Fri, 24 Mar 2023 08:36:46 -0700 (PDT)
-Received: from localhost.localdomain (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id g25-20020a50d0d9000000b00501c2a9e16dsm7987307edf.74.2023.03.24.08.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 08:36:45 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     stefanha@redhat.com, Jason Wang <jasowang@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, eperezma@redhat.com,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v4 4/9] vringh: define the stride used for translation
-Date:   Fri, 24 Mar 2023 16:36:02 +0100
-Message-Id: <20230324153607.46836-5-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230324153607.46836-1-sgarzare@redhat.com>
-References: <20230324153607.46836-1-sgarzare@redhat.com>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 11:37:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FAF212BC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:36:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A19AB82521
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C145C433D2;
+        Fri, 24 Mar 2023 15:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679672210;
+        bh=JCroMqQZjd+JN22GhzD0TxeeMsNCRchQHQcBnwVYkSM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gY3e/mJ/BAEHGarQPwK4hywyE8CuCrzDNeEE540i+DpqezkKjOVjmMyRZexUJY6Lb
+         vWxMcSccIzeO51DiWhBAtsYucy4FefYh+y3B34M/Nqh171V5v3N2+PbGAMweEKPu7V
+         JFg8AJ/kcexTespW/ib1WlZh6d5tV4jyMv8jRPyqVJu+5ZOSDzkmQt+TPifXn0hcCM
+         J4keEAw0fdrMyhFL79Zz+YlCDwtbu9vuvSzfqboDoYGxDRXO7OrS81KlOgfNYT7gp7
+         pVEeq4O3wNtqaRUSpajXW4dr/NpYHbIOCFLTigNejBGX4GFhlZ0RzZSWHUS5iSCEN9
+         hGWOileIrm66Q==
+Received: from [104.132.96.108] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pfjTD-002rFu-B2;
+        Fri, 24 Mar 2023 15:36:47 +0000
+Date:   Fri, 24 Mar 2023 15:36:43 +0000
+Message-ID: <87h6uagnzo.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH V1 1/5] irqchip/loongson-eiointc: Fix returned value on parsing MADT
+In-Reply-To: <20230324060854.29375-2-lvjianmin@loongson.cn>
+References: <20230324060854.29375-1-lvjianmin@loongson.cn>
+        <20230324060854.29375-2-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 104.132.96.108
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define a macro to be reused in the different parts of the code.
+On Fri, 24 Mar 2023 06:08:50 +0000,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> In pch_pic_parse_madt(), a NULL parent pointer will be
+> returned from acpi_get_vec_parent() for second pch-pic domain
+> related to second bridge while calling eiointc_acpi_init() at
+> first time, where the parent of it has not been initialized
+> yet, and will be initialized during second time calling
+> eiointc_acpi_init(). So, it's reasonable to return zero so
+> that failure of acpi_table_parse_madt() will be avoided, or else
+> acpi_cascade_irqdomain_init() will return and initialization of
+> followed pch_msi domain will be skipped.
+> 
+> Although it does not matter when pch_msi_parse_madt() returns
+> -EINVAL if no invalid parent is found, it's also reasonable to
+> return zero for that.
+> 
+> Change-Id: I4d278534999ec3e5c8db6d40155ba2665d9de86f
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index d15fd38c1756..62a632d73991 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -343,7 +343,7 @@ static int __init pch_pic_parse_madt(union acpi_subtable_headers *header,
+>  	if (parent)
+>  		return pch_pic_acpi_init(parent, pchpic_entry);
+>  
+> -	return -EINVAL;
+> +	return 0;
 
-Useful for the next patches where we add more arrays to manage also
-translations with user VA.
+Why can't you detect this particular case instead of blindly
+suppressing the error?
 
-Suggested-by: Eugenio Perez Martin <eperezma@redhat.com>
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
+	M.
 
-Notes:
-    v4:
-    - added this patch with the changes extracted from the next patch [Eugenio]
-    - used _STRIDE instead of _SIZE [Eugenio]
-
- drivers/vhost/vringh.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 0ba3ef809e48..4aee230f7622 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -1141,13 +1141,15 @@ static int iotlb_translate(const struct vringh *vrh,
- 	return ret;
- }
- 
-+#define IOTLB_IOV_STRIDE 16
-+
- static inline int copy_from_iotlb(const struct vringh *vrh, void *dst,
- 				  void *src, size_t len)
- {
- 	u64 total_translated = 0;
- 
- 	while (total_translated < len) {
--		struct bio_vec iov[16];
-+		struct bio_vec iov[IOTLB_IOV_STRIDE];
- 		struct iov_iter iter;
- 		u64 translated;
- 		int ret;
-@@ -1180,7 +1182,7 @@ static inline int copy_to_iotlb(const struct vringh *vrh, void *dst,
- 	u64 total_translated = 0;
- 
- 	while (total_translated < len) {
--		struct bio_vec iov[16];
-+		struct bio_vec iov[IOTLB_IOV_STRIDE];
- 		struct iov_iter iter;
- 		u64 translated;
- 		int ret;
 -- 
-2.39.2
-
+Without deviation from the norm, progress is not possible.
