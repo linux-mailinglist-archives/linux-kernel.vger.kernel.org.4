@@ -2,137 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DBF6C7F00
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 628276C7F04
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjCXNm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S231916AbjCXNmt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 09:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjCXNmY (ORCPT
+        with ESMTP id S231903AbjCXNmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:42:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D3E19F09;
-        Fri, 24 Mar 2023 06:42:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 846EBB821E5;
-        Fri, 24 Mar 2023 13:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0A2C433EF;
-        Fri, 24 Mar 2023 13:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679665340;
-        bh=3auCBNwwTe4do8Z4FC2DAOeRlZUIxijJjRP3hXaDkOY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqZWe3ytNi2kQdPlmlTYJ8i/BIZeCYPbdWPMYIrbXLhn0BzNIicQiYvjnqIK+THxP
-         MmjRjDgViiJS1aMOZjt/cZf59XaT7Q57e5G4q8DD8ML3MUjL/shKOYcQxqhHwI9qN/
-         hBxOy1xgpAREPuRkh5IrJ2Dix1GlVUsX4/BsKSwI=
-Date:   Fri, 24 Mar 2023 14:42:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <ZB2ouZ1qL931uIMr@kroah.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
- <20230324123632.rtb52jh6zeopjwht@houat>
- <ZB2a291P5abeah6s@kroah.com>
- <20230324130206.di2jatakyjzbtbbz@houat>
+        Fri, 24 Mar 2023 09:42:45 -0400
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D296518B0F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:42:36 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id o12so8069814edb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:42:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679665355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bv7FdV3Rt82PfEejYXpMJZy9CU6LFvMwm6M6sXTkJa0=;
+        b=CmFqZf0+PmCYSZFIvRDhQNdHc2lkfyKJCVcpOz/rFFgBjyhS2KHQ9z+0zx6kFohtYt
+         4GBIxWPxXj72gsKA+aYrl7AJ8QlJAk2jfkUxkB4Odzl3DC5SmUGuYMIlS/TeO88ryUbn
+         qOOa3qIz994S4Xn044aOoSFrqm7rk0u9wtaqbiFr90EIYbB3p387NGn9v7Kz7HTMDWWX
+         2ntVhxCekrjCgi2NKgWPG+7NXiQR1q7BEAGjqyJnaE1HkkehqcJSLAANsPMd00RdN8g9
+         FxcE5fRAwRNhCIzNz/ECXwEqh9529Cp+9w/lbNNk+IfC5QSzRYE7jgw7QeFVIXipGZwk
+         NmhA==
+X-Gm-Message-State: AAQBX9dyGdC4GmAK8MWkQmucPD7rJLF8Cm93eN8sunzuaRTx4Kf7KQ+Z
+        eS2pKBqcvQ5lZ9hZoh7VrYFCGpPRiNksfCKHFdlZOCOsBB8=
+X-Google-Smtp-Source: AKy350bWvKFirj17A/xgflf7uHPxUo5gmS03ox8ZESt7+tSqTs4qtOE5iSEX8PuGJxCENch/zVLJUPiC/JkxSGtb6gg=
+X-Received: by 2002:a17:907:d687:b0:93d:a14f:c9b4 with SMTP id
+ wf7-20020a170907d68700b0093da14fc9b4mr1473775ejc.2.1679665355040; Fri, 24 Mar
+ 2023 06:42:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324130206.di2jatakyjzbtbbz@houat>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324100132.1633647-1-gregkh@linuxfoundation.org> <20230324100132.1633647-2-gregkh@linuxfoundation.org>
+In-Reply-To: <20230324100132.1633647-2-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 24 Mar 2023 14:42:23 +0100
+Message-ID: <CAJZ5v0jt8=VGpRjiry-hmyJjpE4YEeWi71-4UUxviaZk7xNpSQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] driver core: class.h: remove extern from function prototypes
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 02:02:06PM +0100, Maxime Ripard wrote:
-> On Fri, Mar 24, 2023 at 01:43:07PM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Mar 24, 2023 at 01:36:32PM +0100, Maxime Ripard wrote:
-> > > On Thu, Mar 23, 2023 at 11:21:58AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Thu, Mar 23, 2023 at 11:12:16AM +0100, Maxime Ripard wrote:
-> > > > > On Wed, Mar 22, 2023 at 07:57:10PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > > > +/**
-> > > > > > > > > + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
-> > > > > > > > > + * @test: The test context object
-> > > > > > > > > + *
-> > > > > > > > > + * This allocates a fake struct &device to create a mock for a KUnit
-> > > > > > > > > + * test. The device will also be bound to a fake driver. It will thus be
-> > > > > > > > > + * able to leverage the usual infrastructure and most notably the
-> > > > > > > > > + * device-managed resources just like a "real" device.
-> > > > > > > > 
-> > > > > > > > What specific "usual infrastructure" are you wanting to access here?
-> > > > > > > > 
-> > > > > > > > And again, if you want a fake device, make a virtual one, by just
-> > > > > > > > calling device_create().
-> > > > > > > > 
-> > > > > > > > Or are you wanting to do "more" with that device pointer than
-> > > > > > > > device_create() can give you?
-> > > > > > > 
-> > > > > > > Personally, I was (am) only interested in devm_ unwinding. I guess the
-> > > > > > > device_create(), device_add(), device_remove()... (didn't study this
-> > > > > > > sequence in details so sorry if there is errors) could've been sufficient
-> > > > > > > for me. I haven't looked how much of the code that there is for 'platform
-> > > > > > > devices' should be duplicated to support that sequence for testability
-> > > > > > > purposes.
-> > > > > > 
-> > > > > > Any device can access devm_ code, there's no need for it to be a
-> > > > > > platform device at all.
-> > > > > 
-> > > > > Sure but the resources are only released if the device is part of a bus,
-> > > > > so it can't be a root_device (or bare device) either
-> > > > 
-> > > > The resources are not cleaned up when the device is freed no matter if
-> > > > it's on a bus or not?  If so, then that's a bug that needs to be fixed,
-> > > > and tested :)
-> > > 
-> > > Please have a look at:
-> > > https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
-> > > 
-> > > I couldn't get an answer on whether it was considered a bug or not last
-> > > time, but as you can see there's a clear difference between a root
-> > > device and a platform device that has probed when it comes to resource
-> > > cleanup.
-> > 
-> > Great, testing shows there are bugs!  :)
-> 
-> I mean, it wasn't clear to me that it was indeed a bug or the intent
-> behind devm was that it would only work when probed. Both seemed
-> reasonable.
-> 
-> > That's a great start of a test, how about submitting that in a way that
-> > I can test it and we can go from there?
-> 
-> Ack.
-> 
-> I guess I'd need to arrange them somewhat differently for it to be
-> useful and merge-able.
-> 
-> How would you prefer them to be submitted, in two different files
-> testing both the root devices and platform devices?
+On Fri, Mar 24, 2023 at 11:01 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> The kernel coding style does not require 'extern' in function prototypes
+> in .h files, so remove them from include/linux/device/class.h as they
+> are not needed.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-root devices are rare, but yes, one for each would be good, thanks!
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-greg k-h
+> ---
+>  include/linux/device/class.h | 46 ++++++++++++++++--------------------
+>  1 file changed, 20 insertions(+), 26 deletions(-)
+>
+> diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+> index 03d2f99f84c5..1dc7706cb42d 100644
+> --- a/include/linux/device/class.h
+> +++ b/include/linux/device/class.h
+> @@ -82,8 +82,9 @@ struct class_dev_iter {
+>
+>  extern struct kobject *sysfs_dev_block_kobj;
+>  extern struct kobject *sysfs_dev_char_kobj;
+> -extern int __must_check class_register(struct class *class);
+> -extern void class_unregister(struct class *class);
+> +
+> +int __must_check class_register(struct class *class);
+> +void class_unregister(struct class *class);
+>
+>  struct class_compat;
+>  struct class_compat *class_compat_register(const char *name);
+> @@ -93,19 +94,15 @@ int class_compat_create_link(struct class_compat *cls, struct device *dev,
+>  void class_compat_remove_link(struct class_compat *cls, struct device *dev,
+>                               struct device *device_link);
+>
+> -extern void class_dev_iter_init(struct class_dev_iter *iter,
+> -                               const struct class *class,
+> -                               const struct device *start,
+> -                               const struct device_type *type);
+> -extern struct device *class_dev_iter_next(struct class_dev_iter *iter);
+> -extern void class_dev_iter_exit(struct class_dev_iter *iter);
+> +void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
+> +                        const struct device *start, const struct device_type *type);
+> +struct device *class_dev_iter_next(struct class_dev_iter *iter);
+> +void class_dev_iter_exit(struct class_dev_iter *iter);
+>
+> -extern int class_for_each_device(const struct class *class, const struct device *start,
+> -                                void *data,
+> -                                int (*fn)(struct device *dev, void *data));
+> -extern struct device *class_find_device(const struct class *class,
+> -                                       const struct device *start, const void *data,
+> -                                       int (*match)(struct device *, const void *));
+> +int class_for_each_device(const struct class *class, const struct device *start, void *data,
+> +                         int (*fn)(struct device *dev, void *data));
+> +struct device *class_find_device(const struct class *class, const struct device *start,
+> +                                const void *data, int (*match)(struct device *, const void *));
+>
+>  /**
+>   * class_find_device_by_name - device iterator for locating a particular device
+> @@ -191,12 +188,10 @@ struct class_attribute {
+>  #define CLASS_ATTR_WO(_name) \
+>         struct class_attribute class_attr_##_name = __ATTR_WO(_name)
+>
+> -extern int __must_check class_create_file_ns(const struct class *class,
+> -                                            const struct class_attribute *attr,
+> -                                            const void *ns);
+> -extern void class_remove_file_ns(const struct class *class,
+> -                                const struct class_attribute *attr,
+> -                                const void *ns);
+> +int __must_check class_create_file_ns(const struct class *class, const struct class_attribute *attr,
+> +                                     const void *ns);
+> +void class_remove_file_ns(const struct class *class, const struct class_attribute *attr,
+> +                         const void *ns);
+>
+>  static inline int __must_check class_create_file(const struct class *class,
+>                                                  const struct class_attribute *attr)
+> @@ -223,8 +218,7 @@ struct class_attribute_string {
+>         struct class_attribute_string class_attr_##_name = \
+>                 _CLASS_ATTR_STRING(_name, _mode, _str)
+>
+> -extern ssize_t show_class_attr_string(struct class *class, struct class_attribute *attr,
+> -                        char *buf);
+> +ssize_t show_class_attr_string(struct class *class, struct class_attribute *attr, char *buf);
+>
+>  struct class_interface {
+>         struct list_head        node;
+> @@ -234,10 +228,10 @@ struct class_interface {
+>         void (*remove_dev)      (struct device *, struct class_interface *);
+>  };
+>
+> -extern int __must_check class_interface_register(struct class_interface *);
+> -extern void class_interface_unregister(struct class_interface *);
+> +int __must_check class_interface_register(struct class_interface *);
+> +void class_interface_unregister(struct class_interface *);
+>
+> -extern struct class * __must_check class_create(const char *name);
+> -extern void class_destroy(struct class *cls);
+> +struct class * __must_check class_create(const char *name);
+> +void class_destroy(struct class *cls);
+>
+>  #endif /* _DEVICE_CLASS_H_ */
+> --
+> 2.40.0
+>
