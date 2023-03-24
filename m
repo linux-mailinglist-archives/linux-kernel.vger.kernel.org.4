@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CBE6C82C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B424A6C82CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbjCXRDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S231919AbjCXRDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjCXRC7 (ORCPT
+        with ESMTP id S231901AbjCXRDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:02:59 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85233B44F;
-        Fri, 24 Mar 2023 10:02:57 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so5667751pjt.2;
-        Fri, 24 Mar 2023 10:02:57 -0700 (PDT)
+        Fri, 24 Mar 2023 13:03:01 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE5B30F0;
+        Fri, 24 Mar 2023 10:02:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z11so1682352pfh.4;
+        Fri, 24 Mar 2023 10:02:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679677376;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+sKP3obDTWYFIT1jnmZ1GqDfFrpCwbFB+xgAFvy1zk=;
-        b=JvzQHWrmzdmUqrzZGY3n89spl9v1DpyjNAzTzcecieHKrfMhskKFy/+LgiaqnwxWHz
-         lByWTPIGP2k5KVrZ2jMJP1GnFzA0NSBvmosBdouIPplz2CCEheYpURGW3lf/KHMTNY0I
-         75a5MfzP0MS7sXn8jbT9zYECZojPW0wm6YENyo37QIKDDSSNmNqJK2NxHT8hfXvY1P02
-         sGzqAjEqlg22FUBqYbtpCOMvaVKx6oMZparCCa/jMdXS0LYBm1mzajuilBk5sZy7FtjX
-         4kGXMlIBg9FC7hozyhlU0lYYOAQvrShSFPEpS21vpgrU5gmjavOfa2NG+mI0aXZA2KRW
-         Hsqw==
+        d=gmail.com; s=20210112; t=1679677378;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ygxBF71VOkM+KeTylKWK/Z0RCTPhhMfAZKU7dH6P7Hg=;
+        b=OIEUXRh+v9HvcGnDSS5Aq05048LRCODXCmO/sixBVKIa2xfhzdcSmf8LxZfSe3x4mV
+         vmOxAXKnX6rXI+Ox2iwdL0E5grJpHKmG4f+kzCuuj8bpVatkaXEi40WDKa8HeOjk3JaD
+         UuCVSqAqznxYu5rskkKlchoJOB4jvvLBJkqkgpbRftz/cdkRge8Z5f5vEvPaj9glcT9k
+         lu2uShqWGlq1Y3Q6GPytJXSfNbCDETst6V9+7HttPUGDON9m2V99Y8GxNmlCRayqtkJb
+         CjcXDM5HGEFciOkTePuoPQvyIjkJdHm61F2n/G/1Qu9Z89sEJPlDPYfi9xbQksUbXV7S
+         BLYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679677376;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+sKP3obDTWYFIT1jnmZ1GqDfFrpCwbFB+xgAFvy1zk=;
-        b=abgDgthrrk1zs0XmvyKwtLHG4AArKLYF42hW+gbPxy9i+V8Fb86nPN+z6rNN33nRuY
-         K1HFs2lej98p3aXjc1F+011CeSV4A8e02VIUOPLvELojqfrFwN+EHDu2qTb2ZJWuRn2E
-         KGisgO+9W0ZhEYneLd9rKiXMuQ1DFNQc7UXlqMekAXeSyGFzMUgjjbBjTr9B2gTSnvPR
-         JSQGgZ3n2RlcbMeDsUaJOgyDQQLquYTQKb8tNiNvgC0nzJ27aShPCc8wu1RzI78ml/Hm
-         lK8Fx3XGCeQlvmDe2NxlYVoZKNugFEOwms8fyzd8KA4oayvFNF+yYaX74gmbqhTfvR8t
-         UW8Q==
-X-Gm-Message-State: AO0yUKX7WV08CNf6IDyai2gqUUbryiXBu+ugFMuYzADorOL6VuE9c7Ud
-        3tS/vXKHTmiVnjacxXaiFD1qLtAhZ+A=
-X-Google-Smtp-Source: AK7set8Gqe9oG6purz55nmRT4dsXxmRMuezoiDfjte62o3iDrMA2ccrWqSfpKc70zttV5z1IDYWQpQ==
-X-Received: by 2002:a05:6a20:4f25:b0:c7:8779:416d with SMTP id gi37-20020a056a204f2500b000c78779416dmr3541839pzb.58.1679677376356;
-        Fri, 24 Mar 2023 10:02:56 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679677378;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ygxBF71VOkM+KeTylKWK/Z0RCTPhhMfAZKU7dH6P7Hg=;
+        b=Z98Zat84DZcX8y8wuyrMf12ZEeauXapEaeTMwV8zIZqCgy5S4t6UQBBKn1mWuQ07Rf
+         MvfzvvmagwUF7tkL7HnF5t2XL4DyvwkQKLuONwG6nKRh0sl583ZnALvnTeDAvILj4TTf
+         tnBSJ5zF59deXNgPD7GpKpzu1yiwQK95QgRjrjnbtjxRQGwz3dm3suQQoXL2NiLysCFi
+         A7X62KZsbEiGQ8xl3bMa51NsjpG9WUWHu1C+pf26KRDTwsig24knGOr+CxHaoIlfG2P8
+         4puG8ms3RllRsZtxby/DoS76Z+sxJnP67/6uNtfFa+vTavJ6JfRJ6FN2Y4btcYbgBYMI
+         dgjg==
+X-Gm-Message-State: AAQBX9db0pNHEx37NxEP1hO2L8FNARkEwD2YYz9biDXvePQJiwz6tVw/
+        iurW8chPZtB92OejThush/r5wXXo5ao=
+X-Google-Smtp-Source: AKy350bqR4UWk0q6amyqYrEhXv1TQkS5KayocmKIbksYrCm4ba7kc5di+dFSprJTaQbsheg4bMx9vA==
+X-Received: by 2002:aa7:8bc2:0:b0:623:2bba:dd9 with SMTP id s2-20020aa78bc2000000b006232bba0dd9mr3545736pfd.14.1679677377917;
+        Fri, 24 Mar 2023 10:02:57 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h4-20020a62b404000000b005a8bfe3b241sm14019591pfn.167.2023.03.24.10.02.54
+        by smtp.gmail.com with ESMTPSA id h4-20020a62b404000000b005a8bfe3b241sm14019591pfn.167.2023.03.24.10.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 10:02:55 -0700 (PDT)
+        Fri, 24 Mar 2023 10:02:57 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     bcm-kernel-feedback-list@broadcom.com,
@@ -63,10 +64,12 @@ Cc:     bcm-kernel-feedback-list@broadcom.com,
         (V4L/DVB)),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE BINDINGS), Matthew Lear <matthew.lear@broadcom.com>
-Subject: [PATCH 0/2] Correct gpio-ir-recv wakeup capability
-Date:   Fri, 24 Mar 2023 10:02:12 -0700
-Message-Id: <20230324170214.3470675-1-f.fainelli@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: media: gpio-ir-receiver: Document wakeup-souce property
+Date:   Fri, 24 Mar 2023 10:02:13 -0700
+Message-Id: <20230324170214.3470675-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230324170214.3470675-1-f.fainelli@gmail.com>
+References: <20230324170214.3470675-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,18 +82,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This small patch series fixes the gpio-ir-recv binding and driver to
-first indicate that it can be a wake-up source for the system, and
-second actually make that happen.
+The GPIO IR receiver can be used as a wake-up source for the system,
+document that.
 
-Florian Fainelli (2):
-  dt-bindings: media: gpio-ir-receiver: Document wakeup-souce property
-  media: rc: gpio-ir-recv: Fix support for wake-up
-
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
  Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml | 3 +++
- drivers/media/rc/gpio-ir-recv.c                               | 2 ++
- 2 files changed, 5 insertions(+)
+ 1 file changed, 3 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml b/Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml
+index 61072745b983..7e76838388cd 100644
+--- a/Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml
++++ b/Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml
+@@ -23,6 +23,9 @@ properties:
+     description: autosuspend delay time in milliseconds
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
++  wakeup-source:
++     description: IR receiver can wake-up the system.
++
+ required:
+   - compatible
+   - gpios
 -- 
 2.34.1
 
