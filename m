@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8756C75CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05EF6C75F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjCXC2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S231691AbjCXCfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjCXC2g (ORCPT
+        with ESMTP id S229508AbjCXCfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:28:36 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806182D55;
-        Thu, 23 Mar 2023 19:28:29 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 4A05524E1E1;
-        Fri, 24 Mar 2023 10:28:28 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Mar
- 2023 10:28:28 +0800
-Received: from starfive-sdk.starfivetech.com (171.223.208.138) by
- EXMBX162.cuchost.com (172.16.6.72) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Fri, 24 Mar 2023 10:28:27 +0800
-From:   Samin Guo <samin.guo@starfivetech.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-Subject: [PATCH v8 6/6] net: stmmac: starfive_dmac: Add phy interface settings
-Date:   Fri, 24 Mar 2023 10:28:19 +0800
-Message-ID: <20230324022819.2324-7-samin.guo@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230324022819.2324-1-samin.guo@starfivetech.com>
-References: <20230324022819.2324-1-samin.guo@starfivetech.com>
+        Thu, 23 Mar 2023 22:35:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1E9113C1;
+        Thu, 23 Mar 2023 19:35:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 75FCB1FE65;
+        Fri, 24 Mar 2023 02:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679625316;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sdIFxlKHqyPQauC3EA1CD6YM6MLgr5BPAenLXoxp8A4=;
+        b=UTEBNWwEiVAYDqhzhkGZAYjd0E7bKXT7WR8ZiErR8zbK/ak3DFu+vj+GpzXqNFdUP2PnUs
+        nBTzujqkrdSxnbEbvOdB5BYA7DUrijKNBzDYfn7d90g0B7P9k83JzJ7M7iN5ZqyAdW03/h
+        o+2rbUH4a0M6kMUG0rCbK88y/StmsIk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679625316;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sdIFxlKHqyPQauC3EA1CD6YM6MLgr5BPAenLXoxp8A4=;
+        b=d35aHSEWmViEqFzHhayXYZ9KWzcDAXvUusXk8N6HMgyczMHcwkValIs17Uhr/i1ZyXiKDQ
+        aU7L5JLmTh/SkXAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3813C133E5;
+        Fri, 24 Mar 2023 02:35:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id roqaDGQMHWQAYwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 24 Mar 2023 02:35:16 +0000
+Date:   Fri, 24 Mar 2023 03:29:04 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Genjian <zhanggenjian123@gmail.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] btrfs: fix uninitialized variable warning
+Message-ID: <20230324022904.GD10580@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20230324020838.67149-1-zhanggenjian@kylinos.cn>
+ <78422b96-52ed-b48a-27d0-1cfaa89a6608@gmx.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <78422b96-52ed-b48a-27d0-1cfaa89a6608@gmx.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,93 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dwmac supports multiple modess. When working under rmii and rgmii,
-you need to set different phy interfaces.
+On Fri, Mar 24, 2023 at 10:24:55AM +0800, Qu Wenruo wrote:
+> On 2023/3/24 10:08, Genjian wrote:
+> > From: Genjian Zhang <zhanggenjian@kylinos.cn>
+> > 
+> > compiler warning:
+> 
+> Compiler version please.
+> 
+> > 
+> > ../fs/btrfs/volumes.c: In function ‘btrfs_init_new_device’:
+> > ../fs/btrfs/volumes.c:2703:3: error: ‘seed_devices’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+> >   2703 |   btrfs_setup_sprout(fs_info, seed_devices);
+> >        |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > ../fs/btrfs/send.c: In function ‘get_cur_inode_state’:
+> > ../include/linux/compiler.h:70:32: error: ‘right_gen’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+> >     70 |   (__if_trace.miss_hit[1]++,1) :  \
+> >        |                                ^
+> > ../fs/btrfs/send.c:1878:6: note: ‘right_gen’ was declared here
+> >   1878 |  u64 right_gen;
+> >        |      ^~~~~~~~~
+> > 
+> > Initialize the uninitialized variables.
+> > 
+> > Reported-by: k2ci <kernel-bot@kylinos.cn>
+> > Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> > ---
+> >   fs/btrfs/send.c    | 2 +-
+> >   fs/btrfs/volumes.c | 2 +-
+> >   2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+> > index e5c963bb873d..af2e153543a5 100644
+> > --- a/fs/btrfs/send.c
+> > +++ b/fs/btrfs/send.c
+> > @@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
+> >   	int left_ret;
+> >   	int right_ret;
+> >   	u64 left_gen;
+> > -	u64 right_gen;
+> > +	u64 right_gen = 0;
+> 
+> IIRC this is not my first time explaining why this is a false alert.
+> 
+> Thus please report your compiler version first.
 
-According to the dwmac document, when working in rmii, it needs to be
-set to 0x4, and rgmii needs to be set to 0x1.
-
-The phy interface needs to be set in syscon, the format is as follows:
-starfive,syscon: <&syscon, offset, shift>
-
-Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
----
- .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-index ef5a769b1c75..84690c8f0250 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-@@ -13,6 +13,10 @@
- 
- #include "stmmac_platform.h"
- 
-+#define STARFIVE_DWMAC_PHY_INFT_RGMII	0x1
-+#define STARFIVE_DWMAC_PHY_INFT_RMII	0x4
-+#define STARFIVE_DWMAC_PHY_INFT_FIELD	0x7U
-+
- struct starfive_dwmac {
- 	struct device *dev;
- 	struct clk *clk_tx;
-@@ -44,6 +48,43 @@ static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
- }
- 
-+static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
-+{
-+	struct starfive_dwmac *dwmac = plat_dat->bsp_priv;
-+	struct regmap *regmap;
-+	unsigned int args[2];
-+	unsigned int mode;
-+
-+	switch (plat_dat->interface) {
-+	case PHY_INTERFACE_MODE_RMII:
-+		mode = STARFIVE_DWMAC_PHY_INFT_RMII;
-+		break;
-+
-+	case PHY_INTERFACE_MODE_RGMII:
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+		mode = STARFIVE_DWMAC_PHY_INFT_RGMII;
-+		break;
-+
-+	default:
-+		dev_err(dwmac->dev, "unsupported interface %d\n",
-+			plat_dat->interface);
-+		return -EINVAL;
-+	}
-+
-+	regmap = syscon_regmap_lookup_by_phandle_args(dwmac->dev->of_node,
-+						      "starfive,syscon",
-+						      2, args);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dwmac->dev, "syscon regmap failed.\n");
-+		return -ENXIO;
-+	}
-+
-+	/* args[0]:offset  args[1]: shift */
-+	return regmap_update_bits(regmap, args[0],
-+				  STARFIVE_DWMAC_PHY_INFT_FIELD << args[1],
-+				  mode << args[1]);
-+}
-+
- static int starfive_dwmac_probe(struct platform_device *pdev)
- {
- 	struct plat_stmmacenet_data *plat_dat;
-@@ -89,6 +130,12 @@ static int starfive_dwmac_probe(struct platform_device *pdev)
- 	plat_dat->bsp_priv = dwmac;
- 	plat_dat->dma_cfg->dche = true;
- 
-+	err = starfive_dwmac_set_mode(plat_dat);
-+	if (err) {
-+		dev_err(&pdev->dev, "dwmac set mode failed.\n");
-+		return err;
-+	}
-+
- 	err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
- 	if (err) {
- 		stmmac_remove_config_dt(pdev, plat_dat);
--- 
-2.17.1
-
+This is probably because of the -Wmaybe-uninitialized we enabled, on
+some combination of architecture and compiler. While I'm also interested
+in the compiler and version we need to fix the warnings before 6.3 final.
+We'd be gettting the warnings and reports/patches, which is wasting
+peoples' time, it's not a big deal to initialize the variables. But
+still I also want to know which version reports that.
