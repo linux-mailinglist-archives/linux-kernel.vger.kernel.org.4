@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728516C7513
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D616C7524
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCXBct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 21:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229997AbjCXBjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 21:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjCXBcr (ORCPT
+        with ESMTP id S229508AbjCXBjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 21:32:47 -0400
-Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC84619F
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 18:32:44 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1679621563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M70XsVdJtUL81tuo2OKkYLLlk8pQMU03G6wBmbDiO64=;
-        b=lV3kZeBrOOcFCbH1tQshhiHqpu5Z4QEJXzp9hx5KbtNMKoGZi/Dvw0G2zEPF+QC/y86Wy4
-        2rhYCkfdwv1CtazOnV2bOPZjMNVZ3bI+JO3R8w9fbgW7tA5MUkxF2bls339hOwWbJSjaZR
-        7Cl6cwRZpO6VRMlanzxxMRjXFEsSYyc=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     Dave Jiang <dave.jiang@intel.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        Frank Li <Frank.Li@nxp.com>, ntb@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] ntb: intel: Remove redundant pci_clear_master
-Date:   Fri, 24 Mar 2023 09:32:20 +0800
-Message-Id: <20230324013224.5963-3-cai.huoqing@linux.dev>
-In-Reply-To: <20230324013224.5963-1-cai.huoqing@linux.dev>
-References: <20230324013224.5963-1-cai.huoqing@linux.dev>
+        Thu, 23 Mar 2023 21:39:39 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220040C0;
+        Thu, 23 Mar 2023 18:39:38 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id kc4so516512plb.10;
+        Thu, 23 Mar 2023 18:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679621977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=diknpbDhmJOoggKEsWIo361E1xjQ+rSUkFKYJZdkY28=;
+        b=gnLz9UYgts87Q3W2eAEqb/mHOi71mt9PGOMXo3NEdCjx7le5V/SdRfNH8QY4DX91PR
+         mCvDShHmWN+U7wlmjHd9cNHfFqLwHTUB+uMCgGW9/AhNY0yULgXlcZ4Yr6gh/o4Q76pD
+         cpevHL0IWLcIVZwFvShEgeRYVAOmSQ439XwAhpgltMNrVpWg6AP/2rmWh2ioK5uFVZu+
+         5o1qQYTV+9U6tf8A347nKJPhMMsepQ9SGZRRmNplq7DNiyWcq7TmfeLRBH8sG0ZbzbPv
+         0nPC1d127qZAyd2STxenO3kLgZbv3SE2IDCsan4ukhVtSm1eAZoY1dhs1c1XqtCOMOe9
+         nA2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679621977;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=diknpbDhmJOoggKEsWIo361E1xjQ+rSUkFKYJZdkY28=;
+        b=erxmBPiCJRFwCG0Q87PgsIXkIPgTPUF+xEEKYBFlQjNz2RCG4ciOONux3B9bjtLleh
+         xpWbORQ1cRwIaKc8/Yzx334kkh0U5xY8iXt5sKCxT+1FeHAvA2m5YHQ6eGAt9KLqhJFq
+         /di/G5Xus09mWMMN3nfKsVa/HQitCIQChzTyvm80pqgjukphpV9fc+OY0gcwlsJ02jKE
+         3eRfRgAo1eJN4ZgTsudmx0I7Ofy6tYOYjVGJ/P4ouBUc9ydltY/eHfNl9qwy0fsdXZE1
+         /2FRb6xjwkYWXqOOetwEKxhFpcD0it+qDe/xVl2TFI9w2VttH9IJq0NTaQ/yBNtzmy75
+         wqTg==
+X-Gm-Message-State: AAQBX9eI4IIWZo8g03iTA/9vErNnsEDI1lGGsQxOA+oqt5rf+WA+Qt60
+        rojynH84IrteAIGXJV+WZkQ=
+X-Google-Smtp-Source: AKy350Z2/Lmf5xqmVragfODC9cX5JhU/nXhgivLUccuwhKWSqvt3QF7E94kIlv5aol/eYR0rE7fg+w==
+X-Received: by 2002:a17:902:f546:b0:19c:be57:9c82 with SMTP id h6-20020a170902f54600b0019cbe579c82mr999628plf.65.1679621977225;
+        Thu, 23 Mar 2023 18:39:37 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170902728d00b001994fc55998sm12884105pll.217.2023.03.23.18.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 18:39:36 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 23 Mar 2023 15:39:35 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+Message-ID: <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323040037.2389095-2-yosryahmed@google.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove pci_clear_master to simplify the code,
-the bus-mastering is also cleared in do_pci_disable_device,
-like this:
-./drivers/pci/pci.c:2197
-static void do_pci_disable_device(struct pci_dev *dev)
-{
-	u16 pci_command;
+Hello,
 
-	pci_read_config_word(dev, PCI_COMMAND, &pci_command);
-	if (pci_command & PCI_COMMAND_MASTER) {
-		pci_command &= ~PCI_COMMAND_MASTER;
-		pci_write_config_word(dev, PCI_COMMAND, pci_command);
-	}
+On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
+> Currently, when sleeping is not allowed during rstat flushing, we hold
+> the global rstat lock with interrupts disabled throughout the entire
+> flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+> having interrupts disabled throughout is dangerous.
+> 
+> For some contexts, we may not want to sleep, but can be interrupted
+> (e.g. while holding a spinlock or RCU read lock). As such, do not
+> disable interrupts throughout rstat flushing, only when holding the
+> percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+> interrupts disabled to a series of O(# cgroups) durations.
+> 
+> Furthermore, if a cpu spinning waiting for the global rstat lock, it
+> doesn't need to spin with interrupts disabled anymore.
 
-	pcibios_disable_device(dev);
-}.
-And dev->is_busmaster is set to 0 in pci_disable_device.
+I'm generally not a fan of big spin locks w/o irq protection. They too often
+become a source of unpredictable latency spikes. As you said, the global
+rstat lock can be held for quite a while. Removing _irq makes irq latency
+better on the CPU but on the other hand it makes a lot more likely that the
+lock is gonna be held even longer, possibly significantly so depending on
+the configuration and workload which will in turn stall other CPUs waiting
+for the lock. Sure, irqs are being serviced quicker but if the cost is more
+and longer !irq context multi-cpu stalls, what's the point?
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-Acked-by: Dave Jiang <dave.jiang@intel.com>
----
-v1->v2: No change
-v1 link:
-	https://lore.kernel.org/lkml/20230323115336.12986-3-cai.huoqing@linux.dev/
+I don't think there's anything which requires the global lock to be held
+throughout the entire flushing sequence and irq needs to be disabled when
+grabbing the percpu lock anyway, so why not just release the global lock on
+CPU boundaries instead? We don't really lose anything significant that way.
+The durations of irq disabled sections are still about the same as in the
+currently proposed solution at O(# cgroups) and we avoid the risk of holding
+the global lock for too long unexpectedly from getting hit repeatedly by
+irqs while holding the global lock.
 
- drivers/ntb/hw/intel/ntb_hw_gen1.c | 2 --
- 1 file changed, 2 deletions(-)
+Thanks.
 
-diff --git a/drivers/ntb/hw/intel/ntb_hw_gen1.c b/drivers/ntb/hw/intel/ntb_hw_gen1.c
-index 60a4ebc7bf35..9ab836d0d4f1 100644
---- a/drivers/ntb/hw/intel/ntb_hw_gen1.c
-+++ b/drivers/ntb/hw/intel/ntb_hw_gen1.c
-@@ -1791,7 +1791,6 @@ static int intel_ntb_init_pci(struct intel_ntb_dev *ndev, struct pci_dev *pdev)
- 
- err_mmio:
- err_dma_mask:
--	pci_clear_master(pdev);
- 	pci_release_regions(pdev);
- err_pci_regions:
- 	pci_disable_device(pdev);
-@@ -1808,7 +1807,6 @@ static void intel_ntb_deinit_pci(struct intel_ntb_dev *ndev)
- 		pci_iounmap(pdev, ndev->peer_mmio);
- 	pci_iounmap(pdev, ndev->self_mmio);
- 
--	pci_clear_master(pdev);
- 	pci_release_regions(pdev);
- 	pci_disable_device(pdev);
- 	pci_set_drvdata(pdev, NULL);
 -- 
-2.34.1
-
+tejun
