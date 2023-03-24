@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324AE6C85EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9456C85F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjCXT0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S231704AbjCXT1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCXT0x (ORCPT
+        with ESMTP id S229753AbjCXT1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:26:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E5B19C60;
-        Fri, 24 Mar 2023 12:26:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E204D62C7D;
-        Fri, 24 Mar 2023 19:26:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0086BC433D2;
-        Fri, 24 Mar 2023 19:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679686011;
-        bh=EXnKvUW2Hc3NIU9pv4lkWJXUJ5FP9/L1K1tDBcTSLBU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Zh7ELqhp8uIN5dxm0jhTS1zHTafbe8UMzU3PbZmbRgmdZb6mp0QBi5MY3LoV1HkO8
-         0NulsaoaU7QWr/mZnsIEXpcDs6wHqlTwD2Y+9WGnl5DBmpL//U4Olr1UrgnNFxqIRe
-         UAMX3e5m3AMDqyiSNo24nbeB36s6gMfEhEdFSjWAVFWf0Je/j4IYjuRnpv3muyN+8S
-         7OrW14JunUvWR4AqoJWLd6QKHio1CSTrkrI3OrDrT97JyYayav3DpRmV+XqzHQn+EW
-         V7SVTvjpRtNmzJekF0LOJ7g63PzciTz0fIMW7eRnNBCpfUvl94FfA7fpRQfqU3RkIO
-         bdCWCBKIOJTQw==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] rtla/timerlat: Fix "Previous IRQ" auto analysis' line
-Date:   Fri, 24 Mar 2023 20:26:42 +0100
-Message-Id: <8b5819077f15ccf24745c9bf3205451e16ee32d9.1679685525.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Fri, 24 Mar 2023 15:27:17 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD79C19C60
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:27:15 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ek18so11936217edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679686034;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dqZs2i/FLy+ED4dLZjowRQFkaHxvBAh+o8hN0bmWyLI=;
+        b=KVn8cXn6sXVrxXuf8nrF+qMJiC96QpfFwWzGi0AJOMIXNA1WbuNvCCIOwSHeyY7QuY
+         2aGiXOkDBP1efMYKns1u4VjrdsX6UBZaVSVMGrcmOeB50NcFvurY90jzSuzriCWhmopr
+         XyQ23MoNZT1HAnni3RE5Sk4UCeFIgfsZpRIdj6m1hDT3jjWaKajUB6dNoi4jitu/3SqA
+         mdRpebq18inaSa6zisiVZksSO7XbFDvZ1r2H9Ci+c/CUKYM0RW95Go5QvZZg156S5X6S
+         EAbyWkd6Sek4ooGqTwrfTJCkOUy1lbNh9i4uUG4maTTUI3jNi3t4MUI78wdKzQ3YtM8l
+         nBOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679686034;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dqZs2i/FLy+ED4dLZjowRQFkaHxvBAh+o8hN0bmWyLI=;
+        b=jWyPARyEUk09nwLEJtckS6jxMVpa9PCA6+oOr07bR0jp/Mf7862LpTfUNJjTUkmQww
+         QguS4PSo6no+DHcF0AZC/b9PdePVTRQa2GkLvP7mrmKNMzCs3fGbTu8xGdhCKYg7jHFQ
+         PKPQBQB2MPbDOwIWkcWhEkQi3FzFbRXS+RoUXOE0+4FwVfHeFbyYm/mIFRethSZoEW/z
+         Xa2p3+K6afxjANZJI4x1uw+eCkhbI98BAJA/x1uPL3SPK5RHFiivNIIT6C0PU7nRp3J8
+         B+tb0h6l0b7OfalYMEcaJ04q5Ok7nHMtpjOKAcxy5lL4IOlP026VFYP3IV2W9gII+PX+
+         SJ6Q==
+X-Gm-Message-State: AO0yUKVVSKr38kZqORLnwpMjj8SwaVELaorNgK9Oh6PNZbml5+UPdnEO
+        TM/JGoQVxdq8q6n3KWR4PxCYvA==
+X-Google-Smtp-Source: AK7set9TEoYzluKH8HHNN0BPwpvbjgxekVvQlU++HyMqrJZpjHWj9ML3a63GwAtC8Qcp8LL/1FOyoQ==
+X-Received: by 2002:a05:6402:a53:b0:4bf:b2b1:84d8 with SMTP id bt19-20020a0564020a5300b004bfb2b184d8mr10928336edb.19.1679686034296;
+        Fri, 24 Mar 2023 12:27:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
+        by smtp.gmail.com with ESMTPSA id jj19-20020a170907985300b008c327bef167sm10682737ejc.7.2023.03.24.12.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 12:27:13 -0700 (PDT)
+Message-ID: <fdd51d3d-a1fd-c3a9-c578-59a11c5213de@linaro.org>
+Date:   Fri, 24 Mar 2023 20:27:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sm8450: remove invalid
+ properties in cluster-sleep nodes
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v2-0-0ca1bea1a843@linaro.org>
+ <20230323-topic-sm8450-upstream-dt-bindings-fixes-v2-2-0ca1bea1a843@linaro.org>
+ <20230324174518.2arvdglqqixmxqcp@ripper>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324174518.2arvdglqqixmxqcp@ripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "Previous IRQ interference" line is misaligned and without
-a \n, breaking the tool's output:
+On 24/03/2023 18:45, Bjorn Andersson wrote:
+> On Fri, Mar 24, 2023 at 10:28:47AM +0100, Neil Armstrong wrote:
+>> Fixes the following DT bindings check error:
+> 
+> Is that because idle-state-name and local-timer-stop should not be
+> defined for domain-idle-states or are you just clearing out the
+> dtbs_check warning?
+> 
+> According to cpu-capacity.txt local-timer-stop seems to have been a
+> property relevant for clusters in the past, was this a mistake in the
+> binding or did something change when this was moved to
+> domain-idle-states?
 
- ## CPU 12 hit stop tracing, analyzing it ##
-  Previous IRQ interference:			up to      2.22 us  IRQ handler delay:		                	    18.06 us (0.00 %)
-  IRQ latency:						    18.52 us
-  Timerlat IRQ duration:				     4.41 us (0.00 %)
-  Blocking thread:					   216.93 us (0.03 %)
+I cannot find anything about local-timer-stop in cpu-capacity.txt. Where
+do you see it?
 
-Fix the output:
-
- ## CPU 7 hit stop tracing, analyzing it ##
-  Previous IRQ interference:			 up to       8.93 us
-  IRQ handler delay:		                	     0.98 us (0.00 %)
-  IRQ latency:						     2.95 us
-  Timerlat IRQ duration:				    11.26 us (0.03 %)
-
-Fixes: 27e348b221f6 ("rtla/timerlat: Add auto-analysis core")
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- tools/tracing/rtla/src/timerlat_aa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/tracing/rtla/src/timerlat_aa.c b/tools/tracing/rtla/src/timerlat_aa.c
-index ec4e0f4b0e6c..1843fff66da5 100644
---- a/tools/tracing/rtla/src/timerlat_aa.c
-+++ b/tools/tracing/rtla/src/timerlat_aa.c
-@@ -548,7 +548,7 @@ static void timerlat_thread_analysis(struct timerlat_aa_data *taa_data, int cpu,
- 	exp_irq_ts = taa_data->timer_irq_start_time - taa_data->timer_irq_start_delay;
- 
- 	if (exp_irq_ts < taa_data->prev_irq_timstamp + taa_data->prev_irq_duration)
--		printf("  Previous IRQ interference:	\t	up to %9.2f us",
-+		printf("  Previous IRQ interference:	\t\t up to  %9.2f us\n",
- 			ns_to_usf(taa_data->prev_irq_duration));
- 
- 	/*
--- 
-2.38.1
+Best regards,
+Krzysztof
 
