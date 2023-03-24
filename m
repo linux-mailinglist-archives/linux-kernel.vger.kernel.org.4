@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35906C818C
+	by mail.lfdr.de (Postfix) with ESMTP id 590426C818B
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjCXPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S232488AbjCXPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjCXPkd (ORCPT
+        with ESMTP id S232197AbjCXPkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:40:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB1F2007A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:39:43 -0700 (PDT)
+        Fri, 24 Mar 2023 11:40:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFD62129A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:39:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679672382;
+        s=mimecast20190719; t=1679672392;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:  content-type:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dJgV3Uny0vAQYBeBkJItoY2HRKhsGCmVf+cCCim+XIk=;
-        b=en6VYq2dfWkn4AQkw2R92tyllByGZwHNzsiG68QdJJ+d8ZBPyvnc6+s7kJt27xYxO5cdGi
-        nPCbruM3z7Ji6Aujt3JGPm9MpDyjbVeSqodKpfoawfx4TWpvouHQp7B3zki9IHfK7lCXNF
-        jEBNCv1rVLYhjT0F3Cgb865I6195vf8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VVAueuORiKGKOw5iPuuD3Ux7+pQ6EAyahLBg2nxd2sw=;
+        b=YWo9+qSWC35TJKScyq4XNA3nwz4tA3j0eBwXR9yRaBIs9mIV8QKoGfB6dmACMeqZUsbd80
+        itYYNY34xA9HTguN4jnMDyc4+sznBX2HGSAAEv+EFW32DlVwNts+SOBHNynMdmacjRhSlr
+        onApVaCIYGStztqhDwXBCWGp6dj4urw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-iXfXSNIHMCivI2CBQXZktg-1; Fri, 24 Mar 2023 11:39:41 -0400
-X-MC-Unique: iXfXSNIHMCivI2CBQXZktg-1
-Received: by mail-ed1-f70.google.com with SMTP id j21-20020a508a95000000b004fd82403c91so3760579edj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:39:40 -0700 (PDT)
+ us-mta-83-V9q7yx27NRm6NqALrbIlxQ-1; Fri, 24 Mar 2023 11:39:51 -0400
+X-MC-Unique: V9q7yx27NRm6NqALrbIlxQ-1
+Received: by mail-ed1-f72.google.com with SMTP id es16-20020a056402381000b004fa3e04c882so3747410edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:39:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672380;
+        d=1e100.net; s=20210112; t=1679672390;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dJgV3Uny0vAQYBeBkJItoY2HRKhsGCmVf+cCCim+XIk=;
-        b=Q1Iq1ypjwYINKcaKn5OpF3+SuRMHwYdwx8qB5lG9HIuu9b5Mel+S+GJrni1CqM9OAI
-         oimMuGsXMO35FvHoFvKjme0fMvHsmNgPZgmsngSf7vUj2S/3ihvlUjIDBYYzDo0nBD/5
-         teR+E2TD+2L+4nJ/FQ32hbTFLY1lE1wVTZInPshz+gPFrw7PNLrlsQA1tYJF29l31a/H
-         AN4g3FGNAu8XzL2phFn6nlVO2BmBqCIYfr/FimRghbs6hIRjIN4vkh+yXSMw/CZJa52u
-         Lgz6RPBS7crEYld/1Wc/7BJAqYSpxN0+ZsEyx0+DedZVIXlXPC4UKDgozvoSSirTG7dm
-         dYow==
-X-Gm-Message-State: AAQBX9fjfKPCV2ZKD0ap6ZkxXnUeFcgHIhZFdCrAKA9z+EQifmRJZsik
-        5HHtncy16USY4zk18jbEThzwGM23iZ+rF/IYjsAKK/OXjVGMoxN2C5m02VJUl1po2+WG4UHcUIv
-        NmJ8RUSP9E1UtJEcdE7sDEeKO
-X-Received: by 2002:a17:906:3607:b0:92d:44ca:1137 with SMTP id q7-20020a170906360700b0092d44ca1137mr3426156ejb.43.1679672380057;
-        Fri, 24 Mar 2023 08:39:40 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZQuqhsbvuSHiIdsu2eZ5X0BBjFSGXqn/HK1XIKT/7J7LjCnWt4PxmBEwCVvzRAmMqLhm8YIA==
-X-Received: by 2002:a17:906:3607:b0:92d:44ca:1137 with SMTP id q7-20020a170906360700b0092d44ca1137mr3426143ejb.43.1679672379807;
-        Fri, 24 Mar 2023 08:39:39 -0700 (PDT)
+        bh=VVAueuORiKGKOw5iPuuD3Ux7+pQ6EAyahLBg2nxd2sw=;
+        b=chOujcUm/QGzDHyadtCBglYLWuEo4Zx2tT70nwuSpk2yjOYjHfFDQBiDpGUBN+y1dT
+         7Ru7HAJogcKS0o1dLb1W2YhhiO8r6Zm5R9J1kbhgP0HXlNnM61Cu4b6tVNhLyXSrUSv0
+         44Yx1lvnzUY5bPNlpzk6IoL9JspLTt5yL1/1A2EE4V6vTNb975f1LiOliDW/PACAtnTD
+         q/UUwA7vVz0UmTmG5UxWZ26Z6QpurnSX7nr3RaSZQoAxmDOyQBrXLf4OBAPJvjTrI2DH
+         1aPCU6lURROUn3lWEWO2LRekb7Q4yGFS2NA8UbMjgXEqefF+eh+kNCk9IIEJhHgiZchD
+         8m1Q==
+X-Gm-Message-State: AAQBX9eaSjWSPw3Qj2cIpOo4zF/M/cERndd0FciThBpRRZN/H9MKfk3c
+        63LtAYNbJ2rooJ9OQ8jWmtBxw6SRvcgF+Ei9Dzhi0JgfkstD0LULNDicWsP3suAWowUJjxz6Kch
+        fCwq0X8+KY9KE33SDt8y5abPh
+X-Received: by 2002:a17:906:3850:b0:92f:13b9:d498 with SMTP id w16-20020a170906385000b0092f13b9d498mr3253853ejc.36.1679672389913;
+        Fri, 24 Mar 2023 08:39:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZS/Tv/2sZYKBNsok47ghj98jKMPgUDCYS3M35Ue86ZuX6HibK2LvWo/dM7n1M7/gbQt5E3Dg==
+X-Received: by 2002:a17:906:3850:b0:92f:13b9:d498 with SMTP id w16-20020a170906385000b0092f13b9d498mr3253829ejc.36.1679672389708;
+        Fri, 24 Mar 2023 08:39:49 -0700 (PDT)
 Received: from localhost.localdomain (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
-        by smtp.gmail.com with ESMTPSA id ot17-20020a170906ccd100b008e51a1fd7bfsm10581350ejb.172.2023.03.24.08.39.38
+        by smtp.gmail.com with ESMTPSA id sd24-20020a170906ce3800b00931024e96c5sm10571246ejb.99.2023.03.24.08.39.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 08:39:38 -0700 (PDT)
+        Fri, 24 Mar 2023 08:39:48 -0700 (PDT)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
@@ -64,174 +64,117 @@ Cc:     Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
         kvm@vger.kernel.org, stefanha@redhat.com,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v4 6/9] vdpa_sim: make devices agnostic for work management
-Date:   Fri, 24 Mar 2023 16:39:29 +0100
-Message-Id: <20230324153929.47670-1-sgarzare@redhat.com>
+Subject: [PATCH v4 7/9] vdpa_sim: use kthread worker
+Date:   Fri, 24 Mar 2023 16:39:40 +0100
+Message-Id: <20230324153940.47710-1-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230324153607.46836-1-sgarzare@redhat.com>
 References: <20230324153607.46836-1-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's move work management inside the vdpa_sim core.
-This way we can easily change how we manage the works, without
-having to change the devices each time.
+Let's use our own kthread to run device jobs.
+This allows us more flexibility, especially we can attach the kthread
+to the user address space when vDPA uses user's VA.
 
-Acked-by: Eugenio Pérez Martin <eperezma@redhat.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 ++-
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 17 +++++++++++++++--
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  6 ++----
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++----
- 4 files changed, 21 insertions(+), 11 deletions(-)
+
+Notes:
+    v3:
+    - fix `dev` not initialized in the error path [Simon Horman]
+
+ drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++-
+ drivers/vdpa/vdpa_sim/vdpa_sim.c | 19 +++++++++++++------
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 144858636c10..acee20faaf6a 100644
+index acee20faaf6a..ce83f9130a5d 100644
 --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
 +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -45,7 +45,7 @@ struct vdpasim_dev_attr {
- 	u32 ngroups;
- 	u32 nas;
- 
--	work_func_t work_fn;
-+	void (*work_fn)(struct vdpasim *vdpasim);
- 	void (*get_config)(struct vdpasim *vdpasim, void *config);
- 	void (*set_config)(struct vdpasim *vdpasim, const void *config);
- 	int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
-@@ -78,6 +78,7 @@ struct vdpasim {
- 
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
- 			       const struct vdpa_dev_set_config *config);
-+void vdpasim_schedule_work(struct vdpasim *vdpasim);
- 
- /* TODO: cross-endian support */
- static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+@@ -57,7 +57,8 @@ struct vdpasim_dev_attr {
+ struct vdpasim {
+ 	struct vdpa_device vdpa;
+ 	struct vdpasim_virtqueue *vqs;
+-	struct work_struct work;
++	struct kthread_worker *worker;
++	struct kthread_work work;
+ 	struct vdpasim_dev_attr dev_attr;
+ 	/* spinlock to synchronize virtqueue state */
+ 	spinlock_t lock;
 diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index eea23c630f7c..2df5227e0b62 100644
+index 2df5227e0b62..bd9f9054de94 100644
 --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
 +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -127,6 +127,13 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+@@ -11,8 +11,8 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/kernel.h>
++#include <linux/kthread.h>
+ #include <linux/slab.h>
+-#include <linux/sched.h>
+ #include <linux/dma-map-ops.h>
+ #include <linux/vringh.h>
+ #include <linux/vdpa.h>
+@@ -127,7 +127,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
  static const struct vdpa_config_ops vdpasim_config_ops;
  static const struct vdpa_config_ops vdpasim_batch_config_ops;
  
-+static void vdpasim_work_fn(struct work_struct *work)
-+{
-+	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
-+
-+	vdpasim->dev_attr.work_fn(vdpasim);
-+}
-+
- struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 			       const struct vdpa_dev_set_config *config)
+-static void vdpasim_work_fn(struct work_struct *work)
++static void vdpasim_work_fn(struct kthread_work *work)
  {
-@@ -163,7 +170,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+ 	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+ 
+@@ -170,11 +170,17 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
  
  	vdpasim = vdpa_to_sim(vdpa);
  	vdpasim->dev_attr = *dev_attr;
--	INIT_WORK(&vdpasim->work, dev_attr->work_fn);
-+	INIT_WORK(&vdpasim->work, vdpasim_work_fn);
+-	INIT_WORK(&vdpasim->work, vdpasim_work_fn);
++	dev = &vdpasim->vdpa.dev;
++
++	kthread_init_work(&vdpasim->work, vdpasim_work_fn);
++	vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
++						dev_attr->name);
++	if (IS_ERR(vdpasim->worker))
++		goto err_iommu;
++
  	spin_lock_init(&vdpasim->lock);
  	spin_lock_init(&vdpasim->iommu_lock);
  
-@@ -214,6 +221,12 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- }
- EXPORT_SYMBOL_GPL(vdpasim_create);
+-	dev = &vdpasim->vdpa.dev;
+ 	dev->dma_mask = &dev->coherent_dma_mask;
+ 	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
+ 		goto err_iommu;
+@@ -223,7 +229,7 @@ EXPORT_SYMBOL_GPL(vdpasim_create);
  
-+void vdpasim_schedule_work(struct vdpasim *vdpasim)
-+{
-+	schedule_work(&vdpasim->work);
-+}
-+EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
-+
- static int vdpasim_set_vq_address(struct vdpa_device *vdpa, u16 idx,
- 				  u64 desc_area, u64 driver_area,
- 				  u64 device_area)
-@@ -248,7 +261,7 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
- 	}
- 
- 	if (vq->ready)
--		schedule_work(&vdpasim->work);
-+		vdpasim_schedule_work(vdpasim);
- }
- 
- static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 5117959bed8a..eb4897c8541e 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -11,7 +11,6 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
--#include <linux/sched.h>
- #include <linux/blkdev.h>
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
-@@ -286,9 +285,8 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 	return handled;
- }
- 
--static void vdpasim_blk_work(struct work_struct *work)
-+static void vdpasim_blk_work(struct vdpasim *vdpasim)
+ void vdpasim_schedule_work(struct vdpasim *vdpasim)
  {
--	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
- 	bool reschedule = false;
+-	schedule_work(&vdpasim->work);
++	kthread_queue_work(vdpasim->worker, &vdpasim->work);
+ }
+ EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+ 
+@@ -623,7 +629,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+ 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
  	int i;
  
-@@ -326,7 +324,7 @@ static void vdpasim_blk_work(struct work_struct *work)
- 	spin_unlock(&vdpasim->lock);
+-	cancel_work_sync(&vdpasim->work);
++	kthread_cancel_work_sync(&vdpasim->work);
++	kthread_destroy_worker(vdpasim->worker);
  
- 	if (reschedule)
--		schedule_work(&vdpasim->work);
-+		vdpasim_schedule_work(vdpasim);
- }
- 
- static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 862f405362de..e61a9ecbfafe 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -11,7 +11,6 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/kernel.h>
--#include <linux/sched.h>
- #include <linux/etherdevice.h>
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
-@@ -192,9 +191,8 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
- 	u64_stats_update_end(&net->cq_stats.syncp);
- }
- 
--static void vdpasim_net_work(struct work_struct *work)
-+static void vdpasim_net_work(struct vdpasim *vdpasim)
- {
--	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
- 	struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
- 	struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
- 	struct vdpasim_net *net = sim_to_net(vdpasim);
-@@ -260,7 +258,7 @@ static void vdpasim_net_work(struct work_struct *work)
- 		vdpasim_net_complete(rxq, write);
- 
- 		if (tx_pkts > 4) {
--			schedule_work(&vdpasim->work);
-+			vdpasim_schedule_work(vdpasim);
- 			goto out;
- 		}
- 	}
+ 	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+ 		vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
 -- 
 2.39.2
 
