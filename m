@@ -2,347 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5806C838B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF2C6C8388
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjCXRps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S231863AbjCXRp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbjCXRpp (ORCPT
+        with ESMTP id S229551AbjCXRp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:45:45 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F5F144B0;
-        Fri, 24 Mar 2023 10:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679679941; x=1711215941;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wAyL2ERrkjUsXndZ+9aTf5YT0YwjrqX94YVfunup+iQ=;
-  b=K3uOZxWbS6F+VPt0Ex+Yj+c4LhJNdHJm6wIZijnLsF7Gs88WT7oj6zqf
-   rC0E0oUh8Zn3xo9eR9PkwegV9mNUK2M0JfQ6BH4u32NUTgkzySkH3aBn9
-   GGxiR5gBuFFtiq38H/HBcn1V9FaaqBsy//F7i8TYMJwlV3OHg1gsiSmIc
-   D3jwXPVx5DPPrJJUOGBCZ8EReHHXdUf22uk6Zyly0f9CT4Ees4zADFaxw
-   aLJOPuyVyKmSoWmohrTJmLZbu3W+OwfFOokGQrkMHCAfhVALr0HHyenLr
-   v3PBD9JynWFZBHhn7sW5jJMdeXGFzEDj8DSy0i586KBi64QMOQpC3FBzt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="337345227"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="337345227"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:45:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="856952526"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="856952526"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2023 10:45:22 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 24 Mar 2023 10:45:21 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 24 Mar 2023 10:45:21 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 24 Mar 2023 10:45:20 -0700
+        Fri, 24 Mar 2023 13:45:27 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2079.outbound.protection.outlook.com [40.107.94.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3635136CC;
+        Fri, 24 Mar 2023 10:45:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eQXzIpHei76M5JB5UDW3A1Z//m3hR80x+HmZRz+KPRdCY3+qS8I2LeZ4t0IE0Jx1RKYVfgcPUtudWEx1ITzYxQjyeTsShBvwEQflEQNIo41zJKQA5+/7GprMSdk/HWyF9TygEVKFKu0TVLmdL9WsFheKI9IxHfTHYtPndJ/PRryIdBGoRDCiRqsvtRS4QKEFNp4fGk99Ryk0LalEkeTzDOWmegHV99cLrYyax/A5RHw7+bVoB8EKoixZTMaPtSDq/oqkPFqnRzUBTxm5viDq10iZQwe4pDn4fgcS12hMuMHS31M9AVBe6R2OIYxuInh9OqyGis63KvlacKMjpoLsiw==
+ b=fScB/mHprsPqvNKj7GN2f+Dl6hUV8ceJZu4STAuzctaPfTczrHvKxCZj3RZofq+wgVJwYmSCeNToam8asICBuwEEj5EK7WFYUWNhVdAN7mkoDRV9Y9MlwgjC49BfNCco4CHFafQ3SqT4Hy+egLyVn8CGuldxeKtcw4uOebzNjTSBRQJGDF1kM0UxJGaM5e7uzhDHULe2H2yhZT6vvEcoy7QaAGnzRhi6vNfSaLSYEODOAjAjhnYL2tG/uWlCsrXfujxn1Jv0K/B0GpnhERs43gVNHbCvMYpXBYCps2RTYEqSi+xAGWYTIUvKXlOOX7pY03d32aRUl0THuaAFhjHj7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nsYSbkhjebH53UN6n72fXXYkynkDaiy5Zy10PCZx648=;
- b=nbV3kQLYuCEiRGmaosNPXDpFodrO/1X8c5Xfn1o0luHqHXkopVP43Eyj4jNVtPgpjPUe7zF+c9jwxKgZ97D6/T/6K6y4mPyMYpxjYwy6THyMeC4oT+peEk3ZR8qocgkGquBOzr3ov8YAc2ExnwPqvuxbcVd5s1DTDtDP4Zc/q3M2wJzFpMtwagApQsl+yKYl0qr32QPuLAaRWR6pKJ9pNAb0Piqa6ft6u/4G5O2RSYWBL6fFqn3bbXo5EbxOgkGchjMcanQUQXDZqM436ZFCqReysH1L+VNlcjoFH+YU7kdIqT+wTsv21XqIqLX5IKDx2tCgWDeG4K3vGTADhGwdIQ==
+ bh=kaRjKh/9nn44X+NhRCRyz0bW+A423pMlUYQmtlB8x2E=;
+ b=ThGm8lNQmGfofGeZoPbNaK5csXzQ09JvPDkB/8FdgCXfBlIxiR5dv/mtnmqpTrA0YSrSCTkNpZ6Icdtvma+yuqt/BNceAVMZ1NcInV5Evugh6DPSjji9aLPTHiypu1nxJYvGkeVeveWJF8QjtLff3sqflms8esh8TAk302cb9abFZG16RxLn/7G5hEZ9m/vKAZpP+OD8zCiZCccCyhXuTrMdE1Bturux+gMO2grA/PIbXjv82UHYkeAoDs0XhCojnd+myWQ3X/YZ68ArHR68n+J1R/b3IoACU0/P4d0vh0y6W+hnm7A/u2RS3VTuAy3BM8Mz1TUa3xhNo3H5unbISg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by SA3PR11MB7611.namprd11.prod.outlook.com (2603:10b6:806:304::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
- 2023 17:45:18 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::7576:1f4a:2a6c:72f7%2]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
- 17:45:18 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     "Li, Xin3" <xin3.li@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 34/34] KVM: x86/vmx: execute "int $2" to handle NMI in
- NMI caused VM exits when FRED is enabled
-Thread-Topic: [PATCH v5 34/34] KVM: x86/vmx: execute "int $2" to handle NMI in
- NMI caused VM exits when FRED is enabled
-Thread-Index: AQHZUKI3WfAyEb/jCU66DZKXu8CGnq8HLBKAgABX0ICAAArqgIAACW+wgAK0sJA=
-Date:   Fri, 24 Mar 2023 17:45:18 +0000
-Message-ID: <SA1PR11MB67346FF35C184F818BB4B8C0A8849@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230307023946.14516-1-xin3.li@intel.com>
- <20230307023946.14516-35-xin3.li@intel.com> <ZBs/sSJwr7zdOUsE@google.com>
- <c9abb017-0088-b96f-d19a-b25e54ad150d@citrix.com>
- <ZBuSg+3jJpjA5S5P@google.com>
- <SA1PR11MB6734AE9646C3018A31872D88A8879@SA1PR11MB6734.namprd11.prod.outlook.com>
-In-Reply-To: <SA1PR11MB6734AE9646C3018A31872D88A8879@SA1PR11MB6734.namprd11.prod.outlook.com>
-Accept-Language: en-US
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kaRjKh/9nn44X+NhRCRyz0bW+A423pMlUYQmtlB8x2E=;
+ b=ewyX/nUha6tqr+vLc141IrdkXl7xVjpWv7H//L4V3Biq52NO+UZWs1RrFPMvePk2eAlgVgArPlWwhp2hTggdH1IO1PLSADcBzyzBxcSsdi3fd321rIy4WaxZcs6coyL3g3eu8l/mXZnsNJ6BVVGRnc+Kov2R+6CYny0jt+O4EaU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ CY8PR12MB8243.namprd12.prod.outlook.com (2603:10b6:930:78::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.39; Fri, 24 Mar 2023 17:45:23 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f%9]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
+ 17:45:22 +0000
+Message-ID: <32674bac-92c2-8fc7-0977-6d2d81b3257f@amd.com>
+Date:   Fri, 24 Mar 2023 13:46:39 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH resent] drm/amd/display: Fix exception handling in
+ dm_validate_stream_and_context()
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|SA3PR11MB7611:EE_
-x-ms-office365-filtering-correlation-id: c1fb4b9a-ac95-4a36-6cd9-08db2c8f8876
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sDuOefRC9lVwp3SP4dGvCzabUrB4GulMewOlkVGK2m42e0ZE8V2iGebVCd0fwLxTZ8h4+TH4OaYbFWSzLm/tUewkudpKCYbRLX/HU+5z96PbQaFxxqxA9UeRmyFsFVsG5xupqCstByAPZ8/G8NhQg7yKe/jLYy0ewLNThtipsQHgFAvH5s2+T98ZqvOVFtRhK17rCRqDOK3PgK0iMktWNDw0BpA93BOdvhrwesx6Y4ykEMdQZ+6zA/N1AkiXH2Fk0PF3oVAGm55RfCAgokVP2GbVnR2Pm6m/AF4MWcDHFqlyLDI2eCQeYisQKyBBDJFRg17aVugS0C3bqsRGLJdhJ7O1Z7Jwsuro5D4MxCFEpSA+wqllb03xbm+4xQg37/CG/3VkLomOKnlfYkwlJa6T1otHAutNZTEVE0H9Yod+fiCkKBv5DF+0DaC378CDaNOATlSNB5Ps+3MAsPzCwFW9GhwPSVB0vcMYLdVMRZa6Qwlhu6zznKdzxQqvaAXtYIzFucwur4lwzSDP6G1LN+u4kFIuIvGXYnUMBdcuG47edZbD6xe8LWg2D6qnQd8yI/JC4BgJpNBy9mNEXjGwjBnUUQI5pDONXiVKmNdKx/ZNL23+aExssgDAKEyea0Sm8BBu0ojfgjnm60wOxcgxgA05h7EBmGRVYmy401P1pJPtPhQzMoAw3hc0VCtDIAyEK+JjYvuO3mex3NxfSOjX86iKmA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(366004)(376002)(346002)(451199021)(2906002)(38100700002)(55016003)(38070700005)(64756008)(4326008)(66946007)(66446008)(54906003)(66556008)(76116006)(41300700001)(5660300002)(316002)(7416002)(82960400001)(122000001)(110136005)(26005)(52536014)(6506007)(8936002)(8676002)(83380400001)(33656002)(86362001)(7696005)(66476007)(186003)(71200400001)(9686003)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tSDTy0mK/fJM7b30BqNANR5DDa3Bqub6OvmPM5BYFBnfWeFrJTl0fI4wg4fg?=
- =?us-ascii?Q?k8ZPQx5IUBiV1GqoyM11kRUbEBOw2uYhHh5iPglp/bS/LIUHQXHzXP6XQE7S?=
- =?us-ascii?Q?LtL5bMKeURl5Vl8aVw28pWJ2IJaNb1pKzYENXBgM8PMqwHCxjF6WgTik/yyV?=
- =?us-ascii?Q?4TyeASRZvLKPeOyX2MnjcfnTzTwu0uX8trDBCDPE5pJUgI2QPf8sKFl4AuD+?=
- =?us-ascii?Q?NtKvIBrMQgm3/BG9twX/5lsiB600yOsD+6gidQaJUqESTmSISGPxOZ6DLOx1?=
- =?us-ascii?Q?QYFqueDAmBr7BVv662wTJUeveG0z40du3liUiNPKSFV23ALA245XGGM7wfsk?=
- =?us-ascii?Q?cWDmtXb206H21IJ/DccZUQf1/ESOoKaRY6I34xc/GT5h7rcQXt2O9aMdwpGq?=
- =?us-ascii?Q?7Xb+PXLwhsYuOxw/YeGCoUOJOCccuP5RppdBvEMStCPRqUSTdW8x8QN5cq/P?=
- =?us-ascii?Q?71lD5LxV4YQpHl6NDrbrZ9he5Oou0pqxHSL57BcRiL/SDyjugw6PLKg99RqQ?=
- =?us-ascii?Q?4rjULq79P2ECPs5odWaBDBXrkJRbErlFJrEmyY0QzsxCF+bD/MfHeglVAmNj?=
- =?us-ascii?Q?cLD0tZW5sL9fIWSKamYPLrXGJQgerfhsHvfpa47OnKB6HZAwW65+RLvLTGQO?=
- =?us-ascii?Q?p/YBXnjimYGmt0JC9h/hY+So+UGvdUw+50+vWbsSn2PiSS4XAzhUgXr9IR2U?=
- =?us-ascii?Q?DfUMkeBU0CjTMLFLWJ11dFMnPuPORkoUdy4g0X3RF+gTJyeMfY5sSgpUUdp8?=
- =?us-ascii?Q?0as6t7c/5ttypghJ5icw/lnIq9bu00572/zPpuzwXrybLQmNm5XPTXY/gcdi?=
- =?us-ascii?Q?73iylhdIthAfe2efg5ESJ7k/8bUJWP5UuONjjzhHpVWMaZ+vDDg8/CtZKqfA?=
- =?us-ascii?Q?5xf2QgxRvcUhc5rYRaGW0BJB1RrheIpMem/aKum6W+D4Q5+HyvjoNN+nhgK1?=
- =?us-ascii?Q?Gx1Yqx0SKADXaiOKLNryRxzd/cGW3FTR+lcKHPaNpBeQJf0+UB6ZDlIMNq+Q?=
- =?us-ascii?Q?WnDEf6QMQsbDP9PAodb1IQKuq5LYDDs9o9gQVoJQPKg53+ftIF01r+RaEnUr?=
- =?us-ascii?Q?0R8V7gwZt9s17f78cG8vZfbBauLBZbIH9MVFXcVMQqFW6Y2jEkNXKVt7OSa4?=
- =?us-ascii?Q?ipQRNdpDsq8mwNLknJIGyhKY1auBtowP8MSlqulUzjzUqM8qvZAGTL6zcfqV?=
- =?us-ascii?Q?Be9eRQMhvcOsZygfPCyQ+5ustWrChHPcMCSDY/bIs0T2gYcR/haHo99X1Rut?=
- =?us-ascii?Q?xCfLGp3ubJa7CKQRGdDuYPhyYcEQ+LmCHQQOhPPpmq8L5fl5GIstxPCVCyXK?=
- =?us-ascii?Q?MHy3dIV2SmqApyjnkAkEkGenOaZ6BqUbZBG5laaguRM374czi9AD5Air6gUx?=
- =?us-ascii?Q?ZDZb131JWfP7k2pHPhZ4XcTob07fT8y9D74lNA/q8QE2uEi21AymHcPN0rKk?=
- =?us-ascii?Q?Df0+rOJHuCETeqpWSZ6gLCSbFqCewMCcssTRheoVBlMQVaZcvju0yeRgCKq9?=
- =?us-ascii?Q?xGBMjOb9zE+O80sZcgHNJQZchJlMrjk5KTmmSu6uFFBnGVOPW59dCjh8C6u8?=
- =?us-ascii?Q?seWVplCAmmy2y7d0SHA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Hersen Wu <hersenxs.wu@amd.com>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Roman Li <roman.li@amd.com>, Stylon Wang <stylon.wang@amd.com>,
+        Xinhui Pan <Xinhui.Pan@amd.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <e6656c83-ee7a-a253-2028-109138779c94@web.de>
+ <ea0ff67b-3665-db82-9792-67a633ba07f5@web.de>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <ea0ff67b-3665-db82-9792-67a633ba07f5@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQXPR0101CA0018.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:15::31) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|CY8PR12MB8243:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3320dbec-2bb3-4bfe-aab2-08db2c8f8ae3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QBZ8P6xylVe9W0LWqab3sBO4bOx4VmEaGyvZNjxhYCjMAXqdu343GSz8ci/CBulbb90QwjzpVWhIUrZLdRu9c+pVyhUUGbsxJc+2Vmg+CJ4J/23JiSTjbKbAvRVZ8meapTUUhPZf9ucJhtFYhcAU8PUU8V7MBYnO0ifKRB1MAyRovOnym7nL+8mSylMdl48GLZgbAgsb+y0vsGzMhObQ/U0XC1H9oX3F7i5aUPgVPtR6OrbivoIeZfxQe0OsLEFLwmFvHreIB4xyTKA63MFW4gXt4QKItjsFPs5foYtpwZ/pBypszpSoFopJNtC9Pk5To4Yq4j9Ce8FBGkyVBrGLMcyGSM0oEPJ741oG56sV8gC/JqSuVcSEsA2v/ZtC36BA6e53q51+sDnCAs7FoT94QBcW0Kct63tyRQS2LxsnnFKXBNCC+L2r1elZHe3+GpHrjN8aEG8V+kWJu1/V+XqPhbexUosiUEW2M4YCDMQGM8hEzKLr2IDVCtvomzXaGC9iocw0ciEuuQLrK7XqrkpSvfa4wPqpHgaPUfMtIrAXrvCrJo7FhUUPnjyDi0bBYT7szu3peJCFy0wzJCuUZ9/lRxK6OxpQgzrjQ/ZLHW54rQuBpEE6Y4BXBXFRYpwjQmiIJXEQec+/4hSL+uucCM9G02iyB581H320iHDFTGjWdb6AM/71ymbGKGHkCalZuP0cm21LS9LOHU+BkNspOZxcCRP9iZuOxdXGxu5eqQNjju29KCm16oh5O9JWTtUmlQua
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199021)(66556008)(66946007)(4326008)(8676002)(66476007)(8936002)(36756003)(41300700001)(6512007)(6506007)(26005)(53546011)(38100700002)(186003)(921005)(86362001)(31696002)(31686004)(6666004)(83380400001)(2616005)(110136005)(6636002)(6486002)(316002)(478600001)(2906002)(44832011)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUN2Z2F2ejBPU250MTU2dVNpNkNPN2JUNnJrNTBPN2R4NEtSZmM3UVFMWXpX?=
+ =?utf-8?B?VmQ4V05ZZlFleEZQbEIxd2VDKzRsRk1zdmI1dVF6UzB4L1lNTnQrdnIxVXZ6?=
+ =?utf-8?B?TmE2VWlxb2xTN1NHenBBdVgyTWlCTk9ESVRDeGU0TC8rUWNaVDVsL2FuVk9C?=
+ =?utf-8?B?Q0VsUzdnRGErdVFia1p5NFYzQVBJc2tZVFNPMmsrWjNUWTRKdDUvL1dtNGh6?=
+ =?utf-8?B?M3l1Z2Z3YjhpSlE3MXpFdXFFZU9EMGJrSk53Wk93M0R0VVA5TlROVmwxUHh3?=
+ =?utf-8?B?NE9mVFN1c2xnMU9PQzkxYTJKaHBWTzRSYTc4aS9WOEgyM2FkNmhmbHNWWkdz?=
+ =?utf-8?B?SlRvTzZEWGRXNFB1WjAxSHdGYVA0cm9hTDZjL1p1YS9sdC82ZFFnQ1draEZZ?=
+ =?utf-8?B?TGYxN0xpblBmQ250Z2tONVBsMHY0YmEzbGRRV1dReWVQTXQ0bS8zWExDcXg2?=
+ =?utf-8?B?akRrUytFcTExS0FYMjU0ZnV1NnJpN0diM3VneDhhWHMyQmRCN3NqUWFBM01Q?=
+ =?utf-8?B?bldnd3hldWRMTjh1aWNZNk9Qc2FSWW1CQU1DRzZZdTVXdFVmWmYyWW0yKy9r?=
+ =?utf-8?B?eDlXZ2lScFhnTG1vWlllNE1qa1FwT3dLSlIzTXpGT0czeitGYmZwaURvQTc2?=
+ =?utf-8?B?TzV4ck1WRWdqOWUvb2pDR3lkVndRcUNwM2FEb1RYM1JOTzZtUGx4RTVBT3Z0?=
+ =?utf-8?B?WFNPSHlnT3pMWlB0bGZvWE9kRUFHcU91UGY5K1FMUHFFb1NJWWVOTlJzRklD?=
+ =?utf-8?B?cFAxOTlNb3BqTnI1UUtUV252V0NoL2k1UDVlK3hxMFBRaVpNaWRnbkZiNW5o?=
+ =?utf-8?B?S1dtcXN1Vy93d3IweE9taW5KTjlvMkFEeXpoWWJhTWJqbFJWS2N0MUdzdU5Z?=
+ =?utf-8?B?YnFYamh6MHRaT3BRQkt5ZlYvVnJnVzAwLzBYblMyRkVmTG5ObHFXRGh4THVG?=
+ =?utf-8?B?cDdVamZFT0FUbzR1cXZjOTM4MUs2cWZueDZCVUI1VjYzV2JsQzRUVjYxdjY1?=
+ =?utf-8?B?TDhoQXljMEU4THlZSElybDNwcS9NRXJ2UWpOQzh2dDVtUG85YUJOZmYxMkdh?=
+ =?utf-8?B?ckk2RXJETCsyUk5NcEhjdTNqMUZzeXJ3MTJZREh6bjZEMEtOdVh6eDB6Q1Ux?=
+ =?utf-8?B?dUdsbWhDNDBsZ1l1cFU2Wk1ZNEQ4Mkg0RGRXSHpHdjNlWUZkT1NEK0R5RFRF?=
+ =?utf-8?B?RDZGbWw1K0h1elYvbU9wM0o0amF0bHhERFVOeWppYy9OSmJDLzlHM0IvcWxQ?=
+ =?utf-8?B?b1o2ZTlpSERySlRyb2wxVEZmbEpGb1hDbm5vS3NEVll6NUwyVVVEYmphV3Uz?=
+ =?utf-8?B?blJXajN2OE9VZHQwOXRkaWRKMnRWZ2M0S2lFWGRsTmRtckRpd04vdjlNcTZ0?=
+ =?utf-8?B?anhqRzN5MVNRbTF3WWxlTmthZkxYcXViQktHNjdETXB4UlhmamwzaTBjNTdq?=
+ =?utf-8?B?WkRjRWt1WE40SWZxQnFPTUEyTUJDSi9XWVorMkdmTC9lRndEMnVBaFNLcklh?=
+ =?utf-8?B?bFUrSFI5aWJ4VGgvUHBqNkNSb0Vvdy9STlZaZjhSdUYrM2g3Qzh5cDRzT0Jp?=
+ =?utf-8?B?QmRPODJnUVZJVk4vYXpWSUR6SkF6QzNQNGV6NG1vT0tBbXhFTXZmc1hqSm93?=
+ =?utf-8?B?eE1KVkcrTGF4amVHQk94YmlTaENlU0Y0eVBHNDFGbWxmZlNHbjVlbTJES1VT?=
+ =?utf-8?B?Nm5uQjdmTEZLdVBNNXpnOWdZclJNYjFic3V6VzZjOVM2SGtLL21PanRHQ0ph?=
+ =?utf-8?B?VDFTNU1aM3M2VXpLMEhMdkoxWUhrUFk1cy9FS084d21tWS9UTStVemFnQVBS?=
+ =?utf-8?B?NW5CTFhkR0xXTWZ2UW1JdHF0cWtyb1NFaUhyZEZhUWdVYnBLaU43WGNsalJx?=
+ =?utf-8?B?cFlvaEpLMWZjREJtdzFSb3I3cmZtS2liV0lMaEtFTEZuSEF3cVpWRlB2QXdo?=
+ =?utf-8?B?OG15NEpDUlRoT0Y2bUpBL2h6K2NSUnU4UitOeWRZM1IzV0xxc3N5bXNoVjVC?=
+ =?utf-8?B?TkpuTC9DMUNIZDBqZmc3RWhQNlFvR1lPNUlDTjUyRGRsV2xXYmkrRUpQcG1W?=
+ =?utf-8?B?L09ob0o5WmRMU05OYzVZZ1lTZTFOaE9YcmNFUGR1bkkwbThXQVdvazh4eHEr?=
+ =?utf-8?Q?3haCBigidYkS94JrPBJeYIlsj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3320dbec-2bb3-4bfe-aab2-08db2c8f8ae3
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1fb4b9a-ac95-4a36-6cd9-08db2c8f8876
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 17:45:18.3996
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 17:45:22.7223
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zNfrJ7PoE4W9NLdB1c8RYoYlFsmEOXXNFFSV/iwF36tlFoUdODzdjAjHGrttxZzQFSlQ5bxeD4uCvHs0+bCVsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7611
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xt0cY4a7uFp4TvCkR/zkxeOPJnYT/Wz9jqVcyFK3rzupA2K9VqxosRtaR92X4uxHTqieADUXBTu27+en8fjMtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8243
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > I'm not dead set against the proposed approach, but IMO it's not
-> > obviously better than a bit of assembly to have a more direct call into=
- the NMI
-> handler.
->=20
-> I will give it a shot.
+Hi Markus,
 
-Hi Sean,
+On 3/24/23 11:42, Markus Elfring wrote:
+> Date: Sat, 18 Mar 2023 16:21:32 +0100
+> 
+> The label “cleanup” was used to jump to another pointer check despite of
+> the detail in the implementation of the function “dm_validate_stream_and_context”
+> that it was determined already that corresponding variables contained
+> still null pointers.
+> 
+> 1. Thus return directly if
+>     * a null pointer was passed for the function parameter “stream”
+>       or
+>     * a call of the function “dc_create_plane_state” failed.
+> 
+> 2. Use a more appropriate label instead.
+> 
+> 3. Delete two questionable checks.
+> 
+> 4. Omit extra initialisations (for the variables “dc_state” and “dc_plane_state”)
+>     which became unnecessary with this refactoring.
+> 
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: 5468c36d628524effbb89a9503eb1a2318804759 ("drm/amd/display: Filter Invalid 420 Modes for HDMI TMDS")
 
-I got a working patch, before I resend the whole FRED patch set again, can
-you please check if this is what you're expecting?
+Please truncate the hash to 12 characters.
 
-When FRED is enabled, the x86 CPU always pushes an error code on the stack
-immediately after the return instruction address is pushed. To generate suc=
-h
-a stack frame, call a trampoline function first to push the return instruct=
-ion
-address on the stack, and the trampoline function then pushes an error code
-(0 for IRQ/NMI) and jump to fred_entrypoint_kernel.
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-I could have vmx_do_interrupt_trampoline jump to fred_entrypoint_kernel
-Instead of calling external_interrupt(), but that would reenter the noinstr
-text again (not a big problem but seems not preferred by Peter Z).
+Also please ensure that your Signed-off-by matches the "From:" entry in 
+the email.
 
-Thanks!
-  Xin
+> ---
+>   .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 20 ++++++++-----------
+>   1 file changed, 8 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index eeaeca8b51f4..3086613f5f5d 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -6426,19 +6426,19 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
+>   						struct dc_stream_state *stream)
+>   {
+>   	enum dc_status dc_result = DC_ERROR_UNEXPECTED;
+> -	struct dc_plane_state *dc_plane_state = NULL;
+> -	struct dc_state *dc_state = NULL;
+> +	struct dc_plane_state *dc_plane_state;
+> +	struct dc_state *dc_state;
+> 
+>   	if (!stream)
+> -		goto cleanup;
+> +		return dc_result;
+> 
+>   	dc_plane_state = dc_create_plane_state(dc);
+>   	if (!dc_plane_state)
+> -		goto cleanup;
+> +		return dc_result;
+> 
+>   	dc_state = dc_create_state(dc);
+>   	if (!dc_state)
+> -		goto cleanup;
+> +		goto release_plane_state;
+> 
+>   	/* populate stream to plane */
+>   	dc_plane_state->src_rect.height  = stream->src.height;
+> @@ -6475,13 +6475,9 @@ static enum dc_status dm_validate_stream_and_context(struct dc *dc,
+>   	if (dc_result == DC_OK)
+>   		dc_result = dc_validate_global_state(dc, dc_state, true);
+> 
+> -cleanup:
+> -	if (dc_state)
+> -		dc_release_state(dc_state);
+> -
+> -	if (dc_plane_state)
+> -		dc_plane_state_release(dc_plane_state);
+> -
+> +	dc_release_state(dc_state);
+> +release_plane_state:
+> +	dc_plane_state_release(dc_plane_state);
+>   	return dc_result;
+>   }
+> 
+> --
+> 2.40.0
+> 
 
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 631fd7da2bc3..6682b5bd202b 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -31,7 +31,7 @@
- #define VCPU_R15       __VCPU_REGS_R15 * WORD_SIZE
- #endif
+-- 
+Hamza
 
--.macro VMX_DO_EVENT_IRQOFF call_insn call_target
-+.macro VMX_DO_EVENT_IRQOFF call_insn call_target fred=3D1 nmi=3D0
-        /*
-         * Unconditionally create a stack frame, getting the correct RSP on=
- the
-         * stack (for x86-64) would take two instructions anyways, and RBP =
-can
-@@ -46,11 +46,34 @@
-         * creating the synthetic interrupt stack frame for the IRQ/NMI.
-         */
-        and  $-16, %rsp
-+
-+       .if \fred
-+       push $0         /* Reserved by FRED, must be 0 */
-+       push $0         /* FRED event data, 0 for NMI and external interrup=
-ts */
-+
-+       .if \nmi
-+       mov $(2 << 32 | 2 << 48), %_ASM_AX      /* NMI event type and vecto=
-r */
-+       .else
-+       mov %_ASM_ARG1, %_ASM_AX
-+       shl $32, %_ASM_AX                       /* external interrupt vecto=
-r */
-+       .endif
-+       add $__KERNEL_DS, %_ASM_AX
-+       bts $57, %_ASM_AX                       /* bit 57: 64-bit mode */
-+       push %_ASM_AX
-+       .else
-        push $__KERNEL_DS
-+       .endif
-+
-        push %rbp
- #endif
-        pushf
-+       .if \nmi
-+       mov $__KERNEL_CS, %_ASM_AX
-+       bts $28, %_ASM_AX                       /* set the NMI bit */
-+       push %_ASM_AX
-+       .else
-        push $__KERNEL_CS
-+       .endif
-        \call_insn \call_target
-
-        /*
-@@ -299,8 +322,19 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
-
- SYM_FUNC_END(__vmx_vcpu_run)
-
-+SYM_FUNC_START(vmx_do_nmi_trampoline)
-+#ifdef CONFIG_X86_FRED
-+       ALTERNATIVE "jmp .Lno_errorcode_push", "", X86_FEATURE_FRED
-+       push $0         /* FRED error code, 0 for NMI */
-+       jmp fred_entrypoint_kernel
-+#endif
-+
-+.Lno_errorcode_push:
-+       jmp asm_exc_nmi_kvm_vmx
-+SYM_FUNC_END(vmx_do_nmi_trampoline)
-+
- SYM_FUNC_START(vmx_do_nmi_irqoff)
--       VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
-+       VMX_DO_EVENT_IRQOFF call vmx_do_nmi_trampoline nmi=3D1
- SYM_FUNC_END(vmx_do_nmi_irqoff)
-
-
-@@ -358,5 +392,51 @@ SYM_FUNC_END(vmread_error_trampoline)
- #endif
-
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
--       VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
-+       VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1 fred=3D0
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-+
-+#ifdef CONFIG_X86_64
-+SYM_FUNC_START(vmx_do_interrupt_trampoline)
-+       push $0 /* FRED error code, 0 for NMI and external interrupts */
-+       push %rdi
-+       push %rsi
-+       push %rdx
-+       push %rcx
-+       push %rax
-+       push %r8
-+       push %r9
-+       push %r10
-+       push %r11
-+       push %rbx
-+       push %rbp
-+       push %r12
-+       push %r13
-+       push %r14
-+       push %r15
-+
-+       movq    %rsp, %rdi      /* %rdi -> pt_regs */
-+       call external_interrupt
-+
-+       pop %r15
-+       pop %r14
-+       pop %r13
-+       pop %r12
-+       pop %rbp
-+       pop %rbx
-+       pop %r11
-+       pop %r10
-+       pop %r9
-+       pop %r8
-+       pop %rax
-+       pop %rcx
-+       pop %rdx
-+       pop %rsi
-+       pop %rdi
-+       addq $8,%rsp            /* Drop FRED error code */
-+       RET
-+SYM_FUNC_END(vmx_do_interrupt_trampoline)
-+
-+SYM_FUNC_START(vmx_do_fred_interrupt_irqoff)
-+       VMX_DO_EVENT_IRQOFF call vmx_do_interrupt_trampoline
-+SYM_FUNC_END(vmx_do_fred_interrupt_irqoff)
-+#endif
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..5addfee5cc6d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6875,6 +6875,7 @@ static void vmx_apicv_post_state_restore(struct kvm_v=
-cpu *vcpu)
- }
-
- void vmx_do_interrupt_irqoff(unsigned long entry);
-+void vmx_do_fred_interrupt_irqoff(unsigned int vector);
- void vmx_do_nmi_irqoff(void);
-
- static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-@@ -6923,7 +6924,12 @@ static void handle_external_interrupt_irqoff(struct =
-kvm_vcpu *vcpu)
-                return;
-
-        kvm_before_interrupt(vcpu, KVM_HANDLING_IRQ);
--       vmx_do_interrupt_irqoff(gate_offset(desc));
-+#ifdef CONFIG_X86_64
-+       if (cpu_feature_enabled(X86_FEATURE_FRED))
-+               vmx_do_fred_interrupt_irqoff(vector);
-+       else
-+#endif
-+               vmx_do_interrupt_irqoff(gate_offset(desc));
-        kvm_after_interrupt(vcpu);
-
-        vcpu->arch.at_instruction_boundary =3D true;
