@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F9F6C8612
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62236C862A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjCXTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S231872AbjCXTtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCXTlM (ORCPT
+        with ESMTP id S230038AbjCXTtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:41:12 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786B35BBB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:41:11 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id n125so3579161ybg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:41:11 -0700 (PDT)
+        Fri, 24 Mar 2023 15:49:07 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1784D59D5;
+        Fri, 24 Mar 2023 12:49:06 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x3so12040282edb.10;
+        Fri, 24 Mar 2023 12:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679686870;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IUCD+IxRLqwZzbEH30wWX1QCJBeJYUOVFgyf9bSu9hM=;
-        b=kG7mEr+AyiSspI904z+BgOxO0ChJNkROnsq0QV+jI5dKx/vtfbi9ldMLD967dOzPIn
-         fr1AjHm0vYdhY8RNYqgs8jBPt7vtGZcuXWLo81Wer4eszGIUI/zgis0PV9gU2l2U4WZ7
-         L0aLLZ/yGqpciuFzH1Vb22wpt5ZY89HZEsgqg0srlSfWtMWMYQ7FCl6qplFzV8Y+WS4H
-         L7XZCX6vYV/9PDvnZj8w2AwI9NDJxDcs9OY3CQg3zGYnCZmvlzTSFRb28s7BUaTyL6Vk
-         nLbewqemd7B68TTFOTzerrXm99ib/mgoNYbg6KUOQsxfRZLG3XR2sxTzn/NIxwEjxL7E
-         MAnA==
+        d=gmail.com; s=20210112; t=1679687344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5dGXja0zvpydJsZsuWVMkoEKw4WPEINUjm2uBsr6JaU=;
+        b=hs+ldOsjN8SnevYkzSOcp4cUBEN4Xz3SacCSZd9EtvwORoBt+sjEovcWxwL5NRPud/
+         5xtC+0z/mihjmMb9UwUJHVANr65g4XGxlUbowxfEyRQNVL2fbf3D5UnoHBKwlTNdqeca
+         DellOa12KN2h9XCNNadej7ttPf9Gq9ezLz03YnxpIXt59Fs36Ey5JUYBA8ovvNhEviUz
+         TMXBWFTpwMXnuTPYUzvqp5WSAIybWC7VCvuMCTc33hipAa9Cb1fYT1PSGeyqZH1VSsRZ
+         s7RuGtEbereB47YaGeVgLLSSFeeOZFk6r68ZoYAYvf54FwKsYH/54Xofkpik0jJRGogR
+         SPMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679686870;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IUCD+IxRLqwZzbEH30wWX1QCJBeJYUOVFgyf9bSu9hM=;
-        b=X9N/oZIJ1kiA4WbfRxXqQAOoR8q+c2wybYXz65Hdc85oQ0Pf5ylzSaPnVnf+lnvKHE
-         zrPYzhwGmPJNBwvPbz2iuUMpL21LCWDFCYKV/TgiqCH17ypDuHNrfGj1VxcDjc5EbrWo
-         rSoa3BgWNHA9tCT9gIilumzy750AcjJAT5AbIBQ8e9CTDD/iOlh/rqXDbbNFwXd8DXr8
-         Q3WhIrdlFgHJvi/QdS9/9LA1ZkQn2Ejz0TKkMKxDHVa38juVQUQ+Le7+N/6IPYHww8X7
-         LRIpn7FpUohk1TwNlUuW0QxMiRiINRfPlrfVuXYFhMH/8Yi26vTj3JdYUOlekdcISlT0
-         K/HQ==
-X-Gm-Message-State: AAQBX9djJdZRHuc+D6vwTTIHfHzrGH8DjPv/hY2vJW14oqoNtyDio97R
-        3pQ4qKnAKFF0esDDRJPSLQZuDZWoISDmBmMA8Xv/Ng==
-X-Google-Smtp-Source: AKy350ab+2+iDDqjp/8MtBPau3csSAqLpql7w1Couc3tePNqHMKcEaSxPYFWamsrYuol36PWs6TWCUU1P72W7/eLEug=
-X-Received: by 2002:a05:6902:a93:b0:b78:5f10:672d with SMTP id
- cd19-20020a0569020a9300b00b785f10672dmr674911ybb.9.1679686870645; Fri, 24 Mar
- 2023 12:41:10 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679687344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5dGXja0zvpydJsZsuWVMkoEKw4WPEINUjm2uBsr6JaU=;
+        b=4oNYKaVCrwr4JYztL+Cl5b+qUkOeaKqtdiPlUc/pKZUX6NUTr6DbdYjmz/ZDsKdhuW
+         514SiHA1AjmfkYfhsL7PsbwetXQpicEckjmGvuCr2SmjwDmhXcYIUc9LCUlvP5iUzctg
+         TeGMp+Dna7sc9Ign2id2fAwteYL8WrALTgvZaQYFZNNO7DCs0mV4YXEc87T4cwXp/HrE
+         QZ2HIw9Knp0tTIpUCynPStsGsMdBx2lRaZNTrh9ZMlYzodeZ8PfkxX/vnzyIyOkVsdI7
+         pgRSSGOD/Ux2jhXMaEfaaGyo33P65lVkiWSL41PFrS/vNKnn+vmiyhfBUhBve78bDKWc
+         Vjgw==
+X-Gm-Message-State: AAQBX9dzy/XsYjSyO8BNTaDFYYaeK80+qVI6gJd5QwgCkAxPEYArasK+
+        f5ODvs//Y9NGiO9UYeKkunMmE8qoBVy3+0GEEQ6M+2Kurg0tTidF
+X-Google-Smtp-Source: AKy350ZSA0zMugpWag/aWNzDe6DH4VbciU7FRSO8/Ns0h3xwxK448eN6P/ZPeRUIQsY0L0n+v2e7VRgBj5PuJtuhA4U=
+X-Received: by 2002:a50:cc94:0:b0:4fb:c8e3:1ae2 with SMTP id
+ q20-20020a50cc94000000b004fbc8e31ae2mr2144838edi.3.1679687344430; Fri, 24 Mar
+ 2023 12:49:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230324192058.3916571-1-markyacoub@google.com> <20230324192058.3916571-2-markyacoub@google.com>
-In-Reply-To: <20230324192058.3916571-2-markyacoub@google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 24 Mar 2023 21:40:59 +0200
-Message-ID: <CAA8EJpo1Ki+Axav2FXc68AxXbM6Vof=FGLejW_EYUMZs=qdwQw@mail.gmail.com>
-Subject: Re: [PATCH v7 01/10] drm/hdcp: Add drm_hdcp_atomic_check()
-To:     Mark Yacoub <markyacoub@chromium.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        seanpaul@chromium.org, suraj.kandpal@intel.com,
-        dianders@chromium.org, Jani Nikula <jani.nikula@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
+References: <20230324123626.2177476-1-sashal@kernel.org> <CAHk-=wgmKqvUrKx6+N6NzKJuQn0OY2xrDApzHAdJj23ztjzcBw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgmKqvUrKx6+N6NzKJuQn0OY2xrDApzHAdJj23ztjzcBw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 24 Mar 2023 12:48:53 -0700
+Message-ID: <CAADnVQLJNtCmSXy1DP-ihbZAgkEySVPPH9u4TGZMOOfKiCvtUw@mail.gmail.com>
+Subject: Re: [PATCH] capability: test_deny_namespace breakage due to
+ capability conversion to u64
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 at 21:21, Mark Yacoub <markyacoub@chromium.org> wrote:
+On Fri, Mar 24, 2023 at 9:49=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> From: Sean Paul <seanpaul@chromium.org>
->
-> Move the hdcp atomic check from i915 to drm_hdcp so other
-> drivers can use it. No functional changes, just cleaned up some of the
-> code when moving it over.
->
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Sean Paul <seanpaul@chromium.org>
-> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> On Fri, Mar 24, 2023 at 5:36=E2=80=AFAM Sasha Levin <sashal@kernel.org> w=
+rote:
+> >
+> > Commit f122a08b197d ("capability: just use a 'u64' instead of a 'u32[2]=
+'
+> > array") attempts to use BIT_LL() but actually wanted to use BIT_ULL(),
+> > fix it up to make the test compile and run again.
 
-Please:
+It would only fix the compilation error, but the test would still fail.
 
-1) Cc the cover letter to all parties, so that we know what is going on
-2) Please also Cc the whole series including the cover letter to
-freedreno@ so that it hits patchwork as a whole.
+> This got fixed differently by e8c8361cfdbf ("selftests/bpf: Fix
+> progs/test_deny_namespace.c issues").
 
--- 
-With best wishes
-Dmitry
+exactly. It's not just the macro that had to be adjusted.
+
+> I wonder what drugs made me think BIT_LL() was ok. Maybe my wife puts
+> something in the coffee?
+
+$ make C=3D2 kernel/bpf/core.o
+kernel/bpf/core.c:1822:43: error: arithmetics on pointers to functions
+kernel/bpf/core.c:1827:48: error: arithmetics on pointers to functions
+kernel/bpf/core.c:2073:77: error: subtraction of functions? Share your drug=
+s
+
+:)
