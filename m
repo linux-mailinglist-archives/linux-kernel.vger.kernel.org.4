@@ -2,132 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5506C77DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4286C77EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCXG3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S231194AbjCXGbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXG3s (ORCPT
+        with ESMTP id S229508AbjCXGbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:29:48 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4732C17CC2;
-        Thu, 23 Mar 2023 23:29:47 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id s20so653999ljp.1;
-        Thu, 23 Mar 2023 23:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679639385;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hH9ReKrWmbRFTyiuvOPNN8/j0VR2qXnASEVkCT8MBz0=;
-        b=FpNALg9qwHuQnFF6J29CLFRlezY4BIbry7EjaUkYzplmC8BhbUcPPDiElZUd78UfvW
-         SSj4DEN+WoFvgVBtuCj7hYjUwPDPWsQmB+vf078/gDH4EbwFnltToix8gJZiPx7xzSGE
-         feS2WjyQhoSZhlpvwO8wjL4sH7ZafMjMWuWNPr+VRjaaSY9QweUZ4PE66TdLJVY/3dlJ
-         EYJC/w/4vyNLzQ9NRI2T0E+yozSUf237ByL/7nrlQBiQ/qKey0VJiMwBUl6NLSDwIR6k
-         KK5xOb2hPsBK4iuRhrHxxTArtdc7TR3BV1MXjHs4b8hlK6tcx6z6JTbIQVFzrOFPFDH2
-         7Lvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679639385;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hH9ReKrWmbRFTyiuvOPNN8/j0VR2qXnASEVkCT8MBz0=;
-        b=bfKXUs8GypJHZaSJVqrxyObIr7EM4XN18iXOgxKgPtG8Shq4FfCB/+2kBSbXAdVeRo
-         8mnguAxSvRSkw16BHNgpp0og7P0a44v3FerA+CuKf6wUVLchRj5PyAsW0poQTIv9dBy3
-         h5RWBiGgDzyQGVn8bLzsxhoigZAdcLS5wvxfNqpUMb5pDs6JtUnkLrxcUCuIzdTkegNT
-         Y9EpeQw50cC4/74Y916nPbk9aoz0a88rayNouhGqV5BHf5c8cj+XHzguugvtyvSwqgPg
-         FhYOSm6Ea/aWqokNPoEbjADDP7WTUwwQeKjSe0GCUOXc2zbusB5pzy9nJ5x6f6AEYyrv
-         Gnzw==
-X-Gm-Message-State: AAQBX9fxwgBFEE0BWl1q8cWtlw9S0Udle6kVlfGtZ3ax5LM5r95a1XSg
-        N2u3c581BG4ZwiTpIaV5dIg=
-X-Google-Smtp-Source: AKy350ZWAJCQpjhChzSTDGzoPlTu365tVPg0gFLRN3+twcy68mzHkASezWya/EdsbyggYqZnDFA7xQ==
-X-Received: by 2002:a2e:904b:0:b0:299:ac61:dedd with SMTP id n11-20020a2e904b000000b00299ac61deddmr609653ljg.40.1679639385190;
-        Thu, 23 Mar 2023 23:29:45 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id b8-20020a2e9888000000b00295a583a20bsm3256731ljj.74.2023.03.23.23.29.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 23:29:44 -0700 (PDT)
-Message-ID: <21a888a1-95e3-cdf9-2a1d-1bb8b3d27a16@gmail.com>
-Date:   Fri, 24 Mar 2023 08:29:44 +0200
+        Fri, 24 Mar 2023 02:31:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495919F35;
+        Thu, 23 Mar 2023 23:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679639468; x=1711175468;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FnjPTKkVqnmJHe9Df3TslawVFi1kARulsCY/YIxS3lw=;
+  b=asglqgkLyANGTo+S/URhK2B5gMQgh7DJtU8xha7gfViNVo+CAb8QbYJr
+   XsG/kRxEorL3tVyBglSXjiI2h0XdYvHsE+8lBbx7VXKe8/cJypdRXfasE
+   gUUi/Dbclhj2s8Go1DiDe9PxXbpAznpK4A6SeV69WDwGulRqT1TSm6M3E
+   9iUphTUpIEJuUcxUtgWiF99S5c8pt1McwgBhm7gvh7Jg1wBriTTjeoS94
+   2OGzNKCZY9pedIIektSNORLx5nNYbcsrdYi/0hsG4CU3DLI/L2bL4uLPG
+   mbvv1I+3a1UUCiKviWcwQEtKxaPJ0tp/2Hi+8mDSgluUQhLonwLzZACoI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="341272827"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="341272827"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 23:31:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="771756023"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="771756023"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Mar 2023 23:31:02 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfax4-000F2u-0o;
+        Fri, 24 Mar 2023 06:31:02 +0000
+Date:   Fri, 24 Mar 2023 14:30:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
+        rrichter@amd.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        bhelgaas@google.com
+Subject: Re: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
+Message-ID: <202303241458.BV292BDH-lkp@intel.com>
+References: <20230323213808.398039-6-terry.bowman@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <3f33fc551c0698b4cddb0d39911dddf7599c6317.1679474247.git.mazziesaccount@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 5/8] iio: test: test gain-time-scale helpers
-In-Reply-To: <3f33fc551c0698b4cddb0d39911dddf7599c6317.1679474247.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323213808.398039-6-terry.bowman@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/22/23 11:07, Matti Vaittinen wrote:
-> Some light sensors can adjust both the HW-gain and integration time.
-> There are cases where adjusting the integration time has similar impact
-> to the scale of the reported values as gain setting has.
-> 
-> IIO users do typically expect to handle scale by a single writable 'scale'
-> entry. Driver should then adjust the gain/time accordingly.
-> 
-> It however is difficult for a driver to know whether it should change
-> gain or integration time to meet the requested scale. Usually it is
-> preferred to have longer integration time which usually improves
-> accuracy, but there may be use-cases where long measurement times can be
-> an issue. Thus it can be preferable to allow also changing the
-> integration time - but mitigate the scale impact by also changing the gain
-> underneath. Eg, if integration time change doubles the measured values,
-> the driver can reduce the HW-gain to half.
-> 
-> The theory of the computations of gain-time-scale is simple. However,
-> some people (undersigned) got that implemented wrong for more than once.
-> Hence some gain-time-scale helpers were introduced.
-> 
-> Add some simple tests to verify the most hairy functions.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> ---
-> Changes:
-> v4 => v5:
-> - remove empty lines from Kconfig
-> - adapt to drop of the non devm iio_init
+Hi Terry,
 
-I think you may want to skip reviewing this specific patch. After having 
-a chat with Greg, David, and Maxime it seems this will be changed quite 
-a bit for v6.
+Thank you for the patch! Yet something to improve:
 
-Most notably, I am planning to drop the generic helpers and struct 
-gts_test. I'll also simplify the signatures of 
-__test_init_iio_gain_scale() and test_init_iio_gain_scale().
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus efi/next cxl/next linus/master v6.3-rc3 next-20230323]
+[cannot apply to cxl/pending]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yours,
-	-- Matti
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230323213808.398039-6-terry.bowman%40amd.com
+patch subject: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
+config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20230324/202303241458.BV292BDH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
+        git checkout c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303241458.BV292BDH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/cxl/mem.c: In function 'rcec_enable_aer_ints':
+>> drivers/cxl/mem.c:51:36: error: 'struct pci_dev' has no member named 'rcec'
+      51 |         struct pci_dev *rcec = pdev->rcec;
+         |                                    ^~
+>> drivers/cxl/mem.c:63:21: error: 'struct pci_dev' has no member named 'aer_cap'; did you mean 'ats_cap'?
+      63 |         aer = rcec->aer_cap;
+         |                     ^~~~~~~
+         |                     ats_cap
+
+
+vim +51 drivers/cxl/mem.c
+
+    48	
+    49	static int rcec_enable_aer_ints(struct pci_dev *pdev)
+    50	{
+  > 51		struct pci_dev *rcec = pdev->rcec;
+    52		int aer, rc;
+    53		u32 mask;
+    54	
+    55		if (!rcec)
+    56			return -ENODEV;
+    57	
+    58		/*
+    59		 * Internal errors are masked by default, unmask RCEC's here
+    60		 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
+    61		 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
+    62		 */
+  > 63		aer = rcec->aer_cap;
+    64		rc = pci_read_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, &mask);
+    65		if (rc)
+    66			return rc;
+    67		mask &= ~PCI_ERR_UNC_INTN;
+    68		rc = pci_write_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, mask);
+    69		if (rc)
+    70			return rc;
+    71	
+    72		rc = pci_read_config_dword(rcec, aer + PCI_ERR_COR_MASK, &mask);
+    73		if (rc)
+    74			return rc;
+    75		mask &= ~PCI_ERR_COR_INTERNAL;
+    76		rc = pci_write_config_dword(rcec, aer + PCI_ERR_COR_MASK, mask);
+    77	
+    78		return rc;
+    79	}
+    80	
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
