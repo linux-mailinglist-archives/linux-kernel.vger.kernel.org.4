@@ -2,339 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B4A6C810B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0929B6C810D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbjCXPUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S232362AbjCXPUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbjCXPT6 (ORCPT
+        with ESMTP id S232299AbjCXPUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:19:58 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06B87EE6;
-        Fri, 24 Mar 2023 08:19:56 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OD7ZMZ030610;
-        Fri, 24 Mar 2023 08:19:49 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=Q2kGjIMhBFd/DPycP247SzcKqxUhvUtSrbx/CaMj/qU=;
- b=dGQPnZIJ7x5macjoUqa2Y+nHkE++W25zIzQmidaBZOFdyCB7l6QHLN7UqMaKO84stnJ4
- Gkgl9WALvc/F8LnpO6I1H8HglFE5Vl8bHxIpkyFnGG0XZd2P0m3EG39FxDtkbnPOhx2L
- NSBcKNOSM2eOJBjEx/U40v67YqvAbZAIhIfjtb8bPxwMO7/IyZcD7XTlNp5dyIXAReZ0
- iD3HtM1q8fOlo8vJSDl52tJ9jZv8rNlHtzGw0FJUK19nbGy66hINPnQCLofkWGAMRxYG
- NHL/q2CVA0a6g6Na0GqsIGikzywnlJs+G77Bxc69vKcF+1ga0ZsiL5f5OQoaYWVDohG5 FA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3pgxmfjx9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 08:19:49 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Mar
- 2023 08:19:46 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Fri, 24 Mar 2023 08:19:46 -0700
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 8B08E3F7067;
-        Fri, 24 Mar 2023 08:19:46 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 08:19:46 -0700
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ulf.hansson@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <yamada.masahiro@socionext.com>, <devicetree@vger.kernel.org>,
-        <jannadurai@marvell.com>, <cchavva@marvell.com>,
-        Dhananjay Kangude <dkangude@cadence.com>
-Subject: Re: [PATCH v3 2/6] mmc: sdhci-cadence: Restructure the code
-Message-ID: <20230324151946.GC462@Dell2s-9>
-References: <20230227183151.27912-1-pmalgujar@marvell.com>
- <20230227183151.27912-3-pmalgujar@marvell.com>
- <e77b9471-806c-7603-7351-76422c42df88@intel.com>
+        Fri, 24 Mar 2023 11:20:04 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A1B13D5C;
+        Fri, 24 Mar 2023 08:20:01 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id e21so2098092ljn.7;
+        Fri, 24 Mar 2023 08:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679671200; x=1682263200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5dIWyxrQgf2AAmPr/ggaE2ELdmMSUNu9fSc3jnoT1Ug=;
+        b=H5Mq+uiqFaMqW+0cngMdQpEj6Z1UBDWN9xfk2936bKfHxecn/AcujyC94VvVLQFVEE
+         PMIYeAxnNUmwfI8GsjST0rWREu69vwC2ZSiHqu2DpOSOi1GjeA8w/5DBcUHb8O56Iqxk
+         2kNkpKklmtkfY7YSi9LK5KtNeqXU3d6Bm4sw9hAuCbYPSjrmzn2doF1tA54d+rW/dK6N
+         VzpgTFuvNu9p75jjDKIKVGfIvR/jPZzx9w90I2QCPNEUX90LmcLR75tgwnWePN+dX7yl
+         PY3ZYqfTquYQk0G+mNyEH0lqTrkY7VSVDA6qldYABPhh0Wrl2IrgHFVgSqaD93+TmG7x
+         LTRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679671200; x=1682263200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5dIWyxrQgf2AAmPr/ggaE2ELdmMSUNu9fSc3jnoT1Ug=;
+        b=iQdr/F8Im36PFk7RegmjQMnLszCoSEuA42SrlN6aoJ88pyp+qSzI5w77+CY7Q1S3dC
+         qONgyFzaFUX8v5LWH7mVGyxuTjVmX4Cw1bEjWXMCKv5Ji8jIWRFOHiOEVmhwJE9Z4Krt
+         3GD7E1gPHLqWqJbUjKggs23Y99TpXwx/ElRFSf4/pZ4Z5Ktx9xyO/1AlMYHZBWT3GKMV
+         vPdNARk1pov4jm63rGbc3gZEdLVj99SvSAM1qQRR9QUv7IXHiQthwYqnAbGfv/mlUH23
+         FQFrfald4fRjzIR98YR9p2DEsf7TDtvM17bhpxnu09oxcBomOeAWeeEV6jaYD2WAjNXN
+         tQ9g==
+X-Gm-Message-State: AAQBX9dnQ6Xqdrq/TDsTKRmjzpW1Vbli+KplB4Qw0P4Qwz4buP/JrPbS
+        t/OOZXIA8/4ZshgIPvyCkSE=
+X-Google-Smtp-Source: AKy350Zvc4rAEAmu0MtbldAQTrsKIGJWCsVQMcFAyx2CdMOdxTSOq1LlRfdse3FnATGKaVjZCZYFyQ==
+X-Received: by 2002:a2e:bc05:0:b0:29b:55bc:2bb3 with SMTP id b5-20020a2ebc05000000b0029b55bc2bb3mr892799ljf.3.1679671199691;
+        Fri, 24 Mar 2023 08:19:59 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id o7-20020a2e90c7000000b002958c4e96fasm2767445ljg.3.2023.03.24.08.19.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 08:19:59 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 17:19:47 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v13 011/113] KVM: TDX: Add C wrapper functions for
+ SEAMCALLs to the TDX module
+Message-ID: <20230324171947.000000a2.zhi.wang.linux@gmail.com>
+In-Reply-To: <3c2c142e14a04a833b47f77faecaa91899b472cd.1678643052.git.isaku.yamahata@intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+        <3c2c142e14a04a833b47f77faecaa91899b472cd.1678643052.git.isaku.yamahata@intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e77b9471-806c-7603-7351-76422c42df88@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: zJtG4ghDSG5oghhmFoP-6Sol5h5vpW4w
-X-Proofpoint-ORIG-GUID: zJtG4ghDSG5oghhmFoP-6Sol5h5vpW4w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_09,2023-03-24_01,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+On Sun, 12 Mar 2023 10:55:35 -0700
+isaku.yamahata@intel.com wrote:
 
-Thanks for the review comments.
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> A VMM interacts with the TDX module using a new instruction (SEAMCALL).  A
+> TDX VMM uses SEAMCALLs where a VMX VMM would have directly interacted with
+  ^ This sentence is little bit confusing, it can be removed. The next two sentences have stated the situation clearly.
+> VMX instructions.  For instance, a TDX VMM does not have full access to the
+> VM control structure corresponding to VMX VMCS.  Instead, a VMM induces the
+> TDX module to act on behalf via SEAMCALLs.
+> 
+> Export __seamcall and define C wrapper functions for SEAMCALLs for
+> readability.
+> 
+> Some SEAMCALL APIs donates host pages to TDX module or guest TD and the
+> donated pages are encrypted.  Some of such SEAMCALLs flush cache lines
+                                      ^ "some of" can be removed.
+> (typically by movdir64b instruction), some don't.  Those that doesn't
+> clear cache lines require the VMM to flush the cache lines to avoid cache
+> line alias.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/include/asm/tdx.h       |   4 +
+>  arch/x86/kvm/vmx/tdx_ops.h       | 202 +++++++++++++++++++++++++++++++
+>  arch/x86/virt/vmx/tdx/seamcall.S |   2 +
+>  arch/x86/virt/vmx/tdx/tdx.h      |   3 -
+>  4 files changed, 208 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/x86/kvm/vmx/tdx_ops.h
+> 
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 112a5b9bd5cd..6c01ab572c1f 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -104,10 +104,14 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
+>  bool platform_tdx_enabled(void);
+>  int tdx_cpu_enable(void);
+>  int tdx_enable(void);
+> +u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +	       struct tdx_module_output *out);
+>  #else	/* !CONFIG_INTEL_TDX_HOST */
+>  static inline bool platform_tdx_enabled(void) { return false; }
+>  static inline int tdx_cpu_enable(void) { return -EINVAL; }
+>  static inline int tdx_enable(void)  { return -EINVAL; }
+> +static inline u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +			     struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+>  #endif	/* CONFIG_INTEL_TDX_HOST */
+>  
+>  #endif /* !__ASSEMBLY__ */
+> diff --git a/arch/x86/kvm/vmx/tdx_ops.h b/arch/x86/kvm/vmx/tdx_ops.h
+> new file mode 100644
+> index 000000000000..70e569838e1c
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/tdx_ops.h
+> @@ -0,0 +1,202 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* constants/data definitions for TDX SEAMCALLs */
+> +
+> +#ifndef __KVM_X86_TDX_OPS_H
+> +#define __KVM_X86_TDX_OPS_H
+> +
+> +#include <linux/compiler.h>
+> +
+> +#include <asm/cacheflush.h>
+> +#include <asm/asm.h>
+> +#include <asm/kvm_host.h>
+> +
+> +#include "tdx_errno.h"
+> +#include "tdx_arch.h"
+> +#include "x86.h"
+> +
+> +static inline u64 kvm_seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +			       struct tdx_module_output *out)
+> +{
+> +	u64 ret;
+> +
+> +	ret = __seamcall(op, rcx, rdx, r8, r9, out);
+> +	if (ret == TDX_SEAMCALL_UD) {
+> +		/*
+> +		 * TDX requires VMXON or #UD.  In the case of reboot or kexec,
+> +		 * VMX is made off (VMXOFF) by kvm reboot notifier,
+> +		 * kvm_reboot(), while TDs are still running.  The callers check
+> +		 * the returned error and complain.  Suppress it by returning 0.
+> +		 */
+> +		kvm_spurious_fault();
+> +		return 0;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static inline u64 tdh_mng_addcx(hpa_t tdr, hpa_t addr)
+> +{
+> +	clflush_cache_range(__va(addr), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MNG_ADDCX, addr, tdr, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mem_page_add(hpa_t tdr, gpa_t gpa, hpa_t hpa, hpa_t source,
+> +				   struct tdx_module_output *out)
+> +{
+> +	clflush_cache_range(__va(hpa), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MEM_PAGE_ADD, gpa, tdr, hpa, source, out);
+> +}
+> +
+> +static inline u64 tdh_mem_sept_add(hpa_t tdr, gpa_t gpa, int level, hpa_t page,
+> +				   struct tdx_module_output *out)
+> +{
+> +	clflush_cache_range(__va(page), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MEM_SEPT_ADD, gpa | level, tdr, page, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mem_sept_remove(hpa_t tdr, gpa_t gpa, int level,
+> +				      struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MEM_SEPT_REMOVE, gpa | level, tdr, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_vp_addcx(hpa_t tdvpr, hpa_t addr)
+> +{
+> +	clflush_cache_range(__va(addr), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_VP_ADDCX, addr, tdvpr, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mem_page_relocate(hpa_t tdr, gpa_t gpa, hpa_t hpa,
+> +					struct tdx_module_output *out)
+> +{
+> +	clflush_cache_range(__va(hpa), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MEM_PAGE_RELOCATE, gpa, tdr, hpa, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mem_page_aug(hpa_t tdr, gpa_t gpa, hpa_t hpa,
+> +				   struct tdx_module_output *out)
+> +{
+> +	clflush_cache_range(__va(hpa), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MEM_PAGE_AUG, gpa, tdr, hpa, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mem_range_block(hpa_t tdr, gpa_t gpa, int level,
+> +				      struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MEM_RANGE_BLOCK, gpa | level, tdr, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mng_key_config(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MNG_KEY_CONFIG, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mng_create(hpa_t tdr, int hkid)
+> +{
+> +	clflush_cache_range(__va(tdr), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_MNG_CREATE, tdr, hkid, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_vp_create(hpa_t tdr, hpa_t tdvpr)
+> +{
+> +	clflush_cache_range(__va(tdvpr), PAGE_SIZE);
+> +	return kvm_seamcall(TDH_VP_CREATE, tdvpr, tdr, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mng_rd(hpa_t tdr, u64 field, struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MNG_RD, tdr, field, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mr_extend(hpa_t tdr, gpa_t gpa,
+> +				struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MR_EXTEND, gpa, tdr, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mr_finalize(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MR_FINALIZE, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_vp_flush(hpa_t tdvpr)
+> +{
+> +	return kvm_seamcall(TDH_VP_FLUSH, tdvpr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mng_vpflushdone(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MNG_VPFLUSHDONE, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mng_key_freeid(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MNG_KEY_FREEID, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mng_init(hpa_t tdr, hpa_t td_params,
+> +			       struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MNG_INIT, tdr, td_params, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_vp_init(hpa_t tdvpr, u64 rcx)
+> +{
+> +	return kvm_seamcall(TDH_VP_INIT, tdvpr, rcx, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_vp_rd(hpa_t tdvpr, u64 field,
+> +			    struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_VP_RD, tdvpr, field, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mng_key_reclaimid(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MNG_KEY_RECLAIMID, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_phymem_page_reclaim(hpa_t page,
+> +					  struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_PHYMEM_PAGE_RECLAIM, page, 0, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_mem_page_remove(hpa_t tdr, gpa_t gpa, int level,
+> +				      struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MEM_PAGE_REMOVE, gpa | level, tdr, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_sys_lp_shutdown(void)
+> +{
+> +	return kvm_seamcall(TDH_SYS_LP_SHUTDOWN, 0, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mem_track(hpa_t tdr)
+> +{
+> +	return kvm_seamcall(TDH_MEM_TRACK, tdr, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_mem_range_unblock(hpa_t tdr, gpa_t gpa, int level,
+> +					struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_MEM_RANGE_UNBLOCK, gpa | level, tdr, 0, 0, out);
+> +}
+> +
+> +static inline u64 tdh_phymem_cache_wb(bool resume)
+> +{
+> +	return kvm_seamcall(TDH_PHYMEM_CACHE_WB, resume ? 1 : 0, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_phymem_page_wbinvd(hpa_t page)
+> +{
+> +	return kvm_seamcall(TDH_PHYMEM_PAGE_WBINVD, page, 0, 0, 0, NULL);
+> +}
+> +
+> +static inline u64 tdh_vp_wr(hpa_t tdvpr, u64 field, u64 val, u64 mask,
+> +			    struct tdx_module_output *out)
+> +{
+> +	return kvm_seamcall(TDH_VP_WR, tdvpr, field, val, mask, out);
+> +}
+> +
+> +#endif /* __KVM_X86_TDX_OPS_H */
+> diff --git a/arch/x86/virt/vmx/tdx/seamcall.S b/arch/x86/virt/vmx/tdx/seamcall.S
+> index f81be6b9c133..b90a7fe05494 100644
+> --- a/arch/x86/virt/vmx/tdx/seamcall.S
+> +++ b/arch/x86/virt/vmx/tdx/seamcall.S
+> @@ -1,5 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  #include <linux/linkage.h>
+> +#include <asm/export.h>
+>  #include <asm/frame.h>
+>  
+>  #include "tdxcall.S"
+> @@ -50,3 +51,4 @@ SYM_FUNC_START(__seamcall)
+>  	FRAME_END
+>  	RET
+>  SYM_FUNC_END(__seamcall)
+> +EXPORT_SYMBOL_GPL(__seamcall)
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index 48f830087e7e..4e497f202586 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -144,7 +144,4 @@ struct tdmr_info_list {
+>  	int max_tdmrs;	/* How many 'tdmr_info's are allocated */
+>  };
+>  
 
-On Fri, Mar 03, 2023 at 10:36:30AM +0200, Adrian Hunter wrote:
-> On 27/02/23 20:31, Piyush Malgujar wrote:
-> > From: Dhananjay Kangude <dkangude@cadence.com>
-> > 
-> > Restructured the code, added new structures and functions for
-> > SD4 operations. Also this adds some abstraction to the code
-> > which will make it modular and adaptable for further SD6 operations.
-> > 
-> > Signed-off-by: Dhananjay Kangude <dkangude@cadence.com>
-> > Co-developed-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Jayanthi Annadurai <jannadurai@marvell.com>
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---
-> >  drivers/mmc/host/sdhci-cadence.c | 100 ++++++++++++++++++++++++-------
-> >  1 file changed, 80 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> > index 5276cdbc652f7faac13bb0244af4926b63dc119a..4f7e63c90e3d68da338b8964f08b7c65ebaf1ffd 100644
-> > --- a/drivers/mmc/host/sdhci-cadence.c
-> > +++ b/drivers/mmc/host/sdhci-cadence.c
-> > @@ -59,16 +59,28 @@
-> >   */
-> >  #define SDHCI_CDNS_MAX_TUNING_LOOP	40
-> >  
-> > +struct sdhci_cdns_priv;
-> > +
-> >  struct sdhci_cdns_sd4_phy_param {
-> >  	u8 addr;
-> >  	u8 data;
-> >  };
-> >  
-> > +struct sdhci_cdns_data {
-> > +	int (*phy_init)(struct sdhci_cdns_priv *priv);
-> > +	int (*set_tune_val)(struct sdhci_host *host, unsigned int val);
-> > +};
-> > +
-> > +struct sdhci_cdns_sd4_phy {
-> > +	unsigned int nr_phy_params;
-> > +	struct sdhci_cdns_sd4_phy_param phy_params[];
-> > +};
-> > +
-> >  struct sdhci_cdns_priv {
-> >  	void __iomem *hrs_addr;
-> >  	bool enhanced_strobe;
-> > -	unsigned int nr_phy_params;
-> > -	struct sdhci_cdns_sd4_phy_param phy_params[];
-> > +	const struct sdhci_cdns_data *cdns_data;
-> 
-> Simpler if there is just a pointer to struct sdhci_cdns_of_data
-> and get rid of struct sdhci_cdns_data.
-> 
+> -struct tdx_module_output;
+> -u64 __seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> -	       struct tdx_module_output *out);
+Better move this part to a correct place.
+>  #endif
 
-Sure, will take care of this.
-
-> > +	void *phy;
-> >  };
-> >  
-> >  struct sdhci_cdns_sd4_phy_cfg {
-> > @@ -76,6 +88,13 @@ struct sdhci_cdns_sd4_phy_cfg {
-> >  	u8 addr;
-> >  };
-> >  
-> > +struct sdhci_cdns_of_data {
-> > +	const struct sdhci_pltfm_data *pltfm_data;
-> 
-> Kernel style is not to unnecessarily have structures that point to
-> other structures or contain other structures.
-> 
-> Here, please just put the struct not a pointer i.e.
-> 
-> 	struct sdhci_pltfm_data *pltfm_data;
-> 
-
-Ok, so, to use 
-
-	struct sdhci_pltfm_data pltfm_data;
-
-> > +	const struct sdhci_cdns_data *cdns_data;
-> 
-> Please get rid of struct sdhci_cdns_data. Instead just put its members here
-> 
-
-Ok, will modify in next version.
-
-> > +	int (*phy_probe)(struct platform_device *pdev,
-> > +			 struct sdhci_cdns_priv *priv);
-> > +};
-> > +
-> >  static const struct sdhci_cdns_sd4_phy_cfg sdhci_cdns_sd4_phy_cfgs[] = {
-> >  	{ "cdns,phy-input-delay-sd-highspeed", SDHCI_CDNS_PHY_DLY_SD_HS, },
-> >  	{ "cdns,phy-input-delay-legacy", SDHCI_CDNS_PHY_DLY_SD_DEFAULT, },
-> > @@ -135,9 +154,9 @@ static unsigned int sdhci_cdns_sd4_phy_param_count(struct device_node *np)
-> >  }
-> >  
-> >  static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
-> > -					   struct sdhci_cdns_priv *priv)
-> > +					   struct sdhci_cdns_sd4_phy *phy)
-> >  {
-> > -	struct sdhci_cdns_sd4_phy_param *p = priv->phy_params;
-> > +	struct sdhci_cdns_sd4_phy_param *p = phy->phy_params;
-> >  	u32 val;
-> >  	int ret, i;
-> >  
-> > @@ -156,10 +175,11 @@ static void sdhci_cdns_sd4_phy_param_parse(struct device_node *np,
-> >  static int sdhci_cdns_sd4_phy_init(struct sdhci_cdns_priv *priv)
-> >  {
-> >  	int ret, i;
-> > +	struct sdhci_cdns_sd4_phy *phy = priv->phy;
-> >  
-> > -	for (i = 0; i < priv->nr_phy_params; i++) {
-> > -		ret = sdhci_cdns_sd4_write_phy_reg(priv, priv->phy_params[i].addr,
-> > -						   priv->phy_params[i].data);
-> > +	for (i = 0; i < phy->nr_phy_params; i++) {
-> > +		ret = sdhci_cdns_sd4_write_phy_reg(priv, phy->phy_params[i].addr,
-> > +						   phy->phy_params[i].data);
-> >  		if (ret)
-> >  			return ret;
-> >  	}
-> > @@ -202,6 +222,27 @@ static u32 sdhci_cdns_get_emmc_mode(struct sdhci_cdns_priv *priv)
-> >  	return FIELD_GET(SDHCI_CDNS_HRS06_MODE, tmp);
-> >  }
-> >  
-> > +static int sdhci_cdns_sd4_phy_probe(struct platform_device *pdev,
-> > +				    struct sdhci_cdns_priv *priv)
-> > +{
-> > +	unsigned int nr_phy_params;
-> > +	struct sdhci_cdns_sd4_phy *phy;
-> > +	struct device *dev = &pdev->dev;
-> > +
-> > +	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
-> > +	phy = devm_kzalloc(dev, struct_size(phy, phy_params, nr_phy_params),
-> > +			   GFP_KERNEL);
-> > +	if (!phy)
-> > +		return -ENOMEM;
-> > +
-> > +	phy->nr_phy_params = nr_phy_params;
-> > +
-> > +	sdhci_cdns_sd4_phy_param_parse(dev->of_node, phy);
-> > +	priv->phy = phy;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int sdhci_cdns_sd4_set_tune_val(struct sdhci_host *host, unsigned int val)
-> >  {
-> >  	struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
-> > @@ -323,10 +364,25 @@ static const struct sdhci_pltfm_data sdhci_cdns_uniphier_pltfm_data = {
-> >  	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
-> >  };
-> >  
-> > +static const struct sdhci_cdns_of_data sdhci_cdns_uniphier_of_data = {
-> > +	.pltfm_data = &sdhci_cdns_uniphier_pltfm_data,
-> > +};
-> > +
-> >  static const struct sdhci_pltfm_data sdhci_cdns_sd4_pltfm_data = {
-> >  	.ops = &sdhci_cdns_sd4_ops,
-> >  };
-> >  
-> > +static const struct sdhci_cdns_data sdhci_cdns_sd4_data = {
-> > +	.phy_init = sdhci_cdns_sd4_phy_init,
-> > +	.set_tune_val = sdhci_cdns_sd4_set_tune_val,
-> > +};
-> > +
-> > +static const struct sdhci_cdns_of_data sdhci_cdns_sd4_of_data = {
-> > +	.pltfm_data = &sdhci_cdns_sd4_pltfm_data,
-> > +	.cdns_data = &sdhci_cdns_sd4_data,
-> > +	.phy_probe = sdhci_cdns_sd4_phy_probe,
-> > +};
-> > +
-> >  static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
-> >  					     struct mmc_ios *ios)
-> >  {
-> > @@ -350,11 +406,10 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
-> >  static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  {
-> >  	struct sdhci_host *host;
-> > -	const struct sdhci_pltfm_data *data;
-> > +	const struct sdhci_cdns_of_data *data;
-> >  	struct sdhci_pltfm_host *pltfm_host;
-> >  	struct sdhci_cdns_priv *priv;
-> >  	struct clk *clk;
-> > -	unsigned int nr_phy_params;
-> >  	int ret;
-> >  	struct device *dev = &pdev->dev;
-> >  	static const u16 version = SDHCI_SPEC_400 << SDHCI_SPEC_VER_SHIFT;
-> > @@ -368,12 +423,12 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  		return ret;
-> >  
-> >  	data = of_device_get_match_data(dev);
-> > -	if (!data)
-> > -		data = &sdhci_cdns_sd4_pltfm_data;
-> > +	if (!data) {
-> > +		ret = -EINVAL;
-> > +		goto disable_clk;
-> > +	}
-> >  
-> > -	nr_phy_params = sdhci_cdns_sd4_phy_param_count(dev->of_node);
-> > -	host = sdhci_pltfm_init(pdev, data,
-> > -				struct_size(priv, phy_params, nr_phy_params));
-> > +	host = sdhci_pltfm_init(pdev, data->pltfm_data, sizeof(*priv));
-> >  	if (IS_ERR(host)) {
-> >  		ret = PTR_ERR(host);
-> >  		goto disable_clk;
-> > @@ -383,9 +438,9 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  	pltfm_host->clk = clk;
-> >  
-> >  	priv = sdhci_pltfm_priv(pltfm_host);
-> > -	priv->nr_phy_params = nr_phy_params;
-> >  	priv->hrs_addr = host->ioaddr;
-> >  	priv->enhanced_strobe = false;
-> > +	priv->cdns_data = data->cdns_data;
-> >  	host->ioaddr += SDHCI_CDNS_SRS_BASE;
-> >  	host->mmc_host_ops.hs400_enhanced_strobe =
-> >  				sdhci_cdns_hs400_enhanced_strobe;
-> > @@ -398,9 +453,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
-> >  	if (ret)
-> >  		goto free;
-> >  
-> > -	sdhci_cdns_sd4_phy_param_parse(dev->of_node, priv);
-> > +	ret = data->phy_probe(pdev, priv);
-> > +	if (ret)
-> > +		goto free;
-> >  
-> > -	ret = sdhci_cdns_sd4_phy_init(priv);
-> > +	ret = priv->cdns_data->phy_init(priv);
-> 
-> As was pointed out last time, you are dereferncing cdns_data unconditionally
-> when it could be NULL e.g. in the case of sdhci_cdns_uniphier_of_data
-> 
-> >  	if (ret)
-> >  		goto free;
-> >  
-> > @@ -429,7 +486,7 @@ static int sdhci_cdns_resume(struct device *dev)
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > -	ret = sdhci_cdns_sd4_phy_init(priv);
-> > +	ret = priv->cdns_data->phy_init(priv);
-> >  	if (ret)
-> >  		goto disable_clk;
-> >  
-> > @@ -453,9 +510,12 @@ static const struct dev_pm_ops sdhci_cdns_pm_ops = {
-> >  static const struct of_device_id sdhci_cdns_match[] = {
-> >  	{
-> >  		.compatible = "socionext,uniphier-sd4hc",
-> > -		.data = &sdhci_cdns_uniphier_pltfm_data,
-> > +		.data = &sdhci_cdns_uniphier_of_data,
-> > +	},
-> > +	{
-> > +		.compatible = "cdns,sd4hc",
-> > +		.data = &sdhci_cdns_sd4_of_data,
-> >  	},
-> > -	{ .compatible = "cdns,sd4hc" },
-> >  	{ /* sentinel */ }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, sdhci_cdns_match);
-> 
-
-Rest of the comments will take care in next version.
-
-Thanks,
-Piyush
