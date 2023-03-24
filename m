@@ -2,136 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BB66C7968
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A95D6C796F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjCXILm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S230061AbjCXIP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjCXILk (ORCPT
+        with ESMTP id S229753AbjCXIP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:11:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48BBB74A;
-        Fri, 24 Mar 2023 01:11:39 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:1cb3:11e4:5834:9d5a] (unknown [IPv6:2a01:e0a:120:3210:1cb3:11e4:5834:9d5a])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6BCE66603103;
-        Fri, 24 Mar 2023 08:11:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679645498;
-        bh=3Mr86UDy3UpNufjt21Ufqdk3iHtyAj7hnO+u3KjB708=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mnKwthLEv+tlfb7ktpXfQvkMYedJR8yf4IqgZX78OzHBsb3TXu0cXugvy4Tly1zQo
-         T559lOJFKtJKlc5TrAvI/G7z02NG3Zw5H9zTdNntrzJ6WRCUa5ZOfMF+6ak+B5hYRQ
-         0EU351Y7+sj8DXpHNRkpvvVU2JmsmcZCv7YN/hb+EfppmoltHjTd82Xz3hGp5fSQuh
-         JXjn5XZhtu358kjzylV8DCcNzShYzFfxEiwlJ9sy1xu1Qgfmb8C8oSYABUGDCo6bNi
-         TmnC5WYWGJMw2VFJ4ri7+hmLy6b0+HnNNczgw9Ff6SVwpnRXjus4LbzhUT6M+Ru8XG
-         sZWzWQx6uyvWA==
-Message-ID: <a88b93cc-a81f-6186-09fc-02223867e677@collabora.com>
-Date:   Fri, 24 Mar 2023 09:11:34 +0100
+        Fri, 24 Mar 2023 04:15:27 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D58123861
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:15:24 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bn14so635665pgb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679645723;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Gte3KdIlbvBpKTWmWyAgQcCPANDQeniPU6SZWvI0BrM=;
+        b=ScfrgAoCl1N+wKjFLznONp7Qh7CaXtuur0XCCOJ8WVx6wtx1HwUG2asADPWV7wGhqu
+         STTNzkdasarroUswQrKy1vUCwuaSsF53JOBZwhl91ztlvbN/Lpot5j73nDWckiYwAD73
+         rzDae4OPXX5ZJb4vY8Ef3pis2zK+qBWSN7lccD5qKur+3WrNYaUe+mjiTqs94tuH0jZf
+         3Us0r55bkUHqMOr4xBdxwOQ0My1XdL1ZPNBiCFbHaFIzcZBSdHjXGLj6ScuAD0mijhQs
+         imB4VIoMjcGtxqeYj0+5raDlb7TKjrvQauRQugf7iooICCFF23C8NS0DDOW4JRx6UIhE
+         EIJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679645723;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gte3KdIlbvBpKTWmWyAgQcCPANDQeniPU6SZWvI0BrM=;
+        b=TizZPfqAs01PRBwgH9/q7mJvn+mIReNLQToDzYF4lGyWrflUeW6g88oPPTPhATCmMJ
+         PzLd9nUxPPhrZheNOpO/eY7f8U3q/CuwpZZOW2QhGo5UfmihwA/K49ziHvd/r1PVkMn1
+         CXXDHp2CifriL+K5v3n+vE7CQ5w6aqGMUfZNjAOJiEA0YYGLwyRmQAMeDvTigrl5wJVZ
+         Mzlz3F0O+T3cBo+GO23TsijGzey5Fa+frPwSKyiLAbMgoi7BST7Vc5DddUx54pbW0ZNL
+         OT+VZKHN3E20sqq+RKsQ9b0wbfVGU0m8Ra/NLgk4NmjbE5cOOVWsQ8W+EkqM3gddkpKD
+         HufQ==
+X-Gm-Message-State: AAQBX9cdoWSrD2kUJ2Mn553bgwR+dPczh07eiKF41pQ60DBQQF8pv7xM
+        7SpKhNn2wAiMIu8t/r4BDHOYJwVWCG81KCFewgPu5OWny2k5QJAr
+X-Google-Smtp-Source: AKy350YTd9kahCaVbHy83/95dp8Pj/IQDt/5EPlUott562SdQ9M0SiawLCK30FO2voFhrkEMjpSHoeVRh0D2cKnKpe0=
+X-Received: by 2002:a05:6a00:8c7:b0:625:cda5:c28c with SMTP id
+ s7-20020a056a0008c700b00625cda5c28cmr1117597pfu.6.1679645723618; Fri, 24 Mar
+ 2023 01:15:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
-Content-Language: en-US
-To:     Dan Carpenter <error27@gmail.com>, oe-kbuild@lists.linux.dev,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, jernel@kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   =?UTF-8?B?57qq5a6P5a6+?= <jihongbin999@gmail.com>
+Date:   Fri, 24 Mar 2023 16:15:13 +0800
+Message-ID: <CAGeo-3e1emyUvqoQBz-v0CQQQasytb15SyhVVhiPwdheYgN=ow@mail.gmail.com>
+Subject: [PATCH] memblock: Make memblock memblock_dbg info handle overflowing
+ range @base + @size
+To:     rppt@kernel.org
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Allow memblock users to specify range where @base + @size overflows,
+This will cause the address range information in the debug output to
+be displayed incorrectly.
 
-Le 24/03/2023 à 06:01, Dan Carpenter a écrit :
-> Hi Benjamin,
->
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
-> base:   git://linuxtv.org/media_tree.git master
-> patch link:    https://lore.kernel.org/r/20230321102855.346732-3-benjamin.gaignard%40collabora.com
-> patch subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
-> config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230324/202303240148.lKRnUqW9-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 12.1.0
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> | Link: https://lore.kernel.org/r/202303240148.lKRnUqW9-lkp@intel.com/
->
-> smatch warnings:
-> include/media/videobuf2-core.h:1272 vb2_queue_add_buffer() warn: sleeping in atomic context
-> drivers/media/common/videobuf2/videobuf2-core.c:2456 vb2_core_queue_init() warn: Please consider using kcalloc instead of kmalloc_array
->
-> vim +1272 include/media/videobuf2-core.h
->
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1263  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1264  {
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1265  	bool ret = false;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1266
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1267  	spin_lock(&q->bufs_lock);
->                                                          ^^^^^^^^^^^^^^^^^^^^^^^
-> Holding a spin lock.
->
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1268
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1269  	if (vb->index >= q->max_num_bufs) {
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1270  		struct vb2_buffer **tmp;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1271
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21 @1272  		tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
->                                                                                                                                       ^^^^^^^^^^
-> Sleeping allocation.  GFP_ATOMIC?  Or is there a way to move the
-> allocation outside the lock?
+For example, calling memblock_remove(1ULL << PHYS_MASK_SHIFT,
+ULLONG_MAX) in arch/arm64/mm/init.c,
+would be displayed as:
+[ 0.000000] memblock_remove: [0x0001000000000000-0x0000fffffffffffe]
+arm64_memblock_init+0x24/0x270
+but we expect the output:
+[ 0.000000] memblock_remove: [0x0001000000000000-0xffffffffffffffff]
+arm64_memblock_init+0x24/0x270
 
-I will add GFP_ATOMIC flag in next version.
+Signed-off-by: Hongbin Ji <jhb_ee@163.com>
+---
+ mm/memblock.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Thanks for your help,
-Benjamin
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 25fd0626a9e7..567b99e4355d 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -700,7 +700,7 @@ static int __init_memblock
+memblock_add_range(struct memblock_type *type,
+ int __init_memblock memblock_add_node(phys_addr_t base, phys_addr_t size,
+        int nid, enum memblock_flags flags)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
 
->
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1273  		if (!tmp)
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1274  			goto realloc_failed;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1275
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1276  		q->max_num_bufs *= 2;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1277  		q->bufs = tmp;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1278  	}
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1279
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1280  	if (vb->index < q->max_num_bufs) {
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1281  		q->bufs[vb->index] = vb;
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1282  		ret = true;
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1283  	}
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1284
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1285  realloc_failed:
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1286  	spin_unlock(&q->bufs_lock);
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1287
-> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1288  	return ret;
-> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1289  }
->
+  memblock_dbg("%s: [%pa-%pa] nid=%d flags=%x %pS\n", __func__,
+       &base, &end, nid, flags, (void *)_RET_IP_);
+@@ -721,7 +721,7 @@ int __init_memblock memblock_add_node(phys_addr_t
+base, phys_addr_t size,
+  */
+ int __init_memblock memblock_add(phys_addr_t base, phys_addr_t size)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+
+  memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+       &base, &end, (void *)_RET_IP_);
+@@ -822,7 +822,7 @@ static int __init_memblock
+memblock_remove_range(struct memblock_type *type,
+
+ int __init_memblock memblock_remove(phys_addr_t base, phys_addr_t size)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+
+  memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+       &base, &end, (void *)_RET_IP_);
+@@ -854,7 +854,7 @@ void __init_memblock memblock_free(void *ptr, size_t size)
+  */
+ int __init_memblock memblock_phys_free(phys_addr_t base, phys_addr_t size)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+
+  memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+       &base, &end, (void *)_RET_IP_);
+@@ -865,7 +865,7 @@ int __init_memblock memblock_phys_free(phys_addr_t
+base, phys_addr_t size)
+
+ int __init_memblock memblock_reserve(phys_addr_t base, phys_addr_t size)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+
+  memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+       &base, &end, (void *)_RET_IP_);
+@@ -876,7 +876,7 @@ int __init_memblock memblock_reserve(phys_addr_t
+base, phys_addr_t size)
+ #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+ int __init_memblock memblock_physmem_add(phys_addr_t base, phys_addr_t size)
+ {
+- phys_addr_t end = base + size - 1;
++ phys_addr_t end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+
+  memblock_dbg("%s: [%pa-%pa] %pS\n", __func__,
+       &base, &end, (void *)_RET_IP_);
+@@ -1645,7 +1645,7 @@ void __init memblock_free_late(phys_addr_t base,
+phys_addr_t size)
+ {
+  phys_addr_t cursor, end;
+
+- end = base + size - 1;
++ end = base + min(size, PHYS_ADDR_MAX - base + 1) - 1;
+  memblock_dbg("%s: [%pa-%pa] %pS\n",
+       __func__, &base, &end, (void *)_RET_IP_);
+  kmemleak_free_part_phys(base, size);
+-- 
+2.34.1
