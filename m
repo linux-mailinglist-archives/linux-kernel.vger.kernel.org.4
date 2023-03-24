@@ -2,330 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EF86C8009
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176846C8003
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjCXOik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S231948AbjCXOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjCXOii (ORCPT
+        with ESMTP id S231903AbjCXOhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:38:38 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2046.outbound.protection.outlook.com [40.107.21.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193F810261;
-        Fri, 24 Mar 2023 07:38:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cnnH3n6wse9a88iyFFi/dpcxJubKs0EjNiExw9mUHbArmqjaHllkiYmC9go0CL3ovkit/dbdl/seIcj0reannRMFmFQxVe6Tu6Vy+rMyTKCKHxkE5+6PvjLfr+lpaBDGRhMxY4fpecf5SGosXioqA5GEUVSI/GR5HxRfhNjlk5wJFhlOBSgnzqiVBeWjE2OsaABExF0BxDJ8y8mCyZAjUDxqJ0s80kE1EWZ7qiC9X82LIu3txiHl05/Pf1mF3GCTptp8Nj6HT5cdX7F1qiVAkX1oCW4D4gFuDO5lGvTzKStkh7qqJ2MxqTW9a4u+sF08SKWgmtd3l6JuhZjm/hTPYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0ZbbeGlXq8UVl23v7QdPvF2RjzZHx2LPO53+RbV34S0=;
- b=F0spOvpJt5vH92KgMCXdDMyW4jTyDzZdVgtiqexVZJdy9abGL4lZaAJ8VQN75URSyYL5uBEK0PdVzQDjI/H+icvW6ETu+amH2eT9SYe0xyfHt2MeXaU+I+WQvHjx8GrRiq9I+7gybszxmryonAdTyfCdV05TFqaNoi12M5yTJ7ekJyO86DTv+trJbWmSwR5ymo8mmfJ33ypkGcIEPcwlG7OkZ+KWWOoTO3z5TEVi7JBOitJk4BBI38iQwdYk/+UtsigWhR/rmCl4Kxk5W3Cs3GiP99RJDRlnDueRT1tj7qnWqvM8csiKQRbaubTjGqqUvMHPEdCvvDXEFCKv5m65/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0ZbbeGlXq8UVl23v7QdPvF2RjzZHx2LPO53+RbV34S0=;
- b=eqmuPUrZU5Dh0ypQTNzcpzHt0TXFfZV+TUzlbM9jHLJp6OFWCWBbZsG8zopYtq44oS5AuYS6/quBJO0mG+HOPFKhplN/Fa2vt+pkTUCRElTmoVDohcXobuyuXEDKwHbQzIjI8vhFbWL/nxtDk5K2s7vJVPYB7m0rRgDBm2D8YltUHSO8U91RotazdoIznh5Sf5y+UVQmOTwDRwwwlVihRuZnossz1GvIfdmPrZ0W/dool7nlNCn0CGCKgT7CgzrACB90Hji+SDNzMohl+dL0OFcVEpMnbgQ5GhTp4K8QX7Twbfe/OyxcaVh5J4P0lijosMkyZL3nbTyk3WYKa7NIFw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by PAXPR04MB8623.eurprd04.prod.outlook.com (2603:10a6:102:21a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
- 2023 14:38:00 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::6802:b2c3:5f12:8f9f]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::6802:b2c3:5f12:8f9f%2]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
- 14:38:00 +0000
-From:   Chester Lin <clin@suse.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Chester Lin <clin@suse.com>, NXP S32 Linux Team <s32@nxp.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>
-Subject: [PATCH v4 5/5] pinctrl: s32: separate const device data from struct s32_pinctrl_soc_info
-Date:   Fri, 24 Mar 2023 22:36:26 +0800
-Message-Id: <20230324143626.16336-6-clin@suse.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230324143626.16336-1-clin@suse.com>
-References: <20230324143626.16336-1-clin@suse.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR0101CA0022.apcprd01.prod.exchangelabs.com
- (2603:1096:404:92::34) To VI1PR0402MB3439.eurprd04.prod.outlook.com
- (2603:10a6:803:4::13)
+        Fri, 24 Mar 2023 10:37:40 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0E011E9E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:37:35 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eg48so8618285edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679668654;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DHjxc7YqFiruNYQh4lzhm2+VmJfX/7i5vzias2lKLP8=;
+        b=LmaW6z7mTf9UR3LZkZW8pXgtWAJ7dyqkgupf8hnzQx2bHEz9TaQ4g3xxGrXpzWD/6G
+         7U/aKRzwITvjr0L83G7XPykBI24y/8tshOgXBk2FZLZ2v36y3INEE7fRr7RAuyq/GMja
+         hp+99PzFK/wiV9h3qSXGk/jB6rmByEdhlFbw3s5IxWoxuR0xSUcf5QbV61L/b76kI5GJ
+         bVcG+i03NHcCyGaVpt22FVNDG5+lskcEnDRs3gTFedvL+azdWeabt5iaRbHWConk+njR
+         wCvlBoEXQ3QOV0w8TOrD8xmfewnHFQ/eS8Tdknr+Cc89Yao7vpjCjSR2o48TJ2MekRnq
+         UEUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679668654;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DHjxc7YqFiruNYQh4lzhm2+VmJfX/7i5vzias2lKLP8=;
+        b=5hd7GcUCpPH5OeGHH8aEi5B9jVwqiswf3k/gGgasSbpSbarlp1lqKTzFsklubw61RI
+         XPrcB24c7fp/tnTilgqq6PRDr5ZwGuV5AiPPXWp8byP6SD83TmUZ0KhPDhe5H0BTfUkQ
+         o1pNWkGEfH3Vo4l7qMtyZozZ8ECr6suGQ5z7oM+vUqkj+WirvoLW7Vx6/ddkRQaOX5KU
+         ajvZSMewi8/fSv4BvvzOCXpAWZahZ37qayCSCl3mzdQe0c3oqiomcCvnG/lqtjYo77k2
+         I4BKvTQmo+ffj1dsxOsuO52dkLg3Eh2WqVGf55ouGjXxuhwvTvj+qmq35Mn3412EvBEF
+         lJig==
+X-Gm-Message-State: AAQBX9eMEnYvO9Bfw/ea/bMXdUjL+OLuPqqDrppg9NJafnP3SMpiwSJ2
+        ydVKh3RUv5I+Mh7DpzSxlch/OV/stKM=
+X-Google-Smtp-Source: AKy350beaNNiQbozUqU9TuWLhc3Bx41zp0ZZ7z0unEmWfBPAJAxfH7TtucTiHgBihBxiFiLuu17h1Q==
+X-Received: by 2002:a17:906:4d8b:b0:92f:7c42:8631 with SMTP id s11-20020a1709064d8b00b0092f7c428631mr2925477eju.16.1679668653500;
+        Fri, 24 Mar 2023 07:37:33 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:9775:6320:cc82:f772? ([2a02:908:1256:79a0:9775:6320:cc82:f772])
+        by smtp.gmail.com with ESMTPSA id ml23-20020a170906cc1700b0092ce8344078sm10367704ejb.33.2023.03.24.07.37.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 07:37:32 -0700 (PDT)
+Message-ID: <d2862c24-c374-730a-4d7f-676a5fd21784@gmail.com>
+Date:   Fri, 24 Mar 2023 15:37:31 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|PAXPR04MB8623:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ec323a2-8062-426d-8bad-08db2c755def
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CDHPgVVOPnkvpeX+P6wGgX060o3YLJgbDyrh4WPaFIgNWEHby5Eg/Rz8Y5+t8D1qmGVC1ZAVDA5GihXN+TlfM5IXQfe7QSFd9FdJRF7LLPaN94yYqxK2IDHMLA2nMeUkeh1iKyU8+h/QzoIaPKrApENOawgy+Zl/hzj3wbHofadVaSwpQLmBh+1WFy+YJ3ubc6+JH5ZBNI6ofZ9DYjNjy9qxTgkJaTymy6xaf/QXyw3QRkY4w8m5jqDcsWmM+5EurMD5tYQUimdU/5GTZc3xA16fp2PYSI1xb3FcbEFfXY+Kp9MD8XnG2bwm0PebFqeWakiStejNJ38ZteykqOsMjSpI2sgaR2TO7zVN8nDNSC1xsZIcHtpW8yaOQ4ieRDuqWYnV6LavGW9dHXGRivK5hqpsf/ogNFXQj0PuisAqeinp+37fE5QOf8eHnc7ELauFKxKpYUTFOHlQrAxEx6vPqkxIVKQf3y6ZW/xcKsIHhEJ+TRRkB4LUO0RHfMjKG5ZBsNdIXW/9W+rMii0IYzBGEOGzbFf/pU4CPjW4Jcn09enAT7nb4wWWbrWZ1p6qEbDSKsQa10z4K6VXPC8NR0iVENi5vXi9YLGqtHElWrUvTZtH5mt8pjtSXeqy2pcpfh7/zF+ciYFCcuFDeWwMQuS8xg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(38100700002)(2906002)(83380400001)(6486002)(478600001)(186003)(2616005)(86362001)(36756003)(110136005)(54906003)(66556008)(8676002)(4326008)(5660300002)(1076003)(66946007)(66476007)(8936002)(107886003)(6506007)(26005)(6512007)(6666004)(316002)(41300700001)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h2JjuliZJNHRFqCh5uEnsfIuLpDSFBzHiuXsIWWTgG7Yhj2bgsPziAyoNlyU?=
- =?us-ascii?Q?D3ccNLztyGvog+nXjyTrXIAYzKfH8kPMF2huCFJGvq4FyYM11qLWNrnmq4wT?=
- =?us-ascii?Q?LNNMv5lhWyyHpwPJbqPbwePjMB7ORtsxGIPfFPq5g0mRyXxAEhiVNGsAqhRA?=
- =?us-ascii?Q?Sy4fYSHlNafoTm8rs8h73iI3yqq2hWpYiSjpWouSmMe+Ww4oFOWiC9nq56CD?=
- =?us-ascii?Q?RIypmImfNnkXTEySEBj2+4Ier9DUnZVf1BXNpkpRtZWZ2HW4QEcKnU66YleT?=
- =?us-ascii?Q?Jn+RDn5egXQurllqBBJkJ4l1XHIeuA2jfzcLcUuX2SYgMxnQOqSmos1gNQQA?=
- =?us-ascii?Q?gS3VPcv1GTxm+I+3TXytD3BtARJ5elQph7UtBp4cOgXAnPjYjScwxfqBfNon?=
- =?us-ascii?Q?46YPJSMzkMLnam03rtH/HZ0xO++VI28/AE+TDrUPVQYW2yFSbNaLx68a+ia6?=
- =?us-ascii?Q?03ep2OsH8PIIinxT5G3QprbK+iTo2+rClDGxNqipQOuf9F46xKzC0e9CNETJ?=
- =?us-ascii?Q?dlmDBDrYFt8kr49tAChmAegExgBXQ7eiBBwbBfcsmlc8K3bNEu1UZOO+Tm6I?=
- =?us-ascii?Q?5DNZDh2iJGIFtw9lLm/60QjbehZqvtMZwa/AUXFV2Bt0LQt8ht74CgtQ1yvh?=
- =?us-ascii?Q?CRTpzpp7dLM12KS/UcZx769I2fV2FK1l/FLW1j4evG5kkiCliWCUvL/FqINr?=
- =?us-ascii?Q?PvqKi4qxaTHGxiHHYiOc29SeqEWTCyPuc0jrcB7CryRu58ozGf8vwwJuVoYN?=
- =?us-ascii?Q?bnD+cFhSv0qn8zYuUvqme6rBnwILUl1iKLuDGNRVJmlNB6JXXZ+dNx6kcp4v?=
- =?us-ascii?Q?RzIhk6wBnSst/S41QwSqyUwURAEofnNTZOY8Wu1zOPk2dwKQrHiXmGVF/cKw?=
- =?us-ascii?Q?BIkutpZHve6urrKWRs8uweXPoUm4Jn5zU5LhfIjBaDGy0qJGLgoyUzW8ZwIW?=
- =?us-ascii?Q?pho2Lcx0jyVuC5INg2GFKpthId6t8JjsxoSxHH5IGg48CPCBjyVv9x+yPJ3U?=
- =?us-ascii?Q?BU6C9+OwDAWdV1b3X8G7sady0Ys3cvXbNSP8aGE2ywNDL9/tyynjDg+aYxHk?=
- =?us-ascii?Q?38LuzhLBb5waPX4zY/K0J1g2GpzOm824QBdVXPw6ZwfdyEX94+NNfXTWQITy?=
- =?us-ascii?Q?oOULBA8FW81IpELzzXR/qgv3+8HglndQvhZkJOxKE8exc+K9Vg0Wz44vdsAA?=
- =?us-ascii?Q?8orOfPQ+xQoL3WEcwQCaU7R2LXwW0uUG9Wq0VpSAKScIaFB5073Hhy3hg/mI?=
- =?us-ascii?Q?DF9cs0ro+AreoPvtqnl75B2YFROJvO1wNGHyu2ZrvyWaGUV3DJ5IVkTv7C/f?=
- =?us-ascii?Q?suWIbqIGLXnmJ7tvmvK+ffxJrA/Mqt2ypN8caNDI4CXmigfZzx5PS5AbiwTQ?=
- =?us-ascii?Q?r6QqBciZluzuF4Njh9UelNGnaVQkhUHhcJxLS6tbQZALD2Eaj6za+ru3Cc40?=
- =?us-ascii?Q?lr2o1Ye+b6LQyx7pKRhQaPc8HVds7Iug3C0/U4+wuwd7Z6D7G9/uU5zMyd0a?=
- =?us-ascii?Q?t+atSgznZ+IzS0W9sWStovAn5rfx6Sv6cNgjpYW+L8qDEgJaqBJJM0Iu1iDq?=
- =?us-ascii?Q?YJxCmlY6weN1Iw4DC84=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ec323a2-8062-426d-8bad-08db2c755def
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 14:38:00.4020
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gwatRvlSDAO9ZTZ+MBvqy1raOv53Z/Z0faSu+f0eRrCA2HzhblMOoNZ0NtXe6ZRb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8623
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: BUG: KASAN: slab-use-after-free in
+ drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+Content-Language: en-US
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Grodzovsky, Andrey" <andrey.grodzovsky@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+References: <CABXGCsMMzsYsMbFoX+ThrjVwq9DLnWiNhappxtmA=NAzPHYVMQ@mail.gmail.com>
+ <66bb5e3a-c62b-d529-5c9b-f9d29bd51809@gmail.com>
+ <CABXGCsOZciq2LtjYZ+g=9mxjtqTkkbzDgH-vWrkWZ+cdDxeTyQ@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CABXGCsOZciq2LtjYZ+g=9mxjtqTkkbzDgH-vWrkWZ+cdDxeTyQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .data field in struct of_device_id is used as a const member so it's
-inappropriate to attach struct s32_pinctrl_soc_info with of_device_id
-because some members in s32_pinctrl_soc_info need to be filled by
-pinctrl-s32cc at runtime.
+Am 23.03.23 um 20:05 schrieb Mikhail Gavrilov:
+> On Tue, Mar 21, 2023 at 11:47 PM Christian König
+> <ckoenig.leichtzumerken@gmail.com> wrote:
+>> Hi Mikhail,
+>>
+>> That looks like a reference counting issue to me.
+>>
+>> I'm going to take a look, but we have already fixed one of those recently.
+>>
+>> Probably best that you try this on drm-fixes, just to double check that
+>> this isn't the same issue.
+>>
+> Hi Christian,
+> you meant this branch?
+> $ git clone -b drm-fixes git://anongit.freedesktop.org/drm/drm linux-drm
 
-For this reason, struct s32_pinctrl_soc_info must be allocated in
-pinctrl-s32cc and then create a new struct s32_pinctrl_soc_data in order
-to represent const .data in of_device_id. To combine these two structures,
-a s32_pinctrl_soc_data pointer is introduced in s32_pinctrl_soc_info.
+Yeah, that one
 
-Besides, use of_device_get_match_data() instead of of_match_device() since
-the driver only needs to retrieve the .data from of_device_id.
+Thanks for the info, looks like this isn't fixed.
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Chester Lin <clin@suse.com>
----
-Changes in v4:
-- Retrieve the matched device data by calling of_device_get_match_data()
-  and remove unnecessary type casting. (Merged from the previous v3 series
-  [PATCH v3 1/6])
+Christian.
 
- drivers/pinctrl/nxp/pinctrl-s32.h   | 14 +++++++++-----
- drivers/pinctrl/nxp/pinctrl-s32cc.c | 30 +++++++++++++++++------------
- drivers/pinctrl/nxp/pinctrl-s32g2.c | 13 +++++--------
- 3 files changed, 32 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32.h b/drivers/pinctrl/nxp/pinctrl-s32.h
-index 2f7aecd462e4..add3c77ddfed 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32.h
-+++ b/drivers/pinctrl/nxp/pinctrl-s32.h
-@@ -34,24 +34,28 @@ struct s32_pin_range {
- 	unsigned int end;
- };
- 
--struct s32_pinctrl_soc_info {
--	struct device *dev;
-+struct s32_pinctrl_soc_data {
- 	const struct pinctrl_pin_desc *pins;
- 	unsigned int npins;
-+	const struct s32_pin_range *mem_pin_ranges;
-+	unsigned int mem_regions;
-+};
-+
-+struct s32_pinctrl_soc_info {
-+	struct device *dev;
-+	const struct s32_pinctrl_soc_data *soc_data;
- 	struct s32_pin_group *groups;
- 	unsigned int ngroups;
- 	struct pinfunction *functions;
- 	unsigned int nfunctions;
- 	unsigned int grp_index;
--	const struct s32_pin_range *mem_pin_ranges;
--	unsigned int mem_regions;
- };
- 
- #define S32_PINCTRL_PIN(pin)	PINCTRL_PIN(pin, #pin)
- #define S32_PIN_RANGE(_start, _end) { .start = _start, .end = _end }
- 
- int s32_pinctrl_probe(struct platform_device *pdev,
--			struct s32_pinctrl_soc_info *info);
-+		      const struct s32_pinctrl_soc_data *soc_data);
- int s32_pinctrl_resume(struct device *dev);
- int s32_pinctrl_suspend(struct device *dev);
- #endif /* __DRIVERS_PINCTRL_S32_H */
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32cc.c b/drivers/pinctrl/nxp/pinctrl-s32cc.c
-index 8373468719b6..41e024160f36 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32cc.c
-+++ b/drivers/pinctrl/nxp/pinctrl-s32cc.c
-@@ -106,7 +106,7 @@ s32_get_region(struct pinctrl_dev *pctldev, unsigned int pin)
- {
- 	struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
- 	const struct s32_pin_range *pin_range;
--	unsigned int mem_regions = ipctl->info->mem_regions;
-+	unsigned int mem_regions = ipctl->info->soc_data->mem_regions;
- 	unsigned int i;
- 
- 	for (i = 0; i < mem_regions; i++) {
-@@ -688,8 +688,8 @@ int s32_pinctrl_suspend(struct device *dev)
- 	int ret;
- 	unsigned int config;
- 
--	for (i = 0; i < info->npins; i++) {
--		pin = &info->pins[i];
-+	for (i = 0; i < info->soc_data->npins; i++) {
-+		pin = &info->soc_data->pins[i];
- 
- 		if (!s32_pinctrl_should_save(ipctl, pin->number))
- 			continue;
-@@ -713,8 +713,8 @@ int s32_pinctrl_resume(struct device *dev)
- 	struct s32_pinctrl_context *saved_context = &ipctl->saved_context;
- 	int ret, i;
- 
--	for (i = 0; i < info->npins; i++) {
--		pin = &info->pins[i];
-+	for (i = 0; i < info->soc_data->npins; i++) {
-+		pin = &info->soc_data->pins[i];
- 
- 		if (!s32_pinctrl_should_save(ipctl, pin->number))
- 			continue;
-@@ -831,7 +831,7 @@ static int s32_pinctrl_probe_dt(struct platform_device *pdev,
- 	struct resource *res;
- 	struct regmap *map;
- 	void __iomem *base;
--	int mem_regions = info->mem_regions;
-+	unsigned int mem_regions = info->soc_data->mem_regions;
- 	int ret;
- 	u32 nfuncs = 0;
- 	u32 i = 0;
-@@ -869,7 +869,7 @@ static int s32_pinctrl_probe_dt(struct platform_device *pdev,
- 		}
- 
- 		ipctl->regions[i].map = map;
--		ipctl->regions[i].pin_range = &info->mem_pin_ranges[i];
-+		ipctl->regions[i].pin_range = &info->soc_data->mem_pin_ranges[i];
- 	}
- 
- 	nfuncs = of_get_child_count(np);
-@@ -904,20 +904,26 @@ static int s32_pinctrl_probe_dt(struct platform_device *pdev,
- }
- 
- int s32_pinctrl_probe(struct platform_device *pdev,
--		      struct s32_pinctrl_soc_info *info)
-+		      const struct s32_pinctrl_soc_data *soc_data)
- {
- 	struct s32_pinctrl *ipctl;
- 	int ret;
- 	struct pinctrl_desc *s32_pinctrl_desc;
-+	struct s32_pinctrl_soc_info *info;
- #ifdef CONFIG_PM_SLEEP
- 	struct s32_pinctrl_context *saved_context;
- #endif
- 
--	if (!info || !info->pins || !info->npins) {
-+	if (!soc_data || !soc_data->pins || !soc_data->npins) {
- 		dev_err(&pdev->dev, "wrong pinctrl info\n");
- 		return -EINVAL;
- 	}
- 
-+	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	info->soc_data = soc_data;
- 	info->dev = &pdev->dev;
- 
- 	/* Create state holders etc for this driver */
-@@ -938,8 +944,8 @@ int s32_pinctrl_probe(struct platform_device *pdev,
- 		return -ENOMEM;
- 
- 	s32_pinctrl_desc->name = dev_name(&pdev->dev);
--	s32_pinctrl_desc->pins = info->pins;
--	s32_pinctrl_desc->npins = info->npins;
-+	s32_pinctrl_desc->pins = info->soc_data->pins;
-+	s32_pinctrl_desc->npins = info->soc_data->npins;
- 	s32_pinctrl_desc->pctlops = &s32_pctrl_ops;
- 	s32_pinctrl_desc->pmxops = &s32_pmx_ops;
- 	s32_pinctrl_desc->confops = &s32_pinconf_ops;
-@@ -960,7 +966,7 @@ int s32_pinctrl_probe(struct platform_device *pdev,
- #ifdef CONFIG_PM_SLEEP
- 	saved_context = &ipctl->saved_context;
- 	saved_context->pads =
--		devm_kcalloc(&pdev->dev, info->npins,
-+		devm_kcalloc(&pdev->dev, info->soc_data->npins,
- 			     sizeof(*saved_context->pads),
- 			     GFP_KERNEL);
- 	if (!saved_context->pads)
-diff --git a/drivers/pinctrl/nxp/pinctrl-s32g2.c b/drivers/pinctrl/nxp/pinctrl-s32g2.c
-index d9f3ff6794ea..e0944c071c8c 100644
---- a/drivers/pinctrl/nxp/pinctrl-s32g2.c
-+++ b/drivers/pinctrl/nxp/pinctrl-s32g2.c
-@@ -721,7 +721,7 @@ static const struct s32_pin_range s32_pin_ranges_siul2[] = {
- 	S32_PIN_RANGE(942, 1007),
- };
- 
--static struct s32_pinctrl_soc_info s32_pinctrl_info = {
-+static struct s32_pinctrl_soc_data s32_pinctrl_data = {
- 	.pins = s32_pinctrl_pads_siul2,
- 	.npins = ARRAY_SIZE(s32_pinctrl_pads_siul2),
- 	.mem_pin_ranges = s32_pin_ranges_siul2,
-@@ -732,7 +732,7 @@ static const struct of_device_id s32_pinctrl_of_match[] = {
- 	{
- 
- 		.compatible = "nxp,s32g2-siul2-pinctrl",
--		.data = (void *) &s32_pinctrl_info,
-+		.data = (void *) &s32_pinctrl_data,
- 	},
- 	{ /* sentinel */ }
- };
-@@ -740,14 +740,11 @@ MODULE_DEVICE_TABLE(of, s32_pinctrl_of_match);
- 
- static int s32g_pinctrl_probe(struct platform_device *pdev)
- {
--	const struct of_device_id *of_id =
--		of_match_device(s32_pinctrl_of_match, &pdev->dev);
-+	const struct s32_pinctrl_soc_data *soc_data;
- 
--	if (!of_id)
--		return -ENODEV;
-+	soc_data = of_device_get_match_data(&pdev->dev);
- 
--	return s32_pinctrl_probe
--			(pdev, (struct s32_pinctrl_soc_info *) of_id->data);
-+	return s32_pinctrl_probe(pdev, soc_data);
- }
- 
- static const struct dev_pm_ops s32g_pinctrl_pm_ops = {
--- 
-2.37.3
+>
+> If yes I just checked and unfortunately see this issue unfixed there.
+>
+> [ 1984.295833] ==================================================================
+> [ 1984.295876] BUG: KASAN: slab-use-after-free in
+> drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+> [ 1984.295898] Read of size 8 at addr ffff88814cadc4c0 by task sdma1/764
+>
+> [ 1984.295924] CPU: 12 PID: 764 Comm: sdma1 Tainted: G        W    L
+>    6.3.0-rc3-drm-fixes+ #1
+> [ 1984.295937] Hardware name: System manufacturer System Product
+> Name/ROG STRIX X570-I GAMING, BIOS 4601 02/02/2023
+> [ 1984.295951] Call Trace:
+> [ 1984.295963]  <TASK>
+> [ 1984.295975]  dump_stack_lvl+0x72/0xc0
+> [ 1984.295991]  print_report+0xcf/0x670
+> [ 1984.296007]  ? drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+> [ 1984.296030]  ? drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+> [ 1984.296047]  kasan_report+0xa4/0xe0
+> [ 1984.296118]  ? drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+> [ 1984.296149]  drm_sched_get_cleanup_job+0x47b/0x5c0 [gpu_sched]
+> [ 1984.296175]  drm_sched_main+0x643/0x990 [gpu_sched]
+> [ 1984.296204]  ? __pfx_drm_sched_main+0x10/0x10 [gpu_sched]
+> [ 1984.296222]  ? __pfx_autoremove_wake_function+0x10/0x10
+> [ 1984.296290]  ? __kthread_parkme+0xc1/0x1f0
+> [ 1984.296304]  ? __pfx_drm_sched_main+0x10/0x10 [gpu_sched]
+> [ 1984.296321]  kthread+0x29e/0x340
+> [ 1984.296334]  ? __pfx_kthread+0x10/0x10
+> [ 1984.296501]  ret_from_fork+0x2c/0x50
+> [ 1984.296518]  </TASK>
+>
+> [ 1984.296539] Allocated by task 12194:
+> [ 1984.296552]  kasan_save_stack+0x2f/0x50
+> [ 1984.296566]  kasan_set_track+0x21/0x30
+> [ 1984.296578]  __kasan_kmalloc+0x8b/0x90
+> [ 1984.296590]  amdgpu_driver_open_kms+0x10b/0x5a0 [amdgpu]
+> [ 1984.297051]  drm_file_alloc+0x46e/0x880
+> [ 1984.297064]  drm_open_helper+0x161/0x460
+> [ 1984.297076]  drm_open+0x1e7/0x5c0
+> [ 1984.297089]  drm_stub_open+0x24d/0x400
+> [ 1984.297107]  chrdev_open+0x215/0x620
+> [ 1984.297125]  do_dentry_open+0x5f1/0x1000
+> [ 1984.297146]  path_openat+0x1b3d/0x28a0
+> [ 1984.297164]  do_filp_open+0x1bd/0x400
+> [ 1984.297180]  do_sys_openat2+0x140/0x420
+> [ 1984.297197]  __x64_sys_openat+0x11f/0x1d0
+> [ 1984.297213]  do_syscall_64+0x5b/0x80
+> [ 1984.297231]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>
+> [ 1984.297266] Freed by task 12195:
+> [ 1984.297284]  kasan_save_stack+0x2f/0x50
+> [ 1984.297303]  kasan_set_track+0x21/0x30
+> [ 1984.297323]  kasan_save_free_info+0x2a/0x50
+> [ 1984.297343]  __kasan_slab_free+0x107/0x1a0
+> [ 1984.297361]  slab_free_freelist_hook+0x11e/0x1d0
+> [ 1984.297373]  __kmem_cache_free+0xbc/0x2e0
+> [ 1984.297385]  amdgpu_driver_postclose_kms+0x582/0x8d0 [amdgpu]
+> [ 1984.297821]  drm_file_free.part.0+0x638/0xb70
+> [ 1984.297834]  drm_release+0x1ea/0x470
+> [ 1984.297845]  __fput+0x213/0x9e0
+> [ 1984.297857]  task_work_run+0x11b/0x200
+> [ 1984.297869]  exit_to_user_mode_prepare+0x23a/0x260
+> [ 1984.297883]  syscall_exit_to_user_mode+0x16/0x50
+> [ 1984.297896]  do_syscall_64+0x67/0x80
+> [ 1984.297907]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>
+> [ 1984.298033] Last potentially related work creation:
+> [ 1984.298044]  kasan_save_stack+0x2f/0x50
+> [ 1984.298057]  __kasan_record_aux_stack+0x97/0xb0
+> [ 1984.298075]  __call_rcu_common.constprop.0+0xf8/0x1af0
+> [ 1984.298095]  amdgpu_bo_list_put+0x1a4/0x1f0 [amdgpu]
+> [ 1984.298557]  amdgpu_cs_parser_fini+0x293/0x5a0 [amdgpu]
+> [ 1984.299055]  amdgpu_cs_ioctl+0x4f2a/0x5630 [amdgpu]
+> [ 1984.299624]  drm_ioctl_kernel+0x1f8/0x3d0
+> [ 1984.299637]  drm_ioctl+0x4c1/0xaa0
+> [ 1984.299649]  amdgpu_drm_ioctl+0xce/0x1b0 [amdgpu]
+> [ 1984.300083]  __x64_sys_ioctl+0x12d/0x1a0
+> [ 1984.300097]  do_syscall_64+0x5b/0x80
+> [ 1984.300109]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>
+> [ 1984.300135] Second to last potentially related work creation:
+> [ 1984.300149]  kasan_save_stack+0x2f/0x50
+> [ 1984.300167]  __kasan_record_aux_stack+0x97/0xb0
+> [ 1984.300185]  __call_rcu_common.constprop.0+0xf8/0x1af0
+> [ 1984.300203]  amdgpu_bo_list_put+0x1a4/0x1f0 [amdgpu]
+> [ 1984.300692]  amdgpu_cs_parser_fini+0x293/0x5a0 [amdgpu]
+> [ 1984.301133]  amdgpu_cs_ioctl+0x4f2a/0x5630 [amdgpu]
+> [ 1984.301577]  drm_ioctl_kernel+0x1f8/0x3d0
+> [ 1984.301598]  drm_ioctl+0x4c1/0xaa0
+> [ 1984.301610]  amdgpu_drm_ioctl+0xce/0x1b0 [amdgpu]
+> [ 1984.302043]  __x64_sys_ioctl+0x12d/0x1a0
+> [ 1984.302056]  do_syscall_64+0x5b/0x80
+> [ 1984.302068]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>
+> [ 1984.302090] The buggy address belongs to the object at ffff88814cadc000
+>                  which belongs to the cache kmalloc-4k of size 4096
+> [ 1984.302103] The buggy address is located 1216 bytes inside of
+>                  freed 4096-byte region [ffff88814cadc000, ffff88814cadd000)
+>
+> [ 1984.302129] The buggy address belongs to the physical page:
+> [ 1984.302141] page:00000000103c1864 refcount:1 mapcount:0
+> mapping:0000000000000000 index:0x0 pfn:0x14cad8
+> [ 1984.302155] head:00000000103c1864 order:3 entire_mapcount:0
+> nr_pages_mapped:0 pincount:0
+> [ 1984.302168] flags:
+> 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+> [ 1984.302184] raw: 0017ffffc0010200 ffff88810004d040 ffffea00311f0200
+> dead000000000002
+> [ 1984.302196] raw: 0000000000000000 0000000000040004 00000001ffffffff
+> 0000000000000000
+> [ 1984.302208] page dumped because: kasan: bad access detected
+>
+> [ 1984.302230] Memory state around the buggy address:
+> [ 1984.302241]  ffff88814cadc380: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [ 1984.302252]  ffff88814cadc400: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [ 1984.302263] >ffff88814cadc480: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [ 1984.302274]                                            ^
+> [ 1984.302285]  ffff88814cadc500: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [ 1984.302296]  ffff88814cadc580: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [ 1984.302307] ==================================================================
+> [ 1984.302339] Disabling lock debugging due to kernel taint
+>
 
