@@ -2,179 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8FB6C77AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E50F6C77AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCXGLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S231241AbjCXGMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjCXGLs (ORCPT
+        with ESMTP id S231668AbjCXGL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:11:48 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5AC28879
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:11:46 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id v126-20020a6bac84000000b007587234a54cso621553ioe.6
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:11:46 -0700 (PDT)
+        Fri, 24 Mar 2023 02:11:59 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2D828EBF;
+        Thu, 23 Mar 2023 23:11:56 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id t14so615991ljd.5;
+        Thu, 23 Mar 2023 23:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679638314;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AM/9ztoT/B4vUWoqEtcJ/mBDI2hPUMi+qwBObmjPQnQ=;
+        b=I6UJLmx6Bf0+CI05WH88vDbAkVgJPlajuRALVs65+1+IFQaF9Knc4le70YBQVIWyLn
+         9liQd33uH0AG67yf86+nTBHUBgVSzMzmss6F4llgG258fYkjCi+wk8REFNRv3Dtu4zwi
+         MPq19p3kWOUtt9NCoIx1IaJWNAVuOe0FMfxEU6rof9M/H9Q0GPK0muKLWVy63HSGFBpt
+         vz0KywUi/2mjVgfB74N6KsG29KkCo9QrmopQMtLxdnxzhweMokkluvpzXL/DJ9qGTv5F
+         9dFkIBfgHnIJrJ/NlKszbELNG3194tzy+6Bh80axEwpHh2bcZMoVW0A/V3oqpO6st/Qy
+         MLqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679638306;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5EazmNoR1OZ8o2+YMKLz7ea0FZT1O49LxZhIVVOGASU=;
-        b=agwB+kKilly9EeZnTW33VXPzRFS8wFMvp5uzxovL/TgRjJ931a0oQMyTU7dP9OreRY
-         P3p7Vi0J0cBrlac1usl5dpSLLUKPnBVZbfRkX10YYB6eLowXN8WQVEXxzLrHoMsF6ds7
-         PRvqcrXatuHtW29eoa2OzijFwnrtV329B3z7p4rjkPquCgrvbiZkXkV4C0uT/JMJcDVj
-         JMlFhMsyIHNzN4H7q4Rhjhgma3PRmM9g6/vnqn4m/S4fGxs5hJ9hFPeM15d8aWEd/R+X
-         xO5NOgtD6g6zYrlFmUlKlyU0fgMbwm+f7jnqcd0LwIa/khkoLgTd6CaH4/e3SMc2tZKx
-         VQ7g==
-X-Gm-Message-State: AO0yUKUAANZdv1P9Qsh6EmyVKniXa2/B+XdCbjp7p6wgl/DDHPbKfYWC
-        V+G+rdh8fAjzE7VfZhirXyalSSVzmljXqHysxMBPCStobE1I
-X-Google-Smtp-Source: AK7set+//66vpydVGOj72rdCt3BRmCaHG0x83OrdHCybr9gyo5Im+LelP6LCqnOTCELfnC83HNox1AjctyxVmZg345qUV5gKqQF/
+        d=1e100.net; s=20210112; t=1679638314;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AM/9ztoT/B4vUWoqEtcJ/mBDI2hPUMi+qwBObmjPQnQ=;
+        b=im2hhMX56AVjUkn8SYyMM7h628jksJkSdPgic+XKUc58QoLHzWTF5l2OBrUJCxY1iY
+         E472s2jTjRMfkDmOOid0EKj3r4rBzkrpB2t7W9fS5eqP3weVr+Qz/UtNBZs7ycPnfvKW
+         4IwLLknt3lFnmSLH6Od5PIE6N4IQoFKZlg8osCTpxaN4/GhV5CYOoIlCbQbGpUszQnxI
+         w4WKTREAU5ARVDxSzXo9+WW/BqWh2b/cTTAFsmq4mG51tOxg08YeDD+IHY3+XTB4/xc7
+         r3oyQb41ymUMItb3bUSqPQ3JtyFmv14Q1Ap4Y7BClllY4V44FY3MMmdyu+5P+Xrqp0aI
+         1W/w==
+X-Gm-Message-State: AAQBX9ey6Nhy/pCRoBOnV8LRqh6fi4s3GSvYrDwHU/YEVaVOVFdKpfo6
+        d7m5MK9/PcOO9zfskSul4uc=
+X-Google-Smtp-Source: AKy350ZATp3UfRcfJoro0cY3guZd4fxEMIqWmM6sagwQ40dD1ww55fSE7zN736oc11T3YWTg5oERcg==
+X-Received: by 2002:a2e:6a0d:0:b0:29f:199e:f6de with SMTP id f13-20020a2e6a0d000000b0029f199ef6demr439764ljc.47.1679638313914;
+        Thu, 23 Mar 2023 23:11:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id a14-20020a2e88ce000000b002935f85760bsm3266638ljk.71.2023.03.23.23.11.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 23:11:53 -0700 (PDT)
+Message-ID: <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+Date:   Fri, 24 Mar 2023 08:11:52 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a6b:500e:0:b0:751:96ce:ed7d with SMTP id
- e14-20020a6b500e000000b0075196ceed7dmr4707751iob.1.1679638305809; Thu, 23 Mar
- 2023 23:11:45 -0700 (PDT)
-Date:   Thu, 23 Mar 2023 23:11:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000091ae5305f79f447f@google.com>
-Subject: [syzbot] [bpf?] [net?] general protection fault in bpf_struct_ops_link_create
-From:   syzbot <syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuifeng@meta.com,
-        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
-        martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
-        song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+In-Reply-To: <20230323163639.xtwpid2uunwnzai4@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 3/23/23 18:36, Maxime Ripard wrote:
+> On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+>> On 3/23/23 14:29, Maxime Ripard wrote:
+>>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+>>>
+>>> This is the description of what was happening:
+>>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
+>>
+>> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
+>> when root_device_register() is used is not because root_device_unregister()
+>> would not trigger the unwinding - but rather because DRM code on top of this
+>> device keeps the refcount increased?
+> 
+> There's a difference of behaviour between a root_device and any device
+> with a bus: the root_device will only release the devm resources when
+> it's freed (in device_release), but a bus device will also do it in
+> device_del (through bus_remove_device() -> device_release_driver() ->
+> device_release_driver_internal() -> __device_release_driver() ->
+> device_unbind_cleanup(), which are skipped (in multiple places) if
+> there's no bus and no driver attached to the device).
+> 
+> It does affect DRM, but I'm pretty sure it will affect any framework
+> that deals with device hotplugging by deferring the framework structure
+> until the last (userspace) user closes its file descriptor. So I'd
+> assume that v4l2 and cec at least are also affected, and most likely
+> others.
 
-syzbot found the following issue on:
+Thanks for the explanation and patience :)
 
-HEAD commit:    226bc6ae6405 Merge branch 'Transit between BPF TCP congest..
-git tree:       bpf-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=139c727ac80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
-dashboard link: https://syzkaller.appspot.com/bug?extid=71ccc0fe37abb458406b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ef67a1c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119c20fec80000
+> 
+>> If this is the case, then it sounds like a DRM specific issue to me.
+> 
+> I mean, I guess. One could also argue that it's because IIO doesn't
+> properly deal with hotplugging.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ac055f681ed7/disk-226bc6ae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3895cc8a51d2/vmlinux-226bc6ae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1b18bb9fae05/bzImage-226bc6ae.xz
+I must say I haven't been testing the IIO registration API. I've only 
+tested the helper API which is not backed up by any "IIO device". (This 
+is fine for the helper because it must by design be cleaned-up only 
+after the IIO-deregistration).
 
-The issue was bisected to:
+After your explanation here, I am not convinced IIO wouldn't see the 
+same issue if I was testing the devm_iio_device_alloc() & co.
 
-commit 68b04864ca425d1894c96b8141d4fba1181f11cb
-Author: Kui-Feng Lee <kuifeng@meta.com>
-Date:   Thu Mar 23 03:24:00 2023 +0000
+> I'm not sure how that helps. Those are
+> common helpers which should accommodate every framework,
 
-    bpf: Create links for BPF struct_ops maps.
+Ok. Fair enough. Besides, if the root-device was sufficient - then I 
+would actually not see the need for a helper. People could in that case 
+directly use the root_device_register(). So, if helpers are provided 
+they should be backed up by a device with a bus then.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116731b1c80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=136731b1c80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=156731b1c80000
+> and your second
+> patch breaks the kunit tests for DRM anyway.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com
-Fixes: 68b04864ca42 ("bpf: Create links for BPF struct_ops maps.")
+Oh, I must have made an error there. It was supposed to be just a 
+refactoring with no functional changes. Sorry about that. Anyways, that 
+patch can be forgotten as Greg opposes using the platform devices in 
+generic helpers.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 1 PID: 5081 Comm: syz-executor182 Not tainted 6.2.0-syzkaller-13084-g226bc6ae6405 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:bpf_struct_ops_valid_to_reg kernel/bpf/bpf_struct_ops.c:764 [inline]
-RIP: 0010:bpf_struct_ops_link_create+0xb1/0x390 kernel/bpf/bpf_struct_ops.c:879
-Code: 95 81 eb ff 48 85 c0 48 89 c5 0f 84 9e 02 00 00 e8 24 27 dd ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 60 02 00 00 44 8b 65 18 bf 1a
-RSP: 0018:ffffc90003b8fc38 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 1ffff92000771f87 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff81a7dc8c RDI: 000000000000000f
-RBP: fffffffffffffff7 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
-R13: 000000000000002c R14: ffffc90003b8fde8 R15: 0000000000000000
-FS:  0000555556538300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000eaa388 CR3: 00000000206d2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- link_create kernel/bpf/syscall.c:4585 [inline]
- __sys_bpf+0x3b77/0x53b0 kernel/bpf/syscall.c:5129
- __do_sys_bpf kernel/bpf/syscall.c:5163 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5161 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5161
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc374490ae9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffe2184578 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc374490ae9
-RDX: 0000000000000010 RSI: 0000000020001340 RDI: 000000000000001c
-RBP: 00007fc374454c90 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc374454d20
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:bpf_struct_ops_valid_to_reg kernel/bpf/bpf_struct_ops.c:764 [inline]
-RIP: 0010:bpf_struct_ops_link_create+0xb1/0x390 kernel/bpf/bpf_struct_ops.c:879
-Code: 95 81 eb ff 48 85 c0 48 89 c5 0f 84 9e 02 00 00 e8 24 27 dd ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 60 02 00 00 44 8b 65 18 bf 1a
-RSP: 0018:ffffc90003b8fc38 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 1ffff92000771f87 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffffffff81a7dc8c RDI: 000000000000000f
-RBP: fffffffffffffff7 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
-R13: 000000000000002c R14: ffffc90003b8fde8 R15: 0000000000000000
-FS:  0000555556538300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000eaa388 CR3: 00000000206d2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	95                   	xchg   %eax,%ebp
-   1:	81 eb ff 48 85 c0    	sub    $0xc08548ff,%ebx
-   7:	48 89 c5             	mov    %rax,%rbp
-   a:	0f 84 9e 02 00 00    	je     0x2ae
-  10:	e8 24 27 dd ff       	callq  0xffdd2739
-  15:	48 8d 7d 18          	lea    0x18(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	74 08                	je     0x3a
-  32:	3c 03                	cmp    $0x3,%al
-  34:	0f 8e 60 02 00 00    	jle    0x29a
-  3a:	44 8b 65 18          	mov    0x18(%rbp),%r12d
-  3e:	bf                   	.byte 0xbf
-  3f:	1a                   	.byte 0x1a
+>> Whether it is a feature or bug is beyond my knowledge. Still, I would
+>> not say using the root_device_[un]register() in generic code is not
+>> feasible - unless all other subsytems have similar refcount handling.
+>>
+>> Sure thing using root_device_register() root_device_unregister() in DRM does
+>> not work as such. This, however, does not mean the generic kunit helpers
+>> should use platform_devices to force unwinding?
+> 
+> platform_devices were a quick way to get a device that would have a bus
+> and a driver bound to fall into the right patch above. We probably
+> shouldn't use platform_devices and a kunit_device sounds like the best
+> idea, but the test linked in the original mail I pointed you to should
+> work with whatever we come up with. It works with multiple (platform,
+> PCI, USB, etc) buses, so the mock we create should behave like their
+> real world equivalents.
+Thanks for the patience and the explanation. Now I understand a generic 
+test device needs to sit on a bus.
 
+As I said, in my very specific IIO related test the test device does not 
+need a bus. Hence I'll drop the 'generic helpers' from this series.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Yours,
+	-- Matti
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
