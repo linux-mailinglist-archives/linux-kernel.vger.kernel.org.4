@@ -2,118 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 063226C7A35
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860846C7A3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjCXIsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S231831AbjCXIsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbjCXIsK (ORCPT
+        with ESMTP id S231795AbjCXIsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:48:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD25C6A44;
-        Fri, 24 Mar 2023 01:48:07 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id i13so1236232lfe.9;
-        Fri, 24 Mar 2023 01:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679647686; x=1682239686;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+CugmSPVEAZOl/CDM7KlMPccXmc+KAo4sr0tOOU2lzo=;
-        b=DzE9VR66YJCpiAMR2ue8DQQZU/WpMFWbYvqlSkzQE2/auGrisKzwzVvwCBHfmHGjat
-         q9RLyui9fhtGIq+qWQvCQdmwDVOW1iK0T7aJtEdyzLoQDDhU49UwKa4+T0wqHpcMMloj
-         BhLiDUwKenTq8OyYrJsr6irE64Y5MCnljKU6b3vN8SmZJE1MjdQcUUmESbl+XtRDt4tj
-         jBqmMvrYxyhvwFq/hzPMCcE99md0r+lFkGSVO5MQmQBDXCMsMcUubIPuhsNekrLubHRT
-         +ajV2bqYZ555AbHHaxEgkxYWhmXe+EfQrRublF/9RRNEudyqXilrkaPsRWBae3ozarhP
-         cVUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679647686; x=1682239686;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+CugmSPVEAZOl/CDM7KlMPccXmc+KAo4sr0tOOU2lzo=;
-        b=bLvGzD22WD0k3AUXj6mzlGWu9XdYgdTX1yUUmn6xvDOOpxY9mQYQd49cWq3oKKFp83
-         7S6Gh9nNM/JZ+gBsi25CM0OJa6lQPgmSK681/4FbUpgrQgYC2r17BhEd5clLC/5RBTkz
-         mYI3RRcIgR3wDr821DjONskTtwe94Kffu2kwuQZ2pBEcOEywU6MOMoVfhiH3P3vLd3T8
-         slQ0xGlL/yxgRmM4fOilJwWwrEj8+Wcl38U2BJBouQf5lWNUUZmuTZdDQGeg7Qf2uaK1
-         WyaCfPnvLewoHUVOsorTHsAI8kfmvExJysVrY4hicfGnmRX4loYTj6vn/xpDEge1IdA8
-         eClA==
-X-Gm-Message-State: AAQBX9cmzJC15jS4aK3ETljH4L4N1soUYH0j3rv4lcrkH82bzcEeT90C
-        T348zFqto16QCvj98++RWvs=
-X-Google-Smtp-Source: AKy350YOkO6htfPjqLXF4hqhI4/3CLaSuQiI48ioIvGg6kkEEsMUurmu24YQrCVANbaWmKSxA4Ze5w==
-X-Received: by 2002:ac2:5fe6:0:b0:4db:3467:f2ff with SMTP id s6-20020ac25fe6000000b004db3467f2ffmr342159lfg.5.1679647685831;
-        Fri, 24 Mar 2023 01:48:05 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id g6-20020a19ee06000000b004e9b183fc5bsm2379251lfb.8.2023.03.24.01.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 01:48:05 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 10:48:03 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH 5/6] KVM: x86: Virtualize FLUSH_L1D and passthrough
- MSR_IA32_FLUSH_CMD
-Message-ID: <20230324104803.000036e9.zhi.wang.linux@gmail.com>
-In-Reply-To: <ZBzQDv9gIHIhOP8Y@google.com>
-References: <20230322011440.2195485-1-seanjc@google.com>
-        <20230322011440.2195485-6-seanjc@google.com>
-        <20230323050753.rufixzrzt2sf3avv@desk>
-        <ZBzQDv9gIHIhOP8Y@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 24 Mar 2023 04:48:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843599756;
+        Fri, 24 Mar 2023 01:48:27 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BAC52A49;
+        Fri, 24 Mar 2023 09:48:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1679647704;
+        bh=KpuY1QKzLkIZDE6DG/yJcKDnShie1EM321tYfP0rhXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8TKt9vrHRV/y+xJrZr+g4iNHQY7dmDSsDecMVTDKWwscC1PvSrj9PCVpiTl5FY+I
+         7CHi2zqvrmgCQ02UYWCqQkKhktUkCmPjXeRSremEKWI7KPXKvw1kVhgx/wWh74varV
+         ZVR0QAz+Mg+nrPfmaPXYNx9Zh8VJyI1TyvRP0oRM=
+Date:   Fri, 24 Mar 2023 10:48:30 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Dan Carpenter <error27@gmail.com>, oe-kbuild@lists.linux.dev,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
+ allocated
+Message-ID: <20230324084830.GA18895@pendragon.ideasonboard.com>
+References: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
+ <a88b93cc-a81f-6186-09fc-02223867e677@collabora.com>
+ <b0018f7b-0556-0ac1-d2fa-89787a27fba1@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b0018f7b-0556-0ac1-d2fa-89787a27fba1@xs4all.nl>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Mar 2023 15:17:50 -0700
-Sean Christopherson <seanjc@google.com> wrote:
-
-> On Wed, Mar 22, 2023, Pawan Gupta wrote:
-> > On Tue, Mar 21, 2023 at 06:14:39PM -0700, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > index 85bb535fc321..b32edaf5a74b 100644
-> > > --- a/arch/x86/kvm/svm/svm.c
-> > > +++ b/arch/x86/kvm/svm/svm.c
-> > > @@ -95,6 +95,7 @@ static const struct svm_direct_access_msrs {
-> > >  #endif
-> > >  	{ .index = MSR_IA32_SPEC_CTRL,			.always = false },
-> > >  	{ .index = MSR_IA32_PRED_CMD,			.always = false },
-> > > +	{ .index = MSR_IA32_FLUSH_CMD,			.always = false },
-> > >  	{ .index = MSR_IA32_LASTBRANCHFROMIP,		.always = false },
-> > >  	{ .index = MSR_IA32_LASTBRANCHTOIP,		.always = false },
-> > >  	{ .index = MSR_IA32_LASTINTFROMIP,		.always = false },
-> > > @@ -4140,6 +4141,10 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > >  		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_PRED_CMD, 0,
-> > >  				     !!guest_has_pred_cmd_msr(vcpu));
-> > >  
-> > > +	if (boot_cpu_has(X86_FEATURE_FLUSH_L1D))
+On Fri, Mar 24, 2023 at 09:31:35AM +0100, Hans Verkuil wrote:
+> On 24/03/2023 09:11, Benjamin Gaignard wrote:
 > > 
-> > Just curious, will this ever be true on AMD hardware? AFAIK,
-> > X86_FEATURE_FLUSH_L1D is Intel-defined CPU feature.
+> > Le 24/03/2023 à 06:01, Dan Carpenter a écrit :
+> >> Hi Benjamin,
+> >>
+> >> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >>
+> >> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
+> >> base:   git://linuxtv.org/media_tree.git master
+> >> patch link:    https://lore.kernel.org/r/20230321102855.346732-3-benjamin.gaignard%40collabora.com
+> >> patch subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
+> >> config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230324/202303240148.lKRnUqW9-lkp@intel.com/config)
+> >> compiler: aarch64-linux-gcc (GCC) 12.1.0
+> >>
+> >> If you fix the issue, kindly add following tag where applicable
+> >> | Reported-by: kernel test robot <lkp@intel.com>
+> >> | Reported-by: Dan Carpenter <error27@gmail.com>
+> >> | Link: https://lore.kernel.org/r/202303240148.lKRnUqW9-lkp@intel.com/
+> >>
+> >> smatch warnings:
+> >> include/media/videobuf2-core.h:1272 vb2_queue_add_buffer() warn: sleeping in atomic context
+> >> drivers/media/common/videobuf2/videobuf2-core.c:2456 vb2_core_queue_init() warn: Please consider using kcalloc instead of kmalloc_array
+> >>
+> >> vim +1272 include/media/videobuf2-core.h
+> >>
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1263  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1264  {
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1265      bool ret = false;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1266
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1267      spin_lock(&q->bufs_lock);
+> >>                                                          ^^^^^^^^^^^^^^^^^^^^^^^
+> >> Holding a spin lock.
+> >>
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1268
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1269      if (vb->index >= q->max_num_bufs) {
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1270          struct vb2_buffer **tmp;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1271
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21 @1272          tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
+> >>                                                                                                                                       ^^^^^^^^^^
+> >> Sleeping allocation.  GFP_ATOMIC?  Or is there a way to move the
+> >> allocation outside the lock?
+> > 
+> > I will add GFP_ATOMIC flag in next version.
 > 
-> Don't know myself, but I assume/home there was actual motivation behind adding
-> support for AMD.
+> No need. Instead, don't use realloc here, just allocate a new array, copy over all
+> the data from the old, and then switch q->bufs with the spinlock held. Then you
+> can free the old one.
+> 
+> It's only when you update q->bufs that you need the lock.
 
-Hmm. I took a look on the APM[1] published on Jan 2023, 3.2.9 Speculation
-control MSRs. It only has SPEC_CTL/PRED_SMD so far. Also, the information
-here [2] shows this is a mitigation only for Intel CPUs. Looks like AMD
-does not require this so far.
+The copy also needs to be protected by the lock.
 
-[1] https://www.amd.com/system/files/TechDocs/40332.pdf
-[2] https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1273          if (!tmp)
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1274              goto realloc_failed;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1275
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1276          q->max_num_bufs *= 2;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1277          q->bufs = tmp;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1278      }
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1279
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1280      if (vb->index < q->max_num_bufs) {
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1281          q->bufs[vb->index] = vb;
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1282          ret = true;
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1283      }
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1284
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1285  realloc_failed:
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1286      spin_unlock(&q->bufs_lock);
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1287
+> >> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1288      return ret;
+> >> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1289  }
+
+-- 
+Regards,
+
+Laurent Pinchart
