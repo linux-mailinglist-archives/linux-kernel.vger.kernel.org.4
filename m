@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82F86C8598
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AC56C859D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjCXTGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S231445AbjCXTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCXTGL (ORCPT
+        with ESMTP id S231215AbjCXTHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:06:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C546A1ABE3;
-        Fri, 24 Mar 2023 12:05:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 464E6B822D8;
-        Fri, 24 Mar 2023 19:05:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10FEC433EF;
-        Fri, 24 Mar 2023 19:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679684739;
-        bh=McKaNQzEbk0xTIOMEdajlR1Z4xozs8VyLrhP53addwA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=knZIVMw5PE0f38FQxhO/H2qZ9SlfUvGpoYT6je9qZqDcGO566VsxxbqdUSmFV+IoM
-         +W02Vis+mamyc/jIhA4q9/ubjwWA8TVwJncHgz7F9RFRnTFweg1w8CWah1ORB0iHPQ
-         MiScVR2neGJUkdQWVN47fAgdGNc2qEBAOykq1AAiQQEtA3RD3nZZC27cDV6+F+5i3I
-         N3MTA5M+vuuXp7kmUnYmM4ZCE71xmNG7Hlz1q6YSelCF8prqW8rVHaiaO79mYnF2Yc
-         OJCvL0vNEEMbfbsNSxaWSMkQkP6V3REab2Mv6d2jXCWOGq3iMJ4DvqRsYb5e+hFQAw
-         Y+kSa1yx8GoPw==
-Date:   Fri, 24 Mar 2023 19:05:34 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] riscv: dts: starfive: jh7110: Correct the properties
- of S7 core
-Message-ID: <225945e3-2610-4fec-8ee5-5893d26641b4@spud>
-References: <20230324064651.84670-1-hal.feng@starfivetech.com>
+        Fri, 24 Mar 2023 15:07:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544E61A942
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679684812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m1e+oH63s8EilReY/6J1/4GgJ3Yip783LTwv8q9nidY=;
+        b=X4GVWJrPUP7H58rDM/uvIswL6yH4xPikqC3Ti5T4DgQQNm57WvaB2eZpWgU+CjdGszDSWV
+        Rnx6WcH8cFJfdrrqIEmLppYojo4r+6HhF14BrZ5D0eTjWRJDGwg0c61sFrom9DjxUHm4c9
+        pJisvTGzYMeoQUaN6VRB0W7tdPrZbOw=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-346-SqmrjD7WNfaxL3ywTfrlCA-1; Fri, 24 Mar 2023 15:06:51 -0400
+X-MC-Unique: SqmrjD7WNfaxL3ywTfrlCA-1
+Received: by mail-qt1-f199.google.com with SMTP id t15-20020a05622a180f00b003e37dd114e3so1584644qtc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:06:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679684810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m1e+oH63s8EilReY/6J1/4GgJ3Yip783LTwv8q9nidY=;
+        b=pIhMN8mrVPL8uLAAdPUX0lSC6Uw+3x6qHi1WAqB/t4I5wDVbUEIEzDbLRtlGtJ3956
+         mesZNCs9TZSFOXet8fw5iWd7jRUdTasZ4qTdU9XohIqkRbnlrhgEb+UX3VsJmRaoPRpn
+         atmXj6j1/B0KceCBvZI0wmIE9K6HnTQJb4muI+0jTde2b64AixMB+UglBSynlElmh7XR
+         pdTvxuF1Gy5jLR4a+VfyT07cXJXluSiziyVPxrAXN8EAFZkdDmR0zEkcPy5RtT6JtIyb
+         4KvD25sv0B6DFcDDEmSgYUePl9ohyXfglodqRlGcrJq9tpQNbNz6anrFKYXby5PqdXOS
+         Kxsg==
+X-Gm-Message-State: AAQBX9c2ybygQi4/OVKeT2x51sLts1fTmPEk4ll5NXg6dnsO74DcbIJH
+        X8vdOmkbhpHRId6X8kxSfolBDkvNkkIoNb/FuqVUJEMsg7c/FvtrjtaWWSPCV+SlYkghIwtWdl0
+        9ni2i9FBwoSJOlz+VVbSTECVE
+X-Received: by 2002:a05:6214:27e8:b0:5a9:2bc0:ea8b with SMTP id jt8-20020a05621427e800b005a92bc0ea8bmr5351758qvb.47.1679684810468;
+        Fri, 24 Mar 2023 12:06:50 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YuWvGXZU1QVTitk/8JsI8hEFHXd1EPDpR8zn1NFJSLnBRtZ4fzQy+1va5RMqv6w0SUiL2WXw==
+X-Received: by 2002:a05:6214:27e8:b0:5a9:2bc0:ea8b with SMTP id jt8-20020a05621427e800b005a92bc0ea8bmr5351729qvb.47.1679684810228;
+        Fri, 24 Mar 2023 12:06:50 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id kr15-20020a0562142b8f00b005dd8b93456csm885828qvb.4.2023.03.24.12.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 12:06:49 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     zajec5@gmail.com, nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] bcma: remove unused mips_read32 function
+Date:   Fri, 24 Mar 2023 15:06:47 -0400
+Message-Id: <20230324190647.2654293-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WqfTepoKbm4XihPt"
-Content-Disposition: inline
-In-Reply-To: <20230324064651.84670-1-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/bcma/driver_mips.c:49:19: error: unused function
+  'mips_read32' [-Werror,-Wunused-function]
+static inline u32 mips_read32(struct bcma_drv_mips *mcore,
+                  ^
+This function is not used so remove it.
 
---WqfTepoKbm4XihPt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/bcma/driver_mips.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-On Fri, Mar 24, 2023 at 02:46:51PM +0800, Hal Feng wrote:
-> The S7 core has no L1 data cache and MMU, so delete some
-> related properties.
->=20
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->=20
-> Hi, Conor,
->=20
-> This is a correction for the S7 entry.
+diff --git a/drivers/bcma/driver_mips.c b/drivers/bcma/driver_mips.c
+index 4f01e6b17bb9..9be0806eb033 100644
+--- a/drivers/bcma/driver_mips.c
++++ b/drivers/bcma/driver_mips.c
+@@ -46,12 +46,6 @@ static inline bool bcma_core_mips_bcm5357b0_quirk(struct bcma_device *dev)
+ 	       dev->id.id == BCMA_CORE_USB20_HOST;
+ }
+ 
+-static inline u32 mips_read32(struct bcma_drv_mips *mcore,
+-			      u16 offset)
+-{
+-	return bcma_read32(mcore->core, offset);
+-}
+-
+ static u32 bcma_core_mips_irqflag(struct bcma_device *dev)
+ {
+ 	u32 flag;
+-- 
+2.27.0
 
-Again going off the latest version of the u74-mc core complex, this
-looks to be correct, thanks.
-I need to go read the Emil email from earier today, but I've
-provisionally gone and put this on the riscv-jh7100_initial_dts branch
-with a Fixes: tag.
-
-Thanks,
-Conor.
-
-> This patch depends on patch [1].
->=20
-> [1] https://lore.kernel.org/all/20230320103750.60295-20-hal.feng@starfive=
-tech.com/
->=20
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 9 ---------
->  1 file changed, 9 deletions(-)
->=20
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/d=
-ts/starfive/jh7110.dtsi
-> index d484ecdf93f7..4c5fdb905da8 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -20,21 +20,12 @@ cpus {
->  		S7_0: cpu@0 {
->  			compatible =3D "sifive,s7", "riscv";
->  			reg =3D <0>;
-> -			d-cache-block-size =3D <64>;
-> -			d-cache-sets =3D <64>;
-> -			d-cache-size =3D <8192>;
-> -			d-tlb-sets =3D <1>;
-> -			d-tlb-size =3D <40>;
->  			device_type =3D "cpu";
->  			i-cache-block-size =3D <64>;
->  			i-cache-sets =3D <64>;
->  			i-cache-size =3D <16384>;
-> -			i-tlb-sets =3D <1>;
-> -			i-tlb-size =3D <40>;
-> -			mmu-type =3D "riscv,sv39";
->  			next-level-cache =3D <&ccache>;
->  			riscv,isa =3D "rv64imac_zba_zbb";
-> -			tlb-split;
->  			status =3D "disabled";
-> =20
->  			cpu0_intc: interrupt-controller {
-> --=20
-> 2.38.1
->=20
-
---WqfTepoKbm4XihPt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZB30fgAKCRB4tDGHoIJi
-0m0jAQDgN9auzDIiU9HW1TSUC9HzDRYLzr+VbgtP30QtgUTeaQEA/UXn5IKUTjFn
-P2TdB0HAjMnHLaEvUPI8++IcsnQWdAs=
-=x47n
------END PGP SIGNATURE-----
-
---WqfTepoKbm4XihPt--
