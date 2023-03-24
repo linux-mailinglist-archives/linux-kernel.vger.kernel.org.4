@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8F76C78C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E876C78C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjCXHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        id S231668AbjCXHYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjCXHXt (ORCPT
+        with ESMTP id S231665AbjCXHXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:23:49 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D449413509
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:33 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 185-20020a250ac2000000b00b6d0cdc8e3bso1082936ybk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:33 -0700 (PDT)
+        Fri, 24 Mar 2023 03:23:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD012BEC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:42 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-541942bfdccso10477107b3.14
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679642613;
+        d=google.com; s=20210112; t=1679642622;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+twZgD2lANnEj4Ejgw/Tmpo0NzizDYZveDuYYTFvBkQ=;
-        b=SWvZOQZzGbL+4m830PxxQcYm/+IoASmFxlJxcy93YaBxAHqY2HYr0hb0AbK36J+Z1r
-         KIcyGN0RnALk9GZNfMqrHdYVfBi9CW3eMQPBmdUuCL6tgnD+2TurBHTMPNmjEV9YpCmH
-         ftN833h+lKBP3j6mumN9tfy/OSPTuwwPnGu0bLJe6CK0KDKk1zfA2k617TC+gIag4kxD
-         zYOzmQjbb6/8V6gfyGXDl9xKSOpCY25m5jjMCV41exFdA3OhVpVtZpq4S1dD8XmB0NYG
-         iRISrPiVbGMumorkMHZNWN2IVqgRE+lccnzdAllCJlxMAi0iabaSONF3Xjfvy7KlTgBL
-         elVA==
+        bh=Ry4pmDb5s4Gk++Qn3wAlJyxk1mZP2UHgdh+PE9tgx6g=;
+        b=tW4mgV7mWQiLK8AcqTZXh2yuHazguhic3RAC0D48flVTHzpTBmEIg5QxvvpDebANjd
+         4l4G90L5nSp32JP1KyMED+mHvT5t/5CrbidI+71CSQGusErjYj5J51P5O++HjXQR+kMI
+         vszIacWM8EARfIYHgYb0XcCKfO1dZCB5KKjIEnutn71Hs3ZyyHsU+bMMvwDQGRx2q3TD
+         PKGUqjw7HjthWQbG2tLVurufNNQ3Rd5AnDbEV+EE9m9dBqWz6VUO9QEM4RlJpJDv7y09
+         U6iszN7+qvuDto/1G10635ElvnFsFmqg0E7oFOBQ2EwKFdAsm2CYS9IJeED+w1u+OKHv
+         QDzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642613;
+        d=1e100.net; s=20210112; t=1679642622;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+twZgD2lANnEj4Ejgw/Tmpo0NzizDYZveDuYYTFvBkQ=;
-        b=DVcv96b93J8Z+pU0L8Qx6a3dBielzjOn69eo7OZ6MkkLmAaseBtaIw2xGXnmauEQGF
-         QnvBi56YrFrcYvGt4qRR72oPgCsx0lep/vwvFLLeZ1Jan2os59xMNo5yUcNCeyDidFWQ
-         snnBOdTXkycQA6wFnIHbMJa3Va7HHwH78uHxxnCEeEg1zRDB/N/EHbBdMjtJrow9HhdN
-         r2Cx5vRi/luYP50BjfxFV2pjaGvVmVnpFMVX05CoSkCMMg9gAUPya6Hm8Ab0WBCbmNtT
-         hEe7a49luh6otrVYVLLWXJoYZ3E+dYZszJCYn6njToXszQ4sjFZ7JfI9C/Nu/uUQLLrk
-         5ljg==
-X-Gm-Message-State: AAQBX9eq8AX/VNgNajx3KTzzEKfEwtX0EdNbLRq5sMqPSa3y9DaGI8Bp
-        kUOFyNAAfFRd6n5kyBmUK8RWAo5BRhXV
-X-Google-Smtp-Source: AKy350aXXKzgEOH65S8VEA7hDBdvZm+V3aREXE/mfJ94S5n64ddYtTWpd4eyhZD3Cq+Nr+hLeclvv1QNL9L+
+        bh=Ry4pmDb5s4Gk++Qn3wAlJyxk1mZP2UHgdh+PE9tgx6g=;
+        b=52LfY2OPtRZaGZD4oP8MkTFJMdVyljwzJEetdFTL2YvvUdOCDO/6p32qLaYs1FFBRx
+         FAM1oab6F1msBAn6kxKcMpfnuv0SsRz6E+xLlzWD7u2V3VeBBu6C4Qg5AcR67isRipw8
+         gdBMzDPbv05w7HZ29p8JgZB1MjbngeuEyy8wAyeyQUU7KWue1JLFctFqtjsBadvPFM4f
+         oXIfPvJ6pRexhvdd8cIg/HrwZWVIva+aLlqMYlxGTdeea382TrlEUhRO66bMQ2tzj/3h
+         1yBTgW+uj/csNQhlF4ww3bQ0NyXQGmpwgpvKrFAhX04ejr+Ba9kOBj96AuId0CHZqHXx
+         FmBw==
+X-Gm-Message-State: AAQBX9cJ8hEekCaGwzHSTsudxwabdmKX7QEmAC161chel51V5wROY7N7
+        4GOrX0Aq9yFgqNLWiPlno5Ae6Km1mLw7
+X-Google-Smtp-Source: AKy350byPKDNZqQaNWAL43WYzFKPlhuXpZ/JUAVqqb5cbjw2IhUnkzZqyfFQ8d3iUk7LSl29zpi4mmzf+Wuw
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e705:3a3d:46e5:fb50])
- (user=irogers job=sendgmr) by 2002:a05:6902:1148:b0:b76:5c0b:3573 with SMTP
- id p8-20020a056902114800b00b765c0b3573mr574672ybu.5.1679642613109; Fri, 24
- Mar 2023 00:23:33 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 00:22:16 -0700
+ (user=irogers job=sendgmr) by 2002:a81:e405:0:b0:544:d5ce:eb33 with SMTP id
+ r5-20020a81e405000000b00544d5ceeb33mr548381ywl.8.1679642622088; Fri, 24 Mar
+ 2023 00:23:42 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 00:22:17 -0700
 In-Reply-To: <20230324072218.181880-1-irogers@google.com>
-Message-Id: <20230324072218.181880-8-irogers@google.com>
+Message-Id: <20230324072218.181880-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20230324072218.181880-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v3 7/9] perf vendor events: Sandybridge v19 events
+Subject: [PATCH v3 8/9] perf metrics: Add has_pmem literal
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -80,46 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds BR_MISP_EXEC.INDIRECT event.
+Add literal so that if nvdimms aren't installed we can record fewer
+events.  The file detection mechanism was suggested by Dan Williams
+<dan.j.williams@intel.com> in:
+https://lore.kernel.org/linux-perf-users/641bbe1eced26_1b98bb29440@dwillia2-xfh.jf.intel.com.notmuch/
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/arch/x86/mapfile.csv               | 2 +-
- tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ tools/perf/util/expr.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-index e41c289fa427..41d755d570e6 100644
---- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -21,7 +21,7 @@ GenuineIntel-6-(57|85),v10,knightslanding,core
- GenuineIntel-6-A[AC],v1.01,meteorlake,core
- GenuineIntel-6-1[AEF],v3,nehalemep,core
- GenuineIntel-6-2E,v3,nehalemex,core
--GenuineIntel-6-2A,v18,sandybridge,core
-+GenuineIntel-6-2A,v19,sandybridge,core
- GenuineIntel-6-(8F|CF),v1.11,sapphirerapids,core
- GenuineIntel-6-(37|4A|4C|4D|5A),v15,silvermont,core
- GenuineIntel-6-(4E|5E|8E|9E|A5|A6),v55,skylake,core
-diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json b/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-index 54454e5e262c..ecaf94ccc9c7 100644
---- a/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/sandybridge/pipeline.json
-@@ -210,6 +210,14 @@
-         "SampleAfterValue": "200003",
-         "UMask": "0xc4"
-     },
-+    {
-+        "BriefDescription": "Speculative mispredicted indirect branches",
-+        "EventCode": "0x89",
-+        "EventName": "BR_MISP_EXEC.INDIRECT",
-+        "PublicDescription": "Counts speculatively miss-predicted indirect branches at execution time. Counts for indirect near CALL or JMP instructions (RET excluded).",
-+        "SampleAfterValue": "200003",
-+        "UMask": "0xe4"
-+    },
-     {
-         "BriefDescription": "Not taken speculative and retired mispredicted macro conditional branches.",
-         "EventCode": "0x89",
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index d46a1878bc9e..bb6ddad7e021 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -14,6 +14,7 @@
+ #include "util/hashmap.h"
+ #include "smt.h"
+ #include "tsc.h"
++#include <api/fs/fs.h>
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/zalloc.h>
+@@ -400,6 +401,20 @@ double arch_get_tsc_freq(void)
+ }
+ #endif
+ 
++static double has_pmem(void)
++{
++	static bool has_pmem, cached;
++	const char *sysfs = sysfs__mountpoint();
++	char path[PATH_MAX];
++
++	if (!cached) {
++		snprintf(path, sizeof(path), "%s/firmware/acpi/tables/NFIT", sysfs);
++		has_pmem = access(path, F_OK) == 0;
++		cached = true;
++	}
++	return has_pmem ? 1.0 : 0.0;
++}
++
+ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx)
+ {
+ 	const struct cpu_topology *topology;
+@@ -449,6 +464,10 @@ double expr__get_literal(const char *literal, const struct expr_scanner_ctx *ctx
+ 		result = perf_pmu__cpu_slots_per_cycle();
+ 		goto out;
+ 	}
++	if (!strcmp("#has_pmem", literal)) {
++		result = has_pmem();
++		goto out;
++	}
+ 
+ 	pr_err("Unrecognized literal '%s'", literal);
+ out:
 -- 
 2.40.0.348.gf938b09366-goog
 
