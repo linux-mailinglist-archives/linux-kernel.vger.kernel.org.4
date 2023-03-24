@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1019C6C8636
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB1A6C8640
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjCXTwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S231786AbjCXTy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjCXTwt (ORCPT
+        with ESMTP id S230404AbjCXTy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:52:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B9A59D5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:52:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA5CBB82582
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 19:52:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3882C433EF;
-        Fri, 24 Mar 2023 19:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679687565;
-        bh=OOIq79glHbDyn3NOGSr+CYyWZMQwvP3Vqubh/mt7bWA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bpwwZWDo5Te3rYYDGM6yY5WiM5KVzh8JP2o/KoxzdW1f7JPXQJDiHcknRDdRwvRt7
-         eoRBX4gOii5uIT0Mngy6apTc7EPNIYGQ/QP15ficQKxwpnObKKRla/hJ2QdOENVMm9
-         ndW9RndLXF3ByP/hpgYNyQ3NB1wRdN6SQNYlX53Kc7iv407V3hso/sDkpo52hpl+0l
-         cykk6skmt6pUtSqwFYq7ZoHEEND3G55tC7Bu5ESO4gkw2k1DgJNBSkW6SKvfBkj3Y7
-         SajgV03MkRfFttTPMMzlt5s4Duq89avhP/sxXr/jh7DScKIPyG+juLDh8s31OQImh5
-         JKo2BDCwFUpdw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     error27@gmail.com, James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230324145535.3951689-1-harshit.m.mogalapalli@oracle.com>
-References: <20230324145535.3951689-1-harshit.m.mogalapalli@oracle.com>
-Subject: Re: [PATCH next] ASoC: cs35l56: Remove redundant return statement
- in cs35l56_spi_probe()
-Message-Id: <167968756243.2700247.10054205791284149281.b4-ty@kernel.org>
-Date:   Fri, 24 Mar 2023 19:52:42 +0000
+        Fri, 24 Mar 2023 15:54:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAD31BDA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679687651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=l3XY7P7qXKaSPDLbgUFV6/pwM2nIqWoTRMEvcOe7JBo=;
+        b=M/wdW+03cwUeiV4wPqoVrZ+e3b/eqHkxDgBK+zCMXUoEN4ntAv9zp/gEEE3izD1XealyXT
+        kiIGaooW7e77pncfs0KaBD86tN7To42ryqzTN2FFkzLPWQAgU9N8zw4R/G35vIMp6uCfPm
+        TlS67+fOU/P5+Z6uQkLqJVQsKIgwABc=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-424-ewVED8lRMVio4RWK7yYdKg-1; Fri, 24 Mar 2023 15:54:09 -0400
+X-MC-Unique: ewVED8lRMVio4RWK7yYdKg-1
+Received: by mail-qv1-f70.google.com with SMTP id c15-20020a056214070f00b005bb308e7c12so1508503qvz.19
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:54:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679687649;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l3XY7P7qXKaSPDLbgUFV6/pwM2nIqWoTRMEvcOe7JBo=;
+        b=xafp2oQjgTJCI3mZcowXTWRvZFWgL+qhNqabwkJU/NkHUuNETi1SN1NyjoyT2OGj2j
+         6xdfHdZJ9ghPQNtAWGS+oMSZ+DOohm+4R6s26WnrkOfxnVEJK6ae8eqQHFWAt32QYkcC
+         rPVx62n8tKz7myZ68BMJOMhCWaFj5HKntQZa2B1PxuZEtvpkXf9t6WF5DyyzMK3hc/MD
+         Rxad2nuFcK/HQnpCI3XmFBumSYaGz2FjH7GuyM96xjMpRZ/weOkx+eXK6msCnzTky1/i
+         VAhj/oeJ+JhUmn+STIXtJkFSvYW+Iw/7Hd99H5oXoVsOI1JylkcUWwQQkO+38C5mjzsu
+         LIww==
+X-Gm-Message-State: AAQBX9fkYMiQJFsXCSZPdIEPtuS7eG3PyK+xmG5lsqnWSfq9HJvXBxkq
+        rUJYvLkg40DqUs+7FiVi7SRa9o9SpZQVihgIfAxlNRYKQ1NGQ82gzpbQoKX/oTjYiACkI0vdGfq
+        1arxiu2kVB7PEfcfhabILOLNMOeeyrKGR
+X-Received: by 2002:a05:6214:2aad:b0:56e:9317:eb9a with SMTP id js13-20020a0562142aad00b0056e9317eb9amr6592658qvb.29.1679687649093;
+        Fri, 24 Mar 2023 12:54:09 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y3suJMoeD22pwLpecdSYpxhvSJ69sCrGTjVBJLxJGFJIxRx3Oe7uCHkoJj7IPUAMd1rm5fxw==
+X-Received: by 2002:a05:6214:2aad:b0:56e:9317:eb9a with SMTP id js13-20020a0562142aad00b0056e9317eb9amr6592635qvb.29.1679687648834;
+        Fri, 24 Mar 2023 12:54:08 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j185-20020a37b9c2000000b007465ad44891sm13466083qkf.102.2023.03.24.12.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 12:54:08 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
+Date:   Fri, 24 Mar 2023 15:54:03 -0400
+Message-Id: <20230324195403.2655148-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 07:55:35 -0700, Harshit Mogalapalli wrote:
-> We have unreachable 'return ret' statement in cs35l56_spi_probe(),
-> delete it as its dead code..
-> 
-> This is found by static analysis with smatch.
-> 
-> 
+clang with W=1 reports
+drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:716:21: error: unused function
+  'mksstat_init_record' [-Werror,-Wunused-function]
+static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+                    ^
+This function is not used so remove it.
 
-Applied to
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
-   broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: cs35l56: Remove redundant return statement in cs35l56_spi_probe()
-      commit: 283771e8eefcbe4a0a84c6a00a0b7a210bbc5846
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+index e76976a95a1e..ca1a3fe44fa5 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+@@ -702,32 +702,6 @@ static inline void hypervisor_ppn_remove(PPN64 pfn)
+ /* Header to the text description of mksGuestStat instance descriptor */
+ #define MKSSTAT_KERNEL_DESCRIPTION "vmwgfx"
+ 
+-/**
+- * mksstat_init_record: Initializes an MKSGuestStatCounter-based record
+- * for the respective mksGuestStat index.
+- *
+- * @stat_idx: Index of the MKSGuestStatCounter-based mksGuestStat record.
+- * @pstat: Pointer to array of MKSGuestStatCounterTime.
+- * @pinfo: Pointer to array of MKSGuestStatInfoEntry.
+- * @pstrs: Pointer to current end of the name/description sequence.
+- * Return: Pointer to the new end of the names/description sequence.
+- */
+-
+-static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+-	MKSGuestStatCounterTime *pstat, MKSGuestStatInfoEntry *pinfo, char *pstrs)
+-{
+-	char *const pstrd = pstrs + strlen(mksstat_kern_name_desc[stat_idx][0]) + 1;
+-	strcpy(pstrs, mksstat_kern_name_desc[stat_idx][0]);
+-	strcpy(pstrd, mksstat_kern_name_desc[stat_idx][1]);
+-
+-	pinfo[stat_idx].name.s = pstrs;
+-	pinfo[stat_idx].description.s = pstrd;
+-	pinfo[stat_idx].flags = MKS_GUEST_STAT_FLAG_NONE;
+-	pinfo[stat_idx].stat.counter = (MKSGuestStatCounter *)&pstat[stat_idx];
+-
+-	return pstrd + strlen(mksstat_kern_name_desc[stat_idx][1]) + 1;
+-}
+-
+ /**
+  * mksstat_init_record_time: Initializes an MKSGuestStatCounterTime-based record
+  * for the respective mksGuestStat index.
+-- 
+2.27.0
 
