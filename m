@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C0F6C8229
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9626C822E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjCXQKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S230369AbjCXQNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCXQKW (ORCPT
+        with ESMTP id S229441AbjCXQNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:10:22 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198741A4A7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:10:21 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O4nCKn031465;
-        Fri, 24 Mar 2023 11:10:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+        Fri, 24 Mar 2023 12:13:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4F565BA;
+        Fri, 24 Mar 2023 09:13:21 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OFsSFf020593;
+        Fri, 24 Mar 2023 16:13:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=G756Gahi7TWXbgsh3cNBPwh35eRWgoBu9ni5KvPdMho=;
- b=N5yg3EJ52WIwsx9s7ssiq7ASJPCuzQBfgxrypp5wT2G57hgHBLhRrO4iQilnXm8pUJOD
- JnwkkW5HO5FXpPkioRFUFpSJ2/DSIacIUFGYacumQE8TkSL5SQllxkvVAJxr8qBuY5KK
- 23XBsl2dYPlLvuoVdpVrQBOnGn5tIHd0NunT6QOM+OPO+83US0Av2VKBZwQtGOeuoSqn
- gj9QAItjqhNFdxMDLiqffGcJOgiE2OzMcppHJCqwQyN7Hhl9de+NS3VJP9nZiabV2KBs
- webShkBtdZzh5Y10kXq91TY0Xm+tGzBevQOk7jJFbZKFsN8hqldqhETipeuZ/yMZvzfp aQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pgy7dsajn-1
+ content-type; s=qcppdkim1;
+ bh=Dak5fQL83ddtMorWQzb+nyjRnP7QPKmm1aK9TibiOds=;
+ b=B79NgJrmP6IchXQB3CSVuhlltoGY8v1G6pcTXyyxat5LILL9lw0cXq3sReTwsOkzCnqL
+ BdgN82qZSciUyeoly/Sbp9/GFQg7ok5LBsscZcX7/xX3lwhgqa8i6DRpYKVeXy5pVX7k
+ xde+AkdltuotkHw4epq2Q73hnyGgg4xTs+rElRyhYw+FgK5cboA3BxPjRnI7brNnURbF
+ 3lcJQl4xpkpoT9SThcVj28gBiQ+zOGOAd0p8q1XeP1A7iGu4xDm1aAHEplpelcm0d8W8
+ WeO8gnuyW9f2beZmt5fu7sFQvTkMnvDRm/JbjDAPBGzysOrhF+M3iq6nNSNhUn5o613H SA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3phev481wb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 11:10:12 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 24 Mar
- 2023 11:10:10 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 24 Mar 2023 11:10:10 -0500
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6212745;
-        Fri, 24 Mar 2023 16:10:10 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH] firmware: cs_dsp: Add a debugfs entry containing control details
-Date:   Fri, 24 Mar 2023 16:10:10 +0000
-Message-ID: <20230324161010.938599-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 24 Mar 2023 16:13:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32OGDGVl031843
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 16:13:16 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 24 Mar 2023 09:13:16 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <mani@kernel.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH v2] bus: mhi: host: Range check CHDBOFF and ERDBOFF
+Date:   Fri, 24 Mar 2023 10:13:04 -0600
+Message-ID: <1679674384-27209-1-git-send-email-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 8hiMtSj9y8vC2dYPM9xDuSLu-he8gcId
-X-Proofpoint-GUID: 8hiMtSj9y8vC2dYPM9xDuSLu-he8gcId
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZjDPMGJx0U0YDY6wT8kJ7ZeYuhhFlbs3
+X-Proofpoint-GUID: ZjDPMGJx0U0YDY6wT8kJ7ZeYuhhFlbs3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_10,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303240128
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,81 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Trimmer <simont@opensource.cirrus.com>
+If the value read from the CHDBOFF and ERDBOFF registers is outside the
+range of the MHI register space then an invalid address might be computed
+which later causes a kernel panic.  Range check the read value to prevent
+a crash due to bad data from the device.
 
-The file named 'controls' in the DSP's debugfs root contains a
-formatted table describing the controls defined within the loaded DSP
-firmware, it is of the form
-
-  name: len region:offset addr fwname algid ctltype flags en dirty
-
-Where flags is represented as a character for each flag if set, or '-',
-enabled is whether the control is enabled or disabled and dirty is
-whether the control value is set in the cache but not the hardware.
-
-Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
 ---
- drivers/firmware/cirrus/cs_dsp.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
 
-diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
-index 513136a924cf..faa6402c344d 100644
---- a/drivers/firmware/cirrus/cs_dsp.c
-+++ b/drivers/firmware/cirrus/cs_dsp.c
-@@ -14,6 +14,7 @@
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
+v2:
+-CC stable
+-Use ERANGE for the error code
+
+ drivers/bus/mhi/host/init.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+index 3d779ee..b46a082 100644
+--- a/drivers/bus/mhi/host/init.c
++++ b/drivers/bus/mhi/host/init.c
+@@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+ 		return -EIO;
+ 	}
  
-@@ -457,6 +458,33 @@ static const struct {
- 	},
- };
- 
-+static int cs_dsp_coeff_base_reg(struct cs_dsp_coeff_ctl *ctl, unsigned int *reg,
-+				 unsigned int off);
-+
-+static int cs_dsp_debugfs_read_controls_show(struct seq_file *s, void *ignored)
-+{
-+	struct cs_dsp *dsp = s->private;
-+	struct cs_dsp_coeff_ctl *ctl;
-+	unsigned int reg;
-+
-+	list_for_each_entry(ctl, &dsp->ctl_list, list) {
-+		cs_dsp_coeff_base_reg(ctl, &reg, 0);
-+		seq_printf(s, "%22.*s: %#8lx %s:%08x %#8x %s %#8x %#4x %c%c%c%c %s %s\n",
-+			   ctl->subname_len, ctl->subname, ctl->len,
-+			   cs_dsp_mem_region_name(ctl->alg_region.type),
-+			   ctl->offset, reg, ctl->fw_name, ctl->alg_region.alg, ctl->type,
-+			   ctl->flags & WMFW_CTL_FLAG_VOLATILE ? 'V' : '-',
-+			   ctl->flags & WMFW_CTL_FLAG_SYS ? 'S' : '-',
-+			   ctl->flags & WMFW_CTL_FLAG_READABLE ? 'R' : '-',
-+			   ctl->flags & WMFW_CTL_FLAG_WRITEABLE ? 'W' : '-',
-+			   ctl->enabled ? "enabled" : "disabled",
-+			   ctl->set ? "dirty" : "clean");
++	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
++		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
++			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
++		return -ERANGE;
 +	}
 +
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(cs_dsp_debugfs_read_controls);
-+
- /**
-  * cs_dsp_init_debugfs() - Create and populate DSP representation in debugfs
-  * @dsp: pointer to DSP structure
-@@ -479,6 +507,9 @@ void cs_dsp_init_debugfs(struct cs_dsp *dsp, struct dentry *debugfs_root)
- 		debugfs_create_file(cs_dsp_debugfs_fops[i].name, 0444, root,
- 				    dsp, &cs_dsp_debugfs_fops[i].fops);
+ 	/* Setup wake db */
+ 	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
+ 	mhi_cntrl->wake_set = false;
+@@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+ 		return -EIO;
+ 	}
  
-+	debugfs_create_file("controls", 0444, root, dsp,
-+			    &cs_dsp_debugfs_read_controls_fops);
++	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
++		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
++			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
++		return -ERANGE;
++	}
 +
- 	dsp->debugfs_root = root;
- }
- EXPORT_SYMBOL_NS_GPL(cs_dsp_init_debugfs, FW_CS_DSP);
+ 	/* Setup event db address for each ev_ring */
+ 	mhi_event = mhi_cntrl->mhi_event;
+ 	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
 -- 
-2.30.2
-
+2.7.4
 
