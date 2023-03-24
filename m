@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA0C6C7F0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DD56C7F10
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCXNsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S231580AbjCXNsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCXNsT (ORCPT
+        with ESMTP id S231236AbjCXNsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:48:19 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C459E5FC5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:48:17 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id b18so2220315ybp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1679665697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tlxb7IQ6LLDgiORswv/qEWs9yBORD5ICbT5uFlhAdGc=;
-        b=x0oemtBhzoiFQ9zWda8YdE4IseDam7CaY18ctp1AXcP7ra3LrMO9tKKr6KhxKPJd3l
-         Cd4Z0SmWjI/+wnilZq7SchK5j4Geff5pvWrC1M9EzgYU4o+rTapdmUI4Rdg0R3lVd1AB
-         Bn8dcgzZzsCVo1yd+pk9fPJEcPkXRPe/qqqjI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679665697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tlxb7IQ6LLDgiORswv/qEWs9yBORD5ICbT5uFlhAdGc=;
-        b=BuiB+xXp70LoFeD1Nks02j4YhupEuEB0J0tMUwyPWgIpisPq+vHJk7xn6KM3cTYmJU
-         SomMYzwFrrGUsNlOkRR10S5mkfSWM5FzMKh9JHH7+5y3t8g8B3wSpjwgpKgadhWAXvuP
-         aeBL6atRTrQp0G5WzHC//UY6vsLpYVMMUwvn+S3fcjhn8fTPWuYHicCUoidyWFL0R6j7
-         XwpOAMdx5d5xMWBmX7ARZ+YFioh0X0Qz+OvfOpmiDCsHK6AGkOVPTsukg8RJowshSP3Z
-         vRgb23r/6ksr4fPMZHEy8GpgIBpR7hWGFljbsYumGxr8rvilq1Orec2sK7jo4P4rtdVm
-         EfQw==
-X-Gm-Message-State: AAQBX9dnXDbBl37liXMYxO0Q8VKMldyNpbO2UdAiWFpYt7/o/uRCgeea
-        uQNOq+/zRpiyI98jPVChdNybe8MxtoX/Hj1QJwBygQ==
-X-Google-Smtp-Source: AKy350Y0Y+FOxa8FFx0ofJUqnL7e/TUq2l89UkZwjYNXRAkKDtrTBjVg9R6nGI2v46q4NjZOHtHAq+zXAL1AkTFMdCA=
-X-Received: by 2002:a25:680e:0:b0:b78:3a15:e6fe with SMTP id
- d14-20020a25680e000000b00b783a15e6femr343682ybc.2.1679665696958; Fri, 24 Mar
- 2023 06:48:16 -0700 (PDT)
+        Fri, 24 Mar 2023 09:48:24 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B35DDBE0;
+        Fri, 24 Mar 2023 06:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679665703; x=1711201703;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vu8F1hy4gOIAuangf3/BoReRbQqwkKKOq4w7ZW6JVtE=;
+  b=l0yHWvn6wPNx+ohFDf303HBVB9VN4BChhIBS/Z9dWrUrWe97YT0GJnHL
+   fQu0Rjkkrg9K1nx6YIiVd2zjVdhzux5ahqujoZbkSGpmpGlWgVvi2xAjL
+   4u8rHrctc1XMwzrZDAGSoIq5iZWtUf/bFpLB+TVYqRdA59zFt/q+ZKG4M
+   Xc+yyqFMfHjlxk8wDihgYgveEpxSosHaF7qLNMUi/oe40YJEKiGeEheXp
+   Yoe1Lz/4Wc3YhZTBiVCTy7CeuAc9iIT0tIRR3PPBAHApJJDujQ8tzBFsq
+   wK2U1cPZuhUOp3ginwrwY5NJdpR2IPPDFkpuqfEHWr9q0qfjuj5snSL8J
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="328198153"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="328198153"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:48:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="806671640"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="806671640"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2023 06:48:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pfhmF-007wcm-1N;
+        Fri, 24 Mar 2023 15:48:19 +0200
+Date:   Fri, 24 Mar 2023 15:48:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
+ for CMR, IOR, and IDR
+Message-ID: <ZB2qI7k/Igws5khg@smile.fi.intel.com>
+References: <cover.1679605919.git.william.gray@linaro.org>
+ <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
+ <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
+ <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
+ <ZB2k9m7rL7Hpy/zU@fedora>
 MIME-Version: 1.0
-References: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz> <20230324130530.xsmqcxapy4j2aaik@box.shutemov.name>
- <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
-In-Reply-To: <CAEXW_YQj_Wg0Xx2cHT9hTrDjEtrAV-bRjgL79=76d=D5f8GnEA@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 24 Mar 2023 09:48:05 -0400
-Message-ID: <CAEXW_YQuzSPm6wwfKuU-7riOsXyoCJK8+pwCmGdvWsJoaiT3mg@mail.gmail.com>
-Subject: Re: WARN_ON in move_normal_pmd
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZB2k9m7rL7Hpy/zU@fedora>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 9:43=E2=80=AFAM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> On Fri, Mar 24, 2023 at 9:05=E2=80=AFAM Kirill A. Shutemov <kirill@shutem=
-ov.name> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 12:15:24PM +0100, Michal Hocko wrote:
-> > > Hi,
-> > > our QA is regularly hitting
-> > > [  544.198822][T20518] WARNING: CPU: 1 PID: 20518 at ../mm/mremap.c:2=
-55 move_pgt_entry+0x4c6/0x510
-> > > triggered by thp01 LTP test. This has been brought up in the past and
-> > > resulted in f81fdd0c4ab7 ("mm: document warning in move_normal_pmd() =
-and
-> > > make it warn only once"). While it is good that the underlying proble=
-m
-> > > is understood, it doesn't seem there is enough interest to fix it
-> > > properly. Which is fair but I am wondering whether the WARN_ON gives
-> > > us anything here.
-> > >
-> > > Our QA process collects all unexpected side effects of tests and a WA=
-RN*
-> > > in the log is certainly one of those. This trigger bugs which are mos=
-tly
-> > > ignored as there is no upstream fix for them. This alone is nothing
-> > > really critical but there are workloads which do run with panic on wa=
-rn
-> > > configured and this issue would put the system down which is unnecess=
-ary
-> > > IMHO. Would it be sufficient to replace the WARN_ON_ONCE by
-> > > pr_warn_once?
-> >
-> > What about relaxing the check to exclude temporary stack from the WARN
-> > condition:
-> >
-> > diff --git a/mm/mremap.c b/mm/mremap.c
-> > index 411a85682b58..eb0778b9d645 100644
-> > --- a/mm/mremap.c
-> > +++ b/mm/mremap.c
-> > @@ -247,15 +247,12 @@ static bool move_normal_pmd(struct vm_area_struct=
- *vma, unsigned long old_addr,
-> >          * of any 4kB pages, but still there) PMD in the page table
-> >          * tree.
-> >          *
-> > -        * Warn on it once - because we really should try to figure
-> > -        * out how to do this better - but then say "I won't move
-> > -        * this pmd".
-> > -        *
-> > -        * One alternative might be to just unmap the target pmd at
-> > -        * this point, and verify that it really is empty. We'll see.
-> > +        * Warn on it once unless it is initial (temporary) stack.
-> >          */
-> > -       if (WARN_ON_ONCE(!pmd_none(*new_pmd)))
-> > +       if (!pmd_none(*new_pmd)) {
-> > +               WARN_ON_ONCE(!vma_is_temporary_stack(vma));
-> >                 return false;
-> > +       }
->
-> Wouldn't it be better to instead fix it from the caller side? Like
-> making it non-overlapping.
->
-> Reading some old threads, I had tried to fix it [1] along these lines
-> but Linus was rightfully concerned about that fix [2]. Maybe we can
-> revisit and fix it properly this time.
->
-> Personally I feel the safest thing to do is to not do a
-> non-overlapping mremap and get rid of the warning. Or is there a [..]
+On Fri, Mar 24, 2023 at 09:26:14AM -0400, William Breathitt Gray wrote:
+> On Fri, Mar 24, 2023 at 01:50:07PM +0200, Andy Shevchenko wrote:
+> > On Fri, Mar 24, 2023 at 01:48:43PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Mar 23, 2023 at 05:25:28PM -0400, William Breathitt Gray wrote:
 
-Aargh, I meant "not do an overlapping mremap", instead of "not do a
-non-overlapping mremap". :-)
+...
 
-Thanks.
+> > > > +static void quad8_control_register_update(struct quad8 *const priv, u8 *const buf,
+> > > > +					  const size_t channel, const u8 val, const u8 field)
+> > > > +{
+> > > > +	u8p_replace_bits(&buf[channel], val, field);
+> > > > +	iowrite8(buf[channel], &priv->reg->channel[channel].control);
+> > > > +}
+> > > 
+> > > How did you compile this?
+> > > Due to nature of *_replace_bits() this may only be a macro.
+> > > 
+> > > That's what LKP is telling about I think.
+> > 
+> > Ah, no, that's because the last parameter is not constant in the last patch in
+> > the series.
+
+> I'm having trouble cross-compiling for riscv, but I'm unable to recreate
+> the build error when I compile for x86_64. However, I'd like to
+> understand this error so I can fix it properly.
+> 
+> Is the problem here due to the "const u8 field" parameter? Instead of a
+> constant variable, does this need to be a constant literal value for
+> u8p_replace_bits()? I don't think that parameter changed in the last
+> patch of the series, so why is the build error occurring for the last
+> patch and not this penultimate patch here?
+
+Good question. Perhaps my understanding is incorrect.
+
+> Would qualifying the
+> quad8_control_register_update() function with "__always_inline" resolve
+> this issue?
+
+Hmm... Don't know. You can always download a toolchain specifically build for
+building kernels: https://mirrors.edge.kernel.org/pub/tools/crosstool/.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
