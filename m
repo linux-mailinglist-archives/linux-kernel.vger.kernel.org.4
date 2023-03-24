@@ -2,138 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0B66C77A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8FB6C77AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjCXGLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S229830AbjCXGLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCXGLH (ORCPT
+        with ESMTP id S231269AbjCXGLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:11:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35D81554F;
-        Thu, 23 Mar 2023 23:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=o8GyCLdqZI9t+Daq6eq68G2ZZ4b2XpF2IvGRiP6/CDU=; b=tu0UUQHu2yZU5mA/5Vw6tv7GYW
-        TBBSOVpTIR+dhrDRoQU8qF+0JzyO59axpNdqbH9x/X0rFD8mL085g7m1a1Rv7p1BEzmZ8xRza4360
-        QPflV6WYoB7Ybjy1q5kBZFOaZs/nZxaNnHFT1ZqZxi2mF6DIi5HIwQ4m6EbBONcGnfpEKik5oOOAx
-        7AQBrCLwOfaS1oPe0hO+CLk+sJZGzdmYxrAdA+pVx9ob1dq3sdkmwzmfWKyMaMzshxEr/gD81B3+e
-        TmEsb5m5u4bKNmbE2prromJC8XaAxQuU8OaA3RbEqFJMpuuBacYRPJN7TOEgzltyOMjYWT1o4ues4
-        bPphdAUg==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfadi-003eY8-2N;
-        Fri, 24 Mar 2023 06:11:02 +0000
-Message-ID: <24da75fa-b0f9-b9ff-5b34-42ae6fc2ba24@infradead.org>
-Date:   Thu, 23 Mar 2023 23:11:02 -0700
+        Fri, 24 Mar 2023 02:11:48 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5AC28879
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:11:46 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id v126-20020a6bac84000000b007587234a54cso621553ioe.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:11:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679638306;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5EazmNoR1OZ8o2+YMKLz7ea0FZT1O49LxZhIVVOGASU=;
+        b=agwB+kKilly9EeZnTW33VXPzRFS8wFMvp5uzxovL/TgRjJ931a0oQMyTU7dP9OreRY
+         P3p7Vi0J0cBrlac1usl5dpSLLUKPnBVZbfRkX10YYB6eLowXN8WQVEXxzLrHoMsF6ds7
+         PRvqcrXatuHtW29eoa2OzijFwnrtV329B3z7p4rjkPquCgrvbiZkXkV4C0uT/JMJcDVj
+         JMlFhMsyIHNzN4H7q4Rhjhgma3PRmM9g6/vnqn4m/S4fGxs5hJ9hFPeM15d8aWEd/R+X
+         xO5NOgtD6g6zYrlFmUlKlyU0fgMbwm+f7jnqcd0LwIa/khkoLgTd6CaH4/e3SMc2tZKx
+         VQ7g==
+X-Gm-Message-State: AO0yUKUAANZdv1P9Qsh6EmyVKniXa2/B+XdCbjp7p6wgl/DDHPbKfYWC
+        V+G+rdh8fAjzE7VfZhirXyalSSVzmljXqHysxMBPCStobE1I
+X-Google-Smtp-Source: AK7set+//66vpydVGOj72rdCt3BRmCaHG0x83OrdHCybr9gyo5Im+LelP6LCqnOTCELfnC83HNox1AjctyxVmZg345qUV5gKqQF/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] irq domain: drop IRQ_DOMAIN_HIERARCHY option, make it
- always on
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20230313023935.31037-1-rdunlap@infradead.org>
- <877cv78a1b.ffs@tglx>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <877cv78a1b.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a6b:500e:0:b0:751:96ce:ed7d with SMTP id
+ e14-20020a6b500e000000b0075196ceed7dmr4707751iob.1.1679638305809; Thu, 23 Mar
+ 2023 23:11:45 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 23:11:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000091ae5305f79f447f@google.com>
+Subject: [syzbot] [bpf?] [net?] general protection fault in bpf_struct_ops_link_create
+From:   syzbot <syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuifeng@meta.com,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
+        song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Hello,
 
-On 3/23/23 13:53, Thomas Gleixner wrote:
-> On Sun, Mar 12 2023 at 19:39, Randy Dunlap wrote:
->> In preparation for dropping the IRQ_DOMAIN Kconfig option (effectively
->> making it always set/on), first drop IRQ_DOMAIN_HIERARCHY as an option,
->> making its code always set/on.
->>
->> This has been built successfully on all ARCHes except hexagon,
->> both 32-bit and 64-bit where applicable.
-> 
-> I really like where this is going, but reviewing this is a pain. I tried
-> to split it up into more digestable pieces:
-> 
->    https://tglx.de/~tglx/patches.tar
-> 
-> That's not completely equivalent to your patch as I did some of the
-> changes below. It builds on various oddball architectures with
-> IRQ_DOMAIN=n, but is otherwise completely untested.
-> 
-> It should be actually trivial after that to make IRQ_DOMAIN def_bool y
-> and then gradually remove the IRQ_DOMAIN selects and ifdeffery.
+syzbot found the following issue on:
 
-Yeah, that may be the best & simplest approach.
+HEAD commit:    226bc6ae6405 Merge branch 'Transit between BPF TCP congest..
+git tree:       bpf-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=139c727ac80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
+dashboard link: https://syzkaller.appspot.com/bug?extid=71ccc0fe37abb458406b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ef67a1c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119c20fec80000
 
-Or just use your patches.tar.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ac055f681ed7/disk-226bc6ae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3895cc8a51d2/vmlinux-226bc6ae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1b18bb9fae05/bzImage-226bc6ae.xz
 
->> v2: add stubs in include/linux/irqdomain.h for the config case of
->> IRQ_DOMAIN is not set. If these are not added, there will be plenty
->> of build errors (not so much for modern arches as for older ones).
-> 
-> I'm not really convinced that all of these stubs are required. Why would
-> there suddenly be a requirement to expose stubs for functions which
-> depend on CONFIG_IRQ_DOMAIN=y already today just by removing the
-> hierarchy config?
+The issue was bisected to:
 
-All of those stubs were added because I had configs/builds that were
-failing due to them. I didn't just add them for fun or "completeness."
+commit 68b04864ca425d1894c96b8141d4fba1181f11cb
+Author: Kui-Feng Lee <kuifeng@meta.com>
+Date:   Thu Mar 23 03:24:00 2023 +0000
 
-I just checked and I didn't save all of those failing configs or
-output files that contain the errors.
+    bpf: Create links for BPF struct_ops maps.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116731b1c80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=136731b1c80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=156731b1c80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com
+Fixes: 68b04864ca42 ("bpf: Create links for BPF struct_ops maps.")
+
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 1 PID: 5081 Comm: syz-executor182 Not tainted 6.2.0-syzkaller-13084-g226bc6ae6405 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:bpf_struct_ops_valid_to_reg kernel/bpf/bpf_struct_ops.c:764 [inline]
+RIP: 0010:bpf_struct_ops_link_create+0xb1/0x390 kernel/bpf/bpf_struct_ops.c:879
+Code: 95 81 eb ff 48 85 c0 48 89 c5 0f 84 9e 02 00 00 e8 24 27 dd ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 60 02 00 00 44 8b 65 18 bf 1a
+RSP: 0018:ffffc90003b8fc38 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 1ffff92000771f87 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff81a7dc8c RDI: 000000000000000f
+RBP: fffffffffffffff7 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: 000000000000002c R14: ffffc90003b8fde8 R15: 0000000000000000
+FS:  0000555556538300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000eaa388 CR3: 00000000206d2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ link_create kernel/bpf/syscall.c:4585 [inline]
+ __sys_bpf+0x3b77/0x53b0 kernel/bpf/syscall.c:5129
+ __do_sys_bpf kernel/bpf/syscall.c:5163 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5161 [inline]
+ __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5161
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc374490ae9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffe2184578 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc374490ae9
+RDX: 0000000000000010 RSI: 0000000020001340 RDI: 000000000000001c
+RBP: 00007fc374454c90 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc374454d20
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:bpf_struct_ops_valid_to_reg kernel/bpf/bpf_struct_ops.c:764 [inline]
+RIP: 0010:bpf_struct_ops_link_create+0xb1/0x390 kernel/bpf/bpf_struct_ops.c:879
+Code: 95 81 eb ff 48 85 c0 48 89 c5 0f 84 9e 02 00 00 e8 24 27 dd ff 48 8d 7d 18 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 60 02 00 00 44 8b 65 18 bf 1a
+RSP: 0018:ffffc90003b8fc38 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 1ffff92000771f87 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff81a7dc8c RDI: 000000000000000f
+RBP: fffffffffffffff7 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: 000000000000002c R14: ffffc90003b8fde8 R15: 0000000000000000
+FS:  0000555556538300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000eaa388 CR3: 00000000206d2000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	95                   	xchg   %eax,%ebp
+   1:	81 eb ff 48 85 c0    	sub    $0xc08548ff,%ebx
+   7:	48 89 c5             	mov    %rax,%rbp
+   a:	0f 84 9e 02 00 00    	je     0x2ae
+  10:	e8 24 27 dd ff       	callq  0xffdd2739
+  15:	48 8d 7d 18          	lea    0x18(%rbp),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e 60 02 00 00    	jle    0x29a
+  3a:	44 8b 65 18          	mov    0x18(%rbp),%r12d
+  3e:	bf                   	.byte 0xbf
+  3f:	1a                   	.byte 0x1a
 
 
-> Even exposing stubs for functions which have been only available via
-> CONFIG_IRQ_DOMAIN_HIERARCHY is questionable simply because there cannot
-> be any code which invokes them unconditionally if
-> CONFIG_IRQ_DOMAIN_HIERARCHY=n today.
-> 
-> IOW, the sum of required stubs cannot be larger than number of stubs
-> required today.
-> 
-> If there is code which has a #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY then
-> this needs to be changed to CONFIG_IRQ_DOMAIN or the required functions
-> have to be exposed unconditionally, right?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Yes, s/CONFIG_IRQ_DOMAIN_HIERARCHY/CONFIG_IRQ_DOMAIN/ in code.
-
-
->> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> --- a/drivers/gpio/Kconfig
->> +++ b/drivers/gpio/Kconfig
->> @@ -361,7 +361,7 @@ config GPIO_IXP4XX
->>  	depends on OF
->>  	select GPIO_GENERIC
->>  	select GPIOLIB_IRQCHIP
->> -	select IRQ_DOMAIN_HIERARCHY
->> +	select IRQ_DOMAIN
-> 
-> IRQ_DOMAIN is already selected by GPIOLIB_IRQCHIP, so this select is
-> redundant for all GPIO configs which select GPIOLIB_IRQCHIP.
-
-Ack.
-
-I'm perfectly happy to use either Marc's patch that he posted on
-2023-FEB-14 (https://lore.kernel.org/all/86y1p0xbqd.wl-maz@kernel.org/)
-or your patches. Both of you know your way around this better than I do.
-
-Thanks for your review and feedback.
-
--- 
-~Randy
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
