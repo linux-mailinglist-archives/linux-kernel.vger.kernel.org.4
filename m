@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10466C8156
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECBC6C8165
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjCXPfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S230192AbjCXPhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbjCXPfs (ORCPT
+        with ESMTP id S232151AbjCXPha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:35:48 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44759AF02
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:35:32 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1679672130;
-        bh=ckFawQ1qLSFHu7FH9gpxiQREhNiKA5dRZcnPaoegb24=;
-        h=From:Date:Subject:To:Cc:From;
-        b=bxV7MelJxdH1rg39V3lDEb+JLrqLBP2PKdDLXWxmrJ9dNGp41MhC8Sdqe1y/0PtsI
-         2zkxqzDj/DYAIXDsODYALwK3Ju6mspcHe2xIW4AAs7pIagNfGGmYJUnuMMD3fJRjqh
-         QkOMKShGzw9eP7rD41CXhNfeB9umzb1+rlkwvkds=
-Date:   Fri, 24 Mar 2023 15:35:27 +0000
-Subject: [PATCH] mm/damon/sysfs: make more kobj_type structures constant
+        Fri, 24 Mar 2023 11:37:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962AA1EFC0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679672180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Z/Kz7kV+UiInmN3q36fZWIJQ0sjJV/FHyS/DppuKTvQ=;
+        b=eW4Ah/mrfC7pv7ma80zN3R370PX2euPb2qm2LBIa7wvv6x5uO3pmBg3NkMxdDTKGZE3Nnp
+        JvDzCj8v452/k3jZBECeQ9pEXoDMUW3zE4VfnjASEakS83drUi1oVvldt5xr1K4MbsVRVC
+        xlyuTkZeGLqAEDVQAL9Cr0f+GGsFsBA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-418-j52mJxbLPbKSphSnMXY6wA-1; Fri, 24 Mar 2023 11:36:18 -0400
+X-MC-Unique: j52mJxbLPbKSphSnMXY6wA-1
+Received: by mail-ed1-f69.google.com with SMTP id c1-20020a0564021f8100b004acbe232c03so3690646edc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:36:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679672177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z/Kz7kV+UiInmN3q36fZWIJQ0sjJV/FHyS/DppuKTvQ=;
+        b=Ck8AdVo5DXX5Lp0gZ3ix9jacYUjgcUZBlUiXNOHMh10qP9zUN9TsmmXFWXnLDru4qX
+         UB5nNZNXfPUI2yLtfAuo4Ew1eaACESDQ0euJ9mwOe+cm1qugkWYxT8n5GnODoTIJgS2a
+         JHstUCXhOfvEKI9WdlhBZdCFBabEt2BvicK0J5wZIu5Ymz/IB+leYH0NbKyqEFCi/ICQ
+         csdTYIUd4hFxrcRG/pbQ5aMQ9j7h7QIY/OLBDqXl0DDjT0Vy8ZPqTgGJZ4eypib6uLZC
+         y25yEkiWg5IXultSLCePOgQc3+6lonfKmwsBs9OYQRxnT2bR3ylrlUMu+zWG60EdnR69
+         XUzQ==
+X-Gm-Message-State: AAQBX9fWrBzpWib5Mwc2kAyl1aZI6DKa9zxlGW+vf2mTVix1jtQ06J45
+        lA1m6ossp1dHEGYSjvyMkoeILYzwqYltuKRgDho7x/OEI6XlDroxm1AyV9kX8E72LgihB1BXBeW
+        9W9KUl4hRVvyc2or69DndJJ/f
+X-Received: by 2002:aa7:c6c8:0:b0:4f9:deb4:b986 with SMTP id b8-20020aa7c6c8000000b004f9deb4b986mr2885727eds.7.1679672177747;
+        Fri, 24 Mar 2023 08:36:17 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ay1iv3SvkhVkCpZgFjlrGDYTHaf4l+WBI3Lkacaxfq08vNdhGScQ/rdLUDCOdmvue3dyREYA==
+X-Received: by 2002:aa7:c6c8:0:b0:4f9:deb4:b986 with SMTP id b8-20020aa7c6c8000000b004f9deb4b986mr2885714eds.7.1679672177492;
+        Fri, 24 Mar 2023 08:36:17 -0700 (PDT)
+Received: from localhost.localdomain (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id a27-20020a509b5b000000b00501dd53dbfbsm5468613edj.75.2023.03.24.08.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 08:36:16 -0700 (PDT)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     stefanha@redhat.com, Jason Wang <jasowang@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, eperezma@redhat.com,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH v4 0/9] vdpa_sim: add support for user VA
+Date:   Fri, 24 Mar 2023 16:35:58 +0100
+Message-Id: <20230324153607.46836-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230324-b4-kobj_type-damon2-v1-1-48ddbf1c8fcf@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAD7DHWQC/x2NywrCMBBFf6XM2oGadhH9FRHJ42pHa1KSKi2l/
- +7g8pzL4W5UUQSVzs1GBV+pkpPC8dBQGFx6gCUqk2lN13amZ9/zK/vnbV4ncHTvnAzrZoETbLS
- BtPSugn1xKQzaps84qpwK7rL8ry7Xff8Ba5swy3oAAAA=
-To:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679672127; l=1721;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ckFawQ1qLSFHu7FH9gpxiQREhNiKA5dRZcnPaoegb24=;
- b=Z/mj9pBksJMTxSODV3RjMllkofs/ct51LPHtbxiK/dC93KL/ZL7YClId558U6SprhHAMWSUIs
- xK0D2hUYCFJBAeidOJF/7lUDrF8OYSpPKrQ9XMWC9+EfDqcPIO4oat1
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+This series adds support for the use of user virtual addresses in the
+vDPA simulator devices.
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+The main reason for this change is to lift the pinning of all guest memory.
+Especially with virtio devices implemented in software.
 
-These structures were not constified in
-commit e56397e8c40d ("mm/damon/sysfs: make kobj_type structures constant")
-as they didn't exist when that patch was written.
+The next step would be to generalize the code in vdpa-sim to allow the
+implementation of in-kernel software devices. Similar to vhost, but using vDPA
+so we can reuse the same software stack (e.g. in QEMU) for both HW and SW
+devices.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- mm/damon/sysfs-schemes.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+For example, we have never merged vhost-blk, and lately there has been interest.
+So it would be nice to do it directly with vDPA to reuse the same code in the
+VMM for both HW and SW vDPA block devices.
 
-diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-index 3cdad5a7f936..50cf89dcd898 100644
---- a/mm/damon/sysfs-schemes.c
-+++ b/mm/damon/sysfs-schemes.c
-@@ -384,7 +384,7 @@ static struct attribute *damon_sysfs_scheme_filter_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_scheme_filter);
- 
--static struct kobj_type damon_sysfs_scheme_filter_ktype = {
-+static const struct kobj_type damon_sysfs_scheme_filter_ktype = {
- 	.release = damon_sysfs_scheme_filter_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_scheme_filter_groups,
-@@ -503,7 +503,7 @@ static struct attribute *damon_sysfs_scheme_filters_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_scheme_filters);
- 
--static struct kobj_type damon_sysfs_scheme_filters_ktype = {
-+static const struct kobj_type damon_sysfs_scheme_filters_ktype = {
- 	.release = damon_sysfs_scheme_filters_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_scheme_filters_groups,
+The main problem (addressed by this series) was due to the pinning of all
+guest memory, which thus prevented the overcommit of guest memory.
 
----
-base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
-change-id: 20230324-b4-kobj_type-damon2-0238ee9e8d8c
+Thanks,
+Stefano
 
-Best regards,
+Changelog listed in each patch.
+v3: https://lore.kernel.org/lkml/20230321154228.182769-1-sgarzare@redhat.com/
+v2: https://lore.kernel.org/lkml/20230302113421.174582-1-sgarzare@redhat.com/
+RFC v1: https://lore.kernel.org/lkml/20221214163025.103075-1-sgarzare@redhat.com/
+
+Stefano Garzarella (9):
+  vdpa: add bind_mm/unbind_mm callbacks
+  vhost-vdpa: use bind_mm/unbind_mm device callbacks
+  vringh: replace kmap_atomic() with kmap_local_page()
+  vringh: define the stride used for translation
+  vringh: support VA with iotlb
+  vdpa_sim: make devices agnostic for work management
+  vdpa_sim: use kthread worker
+  vdpa_sim: replace the spinlock with a mutex to protect the state
+  vdpa_sim: add support for user VA
+
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |  11 +-
+ include/linux/vdpa.h                 |  10 ++
+ include/linux/vringh.h               |   9 ++
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     | 161 ++++++++++++++++++++-----
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  10 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  10 +-
+ drivers/vhost/vdpa.c                 |  34 ++++++
+ drivers/vhost/vringh.c               | 173 ++++++++++++++++++++++-----
+ 8 files changed, 340 insertions(+), 78 deletions(-)
+
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.39.2
 
