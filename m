@@ -2,228 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C71C6C7BFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922226C7C01
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjCXJva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S229938AbjCXJwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjCXJvS (ORCPT
+        with ESMTP id S231194AbjCXJwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:51:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333399758
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679651477; x=1711187477;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v0WqjRvXPQYnAFzl0jiFIKdiwg6icwqaiL3Nj0VMeV8=;
-  b=TklAWzDZH8U/anV2su2Lf9zweAQKNOSAKbyExjPE+TJnuz3s4AE9g5rP
-   23bsH6BJaUkQFEKmuEoOyqlmemEP9K+6BUMlqPEtMQ8dgJFxeozkDrcQu
-   +Ld2euMtF85Cz1XZ+p2zbtlFGfXAT0OWCZ680r93daaTjTL0dsCJv1tiz
-   BTCqIo9PzZATJpdYk1630ppH0hkuk6oXAY7hmAt7y0a60rX4cLhgwyZUL
-   Pb9BcpoeV/1j46AmxD51t5s5Cw7zJCnr9lRrv1jP1h9hVeniD+CMFTprz
-   0PKta+QuqZ91uWZKvnIDiHmeiI0QTlxP+1vlW3w1paZJC8uFKMMwwrd5F
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338462955"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="338462955"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:51:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="751844326"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="751844326"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Mar 2023 02:51:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfe4j-000FBo-0H;
-        Fri, 24 Mar 2023 09:51:09 +0000
-Date:   Fri, 24 Mar 2023 17:50:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcu-cf.2023.03.23a] BUILD SUCCESS WITH WARNING
- 01abd52f1773d0ad92560b79bb55b48e26da06d5
-Message-ID: <641d7271.fL5b5SQPMeeiVHVz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 24 Mar 2023 05:52:16 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB75B81
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:52:14 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id z83so1462889ybb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679651534;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+GMcdpOvcoDnx0HREYN0LXB1sMvcPvzVTyQPUjUxnM=;
+        b=SYvqT5KgBjErklJytil4/yF92V/rQnu8td5jihW+D/0+gQtmGyITzEJOBTz9SHOUVa
+         SZAtTWsjjrbrtn9RUG2ECF9kjX23mO/uYTsuENKUdLIzR/V0rQM8UvwifIiC9ME+nIax
+         uyTcVBBQ1fOlBaSu6dhRLQkVzHfMUc/qzedUrfYHhxbHZke5iBM1DMXdd9mmA6Um/oBX
+         k2hERw5Dz2IAmVq6EiSVMiHr+ME5QlFG2UIXx5HU4Mq6qmgfdM5JJIjq3m/bF4O9JItI
+         V6JfnZHkMtztIZvjiAClRchJ8kNbq0lImPiFXnU6lVplf2DqVQxWQV6iRoGa5MjBlBEI
+         iGxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679651534;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q+GMcdpOvcoDnx0HREYN0LXB1sMvcPvzVTyQPUjUxnM=;
+        b=3CSo2GGg2MeoOKJHUmHf7gt2aEPkxVlW/y/vBpnKv+0bjiB63itxZB2vbFGkg0VPZB
+         egvZRkCRugkePUmz0hFnk6JKUKfIixs8sYpppHDULfPeKDLb8LSqXRxZ1sQl7GWGP96K
+         pRjnuDf45RaRq4bl/Zuo7JQwo3hUBjEGyCkEe1XStoLYhUcymW9rgpGO04O4YbOXJapF
+         OCp5fA1NBXS3s17gfAHcxvJRCR4sNLyTv8JwDEgYi9YHPoNSQ7sfU2cQtaMF67C/xpHW
+         LEtarQFo3jjSlALglPojtz9dH3sPrJglRVPZ08rugjlB7DNMefqkhznPEf4qhd+kzw3b
+         b5UA==
+X-Gm-Message-State: AAQBX9fvgi+qzRWRyY7DO7WQILQpWZoevUof08rdExwah5q8RBa0XGr+
+        rsLl1MsLUD9GiIFqf5OP4EXyV3BvnmEAuuxoWbnFUYAcXACK2LPl+aMpJgvo
+X-Google-Smtp-Source: AKy350aXb0Ihx8iXfQJRk70vBtwQUHCX6Gle0lNz3EQgX8Z/fWWwpgB9AQi8NtiZtYAOdAKdb3aWd6avfd/3UOYTT6E=
+X-Received: by 2002:a05:6902:140e:b0:b76:126b:5aa4 with SMTP id
+ z14-20020a056902140e00b00b76126b5aa4mr981643ybu.9.1679651533888; Fri, 24 Mar
+ 2023 02:52:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat> <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat> <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+ <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com> <97f60824-7067-62cc-2882-d998072886ce@gmail.com>
+In-Reply-To: <97f60824-7067-62cc-2882-d998072886ce@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 24 Mar 2023 17:52:01 +0800
+Message-ID: <CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7FtA-dTQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device creation
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000000d833005f7a25917"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcu-cf.2023.03.23a
-branch HEAD: 01abd52f1773d0ad92560b79bb55b48e26da06d5  squash! srcu: Use static init for statically allocated in-module srcu_struct
+--0000000000000d833005f7a25917
+Content-Type: text/plain; charset="UTF-8"
 
-Warning reports:
+On Fri, 24 Mar 2023 at 14:51, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>
+> On 3/24/23 08:34, David Gow wrote:
+> > On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >>
+> >> On 3/23/23 18:36, Maxime Ripard wrote:
+> >>> On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> >>>> On 3/23/23 14:29, Maxime Ripard wrote:
+> >>>>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+>
+> >> Ok. Fair enough. Besides, if the root-device was sufficient - then I
+> >> would actually not see the need for a helper. People could in that case
+> >> directly use the root_device_register(). So, if helpers are provided
+> >> they should be backed up by a device with a bus then.
+> >
+> > I think there is _some_ value in helpers even without a bus, but it's
+> > much more limited:
+> > - It's less confusing if KUnit test devices are using kunit labelled
+> > structs and functions.
+> > - Helpers could use KUnit's resource management API to ensure any
+> > device created is properly unregistered and removed when the test
+> > exits (particularly if it exits early due to, e.g., an assertion).
+>
+> Ah. That's true. Being able to abort the test on error w/o being forced
+> to do a clean-up dance for the dummy device would be convenient.
+>
+> > I've played around implementing those with a proper struct
+> > kunit_device and the automatic cleanup on test failure, and thus far
+> > it -- like root_device_register -- works for all of the tests except
+> > the drm-test-managed one.
+> >
+> > So if we really wanted to, we could use KUnit-specific helpers for
+> > just those tests which currently work with root_device_register(), but
+> > if we're going to try to implement a KUnit bus -- which I think is at
+> > least worth investigating -- I'd rather not either hold up otherwise
+> > good tests on helper development, or rush a helper out only to have to
+> > change it a lot when we see exactly what the bus implementation would
+> > look like.
+>
+> It's easy for me to agree.
+>
+> >> As I said, in my very specific IIO related test the test device does not
+> >> need a bus. Hence I'll drop the 'generic helpers' from this series.
+> >>
+> >
+> > I think that sounds like a good strategy for now, and we can work on a
+> > set of 'generic helpers' which have an associated bus and struct
+> > kunit_device in the meantime. If we can continue to use
+> > root_device_register until those are ready, that'd be very convenient.
+>
+> Would it be a tiny bit more acceptable if we did add a very simple:
+>
+> #define kunit_root_device_register(name) root_device_register(name)
+> #define kunit_root_device_unregister(dev) root_device_unregister(dev)
+>
+> to include/kunit/device.h (or somesuch)
+>
+> This should help us later to at least spot the places where
+> root_device_[un]register() is abused and (potentially mass-)covert them
+> to use the proper helpers when they're available.
+>
 
-https://lore.kernel.org/oe-kbuild-all/202303241725.0RIyOS2U-lkp@intel.com
+Great idea.
 
-Warning: (recently discovered and may have been fixed)
+The code I've been playing with has the following in include/kunit/device.h:
 
-kernel/rcu/tasks.h:140:20: warning: 'tasks_rcu_exit_srcu' defined but not used [-Wunused-variable]
+/* Register a new device against a KUnit test. */
+struct device *kunit_device_register(struct kunit *test, const char *name);
+/* Unregister a device created by kunit_device_register() early (i.e.,
+before test cleanup). */
+void kunit_device_unregister(struct kunit *test, struct device *dev);
 
-Warning ids grouped by kconfigs:
+If we used the same names, and just forwarded them to
+root_device_register() and root_device_unregister() for now
+(discarding the struct kunit pointer), then I expect we could just
+swap out the implementation to gain the extra functionality.
 
-gcc_recent_errors
-`-- x86_64-rhel-8.3-kselftests
-    `-- kernel-rcu-tasks.h:warning:tasks_rcu_exit_srcu-defined-but-not-used
+It's a little less explicit, though, so I could see the value in using
+macros with "root_device" in the name to make the current
+implementation clearer, and the eventual change more obvious.
 
-elapsed time: 728m
+Cheers,
+-- David
 
-configs tested: 137
-configs skipped: 8
+--0000000000000d833005f7a25917
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r016-20230322   gcc  
-alpha                randconfig-r021-20230322   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r023-20230322   gcc  
-arc                  randconfig-r043-20230322   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm          buildonly-randconfig-r001-20230322   clang
-arm                                 defconfig   gcc  
-arm                       imx_v4_v5_defconfig   clang
-arm                  randconfig-r014-20230322   clang
-arm                  randconfig-r023-20230322   clang
-arm                  randconfig-r046-20230322   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230322   clang
-arm64                randconfig-r005-20230322   clang
-arm64                randconfig-r011-20230322   gcc  
-arm64                randconfig-r013-20230322   gcc  
-csky                                defconfig   gcc  
-hexagon      buildonly-randconfig-r003-20230322   clang
-hexagon      buildonly-randconfig-r004-20230322   clang
-hexagon              randconfig-r004-20230322   clang
-hexagon              randconfig-r006-20230322   clang
-hexagon              randconfig-r036-20230322   clang
-hexagon              randconfig-r041-20230322   clang
-hexagon              randconfig-r045-20230322   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230322   gcc  
-ia64                 randconfig-r012-20230322   gcc  
-ia64                 randconfig-r033-20230322   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230322   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r034-20230322   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r031-20230322   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze   buildonly-randconfig-r006-20230322   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                        bcm47xx_defconfig   gcc  
-mips                 randconfig-r021-20230322   clang
-mips                 randconfig-r034-20230322   gcc  
-nios2        buildonly-randconfig-r004-20230322   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r003-20230322   gcc  
-nios2                randconfig-r035-20230322   gcc  
-openrisc     buildonly-randconfig-r002-20230322   gcc  
-openrisc             randconfig-r022-20230322   gcc  
-openrisc             randconfig-r032-20230322   gcc  
-openrisc             randconfig-r036-20230322   gcc  
-parisc                           alldefconfig   gcc  
-parisc       buildonly-randconfig-r005-20230322   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230322   gcc  
-parisc               randconfig-r015-20230322   gcc  
-parisc               randconfig-r024-20230322   gcc  
-parisc               randconfig-r031-20230322   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                mpc7448_hpc2_defconfig   gcc  
-powerpc                 mpc836x_mds_defconfig   clang
-powerpc                     powernv_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r001-20230322   clang
-riscv                randconfig-r042-20230322   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230322   clang
-s390                 randconfig-r003-20230322   clang
-s390                 randconfig-r044-20230322   gcc  
-sh                               allmodconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230322   gcc  
-sparc                randconfig-r006-20230322   gcc  
-sparc                randconfig-r035-20230322   gcc  
-sparc64              randconfig-r026-20230322   gcc  
-sparc64              randconfig-r033-20230322   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230322   gcc  
-xtensa       buildonly-randconfig-r006-20230322   gcc  
-xtensa               randconfig-r001-20230322   gcc  
-xtensa               randconfig-r002-20230322   gcc  
-xtensa               randconfig-r032-20230322   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC9
+RKWdNIaBRRI4PvwNqvZ9KW1TjAVT4uP5HFk/eolqLzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjQwOTUyMTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAaP60VNKcJIdJsxrHRuJu
+nnSCJU9WmPkUeGipwHXRvNIP2Ot81zAxYoFR50e1Q6aE5o07mCdXkkFbecN9BcaqbsuNWodHdDK6
+Nm9cTz0J7cdfimQ48itvU7nITolEYHRyFY33HYouUUEcFtkLemVao5czB9cEkrttYpxuUAK94sKl
+r9c+KFpl2nViyqUPauGHyBLlJLvMi62mJ7YqGhL9OfKRi0SZkBElZ0j2q2GeSlbCJrRBfuLdgdW6
+eijA+6r1u95oFmIT9YuUbqpHuDtyaGleNyoQ910esKfQ8h1Sm9GrRqKUAc7NCDhB/tbIekYyyrbB
+8huWCk7q/jtcx8t31Q==
+--0000000000000d833005f7a25917--
