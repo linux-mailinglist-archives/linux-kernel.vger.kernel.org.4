@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F412E6C78D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29046C78CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjCXH1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:27:10 -0400
+        id S231274AbjCXH1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:27:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjCXH1C (ORCPT
+        with ESMTP id S231461AbjCXH04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:27:02 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB8C13509
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:55 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id kc4so1064346plb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679642814;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
-        b=lBy36qf99v/akTnZfqIbBpJAhkBbS4hxyhr2Jne8gCswaxvp2Jp3FENopQ1quN9LoI
-         VNuHMsYgqHlORnlmEX5zvB8hUlcw5EI8Jo5JrbapUgAEo7Oq3ti0/E82h0tC8TzSqJ5s
-         azjhTEJfus9EQxuW9F6Rf2F5Ev3ZauxqzemQkoefrGtuiPmPtQJmW84WtnIRYXkqFVPj
-         0Dii2BOGoEZoreA9YJaOiMY8VFyd40yrv/taVZvEHLLJ7kt35WHW/hqNylXgavwDXuIJ
-         BSy+9n59hPfxosCDqWYllWUNRvxdD5iIWjj/KnkorjkQvS2/0Gu1kLM9135Ei678N/38
-         vy5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642814;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
-        b=ym1FHoClZ9QQLs9RLAgZ9DntPwSNl8PfxuhpoawXBekxDbZtVe7MhY7YehtRk/Ahna
-         WCNUaJBLof37vsNzDWw91tsZP17PjdqR3sutgVb/u/eetDphefd5Sf2jV0DVoL4wutbw
-         9Mt2nuSYfwX37XY+HeMTTZcdVlKGJvTugIZdmJ8Kosj03Gg6Ux1b+88h3n9u9K5mOS1u
-         H0/Bpox3ts6zlIVU4fcPntrhCMLk0tbgnATS/j7Br5NtMECDm7wp28FXVnAeruIEq6dN
-         E2LMkyUX6yG2JAoxqghVWOxCL/GE0G3AvhV+81M1rP3f2r+1qQesmdMwWOSE/Rx1SqVB
-         z8cw==
-X-Gm-Message-State: AAQBX9eDFPbcm9emmympv+Ul9VxB1AslesT4I1CoYgeI71OHCtWN2suI
-        OW1hA9s7svg2QvsU1/Vx5uk=
-X-Google-Smtp-Source: AKy350aNhUPcRlU0iL4dePfhEGfhG/kuFnHgs06JnlqWlbVOTtQooldC9zpf0rhCQpaxh7fGZUPo8Q==
-X-Received: by 2002:a17:90b:1d02:b0:23d:133a:62cc with SMTP id on2-20020a17090b1d0200b0023d133a62ccmr1902114pjb.17.1679642814428;
-        Fri, 24 Mar 2023 00:26:54 -0700 (PDT)
-Received: from ubuntu.localdomain ([59.89.175.90])
-        by smtp.gmail.com with ESMTPSA id b16-20020a17090a991000b002311c4596f6sm2345152pjp.54.2023.03.24.00.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 00:26:53 -0700 (PDT)
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH v2 0/3] Staging: greybus: Use inline functions
-Date:   Fri, 24 Mar 2023 00:26:15 -0700
-Message-Id: <cover.1679642024.git.sumitraartsy@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Mar 2023 03:26:56 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF8E188;
+        Fri, 24 Mar 2023 00:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=+R2EEWNBVNSx6himSgCrBinYUox/jg6m2XRma6qQqh8=; b=GUeFr6cWMlom5ypuD40BsCuz/H
+        1NxWCEoVOAFqAvFeZnJs8cw3DrQ2Qp1nJn3qjzUHa4p3RyqiPS0ezsqtSTmizm8jaSwWBG0tNapMd
+        yh928cuyT+ho/lJErYwZKaxOrgVAVScmm/n4B3BH0mQJk145sSdftwt55fxctWmhFxpKL7YCxfVTd
+        mBjQ5eB9yBrDn6TNS1OuzMK0/LlhGkgjiLkBu7bdOQV/1slPTsNj6+7nmJjp49aeu3LHuK/1R2xW8
+        V1Ue4d+IvlTFktlnr6+g+VTUsjkoHg1HikAfRhgZ45560CuxLyu9Yzit7MCMY6EqtF9sqicYz1Ljj
+        KvWsCmWQ==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pfbot-000Bfu-3O; Fri, 24 Mar 2023 08:26:39 +0100
+Received: from [77.58.94.13] (helo=localhost.localdomain)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pfbos-0006oR-Fw; Fri, 24 Mar 2023 08:26:38 +0100
+Subject: Re: [syzbot] [bpf?] [net?] general protection fault in
+ bpf_struct_ops_link_create
+To:     syzbot <syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, kuifeng@meta.com, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, martin.lau@linux.dev,
+        netdev@vger.kernel.org, sdf@google.com, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <00000000000091ae5305f79f447f@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c1b903c0-7089-cefb-dbd3-5dbe1b941a5f@iogearbox.net>
+Date:   Fri, 24 Mar 2023 08:26:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <00000000000091ae5305f79f447f@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26852/Thu Mar 23 08:22:35 2023)
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert macros to a static inline function, to make the relevant 
-types apparent in the definition and to benefit from the type 
-checking performed by the compiler at call sites.
+On 3/24/23 7:11 AM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    226bc6ae6405 Merge branch 'Transit between BPF TCP congest..
+> git tree:       bpf-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=139c727ac80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
+> dashboard link: https://syzkaller.appspot.com/bug?extid=71ccc0fe37abb458406b
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ef67a1c80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119c20fec80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/ac055f681ed7/disk-226bc6ae.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/3895cc8a51d2/vmlinux-226bc6ae.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/1b18bb9fae05/bzImage-226bc6ae.xz
+> 
+> The issue was bisected to:
+> 
+> commit 68b04864ca425d1894c96b8141d4fba1181f11cb
+> Author: Kui-Feng Lee <kuifeng@meta.com>
+> Date:   Thu Mar 23 03:24:00 2023 +0000
+> 
+>      bpf: Create links for BPF struct_ops maps.
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116731b1c80000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=136731b1c80000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=156731b1c80000
 
-CHanges in v2: Change patch subjects, noted by Alison Schofield 
-<alison.schofield@intel.com>
+Kui-Feng, please take a look & fix.
 
-Sumitra Sharma (3):
-  Staging: greybus: Use inline function for macro
-    gpio_chip_to_gb_gpio_controller
-  Staging: greybus: Use inline function for gb_audio_manager_module
-  Staging: greybus: Use inline function for pwm_chip_to_gb_pwm_chip
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com
+> Fixes: 68b04864ca42 ("bpf: Create links for BPF struct_ops maps.")
 
- drivers/staging/greybus/audio_manager_module.c | 7 +++++--
- drivers/staging/greybus/gpio.c                 | 7 +++++--
- drivers/staging/greybus/pwm.c                  | 6 ++++--
- 3 files changed, 14 insertions(+), 6 deletions(-)
-
--- 
-2.25.1
-
+Thanks,
+Daniel
