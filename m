@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8741C6C7EAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E026C7EAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbjCXNY1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 09:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S231667AbjCXNY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjCXNY0 (ORCPT
+        with ESMTP id S232064AbjCXNYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:24:26 -0400
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F248F970;
-        Fri, 24 Mar 2023 06:24:25 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id eh3so7833090edb.11;
-        Fri, 24 Mar 2023 06:24:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679664263;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xANE6v66oWohP4PebACyO/lC5X5hzxKTlxET4jvaQ2c=;
-        b=rbStYVPAz5Uj0e+iyCxEzXwsIEuumdhlWcNorjU8OYPcN94Z+cs7vBF7t/24Of+yxZ
-         fS40h6sEEaovVp+SWT0a9SuI9pK9FkRg4DjTXDOoeUG9MRQAuH/wTrPWd7D3pOrWxNS2
-         MGlCGQV90ssg0p0WuVMn+8SQcSLfKbPpuKg5CjfVLckM6Arqe++WHEThQiKDE+QS94kI
-         cxM5IjzuqPGY78aE/PF5Rfbu5tr1nE8XTSNhh3bxw3cFyW2oZnjTMACXBlgubC3xmeYs
-         smqRndd0+3MiEuxBt9klmRr5yIA+V6gwE5P3INTiF8u3y8rAmRIpZgiNZDMSW/Gh88b+
-         S7Bw==
-X-Gm-Message-State: AAQBX9egZFexGYJxulwEJGFZMMosga/JBJf0LydUFH9mlKIZZBJBFsYb
-        EhaFkN1n3MElkhPii/lyD6ITPfdNIJhgpC5A4GE=
-X-Google-Smtp-Source: AKy350ZxOwLtvgcPNmIhWFUpTMkvqD/15JP96Vd6HCbIxMQB9mjPEDxZpbuhD+XZEG7JVVjG7PFRMmtKoD7VagOPClk=
-X-Received: by 2002:a17:907:d02:b0:931:6921:bdbb with SMTP id
- gn2-20020a1709070d0200b009316921bdbbmr1360329ejc.2.1679664263688; Fri, 24 Mar
- 2023 06:24:23 -0700 (PDT)
+        Fri, 24 Mar 2023 09:24:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB798EB4D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:24:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5A6111FB;
+        Fri, 24 Mar 2023 06:25:35 -0700 (PDT)
+Received: from [10.1.28.32] (e122027.cambridge.arm.com [10.1.28.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 742EC3F766;
+        Fri, 24 Mar 2023 06:24:49 -0700 (PDT)
+Message-ID: <859ef16c-bf31-78f2-f3df-cf0ff9493b3c@arm.com>
+Date:   Fri, 24 Mar 2023 13:24:47 +0000
 MIME-Version: 1.0
-References: <20230324070807.6342-1-rui.zhang@intel.com> <20230324070807.6342-4-rui.zhang@intel.com>
-In-Reply-To: <20230324070807.6342-4-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 24 Mar 2023 14:24:12 +0100
-Message-ID: <CAJZ5v0gXfHQmRGEiHsZRXxTB+=dTLca9fbyQA299gL49ysF6rg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] thermal/core: Enforce paired .bind/.unbind callbacks
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] iommu/rockchip: Add missing set_platform_dma_ops
+ callback
+Content-Language: en-GB
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+References: <20230324111127.221640-1-steven.price@arm.com>
+ <8fda817c-98e7-1988-325d-52d09f3e61a8@linux.intel.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <8fda817c-98e7-1988-325d-52d09f3e61a8@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,42 +50,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 8:08 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> The .bind/.unbind callbacks are designed to allow the thermal zone
-> device to bind to/unbind from a matched cooling device, with thermal
-> instances created/deleted.
->
-> In this sense, .bind/.unbind callbacks must exist in pairs.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/thermal/thermal_core.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 5225d65fb0e0..9c447f22cb39 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1258,6 +1258,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->         if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
->                 return ERR_PTR(-EINVAL);
->
-> +       if ((ops->bind && !ops->unbind) || (!ops->bind && ops->unbind)) {
+On 24/03/2023 13:16, Baolu Lu wrote:
+> On 2023/3/24 19:11, Steven Price wrote:
+>> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+>> operation on ARM 32 bit after recent changes in the IOMMU framework
+>> (detach ops removal). But also the use of a NULL domain is confusing.
+>>
+>> Rework the code to have a singleton rk_identity_domain which is assigned
+>> to domain when using an identity mapping rather than "detaching". This
+>> makes the code easier to reason about.
+>>
+>> Signed-off-by: Steven Price <steven.price@arm.com>
+>> ---
+>> Changes since v1[1]:
+>>
+>>   * Reworked the code to avoid a NULL domain, instead a singleton
+>>     rk_identity_domain is used instead. The 'detach' language is no
+>>     longer used.
+>>
+>> [1]
+>> https://lore.kernel.org/r/20230315164152.333251-1-steven.price%40arm.com
+>>
+>>   drivers/iommu/rockchip-iommu.c | 50 ++++++++++++++++++++++++++--------
+>>   1 file changed, 39 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/iommu/rockchip-iommu.c
+>> b/drivers/iommu/rockchip-iommu.c
+>> index f30db22ea5d7..437541004994 100644
+>> --- a/drivers/iommu/rockchip-iommu.c
+>> +++ b/drivers/iommu/rockchip-iommu.c
+>> @@ -124,6 +124,7 @@ struct rk_iommudata {
+>>     static struct device *dma_dev;
+>>   static const struct rk_iommu_ops *rk_ops;
+>> +static struct iommu_domain rk_identity_domain;
+>>     static inline void rk_table_flush(struct rk_iommu_domain *dom,
+>> dma_addr_t dma,
+>>                     unsigned int count)
+>> @@ -980,26 +981,27 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+>>       return ret;
+>>   }
+>>   -static void rk_iommu_detach_device(struct iommu_domain *domain,
+>> -                   struct device *dev)
+>> +static int rk_iommu_identity_attach(struct iommu_domain
+>> *identity_domain,
+>> +                    struct device *dev)
+>>   {
+>>       struct rk_iommu *iommu;
+>> -    struct rk_iommu_domain *rk_domain = to_rk_domain(domain);
+>> +    struct rk_iommu_domain *rk_domain;
+>>       unsigned long flags;
+>>       int ret;
+>>         /* Allow 'virtual devices' (eg drm) to detach from domain */
+>>       iommu = rk_iommu_from_dev(dev);
+>>       if (!iommu)
+>> -        return;
+>> +        return -ENODEV;
+>> +
+>> +    rk_domain = to_rk_domain(iommu->domain);
+>>         dev_dbg(dev, "Detaching from iommu domain\n");
+>>   -    /* iommu already detached */
+>> -    if (iommu->domain != domain)
+>> -        return;
+>> +    if (iommu->domain == identity_domain)
+>> +        return 0;
+>>   -    iommu->domain = NULL;
+>> +    iommu->domain = identity_domain;
+> 
+> Where did identity_domain come from? Is it rk_identity_domain?
 
-This can be written as
+It's a parameter of the function. In the case of the call in
+rk_iommu_attach_device() then, yes, it's rk_identity_domain. But this
+function is also the "attach_dev" callback of "rk_identity_ops".
 
-        if (!!ops->bind != !!ops->unbind) {
+I'll admit this is cargo-culted from Jason's example:
 
-> +               pr_err("Thermal zone device .bind/.unbind not paired\n");
+https://lore.kernel.org/linux-iommu/ZBnef7g7GCxogPNz@ziepe.ca/
 
-And surely none of the existing drivers do that?  Because it would be
-a functional regression if they did.
+Steve
 
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +
->         if (!thermal_class)
->                 return ERR_PTR(-ENODEV);
->
-> --
+> Best regards,
+> baolu
+
