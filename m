@@ -2,198 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C016C862E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AED6C8632
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjCXTuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S231901AbjCXTuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjCXTuR (ORCPT
+        with ESMTP id S231802AbjCXTut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:50:17 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910A01816C;
-        Fri, 24 Mar 2023 12:50:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ejJodp5Dfmob7fGXSRG6aQF6aLRJDydiPj4dfY5mg4vDRz8Zi+U/SXrXdWrN+Xdv2HMTrfKRLZpsj41tA4nfIxzIK0HE7o5hGXMdFH8z5DNGZQhHwdWs4WuF5gAS5XRSou+Wn5M6eQIywBtqUGNkxTYa3PQjvwpgG6yXDTrA3/ejmJ0udik0DqJSWQM6JAVa6pNyYF6ihXw8gcIpRZkuJEwH0tnGJNnFjO0hFA8XnNIP10NkuhkkQvbNlPoIGg/qLVicb9jov+odWLbdYXLFCk7KCffs2vC+8Mp1dI6RHAI81+Ocref8by2tufZgaFMtf1KuO/fcXsSoS/AkR+31pA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GNAItSyEmikMBul8vf3l4MKr/QxxZjaxucQoO+p8TKk=;
- b=kZVQiWggX2OlgyxmYts8W3mXSbEqwKuD0Lzxs2/m51yaZh+6yCwuMWi0/AuNTDjPCwsZM843scz7L2Q9CYUUy0YY/lwvbz/kHLRch3xbxe41iLw5tQCX9YIePftD9xUZL/0SHpTJfe783Yj0OD5uYB1qzy9Ej+i0juLWHnYfctQfSSJW67FjNiRePAHKXdtrbPw3cVE/psSlTu9rzbZeDFY+ylmuTgnIsufO3WwyN9qJtdzdDSllf7sK0jugEM/7Ova1Qo+9SvS/CkqZndFk2ePOicmv8F24dBoxyCnosUtoyax27gMv8EmRryFWMQxJSCX/LbP8+bvNP/KmIjNQgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GNAItSyEmikMBul8vf3l4MKr/QxxZjaxucQoO+p8TKk=;
- b=buWfbj2wLPPNraDSy9+M2NZanC3swDfUEm5ploMGe/7qwSzR472FKusd8QZIe23DIA9jwpZJgipzKQxSBPBUJOno2OiSnNKgcBfCh19fdHinCMgIkD1xQVsdV81phPBt9B6DO3QQSdP9/kmAH0UI8pnZSuXwdScoCiYRQ7PedXs=
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com (2603:10b6:4:aa::29)
- by SN7PR19MB4797.namprd19.prod.outlook.com (2603:10b6:806:104::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Fri, 24 Mar
- 2023 19:50:13 +0000
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69]) by DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::e6d4:29f7:2077:bd69%4]) with mapi id 15.20.6086.024; Fri, 24 Mar 2023
- 19:50:13 +0000
-From:   Bernd Schubert <bschubert@ddn.com>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miklos Szeredi <miklos@szeredi.hu>
-CC:     Dharmendra Singh <dsingh@ddn.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: fuse uring / wake_up on the same core
-Thread-Topic: fuse uring / wake_up on the same core
-Thread-Index: AQHZXonYo+gt+cSL6UOMGg0a/H7o1A==
-Date:   Fri, 24 Mar 2023 19:50:12 +0000
-Message-ID: <d0ed1dbd-1b7e-bf98-65c0-7f61dd1a3228@ddn.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ddn.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR1901MB2037:EE_|SN7PR19MB4797:EE_
-x-ms-office365-filtering-correlation-id: 8e6f2a06-92f0-455c-5127-08db2ca0fb81
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YHoxe/hgKqdn1AefyGYTGn5g0BH7vT/TW03/ohLrP5krjFAikN2i80w9xStk+KbQoWlt+Mg6SnAjCAudg2DeF6j+kjFHsnwRSIeJwqwDhVB1lCR7xB6EjBU9I0yASSzVKj1+fC86nY83sZabYwKePUKVXoyJdnDRxuL5Uba/vX9/rJkAvgktGT6c4W0+elbCJp4sIYXO+oLRlCgxTQZIjjGK8CPNZD4WmArFOO0hNOI3zwJWNtTgFRui31KO/xNBFX1wtHCE4aTSL5p5BEC0bR5Oy8Ua60QBuF8iOp4HynjzB56BbHaHP+MvY8UHe8wtVcHJG32XdH9Xk49D+p1dIqTsSINT1423S17yX4i5BUcGAHVMkKOgrH7l9mg59tvNOJH4zcbdQRV7YfOfuUH12mFg+PbtKc05XYS6dnCMtSO2dA7mAoEdyl4jJFBlLYNZhqPG/GFhcIkTS9BYd5ousIXevcs4o9JkLrAxHJwpcQF9TznqMSc0RJiOTZaP4lc3ALwi07nFJp8WOJ8Ijvc837oaaTnzDI8HOBQTGXb9Y1vGJc7jhT5fwg0lynRAKEEsHG3XvB8xEzXkgWL+KkcV0MR42vpnYsy1FMVpbK+pH/nZSqyeyXy5fji1T0nxXbvGLCYZCYMgdDG4vw/ZYgAYqXz5gE8BW8WQPZl10YfaV7E=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1901MB2037.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39850400004)(136003)(396003)(346002)(451199021)(2616005)(110136005)(122000001)(36756003)(66446008)(54906003)(6506007)(66946007)(64756008)(8676002)(478600001)(38100700002)(41300700001)(2906002)(76116006)(8936002)(83380400001)(6486002)(4326008)(966005)(38070700005)(66476007)(316002)(186003)(71200400001)(31696002)(86362001)(66556008)(6512007)(31686004)(5660300002)(91956017)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SVJ1MDdGSFpHNXV2S2NheHNqbVN1VEM3d0NFSmVLV2ZHTExrbEhaSmdaeDJy?=
- =?utf-8?B?WnE5VHNUNzk4VUsrVjZMMmZCZGxNU1VMV3NJNkJIOEJ4K05uY2UzNURoU2w5?=
- =?utf-8?B?ajcvaS93Qy9ycVVCQmlpYWUzTytYdzU2eEVubDhxN1ZOcTFIOTRnWjA1Y0F2?=
- =?utf-8?B?dnlhQlF2Z3JIODd3Ri9ld2RPV3crblRXMzQ2OGEralZJYytWQ29ka3pGVHpw?=
- =?utf-8?B?WXB3V3lEV3JSd052eGZMdzJDMDF4OGh3NEErUTEzV0IvU3gwWmEvVW1UTkZj?=
- =?utf-8?B?UWdEeUkweEJQVCt3M1M1VFhKU1F3a3Iyci9mSWxvSG5EbEdkSnJRK1hsZUF4?=
- =?utf-8?B?T1lOYTdmTEdqT01FQzY2OGVNTW8vOXZzNVkwRmJFdnRoVlMvZ0I5VWcxK054?=
- =?utf-8?B?Uk4zazVuS2FXRzI5WTN0WC8xb29PalZYVzdBaWY5NUs2YTRTN3BpbVBHZDhQ?=
- =?utf-8?B?REM0WTFUWHZ0dXlFY1FEdzZ1R0N0QzdiM1dYT2RsekNJS1JHeFdGTDlQUTVn?=
- =?utf-8?B?Y20xVnZhcjN2UjRacmpxb2hRQmZFQUpKRWJGQXQ0NFdrcWVueDltTXUrSUxB?=
- =?utf-8?B?NUNZZ3RBL1BhWGtuOVFGRjMwTnRTL0l1YzZCQ0dtV1hQMkJ6UHB5U3BYS2hs?=
- =?utf-8?B?UWx2c0x0NTVhMVpWZE5XSTRHRUdDNHN1NTJueXBuZ0x5a0xzYzJsbmp0MENq?=
- =?utf-8?B?ZUZDTWpWN3ZtS3A0eElsZjRLQjBmMSs1c1E5cm1RSDJBM2hRdnl5dWh3Wkc0?=
- =?utf-8?B?azI1cGNSVXIvQlRrZWZ3MENZQk1ieHNsd0VldnlCL21PQXZ4QW5KY2tCMU1Y?=
- =?utf-8?B?dTJwNjByc3Z3d0VNSCt6b096dExadTZkTm90M2FjY0NmOEl4QkdCamNyZnpa?=
- =?utf-8?B?MkxzcjlhOHZTeCtiTFFBbGFIdnZlSUVOYmxrZ3NUa1hkaDk0MjNkdUpMWW5X?=
- =?utf-8?B?QlVucHFxMDZmSDI1NVBMd3NRTUtpS0oxWEpQTzJ0ZkFpNUtJeXZmaFZYYmhy?=
- =?utf-8?B?WDFXdDA1SFVsQ2JxWk94cXBEMXJlaWx5K3ZFWVQ3UXU4a1U4aTdDdW4yeTBY?=
- =?utf-8?B?Z3M2RXpBZ0N5N08vWTZpMkExV0hLeUE2N1hYUVdIYURqSmlzanNnNDFibVcx?=
- =?utf-8?B?TEp1RFd1K3NiZVNQdXBNS1FrSEtRVnFwalZjbjFQWGJZQStZSEZnS2NGa3RG?=
- =?utf-8?B?VUtsazdZTmREUjZxcnUyUG1rb25DNjlEaDduSGtLNG44VFgyM1pNY2dGcjc1?=
- =?utf-8?B?WUIwZ21qSDRtaFA2SGhJaUVWQXZSTU1vSE1hV0l2RDNBSjhvK0hGK0FGLzlr?=
- =?utf-8?B?MG9WcEtCTFdDQjAxei9HaXg4TGh6K2toSGdjTVREQnJhcnlzdTFFbUtRV3hl?=
- =?utf-8?B?bWI4RjZGdTRiOEVPV3Fva0dGM3A5VUtlYlZyeXFHVjFMcmhLZUgxUkFEVXhn?=
- =?utf-8?B?K0p3ejFpNU5lTlNrdTBoSG9rK1kvRzhqakNTSWZXM1JvNktyT0g5RXFUYzgz?=
- =?utf-8?B?cWZWYk5veHpPbFhCZ3VlRUZFU0xmSlQ2YzBMalQ4allDSS9haHRwSXc3MDc5?=
- =?utf-8?B?VXlvUXdwUjZ3eU1VMDBjd3RrVjliOGlqNkI1MVlOMzBpQWpqckMwZkZ1Mjhn?=
- =?utf-8?B?dWtwYURLeHYwdjAwZ2x3UW5KdTQ4enZva05FS3pNc1VHQVNDbWlKK0lYMy92?=
- =?utf-8?B?QXRYemt0YnNhcFNOY2tjZFdLVktHa0FDZUxvR1NZQWFscXVreHJSN2FIYk0x?=
- =?utf-8?B?eW5ZcTM3L29kbUVhWWpWd01ua1M4VDVkTW1yTEw0Q2xDQUxQNThlME1PTzNl?=
- =?utf-8?B?MHFBalhlWDY5RlMrdWRZejd4c3ZIc0JkZlNIRjcwUXVXY0JvWGpwWk4xTmRW?=
- =?utf-8?B?ajEyNmZRbUxjbVljNXdJQmdJaEVMbFFFa2JkV3lnOFBqUUVkMWc5U2p4cXVG?=
- =?utf-8?B?a0VUQjhPUXJjci9OTmxkVWxhS2FFeEthNzJZQ0ErTW1TUzhZOXZmVks1aWFa?=
- =?utf-8?B?VVhPZjZnMWZKMXd5cjFGQUNpVmh1TVBHVHFadGEvazRQQzhLVWZ3YjJKN1Fv?=
- =?utf-8?B?WDd1VmMyK0dENWpkMDlralY3RkY1Tm1saDBJVmNrdjUrRFE0SzNKVnRkUW1W?=
- =?utf-8?B?ekxZK2NndzVVeTVwVDY2V09wbCtNRDF0eGJZWVJmR3ptcjhhRGJPMnFhc0RC?=
- =?utf-8?Q?FXObVDG7lXZc+t7KqoRFAbI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0B861D93088B6A46BD717083052DDA63@namprd19.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 24 Mar 2023 15:50:49 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5631B543
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:50:38 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id y15so3609830lfa.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112; t=1679687436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Yw8aFsO52nF+rCwkiyobvl69eUncIFVtLSBaTu9azE=;
+        b=j6jff6epBcmgpWZzr6Mt4fo1JsP01f32arVrxjAkaSC5wFGzaZyAdq2zMj7mb/PTdh
+         0OzYz9mESkbBxCpeuK39NQJTQI+dhTUDSv+8GC/8lLDOxF1+Jg5Ef7gbjlwjJQssNkZ4
+         s8Z8OM1IC1AJv+yrkTyviHWcDBDADHX1czDoDx2Wn3QdQZXptwIqe6mzmvhibgvSvsOd
+         g0XtmqMsoGc/N7Bi3bGtaZ8WSHMq79vDh6/U6MVgA4pUeIXfu2TI1SIg3+GqEF/WIIl0
+         Qyul0WtoCGDrbnBp+grjJ0yXNO9ra71E2CxyFvxLOMbGdOWbzOj6lLaQpOEMbaiv3Gea
+         DGJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679687436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Yw8aFsO52nF+rCwkiyobvl69eUncIFVtLSBaTu9azE=;
+        b=jSUCzK4+tlpiVsbaIrA9frLQXcbPqfWKAW9ffvDk2AjN56DhETuZPvg1/g+CjTd+nY
+         BYVqJrB0s7UPUwi5WXfRKymggGLvUIXC2UBatNqbR9Zn3fTtOhW18RxPyn8qjdELEWpl
+         SpjlCPedhxo4TA5ibBvDTqqNTgbaicb8C1p43w9JMiEXcNS3hGiOmw3D37f84koisVh8
+         Eo+dMvSGVgf7EngZSonjaHEyafdL+ew9eo98+50iQjsyagvePETI/SaTiAr1rrQRaczf
+         HFpsa3XZnyS1x52uRvD2VVxRT5xA3jj+AUBv4j5q2XDlKvLlwryR/4cQ/XDdFo4IMNZn
+         /Brw==
+X-Gm-Message-State: AAQBX9eal+l3cQ1CkDwsgNTmV3ifTm+D2D78kfYAXu95NLpAPrNdJ1KB
+        y/QlGgkFTUKkmeEtrZHFb13ywg==
+X-Google-Smtp-Source: AKy350bUox4jMX8WDd8OT9XknY5+QOLfcn69cZ0KHubEUzso4Fj26uq9efyRVcRKrDtp9MOWavheWA==
+X-Received: by 2002:ac2:4c13:0:b0:4e9:2c0e:c39d with SMTP id t19-20020ac24c13000000b004e92c0ec39dmr879285lfq.41.1679687436084;
+        Fri, 24 Mar 2023 12:50:36 -0700 (PDT)
+Received: from vp-pc.. (109-252-122-203.nat.spd-mgts.ru. [109.252.122.203])
+        by smtp.gmail.com with ESMTPSA id 15-20020ac2484f000000b004eaf6d7228bsm1136021lfy.110.2023.03.24.12.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 12:50:35 -0700 (PDT)
+From:   Viktor Prutyanov <viktor@daynix.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     cohuck@redhat.com, pasic@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, yan@daynix.com, viktor@daynix.com
+Subject: [PATCH v6] virtio: add VIRTIO_F_NOTIFICATION_DATA feature support
+Date:   Fri, 24 Mar 2023 22:50:29 +0300
+Message-Id: <20230324195029.2410503-1-viktor@daynix.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1901MB2037.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e6f2a06-92f0-455c-5127-08db2ca0fb81
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 19:50:12.8534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0XWiQxS/gKnWDl/a/H+IWgf077u2ey3nnCdwv5qZYAvFZPtqpQB1Zf3hgNhN2wlD2hCukRzrZNdciB/Y93U2RQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR19MB4797
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SW5nbywgUGV0ZXIsDQoNCkkgd291bGQgbGlrZSB0byBhc2sgaG93IHRvIHdha2UgdXAgZnJvbSBh
-IHdhaXRxIG9uIHRoZSBzYW1lIGNvcmUuIEkgaGF2ZSANCnRyaWVkIF9fd2FrZV91cF9zeW5jKCkv
-V0ZfU1lOQywgYnV0IEkgZG8gbm90IHNlZSBhbnkgZWZmZWN0Lg0KDQpJJ20gY3VycmVudGx5IHdv
-cmtpbmcgb24gZnVzZS91cmluZyBjb21tdW5pY2F0aW9uIHBhdGNoZXMsIGJlc2lkZXMgdXJpbmcg
-DQpjb21tdW5pY2F0aW9uIHRoZXJlIGlzIGFsc28gYSBxdWV1ZSBwZXIgY29yZS4gQmFzaWMgYm9u
-bmllKysgYmVuY2htYXJrcyANCndpdGggYSB6ZXJvIGZpbGUgc2l6ZSB0byBqdXN0IGNyZWF0ZS9y
-ZWFkKDApL2RlbGV0ZSBzaG93IGEgfjN4IElPUHMgDQpkaWZmZXJlbmNlIGJldHdlZW4gQ1BVIGJv
-dW5kIGJvbm5pZSsrIGFuZCB1bmJvdW5kIC0gaS5lLiB3aXRoIHRoZXNlIA0KcGF0Y2hlcyBpdCBf
-bm90XyBmdXNlLWRhZW1vbiB0aGF0IG5lZWRzIHRvIGJlIGJvdW5kLCBidXQgdGhlIGFwcGxpY2F0
-aW9uIA0KZG9pbmcgSU8gdG8gdGhlIGZpbGUgc3lzdGVtLiBXZSBiYXNpY2FsbHkgaGF2ZQ0KDQpi
-b25uaWUgLT4gdmZzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoYXBwL3ZmcykNCiAg
-IGZ1c2VfcmVxICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoYXBwL2Z1c2Uua28p
-DQogICBxaWQgPSB0YXNrX2NwdShjdXJyZW50KSAgICAgICAgICAgICAgICAgIChhcHAvZnVzZS5r
-bykNCiAgICAgcmluZyhxaWQpIC8gU1FFIGNvbXBsZXRpb24gKGZ1c2Uua28pICAgKGFwcC9mdXNl
-LmtvL3VyaW5nKQ0KICAgICAgIHdhaXRfZXZlbnQocmVxLT53YWl0cSwgLi4uKSAgICAgICAgICAo
-YXBwL2Z1c2Uua28pDQogICAgICAgW2FwcCB3YWl0XQ0KICAgICAgICAgZGFlbW9uIHJpbmcgLyBo
-YW5kbGUgQ1FFICAgICAgICAgICAoZGFlbW9uKQ0KICAgICAgICAgICBzZW5kLWJhY2sgcmVzdWx0
-IGFzIFNRRSAgICAgICAgICAoZGFlbW9uL3VyaW5nKQ0KICAgICAgICAgICAgIGZ1c2VfcmVxdWVz
-dF9lbmQgICAgICAgICAgICAgICAoZGFlbW9uL3VyaW5nL2Z1c2Uua28pDQogICAgICAgICAgIHdh
-a2VfdXAoKSAgLS0tPiByYW5kb20gY29yZSAgICAgIChkYWVtb24vdXJpbmcvZnVzZS5rbykNCiAg
-ICAgICBbYXBwIHdha2V1cC9mdXNlL3Zmcy9zeXNjYWxsIHJldHVybl0NCmJvbm5pZSA9PT4gZGlm
-ZmVyZW50IGNvcmUNCg0KDQoxKSBib3VuZA0KDQpbcm9vdEBpbWVzcnYxIH5dIyBudW1hY3RsIC0t
-bG9jYWxhbGxvYyAtLXBoeXNjcHViaW5kPTAgYm9ubmllKysgLXEgLXggMSANCi1zMCAgLWQgL3Nj
-cmF0Y2gvZGVzdC8gLW4gMjA6MToxOjIwIC1yIDAgLXUgMCB8IGJvbl9jc3YydHh0DQogICAgICAg
-ICAgICAgICAgICAgICAtLS0tLS1TZXF1ZW50aWFsIENyZWF0ZS0tLS0tLSAtLS0tLS0tLVJhbmRv
-bSANCkNyZWF0ZS0tLS0tLS0tDQogICAgICAgICAgICAgICAgICAgICAtQ3JlYXRlLS0gLS1SZWFk
-LS0tIC1EZWxldGUtLSAtQ3JlYXRlLS0gLS1SZWFkLS0tIA0KLURlbGV0ZS0tDQogICAgICAgZmls
-ZXM6bWF4Om1pbiAgL3NlYyAlQ1AgIC9zZWMgJUNQICAvc2VjICVDUCAgL3NlYyAlQ1AgIC9zZWMg
-JUNQIA0KL3NlYyAlQ1ANCmltZXNydjEgICAyMDoxOjE6MjAgIDYyMjkgIDI4IDExMjg5ICA0MSAx
-Mjc4NSAgMjQgIDY2MTUgIDI4ICA3NzY5ICA0MCANCjEwMDIwICAyNQ0KTGF0ZW5jeSAgICAgICAg
-ICAgICAgIDQxMXVzICAgICA4MjR1cyAgICAgODE2dXMgICAgIDI5OHVzICAgMTA0NzN1cyANCjIw
-MG1zDQoNCg0KMikgbm90IGJvdW5kDQoNCltyb290QGltZXNydjEgfl0jIGJvbm5pZSsrIC1xIC14
-IDEgLXMwICAtZCAvc2NyYXRjaC9kZXN0LyAtbiAyMDoxOjE6MjAgDQotciAwIC11IDAgfCBib25f
-Y3N2MnR4dA0KICAgICAgICAgICAgICAgICAgICAgLS0tLS0tU2VxdWVudGlhbCBDcmVhdGUtLS0t
-LS0gLS0tLS0tLS1SYW5kb20gDQpDcmVhdGUtLS0tLS0tLQ0KICAgICAgICAgICAgICAgICAgICAg
-LUNyZWF0ZS0tIC0tUmVhZC0tLSAtRGVsZXRlLS0gLUNyZWF0ZS0tIC0tUmVhZC0tLSANCi1EZWxl
-dGUtLQ0KICAgICAgIGZpbGVzOm1heDptaW4gIC9zZWMgJUNQICAvc2VjICVDUCAgL3NlYyAlQ1Ag
-IC9zZWMgJUNQICAvc2VjICVDUCANCi9zZWMgJUNQDQppbWVzcnYxICAgMjA6MToxOjIwICAyMDY0
-ICAzMyAgMjkyMyAgNDMgIDQ1NTYgIDI4ICAyMDYxICAzMyAgMjE4NiAgNDIgDQo0MjQ1ICAzMA0K
-TGF0ZW5jeSAgICAgICAgICAgICAgIDg1MHVzICAgIDM5MTR1cyAgICAyNDk2dXMgICAgIDczOHVz
-ICAgICA3NTh1cyANCjY0Njl1cw0KDQoNCldpdGggbGVzcyBmaWxlcyB0aGUgZGlmZmVyZW5jZSBi
-ZWNvbWVzIGEgYml0IHNtYWxsZXIsIGJ1dCBpcyBzdGlsbCB2ZXJ5IA0KdmlzaWJsZS4gQmVzaWRl
-cyBjYWNoZSBsaW5lIGJvdW5jaW5nLCBJJ20gc3VyZSB0aGF0IENQVSBmcmVxdWVuY3kgYW5kIA0K
-Qy1zdGF0ZXMgd2lsbCBtYXR0ZXIgLSBJIGNvdWxkIHR1bmUgdGhhdCBpdCBpbiB0aGUgbGFiLCBi
-dXQgaW4gdGhlIGVuZCBJIA0Kd2FudCB0byB0ZXN0IHdoYXQgdXNlcnMgZG8gKEkgaGFkIHJlY2Vu
-dGx5IGNoZWNrZWQgd2l0aCBsYXJnZSBIUEMgY2VudGVyIA0KLSBGb3JzY2h1bmdzemVudHJ1bSBK
-dWVsaWNoIC0gdGhlaXIgSFBDIGNvbXB1dGUgbm9kZXMgYXJlIG5vdCB0dW5lZCB1cCwgDQp0byBz
-YXZlIGVuZXJneSkuDQpBbHNvLCBpbiBvcmRlciB0byByZWFsbHkgdHVuZSBkb3duIGxhdGVuY2ll
-cywgSSB3YW50IHdhbnQgdG8gYWRkIGEgDQpzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zOjp1cmluZ19j
-bWRfaW9wb2xsIHRocmVhZCwgd2hpY2ggd2lsbCBzcGluIGZvciBhIA0Kc2hvcnQgdGltZSBhbmQg
-YXZvaWQgbW9zdCBvZiBrZXJuZWwvdXNlcnNwYWNlIGNvbW11bmljYXRpb24uIElmIA0KYXBwbGlj
-YXRpb25zICh3aXRoIG4tbnRocmVhZHMgPCBuLWNvcmVzKSB0aGVuIGdldCBzY2hlZHVsZWQgb24g
-ZGlmZmVyZW50IA0KY29yZSBkaWZmZXJuZW50IHJpbmdzIHdpbGwgYmUgdXNlZCwgcmVzdWx0IGlu
-DQpuLXRocmVhZHMtc3Bpbm5pbmcgPiBuLXRocmVhZHMtYXBwbGljYXRpb24NCg0KDQpUaGVyZSB3
-YXMgYWxyZWFkeSBhIHJlbGF0ZWQgdGhyZWFkIGFib3V0IGZ1c2UgYmVmb3JlDQoNCmh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2xrbWwvMTYzODc4MDQwNS0zODAyNi0xLWdpdC1zZW5kLWVtYWlsLXF1
-aWNfcHJhZ2FsbGFAcXVpY2luYy5jb20vDQoNCldpdGggdGhlIGZ1c2UtdXJpbmcgcGF0Y2hlcyB0
-aGF0IHBhcnQgaXMgYmFzaWNhbGx5IHNvbHZlZCAtIHRoZSB3YWl0cSANCnRoYXQgdGhhdCB0aHJl
-YWQgaXMgYWJvdXQgaXMgbm90IHVzZWQgYW55bW9yZS4gQnV0IGFzIHBlciBhYm92ZSwgDQpyZW1h
-aW5pbmcgaXMgdGhlIHdhaXRxIG9mIHRoZSBpbmNvbWluZyB3b3JrcSAobm90IG1lbnRpb25lZCBp
-biB0aGUgDQp0aHJlYWQgYWJvdmUpLiBBcyBJIHdyb3RlLCBJIGhhdmUgdHJpZWQNCl9fd2FrZV91
-cF9zeW5jKCh4KSwgVEFTS19OT1JNQUwpLCBidXQgaXQgZG9lcyBub3QgbWFrZSBhIGRpZmZlcmVu
-Y2UgZm9yIA0KbWUgLSBzaW1pbGFyIHRvIE1pa2xvcycgdGVzdGluZyBiZWZvcmUuIEkgaGF2ZSBh
-bHNvIHRyaWVkIHN0cnVjdCANCmNvbXBsZXRpb24gLyBzd2FpdCAtIGRvZXMgbm90IG1ha2UgYSBk
-aWZmZXJlbmNlIGVpdGhlci4NCkkgY2FuIHNlZSB0YXNrX3N0cnVjdCBoYXMgd2FrZV9jcHUsIGJ1
-dCB0aGVyZSBkb2Vzbid0IHNlZW0gdG8gYmUgYSBnb29kIA0KaW50ZXJmYWNlIHRvIHNldCBpdC4N
-Cg0KQW55IGlkZWFzPw0KDQoNClRoYW5rcywNCkJlcm5kDQoNCg0KDQoNCg0KDQo=
+According to VirtIO spec v1.2, VIRTIO_F_NOTIFICATION_DATA feature
+indicates that the driver passes extra data along with the queue
+notifications.
+
+In a split queue case, the extra data is 16-bit available index. In a
+packed queue case, the extra data is 1-bit wrap counter and 15-bit
+available index.
+
+Add support for this feature for MMIO, channel I/O and modern PCI
+transports.
+
+Signed-off-by: Viktor Prutyanov <viktor@daynix.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ v6: use VRING_PACKED_EVENT_F_WRAP_CTR
+ v5: replace ternary operator with if-else
+ v4: remove VP_NOTIFY macro and legacy PCI support, add
+    virtio_ccw_kvm_notify_with_data to virtio_ccw
+ v3: support feature in virtio_ccw, remove VM_NOTIFY, use avail_idx_shadow,
+    remove byte swap, rename to vring_notification_data
+ v2: reject the feature in virtio_ccw, replace __le32 with u32
+
+ Tested with disabled VIRTIO_F_NOTIFICATION_DATA on qemu-system-s390x
+ (virtio-blk-ccw), qemu-system-riscv64 (virtio-blk-device,
+ virtio-rng-device), qemu-system-x86_64 (virtio-blk-pci, virtio-net-pci)
+ to make sure nothing is broken.
+ Tested with enabled VIRTIO_F_NOTIFICATION_DATA on 64-bit RISC-V Linux
+ and my hardware implementation of virtio-rng with MMIO.
+
+ drivers/s390/virtio/virtio_ccw.c   | 22 +++++++++++++++++++---
+ drivers/virtio/virtio_mmio.c       | 18 +++++++++++++++++-
+ drivers/virtio/virtio_pci_modern.c | 17 ++++++++++++++++-
+ drivers/virtio/virtio_ring.c       | 19 +++++++++++++++++++
+ include/linux/virtio_ring.h        |  2 ++
+ include/uapi/linux/virtio_config.h |  6 ++++++
+ 6 files changed, 79 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+index 954fc31b4bc7..02922768b129 100644
+--- a/drivers/s390/virtio/virtio_ccw.c
++++ b/drivers/s390/virtio/virtio_ccw.c
+@@ -391,7 +391,7 @@ static void virtio_ccw_drop_indicator(struct virtio_ccw_device *vcdev,
+ 	ccw_device_dma_free(vcdev->cdev, thinint_area, sizeof(*thinint_area));
+ }
+ 
+-static bool virtio_ccw_kvm_notify(struct virtqueue *vq)
++static inline bool virtio_ccw_do_kvm_notify(struct virtqueue *vq, u32 data)
+ {
+ 	struct virtio_ccw_vq_info *info = vq->priv;
+ 	struct virtio_ccw_device *vcdev;
+@@ -402,12 +402,22 @@ static bool virtio_ccw_kvm_notify(struct virtqueue *vq)
+ 	BUILD_BUG_ON(sizeof(struct subchannel_id) != sizeof(unsigned int));
+ 	info->cookie = kvm_hypercall3(KVM_S390_VIRTIO_CCW_NOTIFY,
+ 				      *((unsigned int *)&schid),
+-				      vq->index, info->cookie);
++				      data, info->cookie);
+ 	if (info->cookie < 0)
+ 		return false;
+ 	return true;
+ }
+ 
++static bool virtio_ccw_kvm_notify(struct virtqueue *vq)
++{
++	return virtio_ccw_do_kvm_notify(vq, vq->index);
++}
++
++static bool virtio_ccw_kvm_notify_with_data(struct virtqueue *vq)
++{
++	return virtio_ccw_do_kvm_notify(vq, vring_notification_data(vq));
++}
++
+ static int virtio_ccw_read_vq_conf(struct virtio_ccw_device *vcdev,
+ 				   struct ccw1 *ccw, int index)
+ {
+@@ -495,6 +505,7 @@ static struct virtqueue *virtio_ccw_setup_vq(struct virtio_device *vdev,
+ 					     struct ccw1 *ccw)
+ {
+ 	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
++	bool (*notify)(struct virtqueue *vq);
+ 	int err;
+ 	struct virtqueue *vq = NULL;
+ 	struct virtio_ccw_vq_info *info;
+@@ -502,6 +513,11 @@ static struct virtqueue *virtio_ccw_setup_vq(struct virtio_device *vdev,
+ 	unsigned long flags;
+ 	bool may_reduce;
+ 
++	if (__virtio_test_bit(vdev, VIRTIO_F_NOTIFICATION_DATA))
++		notify = virtio_ccw_kvm_notify_with_data;
++	else
++		notify = virtio_ccw_kvm_notify;
++
+ 	/* Allocate queue. */
+ 	info = kzalloc(sizeof(struct virtio_ccw_vq_info), GFP_KERNEL);
+ 	if (!info) {
+@@ -524,7 +540,7 @@ static struct virtqueue *virtio_ccw_setup_vq(struct virtio_device *vdev,
+ 	may_reduce = vcdev->revision > 0;
+ 	vq = vring_create_virtqueue(i, info->num, KVM_VIRTIO_CCW_RING_ALIGN,
+ 				    vdev, true, may_reduce, ctx,
+-				    virtio_ccw_kvm_notify, callback, name);
++				    notify, callback, name);
+ 
+ 	if (!vq) {
+ 		/* For now, we fail if we can't get the requested size. */
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 3ff746e3f24a..dd4424c14233 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -285,6 +285,16 @@ static bool vm_notify(struct virtqueue *vq)
+ 	return true;
+ }
+ 
++static bool vm_notify_with_data(struct virtqueue *vq)
++{
++	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vq->vdev);
++	u32 data = vring_notification_data(vq);
++
++	writel(data, vm_dev->base + VIRTIO_MMIO_QUEUE_NOTIFY);
++
++	return true;
++}
++
+ /* Notify all virtqueues on an interrupt. */
+ static irqreturn_t vm_interrupt(int irq, void *opaque)
+ {
+@@ -363,12 +373,18 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+ 				  const char *name, bool ctx)
+ {
+ 	struct virtio_mmio_device *vm_dev = to_virtio_mmio_device(vdev);
++	bool (*notify)(struct virtqueue *vq);
+ 	struct virtio_mmio_vq_info *info;
+ 	struct virtqueue *vq;
+ 	unsigned long flags;
+ 	unsigned int num;
+ 	int err;
+ 
++	if (__virtio_test_bit(vdev, VIRTIO_F_NOTIFICATION_DATA))
++		notify = vm_notify_with_data;
++	else
++		notify = vm_notify;
++
+ 	if (!name)
+ 		return NULL;
+ 
+@@ -397,7 +413,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned int in
+ 
+ 	/* Create the vring */
+ 	vq = vring_create_virtqueue(index, num, VIRTIO_MMIO_VRING_ALIGN, vdev,
+-				 true, true, ctx, vm_notify, callback, name);
++				 true, true, ctx, notify, callback, name);
+ 	if (!vq) {
+ 		err = -ENOMEM;
+ 		goto error_new_virtqueue;
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index 9e496e288cfa..05deba5153bd 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -288,6 +288,15 @@ static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
+ 	return vp_modern_config_vector(&vp_dev->mdev, vector);
+ }
+ 
++static bool vp_notify_with_data(struct virtqueue *vq)
++{
++	u32 data = vring_notification_data(vq);
++
++	iowrite32(data, (void __iomem *)vq->priv);
++
++	return true;
++}
++
+ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 				  struct virtio_pci_vq_info *info,
+ 				  unsigned int index,
+@@ -298,10 +307,16 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ {
+ 
+ 	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
++	bool (*notify)(struct virtqueue *vq);
+ 	struct virtqueue *vq;
+ 	u16 num;
+ 	int err;
+ 
++	if (__virtio_test_bit(&vp_dev->vdev, VIRTIO_F_NOTIFICATION_DATA))
++		notify = vp_notify_with_data;
++	else
++		notify = vp_notify;
++
+ 	if (index >= vp_modern_get_num_queues(mdev))
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -321,7 +336,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	vq = vring_create_virtqueue(index, num,
+ 				    SMP_CACHE_BYTES, &vp_dev->vdev,
+ 				    true, true, ctx,
+-				    vp_notify, callback, name);
++				    notify, callback, name);
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 4c3bb0ddeb9b..f9c6604352b4 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2752,6 +2752,23 @@ void vring_del_virtqueue(struct virtqueue *_vq)
+ }
+ EXPORT_SYMBOL_GPL(vring_del_virtqueue);
+ 
++u32 vring_notification_data(struct virtqueue *_vq)
++{
++	struct vring_virtqueue *vq = to_vvq(_vq);
++	u16 next;
++
++	if (vq->packed_ring)
++		next = (vq->packed.next_avail_idx &
++				~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR))) |
++			vq->packed.avail_wrap_counter <<
++				VRING_PACKED_EVENT_F_WRAP_CTR;
++	else
++		next = vq->split.avail_idx_shadow;
++
++	return next << 16 | _vq->index;
++}
++EXPORT_SYMBOL_GPL(vring_notification_data);
++
+ /* Manipulates transport-specific feature bits. */
+ void vring_transport_features(struct virtio_device *vdev)
+ {
+@@ -2771,6 +2788,8 @@ void vring_transport_features(struct virtio_device *vdev)
+ 			break;
+ 		case VIRTIO_F_ORDER_PLATFORM:
+ 			break;
++		case VIRTIO_F_NOTIFICATION_DATA:
++			break;
+ 		default:
+ 			/* We don't understand this bit. */
+ 			__virtio_clear_bit(vdev, i);
+diff --git a/include/linux/virtio_ring.h b/include/linux/virtio_ring.h
+index 8b95b69ef694..2550c9170f4f 100644
+--- a/include/linux/virtio_ring.h
++++ b/include/linux/virtio_ring.h
+@@ -117,4 +117,6 @@ void vring_del_virtqueue(struct virtqueue *vq);
+ void vring_transport_features(struct virtio_device *vdev);
+ 
+ irqreturn_t vring_interrupt(int irq, void *_vq);
++
++u32 vring_notification_data(struct virtqueue *_vq);
+ #endif /* _LINUX_VIRTIO_RING_H */
+diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
+index 3c05162bc988..2c712c654165 100644
+--- a/include/uapi/linux/virtio_config.h
++++ b/include/uapi/linux/virtio_config.h
+@@ -99,6 +99,12 @@
+  */
+ #define VIRTIO_F_SR_IOV			37
+ 
++/*
++ * This feature indicates that the driver passes extra data (besides
++ * identifying the virtqueue) in its device notifications.
++ */
++#define VIRTIO_F_NOTIFICATION_DATA	38
++
+ /*
+  * This feature indicates that the driver can reset a queue individually.
+  */
+-- 
+2.35.1
+
