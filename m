@@ -2,152 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78E16C7C1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F6E6C7C27
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCXKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S231308AbjCXKCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCXKBp (ORCPT
+        with ESMTP id S231358AbjCXKCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:01:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F9724BD4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98A14B82195
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D77C433EF;
-        Fri, 24 Mar 2023 10:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679652097;
-        bh=0clnbATA9VfATe4746ThObzt1WEqeVe1tU4HzAJpjo8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KZE0V/bYreIJl0TaFoHwb17WbnrzUI2kUAOJA4Jqk6NDmpDrO+xGKUcGzIaixxfbi
-         o/quWp8uCH9qJSBe1U0/X2ryrMW5enrbnzKKhI7x0K/anNmfeyTWg+6wvzfbkQHXrX
-         DU1A1hRk9sb1wUKjnuP7Kfp7MLIR9a0q9YBa9jNY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 2/2] driver core: class.h: remove extern from function prototypes
-Date:   Fri, 24 Mar 2023 11:01:32 +0100
-Message-Id: <20230324100132.1633647-2-gregkh@linuxfoundation.org>
+        Fri, 24 Mar 2023 06:02:47 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9EA2367E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:02:42 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j11so1449724lfg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fr24.com; s=google; t=1679652161;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hqniG2RTuzYc41TgGVo3CFmOEDPj8x/ry7qdxr2ig3U=;
+        b=WdI66PJPmXPEQ9JwFdMZEGzbWsV7VQNXtqHY0IP5KW3ugIT1HddLLFCZGJiW+0fXBb
+         acjfwE58oDPoFP7rSLsBqLYWet8dEnJR4hojFRxQSooIUzKmz4r5C9IPF2+YdVyfqzas
+         6q99o1Fh4jZ8c0agitV0Og+EynCvHsrEpn0Gh5nMyQUIsFkNumPNWlNkYWL4nit46dJa
+         RKpVlISZwv1/YbooAg7Rfz8nR8W7MyR46ZDSvEL6PtuKDXtHvjKDJ6ErB9Rvdee/gqET
+         GfS6FtV8SXIGlSKQ+0c0q4BVxM3LttghMmcZXwRrCNeg8juuGHOZFIVzxAl8ZKVCOL//
+         SdwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679652161;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hqniG2RTuzYc41TgGVo3CFmOEDPj8x/ry7qdxr2ig3U=;
+        b=hsCeiTupodOzzmzXCrUtn0+VUEOHx0s5MgQEQrfH4ZtsvJXJ3dyBlHwegvAUtR+Hxm
+         zhDoaxxho+XjrVQgao4XbDvZzudQIvUs/fpTow28sTkXjzapAmi5nMjZNRz0hKE4xoas
+         J3vuRcAHREbw8r7dQX8A4adRVa8/gExrBvExIqxCtq7yVRZOv+4MU7e2Yuk8V/jKNCRF
+         GDGSJtCHL7ce0b0fSlcHTbPs/MRuiUH5fIiNiUKU3fU16lbQOaYGL7J6zCow2xPJAMh8
+         SJbUzPrx/3/UI2bhyoHYQ1BnnMMKo119cu9xp6oa+szJ9va808ohDPRaYb7Yx4D0bklZ
+         Wypg==
+X-Gm-Message-State: AAQBX9fTlTwuEM6VQF2RA1he0XURIttjWWcP5jCwnrGPMl1+4s4Y3zT6
+        j4psVquIJO/wLKugqzLJqyrTww==
+X-Google-Smtp-Source: AKy350afxW/MzPpBo1E2U1b5voWjHTIIgFJ0cAMVXcl7lU1aJbGr3gBYCSMuQrZgHHbXj2qJBotQ7w==
+X-Received: by 2002:a19:ae02:0:b0:4ea:129c:528 with SMTP id f2-20020a19ae02000000b004ea129c0528mr653408lfc.56.1679652161179;
+        Fri, 24 Mar 2023 03:02:41 -0700 (PDT)
+Received: from localhost.localdomain (bl20-118-143.dsl.telepac.pt. [2.81.118.143])
+        by smtp.googlemail.com with ESMTPSA id q23-20020a19a417000000b004d865c781eesm3282268lfc.24.2023.03.24.03.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 03:02:40 -0700 (PDT)
+From:   =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunog@fr24.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next V4] xsk: allow remap of fill and/or completion rings
+Date:   Fri, 24 Mar 2023 10:02:22 +0000
+Message-Id: <20230324100222.13434-1-nunog@fr24.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230324100132.1633647-1-gregkh@linuxfoundation.org>
-References: <20230324100132.1633647-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4485; i=gregkh@linuxfoundation.org; h=from:subject; bh=0clnbATA9VfATe4746ThObzt1WEqeVe1tU4HzAJpjo8=; b=owGbwMvMwCRo6H6F97bub03G02pJDCmyJX8m16q926dXG9iueMj+ZFD+sePu/xn3tnGVyJRO4 3DhsZLpiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIkI3GNYMCes69FPX/+f836v czFtOPgns772E8P8vAM/mSbf99B0tItz/5n84pxl+O8oAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel coding style does not require 'extern' in function prototypes
-in .h files, so remove them from include/linux/device/class.h as they
-are not needed.
+The remap of fill and completion rings was frowned upon as they
+control the usage of UMEM which does not support concurrent use.
+At the same time this would disallow the remap of these rings
+into another process.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+A possible use case is that the user wants to transfer the socket/
+UMEM ownership to another process (via SYS_pidfd_getfd) and so
+would need to also remap these rings.
+
+This will have no impact on current usages and just relaxes the
+remap limitation.
+
+Signed-off-by: Nuno Gonçalves <nunog@fr24.com>
 ---
- include/linux/device/class.h | 46 ++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 26 deletions(-)
+V3 -> V4: Remove undesired format changes
+V2 -> V3: Call READ_ONCE for each variable and not for the ternary operator
+V1 -> V2: Format and comment changes
 
-diff --git a/include/linux/device/class.h b/include/linux/device/class.h
-index 03d2f99f84c5..1dc7706cb42d 100644
---- a/include/linux/device/class.h
-+++ b/include/linux/device/class.h
-@@ -82,8 +82,9 @@ struct class_dev_iter {
- 
- extern struct kobject *sysfs_dev_block_kobj;
- extern struct kobject *sysfs_dev_char_kobj;
--extern int __must_check class_register(struct class *class);
--extern void class_unregister(struct class *class);
-+
-+int __must_check class_register(struct class *class);
-+void class_unregister(struct class *class);
- 
- struct class_compat;
- struct class_compat *class_compat_register(const char *name);
-@@ -93,19 +94,15 @@ int class_compat_create_link(struct class_compat *cls, struct device *dev,
- void class_compat_remove_link(struct class_compat *cls, struct device *dev,
- 			      struct device *device_link);
- 
--extern void class_dev_iter_init(struct class_dev_iter *iter,
--				const struct class *class,
--				const struct device *start,
--				const struct device_type *type);
--extern struct device *class_dev_iter_next(struct class_dev_iter *iter);
--extern void class_dev_iter_exit(struct class_dev_iter *iter);
-+void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
-+			 const struct device *start, const struct device_type *type);
-+struct device *class_dev_iter_next(struct class_dev_iter *iter);
-+void class_dev_iter_exit(struct class_dev_iter *iter);
- 
--extern int class_for_each_device(const struct class *class, const struct device *start,
--				 void *data,
--				 int (*fn)(struct device *dev, void *data));
--extern struct device *class_find_device(const struct class *class,
--					const struct device *start, const void *data,
--					int (*match)(struct device *, const void *));
-+int class_for_each_device(const struct class *class, const struct device *start, void *data,
-+			  int (*fn)(struct device *dev, void *data));
-+struct device *class_find_device(const struct class *class, const struct device *start,
-+				 const void *data, int (*match)(struct device *, const void *));
- 
- /**
-  * class_find_device_by_name - device iterator for locating a particular device
-@@ -191,12 +188,10 @@ struct class_attribute {
- #define CLASS_ATTR_WO(_name) \
- 	struct class_attribute class_attr_##_name = __ATTR_WO(_name)
- 
--extern int __must_check class_create_file_ns(const struct class *class,
--					     const struct class_attribute *attr,
--					     const void *ns);
--extern void class_remove_file_ns(const struct class *class,
--				 const struct class_attribute *attr,
--				 const void *ns);
-+int __must_check class_create_file_ns(const struct class *class, const struct class_attribute *attr,
-+				      const void *ns);
-+void class_remove_file_ns(const struct class *class, const struct class_attribute *attr,
-+			  const void *ns);
- 
- static inline int __must_check class_create_file(const struct class *class,
- 						 const struct class_attribute *attr)
-@@ -223,8 +218,7 @@ struct class_attribute_string {
- 	struct class_attribute_string class_attr_##_name = \
- 		_CLASS_ATTR_STRING(_name, _mode, _str)
- 
--extern ssize_t show_class_attr_string(struct class *class, struct class_attribute *attr,
--                        char *buf);
-+ssize_t show_class_attr_string(struct class *class, struct class_attribute *attr, char *buf);
- 
- struct class_interface {
- 	struct list_head	node;
-@@ -234,10 +228,10 @@ struct class_interface {
- 	void (*remove_dev)	(struct device *, struct class_interface *);
- };
- 
--extern int __must_check class_interface_register(struct class_interface *);
--extern void class_interface_unregister(struct class_interface *);
-+int __must_check class_interface_register(struct class_interface *);
-+void class_interface_unregister(struct class_interface *);
- 
--extern struct class * __must_check class_create(const char *name);
--extern void class_destroy(struct class *cls);
-+struct class * __must_check class_create(const char *name);
-+void class_destroy(struct class *cls);
- 
- #endif	/* _DEVICE_CLASS_H_ */
--- 
+ net/xdp/xsk.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 2ac58b282b5eb..cc1e7f15fa731 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1301,9 +1301,10 @@ static int xsk_mmap(struct file *file, struct socket *sock,
+ 	loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
+ 	unsigned long size = vma->vm_end - vma->vm_start;
+ 	struct xdp_sock *xs = xdp_sk(sock->sk);
++	int state = READ_ONCE(xs->state);
+ 	struct xsk_queue *q = NULL;
+
+-	if (READ_ONCE(xs->state) != XSK_READY)
++	if (state != XSK_READY && state != XSK_BOUND)
+ 		return -EBUSY;
+
+ 	if (offset == XDP_PGOFF_RX_RING) {
+@@ -1314,9 +1315,11 @@ static int xsk_mmap(struct file *file, struct socket *sock,
+ 		/* Matches the smp_wmb() in XDP_UMEM_REG */
+ 		smp_rmb();
+ 		if (offset == XDP_UMEM_PGOFF_FILL_RING)
+-			q = READ_ONCE(xs->fq_tmp);
++			q = state == XSK_READY ? READ_ONCE(xs->fq_tmp) :
++						 READ_ONCE(xs->pool->fq);
+ 		else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
+-			q = READ_ONCE(xs->cq_tmp);
++			q = state == XSK_READY ? READ_ONCE(xs->cq_tmp) :
++						 READ_ONCE(xs->pool->cq);
+ 	}
+
+ 	if (!q)
+--
 2.40.0
 
