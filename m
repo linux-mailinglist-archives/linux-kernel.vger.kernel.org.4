@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21026C7D3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADD46C7D40
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjCXLfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S231289AbjCXLfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXLfN (ORCPT
+        with ESMTP id S229508AbjCXLfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:35:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 971001CACA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:35:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6DC2611FB;
-        Fri, 24 Mar 2023 04:35:56 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29D493F6C4;
-        Fri, 24 Mar 2023 04:35:11 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 11:35:08 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, palmer@rivosinc.com,
-        linux-kernel@vger.kernel.org, prime.zeng@hisilicon.com,
-        linuxarm@huawei.com, yangyicong@hisilicon.com
-Subject: Re: [PATCH] cacheinfo: Fix LLC is not exported through sysfs
-Message-ID: <20230324113508.x2rt52aakruwelk3@bogus>
-References: <20230323122528.16691-1-yangyicong@huawei.com>
- <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
+        Fri, 24 Mar 2023 07:35:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244171CACA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:35:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8D40F1FE1E;
+        Fri, 24 Mar 2023 11:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679657751; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=xWc83XLUl9PJ7QiVshXSwTcQnyqEwM++XJAI9HPUk/s=;
+        b=UHFHTfcEihfGAPO/fnNY6qr3FjRWSOFYD0i7rgHXpo8vQFZECiMTJBG2mEmwoeLuDSDQZx
+        Fl9hzOQun6QljdjhpmpOLsFTdpYOmV+E5miLje2qvr8VhTt7EuwOq8vrr0RUBi19gd5MhS
+        TqrIY3EXq1KfX6Ru6cET7Cs/8IuS4uU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5EC61133E5;
+        Fri, 24 Mar 2023 11:35:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ClvZFReLHWSCaAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 24 Mar 2023 11:35:51 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        sstabellini@kernel.org
+Subject: [GIT PULL] xen: branch for v6.3-rc4
+Date:   Fri, 24 Mar 2023 12:35:50 +0100
+Message-Id: <20230324113550.8218-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cca5e74-6626-1c8b-9309-47b9f5d4395f@arm.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 06:58:53PM +0100, Pierre Gondois wrote:
-> Hello Yicong,
-> 
-> FWIW, I think the patch is correct and I could reproduce the issue.
-> 
-> On 3/23/23 13:25, Yicong Yang wrote:
-> > From: Yicong Yang <yangyicong@hisilicon.com>
-> > 
-> > After entering 6.3-rc1 the LLC cacheinfo is not exported on our ACPI
-> > based arm64 server. This is because the LLC cacheinfo is partly reset
-> > when secondary CPUs boot up. On arm64 the primary cpu will allocate
-> > and setup cacheinfo:
-> > init_cpu_topology()
-> >    for_each_possible_cpu()
-> >      fetch_cache_info() // Allocate cacheinfo and init levels
-> > detect_cache_attributes()
-> >    cache_shared_cpu_map_setup()
-> >      if (!last_level_cache_is_valid()) // not valid, setup LLC
-> >        cache_setup_properties() // setup LLC
-> > 
-> > On secondary CPU boot up:
-> > detect_cache_attributes()
-> >    populate_cache_leaves()
-> >      get_cache_type() // Get cache type from clidr_el1,
-> >                       // for LLC type=CACHE_TYPE_NOCACHE
-> >    cache_shared_cpu_map_setup()
-> >      if (!last_level_cache_is_valid()) // Valid and won't go to this branch,
-> >                                        // leave LLC's type=CACHE_TYPE_NOCACHE
-> > 
-> > The last_level_cache_is_valid() use cacheinfo->{attributes, fw_token} to
-> > test it's valid or not, but populate_cache_leaves() will only reset
-> > LLC's type, so we won't try to re-setup LLC's type and leave it
-> > CACHE_TYPE_NOCACHE and won't export it through sysfs.
-> >
+Linus,
 
-IIUC this is for the case where arch register doesn't report the system level
-cache. I wonder if it makes sense to fix the arch callback to deal with that
-instead of here. I am fine either way, just checking as ideally it is
-something populate_cache_leaves() is messing up.
+Please git pull the following tag:
 
-[...]
+ git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc4-tag
 
-> > @@ -481,6 +488,7 @@ int detect_cache_attributes(unsigned int cpu)
-> >   	if (ret)
-> >   		goto free_ci;
-> > +update_cpu_map:
-> 
-> Maybe just a suggestion about the code itself,
-> it should be possible to replace the 'goto' by an 'if' condition.
-> (Similarly, the 'populate_leaves:' label could have been avoided.)
->
+xen: branch for v6.3-rc4
 
-Agreed, I prefer that as well.
+It contains two fixes:
 
--- 
-Regards,
-Sudeep
+- a build warning fix for a patch which went into rc3
+- a fix for avoiding concurrent accesses to the Xen PV console ring page
+
+
+Thanks.
+
+Juergen
+
+ arch/x86/xen/enlighten_pvh.c |  2 +-
+ drivers/tty/hvc/hvc_xen.c    | 19 +++++++++++++++++--
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+
+Jan Beulich (1):
+      x86/PVH: avoid 32-bit build warning when obtaining VGA console info
+
+Roger Pau Monne (1):
+      hvc/xen: prevent concurrent accesses to the shared ring
