@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51F46C80E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC8E6C80DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjCXPNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S232498AbjCXPNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjCXPNF (ORCPT
+        with ESMTP id S232437AbjCXPNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:13:05 -0400
+        Fri, 24 Mar 2023 11:13:09 -0400
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83013231D3;
-        Fri, 24 Mar 2023 08:12:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BC81ABCF;
+        Fri, 24 Mar 2023 08:12:49 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5C5DFE000C;
-        Fri, 24 Mar 2023 15:12:45 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5BE5EE000A;
+        Fri, 24 Mar 2023 15:12:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679670767;
+        t=1679670768;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=P0SoD3SIFdJN2ETvwmYpRhGM53wgfEmd1zIDvKZ41MI=;
-        b=RXXqYT16dg0xiL/C6DkElG3MssGV6/wUL7QteAqOstGSrdTfoXiSqXhpSy3J5xlGrwqsyv
-        5P3Mh4QCrbjsxtam0Q0ezKDykqM8xxBthXPpY0qLCwwRgcLFoefZWK1F+rPnKwGlAuJcq7
-        na924dK4iN0em6zSOTKBVPkOFJ7Cw88te/omkn4AKmtfyQa9i2UlV1oTnVbACQNLZxSYCu
-        F2kcn+gLQlzXEwyJe4idHgxZslC06IbDW8o6VCl7EwJofgnJ5dmfr0cMLz53Jw0iFiXa/9
-        Q8YUMkA914R4QYD4nOlXu204Wwe6a/nZQtnNaPlUls0H9NO6rDKzay5nTKphBQ==
+        bh=qIH2xOa232Fh48wwCufBRlgNNrR+ve7uu9Q9Dipak/I=;
+        b=RxOthW9u+Vl0zGq8JoSMX6HQFR1X25CEf9s1nVTPrvCV2/e5Gw8o030kbApFZKm31/MCoS
+        6GBEYnTar7QpOCpMMqcqv6EWrnfpEi3+X7lD528EH7XtAf91Xti+Bp0422oYW6A6I3HQM+
+        1t8DUnc7vY2+/bZZyDs66DALDYGPlzXP9JOdZkZeQmVar/TOe7ieR12QXiTQLeEHJdbnJ5
+        31IdRnNUA232yEWtpEgxGIpO3tstJvL3bBfT8YUvfcNEOufYhufkvKJafYHdSxl522Rp70
+        Cud4OLUX9hwKkPZs7L7XOfCm3VKiZ4f8TZnz8FL7z70JeNzn6quDGAvSxFQebg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Adam Pigg <adam@piggz.co.uk>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 4/9] media: v4l2: Add JPEG pixel format to v4l2 format info
-Date:   Fri, 24 Mar 2023 16:12:23 +0100
-Message-Id: <20230324151228.2778112-5-paul.kocialkowski@bootlin.com>
+Subject: [PATCH 5/9] media: sun6i-csi: capture: Rework and separate format validation
+Date:   Fri, 24 Mar 2023 16:12:24 +0100
+Message-Id: <20230324151228.2778112-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
 References: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
@@ -60,35 +60,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Represent the JPEG pixel format in the v4l2 format info table.
+Introduce a new sun6i_csi_capture_format_check helper to indicate
+whether a set of pixel format and mbus code are compatible.
+Most of the logic is taken from sun6i_csi_capture_link_validate,
+with extra checks added along the way.
 
-Note that the bpp is set to 1 which is not a proper way to estimate
-the needed buffer size for a given JPEG image. However the compression
-ratios of JPEG typically allow fitting the image in a smaller size,
-even though extra metadata could increase the total size by an
-arbitrary amount. Thus it is not a perfectly safe way to calculate the
-size of a JPEG buffer for given dimensions but it still provides a
-reasonable approach.
+Note that v4l2_format_info is now used for all pixel formats
+since they should all be listed in the helper at this point.
+
+The motivation behind this change is to pave the way for supporting
+the mc-style enum_fmt.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/media/v4l2-core/v4l2-common.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 95 ++++++++++---------
+ 1 file changed, 49 insertions(+), 46 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 5101989716aa..8b2f201a8918 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -317,6 +317,9 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_SGBRG12,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_SGRBG12,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_SRGGB12,	.pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-+
-+		/* Compressed formats */
-+		{ .format = V4L2_PIX_FMT_JPEG,	.pixel_enc = V4L2_PIXEL_ENC_COMPRESSED, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 	};
- 	unsigned int i;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+index cf6aadbc130b..6ce7f1d3ed57 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+@@ -327,6 +327,52 @@ static bool sun6i_csi_capture_format_match(u32 pixelformat, u32 mbus_code)
+ 	return false;
+ }
  
++static bool sun6i_csi_capture_format_check(u32 pixelformat, u32 mbus_code)
++{
++	const struct sun6i_csi_capture_format *capture_format;
++	const struct sun6i_csi_bridge_format *bridge_format;
++	const struct v4l2_format_info *format_info;
++
++	format_info = v4l2_format_info(pixelformat);
++	if (WARN_ON(!format_info))
++		return false;
++
++	capture_format = sun6i_csi_capture_format_find(pixelformat);
++	if (WARN_ON(!capture_format))
++		return false;
++
++	bridge_format = sun6i_csi_bridge_format_find(mbus_code);
++	if (WARN_ON(!bridge_format))
++		return false;
++
++	/* Raw input is required for non-YUV formats. */
++	if (bridge_format->input_format != SUN6I_CSI_INPUT_FMT_RAW &&
++	    (format_info->pixel_enc == V4L2_PIXEL_ENC_BAYER ||
++	     format_info->pixel_enc == V4L2_PIXEL_ENC_RGB ||
++	     format_info->pixel_enc == V4L2_PIXEL_ENC_COMPRESSED))
++		return false;
++
++	if (format_info->pixel_enc == V4L2_PIXEL_ENC_YUV) {
++		/* YUV input is required for YUV pixels. */
++		if (bridge_format->input_format != SUN6I_CSI_INPUT_FMT_YUV420 &&
++		    bridge_format->input_format != SUN6I_CSI_INPUT_FMT_YUV422)
++			return false;
++
++		/* YUV420 input can't produce (upsampled) YUV422 output. */
++		if (bridge_format->input_format == SUN6I_CSI_INPUT_FMT_YUV420 &&
++		    format_info->vdiv == 1)
++			return false;
++	}
++
++	/* Raw input requires a 1:1 match between input and output. */
++	if ((bridge_format->input_format == SUN6I_CSI_INPUT_FMT_RAW ||
++	     capture_format->input_format_raw) &&
++	    !sun6i_csi_capture_format_match(pixelformat, mbus_code))
++			return false;
++
++	return true;
++}
++
+ /* Capture */
+ 
+ static void
+@@ -890,28 +936,16 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
+ 		media_entity_to_video_device(link->sink->entity);
+ 	struct sun6i_csi_device *csi_dev = video_get_drvdata(video_dev);
+ 	struct v4l2_device *v4l2_dev = csi_dev->v4l2_dev;
+-	const struct sun6i_csi_capture_format *capture_format;
+-	const struct sun6i_csi_bridge_format *bridge_format;
+ 	unsigned int capture_width, capture_height;
+ 	unsigned int bridge_width, bridge_height;
+-	const struct v4l2_format_info *format_info;
+ 	u32 pixelformat, capture_field;
+ 	u32 mbus_code, bridge_field;
+-	bool match;
+ 
+ 	sun6i_csi_capture_dimensions(csi_dev, &capture_width, &capture_height);
+-
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &capture_field);
+-	capture_format = sun6i_csi_capture_format_find(pixelformat);
+-	if (WARN_ON(!capture_format))
+-		return -EINVAL;
+ 
+ 	sun6i_csi_bridge_dimensions(csi_dev, &bridge_width, &bridge_height);
+-
+ 	sun6i_csi_bridge_format(csi_dev, &mbus_code, &bridge_field);
+-	bridge_format = sun6i_csi_bridge_format_find(mbus_code);
+-	if (WARN_ON(!bridge_format))
+-		return -EINVAL;
+ 
+ 	/* No cropping/scaling is supported. */
+ 	if (capture_width != bridge_width || capture_height != bridge_height) {
+@@ -922,43 +956,12 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
+ 		return -EINVAL;
+ 	}
+ 
+-	format_info = v4l2_format_info(pixelformat);
+-	/* Some formats are not listed. */
+-	if (!format_info)
+-		return 0;
+-
+-	if (format_info->pixel_enc == V4L2_PIXEL_ENC_BAYER &&
+-	    bridge_format->input_format != SUN6I_CSI_INPUT_FMT_RAW)
+-		goto invalid;
+-
+-	if (format_info->pixel_enc == V4L2_PIXEL_ENC_RGB &&
+-	    bridge_format->input_format != SUN6I_CSI_INPUT_FMT_RAW)
+-		goto invalid;
+-
+-	if (format_info->pixel_enc == V4L2_PIXEL_ENC_YUV) {
+-		if (bridge_format->input_format != SUN6I_CSI_INPUT_FMT_YUV420 &&
+-		    bridge_format->input_format != SUN6I_CSI_INPUT_FMT_YUV422)
+-			goto invalid;
+-
+-		/* YUV420 input can't produce YUV422 output. */
+-		if (bridge_format->input_format == SUN6I_CSI_INPUT_FMT_YUV420 &&
+-		    format_info->vdiv == 1)
+-			goto invalid;
+-	}
+-
+-	/* With raw input mode, we need a 1:1 match between input and output. */
+-	if (bridge_format->input_format == SUN6I_CSI_INPUT_FMT_RAW ||
+-	    capture_format->input_format_raw) {
+-		match = sun6i_csi_capture_format_match(pixelformat, mbus_code);
+-		if (!match)
+-			goto invalid;
++	if (!sun6i_csi_capture_format_check(pixelformat, mbus_code)) {
++		v4l2_err(v4l2_dev, "invalid input/output format combination\n");
++		return -EINVAL;
+ 	}
+ 
+ 	return 0;
+-
+-invalid:
+-	v4l2_err(v4l2_dev, "invalid input/output format combination\n");
+-	return -EINVAL;
+ }
+ 
+ static const struct media_entity_operations sun6i_csi_capture_media_ops = {
 -- 
 2.39.2
 
