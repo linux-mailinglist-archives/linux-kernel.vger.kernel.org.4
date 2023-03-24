@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7DC6C7CB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193A06C7CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjCXKej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S231575AbjCXKhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXKeh (ORCPT
+        with ESMTP id S229734AbjCXKhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:34:37 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9350A1AD;
-        Fri, 24 Mar 2023 03:34:36 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 55EDD100004;
-        Fri, 24 Mar 2023 10:34:27 +0000 (UTC)
-Message-ID: <877d03e1-b00b-7863-6104-21b42bc63711@ghiti.fr>
-Date:   Fri, 24 Mar 2023 11:34:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBl?= =?UTF-8?Q?l?= <bjorn@kernel.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, nathan@kernel.org,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
- <20230215143626.453491-2-alexghiti@rivosinc.com>
- <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
- <877cw7dphf.fsf@all.your.base.are.belong.to.us>
- <CAKwvOdk0Lr-9gt0xAKvkcwA53+Wy8oeYQo1RJ7XH-LKCCURQCQ@mail.gmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAKwvOdk0Lr-9gt0xAKvkcwA53+Wy8oeYQo1RJ7XH-LKCCURQCQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 06:37:02 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DF922DD8;
+        Fri, 24 Mar 2023 03:37:01 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id x3so5977578edb.10;
+        Fri, 24 Mar 2023 03:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679654220;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gJuO8B0DxhrYpZaK8J9dfLUU2TS1IlGV+FseHR+oA+A=;
+        b=OwU3k8S0NtXx+KntpzccsesziTlWKynQGojMY+6Z66r+zDSXcFv6Bl7PL+rwKUeVFd
+         8vTaFMQnrWg0tjCYpeGLDpvYB7jT6L3DEwXnkX86E/ieGa/cMGFcQ4DzS5/pSWemIr4w
+         DY6VvbbOL4xpzzg2VxcxKvkTfGaiBjcJewt9RggiKlaMhUBzfBqzQbfuHM2GZKSaAIgg
+         YK26tNTV3Q0XTpUtJnE/eJILEfM+oh/+RC8MRbE1u3HIOls0picNOEK0M6cCWsE4MauR
+         BdjjM10u1oK1zlqFMNDuRmZRBNN3NTfKj5/hYHs2cKkj7XDK6geteVx2tyT84dAEfgPv
+         as9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679654220;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJuO8B0DxhrYpZaK8J9dfLUU2TS1IlGV+FseHR+oA+A=;
+        b=ycAphv2u/0DepgSN+OgiZjH0SdiusoB1wnnDFetRUvpnMWQcx8PdYibWOnpgo74Jz1
+         H7n3+N4aj6qyBI4WDljQih4kB9Drz+2nnwpNHP5e9qO+9Dza2gFPD45FVK1AOVbUjBB0
+         2frn3xB45EJjHEVDpTuDz2hynVglx2V7ptgkdtExYqAEE1FfcIPiJSqLvICH0VC6dVgX
+         LfpVV3Dcwr5OCx9FAEEGCB9ZN+Wy+FKneVJBpzgUmlvkUpfIEJEypBoaOMX/Z3cV+dYi
+         x/LIYyzMvDyVBDcsAhVCRkbkVcHObI6QKcpma7nK2Ur5IT+kEZtDkX/b4yvfMRymolwK
+         xN7Q==
+X-Gm-Message-State: AAQBX9fEOsb4neaSHjHQVPub1lyZk/ueL2LJd5wXAswoGj/a/psmMJ4U
+        Dtqs8HhdgYteCR7jDzK9t+c=
+X-Google-Smtp-Source: AKy350a4WTRRlmlRHILMgnhOO7wrd4M/GHmUQbTlujDN09uAZN8/fvTZc3iv2Il82DJBIxT9RrE5RA==
+X-Received: by 2002:a17:906:5849:b0:931:4b0b:73e3 with SMTP id h9-20020a170906584900b009314b0b73e3mr2250971ejs.65.1679654219663;
+        Fri, 24 Mar 2023 03:36:59 -0700 (PDT)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id i6-20020a170906250600b009306be6bed7sm9987951ejb.190.2023.03.24.03.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 03:36:59 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] sparc: remove obsolete config ARCH_ATU
+Date:   Fri, 24 Mar 2023 11:34:38 +0100
+Message-Id: <20230324103438.28563-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+Before consolidation of commit 4965a68780c5 ("arch: define the
+ARCH_DMA_ADDR_T_64BIT config symbol in lib/Kconfig"), the config ARCH_ATU
+was used to control the state of the config ARCH_DMA_ADDR_T_64BIT. After
+this consolidation, the config ARCH_ATU has been without use and effect.
 
-On 3/22/23 19:25, Nick Desaulniers wrote:
-> On Fri, Feb 24, 2023 at 7:58 AM Björn Töpel <bjorn@kernel.org> wrote:
->> Alexandre Ghiti <alex@ghiti.fr> writes:
->>
->>> +cc linux-kbuild, llvm, Nathan, Nick
->>>
->>> On 2/15/23 15:36, Alexandre Ghiti wrote:
->>>> From: Alexandre Ghiti <alex@ghiti.fr>
->>>>
->>> I tried a lot of things, but I struggle to understand, does anyone have
->>> any idea? FYI, the same problem happens with LLVM.
-> Off the top of my head, no idea.
->
-> (Maybe as a follow up to this series, I wonder if pursuing
-> ARCH_HAS_RELR for ARCH=riscv is worthwhile?)
+Remove this obsolete config.
 
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/sparc/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
-IIUC, the goal for using RELR is to reduce the size of a kernel image: 
-right now, this is not my priority, but I'll add that to my todo list 
-because that may be useful to distros.
-
-
->
->> Don't ask me *why*, but adding --emit-relocs to your linker flags solves
->> "the NULL .rela.dyn" both for GCC and LLVM.
->>
->> The downside is that you end up with a bunch of .rela cruft in your
->> vmlinux.
-> There was a patch just this week to use $(OBJCOPY) to strip these from
-> vmlinux (for x86). Looks like x86 uses --emit-relocs for KASLR:
-> https://lore.kernel.org/lkml/20230320121006.4863-1-petr.pavlu@suse.com/
-
-
-That's nice, that would be an interesting intermediate step until we 
-find the issue here as I believe it is important to have the relocations 
-in the init section to save memory.
-
-Thanks for your answer Nick, really appreciated,
-
-Alex
-
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 84437a4c6545..7749392c9c7f 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -109,10 +109,6 @@ config ARCH_PROC_KCORE_TEXT
+ config CPU_BIG_ENDIAN
+ 	def_bool y
+ 
+-config ARCH_ATU
+-	bool
+-	default y if SPARC64
+-
+ config STACKTRACE_SUPPORT
+ 	bool
+ 	default y if SPARC64
+-- 
+2.17.1
 
