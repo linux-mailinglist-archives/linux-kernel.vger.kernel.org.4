@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5356C78B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F1E6C78BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCXHV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S229609AbjCXHWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCXHV0 (ORCPT
+        with ESMTP id S231299AbjCXHWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:21:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369C4C0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:21:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so779695pjz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:21:25 -0700 (PDT)
+        Fri, 24 Mar 2023 03:22:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71A24C06
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id i5so4428306eda.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679642484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
-        b=olwZ2Ki+GEmXv8N44rzlIT2zwtZrcHbqmSfDZrbXOE8skrN/XFMRPXRh9BxqAVJvq9
-         1h59VhF08YneFvX2/UjLzW4bZ7/UXKkuXAelK8CWyQB03bWYJVm0indIiCeivCqWiIVE
-         o+OnA12bz4QBpDXQGGUwrBH05ESQoZx/s7vzQxklJnkFiNdNGCr1h3neQDr0Wu0ETgc2
-         PE72AAVHb7QW7fiOdDKL6TeyoQTUu8ItQM9D8FJWEgPRHiMsfl+BJtHzPk589PplTlCD
-         F+e588GFFMmS6wLKgeMHAsaf849OTPjNgVpt/segz0OhGb4iGQ5x4kZz4M3pJDHlMQKT
-         Vm1Q==
+        d=google.com; s=20210112; t=1679642566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fa396lb8MjMOl888rXohQoljyuvFkmmjAMpaedz2iKQ=;
+        b=KJ9iz5Uxy+UE7eTmfuZpdee6ope6aJEfkespR2fZMv6ZHIq8x8lW4vifO9yR+IS7pd
+         AK7dGPutrSQ13hJJ80evRzpXtgobfZFo8jXuTzRATpMeqGO6i8D5NSa73p0qsx5i481+
+         7yXiGgxPWmcaJdwbUyT1PbP3K0ZyFQ7Al79kpt3c+Idj9EX40zqvfzZ8aXiS7pBZAi5c
+         qDNLiwlOYnW0tVo8pGG8bbNsjTBTTctF7v1u8gW1K9bJA0CKfZjEf/5jsWat5ZudO5jG
+         cU9nAY6htLcFCArHxPUvuBAUnt26YcyoPsjONXhbMoH+B0T69pLrtxIpj5GEcP1xxW3T
+         K9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
-        b=7LCOZy83yo07amqZ6sv5wHYL5fsczOIsV+kyC1/4yn5HC6T131zyRQKsAobOa/WBpK
-         /27NA0fhK1kjwxbpcZUOpiItFLgoQNtiTCS1wQS4/moDIZc1lHhgMwLs3yIqrv6Wsb9M
-         BQx5HyUDW+nsTWP/PA1Wxcgv6xZSqLT5FiKrGwEcUfnGYGm+kS+uzbnuhbFPz002+8Xz
-         tV4OiVEZKptANn6mPV8VJYVQ0SOsuFmmQOFCv8bg7+EEo49RMCzHz36OVeRLy0m28AdV
-         lDG9Or42MNKF2JhJo8RqMBF/lu4MvjQIlyuTrrfFxhUM4LYp8eVY4a42tw7PL7ADFR4C
-         FXUQ==
-X-Gm-Message-State: AAQBX9fm5LKYMK9II0kPlRNmgxDgIOyzbMVSsW07xEZuQOtaZ3gOFTEM
-        HRIgiINhN/IORKZEb5nW7wc=
-X-Google-Smtp-Source: AKy350a0aAAwD586M+JBEnfHYwX+wsWJNpNqvuQFJGvV3/eCeLmSCS1tVDK+PQPJ/zSPsgvlzLYLow==
-X-Received: by 2002:a17:90b:1c88:b0:233:f354:e7df with SMTP id oo8-20020a17090b1c8800b00233f354e7dfmr1835231pjb.18.1679642484576;
-        Fri, 24 Mar 2023 00:21:24 -0700 (PDT)
-Received: from ubuntu.localdomain ([59.89.175.90])
-        by smtp.gmail.com with ESMTPSA id o10-20020a17090ab88a00b0023cfa3f7c9fsm2362372pjr.10.2023.03.24.00.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 00:21:24 -0700 (PDT)
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH v2 0/3] Staging: greybus: Use inline functions
-Date:   Fri, 24 Mar 2023 00:20:30 -0700
-Message-Id: <cover.1679642024.git.sumitraartsy@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20210112; t=1679642566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fa396lb8MjMOl888rXohQoljyuvFkmmjAMpaedz2iKQ=;
+        b=CU8YdgFE6YlYLzF6NlEZfuQTTWyFN0Ncvr2hXwbMhQ2FQVAL1xfbGLIZlWC51qrHn6
+         /nL3g8EsY4UkEBoHTKXa7DahsmnihxWC6POLA5A6RsH3kQEig7mNqgiwmp26tFdnPu52
+         NkNJFPP47vYh7vGeZfSp2SglZ6gYlTXXHGp+ldqnrBQa3+rCvcMWfqIfNNJji/17CCtC
+         g5aDKZoGrHcapG5jh8PWQcVZs/Qjx0Ku70j302YcJpLsxr9Mz6DXDA6jGzH/aA7jTUaz
+         1Gmdp5LGlnfmzDxw35klPpRbceClSOlZaH8vLHk6XTye8a3xr8SpgDjTiG9m0CvuLjaB
+         kRtA==
+X-Gm-Message-State: AO0yUKU/trDty9+OuPVYG26toHmF2P4d8MnZmo6SiK+E4RdGgpOZXbZ+
+        sJrga/aGz7+gVYs5tq2hnWiOYLzgiLPKki3JuQ3+ng==
+X-Google-Smtp-Source: AK7set9nDooOE3Uv4xSdzevtlYQN6Wrt2NapQojoPuIK5bxgo1JQyfUpt3JH2yw9C0xTBXIvxswIEM39+kTwiiQaVDw=
+X-Received: by 2002:a05:6402:540c:b0:4fb:e069:77ac with SMTP id
+ ev12-20020a056402540c00b004fbe06977acmr6398957edb.0.1679642566177; Fri, 24
+ Mar 2023 00:22:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230323040037.2389095-1-yosryahmed@google.com>
+ <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+In-Reply-To: <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 24 Mar 2023 00:22:09 -0700
+Message-ID: <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
+ percpu lock
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,24 +82,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert macros to a static inline function, to make the relevant 
-types apparent in the definition and to benefit from the type 
-checking performed by the compiler at call sites.
+On Thu, Mar 23, 2023 at 6:39=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
+> > Currently, when sleeping is not allowed during rstat flushing, we hold
+> > the global rstat lock with interrupts disabled throughout the entire
+> > flush operation. Flushing in an O(# cgroups * # cpus) operation, and
+> > having interrupts disabled throughout is dangerous.
+> >
+> > For some contexts, we may not want to sleep, but can be interrupted
+> > (e.g. while holding a spinlock or RCU read lock). As such, do not
+> > disable interrupts throughout rstat flushing, only when holding the
+> > percpu lock. This breaks down the O(# cgroups * # cpus) duration with
+> > interrupts disabled to a series of O(# cgroups) durations.
+> >
+> > Furthermore, if a cpu spinning waiting for the global rstat lock, it
+> > doesn't need to spin with interrupts disabled anymore.
+>
+> I'm generally not a fan of big spin locks w/o irq protection. They too of=
+ten
+> become a source of unpredictable latency spikes. As you said, the global
+> rstat lock can be held for quite a while. Removing _irq makes irq latency
+> better on the CPU but on the other hand it makes a lot more likely that t=
+he
+> lock is gonna be held even longer, possibly significantly so depending on
+> the configuration and workload which will in turn stall other CPUs waitin=
+g
+> for the lock. Sure, irqs are being serviced quicker but if the cost is mo=
+re
+> and longer !irq context multi-cpu stalls, what's the point?
+>
+> I don't think there's anything which requires the global lock to be held
+> throughout the entire flushing sequence and irq needs to be disabled when
+> grabbing the percpu lock anyway, so why not just release the global lock =
+on
+> CPU boundaries instead? We don't really lose anything significant that wa=
+y.
+> The durations of irq disabled sections are still about the same as in the
+> currently proposed solution at O(# cgroups) and we avoid the risk of hold=
+ing
+> the global lock for too long unexpectedly from getting hit repeatedly by
+> irqs while holding the global lock.
 
-CHanges in v2: Change patch subjects, noted by Alison Schofield 
-<alison.schofield@intel.com>
+Thanks for taking a look!
 
-Sumitra Sharma (3):
-  Staging: greybus: Use inline function for macro
-    gpio_chip_to_gb_gpio_controller
-  Staging: greybus: Use inline function for gb_audio_manager_module
-  Staging: greybus: Use inline function for pwm_chip_to_gb_pwm_chip
+I think a problem with this approach is that we risk having to contend
+for the global lock at every CPU boundary in atomic contexts. Right
+now we contend for the global lock once, and once we have it we go
+through all CPUs to flush, only having to contend with updates taking
+the percpu locks at this point. If we unconditionally release &
+reacquire the global lock at every CPU boundary then we may contend
+for it much more frequently with concurrent flushers.
 
- drivers/staging/greybus/audio_manager_module.c | 7 +++++--
- drivers/staging/greybus/gpio.c                 | 7 +++++--
- drivers/staging/greybus/pwm.c                  | 6 ++++--
- 3 files changed, 14 insertions(+), 6 deletions(-)
+On the memory controller side, concurrent flushers are already held
+back to avoid a thundering herd problem on the global rstat lock, but
+flushers from outside the memory controller can still compete together
+or with a flusher from the memory controller. In this case, we risk
+contending the global lock more and concurrent flushers taking a
+longer period of time, which may end up causing multi-CPU stalls
+anyway, right? Also, if we keep _irq when spinning for the lock, then
+concurrent flushers still need to spin with irq disabled -- another
+problem that this series tries to fix.
 
--- 
-2.25.1
+This is particularly a problem for flushers in atomic contexts. There
+is a flusher in mem_cgroup_wb_stats() that flushes while holding
+another spinlock, and a flusher in mem_cgroup_usage() that flushes
+with irqs disabled. If flushing takes a longer period of time due to
+repeated lock contention, it affects such atomic context negatively.
 
+I am not sure how all of this matters in practice, it depends heavily
+on the workloads and the configuration like you mentioned. I am just
+pointing out the potential disadvantages of reacquiring the lock at
+every CPU boundary in atomic contexts.
+
+>
+> Thanks.
+>
+> --
+> tejun
