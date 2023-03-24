@@ -2,272 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515DD6C778E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C076C7791
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjCXGAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
+        id S231522AbjCXGDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjCXGAl (ORCPT
+        with ESMTP id S229681AbjCXGDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:00:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3F8272C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:59:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679637594;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vt1J17FUEsFz1bQOp6BzRT5G+PK9gWtwL+MNcCXC+I8=;
-        b=DbG1ANvCgNs+1I6ytVXRiWXhhIwxinzLvPT24B20Tr/h/mBXVKy6ujL8G/KZgA8/DJNUTK
-        bZsgaQYFREgX7Q3mlhzXr4MqVips6vIfmycyxbhabS61JYU6bX7L/+G22xRekwJ9RVYISf
-        akRT9swgAxRjdv4UOujEmMXpa2lS5OY=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-JjT0p0y_OKaaTT7EWsDS7g-1; Fri, 24 Mar 2023 01:59:52 -0400
-X-MC-Unique: JjT0p0y_OKaaTT7EWsDS7g-1
-Received: by mail-ed1-f71.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so1555212edj.20
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 22:59:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679637591;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vt1J17FUEsFz1bQOp6BzRT5G+PK9gWtwL+MNcCXC+I8=;
-        b=KUZiKxayvDHND40kOtacHJOSjwxUbTPUpSE7zFxEBttPykL7ezCEzOZPp9HW8PnWlS
-         4DyNn4VCczExgSGKSgqzfRzA/IxvAV2KEKJhl91XkS5BMlZLDes/4URbP5HoywsuDZ1d
-         mpZ8LyeTYYiSV4+fAghmx0jfICRM8I9LGPdPgCRLCkFFouqmeR7fB2MClNbZpFSEoBaR
-         rS4YoNNPtrDEa4nbuLA/ujoKz9AmBln3Jl3taYjNpTLl80Not4lqPWyK4YEMcJu/U/iV
-         Sev1JXsYw/c17OBjPDh+oDTtO/AYF9xUQ2ivue0DoMiStuEOWsltnjVXz30dj5UmkSOR
-         GMfQ==
-X-Gm-Message-State: AAQBX9dWIyAvcp8rEsk65YnkGJ7+W38yGkfgAVMmTQfOyYloNvl4f6d0
-        n1QLc6NkE21ZLpCwFtUGHQy494TtYrg616n274722ZL1nIZfwfH5HtUlAdAljuzoMgKvrwv1plg
-        iuaLdzF/ESBWTfkxlrvKF9Tfy
-X-Received: by 2002:aa7:c547:0:b0:4f9:ed17:3bec with SMTP id s7-20020aa7c547000000b004f9ed173becmr1975076edr.20.1679637591414;
-        Thu, 23 Mar 2023 22:59:51 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y9MxlyAuE5jXcAqgE+Rz2mYEFwxEIstOcZTAZDAO6WUG2qcJgTq7hr9YRQ/bj1u1Np+JzcFw==
-X-Received: by 2002:aa7:c547:0:b0:4f9:ed17:3bec with SMTP id s7-20020aa7c547000000b004f9ed173becmr1975053edr.20.1679637591106;
-        Thu, 23 Mar 2023 22:59:51 -0700 (PDT)
-Received: from redhat.com ([2.52.12.190])
-        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm5720060edb.20.2023.03.23.22.59.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 22:59:50 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 01:59:46 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     =?utf-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [External] Re: [PATCH] virtio_ring: Suppress tx interrupt when
- napi_tx disable
-Message-ID: <20230324013805-mutt-send-email-mst@kernel.org>
-References: <20230321085953.24949-1-huangjie.albert@bytedance.com>
- <CACGkMEvx_-3XbnBk1PakqODhL+C0Oy-BVORm=FsMxvzVcBbrnA@mail.gmail.com>
- <CABKxMyNSp1-pJW11B3YuDm39mg=eT48JspDsrEePjKFrHNK8NQ@mail.gmail.com>
- <CACGkMEsG3_+GmfoO-y_dMxSeMn_Ry5L0PVgLSKSAJzRbym4j8A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Fri, 24 Mar 2023 02:03:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7638661AD;
+        Thu, 23 Mar 2023 23:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679637808; x=1711173808;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=sMrx3FJgz5UGOVKfHWgQBRwfCEQnyEK8QVd1vDXwUq8=;
+  b=L+3lPbgprdLOmHjBp5pmqvLTNahjXFlcQbLT/W4PGkpgfoSQxNw1u+vK
+   NkNT/RP7pikQ7xdfWB1jGnUE7SQB4FR2mOjKPrQvWLxxEyqA3n7uC1kUV
+   WKVB/eL0Oe3/Usi09Kyyd6JguJc/nV2/mcq1wFDmsv3dNjO4LABHArkls
+   MOl6ccH+Vr+yqDOOd6FacB6jp9cF8a+FCPfBZXSbwfnsyn7RY68TxJlzj
+   BnE/FmBB/h/ZmgvkUEKU8zR1yY5OtIXg6w3LMBuAQy1z0aAsAHKyOth8R
+   8H53euZMe7X6VoDDiVLPvy9DAcDBwhyC55lFHLJ1eftA04Uw5BVHkmIM1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338428159"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="338428159"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 23:03:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682560653"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="682560653"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP; 23 Mar 2023 23:03:27 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 23:03:27 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 23 Mar 2023 23:03:27 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 23 Mar 2023 23:03:27 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.49) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 23 Mar 2023 23:03:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U+5YN4FnrNG+8Ra9agQNAq7TYGWSxxQUKp/ZiiKzmO5Vg0U+TF8Z8HLvS310jroxtaw8bASxuzVIEXyvcKyt4Jjp/xvGBTSUAAHLh3G8Lo+IHqXZtTN7tEeBnQwuMRkN/YPVAAIMF9P8Y+MqJijyy+EmfkILSorvRmqVh4VGmB9xK222fFhQoljZ033uFtydwBJLicnRHS1rNis54PvHfQ9aUQy/qhjibWMRbuWaBcH1/wiATjjrvm4obmbg0++t6jnTZWBEHDvSNiRO7yk+kaS/PTeaB/kHCfzGR2sraqSi0eSM80yL/YyEBSFfbRIFeUbxwuyFMna8nL63CQbq4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PSbl8fqGmib22ECEtZmweHUNic8Brb8eeMnTUioxf48=;
+ b=k2rV2b5JDRj+XykwpJm+1JWRfons84B0wjS7ryzkBycEdmCLgwl9hVD8Rs7bxNk+2oBVbF8hFpT8HrcVMrzi//k4hnBvG0XDzfwySmHhnRXFEqvmcT1782Wvd47wCULlN1XmGPdt9dw30H8TC6Imh+5wH94vhHLJIezyyHq1jKczwT4hexGuEkTChAILfCX18gRavKjWCsOYeesvlGzDcuhhcY67WUDkWd24nuT53Gl6W7Ck9DMbBvhYQAs6gL4zIkJ8P1x508z5IlW2mNxJY+6qYBic61ADq/08WOVN3WAX9yJaoG4riQnrnVhsbALluw+rDTeqwOIKqitdvKFRLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by IA1PR11MB7198.namprd11.prod.outlook.com (2603:10b6:208:419::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Fri, 24 Mar
+ 2023 06:03:24 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::2629:fb12:6221:3745]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::2629:fb12:6221:3745%5]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
+ 06:03:24 +0000
+Date:   Thu, 23 Mar 2023 23:03:21 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        "Borislav Petkov" <bp@alien8.de>, NeilBrown <neilb@suse.de>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>, <david@redhat.com>,
+        <mwilck@suse.com>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        "Ben Hutchings" <benh@debian.org>,
+        Adam Manzanares <a.manzanares@samsung.com>
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
+References: <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
+ <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
+ <Y8ll+eP+fb0TzFUh@alley>
+ <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
+ <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
+ <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
+ <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
+ <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
+ <20230323150125.35e5nwtrez46dv4b@ldmartin-desk2.lan>
+ <CAB=NE6VtAn8tew723y77KAN_w-UYE+naMaVrKsLjxpJgAkwDXw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEsG3_+GmfoO-y_dMxSeMn_Ry5L0PVgLSKSAJzRbym4j8A@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAB=NE6VtAn8tew723y77KAN_w-UYE+naMaVrKsLjxpJgAkwDXw@mail.gmail.com>
+X-ClientProxiedBy: BY5PR04CA0029.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::39) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|IA1PR11MB7198:EE_
+X-MS-Office365-Filtering-Correlation-Id: d272b034-945c-4918-cc70-08db2c2d7a81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RW5KjAhsQ/IF7eR5KSMuis27lxO4rPskQv9aUd6f5Je27XmeMeYbgcuj7goZW7+7+wT6ZYqdYr+4LIhbKAuBTAG6wBBTpefoRI0oZusNni9jJno9BpwSpLQPqq6AKK2jRe9NeUE+nF0G5ByDPd73Fk1gRvKShM/7C9G+4aj3nIgf2+MZjniQet4wyTVmXI9Bmr7q3X39jaPGzrPtQuL0YzHIxuiFspzHpI+zXsweiCVRTFlSVgODOk7r9Q+TnrghbbALgchzGM5SsEyCbCcWwAbYA/SNkzgFbitY+em3Gixw2Owv5AYRiO6DHlmlVOF9TwXbHaRzVMJ3O1CuzC0oMY3PypgERnUiHg6xlCkUEEokLRdT/ivZSWzSWXAvzl4Df8uUU4SVz175Fq+1UxIv9Qghw5Sg6RgEkqeJqbmRNabXicP8yWkpTjwmwySfB28RUQBgw/WqlVG/C3/jJuWt3cjKGz7iLbjXZhZyvAd3c+I+78ZIOuDogGHRBSu1k+P1ybJtUDBJPlgT7EKopPFlbelvYCzB+kqShQa4QDnNfdvSJ/3d2zwMX2poigvt+Jfc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199018)(316002)(54906003)(478600001)(6916009)(66946007)(41300700001)(8936002)(2906002)(5660300002)(36756003)(7416002)(186003)(4326008)(8676002)(66476007)(38100700002)(66556008)(6506007)(6512007)(6666004)(1076003)(26005)(6486002)(86362001)(9686003)(82960400001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MHJsekVNTGhGNTRxcUlKYkk2YUJMVW9NNGlYQ3cvUzVlZ0NQUGdjUklKRU5I?=
+ =?utf-8?B?RHA1ZFlMOFBJRkRBRVFtblpPQmJkY1gwUTdiWm5Ib1VsbThLQlpoNjFteXVv?=
+ =?utf-8?B?K1lSdDN3U3paZTk0bHJzSldHK3A4OUdqV1k3VlhzMTV0QnFTQzRCaHdnTEpy?=
+ =?utf-8?B?SGR3RDBTYjRsSGoxOUhrckRkQ09uYkFGa1RWUkoydlBEVkJiWWgrZE13UEUr?=
+ =?utf-8?B?M0RWZWhkWnQ5YzdHTlpLSWhyVnZybjlkYkR5TTVHR0JTOCtkZWxrejJaZjZt?=
+ =?utf-8?B?RlZIRmt4VDg5WjJoL0tHaGx0RmtaTzBGUHdYazQ0U2NGSmF4bjdlMkhaQXQr?=
+ =?utf-8?B?R0c2MS9GYXJOcHhCNjM1WUlWd3BoN0k3ZkRiVWdlVFpnNWU2bTJGWGpvMmdN?=
+ =?utf-8?B?NVBVelVkaW9aMzJqNGZWVXVYLzh4enQ0VWxXckF2VEMvUEFLL0IzZVVQYjQ3?=
+ =?utf-8?B?S0g2RGlmSi9qQXN1M0p5ZTloZGNraG8xL1JzZW9XSG55R1MvM3YydDk3RWJ0?=
+ =?utf-8?B?S2g5TjVqY1dYUExvRWs1NkRXcE1YRVJ3enZxS3R3YW1Hb01xV2NVb2pCQkxH?=
+ =?utf-8?B?V0l6ZTd2d1JHV0dBNjdXQ3plVVdaVEx1dDBacVQwVHgrYUI0M09RYjlPaVhx?=
+ =?utf-8?B?QXhxeER2VFgzcGFVYkNDcndUN3N3VkJVd0c5T0p3OVpZRkorazh6YmNvaWFP?=
+ =?utf-8?B?aEo1c080R2VZcjlLckllWDNtNDQrS2xwQjVuWWUvSnhOaDRidlNHNThvT09j?=
+ =?utf-8?B?UkhWSXBUTWIrb3R0YVBxdTY4R1hVMmVsTjArVkRLSXd1cFZ3RmJsdTFwMFll?=
+ =?utf-8?B?QlNSSTBqNTlweDhlcmRtVEh6NGRSY0RlR1ZkYnRpcFJQaU5JL0d2enNVWjJ6?=
+ =?utf-8?B?eDVaRVRwb0Q0WlZqYmJjdXM5S25Kckg0T0xQL2lwVC96V3ExYWg3MjA5dFFi?=
+ =?utf-8?B?NnYyay92akhnRVFIQ0FBbmIwYTBJaDF4bzIzRXV4SldSVXdGOGE2bnpWZk14?=
+ =?utf-8?B?SG5qcHRRQkZ6K0xEYUkrQ3ZzV1ZFR2V3NmpMbjhXNEYyZFdKaUllVmVUekdr?=
+ =?utf-8?B?cWduTkxFMlU0MlRhK0V6NkJ5Q0pnd3ZOT2hQakZSSFVlWkxhbGdYV0lmNkUz?=
+ =?utf-8?B?dFF4U1YzV1o5MXgxbEF0RG9oZDdqbXRNQnhtMmc1UmdkL1pIeVhNWnIzdDdW?=
+ =?utf-8?B?MjlRWkNIWUMxZEZlb1FFUUU1OE82RkJPVmtobHFSd1BpcEZrTnJ6V3ljRTVB?=
+ =?utf-8?B?OTVkK2VNQzFqSnNlWEZEeGM2NlRDbUFrdDIxSDJyc2c4RHhodGFiNlBValVs?=
+ =?utf-8?B?R3d3UzFmYnRYdDU4WDFuSDgxc3NZWm5SQm05ckh1Q0djeXNMVFlkWngzWnNK?=
+ =?utf-8?B?MUZqWWU1Z2NkZnhmcnZaRy9CRnpndlhDdWovVTVnM2NVejZUQXdjdloxUzdt?=
+ =?utf-8?B?NGZPOCthRExyYytCVi94VzB6eUlrZVA1WGV0R1YzK2dJckxRT2lVaGJndDVP?=
+ =?utf-8?B?VkVFS1FwdmNONGJtVVQzbDFwWlpZeHRCTGVVZ1ZwVkJndTl4T1FsUXAwemg4?=
+ =?utf-8?B?clA1WTlydTR5WGtXenR3ZVFQRzhSZy8vV3lJdU05NTVBWUN2UHBYR0pBQjAx?=
+ =?utf-8?B?bEo3VjQ0UndnMm1YcDE3M1AzemdYN3ZmQ2hETjNjWksvR0h5ODZBbTNXeVE4?=
+ =?utf-8?B?Z3pyMjFlb0tPaWNYb0lDUTc3TDhFMnVic05UM3hVeEp3U0gvZFBnMXNObmFx?=
+ =?utf-8?B?M0VGSTR2VVJ2dE1VSGdoblRZMDdYOENReWRsV2l6bUExcHdBR1EwZE9laDRR?=
+ =?utf-8?B?U3ZHZzZEOUlEbi83QnV5R29QMFZENEdMMS9vdFREYloxcDhWMTJhNStCYW0v?=
+ =?utf-8?B?VEY5d2ZWcGdEWGdvSHFzTHB5SmMydmlkbG01MmVRbDlTOFQrckh2d21hbE45?=
+ =?utf-8?B?N3hPWUVMRUFWckpkNVpjZ0pHUW1RemVnSGRqL3loSFpHRkM3WDl5SC9YT00w?=
+ =?utf-8?B?YkZOaCtKY1BIeHpXejN0TzQ0WjZEOEZIQ2NmTmtEdzNTZWtvcE9oUVhJOThs?=
+ =?utf-8?B?NGNlMmtTQWFjQ3VqZ3ZhZ3MxV1diVkplZGpRMFpFRFJYYlArQ1BVc2lSWXhH?=
+ =?utf-8?B?ekFtamlDYjB6M1p3RlFPanczRGUzL3ZlZE1ENVlESWpoQk9sU1NxemIwUlBv?=
+ =?utf-8?B?ZkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d272b034-945c-4918-cc70-08db2c2d7a81
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 06:03:24.5721
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JxdZKPOcFf++1rfIdLry7a8oexxuJM5eB5WTQNaKG0slUvB2m+4TXJzsmBlyziJcCxhFro5nsYefLp0SPOGhLfWDDymFlTgKUVzM3ZS6jRY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7198
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 11:41:12AM +0800, Jason Wang wrote:
-> On Thu, Mar 23, 2023 at 4:01 PM 黄杰 <huangjie.albert@bytedance.com> wrote:
-> >
-> > Jason Wang <jasowang@redhat.com> 于2023年3月22日周三 10:37写道：
-> > >
-> > > On Tue, Mar 21, 2023 at 5:00 PM Albert Huang
-> > > <huangjie.albert@bytedance.com> wrote:
-> > > >
-> > > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> > > >
-> > > > fix commit 8d622d21d248 ("virtio: fix up virtio_disable_cb")
-> > > >
-> > > > if we disable the napi_tx. when we triger a tx interrupt, the
-> > >
-> > > typo should be "trigger"
-> > >
-> >
-> > OK, thanks for this. I will correct it in the next version
-> >
-> > > > vq->event_triggered will be set to true. It will no longer be
-> > > > set to false. Unless we explicitly call virtqueue_enable_cb_delayed
-> > > > or virtqueue_enable_cb_prepare
-> > > >
-> > > > if we disable the napi_tx, It will only be called when the tx ring
-> > > > buffer is relatively small:
-> > > > virtio_net->start_xmit:
-> > > >         if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
-> > > >                 netif_stop_subqueue(dev, qnum);
-> > > >                 if (!use_napi &&
-> > > >                     unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-> > > >                         /* More just got used, free them then recheck. */
-> > > >                         free_old_xmit_skbs(sq, false);
-> > > >                         if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-> > > >                                 netif_start_subqueue(dev, qnum);
-> > > >                                 virtqueue_disable_cb(sq->vq);
-> > > >                         }
-> > >
-> > > The code example here is out of date, make sure your tree has this:
-> >
-> > also, I will correct it in the next version，this is from kernel 5.15.
-> >
-> > >
-> > > commit d71ebe8114b4bf622804b810f5e274069060a174
-> > > Author: Jason Wang <jasowang@redhat.com>
-> > > Date:   Tue Jan 17 11:47:07 2023 +0800
-> > >
-> > >     virtio-net: correctly enable callback during start_xmit
-> > >
-> > > >                 }
-> > > >         }
-> > > > Because event_triggered is true.Therefore, VRING_AVAIL_F_NO_INTERRUPT or
-> > > > VRING_PACKED_EVENT_FLAG_DISABLE will not be set.So we update
-> > > > vring_used_event(&vq->split.vring) or vq->packed.vring.driver->off_wrap
-> > > > every time we call virtqueue_get_buf_ctx.This will bring more interruptions.
-> > >
-> > > Can you please post how to test with the performance numbers?
-> > >
-> >
-> > iperf3 tcp stream:
-> > vm1 -----------------> vm2
-> > vm2 just receive tcp data stream from vm1, and send the ack to vm1,
-> > there are so
-> > many tx interruptions  in vm2.
-> >
-> > but without event_triggered there are just a few tx interruptions.
-> >
-> > > >
-> > > > if event_triggered is set to true, do not update vring_used_event(&vq->split.vring)
-> > > > or vq->packed.vring.driver->off_wrap
-> > > >
-> > > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> > > > ---
-> > > >  drivers/virtio/virtio_ring.c | 6 ++++--
-> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > > index 307e139cb11d..f486cccadbeb 100644
-> > > > --- a/drivers/virtio/virtio_ring.c
-> > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > @@ -795,7 +795,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
-> > > >         /* If we expect an interrupt for the next entry, tell host
-> > > >          * by writing event index and flush out the write before
-> > > >          * the read in the next get_buf call. */
-> > > > -       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT))
-> > > > +       if (!(vq->split.avail_flags_shadow & VRING_AVAIL_F_NO_INTERRUPT)
-> > > > +                       && (vq->event_triggered == false))
-> > >
-> > > I'm not sure this can work, when event_triggered is true it means
-> > > we've got an interrupt, in this case if we want another interrupt for
-> > > the next entry, we should update used_event otherwise we will lose
-> > > that interrupt?
-> > >
-> > > Thanks
-> >
-> > Normally, if we receive an interrupt, we should disable the interrupt
-> > in the interrupt callback handler.
-> 
-> So the problem is:
-> 
-> 1) event_triggered was set to true in vring_interrupt()
+On Thu, Mar 23, 2023 at 08:08:49AM -0700, Luis Chamberlain wrote:
+>On Thu, Mar 23, 2023 at 8:02 AM Lucas De Marchi
+><lucas.demarchi@intel.com> wrote:
+>>
+>> On Wed, Mar 22, 2023 at 03:31:59PM -0700, Luis Chamberlain wrote:
+>> >On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
+>> >> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
+>> >> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
+>> >> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
+>> >> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
+>> >> > > > > Yes, the -EINVAL error is strange. It is returned also in
+>> >> > > > > kernel/module/main.c on few locations. But neither of them
+>> >> > > > > looks like a good candidate.
+>> >> > > >
+>> >> > > > OK I updated to next-20230119 and I don't see the issue now.
+>> >> > > > Odd. It could have been an issue with next-20221207 which I was
+>> >> > > > on before.
+>> >> > > >
+>> >> > > > I'll run some more test and if nothing fails I'll send the fix
+>> >> > > > to Linux for rc5.
+>> >> > >
+>> >> > > Jeesh it just occured to me the difference, which I'll have to
+>> >> > > test next, for next-20221207 I had enabled module compression
+>> >> > > on kdevops with zstd.
+>> >> > >
+>> >> > > You can see the issues on kdevops git log with that... and I finally
+>> >> > > disabled it and the kmod test issue is gone. So it could be that
+>> >> > > but I just am ending my day so will check tomorrow if that was it.
+>> >> > > But if someone else beats me then great.
+>> >> > >
+>> >> > > With kdevops it should be a matter of just enabling zstd as I
+>> >> > > just bumped support for next-20230119 and that has module decompression
+>> >> > > disabled.
+>> >> >
+>> >> > So indeed, my suspcions were correct. There is one bug with
+>> >> > compression on debian:
+>> >> >
+>> >> > - gzip compressed modules don't end up in the initramfs
+>> >> >
+>> >> > There is a generic upstream kmod bug:
+>> >> >
+>> >> >  - modprobe --show-depends won't grok compressed modules so initramfs
+>> >> >    tools that use this as Debian likely are not getting module dependencies
+>> >> >    installed in their initramfs
+>> >>
+>> >> are you sure you have the relevant compression setting enabled
+>> >> in kmod?
+>> >>
+>> >> $ kmod --version
+>> >> kmod version 30
+>> >> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
+>> >
+>> >Debian has:
+>> >
+>> >kmod version 30
+>> >+ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
+>>
+>>            ^ so... mind the minus :). It doesn't support zlib.
+>>
+>> Change your kernel config to either compress the modules as xz or zstd.
 >
-> 2) after this nothing will happen for virtqueue_disable_cb() so
-> VRING_AVAIL_F_NO_INTERRUPT is not set in avail_flags_shadow
-> 3) virtqueue_get_buf_ctx_split() will still think the cb is enabled
-> then it tries to publish new event
+>Oh so then we should complain about these things if an initramfs is
+>detected with modules compressed using a compression algorithm which
+>modprobe installed does not support. What tool would do that?
 
-Oh. Good point! I think when I wrote up
-8d622d21d248 ("virtio: fix up virtio_disable_cb")
-I missed this corner case.
+I guess we could add that in depmod side as a dummy handler for when
+that config is off. Thoughts?
 
+Lucas De Marchi
 
-
-> This makes me think about whether or not we really need
-> event_triggered. The assumption in the virtqueue_disable_cb() seems
-> wrong:
-> 
-> /* If device triggered an event already it won't trigger one again:
->  * no need to disable.
->  */
-> if (vq->event_triggered)
->                 return;
-> 
-> This is wrong if there's no event index support.
-
-
-I don't get it.  how does this get triggered?
-
-You are talking about device without event index?
-Here's code from vring_interrupt():
-
-        /* Just a hint for performance: so it's ok that this can be racy! */
-        if (vq->event)
-                vq->event_triggered = true;
-
-
-
-
-> And the
-> event_triggered is somehow duplicated with the
-> VRING_AVAIL_F_NO_INTERRUPT in the case of event index. The correct fix
-> might be:
-> 
-> 1) remove event_triggered
-> 2) set VRING_AVAIL_F_NO_INTERRUPT in avail_flags_shadow in
-> vring_interrrupt if event index is supported
-> 
-> ?
-> 
-> Thanks
-
-I am not sure all this is right and I'd rather we focused
-performance/correctness and cleanups separately.
-
-
-
-
-> 
-> > But because of the introduction of event_triggered, here,
-> > virtqueue_get_buf_ctx_split  cannot be recognized
-> > that the interrupt has been turned off.
-> >
-> > if we want  another interrupt for the next entry, We should probably
-> > call virtqueue_enable_cb？
-> >
-> > Thanks
-> >
-> > >
-> > > >                 virtio_store_mb(vq->weak_barriers,
-> > > >                                 &vring_used_event(&vq->split.vring),
-> > > >                                 cpu_to_virtio16(_vq->vdev, vq->last_used_idx));
-> > > > @@ -1529,7 +1530,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > >          * by writing event index and flush out the write before
-> > > >          * the read in the next get_buf call.
-> > > >          */
-> > > > -       if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
-> > > > +       if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC
-> > > > +                       && (vq->event_triggered == false))
-> > > >                 virtio_store_mb(vq->weak_barriers,
-> > > >                                 &vq->packed.vring.driver->off_wrap,
-> > > >                                 cpu_to_le16(vq->last_used_idx));
-> > > > --
-> > > > 2.31.1
-> > > >
-> > >
-> >
-
+>
+>  Luis
