@@ -2,351 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23056C8155
+	by mail.lfdr.de (Postfix) with ESMTP id 332EB6C8153
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbjCXPfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S232465AbjCXPfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjCXPfg (ORCPT
+        with ESMTP id S232432AbjCXPfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:35:36 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFE71E9C3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:35:18 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id bl39so596581qkb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:35:18 -0700 (PDT)
+        Fri, 24 Mar 2023 11:35:32 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB98A1ADF6;
+        Fri, 24 Mar 2023 08:35:12 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so1962919pjz.1;
+        Fri, 24 Mar 2023 08:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679672117;
+        d=gmail.com; s=20210112; t=1679672112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xS9OJOyQykTozpJFGoheT7sjaNubVMUEBG8YDPV7WRc=;
-        b=FxQsuMA7Sb3PTTKEyQWsMO7e0nYg4tIkkBo0BYOQglSRd7RtitijynQime6t2qHe49
-         O88YpogYfb2hQTSLg190JT84WTiDsSE80Q6z639unek9w+tX1i/uN0bz4ntf2SKV0zrb
-         HTzLAiPPCGNHD5DuI1CmMhjA3SMOK1LTHiOJw=
+        bh=4uioeUW0b5QfjzsCcQLCYz9oQ5uQ4Sn5bsToPRxmO2s=;
+        b=D6KxP1oArJBJV2Y65xV8DroR8s9jDS60ScwNt9HIijqtklBCb1N+fbYuWUn/nKvwXS
+         rBW8xktv8HDDH/KrSyQrPgFMJru8YCUAlCigoy4HRYHrJOhJ5MRbbCQSD5gX7GN6EaXz
+         xWRG4T0sc0Wy3QFRnFZW9u6IGx+IjSMVPf5ASwg2CcXTdkhj2DFN8/oCu+COido8mqUR
+         uK/Hn+xut7BCvLN1Bu9UWMW2sGKuGn1JnGup+BbMF+/VylMR51pue2Blokpi2wuoKRoI
+         AC/PiLnRKpA2JnymMy7bQeurM8oZkkPuyhm1I4kBuD8aj0sZ4ZrDpuxmGJexAGal8GP3
+         pJsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672117;
+        d=1e100.net; s=20210112; t=1679672112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xS9OJOyQykTozpJFGoheT7sjaNubVMUEBG8YDPV7WRc=;
-        b=57qQESWSxJPlTTNhvHCAf5V56unm2F48H6I2A6po/Fy2/J5widunvlW3dXFPKeeL4g
-         X7pLnuBQ1eYLmJmcFg4DEfIf8jnueCLUrN+awRj/8+ahJBOOsOXZojXaOJ1wW5uCg/hq
-         puP3OlUR7TestpzO6UQoup6lbOE9mgmu/5Djyx+3hJv+qah4Qly125dyOFD2Ve0lLYSt
-         OEUYPpftkOoT/7WV0MQmqDVkXNTEcwYfcCHD9KtRjWPHyNRvub4Jsh1csuJzrCQs612I
-         E21+TivjyuhNHKWCjpWlNaKHxUh641MLcsG0Y/s2inQHcF4J0ziAFB5MR+TbPHzZYeH3
-         MCRA==
-X-Gm-Message-State: AO0yUKVHQZ0XHe15WZ2CrdOPkdnwHT3coi+v0yx4b8+cdPzJzxMGiefi
-        yPIGfuzbNT0sf7Q/QwE7ks2Li+f8zvYUQWQom9wyGg==
-X-Google-Smtp-Source: AK7set+eIR7koilS2BECAqpv/BZLKCaGeKNbr3/pR4NfKgS75sl47b47qY0gMGCcJGAnKQ4I8v3v2ro0IWsYYhyDcNk=
-X-Received: by 2002:a05:620a:20d8:b0:746:7829:c3fe with SMTP id
- f24-20020a05620a20d800b007467829c3femr709378qka.0.1679672117479; Fri, 24 Mar
- 2023 08:35:17 -0700 (PDT)
+        bh=4uioeUW0b5QfjzsCcQLCYz9oQ5uQ4Sn5bsToPRxmO2s=;
+        b=cOwmu+ntUdKf1sd7bSEhj9PfAdgt8eXPrau5JjLWITePqR3tp1Id1WggtSI4fYAv+q
+         Hr007tPQor3sAmEmnHYrEDC3dS5Z62YYe6TJwhcBH/09FR3ahGAGzx4bSIb1c3Bhinbc
+         kl9HdWeclFqRzmwO1P4DdTUFZFGXk/7vHe6YtQ08wh0FwxRQv62XFJR+XLK+p4lo7XgR
+         JSqE806Qv5BjNhLOhzknKS65unAGkdK+CiWTaeIX68O7SC3XLl+3WVY2YqdeMJyzg+Q7
+         PIfa9SzTEf9D1GWDRy6HkyLOAnRK36KcMEZgkel5+5EnrnBwa6P6v4G5eIFZrpIk4smd
+         xcPw==
+X-Gm-Message-State: AAQBX9cVyKGAYdr6p9zgrGw+E9eQ7pzeVqR82wbbGgZX7XHTXhNWWMxK
+        ZOx1NBf/0g4tldgo4neBX4lV9FlOqKfyiBJtSzgfcNfnmnkQ0CU6
+X-Google-Smtp-Source: AKy350Y1MR+BaIB7nk22Q/ip4wTWcomWFt/7dkSX8lPQbvnLmG6x9trv2/5KZXGzHqJKzbl9G3EpL5MjX7mkZ3N4eHY=
+X-Received: by 2002:a17:902:ecd2:b0:1a2:278d:1824 with SMTP id
+ a18-20020a170902ecd200b001a2278d1824mr123343plh.12.1679672112173; Fri, 24 Mar
+ 2023 08:35:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230324072958.2993946-1-hsinyi@chromium.org> <f4573a49-ae05-07bf-4e7c-70037b4596b9@intel.com>
-In-Reply-To: <f4573a49-ae05-07bf-4e7c-70037b4596b9@intel.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Fri, 24 Mar 2023 23:34:51 +0800
-Message-ID: <CAJMQK-gzFc41kDxYHJQzuXtvaJnYN8zvsfHbam4TX+PaYoRE-w@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: it6505: Add lock for it6505 i2c bank
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Robert Foss <rfoss@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kenneth.hung@ite.corp-partner.google.com,
-        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+References: <20230310070039.1288927-1-zyytlz.wz@163.com> <ZBx8S0tSz/Ot+xw7@kroah.com>
+In-Reply-To: <ZBx8S0tSz/Ot+xw7@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Fri, 24 Mar 2023 23:34:59 +0800
+Message-ID: <CAJedcCznj8Ve7GOJxopG6X9eDXfi8MMKr+BtTZK7D1xDf0PaBQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: gadget: udc: Fix use after free bug in
+ udc_plat_remove due to race condition
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 8:18=E2=80=AFPM Andrzej Hajda <andrzej.hajda@intel.=
-com> wrote:
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8824=E6=
+=97=A5=E5=91=A8=E4=BA=94 00:20=E5=86=99=E9=81=93=EF=BC=9A
 >
->
->
-> On 24.03.2023 08:29, Hsin-Yi Wang wrote:
-> > From: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+> On Fri, Mar 10, 2023 at 03:00:39PM +0800, Zheng Wang wrote:
+> > In udc_plat_probe, &udc->drd_work is bound with
+> > udc_drd_work. udc_drd_work may be called by
+> > usbd_connect_notify to start the work.
 > >
-> > When the i2c bank register (REG_BANK_SEL) is set to 1,
-> > only the registers belong to bank 1 can be written.
-> > There will be a race condition when a process is writing
-> > bank 0 registers while another process set the bank to 1.
-> > Add a mutex to handle regmap read/write locking for
-> > registers in multiple i2c bank. Since the driver now
-> > owns the lock, there's no need to use regmap API's lock.
+> > Besides, there is a invoking chain:
+> > udc_plat_probe
+> > ->udc_probe
+> > ->usb_add_gadget_udc_release
+> > ->usb_add_gadget
 > >
-> > Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.co=
-m>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > It will add a new gadget to the udc class driver
+> >  list. In usb_add_gadget, it uses usb_udc_release
+> >  as its release function, which will kfree(udc)
+> >  to when destroying the gadget.
+> >
+> > If we remove the module which will call udc_plat_remove
+> >   to make cleanup, there may be a unfinished work.
+> > The possible sequence is as follows:
+> >
+> > Fix it by finishing the work before cleanup in the udc_plat_remove
+> >
+> > Fixes: 1b9f35adb0ff ("usb: gadget: udc: Add Synopsys UDC Platform drive=
+r")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 > > ---
-> >   drivers/gpu/drm/bridge/ite-it6505.c | 72 ++++++++++++++++++++++------=
--
-> >   1 file changed, 55 insertions(+), 17 deletions(-)
+> >  drivers/usb/gadget/udc/snps_udc_plat.c | 1 +
+> >  1 file changed, 1 insertion(+)
 > >
-> > diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/brid=
-ge/ite-it6505.c
-> > index bc451b2a77c28..1a8dcc49fc1ee 100644
-> > --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> > +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> > @@ -258,12 +258,12 @@
-> >   #define REG_AUD_INFOFRAM_SUM 0xFB
+> > diff --git a/drivers/usb/gadget/udc/snps_udc_plat.c b/drivers/usb/gadge=
+t/udc/snps_udc_plat.c
+> > index 8bbb89c80348..6228e178cc0a 100644
+> > --- a/drivers/usb/gadget/udc/snps_udc_plat.c
+> > +++ b/drivers/usb/gadget/udc/snps_udc_plat.c
+> > @@ -230,6 +230,7 @@ static int udc_plat_remove(struct platform_device *=
+pdev)
+> >       struct udc *dev;
 > >
-> >   /* the following six registers are in bank1 */
-> > -#define REG_DRV_0_DB_800_MV 0x7E
-> > -#define REG_PRE_0_DB_800_MV 0x7F
-> > -#define REG_PRE_3P5_DB_800_MV 0x81
-> > -#define REG_SSC_CTRL0 0x88
-> > -#define REG_SSC_CTRL1 0x89
-> > -#define REG_SSC_CTRL2 0x8A
-> > +#define REG_DRV_0_DB_800_MV 0x17E
-> > +#define REG_PRE_0_DB_800_MV 0x17F
-> > +#define REG_PRE_3P5_DB_800_MV 0x181
-> > +#define REG_SSC_CTRL0 0x188
-> > +#define REG_SSC_CTRL1 0x189
-> > +#define REG_SSC_CTRL2 0x18A
+> >       dev =3D platform_get_drvdata(pdev);
+> > +     cancel_delayed_work_sync(&dev->drd_work);
 > >
-> >   #define RBR DP_LINK_BW_1_62
-> >   #define HBR DP_LINK_BW_2_7
-> > @@ -414,12 +414,14 @@ struct it6505 {
-> >       struct mutex extcon_lock;
-> >       struct mutex mode_lock; /* used to bridge_detect */
-> >       struct mutex aux_lock; /* used to aux data transfers */
-> > +     struct mutex bank_lock; /* used to protect i2c bank access */
-> >       struct regmap *regmap;
-> >       struct drm_display_mode source_output_mode;
-> >       struct drm_display_mode video_info;
-> >       struct notifier_block event_nb;
-> >       struct extcon_dev *extcon;
-> >       struct work_struct extcon_wq;
-> > +     int bank_state;   /* 1 indicates bank 1, 0 indicates bank 0 */
-> >       int extcon_state;
-> >       enum drm_connector_status connector_status;
-> >       enum link_train_status link_state;
-> > @@ -502,8 +504,22 @@ static const struct regmap_config it6505_regmap_co=
-nfig =3D {
-> >       .val_bits =3D 8,
-> >       .volatile_table =3D &it6505_bridge_volatile_table,
-> >       .cache_type =3D REGCACHE_NONE,
-> > +     .disable_locking =3D true,
-> > +     .can_sleep =3D true,
-> >   };
+> >       usb_del_gadget_udc(&dev->gadget);
+> >       /* gadget driver must not be registered */
+> > --
+> > 2.25.1
 > >
-> > +static int it6505_config_bank(struct it6505 *it6505, unsigned int reg_=
-addr)
-> > +{
-> > +     int err =3D 0, target =3D !!(reg_addr > 0xff);
-> > +
-> > +     if (target !=3D it6505->bank_state) {
 >
-> It would be better to return if equal, this way you can avoid indentation=
-.
+> Please test this to verify that it actually works.
 >
-Will fix in v2.
-> > +             err =3D regmap_write(it6505->regmap, REG_BANK_SEL, target=
-);
-> > +             if (!err)
-> > +                     it6505->bank_state =3D target;
-> > +     }
-> > +     return err;
-> > +}
-> > +
-> >   static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
-> >   {
-> >       unsigned int value;
-> > @@ -513,7 +529,10 @@ static int it6505_read(struct it6505 *it6505, unsi=
-gned int reg_addr)
-> >       if (!it6505->powered)
-> >               return -ENODEV;
-> >
-> > -     err =3D regmap_read(it6505->regmap, reg_addr, &value);
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     err =3D it6505_config_bank(it6505, reg_addr);
-> > +     err |=3D regmap_read(it6505->regmap, reg_addr & 0xff, &value);
->
-> Shoudn't be rather if (!err) err =3D regmap_read(...) ?
->
-Will fix in v2.
-> > +     mutex_unlock(&it6505->bank_lock);
-> >       if (err < 0) {
-> >               dev_err(dev, "read failed reg[0x%x] err: %d", reg_addr, e=
-rr);
-> >               return err;
-> > @@ -531,8 +550,10 @@ static int it6505_write(struct it6505 *it6505, uns=
-igned int reg_addr,
-> >       if (!it6505->powered)
-> >               return -ENODEV;
-> >
-> > -     err =3D regmap_write(it6505->regmap, reg_addr, reg_val);
-> > -
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     err =3D it6505_config_bank(it6505, reg_addr);
-> > +     err |=3D regmap_write(it6505->regmap, reg_addr & 0xff, reg_val);
-> > +     mutex_unlock(&it6505->bank_lock);
-> >       if (err < 0) {
-> >               dev_err(dev, "write failed reg[0x%x] =3D 0x%x err =3D %d"=
-,
-> >                       reg_addr, reg_val, err);
-> > @@ -551,7 +572,10 @@ static int it6505_set_bits(struct it6505 *it6505, =
-unsigned int reg,
-> >       if (!it6505->powered)
-> >               return -ENODEV;
-> >
-> > -     err =3D regmap_update_bits(it6505->regmap, reg, mask, value);
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     err =3D it6505_config_bank(it6505, reg);
-> > +     err |=3D regmap_update_bits(it6505->regmap, reg & 0xff, mask, val=
-ue);
-> > +     mutex_unlock(&it6505->bank_lock);
-> >       if (err < 0) {
-> >               dev_err(dev, "write reg[0x%x] =3D 0x%x mask =3D 0x%x fail=
-ed err %d",
-> >                       reg, value, mask, err);
-> > @@ -892,7 +916,10 @@ static void it6505_aux_reset(struct it6505 *it6505=
-)
-> >
-> >   static void it6505_reset_logic(struct it6505 *it6505)
-> >   {
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     it6505_config_bank(it6505, REG_RESET_CTRL);
-> >       regmap_write(it6505->regmap, REG_RESET_CTRL, ALL_LOGIC_RESET);
-> > +     mutex_unlock(&it6505->bank_lock);
->
-> Why not call it6505_write ?
-Will fix in v2.
-> >       usleep_range(1000, 1500);
-> >   }
-> >
-> > @@ -972,9 +999,14 @@ static ssize_t it6505_aux_operation(struct it6505 =
-*it6505,
-> >       it6505_write(it6505, REG_AUX_ADR_16_19,
-> >                    ((address >> 16) & 0x0F) | ((size - 1) << 4));
-> >
-> > -     if (cmd =3D=3D CMD_AUX_NATIVE_WRITE)
-> > +     if (cmd =3D=3D CMD_AUX_NATIVE_WRITE) {
-> > +             mutex_lock(&it6505->bank_lock);
-> > +             it6505_config_bank(it6505, REG_AUX_OUT_DATA0);
-> >               regmap_bulk_write(it6505->regmap, REG_AUX_OUT_DATA0, buff=
-er,
-> >                                 size);
-> > +             mutex_unlock(&it6505->bank_lock);
-> > +     }
-> > +
-> >
-> >       /* Aux Fire */
-> >       it6505_write(it6505, REG_AUX_CMD_REQ, cmd);
-> > @@ -1197,9 +1229,12 @@ static int it6505_send_video_infoframe(struct it=
-6505 *it6505,
-> >       if (err)
-> >               return err;
-> >
-> > -     err =3D regmap_bulk_write(it6505->regmap, REG_AVI_INFO_DB1,
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     err =3D it6505_config_bank(it6505, REG_AVI_INFO_DB1);
-> > +     err |=3D regmap_bulk_write(it6505->regmap, REG_AVI_INFO_DB1,
-> >                               buffer + HDMI_INFOFRAME_HEADER_SIZE,
-> >                               frame->length);
-> > +     mutex_unlock(&it6505->bank_lock);
->
-> Common code with it6505_aux_operation, maybe it6505_bulk_write ?
-Will fix in v2.
->
-> Have you checked if regmap does not support banking? IMO it should be
-> implemented there.
 
-Thanks for the suggestion. Do you mean regmap_field*? I think the
-banking in that series of API is different to the use case here. Since
-we would need to additionally set REG_BANK_SEL to 0 or 1, we still
-need a similar approach to this patch.
-We can also use regmap_multi_reg_write() to carry REG_BANK_SEL and the
-reg we want to write but that would have set REG_BANK_SEL multiple
-times unnecessarily (eg. a consequent write on 2 regs on bank 0
-doesn't need to write REG_BANK_SEL to 0 again on the second one.)
+Hi,
 
+Sorry for my late reply. I will try to simulate a device in qemu to test.
 
+Best regards,
+Zheng
+
+> thanks,
 >
-> Regards
-> Andrzej
->
-> >       if (err)
-> >               return err;
-> >
-> > @@ -1267,7 +1302,6 @@ static void it6505_init(struct it6505 *it6505)
-> >       it6505_write(it6505, REG_TIME_STMP_CTRL,
-> >                    EN_SSC_GAT | EN_ENHANCE_VID_STMP | EN_ENHANCE_AUD_ST=
-MP);
-> >       it6505_write(it6505, REG_INFOFRAME_CTRL, 0x00);
-> > -     it6505_write(it6505, REG_BANK_SEL, 0x01);
-> >       it6505_write(it6505, REG_DRV_0_DB_800_MV,
-> >                    afe_setting_table[it6505->afe_setting][0]);
-> >       it6505_write(it6505, REG_PRE_0_DB_800_MV,
-> > @@ -1277,7 +1311,6 @@ static void it6505_init(struct it6505 *it6505)
-> >       it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
-> >       it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
-> >       it6505_write(it6505, REG_SSC_CTRL2, 0x42);
-> > -     it6505_write(it6505, REG_BANK_SEL, 0x00);
-> >   }
-> >
-> >   static void it6505_video_disable(struct it6505 *it6505)
-> > @@ -1506,11 +1539,9 @@ static void it6505_setup_ssc(struct it6505 *it65=
-05)
-> >       it6505_set_bits(it6505, REG_TRAIN_CTRL0, SPREAD_AMP_5,
-> >                       it6505->enable_ssc ? SPREAD_AMP_5 : 0x00);
-> >       if (it6505->enable_ssc) {
-> > -             it6505_write(it6505, REG_BANK_SEL, 0x01);
-> >               it6505_write(it6505, REG_SSC_CTRL0, 0x9E);
-> >               it6505_write(it6505, REG_SSC_CTRL1, 0x1C);
-> >               it6505_write(it6505, REG_SSC_CTRL2, 0x42);
-> > -             it6505_write(it6505, REG_BANK_SEL, 0x00);
-> >               it6505_write(it6505, REG_SP_CTRL0, 0x07);
-> >               it6505_write(it6505, REG_IP_CTRL1, 0x29);
-> >               it6505_write(it6505, REG_IP_CTRL2, 0x03);
-> > @@ -1983,8 +2014,11 @@ static int it6505_setup_sha1_input(struct it6505=
- *it6505, u8 *sha1_input)
-> >       it6505_set_bits(it6505, REG_HDCP_CTRL2, HDCP_EN_M0_READ,
-> >                       HDCP_EN_M0_READ);
-> >
-> > -     err =3D regmap_bulk_read(it6505->regmap, REG_M0_0_7,
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     err =3D it6505_config_bank(it6505, REG_M0_0_7);
-> > +     err |=3D regmap_bulk_read(it6505->regmap, REG_M0_0_7,
-> >                              sha1_input + msg_count, 8);
-> > +     mutex_unlock(&it6505->bank_lock);
-> >
-> >       it6505_set_bits(it6505, REG_HDCP_CTRL2, HDCP_EN_M0_READ, 0x00);
-> >
-> > @@ -2577,6 +2611,9 @@ static int it6505_poweron(struct it6505 *it6505)
-> >       }
-> >
-> >       it6505->powered =3D true;
-> > +     mutex_lock(&it6505->bank_lock);
-> > +     it6505->bank_state =3D 0;
-> > +     mutex_unlock(&it6505->bank_lock);
-> >       it6505_reset_logic(it6505);
-> >       it6505_int_mask_enable(it6505);
-> >       it6505_init(it6505);
-> > @@ -3359,6 +3396,7 @@ static int it6505_i2c_probe(struct i2c_client *cl=
-ient)
-> >       mutex_init(&it6505->extcon_lock);
-> >       mutex_init(&it6505->mode_lock);
-> >       mutex_init(&it6505->aux_lock);
-> > +     mutex_init(&it6505->bank_lock);
-> >
-> >       it6505->bridge.of_node =3D client->dev.of_node;
-> >       it6505->connector_status =3D connector_status_disconnected;
->
+> greg k-h
