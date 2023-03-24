@@ -2,791 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B396C75C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041226C75C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjCXC1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S231460AbjCXC2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCXC1x (ORCPT
+        with ESMTP id S229600AbjCXC2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:27:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707CEF940;
-        Thu, 23 Mar 2023 19:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679624871; x=1711160871;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2dl0eddcM3V6lcQ9QRzFb8Ziqg9qOaiatZS/pk0/Rlg=;
-  b=eSK6FBgnApu9bfqZ42tcEXC6liecwTJmGD2tbGdmYY3yeEA/0dPCSGqv
-   kSp9xbmS9VeP5Ub59P2LHl4ukgrb/6IMNf+3U5gRMUVsWKF/HwEJt+pig
-   HKMMgyUhaUrVxESmnduVRwmM/58HzTBfOFtgsRwaASL9M3EzwE6P4G9Mq
-   2EBRmbPfj6dJMKuJT1uWs36aV8peakjj023x8/mMJjIM6/4WUWilaetfg
-   lD2tna2ePrPIUwnhsVMvluLX57/V9S23FfLPMQNChcMp7m60pOUVgniog
-   OA8M7v+pf2QqhbjlRTGPNprhaAnvSZXHn05g5W1XSH0ho7y/TR8f0xW/Z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338402065"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="338402065"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:27:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="751721617"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="751721617"
-Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.238.212.107]) ([10.238.212.107])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:27:48 -0700
-Message-ID: <a3c1de55-0d8c-239e-5cbb-ce57b065d625@intel.com>
-Date:   Fri, 24 Mar 2023 10:27:46 +0800
+        Thu, 23 Mar 2023 22:28:34 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036CD10DA;
+        Thu, 23 Mar 2023 19:28:23 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 61FCC24E094;
+        Fri, 24 Mar 2023 10:28:21 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Mar
+ 2023 10:28:21 +0800
+Received: from starfive-sdk.starfivetech.com (171.223.208.138) by
+ EXMBX162.cuchost.com (172.16.6.72) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 24 Mar 2023 10:28:20 +0800
+From:   Samin Guo <samin.guo@starfivetech.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+Subject: [PATCH v8 0/6] Add Ethernet driver for StarFive JH7110 SoC
+Date:   Fri, 24 Mar 2023 10:28:13 +0800
+Message-ID: <20230324022819.2324-1-samin.guo@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH v13 019/113] KVM: TDX: create/destroy VM structure
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <7c011a5c9dd92cfb9074297af22d132a4e57fd11.1678643052.git.isaku.yamahata@intel.com>
-From:   "Wang, Lei" <lei4.wang@intel.com>
-In-Reply-To: <7c011a5c9dd92cfb9074297af22d132a4e57fd11.1678643052.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/2023 1:55, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> As the first step to create TDX guest, create/destroy VM struct.  Assign
-> TDX private Host Key ID (HKID) to the TDX guest for memory encryption and
-> allocate extra pages for the TDX guest. On destruction, free allocated
-> pages, and HKID.
-> 
-> Before tearing down private page tables, TDX requires some resources of the
-> guest TD to be destroyed (i.e. HKID must have been reclaimed, etc).  Add
-> flush_shadow_all_private callback before tearing down private page tables
-> for it.
-> 
-> Add vm_free() of kvm_x86_ops hook at the end of kvm_arch_destroy_vm()
-> because some per-VM TDX resources, e.g. TDR, need to be freed after other
-> TDX resources, e.g. HKID, were freed.
-> 
-> Co-developed-by: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> ---
-> Changes v11 -> v12:
-> - use cpu_feature_enabled().
-> 
-> Changes v10 -> v11:
-> - Fix doule free in tdx_vm_free() by setting NULL.
-> - replace struct tdx_td_page tdr and tdcs from struct kvm_tdx with
->   unsigned long
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h |   2 +
->  arch/x86/include/asm/kvm_host.h    |   2 +
->  arch/x86/kvm/vmx/main.c            |  35 ++-
->  arch/x86/kvm/vmx/tdx.c             | 442 ++++++++++++++++++++++++++++-
->  arch/x86/kvm/vmx/tdx.h             |   6 +-
->  arch/x86/kvm/vmx/x86_ops.h         |   9 +
->  arch/x86/kvm/x86.c                 |   8 +
->  7 files changed, 498 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 7522c193f2b4..c30d2d2ad686 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -24,7 +24,9 @@ KVM_X86_OP(is_vm_type_supported)
->  KVM_X86_OP_OPTIONAL(max_vcpus);
->  KVM_X86_OP_OPTIONAL(vm_enable_cap)
->  KVM_X86_OP(vm_init)
-> +KVM_X86_OP_OPTIONAL(flush_shadow_all_private)
->  KVM_X86_OP_OPTIONAL(vm_destroy)
-> +KVM_X86_OP_OPTIONAL(vm_free)
->  KVM_X86_OP_OPTIONAL_RET0(vcpu_precreate)
->  KVM_X86_OP(vcpu_create)
->  KVM_X86_OP(vcpu_free)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index d98d61e5213d..15f7c0d45082 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1566,7 +1566,9 @@ struct kvm_x86_ops {
->  	unsigned int vm_size;
->  	int (*vm_enable_cap)(struct kvm *kvm, struct kvm_enable_cap *cap);
->  	int (*vm_init)(struct kvm *kvm);
-> +	void (*flush_shadow_all_private)(struct kvm *kvm);
->  	void (*vm_destroy)(struct kvm *kvm);
-> +	void (*vm_free)(struct kvm *kvm);
->  
->  	/* Create, but do not attach this VCPU */
->  	int (*vcpu_precreate)(struct kvm *kvm);
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 68bb320d0b6d..08ed6fc8cc3d 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -62,14 +62,41 @@ static int vt_vm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
->  	return -EINVAL;
->  }
->  
-> +static void vt_hardware_unsetup(void)
-> +{
-> +	if (enable_tdx)
-> +		tdx_hardware_unsetup();
-> +	vmx_hardware_unsetup();
-> +}
-> +
->  static int vt_vm_init(struct kvm *kvm)
->  {
->  	if (is_td(kvm))
-> -		return -EOPNOTSUPP;	/* Not ready to create guest TD yet. */
-> +		return tdx_vm_init(kvm);
->  
->  	return vmx_vm_init(kvm);
->  }
->  
-> +static void vt_flush_shadow_all_private(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		tdx_mmu_release_hkid(kvm);
-> +}
-> +
-> +static void vt_vm_destroy(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		return;
-> +
-> +	vmx_vm_destroy(kvm);
-> +}
-> +
-> +static void vt_vm_free(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		tdx_vm_free(kvm);
-> +}
-> +
->  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	if (!is_td(kvm))
-> @@ -94,7 +121,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  
->  	.check_processor_compatibility = vmx_check_processor_compat,
->  
-> -	.hardware_unsetup = vmx_hardware_unsetup,
-> +	.hardware_unsetup = vt_hardware_unsetup,
->  
->  	.hardware_enable = vt_hardware_enable,
->  	.hardware_disable = vmx_hardware_disable,
-> @@ -105,7 +132,9 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.vm_size = sizeof(struct kvm_vmx),
->  	.vm_enable_cap = vt_vm_enable_cap,
->  	.vm_init = vt_vm_init,
-> -	.vm_destroy = vmx_vm_destroy,
-> +	.flush_shadow_all_private = vt_flush_shadow_all_private,
-> +	.vm_destroy = vt_vm_destroy,
-> +	.vm_free = vt_vm_free,
->  
->  	.vcpu_precreate = vmx_vcpu_precreate,
->  	.vcpu_create = vmx_vcpu_create,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 8b02e605cfb5..3ede8a726b47 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -5,8 +5,9 @@
->  
->  #include "capabilities.h"
->  #include "x86_ops.h"
-> -#include "x86.h"
->  #include "tdx.h"
-> +#include "tdx_ops.h"
-> +#include "x86.h"
->  
->  #undef pr_fmt
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> @@ -46,11 +47,276 @@ int tdx_vm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
->  	return r;
->  }
->  
-> +struct tdx_info {
-> +	u8 nr_tdcs_pages;
-> +};
-> +
-> +/* Info about the TDX module. */
-> +static struct tdx_info tdx_info;
-> +
-> +/*
-> + * Some TDX SEAMCALLs (TDH.MNG.CREATE, TDH.PHYMEM.CACHE.WB,
-> + * TDH.MNG.KEY.RECLAIMID, TDH.MNG.KEY.FREEID etc) tries to acquire a global lock
-> + * internally in TDX module.  If failed, TDX_OPERAND_BUSY is returned without
-> + * spinning or waiting due to a constraint on execution time.  It's caller's
-> + * responsibility to avoid race (or retry on TDX_OPERAND_BUSY).  Use this mutex
-> + * to avoid race in TDX module because the kernel knows better about scheduling.
-> + */
-> +static DEFINE_MUTEX(tdx_lock);
-> +static struct mutex *tdx_mng_key_config_lock;
-> +
-> +static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
-> +{
-> +	return pa | ((hpa_t)hkid << boot_cpu_data.x86_phys_bits);
-> +}
-> +
-> +static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
-> +{
-> +	return kvm_tdx->tdr_pa;
-> +}
-> +
-> +static inline void tdx_hkid_free(struct kvm_tdx *kvm_tdx)
-> +{
-> +	tdx_guest_keyid_free(kvm_tdx->hkid);
-> +	kvm_tdx->hkid = 0;
-> +}
-> +
-> +static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
-> +{
-> +	return kvm_tdx->hkid > 0;
-> +}
-> +
->  int tdx_hardware_enable(void)
->  {
->  	return tdx_cpu_enable();
->  }
->  
-> +static void tdx_clear_page(unsigned long page_pa)
-> +{
-> +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
-> +	void *page = __va(page_pa);
-> +	unsigned long i;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_MOVDIR64B)) {
-> +		clear_page(page);
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Zeroing the page is only necessary for systems with MKTME-i:
-> +	 * when re-assign one page from old keyid to a new keyid, MOVDIR64B is
-> +	 * required to clear/write the page with new keyid to prevent integrity
-> +	 * error when read on the page with new keyid.
-> +	 *
-> +	 * clflush doesn't flush cache with HKID set.
-> +	 * The cache line could be poisoned (even without MKTME-i), clear the
-> +	 * poison bit.
-> +	 */
-> +	for (i = 0; i < PAGE_SIZE; i += 64)
-> +		movdir64b(page + i, zero_page);
-> +	/*
-> +	 * MOVDIR64B store uses WC buffer.  Prevent following memory reads
-> +	 * from seeing potentially poisoned cache.
-> +	 */
-> +	__mb();
-> +}
-> +
-> +static int tdx_reclaim_page(hpa_t pa, bool do_wb, u16 hkid)
-> +{
-> +	struct tdx_module_output out;
-> +	u64 err;
-> +
-> +	do {
-> +		err = tdh_phymem_page_reclaim(pa, &out);
-> +		/*
-> +		 * TDH.PHYMEM.PAGE.RECLAIM is allowed only when TD is shutdown.
-> +		 * state.  i.e. destructing TD.
-> +		 * TDH.PHYMEM.PAGE.RECLAIM requires TDR and target page.
-> +		 * Because we're destructing TD, it's rare to contend with TDR.
-> +		 */
-> +	} while (err == (TDX_OPERAND_BUSY | TDX_OPERAND_ID_RCX));
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
-> +		return -EIO;
-> +	}
-> +
-> +	if (do_wb) {
-> +		/*
-> +		 * Only TDR page gets into this path.  No contention is expected
-> +		 * because of the last page of TD.
-> +		 */
-> +		err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	tdx_clear_page(pa);
-> +	return 0;
-> +}
-> +
-> +static void tdx_reclaim_td_page(unsigned long td_page_pa)
-> +{
-> +	if (!td_page_pa)
-> +		return;
-> +	/*
-> +	 * TDCX are being reclaimed.  TDX module maps TDCX with HKID
-> +	 * assigned to the TD.  Here the cache associated to the TD
-> +	 * was already flushed by TDH.PHYMEM.CACHE.WB before here, So
-> +	 * cache doesn't need to be flushed again.
-> +	 */
-> +	if (tdx_reclaim_page(td_page_pa, false, 0))
-> +		/*
-> +		 * Leak the page on failure:
-> +		 * tdx_reclaim_page() returns an error if and only if there's an
-> +		 * unexpected, fatal error, e.g. a SEAMCALL with bad params,
-> +		 * incorrect concurrency in KVM, a TDX Module bug, etc.
-> +		 * Retrying at a later point is highly unlikely to be
-> +		 * successful.
-> +		 * No log here as tdx_reclaim_page() already did.
-> +		 */
-> +		return;
-> +	free_page((unsigned long)__va(td_page_pa));
-> +}
-> +
-> +static int tdx_do_tdh_phymem_cache_wb(void *param)
-> +{
-> +	u64 err = 0;
-> +
-> +	do {
-> +		err = tdh_phymem_cache_wb(!!err);
-> +	} while (err == TDX_INTERRUPTED_RESUMABLE);
-> +
-> +	/* Other thread may have done for us. */
-> +	if (err == TDX_NO_HKID_READY_TO_WBCACHE)
-> +		err = TDX_SUCCESS;
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_PHYMEM_CACHE_WB, err, NULL);
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void tdx_mmu_release_hkid(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	cpumask_var_t packages;
-> +	bool cpumask_allocated;
-> +	u64 err;
-> +	int ret;
-> +	int i;
-> +
-> +	if (!is_hkid_assigned(kvm_tdx))
-> +		return;
-> +
-> +	if (!is_td_created(kvm_tdx))
-> +		goto free_hkid;
-> +
-> +	cpumask_allocated = zalloc_cpumask_var(&packages, GFP_KERNEL);
-> +	cpus_read_lock();
-> +	for_each_online_cpu(i) {
-> +		if (cpumask_allocated &&
-> +			cpumask_test_and_set_cpu(topology_physical_package_id(i),
-> +						packages))
-> +			continue;
-> +
-> +		/*
-> +		 * We can destroy multiple the guest TDs simultaneously.
-> +		 * Prevent tdh_phymem_cache_wb from returning TDX_BUSY by
-> +		 * serialization.
-> +		 */
-> +		mutex_lock(&tdx_lock);
-> +		ret = smp_call_on_cpu(i, tdx_do_tdh_phymem_cache_wb, NULL, 1);
-> +		mutex_unlock(&tdx_lock);
-> +		if (ret)
-> +			break;
-> +	}
-> +	cpus_read_unlock();
-> +	free_cpumask_var(packages);
-> +
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_key_freeid(kvm_tdx->tdr_pa);
-> +	mutex_unlock(&tdx_lock);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_KEY_FREEID, err, NULL);
-> +		pr_err("tdh_mng_key_freeid failed. HKID %d is leaked.\n",
-> +			kvm_tdx->hkid);
-> +		return;
-> +	}
-> +
-> +free_hkid:
-> +	tdx_hkid_free(kvm_tdx);
-> +}
-> +
-> +void tdx_vm_free(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	int i;
-> +
-> +	/* Can't reclaim or free TD pages if teardown failed. */
-> +	if (is_hkid_assigned(kvm_tdx))
-> +		return;
-> +
-> +	if (kvm_tdx->tdcs_pa) {
-> +		for (i = 0; i < tdx_info.nr_tdcs_pages; i++)
-> +			tdx_reclaim_td_page(kvm_tdx->tdcs_pa[i]);
-> +		kfree(kvm_tdx->tdcs_pa);
-> +		kvm_tdx->tdcs_pa = NULL;
-> +	}
-> +
-> +	if (!kvm_tdx->tdr_pa)
-> +		return;
-> +	/*
-> +	 * TDX module maps TDR with TDX global HKID.  TDX module may access TDR
-> +	 * while operating on TD (Especially reclaiming TDCS).  Cache flush with
-> +	 * TDX global HKID is needed.
-> +	 */
-> +	if (tdx_reclaim_page(kvm_tdx->tdr_pa, true, tdx_global_keyid))
-> +		return;
-> +
-> +	free_page((unsigned long)__va(kvm_tdx->tdr_pa));
-> +	kvm_tdx->tdr_pa = 0;
-> +}
-> +
-> +static int tdx_do_tdh_mng_key_config(void *param)
-> +{
-> +	hpa_t *tdr_p = param;
-> +	u64 err;
-> +
-> +	do {
-> +		err = tdh_mng_key_config(*tdr_p);
-> +
-> +		/*
-> +		 * If it failed to generate a random key, retry it because this
-> +		 * is typically caused by an entropy error of the CPU's random
-> +		 * number generator.
-> +		 */
-> +	} while (err == TDX_KEY_GENERATION_FAILED);
-> +
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_KEY_CONFIG, err, NULL);
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int __tdx_td_init(struct kvm *kvm);
-> +
-> +int tdx_vm_init(struct kvm *kvm)
-> +{
-> +	/*
-> +	 * TDX has its own limit of the number of vcpus in addition to
-> +	 * KVM_MAX_VCPUS.
-> +	 */
-> +	kvm->max_vcpus = min(kvm->max_vcpus, TDX_MAX_VCPUS);
-> +
-> +	/* Place holder for TDX specific logic. */
-> +	return __tdx_td_init(kvm);
-> +}
-> +
->  int tdx_dev_ioctl(void __user *argp)
->  {
->  	struct kvm_tdx_capabilities __user *user_caps;
-> @@ -102,6 +368,160 @@ int tdx_dev_ioctl(void __user *argp)
->  	return 0;
->  }
->  
-> +static int __tdx_td_init(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	cpumask_var_t packages;
-> +	unsigned long *tdcs_pa = NULL;
-> +	unsigned long tdr_pa = 0;
-> +	unsigned long va;
-> +	int ret, i;
-> +	u64 err;
-> +
-> +	ret = tdx_guest_keyid_alloc();
-> +	if (ret < 0)
-> +		return ret;
-> +	kvm_tdx->hkid = ret;
-> +
-> +	va = __get_free_page(GFP_KERNEL_ACCOUNT);
-> +	if (!va)
-> +		goto free_hkid;
-> +	tdr_pa = __pa(va);
-> +
-> +	tdcs_pa = kcalloc(tdx_info.nr_tdcs_pages, sizeof(*kvm_tdx->tdcs_pa),
-> +			  GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-> +	if (!tdcs_pa)
-> +		goto free_tdr;
-> +	for (i = 0; i < tdx_info.nr_tdcs_pages; i++) {
-> +		va = __get_free_page(GFP_KERNEL_ACCOUNT);
-> +		if (!va)
-> +			goto free_tdcs;
-> +		tdcs_pa[i] = __pa(va);
-> +	}
-> +
-> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL)) {
-> +		ret = -ENOMEM;
-> +		goto free_tdcs;
-> +	}
-> +	cpus_read_lock();
-> +	/*
-> +	 * Need at least one CPU of the package to be online in order to
-> +	 * program all packages for host key id.  Check it.
-> +	 */
-> +	for_each_present_cpu(i)
-> +		cpumask_set_cpu(topology_physical_package_id(i), packages);
-> +	for_each_online_cpu(i)
-> +		cpumask_clear_cpu(topology_physical_package_id(i), packages);
-> +	if (!cpumask_empty(packages)) {
-> +		ret = -EIO;
-> +		/*
-> +		 * Because it's hard for human operator to figure out the
-> +		 * reason, warn it.
-> +		 */
-> +		pr_warn("All packages need to have online CPU to create TD. Online CPU and retry.\n");
-> +		goto free_packages;
-> +	}
-> +
-> +	/*
-> +	 * Acquire global lock to avoid TDX_OPERAND_BUSY:
-> +	 * TDH.MNG.CREATE and other APIs try to lock the global Key Owner
-> +	 * Table (KOT) to track the assigned TDX private HKID.  It doesn't spin
-> +	 * to acquire the lock, returns TDX_OPERAND_BUSY instead, and let the
-> +	 * caller to handle the contention.  This is because of time limitation
-> +	 * usable inside the TDX module and OS/VMM knows better about process
-> +	 * scheduling.
-> +	 *
-> +	 * APIs to acquire the lock of KOT:
-> +	 * TDH.MNG.CREATE, TDH.MNG.KEY.FREEID, TDH.MNG.VPFLUSHDONE, and
-> +	 * TDH.PHYMEM.CACHE.WB.
-> +	 */
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_create(tdr_pa, kvm_tdx->hkid);
+This series adds ethernet support for the StarFive JH7110 RISC-V SoC,
+which includes a dwmac-5.20 MAC driver (from Synopsys DesignWare).
+This series has been tested and works fine on VisionFive-2 v1.2A and
+v1.3B SBC boards.
 
-In the latest (March 2023 ver.) Intel® TDX Module v1.5 ABI Specification, error
-code 0x80000203 represents TDX_RND_NO_ENTROPY:
+For more information and support, you can visit RVspace wiki[1].
+You can simply review or test the patches at the link [2].
+This patchset should be applied after the patchset [3] [4].
 
-Random number generation (e.g., RDRAND or RDSEED) failed because the hardware
-random number generator did not have enough entropy. The caller should retry the
-operation.
+[1]: https://wiki.rvspace.org/
+[2]: https://github.com/SaminGuo/linux/tree/vf2-6.3rc3-gmac
+[3]: https://patchwork.kernel.org/project/linux-riscv/cover/20230320103750.60295-1-hal.feng@starfivetech.com
+[4]: https://patchwork.kernel.org/project/linux-riscv/cover/20230315055813.94740-1-william.qiu@starfivetech.com
 
-> +	mutex_unlock(&tdx_lock);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_CREATE, err, NULL);
-> +		ret = -EIO;
-> +		goto free_packages;
-> +	}
-> +	kvm_tdx->tdr_pa = tdr_pa;
-> +
-> +	for_each_online_cpu(i) {
-> +		int pkg = topology_physical_package_id(i);
-> +
-> +		if (cpumask_test_and_set_cpu(pkg, packages))
-> +			continue;
-> +
-> +		/*
-> +		 * Program the memory controller in the package with an
-> +		 * encryption key associated to a TDX private host key id
-> +		 * assigned to this TDR.  Concurrent operations on same memory
-> +		 * controller results in TDX_OPERAND_BUSY.  Avoid this race by
-> +		 * mutex.
-> +		 */
-> +		mutex_lock(&tdx_mng_key_config_lock[pkg]);
-> +		ret = smp_call_on_cpu(i, tdx_do_tdh_mng_key_config,
-> +				      &kvm_tdx->tdr_pa, true);
-> +		mutex_unlock(&tdx_mng_key_config_lock[pkg]);
-> +		if (ret)
-> +			break;
-> +	}
-> +	cpus_read_unlock();
-> +	free_cpumask_var(packages);
-> +	if (ret)
-> +		goto teardown;
-> +
-> +	kvm_tdx->tdcs_pa = tdcs_pa;
-> +	for (i = 0; i < tdx_info.nr_tdcs_pages; i++) {
-> +		err = tdh_mng_addcx(kvm_tdx->tdr_pa, tdcs_pa[i]);
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_MNG_ADDCX, err, NULL);
-> +			for (i++; i < tdx_info.nr_tdcs_pages; i++) {
-> +				free_page((unsigned long)__va(tdcs_pa[i]));
-> +				tdcs_pa[i] = 0;
-> +			}
-> +			ret = -EIO;
-> +			goto teardown;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Note, TDH_MNG_INIT cannot be invoked here.  TDH_MNG_INIT requires a dedicated
-> +	 * ioctl() to define the configure CPUID values for the TD.
-> +	 */
-> +	return 0;
-> +
-> +	/*
-> +	 * The sequence for freeing resources from a partially initialized TD
-> +	 * varies based on where in the initialization flow failure occurred.
-> +	 * Simply use the full teardown and destroy, which naturally play nice
-> +	 * with partial initialization.
-> +	 */
-> +teardown:
-> +	tdx_mmu_release_hkid(kvm);
-> +	tdx_vm_free(kvm);
-> +	return ret;
-> +
-> +free_packages:
-> +	cpus_read_unlock();
-> +	free_cpumask_var(packages);
-> +free_tdcs:
-> +	for (i = 0; i < tdx_info.nr_tdcs_pages; i++) {
-> +		if (tdcs_pa[i])
-> +			free_page((unsigned long)__va(tdcs_pa[i]));
-> +	}
-> +	kfree(tdcs_pa);
-> +	kvm_tdx->tdcs_pa = NULL;
-> +
-> +free_tdr:
-> +	if (tdr_pa)
-> +		free_page((unsigned long)__va(tdr_pa));
-> +	kvm_tdx->tdr_pa = 0;
-> +free_hkid:
-> +	if (is_hkid_assigned(kvm_tdx))
-> +		tdx_hkid_free(kvm_tdx);
-> +	return ret;
-> +}
-> +
->  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_tdx_cmd tdx_cmd;
-> @@ -142,9 +562,11 @@ static int __init tdx_module_setup(void)
->  		return ret;
->  	}
->  
-> -	/* Sanitary check just in case. */
->  	tdsysinfo = tdx_get_sysinfo();
->  	WARN_ON(tdsysinfo->num_cpuid_config > TDX_MAX_NR_CPUID_CONFIGS);
-> +	tdx_info = (struct tdx_info) {
-> +		.nr_tdcs_pages = tdsysinfo->tdcs_base_size / PAGE_SIZE,
-> +	};
->  
->  	pr_info("TDX is supported.\n");
->  	return 0;
-> @@ -163,6 +585,8 @@ static int __init tdx_cpu_enable_cpu(void *unused)
->  
->  int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
->  {
-> +	int max_pkgs;
-> +	int i;
->  	int r;
->  
->  	if (!enable_ept) {
-> @@ -170,6 +594,14 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
->  		return -EINVAL;
->  	}
->  
-> +	max_pkgs = topology_max_packages();
-> +	tdx_mng_key_config_lock = kcalloc(max_pkgs, sizeof(*tdx_mng_key_config_lock),
-> +				   GFP_KERNEL);
-> +	if (!tdx_mng_key_config_lock)
-> +		return -ENOMEM;
-> +	for (i = 0; i < max_pkgs; i++)
-> +		mutex_init(&tdx_mng_key_config_lock[i]);
-> +
->  	/* tdx_enable() in tdx_module_setup() requires cpus lock. */
->  	cpus_read_lock();
->  	/* TDX requires VMX. */
-> @@ -193,3 +625,9 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
->  
->  	return r;
->  }
-> +
-> +void tdx_hardware_unsetup(void)
-> +{
-> +	/* kfree accepts NULL. */
-> +	kfree(tdx_mng_key_config_lock);
-> +}
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index 3860aa351bd9..4b790503e43e 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -8,7 +8,11 @@
->  
->  struct kvm_tdx {
->  	struct kvm kvm;
-> -	/* TDX specific members follow. */
-> +
-> +	unsigned long tdr_pa;
-> +	unsigned long *tdcs_pa;
-> +
-> +	int hkid;
->  };
->  
->  struct vcpu_tdx {
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index 8118647aa8ca..8f87eeeab97c 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -139,19 +139,28 @@ void vmx_setup_mce(struct kvm_vcpu *vcpu);
->  
->  #ifdef CONFIG_INTEL_TDX_HOST
->  int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
-> +void tdx_hardware_unsetup(void);
->  int tdx_hardware_enable(void);
->  bool tdx_is_vm_type_supported(unsigned long type);
->  int tdx_dev_ioctl(void __user *argp);
->  
->  int tdx_vm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap);
-> +int tdx_vm_init(struct kvm *kvm);
-> +void tdx_mmu_release_hkid(struct kvm *kvm);
-> +void tdx_vm_free(struct kvm *kvm);
->  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->  #else
->  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
-> +static inline void tdx_hardware_unsetup(void) {}
->  static inline int tdx_hardware_enable(void) { return -EOPNOTSUPP; }
->  static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
->  static inline int tdx_dev_ioctl(void __user *argp) { return -EOPNOTSUPP; };
->  
->  static inline int tdx_vm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap) { return -EINVAL; };
-> +static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
-> +static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
-> +static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
-> +static inline void tdx_vm_free(struct kvm *kvm) {}
->  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
->  #endif
->  
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 7b02dd40ef21..89fd8074c20c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12398,6 +12398,7 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
->  	kvm_page_track_cleanup(kvm);
->  	kvm_xen_destroy_vm(kvm);
->  	kvm_hv_destroy_vm(kvm);
-> +	static_call_cond(kvm_x86_vm_free)(kvm);
->  }
->  
->  static void memslot_rmap_free(struct kvm_memory_slot *slot)
-> @@ -12710,6 +12711,13 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
->  
->  void kvm_arch_flush_shadow_all(struct kvm *kvm)
->  {
-> +	/*
-> +	 * kvm_mmu_zap_all() zaps both private and shared page tables.  Before
-> +	 * tearing down private page tables, TDX requires some TD resources to
-> +	 * be destroyed (i.e. keyID must have been reclaimed, etc).  Invoke
-> +	 * kvm_x86_flush_shadow_all_private() for this.
-> +	 */
-> +	static_call_cond(kvm_x86_flush_shadow_all_private)(kvm);
->  	kvm_mmu_zap_all(kvm);
->  }
->  
+Changes since v7:
+Patch 4:
+- Constrained the reg/interrupts/interrupt-names properties (by Krzysztof Kozlowski)
+
+
+Changes history:
+
+Changes since v6:
+- Sended network patches[patch 1,2,3,4,5,6] and riscv trees patches[patch 7,8] separately (by Jakub Kicinski)
+
+Changes since v5:
+- Dropped "depends on STMMAC_ETH" and compiled DWMAC_STARFIVE to m by default (by Emil)
+- Removed clk_gtx in struct starfive_dwmac due to this pointer is only set, but never read. (by Emil)
+- Only setting the plat_dat->fix_mac_speed callback when it is needed (by Emil)
+- Moved mdio/phy nodes from SOC .dtsi into board .dtsi (by Andrew)
+- Modified the parameters passed by starfive,syscon (by Andrew && Emil)
+    <syscon, offset, mask>  ==>  <syscon, offset, shift>
+- Optimized the patchs(Fewer patches from 12 to 8)
+    1)merged patch-7 into patch-4 (by Rob)
+    2)merged patch-9 into patch-5
+    2)merged patch-11,12 into patch-10
+    3)Adjusted the patchs order
+- Fixed the unevaluatedProperties property from true to false (by Rob)
+- Replaced contains:enum with items:const for reset-names in snps,dwmac.yaml (by Rob)
+- Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+
+Changes since v4:
+- Supported both visionfive 2 v1.2A and visionfive 2 v1.3B.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+- Suggested by Emil, dropped the _PLAT/_plat from the config/function/struct/file names.
+- Suggested by Emil, added MODULE_DEVICE_TABLE().
+- Suggested by Emil, dropped clk_gtxclk and use clk_tx_inv to set the clock frequency.
+- Added phy interface mode configuration function.
+- Rebased on tag v6.2.
+
+Changes since v3:
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'
+- Removed the unused code in 'dwmac-starfive-plat.c'.
+- Reworded the return statement in 'starfive_eth_plat_fix_mac_speed' function.
+
+Changes since v2:
+- Renamed the dt-bindings 'starfive,jh71x0-dwmac.yaml' to 'starfive,jh7110-dwmac.yaml'.
+- Reworded the commit messages.
+- Reworded the example context in the dt-binding 'starfive,jh7110-dwmac.yaml'.
+- Removed "starfive,jh7100-dwmac" compatible string and special initialization of jh7100.
+- Removed the parts of YT8531,so dropped patch 5 and 6.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+
+Changes since v1:
+- Recovered the author of the 1st and 3rd patches back to Emil Renner Berthing.
+- Added a new patch to update maxitems number of resets property in 'snps,dwmac.yaml'.
+- Fixed the check errors reported by "make dt_binding_check".
+- Renamed the dt-binding 'starfive,dwmac-plat.yaml' to 'starfive,jh71x0-dwmac.yaml'.
+- Updated the example context in the dt-binding 'starfive,jh71x0-dwmac.yaml'.
+- Added new dt-binding 'motorcomm,yt8531.yaml' to describe details of phy clock
+  delay configuration parameters.
+- Added more comments for PHY driver setting. For more details, see
+  'motorcomm,yt8531.yaml'.
+- Moved mdio device tree node from 'jh7110-starfive-visionfive-v2.dts' to 'jh7110.dtsi'.
+- Re-worded the commit message of several patches.
+- Renamed all the functions with starfive_eth_plat prefix in 'dwmac-starfive-plat.c'.
+- Added "starfive,jh7100-dwmac" compatible string and special init to support JH7100.
+
+Previous versions:
+v1 - https://patchwork.kernel.org/project/linux-riscv/cover/20221201090242.2381-1-yanhong.wang@starfivetech.com/
+v2 - https://patchwork.kernel.org/project/linux-riscv/cover/20221216070632.11444-1-yanhong.wang@starfivetech.com/
+v3 - https://patchwork.kernel.org/project/linux-riscv/cover/20230106030001.1952-1-yanhong.wang@starfivetech.com/
+v4 - https://patchwork.kernel.org/project/linux-riscv/cover/20230118061701.30047-1-yanhong.wang@starfivetech.com/
+v5 - https://patchwork.kernel.org/project/netdevbpf/cover/20230303085928.4535-1-samin.guo@starfivetech.com/
+v6 - https://patchwork.kernel.org/project/netdevbpf/cover/20230313034645.5469-1-samin.guo@starfivetech.com/
+v7 - https://patchwork.kernel.org/project/netdevbpf/cover/20230316043714.24279-1-samin.guo@starfivetech.com/
+
+Emil Renner Berthing (2):
+  dt-bindings: net: snps,dwmac: Add dwmac-5.20 version
+  net: stmmac: platform: Add snps,dwmac-5.20 IP compatible string
+
+Samin Guo (3):
+  dt-bindings: net: snps,dwmac: Add 'ahb' reset/reset-name
+  net: stmmac: Add glue layer for StarFive JH7110 SoC
+  net: stmmac: starfive_dmac: Add phy interface settings
+
+Yanhong Wang (1):
+  dt-bindings: net: Add support StarFive dwmac
+
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  17 +-
+ .../bindings/net/starfive,jh7110-dwmac.yaml   | 144 +++++++++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 168 ++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |   3 +-
+ 7 files changed, 347 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+
+
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+prerequisite-patch-id: 8a6f135bcabdad4a4bfb21f0c6a0ffd2bb57efe7
+prerequisite-patch-id: 1da7255d6aeb5576ca810116a9323452be2202fa
+prerequisite-patch-id: 50d53a21f91f4087fc80b6f1f72864adfb0002b9
+prerequisite-patch-id: 0df3703af91c30f1ca2c47f5609012f2d7200028
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 85c5bb437c383b2e68c79e59a439f01b7bcd963e
+prerequisite-patch-id: 8600b156a235be2b3db53be3f834e7a370e2cfb9
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 42d352fe14713b74951c4513128a0a494b2dce76
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 4f10a3d827679eafbd3d49d2e21f31032dc9c418
+prerequisite-patch-id: fd93763b95469912bde9bdfa4cd827c8d5dba9c6
+prerequisite-patch-id: 6987950c2eb4b3773b2df8f7934eff434244aeab
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 999c243dca89d56d452aa52ea3e181358b5c1d80
+prerequisite-patch-id: 1be0fb49e0fbe293ca8fa94601e191b13c8c67d9
+-- 
+2.17.1
+
