@@ -2,223 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C466C8606
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BD36C860B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjCXTgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S229441AbjCXTjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 15:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCXTgK (ORCPT
+        with ESMTP id S231725AbjCXTji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:36:10 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020024.outbound.protection.outlook.com [52.101.56.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F13A113DD;
-        Fri, 24 Mar 2023 12:36:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b01eemSnzmLWThId8/8MrFQZ4iXN5mdTHMWt0LmOD1Dz/zebQkCXvT4ep8p++WRrtfMKDKqNLmicAzMv1qGqxdNJzoY4GLI8IcTJfrt/0P9KEPCHOg1TKks3FFQuMrvLsp2mGJWi9BuUS+CuEKcLw6uMFL6skUz2UVO0hAkoHU5zj3dZhFiXSRFOisJ2LrH3CLMQslLd+cauBLsphVGtkmyEwQttARixjbdU/gjsjmERHL8XHvQV0/KlWFT6W0p13KYhRO8u4GA01Z5vDHXMd4+1TooxZ5m411+8lmeBhnPQXMw7r77fCHgjGTfevTYRIA0+T+As6BKpgGLVpJh3xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gDGktV/ukM4Jriu1Ok/G7+JogUFeDYEDG5cKFavPA2U=;
- b=gTkZsDnh4Gh1EArkgLxikRjwg+kQLX1y6LcPRQERangG9qcK5cdD3tnmn6KvYUJRkA3MBAZ/xPvb2uVAIz8WyccKaBh5oxLZ9s0F2ZvEWzppauCpXIz+Nlgd3JL9MrRCxvVm9cQOejsC2sSPwiTHUgDs4YshTtyV4YaZ3gcE7ljiipc8n+JFpHpfAjw8FabAERzePP2Akt1Yd8TOOKTWixrse8f9ONubIn27ESwik4q1CsfrBHGn/K+/UZZAwCDSDYg4SZKiwzK8NCvEhXi+S1/+xcD3x8YdyBi5BSQL+a07LxtNLEkpvjMrVb/06ZyYDeBIZpKUXi7SMXzekL3tnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gDGktV/ukM4Jriu1Ok/G7+JogUFeDYEDG5cKFavPA2U=;
- b=alNd8iNwPbZTLoA1lTztBM4l2WXoQpEVLmKU5LpzmRt03jM0rIOGf6H5eXEEqbEYnrewJvfVBx4cBHx27jyug43cyXXmtReRfptVtVZdVgo3/Xa070oAAmfi+wUEOPbaT1U80qzkn7dLrU879DAqReI9alRVE7USau7rdCSke6g=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by PH0PR21MB1878.namprd21.prod.outlook.com (2603:10b6:510:15::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.9; Fri, 24 Mar
- 2023 19:36:03 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6254.007; Fri, 24 Mar 2023
- 19:36:03 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use standard
- coco mechanisms
-Thread-Topic: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Thread-Index: AQHZUjCyCpporLk3zkiXtyclH/4N+K8DmEQAgAAZtaCAAFnoAIAAAQEAgARphwCAAbV9AIAANy4g
-Date:   Fri, 24 Mar 2023 19:36:02 +0000
-Message-ID: <BYAPR21MB16886692DF02269DE1D0C4A5D7849@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
- <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
- <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
- <BYAPR21MB16880C855EDB5AD3AECA473DD7809@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230320181646.GAZBijDiAckZ9WOmhU@fat_crate.local>
- <BYAPR21MB1688DF161ACE142DEA721DA1D7809@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230323134306.GEZBxXahNkFIx1vyzN@fat_crate.local>
- <20230324154856.GDZB3GaHG/3L0Q1x47@fat_crate.local>
-In-Reply-To: <20230324154856.GDZB3GaHG/3L0Q1x47@fat_crate.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ef61c53a-5ae8-40e5-8d3f-b3f53d1eeaa2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-24T19:06:25Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH0PR21MB1878:EE_
-x-ms-office365-filtering-correlation-id: caab2737-0fc3-4157-0007-08db2c9f00f1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3dsdnjaYP0NdDzIs2fEif3GCLIB+pJsU1qjtLJpJedity07loCmrTA63Hf7dgUv87ZJbZF4LJjz9JxZKYf75AvqYR1iwIUzJFNqlhx32VzU/GwuGIUZ/5uXLOts9f4HakdiIgdSq45lUWKMyEhvtxKa2kY/J63zYlCUrgJj42pI7vdk9SM0ED4JbC3xvieuLxjZiShVnehdzTFAUy30fMaH73ocg+8PfrsSoYUHkUfsm+e732h/0xYGo3Qp1EKvXklbiu5DQWn2OqVjD09Ui3nr5EO95eAAesgRZiQHOJ1nz4IE0FiIYgT+VzKKiyRtH4rnAxG6mH94zeEj9Cee7YNGDmRtXWMe/ylR10iOr8b2mZFnzvuaoO5eSfxqbvBe9DBonf7Aspdp+Pa7Y+UOElPpnGn+QKj29cmeaacrjAQ8p39+NkvuV6PZ1M4wka/ZoczjKcJhkcwiMUZOZuBz5e/E21PRkKxtjFQK5i148RLIWkuHb/1C7hsbiY4MxL3RJPEZ6iVpn6GHznOGjYj5EqoApqX/TON+ZH3LUnPFOEBZb6PvEk9Ei5c7H1KyrM3sKmeMLEzy0NB4BeD6cjZHIs9IntgUZEwJNFVBjtlpzFRACAnolus21k2y80U7Cj9uf1sar7PD/u9Rektb0EnJuPN/g0iwetftqBLE7NZ2U2YU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199021)(54906003)(66556008)(41300700001)(316002)(66446008)(478600001)(83380400001)(5660300002)(52536014)(71200400001)(8936002)(64756008)(38070700005)(8676002)(76116006)(6506007)(186003)(9686003)(26005)(66946007)(66476007)(4326008)(6916009)(86362001)(2906002)(8990500004)(33656002)(10290500003)(55016003)(122000001)(82950400001)(82960400001)(7416002)(7406005)(38100700002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Kll+VudfSD9o7VSlutyQlAJHSrBBd+EuZ2lcTraDCCWR4MjGPgFDVDu1xK0f?=
- =?us-ascii?Q?WRNO7GzT4Vy3udY0fFwIGmsfalNfg+ZUY5+Ji2EI0zP/bVKNC9uHNJhsQ0DS?=
- =?us-ascii?Q?C28yuM67+MtW619gmhkBM3FqWy3XIwLmBTAWO02/jluvj0+KHLJvXDRHmVxC?=
- =?us-ascii?Q?JtmLpgNzt1f87nItnOZkc1HgcsGofEEuyR19Mvf3MLZooeQo4pBIr6upDgfZ?=
- =?us-ascii?Q?Uuq90DCOpIT7yZgakXv6ab33TVr9cnS2FpQuYHcZ55MxXiqMnHcbDrUnWu7N?=
- =?us-ascii?Q?CAbPQWU7vbgk5LJiN6uZIWxCgef2zM35vNXIj9MNnINTK8B6jvl8aNFb0oSz?=
- =?us-ascii?Q?Vnngg4mxZSkC8/g47aWUfgM1PtFfFkCt9JotHrwk3ezvgYdgaGI6tHINa51C?=
- =?us-ascii?Q?r46tvpBgIwzvY8Pv/odYobaMv0FxpYl2KNcNhgBWSpWoI9VpWr4d+mE8oG0V?=
- =?us-ascii?Q?lRttxcntXoh5nltErbwQI7igSZcJRzGrULi+ZKsRyapJZb8UVq964qZQTekR?=
- =?us-ascii?Q?vBxRZ2yL0JP1GxSucSm2PX/OLWLwIpxbeiKKPU+2IVA1D/vsBgUaLIxpEQML?=
- =?us-ascii?Q?nLCqzAAVKHviT84CS7SsiHtQRA9IqzGAt1ii9GQxfLtB8FRlzFfN5fcwriD8?=
- =?us-ascii?Q?3kbf5OaKoUKGuCmcKLo4WR/jJyt3Mb+JYhCxlg/RGb9Kk+X3Xvon5aqBfBxL?=
- =?us-ascii?Q?s9xpx6xnv033IkVyVrwBPKlO5UIrRlUujzZtBDPrBaY+Dn0cgsdFPhEs+yXf?=
- =?us-ascii?Q?e4z1ocDG2Iqp7UOTH+jZZ58PMz1GSw0J4bWdPLpFHre7gApuqXb/Jnam99Ut?=
- =?us-ascii?Q?G5UIAJot7DvtFEisd5l8HBZRJ1HiCKHV+Qunfub4gn3GCtQXVMk10yM+kM3S?=
- =?us-ascii?Q?1+vpMV3fUHiTtvthD9p1SWbEuQSOjQ0lfYwq132BIh2idSDc43Qpkzd+d1IU?=
- =?us-ascii?Q?kBWT0/XN4Jo5lb53nKDmLk/EGiEps0y6njLS+YVnE8Z9XbjBCFscCCmUbhkA?=
- =?us-ascii?Q?/sl6acs1iih7nzC4xaTh0cqxsJnCKPMI5pkinZPFqH/X/tKjR1FpN1icFfPf?=
- =?us-ascii?Q?UGrY7PYsYf0aKtZSjZH0V/CBoGQBvZW4nLogubYxKKq3bTXOoKy3PfT5uVdt?=
- =?us-ascii?Q?dnZ7WvYKJvpiN4SBnIUjRFVmc5LdAuTsPPu1WSr3KllDInE7uweqkUjgAKf5?=
- =?us-ascii?Q?ilnjaRJ4z74ceNaqmaEfnJVNsLI0Tl4ZAUAdfyD/Z8IrX3OGDcyKi6zlw3QS?=
- =?us-ascii?Q?EfdnB6HHpNPyzRASq3z44IJCy/NtDHXNQxeVZhEXk92F3Vhuyl7DpmJk7MdH?=
- =?us-ascii?Q?EwvMgUHN0jBhSWj7a8v9iM/Ljygzz9yotvHgH+A3MCsLCrTkGXqa/mBeshJr?=
- =?us-ascii?Q?ImyyNIifVTgDnVNCKDz7B3mymCH2bSgTha8m7f6S2mr+ZVYYUaA9tI7Pm+xJ?=
- =?us-ascii?Q?7MxZGunEFxBG24XoSjrwLmlnKkQTuqQbs/2/0bC7AhPZpcEU/BxAkoA+LC97?=
- =?us-ascii?Q?cL2WfeKTXVbGKRABmkgnqTT+ro9WNeHFTgyruX3Xlap2yOTXCSMtPwdS4Hb/?=
- =?us-ascii?Q?4n8Xxh9QCPGNMJsf4A6o93d2Ha7yCmnJyGJ1E41+bvgP30aXqCNl/dPwOygR?=
- =?us-ascii?Q?tQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 24 Mar 2023 15:39:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7916331
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679686773; x=1711222773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mEO8F9qBo8jetofq3ZYYYAKaUbuAJ4bhSSQ1NtxMlSc=;
+  b=YNxXS1mIMJKhug/3ax59R7m9V8Bigen3hTM1lNLsKzSx/AaUxK8xrjSp
+   I5wOYKMRJZcvyPTomDTd+YvDXk44oDMA+dWplzC0IbDuPA//bTFsWbEbi
+   BzLvclwrZ2BT2fYYwOOamMdkb2Q1gU+GCCV7biiDF2GGel0X1186tfZo/
+   HIDedyNY/zfK5NhUhripkmw8KAqNYdC9Sid34793xv1FjzF6hhd0E038q
+   g6urCN9L8Jgb0kfhP7Tch0Dgc+VAihzF6SADacQkQ9GNTxVVblugp/mJq
+   pSiZbqU94v4waUGWdUajn8mEatxnHnsmz6OvvRs9ja+CQJtBrX0y83/0v
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="342260568"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="342260568"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 12:39:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="806792457"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="806792457"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2023 12:39:30 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfnG5-000FbU-2x;
+        Fri, 24 Mar 2023 19:39:29 +0000
+Date:   Sat, 25 Mar 2023 03:39:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed
+ in EL1
+Message-ID: <202303250356.K6CxtK2u-lkp@intel.com>
+References: <20230324055127.2228330-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: caab2737-0fc3-4157-0007-08db2c9f00f1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 19:36:02.9833
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zYglYJdZV9QJ3d1dKIkAaVFVOy2AOBrUoiafX3uCHFxciDTkrsbYtwMuKxK3O9BTuoFWVmenzzYhUwj1Yr52qb8XX9Rcq0AAFOYq9Say+ig=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1878
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324055127.2228330-1-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de> Sent: Friday, March 24, 2023 8:49 AM
->=20
-> On Thu, Mar 23, 2023 at 02:43:06PM +0100, Borislav Petkov wrote:
-> > Ok, lemme queue 1-2,4-6 as previously mentioned.
->=20
-> With first six applied:
->=20
-> arch/x86/coco/core.c:123:7: error: use of undeclared identifier 'sev_stat=
-us'
->                 if (sev_status & MSR_AMD64_SNP_VTOM)
->                     ^
-> arch/x86/coco/core.c:139:7: error: use of undeclared identifier 'sev_stat=
-us'
->                 if (sev_status & MSR_AMD64_SNP_VTOM)
->                     ^
-> 2 errors generated.
-> make[3]: *** [scripts/Makefile.build:252: arch/x86/coco/core.o] Error 1
-> make[2]: *** [scripts/Makefile.build:494: arch/x86/coco] Error 2
-> make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:2025: .] Error 2
->=20
-> compiler is:
->=20
-> Debian clang version 14.0.6-2
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
->=20
-> .config is attached.
->=20
+Hi Anshuman,
 
-OK, I see what went wrong.  I had tested with CONFIG_AMD_MEM_ENCRYPT=3Dn
-and didn't see any compile problems.  It turns out in my test, arch/x86/coc=
-o/core.c
-wasn't built at all because I did not also have TDX configured, so I didn't=
- see
-any errors.  But with CONFIG_INTEL_TDX_GUEST=3Dy, coco/core.c gets built, a=
-nd
-the error with undefined sev_status pops out.
+Thank you for the patch! Yet something to improve:
 
-The straightforward fix is somewhat ugly.  That's to put #ifdef
-CONFIG_AMD_MEM_ENCRYPT around the entire CC_VENDOR_AMD
-case in cc_mkenc() and in cc_mkdec().  Or put it just around the test of
-sev_status.
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on arm/for-next arm/fixes kvmarm/next soc/for-next xilinx-xlnx/master linus/master v6.3-rc3 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Perhaps a cleaner way would be to have a "vendor_subtype" variable
-declared in arch/x86/coco/core.c and tested instead of sev_status.
-That subtype variable would be set from hv_vtom_init(), maybe via
-a separate accessor function.  But didn't I recently see a patch that
-makes the existing "vendor" variable no longer static?   In that case
-just setting vendor_subtype without the accessor function may be
-OK.
+url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20230324055127.2228330-1-anshuman.khandual%40arm.com
+patch subject: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed in EL1
+config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20230325/202303250356.K6CxtK2u-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/457bbac085c7f83be1a63b54f6caf32b820503eb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
+        git checkout 457bbac085c7f83be1a63b54f6caf32b820503eb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-What's your preference Boris?  I can spin a v7 of the patch series
-that fixes this, and that squashes the last two patches of the series
-per Lorenz Pieralisi's comments.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250356.K6CxtK2u-lkp@intel.com/
 
-Michael
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm64/kernel/head.S:27:
+   arch/arm64/include/asm/kernel-pgtable.h:126:41: warning: "PUD_SHIFT" is not defined, evaluates to 0 [-Wundef]
+     126 | #define ARM64_MEMSTART_SHIFT            PUD_SHIFT
+         |                                         ^~~~~~~~~
+   arch/arm64/include/asm/kernel-pgtable.h:139:5: note: in expansion of macro 'ARM64_MEMSTART_SHIFT'
+     139 | #if ARM64_MEMSTART_SHIFT < SECTION_SIZE_BITS
+         |     ^~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/head.S: Assembler messages:
+>> arch/arm64/kernel/head.S:577: Error: undefined symbol HFGITR_EL2_nBRBIALL used as an immediate value
+>> arch/arm64/kernel/head.S:577: Error: undefined symbol HFGITR_EL2_nBRBINJ used as an immediate value
+
+
+vim +577 arch/arm64/kernel/head.S
+
+034edabe6cf1d0 Laura Abbott    2014-11-21  526  
+034edabe6cf1d0 Laura Abbott    2014-11-21  527  /*
+034edabe6cf1d0 Laura Abbott    2014-11-21  528   * end early head section, begin head code that is also used for
+034edabe6cf1d0 Laura Abbott    2014-11-21  529   * hotplug and needs to have the same protections as the text region
+034edabe6cf1d0 Laura Abbott    2014-11-21  530   */
+d54170812ef1c8 Mark Rutland    2023-02-20  531  	.section ".idmap.text","a"
+f80fb3a3d50843 Ard Biesheuvel  2016-01-26  532  
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  533  /*
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  534   * Starting from EL2 or EL1, configure the CPU to execute at the highest
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  535   * reachable EL supported by the kernel in a chosen default state. If dropping
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  536   * from EL2 to EL1, configure EL2 before configuring EL1.
+828e9834e9a5b7 Matthew Leach   2013-10-11  537   *
+d87a8e65b51011 Mark Rutland    2020-11-13  538   * Since we cannot always rely on ERET synchronizing writes to sysregs (e.g. if
+d87a8e65b51011 Mark Rutland    2020-11-13  539   * SCTLR_ELx.EOS is clear), we place an ISB prior to ERET.
+828e9834e9a5b7 Matthew Leach   2013-10-11  540   *
+b65e411d6cc2f1 Marc Zyngier    2022-06-30  541   * Returns either BOOT_CPU_MODE_EL1 or BOOT_CPU_MODE_EL2 in x0 if
+b65e411d6cc2f1 Marc Zyngier    2022-06-30  542   * booted in EL1 or EL2 respectively, with the top 32 bits containing
+b65e411d6cc2f1 Marc Zyngier    2022-06-30  543   * potential context flags. These flags are *not* stored in __boot_cpu_mode.
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  544   *
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  545   * x0: whether we are being called from the primary boot path with the MMU on
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  546   */
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  547  SYM_FUNC_START(init_kernel_el)
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  548  	mrs	x1, CurrentEL
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  549  	cmp	x1, #CurrentEL_EL2
+d87a8e65b51011 Mark Rutland    2020-11-13  550  	b.eq	init_el2
+d87a8e65b51011 Mark Rutland    2020-11-13  551  
+d87a8e65b51011 Mark Rutland    2020-11-13  552  SYM_INNER_LABEL(init_el1, SYM_L_LOCAL)
+31a32b49b80f79 Marc Zyngier    2021-04-08  553  	mov_q	x0, INIT_SCTLR_EL1_MMU_OFF
+9d7c13e5dde312 Ard Biesheuvel  2023-01-11  554  	pre_disable_mmu_workaround
+31a32b49b80f79 Marc Zyngier    2021-04-08  555  	msr	sctlr_el1, x0
+9cf71728931a40 Matthew Leach   2013-10-11  556  	isb
+d87a8e65b51011 Mark Rutland    2020-11-13  557  	mov_q	x0, INIT_PSTATE_EL1
+d87a8e65b51011 Mark Rutland    2020-11-13  558  	msr	spsr_el1, x0
+d87a8e65b51011 Mark Rutland    2020-11-13  559  	msr	elr_el1, lr
+d87a8e65b51011 Mark Rutland    2020-11-13  560  	mov	w0, #BOOT_CPU_MODE_EL1
+d87a8e65b51011 Mark Rutland    2020-11-13  561  	eret
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  562  
+d87a8e65b51011 Mark Rutland    2020-11-13  563  SYM_INNER_LABEL(init_el2, SYM_L_LOCAL)
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  564  	msr	elr_el2, lr
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  565  
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  566  	// clean all HYP code to the PoC if we booted at EL2 with the MMU on
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  567  	cbz	x0, 0f
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  568  	adrp	x0, __hyp_idmap_text_start
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  569  	adr_l	x1, __hyp_text_end
+d54170812ef1c8 Mark Rutland    2023-02-20  570  	adr_l	x2, dcache_clean_poc
+d54170812ef1c8 Mark Rutland    2023-02-20  571  	blr	x2
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  572  0:
+78869f0f0552d0 David Brazdil   2020-12-02  573  	mov_q	x0, HCR_HOST_NVHE_FLAGS
+78869f0f0552d0 David Brazdil   2020-12-02  574  	msr	hcr_el2, x0
+22043a3c082a58 Dave Martin     2017-10-31  575  	isb
+78869f0f0552d0 David Brazdil   2020-12-02  576  
+e2df464173f0b5 Marc Zyngier    2021-02-08 @577  	init_el2_state
+22043a3c082a58 Dave Martin     2017-10-31  578  
+712c6ff4dba491 Marc Zyngier    2012-10-19  579  	/* Hypervisor stub */
+78869f0f0552d0 David Brazdil   2020-12-02  580  	adr_l	x0, __hyp_stub_vectors
+712c6ff4dba491 Marc Zyngier    2012-10-19  581  	msr	vbar_el2, x0
+d87a8e65b51011 Mark Rutland    2020-11-13  582  	isb
+78869f0f0552d0 David Brazdil   2020-12-02  583  
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  584  	mov_q	x1, INIT_SCTLR_EL1_MMU_OFF
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  585  
+31a32b49b80f79 Marc Zyngier    2021-04-08  586  	/*
+31a32b49b80f79 Marc Zyngier    2021-04-08  587  	 * Fruity CPUs seem to have HCR_EL2.E2H set to RES1,
+31a32b49b80f79 Marc Zyngier    2021-04-08  588  	 * making it impossible to start in nVHE mode. Is that
+31a32b49b80f79 Marc Zyngier    2021-04-08  589  	 * compliant with the architecture? Absolutely not!
+31a32b49b80f79 Marc Zyngier    2021-04-08  590  	 */
+31a32b49b80f79 Marc Zyngier    2021-04-08  591  	mrs	x0, hcr_el2
+31a32b49b80f79 Marc Zyngier    2021-04-08  592  	and	x0, x0, #HCR_E2H
+31a32b49b80f79 Marc Zyngier    2021-04-08  593  	cbz	x0, 1f
+31a32b49b80f79 Marc Zyngier    2021-04-08  594  
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  595  	/* Set a sane SCTLR_EL1, the VHE way */
+9d7c13e5dde312 Ard Biesheuvel  2023-01-11  596  	pre_disable_mmu_workaround
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  597  	msr_s	SYS_SCTLR_EL12, x1
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  598  	mov	x2, #BOOT_CPU_FLAG_E2H
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  599  	b	2f
+31a32b49b80f79 Marc Zyngier    2021-04-08  600  
+31a32b49b80f79 Marc Zyngier    2021-04-08  601  1:
+9d7c13e5dde312 Ard Biesheuvel  2023-01-11  602  	pre_disable_mmu_workaround
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  603  	msr	sctlr_el1, x1
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  604  	mov	x2, xzr
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  605  2:
+d87a8e65b51011 Mark Rutland    2020-11-13  606  	mov	w0, #BOOT_CPU_MODE_EL2
+ae4b7e38e9a947 Marc Zyngier    2022-06-30  607  	orr	x0, x0, x2
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  608  	eret
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  609  SYM_FUNC_END(init_kernel_el)
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  610  
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  611  	/*
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  612  	 * This provides a "holding pen" for platforms to hold all secondary
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  613  	 * cores are held until we're ready for them to initialise.
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  614  	 */
+c63d9f82db9439 Mark Brown      2020-02-18  615  SYM_FUNC_START(secondary_holding_pen)
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  616  	mov	x0, xzr
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  617  	bl	init_kernel_el			// w0=cpu_boot_mode
+005e12676af09a Ard Biesheuvel  2022-06-24  618  	mrs	x2, mpidr_el1
+b03cc885328e3c Ard Biesheuvel  2016-04-18  619  	mov_q	x1, MPIDR_HWID_BITMASK
+005e12676af09a Ard Biesheuvel  2022-06-24  620  	and	x2, x2, x1
+b1c98297fe0c6e Ard Biesheuvel  2015-03-10  621  	adr_l	x3, secondary_holding_pen_release
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  622  pen:	ldr	x4, [x3]
+005e12676af09a Ard Biesheuvel  2022-06-24  623  	cmp	x4, x2
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  624  	b.eq	secondary_startup
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  625  	wfe
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  626  	b	pen
+c63d9f82db9439 Mark Brown      2020-02-18  627  SYM_FUNC_END(secondary_holding_pen)
+652af899799354 Mark Rutland    2013-10-24  628  
+652af899799354 Mark Rutland    2013-10-24  629  	/*
+652af899799354 Mark Rutland    2013-10-24  630  	 * Secondary entry point that jumps straight into the kernel. Only to
+652af899799354 Mark Rutland    2013-10-24  631  	 * be used where CPUs are brought online dynamically by the kernel.
+652af899799354 Mark Rutland    2013-10-24  632  	 */
+c63d9f82db9439 Mark Brown      2020-02-18  633  SYM_FUNC_START(secondary_entry)
+3dcf60bbfd284e Ard Biesheuvel  2023-01-11  634  	mov	x0, xzr
+ecbb11ab3ebc02 Mark Rutland    2020-11-13  635  	bl	init_kernel_el			// w0=cpu_boot_mode
+652af899799354 Mark Rutland    2013-10-24  636  	b	secondary_startup
+c63d9f82db9439 Mark Brown      2020-02-18  637  SYM_FUNC_END(secondary_entry)
+9703d9d7f77ce1 Catalin Marinas 2012-03-05  638  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
