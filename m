@@ -2,144 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C8B6C7C3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804346C7C3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjCXKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S231486AbjCXKK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXKJt (ORCPT
+        with ESMTP id S229508AbjCXKKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:09:49 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31606132E2;
-        Fri, 24 Mar 2023 03:09:47 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.153])
-        by gateway (Coremail) with SMTP id _____8BxONnqdh1krbAQAA--.25214S3;
-        Fri, 24 Mar 2023 18:09:46 +0800 (CST)
-Received: from [10.20.42.153] (unknown [10.20.42.153])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxAeXndh1kyR0LAA--.40938S3;
-        Fri, 24 Mar 2023 18:09:44 +0800 (CST)
-Subject: Re: [regression] Bug 217069 - Wake on Lan is broken on r8169 since
- 6.2
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bob Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        acpica-devel@lists.linuxfoundation.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <e6aaddb9-afec-e77d-be33-570f9f10a9c2@leemhuis.info>
- <53e8b4db-e8dd-4dfa-f873-7dcbeac09149@leemhuis.info>
- <3089214d-292b-885d-9bc1-c81d0101d5f0@leemhuis.info>
- <CAAhV-H5j29CnCN+F8Oz0qh1UCqp+CmL=aQXCSjqgX8CZ5sXTtg@mail.gmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <b39064e3-4f8b-f607-b270-1e0c8539d391@loongson.cn>
-Date:   Fri, 24 Mar 2023 18:09:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 24 Mar 2023 06:10:54 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3782324BE3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:10:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id k2so1367884pll.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1679652652;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W4KS5G3REHVCdxBgUTUEliCmdg0KdWIiJLQyKXqBc8o=;
+        b=T971bppT4E5KW3z8EklcB48B725o+sWZpdb8P3syTbEgrBqgbsUtkH1NU9NB11yQEL
+         uSpE3Hkw8E+ChGrirhdOIQzXmyglPiZCAw8jH9aGeyI4J73YD9gvOjjOHOb0cH6cJsuu
+         aXPMTZFJoqvfIFFxeQxfQemjRgRoJxMjMatUNPP/PGDrbijRJuFMXm2Kr6ZLXmlgNxEr
+         Vg9CRsReoOHIHLscpE75sVbsogHchW9TdzSnQyObLYWTAu+lcnPIB8v5FDEmGcuiJGAu
+         iP37OrvLFnL6kmHoc52cIW3O5rNvrF/2O8YJdEgsyEs6UWj26PvADgSylGZDIs20Wwe3
+         DM/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679652652;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4KS5G3REHVCdxBgUTUEliCmdg0KdWIiJLQyKXqBc8o=;
+        b=Dt7D1OXkSG95XjED4Lvhm7rpeQj0MbkLuNXhY29OxJU6jgOXMAIlOW+ufMNTFvU6RZ
+         ncLuhGxyQt+MitoyV/PnZB6CdD7NgUOHqPnDiQp8ElVp/oASoNxdEZl/9BjInGRshz9L
+         y5ft/sEQjqxrR10JcvCvbRaeISUnmLwyla0IUP9RHSNF/DMtyGEOF8FxrheBPb3EzB7Q
+         1u+ms7YkXnP+NFv7oToBvExKD86UYiS7CwYEgruF3KF7ZARz9CM/E9Hp8RzJ1po6Qh+R
+         cIsfuIAflOQNDL5WTdMWoOT2Fb6OOZcma3vGVVrtzA9cU1i7bbNkIY6CPkK5kr5ce1s2
+         Y0Vw==
+X-Gm-Message-State: AAQBX9dmZkSEDTkOFkOPBkP0iMb3jqLr27sE6oyvxFwI5Ith4kfwN0mo
+        LlDWjS6uH4mhmSs+dl56lQd6NbXcjnBwH3ABUSZO4g==
+X-Google-Smtp-Source: AKy350bMN38ffgwIpzSmXtq+JrV7BDSFXJNQlgxqgWDzullhuOnJWv6Vb/49p5tbUEulIx7AEVihLQ==
+X-Received: by 2002:a17:903:684:b0:19d:297:f30b with SMTP id ki4-20020a170903068400b0019d0297f30bmr1750023plb.19.1679652652570;
+        Fri, 24 Mar 2023 03:10:52 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id t7-20020a170902a5c700b001a207906418sm2564043plq.23.2023.03.24.03.10.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 03:10:52 -0700 (PDT)
+Message-ID: <5e861c22-84e0-6f97-e25b-f754257e2f74@9elements.com>
+Date:   Fri, 24 Mar 2023 15:40:50 +0530
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5j29CnCN+F8Oz0qh1UCqp+CmL=aQXCSjqgX8CZ5sXTtg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] iio: max597x: Add support for max597x
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     jic23@kernel.org, lars@metafoo.de, lee@kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patrick.rudolph@9elements.com
+References: <20230323194550.1914725-1-Naresh.Solanki@9elements.com>
+ <10c6640e-4de3-65dd-8798-988def9a6cc5@wanadoo.fr>
 Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <10c6640e-4de3-65dd-8798-988def9a6cc5@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxAeXndh1kyR0LAA--.40938S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJFy5uw1xKr4fGF15Zr1fWFg_yoW5XF4kpF
-        WYqFs8Kr4Dtr1UAws2y3W0gr4jvrs5try5ur9xWr48X3s0vFy3Xrn7KrW5uFy3Wr97Ga12
-        gF1jvwna9ry5JaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
-        aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jbDGOUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please try the following patch:
+Hi,
 
-https://github.com/acpica/acpica/pull/784/commits/0e66e6aae972dac3833bdcbd223aa6a8b1733176
-
-
-On 2023/3/24 下午5:50, Huacai Chen wrote:
-> Hi, Thorsten,
+On 24-03-2023 01:36 am, Christophe JAILLET wrote:
+> Le 23/03/2023 à 20:45, Naresh Solanki a écrit :
+>> From: Patrick Rudolph 
+>> <patrick.rudolph-cWEv32IpryCakBO8gow8eQ@public.gmane.org>
+>>
+>> max597x has 10bit ADC for voltage & current monitoring.
+>> Use iio framework to expose the same in sysfs.
+>>
+>> Signed-off-by: Patrick Rudolph 
+>> <patrick.rudolph-cWEv32IpryCakBO8gow8eQ@public.gmane.org>
+>> Signed-off-by: Naresh Solanki 
+>> <Naresh.Solanki-cWEv32IpryCakBO8gow8eQ@public.gmane.org>
 > 
-> I'm sorry I ignored this email, and Jianmin, could you please
-> investigate this problem? Thank you.
+> Hi, a few nits below, should there be a v3.
 > 
-> Huacai
+> CJ
 > 
-> On Fri, Mar 24, 2023 at 5:46 PM Thorsten Leemhuis
-> <regressions@leemhuis.info> wrote:
+>> ...
+>> Changes in V2:
+>> - Remove fallthrough
+>> - Use pdev->dev instead of i2c->dev
+>> - Init indio_dev->name based on device type.
+>> ---
+>>   drivers/iio/adc/Kconfig       |  15 ++++
+>>   drivers/iio/adc/Makefile      |   1 +
+>>   drivers/iio/adc/max597x-iio.c | 152 ++++++++++++++++++++++++++++++++++
+>>   3 files changed, 168 insertions(+)
+>>   create mode 100644 drivers/iio/adc/max597x-iio.c
 >>
->> On 19.03.23 08:20, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> Hi, Thorsten here, the Linux kernel's regression tracker.
->>>
->>> On 22.02.23 08:57, Thorsten Leemhuis wrote:
->>>>
->>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->>>> kernel developer don't keep an eye on it, I decided to forward it by
->>>> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217069 :
->>>
->>> An issue that looked like a network bug was now bisected and it turns
->>> out it's cause by 5c62d5aab875 ("ACPICA: Events: Support fixed PCIe wake
->>> event") which Huacai Chen provided. Could you take a look at the ticket
->>> linked above?
+>> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+>> index 45af2302be53..0d1a3dea0b7d 100644
+>> --- a/drivers/iio/adc/Kconfig
+>> +++ b/drivers/iio/adc/Kconfig
+>> @@ -735,6 +735,21 @@ config MAX1363
+>>         To compile this driver as a module, choose M here: the module 
+>> will be
+>>         called max1363.
+>> +config MAX597X_IIO
+>> +    tristate "Maxim 597x power switch and monitor"
+>> +    depends on I2C && OF
+>> +    select MFD_MAX597X
+>> +    help
+>> +      This driver enables support for the Maxim 597x smart switch and
+>> +      voltage/current monitoring interface using the Industrial I/O 
+>> (IIO)
+>> +      framework. The Maxim 597x is a power switch and monitor that can
+>> +      provide voltage and current measurements via the I2C bus. Enabling
+>> +      this driver will allow user space applications to read the voltage
+>> +      and current measurements using IIO interfaces.
+>> +
+>> +      To compile this driver as a module, choose M here: the module 
+>> will be
+>> +      called max597x-iio.
+>> +
+>>   config MAX9611
+>>       tristate "Maxim max9611/max9612 ADC driver"
+>>       depends on I2C
+>> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+>> index 36c18177322a..7ec0c2cf7bbb 100644
+>> --- a/drivers/iio/adc/Makefile
+>> +++ b/drivers/iio/adc/Makefile
+>> @@ -67,6 +67,7 @@ obj-$(CONFIG_MAX11205) += max11205.o
+>>   obj-$(CONFIG_MAX11410) += max11410.o
+>>   obj-$(CONFIG_MAX1241) += max1241.o
+>>   obj-$(CONFIG_MAX1363) += max1363.o
+>> +obj-$(CONFIG_MAX597X_IIO) += max597x-iio.o
+>>   obj-$(CONFIG_MAX9611) += max9611.o
+>>   obj-$(CONFIG_MCP320X) += mcp320x.o
+>>   obj-$(CONFIG_MCP3422) += mcp3422.o
+>> diff --git a/drivers/iio/adc/max597x-iio.c 
+>> b/drivers/iio/adc/max597x-iio.c
+>> new file mode 100644
+>> index 000000000000..8a9fc27ff71e
+>> --- /dev/null
+>> +++ b/drivers/iio/adc/max597x-iio.c
+>> @@ -0,0 +1,152 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Device driver for IIO in MAX5970 and MAX5978 IC
+>> + *
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph 
+>> <patrick.rudolph-cWEv32IpryCakBO8gow8eQ@public.gmane.org>
+>> + */
+>> +
+>> +#include <linux/iio/iio.h>
+>> +#include <linux/mfd/max597x.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +struct max597x_iio {
+>> +    struct regmap *regmap;
+>> +    int shunt_micro_ohms[MAX5970_NUM_SWITCHES];
+>> +    unsigned int irng[MAX5970_NUM_SWITCHES];
+>> +    unsigned int mon_rng[MAX5970_NUM_SWITCHES];
+>> +};
+>> +
+>> +#define MAX597X_ADC_CHANNEL(_idx, _type) {            \
+>> +    .type = IIO_ ## _type,                    \
+>> +    .indexed = 1,                        \
+>> +    .channel = (_idx),                    \
+>> +    .info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |        \
+>> +                  BIT(IIO_CHAN_INFO_SCALE),        \
+>> +    .address = MAX5970_REG_ ## _type ## _L(_idx),        \
+>> +}
+>> +
+>> +static const struct iio_chan_spec max5978_adc_iio_channels[] = {
+>> +    MAX597X_ADC_CHANNEL(0, VOLTAGE),
+>> +    MAX597X_ADC_CHANNEL(0, CURRENT),
+>> +};
+>> +
+>> +static const struct iio_chan_spec max5970_adc_iio_channels[] = {
+>> +    MAX597X_ADC_CHANNEL(0, VOLTAGE),
+>> +    MAX597X_ADC_CHANNEL(0, CURRENT),
+>> +    MAX597X_ADC_CHANNEL(1, VOLTAGE),
+>> +    MAX597X_ADC_CHANNEL(1, CURRENT),
+>> +};
+>> +
+>> +static int max597x_iio_read_raw(struct iio_dev *iio_dev,
+>> +                struct iio_chan_spec const *chan,
+>> +                int *val, int *val2, long info)
+>> +{
+>> +    int ret;
+>> +    struct max597x_iio *data = iio_priv(iio_dev);
+>> +    unsigned int reg_l, reg_h;
+>> +
+>> +    switch (info) {
+>> +    case IIO_CHAN_INFO_RAW:
+>> +        ret = regmap_read(data->regmap, chan->address, &reg_l);
+>> +        if (ret < 0)
+>> +            return ret;
+>> +        ret = regmap_read(data->regmap, chan->address - 1, &reg_h);
+>> +        if (ret < 0)
+>> +            return ret;
+>> +        *val = (reg_h << 2) | (reg_l & 3);
+>> +
+>> +        return IIO_VAL_INT;
+>> +    case IIO_CHAN_INFO_SCALE:
+>> +
+> 
+> Nit: This blank line would look nicer if above the case:
+Oh yes. Will do that in V3
+> 
+>> +        switch (chan->address) {
+>> +        case MAX5970_REG_CURRENT_L(0):
+>> +        case MAX5970_REG_CURRENT_L(1):
+>> +            /* in A, convert to mA */
+>> +            *val = data->irng[chan->channel] * 1000;
+>> +            *val2 =
+>> +                data->shunt_micro_ohms[chan->channel] * ADC_MASK;
+>> +            return IIO_VAL_FRACTIONAL;
+>> +
+>> +        case MAX5970_REG_VOLTAGE_L(0):
+>> +        case MAX5970_REG_VOLTAGE_L(1):
+>> +            /* in uV, convert to mV */
+>> +            *val = data->mon_rng[chan->channel];
+>> +            *val2 = ADC_MASK * 1000;
+>> +            return IIO_VAL_FRACTIONAL;
+>> +        }
+>> +
+>> +        break;
+>> +    }
+>> +    return -EINVAL;
+>> +}
+>> +
+>> +static const struct iio_info max597x_adc_iio_info = {
+>> +    .read_raw = &max597x_iio_read_raw,
+>> +};
+>> +
+>> +static int max597x_iio_probe(struct platform_device *pdev)
+>> +{
+>> +    struct max597x_data *max597x = dev_get_drvdata(pdev->dev.parent);
+>> +    struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+>> +    struct iio_dev *indio_dev;
+>> +    struct max597x_iio *priv;
+>> +    int ret, i;
+>> +
+>> +    if (!regmap)
+>> +        return -EPROBE_DEFER;
+>> +
+>> +    if (!max597x || !max597x->num_switches)
+>> +        return -EPROBE_DEFER;
+>> +
+>> +    /* registering iio */
+>> +    indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*priv));
+>> +    if (!indio_dev)
+>> +        return dev_err_probe(&pdev->dev, -ENOMEM,
+>> +                     "failed to allocate iio device\n");
+>> +
+>> +    indio_dev->info = &max597x_adc_iio_info;
+>> +    indio_dev->modes = INDIO_DIRECT_MODE;
+>> +
+>> +    switch (max597x->num_switches) {
+>> +    case MAX597x_TYPE_MAX5970:
+>> +        indio_dev->channels = max5970_adc_iio_channels;
+>> +        indio_dev->num_channels = ARRAY_SIZE(max5970_adc_iio_channels);
+>> +        indio_dev->name = "max5970";
+>> +        break;
+>> +    case MAX597x_TYPE_MAX5978:
+>> +        indio_dev->channels = max5978_adc_iio_channels;
+>> +        indio_dev->num_channels = ARRAY_SIZE(max5978_adc_iio_channels);
+>> +        indio_dev->name = "max5978";
+>> +        break;
+>> +    }
+>> +
+>> +    priv = iio_priv(indio_dev);
+>> +    priv->regmap = regmap;
+>> +    for (i = 0; i < indio_dev->num_channels; i++) {
+>> +        priv->irng[i] = max597x->irng[i];
+>> +        priv->mon_rng[i] = max597x->mon_rng[i];
+>> +        priv->shunt_micro_ohms[i] = max597x->shunt_micro_ohms[i];
+>> +    }
+>> +
+>> +    ret = devm_iio_device_register(&pdev->dev, indio_dev);
+>> +    if (ret)
+>> +        dev_err_probe(&pdev->dev, ret, "could not register iio device");
+> 
+> Nit: \n missing
+> 
+Sure will make it like this:
+	if (ret)
+		return dev_err_probe(&pdev->dev, ret, "could not register iio device\n");
+>> +
+>> +    return ret;
+> 
+> Nit: return 0;
+Sure
+> 
+>> +}
+>> +
+>> +static struct platform_driver max597x_iio_driver = {
+>> +    .driver = {
+>> +        .name = "max597x-iio",
+>> +    },
+>> +    .probe = max597x_iio_probe,
+>> +};
+>> +
+>> +module_platform_driver(max597x_iio_driver);
+>> +
+>> +MODULE_AUTHOR("Patrick Rudolph 
+>> <patrick.rudolph-cWEv32IpryCakBO8gow8eQ@public.gmane.org>");
+>> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
+>> +MODULE_LICENSE("GPL");
 >>
->> Huacai Chen, did you look into this? Would be good to have this
->> regression fixed rather sooner than later, as it seems to annoy quite a
->> few people.
->>
->> Should we maybe simply revert the problematic change for now and reapply
->> it later once the root-issue was found and fixed?
->>
->> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->> --
->> Everything you wanna know about Linux kernel regression tracking:
->> https://linux-regtracking.leemhuis.info/about/#tldr
->> If I did something stupid, please tell me, as explained on that page.
->>
->> #regzbot poke
->>
->>> FWIW, the whole story started like this:
->>>
->>>>> Ivan Ivanich 2023-02-22 00:51:52 UTC
->>>>>
->>>>> After upgrade to 6.2 having issues with wake on lan on 2 systems: -
->>>>> first is an old lenovo laptop from 2012(Ivy Bridge) with realtek
->>>>> network adapter - second is a PC(Haswell refresh) with PCIE realtek
->>>>> network adapter
->>>>>
->>>>> Both uses r8169 driver for network.
->>>>>
->>>>> On laptop it's not possible to wake on lan after poweroff On PC it's
->>>>> not possible to wake on lan up after hibernate but works after
->>>>> poweroff
->>>>>
->>>>> In both cases downgrade to 6.1.x kernel fixes the issue.
->>>
->>> Meanwhile a few others that ran into the same problem with NICs from
->>> different vendors joined the ticket
->>>
->>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>> --
->>> Everything you wanna know about Linux kernel regression tracking:
->>> https://linux-regtracking.leemhuis.info/about/#tldr
->>> If I did something stupid, please tell me, as explained on that page.
-
+>> base-commit: 368eb79f738a21e16c2bdbcac2444dfa96b01aaa
+> 
