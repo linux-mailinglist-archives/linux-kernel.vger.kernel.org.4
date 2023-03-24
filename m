@@ -2,105 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EF26C7983
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AA16C799F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCXISG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S231127AbjCXIXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjCXIRx (ORCPT
+        with ESMTP id S229484AbjCXIXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:17:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C4252A9;
-        Fri, 24 Mar 2023 01:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679645869; x=1711181869;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=huOgNrOBcSC1/tjpitYzPeEN/HeYkrzn2WanLt9fM1M=;
-  b=mwZ2mHOajToQtBkqit/Zizuknis3rRMx+YWLAy23lNS91OqfNHVap31n
-   8osDZP4gSa/D+AHu1K2//gyy+N4x4eCNMEfa4pPs4tl9lEEZ6dGQzbwKw
-   cfgkTqjxPdvYHe6ZB9ooAmk3ncWOxzgncicGE6b/pLpmu3YjxmdDKTHYV
-   n7WFNv2iuZjfIwTIsBHEtmn3l6qVAwTaLuYr2oX086QQO0GLXqJHt8eqo
-   AUFrf3DXUXHXnW1GDQfmp5Y4Q5e1uEYpyA9ag7hUWfc+xN9/9SVZ6IEbq
-   qIgU11oytcOuXlOYqrxk0+2DgYDq7M00D06cvX2hcZkUWTtKaU/vYfbdT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320116160"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="320116160"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 01:17:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="928574755"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="928574755"
-Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Mar 2023 01:17:45 -0700
-From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk
-Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
-Subject: [PATCH net v3 3/3] net: stmmac: remove redundant fixup to support fixed-link mode
-Date:   Fri, 24 Mar 2023 16:16:56 +0800
-Message-Id: <20230324081656.2969663-4-michael.wei.hong.sit@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230324081656.2969663-1-michael.wei.hong.sit@intel.com>
-References: <20230324081656.2969663-1-michael.wei.hong.sit@intel.com>
+        Fri, 24 Mar 2023 04:23:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018CBE057;
+        Fri, 24 Mar 2023 01:23:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D54FB81E21;
+        Fri, 24 Mar 2023 08:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43031C433EF;
+        Fri, 24 Mar 2023 08:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679646228;
+        bh=WNmnBMlXQbbzSIzNbiTJv8PajglyS7jPcj9FFmg6NWU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dDeq+INQJQ8cdGwiqzVv1YUb+oIdwqPJJHuTj1Q0fbnl92ex0saerlTqYpdWYHewN
+         7CF1K1iztsPDj71V0OW3fxLF/4LCJVPqvt1gitdHYBWfUfRHssbptB7A0tdQN3VG6p
+         3xDGQe+GA3LdUHIFx+Yh5EihmAcO7RdA9gqiVoHQIjfB/MENJKU090orHMCrRU++Ks
+         thLUVJeZlY9O/HNWXo5LuNn22vCOzw1j7jatENm+YJDEV2xili6xuUmTDnbS8Ud/6J
+         USGAGp4AH+yBsBdNwBnvZlFvpNR/J5aEu53kvZ0Aijlxp8iO7UY0E2bSauakE6Xcow
+         H9Ady5C0BXUpQ==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V4] riscv: jump_label: Optimize the code size with compressed instruction
+Date:   Fri, 24 Mar 2023 04:23:20 -0400
+Message-Id: <20230324082320.290410-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, intel_speed_mode_2500() will fix-up xpcs_an_inband
-to 1 if the underlying controller has a max speed of 1000Mbps.
-The value has been initialized and modified if it is
-a fixed-linked setup earlier.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-This patch removes the fix-up to allow for fixed-linked setup
-support. In stmmac_phy_setup(), ovr_an_inband is set based on
-the value of xpcs_an_inband. Which in turn will return an
-error in phylink_parse_mode() where MLO_AN_FIXED and
-ovr_an_inband are both set.
+Reduce the size of the static branch instruction and prevent atomic
+update problems when CONFIG_RISCV_ISA_C=y. It also reduces the jump
+range from 1MB to 4KB, but 4KB is enough for the current riscv
+requirement.
 
-Fixes: c82386310d95 ("stmmac: intel: prepare to support 1000BASE-X phy interface setting")
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 1 -
- 1 file changed, 1 deletion(-)
+Changelog
+v4:
+ - Rebase on palmer/for-next (20230324)
+ - Separate from "riscv: jump_label: Fixup & Optimization"
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 7deb1f817dac..6db87184bf75 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -251,7 +251,6 @@ static void intel_speed_mode_2500(struct net_device *ndev, void *intel_data)
- 		priv->plat->mdio_bus_data->xpcs_an_inband = false;
- 	} else {
- 		priv->plat->max_speed = 1000;
--		priv->plat->mdio_bus_data->xpcs_an_inband = true;
- 	}
- }
+v3:
+https://lore.kernel.org/linux-riscv/20230126170607.1489141-3-guoren@kernel.org/
+
+v2:
+https://lore.kernel.org/linux-riscv/20221210100927.835145-3-guoren@kernel.org/
+
+v1:
+https://lore.kernel.org/linux-riscv/20220913094252.3555240-6-andy.chiu@sifive.com/
+---
+ arch/riscv/include/asm/jump_label.h | 16 +++++++++++----
+ arch/riscv/kernel/jump_label.c      | 30 +++++++++++++++++++++++++++--
+ 2 files changed, 40 insertions(+), 6 deletions(-)
+
+diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
+index 14a5ea8d8ef0..afc58c31d02b 100644
+--- a/arch/riscv/include/asm/jump_label.h
++++ b/arch/riscv/include/asm/jump_label.h
+@@ -12,17 +12,23 @@
+ #include <linux/types.h>
+ #include <asm/asm.h>
  
++#ifdef CONFIG_RISCV_ISA_C
++#define JUMP_LABEL_NOP_SIZE 2
++#else
+ #define JUMP_LABEL_NOP_SIZE 4
++#endif
+ 
+ static __always_inline bool arch_static_branch(struct static_key * const key,
+ 					       const bool branch)
+ {
+ 	asm_volatile_goto(
+-		"	.align		2			\n\t"
+ 		"	.option push				\n\t"
+ 		"	.option norelax				\n\t"
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.nop					\n\t"
++#else
+ 		"1:	nop					\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+@@ -40,11 +46,13 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+ 						    const bool branch)
+ {
+ 	asm_volatile_goto(
+-		"	.align		2			\n\t"
+ 		"	.option push				\n\t"
+ 		"	.option norelax				\n\t"
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.j		%l[label]		\n\t"
++#else
+ 		"1:	jal		zero, %l[label]		\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
+index e6694759dbd0..08f42c49e3a0 100644
+--- a/arch/riscv/kernel/jump_label.c
++++ b/arch/riscv/kernel/jump_label.c
+@@ -11,26 +11,52 @@
+ #include <asm/bug.h>
+ #include <asm/patch.h>
+ 
++#ifdef CONFIG_RISCV_ISA_C
++#define RISCV_INSN_NOP 0x0001U
++#define RISCV_INSN_C_J 0xa001U
++#else
+ #define RISCV_INSN_NOP 0x00000013U
+ #define RISCV_INSN_JAL 0x0000006fU
++#endif
+ 
+ void arch_jump_label_transform(struct jump_entry *entry,
+ 			       enum jump_label_type type)
+ {
+ 	void *addr = (void *)jump_entry_code(entry);
++#ifdef CONFIG_RISCV_ISA_C
++	u16 insn;
++#else
+ 	u32 insn;
++#endif
+ 
+ 	if (type == JUMP_LABEL_JMP) {
+ 		long offset = jump_entry_target(entry) - jump_entry_code(entry);
+-
+-		if (WARN_ON(offset & 1 || offset < -524288 || offset >= 524288))
++		if (WARN_ON(offset & 1 || offset < -2048 || offset >= 2048))
+ 			return;
+ 
++#ifdef CONFIG_RISCV_ISA_C
++		/*
++		 * 001 | imm[11|4|9:8|10|6|7|3:1|5] 01 - C.J
++		 */
++		insn = RISCV_INSN_C_J |
++			(((u16)offset & GENMASK(5, 5)) >> (5 - 2)) |
++			(((u16)offset & GENMASK(3, 1)) << (3 - 1)) |
++			(((u16)offset & GENMASK(7, 7)) >> (7 - 6)) |
++			(((u16)offset & GENMASK(6, 6)) << (7 - 6)) |
++			(((u16)offset & GENMASK(10, 10)) >> (10 - 8)) |
++			(((u16)offset & GENMASK(9, 8)) << (9 - 8)) |
++			(((u16)offset & GENMASK(4, 4)) << (11 - 4)) |
++			(((u16)offset & GENMASK(11, 11)) << (12 - 11));
++#else
++		/*
++		 * imm[20|10:1|11|19:12] | rd | 1101111 - JAL
++		 */
+ 		insn = RISCV_INSN_JAL |
+ 			(((u32)offset & GENMASK(19, 12)) << (12 - 12)) |
+ 			(((u32)offset & GENMASK(11, 11)) << (20 - 11)) |
+ 			(((u32)offset & GENMASK(10,  1)) << (21 -  1)) |
+ 			(((u32)offset & GENMASK(20, 20)) << (31 - 20));
++#endif
+ 	} else {
+ 		insn = RISCV_INSN_NOP;
+ 	}
 -- 
-2.34.1
+2.36.1
 
