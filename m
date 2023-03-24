@@ -2,243 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91B06C7DFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEB26C7DF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjCXMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S231880AbjCXMY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjCXMYd (ORCPT
+        with ESMTP id S230377AbjCXMY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:24:33 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106231CBD1;
-        Fri, 24 Mar 2023 05:24:29 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32OCOIvG120757;
-        Fri, 24 Mar 2023 07:24:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679660658;
-        bh=wkap2e6kzTTSvLw7zUfEUzfuLRCTlP03LJspERu3sD0=;
-        h=From:To:CC:Subject:Date;
-        b=U1iWKRQ60W+6AUfgcW3WBuk6R0YVDAWpZ3TpCSH2pCuYsK/Ywwyp9x4mf00AjMSH7
-         Ctyu+BAxYyIDpnf3FWdif9NNUb34MomJ4BoEi5wf5kQXTI41VoKOY1Y/asbKhvcaWn
-         3DXWz7Y5DrHALKZ3ENXfzz/SYk0Wdo6CjHO7djGo=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32OCOIp1005338
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 24 Mar 2023 07:24:18 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 24
- Mar 2023 07:24:18 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 24 Mar 2023 07:24:18 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32OCOHkr097323;
-        Fri, 24 Mar 2023 07:24:17 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>
-CC:     <afd@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-luthra@ti.com>, <j-choudhary@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-am654: Add overlay for audio support
-Date:   Fri, 24 Mar 2023 17:54:17 +0530
-Message-ID: <20230324122417.252491-1-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Mar 2023 08:24:26 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7129B12CC4;
+        Fri, 24 Mar 2023 05:24:25 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PjhF13cy6z6J7VZ;
+        Fri, 24 Mar 2023 20:23:01 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 24 Mar
+ 2023 12:24:22 +0000
+Date:   Fri, 24 Mar 2023 12:24:22 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Jie Zhan <zhanjie9@hisilicon.com>
+CC:     Yicong Yang <yangyicong@huawei.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <james.clark@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <21cnbao@gmail.com>, <tim.c.chen@intel.com>,
+        <prime.zeng@hisilicon.com>, <shenyang39@huawei.com>,
+        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
+Subject: Re: [PATCH] perf stat: Support per-cluster aggregation
+Message-ID: <20230324122422.00006a2b@Huawei.com>
+In-Reply-To: <039a2fc2-48e2-fe3b-73c1-f7f658c7f22f@hisilicon.com>
+References: <20230313085911.61359-1-yangyicong@huawei.com>
+        <039a2fc2-48e2-fe3b-73c1-f7f658c7f22f@hisilicon.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@ti.com>
+On Fri, 24 Mar 2023 10:34:33 +0800
+Jie Zhan <zhanjie9@hisilicon.com> wrote:
 
-The GP application board has:
-ICSSG I2C0..3 connected to I2C EEPROMs
-ICSSG UART0..3 headers with level shifters
-ICSSG SPI0..3 connected to SPI Flash
-McASP0 connected to tlv320aic3106 codec with Headset out and Line In jack
+> On 13/03/2023 16:59, Yicong Yang wrote:
+> > From: Yicong Yang <yangyicong@hisilicon.com>
+> >
+> > Some platforms have 'cluster' topology and CPUs in the cluster will
+> > share resources like L3 Cache Tag (for HiSilicon Kunpeng SoC) or L2
+> > cache (for Intel Jacobsville). Currently parsing and building cluster
+> > topology have been supported since [1].
+> >
+> > perf stat has already supported aggregation for other topologies like
+> > die or socket, etc. It'll be useful to aggregate per-cluster to find
+> > problems like L3T bandwidth contention or imbalance.
+> >
+> > This patch adds support for "--per-cluster" option for per-cluster
+> > aggregation. Also update the docs and related test. The output will
+> > be like:
+> >
+> > [root@localhost tmp]# perf stat -a -e LLC-load --per-cluster -- sleep 5
+> >
+> >   Performance counter stats for 'system wide':
+> >
+> > S56-D0-CLS158    4      1,321,521,570      LLC-load
+> > S56-D0-CLS594    4        794,211,453      LLC-load
+> > S56-D0-CLS1030    4             41,623      LLC-load
+> > S56-D0-CLS1466    4             41,646      LLC-load
+> > S56-D0-CLS1902    4             16,863      LLC-load
+> > S56-D0-CLS2338    4             15,721      LLC-load
+> > S56-D0-CLS2774    4             22,671      LLC-load
+> > [...]
+> >
+> > [1] commit c5e22feffdd7 ("topology: Represent clusters of CPUs within a die")
+> >
+> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>  
+> 
+> An end user may have to check sysfs to figure out what CPUs those 
+> cluster IDs account for.
+> 
+> Any better method to show the mapping between CPUs and cluster IDs?
 
-This patch adds support for the audio on the GP application board.
+The cluster code is capable of using the ACPI_PPTT_ACPI_PROCESSOR_ID field
+if valid for the cluster level of PPTT.
 
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-[j-choudhary@ti.com: Makefile fixups, dtso file cleanups]
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
+The numbers in the example above look like offsets into the PPTT table
+so I think the PPTT table is missing that information.
 
-Changes are made considering Andrew's comment on another overlay patch[1]
-related to Makefile and styling comments on the overlay file.
+Whilst not a great description anyway (it's just an index), the UUID
+that would be in there can convey more info on which cluster this is.
 
-[1]:
-<https://lore.kernel.org/all/8e6442c8-e4ef-705d-1378-7d1f8b74e84d@ti.com/>
 
- arch/arm64/boot/dts/ti/Makefile         |   3 +-
- arch/arm64/boot/dts/ti/k3-am654-gp.dtso | 124 ++++++++++++++++++++++++
- 2 files changed, 126 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am654-gp.dtso
+> 
+> Perhaps adding a conditional cluster id (when there are clusters) in the 
+> "--per-core" output may help.
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index 541970a8ed0a..9b70a85fbc96 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -21,12 +21,13 @@ dtb-$(CONFIG_ARCH_K3) += k3-am642-phyboard-electra-rdk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
- 
- # Boards with AM65x SoC
-+k3-am654-evm-dtbs := k3-am654-base-board.dtb k3-am654-gp.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic-pg2.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-m2.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-pg2.dtb
--dtb-$(CONFIG_ARCH_K3) += k3-am654-base-board.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am654-evm.dtb
- 
- # Boards with J7200 SoC
- k3-j7200-evm-dtbs := k3-j7200-common-proc-board.dtb k3-j7200-evm-quad-port-eth-exp.dtbo
-diff --git a/arch/arm64/boot/dts/ti/k3-am654-gp.dtso b/arch/arm64/boot/dts/ti/k3-am654-gp.dtso
-new file mode 100644
-index 000000000000..14ceb2714677
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am654-gp.dtso
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * DT overlay for GP application board on AM654 EVM
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#include "k3-pinctrl.h"
-+
-+&{/} {
-+	gp_vcc_5v0: fixedregulator-gp-vcc-5v0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "gp_vcc_5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	codec_vcc_3v3: fixedregulator-codec-vcc-3v3 {
-+		/* LP5912-3.3DRVT */
-+		compatible = "regulator-fixed";
-+		regulator-name = "codec_vcc_3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&gp_vcc_5v0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	gp_vcc_1v8: fixedregulator-gp-vcc-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "gp_vcc_1v8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "AM65x-GPEVM";
-+		simple-audio-card,widgets =
-+			"Headphone", "Headphone Jack",
-+			"Line", "Line In";
-+		simple-audio-card,routing =
-+			"Headphone Jack",	"HPLOUT",
-+			"Headphone Jack",	"HPROUT",
-+			"LINE1L",		"Line In",
-+			"LINE1R",		"Line In";
-+		simple-audio-card,format = "dsp_b";
-+		simple-audio-card,bitclock-master = <&sound_master>;
-+		simple-audio-card,frame-master = <&sound_master>;
-+		simple-audio-card,bitclock-inversion;
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&mcasp0>;
-+		};
-+
-+		sound_master: simple-audio-card,codec {
-+			sound-dai = <&tlv320aic3106>;
-+			system-clock-frequency = <12000000>;
-+		};
-+	};
-+};
-+
-+&main_pmx0 {
-+	mcasp0_pins: mcasp0-pins {
-+		pinctrl-single,pins = <
-+			AM65X_IOPAD(0x01f4, PIN_INPUT, 5) /* (V24) PRG0_PRU0_GPO0.MCASP0_ACLKX */
-+			AM65X_IOPAD(0x01f8, PIN_INPUT, 5) /* (W25) PRG0_PRU0_GPO1.MCASP0_AFSX */
-+			AM65X_IOPAD(0x0204, PIN_OUTPUT, 5) /* (Y24) PRG0_PRU0_GPO4.MCASP0_AXR0 */
-+			AM65X_IOPAD(0x0208, PIN_INPUT, 5) /* (V28) PRG0_PRU0_GPO5.MCASP0_AXR1 */
-+		>;
-+	};
-+
-+	aic3106_pins: aic3106-pins {
-+		pinctrl-single,pins = <
-+			AM65X_IOPAD(0x011c, PIN_OUTPUT, 7) /* (AD19) PRG1_PRU0_GPO15.GPIO0_71 */
-+		>;
-+	};
-+};
-+
-+&main_i2c0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	tlv320aic3106: tlv320aic3106@1b {
-+		#sound-dai-cells = <0>;
-+		compatible = "ti,tlv320aic3106";
-+		reg = <0x1b>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&aic3106_pins>;
-+		gpio-reset = <&main_gpio0 71 GPIO_ACTIVE_LOW>; /* gpio0_71 */
-+		/* Regulators */
-+		AVDD-supply = <&codec_vcc_3v3>;
-+		IOVDD-supply = <&gp_vcc_1v8>;
-+		DRVDD-supply = <&codec_vcc_3v3>;
-+		DVDD-supply = <&gp_vcc_1v8>;
-+	};
-+};
-+
-+&mcasp0 {
-+	status = "okay";
-+	#sound-dai-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcasp0_pins>;
-+	op-mode = <0>;          /* MCASP_IIS_MODE */
-+	tdm-slots = <2>;
-+	/* 16 serializers */
-+	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
-+		1 2 0 0
-+		0 0 0 0
-+		0 0 0 0
-+		0 0 0 0
-+	>;
-+	tx-num-evt = <32>;
-+	rx-num-evt = <32>;
-+};
--- 
-2.25.1
+That's an interesting idea.  You'd want to include the other levels
+if doing that.  So whenever you do a --per-xxx it also provides the
+cluster / die / node / socket etc as relevant 'above' the level of xxx
+Fun is that node and die can flip which would make this tricky to do.
+
+Jonathan
+
+> 
+> Apart form that, this works well on my aarch64.
+> 
+> Tested-by: Jie Zhan <zhanjie9@hisilicon.com>
+
+> 
+> 
 
