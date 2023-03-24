@@ -2,114 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D606C7E95
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796056C7E97
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCXNOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S231841AbjCXNQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXNOv (ORCPT
+        with ESMTP id S229734AbjCXNQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:14:51 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C08DEB71;
-        Fri, 24 Mar 2023 06:14:50 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b20so7905681edd.1;
-        Fri, 24 Mar 2023 06:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679663688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4C2Xjynd/QVbdXclxsjAeLaEctmSISPKI1FYwZ216X4=;
-        b=DSLJ4H4zCmV45v+r2JCjP7WOdrz4EISGNt1vyczaJ430PPyQ2oVtKeZ/dodBd61oUF
-         VDyn27zoK8NALvAC9QKi5eDtzcbikxPq5pYNCltdsZ5DfA5QVl1VlrEs7jmOJQekYcaF
-         V6PwlfTOSRsAb2nntDsMz/wEOrN4Bt736YEPYMy5el8IcBVQZs+BExRNMO07cEfoEGWL
-         m6osbPnxEOshH5ygJTBlsn1eHaRKSZdpSYgZmoVM0vAV5bhzkeVG1ovxmjtZNSJTzjoF
-         KLit+xVQLV+vxr9raGo+Bv+qyipNr/zh3LvxoM/gj5AjgZJzBCcj2PHpaEJ7wlm8V24h
-         bVdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679663688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4C2Xjynd/QVbdXclxsjAeLaEctmSISPKI1FYwZ216X4=;
-        b=XHQmdpiRZxv8zEsAprETujG2EI8u4xdIRaYNzVee/ofxAASAE5lKdmKh+IDZAcvZrm
-         ecLhyex44tVagwj4k/Ji9ENR11v/tdk3FuF5EY6aTgsyguTK/UsqQD0hPbHseQth4Qdm
-         GLd99Fwx8AIvqGDTxvqA7x/E0zgZFckJ7/D7LJIvIzNCaShjZ1Dj/9a6c/gXVtLRGXkS
-         VZkNyp90JZhy/4R2nW8cRH1244V6a5FsDG7JgO7M++EAbRmqbqrqo40vXar7lw0//0X7
-         Rv+i98d0K0khF8Juxu90/69yaG6gKr1XpnnVlDd3UY08srxABAfC/t1okSJ3y+3tJNLv
-         Q35w==
-X-Gm-Message-State: AO0yUKUaajg8ZGEaRzinz2RoTzMgao+SBLxoQK8xbbatWBR8kmaB83W+
-        7b0zyQ/QADiTC6jB69Z/esE=
-X-Google-Smtp-Source: AKy350YiRP0hA2xKwsJk3la5nIITaD+9SPkMNBL8zKCCZT6Tlc9ZQqosO+08awM/Wqj47MVUaVEZoQ==
-X-Received: by 2002:a17:907:a50f:b0:930:a74:52bb with SMTP id vr15-20020a170907a50f00b009300a7452bbmr3064874ejc.14.1679663688396;
-        Fri, 24 Mar 2023 06:14:48 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id o7-20020a1709062e8700b00933356c681esm8703435eji.150.2023.03.24.06.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 06:14:48 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 15:14:45 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniil Dulov <d.dulov@aladdin.ru>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kurt Kanzenbach <kurt@linutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-patches@linuxtesting.org
-Subject: Re: [PATCH] media: dib7000p: Fix potential division by zero
-Message-ID: <20230324131445.g42kvq5wzj2z3qil@skbuf>
-References: <20230324131209.651475-1-d.dulov@aladdin.ru>
+        Fri, 24 Mar 2023 09:16:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6F95FD6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679663789; x=1711199789;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GDZg2mRuA1og/+FYECT/suAKTGeLw7ZZtMrYY5CS7do=;
+  b=jFurM4J+yh/eDsfJbGvcj6fZeU808qcxpQvz+QjH3NDY7lD+eyO+gBtM
+   F6ZjbJAaGPRXPB0Hy/TcA2T7PzWTtEZ4mSVhCuV+XdcACmVuWNzIcym//
+   UDR9CH/OiTMryOIsqzR1rDZYNlGP72FjkChe5rK6OPMtU5iXe73J6495A
+   jqhksOkOEKdO3Wjw5POZbT9FLRb01RYhfCE8k3on20adJ5kJYsnQZP/n4
+   YA9nfCvxzfYnpQWxg6YjYLzYwmp7QFD2c0FfkN7tXseC2TGzwFUV8YYEY
+   ghEszOYmO7Bms7fmTDjGD8zlVtBpjOMBLcoKX1f0yavlpVq8sw6iSzuwK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="339800370"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="339800370"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:16:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="928657058"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="928657058"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.215.177]) ([10.254.215.177])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:16:26 -0700
+Message-ID: <8fda817c-98e7-1988-325d-52d09f3e61a8@linux.intel.com>
+Date:   Fri, 24 Mar 2023 21:16:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324131209.651475-1-d.dulov@aladdin.ru>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2] iommu/rockchip: Add missing set_platform_dma_ops
+ callback
+To:     Steven Price <steven.price@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@ziepe.ca>
+References: <20230324111127.221640-1-steven.price@arm.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230324111127.221640-1-steven.price@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniil,
-
-On Fri, Mar 24, 2023 at 06:12:09AM -0700, Daniil Dulov wrote:
-> Variable loopdiv can be assigned 0, then it is used as a denominator,
-> without checking it for 0.
+On 2023/3/24 19:11, Steven Price wrote:
+> Similar to exynos, we need a set_platform_dma_ops() callback for proper
+> operation on ARM 32 bit after recent changes in the IOMMU framework
+> (detach ops removal). But also the use of a NULL domain is confusing.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> Rework the code to have a singleton rk_identity_domain which is assigned
+> to domain when using an identity mapping rather than "detaching". This
+> makes the code easier to reason about.
 > 
-> Fixes: 713d54a8bd81 ("[media] DiB7090: add support for the dib7090 based")
-> Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
+> Signed-off-by: Steven Price <steven.price@arm.com>
 > ---
->  drivers/media/dvb-frontends/dib7000p.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since v1[1]:
 > 
-> diff --git a/drivers/media/dvb-frontends/dib7000p.c b/drivers/media/dvb-frontends/dib7000p.c
-> index 55bee50aa871..bea5717907e7 100644
-> --- a/drivers/media/dvb-frontends/dib7000p.c
-> +++ b/drivers/media/dvb-frontends/dib7000p.c
-> @@ -497,7 +497,7 @@ static int dib7000p_update_pll(struct dvb_frontend *fe, struct dibx000_bandwidth
->  	prediv = reg_1856 & 0x3f;
->  	loopdiv = (reg_1856 >> 6) & 0x3f;
->  
-> -	if ((bw != NULL) && (bw->pll_prediv != prediv || bw->pll_ratio != loopdiv)) {
-> +	if (loopdiv && (bw != NULL) && (bw->pll_prediv != prediv || bw->pll_ratio != loopdiv)) {
->  		dprintk("Updating pll (prediv: old =  %d new = %d ; loopdiv : old = %d new = %d)\n", prediv, bw->pll_prediv, loopdiv, bw->pll_ratio);
->  		reg_1856 &= 0xf000;
->  		reg_1857 = dib7000p_read_word(state, 1857);
-> -- 
-> 2.25.1
+>   * Reworked the code to avoid a NULL domain, instead a singleton
+>     rk_identity_domain is used instead. The 'detach' language is no
+>     longer used.
 > 
+> [1] https://lore.kernel.org/r/20230315164152.333251-1-steven.price%40arm.com
+> 
+>   drivers/iommu/rockchip-iommu.c | 50 ++++++++++++++++++++++++++--------
+>   1 file changed, 39 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index f30db22ea5d7..437541004994 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+> @@ -124,6 +124,7 @@ struct rk_iommudata {
+>   
+>   static struct device *dma_dev;
+>   static const struct rk_iommu_ops *rk_ops;
+> +static struct iommu_domain rk_identity_domain;
+>   
+>   static inline void rk_table_flush(struct rk_iommu_domain *dom, dma_addr_t dma,
+>   				  unsigned int count)
+> @@ -980,26 +981,27 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+>   	return ret;
+>   }
+>   
+> -static void rk_iommu_detach_device(struct iommu_domain *domain,
+> -				   struct device *dev)
+> +static int rk_iommu_identity_attach(struct iommu_domain *identity_domain,
+> +				    struct device *dev)
+>   {
+>   	struct rk_iommu *iommu;
+> -	struct rk_iommu_domain *rk_domain = to_rk_domain(domain);
+> +	struct rk_iommu_domain *rk_domain;
+>   	unsigned long flags;
+>   	int ret;
+>   
+>   	/* Allow 'virtual devices' (eg drm) to detach from domain */
+>   	iommu = rk_iommu_from_dev(dev);
+>   	if (!iommu)
+> -		return;
+> +		return -ENODEV;
+> +
+> +	rk_domain = to_rk_domain(iommu->domain);
+>   
+>   	dev_dbg(dev, "Detaching from iommu domain\n");
+>   
+> -	/* iommu already detached */
+> -	if (iommu->domain != domain)
+> -		return;
+> +	if (iommu->domain == identity_domain)
+> +		return 0;
+>   
+> -	iommu->domain = NULL;
+> +	iommu->domain = identity_domain;
 
-Did you send this patch to the correct recipients and mailing lists?
+Where did identity_domain come from? Is it rk_identity_domain?
 
-$ ./scripts/get_maintainer.pl drivers/media/dvb-frontends/dib7000p.c
-Mauro Carvalho Chehab <mchehab@kernel.org> (maintainer:MEDIA INPUT INFRASTRUCTURE (V4L/DVB))
-linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB))
-linux-kernel@vger.kernel.org (open list)
+Best regards,
+baolu
