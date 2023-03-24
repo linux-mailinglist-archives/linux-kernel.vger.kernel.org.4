@@ -2,152 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699D46C7E54
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C837D6C7E55
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjCXM57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S231596AbjCXM6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjCXM55 (ORCPT
+        with ESMTP id S231393AbjCXM6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:57:57 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933091E5DE;
-        Fri, 24 Mar 2023 05:57:55 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E09CA5FD72;
-        Fri, 24 Mar 2023 15:57:52 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679662672;
-        bh=TYAU8R6v5hMibdRbWUhIb7/NXDFhS4JxFF4SG4AWgoM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=k0IU/icPvaHmJZilzJVvsdIu2VJ8MIGXfsbfsxAHGrlG+yOSETJmXRLd65i/WA9mQ
-         /yczMu+peeDKpxk37VsivgItxQ6wl2VTCO3FTZoOps5rEVi4oDlLuKMgCcsB+LN+T4
-         CXUHgzo7kEGTkG8pYTrpaMvlhykLUS3DtRqtyU11g+0s0usbe5fzSuVb8WTBwpbjin
-         CQbJ8q/plYY2br0H+QcGNqvWMMWP0QsOjoI1aiXKV7UaeGM0HjHfpHTBa09ZhEkHiP
-         v/+ZEQ4c36oHFaFpKsJpAMFiKsX26Q4aVEN8S+Us2y/u+3GQ6HSzJWfz4j/3IfjLru
-         CcLd6Wa3PL5lw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 24 Mar 2023 15:57:46 +0300 (MSK)
-Message-ID: <94b58c20-9111-8ada-79fd-eced6a1ba2cc@sberdevices.ru>
-Date:   Fri, 24 Mar 2023 15:54:33 +0300
+        Fri, 24 Mar 2023 08:58:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F0AC86A0;
+        Fri, 24 Mar 2023 05:58:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B64711FB;
+        Fri, 24 Mar 2023 05:58:56 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.56.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BC043F766;
+        Fri, 24 Mar 2023 05:58:07 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 12:57:18 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chenhuacai@kernel.org, zhangqing@loongson.cn, kernel@xen0n.name,
+        mingo@redhat.com, peterz@infradead.org, xiehuan09@gmail.com,
+        dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        dolinux.peng@gmail.com, linux-trace-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/8] arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+Message-ID: <ZB2eLsD4aoR3LEOV@FVFF77S0Q05N>
+References: <20230324123731.3801920-1-pengdonglin@sangfor.com.cn>
+ <20230324123731.3801920-5-pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net] vsock/loopback: use only sk_buff_head.lock to protect
- the packet queue
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>, <netdev@vger.kernel.org>
-CC:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        <linux-kernel@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com>
-References: <20230324115450.11268-1-sgarzare@redhat.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230324115450.11268-1-sgarzare@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/24 06:52:00 #21002836
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324123731.3801920-5-pengdonglin@sangfor.com.cn>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 05:37:27AM -0700, Donglin Peng wrote:
+> The commit d4815c5d1bbd ("function_graph: Support recording and
+> printing the return value of function") laid the groundwork for the
+> for the funcgraph-retval, and this modification makes it available
+> on the ARM64 platform.
+> 
+> We introduce a new structure called fgraph_ret_regs for the ARM64
+> platform to hold return registers and the frame pointer. We then
+> fill its content in the return_to_handler and pass its address to
+> the function ftrace_return_to_handler to record the return value.
 
+I'm happy with this, or with using ftrace_regs and capturing more regs here.
 
-On 24.03.2023 14:54, Stefano Garzarella wrote:
-> pkt_list_lock was used before commit 71dc9ec9ac7d ("virtio/vsock:
-> replace virtio_vsock_pkt with sk_buff") to protect the packet queue.
-> After that commit we switched to sk_buff and we are using
-> sk_buff_head.lock in almost every place to protect the packet queue
-> except in vsock_loopback_work() when we call skb_queue_splice_init().
+This overall looks good, but there's one functional issue and a couple of minor
+nits which I've detailed below.
+
 > 
-> As reported by syzbot, this caused unlocked concurrent access to the
-> packet queue between vsock_loopback_work() and
-> vsock_loopback_cancel_pkt() since it is not holding pkt_list_lock.
-> 
-> With the introduction of sk_buff_head, pkt_list_lock is redundant and
-> can cause confusion, so let's remove it and use sk_buff_head.lock
-> everywhere to protect the packet queue access.
-> 
-> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-> Cc: bobby.eshleman@bytedance.com
-> Reported-and-tested-by: syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 > ---
->  net/vmw_vsock/vsock_loopback.c | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
-
-Reviewed-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-
+>  arch/arm64/Kconfig               |  1 +
+>  arch/arm64/include/asm/ftrace.h  | 23 +++++++++++++++++++++++
+>  arch/arm64/kernel/entry-ftrace.S |  9 +++++----
+>  3 files changed, 29 insertions(+), 4 deletions(-)
 > 
-> diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
-> index 671e03240fc5..89905c092645 100644
-> --- a/net/vmw_vsock/vsock_loopback.c
-> +++ b/net/vmw_vsock/vsock_loopback.c
-> @@ -15,7 +15,6 @@
->  struct vsock_loopback {
->  	struct workqueue_struct *workqueue;
->  
-> -	spinlock_t pkt_list_lock; /* protects pkt_list */
->  	struct sk_buff_head pkt_queue;
->  	struct work_struct pkt_work;
->  };
-> @@ -32,9 +31,7 @@ static int vsock_loopback_send_pkt(struct sk_buff *skb)
->  	struct vsock_loopback *vsock = &the_vsock_loopback;
->  	int len = skb->len;
->  
-> -	spin_lock_bh(&vsock->pkt_list_lock);
->  	skb_queue_tail(&vsock->pkt_queue, skb);
-> -	spin_unlock_bh(&vsock->pkt_list_lock);
->  
->  	queue_work(vsock->workqueue, &vsock->pkt_work);
->  
-> @@ -113,9 +110,9 @@ static void vsock_loopback_work(struct work_struct *work)
->  
->  	skb_queue_head_init(&pkts);
->  
-> -	spin_lock_bh(&vsock->pkt_list_lock);
-> +	spin_lock_bh(&vsock->pkt_queue.lock);
->  	skb_queue_splice_init(&vsock->pkt_queue, &pkts);
-> -	spin_unlock_bh(&vsock->pkt_list_lock);
-> +	spin_unlock_bh(&vsock->pkt_queue.lock);
->  
->  	while ((skb = __skb_dequeue(&pkts))) {
->  		virtio_transport_deliver_tap_pkt(skb);
-> @@ -132,7 +129,6 @@ static int __init vsock_loopback_init(void)
->  	if (!vsock->workqueue)
->  		return -ENOMEM;
->  
-> -	spin_lock_init(&vsock->pkt_list_lock);
->  	skb_queue_head_init(&vsock->pkt_queue);
->  	INIT_WORK(&vsock->pkt_work, vsock_loopback_work);
->  
-> @@ -156,9 +152,7 @@ static void __exit vsock_loopback_exit(void)
->  
->  	flush_work(&vsock->pkt_work);
->  
-> -	spin_lock_bh(&vsock->pkt_list_lock);
->  	virtio_vsock_skb_queue_purge(&vsock->pkt_queue);
-> -	spin_unlock_bh(&vsock->pkt_list_lock);
->  
->  	destroy_workqueue(vsock->workqueue);
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1023e896d46b..48856d230800 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -195,6 +195,7 @@ config ARM64
+>  	select HAVE_FTRACE_MCOUNT_RECORD
+>  	select HAVE_FUNCTION_TRACER
+>  	select HAVE_FUNCTION_ERROR_INJECTION
+> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+>  	select HAVE_FUNCTION_GRAPH_TRACER
+>  	select HAVE_GCC_PLUGINS
+>  	select HAVE_HW_BREAKPOINT if PERF_EVENTS
+> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+> index 1c2672bbbf37..f68dcc41be3b 100644
+> --- a/arch/arm64/include/asm/ftrace.h
+> +++ b/arch/arm64/include/asm/ftrace.h
+> @@ -170,4 +170,27 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
 >  }
+>  #endif /* ifndef __ASSEMBLY__ */
+>  
+> +#ifndef __ASSEMBLY__
+> +
+> +#ifdef CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+> +struct fgraph_ret_regs {
+> +	/* x0 - x7 */
+> +	u64 regs[8];
+> +
+> +	u64 fp;
+> +};
+
+As a minor nit, for ftrace_regs we used `unsigned long` rather than `u64`;
+could we do the same here for consistency?
+
+This will need to be padded to 16 bytes, as within the kernel, arm64 requires
+the SP to be aligned to 16 bytes at all time. Please can you add an `__unused`
+field, like we have in ftrace_regs, to ensure that?
+
+> +
+> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
+> +{
+> +	return ret_regs->regs[0];
+> +}
+> +
+> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
+> +{
+> +	return ret_regs->fp;
+> +}
+> +#endif
+> +
+> +#endif
+> +
+>  #endif /* __ASM_FTRACE_H */
+> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+> index 350ed81324ac..8ac6f952e68f 100644
+> --- a/arch/arm64/kernel/entry-ftrace.S
+> +++ b/arch/arm64/kernel/entry-ftrace.S
+> @@ -270,14 +270,15 @@ SYM_FUNC_END(ftrace_stub_graph)
+>   */
+>  SYM_CODE_START(return_to_handler)
+>  	/* save return value regs */
+> -	sub sp, sp, #64
+> +	sub sp, sp, #72
+>  	stp x0, x1, [sp]
+>  	stp x2, x3, [sp, #16]
+>  	stp x4, x5, [sp, #32]
+>  	stp x6, x7, [sp, #48]
+> +	str x29,    [sp, #64]		//     parent's fp
+
+As above, this will need to be padded to keep the stack aligned to 16 bytes,
+and I'd prefer if we could use asm-offsets so that we can have something like:
+
+	sub	sp, sp, #FRET_REGS_SIZE
+	stp	x0, x1, [sp, #FRET_REGS_X0]
+	stp	x2, x3, [sp, #FRET_REGS_X2]
+	stp	x4, x5, [sp, #FRET_REGS_X4]
+	stp	x6, x7, [sp, #FRET_REGS_X6]
+	str	x29, [sp, FRET_REGS_FP]
+
+>  
+> -	mov	x0, x29			//     parent's fp
+> -	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
+> +	mov	x0, sp
+> +	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(regs);
+>  	mov	x30, x0			// restore the original return address
+>  
+>  	/* restore return value regs */
+> @@ -285,7 +286,7 @@ SYM_CODE_START(return_to_handler)
+>  	ldp x2, x3, [sp, #16]
+>  	ldp x4, x5, [sp, #32]
+>  	ldp x6, x7, [sp, #48]
+> -	add sp, sp, #64
+> +	add sp, sp, #72
+
+Likewise here.
+
+Other than that, this looks good to me, thanks for respinning!
+
+Thanks,
+Mark.
