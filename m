@@ -2,240 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510086C7F15
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C456C7F19
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjCXNtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S231705AbjCXNuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCXNs4 (ORCPT
+        with ESMTP id S231215AbjCXNuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:48:56 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE165B75B;
-        Fri, 24 Mar 2023 06:48:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AO5fgiiKvbp+FtIz+XFTVQzS6GCllakEdsOQbxBxNIb6QmPSWXZQvUuDQGuaW1oi9+zQxB0EySNnxs07rqEMv1zs3EBs1Zxgd5gu14XLcHpTGIGSdHHbVuCDfJUnn65nkO6EdcKaFyLnKY9gVb2g7322LoAk+i5Jq/kOX953DgqvJk/0AfFIMJTl3SukFiJMrVW2usZKFOHFUPBKJrXaxO7KjbIswClEeNGnGHpRZ5rSMw5XPoWYoZ+VmfLWXvPq1mZcr3yUI5Z+C6NslOVHURcbcMYMISUBfXtgUKvpVxMTzJwSs40dT5u2NwZ93FgiIadTVf1axKXI3cEsvrn/WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kvg8lROentx0LnNhx0Hl0Ztws+5206tkx9RwjxNZ68c=;
- b=bwUA7M8CY5khuFFL14CVIwimQoykYEHkBcte/TZ4AxOdsk3i8kaQMANq30LTf2bVEuuWQ0LyHC+33GJXJkF6Z4N/fArY+eIfC1L5z9NBhZrpGZ8SoeJdQmHJFwSbjOMnHcXQIY6vgmNgVwaKMnWv86NPzGR6nlgdB1EfUjKzL2iVodqrPAE2SVZBAzax/d18twzzxIWWpg5L7IEig6211BAEJSFFTxgmoxXLg9x0FRHxEvbsbb8g+A9zLu3vEDhpuNeSGBtTPpJaU3Mit2RXqURZYSMcZ8XxHF/FyNCSNSnhGuCBTuZkIjsmWhEHSOjgssbHsqgHBVamvDSTxE7oWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kvg8lROentx0LnNhx0Hl0Ztws+5206tkx9RwjxNZ68c=;
- b=eIWSxbDHdFqyct2CqaDA80iH6ru60iYWGbhXHFicSXBLBuOvItzoF3/MGjKOSwUOIuj07jo62NkRnq6a6y0IN8PW7+QQf0XAOGaQ+ebycFTBYQSJpp2O0aD2z6iizsNttHX2aRyh58jsbZHBgOSnAjIQmRkVfbuir2LNQf3+C9guuKTR0TtMe2M1hdDBoLaFBW+nqR2lPu+NyP/NzSdoiqXes4Q4rXz8zZPW382RdXdjcAztM1ikX+XnPCgg30VS8X2ALJSSsnrBWyi6qFL5hVUcYTboHwqrkevp11rm96JbbdUS8T4bO1v0anTH1mv/oxefHKP2XOAL0kLeAdY5JQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- SA0PR12MB4382.namprd12.prod.outlook.com (2603:10b6:806:9a::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.38; Fri, 24 Mar 2023 13:48:53 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::bb0b:f14a:c49a:9cd7]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::bb0b:f14a:c49a:9cd7%4]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
- 13:48:52 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mm@kvack.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 03/14] arm64: reword ARCH_FORCE_MAX_ORDER prompt and
- help text
-Date:   Fri, 24 Mar 2023 09:48:49 -0400
-X-Mailer: MailMate (1.14r5937)
-Message-ID: <0D106E04-A043-45B0-8629-11DC10127FD8@nvidia.com>
-In-Reply-To: <20230324052233.2654090-4-rppt@kernel.org>
-References: <20230324052233.2654090-1-rppt@kernel.org>
- <20230324052233.2654090-4-rppt@kernel.org>
-Content-Type: multipart/signed;
- boundary="=_MailMate_C127E265-4DDB-40BB-87AD-DB2006154019_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR14CA0010.namprd14.prod.outlook.com
- (2603:10b6:208:23e::15) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        Fri, 24 Mar 2023 09:50:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F011ABFA;
+        Fri, 24 Mar 2023 06:50:18 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OCeBHm028430;
+        Fri, 24 Mar 2023 13:50:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JdVVWHZ69BaDiZ+0gfVAZs2x+E32SkohOmw9pXDXoGk=;
+ b=fvr2yaNH5nbmkKZloZvXrH1DkJJmfJgqJfWsTTdFzJT1iD5fISUPziR5RTexE+QSQaXs
+ Z5ERk1BVTaNhMKjx4kFzv3cMzTcqd6WIbHbWSA8RFS4x6842c7TWwhyq41XN9oAPzcDb
+ hlNeh4IogQqOZiz/4chZzcQrp3miUKVWaEPetHU3+7vMjtkZGRS4Lg00iKzw10Ewj5L6
+ 1JAA4eRM5W6zAL7ZCZkZ2QnrAPyg0M07e925G8Kevi+7aaW9bXWtSNuV1WEDdtB24BCX
+ YyULnuuU98MeIP0gRGydJq2iXnxlKoNDRrzrc/HAtj8de+Vs8h+pjZX81zvP9+JJQ2O5 6g== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgy60a0qj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 13:50:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32ODo3E3020342
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 13:50:03 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Mar
+ 2023 06:50:02 -0700
+Message-ID: <11ea2552-27e1-3665-869c-4594de1782a5@quicinc.com>
+Date:   Fri, 24 Mar 2023 07:50:01 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|SA0PR12MB4382:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3fd835f-1b41-4474-f959-08db2c6e80eb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +hSCiZE00w4ECAytzmP8tJCVdKfSq8uDYPsWib/SJq/wRni5V2wGBqABcM8HSDCvUmf+1MJf+5u6KzcZsRLrWAi0PcG0bKOSSSlOY7wcVVI8aduU4Zv6/ndrR3v6htDb7YNUcmSDwTsUd3lQC+EKeIKUrLn2tz3jpGP1SJmLrFXI99+ZlDPMolgHvwRHvttwj5wfwKFIg5ue+878DdKJ1LjO++jckjzt8nZZ7EWfQBOkcxfIi0I4LtL3Mo8+m2R8lNaikEZUb2wT2vRjvPo6EbCxm0bZ3dERtxz/bWLvNAagqtWBpyffJ1La5PDmu4ZwKHsNt4tGx2vTx4tjR7xXtxv5UF7ouwyVsgw0CUkCDDDF3OhFzbBcoIGNMP77/bSTlN0QDdhsO/MvanaX75oCqxgsLhJICq5W2y44LHd8ko06oX8r2BE25c7b8XXVtDxGq7ZO4Ml+i7L+w2hN6MIfgZqBDOwO8UBQP9U3gotE5s4Kr2zgD/MX9zhWbcZz3+zTBzykmXJ6TyQn62f621S3kwRy+Kyee6jPRHeSHeFlQdc4yvfty+POCUj4zGOpU6R9rZ5p7zzdKHbrbpYZpn5psWtZhv8yAMz/LV059fPabOeyHUhBzHi0vICsH3Oq8wFJDoujhU/nBEfwpx4jJaXNGH1KDi1hKNZUsqsKrtqs8xC7/ud8rcOdcjVsZ0Xvd4IJS6ISql84mFRoQ2NJUT08UgRRfuC5U/gPjf/YSaqCr5U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(451199018)(38100700002)(2906002)(36756003)(66476007)(83380400001)(2616005)(6486002)(186003)(478600001)(86362001)(33656002)(6916009)(66946007)(8676002)(4326008)(54906003)(66556008)(6512007)(53546011)(6666004)(6506007)(8936002)(26005)(7416002)(41300700001)(5660300002)(235185007)(316002)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ArbZemy+uPmNOGcVQHstQSlQXA6XGuqe6IS/t1ThEe707MTrOgZofo0Yo7I4?=
- =?us-ascii?Q?cLWtJQ9HJnRhRGbP2134cbJPdtybTHxoujVlpbQsVCzsCWFAP9T310lPr3Xk?=
- =?us-ascii?Q?M4PxHL993zLz+qCdurR1gUSa9EtSzLPqOumxh/xxdYV2EqJSDVBb+bo0D0q7?=
- =?us-ascii?Q?6hHrRDmkW5JAEhOyigWAMnvpZvZncmHMbblZBh2JR5ixvp6h+g+ZpovL7FLi?=
- =?us-ascii?Q?DX3rrhN2wNqnqOD0kWoXK88muIA0GNJ3SCRc0N6NtpiXU6uGXrnkwt27ad/d?=
- =?us-ascii?Q?+JrdjNmykBlHv7xPQPXtYTKmEK/w30eGGi6NZ+e/fl4SyLL1IQnIkyq3PVtH?=
- =?us-ascii?Q?p2zgYUcBGHqH+gYRTi4yO+z4bgYoRywlLPQvkbBzMPhLB+KTajQVh8qB1ctb?=
- =?us-ascii?Q?IlkfIem99cYGDvVRFZsc7Kgc7VVPfsOWMsa7BdUtj5YvXXouM0Q2ko2ctsSU?=
- =?us-ascii?Q?Zqrq3fzQjNEJhUG9ghOEIrzpPRg92gNfNM0Dc8BPhZQXCGwUL71y+2p5Chp8?=
- =?us-ascii?Q?bqPli6CGXJAEMB0BCn60ZVuvWz012rM8JX4imeRtNXyBKQQqgrNToo+WL3ft?=
- =?us-ascii?Q?GwQ4OUjdw0zEcc7sSGVZxrviVu6Q8E/Da8pLe8drHByNVWz6dl7myXsLUJ2r?=
- =?us-ascii?Q?kKcPnxUipBgVmuRxpQQ95xzc2h8PMnnPlsAdPdbr0ySmsioYbpt3y8LbcpWO?=
- =?us-ascii?Q?DqaiInOzK7uErk+wgXBFyo1UVXe/Qt8s9VPyJ7FMEJKHPqAenem5whvNGu10?=
- =?us-ascii?Q?yP9oYk7NJCugQWGqhzpsjQv9tJBIUxY0PDQ9x7TUq/THSCoSbbya08WPsEce?=
- =?us-ascii?Q?AUlluL1TdDg6lPREb8SbTJAEM6xTB1K6DoTE31itBnzQp5ePba4vCaxha74u?=
- =?us-ascii?Q?HKE58mR4wbYfdBLnWawFCT98/ujfgqZqiNKMRLEnj5kUT4shNw+FUpcygZZW?=
- =?us-ascii?Q?XtDFQA+hVhh0aA49oUbhCRbcz3g7rUtVrGl6o/xGMHmXWRIO/ESQa+ME/aLL?=
- =?us-ascii?Q?ORbUKrY05BVikoruU9Zc9YQ05tff8eWwCD9zfCC2TVlK8FgVirYkvLZWII69?=
- =?us-ascii?Q?vNnWRU/6ufGcVa8goe3YxO51HF2/4+9Kq8MOEP8YaMZ0IjC74SLVCMD0FC2B?=
- =?us-ascii?Q?3W2tZFCAmE1A4bJKjXqYIBgQx0SKG0Sdze1zBimpXStMyA9b4JKG9KxOnpM7?=
- =?us-ascii?Q?mRnjWoPgUEvm20ecW6roU2iUPJhrHnPqUDV157zphYcpOLwITwyk9EGijGhw?=
- =?us-ascii?Q?Rwx8rhpzUiGGfWZxWIoEgWjL86XOvstgGrjGwejE8ZFztQOlZTXPQIEMqLTs?=
- =?us-ascii?Q?5uSrVaqqlcL/v0UEKMjVUl+7+IpXD+XWA6yxUx9z9rvMSb/ie6jo/3GQu8b1?=
- =?us-ascii?Q?eUF7GOmkB164fToHPT+sHkoD8LctCXPXneazRbdbv3qw4NQBgGljw+ImPyPe?=
- =?us-ascii?Q?9Sp/GEm+1eELXoEonlFOlajN+W3KQ3AUio1CTgOP7gyDYcdI93aSwqaSmzFM?=
- =?us-ascii?Q?zCStBVtJXQCJxzqL5MXQd0nI6/UcOk6Q5TFkORgCygOA01TmnUEYnGxO3DVC?=
- =?us-ascii?Q?RFIs4fZKsx6hurzgK0cB8hAGSSio5IDTNTBq0T+E?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3fd835f-1b41-4474-f959-08db2c6e80eb
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 13:48:52.6529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: he5SjmLElUsSYpWnnrahnd5fRDu5tt9GSyDjRRkeOO5vs5+/B/cAZ/kQkn5oIYJa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4382
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] bus: mhi: host: Range check CHDBOFF and ERDBOFF
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1679066059-8399-1-git-send-email-quic_jhugo@quicinc.com>
+ <20230324103452.GC4259@thinkpad>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230324103452.GC4259@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vHeHX3xCtvbLGlCpiO9ew32pexnjDQOK
+X-Proofpoint-GUID: vHeHX3xCtvbLGlCpiO9ew32pexnjDQOK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 clxscore=1015 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2303240112
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_C127E265-4DDB-40BB-87AD-DB2006154019_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 3/24/2023 4:34 AM, Manivannan Sadhasivam wrote:
+> On Fri, Mar 17, 2023 at 09:14:19AM -0600, Jeffrey Hugo wrote:
+>> If the value read from the CHDBOFF and ERDBOFF registers is outside the
+>> range of the MHI register space then an invalid address might be computed
+>> which later causes a kernel panic.  Range check the read value to prevent
+>> a crash due to bad data from the device.
+>>
+>> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
+> 
+> Please CC stable list.
 
-On 24 Mar 2023, at 1:22, Mike Rapoport wrote:
+The stable folks have been automatically picking up everything with a 
+fixes tag for years.  CCing the stable list does not seem to do anything 
+unless the patch needs specific backporting adjustments.
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> The prompt and help text of ARCH_FORCE_MAX_ORDER are not even close to
-> describe this configuration option.
->
-> Update both to actually describe what this option does.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  arch/arm64/Kconfig | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 7324032af859..cdaf52ac4018 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1487,24 +1487,24 @@ config XEN
->  # 16K |       27          |      14      |       13        |         1=
-1         |
->  # 64K |       29          |      16      |       13        |         1=
-3         |
->  config ARCH_FORCE_MAX_ORDER
-> -	int "Maximum zone order" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PA=
-GES)
-> +	int "Order of maximal physically contiguous allocations" if ARM64_4K_=
-PAGES || ARM64_16K_PAGES
+Do you still want an explicit CC?
 
-It seems that "if EXPERT" was dropped by accident here.
+> 
+>> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+>> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+>> ---
+>>   drivers/bus/mhi/host/init.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+>> index 3d779ee..ae8ebcfb 100644
+>> --- a/drivers/bus/mhi/host/init.c
+>> +++ b/drivers/bus/mhi/host/init.c
+>> @@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>>   		return -EIO;
+>>   	}
+>>   
+>> +	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
+>> +		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
+>> +			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
+>> +		return -EINVAL;
+> 
+> Isn't -ERANGE a better errno here and also in other places of the driver?
 
->  	default "13" if ARM64_64K_PAGES
->  	default "11" if ARM64_16K_PAGES
->  	default "10"
->  	help
-> -	  The kernel memory allocator divides physically contiguous memory
-> -	  blocks into "zones", where each zone is a power of two number of
-> -	  pages.  This option selects the largest power of two that the kerne=
-l
-> -	  keeps in the memory allocator.  If you need to allocate very large
-> -	  blocks of physically contiguous memory, then you may need to
-> -	  increase this value.
-> +	  The kernel page allocator limits the size of maximal physically
-> +	  contiguous allocations. The limit is called MAX_ORDER and it
-> +	  defines the maximal power of two of number of pages that can be
-> +	  allocated as a single contiguous block. This option allows
-> +	  overriding the default setting when ability to allocate very
-> +	  large blocks of physically contiguous memory is required.
->
-> -	  We make sure that we can allocate up to a HugePage size for each co=
-nfiguration.
-> -	  Hence we have :
-> -		MAX_ORDER =3D PMD_SHIFT - PAGE_SHIFT  =3D> PAGE_SHIFT - 3
-> +	  The maximal size of allocation cannot exceed the size of the
-> +	  section, so the value of MAX_ORDER should satisfy
->
-> -	  However for 4K, we choose a higher default value, 10 as opposed to =
-9, giving us
-> -	  4M allocations matching the default size used by generic code.
-> +	    MAX_ORDER + PAGE_SHIFT <=3D SECTION_SIZE_BITS
-> +
-> +	  Don't change if unsure.
->
->  config UNMAP_KERNEL_AT_EL0
->  	bool "Unmap kernel when running in userspace (aka \"KAISER\")" if EXP=
-ERT
-> -- =
+I suppose that could work.  This was modeled after the existing BHI (eg 
+BHIOFF) range checks.  You want those updated in the same change or a 
+separate one?
 
-> 2.35.1
+> Thanks,
+> Mani
+> 
+>> +	}
+>> +
+>>   	/* Setup wake db */
+>>   	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
+>>   	mhi_cntrl->wake_set = false;
+>> @@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>>   		return -EIO;
+>>   	}
+>>   
+>> +	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
+>> +		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
+>> +			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
+>> +		return -EINVAL;
+>> +	}
+>> +
+>>   	/* Setup event db address for each ev_ring */
+>>   	mhi_event = mhi_cntrl->mhi_event;
+>>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
+>> -- 
+>> 2.7.4
+>>
+>>
+> 
 
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_C127E265-4DDB-40BB-87AD-DB2006154019_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmQdqkEPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUwaIP/RG0bciGb3wj5HWQeRaRqWKWcktYcPQ7w4Dh
-2pGQeKuSL51RphMV2eO9lDSw0fmEyRTvCWVHKaMCD/9leDkY5chAmu7jpb1IUPTp
-3jK8kg56Iepg13Gx3EWW1KDE2y/3GarCF6JcVvSuVb0yVsP70XPbMHoS7qgI6WjN
-vs14YoCZRPSA5OaCRDmrh7bc4UXkU7Biwsg8DiOsZcnjMFm3HJgafOhLQ57UWtQF
-f6g/uls+c+s1BtCGgZ48iygBq1oJeVn30IkXU/+LeEPGj6qLUXJAcXqTHEXmaW8h
-tbzaHVog1hMjOYuUoCfH+YAgKQ833P19IST6L2CsGh+LQZC3oPUBA7N2HGVa1RtL
-YNkHl4nKsh3yX5TxNadzMdfldoW3oBho0GnxaL93gFknFl+sEudEf7ExRJeXaFjo
-rCVelBEyVCfr0k6pngXCCfs/lw4SYqTb+k+ZbxA+WIgaTqOMUe62wThNnfHrENy6
-OKX6UltE6o5l5XbF3T12cmWemZzBWwOVGpWSUxoImM1isuYl+6DmAbZdcDBImY80
-lLTKlsK7uc9GfQfOmTCicDT9yTR16alIuxP262DfQryqYcwmHqjDwLLyk1JmdRYp
-/o94M++puGJfVSMk/3fBkmvVjH/4+J18ZQ/hW4F1pCWz9OSik+y1bOfSovihFeyB
-46TBIGnB
-=WRnA
------END PGP SIGNATURE-----
-
---=_MailMate_C127E265-4DDB-40BB-87AD-DB2006154019_=--
