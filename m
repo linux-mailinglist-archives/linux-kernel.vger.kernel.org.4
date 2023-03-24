@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6998D6C7A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948A96C7A9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjCXI75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S230102AbjCXJA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCXI7z (ORCPT
+        with ESMTP id S231986AbjCXJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:59:55 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2048D2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:59:53 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o32so670811wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:59:53 -0700 (PDT)
+        Fri, 24 Mar 2023 05:00:23 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0B63A8B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:00:17 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n10-20020a05600c4f8a00b003ee93d2c914so2353757wmq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679648392;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4h1y29ufgBdPBj0FinbulRj195jm8gHSccDSNysL7ng=;
-        b=RXGKhRMsOU+O1tqz6J/suUb0aU7VUqgtBJargaGNRHO4USwinGX4Q+o6F1N+3L2w1I
-         IvWNS7eL2Mq0WjlaGWdjqZcXoSMK/T0QMNwsmJFsOG8EOZPd73nIrMKCDkjY/McrjEt4
-         El++mpFcY/v6AmVH38u3nFhTLyp1GLdbgRMtyvhEvk98Pt717lCdKYIGPkPLogtqYwcq
-         mMaL1qfpq5O6vt+csqk1DCAwIxJroCgTYG0s1LW3gjgAWsRIXbZVSHRyZeKytvVMhmrz
-         byraSTt+tH/d4z/v/k+OIyK8gQ8JGLKXCrUgi2I9nf4VVRWdcafzGS/bK2673u6mhQhJ
-         ZZKA==
+        d=linaro.org; s=google; t=1679648415;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5xxjybCBQ7FBka5nE6E8+uHXCIz/6b/SCGTHJfPcbCM=;
+        b=a1FBd8hdYt0yM0X/QMw5JK93/6fmZkvcvOaCpGAhllGD9kZY3ocWprh/fBfy2T2rod
+         YkjH4UdxH2uedUuCvo+EkF57N3c7HVf3QBOceSd07Mza5R+OpESBolPUbeS2d8fEsBnh
+         OQSDXwfd2956PoRvrlESlWmo04/2c61Xl/bDa7ICS7G31P3ZvNNxX5D0+ZOcZrZ5tdVJ
+         2S9NsPv6/2vlegpFew239TZL4Ndvj2ZSLHjydzAhHLKc0SUYXBptCAACw1ytjJlvXLD2
+         ngcfW35TYBHM51xRfg++jvURD69Dmc0jU2GT+32k16t0vBRoghLroNVWI9Q6WKBRZRnc
+         Sc/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679648392;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4h1y29ufgBdPBj0FinbulRj195jm8gHSccDSNysL7ng=;
-        b=OVlI20+PlsZtXUndZTdWzmxR+XyDASKWPPDQ6BUo/ec7J5k3hC8DTMeL4/jSG+hm0T
-         gfw5qjKcOvb8MBrZSFwSmzm7FLrJTiDG5SgbI8fiIFTHlIqusZ8ER+VUukim2PwOGwyc
-         Lp5kLE0jO/g+6dlU4AffeRxyj6PMEEYB7SGPIRFOkSUydOiQ5c2S/3rZYRxt8HvydN9T
-         razwRgAxwuuR/zqXUbP9Mwxbwp6KGTQh+rb3HU81FnbPvjZ3+o6uTzE3qpw2bOhqlkFW
-         N2Ga9qb/4Wi9ecr0ld4HH5dyCyg+QmYcQc1aW+AHGZcgWU1Z1tuCi/t3ikz0xBshLd8N
-         oopg==
-X-Gm-Message-State: AO0yUKWNmdj8K2OT4ShK4TonfNLwIiSnVHnJ3ziKhZQaXHpD68FO5NqU
-        1X2OgvMXpZMcu+Dyfs4agWX8og==
-X-Google-Smtp-Source: AK7set9DG+XY29oWgPGOtByRIw0f/x7EReSCqkruYexEvZ/9XEyDyxvCA4c50AzdzXZSJ7vOBmBf6g==
-X-Received: by 2002:a05:600c:3b1b:b0:3ed:24f7:2b48 with SMTP id m27-20020a05600c3b1b00b003ed24f72b48mr4665100wms.8.1679648392490;
-        Fri, 24 Mar 2023 01:59:52 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:213f:a579:70af:e4a0? ([2a01:e0a:982:cbb0:213f:a579:70af:e4a0])
-        by smtp.gmail.com with ESMTPSA id y23-20020a7bcd97000000b003eb966d39desm4253441wmj.2.2023.03.24.01.59.50
+        d=1e100.net; s=20210112; t=1679648415;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xxjybCBQ7FBka5nE6E8+uHXCIz/6b/SCGTHJfPcbCM=;
+        b=iakLpsGLG2u9zdIAHIxRfTAmfXd0iDgec/G+/H8P7fAlbzFChyKIENMNF1DcdEw7Ma
+         BWHqef6FD8/p4TwuK5ePAgegIaiNZ9U1kffVYeJP0xKgAVNT+8iB1eNg75esXmMvTOET
+         Exy2lEC+wUhPKLyTi1uQrzZ0e95YvTrUJVjKIvv5RVemcw1amMMQu6ka6Ilnu9peCtUS
+         O/CRkH6ix/aeKFZoqgGl+BcORhb5z6rEVA18sMxDHBqc7ecquDXVWcvPs0xBIC/2yhSm
+         tEn50kaBda5cjNCv7MlucSMk95zlOijRT5PTlMImiz9Cj40tK/bywiL4tYqMseUSa4wu
+         9xGA==
+X-Gm-Message-State: AO0yUKVfNFkDYNA2hOomqkNRqp+77ODSkhajlNjRmVDYEOtDor7qRUAY
+        cAITGrLCCRcBJwRrZvqoRxxibA==
+X-Google-Smtp-Source: AK7set/G+BrnIBHzdKAcJLIchyTJ1+8LJ+VqEzbQ4F0KmkhucSNebeQVHkqJ+K4tuv21EwA1IHVe7Q==
+X-Received: by 2002:a7b:c459:0:b0:3eb:a4e:a2b2 with SMTP id l25-20020a7bc459000000b003eb0a4ea2b2mr1815337wmi.4.1679648415689;
+        Fri, 24 Mar 2023 02:00:15 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.152.149])
+        by smtp.gmail.com with ESMTPSA id n20-20020a7bc5d4000000b003ee10fb56ebsm4302953wmk.9.2023.03.24.02.00.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 01:59:52 -0700 (PDT)
-Message-ID: <18ad8d98-b67a-894b-9f6f-efb0afc8321c@linaro.org>
-Date:   Fri, 24 Mar 2023 09:59:50 +0100
+        Fri, 24 Mar 2023 02:00:15 -0700 (PDT)
+Message-ID: <78a9e002-ba18-c580-fe89-46f5653ea49d@linaro.org>
+Date:   Fri, 24 Mar 2023 10:00:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 6/8] arm64: dts: qcom: sm8450: remove invalid npl clock in
- vamacro node
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v7 3/6] PCI: Allow pci_bus_for_each_resource() to take
+ less arguments
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-scsi@vger.kernel.org
-References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
- <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-6-3ead1e418fe4@linaro.org>
- <35e3aa8b-ccff-25fa-42da-d8934ef366c6@linaro.org>
- <006bf3bf-ab9a-4a08-3ba5-fa23ff4ea05a@linaro.org>
- <306b02e8-72bf-3eb7-f4cc-3cc5c598993b@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <306b02e8-72bf-3eb7-f4cc-3cc5c598993b@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Anatolij Gustschin <agust@denx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
+ <20230323173610.60442-4-andriy.shevchenko@linux.intel.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20230323173610.60442-4-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -101,44 +112,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 08:17, Krzysztof Kozlowski wrote:
-> On 23/03/2023 14:13, Neil Armstrong wrote:
->> On 23/03/2023 11:47, Krzysztof Kozlowski wrote:
->>> On 23/03/2023 11:25, Neil Armstrong wrote:
->>>> Fixes the following DT bindings check error:
->>>> codec@33f0000: clocks: [[137, 57, 1], [137, 102, 1], [137, 103, 1], [137, 70, 1]] is too long
->>>> codec@33f0000: clock-names: 'oneOf' conditional failed, one must be fixed:
->>>> 	        ['mclk', 'macro', 'dcodec', 'npl'] is too long
->>>>
->>>> The implementation was checked and this npl clock isn't used for the VA macro.
->>>>
->>>
->>> This does not look correct. DTS looks good, you miss some patches in
->>> your tree.
->>
->> I'm based on today's linux-next,
+On 23/3/23 18:36, Andy Shevchenko wrote:
+> Refactor pci_bus_for_each_resource() in the same way as it's done in
+> pci_dev_for_each_resource() case. This will allow to hide iterator
+> inside the loop, where it's not used otherwise.
 > 
-> Which is unfortunately not enough. Several things were
-> fixed/added/changed and are pending. I brought the topic of pending
-> branch few times on IRC for that reason.
+> No functional changes intended.
 > 
->> while the other lpass macros uses the npl clock,
->> the lpass vamacro bindings doesn't document the npl clock.
->>
->> And I found no fixes whatsover to add the npl clock to bindings.
-> 
-> Really? lore finds it easily:
-> 
-> https://lore.kernel.org/all/20221118071849.25506-2-srinivas.kandagatla@linaro.org/
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+> ---
+>   drivers/pci/bus.c                  |  7 +++----
+>   drivers/pci/hotplug/shpchp_sysfs.c |  8 ++++----
+>   drivers/pci/pci.c                  |  3 +--
+>   drivers/pci/probe.c                |  2 +-
+>   drivers/pci/setup-bus.c            | 10 ++++------
+>   include/linux/pci.h                | 17 +++++++++++++----
+>   6 files changed, 26 insertions(+), 21 deletions(-)
 
-You're better at lore than me... thx anyway...
+Nice.
 
-Neil
-
-
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
