@@ -2,167 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AF46C7D22
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4CB6C7D26
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjCXLVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S230471AbjCXLWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCXLVQ (ORCPT
+        with ESMTP id S229830AbjCXLWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:21:16 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D198B22DC4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:21:14 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id o32so943499wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:21:14 -0700 (PDT)
+        Fri, 24 Mar 2023 07:22:21 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F2722DC4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:22:19 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id h8so6546543ede.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679656873;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=fairphone.com; s=fair; t=1679656938;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0xv+mNtTjOwpBHKb8GKtrxehmmp8291b5lSijCZpo2M=;
-        b=HuA2P+Axbp378wEn0s9/x4Yo8i3Od1knU145ZeLcEsCgQPLYA8N2ML/M7LUzGAIQkm
-         Ep18Pj30tpphoEw1yT09MKR43VxVWb7VsTmY8aeomzhCP1RT6z1SzialPE3n1fTYUWLY
-         4b7KhUXiOtpbHgb//g3Q/Bnuu03jkuC0O3KFRHGYoxyP09OZDcoMryVepCsAhwKPGub7
-         AgxvExRxeJZ1N7WVgFrU8L1ilPUBBVgmDXQBZR7FMIznSpYNNV2wdssl4z19x0bkIZbq
-         gNIpTMFLRnPjVab0dSjU8vQ2Zs4g5jyHHMb2ZRSMVrnT+pPnhkf4nN75qZlq9ITxg+sW
-         tOdA==
+        bh=HRr72t+4UZ9OP3mnlpRJ8YUSEtD1+XLxKD3GEqqnIeE=;
+        b=rByZavltipXd6PeR2v95ebI03dIGh+3m2D/LZWooOg5lz5WRzXzg/D3YV9l6c0uKxL
+         jmZHyS9y3jTCVpIFONpkVGKNXMgqnEoCtaALhrvBxRcbhy7HZAO65bc/g/LbBuXCXQQq
+         I0GAjGQd/+iNmUagoaSY16uUt3vBsSa/WZr3QMIH9KM3NswBASm4ZC0Y4Mn2CONJZed9
+         gY6oxtGvKUnV7EMSeoXWDnT23dCbFjxq4MKzORJ1TDHUbU2+aP0X8kol/QZ89GQ3s0Ec
+         bcIzag9bxLfvF2eRS7XN3NkjTpxb97uICwhyXyalcsyXQH5rGpou8OAfP+VUeZHyMHz4
+         6Feg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679656873;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+        d=1e100.net; s=20210112; t=1679656938;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=0xv+mNtTjOwpBHKb8GKtrxehmmp8291b5lSijCZpo2M=;
-        b=I1EiH9nW8fCmrVfQqBI4SfF0H8tbjLNlY2l59OhmPjHyHSKdWAxZ6WMP1id7wz153Y
-         8bLWmcT+8fzIKekoI9SOFhAVsYRcMJnW5JB23qiwfwQqYz2ZJbyEPedk/G6RkPtXTX2b
-         gtpgVidnaE0rY/j4XYtXhkXhewVaE8wVKfJuCbgRDC8Cwn9O4mG0idYwSj56uo0LdFK0
-         aAVYDyCYaHtVDe5OM4N10QGE0hl0uwjvZmSrhXFTZS5RrZB5bN431ipmw33IuaEafMN1
-         lUd6EotBoR03OVx8Vc223jBGm5QoVMcyvCMq7hvkU48eZeuL0H7HOv8/Y/N4bOK9t+5b
-         1enw==
-X-Gm-Message-State: AO0yUKV1uSjLlB3CRkqD6imdRp2X9waGdqvO1hw2h/waWeZE6NADY13m
-        kz29r8Pm5OaQBpJlDHc7PZFQZoD8INU=
-X-Google-Smtp-Source: AK7set+vAK+YrCS5/U3GOCqpd6jNW6jOgX7VnHc3aRQBrB3AVpAl5wBs7nZkuiRjcpTKrmpOFveSiQ==
-X-Received: by 2002:a1c:f217:0:b0:3ee:5c4c:bdb0 with SMTP id s23-20020a1cf217000000b003ee5c4cbdb0mr2079165wmc.39.1679656873188;
-        Fri, 24 Mar 2023 04:21:13 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id w4-20020a05600c474400b003edc9a5f98asm4775443wmo.44.2023.03.24.04.21.12
+        bh=HRr72t+4UZ9OP3mnlpRJ8YUSEtD1+XLxKD3GEqqnIeE=;
+        b=NWkkXUPOG1V06seUKON6mawIlEtYzwh2PPAXLSEoKB/MbTCvK6orvqTjRp7HVFgoUX
+         W9f6rrpG3yXYlV8hB3ldIx607KTzGYieW0VNcPZzT13WFuV1T2Qgg3rpffCgC5ayCqQR
+         qUt0iUnAvaLqpynKUqxhAppC/sEbnUc0FGc9F63Z8kaCIL88n3sND332/LAnwxeZfmPD
+         czERHFZhcj2+68dlJF/JorYnzIFqRHChMPtzboky44d+ncEMNUq1IQsKlRi6R1tQa1+V
+         r+s2ick+V9JqdFkA9V74fLEeE33pRJOl7w8XIalQMz1V9nOpLG5um5Lviz3QlEVuidH8
+         O8VQ==
+X-Gm-Message-State: AAQBX9fSB6ZizFEA2RRuAHTfKPpzz6mTY663dQOkbD9QlmQ/0UkkjKd0
+        ATMY6U6MPRHrqGaKUteFwhOKmA==
+X-Google-Smtp-Source: AKy350bjEB9tApb06Tb8yG8b1P3/ZPV+Lg4I1D0D6bOj4xxx8mW783dZePdsRRnmgNADtBJDf0pU8g==
+X-Received: by 2002:a17:906:5288:b0:932:3d1b:b67a with SMTP id c8-20020a170906528800b009323d1bb67amr2333180ejm.41.1679656938274;
+        Fri, 24 Mar 2023 04:22:18 -0700 (PDT)
+Received: from localhost (84-115-214-73.cable.dynamic.surfer.at. [84.115.214.73])
+        by smtp.gmail.com with ESMTPSA id g9-20020a056402320900b004fd219242a5sm10458496eda.7.2023.03.24.04.22.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 04:21:12 -0700 (PDT)
-Message-ID: <e50ebe1a-73a0-5800-71e3-0ddd366727ac@gmail.com>
-Date:   Fri, 24 Mar 2023 11:21:11 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: re: f2fs: factor out discard_cmd usage from general rb_tree use
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Fri, 24 Mar 2023 04:22:18 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 24 Mar 2023 12:22:17 +0100
+Message-Id: <CREKOWOABXLP.28VKF824CFB3O@otso>
+To:     "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        <broonie@kernel.org>
+Cc:     <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <steev@kali.org>, <johan+linaro@kernel.org>,
+        <quic_bjorande@quicinc.com>
+Subject: Re: [PATCH 5/8] ASoC: codecs: lpass: register mclk after runtime pm
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.14.0
+References: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
+ <20230209122806.18923-6-srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230209122806.18923-6-srinivas.kandagatla@linaro.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Srinivas,
 
-static analysis with clang scan build has detected a potential issue 
-introduced by the following commit:
+On Thu Feb 9, 2023 at 1:28 PM CET, Srinivas Kandagatla wrote:
+> move mclk out registration after runtime pm is enabled so that the
+> clk framework can resume the codec if it requires to enable the mclk out.
+>
+> Fixes: c96baa2949b2 ("ASoC: codecs: wsa-macro: add runtime pm support")
+> Fixes: 72ad25eabda0 ("ASoC: codecs: va-macro: add runtime pm support")
+> Fixes: 366ff79ed539 ("ASoC: codecs: rx-macro: add runtime pm support")
+> Fixes: 1fb83bc5cf64 ("ASoC: codecs: tx-macro: add runtime pm support")
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-commit 7e9775a516ff6c1e73ee2b42ec563cafee38f42f
-Author: Jaegeuk Kim <jaegeuk@kernel.org>
-Date:   Fri Mar 10 11:12:35 2023 -0800
+I see the following remoteproc crash with this patch in on
+sm6350/sm7225-fairphone-fp4.
 
-f2fs: factor out discard_cmd usage from general rb_tree use
+To be clear, all the audio parts for that SoC are not upstream (yet) and
+there's still many issues to solve so not sure if it's actually my fault.
+
+Anyways, getting this crash after starting adsp.
+
+[   97.212943] qcom_q6v5_pas 3000000.remoteproc: fatal error received: ABT_=
+dal.c:287:ABTimeout: AHB Bus hang is detected, Number of bus hang detected =
+:=3D 1 , addr0 =3D 0x3370000 , addr1 =3D 0x0!!!
+[   97.212995] remoteproc remoteproc0: crash detected in 3000000.remoteproc=
+: type fatal error
+[   97.213015] remoteproc remoteproc0: handling crash #1 in 3000000.remotep=
+roc
+[   97.213022] remoteproc remoteproc0: recovering 3000000.remoteproc
+
+This happens just after some clocks on the adsp get disabled, this is
+from my own debug prints:
+[   97.189097] q6afe_set_lpass_clock: clk_id=3D780, attri=3D1, clk_root=3D0=
+, freq=3D0
+[   97.189426] q6afe_set_lpass_clock: clk_id=3D781, attri=3D1, clk_root=3D0=
+, freq=3D0
+
+And then a couple of seconds later the whole phone just crashes into the
+900e mode.
+
+Regards
+Luca
 
 
-The warning is as follows:
-
-fs/f2fs/segment.c:1425:4: warning: Value stored to 'tdc' is never read 
-[deadcode.DeadStores]
-
-The while loop in function __update_discard_tree_range is as follows (+ 
-my annotations):
-
-
-         while (1) {
-                 struct rb_node *node;
-                 struct discard_cmd *tdc = NULL;
-
-### tdc is set to NULL
-
-                 if (prev_dc) {
-                         di.lstart = prev_dc->di.lstart + prev_dc->di.len;
-                         if (di.lstart < lstart)
-                                 di.lstart = lstart;
-                         if (di.lstart >= end)
-                                 break;
-
-                         if (!next_dc || next_dc->di.lstart > end)
-                                 di.len = end - di.lstart;
-                         else
-                                 di.len = next_dc->di.lstart - di.lstart;
-                         di.start = start + di.lstart - lstart;
-                 }
-
-                 if (!di.len)
-                         goto next;
-
-                 if (prev_dc && prev_dc->state == D_PREP &&
-                         prev_dc->bdev == bdev &&
-                         __is_discard_back_mergeable(&di, &prev_dc->di,
- 
-max_discard_blocks)) {
-                         prev_dc->di.len += di.len;
-                         dcc->undiscard_blks += di.len;
-                         __relocate_discard_cmd(dcc, prev_dc);
-                         di = prev_dc->di;
-                         tdc = prev_dc;
-
-### tdc is set to prev_dc, however, it is not not read any more with th 
-introduction of the "goto next"" statement introduced in the commit 
-mentioned earlier
-
-                         goto next;
-                 }
-
-                 if (next_dc && next_dc->state == D_PREP &&
-                         next_dc->bdev == bdev &&
-                         __is_discard_front_mergeable(&di, &next_dc->di,
- 
-max_discard_blocks)) {
-                         next_dc->di.lstart = di.lstart;
-                         next_dc->di.len += di.len;
-                         next_dc->di.start = di.start;
-                         dcc->undiscard_blks += di.len;
-                         __relocate_discard_cmd(dcc, next_dc);
-
-### tdc is always NULL, there is no path to this code where tdc is ever 
-set to a non-NULL value.
-
-                         if (tdc)
-                                 __remove_discard_cmd(sbi, tdc);
-                         goto next;
-                 }
-
-                 __insert_discard_cmd(sbi, bdev, di.lstart, di.start, 
-di.len);
-  next:
-                 prev_dc = next_dc;
-                 if (!prev_dc)
-                         break;
-
-                 node = rb_next(&prev_dc->rb_node);
-                 next_dc = rb_entry_safe(node, struct discard_cmd, rb_node);
-         }
-
+> ---
+>  sound/soc/codecs/lpass-rx-macro.c  |  8 ++++----
+>  sound/soc/codecs/lpass-tx-macro.c  |  8 ++++----
+>  sound/soc/codecs/lpass-va-macro.c  | 20 ++++++++++----------
+>  sound/soc/codecs/lpass-wsa-macro.c |  9 ++++-----
+>  4 files changed, 22 insertions(+), 23 deletions(-)
+>
+> diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-r=
+x-macro.c
+> index a9ef9d5ffcc5..dd6970d5eb8d 100644
+> --- a/sound/soc/codecs/lpass-rx-macro.c
+> +++ b/sound/soc/codecs/lpass-rx-macro.c
+> @@ -3601,10 +3601,6 @@ static int rx_macro_probe(struct platform_device *=
+pdev)
+>  	if (ret)
+>  		goto err_fsgen;
+> =20
+> -	ret =3D rx_macro_register_mclk_output(rx);
+> -	if (ret)
+> -		goto err_clkout;
+> -
+>  	ret =3D devm_snd_soc_register_component(dev, &rx_macro_component_drv,
+>  					      rx_macro_dai,
+>  					      ARRAY_SIZE(rx_macro_dai));
+> @@ -3618,6 +3614,10 @@ static int rx_macro_probe(struct platform_device *=
+pdev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+> =20
+> +	ret =3D rx_macro_register_mclk_output(rx);
+> +	if (ret)
+> +		goto err_clkout;
+> +
+>  	return 0;
+> =20
+>  err_clkout:
+> diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-t=
+x-macro.c
+> index 2ef62d6edc30..b9475ba55e20 100644
+> --- a/sound/soc/codecs/lpass-tx-macro.c
+> +++ b/sound/soc/codecs/lpass-tx-macro.c
+> @@ -2036,10 +2036,6 @@ static int tx_macro_probe(struct platform_device *=
+pdev)
+>  	if (ret)
+>  		goto err_fsgen;
+> =20
+> -	ret =3D tx_macro_register_mclk_output(tx);
+> -	if (ret)
+> -		goto err_clkout;
+> -
+>  	ret =3D devm_snd_soc_register_component(dev, &tx_macro_component_drv,
+>  					      tx_macro_dai,
+>  					      ARRAY_SIZE(tx_macro_dai));
+> @@ -2052,6 +2048,10 @@ static int tx_macro_probe(struct platform_device *=
+pdev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+> =20
+> +	ret =3D tx_macro_register_mclk_output(tx);
+> +	if (ret)
+> +		goto err_clkout;
+> +
+>  	return 0;
+> =20
+>  err_clkout:
+> diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-v=
+a-macro.c
+> index b0b6cf29cba3..1623ba78ddb3 100644
+> --- a/sound/soc/codecs/lpass-va-macro.c
+> +++ b/sound/soc/codecs/lpass-va-macro.c
+> @@ -1524,16 +1524,6 @@ static int va_macro_probe(struct platform_device *=
+pdev)
+>  	if (ret)
+>  		goto err_mclk;
+> =20
+> -	ret =3D va_macro_register_fsgen_output(va);
+> -	if (ret)
+> -		goto err_clkout;
+> -
+> -	va->fsgen =3D clk_hw_get_clk(&va->hw, "fsgen");
+> -	if (IS_ERR(va->fsgen)) {
+> -		ret =3D PTR_ERR(va->fsgen);
+> -		goto err_clkout;
+> -	}
+> -
+>  	if (va->has_swr_master) {
+>  		/* Set default CLK div to 1 */
+>  		regmap_update_bits(va->regmap, CDC_VA_TOP_CSR_SWR_MIC_CTL0,
+> @@ -1560,6 +1550,16 @@ static int va_macro_probe(struct platform_device *=
+pdev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+> =20
+> +	ret =3D va_macro_register_fsgen_output(va);
+> +	if (ret)
+> +		goto err_clkout;
+> +
+> +	va->fsgen =3D clk_hw_get_clk(&va->hw, "fsgen");
+> +	if (IS_ERR(va->fsgen)) {
+> +		ret =3D PTR_ERR(va->fsgen);
+> +		goto err_clkout;
+> +	}
+> +
+>  	return 0;
+> =20
+>  err_clkout:
+> diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-=
+wsa-macro.c
+> index 5cfe96f6e430..c0b86d69c72e 100644
+> --- a/sound/soc/codecs/lpass-wsa-macro.c
+> +++ b/sound/soc/codecs/lpass-wsa-macro.c
+> @@ -2451,11 +2451,6 @@ static int wsa_macro_probe(struct platform_device =
+*pdev)
+>  	if (ret)
+>  		goto err_fsgen;
+> =20
+> -	ret =3D wsa_macro_register_mclk_output(wsa);
+> -	if (ret)
+> -		goto err_clkout;
+> -
+> -
+>  	ret =3D devm_snd_soc_register_component(dev, &wsa_macro_component_drv,
+>  					      wsa_macro_dai,
+>  					      ARRAY_SIZE(wsa_macro_dai));
+> @@ -2468,6 +2463,10 @@ static int wsa_macro_probe(struct platform_device =
+*pdev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+> =20
+> +	ret =3D wsa_macro_register_mclk_output(wsa);
+> +	if (ret)
+> +		goto err_clkout;
+> +
+>  	return 0;
+> =20
+>  err_clkout:
+> --=20
+> 2.21.0
 
