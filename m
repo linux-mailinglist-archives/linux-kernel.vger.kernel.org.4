@@ -2,680 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEBC6C77FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0B66C7806
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjCXGdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S231722AbjCXGfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjCXGda (ORCPT
+        with ESMTP id S230380AbjCXGe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:33:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 069768699;
-        Thu, 23 Mar 2023 23:33:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cxhdg2RB1kHZ4QAA--.25574S3;
-        Fri, 24 Mar 2023 14:33:26 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxsOQuRB1k8fgKAA--.40991S4;
-        Fri, 24 Mar 2023 14:33:25 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi controller
-Date:   Fri, 24 Mar 2023 14:33:17 +0800
-Message-Id: <20230324063317.14664-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230324063317.14664-1-zhuyinbo@loongson.cn>
-References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
+        Fri, 24 Mar 2023 02:34:58 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DF31C5A0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:34:32 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id b18so1016783ybp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679639672;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xBLmTAPDD5R1yIJVPKxnGTOis+Y34N+PiOtQubcy4XQ=;
+        b=HMW/HWHq8YXdjGkFL4a+9US42pYccd/K99f61jGuD7kEQ2Oo5CSwGVhCbjBateNxfq
+         ZQS0dflr2de6sTLxlYD2MB3yvpawmZhcX2CmgzhKArQn04p686Q34+zUV1Cs1WtQUZP9
+         M85yBeEUcMe97zm50SOf33tGlMaN88EWSX2oGn0GYn/eItN85jvjY5zQjRw0E3HxCqj1
+         mhXlf4GXeADDiLHshZyFRPkHmfeBpRKq9Q7olhB6SwUIZ9lMxidcKJqZdyh8GhyxD3Yp
+         Q0wUOsjcmQvLgxGsK/DEkvjzyr26a+wInIpinWUwfBX68+8CDNncvp1dqVjFjrzxqe9s
+         /GKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679639672;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBLmTAPDD5R1yIJVPKxnGTOis+Y34N+PiOtQubcy4XQ=;
+        b=i38c3sokL4+ddejAOSieMppGMNfzh3j1uDr9xo2e9RTOqOMjfHV5i8aygDEVJACgUG
+         +s49jx2nTksF5YeN+FrmGNFTXI99yg8+EfSpe/FHCBsM7FPDaXB3fUYeXLciGaEZVOYO
+         0z2ECoK44mq9pY6bQmwIjHdKWtXJMzVSu7w3qT/Ci2iFgosyjiYnEIEojwkTFJCC74Jk
+         KESSsBCdYXzfGt7qTSggJdonER00dU9TPEhWqDtyXD2mrOkfRiMZv+t4YFt2i4hczNwE
+         wp4Lq/H/mRR3A5zce9Xcb9BYZi8KWF7768Uv65AzQJj9ABE2cPXDgyl6qaXvT00/tzzh
+         bw+g==
+X-Gm-Message-State: AAQBX9fIiFiIXMupVnv/gLuK2cGJQtIAxgBwdng1zhaIPSCkkCgloOnF
+        rBDW1nDxmmCtSfAgFU5G2gtmhrgbronsflYnd8nTKg==
+X-Google-Smtp-Source: AKy350akey46vO/29yZJ09UctkZycjISDVnjzOikdoJnNjgVlZdk9miYsI24cwUI7xvpPU2bo1kyZUFZev+jJeyURBo=
+X-Received: by 2002:a05:6902:168d:b0:b6c:2d28:b3e7 with SMTP id
+ bx13-20020a056902168d00b00b6c2d28b3e7mr714718ybb.9.1679639671817; Thu, 23 Mar
+ 2023 23:34:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxsOQuRB1k8fgKAA--.40991S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3KFyfJF4kJw1kKFWkuF15urg_yoW8CFyfXo
-        WxZ3Z5Xr48ur18GF1jqr1FqFy7Xa45WrZ0yrs3A3WkJay5tFyDJr9xJrW7CF18Z3W3JFy3
-        AFySgFW8KF4IgrWkn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UU901xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFV
-        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvY
-        zxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4
-        xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCa
-        FVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz4
-        8v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw
-        0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-        v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jYKZXUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat> <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat> <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+In-Reply-To: <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 24 Mar 2023 14:34:19 +0800
+Message-ID: <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device creation
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000003041d05f79f968c"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bus driver supports the Loongson spi hardware controller in the
-Loongson platforms and supports to use DTS and PCI framework to
-register spi device resources.
+--00000000000003041d05f79f968c
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- MAINTAINERS                     |   4 +
- drivers/spi/Kconfig             |  31 ++++
- drivers/spi/Makefile            |   3 +
- drivers/spi/spi-loongson-core.c | 302 ++++++++++++++++++++++++++++++++
- drivers/spi/spi-loongson-pci.c  |  89 ++++++++++
- drivers/spi/spi-loongson-plat.c |  66 +++++++
- drivers/spi/spi-loongson.h      |  41 +++++
- 7 files changed, 536 insertions(+)
- create mode 100644 drivers/spi/spi-loongson-core.c
- create mode 100644 drivers/spi/spi-loongson-pci.c
- create mode 100644 drivers/spi/spi-loongson-plat.c
- create mode 100644 drivers/spi/spi-loongson.h
+On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>
+> On 3/23/23 18:36, Maxime Ripard wrote:
+> > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> >> On 3/23/23 14:29, Maxime Ripard wrote:
+> >>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> >>>
+> >>> This is the description of what was happening:
+> >>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
+> >>
+> >> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
+> >> when root_device_register() is used is not because root_device_unregister()
+> >> would not trigger the unwinding - but rather because DRM code on top of this
+> >> device keeps the refcount increased?
+> >
+> > There's a difference of behaviour between a root_device and any device
+> > with a bus: the root_device will only release the devm resources when
+> > it's freed (in device_release), but a bus device will also do it in
+> > device_del (through bus_remove_device() -> device_release_driver() ->
+> > device_release_driver_internal() -> __device_release_driver() ->
+> > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > there's no bus and no driver attached to the device).
+> >
+> > It does affect DRM, but I'm pretty sure it will affect any framework
+> > that deals with device hotplugging by deferring the framework structure
+> > until the last (userspace) user closes its file descriptor. So I'd
+> > assume that v4l2 and cec at least are also affected, and most likely
+> > others.
+>
+> Thanks for the explanation and patience :)
+>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9bc2158c735d..f2b1ad2c785a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12162,6 +12162,10 @@ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
-+F:	drivers/spi/spi-loongson-core.c
-+F:	drivers/spi/spi-loongson-pci.c
-+F:	drivers/spi/spi-loongson-plat.c
-+F:	drivers/spi/spi-loongson.h
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
- M:	Sathya Prakash <sathya.prakash@broadcom.com>
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index cbf60b6a931c..87f87ee35d27 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -509,6 +509,37 @@ config SPI_LM70_LLP
- 	  which interfaces to an LM70 temperature sensor using
- 	  a parallel port.
- 
-+config SPI_LOONGSON_CORE
-+	tristate "Loongson SPI Controller Core Driver Support"
-+	depends on LOONGARCH || COMPILE_TEST
-+	help
-+	  This core driver supports the Loongson spi hardware controller in
-+	  the Loongson platforms.
-+	  Say Y or M here if you want to use the SPI controller on
-+	  Loongson platform.
-+
-+config SPI_LOONGSON_PCI
-+	tristate "Loongson SPI Controller PCI Driver Support"
-+	select SPI_LOONGSON_CORE
-+	depends on PCI && (LOONGARCH || COMPILE_TEST)
-+	help
-+	  This bus driver supports the Loongson spi hardware controller in
-+	  the Loongson platforms and supports to use PCI framework to
-+	  register spi device resources.
-+	  Say Y or M here if you want to use the SPI controller on
-+	  Loongson platform.
-+
-+config SPI_LOONGSON_PLATFORM
-+	tristate "Loongson SPI Controller Platform Driver Support"
-+	select SPI_LOONGSON_CORE
-+	depends on OF && (LOONGARCH || COMPILE_TEST)
-+	help
-+	  This bus driver supports the Loongson spi hardware controller in
-+	  the Loongson platforms and supports to use DTS framework to
-+	  register spi device resources.
-+	  Say Y or M here if you want to use the SPI controller on
-+	  Loongson platform.
-+
- config SPI_LP8841_RTC
- 	tristate "ICP DAS LP-8841 SPI Controller for RTC"
- 	depends on MACH_PXA27X_DT || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index d87cf75bee6a..a4931aa64476 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -70,6 +70,9 @@ obj-$(CONFIG_SPI_INTEL_PLATFORM)	+= spi-intel-platform.o
- obj-$(CONFIG_SPI_LANTIQ_SSC)		+= spi-lantiq-ssc.o
- obj-$(CONFIG_SPI_JCORE)			+= spi-jcore.o
- obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
-+obj-$(CONFIG_SPI_LOONGSON_CORE)		+= spi-loongson-core.o
-+obj-$(CONFIG_SPI_LOONGSON_PCI)		+= spi-loongson-pci.o
-+obj-$(CONFIG_SPI_LOONGSON_PLATFORM)	+= spi-loongson-plat.o
- obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
- obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
- obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
-diff --git a/drivers/spi/spi-loongson-core.c b/drivers/spi/spi-loongson-core.c
-new file mode 100644
-index 000000000000..9c13a92c0926
---- /dev/null
-+++ b/drivers/spi/spi-loongson-core.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+// Loongson SPI Support
-+// Copyright (C) 2023 Loongson Technology Corporation Limited
-+
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/interrupt.h>
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/spi/spi.h>
-+#include <linux/clk.h>
-+
-+#include "spi-loongson.h"
-+
-+static inline void loongson_spi_write_reg(struct loongson_spi *spi, unsigned char reg,
-+					  unsigned char data)
-+{
-+	writeb(data, spi->base + reg);
-+}
-+
-+static inline char loongson_spi_read_reg(struct loongson_spi *spi, unsigned char reg)
-+{
-+	return readb(spi->base + reg);
-+}
-+
-+static void loongson_spi_set_cs(struct spi_device *spi, bool val)
-+{
-+	int cs;
-+	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
-+
-+	if (loongson_spi->mode & SPI_NO_CS)
-+		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG, 0);
-+	else {
-+		cs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG)
-+					   & ~(0x11 << spi->chip_select);
-+		loongson_spi_write_reg(loongson_spi,
-+				       LOONGSON_SPI_SFCS_REG,
-+				       (val ? (0x11 << spi->chip_select) :
-+				       (0x1 << spi->chip_select)) | cs);
-+	}
-+}
-+
-+static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
-+				     struct spi_device *spi, struct spi_transfer *t)
-+{
-+	unsigned int hz;
-+	unsigned int div, div_tmp;
-+	unsigned int bit;
-+	unsigned char val;
-+	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
-+
-+	if (t)
-+		hz = t->speed_hz;
-+
-+	if ((hz && loongson_spi->hz != hz) ||
-+	    ((spi->mode ^ loongson_spi->mode) & (SPI_CPOL | SPI_CPHA))) {
-+		div = DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
-+		if (div < 2)
-+			div = 2;
-+		if (div > 4096)
-+			div = 4096;
-+
-+		bit = fls(div) - 1;
-+		if ((1<<bit) == div)
-+			bit--;
-+		div_tmp = rdiv[bit];
-+		dev_dbg(&spi->dev, "clk_rate = %llu hz = %d div_tmp = %d bit = %d\n",
-+			loongson_spi->clk_rate, hz, div_tmp, bit);
-+
-+		loongson_spi->hz = hz;
-+		loongson_spi->spcr = div_tmp & 3;
-+		loongson_spi->sper = (div_tmp >> 2) & 3;
-+		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
-+		val &= ~0xc;
-+		if (spi->mode & SPI_CPOL)
-+			val |= 8;
-+		if (spi->mode & SPI_CPHA)
-+			val |= 4;
-+
-+		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, (val & ~3) |
-+				       loongson_spi->spcr);
-+		val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
-+		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, (val & ~3) |
-+				       loongson_spi->sper);
-+		loongson_spi->mode &= SPI_NO_CS;
-+		loongson_spi->mode |= spi->mode;
-+	}
-+
-+	return 0;
-+}
-+
-+static int loongson_spi_setup(struct spi_device *spi)
-+{
-+	struct loongson_spi *loongson_spi;
-+
-+	loongson_spi = spi_master_get_devdata(spi->master);
-+	if (spi->bits_per_word % 8)
-+		return -EINVAL;
-+
-+	if (spi->chip_select >= spi->master->num_chipselect)
-+		return -EINVAL;
-+
-+	loongson_spi->hz = 0;
-+	loongson_spi->mode &= SPI_NO_CS;
-+	loongson_spi_set_cs(spi, 1);
-+
-+	return 0;
-+}
-+
-+static int loongson_spi_write_read_8bit(struct spi_device *spi, const u8 **tx_buf,
-+					u8 **rx_buf, unsigned int num)
-+{
-+	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
-+	unsigned long timeout = jiffies + SPI_COMPLETION_TIMEOUT;
-+
-+	if (tx_buf && *tx_buf) {
-+		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, *((*tx_buf)++));
-+		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
-+			time_after(timeout, jiffies))
-+			cpu_relax();
-+	} else {
-+		loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_FIFO_REG, 0);
-+		while ((loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG) & 0x1) == 1 &&
-+			time_after(timeout, jiffies))
-+			cpu_relax();
-+	}
-+
-+	if (rx_buf && *rx_buf)
-+		*(*rx_buf)++ = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_FIFO_REG);
-+	else
-+		loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_FIFO_REG);
-+
-+	return 0;
-+}
-+
-+static unsigned int loongson_spi_write_read(struct spi_device *spi, struct spi_transfer *xfer)
-+{
-+	unsigned int count;
-+	const u8 *tx = xfer->tx_buf;
-+	u8 *rx = xfer->rx_buf;
-+
-+	count = xfer->len;
-+
-+	do {
-+		if (loongson_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
-+			goto out;
-+		count--;
-+	} while (count);
-+
-+out:
-+	return xfer->len - count;
-+}
-+
-+static int loongson_spi_prepare_message(struct spi_controller *ctlr, struct spi_message *m)
-+{
-+	struct loongson_spi *loongson_spi = spi_controller_get_devdata(ctlr);
-+
-+	loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, loongson_spi->para & ~1);
-+
-+	return 0;
-+}
-+
-+static int loongson_spi_transfer_one(struct spi_controller *ctrl, struct spi_device *spi,
-+				     struct spi_transfer *xfer)
-+{
-+	struct loongson_spi *loongson_spi = spi_master_get_devdata(spi->master);
-+
-+	loongson_spi_update_state(loongson_spi, spi, xfer);
-+	if (xfer->len)
-+		xfer->len = loongson_spi_write_read(spi, xfer);
-+
-+	return 0;
-+}
-+
-+static int loongson_spi_unprepare_message(struct spi_controller *ctrl, struct spi_message *m)
-+{
-+	struct loongson_spi *loongson_spi = spi_controller_get_devdata(ctrl);
-+
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, loongson_spi->para);
-+
-+	return 0;
-+}
-+
-+static void loongson_spi_reginit(struct loongson_spi *loongson_spi_dev)
-+{
-+	unsigned char val;
-+
-+	val = loongson_spi_read_reg(loongson_spi_dev, LOONGSON_SPI_SPCR_REG);
-+	val &= ~LOONGSON_SPI_SPCR_SPE;
-+	loongson_spi_write_reg(loongson_spi_dev, LOONGSON_SPI_SPCR_REG, val);
-+
-+	loongson_spi_write_reg(loongson_spi_dev, LOONGSON_SPI_SPSR_REG,
-+			       (LOONGSON_SPI_SPSR_SPIF | LOONGSON_SPI_SPSR_WCOL));
-+
-+	val = loongson_spi_read_reg(loongson_spi_dev, LOONGSON_SPI_SPCR_REG);
-+	val |= LOONGSON_SPI_SPCR_SPE;
-+	loongson_spi_write_reg(loongson_spi_dev, LOONGSON_SPI_SPCR_REG, val);
-+}
-+
-+int loongson_spi_init_master(struct device *dev, struct resource *res)
-+{
-+	struct spi_master *master;
-+	struct loongson_spi *spi;
-+	struct clk *clk;
-+	int ret;
-+
-+	master = spi_alloc_master(dev, sizeof(struct loongson_spi));
-+	if (master == NULL) {
-+		dev_dbg(dev, "master allocation failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
-+	master->setup = loongson_spi_setup;
-+	master->prepare_message = loongson_spi_prepare_message;
-+	master->transfer_one = loongson_spi_transfer_one;
-+	master->unprepare_message = loongson_spi_unprepare_message;
-+	master->set_cs = loongson_spi_set_cs;
-+	master->num_chipselect = 4;
-+	master->dev.of_node = of_node_get(dev->of_node);
-+	dev_set_drvdata(dev, master);
-+
-+	spi = spi_master_get_devdata(master);
-+
-+	spi->master = master;
-+
-+	spi->base = devm_ioremap(dev, res->start, resource_size(res));
-+	if (spi->base == NULL) {
-+		dev_err(dev, "cannot map io\n");
-+		ret = -ENXIO;
-+		goto free_master;
-+	}
-+
-+	clk = devm_clk_get(dev, NULL);
-+	if (!IS_ERR(clk))
-+		spi->clk_rate = clk_get_rate(clk);
-+
-+	loongson_spi_reginit(spi);
-+
-+	spi->mode = 0;
-+	if (of_get_property(dev->of_node, "spi-nocs", NULL))
-+		spi->mode |= SPI_NO_CS;
-+
-+	ret = spi_register_master(master);
-+	if (ret < 0)
-+		goto free_master;
-+
-+	return ret;
-+
-+free_master:
-+	kfree(master);
-+	spi_master_put(master);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(loongson_spi_init_master);
-+
-+static int __maybe_unused loongson_spi_suspend(struct device *dev)
-+{
-+	struct loongson_spi *loongson_spi;
-+	struct spi_master *master;
-+
-+	master = dev_get_drvdata(dev);
-+	loongson_spi = spi_master_get_devdata(master);
-+
-+	loongson_spi->spcr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
-+	loongson_spi->sper = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
-+	loongson_spi->spsr = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPSR_REG);
-+	loongson_spi->para = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_PARA_REG);
-+	loongson_spi->sfcs = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SFCS_REG);
-+	loongson_spi->timi = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_TIMI_REG);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused loongson_spi_resume(struct device *dev)
-+{
-+	struct loongson_spi *loongson_spi;
-+	struct spi_master *master;
-+
-+	master = dev_get_drvdata(dev);
-+	loongson_spi = spi_master_get_devdata(master);
-+
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, loongson_spi->spcr);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG, loongson_spi->sper);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPSR_REG, loongson_spi->spsr);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_PARA_REG, loongson_spi->para);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SFCS_REG, loongson_spi->sfcs);
-+	loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_TIMI_REG, loongson_spi->timi);
-+
-+	return 0;
-+}
-+
-+const struct dev_pm_ops loongson_spi_dev_pm_ops = {
-+	.suspend = loongson_spi_suspend,
-+	.resume = loongson_spi_resume,
-+};
-+
-+MODULE_DESCRIPTION("Loongson spi core driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-loongson-pci.c b/drivers/spi/spi-loongson-pci.c
-new file mode 100644
-index 000000000000..b811de769ecb
---- /dev/null
-+++ b/drivers/spi/spi-loongson-pci.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+// PCI interface driver for Loongson SPI Support
-+// Copyright (C) 2023 Loongson Technology Corporation Limited
-+
-+#include <linux/pci.h>
-+
-+#include "spi-loongson.h"
-+
-+static int loongson_spi_pci_register(struct pci_dev *pdev,
-+			const struct pci_device_id *ent)
-+{
-+	int ret;
-+	unsigned char v8;
-+	struct resource res[2];
-+	struct device *dev = &pdev->dev;
-+
-+	ret = pci_enable_device(pdev);
-+	if (ret < 0) {
-+		dev_err(dev, "cannot enable pci device\n");
-+		goto err_out;
-+	}
-+
-+	ret = pci_request_region(pdev, 0, "loongson-spi io");
-+	if (ret < 0) {
-+		dev_err(dev, "cannot request region 0.\n");
-+		goto err_out;
-+	}
-+
-+	res[0].start = pci_resource_start(pdev, 0);
-+	res[0].end = pci_resource_end(pdev, 0);
-+	ret = pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &v8);
-+
-+	if (ret == PCIBIOS_SUCCESSFUL) {
-+		res[1].start = v8;
-+		res[1].end = v8;
-+	}
-+
-+	ret = loongson_spi_init_master(dev, res);
-+	if (ret)
-+		dev_err(dev, "failed to initialize master\n");
-+
-+err_out:
-+	return ret;
-+}
-+
-+static void loongson_spi_pci_unregister(struct pci_dev *pdev)
-+{
-+	pci_release_region(pdev, 0);
-+}
-+
-+static struct pci_device_id loongson_spi_devices[] = {
-+	{PCI_DEVICE(0x14, 0x7a0b)},
-+	{PCI_DEVICE(0x14, 0x7a1b)},
-+	{0, 0, 0, 0, 0, 0, 0}
-+};
-+MODULE_DEVICE_TABLE(pci, loongson_spi_devices);
-+
-+static struct pci_driver loongson_spi_pci_driver = {
-+	.name       = "loongson-spi-pci",
-+	.id_table   = loongson_spi_devices,
-+	.probe      = loongson_spi_pci_register,
-+	.remove     = loongson_spi_pci_unregister,
-+	.driver	= {
-+		.bus = &pci_bus_type,
-+		.pm = &loongson_spi_dev_pm_ops,
-+	},
-+};
-+
-+static int __init loongson_spi_pci_init(void)
-+{
-+	int ret;
-+
-+	ret = pci_register_driver(&loongson_spi_pci_driver);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void __exit loongson_spi_pci_exit(void)
-+{
-+	pci_unregister_driver(&loongson_spi_pci_driver);
-+}
-+
-+module_init(loongson_spi_pci_init);
-+module_exit(loongson_spi_pci_exit);
-+
-+MODULE_DESCRIPTION("Loongson spi pci driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-loongson-plat.c b/drivers/spi/spi-loongson-plat.c
-new file mode 100644
-index 000000000000..8f4aa70168f3
---- /dev/null
-+++ b/drivers/spi/spi-loongson-plat.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+// Platform driver for Loongson SPI Support
-+// Copyright (C) 2023 Loongson Technology Corporation Limited
-+
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+
-+#include "spi-loongson.h"
-+
-+static int loongson_spi_platform_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	int ret;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (res == NULL) {
-+		dev_err(dev, "cannot get io resource memory\n");
-+		return -ENOENT;
-+	}
-+
-+	ret = loongson_spi_init_master(dev, res);
-+	if (ret)
-+		dev_err(dev, "failed to initialize master\n");
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id loongson_spi_id_table[] = {
-+	{ .compatible = "loongson,ls2k-spi", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, loongson_spi_id_table);
-+
-+static struct platform_driver loongson_spi_plat_driver = {
-+	.probe = loongson_spi_platform_probe,
-+	.driver	= {
-+		.name	= "loongson-spi",
-+		.owner	= THIS_MODULE,
-+		.bus = &platform_bus_type,
-+		.pm = &loongson_spi_dev_pm_ops,
-+		.of_match_table = loongson_spi_id_table,
-+	},
-+};
-+
-+static int __init loongson_spi_plat_init(void)
-+{
-+	int ret;
-+
-+	ret = platform_driver_register(&loongson_spi_plat_driver);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void __exit loongson_spi_plat_exit(void)
-+{
-+	platform_driver_unregister(&loongson_spi_plat_driver);
-+}
-+
-+module_init(loongson_spi_plat_init);
-+module_exit(loongson_spi_plat_exit);
-+
-+MODULE_DESCRIPTION("Loongson spi platform driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/spi/spi-loongson.h b/drivers/spi/spi-loongson.h
-new file mode 100644
-index 000000000000..44818340188d
---- /dev/null
-+++ b/drivers/spi/spi-loongson.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/* Header File for Loongson SPI Driver. */
-+/* Copyright (C) 2023 Loongson Technology Corporation Limited */
-+
-+#ifndef __LINUX_SPI_LOONGSON_H
-+#define __LINUX_SPI_LOONGSON_H
-+
-+#define	LOONGSON_SPI_SPCR_REG	0x00
-+#define	LOONGSON_SPI_SPSR_REG	0x01
-+#define	LOONGSON_SPI_FIFO_REG	0x02
-+#define	LOONGSON_SPI_SPER_REG	0x03
-+#define	LOONGSON_SPI_PARA_REG	0x04
-+#define	LOONGSON_SPI_SFCS_REG	0x05
-+#define	LOONGSON_SPI_TIMI_REG	0x06
-+
-+/* Bits definition for Loongson SPI register */
-+#define	LOONGSON_SPI_PARA_MEM_EN	BIT(0)
-+#define	LOONGSON_SPI_SPSR_SPIF	BIT(7)
-+#define	LOONGSON_SPI_SPSR_WCOL	BIT(6)
-+#define	LOONGSON_SPI_SPCR_SPE	BIT(6)
-+
-+#define SPI_COMPLETION_TIMEOUT	msecs_to_jiffies(2000)
-+
-+struct loongson_spi {
-+	struct	spi_master	*master;
-+	void __iomem		*base;
-+	int			cs_active;
-+	unsigned int		hz;
-+	unsigned char		spcr;
-+	unsigned char		sper;
-+	unsigned char		spsr;
-+	unsigned char		para;
-+	unsigned char		sfcs;
-+	unsigned char		timi;
-+	unsigned int		mode;
-+	u64			clk_rate;
-+};
-+
-+extern int loongson_spi_init_master(struct device *dev, struct resource *res);
-+extern const struct dev_pm_ops loongson_spi_dev_pm_ops;
-+#endif /* __LINUX_SPI_LOONGSON_H */
--- 
-2.20.1
+Thanks from me as well -- this has certainly helped me understand some
+of the details of the driver model that had slipped past me.
 
+> >
+> >> If this is the case, then it sounds like a DRM specific issue to me.
+> >
+> > I mean, I guess. One could also argue that it's because IIO doesn't
+> > properly deal with hotplugging.
+>
+> I must say I haven't been testing the IIO registration API. I've only
+> tested the helper API which is not backed up by any "IIO device". (This
+> is fine for the helper because it must by design be cleaned-up only
+> after the IIO-deregistration).
+>
+> After your explanation here, I am not convinced IIO wouldn't see the
+> same issue if I was testing the devm_iio_device_alloc() & co.
+>
+> > I'm not sure how that helps. Those are
+> > common helpers which should accommodate every framework,
+>
+> Ok. Fair enough. Besides, if the root-device was sufficient - then I
+> would actually not see the need for a helper. People could in that case
+> directly use the root_device_register(). So, if helpers are provided
+> they should be backed up by a device with a bus then.
+>
+
+I think there is _some_ value in helpers even without a bus, but it's
+much more limited:
+- It's less confusing if KUnit test devices are using kunit labelled
+structs and functions.
+- Helpers could use KUnit's resource management API to ensure any
+device created is properly unregistered and removed when the test
+exits (particularly if it exits early due to, e.g., an assertion).
+
+I've played around implementing those with a proper struct
+kunit_device and the automatic cleanup on test failure, and thus far
+it -- like root_device_register -- works for all of the tests except
+the drm-test-managed one.
+
+So if we really wanted to, we could use KUnit-specific helpers for
+just those tests which currently work with root_device_register(), but
+if we're going to try to implement a KUnit bus -- which I think is at
+least worth investigating -- I'd rather not either hold up otherwise
+good tests on helper development, or rush a helper out only to have to
+change it a lot when we see exactly what the bus implementation would
+look like.
+
+> > and your second
+> > patch breaks the kunit tests for DRM anyway.
+>
+> Oh, I must have made an error there. It was supposed to be just a
+> refactoring with no functional changes. Sorry about that. Anyways, that
+> patch can be forgotten as Greg opposes using the platform devices in
+> generic helpers.
+>
+> >> Whether it is a feature or bug is beyond my knowledge. Still, I would
+> >> not say using the root_device_[un]register() in generic code is not
+> >> feasible - unless all other subsytems have similar refcount handling.
+> >>
+> >> Sure thing using root_device_register() root_device_unregister() in DRM does
+> >> not work as such. This, however, does not mean the generic kunit helpers
+> >> should use platform_devices to force unwinding?
+> >
+> > platform_devices were a quick way to get a device that would have a bus
+> > and a driver bound to fall into the right patch above. We probably
+> > shouldn't use platform_devices and a kunit_device sounds like the best
+> > idea, but the test linked in the original mail I pointed you to should
+> > work with whatever we come up with. It works with multiple (platform,
+> > PCI, USB, etc) buses, so the mock we create should behave like their
+> > real world equivalents.
+> Thanks for the patience and the explanation. Now I understand a generic
+> test device needs to sit on a bus.
+>
+> As I said, in my very specific IIO related test the test device does not
+> need a bus. Hence I'll drop the 'generic helpers' from this series.
+>
+
+I think that sounds like a good strategy for now, and we can work on a
+set of 'generic helpers' which have an associated bus and struct
+kunit_device in the meantime. If we can continue to use
+root_device_register until those are ready, that'd be very convenient.
+Certainly, the helpers I'm playing with at the moment have a few other
+dependencies I'd want to land first, so I suspect they wouldn't be
+done in time for 6.4. It'd also make sense to see if we can make sure
+any such helpers could either work well with (or at least not conflict
+with) tests which use devicetree.
+
+Regardless, thanks very much for putting all of the effort in to
+working this out. I think we have a much better idea of the
+requirements for this sort of thing now.
+
+Cheers,
+-- David
+
+--00000000000003041d05f79f968c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
++sOL210qxSx5STnjTd6QSEsaRlt9rZ2yITo8+qEfiDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjQwNjM0MzJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEACQn9Yx4d3EXFqegtTKXA
+gcAE2q6mU49cGRFMctNVwzZG9nJ6Q59lSBBucMkmt3+vn6w7xcL667t7EYI5qrlUEdOsdfSiHSrj
+qUsUFscA0P/WRd4D8DGSz5dWihr5NVxeqcSppF3GULYhVH9q51NbEFpreLh67k9cLdjWSss8iYqv
+pnu27jkXYqxrNXO+dwFRzdUE3f7dvdm2/sO6K8oKS4QTVjd7SJU95cVYnmEXovM3U2qswYGx/9NN
+SlZiBjHCZV8ToB8wHu/gxTc0uiPZa8xPZ18Z6AKmpjunccf12p8HLSkHBJ1UVTDcw3C2l69W8AYX
+otaCwcffT7NpPHKWrw==
+--00000000000003041d05f79f968c--
