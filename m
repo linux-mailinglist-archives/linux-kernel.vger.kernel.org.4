@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792266C78E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA676C78E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjCXHeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S231631AbjCXHbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjCXHeV (ORCPT
+        with ESMTP id S231515AbjCXHbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:34:21 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B96640C0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:34:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so4285256pjp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:34:20 -0700 (PDT)
+        Fri, 24 Mar 2023 03:31:14 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1852D10C8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:31:14 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id z33so216194qko.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679643260;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TCuUQNVkkfD2ZPnOF587mW3XsARVZtximMlGLvwHOxo=;
-        b=oVpq6RhJr2s0S9DQD3buIKYI1LGRwDwGLmm55a4+Dc6subYya2Oywblx+ebe3Wj/Bs
-         nSHIQ39bpdx9GsJvW6iq9hTjHO/rHdV8ZlQpAhJ3eKl2yHT583D/1skJVMDKYwHF27Gx
-         rzA60odIMXvYC/efcBdh5eUdDm5h3B7C+kzP5AMQx6hBmVkYLw+vPR5X0WPFjop1Md3p
-         cvRPWxZgjF0GKVWX4UQ2Os4vAoZga7Ri9LhqEM+QCfXnXNZV/F9OQcMbISWy3W+rlQGK
-         rT1HJGQCzfWxFsYcUlz8uTpQmAOxW/OH1cdWoYIBCWv9O0NVQp36Q6lZV2otYTCejxMd
-         nieA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679643260;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20210112; t=1679643073;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TCuUQNVkkfD2ZPnOF587mW3XsARVZtximMlGLvwHOxo=;
-        b=v7jYjEqA5G+k1iJi8CVWNZf4Cj730BEjmPEbxbZ1pK5LJTB+HnWL2pMOUkYfACapxN
-         B8gnLermZ6Oe3OrvXv235UVuWNt+mp+6gzjTAQg/fOP2l6E6jcR8cPAq6GD+0/Ym87dL
-         xh18diEmdTQmYzC2M5w+rmFXJ4wv2N9t7A+YRW9mYZDkUw04IUu+Nv0e4Ydqc4/PLc6/
-         SDQeQfTdC1r1gL6qF81FtlDU/J7OF1Yw7pDzZTeN+7g/EplKOb9evT/fV0ggJ7FcglQh
-         hJG1rN32HIkzEexqXfCpecW/SkhSz6YVmgpOe2ML4ldnSTu+7p1orWX458vxtoVCopAz
-         z86Q==
-X-Gm-Message-State: AAQBX9eXoHp4EE/pyJUn/K/C/COyFn2GHNUScdvW1+vociyM7o6+r3ar
-        6PTO2kqJ+q2zMuZBlyqB5k8=
-X-Google-Smtp-Source: AKy350Y/HHioS9DnMn2ppRJJ2qm9D8YHrwBl/5qZydmOURfSPB4rXN6nY4wARgBZ8PsqDCngFlx4gA==
-X-Received: by 2002:a17:903:124d:b0:19f:3aff:dcfd with SMTP id u13-20020a170903124d00b0019f3affdcfdmr8704345plh.6.1679643260081;
-        Fri, 24 Mar 2023 00:34:20 -0700 (PDT)
-Received: from ubuntu.localdomain ([59.89.175.90])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b0019a75ea08e5sm13511604plp.33.2023.03.24.00.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 00:34:19 -0700 (PDT)
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH v2 3/3] Staging: greybus: Use inline function for pwm_chip_to_gb_pwm_chip
-Date:   Fri, 24 Mar 2023 00:30:03 -0700
-Message-Id: <a7d0f315478af0596d1b6b97b8722a753dd39666.1679642024.git.sumitraartsy@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1679642024.git.sumitraartsy@gmail.com>
-References: <cover.1679642024.git.sumitraartsy@gmail.com>
+        bh=zv+/okQpvLPeEesFbW+f0IeMoL7WJaBwrI7ka3EB5Nc=;
+        b=eeCN/q6MxHO0ki4tWoq9xAJhL0mehJfTlnEboKNHkBSveOGhiYijONV3Uamwqjabar
+         JIgu6OqEdtk2SQHNeKvQh9Fzeq7cgxzCwLbsMmeUHhakKyDyLdwJ6P2LTei4Yfmts4Qx
+         8mQDxSud0Z3w+14O8CVRxE/Jl7wdw5J29AqIGpwLV4P1nOEOGuj0QTx5/2ueBT6GYSnq
+         f5yitxZjp/yfG3jigApdxdoiNfFCYTBCwbiUymVOMyQ801C51tnQ9Daac3mrJxVomyK7
+         jCdv7pjd5t0xFXcJ9p6c7KKOyj78So3pd9CLzd6sLXwI/95VdBefALscvAbpD+Mkx/kT
+         BA3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679643073;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zv+/okQpvLPeEesFbW+f0IeMoL7WJaBwrI7ka3EB5Nc=;
+        b=wMRXEGXUfhOihUUUwi+ZfNrF/AEQ1FtYUDDkbehw/+bwqLXHP4Am+77K0eBUXc8QG2
+         cDq/W59t1RxmI2XdqwSdFZwZsOgnMYPUWWRWrhHr2rbyilz3ftm7tcKr0OkVG2Y0kfzS
+         iEW20wtC05UpdONJVLwOMZPn+eUdfhLizH2CCgrnSEilzgX2RyqwQwInfnNv9kC8JbHb
+         2yu7mAgriUSRJthnvai11FIBw4WNb1/+/NfVldgX08A5wVC5CtnEW4IP/JqSVc4WiHOY
+         QzDGKHjDrUFeWad7nFBVflRaaX1E4n5y5OMVaLcbjN65KyZtvUOsqauDECiY7byVu28k
+         ffZA==
+X-Gm-Message-State: AO0yUKWu0qWaqEzIXvqIvKO5tHyB5LuLleSVq9swjKG91eZMjJxVhzAq
+        oqDDsrUFcB0jfcpBLYw0GwA5TX3Fs5biwqfiTKzDd3N9R/g4Kg==
+X-Google-Smtp-Source: AK7set8qiayrCQEmrQ5sKGxmsUtgqmXMfjOom1t/uDcRYLTwBBWLqd9j56uIL47lGmfA8XGGvggkEWjT4TGwIXlo30Y=
+X-Received: by 2002:a05:620a:b0a:b0:742:71e6:b8d4 with SMTP id
+ t10-20020a05620a0b0a00b0074271e6b8d4mr378929qkg.6.1679643073150; Fri, 24 Mar
+ 2023 00:31:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:6200:5899:b0:4d4:81fa:9c9 with HTTP; Fri, 24 Mar 2023
+ 00:31:12 -0700 (PDT)
+Reply-To: a54111046@outlook.com
+From:   audu bello <gadstra2@gmail.com>
+Date:   Fri, 24 Mar 2023 08:31:12 +0100
+Message-ID: <CAL1zo1qhwQGN3xOJ967jHMmsBNh2tWOFUkkkFkO7M=8mOs--3Q@mail.gmail.com>
+Subject: please confirm urgent
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert 'pwm_chip_to_gb_pwm_chip' from a macro to a static
-inline function, to make the relevant types apparent in the
-definition and to benefit from the type checking performed by
-the compiler at call sites.
-
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-v2: Change patch subject, noted by Alison Schofield 
-<alison.schofield@intel.com>
-
- drivers/staging/greybus/pwm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-index 3fda172239d2..88da1d796f13 100644
---- a/drivers/staging/greybus/pwm.c
-+++ b/drivers/staging/greybus/pwm.c
-@@ -21,9 +21,11 @@ struct gb_pwm_chip {
- 	struct pwm_chip		chip;
- 	struct pwm_chip		*pwm;
- };
--#define pwm_chip_to_gb_pwm_chip(chip) \
--	container_of(chip, struct gb_pwm_chip, chip)
- 
-+static inline struct gb_pwm_chip *pwm_chip_to_gb_pwm_chip(struct pwm_chip *chip)
-+{
-+	return container_of(chip, struct gb_pwm_chip, chip);
-+}
- 
- static int gb_pwm_count_operation(struct gb_pwm_chip *pwmc)
- {
 -- 
-2.25.1
-
+I've reached out a couple times, but I haven't heard back. I'd
+appreciate a response to my email about pending transaction
