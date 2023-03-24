@@ -2,137 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5554B6C7F99
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0556C7F9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjCXONe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S232134AbjCXONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjCXONb (ORCPT
+        with ESMTP id S230404AbjCXONp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:13:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03F51CAE9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679667168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ADiIDdAPnjqVAbV/udpxZCAiMLd8rfZn004mVe2ENYg=;
-        b=ToO3WvzOcpNA6POY7Rl5QDYxTX0ssWQb+5juObBFhHeheNcIRs8cQR1kjq0J5aPP6DX88N
-        1x4gBg/w9uLq7OQNd2WQMA4tAyn/ChUwGIAL/UAypMn22eSvNJdu0734FGu7yARjKq0iOI
-        4W/m+hYVeGL+x22Jm9VxxJZyHJ3NH60=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-1m-g8VaUM1S0ZM79i3uKWA-1; Fri, 24 Mar 2023 10:12:45 -0400
-X-MC-Unique: 1m-g8VaUM1S0ZM79i3uKWA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7BAE29AA3B5;
-        Fri, 24 Mar 2023 14:12:43 +0000 (UTC)
-Received: from [10.22.33.184] (unknown [10.22.33.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E174D140EBF4;
-        Fri, 24 Mar 2023 14:12:42 +0000 (UTC)
-Message-ID: <53582a07-81c6-35eb-10bf-7920b27483be@redhat.com>
-Date:   Fri, 24 Mar 2023 10:12:42 -0400
+        Fri, 24 Mar 2023 10:13:45 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 878E9D307;
+        Fri, 24 Mar 2023 07:13:37 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.47
+        by mg.richtek.com with MailGates ESMTP Server V5.0(26690:0:AUTH_RELAY)
+        (envelope-from <chiaen_wu@richtek.com>); Fri, 24 Mar 2023 22:13:05 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 24 Mar
+ 2023 22:13:05 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Fri, 24 Mar 2023 22:13:05 +0800
+From:   ChiaEn Wu <chiaen_wu@richtek.com>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <peterwu.pub@gmail.com>,
+        <cy_huang@richtek.com>, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of some specific vendor ID chips
+Date:   Fri, 24 Mar 2023 22:12:47 +0800
+Message-ID: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-Content-Language: en-US
-To:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>
-Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com>
- <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
- <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 03:22, Yosry Ahmed wrote:
-> On Thu, Mar 23, 2023 at 6:39 PM Tejun Heo <tj@kernel.org> wrote:
->> Hello,
->>
->> On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
->>> Currently, when sleeping is not allowed during rstat flushing, we hold
->>> the global rstat lock with interrupts disabled throughout the entire
->>> flush operation. Flushing in an O(# cgroups * # cpus) operation, and
->>> having interrupts disabled throughout is dangerous.
->>>
->>> For some contexts, we may not want to sleep, but can be interrupted
->>> (e.g. while holding a spinlock or RCU read lock). As such, do not
->>> disable interrupts throughout rstat flushing, only when holding the
->>> percpu lock. This breaks down the O(# cgroups * # cpus) duration with
->>> interrupts disabled to a series of O(# cgroups) durations.
->>>
->>> Furthermore, if a cpu spinning waiting for the global rstat lock, it
->>> doesn't need to spin with interrupts disabled anymore.
->> I'm generally not a fan of big spin locks w/o irq protection. They too often
->> become a source of unpredictable latency spikes. As you said, the global
->> rstat lock can be held for quite a while. Removing _irq makes irq latency
->> better on the CPU but on the other hand it makes a lot more likely that the
->> lock is gonna be held even longer, possibly significantly so depending on
->> the configuration and workload which will in turn stall other CPUs waiting
->> for the lock. Sure, irqs are being serviced quicker but if the cost is more
->> and longer !irq context multi-cpu stalls, what's the point?
->>
->> I don't think there's anything which requires the global lock to be held
->> throughout the entire flushing sequence and irq needs to be disabled when
->> grabbing the percpu lock anyway, so why not just release the global lock on
->> CPU boundaries instead? We don't really lose anything significant that way.
->> The durations of irq disabled sections are still about the same as in the
->> currently proposed solution at O(# cgroups) and we avoid the risk of holding
->> the global lock for too long unexpectedly from getting hit repeatedly by
->> irqs while holding the global lock.
-> Thanks for taking a look!
->
-> I think a problem with this approach is that we risk having to contend
-> for the global lock at every CPU boundary in atomic contexts. Right
-Isn't it the plan to just do a trylock in atomic contexts so that it 
-won't get stuck spinning for the lock for an indeterminate amount of time?
-> now we contend for the global lock once, and once we have it we go
-> through all CPUs to flush, only having to contend with updates taking
-> the percpu locks at this point. If we unconditionally release &
-> reacquire the global lock at every CPU boundary then we may contend
-> for it much more frequently with concurrent flushers.
+The scale value of ibus and ibat on the datasheet is incorrect due to the
+customer report after the experimentation with some specific vendor ID
+chips.
 
-Note that with the use of qspinlock in all the major arches, the impact 
-of thundering herds of lockers are much less serious than before. There 
-are certainly some overhead in doing multiple lock acquires and 
-releases, but that shouldn't been too excessive.
+Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+---
+ drivers/iio/adc/mt6370-adc.c | 48 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 2 deletions(-)
 
-I am all in for reducing lock hold time as much as possible as it will 
-improve the response time.
-
-Cheers,
-Longman
+diff --git a/drivers/iio/adc/mt6370-adc.c b/drivers/iio/adc/mt6370-adc.c
+index bc62e5a..eea7223 100644
+--- a/drivers/iio/adc/mt6370-adc.c
++++ b/drivers/iio/adc/mt6370-adc.c
+@@ -19,6 +19,7 @@
+ 
+ #include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
+ 
++#define MT6370_REG_DEV_INFO		0x100
+ #define MT6370_REG_CHG_CTRL3		0x113
+ #define MT6370_REG_CHG_CTRL7		0x117
+ #define MT6370_REG_CHG_ADC		0x121
+@@ -27,6 +28,7 @@
+ #define MT6370_ADC_START_MASK		BIT(0)
+ #define MT6370_ADC_IN_SEL_MASK		GENMASK(7, 4)
+ #define MT6370_AICR_ICHG_MASK		GENMASK(7, 2)
++#define MT6370_VENID_MASK		GENMASK(7, 4)
+ 
+ #define MT6370_AICR_100_mA		0x0
+ #define MT6370_AICR_150_mA		0x1
+@@ -47,6 +49,10 @@
+ #define ADC_CONV_TIME_MS		35
+ #define ADC_CONV_POLLING_TIME_US	1000
+ 
++#define MT6370_VID_RT5081		0x8
++#define MT6370_VID_RT5081A		0xA
++#define MT6370_VID_MT6370		0xE
++
+ struct mt6370_adc_data {
+ 	struct device *dev;
+ 	struct regmap *regmap;
+@@ -55,6 +61,7 @@ struct mt6370_adc_data {
+ 	 * from being read at the same time.
+ 	 */
+ 	struct mutex adc_lock;
++	int vid;
+ };
+ 
+ static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
+@@ -98,6 +105,26 @@ static int mt6370_adc_read_channel(struct mt6370_adc_data *priv, int chan,
+ 	return ret;
+ }
+ 
++static int mt6370_adc_get_ibus_scale(struct mt6370_adc_data *priv)
++{
++	if (priv->vid == MT6370_VID_RT5081  ||
++	    priv->vid == MT6370_VID_RT5081A ||
++	    priv->vid == MT6370_VID_MT6370)
++		return 3350;
++	else
++		return 3875;
++}
++
++static int mt6370_adc_get_ibat_scale(struct mt6370_adc_data *priv)
++{
++	if (priv->vid == MT6370_VID_RT5081  ||
++	    priv->vid == MT6370_VID_RT5081A ||
++	    priv->vid == MT6370_VID_MT6370)
++		return 2680;
++	else
++		return 3870;
++}
++
+ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+ 				 int chan, int *val1, int *val2)
+ {
+@@ -123,7 +150,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+ 		case MT6370_AICR_250_mA:
+ 		case MT6370_AICR_300_mA:
+ 		case MT6370_AICR_350_mA:
+-			*val1 = 3350;
++			*val1 = mt6370_adc_get_ibus_scale(priv);
+ 			break;
+ 		default:
+ 			*val1 = 5000;
+@@ -150,7 +177,7 @@ static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
+ 		case MT6370_ICHG_600_mA:
+ 		case MT6370_ICHG_700_mA:
+ 		case MT6370_ICHG_800_mA:
+-			*val1 = 2680;
++			*val1 = mt6370_adc_get_ibat_scale(priv);
+ 			break;
+ 		default:
+ 			*val1 = 5000;
+@@ -251,6 +278,19 @@ static const struct iio_chan_spec mt6370_adc_channels[] = {
+ 	MT6370_ADC_CHAN(TEMP_JC, IIO_TEMP, 12, BIT(IIO_CHAN_INFO_OFFSET)),
+ };
+ 
++static int mt6370_get_vendor_info(struct mt6370_adc_data *priv)
++{
++	unsigned int dev_info;
++	int ret;
++
++	ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &dev_info);
++	if (ret)
++		return ret;
++
++	priv->vid = FIELD_GET(MT6370_VENID_MASK, dev_info);
++	return 0;
++}
++
+ static int mt6370_adc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -263,6 +303,10 @@ static int mt6370_adc_probe(struct platform_device *pdev)
+ 	if (!regmap)
+ 		return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
+ 
++	ret = mt6370_get_vendor_info(priv);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to get vid\n");
++
+ 	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
+ 	if (!indio_dev)
+ 		return -ENOMEM;
+-- 
+2.7.4
 
