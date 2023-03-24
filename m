@@ -2,107 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028946C811C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C986C811F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjCXPX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S232378AbjCXPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjCXPXY (ORCPT
+        with ESMTP id S231795AbjCXPXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:23:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9F76581;
-        Fri, 24 Mar 2023 08:23:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1128B82498;
-        Fri, 24 Mar 2023 15:23:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEF6C433EF;
-        Fri, 24 Mar 2023 15:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679671398;
-        bh=pSKqpC0a1kWME7wWNk8qBL0xdEmVi13/hyo55l1Pm08=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=HRiqB9cfU8MwjF/Ip6NmJBjYpbr/mpSLcd+TVVfddfoK+QK9yBnzXCdB9MoxAhYfP
-         ATnCkS+AnfJK7YaoqAMFy5X//g+iAVIvZZRx0yr21uWb3M5Omm/0cLqwgFAluPa3ty
-         8Sw1hqfduRdJSsUr5F6kC1omPyDMoSeYZ0ERDoguL05Mg/5mvUUTfPtM5R7GaoOLJ2
-         BmhcBeO7+ipKHkUV4BRhzp00/frpyeJ7p0ylOvoj+6DNPCVTZYNnQyAONo3nd1IRPe
-         XnrumaqU5wI6hKVclvYDeAq8ogxYV/UNMRUBUEtnllhvZ7MUvaXxv7naVSKnBJWZjz
-         zgH44JrMoozvw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
-        <20230320180501.GA598084@dev-arch.thelio-3990X>
-        <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
-        <20230320185337.GA615556@dev-arch.thelio-3990X>
-        <87pm91uf9c.fsf@kernel.org>
-        <20230322163637.GA918620@dev-arch.thelio-3990X>
-        <87wn36ctdi.fsf@kernel.org>
-        <20230324151150.GC428955@dev-arch.thelio-3990X>
-Date:   Fri, 24 Mar 2023 17:23:12 +0200
-In-Reply-To: <20230324151150.GC428955@dev-arch.thelio-3990X> (Nathan
-        Chancellor's message of "Fri, 24 Mar 2023 08:11:50 -0700")
-Message-ID: <87o7oicgwv.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 24 Mar 2023 11:23:50 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38D0619F;
+        Fri, 24 Mar 2023 08:23:48 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id A71C1FF814;
+        Fri, 24 Mar 2023 15:23:42 +0000 (UTC)
+Message-ID: <dc0ffd3c-18cf-aeb9-52f9-dfcf9c92c6e9@ghiti.fr>
+Date:   Fri, 24 Mar 2023 16:23:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 3/4] arm64: Make use of memblock_isolate_memory for the
+ linear mapping
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+ <20230316131711.1284451-4-alexghiti@rivosinc.com>
+ <20230324152112.GD27199@willie-the-truck>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230324152112.GD27199@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nathan Chancellor <nathan@kernel.org> writes:
+Hi Will,
 
->> This is nitpicking but it would be nice if the tarball contents wouldn't
->> conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
->> llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
->> same binary names. It would be much better if they would extract to
->> llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
->> 
->> For example, Arnd's crosstool packages don't conflict with each other:
->> 
->> https://mirrors.edge.kernel.org/pub/tools/crosstool/
+On 3/24/23 16:21, Will Deacon wrote:
+> On Thu, Mar 16, 2023 at 02:17:10PM +0100, Alexandre Ghiti wrote:
+>> In order to isolate the kernel text mapping and the crash kernel
+>> region, we used some sort of hack to isolate thoses ranges which consisted
+>> in marking them as not mappable with memblock_mark_nomap.
+>>
+>> Simply use the newly introduced memblock_isolate_memory function which does
+>> exactly the same but does not uselessly mark the region as not mappable.
+> But that's not what this patch does -- it's also adding special-case code
+> for kexec and, honestly, I'm struggling to see why this is improving
+> anything.
 >
-> I could certainly do that but what is the use case for extracting both?
-> You cannot run the aarch64 version on an x86_64 host and vice versa, so
-> why bother extracting them?
+> Can we leave the code like it is, or is there something else going on?
 
-Ah, I didn't realise that. I assumed llvm-16.0.0-aarch64.tar.gz was a
-cross compiler. I'm sure you documented that in the page but hey who
-reads the documentation ;)
 
-> I had figured the architecture would be irrelevant once installed on
-> the host, so I opted only to include it in the tarball name. Perhaps I
-> should make it clearer that these are the host architectures, not the
-> target architectures (because clang is multi-targeted, unlike GCC)?
+Yes, the next version won't touch arm64 at all since actually, I'll 
+remove this new api.
 
-Makes sense now. But I still think it's good style that a tarball named
-llvm-16.0.0-aarch64.tar.gz extracts to llvm-16.0.0-aarch64.
+Thanks for your time,
 
->> And maybe request a similar llvm directory under pub/tools to make it
->> more official? :)
+Alex
+
+
 >
-> Yes, I was talking that over with Nick recently, as having it under a
-> group on kernel.org would make taking over maintainership easier should
-> something happen to me :)
-
-Yeah, sharing the load is always good.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Will
+>
+>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>> ---
+>>   arch/arm64/mm/mmu.c | 25 ++++++++++++++++---------
+>>   1 file changed, 16 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>> index 6f9d8898a025..387c2a065a09 100644
+>> --- a/arch/arm64/mm/mmu.c
+>> +++ b/arch/arm64/mm/mmu.c
+>> @@ -548,19 +548,18 @@ static void __init map_mem(pgd_t *pgdp)
+>>   
+>>   	/*
+>>   	 * Take care not to create a writable alias for the
+>> -	 * read-only text and rodata sections of the kernel image.
+>> -	 * So temporarily mark them as NOMAP to skip mappings in
+>> -	 * the following for-loop
+>> +	 * read-only text and rodata sections of the kernel image so isolate
+>> +	 * those regions and map them after the for loop.
+>>   	 */
+>> -	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>> +	memblock_isolate_memory(kernel_start, kernel_end - kernel_start);
+>>   
+>>   #ifdef CONFIG_KEXEC_CORE
+>>   	if (crash_mem_map) {
+>>   		if (defer_reserve_crashkernel())
+>>   			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>>   		else if (crashk_res.end)
+>> -			memblock_mark_nomap(crashk_res.start,
+>> -			    resource_size(&crashk_res));
+>> +			memblock_isolate_memory(crashk_res.start,
+>> +						resource_size(&crashk_res));
+>>   	}
+>>   #endif
+>>   
+>> @@ -568,6 +567,17 @@ static void __init map_mem(pgd_t *pgdp)
+>>   	for_each_mem_range(i, &start, &end) {
+>>   		if (start >= end)
+>>   			break;
+>> +
+>> +		if (start == kernel_start)
+>> +			continue;
+>> +
+>> +#ifdef CONFIG_KEXEC_CORE
+>> +		if (start == crashk_res.start &&
+>> +		    crash_mem_map && !defer_reserve_crashkernel() &&
+>> +		    crashk_res.end)
+>> +			continue;
+>> +#endif
+>> +
+>>   		/*
+>>   		 * The linear map must allow allocation tags reading/writing
+>>   		 * if MTE is present. Otherwise, it has the same attributes as
+>> @@ -589,7 +599,6 @@ static void __init map_mem(pgd_t *pgdp)
+>>   	 */
+>>   	__map_memblock(pgdp, kernel_start, kernel_end,
+>>   		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+>> -	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
+>>   
+>>   	/*
+>>   	 * Use page-level mappings here so that we can shrink the region
+>> @@ -603,8 +612,6 @@ static void __init map_mem(pgd_t *pgdp)
+>>   				       crashk_res.end + 1,
+>>   				       PAGE_KERNEL,
+>>   				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+>> -			memblock_clear_nomap(crashk_res.start,
+>> -					     resource_size(&crashk_res));
+>>   		}
+>>   	}
+>>   #endif
+>> -- 
+>> 2.37.2
+>>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
