@@ -2,198 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F976C894D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 00:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 211DF6C8950
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 00:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjCXXeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 19:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S231513AbjCXXeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 19:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCXXeM (ORCPT
+        with ESMTP id S230075AbjCXXen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 19:34:12 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DFB2128;
-        Fri, 24 Mar 2023 16:34:10 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eg48so13703773edb.13;
-        Fri, 24 Mar 2023 16:34:10 -0700 (PDT)
+        Fri, 24 Mar 2023 19:34:43 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF82132
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:34:42 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j11-20020a25230b000000b00b6871c296bdso3180761ybj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679700849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UgItKrX+omIU9rZpNlw4Q+2It9vk7cbT9xavBL46gQE=;
-        b=jhhtQYQhwSI1lUOacB6rX6mQ6I9kcNngJjlT25U2XMe2EBOP2LZkRzUJI5uO0onZT9
-         QS9spWGM6ub7lEX5PQZwpfVufsW/HoiurnwsZyA2JTDaiwfFSGhG3Oyfl9SQh71iG0o3
-         gjrCNIk+aT5plzF5gcJbsHAkNqknm6OhSvr3lkAgVe9naRZHzLaNBPCa+rap90AcIItL
-         s6LZax6BRYSjhY2VW9RIyvIRwNJQxZdmYddrdrqUv6Q5kBUdshsk0EfRiWXpLL670K9e
-         Kf2QljzpYsiwn7F2/BINg4/dXiHGDT/VdChMuPjee77g6zEwfTERr7XSoLdaisvZKjFH
-         Q6iQ==
+        d=google.com; s=20210112; t=1679700881;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVqt0f/2DRo4XcbI675kTrDo1clxY/Vi3m7vjYnFwOA=;
+        b=aKJeJbAPI2zvDKhOXeemI6Ck070EXJq96VyMniA/gXT6T5xmvuqc94G/eI8xpgXrsr
+         mmnfq0asgxQLRWrQaMqIG8nZNZ+6ye/AaHgrfPLktSTurIeZqLky6i5qY4QAwHsj6gy+
+         80xLwC+0w4a3acbjCwa5TTEI05tYUjiNO7ssXdEJfIa9o+NJ4cd3XEfElQpSKL8ACCQO
+         8mEOPqTIpJsXn7SHM2qEMRw15jlNsQt/4dECNymTtE7bwbTw4kaLdcnb1YkBw1mcOOpv
+         oryjp1sXBhlM/E73C0JmWRC1Vn0X4gg5fu0pyyw0iS6AsgdYu0U9n1muictDpnNYqKdI
+         hfXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679700849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UgItKrX+omIU9rZpNlw4Q+2It9vk7cbT9xavBL46gQE=;
-        b=RBBEE7e8LW+JEhgcX21HwWdlkLFJIKqQoe9u8L9yT6r7idHKzBj2ETTX7LrhaX6Vdq
-         nBmuMrQ+OiIJ3eBvOYV0gKSSpj4Vh8GVIuBTlmh5vgBsQo3TbHhymOhyHOzSCxaY0tDq
-         FWd06D52B2gPIL2R/JvYJuNgbxhH3fG+CWX+NHUKL4qbr+4AehqKbXfL2nSDO2q8spYe
-         W9jotzZTRTNe/g6BLuUCtSV4rASa0WG8mam1ZfhZiLmwlvNqUbPPBY9WQJB8BDr+rkDt
-         VpTDA0TEaHwbR21IHyG3ILRAMf3JAEyiu3pOeiWilmfXKpPMUY0oM/uxjg/mlVjRUwnY
-         sOBA==
-X-Gm-Message-State: AAQBX9dQRbWvO/G5IlScfvE+TP3T1+amRAGJyapvy2AO7m2v3JcOom9L
-        IfKx3Z59ZuMIoWHfEH5DYTplaw4XjvLVYxnfFjI=
-X-Google-Smtp-Source: AKy350brcVccDKLSCNemmSxxbeInWb75qa6vMOl2tfUtV4JIn1vn2IHNipB+v4CqYEiT4ZW+T2GgE8018gwBsfqqAjE=
-X-Received: by 2002:a17:907:f90:b0:924:32b2:e3d1 with SMTP id
- kb16-20020a1709070f9000b0092432b2e3d1mr2278540ejc.3.1679700848823; Fri, 24
- Mar 2023 16:34:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
- <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
- <ZBzAp457rrO52FPy@aurel32.net> <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
-In-Reply-To: <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 24 Mar 2023 16:33:57 -0700
-Message-ID: <CAADnVQLniq_NTN+dayioY76UvJ6Rt88wC31tboQx0UAvMn3Few@mail.gmail.com>
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
-To:     Ard Biesheuvel <ardb@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1679700881;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVqt0f/2DRo4XcbI675kTrDo1clxY/Vi3m7vjYnFwOA=;
+        b=aHLmVi6RRblT33hSRkQxTqkVJ7Pn0MLslgurYq+YwYgWNTG4UMWwk5hqBs0D2oOUsp
+         VEWRJ/I+is0DZ9LcRDphWt0AqPUZVf2YQjuvx2XP465ym9tAXZMQTORtjjo/oAkbszFy
+         RvjluA/gX3/biD28ZJ27+j5XqWLbxF4edekxhdA4A8lQt4ZZ+4pm6vasU2m1lraHYdnR
+         +LzS05PF5Jj+BtGvZkU7JDIlBgk6pgqbJ5DG35qU7WMDSqhyv8ujY68H4IBxN3gIOhF8
+         Sfi9/qfX2BbjLQYMaE/QihL7joRFMB7oy35vJHTGKRTFZTTYAQOgYJo+Khi+z4jkKQBb
+         Nb8A==
+X-Gm-Message-State: AAQBX9d8MIjCXrewl1IgLt//EVbG57U0rjeRhNaZ+g4wX8PlpX5Q3HY8
+        NlmZVo3vlW1aW36NHUu/2aqx/1BKQvk=
+X-Google-Smtp-Source: AKy350a6CE3UYLppfPzPR79Wj9dtjeq2AmDaaJvl57pOHOK2QDtwYeQk5hmIIjRhWHj9Z2WE449W47oFAKo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:18cd:b0:b74:6c88:7bff with SMTP id
+ ck13-20020a05690218cd00b00b746c887bffmr2120917ybb.0.1679700881510; Fri, 24
+ Mar 2023 16:34:41 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 16:34:40 -0700
+In-Reply-To: <20230227174654.94641-1-ackerleytng@google.com>
+Mime-Version: 1.0
+References: <20230227174654.94641-1-ackerleytng@google.com>
+Message-ID: <ZB4zkGyW7gVh9qDa@google.com>
+Subject: Re: [PATCH] tools: Copy linux/align.h into tools/
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 4:39=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
->
-> (cc BTF list and maintainer)
->
-> On Thu, 23 Mar 2023 at 22:12, Aurelien Jarno <aurelien@aurel32.net> wrote=
-:
-> >
-> > Hi,
-> >
-> > On 2023-03-22 15:51, Ard Biesheuvel wrote:
-> > > On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> w=
-rote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > On 2022-10-13 08:35, Masahiro Yamada wrote:
-> > > > > In the previous discussion (see the Link tag), Ard pointed out th=
-at
-> > > > > arm/arm64/kernel/head.o does not need any special treatment - the=
- only
-> > > > > piece that must appear right at the start of the binary image is =
-the
-> > > > > image header which is emitted into .head.text.
-> > > > >
-> > > > > The linker script does the right thing to do. The build system do=
-es
-> > > > > not need to manipulate the link order of head.o.
-> > > > >
-> > > > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=
-=3D1F8Uy-uAWGVDm4-CG=3DEuA@mail.gmail.com/
-> > > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > > ---
-> > > > >
-> > > > >  scripts/head-object-list.txt | 1 -
-> > > > >  1 file changed, 1 deletion(-)
-> > > > >
-> > > > > diff --git a/scripts/head-object-list.txt b/scripts/head-object-l=
-ist.txt
-> > > > > index b16326a92c45..f226e45e3b7b 100644
-> > > > > --- a/scripts/head-object-list.txt
-> > > > > +++ b/scripts/head-object-list.txt
-> > > > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
-> > > > >  arch/arc/kernel/head.o
-> > > > >  arch/arm/kernel/head-nommu.o
-> > > > >  arch/arm/kernel/head.o
-> > > > > -arch/arm64/kernel/head.o
-> > > > >  arch/csky/kernel/head.o
-> > > > >  arch/hexagon/kernel/head.o
-> > > > >  arch/ia64/kernel/head.o
-> > > >
-> > > > This patch causes a significant increase of the arch/arm64/boot/Ima=
-ge
-> > > > size. For instance the generic arm64 Debian kernel went from 31 to =
-39 MB
-> > > > after this patch has been applied to the 6.1 stable tree.
-> > > >
-> > > > In turn this causes issues with some bootloaders, for instance U-Bo=
-ot on
-> > > > a Raspberry Pi limits the kernel size to 36 MB.
-> > > >
-> > >
-> > > I cannot reproduce this with mainline
-> > >
-> > > With the patch
-> > >
-> > > $ size vmlinux
-> > >    text    data     bss     dec     hex filename
-> > > 24567309 14752630 621680 39941619 26175f3 vmlinux
-> > >
-> > > With the patch reverted
-> > >
-> > > $ size vmlinux
-> > >    text    data     bss     dec     hex filename
-> > > 24567309 14752694 621680 39941683 2617633 vmlinux
-> >
-> > I have tried with the current mainline, this is what I get, using GCC 1=
-2.2.0
-> > and binutils 2.40:
-> >
-> >    text    data     bss     dec     hex filename
-> > 32531655        8192996  621968 41346619        276e63b vmlinux.orig
-> > 25170610        8192996  621968 33985574        2069426 vmlinux.revert
-> >
-> > > It would help to compare the resulting vmlinux ELF images from both
-> > > builds to see where the extra space is being allocated
-> >
-> > At a first glance, it seems the extra space is allocated in the BTF
-> > section. I have uploaded the resulting files as well as the config file
-> > I used there:
-> > https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
-> >
->
-> Indeed. So we go from
->
->   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
->        00000000005093d6  0000000000000000   A       0     0     1
->
-> to
->
->   [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
->        0000000000c0e5eb  0000000000000000   A       0     0     1
->
-> i.e, from 5 MiB to 12+ MiB of BTF metadata.
->
-> To me, it is not clear at all how one would be related to the other,
-> so it will leave it to the Kbuild and BTF experts to chew on this one.
+On Mon, Feb 27, 2023, Ackerley Tng wrote:
+> This provides alignment macros for use in selftests.
+> 
+> Also clean up tools/include/linux/bitmap.h's inline definition of
+> IS_ALIGNED().
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  tools/include/linux/align.h  | 15 +++++++++++++++
+>  tools/include/linux/bitmap.h |  2 +-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/include/linux/align.h
 
-That's a huge increase.
-It's not just that commit responsible, but the whole series ?
-https://lore.kernel.org/lkml/20220906061313.1445810-1-masahiroy@kernel.org/
-I'm guessing "Link vmlinux and modules in parallel" is related.
-I'm not sure what "parallel link" means. Running 'ar' in parallel?
-I cannot read makefile syntax, so no idea.
+Anyone object to pulling in align.h?  I'd be more than happy to take this through
+the KVM tree, which is the motivation/context (we want to use the various macros
+in KVM selftests).
 
-Jiri, Andrii, Alan, please take a look.
+Thanks!
