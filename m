@@ -2,91 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040356C8142
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408726C814C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbjCXPd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S232424AbjCXPes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjCXPd4 (ORCPT
+        with ESMTP id S232038AbjCXPeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:33:56 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3832F759
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:33:54 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i7-20020a056e021b0700b0031dc4cdc47cso1414136ilv.23
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:33:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679672034;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eLycQxPJh5ctdiAHM+TFhyOKcExHz+mFKF6NIvcUHOA=;
-        b=Sz3JdPXcgnMdlWs96p8OzwkgejoFWTPmdkPxI4clKGHTVcjire7G3KAwU46MCf/B7V
-         otXPmOVWlwtWmWULrfAQucH+KA7cBZhrDej5bJpVtyBWizziayZqbwTQihP6fOkFCzvd
-         FDg70SbHwALLQ1N3aJ0U3C4R89YrQo84jLSWspH6TuYX0BanaLRRJRtW5w1NcKoloYXI
-         EZjaud/POqgdEkkgaxurG49OIcKxIvUJSu+ZZaTFHthf4jz4NLz8k1dGhaqzyGKSwc38
-         /fZh+Kl7Ji8o5ncAsDEF/2lYbuH2XbEMjq8hBStNlmsRzwHF2uFEfHEgyxGlkvs2ZOwR
-         uI7Q==
-X-Gm-Message-State: AO0yUKXTXR35XNSlynCL8PQX6IgNIOrCrOaQuP/iWIQYE+pSlt9v23i/
-        sRKHmSNoSxYJD7XihMFT2o3MdHmiOZii+4X3iYwhFMo6NA1DkaE=
-X-Google-Smtp-Source: AK7set8UfRAmUJZ9Pdv22DQTYvQa4B67nyUY5YX08xzcbn8+rNZj62ZJYHmhaEpOsXfVcdvNZq5UIPZ8gpDieG2iTXihb54QJ+SK
-MIME-Version: 1.0
-X-Received: by 2002:a02:95c4:0:b0:406:2a80:467a with SMTP id
- b62-20020a0295c4000000b004062a80467amr1109851jai.0.1679672033950; Fri, 24 Mar
- 2023 08:33:53 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 08:33:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec461d05f7a71e38@google.com>
-Subject: [syzbot] [wireless] Monthly Report
-From:   syzbot <syzbot+listd50b9cb19229e38c60c8@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 11:34:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41591DB9B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:34:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87DB6B82521
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40422C4339E;
+        Fri, 24 Mar 2023 15:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679672051;
+        bh=c1GJ178dbtFcDJeY4wYI58g4hBLah/8oQTpGD/PF/+U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kJu3KeRtRCZTSwAtXO9Sqi2IQG1yh03Evu5bxRfuEGyOUzqdPWhed7oKHkWd3ZOuZ
+         fztqPULouwQCgH5Mn6D1xoKC+Tko80Isj4VcGxRGk2P74o/lUYBDINb9AXbQptmerd
+         kWFmlyH/iqWLgdFe1Cvoy9anAZQ1qTU4xFyA/2YZP4kikW0zjDOfz48hAKOPx7Atkv
+         dwnCCNsUq2o2jLvH7FS/5LZ6ipyZWm4ilNfO3Rwfg03xqHLQGz0b71fNBXtKyHLl/P
+         xl3zcKn7PtJVB31mx8kWrcSRPacs7J/NUwBciku6cxE8675IRaoaXf9Peh8sPcyArF
+         GTowZ3AwMflZQ==
+Received: from [104.132.96.108] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pfjQe-002rBP-Qd;
+        Fri, 24 Mar 2023 15:34:09 +0000
+Date:   Fri, 24 Mar 2023 15:34:05 +0000
+Message-ID: <87ileqgo42.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH V1 2/5] irqchip/loongson-eiointc: Fix incorrect use of acpi_get_vec_parent
+In-Reply-To: <20230324060854.29375-3-lvjianmin@loongson.cn>
+References: <20230324060854.29375-1-lvjianmin@loongson.cn>
+        <20230324060854.29375-3-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 104.132.96.108
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello wireless maintainers/developers,
+On Fri, 24 Mar 2023 06:08:51 +0000,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> In eiointc_acpi_init(), a *eiointc* node is passed into
+> acpi_get_vec_parent() instead of a required *NUMA* node (on some chip
+> like 3C5000L, a *NUMA* node means a *eiointc* node, but on some chip
+> like 3C5000, a *NUMA* node contains 4 *eiointc* nodes), and node in
+> struct acpi_vector_group is essentially a *NUMA* node, which will
+> lead to no parent matched for passed *eiointc* node. so the patch
+> adjusts code to use *NUMA* node for parameter node of
+> acpi_set_vec_parent/acpi_get_vec_parent.
+> 
+> Change-Id: Iddd8423f9694cadc1ce28ee290c2e98ca17dfccc
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 62a632d73991..b165c27a3609 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -280,9 +280,6 @@ static void acpi_set_vec_parent(int node, struct irq_domain *parent, struct acpi
+>  {
+>  	int i;
+>  
+> -	if (cpu_has_flatmode)
+> -		node = cpu_to_node(node * CORES_PER_EIO_NODE);
+> -
+>  	for (i = 0; i < MAX_IO_PICS; i++) {
+>  		if (node == vec_group[i].node) {
+>  			vec_group[i].parent = parent;
+> @@ -349,8 +346,13 @@ static int __init pch_pic_parse_madt(union acpi_subtable_headers *header,
+>  static int __init pch_msi_parse_madt(union acpi_subtable_headers *header,
+>  					const unsigned long end)
+>  {
+> +	struct irq_domain *parent;
+>  	struct acpi_madt_msi_pic *pchmsi_entry = (struct acpi_madt_msi_pic *)header;
+> -	struct irq_domain *parent = acpi_get_vec_parent(eiointc_priv[nr_pics - 1]->node, msi_group);
+> +	int node = eiointc_priv[nr_pics - 1]->node;
+> +
+> +	if (cpu_has_flatmode)
+> +		node = cpu_to_node(node * CORES_PER_EIO_NODE);
 
-This is a 30-day syzbot report for wireless subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/wireless
+This is a bit unreadable. I'd rather see:
 
-During the period, 6 new issues were detected and 0 were fixed.
-In total, 45 issues are still open and 102 have been fixed so far.
+	int node;
 
-Some of the still happening issues:
+	if (cpu_has_flatmode)
+		node = ....;
+	else
+		node = ....;
 
-Crashes Repro Title
-6721    Yes   KMSAN: uninit-value in hwsim_cloned_frame_received_nl
-              https://syzkaller.appspot.com/bug?extid=b2645b5bf1512b81fa22
-4059    Yes   WARNING in __cfg80211_ibss_joined (2)
-              https://syzkaller.appspot.com/bug?extid=7f064ba1704c2466e36d
-3067    Yes   WARNING in __ieee80211_beacon_get
-              https://syzkaller.appspot.com/bug?extid=18c783c5cf6a781e3e2c
-806     Yes   INFO: task hung in switchdev_deferred_process_work (2)
-              https://syzkaller.appspot.com/bug?extid=8ecc009e206a956ab317
-558     Yes   WARNING in __rate_control_send_low
-              https://syzkaller.appspot.com/bug?extid=fdc5123366fb9c3fdc6d
-517     Yes   WARNING in ieee80211_start_next_roc
-              https://syzkaller.appspot.com/bug?extid=c3a167b5615df4ccd7fb
-245     Yes   INFO: task hung in rfkill_global_led_trigger_worker (2)
-              https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb
-232     Yes   WARNING in ieee80211_link_info_change_notify (2)
-              https://syzkaller.appspot.com/bug?extid=de87c09cc7b964ea2e23
-196     No    WARNING in ieee80211_ibss_csa_beacon (2)
-              https://syzkaller.appspot.com/bug?extid=b10a54cb0355d83fd75c
-10      Yes   KMSAN: uninit-value in ath9k_wmi_ctrl_rx
-              https://syzkaller.appspot.com/bug?extid=f2cb6e0ffdb961921e4d
+which makes it easy to detect the use of an uninitialised 'node'
+rather than using the wrong default variable.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +	parent = acpi_get_vec_parent(node, msi_group);
+>  
+>  	if (parent)
+>  		return pch_msi_acpi_init(parent, pchmsi_entry);
+> @@ -379,6 +381,7 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
+>  	int i, ret, parent_irq;
+>  	unsigned long node_map;
+>  	struct eiointc_priv *priv;
+> +	int node = acpi_eiointc->node;
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> @@ -421,8 +424,10 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
+>  				  "irqchip/loongarch/intc:starting",
+>  				  eiointc_router_init, NULL);
+>  
+> -	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
+> -	acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
+> +	if (cpu_has_flatmode)
+> +		node = cpu_to_node(node * CORES_PER_EIO_NODE);
+> +	acpi_set_vec_parent(node, priv->eiointc_domain, pch_group);
+> +	acpi_set_vec_parent(node, priv->eiointc_domain, msi_group);
+>  	ret = acpi_cascade_irqdomain_init();
+>  
+>  	return ret;
+
+Same thing here.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
