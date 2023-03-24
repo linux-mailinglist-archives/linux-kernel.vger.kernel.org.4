@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06136C86E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0716C86EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjCXUhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S232142AbjCXUil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCXUhl (ORCPT
+        with ESMTP id S232110AbjCXUii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:37:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6B61F905;
-        Fri, 24 Mar 2023 13:37:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D55CB82608;
-        Fri, 24 Mar 2023 20:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7BCC4339C;
-        Fri, 24 Mar 2023 20:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679690257;
-        bh=aWXxTpUzVdWKwRyaJyc6kpA5qikK8OgfqGObFSQG9Q0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ex8Z9pZ4OL5wCGHQ7yY3D0VQ48EbuxFK9fk474Er+4+ws+7Jp/erWuSkCqiCPWMmE
-         1l5PLpiJ0S2+1GHj+XrtQgOW+IRFYM3hw3MfT9RAEfE1hyqBDPEv0A7X/Wnlid04hK
-         h7RnFqtuSKcGFEsPKfMSv8sYX8qH16qDX0+VrNwoxgMYyWNiTTj7o4716W9zwqPlVS
-         wbdj4daIe8ACFK6VBgAy8CbBzrXSWudcHoai4xuh/dw3AD0wyErUyd0LfkrnfyczJQ
-         6jDpnioFT9MtJzzXp6un/63S+Emx91/ro/D/8yNhrtSt8W2ryQ8rCa5+m366Eqlw01
-         UtfA3opoi6EUA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rafael@kernel.org,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Lee Jones <lee@kernel.org>, davem@davemloft.net,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        thomas.petazzoni@bootlin.com
-In-Reply-To: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
-References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
-Subject: Re: (subset) [RFC 0/7] Introduce a generic regmap-based MDIO
- driver
-Message-Id: <167969025376.2727723.12829947448375375074.b4-ty@kernel.org>
-Date:   Fri, 24 Mar 2023 20:37:33 +0000
+        Fri, 24 Mar 2023 16:38:38 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177531E1C1;
+        Fri, 24 Mar 2023 13:38:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso6199398pjb.3;
+        Fri, 24 Mar 2023 13:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679690317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpfYsPLth4MHWQZy4hoycC7tFlnErWweN4IdkgXtblQ=;
+        b=dhSZUMs3WEMLMAiouToHsa6c1XEcau983DamW3FfSgP7i+RACbSvNKbhA2Cvjfn26/
+         sopbbSpkqF3to1OxdDd7JZM/ie9IzJWoANyizZjLWHAl+PVttHTVK+04HROysUkB0Lee
+         2vaaJJygJySloO/wpR2i3rRcXYrTrA7zBpmhIWCQ1FRpPEcGWCIyqEVYALmTsKWK71kj
+         ZAc7IP0D38xkhPmYrf4ldrt9cXkDL+oCQVPrBeBGvVAd9IrMw0xzZ4+qrO3GahyWn0YD
+         INZg05kse8JzXU3QPSRA6jDaI+ND4W9rgotf7hRjQmKVEqCw//nLb9TRz7+WF2buJh6B
+         yvgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679690317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UpfYsPLth4MHWQZy4hoycC7tFlnErWweN4IdkgXtblQ=;
+        b=OENK52bHU8kM2F8AXAhUvWTDIxdmt8Qxma3yKPDLerixwPUuu4xrfHUFGSkqe7oUgx
+         3tV5Tk3R/gDAMtNSRyr+M3ciBDTJEdwWuey9Rrk6TQKF+QADOTqU0+HY28V1JxGh1T9k
+         dm0A8xRemFq9+XMhSlrD1G7IRzHbbLxwb/+LzAFC63IqGm1SETwXhkEewC6g/PncdJ2R
+         ITFiCeh4FTXCIIpY+veFo/Qn37iTrEFiMAFAdm9DMgMeQ+fdp5FNbctcTTio0X8YL28K
+         FsPf6aAdQgo/sop8sYRFoKvPePwYrCPuZxW1F8iuuymvthY/faYf4jR7QkEoWtHi3R7Q
+         4/Xw==
+X-Gm-Message-State: AAQBX9dkRChX1X6MtC3/tyGk/Am4NIj3MDkNKFx1g2A3b//VHh4CpgoT
+        N8OMi9x0upvBe4uqIuEwZYJhmvgB0nE=
+X-Google-Smtp-Source: AKy350Z6a6EpSZcpgWRYW72xNNVmQy0tgNvMAdFFnlz4s+uqNWeqXbqFINm/dVCXK9QpiYsE38rw1Q==
+X-Received: by 2002:a17:903:684:b0:19d:297:f30b with SMTP id ki4-20020a170903068400b0019d0297f30bmr3336555plb.19.1679690317100;
+        Fri, 24 Mar 2023 13:38:37 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170902ab9100b001966d94cb2esm14503431plr.288.2023.03.24.13.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 13:38:36 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Young <sean@mess.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ravi Kumar V <kumarrav@codeaurora.org>,
+        linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
+        (V4L/DVB)),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), Matthew Lear <matthew.lear@broadcom.com>
+Subject: [PATCH v2 0/2] Correct gpio-ir-recv wakeup capability
+Date:   Fri, 24 Mar 2023 13:38:31 -0700
+Message-Id: <20230324203833.3540187-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 10:36:37 +0100, Maxime Chevallier wrote:
-> When the Altera TSE PCS driver was initially introduced, there were
-> comments by Russell that the register layout looked very familiar to the
-> existing Lynx PCS driver, the only difference being that the TSE PCS
-> driver is memory-mapped whereas the Lynx PCS driver sits on an MDIO bus.
-> 
-> Since then, I've sent a followup to create a wrapper around Lynx, that
-> would create a virtual MDIO bus driver that would translate the mdio
-> operations to mmio operations [1].
-> 
-> [...]
+This small patch series fixes the gpio-ir-recv binding and driver to
+first indicate that it can be a wake-up source for the system, and
+second actually make that happen.
 
-Applied to
+Changes in v2:
+- corrected the indentation of the description for "wakeup-source"
 
-   broonie/regmap.git for-next
+Florian Fainelli (2):
+  dt-bindings: media: gpio-ir-receiver: Document wakeup-souce property
+  media: rc: gpio-ir-recv: Fix support for wake-up
 
-Thanks!
+ Documentation/devicetree/bindings/media/gpio-ir-receiver.yaml | 3 +++
+ drivers/media/rc/gpio-ir-recv.c                               | 2 ++
+ 2 files changed, 5 insertions(+)
 
-[1/7] regmap: add a helper to translate the register address
-      commit: 3f58f6dc4d92ed6fae4a4da0d5b091e00ec10fa8
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.34.1
 
