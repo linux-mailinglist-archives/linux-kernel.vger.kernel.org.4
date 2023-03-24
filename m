@@ -2,263 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226916C6E53
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 18:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929C56C6CC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Mar 2023 16:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjCWRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 13:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S232233AbjCWP7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 11:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjCWRCu (ORCPT
+        with ESMTP id S231241AbjCWP7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 13:02:50 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2320DA;
-        Thu, 23 Mar 2023 10:02:48 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id p34so9040377wms.3;
-        Thu, 23 Mar 2023 10:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679590967;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bp/47FyfXWrv7YAHrhutabfG1x/VNQCETTStp/ikpF0=;
-        b=YpzCEp3j8wt9o6oLxFHsOHKtoZ5POjoBAuNlnPA+IQIrdEE0ldt4CiFPy73P8Dp6Dj
-         PpSUrpTMmsqcElS/p/MDEIqWc69Y4WLJUs+HV3lBxYSZeIW20h+Ytg2jiqTlkqrDWTME
-         dky8zthLpZa/HAIBAimGTLjZ9rxAvGsMUrgTHA4p6SUH5IKgtRvGy37kn24cxen6K+3V
-         AuTYI0iz3MdU/lRNsWuKW+Lbt5xarsRpK8q8lWn1fbYC7HbEdNpiR0v0sAHmnYgZTv3k
-         T5jP+fviAYejXC9CiSS/bywBO0p1/It8m4XTX8x+Jp+/jWQtNvbhRE641rnktLGa8SuE
-         hRkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679590967;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bp/47FyfXWrv7YAHrhutabfG1x/VNQCETTStp/ikpF0=;
-        b=4Ekne2zE2hptEDu4yfHLShuooHYJEnRDhTon3VgqHKaQ9sDocSm7+DA4luRWJ9B9N7
-         MXeP4GydKbwNSDRzwVLqcx1cBvg1xu2G+lKY0WVw60T+wz/mPVeaoBEsvQX8iFIAlRVD
-         LRyTgGjbYbbPisqfyvcb7CfhKZEbseu0TtBVVNtpUSAJpZb8tkTW5DI+K6PZlJ7c2Dux
-         gdxAnpOqri4iWmbswA8azCPEepYOsQV6ug+qoJBes0VWUiiTp8NTRzIIgODcVGuzIj2u
-         BpiAutOrfwckQdwrPtH9f9/uRvhUuCBauMY9K+eW7dF11fDzADmMDiMpkHHDsX4kUkbX
-         5BnA==
-X-Gm-Message-State: AO0yUKWeZDuOp0EjVJGqdgSiX8SRkj+bYH/EKnPiLcfnmHWpl2HPEbia
-        +oyCm8it8AgKq7drRP+IjzE=
-X-Google-Smtp-Source: AK7set8pPNGQg+UcP0a9kYvkyJ+7YK0034Oo2O5j/vzz2t8hErZx4p3vywMm9OUoVpLHhCmZf2MGjw==
-X-Received: by 2002:a05:600c:a0c:b0:3ee:90fa:aedf with SMTP id z12-20020a05600c0a0c00b003ee90faaedfmr1682671wmp.11.1679590967156;
-        Thu, 23 Mar 2023 10:02:47 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id a2-20020a05600c224200b003ee63fe5203sm2395778wmm.36.2023.03.23.10.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 10:02:46 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com, andrew@lunn.ch,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH 1/1] net: dsa: b53: mmap: add dsa switch ops
-Date:   Thu, 23 Mar 2023 18:02:38 +0100
-Message-Id: <20230323170238.210687-2-noltari@gmail.com>
+        Thu, 23 Mar 2023 11:59:34 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A841026A;
+        Thu, 23 Mar 2023 08:59:33 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pj95D4BBmz4f3jqM;
+        Thu, 23 Mar 2023 23:59:28 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgC3aq5fdxxktQW3Fw--.25283S2;
+        Thu, 23 Mar 2023 23:59:29 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: add bound tracking for BPF_MOD
+Date:   Fri, 24 Mar 2023 00:58:40 -0400
+Message-Id: <20230324045842.729719-1-xukuohai@huaweicloud.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230323170238.210687-1-noltari@gmail.com>
-References: <20230323170238.210687-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: gCh0CgC3aq5fdxxktQW3Fw--.25283S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyfKr1UXF1kWrW7Cw47CFg_yoWDtFcEya
+        93tasYvFnxJFnYqFZakF17WrWqkw4UKFyrJF42qrW7XFn7Jr1FgFs5Gry5Ja4DKFWrXrZ7
+        JF9xtayvvrnIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbs8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_Grv_XF1l8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWD
+        JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oV
+        Cq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG
+        8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2js
+        IE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY
+        1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7IU8L2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=2.5 required=5.0 tests=DATE_IN_FUTURE_12_24,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-B53 MMAP switches have a MDIO Mux bus controller which should be used instead
-of the default phy_read/phy_write ops used in the rest of the B53 controllers.
-Therefore, in order to use the proper MDIO Mux bus controller we need to
-replicate the default B53 DSA switch ops removing the phy_read/phy_write
-entries.
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- drivers/net/dsa/b53/b53_common.c | 22 +++++++++---------
- drivers/net/dsa/b53/b53_mmap.c   | 40 ++++++++++++++++++++++++++++++++
- drivers/net/dsa/b53/b53_priv.h   | 11 +++++++++
- 3 files changed, 62 insertions(+), 11 deletions(-)
+dst_reg is marked as unknown when BPF_MOD instruction is verified, causing
+the following bpf prog to be incorrectly rejected.
 
-diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
-index 1f9b251a5452..9080506f2a9c 100644
---- a/drivers/net/dsa/b53/b53_common.c
-+++ b/drivers/net/dsa/b53/b53_common.c
-@@ -1096,7 +1096,7 @@ int b53_setup_devlink_resources(struct dsa_switch *ds)
- }
- EXPORT_SYMBOL(b53_setup_devlink_resources);
- 
--static int b53_setup(struct dsa_switch *ds)
-+int b53_setup(struct dsa_switch *ds)
- {
- 	struct b53_device *dev = ds->priv;
- 	unsigned int port;
-@@ -1134,7 +1134,7 @@ static int b53_setup(struct dsa_switch *ds)
- 	return b53_setup_devlink_resources(ds);
- }
- 
--static void b53_teardown(struct dsa_switch *ds)
-+void b53_teardown(struct dsa_switch *ds)
- {
- 	dsa_devlink_resources_unregister(ds);
- }
-@@ -1253,8 +1253,8 @@ static void b53_adjust_63xx_rgmii(struct dsa_switch *ds, int port,
- 		phy_modes(interface));
- }
- 
--static void b53_adjust_link(struct dsa_switch *ds, int port,
--			    struct phy_device *phydev)
-+void b53_adjust_link(struct dsa_switch *ds, int port,
-+		     struct phy_device *phydev)
- {
- 	struct b53_device *dev = ds->priv;
- 	struct ethtool_eee *p = &dev->ports[port].eee;
-@@ -1356,8 +1356,8 @@ void b53_port_event(struct dsa_switch *ds, int port)
- }
- EXPORT_SYMBOL(b53_port_event);
- 
--static void b53_phylink_get_caps(struct dsa_switch *ds, int port,
--				 struct phylink_config *config)
-+void b53_phylink_get_caps(struct dsa_switch *ds, int port,
-+			  struct phylink_config *config)
- {
- 	struct b53_device *dev = ds->priv;
- 
-@@ -1401,9 +1401,9 @@ static void b53_phylink_get_caps(struct dsa_switch *ds, int port,
- 	config->legacy_pre_march2020 = false;
- }
- 
--static struct phylink_pcs *b53_phylink_mac_select_pcs(struct dsa_switch *ds,
--						      int port,
--						      phy_interface_t interface)
-+struct phylink_pcs *b53_phylink_mac_select_pcs(struct dsa_switch *ds,
-+					       int port,
-+					       phy_interface_t interface)
- {
- 	struct b53_device *dev = ds->priv;
- 
-@@ -2262,7 +2262,7 @@ int b53_set_mac_eee(struct dsa_switch *ds, int port, struct ethtool_eee *e)
- }
- EXPORT_SYMBOL(b53_set_mac_eee);
- 
--static int b53_change_mtu(struct dsa_switch *ds, int port, int mtu)
-+int b53_change_mtu(struct dsa_switch *ds, int port, int mtu)
- {
- 	struct b53_device *dev = ds->priv;
- 	bool enable_jumbo;
-@@ -2277,7 +2277,7 @@ static int b53_change_mtu(struct dsa_switch *ds, int port, int mtu)
- 	return b53_set_jumbo(dev, enable_jumbo, allow_10_100);
- }
- 
--static int b53_get_max_mtu(struct dsa_switch *ds, int port)
-+int b53_get_max_mtu(struct dsa_switch *ds, int port)
- {
- 	return JMS_MAX_SIZE;
- }
-diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
-index 7bb774368f64..45481db7a891 100644
---- a/drivers/net/dsa/b53/b53_mmap.c
-+++ b/drivers/net/dsa/b53/b53_mmap.c
-@@ -22,6 +22,7 @@
- #include <linux/io.h>
- #include <linux/platform_device.h>
- #include <linux/platform_data/b53.h>
-+#include <net/dsa.h>
- 
- #include "b53_priv.h"
- 
-@@ -29,6 +30,44 @@ struct b53_mmap_priv {
- 	void __iomem *regs;
- };
- 
-+static const struct dsa_switch_ops b53_mmap_switch_ops = {
-+	.get_tag_protocol	= b53_get_tag_protocol,
-+	.setup			= b53_setup,
-+	.teardown		= b53_teardown,
-+	.get_strings		= b53_get_strings,
-+	.get_ethtool_stats	= b53_get_ethtool_stats,
-+	.get_sset_count		= b53_get_sset_count,
-+	.get_ethtool_phy_stats	= b53_get_ethtool_phy_stats,
-+	.adjust_link		= b53_adjust_link,
-+	.phylink_get_caps	= b53_phylink_get_caps,
-+	.phylink_mac_select_pcs	= b53_phylink_mac_select_pcs,
-+	.phylink_mac_config	= b53_phylink_mac_config,
-+	.phylink_mac_link_down	= b53_phylink_mac_link_down,
-+	.phylink_mac_link_up	= b53_phylink_mac_link_up,
-+	.port_enable		= b53_enable_port,
-+	.port_disable		= b53_disable_port,
-+	.get_mac_eee		= b53_get_mac_eee,
-+	.set_mac_eee		= b53_set_mac_eee,
-+	.port_bridge_join	= b53_br_join,
-+	.port_bridge_leave	= b53_br_leave,
-+	.port_pre_bridge_flags	= b53_br_flags_pre,
-+	.port_bridge_flags	= b53_br_flags,
-+	.port_stp_state_set	= b53_br_set_stp_state,
-+	.port_fast_age		= b53_br_fast_age,
-+	.port_vlan_filtering	= b53_vlan_filtering,
-+	.port_vlan_add		= b53_vlan_add,
-+	.port_vlan_del		= b53_vlan_del,
-+	.port_fdb_dump		= b53_fdb_dump,
-+	.port_fdb_add		= b53_fdb_add,
-+	.port_fdb_del		= b53_fdb_del,
-+	.port_mirror_add	= b53_mirror_add,
-+	.port_mirror_del	= b53_mirror_del,
-+	.port_mdb_add		= b53_mdb_add,
-+	.port_mdb_del		= b53_mdb_del,
-+	.port_max_mtu		= b53_get_max_mtu,
-+	.port_change_mtu	= b53_change_mtu,
-+};
-+
- static int b53_mmap_read8(struct b53_device *dev, u8 page, u8 reg, u8 *val)
- {
- 	struct b53_mmap_priv *priv = dev->priv;
-@@ -302,6 +341,7 @@ static int b53_mmap_probe(struct platform_device *pdev)
- 	if (!dev)
- 		return -ENOMEM;
- 
-+	dev->ds->ops = &b53_mmap_switch_ops;
- 	dev->pdata = pdata;
- 
- 	platform_set_drvdata(pdev, dev);
-diff --git a/drivers/net/dsa/b53/b53_priv.h b/drivers/net/dsa/b53/b53_priv.h
-index a689a6950189..cd759b177c94 100644
---- a/drivers/net/dsa/b53/b53_priv.h
-+++ b/drivers/net/dsa/b53/b53_priv.h
-@@ -348,7 +348,16 @@ int b53_br_flags(struct dsa_switch *ds, int port,
- 		 struct switchdev_brport_flags flags,
- 		 struct netlink_ext_ack *extack);
- int b53_setup_devlink_resources(struct dsa_switch *ds);
-+int b53_setup(struct dsa_switch *ds);
-+void b53_teardown(struct dsa_switch *ds);
-+void b53_adjust_link(struct dsa_switch *ds, int port,
-+		     struct phy_device *phydev);
- void b53_port_event(struct dsa_switch *ds, int port);
-+void b53_phylink_get_caps(struct dsa_switch *ds, int port,
-+			  struct phylink_config *config);
-+struct phylink_pcs *b53_phylink_mac_select_pcs(struct dsa_switch *ds,
-+					       int port,
-+					       phy_interface_t interface);
- void b53_phylink_mac_config(struct dsa_switch *ds, int port,
- 			    unsigned int mode,
- 			    const struct phylink_link_state *state);
-@@ -396,5 +405,7 @@ void b53_eee_enable_set(struct dsa_switch *ds, int port, bool enable);
- int b53_eee_init(struct dsa_switch *ds, int port, struct phy_device *phy);
- int b53_get_mac_eee(struct dsa_switch *ds, int port, struct ethtool_eee *e);
- int b53_set_mac_eee(struct dsa_switch *ds, int port, struct ethtool_eee *e);
-+int b53_change_mtu(struct dsa_switch *ds, int port, int mtu);
-+int b53_get_max_mtu(struct dsa_switch *ds, int port);
- 
- #endif
+0: r0 = 0
+1: r0 %= 1   // r0 is marked as unknown
+2: r1 = 0
+3: r1 += 1
+4: if r1 < r0 goto pc-2 // verifier concludes the loop is unbounded
+5: exit
+
+To teach verifier to accept the above prog, this series adds bound tracking
+for BPF_MOD.
+
+v2:
+- fix build warning reported by kernel test robot <lkp@intel.com> [0]
+- add two more cases and update commit message
+
+[0] https://lore.kernel.org/oe-kbuild-all/202303060036.zK05OC5M-lkp@intel.com
+
+v1: https://lore.kernel.org/bpf/20230306033119.2634976-1-xukuohai@huaweicloud.com
+
+Xu Kuohai (2):
+  bpf: add bound tracking for BPF_MOD
+  selftests/bpf: check if verifier tracks dst_reg bound for BPF_MOD
+
+ kernel/bpf/verifier.c                      |  98 ++++++-
+ tools/testing/selftests/bpf/verifier/mod.c | 320 +++++++++++++++++++++
+ 2 files changed, 413 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/mod.c
+
 -- 
 2.30.2
 
