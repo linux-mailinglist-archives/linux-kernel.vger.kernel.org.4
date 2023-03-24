@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBC46C7D39
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B14A6C7D3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjCXLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S230102AbjCXLeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjCXLbu (ORCPT
+        with ESMTP id S229508AbjCXLd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:31:50 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A471234FF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:31:22 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o12so6644774edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679657475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1rNUx5PH+PaAEWGpJPPP680k3czmX+EawiTbGX+dCs=;
-        b=QXr0k0McIYg705LgB46JG1XSCYwYgoRapwcMhK3GCvT8uaBzfpR225arLZFQiYVUVe
-         5pdQxyzZGdEWXOrZZheu9Mfonk/pv2L8KbO0i6ipcr5D5tWXJWiXcYmwr4iXcFGK6Afa
-         +uifTx4ZySOtqYRn626zPws3+v0twytGLhbwuOt9sPIA9mA5IZfWcREx3uPeSKPm0DS0
-         ogr14Wop3rCp2ZHDWkQ/LJXPcXP51ZxEkApk3+Fr7hldEKVIwFnM5uXhRDUQIUbQYYKz
-         XNMZCKEtKn0Bq5Ube2LmSArCaPLXGAb8g0Xfl9J2KjA5/2fEMRI/U4lioZ9UIGzFxm8b
-         ousQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679657475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1rNUx5PH+PaAEWGpJPPP680k3czmX+EawiTbGX+dCs=;
-        b=tAgqWnvYAVLvx0L4OIhM2LTH5axjw5CC6vnoBIhNOuqWjv0WHy6G0tOqPtRI93XAQ8
-         N0pimcvql8JIkzDU/Gi6/ExX6InRzak966EMxOrKWdHQ34gOW51xe6z7Ck37tltDvuWA
-         KJYrgmbnxfAIYl/TQU9vt4zMKlbQImhK3nv1kW6G3s805Mbl/Q4E2kltxd/TRAgP9yQK
-         gn1VdaOLfF0I+8j4l137v5ajzlBd9mN2sh1LeUzmESiJY4tT90YKhVbwv0fbJmN25nPV
-         QB9wU8iUtmiBZjXjyzcqFk/hqrezOYvChA0TcEWRpcGE6ZBApH5+tfYDtvZTtqCCkkRF
-         VQJQ==
-X-Gm-Message-State: AO0yUKWZDqT3w0BXh4L+Kob2ccfKskyQArqxfaaRInPgN7lgd9EjVrvQ
-        HrDVYDUxE6+lK+XGtNQQDj6M0Q==
-X-Google-Smtp-Source: AK7set+epd09sUUlXsOnISckn46QyPnpX3E7bZc6L6A8pdpiSAxNGg4Jn1Vr7jy4OrcZo6o0MB812Q==
-X-Received: by 2002:a17:906:57cb:b0:929:e5a8:63f7 with SMTP id u11-20020a17090657cb00b00929e5a863f7mr8781451ejr.28.1679657475167;
-        Fri, 24 Mar 2023 04:31:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
-        by smtp.gmail.com with ESMTPSA id v15-20020a170906858f00b0093229e527cdsm9665138ejx.42.2023.03.24.04.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 04:31:14 -0700 (PDT)
-Message-ID: <0fff1e01-678b-a26a-084b-9aa30a0deea5@linaro.org>
-Date:   Fri, 24 Mar 2023 12:31:13 +0100
+        Fri, 24 Mar 2023 07:33:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D306B1C7FB;
+        Fri, 24 Mar 2023 04:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83EE2B8239C;
+        Fri, 24 Mar 2023 11:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F2BC4339B;
+        Fri, 24 Mar 2023 11:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679657634;
+        bh=gN1rw7P5nD0EPnar+Hih8wRjO2zp+3Y1UdQYfZsCqBs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oKBFZiTSugNI6NXoGDFM/eBf78cVT9COzfU+bK3uSgOS53e3/8uY8Lu7lDAbjrduk
+         f+o8I4IP6BYkZGnxLmFm4qVfvm7dJSJkandF8nEHZh/DaIWiYRlpfG6z0ULmtwPtIg
+         nDHS6FGdnDYwICHFy4dxqwAXliGTH64w++/LYtza0OHzdJky1GlEg3mil1o4aW6rbz
+         Si9H/Df8j+pf7qs8sOV622rw/SqwGlYi73awC5Nv4oZBD90kbgTPSq3JXLOam8tfXA
+         kH7kbVtZ3aljmfG69UC5diNO8GcTecvllVT+g4KIePYuMC3aOG6ac2SfijvN6YPeoE
+         ncSzwNoANakxg==
+Received: by mail-lf1-f44.google.com with SMTP id br6so1810469lfb.11;
+        Fri, 24 Mar 2023 04:33:54 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dTve0JONSYQmUyJyR56PQSmIso5wytq8LDFdP8iNPZ96Yw35Qh
+        s3AdWz0odaJVclBtzsyALS+Q8HQVkfStO+11k8c=
+X-Google-Smtp-Source: AKy350b8q3+lUeJ9w5ZT9GW50L8qAY6bqdL3UY0CHDzs4u9bAT5b8qVWBbNxvRz6Pby8JiJnvjS/qp42bIAdEGY9RWU=
+X-Received: by 2002:ac2:4a89:0:b0:4ea:12f7:a725 with SMTP id
+ l9-20020ac24a89000000b004ea12f7a725mr650882lfp.4.1679657632209; Fri, 24 Mar
+ 2023 04:33:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com> <ZBzAp457rrO52FPy@aurel32.net>
+In-Reply-To: <ZBzAp457rrO52FPy@aurel32.net>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 24 Mar 2023 12:33:40 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+Message-ID: <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
         linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230324063317.14664-1-zhuyinbo@loongson.cn>
- <20230324063317.14664-3-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230324063317.14664-3-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/03/2023 07:33, Yinbo Zhu wrote:
-> This bus driver supports the Loongson spi hardware controller in the
-> Loongson platforms and supports to use DTS and PCI framework to
-> register spi device resources.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  MAINTAINERS                     |   4 +
->  drivers/spi/Kconfig             |  31 ++++
->  drivers/spi/Makefile            |   3 +
->  drivers/spi/spi-loongson-core.c | 302 ++++++++++++++++++++++++++++++++
->  drivers/spi/spi-loongson-pci.c  |  89 ++++++++++
->  drivers/spi/spi-loongson-plat.c |  66 +++++++
->  drivers/spi/spi-loongson.h      |  41 +++++
->  7 files changed, 536 insertions(+)
->  create mode 100644 drivers/spi/spi-loongson-core.c
->  create mode 100644 drivers/spi/spi-loongson-pci.c
->  create mode 100644 drivers/spi/spi-loongson-plat.c
->  create mode 100644 drivers/spi/spi-loongson.h
+(cc BTF list and maintainer)
 
-Your patches still have build warnings. Are these false postives or you
-forgot to build it? Anyway, please respond to the report.
+On Thu, 23 Mar 2023 at 22:12, Aurelien Jarno <aurelien@aurel32.net> wrote:
+>
+> Hi,
+>
+> On 2023-03-22 15:51, Ard Biesheuvel wrote:
+> > On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > > > In the previous discussion (see the Link tag), Ard pointed out that
+> > > > arm/arm64/kernel/head.o does not need any special treatment - the only
+> > > > piece that must appear right at the start of the binary image is the
+> > > > image header which is emitted into .head.text.
+> > > >
+> > > > The linker script does the right thing to do. The build system does
+> > > > not need to manipulate the link order of head.o.
+> > > >
+> > > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > ---
+> > > >
+> > > >  scripts/head-object-list.txt | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > > >
+> > > > diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> > > > index b16326a92c45..f226e45e3b7b 100644
+> > > > --- a/scripts/head-object-list.txt
+> > > > +++ b/scripts/head-object-list.txt
+> > > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> > > >  arch/arc/kernel/head.o
+> > > >  arch/arm/kernel/head-nommu.o
+> > > >  arch/arm/kernel/head.o
+> > > > -arch/arm64/kernel/head.o
+> > > >  arch/csky/kernel/head.o
+> > > >  arch/hexagon/kernel/head.o
+> > > >  arch/ia64/kernel/head.o
+> > >
+> > > This patch causes a significant increase of the arch/arm64/boot/Image
+> > > size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
+> > > after this patch has been applied to the 6.1 stable tree.
+> > >
+> > > In turn this causes issues with some bootloaders, for instance U-Boot on
+> > > a Raspberry Pi limits the kernel size to 36 MB.
+> > >
+> >
+> > I cannot reproduce this with mainline
+> >
+> > With the patch
+> >
+> > $ size vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24567309 14752630 621680 39941619 26175f3 vmlinux
+> >
+> > With the patch reverted
+> >
+> > $ size vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24567309 14752694 621680 39941683 2617633 vmlinux
+>
+> I have tried with the current mainline, this is what I get, using GCC 12.2.0
+> and binutils 2.40:
+>
+>    text    data     bss     dec     hex filename
+> 32531655        8192996  621968 41346619        276e63b vmlinux.orig
+> 25170610        8192996  621968 33985574        2069426 vmlinux.revert
+>
+> > It would help to compare the resulting vmlinux ELF images from both
+> > builds to see where the extra space is being allocated
+>
+> At a first glance, it seems the extra space is allocated in the BTF
+> section. I have uploaded the resulting files as well as the config file
+> I used there:
+> https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
+>
 
-Best regards,
-Krzysztof
+Indeed. So we go from
 
+  [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+       00000000005093d6  0000000000000000   A       0     0     1
+
+to
+
+  [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+       0000000000c0e5eb  0000000000000000   A       0     0     1
+
+i.e, from 5 MiB to 12+ MiB of BTF metadata.
+
+To me, it is not clear at all how one would be related to the other,
+so it will leave it to the Kbuild and BTF experts to chew on this one.
