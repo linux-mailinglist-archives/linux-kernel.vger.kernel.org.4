@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2795E6C78C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F412E6C78D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjCXH0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S231680AbjCXH1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCXH0L (ORCPT
+        with ESMTP id S231571AbjCXH1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:26:11 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD1D2684E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:25:39 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32O7Oi7p107140;
-        Fri, 24 Mar 2023 02:24:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679642684;
-        bh=rF9gqCX1E1b9HvvQFT1lQokYiQ1TG/jF+TfJcLSPlao=;
-        h=From:To:CC:Subject:Date;
-        b=uRLPHuW840L/+jZ1iJmpMtfIZPxY2yaOezszB+RoW4OsRfZcFXM87PEaZ56MKQEGi
-         AoZZrdBx45EcyUxHyu6DLa9OFJvN2KgtdZ0nz9zPZYDxklpKzCZ/k0ikd56abR4PEa
-         E5lobq/2RbPd+6UU+86z39bRoei8T8PWs67PYneo=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32O7Oi0r001558
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 24 Mar 2023 02:24:44 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 24
- Mar 2023 02:24:44 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 24 Mar 2023 02:24:44 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32O7OhxD095717;
-        Fri, 24 Mar 2023 02:24:43 -0500
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <b-kapoor@ti.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <quic_bjorande@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <arnd@arndb.de>, <krzysztof.kozlowski@linaro.org>,
-        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <rafal@milecki.pl>
-Subject: [PATCH v3] arm64: defconfig: Enable CAN PHY transceiver driver
-Date:   Fri, 24 Mar 2023 12:54:43 +0530
-Message-ID: <20230324072443.395080-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 24 Mar 2023 03:27:02 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB8C13509
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:55 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id kc4so1064346plb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679642814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
+        b=lBy36qf99v/akTnZfqIbBpJAhkBbS4hxyhr2Jne8gCswaxvp2Jp3FENopQ1quN9LoI
+         VNuHMsYgqHlORnlmEX5zvB8hUlcw5EI8Jo5JrbapUgAEo7Oq3ti0/E82h0tC8TzSqJ5s
+         azjhTEJfus9EQxuW9F6Rf2F5Ev3ZauxqzemQkoefrGtuiPmPtQJmW84WtnIRYXkqFVPj
+         0Dii2BOGoEZoreA9YJaOiMY8VFyd40yrv/taVZvEHLLJ7kt35WHW/hqNylXgavwDXuIJ
+         BSy+9n59hPfxosCDqWYllWUNRvxdD5iIWjj/KnkorjkQvS2/0Gu1kLM9135Ei678N/38
+         vy5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679642814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qOWL7nV1WlBQFqJTXaBmWX6r0g27OV1XFhs05mfe2aI=;
+        b=ym1FHoClZ9QQLs9RLAgZ9DntPwSNl8PfxuhpoawXBekxDbZtVe7MhY7YehtRk/Ahna
+         WCNUaJBLof37vsNzDWw91tsZP17PjdqR3sutgVb/u/eetDphefd5Sf2jV0DVoL4wutbw
+         9Mt2nuSYfwX37XY+HeMTTZcdVlKGJvTugIZdmJ8Kosj03Gg6Ux1b+88h3n9u9K5mOS1u
+         H0/Bpox3ts6zlIVU4fcPntrhCMLk0tbgnATS/j7Br5NtMECDm7wp28FXVnAeruIEq6dN
+         E2LMkyUX6yG2JAoxqghVWOxCL/GE0G3AvhV+81M1rP3f2r+1qQesmdMwWOSE/Rx1SqVB
+         z8cw==
+X-Gm-Message-State: AAQBX9eDFPbcm9emmympv+Ul9VxB1AslesT4I1CoYgeI71OHCtWN2suI
+        OW1hA9s7svg2QvsU1/Vx5uk=
+X-Google-Smtp-Source: AKy350aNhUPcRlU0iL4dePfhEGfhG/kuFnHgs06JnlqWlbVOTtQooldC9zpf0rhCQpaxh7fGZUPo8Q==
+X-Received: by 2002:a17:90b:1d02:b0:23d:133a:62cc with SMTP id on2-20020a17090b1d0200b0023d133a62ccmr1902114pjb.17.1679642814428;
+        Fri, 24 Mar 2023 00:26:54 -0700 (PDT)
+Received: from ubuntu.localdomain ([59.89.175.90])
+        by smtp.gmail.com with ESMTPSA id b16-20020a17090a991000b002311c4596f6sm2345152pjp.54.2023.03.24.00.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 00:26:53 -0700 (PDT)
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: [PATCH v2 0/3] Staging: greybus: Use inline functions
+Date:   Fri, 24 Mar 2023 00:26:15 -0700
+Message-Id: <cover.1679642024.git.sumitraartsy@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable CAN PHY transceiver driver to be built as a module which will
-add support for generic CAN transceivers used by TI K3 specific SoCs.
+Convert macros to a static inline function, to make the relevant 
+types apparent in the definition and to benefit from the type 
+checking performed by the compiler at call sites.
 
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
+CHanges in v2: Change patch subjects, noted by Alison Schofield 
+<alison.schofield@intel.com>
 
-Changelog v2->v3:
- - Modified Commit message to be more descriptive
+Sumitra Sharma (3):
+  Staging: greybus: Use inline function for macro
+    gpio_chip_to_gb_gpio_controller
+  Staging: greybus: Use inline function for gb_audio_manager_module
+  Staging: greybus: Use inline function for pwm_chip_to_gb_pwm_chip
 
-Link to V2 : https://lore.kernel.org/all/20230323113324.361991-1-b-kapoor@ti.com/
+ drivers/staging/greybus/audio_manager_module.c | 7 +++++--
+ drivers/staging/greybus/gpio.c                 | 7 +++++--
+ drivers/staging/greybus/pwm.c                  | 6 ++++--
+ 3 files changed, 14 insertions(+), 6 deletions(-)
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7790ee42c68a..6e123de3a9cf 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1292,6 +1292,7 @@ CONFIG_RESET_QCOM_PDC=m
- CONFIG_RESET_RZG2L_USBPHY_CTRL=y
- CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
-+CONFIG_PHY_CAN_TRANSCEIVER=m
- CONFIG_PHY_SUN4I_USB=y
- CONFIG_PHY_CADENCE_TORRENT=m
- CONFIG_PHY_CADENCE_SIERRA=m
 -- 
-2.34.1
+2.25.1
 
