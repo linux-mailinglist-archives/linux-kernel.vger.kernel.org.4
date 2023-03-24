@@ -2,134 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27E96C7E4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BA96C7E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjCXMuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S231616AbjCXMrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjCXMul (ORCPT
+        with ESMTP id S229522AbjCXMrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:50:41 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6337C3;
-        Fri, 24 Mar 2023 05:50:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3BB943200A08;
-        Fri, 24 Mar 2023 08:50:40 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Fri, 24 Mar 2023 08:50:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679662239; x=1679748639; bh=0i
-        PYyvYnm1AEnXuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=WWNYrMotO9neL7JvKt
-        pqkQSLtU2bDgE0Pqw+/uoCIWZqH40RjwlU36+KbNs9EUarOTd+etVk3xlPVtMIJa
-        dy53rRiPrDrI90GAjCG6O0jc8xeyl1EBx/nkHEL13Zl43eVUdFsrOoQMEQKaamro
-        zyYcnb/PPmC2XqmD08PU1Rpx2eYO79o1hVuz02H2O0TIJ9gZMyVKO7vViBA9kht9
-        awhtyIoAY3vnim01+9Eq/dpoZ59DIDfGwRTJa/6ELZi+DgzP0XcCezj4E3pC1RJY
-        TRXq2mx3+oTcxw/k2gP9EwNTyaXFtYP3dKpRZl8cER6neTAhy8DgAisXn8V0Lyic
-        XvCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679662239; x=1679748639; bh=0iPYyvYnm1AEn
-        XuoGimRYpODjqiX75LCp0xlyX7nFAE=; b=Rxo0Q/2dEJs4isNP1RMPXnWioHheE
-        SSWR/wdHyh1MvnKUuVFaPZ9uwmdch3ezrgTytitS63V6ddLIirDeaYWAd+RL+siy
-        4zaYwOe4VN4YwXTRoSuNibhf+xb21Hg86rbnN0G3Nkjbmyaiau6aWgnnyR4V7qR+
-        Fn7IML/hYZazcTtvCWDHFAhzddaQza90QfP9/xucE74O4gjIk5XJKOvZpIJ92zVT
-        qeF3baI7uWE4xcna4IgNFmk+sBHbuMf5k6zXHtCNqIoSUPlSGzB6NJWOiSfsmO44
-        8ZGOEu3JiePhwTbZ0129mTMjowrYTY22Hgym6q2EsnAfXi5tubPr1Vlsw==
-X-ME-Sender: <xms:n5wdZJx7hANKXck7D2UkvyV5UsGeyAZy9EdB7Dn79vUVQJQeR3jN2w>
-    <xme:n5wdZJTlPAodL8CTPuQ8hyAEDhmBca--r1ZdGsS7Iipz9lWDEYWQ6HKMXLNiywx-d
-    oTIfkEuILZ3q_WXLYc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
-    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:n5wdZDUQAQb7-vKidLHSbaOlx1WzDxRfX6kXmDZ20AaEZ6dGzjcrbw>
-    <xmx:n5wdZLjwwq4_m_50IMRHoqROaHru0Nym6RpzH7sc-_o5lQq9bxYjYQ>
-    <xmx:n5wdZLCSKUNfNO-sgpT6SfUpGuC4YA8jzqX-JxwnlQw1V6xUy6htoA>
-    <xmx:n5wdZA5bksg3ktQ7J035GemBpUHNQoEFQEGyGkEzwjAY2IMc8gkhUw>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6568BC60091; Fri, 24 Mar 2023 08:50:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <16c47819-dbcc-4a9d-9124-7d440cfbf1d6@app.fastmail.com>
-In-Reply-To: <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230321190136.449485-1-mpearson-lenovo@squebb.ca>
- <ZBwikZ0wyQ1LGYBc@kuha.fi.intel.com>
-Date:   Fri, 24 Mar 2023 08:50:19 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>
-Cc:     "Greg KH" <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: acpi: Remove notifier before destroying handler
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 08:47:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CCB1C591;
+        Fri, 24 Mar 2023 05:47:38 -0700 (PDT)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Pjhm93H8nzrSQh;
+        Fri, 24 Mar 2023 20:46:33 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 24 Mar 2023 20:47:36 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] ring-buffer: Fix race while reader and writer are on the same page
+Date:   Fri, 24 Mar 2023 20:50:37 +0800
+Message-ID: <20230324125037.2719020-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+When user reads file 'trace_pipe', kernel keeps printing following logs
+that warn at "cpu_buffer->reader_page->read > rb_page_size(reader)".
+It just looks like there's an infinite loop in tracing_read_pipe().
+This problem occurs several times on arm64 when testing v5.10 and below.
 
-On Thu, Mar 23, 2023, at 5:57 AM, Heikki Krogerus wrote:
-> On Tue, Mar 21, 2023 at 03:01:36PM -0400, Mark Pearson wrote:
->> Was debugging another issue (since fixed) and noticed that the acpi
->> notify_handler should be removed before the ucsi object is destroyed.
->> 
->> This isn't fixing any issues that I'm aware of - but I assume could
->> potentially lead to a race condition if you were really unlucky?
->> 
->> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->> ---
->>  drivers/usb/typec/ucsi/ucsi_acpi.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->> 
->> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
->> index ce0c8ef80c04..be3bf4f996d3 100644
->> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
->> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
->> @@ -176,12 +176,12 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
->>  {
->>  	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
->>  
->> -	ucsi_unregister(ua->ucsi);
->> -	ucsi_destroy(ua->ucsi);
->> -
->>  	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
->>  				   ucsi_acpi_notify);
->>  
->> +	ucsi_unregister(ua->ucsi);
->> +	ucsi_destroy(ua->ucsi);
->> +
->>  	return 0;
->>  }
->
-> Calling ucsi_desctroy() after removing the notifier makes sense to me,
-> but do you also need to unregister the instance after that?
->
-> You may still be in the middle of init or resume, so I think we need
-> to accept notifications until we are sure those have finished, i.e.
-> ucsi_unregister() has finished.
->
+  Call trace:
+   rb_get_reader_page+0x248/0x1300
+   rb_buffer_peek+0x34/0x160
+   ring_buffer_peek+0xbc/0x224
+   peek_next_entry+0x98/0xbc
+   __find_next_entry+0xc4/0x1c0
+   trace_find_next_entry_inc+0x30/0x94
+   tracing_read_pipe+0x198/0x304
+   vfs_read+0xb4/0x1e0
+   ksys_read+0x74/0x100
+   __arm64_sys_read+0x24/0x30
+   el0_svc_common.constprop.0+0x7c/0x1bc
+   do_el0_svc+0x2c/0x94
+   el0_svc+0x20/0x30
+   el0_sync_handler+0xb0/0xb4
+   el0_sync+0x160/0x180
 
-That makes sense - I hadn't considered that.
-I'll post an updated patch with the acpi_remove_notify_handler between the two calls.
+Then I dump the vmcore and look into the problematic per_cpu ring_buffer,
+I found that tail_page/commit_page/reader_page are on the same page while
+reader_page->read is obviously abnormal:
+  tail_page == commit_page == reader_page == {
+    .write = 0x100d20,
+    .read = 0x8f9f4805,  // Far greater than 0xd20, obviously abnormal!!!
+    .entries = 0x10004c,
+    .real_end = 0x0,
+    .page = {
+      .time_stamp = 0x857257416af0,
+      .commit = 0xd20,  // This page hasn't been full filled.
+      // .data[0...0xd20] seems normal
+    }
+ }
 
-Thanks for the review
-Mark
+The root cause is most likely the race that reader and writer are on the
+same page while reader saw an event that not fully committed by writer.
+
+To fix this, add memory barriers to make sure that reader can see every
+completely committed event. Since commit a0fcaaed0c46 ("ring-buffer: Fix
+race between reset page and reading page") has added the read barrier in
+rb_get_reader_page(), here we just need to add the write barrier.
+
+Fixes: 77ae365eca89 ("ring-buffer: make lockless")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/trace/ring_buffer.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index c6f47b6cfd5f..79fd5e10ee05 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -2942,6 +2942,13 @@ rb_update_event(struct ring_buffer_per_cpu *cpu_buffer,
+ 		event->array[0] = length;
+ 	} else
+ 		event->type_len = DIV_ROUND_UP(length, RB_ALIGNMENT);
++
++	/*
++	 * The 'event' may be reserved from the page which is reading
++	 * by reader, make sure 'event' is completely updated before
++	 * reader_page->page->commit being set.
++	 */
++	smp_wmb();
+ }
+ 
+ static unsigned rb_calculate_event_length(unsigned length)
+@@ -4684,7 +4691,12 @@ rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)
+ 
+ 	/*
+ 	 * Make sure we see any padding after the write update
+-	 * (see rb_reset_tail())
++	 * (see rb_reset_tail()).
++	 *
++	 * In addition, writer may be writing on the reader page
++	 * if the page has not been fully filled, so the read barrier
++	 * is also needed to make sure we see the completely updated
++	 * event that reserved by writer (see rb_update_event()).
+ 	 */
+ 	smp_rmb();
+ 
+-- 
+2.25.1
+
