@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86B66C8079
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430546C8077
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjCXO4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S232210AbjCXO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjCXO4P (ORCPT
+        with ESMTP id S231877AbjCXO4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:56:15 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AEB2101;
-        Fri, 24 Mar 2023 07:56:13 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id q88so1667989qvq.13;
-        Fri, 24 Mar 2023 07:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679669773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yfQeRAUQ1sYH8jejnGUjF6wZ1+eebaWTvxfhMe12ulE=;
-        b=ck8aUFt3Tzmq6oJqHgjCskSNmgf+cW+LTMq9MZByBA0myNZF4TLzS4SU43PuChD0HO
-         KdZiC7E440UaTr/+ESu4VyxySNdBVQisHkvuLYpFeZsA6AJMmIqBHYh4ct4suHNGw2dV
-         9o9qswsM5ZD6muOSBP7cEO96FGZYnr1bNNdsBB50CShdXtR3KSI6jgztu8ZMQywnLH3N
-         Dd5ktK+1KU8pxgEZEmqvcup0gE4UpcwYGpWktLptsOzC3xCepwbdO8i/4jB9USX/j+Wp
-         McaxrGUz5MSG/sEaAkGxFjzMbqyLHxgOAgo7PfzaiFZhZphGhZt5vYEC9Vgdu6MAEyMC
-         LwsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679669773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yfQeRAUQ1sYH8jejnGUjF6wZ1+eebaWTvxfhMe12ulE=;
-        b=kFyrGsdYIpxbsaj2lG9Eviez1a8CuUHkJm1NrH32q045KqmY96uP9ggbwOK9f94FF6
-         GEguvjfDRt1uxx/qBDncdIfmoZWgxwqA38y8uBKJ6+FNJG4hsox5g6c/Bmo5pU2z0HCT
-         xUIezMM9FjWnmmOPhH/BfewY6cNFMxvJFyjAqSx8kIh/Pu4PCLmd41f6or7NwduddBTq
-         SmCMqdVw8LtL2ZIk7nlDnzjSpAjzYlSqHQYPiblITetyccVik7XVAv5UJNG07THBi1X+
-         3udGCtUm3fU5enQ2NpkCfymRicqfJ7AjQdIxi8bWPvU8oqzVfa9HBw/9F9Ko59JxOsP3
-         hueg==
-X-Gm-Message-State: AAQBX9ehRVjWEbMh+hGuM3gUGEajlUwGtJR406LSGwSegDUWQRyyFPvA
-        IAWrnAYI8JI9lhmPfyckbL4oWnThOle+Shi7AO0=
-X-Google-Smtp-Source: AKy350ZOiUboDCYVCjLTx1izxg117Yi0V+Kgoq5YpDlR/MdhajgP/uYoiUhxqb0nSpuJrfdC9gIBnAxy/HfDYWQZu0Y=
-X-Received: by 2002:ad4:4f2b:0:b0:570:ffdf:c0a3 with SMTP id
- fc11-20020ad44f2b000000b00570ffdfc0a3mr437746qvb.10.1679669772932; Fri, 24
- Mar 2023 07:56:12 -0700 (PDT)
+        Fri, 24 Mar 2023 10:56:12 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9513F2D5F;
+        Fri, 24 Mar 2023 07:56:10 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 23C035FD35;
+        Fri, 24 Mar 2023 17:56:08 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679669768;
+        bh=jKGFF0Da4+1cXaHKpDC/eneHomsmAiAzeGToPU73Ezw=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=n9hzZenddFoehGW/bLJK8iYJ1+F+cmLzgGNjzI05HGrl0Dbm9UYRrZOoPP09iAy7W
+         gKUbM5uO2+5SDZWi16LZdE7mRi2Xxhg+Am1QSs0i3jd7ylClla2wTVMZjGex/WgZPY
+         6i4FOs0642yY94YTdoRTfq3LP7K3OmxroX4Auqy3TuNUwVZ7U7yvgzgt6H5PVaE6HJ
+         hNf4Ehyy4P+32/cAZbdTXsJ/0vKUC18x3q5i8tRtA6fGnNKJS5dfr+6YcoJLzBeego
+         XK2DWZGWgq7HkrcpsCyBvyjfuAeSM0N9gbR4gt6wOBYwxHe8yl9hCLa25DwLpUnnb5
+         o2xr2q6GEBeVA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 17:56:07 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <jianxin.pan@amlogic.com>
+CC:     <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <rockosov@gmail.com>, Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v3] firmware: meson_sm: populate platform devices from sm device tree data
+Date:   Fri, 24 Mar 2023 17:55:57 +0300
+Message-ID: <20230324145557.27797-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20230324143626.16336-1-clin@suse.com> <20230324143626.16336-6-clin@suse.com>
-In-Reply-To: <20230324143626.16336-6-clin@suse.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 24 Mar 2023 16:55:36 +0200
-Message-ID: <CAHp75Vc5SiB7HCdMmigAJOWyqr50s_Urny0XSN61hyx=u5JzjQ@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] pinctrl: s32: separate const device data from
- struct s32_pinctrl_soc_info
-To:     Chester Lin <clin@suse.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        NXP S32 Linux Team <s32@nxp.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/24 06:52:00 #21002836
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 4:38=E2=80=AFPM Chester Lin <clin@suse.com> wrote:
->
-> The .data field in struct of_device_id is used as a const member so it's
-> inappropriate to attach struct s32_pinctrl_soc_info with of_device_id
-> because some members in s32_pinctrl_soc_info need to be filled by
-> pinctrl-s32cc at runtime.
->
-> For this reason, struct s32_pinctrl_soc_info must be allocated in
-> pinctrl-s32cc and then create a new struct s32_pinctrl_soc_data in order
-> to represent const .data in of_device_id. To combine these two structures=
-,
-> a s32_pinctrl_soc_data pointer is introduced in s32_pinctrl_soc_info.
->
-> Besides, use of_device_get_match_data() instead of of_match_device() sinc=
-e
-> the driver only needs to retrieve the .data from of_device_id.
+In some meson boards, secure monitor device has children, for example,
+power secure controller. By default, secure monitor isn't the bus in terms
+of device tree subsystem, so the of_platform initialization code doesn't
+populate its device tree data. As a result, secure monitor's children
+aren't probed at all.
 
-...
+Run the 'of_platform_populate()' routine manually to resolve such issues.
 
->                 .compatible =3D "nxp,s32g2-siul2-pinctrl",
-> -               .data =3D (void *) &s32_pinctrl_info,
-> +               .data =3D (void *) &s32_pinctrl_data,
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+Changes v3 since v2 at [2]:
+    - unmap meson sm shmem region if devm_of_platform_populate() failed
+    - move pr_info() log about successfully enabled secure-monitor to
+      the end of probe() routine
 
-Do you need casting now?
+Changes v2 since v1 at [1]:
+    - decline the device tree /firmware based solution
+    - introduce devm_of_platform_populate() solution in the meson sm driver
 
---=20
-With Best Regards,
-Andy Shevchenko
+Links:
+    [1] https://lore.kernel.org/all/20230323185548.13731-1-ddrokosov@sberdevices.ru/
+    [2] https://lore.kernel.org/linux-amlogic/20230324140141.6743-1-ddrokosov@sberdevices.ru/
+---
+ drivers/firmware/meson/meson_sm.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+index 77aa5c6398aa..1a99dbc274fa 100644
+--- a/drivers/firmware/meson/meson_sm.c
++++ b/drivers/firmware/meson/meson_sm.c
+@@ -311,11 +311,14 @@ static int __init meson_sm_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, fw);
+ 
+-	pr_info("secure-monitor enabled\n");
++	if (devm_of_platform_populate(dev))
++		goto out_in_base;
+ 
+ 	if (sysfs_create_group(&pdev->dev.kobj, &meson_sm_sysfs_attr_group))
+ 		goto out_in_base;
+ 
++	pr_info("secure-monitor enabled\n");
++
+ 	return 0;
+ 
+ out_in_base:
+-- 
+2.36.0
+
