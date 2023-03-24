@@ -2,73 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9646C7D6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA926C7D70
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjCXLqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S231503AbjCXLr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCXLqn (ORCPT
+        with ESMTP id S229600AbjCXLrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:46:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A453212B1;
-        Fri, 24 Mar 2023 04:46:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53C6211FB;
-        Fri, 24 Mar 2023 04:47:26 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.56.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9211E3F766;
-        Fri, 24 Mar 2023 04:46:40 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 11:46:31 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kpsingh@kernel.org, jolsa@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 0/7] Refactor ftrace direct call APIs
-Message-ID: <ZB2Nl7fzpHoq5V20@FVFF77S0Q05N>
-References: <20230321140424.345218-1-revest@chromium.org>
- <20230323194355.3f714774@gandalf.local.home>
- <20230323220042.40ec4904@gandalf.local.home>
+        Fri, 24 Mar 2023 07:47:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D17212B1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:47:23 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679658441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KDPHyC6kWyePMtKLTpdAD+GT0kcy5lpaGKk40vT9Trk=;
+        b=pYBaWSXTO+Wz8eDa1FUSKeX9XRTcRQiGR+tn0DaBZaj2pSQTCpNciw284AfXoUL43F9/pV
+        ZOLFU7nwE/quHO0F/ujK2j9/zEHeD3HdpaL210Mc/1M7FdJZ3el8yttzJ7i5vac/ID3MFm
+        wySJqyLXZNpqqqLQjb/IU/8eqp1/CndsZSgnYrYSbhZJ746MDVQ8yJRQpvfi1jPB/zpVOM
+        YgnnRtaecElUEyVKkHOnWdGISCEUpK/RlIbSKRs79znEqHpzkOzefb9JTMgZ5b1AIwe0C7
+        6UOiqpAsvC0RbYOX2EZ7f/wtsT0JpFP5DGnM4zBa/Z9NqH2V2VUsw+l+0fMFBQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679658441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KDPHyC6kWyePMtKLTpdAD+GT0kcy5lpaGKk40vT9Trk=;
+        b=p7MsW3zN+G0mjBxUNC5rQL58AdcZjYToNkx+sxTQB3HC9GmzxCrXtkkXG+pbPo6AYvg4le
+        wr4fyU/kQ4RsauCw==
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/microcode: move @microcode_mutex definition near usage
+Date:   Fri, 24 Mar 2023 11:47:20 +0000
+Message-Id: <20230324114720.1756466-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323220042.40ec4904@gandalf.local.home>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:00:42PM -0400, Steven Rostedt wrote:
-> On Thu, 23 Mar 2023 19:43:55 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > Since that commit only contains the updates for the direct trampolines that
-> > ARM64 needs, and I'm not going to rebase that branch, you can just merge it
-> > into the ARM64 tree so that you can base your changes on it. Make sure you
-> > merge that commit, not the branch, as I have more tracing specific patches
-> > on top of that commit.
-> 
-> I just made it easier for you. I created a signed tag: trace-direct-v6.3-rc3
-> 
-> So just pull from:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-> 
-> tag: trace-direct-v6.3-rc3
+If CONFIG_MICROCODE_LATE_LOADING is not enabled, the compiler warns:
 
-Thanks Steve; much appreciated!
+'microcode_mutex' defined but not used
 
-Florent, can you post a new spinf of the remaining arm64 bits rebased atop
-that?
+Since reload_store() is the only function using this mutex, move the
+mutex definititon there. Then it is also within the #ifdef block for
+CONFIG_MICROCODE_LATE_LOADING.
 
-Thanks,
-Mark.
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+---
+ arch/x86/kernel/cpu/microcode/core.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 7a329e561354..e7b8f7ad105d 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -49,20 +49,6 @@ bool initrd_gone;
+ 
+ LIST_HEAD(microcode_cache);
+ 
+-/*
+- * Synchronization.
+- *
+- * All non cpu-hotplug-callback call sites use:
+- *
+- * - microcode_mutex to synchronize with each other;
+- * - cpus_read_lock/unlock() to synchronize with
+- *   the cpu-hotplug-callback call sites.
+- *
+- * We guarantee that only a single cpu is being
+- * updated at any particular moment of time.
+- */
+-static DEFINE_MUTEX(microcode_mutex);
+-
+ struct ucode_cpu_info		ucode_cpu_info[NR_CPUS];
+ 
+ struct cpu_info_ctx {
+@@ -465,6 +451,20 @@ static int microcode_reload_late(void)
+ 	return ret;
+ }
+ 
++/*
++ * Synchronization.
++ *
++ * All non cpu-hotplug-callback call sites use:
++ *
++ * - microcode_mutex to synchronize with each other;
++ * - cpus_read_lock/unlock() to synchronize with
++ *   the cpu-hotplug-callback call sites.
++ *
++ * We guarantee that only a single cpu is being
++ * updated at any particular moment of time.
++ */
++static DEFINE_MUTEX(microcode_mutex);
++
+ static ssize_t reload_store(struct device *dev,
+ 			    struct device_attribute *attr,
+ 			    const char *buf, size_t size)
+
+base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
+-- 
+2.30.2
+
