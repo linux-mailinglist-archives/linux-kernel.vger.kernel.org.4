@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0A96C77DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5506C77DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjCXG27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S231168AbjCXG3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXG25 (ORCPT
+        with ESMTP id S229508AbjCXG3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:28:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F272D71
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679639285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qeXjSRfLwdb188nYRp/OaR/THnDSMW2kUowSqcUnpsU=;
-        b=BXrWQLHqNVEp5AZBUMAvLv7Slm8zRyUG54Y7N3W94++8VbAif8EgWmjZPspIjkwQ2xEiSo
-        hjqsvfTbGwuwAL3w+31vGMMHIkT59lx5KT8j7d3i/WRYVgKQM2Ah6nZTpMEbwcgZlo+lra
-        sP4e6bIRPDuJuHRYVECVQvFGsR683Ng=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-184-hQCW3TsBOdCnkxladtF1ow-1; Fri, 24 Mar 2023 02:28:04 -0400
-X-MC-Unique: hQCW3TsBOdCnkxladtF1ow-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17a03f26ff8so480714fac.8
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:28:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679639283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        Fri, 24 Mar 2023 02:29:48 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4732C17CC2;
+        Thu, 23 Mar 2023 23:29:47 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s20so653999ljp.1;
+        Thu, 23 Mar 2023 23:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679639385;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qeXjSRfLwdb188nYRp/OaR/THnDSMW2kUowSqcUnpsU=;
-        b=tDXIteBgTeyKG6ps1Du46muk3MwBirsFyE5Y0QrBHemSjHRTJb1O8TaSKmRjth/fU/
-         /1pg/1m7rGy9De6NRnOj+NsJ7gujaSyvamZH10voj3GBIsCM+3Tf/c+oglwAIytVx754
-         87FCmmsEjAQHHsR8qksB7Ml9tzaKVmFNjZkkTeuXU7q3VHTdsZ5twp5wkESEQSavlH0z
-         iYCCNdkDv8tYEhNaOteYRJXJq5wK8x/5j8AYoMjdafriz+aY+jbuh57YWWnSFSiMbJuo
-         lglubaDBsBiKIpLvlk+lHwIClFnVwmX26uaYOBFXu9btRNa2dOtdQ5vzobz185S75JAR
-         xVOA==
-X-Gm-Message-State: AO0yUKVxojXdqLptwCxyhazZyF6978Ukg/qoyt8Pp4L3o53aHyuuk0Dl
-        TaCPzikEApOl1V3z46htZECJE7v1GMB9PqlinucTPeQyZ7xMSBDHYP9YjRCGiZm9CyF6wghMQXR
-        v+h8C+c9GwDPax3iBr8ShQKAowIuwEItsMJbMzlV1
-X-Received: by 2002:a9d:67d8:0:b0:69f:229:ce72 with SMTP id c24-20020a9d67d8000000b0069f0229ce72mr730086otn.2.1679639283479;
-        Thu, 23 Mar 2023 23:28:03 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/zNwGCo/4/80XEpIM9DnWdRGQX0nNE6byaeqSilTsY7EeCq2IfuWvaX/hDv/JoJjxxWKANx/x9oE3B2Q4WmeI=
-X-Received: by 2002:a9d:67d8:0:b0:69f:229:ce72 with SMTP id
- c24-20020a9d67d8000000b0069f0229ce72mr730078otn.2.1679639283227; Thu, 23 Mar
- 2023 23:28:03 -0700 (PDT)
+        bh=hH9ReKrWmbRFTyiuvOPNN8/j0VR2qXnASEVkCT8MBz0=;
+        b=FpNALg9qwHuQnFF6J29CLFRlezY4BIbry7EjaUkYzplmC8BhbUcPPDiElZUd78UfvW
+         SSj4DEN+WoFvgVBtuCj7hYjUwPDPWsQmB+vf078/gDH4EbwFnltToix8gJZiPx7xzSGE
+         feS2WjyQhoSZhlpvwO8wjL4sH7ZafMjMWuWNPr+VRjaaSY9QweUZ4PE66TdLJVY/3dlJ
+         EYJC/w/4vyNLzQ9NRI2T0E+yozSUf237ByL/7nrlQBiQ/qKey0VJiMwBUl6NLSDwIR6k
+         KK5xOb2hPsBK4iuRhrHxxTArtdc7TR3BV1MXjHs4b8hlK6tcx6z6JTbIQVFzrOFPFDH2
+         7Lvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679639385;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hH9ReKrWmbRFTyiuvOPNN8/j0VR2qXnASEVkCT8MBz0=;
+        b=bfKXUs8GypJHZaSJVqrxyObIr7EM4XN18iXOgxKgPtG8Shq4FfCB/+2kBSbXAdVeRo
+         8mnguAxSvRSkw16BHNgpp0og7P0a44v3FerA+CuKf6wUVLchRj5PyAsW0poQTIv9dBy3
+         h5RWBiGgDzyQGVn8bLzsxhoigZAdcLS5wvxfNqpUMb5pDs6JtUnkLrxcUCuIzdTkegNT
+         Y9EpeQw50cC4/74Y916nPbk9aoz0a88rayNouhGqV5BHf5c8cj+XHzguugvtyvSwqgPg
+         FhYOSm6Ea/aWqokNPoEbjADDP7WTUwwQeKjSe0GCUOXc2zbusB5pzy9nJ5x6f6AEYyrv
+         Gnzw==
+X-Gm-Message-State: AAQBX9fxwgBFEE0BWl1q8cWtlw9S0Udle6kVlfGtZ3ax5LM5r95a1XSg
+        N2u3c581BG4ZwiTpIaV5dIg=
+X-Google-Smtp-Source: AKy350ZWAJCQpjhChzSTDGzoPlTu365tVPg0gFLRN3+twcy68mzHkASezWya/EdsbyggYqZnDFA7xQ==
+X-Received: by 2002:a2e:904b:0:b0:299:ac61:dedd with SMTP id n11-20020a2e904b000000b00299ac61deddmr609653ljg.40.1679639385190;
+        Thu, 23 Mar 2023 23:29:45 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id b8-20020a2e9888000000b00295a583a20bsm3256731ljj.74.2023.03.23.23.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 23:29:44 -0700 (PDT)
+Message-ID: <21a888a1-95e3-cdf9-2a1d-1bb8b3d27a16@gmail.com>
+Date:   Fri, 24 Mar 2023 08:29:44 +0200
 MIME-Version: 1.0
-References: <20230323053043.35-1-xieyongji@bytedance.com> <20230323053043.35-4-xieyongji@bytedance.com>
-In-Reply-To: <20230323053043.35-4-xieyongji@bytedance.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 24 Mar 2023 14:27:52 +0800
-Message-ID: <CACGkMEtH0=vr6JQrqWFZqf4p8bcgeKCr4ipqdBc9nv-st3Pfiw@mail.gmail.com>
-Subject: Re: [PATCH v4 03/11] virtio-vdpa: Support interrupt affinity
- spreading mechanism
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     mst@redhat.com, tglx@linutronix.de, hch@lst.de,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <3f33fc551c0698b4cddb0d39911dddf7599c6317.1679474247.git.mazziesaccount@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v5 5/8] iio: test: test gain-time-scale helpers
+In-Reply-To: <3f33fc551c0698b4cddb0d39911dddf7599c6317.1679474247.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,163 +82,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 1:31=E2=80=AFPM Xie Yongji <xieyongji@bytedance.com=
-> wrote:
->
-> To support interrupt affinity spreading mechanism,
-> this makes use of group_cpus_evenly() to create
-> an irq callback affinity mask for each virtqueue
-> of vdpa device. Then we will unify set_vq_affinity
-> callback to pass the affinity to the vdpa device driver.
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-
-Thinking hard of all the logics, I think I've found something interesting.
-
-Commit ad71473d9c437 ("virtio_blk: use virtio IRQ affinity") tries to
-pass irq_affinity to transport specific find_vqs().  This seems a
-layer violation since driver has no knowledge of
-
-1) whether or not the callback is based on an IRQ
-2) whether or not the device is a PCI or not (the details are hided by
-the transport driver)
-3) how many vectors could be used by a device
-
-This means the driver can't actually pass a real affinity masks so the
-commit passes a zero irq affinity structure as a hint in fact, so the
-PCI layer can build a default affinity based that groups cpus evenly
-based on the number of MSI-X vectors (the core logic is the
-group_cpus_evenly). I think we should fix this by replacing the
-irq_affinity structure with
-
-1) a boolean like auto_cb_spreading
-
-or
-
-2) queue to cpu mapping
-
-So each transport can do its own logic based on that. Then virtio-vDPA
-can pass that policy to VDUSE where we only need a group_cpus_evenly()
-and avoid duplicating irq_create_affinity_masks()?
-
-Thanks
-
+On 3/22/23 11:07, Matti Vaittinen wrote:
+> Some light sensors can adjust both the HW-gain and integration time.
+> There are cases where adjusting the integration time has similar impact
+> to the scale of the reported values as gain setting has.
+> 
+> IIO users do typically expect to handle scale by a single writable 'scale'
+> entry. Driver should then adjust the gain/time accordingly.
+> 
+> It however is difficult for a driver to know whether it should change
+> gain or integration time to meet the requested scale. Usually it is
+> preferred to have longer integration time which usually improves
+> accuracy, but there may be use-cases where long measurement times can be
+> an issue. Thus it can be preferable to allow also changing the
+> integration time - but mitigate the scale impact by also changing the gain
+> underneath. Eg, if integration time change doubles the measured values,
+> the driver can reduce the HW-gain to half.
+> 
+> The theory of the computations of gain-time-scale is simple. However,
+> some people (undersigned) got that implemented wrong for more than once.
+> Hence some gain-time-scale helpers were introduced.
+> 
+> Add some simple tests to verify the most hairy functions.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
 > ---
->  drivers/virtio/virtio_vdpa.c | 68 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->
-> diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
-> index f72696b4c1c2..f3826f42b704 100644
-> --- a/drivers/virtio/virtio_vdpa.c
-> +++ b/drivers/virtio/virtio_vdpa.c
-> @@ -13,6 +13,7 @@
->  #include <linux/kernel.h>
->  #include <linux/slab.h>
->  #include <linux/uuid.h>
-> +#include <linux/group_cpus.h>
->  #include <linux/virtio.h>
->  #include <linux/vdpa.h>
->  #include <linux/virtio_config.h>
-> @@ -272,6 +273,66 @@ static void virtio_vdpa_del_vqs(struct virtio_device=
- *vdev)
->                 virtio_vdpa_del_vq(vq);
->  }
->
-> +static void default_calc_sets(struct irq_affinity *affd, unsigned int af=
-fvecs)
-> +{
-> +       affd->nr_sets =3D 1;
-> +       affd->set_size[0] =3D affvecs;
-> +}
-> +
-> +static struct cpumask *
-> +create_affinity_masks(unsigned int nvecs, struct irq_affinity *affd)
-> +{
-> +       unsigned int affvecs =3D 0, curvec, usedvecs, i;
-> +       struct cpumask *masks =3D NULL;
-> +
-> +       if (nvecs > affd->pre_vectors + affd->post_vectors)
-> +               affvecs =3D nvecs - affd->pre_vectors - affd->post_vector=
-s;
-> +
-> +       if (!affd->calc_sets)
-> +               affd->calc_sets =3D default_calc_sets;
-> +
-> +       affd->calc_sets(affd, affvecs);
-> +
-> +       if (!affvecs)
-> +               return NULL;
-> +
-> +       masks =3D kcalloc(nvecs, sizeof(*masks), GFP_KERNEL);
-> +       if (!masks)
-> +               return NULL;
-> +
-> +       /* Fill out vectors at the beginning that don't need affinity */
-> +       for (curvec =3D 0; curvec < affd->pre_vectors; curvec++)
-> +               cpumask_setall(&masks[curvec]);
-> +
-> +       for (i =3D 0, usedvecs =3D 0; i < affd->nr_sets; i++) {
-> +               unsigned int this_vecs =3D affd->set_size[i];
-> +               int j;
-> +               struct cpumask *result =3D group_cpus_evenly(this_vecs);
-> +
-> +               if (!result) {
-> +                       kfree(masks);
-> +                       return NULL;
-> +               }
-> +
-> +               for (j =3D 0; j < this_vecs; j++)
-> +                       cpumask_copy(&masks[curvec + j], &result[j]);
-> +               kfree(result);
-> +
-> +               curvec +=3D this_vecs;
-> +               usedvecs +=3D this_vecs;
-> +       }
-> +
-> +       /* Fill out vectors at the end that don't need affinity */
-> +       if (usedvecs >=3D affvecs)
-> +               curvec =3D affd->pre_vectors + affvecs;
-> +       else
-> +               curvec =3D affd->pre_vectors + usedvecs;
-> +       for (; curvec < nvecs; curvec++)
-> +               cpumask_setall(&masks[curvec]);
-> +
-> +       return masks;
-> +}
-> +
->  static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int=
- nvqs,
->                                 struct virtqueue *vqs[],
->                                 vq_callback_t *callbacks[],
-> @@ -282,9 +343,15 @@ static int virtio_vdpa_find_vqs(struct virtio_device=
- *vdev, unsigned int nvqs,
->         struct virtio_vdpa_device *vd_dev =3D to_virtio_vdpa_device(vdev)=
-;
->         struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
->         const struct vdpa_config_ops *ops =3D vdpa->config;
-> +       struct irq_affinity default_affd =3D { 0 };
-> +       struct cpumask *masks;
->         struct vdpa_callback cb;
->         int i, err, queue_idx =3D 0;
->
-> +       masks =3D create_affinity_masks(nvqs, desc ? desc : &default_affd=
-);
-> +       if (!masks)
-> +               return -ENOMEM;
-> +
->         for (i =3D 0; i < nvqs; ++i) {
->                 if (!names[i]) {
->                         vqs[i] =3D NULL;
-> @@ -298,6 +365,7 @@ static int virtio_vdpa_find_vqs(struct virtio_device =
-*vdev, unsigned int nvqs,
->                         err =3D PTR_ERR(vqs[i]);
->                         goto err_setup_vq;
->                 }
-> +               ops->set_vq_affinity(vdpa, i, &masks[i]);
->         }
->
->         cb.callback =3D virtio_vdpa_config_cb;
-> --
-> 2.20.1
->
+> Changes:
+> v4 => v5:
+> - remove empty lines from Kconfig
+> - adapt to drop of the non devm iio_init
+
+I think you may want to skip reviewing this specific patch. After having 
+a chat with Greg, David, and Maxime it seems this will be changed quite 
+a bit for v6.
+
+Most notably, I am planning to drop the generic helpers and struct 
+gts_test. I'll also simplify the signatures of 
+__test_init_iio_gain_scale() and test_init_iio_gain_scale().
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
