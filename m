@@ -2,143 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 878CE6C7D7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E754E6C7D87
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjCXLwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S231281AbjCXLzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCXLwJ (ORCPT
+        with ESMTP id S231127AbjCXLzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:52:09 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7776B22A1E;
-        Fri, 24 Mar 2023 04:52:08 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id o14so674376ioa.3;
-        Fri, 24 Mar 2023 04:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679658728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iWww7KIOZBCmIAHeZv67n8Ky5bkkqCoK79aVsIAZNBI=;
-        b=TZIv8T/N6JJPGZzyhEafVekIQ23TQTiv0q+86h2sLILA6iYzEfF+u25kxtdHp0VNRq
-         oxZ78xFZORp0fy9rKmZZbV739hSARgPOxdeaHK8u5HVOOZ+XoTsb4e+8OIlwjfdD+Ql7
-         zhqN1Parx4H/ypNye6pC5LYEcdA2aVqEf5Pj85VQJCszYYHd3qwp7Z6vgH8A4g2J4iDq
-         Jvyj/nX9Kxxs1RNcEyCI4VxU8gCULSV9V72g3/PWK4V27yBgt7JRix0tewp8vbtVw3wM
-         S62jCU5Rp3Pf1rHR89/Ps52hFSuInfYfA0/v6QVaVOAAszzLLvwm1fE5xWI5yg91LgDW
-         n8Vg==
+        Fri, 24 Mar 2023 07:55:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F83144A4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679658900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o+NGktWMseNGfUqMMOZXVUXPZfRBI2cuMMXpzSQXhTs=;
+        b=BvrFAyZdrzOqD6nbLzI2P/nGvS4jIi2bC2ZfikBGe9O8F98hMjCuoyBxttxyZ39XJ8XDT3
+        aCdr1vKnkBfe/y7bWWOM9Ha/ngdnM4j/qEb0drNF80CROVAQrJlkBcygtu2wGbMiPn1uga
+        f4YLy0fmKolPuL1F6Mw2zU9Fyv7drac=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-54-mizbSgbQOuermG_xzAeHEg-1; Fri, 24 Mar 2023 07:54:59 -0400
+X-MC-Unique: mizbSgbQOuermG_xzAeHEg-1
+Received: by mail-ed1-f71.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so2877487edc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:54:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679658728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iWww7KIOZBCmIAHeZv67n8Ky5bkkqCoK79aVsIAZNBI=;
-        b=K1KOHApxjnV3NaWp+LomxoU+QAfwLSQUTgqzW2SD3iwqQEpCg13gElLdprOGPJhCA/
-         sCdzMarjTJ3+D91U9JYQIfkYn2zjigY1AOWW4uV5InCsiJGCDFQayGJXC+MHM5sO87in
-         bJ37sfKgzKqme2zFyJMUBwjz5rw7nWDZVFEEwaut4DqFhv2uh4vwq+LbYHEbphR2LcCL
-         ox1MMpJ3nivSUzxoAbfO6R2zpk0w8DYbp48ZEG+uL6j5632zMaCX6PDZb0OpDuRyVDE1
-         r5vhhppe8XYydPt7aj8m6Ne82e0/VrfKu58YQ+hpRU5ZeWRcaTYfVxK6s+G+FL+zffeE
-         7K1w==
-X-Gm-Message-State: AO0yUKU5b2Xz8YYjUSTTDM3W99bnMvervQVCvk6jBWPwzc1HCjFlod6o
-        REyecNVAAt9LUsX/JJumY+iJ5FhbBEtnVy10kvu28wmhtAs=
-X-Google-Smtp-Source: AK7set8+H6cwLxu738lkTCKCs6nwLDvrDpz/EBmL2ZmHT3i13MKkp+14knPu99WuRsmhLBPnfRJcdLzJTAFzgFo9qX0=
-X-Received: by 2002:a05:6638:22a1:b0:3ae:e73b:ff26 with SMTP id
- z1-20020a05663822a100b003aee73bff26mr831353jas.1.1679658727838; Fri, 24 Mar
- 2023 04:52:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679658898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o+NGktWMseNGfUqMMOZXVUXPZfRBI2cuMMXpzSQXhTs=;
+        b=0kiTvwDxHPl19oebCtC7jo9AQgs6RX15xrRgzKK9hlJlSUTaKouHQz3v+OdxjUb5Xk
+         61RCGVi8f8Ttg8adnifBDvk9ezajwavcQAxgVzska2HUXTPJ/i+P35uAJ1yrXHJ6xlPB
+         hER/xl0lR62JIZ+UO44Alozx4HTyhYk5t1/yjt4NDgRqCDDpZUQQujSV9x7SuRSTFwZ6
+         /jeuyaMduE+hm79dk1osH6047uYvHMNG4jqFS2PJZ845hvNe/B3UN8NEv+298rnFcisO
+         CYkqbPdNC+7i6qSHaiX3NEVGO2JefpTmRAkg7Fy+CIxiXjno8TGdniXPFZaw/qq/hyC2
+         iDkQ==
+X-Gm-Message-State: AAQBX9eCNyqdbA7Q+OkGoutW5cf7wmGzEldEjisrwCvgykfjln8vOWL8
+        5yp8Hi80m1F2TVFDT4OR6McMjdIu7KRtU24iH3LVQu43IbuOzMjILqRpyGH4Q4aSTzx1kPPZjva
+        2NFJU2+mFbztbDj5GjH2AIICo
+X-Received: by 2002:aa7:da82:0:b0:502:100c:53a with SMTP id q2-20020aa7da82000000b00502100c053amr3077953eds.41.1679658898277;
+        Fri, 24 Mar 2023 04:54:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a2BftDLdHSiXK8s1hrtYYBfNg5thmCdq/Nta4rzlvwQHmMyC+RKWswAjDMk6HYVn/7+xcAeA==
+X-Received: by 2002:aa7:da82:0:b0:502:100c:53a with SMTP id q2-20020aa7da82000000b00502100c053amr3077932eds.41.1679658897990;
+        Fri, 24 Mar 2023 04:54:57 -0700 (PDT)
+Received: from localhost.localdomain (host-82-53-134-98.retail.telecomitalia.it. [82.53.134.98])
+        by smtp.gmail.com with ESMTPSA id v30-20020a50a45e000000b005021d17d896sm1153485edb.21.2023.03.24.04.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 04:54:57 -0700 (PDT)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org, avkrasnov@sberdevices.ru,
+        Jakub Kicinski <kuba@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
+Subject: [PATCH net] vsock/loopback: use only sk_buff_head.lock to protect the packet queue
+Date:   Fri, 24 Mar 2023 12:54:50 +0100
+Message-Id: <20230324115450.11268-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230323185112.13855-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVKRS1N5s-cvxrgSj9ev-Hh+gxfa-Hp2+z1zt+r7fEUWg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVKRS1N5s-cvxrgSj9ev-Hh+gxfa-Hp2+z1zt+r7fEUWg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 24 Mar 2023 11:51:41 +0000
-Message-ID: <CA+V-a8u5ttTsG9fn4ePKi-0=2NXzhk1seBwnzBn_X6VQDwWKpw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: timer: renesas: ostm: Document RZ/Five SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+pkt_list_lock was used before commit 71dc9ec9ac7d ("virtio/vsock:
+replace virtio_vsock_pkt with sk_buff") to protect the packet queue.
+After that commit we switched to sk_buff and we are using
+sk_buff_head.lock in almost every place to protect the packet queue
+except in vsock_loopback_work() when we call skb_queue_splice_init().
 
-Thank you for the review.
+As reported by syzbot, this caused unlocked concurrent access to the
+packet queue between vsock_loopback_work() and
+vsock_loopback_cancel_pkt() since it is not holding pkt_list_lock.
 
-On Fri, Mar 24, 2023 at 9:35=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
->
-> Hi Prabhakar,
->
-> Thanks for your patch!
->
-> On Thu, Mar 23, 2023 at 7:56=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail=
-.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > The OSTM block on the RZ/Five SoC is identical to one found on the RZ/G=
-2UL
-> > SoC. "renesas,r9a07g043-ostm" compatible string will be used on the
-> > RZ/Five SoC so to make this clear, update the comment to include RZ/Fiv=
-e
-> > SoC.
-> >
-> > No driver changes are required as generic compatible string
-> > "renesas,ostm" will be used as a fallback on RZ/Five SoC.
->
-> While this paragraph is true, it doesn't really matter, as you're not
-> adding a new SoC-specific compatible value.
->
-Agreed, I will keep that in mind for future patches.
+With the introduction of sk_buff_head, pkt_list_lock is redundant and
+can cause confusion, so let's remove it and use sk_buff_head.lock
+everywhere to protect the packet queue access.
 
-Cheers,
-Prabhakar
+Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+Cc: bobby.eshleman@bytedance.com
+Reported-and-tested-by: syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ net/vmw_vsock/vsock_loopback.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/renesas,ostm.yaml
-> > @@ -23,7 +23,7 @@ properties:
-> >        - enum:
-> >            - renesas,r7s72100-ostm  # RZ/A1H
-> >            - renesas,r7s9210-ostm   # RZ/A2M
-> > -          - renesas,r9a07g043-ostm # RZ/G2UL
-> > +          - renesas,r9a07g043-ostm # RZ/G2UL and RZ/Five
-> >            - renesas,r9a07g044-ostm # RZ/G2{L,LC}
-> >            - renesas,r9a07g054-ostm # RZ/V2L
-> >        - const: renesas,ostm        # Generic
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
+diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+index 671e03240fc5..89905c092645 100644
+--- a/net/vmw_vsock/vsock_loopback.c
++++ b/net/vmw_vsock/vsock_loopback.c
+@@ -15,7 +15,6 @@
+ struct vsock_loopback {
+ 	struct workqueue_struct *workqueue;
+ 
+-	spinlock_t pkt_list_lock; /* protects pkt_list */
+ 	struct sk_buff_head pkt_queue;
+ 	struct work_struct pkt_work;
+ };
+@@ -32,9 +31,7 @@ static int vsock_loopback_send_pkt(struct sk_buff *skb)
+ 	struct vsock_loopback *vsock = &the_vsock_loopback;
+ 	int len = skb->len;
+ 
+-	spin_lock_bh(&vsock->pkt_list_lock);
+ 	skb_queue_tail(&vsock->pkt_queue, skb);
+-	spin_unlock_bh(&vsock->pkt_list_lock);
+ 
+ 	queue_work(vsock->workqueue, &vsock->pkt_work);
+ 
+@@ -113,9 +110,9 @@ static void vsock_loopback_work(struct work_struct *work)
+ 
+ 	skb_queue_head_init(&pkts);
+ 
+-	spin_lock_bh(&vsock->pkt_list_lock);
++	spin_lock_bh(&vsock->pkt_queue.lock);
+ 	skb_queue_splice_init(&vsock->pkt_queue, &pkts);
+-	spin_unlock_bh(&vsock->pkt_list_lock);
++	spin_unlock_bh(&vsock->pkt_queue.lock);
+ 
+ 	while ((skb = __skb_dequeue(&pkts))) {
+ 		virtio_transport_deliver_tap_pkt(skb);
+@@ -132,7 +129,6 @@ static int __init vsock_loopback_init(void)
+ 	if (!vsock->workqueue)
+ 		return -ENOMEM;
+ 
+-	spin_lock_init(&vsock->pkt_list_lock);
+ 	skb_queue_head_init(&vsock->pkt_queue);
+ 	INIT_WORK(&vsock->pkt_work, vsock_loopback_work);
+ 
+@@ -156,9 +152,7 @@ static void __exit vsock_loopback_exit(void)
+ 
+ 	flush_work(&vsock->pkt_work);
+ 
+-	spin_lock_bh(&vsock->pkt_list_lock);
+ 	virtio_vsock_skb_queue_purge(&vsock->pkt_queue);
+-	spin_unlock_bh(&vsock->pkt_list_lock);
+ 
+ 	destroy_workqueue(vsock->workqueue);
+ }
+-- 
+2.39.2
+
