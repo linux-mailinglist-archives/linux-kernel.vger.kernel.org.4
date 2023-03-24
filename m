@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B177F6C896B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 00:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA376C896D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Mar 2023 00:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjCXXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 19:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S232017AbjCXXl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 19:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjCXXkU (ORCPT
+        with ESMTP id S231922AbjCXXlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 19:40:20 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92762113CF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:40:19 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id bk5so2443521oib.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:40:19 -0700 (PDT)
+        Fri, 24 Mar 2023 19:41:25 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C3D12CD2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:41:24 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id er18so2625378edb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679701219;
+        d=linux-foundation.org; s=google; t=1679701282;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iHpidQtSUhq3zpSTOAjO5JszMuIBlCwSY/IIVCS13Og=;
-        b=OAMSGtUvcgKwUCSlAKFsRCZIQZO/KMvaklqg44VZjnuRh+tIRYjgzQGOEAW2IigUv3
-         lDxzy8GKkQ/C80ZAgD+Nh4W6lWwi/DSPoD6mE9ylrrybRA8nODH6anAXXCzwOhUehhW7
-         Q3j4s7HGCB3ETtSVwEAUoQt/rFECW8YR8jVibgjmB6CMuou0GnE21WDrABxSz7Z+nU40
-         Lct9J/ShRIsvbRxteaypiQUSXkJg2HNx5f3k8RQlUkI4eaBkzFadRlsH0LpCI72l2LE5
-         Utnw/kYBhuNamQ9r4ZmEsEYgxZ6a7GW3piX8R4yy/ANoCgH0CjHUHsFWj88gwQwN8b00
-         C1Kw==
+        bh=blNmP7fzJBK5OFePYsB620CQcO46wrdWBDUrlFUHYQQ=;
+        b=UqHwrfg02dC+olMypt934/3zePsBsXN2nDW/vQzaPMUvdiokkPnutN7c4KvMq21kjf
+         gaNkP3+PsOVbTnBJ6RqFocRyr8R9XR5OGlcJMpCHV1f5sP4KY/b0/WC0c4q6v7L0LWaL
+         3WKyYZM2g5QeJuoSmBSyjc7U7/iVtTRZt9WcM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679701219;
+        d=1e100.net; s=20210112; t=1679701282;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iHpidQtSUhq3zpSTOAjO5JszMuIBlCwSY/IIVCS13Og=;
-        b=7W1I7h/S3oFzv3sp1fANkDxRLhE7dOia9XZ7OL9OS1eXgVYPzAUqIWOCQRUbn7ZkqZ
-         H7EFsZcHkZgN//lZi5r1b3bzV2awZiQ6HNimL7/KT3cXkHJEBUeFgP3RlRsnHMYYGmsL
-         2IEjy1LiZKBFPO6f0BWiI66cMtGDYIyfiduvgzHTM7X1vY0hwV41jKP6VrT4qJCdBJep
-         QfIpqxAVeL5PE7FJZ8KNYWgO4d3P2Sa421w7fuFmI8ZCxlGPHOVuwTW3APO59l61cGJj
-         4D7E34QAWXlju3zNXRnVfZeGJSQqvRth+hfWYoAB4PQiHDIj0ksPJO1V+ya9/H+Gfn/v
-         wcEA==
-X-Gm-Message-State: AO0yUKVNTgS84JpJawE07ASgVV+Xtm1JvfRrXBHrhxpyckuNhfF1F3Zq
-        creF2e04Or2ScNL2PPKx3Raki0MqMYGiivOv6VSOfg==
-X-Google-Smtp-Source: AK7set8kWpGKbko4C/hT8r6bhx97Jjx5Kdn8h6twZJE7ICY0Ywo/Xw0NrC7eBrFNsJ2lFfldWAtWm8UcA02q1zrh8Os=
-X-Received: by 2002:a54:4710:0:b0:384:4e2d:81ea with SMTP id
- k16-20020a544710000000b003844e2d81eamr1128565oik.9.1679701218769; Fri, 24 Mar
- 2023 16:40:18 -0700 (PDT)
+        bh=blNmP7fzJBK5OFePYsB620CQcO46wrdWBDUrlFUHYQQ=;
+        b=oQs0uxXl++qD3lUgPhKRnGM/AQEf5gMTfRv+UnXWiuDWiMZFPUBz85LfiFYxBKIsi9
+         MLSRk5ztZ1uvkaw37xnz488G+a48XSM1HwB+MP36rDrWvgqhAompQHeuTreE1Q4JBovH
+         e4rDoE+y1mBo+fWz9lX293NzUEHChpug3l4ic9oJA1MQD8YC/HFRFbpuQKKNCP9xgQCX
+         XdZE+RyBM5DTyq/Hjs6rtUTydemqH6QHxqCG1H1Rj4TABHlJJdpZujMb0ivPu8pKlB9x
+         3jAvG20/CBAeZ0MpXpla9lMtWAWlLVYQbR2Sw0yiHW/DJyY6+tTmIrJJTmWSE05Ac40n
+         lvIw==
+X-Gm-Message-State: AAQBX9fvJcbMCPOyjWPB9r+rDRIMvVDGTpExtzKzOUp5YtZP8BHL9mHc
+        PIpiZBzYvIx+4hU5VpNW/j7CnJpACCd05m2dEFZjWvQ6
+X-Google-Smtp-Source: AKy350aCyitw1JDyp7ClSpjDIrFVOeP6fNHYdqklSGj4U8aR1Iab2gkZP1mbLnV4v5Ii8T/Im7Nm2Q==
+X-Received: by 2002:a17:906:4b51:b0:92f:3e2b:fbb7 with SMTP id j17-20020a1709064b5100b0092f3e2bfbb7mr4346361ejv.14.1679701282436;
+        Fri, 24 Mar 2023 16:41:22 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id vq2-20020a170907a4c200b0093e9fb91837sm1018479ejc.76.2023.03.24.16.41.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 16:41:21 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id i5so14063592eda.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:41:20 -0700 (PDT)
+X-Received: by 2002:a50:a6d1:0:b0:4fa:da46:6f1c with SMTP id
+ f17-20020a50a6d1000000b004fada466f1cmr2400386edc.2.1679701280484; Fri, 24 Mar
+ 2023 16:41:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230301185838.21659-1-itazur@amazon.com> <20230301185838.21659-2-itazur@amazon.com>
- <ZB4S9eP0tGbGUTSC@google.com>
-In-Reply-To: <ZB4S9eP0tGbGUTSC@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 24 Mar 2023 16:40:06 -0700
-Message-ID: <CALMp9eR766pb0664V3GHsq84qCCATRwUxPLrmeRUMv-6EYcs1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] KVM: x86: Propagate AMD-specific IBRS bits to guests
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Takahiro Itazuri <itazur@amazon.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, Takahiro Itazuri <zulinx86@gmail.com>
+References: <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com>
+ <ZBjO2LqBkayxG+Sd@bombadil.infradead.org> <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org>
+ <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com> <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com>
+ <ZB3j3x4F2ozYX8UI@bombadil.infradead.org> <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com>
+ <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org> <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+ <ZB4SoxgM6vydrxrj@bombadil.infradead.org> <ZB4x6IY/8P1Xam7d@bombadil.infradead.org>
+In-Reply-To: <ZB4x6IY/8P1Xam7d@bombadil.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Mar 2023 16:41:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjsBkyD+y_zfif1MXWYEkvPt+TPLdVjP41573oKEOu4qA@mail.gmail.com>
+Message-ID: <CAHk-=wjsBkyD+y_zfif1MXWYEkvPt+TPLdVjP41573oKEOu4qA@mail.gmail.com>
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        fan.ni@samsung.com, vincent.fu@samsung.com,
+        a.manzanares@samsung.com, colin.i.king@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 2:16=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
+On Fri, Mar 24, 2023 at 4:27=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
 >
-> On Wed, Mar 01, 2023, Takahiro Itazuri wrote:
-> > VMMs retrieve supported CPUID features via KVM_GET_SUPPORTED_CPUID to
-> > construct CPUID information to be passed to KVM_SET_CPUID2. Most CPUID
-> > feature bits related to speculative attacks are propagated from host
-> > CPUID. AMD processors have AMD-specific IBRS related bits in CPUID
-> > Fn8000_0008_EBX (ref: AMD64 Architecture Programmer's Manual Volume 3:
-> > General-Purpose and System Instructions) and some bits are not
-> > propagated to guests.
-> >
-> > Enable propagation of these bits to guests, so that guests can see the
-> > same security information as the host without VMM action.
-Usually, I can count on Sean for the semantic nitpick:
+> A magic values of 20 is completely empirical.
 
-This propagates bits only to the userspace VMM. They may make it to
-the guest. They may not.
+I suspect a magic value is fine in this context. I do not believe that
+"hundreds of concurrent module loads" is a valid real-life load. It
+sounds more like a "systemd does horrible things at startup".
+
+20 sounds plenty big enough to me.
+
+But I guess this is one of those "only real life will tell".
+
+              Linus
