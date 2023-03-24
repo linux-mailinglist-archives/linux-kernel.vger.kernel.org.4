@@ -2,138 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C436C760A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77F36C7613
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCXCzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S231307AbjCXC4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjCXCzk (ORCPT
+        with ESMTP id S231128AbjCXC4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:55:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB3D9756
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 19:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679626493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+uAUlOWmnaNVo/VWoXQNmQTS2u7vnkE353p3vcNlNhc=;
-        b=Yi1EsPyVBvI0hkrRYM3GszLSgDJNbK2UFGDw2WxUtIObPLdEME6sbKDoEsk12gAEYCc8pA
-        VCPitFti9zLqjMRdgdqdQyp5wqPPDNlMNE+aDnxJ+FF5lgOYiGeMW5aC/sA0rG0F3kuc33
-        2OAn1mD5TRVxycVcC33yekc39qelhoA=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-q3y_l-5IMW6Kgka7xhTZkQ-1; Thu, 23 Mar 2023 22:54:51 -0400
-X-MC-Unique: q3y_l-5IMW6Kgka7xhTZkQ-1
-Received: by mail-ot1-f71.google.com with SMTP id e2-20020a9d5602000000b00694299f6ea9so165920oti.19
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 19:54:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679626491;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+uAUlOWmnaNVo/VWoXQNmQTS2u7vnkE353p3vcNlNhc=;
-        b=BDbEbIyM09UO/+oH/OKi8IWGhBlIh1jXRYyjETRX5WZTwA+JQdIzfoREfvS28rfKEm
-         9TK8gEX37NXboZe6nJcKPTM6jv6d69VijkkNVB9gfSohCR3lzzshx3WRJnFigU3iy41K
-         apQg8fa5zJUattqX8gug4sCK4y5f1i7etq+TH/AzO8b9bo74DhU9Qf41Tq2HeBNIaYr2
-         Z47OXSIy2V5STAQqXOeO53rVZi8xaTrU2pvGfsDHMtstq0PxpEaGYRnxaviPUeWPF2dY
-         GhDSB/m5dmfU6uy/gf2RPZMZPd+n5Uh884vJekUWKrYPgfR9T/03aUF2t/8Pue75fLjm
-         zIxw==
-X-Gm-Message-State: AO0yUKX4vogd2menqMIJbkGrm/QYr/c3sbU7Df3hPTx8ArXvoeELuga7
-        eKNhFXjC7IvvsuL6cNseuABdloz7SvyMlct6EbX7m0B89z9iQIvrKWLiAjxaRUoQjTTaCoeohAE
-        3tXNBmGhrPRanmaDCg+7BeXbz6BmYEOMGk3X9JqsBI5YAOdGQa4QpZw==
-X-Received: by 2002:a05:6871:b19b:b0:177:9f9c:dc5 with SMTP id an27-20020a056871b19b00b001779f9c0dc5mr512928oac.9.1679626491037;
-        Thu, 23 Mar 2023 19:54:51 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9fm4WXoQhc8oPxzAxZzgWX14feJUPEMiSJPQgN0rubtFNZsrLMc1kcr+QSYvWg5YQ6SKRhX2omEeiDY+P3wck=
-X-Received: by 2002:a05:6871:b19b:b0:177:9f9c:dc5 with SMTP id
- an27-20020a056871b19b00b001779f9c0dc5mr512917oac.9.1679626490818; Thu, 23 Mar
- 2023 19:54:50 -0700 (PDT)
+        Thu, 23 Mar 2023 22:56:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D321ED520;
+        Thu, 23 Mar 2023 19:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679626557; x=1711162557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DO6YsYCdF4dQEBnvdYw32rQ5TOcKg8m5rWccaAoqGo8=;
+  b=bzAdLbISSIDHOSAA4yzOyu8np37J4CrOGwl5YMJErjXBXMprSua3sDM/
+   IOXdvKYaXyW8qkVCDC2AHOWQJhCHK56qRWOl58B5OKemdciddvKl4oAnh
+   sDSVQtiW1xOhTtV2IgeQLCJK8JvqUY1obxpa2aYJ4oaPzdYGhMH+OGLzC
+   zSIYoucnO5nPH1Bnbio2wOApuy8+smbJCs+mNeMEIpC9fgzKWvyS7EZDJ
+   V5ysrot4HJHaPq+8f1mxKA96iTPE+yfxY8wo0FkdzYD7DZn4vZtyVVWW3
+   eIp6k5KK0bq4fh6fv9YLycRCZHURmyXiGF8NCKVFlBFJqDzWwzC2oXffI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="339712177"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="339712177"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:55:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="856714502"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="856714502"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Mar 2023 19:55:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfXas-000Euy-2D;
+        Fri, 24 Mar 2023 02:55:54 +0000
+Date:   Fri, 24 Mar 2023 10:55:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] mailbox: pcc: Use mbox_bind_client
+Message-ID: <202303241039.usKTcpEw-lkp@intel.com>
+References: <20230323191527.1472695-4-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-References: <20230321154804.184577-1-sgarzare@redhat.com> <20230321154804.184577-4-sgarzare@redhat.com>
- <CACGkMEtbrt3zuqy9YdhNyE90HHUT1R=HF-YRAQ6b4KnW_SdZ-w@mail.gmail.com> <20230323095006.jvbbdjvkdvhzcehz@sgarzare-redhat>
-In-Reply-To: <20230323095006.jvbbdjvkdvhzcehz@sgarzare-redhat>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 24 Mar 2023 10:54:39 +0800
-Message-ID: <CACGkMEveMGEzX7bCPuQuqm=9q7Ut-k=MLrRYM3Bq6cMpaw9fVQ@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] vdpa_sim: add support for user VA
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        stefanha@redhat.com, linux-kernel@vger.kernel.org,
-        eperezma@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323191527.1472695-4-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 5:50=E2=80=AFPM Stefano Garzarella <sgarzare@redhat=
-.com> wrote:
->
-> On Thu, Mar 23, 2023 at 11:42:07AM +0800, Jason Wang wrote:
-> >On Tue, Mar 21, 2023 at 11:48=E2=80=AFPM Stefano Garzarella <sgarzare@re=
-dhat.com> wrote:
-> >>
-> >> The new "use_va" module parameter (default: true) is used in
-> >> vdpa_alloc_device() to inform the vDPA framework that the device
-> >> supports VA.
-> >>
-> >> vringh is initialized to use VA only when "use_va" is true and the
-> >> user's mm has been bound. So, only when the bus supports user VA
-> >> (e.g. vhost-vdpa).
-> >>
-> >> vdpasim_mm_work_fn work is used to serialize the binding to a new
-> >> address space when the .bind_mm callback is invoked, and unbinding
-> >> when the .unbind_mm callback is invoked.
-> >>
-> >> Call mmget_not_zero()/kthread_use_mm() inside the worker function
-> >> to pin the address space only as long as needed, following the
-> >> documentation of mmget() in include/linux/sched/mm.h:
-> >>
-> >>   * Never use this function to pin this address space for an
-> >>   * unbounded/indefinite amount of time.
-> >
-> >I wonder if everything would be simplified if we just allow the parent
-> >to advertise whether or not it requires the address space.
-> >
-> >Then when vhost-vDPA probes the device it can simply advertise
-> >use_work as true so vhost core can use get_task_mm() in this case?
->
-> IIUC set user_worker to true, it also creates the kthread in the vhost
-> core (but we can add another variable to avoid this).
->
-> My biggest concern is the comment in include/linux/sched/mm.h.
-> get_task_mm() uses mmget(), but in the documentation they advise against
-> pinning the address space indefinitely, so I preferred in keeping
-> mmgrab() in the vhost core, then call mmget_not_zero() in the worker
-> only when it is running.
+Hi Elliot,
 
-Ok.
+Thank you for the patch! Perhaps something to improve:
 
->
-> In the future maybe mm will be used differently from parent if somehow
-> it is supported by iommu, so I would leave it to the parent to handle
-> this.
+[auto build test WARNING on 6ccbe33a39523f6d62b22c5ee99c6695993c935e]
 
-This should be possible, I was told by Intel that their IOMMU can
-access the process page table for shared virtual memory.
+url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/mailbox-Allow-direct-registration-to-a-channel/20230324-031813
+base:   6ccbe33a39523f6d62b22c5ee99c6695993c935e
+patch link:    https://lore.kernel.org/r/20230323191527.1472695-4-quic_eberman%40quicinc.com
+patch subject: [PATCH v2 3/3] mailbox: pcc: Use mbox_bind_client
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303241039.usKTcpEw-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5db6edf9f393224193ab13e82d63e0d7616c74c9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Elliot-Berman/mailbox-Allow-direct-registration-to-a-channel/20230324-031813
+        git checkout 5db6edf9f393224193ab13e82d63e0d7616c74c9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mailbox/
 
-Thanks
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303241039.usKTcpEw-lkp@intel.com/
 
->
-> Thanks,
-> Stefano
->
+All warnings (new ones prefixed by >>):
 
+   drivers/mailbox/pcc.c:285:17: warning: variable 'dev' set but not used [-Wunused-but-set-variable]
+           struct device *dev;
+                          ^
+>> drivers/mailbox/pcc.c:355:5: warning: no previous prototype for function 'pcc_startup' [-Wmissing-prototypes]
+   int pcc_startup(struct mbox_chan *chan)
+       ^
+   drivers/mailbox/pcc.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int pcc_startup(struct mbox_chan *chan)
+   ^
+   static 
+>> drivers/mailbox/pcc.c:378:6: warning: no previous prototype for function 'pcc_shutdown' [-Wmissing-prototypes]
+   void pcc_shutdown(struct mbox_chan *chan)
+        ^
+   drivers/mailbox/pcc.c:378:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void pcc_shutdown(struct mbox_chan *chan)
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +/pcc_startup +355 drivers/mailbox/pcc.c
+
+   347	
+   348	/**
+   349	 * pcc_startup - Called from Mailbox Controller code. Used here
+   350	 *		to request the interrupt.
+   351	 * @chan: Pointer to Mailbox channel to startup.
+   352	 *
+   353	 * Return: Err if something failed else 0 for success.
+   354	 */
+ > 355	int pcc_startup(struct mbox_chan *chan)
+   356	{
+   357		struct pcc_chan_info *pchan = chan->con_priv;
+   358		int rc;
+   359	
+   360		if (pchan->plat_irq > 0) {
+   361			rc = devm_request_irq(chan->mbox->dev, pchan->plat_irq, pcc_mbox_irq, 0,
+   362					      MBOX_IRQ_NAME, chan);
+   363			if (unlikely(rc)) {
+   364				dev_err(chan->mbox->dev, "failed to register PCC interrupt %d\n",
+   365					pchan->plat_irq);
+   366				return rc;
+   367			}
+   368		}
+   369	
+   370		return 0;
+   371	}
+   372	
+   373	/**
+   374	 * pcc_shutdown - Called from Mailbox Controller code. Used here
+   375	 *		to free the interrupt.
+   376	 * @chan: Pointer to Mailbox channel to shutdown.
+   377	 */
+ > 378	void pcc_shutdown(struct mbox_chan *chan)
+   379	{
+   380		struct pcc_chan_info *pchan = chan->con_priv;
+   381	
+   382		if (pchan->plat_irq > 0)
+   383			devm_free_irq(chan->mbox->dev, pchan->plat_irq, chan);
+   384	}
+   385	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
