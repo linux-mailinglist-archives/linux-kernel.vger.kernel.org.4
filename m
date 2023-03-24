@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208756C7488
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C90F6C748B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjCXAW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
+        id S231241AbjCXAYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjCXAWH (ORCPT
+        with ESMTP id S229991AbjCXAY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:22:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7452E0E0;
-        Thu, 23 Mar 2023 17:21:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 23 Mar 2023 20:24:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A4F2F7BF;
+        Thu, 23 Mar 2023 17:24:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjNCg2c6Dz4xFb;
-        Fri, 24 Mar 2023 11:20:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1679617249;
-        bh=Ec7in0wIuy+VDbDVAQ8RuUjdxF9bluD17phAnPQTL/U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CbTJ+zys750RlGeuZFVl8ajfThkj/tQ7sLDOmAt1GR1qmEzamSQwrDoxvCoRuRoXl
-         1IczlGBFLJL+AdT5u4rWLaxfGMyr9ldhOSjPzl9kWwn9nUD7Y9XsLN/O4qIp4P+iqh
-         qpgysup8n7Y1nh0HEM1g+UKsQgeRY5SCCPwZACOn+SpQY36eXPVaU6x7qp06XgFvSW
-         K2Aor+DttkGy6WrWj4aNTB/lYZUEh1AsDg2oOHl29dTlXj5a2hcZ+VGNtASLZEXxB3
-         O8KGMU7RYKb1vQ7yM3tCKKZ2P7CCcyVUZxS27vz5buq1udmB2m5i+UIMySGKRO7bir
-         Pa3jBiAkA9PZQ==
-Date:   Fri, 24 Mar 2023 11:20:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the tegra tree
-Message-ID: <20230324112046.23e9ef5d@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE9E36289E;
+        Fri, 24 Mar 2023 00:24:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696F9C433EF;
+        Fri, 24 Mar 2023 00:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679617448;
+        bh=LMA50TR+ueiQ5J8dwpRDrkMnxhAmzBh6bOouAxz3Els=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=q6kIxRE1LVstF8sifnewiev66MEBPwTsR+DxN1sSoqr1dTWStLo9ULTu98fBRdkYw
+         OlAmzscJqsyVJSGsuh1ur/p9FKrkryUpY9lrsC2RGCGmnKeyGbK0CivhMnmKns/NRj
+         3CmVgkQlEljrXekfYaSzmQL2hnfydaLkNkqphgQ9BsCsrEICBcmGUsa1dZ43jYx/q0
+         9xTULSmiaJkeDdtF2P3KOGwTI/xwPSSoRkbTlbiIskJBme81ZDFyPih43ztidH/uzz
+         7ISsdvmK3rXLUHX3IzbntF64S6BqQRh43/cjFxfDO9mxXmki1pzwxGXm4LRYBrDJDH
+         DG0lZ0EgsnMaQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230323220518.3247530-1-m.szyprowski@samsung.com>
+References: <CGME20230323220529eucas1p12e5e1bbe2a31fe775cd9e6244f9282ce@eucas1p1.samsung.com>
+ <20230323220518.3247530-1-m.szyprowski@samsung.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS
+Message-Id: <167961744607.174517.3298842464664713586.b4-ty@kernel.org>
+Date:   Fri, 24 Mar 2023 00:24:06 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aZpterKTi_NRW/_2GFxCF8m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aZpterKTi_NRW/_2GFxCF8m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 23 Mar 2023 23:05:18 +0100, Marek Szyprowski wrote:
+> Restore synchronous probing for 'qcom,pm8150-rpmh-regulators' because
+> otherwise the UFSHC device is not properly initialized on QRB5165-RB5
+> board.
+> 
+> 
 
-Hi all,
+Applied to
 
-The following commit is also in the arm-soc tree as a different commit
-(but the same patch):
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-  23797dde7588 ("arm64: tegra: Bump CBB ranges property on Tegra194 and Teg=
-ra234")
+Thanks!
 
-This is commit
+[1/1] regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS
+      commit: 58973046c1bf782cac01644a9dcd8e5bba9c2f16
 
-  4bb54c2ce48f ("arm64: tegra: Bump CBB ranges property on Tegra194 and Teg=
-ra234")
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-in the arm-soc tree.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---=20
-Cheers,
-Stephen Rothwell
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---Sig_/aZpterKTi_NRW/_2GFxCF8m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc7N4ACgkQAVBC80lX
-0Gz2Sgf+KtFoSi1MBMI/GoIfvDk+ti/P1Zu93YYpkiohNRqTCfofzGZpJYOZqNtQ
-a+50vrRX9LKZlQ5TQ5GRcLMntOUFmNCn0rDtFgVXnL7UYcVN2dkUSmODkFwXsibM
-2vIlC7gMH2LK/zsEKAQZFX4boTM8zNqHUeMkdS9iDpDaN+fncS6DpRxqHyiLWejz
-4ffhtphFgM9kAbKy1EAVVrMn2azI6qqF7wOddYSgjbQc8eI5uODT2LCx4uXqSNAm
-3ADqiArl8UO+rSMv0sDikUUz00y3xblmU1J5rPIZYV7B4CoL8G0Qnar/tBoDRGbX
-lJ/UvNqMlAswd+niIBikGPwkUzBD8A==
-=6q5J
------END PGP SIGNATURE-----
-
---Sig_/aZpterKTi_NRW/_2GFxCF8m--
