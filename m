@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD816C7EBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488056C7EBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjCXN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S231127AbjCXN2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjCXN0S (ORCPT
+        with ESMTP id S229921AbjCXN2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:26:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D5C1EBE5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:26:17 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54184571389so32832247b3.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679664377;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/4+hgYW6apNidWZ2eWxndApVq4c9LGlZUgQ8HGnG/YM=;
-        b=wIxqgZulTguPL2eBnY7KKFTiLFfWsB5DxTGHxGyzaJDvUiT32yMYu6zbYRKhmPU+UF
-         dReG9qGEJJSCXjVLX+j35LEn1tnjyzTCG3ayZO07kVHhGJuxO3BBvoWW22h4XKLywkc5
-         F24YZ1VBvBuDeKm0ehW+fJV0vSBEY4AtR+AXwx8Rm4JVvj2MFZqS1oMlBS5ajplr93yS
-         VI88s/iEkqLRh57LholqpmYHqa7jz4wgSoP7+AvgJ12j7eGHZMrFgfs12Aqgv2r8HiJG
-         HaqIEYIgi9TRyP3t8AIYF/k9K6nY13mvLODxXVpAraVXhTnH0ngBaEQdZdtk3pfHANKV
-         Sdng==
+        Fri, 24 Mar 2023 09:28:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58798234E0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679664417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rqu3TJ9Us4tjFNY0o3zPlo/dxstIWcHIOGlWftNzUnQ=;
+        b=OiKQd7pbQIV5MERaKo6pkXoM8TnMI1TYI0orW5kfUHIWzoQSB7oiLZlz1N7wZUtWXSOYoB
+        WDnK6/qUr1eS9P9eaqOWsw7RuVliLIPUrk7fKgSwqKLpn/boTRqzJwmP1nGbdIoiLoZ56D
+        4f+TNjtilPnRmMTaPk8+suKnvnTYcTw=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-321-wykLUkjgPha-VzOQ9K-JLg-1; Fri, 24 Mar 2023 09:26:56 -0400
+X-MC-Unique: wykLUkjgPha-VzOQ9K-JLg-1
+Received: by mail-qk1-f198.google.com with SMTP id ou5-20020a05620a620500b007423e532628so764141qkn.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:26:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679664377;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/4+hgYW6apNidWZ2eWxndApVq4c9LGlZUgQ8HGnG/YM=;
-        b=vavfBU/b5zxoJUB8KoiRxUtMoaM37gX8AToZNURqqgGl6mfVHjGetUzI6o0VVpJOkn
-         IDesqttjD0Pq1b0cqCnyo7BFV+HbPYjMWiSVXYcOQf/0vQ/xBgFM+GVT1SVcFH6PbZmA
-         BkNJ5slz/pqCj374LUpc8vgr8hP6rClQj6Zcoa5dETrtyp6ndpEF27MZ41bNJEY30E1j
-         Mi6gcXA4T5XZig2Tp7aX4unbMOpmxgFlHT9RXoE+r2dtiaYHjFZepUTU0q0dIAbv4cAe
-         Rh4CiSU5kTVmmiTtE/BEONgZ50iyA+oGX4hKqLO2cIzBXdPX7Dv2xOTOtVNE2MfLG49v
-         6OOA==
-X-Gm-Message-State: AAQBX9citaweqh0kHmzg9DcCPfJs/1qcmT0LgEdXKMAHx0qWV9dGt7+l
-        1mLWZk+4H2vp23fWVDrFVwrKkw==
-X-Google-Smtp-Source: AKy350a+oQQcX2Rv3Fysb0IwdJWRYo/W9Xhr2WxWZ8stfA1Ib+ZJCeVkiOatLvDRHmdDAcW/3Vcnfg==
-X-Received: by 2002:a81:d348:0:b0:539:4475:ff64 with SMTP id d8-20020a81d348000000b005394475ff64mr2203598ywl.40.1679664376892;
-        Fri, 24 Mar 2023 06:26:16 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id b2-20020a81bc42000000b00545a08184a7sm402507ywl.55.2023.03.24.06.26.15
+        d=1e100.net; s=20210112; t=1679664415;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rqu3TJ9Us4tjFNY0o3zPlo/dxstIWcHIOGlWftNzUnQ=;
+        b=d+gJQMvQDUN9EZCBsKmgjvSCPFPsU0PeWQUenNFLA3Zx05adMvbeS4s/zqyhXGHW9V
+         YLEYHCNI9ZbMtiS8ByjeArrrzP2xM+z1fREQCm3p3/6QaOYI2G5OzLecyVxKi4CV5M+k
+         DETebzYA5R0gVDJvNc+19mo1t3WhA808xutHHB9XnGyjY2SuqBdKlkt3chCK5lzr9ci0
+         1tm3d1uREzu4mQOWK/C+F/RVJmkumkMqpC3v19EoqTTFB2WTz7eUIv9cYcWeJrcypNa2
+         6qkWMuoNLb+bdVtIXuXS9JSqSNeQzOtI1J6LQ6EIgc9jp2EZigBHgItij+qy9L2f312+
+         UqLg==
+X-Gm-Message-State: AAQBX9c0B9rnojUDB8ZoF5MJtUwzd63OG1hvgdd56MAXDoXmxovqOh6c
+        x3mKpQQ+SV2N1hkTTeKjjoQo5UqE5Sj2nkv/sMBkeYuRNqKCeFqVeG268ua0Dmi7PuO2moBvonG
+        5DGBzYtY1DmXpd63Y1/ShxdRHKj9t93gA
+X-Received: by 2002:a05:6214:d07:b0:5ad:1a83:8021 with SMTP id 7-20020a0562140d0700b005ad1a838021mr3926027qvh.49.1679664415746;
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bWyV7OYeyD9u0w6iNh0EYkkwfo17tJz1C8lhIiQ8oaWqvEFwUsQXfvyFHVNhZAkqBx+PZ4Og==
+X-Received: by 2002:a05:6214:d07:b0:5ad:1a83:8021 with SMTP id 7-20020a0562140d0700b005ad1a838021mr3926002qvh.49.1679664415511;
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 123-20020a370381000000b00746a7945d87sm5095680qkd.52.2023.03.24.06.26.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 06:26:16 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 09:26:14 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] counter: 104-quad-8: Refactor to buffer states
- for CMR, IOR, and IDR
-Message-ID: <ZB2k9m7rL7Hpy/zU@fedora>
-References: <cover.1679605919.git.william.gray@linaro.org>
- <c5adb13b4b0887beb1df40b34d2ef03d63a2860d.1679605919.git.william.gray@linaro.org>
- <ZB2OG4zZXsqqyN8v@smile.fi.intel.com>
- <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     vkoul@kernel.org, kishon@kernel.org, heiko@sntech.de,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] phy: rockchip: remove unused hw_to_inno function
+Date:   Fri, 24 Mar 2023 09:26:49 -0400
+Message-Id: <20230324132649.2649166-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a1iK5qxqblY7GTai"
-Content-Disposition: inline
-In-Reply-To: <ZB2Ob9VGe3GoEVko@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+clang with W=1 reports
+drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c:284:36: error:
+  unused function 'hw_to_inno' [-Werror,-Wunused-function]
+static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+                                   ^
+This function is not used so remove it.
 
---a1iK5qxqblY7GTai
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-On Fri, Mar 24, 2023 at 01:50:07PM +0200, Andy Shevchenko wrote:
-> On Fri, Mar 24, 2023 at 01:48:43PM +0200, Andy Shevchenko wrote:
-> > On Thu, Mar 23, 2023 at 05:25:28PM -0400, William Breathitt Gray wrote:
->=20
-> ...
->=20
-> > > +static void quad8_control_register_update(struct quad8 *const priv, =
-u8 *const buf,
-> > > +					  const size_t channel, const u8 val, const u8 field)
-> > > +{
-> > > +	u8p_replace_bits(&buf[channel], val, field);
-> > > +	iowrite8(buf[channel], &priv->reg->channel[channel].control);
-> > > +}
-> >=20
-> > How did you compile this?
-> > Due to nature of *_replace_bits() this may only be a macro.
-> >=20
-> > That's what LKP is telling about I think.
->=20
-> Ah, no, that's because the last parameter is not constant in the last pat=
-ch in
-> the series.
->=20
-> --=20
-> With Best Regards,
-> Andy Shevchenko
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+index 726928ff1273..401b0aabb159 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+@@ -281,11 +281,6 @@ struct inno_mipi_dphy_timing inno_mipi_dphy_timing_table_max_2_5ghz[] = {
+ 	{2500000000, 0x15, 0x54, 0x7f, 0x15, 0x6a},
+ };
+ 
+-static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+-{
+-	return container_of(hw, struct inno_dsidphy, pll.hw);
+-}
+-
+ static void phy_update_bits(struct inno_dsidphy *inno,
+ 			    u8 first, u8 second, u8 mask, u8 val)
+ {
+-- 
+2.27.0
 
-I'm having trouble cross-compiling for riscv, but I'm unable to recreate
-the build error when I compile for x86_64. However, I'd like to
-understand this error so I can fix it properly.
-
-Is the problem here due to the "const u8 field" parameter? Instead of a
-constant variable, does this need to be a constant literal value for
-u8p_replace_bits()? I don't think that parameter changed in the last
-patch of the series, so why is the build error occurring for the last
-patch and not this penultimate patch here? Would qualifying the
-quad8_control_register_update() function with "__always_inline" resolve
-this issue?
-
-William Breathitt Gray
-
---a1iK5qxqblY7GTai
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZB2k9gAKCRC1SFbKvhIj
-K41wAPwOf8OqdfF6dz3HKHzBtD3U1U1Ro93BWneFPEE7DoA5HAEAz2MYQ+iTfAXb
-8emsDRSyFLpKXsQo0etP8qqlqS85sQc=
-=7y20
------END PGP SIGNATURE-----
-
---a1iK5qxqblY7GTai--
