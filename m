@@ -2,139 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A346C7E14
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3C06C7E17
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjCXMbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S231447AbjCXMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbjCXMah (ORCPT
+        with ESMTP id S231387AbjCXMcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:30:37 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8A3268E;
-        Fri, 24 Mar 2023 05:30:35 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PjhP66rcyz6J7fx;
-        Fri, 24 Mar 2023 20:30:02 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 24 Mar
- 2023 12:30:32 +0000
-Date:   Fri, 24 Mar 2023 12:30:31 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Jie Zhan <zhanjie9@hisilicon.com>
-CC:     Yicong Yang <yangyicong@huawei.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <james.clark@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <21cnbao@gmail.com>, <tim.c.chen@intel.com>,
-        <prime.zeng@hisilicon.com>, <shenyang39@huawei.com>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
-Subject: Re: [PATCH] perf stat: Support per-cluster aggregation
-Message-ID: <20230324123031.0000013c@Huawei.com>
-In-Reply-To: <20230324122422.00006a2b@Huawei.com>
-References: <20230313085911.61359-1-yangyicong@huawei.com>
-        <039a2fc2-48e2-fe3b-73c1-f7f658c7f22f@hisilicon.com>
-        <20230324122422.00006a2b@Huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 24 Mar 2023 08:32:13 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F5C9010
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1679661108;
+        bh=bbY7fKmOGZlbBs0GEtdCsGyFjjGMwhT2jcpGl3ev/TY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rY+ccjp/85u8ItujvEpb1pfi4OpOnJm6TJatCUXIqV9reOpDwrjI+M2QosQkL98Bj
+         LS3RfELlMgAEHHjnZPg/wqUEIrMkC0PwGGazFoC6npCdxYOPMBirWKKT6Eyuj7xti/
+         IJcBFW1O1VXTS8r4vkaD2KgP0D92qUF3VjDSv0sO7MOJysaD/Fru+NXXJmvCU7xQth
+         tuN1CQldqlKp/XL6hogNJEr7XVnVB/MDCVLV+wIsW6o0cYVMAvQBweTZ9YCKkorT9C
+         GlsXxlnSQRxv58+bsdBBJubiZhyzZTyeVXbFjHeAk1PWicZPu8j+kUBoZ3hut3StYB
+         4HTfGotsAricw==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PjhR80crdzt63;
+        Fri, 24 Mar 2023 08:31:48 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Rutland <mark.rutlnand@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v3] tracepoint: Fix CFI failures with tp_sub_func
+Date:   Fri, 24 Mar 2023 08:31:42 -0400
+Message-Id: <20230324123142.7463-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 12:24:22 +0000
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+When CLANG_CFI is in use, using tracing will occasionally result in
+CFI failures, e.g.
 
-> On Fri, 24 Mar 2023 10:34:33 +0800
-> Jie Zhan <zhanjie9@hisilicon.com> wrote:
-> 
-> > On 13/03/2023 16:59, Yicong Yang wrote:  
-> > > From: Yicong Yang <yangyicong@hisilicon.com>
-> > >
-> > > Some platforms have 'cluster' topology and CPUs in the cluster will
-> > > share resources like L3 Cache Tag (for HiSilicon Kunpeng SoC) or L2
-> > > cache (for Intel Jacobsville). Currently parsing and building cluster
-> > > topology have been supported since [1].
-> > >
-> > > perf stat has already supported aggregation for other topologies like
-> > > die or socket, etc. It'll be useful to aggregate per-cluster to find
-> > > problems like L3T bandwidth contention or imbalance.
-> > >
-> > > This patch adds support for "--per-cluster" option for per-cluster
-> > > aggregation. Also update the docs and related test. The output will
-> > > be like:
-> > >
-> > > [root@localhost tmp]# perf stat -a -e LLC-load --per-cluster -- sleep 5
-> > >
-> > >   Performance counter stats for 'system wide':
-> > >
-> > > S56-D0-CLS158    4      1,321,521,570      LLC-load
-> > > S56-D0-CLS594    4        794,211,453      LLC-load
-> > > S56-D0-CLS1030    4             41,623      LLC-load
-> > > S56-D0-CLS1466    4             41,646      LLC-load
-> > > S56-D0-CLS1902    4             16,863      LLC-load
-> > > S56-D0-CLS2338    4             15,721      LLC-load
-> > > S56-D0-CLS2774    4             22,671      LLC-load
-> > > [...]
-> > >
-> > > [1] commit c5e22feffdd7 ("topology: Represent clusters of CPUs within a die")
-> > >
-> > > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>    
-> > 
-> > An end user may have to check sysfs to figure out what CPUs those 
-> > cluster IDs account for.
-> > 
-> > Any better method to show the mapping between CPUs and cluster IDs?  
-> 
-> The cluster code is capable of using the ACPI_PPTT_ACPI_PROCESSOR_ID field
-> if valid for the cluster level of PPTT.
-> 
-> The numbers in the example above look like offsets into the PPTT table
-> so I think the PPTT table is missing that information.
-> 
-> Whilst not a great description anyway (it's just an index), the UUID
-> that would be in there can convey more info on which cluster this is.
-> 
-> 
-> > 
-> > Perhaps adding a conditional cluster id (when there are clusters) in the 
-> > "--per-core" output may help.  
-> 
-> That's an interesting idea.  You'd want to include the other levels
-> if doing that.  So whenever you do a --per-xxx it also provides the
-> cluster / die / node / socket etc as relevant 'above' the level of xxx
-> Fun is that node and die can flip which would make this tricky to do.
+| CFI failure at syscall_trace_enter+0x66c/0x7d0 (target: tp_stub_func+0x0/0x2c; expected type: 0x4877830c)
+| Internal error: Oops - CFI: 00000000f200823a [#1] PREEMPT SMP
+| CPU: 2 PID: 118 Comm: klogd Not tainted 6.3.0-rc3-00002-gc242ea6f2f98 #2
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 30400005 (nzCV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : syscall_trace_enter+0x66c/0x7d0
+| lr : syscall_trace_enter+0x5e8/0x7d0
+| sp : ffff800015ce7d80
+| x29: ffff800015ce7d80 x28: ffff000017538000 x27: 0000000000000003
+| x26: ffff8000084c9454 x25: ffff00001182bd10 x24: dfff800000000000
+| x23: 1fffe00002ea7001 x22: ffff00001182bd10 x21: ffff000017538008
+| x20: ffff000017538000 x19: ffff800015ce7eb0 x18: 0000000000000000
+| x17: 000000004877830c x16: 00000000a540670c x15: 0000000000000000
+| x14: 0000000000000000 x13: 0000000000000000 x12: ff80800008039d8c
+| x11: ff80800008039dd0 x10: 0000000000000000 x9 : 0000000000000000
+| x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+| x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+| x2 : 00000000000000ce x1 : ffff800015ce7eb0 x0 : ffff800013d55000
+| Call trace:
+|  syscall_trace_enter+0x66c/0x7d0
+|  el0_svc_common+0x1dc/0x268
+|  do_el0_svc+0x70/0x1a4
+|  el0_svc+0x58/0x14c
+|  el0t_64_sync_handler+0x84/0xf0
+|  el0t_64_sync+0x190/0x194
+| Code: 72906191 72a90ef1 6b11021f 54000040 (d4304740)
+| ---[ end trace 0000000000000000 ]---
 
-Ignore me on this.  I'd not looked at the patch closely when I wrote
-this.  Clearly a lot of this information is already provided - the
-suggestion was to consider adding cluster to that mix which makes
-sense to me.
+This happens because the function prototype of tp_sub_func doesn't match
+the prototype of the tracepoint function. As each tracepoint may have a
+distinct prototype, it's not possible to share a common stub function.
 
-Jonathan
+Avoid this by comparing the tracepoint function pointer to the value 1
+before calling each function.
 
-> 
-> Jonathan
-> 
-> > 
-> > Apart form that, this works well on my aarch64.
-> > 
-> > Tested-by: Jie Zhan <zhanjie9@hisilicon.com>  
-> 
-> > 
-> >   
-> 
+Prior to this change, it_func_ptr->func was loaded twice per loop
+iteration:
+
+    it_func = READ_ONCE((it_func_ptr)->func);
+[...]
+  } while ((++it_func_ptr)->func);
+
+With this change, the loaded it_func is used for comparisons with 0 (end
+of loop), 1 (skip) and as a function pointer, thus saving a load per
+loop.
+
+The comparison with <= TRACEPOINT_FUNC_SKIP is done on purpose to branch
+over both comparisons with 0 and 1 with a single branch for each loop
+and an extra conditional branch on the last loop to compare with 0.
+
+A simplified example of this compiled on godbolt.org:
+
+  #include <stdint.h>
+
+  typedef void (*f_t)(void);
+  volatile f_t *arr;
+
+  void fct(void)
+  {
+      volatile f_t *iter = &arr[0];
+
+      for (;;) {
+          f_t l_iter = *iter;
+          if (((uintptr_t)l_iter <= 0x1)) {
+              if ((uintptr_t)l_iter == 0x1)
+                  continue;
+              else
+                  break;
+          }
+          l_iter();
+          iter++;
+      }
+  }
+
+Generates:
+
+x86-64 gcc 12.2 -O2:
+
+  fct:
+          push    rbx
+          mov     rbx, QWORD PTR arr[rip]
+  .L29:
+          mov     rax, QWORD PTR [rbx]
+          cmp     rax, 1
+          jbe     .L38
+  .L30:
+          call    rax
+          mov     rax, QWORD PTR [rbx+8]
+          add     rbx, 8
+          cmp     rax, 1
+          ja      .L30
+  .L38:
+          je      .L29
+          pop     rbx
+          ret
+
+clang 16.0.0 -O2:
+
+  fct:                                    # @fct
+          push    rbx
+          mov     rbx, qword ptr [rip + arr]
+  .LBB0_1:                                # =>This Inner Loop Header: Depth=1
+          mov     rax, qword ptr [rbx]
+          cmp     rax, 1
+          ja      .LBB0_4
+          je      .LBB0_1
+          jmp     .LBB0_3
+  .LBB0_4:                                #   in Loop: Header=BB0_1 Depth=1
+          call    rax
+          add     rbx, 8
+          jmp     .LBB0_1
+  .LBB0_3:
+          pop     rbx
+          ret
+  arr:
+          .quad   0
+
+On x86, the result of the "cmp" instruction is used to conditionally
+branch based on both inequality (jbe, ja) and equality (je), thus
+keeping the code size small and limiting the number of instructions to
+execute on this tracepoint instrumentation fast path.
+
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Tested-by: Mark Rutland <mark.rutlnand@arm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+Changes since v2:
+- Fix typo in commit message.
+- Add acked-by, tested-by.
+---
+ include/linux/tracepoint.h | 14 ++++++++++++--
+ kernel/tracepoint.c        | 20 +++++++-------------
+ 2 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index 4b33b95eb8be..0aeac249d412 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -33,6 +33,9 @@ struct trace_eval_map {
+ 
+ #define TRACEPOINT_DEFAULT_PRIO	10
+ 
++/* Reserved value for tracepoint callback. */
++#define TRACEPOINT_FUNC_SKIP	((void *) 0x1)
++
+ extern struct srcu_struct tracepoint_srcu;
+ 
+ extern int
+@@ -314,11 +317,18 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 		it_func_ptr =						\
+ 			rcu_dereference_raw((&__tracepoint_##_name)->funcs); \
+ 		if (it_func_ptr) {					\
+-			do {						\
++			for (;;) {					\
+ 				it_func = READ_ONCE((it_func_ptr)->func); \
++				if ((uintptr_t) it_func <= (uintptr_t) TRACEPOINT_FUNC_SKIP) { \
++					if (it_func == TRACEPOINT_FUNC_SKIP) \
++						continue;		\
++					else				\
++						break;			\
++				}					\
+ 				__data = (it_func_ptr)->data;		\
+ 				((void(*)(void *, proto))(it_func))(__data, args); \
+-			} while ((++it_func_ptr)->func);		\
++				it_func_ptr++;				\
++			}						\
+ 		}							\
+ 		return 0;						\
+ 	}								\
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index f23144af5743..2fa108ddbbc2 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -98,12 +98,6 @@ struct tp_probes {
+ 	struct tracepoint_func probes[];
+ };
+ 
+-/* Called in removal of a func but failed to allocate a new tp_funcs */
+-static void tp_stub_func(void)
+-{
+-	return;
+-}
+-
+ static inline void *allocate_probes(int count)
+ {
+ 	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),
+@@ -193,8 +187,8 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+ 	if (old) {
+ 		/* (N -> N+1), (N != 0, 1) probes */
+ 		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
+-			if (old[iter_probes].func == tp_stub_func)
+-				continue;	/* Skip stub functions. */
++			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
++				continue;
+ 			if (old[iter_probes].func == tp_func->func &&
+ 			    old[iter_probes].data == tp_func->data)
+ 				return ERR_PTR(-EEXIST);
+@@ -208,7 +202,7 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+ 	if (old) {
+ 		nr_probes = 0;
+ 		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
+-			if (old[iter_probes].func == tp_stub_func)
++			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
+ 				continue;
+ 			/* Insert before probes of lower priority */
+ 			if (pos < 0 && old[iter_probes].prio < prio)
+@@ -246,7 +240,7 @@ static void *func_remove(struct tracepoint_func **funcs,
+ 		for (nr_probes = 0; old[nr_probes].func; nr_probes++) {
+ 			if ((old[nr_probes].func == tp_func->func &&
+ 			     old[nr_probes].data == tp_func->data) ||
+-			    old[nr_probes].func == tp_stub_func)
++			    old[nr_probes].func == TRACEPOINT_FUNC_SKIP)
+ 				nr_del++;
+ 		}
+ 	}
+@@ -269,7 +263,7 @@ static void *func_remove(struct tracepoint_func **funcs,
+ 			for (i = 0; old[i].func; i++) {
+ 				if ((old[i].func != tp_func->func ||
+ 				     old[i].data != tp_func->data) &&
+-				    old[i].func != tp_stub_func)
++				    old[i].func != TRACEPOINT_FUNC_SKIP)
+ 					new[j++] = old[i];
+ 			}
+ 			new[nr_probes - nr_del].func = NULL;
+@@ -277,12 +271,12 @@ static void *func_remove(struct tracepoint_func **funcs,
+ 		} else {
+ 			/*
+ 			 * Failed to allocate, replace the old function
+-			 * with calls to tp_stub_func.
++			 * with TRACEPOINT_FUNC_SKIP.
+ 			 */
+ 			for (i = 0; old[i].func; i++) {
+ 				if (old[i].func == tp_func->func &&
+ 				    old[i].data == tp_func->data)
+-					WRITE_ONCE(old[i].func, tp_stub_func);
++					WRITE_ONCE(old[i].func, TRACEPOINT_FUNC_SKIP);
+ 			}
+ 			*funcs = old;
+ 		}
+-- 
+2.25.1
 
