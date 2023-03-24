@@ -2,99 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E976C77EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FF06C77F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCXGcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S231501AbjCXGcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXGcU (ORCPT
+        with ESMTP id S229508AbjCXGcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:32:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AC919F1A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:32:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 24 Mar 2023 02:32:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1045E19F1A;
+        Thu, 23 Mar 2023 23:32:41 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.168.222])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBEB62966
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4BDC4339C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:32:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679639534;
-        bh=Y5MMaZi0o7RlD8qMkDwmPie+nRo/SORxygZ7ZKxmpI0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D5/+LaiVp4HRPVvkZx3dj6XKOg+VwzAILuk5+BU7bsSdYMm9Jq39Zp2+RtvaUFtKr
-         blE+vRSIzXetAUa48W5nY8OzFY4qCxMV9AeuJEbWXd3ilfbv54rbzVBFf0GxHwopdu
-         8fzU4EaUVGfUGoZ17NVqaEJ6+ItaFov9N6ej4o40clzdbtcQZ5fgaBwjgPzI9FUsni
-         Splvvi/3txwI/uTWxAoUv+qz0ewWRrgR2ysjMV8V3KF8Cj3dCusJESJYCmkbkvx4Pa
-         q87HgI0D9CC/+UlRZbiONLWwm5j3NHMWsfOaBhbwMet7gV2xCxa4TZdAM/mMPUWcZi
-         lDIljoRcoNHeg==
-Received: by mail-ed1-f54.google.com with SMTP id ew6so3805412edb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:32:14 -0700 (PDT)
-X-Gm-Message-State: AAQBX9e5+w5vdquCPXR9+kJon7xVqdw3vEBy8FRaGTwnucFGsidUQwsi
-        /Qsq3PdOFpv2PRwjFsWyJJnCBBTGI5d7TthxnLE=
-X-Google-Smtp-Source: AKy350ZkigswArINqxGmNoRt5tjC+y678vUz2AKeNWNeVyMaJ06ynxPwoTh63yhb8jD6UtkRhQsZYt7hC6zS4w+WzkA=
-X-Received: by 2002:a50:cdda:0:b0:4fb:dc5e:6501 with SMTP id
- h26-20020a50cdda000000b004fbdc5e6501mr888360edj.1.1679639532646; Thu, 23 Mar
- 2023 23:32:12 -0700 (PDT)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9FA0E660310B;
+        Fri, 24 Mar 2023 06:32:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679639559;
+        bh=IMA5rGCkVAVmMkQFMSp4zzFkYv6syLIF9LAmjyndPbE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=hdM8mvf1+XN0U8kmYynVlztFJRmNGyTmYHC8/v6zAF+VHcsOMQVlIR8U5RZbNJr+u
+         Vx4ZMLRnf0Z3+TRBnlrlsVQUdQ+e2QyA/Z1ELTRRUjTnnBBKkMwm90rDwgBoB9WOtN
+         3piW2bW93Jh0bxcegtwgyJiT9B6N17c+JiPElngLMkL4VYYTD5iqp2lPZ+v/Um2W1X
+         IyRdQ6ZVVNWUMpuDsUmklcliu+izZHUxqG6l7Qb1NjpyY0oA5OK31BWFJyc3bUiC8q
+         OG3E9oUTPlSh5YmAmF+djmZdct/7XU0l5NM36RxMzkWDwH2tbElKTEvbOrJtW3OryG
+         ZqFEMYkoUb7GQ==
+Message-ID: <a9277ba3-f963-4fe3-a06f-d76e5deccb3b@collabora.com>
+Date:   Fri, 24 Mar 2023 11:32:27 +0500
 MIME-Version: 1.0
-References: <20230324060854.29375-1-lvjianmin@loongson.cn>
-In-Reply-To: <20230324060854.29375-1-lvjianmin@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 24 Mar 2023 14:32:01 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7NpUwaf5OCZL=2_GAN_RYGOkPeVAcDiVR5b1M2jdzkDA@mail.gmail.com>
-Message-ID: <CAAhV-H7NpUwaf5OCZL=2_GAN_RYGOkPeVAcDiVR5b1M2jdzkDA@mail.gmail.com>
-Subject: Re: [PATCH V1 0/5] Fix some issues of irq controllers for
- dual-bridges scenario
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        linux-stable <stable@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/hugetlb: Fix uffd wr-protection for CoW optimization
+ path
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230321191840.1897940-1-peterx@redhat.com>
+ <44aae7fc-fb1f-b38e-bc17-504abf054e3f@redhat.com> <ZBoKod6+twRYvSYz@x1n>
+ <f411b983-0c47-73f8-775b-928fcf61620a@collabora.com> <ZBzOqwF2wrHgBVZb@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZBzOqwF2wrHgBVZb@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jianmin,
+On 3/24/23 3:11 AM, Peter Xu wrote:
+> On Thu, Mar 23, 2023 at 08:33:07PM +0500, Muhammad Usama Anjum wrote:
+>> Hi Peter,
+>>
+>> Sorry for late reply.
+>>
+>> On 3/22/23 12:50 AM, Peter Xu wrote:
+>>> On Tue, Mar 21, 2023 at 08:36:35PM +0100, David Hildenbrand wrote:
+>>>> On 21.03.23 20:18, Peter Xu wrote:
+>>>>> This patch fixes an issue that a hugetlb uffd-wr-protected mapping can be
+>>>>> writable even with uffd-wp bit set.  It only happens with all these
+>>>>> conditions met: (1) hugetlb memory (2) private mapping (3) original mapping
+>>>>> was missing, then (4) being wr-protected (IOW, pte marker installed).  Then
+>>>>> write to the page to trigger.
+>>>>>
+>>>>> Userfaultfd-wp trap for hugetlb was implemented in hugetlb_fault() before
+>>>>> even reaching hugetlb_wp() to avoid taking more locks that userfault won't
+>>>>> need.  However there's one CoW optimization path for missing hugetlb page
+>>>>> that can trigger hugetlb_wp() inside hugetlb_no_page(), that can bypass the
+>>>>> userfaultfd-wp traps.
+>>>>>
+>>>>> A few ways to resolve this:
+>>>>>
+>>>>>    (1) Skip the CoW optimization for hugetlb private mapping, considering
+>>>>>    that private mappings for hugetlb should be very rare, so it may not
+>>>>>    really be helpful to major workloads.  The worst case is we only skip the
+>>>>>    optimization if userfaultfd_wp(vma)==true, because uffd-wp needs another
+>>>>>    fault anyway.
+>>>>>
+>>>>>    (2) Move the userfaultfd-wp handling for hugetlb from hugetlb_fault()
+>>>>>    into hugetlb_wp().  The major cons is there're a bunch of locks taken
+>>>>>    when calling hugetlb_wp(), and that will make the changeset unnecessarily
+>>>>>    complicated due to the lock operations.
+>>>>>
+>>>>>    (3) Carry over uffd-wp bit in hugetlb_wp(), so it'll need to fault again
+>>>>>    for uffd-wp privately mapped pages.
+>>>>>
+>>>>> This patch chose option (3) which contains the minimum changeset (simplest
+>>>>> for backport) and also make sure hugetlb_wp() itself will start to be
+>>>>> always safe with uffd-wp ptes even if called elsewhere in the future.
+>>>>>
+>>>>> This patch will be needed for v5.19+ hence copy stable.
+>>>>>
+>>>>> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>> Cc: linux-stable <stable@vger.kernel.org>
+>>>>> Fixes: 166f3ecc0daf ("mm/hugetlb: hook page faults for uffd write protection")
+>>>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>>>> ---
+>>>>>   mm/hugetlb.c | 8 +++++---
+>>>>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>>>>>
+>>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>>> index 8bfd07f4c143..22337b191eae 100644
+>>>>> --- a/mm/hugetlb.c
+>>>>> +++ b/mm/hugetlb.c
+>>>>> @@ -5478,7 +5478,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>>>   		       struct folio *pagecache_folio, spinlock_t *ptl)
+>>>>>   {
+>>>>>   	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+>>>>> -	pte_t pte;
+>>>>> +	pte_t pte, newpte;
+>>>>>   	struct hstate *h = hstate_vma(vma);
+>>>>>   	struct page *old_page;
+>>>>>   	struct folio *new_folio;
+>>>>> @@ -5622,8 +5622,10 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>>>   		mmu_notifier_invalidate_range(mm, range.start, range.end);
+>>>>>   		page_remove_rmap(old_page, vma, true);
+>>>>>   		hugepage_add_new_anon_rmap(new_folio, vma, haddr);
+>>>>> -		set_huge_pte_at(mm, haddr, ptep,
+>>>>> -				make_huge_pte(vma, &new_folio->page, !unshare));
+>>>>> +		newpte = make_huge_pte(vma, &new_folio->page, !unshare);
+>>>>> +		if (huge_pte_uffd_wp(pte))
+>>>>> +			newpte = huge_pte_mkuffd_wp(newpte);
+>>>>> +		set_huge_pte_at(mm, haddr, ptep, newpte);
+>>>>>   		folio_set_hugetlb_migratable(new_folio);
+>>>>>   		/* Make the old page be freed below */
+>>>>>   		new_folio = page_folio(old_page);
+>>>>
+>>>> Looks correct to me. Do we have a reproducer?
+>>>
+>>> I used a reproducer for the async mode I wrote (patch 2 attached, need to
+>>> change to VM_PRIVATE):
+>>>
+>>> https://lore.kernel.org/all/ZBNr4nohj%2FTw4Zhw@x1n/
+>>>
+>>> I don't think kernel kselftest can trigger it because we don't do strict
+>>> checks yet with uffd-wp bits.  I've already started looking into cleanup
+>>> the test cases and I do plan to add new tests to cover this.
+>>>
+>>> Meanwhile, let's also wait for an ack from Muhammad.  Even though the async
+>>> mode is not part of the code base, it'll be a good test for verifying every
+>>> single uffd-wp bit being set or cleared as expected.
+>> I've tested by applying this patch. But the bug is still there. Just like
+>> Peter has mentioned, we are using our in progress patches related to
+>> pagemap_scan ioctl and userfaultd wp async patches to reproduce it.
+>>
+>> To reproduce please build kernel and run pagemap_ioctl test in mm in
+>> hugetlb_mem_reproducer branch:
+>> https://gitlab.collabora.com/usama.anjum/linux-mainline/-/tree/hugetlb_mem_reproducer
+>>
+>> In case you have any question on how to reproduce, please let me know. I'll
+>> try to provide a cleaner alternative.
+> 
+> Hmm, I think my current fix is incomplete if not wrong.  The root cause
+> should still be valid, however I overlooked another path:
+> 
+> 	if (page_mapcount(old_page) == 1 && PageAnon(old_page)) {
+> 		if (!PageAnonExclusive(old_page))
+> 			page_move_anon_rmap(old_page, vma);
+> 		if (likely(!unshare))
+> 			set_huge_ptep_writable(vma, haddr, ptep);
+> 
+> 		delayacct_wpcopy_end();
+> 		return 0;
+> 	}
+> 
+> We should bail out early in this path, and it'll be even easier we always
+> bail out hugetlb_wp() as long as uffd-wp is detected because userfault
+> should always be handled before any decision to CoW.
+> 
+> v2 attached.. Please give it another shot.
+This attached v2 works. Please add:
 
-1, Please remove the Change-Id: lines in every patch;
-2, Please Cc: stable@vger.kernel.org to make them be backported to
-stable branch;
-3, Maybe changing the order of Patch3/Patch4 is better.
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Huacai
+> 
+> Thanks,
+> 
 
-On Fri, Mar 24, 2023 at 2:09=E2=80=AFPM Jianmin Lv <lvjianmin@loongson.cn> =
-wrote:
->
-> In dual-bridges scenario, some bugs were found for irq
-> controllers drivers, so the patch serie is used to fix them.
->
-> Jianmin Lv (5):
->   irqchip/loongson-eiointc: Fix returned value on parsing MADT
->   irqchip/loongson-eiointc: Fix incorrect use of acpi_get_vec_parent
->   irqchip/loongson-pch-pic: Fix pch_pic_acpi_init calling
->   irqchip/loongson-eiointc: Fix registration of syscore_ops
->   irqchip/loongson-pch-pic: Fix registration of syscore_ops
->
->  drivers/irqchip/irq-loongson-eiointc.c | 27 ++++++++++++++++----------
->  drivers/irqchip/irq-loongson-pch-pic.c |  6 +++++-
->  2 files changed, 22 insertions(+), 11 deletions(-)
->
-> --
-> 2.31.1
->
->
+-- 
+BR,
+Muhammad Usama Anjum
