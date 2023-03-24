@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7066C850A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B2B6C8501
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjCXSbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S231387AbjCXSbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjCXSb3 (ORCPT
+        with ESMTP id S230015AbjCXSb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:31:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4DE15C8C;
+        Fri, 24 Mar 2023 14:31:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FE07DB2;
         Fri, 24 Mar 2023 11:31:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EFFBB825BC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA2AD62C3A;
         Fri, 24 Mar 2023 18:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959BBC4339C;
-        Fri, 24 Mar 2023 18:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE88C433A4;
+        Fri, 24 Mar 2023 18:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679682686;
-        bh=s+V/3hqSUP68gzX0U6WA9nIW6nH1PRME+P1GFHIXj+k=;
+        s=k20201202; t=1679682687;
+        bh=Ic1B6wQV50JDPwY+CApZcmUliG9wEFrvB2GpvMvl5ms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oOh5IqGttMNsrOPsDYrnQUGgdl/xkgT0M8+nQCVxi1GoI2Uvj2ki6Krxpl56HfWq6
-         dvZN6t2Pw3HmwlK47lIQMY5HwJrf4I2bqdx68ezSsgroO3wrLJ8e5lDQJwlUiLnAuW
-         X+Vqi/5led5FK7SlCZs5NNlflbsGuKDdDddkRH+Mv43rM6A+7DkoWh48nU9JLAdUmj
-         aMGB9ztYZsL39ix1mSYVOts+EPa5i5daES9gRDn+YazhmhSw+XfR2pljynxLm0Ziuh
-         JqYAAOix5pzgLnvFPWT89EfKgP0ok//PQ5VGjzGfnxqZ+ZUUqWXrB71eq6YnUcCxqu
-         wlpQVfLhCciaw==
+        b=mYbopYt1qLkhjKlzqjqRakmsJfzu/fSRbHhQ2x0nfcQ794Vu+nxR7wk+Wb/FuiHtB
+         OU1z1eLWKWtzrgF8VDcqSZ3yZmcmF93omiemGLwM1Th+nW/Yso23m2xOEjf/Y/LH/D
+         YmD8GTkHITAHDBMzl7bJDaCaZU6K+XNRBuREviOHcOvCctj+uEtDN8DQEZ3mLmx2aC
+         EOhZiBS2nXlSiRls61c0X32hBha4yE9Fa8Dm53lvPqC1i77VN4SNdKcgBAIZR0ZqeA
+         BYLXjJn0c6SQIPcp67BBlAYOONVAeRzeEGH80sDX6mi3CQ1TwsFByM6y9J8eusxkFN
+         2UXsR2so7siWA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>, Lee Jones <lee@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
 Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Andy Gross <agross@kernel.org>
-Subject: Re: (subset) [PATCH 0/3] arm64: dts: qcom: sc8280xp-pmics: fix sdam 'reg' property
-Date:   Fri, 24 Mar 2023 11:34:26 -0700
-Message-Id: <167968287204.2233401.3251080413822700524.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-x13s: enable alternate touchpad
+Date:   Fri, 24 Mar 2023 11:34:27 -0700
+Message-Id: <167968287204.2233401.15960719073719503318.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320135710.1989-1-johan+linaro@kernel.org>
-References: <20230320135710.1989-1-johan+linaro@kernel.org>
+In-Reply-To: <20230324094744.20448-1-johan+linaro@kernel.org>
+References: <20230324094744.20448-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,21 +57,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 14:57:07 +0100, Johan Hovold wrote:
-> This series addresses the dt-schema validation warnings that were
-> introduced when enabling the PMIC SDAM block (and RTC) on sc8280xp.
+On Fri, 24 Mar 2023 10:47:44 +0100, Johan Hovold wrote:
+> Enable both touchpad nodes in the devictree and let the HID driver
+> determine which one is actually populated (by attempting to read from
+> each i2c address).
 > 
-> I guess this should go through the nvmem, qcom, and mfd trees,
-> respectively.
-> 
-> Johan
+> Ideally this would not be needed and the boot firmware should instead
+> enable only the node for the populated touchpad, but this is unlikely to
+> ever be realised for the X13s.
 > 
 > [...]
 
 Applied, thanks!
 
-[2/3] arm64: dts: qcom: sc8280xp-pmics: fix sdam 'reg' property
-      commit: 1681ce3735483ab6897e403a20a7faf5c34c1f09
+[1/1] arm64: dts: qcom: sc8280xp-x13s: enable alternate touchpad
+      commit: 4367d763698c5c7c2c0e540f0508e48b337c7d8a
 
 Best regards,
 -- 
