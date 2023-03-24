@@ -2,70 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55F86C8809
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B986C880E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbjCXWFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S231974AbjCXWGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjCXWFj (ORCPT
+        with ESMTP id S229943AbjCXWGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:05:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD61EBDF;
-        Fri, 24 Mar 2023 15:05:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22DFE62CC4;
-        Fri, 24 Mar 2023 22:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C2BC433EF;
-        Fri, 24 Mar 2023 22:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679695520;
-        bh=bHtLSxf1+00+J1kjv0ObnAA8CG7DEK3gYRH0zPPL/3Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r5lqPtnbqTtRkpxIz/PGgPe+Tr12ln9NCPVWJzeeSdHT5hK6hl89xsC/D4N+SfqGR
-         qordnAiel56SmaNATY1w3gta1UWQ8frg06Un91AbdhEuyGuVH27pfTigaoh8PxtMfv
-         YCEp2lTet1Iaf/z0kDV0x69HL7xoSsSbE/I666KORuP9YcpyP+SGwzt4q9aQOEo24B
-         PvOiacYjDPk3NhhTNlhfNwhHkhlGMN+HnoUaIK1pwyT0AHp4n+BUNiPyjuD+eY5ugR
-         eSWmhnJFW38jF/C4DOIGsM553fSLDY/FdkVTXtmldkK8fEm2IW+jEhq9NLo62hZ1Be
-         3stdKAube8uqA==
-Date:   Fri, 24 Mar 2023 15:05:19 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
-Cc:     paul.geurts@prodrive-technologies.com, f.fainelli@gmail.com,
-        jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] net: dsa: b53: mdio: add support for BCM53134
-Message-ID: <20230324150519.53b9cc4b@kernel.org>
-In-Reply-To: <20230324084138.664285-1-noltari@gmail.com>
-References: <20230323121804.2249605-1-noltari@gmail.com>
-        <20230324084138.664285-1-noltari@gmail.com>
+        Fri, 24 Mar 2023 18:06:35 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1821E5F2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:06:34 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id j7so4009187ybg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 15:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679695593;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AW96lDx5vwowhGiHzDVKGLsiV7fUhA67Ww+wttjBEwU=;
+        b=kpJyuBzmaRYbioRqb5vGqry2GHgycmPyUnnxvdAANb2s+I5+UckR9viLl/8kUnwtsf
+         Q7+LDDM69Vu2oFwkJGdq0pk81UJndycZyxuRQhPnR7WIn7TI116XPFHuAu6wWLccOc8o
+         2sBeL91RE2283BvpWqZ1lLdl5THJKMNCJ+BTayM2nZ2dJsHu0EO7S7GQgtCqrYSJvdwW
+         UU7aT8YPVkRLG1i0zyfT4IEd5slRhq8VTdfFrM8OfTioFMwOV0gD8IBlT0YtUSuoNtQu
+         539xnoMEbH6SAZf8TaExkU7HmF+MVxlf2Ed51omRr2X6PZWYSIxHlxDf25bEFwSFH7oV
+         //iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679695593;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AW96lDx5vwowhGiHzDVKGLsiV7fUhA67Ww+wttjBEwU=;
+        b=rgHABOrwb+jrDTqej1hx1c9Ae1PiR+iTA/CLif565PdnyjTP1yCKbebn3mZ7AfrIHR
+         IBCOO0/Y9T7c5KrJhA0PgnmWgWf1+vxMAu/UFxHmM9xXmCOXTPeNmhlzLOouLnGYn2mb
+         EiFyqubKPm+Y/1pBm5Ti4K8PjBxapHzXSIBR9WgTjcjpOjPb/hsBhmXAdJSr8BPftTGK
+         0Pr+Ydsz9ypdn8yk/nimHagqXwBid/F+h/wB2aKNZN2ygNQX8foF33WUVP1bGSUvfZD0
+         OEnNlEKlWFklysX60XBJ9HFAsbE9QZRp9gF5lbskDy6RcwSDxpb0NlerzwgLo0hZ92qN
+         01yA==
+X-Gm-Message-State: AAQBX9d5jmE6eSXJ+jT1tnvaxu4pxB4lIrkGs40ueZSVUvURM4t12hED
+        RKW+Flga4AE48Tw2UWZQTr8k0ryHAsCAfKg1QTA4hQ==
+X-Google-Smtp-Source: AKy350b22KWd/52YQxPAH9uA2YhVFFyLDy325ozIEZ34++SQJC7q83qVmJTG2A31rDN5OZEc70zCmWabGGvncpkmyxQ=
+X-Received: by 2002:a05:6902:1501:b0:b4c:9333:2a2 with SMTP id
+ q1-20020a056902150100b00b4c933302a2mr1857678ybu.9.1679695593310; Fri, 24 Mar
+ 2023 15:06:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230306100722.28485-1-johan+linaro@kernel.org> <20230306100722.28485-7-johan+linaro@kernel.org>
+In-Reply-To: <20230306100722.28485-7-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 25 Mar 2023 00:06:21 +0200
+Message-ID: <CAA8EJpoMKRY_w1eM6XVx6R3+2Mi3y=AbbvXQcFF-ccTfV_j2AQ@mail.gmail.com>
+Subject: Re: [PATCH 06/10] drm/msm: fix vram leak on bind errors
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Craig Tatlor <ctatlor97@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 09:41:36 +0100 =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> This is based on the initial work from Paul Geurts that was sent to the
-> incorrect linux development lists and recipients.
-> I've simplified his patches by adding BCM53134 to the is531x5() block sin=
-ce it
-> seems that the switch doesn't need a special RGMII config.
+On Mon, 6 Mar 2023 at 12:09, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> Make sure to release the VRAM buffer also in a case a subcomponent fails
+> to bind.
+>
+> Fixes: d863f0c7b536 ("drm/msm: Call msm_init_vram before binding the gpu")
+> Cc: stable@vger.kernel.org      # 5.11
+> Cc: Craig Tatlor <ctatlor97@gmail.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/gpu/drm/msm/msm_drv.c | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
 
-In the future please don't send the new version in-reply to.
-Makes it harder to organize patches that need review for maintainers.
-Or at least IDK how to maintain a queue ordered by submission date=20
-when people do this :\
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+-- 
+With best wishes
+Dmitry
