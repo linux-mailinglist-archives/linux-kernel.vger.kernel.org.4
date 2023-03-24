@@ -2,298 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B396C7FF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A326C7FFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjCXOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S231777AbjCXOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjCXOgM (ORCPT
+        with ESMTP id S230025AbjCXOhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:36:12 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A04EF9D;
-        Fri, 24 Mar 2023 07:36:06 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6C35FE000F;
-        Fri, 24 Mar 2023 14:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679668565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lv8p1+PnrZtKSya53OQStnceMrUDgZxb7dVA77owBQU=;
-        b=LDvZj8jhrSHGoSqGXF0XTnlLPkBgVRq9egUk6tPUXR6//bl14C2On9KPoNqcs3EezMzKHQ
-        mH+5cnvswV9S1tCBIQYNrEx6MJdsUl5byowb/CtQ555xlq3qh+nTTcxirEeaa+3lDHPHX1
-        ULZe7KTowTGVnFRDCuZosfZc7jxglLimnKRtxBwHrr5iv/isPgQYvBBT40nyZj9iDbU02b
-        ZC8G+Jtdx3XPDnncvFkA9LJx9y3Yq2revwFVuWsArVVz2pDxkPqeQhXYxjXWp8f0mMGPhV
-        gwIB69zyKpUH/pAe2CiGjT4vTwcbOCV8THQPya/zpJn7LjvSD89JRx3MXuVcIQ==
-Date:   Fri, 24 Mar 2023 15:36:02 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
-Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jaime Liao <jaimeliao@mxic.com.tw>,
-        YouChing <ycllin@mxic.com.tw>
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new
- binding
-Message-ID: <20230324153602.66a8841d@xps-13>
-In-Reply-To: <CAKR-sGdxFbMZYGcDnWHW9SU=6hchZMi75=BjGtDen_Ws1keORg@mail.gmail.com>
-References: <20230323124510.2484808-1-noltari@gmail.com>
-        <20230323124510.2484808-2-noltari@gmail.com>
-        <20230324104020.54754079@xps-13>
-        <CAKR-sGcbRRjqt3raXHcvfCfKFDfFWsuu+C7XW3qFckawMsqe4w@mail.gmail.com>
-        <20230324114911.19e00ae1@xps-13>
-        <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
-        <20230324144559.3473c537@xps-13>
-        <CAKR-sGdxFbMZYGcDnWHW9SU=6hchZMi75=BjGtDen_Ws1keORg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 24 Mar 2023 10:37:05 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2055.outbound.protection.outlook.com [40.107.22.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BCE10EB;
+        Fri, 24 Mar 2023 07:37:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XQ1odqTm9wAiVm8jgnWSwTuwRokr+9WZCxvBxTxezJpj91gpkoQYS4mOO8kVBMxgQewI8CtTjDFEN9+ugJbuA7ryDIF/kE7IBQMSg+XNc2V50Thkf4yLQV5YMKyTfaFntk5MtKoCnE78Zvo0ZO5DcRpcdKlEsE5mCtOJ/lRYvQG6hBmNjNcwE93m9glRsoaN38nTUEH215/jmI/pIatJtuNfGZjh+NeSrpmcGmFEeDUA9wmftWi6Q6SUkHCvVzJzuj/yUxcYN7kQ+1RHMuoYq6RByHph5hjTAOTLCe35ideand76kX3A+ZlskO+uztvlRHh7whbjbgtPy28BFZricg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lVsHlmmOZnH5Pscvqqk8V4t+npY30iT2/Gs3LMFbQbg=;
+ b=Oe8MKqE1TdxcwtzZbKK2VsHKQWHZKOPzEPR2U6sHQZ95hunFDuzU+uMW9297dZYmv9tW7LZjxtxYXWo2V+XftXYbD5RcN1XlpEaqJF+cWkWuqYqAkYUxA+xG8bG0PDpRsAhLuHZbs7sEZcJwAP36rn7T5gHCjZ4VnFDPb+gbNqDkNCEor06fcOuvIlVbAUG2KYucF+i1FtWv3EPnJu0Y8TrTtZaZ97FnqG+NOc3rlFLA3/WyTUK9kDLaOFttGBClqrljgWQS94K2+g/BoBV+Wl3IUTYCprq4DiVaK5Bj6qDw+mhoT/iljWWaJ76zP5JLSQ1fREw9slZG0HZ2JTZGCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lVsHlmmOZnH5Pscvqqk8V4t+npY30iT2/Gs3LMFbQbg=;
+ b=Ni80TAgACUJJFGEIXp94w1fT7TGwh5g+YfAPl0FhKE8Armo1sbRNpPaCaR3ZbfQEX4lOCn8UcQ9ZijM7drULp4Wzp4D9RsCDWPL9acIdNATRWdlJOrUT6lbS19raMXfZMUgWCLPWMrBla4K3MNHqJSIImv5BeqzEtC4poREG/IAGJtooWQO6RntEVBy4ILWWs99L58d5lu2cjilk9bg/Ta/fVjUH+dt7txy+hcRrCBz32U0fbBt58V4ffWViM9xzFtGReaHDAOYmwrS2lRiiwtnIzFAvpj6E6zTuDAkVjNmgQGB0ksyHg301kLfOOc3j+esv4LfrEjyWKjQmVMZiIA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
+ by VE1PR04MB7454.eurprd04.prod.outlook.com (2603:10a6:800:1a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 14:37:01 +0000
+Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
+ ([fe80::6802:b2c3:5f12:8f9f]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
+ ([fe80::6802:b2c3:5f12:8f9f%2]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
+ 14:37:00 +0000
+From:   Chester Lin <clin@suse.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Chester Lin <clin@suse.com>, NXP S32 Linux Team <s32@nxp.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: [PATCH v4 0/5] pinctrl: s32: driver improvements and generic struct use
+Date:   Fri, 24 Mar 2023 22:36:21 +0800
+Message-Id: <20230324143626.16336-1-clin@suse.com>
+X-Mailer: git-send-email 2.37.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCPR01CA0013.jpnprd01.prod.outlook.com (2603:1096:405::25)
+ To VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|VE1PR04MB7454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8923ee34-99b9-4cc8-538b-08db2c753a5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tkwYg5EAx4GJ9gxthv7W/1gE7z8CX+7GJjS9Z775QBtq99XSTMYlTQ91mo5bs2qZucSTQHb4WFR0NKTLwtrhdS5lA0iRL0wpaUZ1HYxpHLpFpTbY+LB+hmMLE0CIJ2CuA8l4Ra5LWtkHYCSGFmTyPWvssf4NgIPBOmDy5GIgjZumM8Vl/776rK/8L6gaF6RQl6bSUB8TQY2R8Kios/e8geux1Bx3SDKxNKgiro8/Z+E+QXtjYcXryGuX2Z2ukJGnDwAo+ieCELPW5kKyJIkSs9FrF29ZzPGbbjPPlMg+4SZU4ni3otBrdw85xxyHJ1lbCcoyg7xpEt1Obk6n3R6IdBnN1geHWymXFSmil4YlU+fGtrX68008eEHSTTrNN6kb8RJodgtr3tkZfTq9ypLOrugpgQorMW8nmKAqMN8374aepto3HuBBB//XgxvATkUPnKJpI7b0Wrv2rwtW48ifR0afaNvaEw7I2xflL/md9213PP4AvLK/18e4Ye/0rwIwiH5TCfUA+E7uG8USRysFIlClCp6Gm9BJNeY0q/kf9wkRkwJs0U6Bnlkg77SlxIbGZ+rhOait2oqEccmdQ67stmje/0j0ZLurMPKZ5OZXNIZMJHJ1+jUYYiT479W1bBtyy6+/zYXb5JbuV8rVSQqUnFQgJn/pJ9+3T+DEuACwCE5XGDRWa59B+W8M16BUDJmUasZvIM41BNfIKw9Qh3CfOMBhZlyTuOjWSJ+pDGCSOzk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(366004)(136003)(376002)(39850400004)(451199018)(8936002)(66946007)(66476007)(66556008)(41300700001)(4326008)(86362001)(8676002)(36756003)(38100700002)(6506007)(1076003)(6512007)(6666004)(26005)(83380400001)(186003)(2616005)(107886003)(316002)(6486002)(54906003)(110136005)(478600001)(966005)(5660300002)(7416002)(2906002)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NY+p1HaURysRTaeClMHR/6ZI0aLXTgCvd0YuoDyeJOMXDdcTKs7Mzoqy4esi?=
+ =?us-ascii?Q?vKhPcpaX077Mny4DcvdD+O0qAxRRf6a6gYBFL7rdaBQoMzpyX31vEI2PHlbg?=
+ =?us-ascii?Q?oNaOll89v5QcJzTUo4T/IT587XfpkzP2MaEcXTI5SI9gna/lReYT7LeYexS0?=
+ =?us-ascii?Q?S8u1Xna1GoVwOcKuIIVrcv5YVLvRnHWHKyOxdV+cgMwrDvvD3oKEXCLYSo1t?=
+ =?us-ascii?Q?xtBzYV2KA7xTRIiomLp4/tsMMsbjzvPiZKwVxSplHiGMGNMMfIrSDrEopjhp?=
+ =?us-ascii?Q?N2783vYXv6Pp1OOEVUDDa888heT4n4jMDFX/JmzUh+LmGuhveT7u5KbV3r8O?=
+ =?us-ascii?Q?1uEpM19aWV9iyIroLE5Wn9dzpBW6fCXz3AslsvvLxfEawHNEwE7AEsjgJQjF?=
+ =?us-ascii?Q?hi+2dsH8SX59SjuZXRPvY6/qe74qmxq2xapBXkXRKJCNot8oDIzNeewAKY0o?=
+ =?us-ascii?Q?s6GOt5ALgjmMWMdxEZL4VffkuwAuGBHuF+lfnNyO0Wn/WW9aZO8hNdmZVVvT?=
+ =?us-ascii?Q?WeXzhTT2McRKQrmbNIyB1x+anUGPOScEUTFSepZOsU1wKP+PD/AdnLvwlYbK?=
+ =?us-ascii?Q?Hyz3mmxS93m6robAMbTVxplwuBaR8ZgQ7tw0cXsgvS0gZ1/U8oVgo2wBMyIx?=
+ =?us-ascii?Q?HLQiHc8dRre0DU1pZrqZ2pNMtFcUyEaUuj7dxkoGy6HVXO1xmwWdWrLA0e3Q?=
+ =?us-ascii?Q?7/Oo1lmx37t+n5eTGbdxL4RVk94XTrSEkVblxgrL1Bt29OJWYeu95Hkt204m?=
+ =?us-ascii?Q?rbUNI+ofiG9fIH6PqU9reWkermdQZoNhyXlIWtYt+Ip1UeXKwMv8Ih8CUlNQ?=
+ =?us-ascii?Q?YZtRuU/0RDITaqlYZsWZhrTMDerXqz/MZREh70GBCGi+WTYqwIDzH4dIk7Og?=
+ =?us-ascii?Q?cxwgwAUvIC+rohc4AQyXes/WOUlOFa0JrEaJtskyDmh5c+pGWd+HzMneGRQA?=
+ =?us-ascii?Q?og076HENOkEN6gU33rxt9gKhyBcGa+g2i0PCcTQvxPC4+uOjxyr3moBHBmhm?=
+ =?us-ascii?Q?Dj1JXK5Tmj3M22DKLZQddZ25cziKldLTv7yJH7+3csOqg7s4Wws3Oh8QN+wd?=
+ =?us-ascii?Q?y01ZfxGeS1OlfQ6GV7q3rwdALNWx511tam9mpd12LLxqg8FRP6EhOawaKMLT?=
+ =?us-ascii?Q?NbQGv0OX6/vKhQBsj4l9fHRmHAa58H4htoJoFk82HF2NKIqgcvZeBW/GKpyq?=
+ =?us-ascii?Q?gxQcIHeceSCw7q0o6h+XJ3x0bZpV3BTSOdxg0bJxdOSJKZ2FK0wFgoGxu1iJ?=
+ =?us-ascii?Q?t8nGzYgNM7LNLRVdeMASZV9xF2ZvcdqLQz4ZOqN0WrFeplhVsrvwZE9SyxqP?=
+ =?us-ascii?Q?n9yrxP9b1CNF54qVMgCC/pd8OW1WCA0qt0jjbsYDCFM5VErujZ0LNvJ9UTpH?=
+ =?us-ascii?Q?NVy5kEKHCpX9hTygsIvpX2lagT0AhmH6UgtsH/b7guN76WodAlIAL/TUM0KX?=
+ =?us-ascii?Q?Mp8nJ1Dn2QFbkdu1eIVtYswM7rbVfN1V5bDd/L0wTmLd5PvHWLZl3LaJa5eQ?=
+ =?us-ascii?Q?4JhABmocDQrzEIx83pJ2k251TuG29/Z+5utC6IaCoqclVDHaKf0uLuh1zKYw?=
+ =?us-ascii?Q?140xdgZD7xlVKg+3oFk=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8923ee34-99b9-4cc8-538b-08db2c753a5a
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 14:37:00.6725
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FgqlkK4GL8XgUiILzgfizpzHJaZML/RAA/vHC+djtBZ0BhXwyhzyvr7DT5bOdZ2x
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7454
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi =C3=81lvaro,
+Hello,
 
-+ YouChing and Jaime from Macronix
-TLDR for them: there is a misbehavior since Mason added block
-protection support. Just checking if the blocks are protected seems to
-misconfigure the chip entirely, see below. Any hints?
+This patch series contains some improvements for s32 pinctrl drivers suggested
+by upstream[1], such as
+  - Fix error shadowings and improve return value handlings.
+  - Fix print format.
+  - Remove unnecessary blanks.
+  - Use proper macros and helpers to simplify codes.
+  - Refactor config param parsing and remove config arguments that are never used.
+  - Use generic struct pingroup and struct pinfunction to describe pin data.
 
-noltari@gmail.com wrote on Fri, 24 Mar 2023 15:15:47 +0100:
+Regards,
+Chester
 
-> Hi Miqu=C3=A8l,
->=20
-> 2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
-> > Hi =C3=81lvaro,
-> >
-> > noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
-> > =20
-> >> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
-> >> (<miquel.raynal@bootlin.com>) escribi=C3=B3: =20
-> >> >
-> >> > Hi =C3=81lvaro,
-> >> >
-> >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
-> >> > =20
-> >> > > Hi Miqu=C3=A8l,
-> >> > >
-> >> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
-> >> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3: =20
-> >> > > >
-> >> > > > Hi =C3=81lvaro,
-> >> > > >
-> >> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
-> >> > > > =20
-> >> > > > > Add new "mxic,disable-block-protection" binding documentation.
-> >> > > > > This binding allows disabling block protection support for tho=
-se
-> >> > > > > devices not
-> >> > > > > supporting it.
-> >> > > > >
-> >> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail=
-.com>
-> >> > > > > ---
-> >> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3 +=
-++
-> >> > > > >  1 file changed, 3 insertions(+)
-> >> > > > >
-> >> > > > > diff --git
-> >> > > > > a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> >> > > > > b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> >> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
-> >> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> >> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> >> > > > > @@ -16,6 +16,9 @@ in children nodes.
-> >> > > > >  Required NAND chip properties in children mode:
-> >> > > > >  - randomizer enable: should be "mxic,enable-randomizer-otp"
-> >> > > > >
-> >> > > > > +Optional NAND chip properties in children mode:
-> >> > > > > +- block protection disable: should be
-> >> > > > > "mxic,disable-block-protection"
-> >> > > > > + =20
-> >> > > >
-> >> > > > Besides the fact that nowadays we prefer to see binding conversi=
-ons
-> >> > > > to
-> >> > > > yaml before adding anything, I don't think this will fly.
-> >> > > >
-> >> > > > I'm not sure exactly what "disable block protection" means, we
-> >> > > > already have similar properties like "lock" and "secure-regions",
-> >> > > > not
-> >> > > > sure they will fit but I think it's worth checking. =20
-> >> > >
-> >> > > As explained in 2/2, commit 03a539c7a118 introduced a regression on
-> >> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix MX30LF1G18=
-AC
-> >> > > which hangs the device.
-> >> > >
-> >> > > This is the log with block protection disabled:
-> >> > > [    0.495831] bcm6368_nand 10000200.nand: there is not valid maps
-> >> > > for
-> >> > > state default
-> >> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID:
-> >> > > 0xf1
-> >> > > [    0.511526] nand: Macronix MX30LF1G18AC
-> >> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> >> > > 2048, OOB size: 64
-> >> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
-> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> >> > > [    0.535912] Bad block table found at page 65472, version 0x01
-> >> > > [    0.544268] Bad block table found at page 65408, version 0x01
-> >> > > [    0.954329] 9 fixed-partitions partitions found on MTD device
-> >> > > brcmnand.0
-> >> > > ...
-> >> > >
-> >> > > This is the log with block protection enabled:
-> >> > > [    0.495095] bcm6368_nand 10000200.nand: there is not valid maps
-> >> > > for
-> >> > > state default
-> >> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID:
-> >> > > 0xf1
-> >> > > [    0.510772] nand: Macronix MX30LF1G18AC
-> >> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> >> > > 2048, OOB size: 64
-> >> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
-> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> >> > > [    0.539687] Bad block table not found for chip 0
-> >> > > [    0.550153] Bad block table not found for chip 0
-> >> > > [    0.555069] Scanning device for bad blocks
-> >> > > [    0.601213] CPU 1 Unable to handle kernel paging request at
-> >> > > virtual
-> >> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
-> >> > > *** Device hangs ***
-> >> > >
-> >> > > Enabling macronix_nand_block_protection_support() makes the device
-> >> > > unable to detect the bad block table and hangs it when trying to s=
-can
-> >> > > for bad blocks. =20
-> >> >
-> >> > Please trace nand_macronix.c and look:
-> >> > - are the get_features and set_features really supported by the
-> >> >   controller driver? =20
-> >>
-> >> This is what I could find by debugging:
-> >> [    0.494993] bcm6368_nand 10000200.nand: there is not valid maps for
-> >> state default
-> >> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
-> >> [    0.512077] nand: Macronix MX30LF1G18AC
-> >> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
-> >> 2048, OOB size: 64
-> >> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
-> >> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> >> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
-> >> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
-> >> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> >> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0=
-x00
-> >> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> >> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0=
-x00
-> >> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> >> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0=
-x00
-> >> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
-> >> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0=
-x00
-> >> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_param=3D[=
-00
-> >> 00 00 00] -> 0
-> >> [    0.602341] macronix_nand_block_protection_support:
-> >> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
-> >> [    0.610548] macronix_nand_block_protection_support: !=3D
-> >> MXIC_BLOCK_PROTECTION_ALL_LOCK
-> >> [    0.624760] Bad block table not found for chip 0
-> >> [    0.635542] Bad block table not found for chip 0
-> >> [    0.640270] Scanning device for bad blocks
-> >>
-> >> I don't know how to tell if get_features / set_features is really
-> >> supported... =20
-> >
-> > Looks like your driver does not support exec_op but the core provides a
-> > get/set_feature implementation. =20
->=20
-> According to Florian, low level should be supported on brcmnand
-> controllers >=3D 4.0
-> Also:
-> https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddbb20bf75=
-689372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_map_part=
-.h#L1597
+[1] https://lore.kernel.org/all/20230220023320.3499-1-clin@suse.com/
 
-Just to be sure, you're using a mainline controller driver, not this
-one?
+Changes in v4:
+- Merge the of_device_get_match_data() patch [v3 1/6] into the last patch
+  [v4 5/5, "pinctrl: s32: separate const device data ..."] in order to solve
+  compiler warning properly.
 
-> > =20
-> >> =20
-> >> > - what is the state of the locking configuration in the chip when you
-> >> >   boot? =20
-> >>
-> >> Unlocked, I guess...
-> >> How can I check that? =20
-> >
-> > It's in your dump, the chip returns 0, meaning it's all unlocked,
-> > apparently. =20
->=20
-> Well, I can read/write the device if block protection isn=E2=80=99t disab=
-led,
-> so I guess we can confirm it=E2=80=99s unlocked=E2=80=A6
->=20
-> > =20
-> >> > - is there anything that locks the device by calling mxic_nand_lock(=
-) ? =20
-> >
-> > So nobody locks the device I guess? Did you add traces there? =20
->=20
-> It doesn=E2=80=99t get to the point that it enabled the lock/unlock funct=
-ions
-> since it fails when checking if feature is 0x38, so there=E2=80=99s no po=
-int
-> in adding those traces=E2=80=A6
+Changes in v3:
+- Link: https://lore.kernel.org/lkml/20230323144833.28562-1-clin@suse.com/
+- Remove unnecessary type casting and correct type qualifiers.
+- Split the previous generic-struct patch [v2 4/4] into two separate patches.
+- Add a new patch [v3 6/6] to attach a real const .data with of_device_id.
 
-Right, it returns before setting these I guess.
+Changes in v2:
+- Link: https://lore.kernel.org/lkml/20230320163823.886-1-clin@suse.com/
+- Use of_device_get_match_data() to get matched of_device_id data.
+- Enhance sizeof() arguments.
+- Fix blanks and remove unnecessary parentheses.
+- Drop unnecessary marcos and s32_pin_config() implemented in v1 and set/clear
+  mask/config values transparently.
+- Put pull-function related cases together in s32_pin_set_pull().
+- Simply use generic 'struct pinfunction' rather than having extra 'struct
+  s32_pmx_func'.
 
->=20
-> > =20
-> >> > - finding no bbt is one thing, hanging is another, where is it hangi=
-ng
-> >> >   exactly? (offset in nand/ and line in the code) =20
-> >>
-> >> I've got no idea... =20
-> >
-> > You can use ftrace or just add printks a bit everywhere and try to get
-> > closer and closer. =20
->=20
-> I think that after trying to get the feature it just start reading
-> nonsense from the NAND and at some point it hangs due to that garbage=E2=
-=80=A6
+Chester Lin (5):
+  pinctrl: s32: refine error/return/config checks and simplify driver
+    codes
+  pinctrl: s32cc: refactor pin config parsing
+  pinctrl: s32cc: embed generic struct pingroup
+  pinctrl: s32cc: Use generic struct data to describe pin function
+  pinctrl: s32: separate const device data from struct
+    s32_pinctrl_soc_info
 
-It should refuse to mount the device somehow, but in no case the kernel
-should hang.
+ drivers/pinctrl/nxp/pinctrl-s32.h   |  40 ++--
+ drivers/pinctrl/nxp/pinctrl-s32cc.c | 282 ++++++++++++++++------------
+ drivers/pinctrl/nxp/pinctrl-s32g2.c |  17 +-
+ 3 files changed, 178 insertions(+), 161 deletions(-)
 
-> Is it posible that the NAND starts behaving like this after getting
-> the feature due to some specific config of my device?
->=20
-> >
-> > I looked at the patch, I don't see anything strange. Besides, I have a
-> > close enough datasheet and I don't see what could confuse the device.
-> >
-> > Are you really sure this patch is the problem? Is the WP pin wired on
-> > your design? =20
->=20
-> There=E2=80=99s no WP pin in brcmnand controllers < 7.0
+-- 
+2.37.3
 
-What about the chip?
-
-Thanks,
-Miqu=C3=A8l
