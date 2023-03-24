@@ -2,75 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240CB6C77B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083586C778B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 06:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjCXGMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S231417AbjCXF6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 01:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCXGMs (ORCPT
+        with ESMTP id S229623AbjCXF6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:12:48 -0400
-X-Greylist: delayed 917 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Mar 2023 23:12:45 PDT
-Received: from m1360.mail.163.com (m1360.mail.163.com [220.181.13.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7AAD15147
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=YwRZQgLssuEVHqSJNlLh2ATcMxHte0Lp0qjfaDXiK1E=; b=j
-        DWz4F229Onu5Cj/FKIp+meNAuYAKoxym9DFXwhIz4FmmnXa1r4iLKbyo8QadGTgj
-        7DBUnXqkX3GnwrMKZg/KtHwuBbBXk+NN67yk1U5keWVqaNDoEwk8SYg+Bs3RD4vw
-        TPXf2miF+zBicFKl9WrczpScqklVf/cSdGBC8Ndrzg=
-Received: from jhb_ee$163.com ( [113.105.127.219] ) by ajax-webmail-wmsvr60
- (Coremail) ; Fri, 24 Mar 2023 13:56:42 +0800 (CST)
-X-Originating-IP: [113.105.127.219]
-Date:   Fri, 24 Mar 2023 13:56:42 +0800 (CST)
-From:   =?GBK?B?tefX0w==?= <jhb_ee@163.com>
-To:     rppt@kernel.org
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:[PATCH] memblock: Correct calculation method for overflowing
- range @size
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20230324052351.31106-1-jhb_ee@163.com>
-References: <20230324052351.31106-1-jhb_ee@163.com>
-X-NTES-SC: AL_QuycC/qYuEwr5CWdZukXn0oUhOs2XMq5s/4k2INTP5k0vCr89zAMXWFAEEv56vOXEB+grgabewlP2NVBdqd9Y50bWySHdvXd5MQ8MjCx36CC
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Fri, 24 Mar 2023 01:58:32 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4169C272C;
+        Thu, 23 Mar 2023 22:58:31 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a16so630628pjs.4;
+        Thu, 23 Mar 2023 22:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679637511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TVvvlvt0PpLh4HRInUY1OVgFNwPoQgkN2SvfrIoJ8Gg=;
+        b=fHF4pwLlhDq9y0o2piJ8HslYzWZWsc+oUxtmosySAoeNLilwB16RYiSYZEUGeoxRQ1
+         Zk95FeX8eR8bqqTGPDbTeK06mLKFehY/nrkO8MurT9E38ETAZ16rUWZbW4JBHgsX1Lip
+         WECF2mIwmBPEteVc/lf0oKp+m3v25Ohh9QeJ6FX0/Zbj+zv/fnGEbpvBvhRSKP8QWqgD
+         K2Cwl+LgfS46FoS7g+mLaBjl+pDaFVwAvLFx2zpfZzFtvzKigfNHRAAnEYDP8i2xd0Ct
+         VZl3GPQaZIE1IFjtlkcWXr9MHowHMnQxigZkQdswKsbDgGsDX6erZC4Nxnj9GrzA00wj
+         /bmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679637511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TVvvlvt0PpLh4HRInUY1OVgFNwPoQgkN2SvfrIoJ8Gg=;
+        b=m54ivl+UwKJQkiAvCpIn2H/JGiuL13WZRE4YaUkKmhKBNj6OKxKXtR+K3nn6ZaeUAX
+         a1uFnF4x98XW9jIylvIBEfkUGMVTKnwwJFJd5VZ7tnIn+gcdfpamQg5fGippYppD6O8W
+         WL/anX7Rqg8aUFeS3Xmmexl+1FVDYhP6RbUr7Kezl3cTxsT2GLL36vNSDUbpzCYsj7/x
+         To9lB9WZ9m6gsQtm5urq2DbAnAh10jsPm6DNDmxxrjbPzK4z1NGSSkyY6Zut3etNK6Uj
+         SrCWpJ1ZjlevbD1g0vpHDQynUemiUBoXMRD6k5It5UQEcWBKdQN+j+4frMiT/EMXugCw
+         lHhQ==
+X-Gm-Message-State: AAQBX9cgIinDKJOl/725iSQ91oaiFMB4uPqD3hfZiQ/H4qZoebzZ/Tmh
+        FVVI/lti3/xYrnU+72wRFos=
+X-Google-Smtp-Source: AKy350bgiSo4RK8v3fSxyjiNi5su3WXIPtt91Q1W+bEWqPozZ1bwZHir1WriQHcpv4Zdyf0QPIkQkw==
+X-Received: by 2002:a17:90b:1215:b0:234:b170:1f27 with SMTP id gl21-20020a17090b121500b00234b1701f27mr1297339pjb.0.1679637510687;
+        Thu, 23 Mar 2023 22:58:30 -0700 (PDT)
+Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
+        by smtp.gmail.com with ESMTPSA id u10-20020a17090a890a00b002339195a47bsm2180954pjn.53.2023.03.23.22.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 22:58:30 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 05:58:28 +0000
+From:   Alok Tiagi <aloktiagi@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        David.Laight@aculab.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, Tycho Andersen <tycho@tycho.pizza>,
+        aloktiagi@gmail.com
+Subject: Re: [RFC v3 2/3] file: allow callers to free the old file descriptor
+ after dup2
+Message-ID: <ZB08BPmuqEsw3bqU@ip-172-31-38-16.us-west-2.compute.internal>
+References: <20230324051526.963702-1-aloktiagi@gmail.com>
+ <20230324051526.963702-2-aloktiagi@gmail.com>
+ <ZB005rys4ZTeaQfU@casper.infradead.org>
 MIME-Version: 1.0
-Message-ID: <2032a48e.3206.1871230d3bb.Coremail.jhb_ee@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: PMGowAB3mDSaOx1k3eIAAA--.9128W
-X-CM-SenderInfo: 5mkesvrh6rljoofrz/1tbiRRM8fGDuzJsGygABsC
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZB005rys4ZTeaQfU@casper.infradead.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ClNvcnJ5LCB0aGUgc2l6ZSBoZXJlIG1heSBiZSBjYWxjdWxhdGVkIGFjY29yZGluZyB0byB0aGlz
-IGZvcm11bGEsIGNhbmNlbCB0aGlzIHBhdGNoCgoKCgpBdCAyMDIzLTAzLTI0IDEzOjIzOjUxLCAi
-SG9uZ2JpbiBKaSIgPGpoYl9lZUAxNjMuY29tPiB3cm90ZToKPldoZW4gbWVtYmxvY2sgdXNlcnMg
-dG8gc3BlY2lmeSByYW5nZSB3aGVyZSBAYmFzZSArIEBzaXplIG92ZXJmbG93cwo+YW5kIGF1dG9t
-YXRpY2FsbHkgY2FwIGl0IGF0IG1heGltdW0sIFRoZSBuZXcgc2l6ZSBzaG91bGQgYmUKPlBIWVNf
-QUREUl9NQVggLSBAYmFzZSArIDEuCj4KPkFzc3VtaW5nIHRoYXQgYmFzZSBpcyAwLCBQSFlTX0FE
-RFJfTUFYIGlzIDB4ZmYsIHdoaWNoIGlzIDI1NSBpbiBkZWNpbWFsLAo+dGhlbiBAc2l6ZSBzaG91
-bGQgYmUgMjU2IGluc3RlYWQgb2YgMjU1Cj4KPlNpZ25lZC1vZmYtYnk6IEhvbmdiaW4gSmkgPGpo
-Yl9lZUAxNjMuY29tPgo+LS0tCj4gbW0vbWVtYmxvY2suYyB8IDIgKy0KPiAxIGZpbGUgY2hhbmdl
-ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPgo+ZGlmZiAtLWdpdCBhL21tL21lbWJs
-b2NrLmMgYi9tbS9tZW1ibG9jay5jCj5pbmRleCAyNWZkMDYyNmE5ZTcuLmYxNjgzZDFkYWU2NSAx
-MDA2NDQKPi0tLSBhL21tL21lbWJsb2NrLmMKPisrKyBiL21tL21lbWJsb2NrLmMKPkBAIC0xNjks
-NyArMTY5LDcgQEAgc3RhdGljIGVudW0gbWVtYmxvY2tfZmxhZ3MgX19pbml0X21lbWJsb2NrIGNo
-b29zZV9tZW1ibG9ja19mbGFncyh2b2lkKQo+IC8qIGFkanVzdCAqQHNpemUgc28gdGhhdCAoQGJh
-c2UgKyAqQHNpemUpIGRvZXNuJ3Qgb3ZlcmZsb3csIHJldHVybiBuZXcgc2l6ZSAqLwo+IHN0YXRp
-YyBpbmxpbmUgcGh5c19hZGRyX3QgbWVtYmxvY2tfY2FwX3NpemUocGh5c19hZGRyX3QgYmFzZSwg
-cGh5c19hZGRyX3QgKnNpemUpCj4gewo+LQlyZXR1cm4gKnNpemUgPSBtaW4oKnNpemUsIFBIWVNf
-QUREUl9NQVggLSBiYXNlKTsKPisJcmV0dXJuICpzaXplID0gbWluKCpzaXplLCBQSFlTX0FERFJf
-TUFYIC0gYmFzZSArIDEpOwo+IH0KPiAKPiAvKgo+LS0gCj4yLjM0LjEK
+On Fri, Mar 24, 2023 at 05:28:06AM +0000, Matthew Wilcox wrote:
+> On Fri, Mar 24, 2023 at 05:15:25AM +0000, aloktiagi wrote:
+> > @@ -1119,8 +1119,12 @@ __releases(&files->file_lock)
+> >  		__clear_close_on_exec(fd, fdt);
+> >  	spin_unlock(&files->file_lock);
+> >  
+> > -	if (tofree)
+> > -		filp_close(tofree, files);
+> > +	if (fdfile) {
+> > +		*fdfile = tofree;
+> > +	} else {
+> > +		if (tofree)
+> > +			filp_close(tofree, files);
+> > +	}
+> 
+> Why not:
+> 
+> 	if (fdfile)
+> 		 *fdfile = tofree;
+> 	else if (tofree)
+> 		filp_close(tofree, files);
+> 
+> Shorter and makes the parallel structure more obvious.
+> 
+
+Agreed. Thank you for suggesting that. I'll fix this in v4.
+
