@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BC56C87DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF96C87E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjCXV7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S231904AbjCXWAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 18:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjCXV7g (ORCPT
+        with ESMTP id S231802AbjCXWAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:59:36 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E81315562;
-        Fri, 24 Mar 2023 14:59:35 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id r16so2216676oij.5;
-        Fri, 24 Mar 2023 14:59:35 -0700 (PDT)
+        Fri, 24 Mar 2023 18:00:22 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B660A15899;
+        Fri, 24 Mar 2023 15:00:20 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id z19so3125288plo.2;
+        Fri, 24 Mar 2023 15:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679695220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TwSVZpLUzRmiKPBTqz2xkUjjibhOLesM/D7QB066vDY=;
+        b=MzzWglGqjxWYLJ5m0oOhSLE8/AUlI9bSF/LPOlD7NAvgKgilVhKJrTyXk0zveHQ6qb
+         YC/rJ5lphx2bNt7p81GmTWdTTWAf/HifT+tF5GwgQO0tcg57jipY7bral9bwxSrPWvzC
+         t/SarjzE8fMpdaiLFmOiO22fwq4U721ebyBbzJvA4AUlse0y0R+oAqKSjenK/5IV5Jya
+         QdssZ7RXOHqlbsPBfDBEHbOXNGYHaax75s48wmivRLqrdCCgN4YBtb5xz5+H76WF5OMt
+         Hbvr7aJNSTR19MEZznTmkxPA57RsbJ/FW/vfM4XrdaD4+yis7IporewAm9+uWJLyWuwt
+         1fYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679695174;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZNL5w5eYDM55BXRsVUv16I402Vb2xlU+5wdQWl0ZA5o=;
-        b=BfQmJD3ItifKSUonchLCTksqwzMNOfXIjelC+DoKRkEs8eC5iEKEAIYgPfn2nXnTuS
-         IGLKDwBCaMmXmCb8stcnLurzYePW2+iVubNja/Gxqs2Ua3H/3ADO1Lt6n96Sr0wGyR1g
-         gZN1w9zS+cGB+IEMDB2GbyMxflt9AEvY00/CpEYD3XxvM5Yd21ShQOoRih3r7MFxo1hr
-         WrKIUaaWkxNma0VZ1LBsVkwsOJEqm52mACvhckA69MMvm4+cktahETNnO9kUV3qxwWsj
-         M+M1yWOPwRH70oF9qDFqZOEHrAPHDHNtK7jAWnOZuelJtnqL30YNdrhfbz+WRGgVt5M2
-         IXBg==
-X-Gm-Message-State: AO0yUKXAJij5kG8dBK+w8t/HUjHrSzW4qUpp9dkhAc4F7HSqJHWSPS4r
-        eDBTG2lQskh/oJ952ZfUYQ==
-X-Google-Smtp-Source: AK7set83OMMwHEd/xmeCKjvOBf+FPOq4sNLD29gH0PdiDnCImpMV3fVRF6vT6C/vpyBYUnXPJA7boA==
-X-Received: by 2002:a54:4805:0:b0:386:ce06:8d87 with SMTP id j5-20020a544805000000b00386ce068d87mr1666502oij.38.1679695174268;
-        Fri, 24 Mar 2023 14:59:34 -0700 (PDT)
-Received: from robh_at_kernel.org ([2605:ef80:80f9:92f0:b372:78c0:69c1:66d6])
-        by smtp.gmail.com with ESMTPSA id r2-20020a056808210200b00387160bcd46sm4918565oiw.46.2023.03.24.14.59.31
+        d=1e100.net; s=20210112; t=1679695220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TwSVZpLUzRmiKPBTqz2xkUjjibhOLesM/D7QB066vDY=;
+        b=bp1iLynZXAy6nH8uTi1PEv+xDtrzhrBqMH6kjOrvAuQbesjTdrbajEAJ1p0rPCQWOX
+         N6UEndTnDWs6lLVcSMJGcMNVC3aZ+chUsRGG/b/BpXW1G/PsoXfsVpGLlPmRWl7z6rwf
+         wF0sA4n8otX369VZb37/YA9SARjA3q1vJqZu2t2Ia8gMoOc0h6TaUeubeVz/7vbDF6oh
+         c04imV7L4yqwhOptS0ffGciH2VUjNNwkfiMZoOp84HXdLLO+/hiZQRfk2P0Y4Vf5Svv5
+         fqGDT2cU0QFL+sCSjUoRjV3/l8fnMxE+ctJtn3F/mpIZWOXIM1NWDB+tiH5+/k0ghbtl
+         YGrg==
+X-Gm-Message-State: AO0yUKVwcDZZk6LDfbFv5CrEs+H4NrHJxRZZdZbiuRbmZVooTI0IzRUY
+        EPR7m/ZoaaszZxowwqIjFI0=
+X-Google-Smtp-Source: AK7set+PGtDOTkfzZJx37x4Pz4RQeFFcdSqmH6QQdA7Wb4n1Bcs/q3h6z5bxt6vTpwuaw2fVQ90ZjA==
+X-Received: by 2002:a05:6a20:c28a:b0:c7:770a:557f with SMTP id bs10-20020a056a20c28a00b000c7770a557fmr3861341pzb.50.1679695220121;
+        Fri, 24 Mar 2023 15:00:20 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id k23-20020aa790d7000000b006247123adf1sm14773685pfk.143.2023.03.24.15.00.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 14:59:33 -0700 (PDT)
-Received: (nullmailer pid 54572 invoked by uid 1000);
-        Fri, 24 Mar 2023 21:59:30 -0000
-Date:   Fri, 24 Mar 2023 16:59:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
- Document support for LEDs node
-Message-ID: <20230324215930.GA49367-robh@kernel.org>
-References: <20230319191814.22067-1-ansuelsmth@gmail.com>
- <20230319191814.22067-11-ansuelsmth@gmail.com>
- <20230321211953.GA1544549-robh@kernel.org>
- <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
- <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
- <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
+        Fri, 24 Mar 2023 15:00:19 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Avoid rounding down to zero jiffies
+Date:   Fri, 24 Mar 2023 15:00:13 -0700
+Message-Id: <20230324220013.191795-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 12:39:48AM +0100, Christian Marangi wrote:
-> On Wed, Mar 22, 2023 at 12:23:59AM +0100, Andrew Lunn wrote:
-> > > > Are specific ethernet controllers allowed to add their own properties in 
-> > > > led nodes? If so, this doesn't work. As-is, this allows any other 
-> > > > properties. You need 'unevaluatedProperties: false' here to prevent 
-> > > > that. But then no one can add properties. If you want to support that, 
-> > > > then you need this to be a separate schema that devices can optionally 
-> > > > include if they don't extend the properties, and then devices that 
-> > > > extend the binding would essentially have the above with:
-> > > > 
-> > > > $ref: /schemas/leds/common.yaml#
-> > > > unevaluatedProperties: false
-> > > > properties:
-> > > >   a-custom-device-prop: ...
-> > > > 
-> > > > 
-> > > > If you wanted to define both common ethernet LED properties and 
-> > > > device specific properties, then you'd need to replace leds/common.yaml 
-> > > > above  with the ethernet one.
-> > > > 
-> > > > This is all the same reasons the DSA/switch stuff and graph bindings are 
-> > > > structured the way they are.
-> > > > 
-> > > 
-> > > Hi Rob, thanks for the review/questions.
-> > > 
-> > > The idea of all of this is to keep leds node as standard as possible.
-> > > It was asked to add unevaluatedProperties: False but I didn't understood
-> > > it was needed also for the led nodes.
-> > > 
-> > > leds/common.yaml have additionalProperties set to true but I guess that
-> > > is not OK for the final schema and we need something more specific.
-> > > 
-> > > Looking at the common.yaml schema reg binding is missing so an
-> > > additional schema is needed.
-> > > 
-> > > Reg is needed for ethernet LEDs and PHY but I think we should also permit
-> > > to skip that if the device actually have just one LED. (if this wouldn't
-> > > complicate the implementation. Maybe some hints from Andrew about this
-> > > decision?)
-> > 
-> > I would make reg mandatory.
-> >
-> 
-> Ok will add a new schema and change the regex.
-> 
-> > We should not encourage additional properties, but i also think we
-> > cannot block it.
-> > 
-> > The problem we have is that there is absolutely no standardisation
-> > here. Vendors are free to do whatever they want, and they do. So i
-> > would not be too surprised if some vendor properties are needed
-> > eventually.
-> >
-> 
-> Think that will come later with defining a more specific schema. But I
-> honestly think most of the special implementation will be handled to the
-> driver internally and not with special binding in DT.
+From: Rob Clark <robdclark@chromium.org>
 
-Then encourage no additional properties by letting whomever wants to add 
-them to restructure the schema. ;)
+If userspace asked for a timeout greater than zero, but less than a
+jiffy, they clearly weren't planning on spinning.  So it is better
+to round up to one.
 
-Rob
+This fixes an issue with supertuxkart that was (for some reason)
+spinning on a gl sync with 1ms timeout.  CPU time for a demo lap
+drops from:
+
+  15.83user 20.98system 0:47.46elapsed 77%CPU
+
+to:
+
+  8.84user 2.30system 0:46.67elapsed 23%CPU
+
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_drv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index 9f0c184b02a0..7936aa6cad03 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -548,7 +548,7 @@ static inline unsigned long timeout_to_jiffies(const ktime_t *timeout)
+ 		remaining_jiffies = ktime_divns(rem, NSEC_PER_SEC / HZ);
+ 	}
+ 
+-	return clamp(remaining_jiffies, 0LL, (s64)INT_MAX);
++	return clamp(remaining_jiffies, 1LL, (s64)INT_MAX);
+ }
+ 
+ /* Driver helpers */
+-- 
+2.39.2
+
