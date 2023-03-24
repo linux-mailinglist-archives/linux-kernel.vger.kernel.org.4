@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5E86C7CDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE01C6C7CE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCXKuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S231584AbjCXKvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjCXKu1 (ORCPT
+        with ESMTP id S231196AbjCXKvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:50:27 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC79132E9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:50:26 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id x22-20020a056830409600b0069b30fb38f7so680471ott.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:50:26 -0700 (PDT)
+        Fri, 24 Mar 2023 06:51:47 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C6721A13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:51:46 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b20so6331018edd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 03:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1679655025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LA3Zcbbrd2EPDNxAP1qxAnsroRRZb68Sab3Jkh0P0Sc=;
-        b=Ml2sbeXt/dJV+DVGdd+scTwplDkwCY6tNDAarNSO3EkTPvCC5TMw0SXUB/1GzsyHlb
-         Q/hm5Fs1tVJHZiaUSjpj4ilnnjhayYRhd1Jb5N8YsoVyBUjufC8K2OsitmUyB/8AVL9F
-         fH381F+xJ4iNHp8+pGopMBOJLEhExFdBuAkHQ=
+        d=linaro.org; s=google; t=1679655106;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Es5Zj8ZXJ7+ZNmQgL15R+ALbyXTkugPpIYfE2O75ZBU=;
+        b=CXBdPye3PRCRSuXjVDdN7jhjXHh+6oyf+1bBlIxXRNKDQLgCkUqULD/H/T7lF7oRN+
+         7Yyp7JjJ7mycVtXrF3TSNlxfXzhQUfgUGr1DwtNi+7sQEqfHqJD+pF4Ociu0YFg5nfqi
+         5UM/cLMU4cCLDziY45EI6QiQb9MUv1tXESuwdsvT3TYPyGyj2fLboMBXgB2ir2S6j1J9
+         IVX38Ud9LWsDj1CsVqOw3NiwBfkd0iJIz2Wh42+fRrQJ1sJNVDUT13TTdYGLKdDNtNBe
+         5WiTeINDrev7l0q4swaFRpbU2UVxD2Smv1B9GWHIH2kIbLCFlwPHo4Dg6EHdHQ9RQoO9
+         miiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679655025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LA3Zcbbrd2EPDNxAP1qxAnsroRRZb68Sab3Jkh0P0Sc=;
-        b=IJDW1gwQZ3pLeg+fieRo0EhBOkbgvYMmgCd2Tt8PMVvQc6ij8AjvDfAJfLUBIFXEyo
-         Uhgd0fLJJHn1Bw6Gy3IDw5r2gbn/KZ0goz+frugGNfFfdiznnRmjnYVdrUHz1hxXf9xf
-         PIcnyEnNJ4g4VlWTZaQtAAQ4K5+UcaYnYbgmEmtEMyRIJ7S0be7GogCi1Lq8kmirm4/o
-         yEj8rKuE6XqKNAz4SyL1xunhehtDyNe262vcUdLABVe/vNaYXX3X7GTPv+w5tmD4bRzC
-         A5v9w6v5Oa0RqCyIdNYbA87Z68kfZ9Vy6VbgybMb5SbsKYwnuEGlUBjnJc65AjGXOkjL
-         +luQ==
-X-Gm-Message-State: AO0yUKUUpVsJcZ380+LY5yjxH2rgIMBo9KoepfutERU5GRdVIzH7FNDj
-        yqq3AfUj7Rb500MXAcOhC3tKmkClobof9pXZ1BRoEQ==
-X-Google-Smtp-Source: AK7set9XwOprmvMSZxE219+neH4dJVe0b6v5IUqmo46jRmevl4lz/+ilhJWCP96nyC4V+5+FhrFrE2HhdAGzya1YoHU=
-X-Received: by 2002:a9d:4f15:0:b0:699:7d71:d2dc with SMTP id
- d21-20020a9d4f15000000b006997d71d2dcmr916625otl.6.1679655025541; Fri, 24 Mar
- 2023 03:50:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679655106;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Es5Zj8ZXJ7+ZNmQgL15R+ALbyXTkugPpIYfE2O75ZBU=;
+        b=fkscpsgC8mNcDMbS7oHo39e7iQiloSZ84eokTlp0YT9t691RuxVbraHbb9G1k2/C61
+         8rZVmNOUU5rkWyWNIDHqy+SD1jmSdL0ExW1RPE3roi20h6HCcBoJOV0MAENLtWDsetJ1
+         M9ygZR4y8Eo+TIyTUTpSG+YtKbV8g6D+nIFIqhWmuOh14Dy6eke7EMEWvpAEk5yV7ugA
+         IefpszhdH+pVEiX2TerDKnJvLRB18xfNFa+W/xE2znGQbCvCD292Zwq2GGzmiJE1oVLF
+         iQTWN0iEFkkTP6/YjJjOAQU1y+lZ2Szip1nzmjRojoPfikuFIYV/Nsdm4yoFcwH4kLTA
+         4rYw==
+X-Gm-Message-State: AAQBX9cZJB64WeITdUUnR6oRoe86cKl0/EFBwQgobGw3AdCLGcRhmvOY
+        OyD7qWgAX1P9KIT1WIDpjzZIS/cazCDw1g7C/oE=
+X-Google-Smtp-Source: AKy350aErcL5avhfKGOpWseo+06TK2BrPxMGJrLNIuMn/QfBynVnd5H6M9Amrih8BJ0biropoVOBPQ==
+X-Received: by 2002:aa7:c1d7:0:b0:4fa:ba31:6c66 with SMTP id d23-20020aa7c1d7000000b004faba316c66mr2493240edp.42.1679655105779;
+        Fri, 24 Mar 2023 03:51:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
+        by smtp.gmail.com with ESMTPSA id k19-20020a508ad3000000b00501c0eaf10csm7596212edk.40.2023.03.24.03.51.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 03:51:45 -0700 (PDT)
+Message-ID: <2dd13286-c518-66a7-44f4-b6c4f8acd061@linaro.org>
+Date:   Fri, 24 Mar 2023 11:51:43 +0100
 MIME-Version: 1.0
-References: <20230127221418.2522612-1-arnd@kernel.org> <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
- <20230308165644.GA1181835@dev-arch.thelio-3990X> <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
- <ZB1xWRo0rkhku2BS@phenom.ffwll.local> <CAKMK7uF4tYyw6Eio6YkWZpBej1J8_5+VLU_hvVbL-Lnk06=v1g@mail.gmail.com>
- <ZB19rRHIeLxyzDrX@orome>
-In-Reply-To: <ZB19rRHIeLxyzDrX@orome>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Fri, 24 Mar 2023 11:50:14 +0100
-Message-ID: <CAKMK7uGP+n6CkMLq4N006Mctj6ta7NV3iSBt7qZiisptTBVv8w@mail.gmail.com>
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] crypto - img-hash: Depend on OF and silence compile
+ test warning
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20230319144439.31399-1-krzysztof.kozlowski@linaro.org>
+ <ZB14gXqnkBzhdm0i@gondor.apana.org.au>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZB14gXqnkBzhdm0i@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Mar 2023 at 11:38, Thierry Reding <thierry.reding@gmail.com> wrote:
->
-> On Fri, Mar 24, 2023 at 10:59:23AM +0100, Daniel Vetter wrote:
-> > On Fri, 24 Mar 2023 at 10:46, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Wed, Mar 08, 2023 at 05:28:06PM +0000, Jon Hunter wrote:
-> > > >
-> > > >
-> > > > On 08/03/2023 16:56, Nathan Chancellor wrote:
-> > > > > Ping? This warning is now in 6.3-rc1.
-> > > >
-> > > > Thierry is away at the moment.
-> > > >
-> > > > David, Daniel, do you want to pick this up directly in the meantime as a fix
-> > > > for 6.3? Mikko has already reviewed and FWIW ...
-> > >
-> > > Generally first fallback should be drm-misc maintainers (or anyone else
-> > > with commit rights), but since this fell through cracks for weeks it seems
-> > > I'll pick it up to drm-fixes now directly.
-> >
-> > Ok I think I found out why this fell through cracks, MAINTAINERS isn't
-> > updated that host1x&tegra is maintained in drm-misc.
-> >
-> > John, since Thierry is out, can you pls create the MAINTAINERS patch to
-> > - point at drm-misc git repo everywhere needed
-> > - add any missing host1x paths to the drm-misc entry so that
-> > get_maintainers.pl adds the right people for this patch (currently it
-> > doesn't)
-> >
-> > Also should we have at least a 2nd person for tegra stuff (or well
-> > maybe nvidia stuff in general) for drm-misc? Currently it's just
-> > Thierry, and I don't think that's enough. Whomever gets volunteered
-> > please follow
-> >
-> > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
->
-> We never actually moved host1x and Tegra DRM to drm-misc completely.
-> There's still a separate tree that feeds into linux-next. This made
-> sense a while ago because there was a lot going on, but development
-> speed has decreased recently, so we may want to fix that. The big
-> benefit is that drm-misc is better oiled than drm-tegra, so getting
-> things merged would be easier for everyone.
+On 24/03/2023 11:16, Herbert Xu wrote:
+> On Sun, Mar 19, 2023 at 03:44:39PM +0100, Krzysztof Kozlowski wrote:
+>> The driver is specific to OF platforms (can match only via OF table),
+>> thus add dependency on CONFIG_OF.  Mark the of_device_id table as
+>> unused.  This also fixes W=1 warning:
+>>
+>>   drivers/crypto/img-hash.c:930:34: error: ‘img_hash_match’ defined but not used [-Werror=unused-const-variable=]
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> You should either add a dependency on OF or __maybe_unused.
+> Adding both makes no sense.
 
-Hm I thought you had a split where you feed -fixes through misc and
-features through tegra.git? Just listing both trees would cover that.
+Of course it makes, otherwise you have warnings which is also fixed here.
 
-> I'm all in favor of adding a second Tegra person to take pick up the
-> slack when necessary.
+> 
+> Anyway, what is your final goal here? If it is to get rid of
+> of_match_ptr because of_match_table has been unconditinoal for
+> over 10 years then just do it in one giant patch rather than
+> evaluating every single driver with of_match_table as to whether
+> they can be used through ACPI or not.
 
-Imo features still through tegra.git with just you is fine, there's
-not going to be anyone else (like ci farms) blocked if that's held up
-for a bit. It's more the bugfixes where a 2nd nvidia person would be
-great.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+My current goal is to pass compile tests. The final goal is not yet
+decided because final approach is not known. Different people disagree
+on details, e.g. whether ACPI && !OF should have of_device_id or not.
+
+
+Best regards,
+Krzysztof
+
