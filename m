@@ -2,66 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEE96C7EF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DADCC6C7EF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjCXNiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S231862AbjCXNjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjCXNit (ORCPT
+        with ESMTP id S230456AbjCXNjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:38:49 -0400
-Received: from mail-out.aladdin-rd.ru (mail-out.aladdin-rd.ru [91.199.251.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2CEBC;
-        Fri, 24 Mar 2023 06:38:45 -0700 (PDT)
-From:   Daniil Dulov <d.dulov@aladdin.ru>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Daniil Dulov <d.dulov@aladdin.ru>, <linux-media@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <lvc-patches@linuxtesting.org>
-Subject: [PATCH] media: dib7000p: Fix potential division by zero
-Date:   Fri, 24 Mar 2023 06:38:32 -0700
-Message-ID: <20230324133832.652630-1-d.dulov@aladdin.ru>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Mar 2023 09:39:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484E0198D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:39:19 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfhdP-0006yo-UT; Fri, 24 Mar 2023 14:39:11 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfhdO-006OgR-6o; Fri, 24 Mar 2023 14:39:10 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pfhdN-00905J-Bw; Fri, 24 Mar 2023 14:39:09 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        netdev@vger.kernel.org
+Subject: [PATCH net v1 1/1] net: phy: micrel: correct KSZ9131RNX EEE capabilities and advertisement
+Date:   Fri, 24 Mar 2023 14:39:08 +0100
+Message-Id: <20230324133908.2145226-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.20.32]
-X-ClientProxiedBy: EXCH-2016-02.aladdin.ru (192.168.1.102) To
- EXCH-2016-01.aladdin.ru (192.168.1.101)
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable loopdiv can be assigned 0, then it is used as a denominator,
-without checking it for 0.
+The KSZ9131RNX incorrectly shows EEE capabilities in its registers.
+Although the "EEE control and capability 1" (Register 3.20) is set to 0,
+indicating no EEE support, the "EEE advertisement 1" (Register 7.60) is
+set to 0x6, advertising EEE support for 1000BaseT/Full and
+100BaseT/Full.
+This inconsistency causes PHYlib to assume there is no EEE support,
+preventing control over EEE advertisement, which is enabled by default.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+This patch resolves the issue by utilizing the ksz9477_get_features()
+function to correctly set the EEE capabilities for the KSZ9131RNX. This
+adjustment allows proper control over EEE advertisement and ensures
+accurate representation of the device's capabilities.
 
-Fixes: 713d54a8bd81 ("[media] DiB7090: add support for the dib7090 based")
-Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
+Fixes: 8b68710a3121 ("net: phy: start using genphy_c45_ethtool_get/set_eee()")
+Reported-by: Marek Vasut <marex@denx.de>
+Tested-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/media/dvb-frontends/dib7000p.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/micrel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/dvb-frontends/dib7000p.c b/drivers/media/dvb-frontends/dib7000p.c
-index 55bee50aa871..bea5717907e7 100644
---- a/drivers/media/dvb-frontends/dib7000p.c
-+++ b/drivers/media/dvb-frontends/dib7000p.c
-@@ -497,7 +497,7 @@ static int dib7000p_update_pll(struct dvb_frontend *fe, struct dibx000_bandwidth
- 	prediv = reg_1856 & 0x3f;
- 	loopdiv = (reg_1856 >> 6) & 0x3f;
- 
--	if ((bw != NULL) && (bw->pll_prediv != prediv || bw->pll_ratio != loopdiv)) {
-+	if (loopdiv && (bw != NULL) && (bw->pll_prediv != prediv || bw->pll_ratio != loopdiv)) {
- 		dprintk("Updating pll (prediv: old =  %d new = %d ; loopdiv : old = %d new = %d)\n", prediv, bw->pll_prediv, loopdiv, bw->pll_ratio);
- 		reg_1856 &= 0xf000;
- 		reg_1857 = dib7000p_read_word(state, 1857);
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 2c84fccef4f6..4e884e4ba0ea 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -4151,6 +4151,7 @@ static struct phy_driver ksphy_driver[] = {
+ 	.resume		= kszphy_resume,
+ 	.cable_test_start	= ksz9x31_cable_test_start,
+ 	.cable_test_get_status	= ksz9x31_cable_test_get_status,
++	.get_features	= ksz9477_get_features,
+ }, {
+ 	.phy_id		= PHY_ID_KSZ8873MLL,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
 -- 
-2.25.1
+2.30.2
 
