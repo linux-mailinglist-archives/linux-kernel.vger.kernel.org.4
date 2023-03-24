@@ -2,98 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723F26C7E7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE5B6C7E83
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjCXNKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S231761AbjCXNM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCXNKT (ORCPT
+        with ESMTP id S231725AbjCXNMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9481795;
-        Fri, 24 Mar 2023 06:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23AA662ACB;
-        Fri, 24 Mar 2023 13:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 979ACC433D2;
-        Fri, 24 Mar 2023 13:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679663417;
-        bh=F0HFFIS62//+IDqQarAuRmb4u+Etmm9kj8vJ4jyMrVY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=KNRX96BfZOHJpemk4BPtqYbiYzfz+E+F9ajdXWKCVSrwZ1qiXrUHjUAtXY/3Sz6LG
-         l+oTBqGBSK/OCpWMDAqtpage16IZT4lncVS+nwyBETT4ZaFHNf41Jn+SIASll3mMcI
-         iZ31FtHtpdQdDTsumsQAyZe3g6nDIj5lUeAd85fLrLfcbGgA2HnFsGOoMYeKi8BBxl
-         7vzXiwXUGGBlu0OIX9QCQnmLSrvfB4374pnvkb38AkBDmsv9IiDn2ViP/YRGMOM3Ve
-         V46+hG/38UeCyBQvmP2YyRXLgHyRjF5GF4a2JExT+lqPUL3xujI8GA+Kg3eEvTJ1CL
-         LAA1xvx3vaU2A==
-Date:   Fri, 24 Mar 2023 14:10:13 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Todd Brandt <todd.e.brandt@intel.com>
-cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, todd.e.brandt@linux.intel.com,
-        srinivas.pandruvada@linux.intel.com, jic23@kernel.org,
-        p.jungkamp@gmx.net, stable@vger.kernel.org
-Subject: Re: [PATCH v4] HID:hid-sensor-custom: Fix buffer overrun in device
- name
-In-Reply-To: <20230314181256.15283-1-todd.e.brandt@intel.com>
-Message-ID: <nycvar.YFH.7.76.2303241409580.1142@cbobk.fhfr.pm>
-References: <20230314181256.15283-1-todd.e.brandt@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 24 Mar 2023 09:12:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7437233F7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:12:51 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679663569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m5SDxOoolUK9Wyj28+FiVDVLp5CYB42n63XNmD+YPlE=;
+        b=ytMvk5KVgQRedv8mr4wFKR0DO5fmbSqb3ChOsdilvijfKLnIyYqSXS29UAI0WUosZYmzYT
+        mFlFFlygRR7ApEpgezqlFhVFC8mAK0nDaF69BH0oqJbs096Gr6c3D+axw90drHil2Fgiae
+        kFtprePDE1iyEAeIbSNU1/b40zSKhRcwZDvfXmU51YfJG1fiBqdhI7al3H4UH05F6zkJdo
+        04koG4M37nZcNWoS0AARgUP+1zo7hz4mCdE3oC73wS45fUuxOCkonbiQOfU6qb63AdIpnW
+        cYAgWIcsGXqjPlXOMOaBrFni1xAII2lzA0R27+3Qgnv7Nkt9g68FAzWAzr0TwQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679663569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m5SDxOoolUK9Wyj28+FiVDVLp5CYB42n63XNmD+YPlE=;
+        b=7CTYTqnV2ghA9YVCkgUVTCctt71Ga0GrdDjJGAoTxO/bzk4Wre+hWvrpqPd80hugL0Uw1f
+        QiSkN0aDsLCNGnCw==
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/microcode: move @microcode_mutex definition near usage
+In-Reply-To: <20230324120019.GAZB2Q09ODVq0iYz5l@fat_crate.local>
+References: <20230324114720.1756466-1-john.ogness@linutronix.de>
+ <20230324120019.GAZB2Q09ODVq0iYz5l@fat_crate.local>
+Date:   Fri, 24 Mar 2023 14:17:10 +0106
+Message-ID: <87edpenvkh.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023, Todd Brandt wrote:
+On 2023-03-24, Borislav Petkov <bp@alien8.de> wrote:
+>> If CONFIG_MICROCODE_LATE_LOADING is not enabled, the compiler warns:
+>> 
+>> 'microcode_mutex' defined but not used
+>
+> How do you trigger this?
 
-> On some platforms there are some platform devices created with
-> invalid names. For example: "HID-SENSOR-INT-020b?.39.auto" instead
-> of "HID-SENSOR-INT-020b.39.auto"
-> 
-> This string include some invalid characters, hence it will fail to
-> properly load the driver which will handle this custom sensor. Also
-> it is a problem for some user space tools, which parses the device
-> names from ftrace and dmesg.
-> 
-> This is because the string, real_usage, is not NULL terminated and
-> printed with %s to form device name.
-> 
-> To address this, initialize the real_usage string with 0s.
-> 
-> Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-> Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio sensors")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Philipp Jungkamp <p.jungkamp@gmx.net>
-> Signed-off-by: Philipp Jungkamp <p.jungkamp@gmx.net>
-> Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-> Changes in v4:
-> - add the Fixes line
-> - add patch version change list
-> Changes in v3:
-> - update the changelog
-> - add proper reviewed/signed/suggested links
-> Changes in v2:
-> - update the changelog
+I was doing some tests with CONFIG_PREEMPT_RT. I did not think that
+mattered, since the mutex is obviously defined but not used for
+!CONFIG_MICROCODE_LATE_LOADING.
 
-Applied to for-6.3/upstream-fixes, thanks.
+Digging deeper I see that initializing @wait_list in
+__MUTEX_INITIALIZER() is what is allowing unused global mutexes to go
+unnoticed. Since with CONFIG_PREEMPT_RT the mutex is different and
+initialized differently, it is (correctly) detected as unused.
 
--- 
-Jiri Kosina
-SUSE Labs
+CONFIG_PREEMPT_RT cannot be enabled yet, so this patch is not urgent for
+mainline. But at some point it will need fixing.
 
+John Ogness
