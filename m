@@ -2,180 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CDC6C7A80
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4686C7A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjCXI5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S231959AbjCXI5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbjCXI4z (ORCPT
+        with ESMTP id S231983AbjCXI5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:56:55 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E902C2798B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:56:24 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id eh3so4901923edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679648177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Um8TbgrwhTbkEwzBW9OgNTPHsSW0JHe7bi80kPf/8AM=;
-        b=tv9rIy9Uxu3qQtgXFh+rGg9UcyLX/MSBomBeUuea9AyNItUKVcnbXFLlYIaTPV0LDB
-         CQQugLqK7FP4jB7h+4rmxx5LAtCnyIpxToRHnyTKgJOrQW4OUHW9a4q5nQ2JdfnTYBJb
-         EsLCIF1w/ZBjnQD3Du69SsSYV2vCMp9LIUEiy2nHce7dBotl/YoYpxCrbQEp7fMwi4mO
-         cjS9PD/yx1wDYidaGNYm0jfQHbOQ224kh+Pdm08SgNvQEeXq/yIQndaa9wJ8wvmLshGf
-         TSYFnFj5kEUJUR55YMQ84OTOhr5K8XYpjB0mNaoGBOpcdsM/yXBnTxzDlByaF7Ju1pAS
-         Oeew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679648177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Um8TbgrwhTbkEwzBW9OgNTPHsSW0JHe7bi80kPf/8AM=;
-        b=cikqIVMS2OxN83dJ5IzxzHwrPedn22HJWDmpx56Wh4SbuspdfdW5HBZ00sEyP/Kegf
-         Q0jCV3BmFNFOS3KOYFNB0942Jeh0H6jI9CtvF+ieN0jROaCyyoQ1l4CTCwgBrz0k3vP+
-         iquOTAMzZoINX1JW9bQDWlxYpE+hJHvK88LfLKDnhsT28ibydGqciCkhtOxih/7kCewU
-         UcaJ4U9y0VLWhuejKhoQSy06zHJCNUyClwh3ALPt/9YDRYpJ995ev9EDYAuNqhrxk/WP
-         MSbE/obqJgy3Wb0GdJS0O2ZCOy4eYxenEWfdIE2bSokVyNu0LrNBCVBgP2YMKdnj38zs
-         7K3g==
-X-Gm-Message-State: AAQBX9fQ0Pord1vfrOEFhfS4vViA9xkbZoaXGVDY9lx7lUXBmKkymSD/
-        3AmbrERrVeoRudvVqfA4igqjDw==
-X-Google-Smtp-Source: AKy350Z722g5hPv9Mo9UlX7Q2mEg4+ITEw0ynPSM2C2jUm30y/pXKOFomdKzmH7x/14WP6tJRKidxg==
-X-Received: by 2002:a17:906:3607:b0:92d:44ca:1137 with SMTP id q7-20020a170906360700b0092d44ca1137mr2162491ejb.43.1679648176715;
-        Fri, 24 Mar 2023 01:56:16 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ce50:243f:54cc:5373? ([2a02:810d:15c0:828:ce50:243f:54cc:5373])
-        by smtp.gmail.com with ESMTPSA id wy8-20020a170906fe0800b0093e261cc8bcsm612167ejb.58.2023.03.24.01.56.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 01:56:16 -0700 (PDT)
-Message-ID: <58316fc3-1ee1-b530-e783-ccd8225e07d6@linaro.org>
-Date:   Fri, 24 Mar 2023 09:56:15 +0100
+        Fri, 24 Mar 2023 04:57:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A1D298CA;
+        Fri, 24 Mar 2023 01:56:43 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:1cb3:11e4:5834:9d5a] (unknown [IPv6:2a01:e0a:120:3210:1cb3:11e4:5834:9d5a])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B52946603111;
+        Fri, 24 Mar 2023 08:56:37 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679648198;
+        bh=fSTAJcZ+stux5F7CVDxrYSB6CjZcdcUM5EQHkwSolOQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KKVdO9t0sYkHaJ1tstArEyba/Fvd76PT+Bb8whfZp36eVUKPCYx6dyCpSzgaHNQp9
+         PwavG2SpFEZPWYNj8NHCvb7hfu0czslZWU1neac/udmuLbgOdOevERU3lx0d2roFkM
+         ZY0njDbuL4MOMUmrRdEc5kyjlWN3steO1fR3FNSalz3wH+kgoCxB5l3b0+K9JA11ie
+         uTdtvV2M3vKrzlUSFuJPpYcGZke6Dw4wZkh9VCo4R2VAC5dhhRE0+5YHyERpLZc6cH
+         Ky37tKSoz4+Si/+YVszJgLXCKE1wq4wvSl/WETQfTQAiot7Ys4CfAsugbkirmU2Inz
+         cbMAAZQAM0FiA==
+Message-ID: <7ad524a1-c54f-a01c-3453-2cf1f0f82a13@collabora.com>
+Date:   Fri, 24 Mar 2023 09:56:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V1 3/4] soc: qcom: boot_stat: Add Driver Support for Boot
- Stats
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
+ allocated
 Content-Language: en-US
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1679403696.git.quic_schowdhu@quicinc.com>
- <3f385562845ae26d519940ca8098fde89282991b.1679403696.git.quic_schowdhu@quicinc.com>
- <611ea918-64a6-f306-b5ec-db55e41abda2@linaro.org>
- <321005fc-1bfd-c04d-b2b5-d85d213ac00a@quicinc.com>
- <7b939818-993a-e849-e7e0-ae9ea74ea52b@linaro.org>
- <5c4df95e-fb44-e873-7ecc-dec381a42aff@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5c4df95e-fb44-e873-7ecc-dec381a42aff@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Dan Carpenter <error27@gmail.com>, oe-kbuild@lists.linux.dev,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+References: <4e2cb832-de83-4ba6-bd8a-119a19038cfe@kili.mountain>
+ <a88b93cc-a81f-6186-09fc-02223867e677@collabora.com>
+ <b0018f7b-0556-0ac1-d2fa-89787a27fba1@xs4all.nl>
+ <20230324084830.GA18895@pendragon.ideasonboard.com>
+ <d4b6ad10-1889-0a63-5a14-cb1320e2dc09@xs4all.nl>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <d4b6ad10-1889-0a63-5a14-cb1320e2dc09@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 14:45, Souradeep Chowdhury wrote:
-> 
-> 
-> On 3/22/2023 8:23 PM, Krzysztof Kozlowski wrote:
->> On 22/03/2023 14:54, Souradeep Chowdhury wrote:
->>>
->>>
->>> On 3/21/2023 11:07 PM, Krzysztof Kozlowski wrote:
->>>> On 21/03/2023 14:51, Souradeep Chowdhury wrote:
->>>>> All of Qualcomm's proprietary Android boot-loaders capture boot time
->>>>> stats, like the time when the bootloader started execution and at what
->>>>> point the bootloader handed over control to the kernel etc. in the IMEM
->>>>> region. This information is captured in a specific format by this driver
->>>>> by mapping a structure to the IMEM memory region and then accessing the
->>>>> members of the structure to print the information. This information is
->>>>> useful in verifying if the existing boot KPIs have regre
->>>>
->>>>
->>>>> +/**
->>>>> + *  struct boot_stats - timestamp information related to boot stats
->>>>> + *  @bootloader_start:	Time for the starting point of the abl bootloader
->>>>> + *  @bootloader_end:	Time when the kernel starts loading from abl bootloader
->>>>> + */
->>>>> +struct boot_stats {
->>>>> +	u32 bootloader_start;
->>>>> +	u32 bootloader_end;
->>>>> +} __packed;
->>>>> +
->>>>> +static struct boot_stats __iomem *boot_stats;
->>>>> +static void __iomem *mpm_counter_base;
->>>>> +static u32 mpm_counter_freq;
->>>>
->>>> No file-scope variables. Does not scale, not easy for review and
->>>> maintenance. Avoid such code.
->>>
->>> Ack
->>>>
->>>>> +
->>>>> +static int mpm_parse_dt(void)
->>>>> +{
->>>>> +	struct device_node *np_imem, *np_mpm2;
->>>>> +
->>>>> +	np_imem = of_find_compatible_node(NULL, NULL,
->>>>> +					  "qcom,imem-boot_stats");
->>>>> +	if (!np_imem) {
->>>>> +		pr_err("can't find qcom,imem node\n");
->>>>
->>>> So you are printing errors everywhere, on every soc and with compile
->>>> test on every platform there is in the world... sorry, it does not work
->>>> like that.
->>>
->>> Ack
->>>>
->>>>> +		return -ENODEV;
->>>>> +	}
->>>>> +	boot_stats = of_iomap(np_imem, 0);
->>>>> +	if (!boot_stats) {
->>>>> +		pr_err("boot_stats: Can't map imem\n");
->>>>> +		goto err1;
->>>>> +	}
->>>>
->>>>
->>>>> +
->>>>> +static void __exit boot_stats_exit(void)
->>>>> +{
->>>>> +}
->>>>> +module_exit(boot_stats_exit)
->>>>
->>>>
->>>> I don't think this is some special code which deserves init calls. Make
->>>> it module_platform_driver().
->>>
->>> Since this just reads some values from the Imem region and prints it to
->>> the user and doesn't have a specific device associated with it, a
->>
->> Which is not really an argument for such antipattern, but okay...
->>
->>> generic module code is written for it and not a module_platform_driver().
->>
->> ... so how do you handle deferred probe?
-> 
-> This has no dependency on other resources except that it parses some 
-> information from DT nodes, so deferred probe handling is not needed
-> in this case.
 
-Yes, I know, but if we would ever add it how this driver can handle it?
-This is antipattern.
+Le 24/03/2023 à 09:52, Hans Verkuil a écrit :
+> On 24/03/2023 09:48, Laurent Pinchart wrote:
+>> On Fri, Mar 24, 2023 at 09:31:35AM +0100, Hans Verkuil wrote:
+>>> On 24/03/2023 09:11, Benjamin Gaignard wrote:
+>>>> Le 24/03/2023 à 06:01, Dan Carpenter a écrit :
+>>>>> Hi Benjamin,
+>>>>>
+>>>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>>>
+>>>>> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-videobuf2-Access-vb2_queue-bufs-array-through-helper-functions/20230321-183154
+>>>>> base:   git://linuxtv.org/media_tree.git master
+>>>>> patch link:    https://lore.kernel.org/r/20230321102855.346732-3-benjamin.gaignard%40collabora.com
+>>>>> patch subject: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic allocated
+>>>>> config: arm64-randconfig-m041-20230319 (https://download.01.org/0day-ci/archive/20230324/202303240148.lKRnUqW9-lkp@intel.com/config)
+>>>>> compiler: aarch64-linux-gcc (GCC) 12.1.0
+>>>>>
+>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>> | Reported-by: Dan Carpenter <error27@gmail.com>
+>>>>> | Link: https://lore.kernel.org/r/202303240148.lKRnUqW9-lkp@intel.com/
+>>>>>
+>>>>> smatch warnings:
+>>>>> include/media/videobuf2-core.h:1272 vb2_queue_add_buffer() warn: sleeping in atomic context
+>>>>> drivers/media/common/videobuf2/videobuf2-core.c:2456 vb2_core_queue_init() warn: Please consider using kcalloc instead of kmalloc_array
+>>>>>
+>>>>> vim +1272 include/media/videobuf2-core.h
+>>>>>
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1263  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1264  {
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1265      bool ret = false;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1266
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1267      spin_lock(&q->bufs_lock);
+>>>>>                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+>>>>> Holding a spin lock.
+>>>>>
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1268
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1269      if (vb->index >= q->max_num_bufs) {
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1270          struct vb2_buffer **tmp;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1271
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21 @1272          tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
+>>>>>                                                                                                                                        ^^^^^^^^^^
+>>>>> Sleeping allocation.  GFP_ATOMIC?  Or is there a way to move the
+>>>>> allocation outside the lock?
+>>>> I will add GFP_ATOMIC flag in next version.
+>>> No need. Instead, don't use realloc here, just allocate a new array, copy over all
+>>> the data from the old, and then switch q->bufs with the spinlock held. Then you
+>>> can free the old one.
+>>>
+>>> It's only when you update q->bufs that you need the lock.
+>> The copy also needs to be protected by the lock.
+> I suspect that that is not needed, since you shouldn't be able to add buffers here
+> since a mutex should be held at this time.
+>
+> That said, it's something that Benjamin needs to analyze.
 
-Best regards,
-Krzysztof
+Does using GFP_ATOMIC is problematic ?
 
+>
+> Regards,
+>
+> 	Hans
+>
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1273          if (!tmp)
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1274              goto realloc_failed;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1275
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1276          q->max_num_bufs *= 2;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1277          q->bufs = tmp;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1278      }
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1279
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1280      if (vb->index < q->max_num_bufs) {
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1281          q->bufs[vb->index] = vb;
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1282          ret = true;
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1283      }
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1284
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1285  realloc_failed:
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1286      spin_unlock(&q->bufs_lock);
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1287
+>>>>> 487d3f14d12ecf Benjamin Gaignard 2023-03-21  1288      return ret;
+>>>>> 625d46c1c1fe8e Benjamin Gaignard 2023-03-21  1289  }
+>
