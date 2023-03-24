@@ -2,116 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44CA6C746E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF9A6C7473
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCXATd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S231422AbjCXAUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjCXATb (ORCPT
+        with ESMTP id S230486AbjCXATq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:19:31 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5B4193F7;
-        Thu, 23 Mar 2023 17:19:26 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so77346pjz.1;
-        Thu, 23 Mar 2023 17:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679617165; x=1682209165;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=suA1jKhcCOcixXpCVcZ12id0ImQVSXHARQLzFn5G688=;
-        b=K8yiMNIxCIwbaoE1vowESnH4hmdNOEIlQEDou+HVvhwgdL7eFWV0JyW5TQ89hgccGB
-         whgyLfye3QllyjiS8MwJ4OyalsouO58WrU2EICYmFr1F/S8GZSMNt6a+BbWNsSc088QE
-         2faYgpmsKgx57c7bAri/bWZ/u2V+WjJ45qL4m/DPjJ1a/YyX97neS5AMnSerBo6bswbJ
-         Sfysmo08c9M/IsJ88ODIskzd+iQmB0HJ2U92auyyYB1Np/j0GKH6hrUChrH5YQcKAa5G
-         SlmIezxPiNVmSnWeg8oNGggiGMsZLCMfOaNWxQEQiYFKhDYC0DPJUF9ypT38wAVp4uPc
-         5ydQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679617165; x=1682209165;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=suA1jKhcCOcixXpCVcZ12id0ImQVSXHARQLzFn5G688=;
-        b=mlXKMLh79i78wlbA7XtHW/ZIxo/fH1A6nHP2AapWaTm0RUo3yGQkgHMdOmPMDFIWJj
-         DDCsDN+m7c1oVXR6MXrb29dP54hHalKRFrtZdYcXeTlHBADo/5vRcKqShVUiBrmRtTVE
-         e5I+z2966ayfepk0i+XECb2xV3qywWqD/ajakfgHmB4FOriGNC9YD3Y7r80QoY2K/fUx
-         yKq0C0Q4+bLVqTMxLXnYFY9U+zcCwdFPkLebqvY3aCGuOLH4KF4kF9qNlBVgFE+nelOc
-         Ho3KFoqPLRuBzEIsGcNHH5YQi/2XdmzZHsv2FnneAuuc9FLObDykPq1W/nvi/+BBljVT
-         bvkw==
-X-Gm-Message-State: AAQBX9e/kVCJ/7NhYbmrQfh2KhmdO1ZH/UKT2Vhw57AMNMghqnxBp8Bk
-        1xwm0QAfP72y8aonq6lJq3jIeMK/0iU=
-X-Google-Smtp-Source: AKy350ZAajLtafXS2eumPKcAZTQWHAgGg4qFsVyTIdctzYlBvd9M6SM/mLwWVQMYikGr/MYnVYpf2g==
-X-Received: by 2002:a17:903:32d1:b0:1a1:80ea:4352 with SMTP id i17-20020a17090332d100b001a180ea4352mr943126plr.0.1679617165387;
-        Thu, 23 Mar 2023 17:19:25 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:77d1:5545:2244:c784])
-        by smtp.gmail.com with ESMTPSA id m3-20020a63fd43000000b004facdf070d6sm12292278pgj.39.2023.03.23.17.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 17:19:24 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf lock contention: Fix msan issue in lock_contention_read()
+        Thu, 23 Mar 2023 20:19:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5B12DE63;
+        Thu, 23 Mar 2023 17:19:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E01562922;
+        Fri, 24 Mar 2023 00:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D03C4339B;
+        Fri, 24 Mar 2023 00:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679617181;
+        bh=0OKDq/T3sDmYtszQPVaOvqY8WMmnghojks+2Z1U5srw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pNvyVgFbgEukhtTuu4UgE2tFC/2yD4ByiHzvgTYPWU+nb6T6T6EduEkHHNKOTLDgk
+         c3MUo2YA+f6/0i+Zs2+x2AfzvzP0Sh6FiAjOoGGoYE2/aidH6DdRrh5qUL3hWk/jL8
+         5UbyOY9HwB7Vs6JdwzPOhZ2mRXeuVJGI4MhjN0b7tEn4TF6gLRhfO/h2p7OwLoWpgt
+         DFXuQCHg0NnOucrpCmRwh9r0mrS5ygFjaTjp6RJaQ073sapuzE6nxa+2u7ghSC8ED7
+         65Dzb0JVsj9Kh1QNFB5kqRJt+ON9jtl13NksyuJIsU7Sq83LrDXibyJstRrUmvk5uO
+         cA0T73/oj1Q/Q==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 910D81540398; Thu, 23 Mar 2023 17:19:40 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, hch@lst.de,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: [PATCH RFC rcu 03/19] srcu: Begin offloading srcu_struct fields to srcu_update
 Date:   Thu, 23 Mar 2023 17:19:22 -0700
-Message-Id: <20230324001922.937634-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-Id: <20230324001938.3443499-3-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc2
+In-Reply-To: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
+References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got a report of a msan failure like below:
+The current srcu_struct structure is on the order of 200 bytes in size
+(depending on architecture and .config), which is much better than the
+old-style 26K bytes, but still all too inconvenient when one is trying
+to achieve good cache locality on a fastpath involving SRCU readers.
 
-  $ sudo perf lock con -ab -- sleep 1
-  ...
-  ==224416==WARNING: MemorySanitizer: use-of-uninitialized-value
-      #0 0x5651160d6c96 in lock_contention_read  util/bpf_lock_contention.c:290:8
-      #1 0x565115f90870 in __cmd_contention  builtin-lock.c:1919:3
-      #2 0x565115f90870 in cmd_lock  builtin-lock.c:2385:8
-      #3 0x565115f03a83 in run_builtin  perf.c:330:11
-      #4 0x565115f03756 in handle_internal_command  perf.c:384:8
-      #5 0x565115f02d53 in run_argv  perf.c:428:2
-      #6 0x565115f02d53 in main  perf.c:562:3
-      #7 0x7f43553bc632 in __libc_start_main
-      #8 0x565115e865a9 in _start
+However, only a few fields in srcu_struct are used by SRCU readers.
+The remaining fields could be offloaded to a new srcu_update
+structure, thus shrinking the srcu_struct structure down to a few
+tens of bytes.  This commit begins this noble quest, a quest that is
+complicated by open-coded initialization of the srcu_struct within the
+srcu_notifier_head structure.  This complication is addressed by updating
+the srcu_notifier_head structure's open coding, given that there does
+not appear to be a straightforward way of abstracting that initialization.
 
-It was because the 'key' variable is not initialized.  Actually it'd be set
-by bpf_map_get_next_key() but msan didn't seem to understand it.  Let's make
-msan happy by initializing the variable.
+This commit moves only the ->node pointer to srcu_update.  Later commits
+will move additional fields.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+[ paulmck: Fold in qiang1.zhang@intel.com's memory-leak fix. ]
+
+Link: https://lore.kernel.org/all/20230320055751.4120251-1-qiang1.zhang@intel.com/
+Suggested-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: "Michał Mirosław" <mirq-linux@rere.qmqm.pl>
+Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- tools/perf/util/bpf_lock_contention.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/notifier.h |  5 ++++-
+ include/linux/srcutiny.h |  6 +++---
+ include/linux/srcutree.h | 27 ++++++++++++++++++---------
+ kernel/rcu/rcu.h         |  6 ++++--
+ kernel/rcu/srcutree.c    | 28 +++++++++++++++++++---------
+ 5 files changed, 48 insertions(+), 24 deletions(-)
 
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index 235fc7150545..5927bf0bd92b 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -249,7 +249,7 @@ static const char *lock_contention_get_name(struct lock_contention *con,
- int lock_contention_read(struct lock_contention *con)
+diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+index aef88c2d1173..2aba75145144 100644
+--- a/include/linux/notifier.h
++++ b/include/linux/notifier.h
+@@ -73,6 +73,9 @@ struct raw_notifier_head {
+ 
+ struct srcu_notifier_head {
+ 	struct mutex mutex;
++#ifdef CONFIG_TREE_SRCU
++	struct srcu_usage srcuu;
++#endif
+ 	struct srcu_struct srcu;
+ 	struct notifier_block __rcu *head;
+ };
+@@ -107,7 +110,7 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
+ 	{							\
+ 		.mutex = __MUTEX_INITIALIZER(name.mutex),	\
+ 		.head = NULL,					\
+-		.srcu = __SRCU_STRUCT_INIT(name.srcu, pcpu),	\
++		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu), \
+ 	}
+ 
+ #define ATOMIC_NOTIFIER_HEAD(name)				\
+diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+index 5aa5e0faf6a1..ebd72491af99 100644
+--- a/include/linux/srcutiny.h
++++ b/include/linux/srcutiny.h
+@@ -31,7 +31,7 @@ struct srcu_struct {
+ 
+ void srcu_drive_gp(struct work_struct *wp);
+ 
+-#define __SRCU_STRUCT_INIT(name, __ignored)				\
++#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored)			\
+ {									\
+ 	.srcu_wq = __SWAIT_QUEUE_HEAD_INITIALIZER(name.srcu_wq),	\
+ 	.srcu_cb_tail = &name.srcu_cb_head,				\
+@@ -44,9 +44,9 @@ void srcu_drive_gp(struct work_struct *wp);
+  * Tree SRCU, which needs some per-CPU data.
+  */
+ #define DEFINE_SRCU(name) \
+-	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
++	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+ #define DEFINE_STATIC_SRCU(name) \
+-	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
++	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
+ 
+ void synchronize_srcu(struct srcu_struct *ssp);
+ 
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index 428480152375..2689e64024bb 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -57,11 +57,17 @@ struct srcu_node {
+ 	int grphi;				/* Biggest CPU for node. */
+ };
+ 
++/*
++ * Per-SRCU-domain structure, update-side data linked from srcu_struct.
++ */
++struct srcu_usage {
++	struct srcu_node *node;			/* Combining tree. */
++};
++
+ /*
+  * Per-SRCU-domain structure, similar in function to rcu_state.
+  */
+ struct srcu_struct {
+-	struct srcu_node *node;			/* Combining tree. */
+ 	struct srcu_node *level[RCU_NUM_LVLS + 1];
+ 						/* First node at each level. */
+ 	int srcu_size_state;			/* Small-to-big transition state. */
+@@ -90,6 +96,7 @@ struct srcu_struct {
+ 	unsigned long reschedule_count;
+ 	struct delayed_work work;
+ 	struct lockdep_map dep_map;
++	struct srcu_usage *srcu_sup;		/* Update-side data. */
+ };
+ 
+ // Values for size state variable (->srcu_size_state).  Once the state
+@@ -121,24 +128,24 @@ struct srcu_struct {
+ #define SRCU_STATE_SCAN1	1
+ #define SRCU_STATE_SCAN2	2
+ 
+-#define __SRCU_STRUCT_INIT_COMMON(name)								\
++#define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ 	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
+ 	.srcu_gp_seq_needed = -1UL,								\
+ 	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
++	.srcu_sup = &usage_name,								\
+ 	__SRCU_DEP_MAP_INIT(name)
+ 
+-#define __SRCU_STRUCT_INIT_MODULE(name)								\
++#define __SRCU_STRUCT_INIT_MODULE(name, usage_name)						\
+ {												\
+-	__SRCU_STRUCT_INIT_COMMON(name)								\
++	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ }
+ 
+-#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
++#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name)						\
+ {												\
+ 	.sda = &pcpu_name,									\
+-	__SRCU_STRUCT_INIT_COMMON(name)								\
++	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
+ }
+ 
+-
+ /*
+  * Define and initialize a srcu struct at build time.
+  * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
+@@ -160,15 +167,17 @@ struct srcu_struct {
+  */
+ #ifdef MODULE
+ # define __DEFINE_SRCU(name, is_static)								\
+-	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name);			\
++	static struct srcu_usage name##_srcu_usage;						\
++	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
+ 	extern struct srcu_struct * const __srcu_struct_##name;					\
+ 	struct srcu_struct * const __srcu_struct_##name						\
+ 		__section("___srcu_struct_ptrs") = &name
+ #else
+ # define __DEFINE_SRCU(name, is_static)								\
+ 	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
++	static struct srcu_usage name##_srcu_usage;						\
+ 	is_static struct srcu_struct name =							\
+-		__SRCU_STRUCT_INIT(name, name##_srcu_data)
++		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
+ #endif
+ #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
+ #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
+diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+index a3adcf9a9919..4a1b9622598b 100644
+--- a/kernel/rcu/rcu.h
++++ b/kernel/rcu/rcu.h
+@@ -378,11 +378,13 @@ extern void rcu_init_geometry(void);
+  * specified state structure (for SRCU) or the only rcu_state structure
+  * (for RCU).
+  */
+-#define srcu_for_each_node_breadth_first(sp, rnp) \
++#define _rcu_for_each_node_breadth_first(sp, rnp) \
+ 	for ((rnp) = &(sp)->node[0]; \
+ 	     (rnp) < &(sp)->node[rcu_num_nodes]; (rnp)++)
+ #define rcu_for_each_node_breadth_first(rnp) \
+-	srcu_for_each_node_breadth_first(&rcu_state, rnp)
++	_rcu_for_each_node_breadth_first(&rcu_state, rnp)
++#define srcu_for_each_node_breadth_first(ssp, rnp) \
++	_rcu_for_each_node_breadth_first(ssp->srcu_sup, rnp)
+ 
+ /*
+  * Scan the leaves of the rcu_node hierarchy for the rcu_state structure.
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 7a6d9452a5d0..ad1d5ca42a99 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -173,12 +173,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+ 
+ 	/* Initialize geometry if it has not already been initialized. */
+ 	rcu_init_geometry();
+-	ssp->node = kcalloc(rcu_num_nodes, sizeof(*ssp->node), gfp_flags);
+-	if (!ssp->node)
++	ssp->srcu_sup->node = kcalloc(rcu_num_nodes, sizeof(*ssp->srcu_sup->node), gfp_flags);
++	if (!ssp->srcu_sup->node)
+ 		return false;
+ 
+ 	/* Work out the overall tree geometry. */
+-	ssp->level[0] = &ssp->node[0];
++	ssp->level[0] = &ssp->srcu_sup->node[0];
+ 	for (i = 1; i < rcu_num_lvls; i++)
+ 		ssp->level[i] = ssp->level[i - 1] + num_rcu_lvl[i - 1];
+ 	rcu_init_levelspread(levelspread, num_rcu_lvl);
+@@ -195,7 +195,7 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+ 		snp->srcu_gp_seq_needed_exp = SRCU_SNP_INIT_SEQ;
+ 		snp->grplo = -1;
+ 		snp->grphi = -1;
+-		if (snp == &ssp->node[0]) {
++		if (snp == &ssp->srcu_sup->node[0]) {
+ 			/* Root node, special case. */
+ 			snp->srcu_parent = NULL;
+ 			continue;
+@@ -236,8 +236,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
+  */
+ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
  {
- 	int fd, stack, err = 0;
--	struct contention_key *prev_key, key;
-+	struct contention_key *prev_key, key = {};
- 	struct contention_data data = {};
- 	struct lock_stat *st = NULL;
- 	struct machine *machine = con->machine;
++	if (!is_static)
++		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
++	if (!ssp->srcu_sup)
++		return -ENOMEM;
+ 	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+-	ssp->node = NULL;
++	ssp->srcu_sup->node = NULL;
+ 	mutex_init(&ssp->srcu_cb_mutex);
+ 	mutex_init(&ssp->srcu_gp_mutex);
+ 	ssp->srcu_idx = 0;
+@@ -249,8 +253,11 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ 	ssp->sda_is_static = is_static;
+ 	if (!is_static)
+ 		ssp->sda = alloc_percpu(struct srcu_data);
+-	if (!ssp->sda)
++	if (!ssp->sda) {
++		if (!is_static)
++			kfree(ssp->srcu_sup);
+ 		return -ENOMEM;
++	}
+ 	init_srcu_struct_data(ssp);
+ 	ssp->srcu_gp_seq_needed_exp = 0;
+ 	ssp->srcu_last_gp_end = ktime_get_mono_fast_ns();
+@@ -259,6 +266,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
+ 			if (!ssp->sda_is_static) {
+ 				free_percpu(ssp->sda);
+ 				ssp->sda = NULL;
++				kfree(ssp->srcu_sup);
+ 				return -ENOMEM;
+ 			}
+ 		} else {
+@@ -656,13 +664,15 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
+ 			rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
+ 		return; /* Caller forgot to stop doing call_srcu()? */
+ 	}
++	kfree(ssp->srcu_sup->node);
++	ssp->srcu_sup->node = NULL;
++	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+ 	if (!ssp->sda_is_static) {
+ 		free_percpu(ssp->sda);
+ 		ssp->sda = NULL;
++		kfree(ssp->srcu_sup);
++		ssp->srcu_sup = NULL;
+ 	}
+-	kfree(ssp->node);
+-	ssp->node = NULL;
+-	ssp->srcu_size_state = SRCU_SIZE_SMALL;
+ }
+ EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
+ 
 -- 
-2.40.0.348.gf938b09366-goog
+2.40.0.rc2
 
