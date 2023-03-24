@@ -2,181 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2474D6C87DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BC56C87DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjCXV7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S232273AbjCXV7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjCXV7k (ORCPT
+        with ESMTP id S231802AbjCXV7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:59:40 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9940115C82;
-        Fri, 24 Mar 2023 14:59:38 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id h27so2669206vsa.1;
-        Fri, 24 Mar 2023 14:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679695177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EMI9am9Who8Vr+JcgsFIxZwdNfhXbZD74wYkzXXqGrE=;
-        b=Y1Hcc/DOwFkD5em8m3cGq9KizwVFun0h5yj9KWDVpN1IBHUCgwasXAzNydhazPclKW
-         Af76dJeX4KB7uIu8sphfyGJy4i1/rfjN/pr1L/t0//eaaRfo8OJcV6J+jV90qYvjFUR1
-         7/CoguAgMQTFYyZNEfndEedGIfpptz/EP1AbJhaAu6TLYGeuIGE8Tz4dtWj/3lDewgc1
-         JLEEE+LlouIkpjPB7Mm04n6QazFsJAMPWEjzqaErkq95VL03WumVlDr/Hr68aW0Y2c5r
-         Imr/voLpm5aAvWVnc0v77+zgKHkUH6MWwcxt3+fre+8+UWOa71p0M70TaB3VDdV+uEDH
-         9cgw==
+        Fri, 24 Mar 2023 17:59:36 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E81315562;
+        Fri, 24 Mar 2023 14:59:35 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id r16so2216676oij.5;
+        Fri, 24 Mar 2023 14:59:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679695177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EMI9am9Who8Vr+JcgsFIxZwdNfhXbZD74wYkzXXqGrE=;
-        b=Hjn2IS9Ya6IthP8HTRFLEnreZiIXfcJpNP+MxsQ8Eo1aez/FdAS2PLPpEhthkoMnDg
-         IQkIEef+IvY4fWyxnAVjHkanJ2SYqP7g3ZGJkAwhTEBDr5LOS/eJsezQUvjpzj0XvSka
-         EQowUxkmNLKNZlxI+0fU8V0g7sJaWrAJIT9KyyV6BTqsggcWAncFwTYeb2vRnGo+q5PP
-         9LHUIb9HreQN8LinERqGB/kNi4j6u2GY/tTh44U6eIry1FFERrkVDUjS7KoxjJbBDmUV
-         x2zmbP8kOn0mhd3CEDs8xQguC6axX1zYJhhfVwIJtKBeqCcWlrehgPHsBIHGmqMhCBlI
-         BoRQ==
-X-Gm-Message-State: AAQBX9eDZNsGQUT/eHHgr3qBQVgcUow9dP4ykZ//vTl7t+sRAZOGBYx1
-        DL7MjTXNe5XfEVqd3+k1m33+J6hPg4YfgSNuhbKofAhUcf2c8w==
-X-Google-Smtp-Source: AKy350Y4ycW+PakcRHUbwa/ef6g9P6OejUHdxPOZAdamYNr0z294CU3Glt+E1U8V91GyUv4t1y5UxN0/UsoqvLIoUNE=
-X-Received: by 2002:a67:c290:0:b0:426:8391:de08 with SMTP id
- k16-20020a67c290000000b004268391de08mr1332332vsj.2.1679695177471; Fri, 24 Mar
- 2023 14:59:37 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679695174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNL5w5eYDM55BXRsVUv16I402Vb2xlU+5wdQWl0ZA5o=;
+        b=BfQmJD3ItifKSUonchLCTksqwzMNOfXIjelC+DoKRkEs8eC5iEKEAIYgPfn2nXnTuS
+         IGLKDwBCaMmXmCb8stcnLurzYePW2+iVubNja/Gxqs2Ua3H/3ADO1Lt6n96Sr0wGyR1g
+         gZN1w9zS+cGB+IEMDB2GbyMxflt9AEvY00/CpEYD3XxvM5Yd21ShQOoRih3r7MFxo1hr
+         WrKIUaaWkxNma0VZ1LBsVkwsOJEqm52mACvhckA69MMvm4+cktahETNnO9kUV3qxwWsj
+         M+M1yWOPwRH70oF9qDFqZOEHrAPHDHNtK7jAWnOZuelJtnqL30YNdrhfbz+WRGgVt5M2
+         IXBg==
+X-Gm-Message-State: AO0yUKXAJij5kG8dBK+w8t/HUjHrSzW4qUpp9dkhAc4F7HSqJHWSPS4r
+        eDBTG2lQskh/oJ952ZfUYQ==
+X-Google-Smtp-Source: AK7set83OMMwHEd/xmeCKjvOBf+FPOq4sNLD29gH0PdiDnCImpMV3fVRF6vT6C/vpyBYUnXPJA7boA==
+X-Received: by 2002:a54:4805:0:b0:386:ce06:8d87 with SMTP id j5-20020a544805000000b00386ce068d87mr1666502oij.38.1679695174268;
+        Fri, 24 Mar 2023 14:59:34 -0700 (PDT)
+Received: from robh_at_kernel.org ([2605:ef80:80f9:92f0:b372:78c0:69c1:66d6])
+        by smtp.gmail.com with ESMTPSA id r2-20020a056808210200b00387160bcd46sm4918565oiw.46.2023.03.24.14.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 14:59:33 -0700 (PDT)
+Received: (nullmailer pid 54572 invoked by uid 1000);
+        Fri, 24 Mar 2023 21:59:30 -0000
+Date:   Fri, 24 Mar 2023 16:59:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v5 10/15] dt-bindings: net: ethernet-controller:
+ Document support for LEDs node
+Message-ID: <20230324215930.GA49367-robh@kernel.org>
+References: <20230319191814.22067-1-ansuelsmth@gmail.com>
+ <20230319191814.22067-11-ansuelsmth@gmail.com>
+ <20230321211953.GA1544549-robh@kernel.org>
+ <641a35b8.1c0a0220.25419.2b4d@mx.google.com>
+ <38534a25-4bb3-4371-b80b-abfc259de781@lunn.ch>
+ <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
 MIME-Version: 1.0
-References: <20230308032748.609510-1-nphamcs@gmail.com> <20230314160041.960ede03d5f5ff3dbb3e3fd0@linux-foundation.org>
- <20230315170934.GA97793@cmpxchg.org> <20230315191459.f3z3gahxdew4dwrv@awork3.anarazel.de>
-In-Reply-To: <20230315191459.f3z3gahxdew4dwrv@awork3.anarazel.de>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Fri, 24 Mar 2023 14:59:26 -0700
-Message-ID: <CAKEwX=PgG-mrWqEOAcjPbGRF8WxHviaF3ci+_1yS-qq_x5nqFg@mail.gmail.com>
-Subject: Re: [PATCH v11 0/3] cachestat: a new syscall for page cache state of files
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, arnd@arndb.de, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <641a4046.7b0a0220.44d4e.95d4@mx.google.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:15=E2=80=AFPM Andres Freund <andres@anarazel.de>=
- wrote:
->
-> Hi,
->
-> On 2023-03-15 13:09:34 -0400, Johannes Weiner wrote:
-> > On Tue, Mar 14, 2023 at 04:00:41PM -0700, Andrew Morton wrote:
-> > > A while ago I asked about the security implications - could cachestat=
-()
-> > > be used to figure out what parts of a file another user is reading.
-> > > This also applies to mincore(), but cachestat() newly permits user A =
-to
-> > > work out which parts of a file user B has *written* to.
+On Wed, Mar 22, 2023 at 12:39:48AM +0100, Christian Marangi wrote:
+> On Wed, Mar 22, 2023 at 12:23:59AM +0100, Andrew Lunn wrote:
+> > > > Are specific ethernet controllers allowed to add their own properties in 
+> > > > led nodes? If so, this doesn't work. As-is, this allows any other 
+> > > > properties. You need 'unevaluatedProperties: false' here to prevent 
+> > > > that. But then no one can add properties. If you want to support that, 
+> > > > then you need this to be a separate schema that devices can optionally 
+> > > > include if they don't extend the properties, and then devices that 
+> > > > extend the binding would essentially have the above with:
+> > > > 
+> > > > $ref: /schemas/leds/common.yaml#
+> > > > unevaluatedProperties: false
+> > > > properties:
+> > > >   a-custom-device-prop: ...
+> > > > 
+> > > > 
+> > > > If you wanted to define both common ethernet LED properties and 
+> > > > device specific properties, then you'd need to replace leds/common.yaml 
+> > > > above  with the ethernet one.
+> > > > 
+> > > > This is all the same reasons the DSA/switch stuff and graph bindings are 
+> > > > structured the way they are.
+> > > > 
+> > > 
+> > > Hi Rob, thanks for the review/questions.
+> > > 
+> > > The idea of all of this is to keep leds node as standard as possible.
+> > > It was asked to add unevaluatedProperties: False but I didn't understood
+> > > it was needed also for the led nodes.
+> > > 
+> > > leds/common.yaml have additionalProperties set to true but I guess that
+> > > is not OK for the final schema and we need something more specific.
+> > > 
+> > > Looking at the common.yaml schema reg binding is missing so an
+> > > additional schema is needed.
+> > > 
+> > > Reg is needed for ethernet LEDs and PHY but I think we should also permit
+> > > to skip that if the device actually have just one LED. (if this wouldn't
+> > > complicate the implementation. Maybe some hints from Andrew about this
+> > > decision?)
+> > 
+> > I would make reg mandatory.
 > >
-> > The caller of cachestat() must have the file open for reading. If they
-> > can read the contents that B has written, is the fact that they can
-> > see dirty state really a concern?
->
-> Random idea: Only fill ->dirty/writeback if the fd is open for writing.
->
->
-> > > Secondly, I'm not seeing description of any use cases.  OK, it's fast=
-er
-> > > and better than mincore(), but who cares?  In other words, what
-> > > end-user value compels us to add this feature to Linux?
+> 
+> Ok will add a new schema and change the regex.
+> 
+> > We should not encourage additional properties, but i also think we
+> > cannot block it.
+> > 
+> > The problem we have is that there is absolutely no standardisation
+> > here. Vendors are free to do whatever they want, and they do. So i
+> > would not be too surprised if some vendor properties are needed
+> > eventually.
 > >
-> > Years ago there was a thread about adding dirty bits to mincore(), I
-> > don't know if you remember this:
-> >
-> > https://lkml.org/lkml/2013/2/10/162
-> >
-> > In that thread, Rusty described a usecase of maintaining a journaling
-> > file alongside a main file. The idea for testing the dirty state isn't
-> > to call sync but to see whether the journal needs to be updated.
-> >
-> > The efficiency of mincore() was touched on too. Andres Freund (CC'd,
-> > hopefully I got the email address right) mentioned that Postgres has a
-> > usecase for deciding whether to do an index scan or query tables
-> > directly, based on whether the index is cached. Postgres works with
-> > files rather than memory regions, and Andres mentioned that the index
-> > could be quite large.
->
-> This is still relevant, FWIW. And not just for deciding on the optimal qu=
-ery
-> plan, but also for reporting purposes. We can show the user what part of =
-the
-> query has done how much IO, but that can end up being quite confusing bec=
-ause
-> we're not aware of how much IO was fullfilled by the page cache.
->
->
-> > Most recently, the database team at Meta reached out to us and asked
-> > about the ability to query dirty state again. The motivation for this
-> > was twofold. One was simply visibility into the writeback algorithm,
-> > i.e. trying to figure out what it's doing when investigating
-> > performance problems.
-> >
-> > The second usecase they brought up was to advise writeback from
-> > userspace to manage the tradeoff between integrity and IO utilization:
-> > if IO capacity is available, sync more frequently; if not, let the
-> > work batch up. Blindly syncing through the file in chunks doesn't work
-> > because you don't know in advance how much IO they'll end up doing (or
-> > how much they've done, afterwards.) So it's difficult to build an
-> > algorithm that will reasonably pace through sparsely dirtied regions
-> > without the risk of overwhelming the IO device on dense ones. And it's
-> > not straight-forward to do this from the kernel, since it doesn't know
-> > the IO headroom the application needs for reading (which is dynamic).
->
-> We ended up building something very roughly like that in userspace - each
-> backend tracks the last N writes, and once the numbers reaches a certain
-> limit, we sort and collapse the outstanding ranges and issue
-> sync_file_range(SYNC_FILE_RANGE_WRITE) for them. Different types of tasks=
- have
-> different limits. Without that latency in write heavy workloads is ... no=
-t
-> good (to this day, but to a lesser degree than 5-10 years ago).
->
->
-> > Another query we get almost monthly is service owners trying to
-> > understand where their memory is going and what's causing unexpected
-> > pressure on a host. They see the cache in vmstat, but between a
-> > complex application, shared libraries or a runtime (jvm, hhvm etc.)
-> > and a myriad of host management agents, there is so much going on on
-> > the machine that it's hard to find out who is touching which
-> > files. When it comes to disk usage, the kernel provides the ability to
-> > quickly stat entire filesystem subtrees and drill down with tools like
-> > du. It sure would be useful to have the same for memory usage.
->
-> +1
->
-> Greetings,
->
-> Andres Freund
+> 
+> Think that will come later with defining a more specific schema. But I
+> honestly think most of the special implementation will be handled to the
+> driver internally and not with special binding in DT.
 
-Thanks for the suggestion/discussion regarding cachestat's use cases,
-Johannes and Andres! I'll put a summary of these points (along with a link =
-to
-the original discussion thread) in the cover letter and commit message
-of the new version of the patch set.
+Then encourage no additional properties by letting whomever wants to add 
+them to restructure the schema. ;)
 
-In the meantime, feel free to let me know if there is something else caches=
-tat
-could help with (along with any improvements that could facilitate such
-use cases)
-
-Best,
-Nhat
+Rob
