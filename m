@@ -2,151 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A532B6C82AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3766C82AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjCXQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S231841AbjCXQ4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjCXQzq (ORCPT
+        with ESMTP id S231447AbjCXQ4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:55:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BB212D
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:55:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 24 Mar 2023 12:56:19 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AEAD8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:56:18 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 518B262A3E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EF5C433D2;
-        Fri, 24 Mar 2023 16:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679676943;
-        bh=ZEbjlpAh2WrqUnDW5ZNWKy6ydvQ8KRSfEkJ24vJOxjw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ffCp+pIcMsdyYgAbrBCxSn401DJbItZ+VxxFzMHcsXi2VWGOLY2bX/srw/reGOTFQ
-         HqDM7b+qO2peo1iRH5gMoLIP79B6AGdrgv++ql4AAaOLvY43id26vhJQxmiQ5e0y9D
-         HgLFg8NzMx3WDInKRPa8Pi52ceDBvoD8ian5IzW9zFBjjIKIuaAIgO29qphc08J9FK
-         ioqq+J4QaKTZWQsgSxZWYBLajFvYL6lhDnBXUom+gcB5jvj/d+dq2CBdUCrQlYdxE4
-         NkMaM+xSythvSS17VvfO/pYobKS/b8MftiyS1DXAKaJUHFJhZwBvauOIfNZmn1KB4H
-         1iRgbhZ0SFQaQ==
-Date:   Fri, 24 Mar 2023 09:55:42 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: f2fs: factor out discard_cmd usage from general rb_tree use
-Message-ID: <ZB3WDpunfgJZhhQy@google.com>
-References: <e50ebe1a-73a0-5800-71e3-0ddd366727ac@gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F166D1EC052A;
+        Fri, 24 Mar 2023 17:56:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679676977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7ZRKSsns+egRH+T5pXbc9Siz0msd/nkSLiFV7f95bNo=;
+        b=emP3UAe8KFcrpD0ZoVAtKVjycQ7eOEHAfoJMoKPqHNt/McjmWNPziiZ10njlW04ixVU9D+
+        et5XMFRE2q6HwnwRxbrfaZiq8zTHjm/rrODzR1Dwaxm+x+leEQ1t+nWWon8qfDaWmIu16Z
+        hD76Qb0Huv4lL7I4xHQVgWPzf3Wbszc=
+Date:   Fri, 24 Mar 2023 17:56:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 06/12] x86/mtrr: replace vendor tests in MTRR code
+Message-ID: <20230324165611.GIZB3WK13NdjceLWnN@fat_crate.local>
+References: <20230306163425.8324-1-jgross@suse.com>
+ <20230306163425.8324-7-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e50ebe1a-73a0-5800-71e3-0ddd366727ac@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230306163425.8324-7-jgross@suse.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/24, Colin King (gmail) wrote:
-> Hi,
+On Mon, Mar 06, 2023 at 05:34:19PM +0100, Juergen Gross wrote:
+> Modern CPUs all share the same MTRR interface implemented via
+> generic_mtrr_ops.
 > 
-> static analysis with clang scan build has detected a potential issue
-> introduced by the following commit:
+> At several places in MTRR code this generic interface is deduced via
+> is_cpu(INTEL) tests, which is only working due to X86_VENDOR_INTEL
+> being 0 (the is_cpu() macro is testing mtrr_if->vendor, which isn't
+> explicitly set in generic_mtrr_ops).
 > 
-> commit 7e9775a516ff6c1e73ee2b42ec563cafee38f42f
-> Author: Jaegeuk Kim <jaegeuk@kernel.org>
-> Date:   Fri Mar 10 11:12:35 2023 -0800
-> 
-> f2fs: factor out discard_cmd usage from general rb_tree use
+> Fix that by replacing the is_cpu(INTEL) tests with testing for mtrr_if
+> to be &generic_mtrr_ops.
 
-Good catch!
-I found the bug and will post v2 soon.
+Two things:
 
-> 
-> 
-> The warning is as follows:
-> 
-> fs/f2fs/segment.c:1425:4: warning: Value stored to 'tdc' is never read
-> [deadcode.DeadStores]
-> 
-> The while loop in function __update_discard_tree_range is as follows (+ my
-> annotations):
-> 
-> 
->         while (1) {
->                 struct rb_node *node;
->                 struct discard_cmd *tdc = NULL;
-> 
-> ### tdc is set to NULL
-> 
->                 if (prev_dc) {
->                         di.lstart = prev_dc->di.lstart + prev_dc->di.len;
->                         if (di.lstart < lstart)
->                                 di.lstart = lstart;
->                         if (di.lstart >= end)
->                                 break;
-> 
->                         if (!next_dc || next_dc->di.lstart > end)
->                                 di.len = end - di.lstart;
->                         else
->                                 di.len = next_dc->di.lstart - di.lstart;
->                         di.start = start + di.lstart - lstart;
->                 }
-> 
->                 if (!di.len)
->                         goto next;
-> 
->                 if (prev_dc && prev_dc->state == D_PREP &&
->                         prev_dc->bdev == bdev &&
->                         __is_discard_back_mergeable(&di, &prev_dc->di,
-> 
-> max_discard_blocks)) {
->                         prev_dc->di.len += di.len;
->                         dcc->undiscard_blks += di.len;
->                         __relocate_discard_cmd(dcc, prev_dc);
->                         di = prev_dc->di;
->                         tdc = prev_dc;
-> 
-> ### tdc is set to prev_dc, however, it is not not read any more with th
-> introduction of the "goto next"" statement introduced in the commit
-> mentioned earlier
-> 
->                         goto next;
->                 }
-> 
->                 if (next_dc && next_dc->state == D_PREP &&
->                         next_dc->bdev == bdev &&
->                         __is_discard_front_mergeable(&di, &next_dc->di,
-> 
-> max_discard_blocks)) {
->                         next_dc->di.lstart = di.lstart;
->                         next_dc->di.len += di.len;
->                         next_dc->di.start = di.start;
->                         dcc->undiscard_blks += di.len;
->                         __relocate_discard_cmd(dcc, next_dc);
-> 
-> ### tdc is always NULL, there is no path to this code where tdc is ever set
-> to a non-NULL value.
-> 
->                         if (tdc)
->                                 __remove_discard_cmd(sbi, tdc);
->                         goto next;
->                 }
-> 
->                 __insert_discard_cmd(sbi, bdev, di.lstart, di.start,
-> di.len);
->  next:
->                 prev_dc = next_dc;
->                 if (!prev_dc)
->                         break;
-> 
->                 node = rb_next(&prev_dc->rb_node);
->                 next_dc = rb_entry_safe(node, struct discard_cmd, rb_node);
->         }
-> 
+* is_cpu() checks also whether mtrr_if is set. And we don't set it for
+all vendors. I wanted to replace that thing with a vendor check recently
+but there's that little issue.
+
+I guess for the cases where we have the generic MTRR implementation, we
+can safely assume that mtrr_if is set. Which leads me to the second
+thing:
+
+* If you're going to test for &generic_mtrr_ops, then you can just as
+well do
+
+	cpu_feature_enabled(X86_FEATURE_MTRR)
+
+which is a lot more telling.
+
+> diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+> index 5fe62ee0361b..0c83990501f5 100644
+> --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
+> +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+> @@ -108,14 +108,12 @@ static int have_wrcomb(void)
+>  /*  This function returns the number of variable MTRRs  */
+>  static void __init set_num_var_ranges(bool use_generic)
+>  {
+> -	unsigned long config = 0, dummy;
+> +	unsigned long config, dummy;
+>  
+>  	if (use_generic)
+>  		rdmsr(MSR_MTRRcap, config, dummy);
+> -	else if (is_cpu(AMD) || is_cpu(HYGON))
+> -		config = 2;
+> -	else if (is_cpu(CYRIX) || is_cpu(CENTAUR))
+> -		config = 8;
+> +	else
+> +		config = mtrr_if->var_regs;
+>  
+>  	num_var_ranges = config & 0xff;
+>  }
+
+Since you're touching this function, you might simply expand its body in
+its only call site in mtrr_bp_init(), put a comment above the expanded
+code and remove that function.
+
+That is, if we're going to do the ->var_regs thing.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
