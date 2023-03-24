@@ -2,83 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64186C7D12
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883AC6C7D16
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 12:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjCXLPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 07:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S231308AbjCXLRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 07:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjCXLPc (ORCPT
+        with ESMTP id S229536AbjCXLRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 07:15:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED82225962
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:15:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A0A0433777;
-        Fri, 24 Mar 2023 11:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679656525; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=i2iOJQ2cBwIeRh7jfmFtt3V7v9mVqIjDAe9mWv1x44U=;
-        b=tYtBHkKnJMFuKvkIoLLY6nYBE0BzCtmtYZO6wi3h/nh4JoqIHotdlkNH5HZBtW7J/2XDX+
-        l/38tbjS4b68QIN/okh7YS+rbPoTrsH82Y8NsCz9j+qCuHlByZydrvbUjAE3oHv3qBNshC
-        3nT/DkhKWh4ddxa2laQSu1E5ugFrIJs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E614133E5;
-        Fri, 24 Mar 2023 11:15:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3hIbHU2GHWS3XAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 24 Mar 2023 11:15:25 +0000
-Date:   Fri, 24 Mar 2023 12:15:24 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: WARN_ON in move_normal_pmd
-Message-ID: <ZB2GTBD/LWTrkOiO@dhcp22.suse.cz>
+        Fri, 24 Mar 2023 07:17:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D94D3193F9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 04:17:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9776411FB;
+        Fri, 24 Mar 2023 04:18:20 -0700 (PDT)
+Received: from [10.1.28.32] (e122027.cambridge.arm.com [10.1.28.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEF9D3F6C4;
+        Fri, 24 Mar 2023 04:17:33 -0700 (PDT)
+Message-ID: <80238e1b-15d7-23b7-b2a9-77078e64e056@arm.com>
+Date:   Fri, 24 Mar 2023 11:17:32 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] iommu/rockchip: Add missing set_platform_dma_ops callback
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+References: <20230315164152.333251-1-steven.price@arm.com>
+ <ZBnBU9OU4iV6CV0W@ziepe.ca> <85607806-b888-2d5e-67a4-e9d63ebd1976@arm.com>
+ <ZBr5e6tn1i7EE/16@ziepe.ca> <a5b946f0-5be8-a656-a8d5-1cd75399f0c4@arm.com>
+ <ZBsb01emBJJMZIt0@ziepe.ca> <bee3e168-3fc3-89e8-6b10-a830f052cf55@arm.com>
+ <ZBs8k8nki/iqUiwE@ziepe.ca>
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <ZBs8k8nki/iqUiwE@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-our QA is regularly hitting
-[  544.198822][T20518] WARNING: CPU: 1 PID: 20518 at ../mm/mremap.c:255 move_pgt_entry+0x4c6/0x510
-triggered by thp01 LTP test. This has been brought up in the past and
-resulted in f81fdd0c4ab7 ("mm: document warning in move_normal_pmd() and
-make it warn only once"). While it is good that the underlying problem
-is understood, it doesn't seem there is enough interest to fix it
-properly. Which is fair but I am wondering whether the WARN_ON gives
-us anything here.
+On 22/03/2023 17:36, Jason Gunthorpe wrote:
+> On Wed, Mar 22, 2023 at 04:04:25PM +0000, Steven Price wrote:
+>> On 22/03/2023 15:16, Jason Gunthorpe wrote:
+>>> On Wed, Mar 22, 2023 at 03:08:41PM +0000, Steven Price wrote:
+>>>> @@ -1035,8 +1055,9 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
+>>>>  	if (iommu->domain == domain)
+>>>>  		return 0;
+>>>>  
+>>>> -	if (iommu->domain)
+>>>> -		rk_iommu_detach_device(iommu->domain, dev);
+>>>> +	ret = rk_iommu_identity_attach(&rk_identity_domain, dev);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>
+>>>>  
+>>>>  	iommu->domain = domain;
+>>>>  
+>>>> @@ -1049,8 +1070,6 @@ static int rk_iommu_attach_device(struct iommu_domain *domain,
+>>>>  		return 0;
+>>>>  
+>>>>  	ret = rk_iommu_enable(iommu);
+>>>> -	if (ret)
+>>>> -		rk_iommu_detach_device(iommu->domain, dev);
+>>>
+>>> I think this still needs error handling, it should put it back to the
+>>> identity domain and return an error code if it fails to attach to the
+>>> requested domain.
+>>
+>> What confused me here is that there's already a call to
+>> rk_iommu_identity_attach() just above. But I can obviously add a...
+> 
+> I don't know this driver at all, but to me it looks like this is
+> perhaps undoing a partially failed rk_iommu_enable() since it doesn't
+> seem to enetirely fix itself. Ie it zeros the INT_MASK and DTE_ADDR
+> 
+> Maybe it would be better to put that error cleanup direclty into
+> enable and just move the iommu->domain assignment to after enable
+> success.
 
-Our QA process collects all unexpected side effects of tests and a WARN*
-in the log is certainly one of those. This trigger bugs which are mostly
-ignored as there is no upstream fix for them. This alone is nothing
-really critical but there are workloads which do run with panic on warn
-configured and this issue would put the system down which is unnecessary
-IMHO. Would it be sufficient to replace the WARN_ON_ONCE by
-pr_warn_once?
+While I agree this would be better - I don't feel I understand the
+driver enough to have confidence in doing this. And I don't know how to
+trigger the error conditions to test this either.
 
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+>>        if (ret)
+>>                rk_iommu_identity_attach(&rk_identity_domain, dev);
+>>
+>> ... in here. But I don't know how to handle an error from
+>> rk_iommu_identity_attach() at this point. Does it need handling - is a
+>> WARN_ON sufficient?
+> 
+> WARN_ON should be fine, that is kind of hacky, it would be better to
+> organize things so there is an identity attach function that cannot
+> fail, ie pre-assumes all the validation is done alread.y
+
+As the code currently stands rk_iommu_identity_attach can fail for
+exactly one reason: if rk_iommu_from_dev() fails. And since that check
+is already done in rk_iommu_attach_device() this cannot fail (baring
+memory corruption etc). So I'll stick to WARN_ON for now.
+
+>>
+>>> It should also initlaize iommu->domain to the identity domain when the
+>>> iommu struct is allocated. The iommu->domain should never be
+>>> NULL. identity domain means the IOMMU is turned off which was
+>>> previously called "detached".
+>>
+>> I presume you mean in rk_iommu_probe()?
+> 
+> It would be best if it was setup at allocation time so in
+> rk_iommu_of_xlate() before dev_iommu_priv_set()
+
+I've already put an assignment in rk_iommu_of_xlate() just before
+dev_iommu_priv_set().
+
+Steve
