@@ -2,145 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0306C8553
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6186C855A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjCXSrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S231418AbjCXSv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCXSrW (ORCPT
+        with ESMTP id S229729AbjCXSvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:47:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A82F1;
-        Fri, 24 Mar 2023 11:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=8dtrVZxItauX11UB4f80WXUPADDXCAOcUF0i9BW2H9k=; b=qR47UVnFHk2OHyqfEV+Qna+ckx
-        jA3BDaASobqqDwuqyNstDsyKTX0e13ny5NGVfC4LFlxqXnS3C3yzyf52GlzF1A/nS0srl31uqmUnc
-        x86PGqWttWtZ0CFzoVXT5oc8DzXJBFocXsiPr5wfiaGUXYyzZPfjtLRQOA/GKldsKkN0Tf8mDhDpB
-        JwyRS6NVDRh8t9jjE6cjWsd6sgllbORAvRJkI/E5ejLRAMa5jA/ePzyqqMgV9U1w1QS90LmoyGp3q
-        qs8pMu2cTd3pP+jiXnDpnIxJIoo57is2icg9rKJnfveuIDs3jhomTJGg9pMUZn8eDyhSDMyOoyz6b
-        W2Pz7mGA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfmRW-005Lhh-0H;
-        Fri, 24 Mar 2023 18:47:14 +0000
-Date:   Fri, 24 Mar 2023 11:47:14 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Ben Hutchings <benh@debian.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <ZB3wMuynKnQ1IFjb@bombadil.infradead.org>
-References: <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
- <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
- <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
- <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
- <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
- <ZBuB3+cN4BK6woKZ@bombadil.infradead.org>
- <20230323150125.35e5nwtrez46dv4b@ldmartin-desk2.lan>
- <CAB=NE6VtAn8tew723y77KAN_w-UYE+naMaVrKsLjxpJgAkwDXw@mail.gmail.com>
- <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
+        Fri, 24 Mar 2023 14:51:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABD82711;
+        Fri, 24 Mar 2023 11:51:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDBD562C17;
+        Fri, 24 Mar 2023 18:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CA2DC433D2;
+        Fri, 24 Mar 2023 18:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679683883;
+        bh=QI5iYgTsM1ofAY1J/uBq41C90EbbFq4z92TpmdnFVc4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tNCjlyW8f7VaTbSCdPD6yo9vJvr8VRMo9JXdO+aZZXqe6Am1BcQwreIJU3qHP3Ois
+         B/Rv6t/v/mWitdZlIBc5xEYDH++hMpx9g+yjdR8eS/vopd7aGDcRh6529bmD5/oHLu
+         FjCyCTZ0O5ykbfXbVJOiRe33MJpwoDkc00hp9H+sw3anVTUpJtNS8WlAiffYIzvO88
+         fotJpp5xnnLEf+dvSVw8E+WPQYNwXW+xE194ASOkkfgB173lWHN7s3H+anebxssULH
+         sVznSmacOj2lrd527KFOcplTJV344/iUG2f0DleiGk/gjG/8BNSg1FAQG5ErMivnKM
+         1GtceNZJr//vQ==
+Date:   Fri, 24 Mar 2023 18:51:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 2/7] regmap: check for alignment on translated register
+ addresses
+Message-ID: <ZB3xJ4/FTEwHyVyY@sirena.org.uk>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+ <20230324093644.464704-3-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R3QyACzrFnj0ObNQ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230324060321.c2szz34n6zggvubj@ldmartin-desk2.lan>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230324093644.464704-3-maxime.chevallier@bootlin.com>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 11:03:21PM -0700, Lucas De Marchi wrote:
-> On Thu, Mar 23, 2023 at 08:08:49AM -0700, Luis Chamberlain wrote:
-> > On Thu, Mar 23, 2023 at 8:02 AM Lucas De Marchi
-> > <lucas.demarchi@intel.com> wrote:
-> > > 
-> > > On Wed, Mar 22, 2023 at 03:31:59PM -0700, Luis Chamberlain wrote:
-> > > >On Sat, Mar 11, 2023 at 10:25:05PM -0800, Lucas De Marchi wrote:
-> > > >> On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
-> > > >> > On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
-> > > >> > > On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
-> > > >> > > > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
-> > > >> > > > > Yes, the -EINVAL error is strange. It is returned also in
-> > > >> > > > > kernel/module/main.c on few locations. But neither of them
-> > > >> > > > > looks like a good candidate.
-> > > >> > > >
-> > > >> > > > OK I updated to next-20230119 and I don't see the issue now.
-> > > >> > > > Odd. It could have been an issue with next-20221207 which I was
-> > > >> > > > on before.
-> > > >> > > >
-> > > >> > > > I'll run some more test and if nothing fails I'll send the fix
-> > > >> > > > to Linux for rc5.
-> > > >> > >
-> > > >> > > Jeesh it just occured to me the difference, which I'll have to
-> > > >> > > test next, for next-20221207 I had enabled module compression
-> > > >> > > on kdevops with zstd.
-> > > >> > >
-> > > >> > > You can see the issues on kdevops git log with that... and I finally
-> > > >> > > disabled it and the kmod test issue is gone. So it could be that
-> > > >> > > but I just am ending my day so will check tomorrow if that was it.
-> > > >> > > But if someone else beats me then great.
-> > > >> > >
-> > > >> > > With kdevops it should be a matter of just enabling zstd as I
-> > > >> > > just bumped support for next-20230119 and that has module decompression
-> > > >> > > disabled.
-> > > >> >
-> > > >> > So indeed, my suspcions were correct. There is one bug with
-> > > >> > compression on debian:
-> > > >> >
-> > > >> > - gzip compressed modules don't end up in the initramfs
-> > > >> >
-> > > >> > There is a generic upstream kmod bug:
-> > > >> >
-> > > >> >  - modprobe --show-depends won't grok compressed modules so initramfs
-> > > >> >    tools that use this as Debian likely are not getting module dependencies
-> > > >> >    installed in their initramfs
-> > > >>
-> > > >> are you sure you have the relevant compression setting enabled
-> > > >> in kmod?
-> > > >>
-> > > >> $ kmod --version
-> > > >> kmod version 30
-> > > >> +ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
-> > > >
-> > > >Debian has:
-> > > >
-> > > >kmod version 30
-> > > >+ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
-> > > 
-> > >            ^ so... mind the minus :). It doesn't support zlib.
-> > > 
-> > > Change your kernel config to either compress the modules as xz or zstd.
-> > 
-> > Oh so then we should complain about these things if an initramfs is
-> > detected with modules compressed using a compression algorithm which
-> > modprobe installed does not support. What tool would do that?
-> 
-> I guess we could add that in depmod side as a dummy handler for when
-> that config is off. Thoughts?
 
-That sounds like a good solution, better than and complain before
-allowing someone to boot and *not* be able to.
+--R3QyACzrFnj0ObNQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Luis
+On Fri, Mar 24, 2023 at 10:36:39AM +0100, Maxime Chevallier wrote:
+> With regmap->reg_base and regmap->reg_downshift, the actual register
+> address that is going to be used for the next operation might not be the
+> same as the one we have as an input. Addresses can be offset with
+> reg_base and shifted, which will affect alignment.
+>=20
+> Check for alignment on the real register address.
+
+It is not at all clear to me that the combination of stride and
+downshift particularly makes sense, and especially not that the
+stride should be applied after downshifting rather than to what
+the user is passing in.
+
+--R3QyACzrFnj0ObNQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQd8ScACgkQJNaLcl1U
+h9APUgf/VgS2RAgGVn3JfSBIqYVhOLgeS+YFm9Azjphm9lH6hDY6lyib+hAJFQ1H
+3uOqbJBWJ/v6SSeYTAdA4jwZhiiaPQ+b1NRz/cNmbouD8aEmQp4mDm8Py8NYPTKO
+JWs8tF0UBVsllIO/bh5wRgG3tFLP+wivFYHB3QBm2bP4NcLC60U2w3hxvfpFEUb3
+cLZQS5SYznLhwaunrpI9XfQbKzDRT3eb2WN9vrb6MnhPzON/8/OOHUtOT8sOo2+s
+4NiBtYCjzh4gz4EGG4ywH2VCEGMU5qjOEd0qyOXGjOgH9pTCSnVB1c06MS1EhqJm
+yGxEi1ATCsgcXaPEEZ1urEwFhPqzjg==
+=cfQS
+-----END PGP SIGNATURE-----
+
+--R3QyACzrFnj0ObNQ--
