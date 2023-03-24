@@ -2,220 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D57E6C805C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806F86C805F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjCXOxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S232248AbjCXOxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjCXOxB (ORCPT
+        with ESMTP id S232211AbjCXOxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:53:01 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD10CBA;
-        Fri, 24 Mar 2023 07:53:00 -0700 (PDT)
-Received: from localhost.localdomain (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B308E20FC3DB;
-        Fri, 24 Mar 2023 07:52:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B308E20FC3DB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1679669580;
-        bh=XF1vbq7gokzNKZoPuMKmB97h2a+RXc+m3lJbm+yiyvc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GiSQbslBY0MTgFojIIhCGjaD1vg4TqycSGXd306uujyvRdb42251/imGyyDxsPXqi
-         +dBTPdc2kP7cEp4S7D9O07hLsIO/1Nw9Awq+5/wHhYESQimxHNkvvQiVPzZnRZyflv
-         KeQ3JQBfLtPhevXFRUk5eQ3QOCuL0FcKM8XiQVeg=
-From:   jpiotrowski@linux.microsoft.com
-To:     linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Sean Christopherson <seanjc@google.com>, stable@vger.kernel.org
-Subject: [RESEND PATCH v2] KVM: SVM: Flush Hyper-V TLB when required
-Date:   Fri, 24 Mar 2023 15:52:33 +0100
-Message-Id: <20230324145233.4585-1-jpiotrowski@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230324144500.4216-1-jpiotrowski@microsoft.com>
-References: <20230324144500.4216-1-jpiotrowski@microsoft.com>
+        Fri, 24 Mar 2023 10:53:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E02728;
+        Fri, 24 Mar 2023 07:53:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3406B82498;
+        Fri, 24 Mar 2023 14:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4DBC433EF;
+        Fri, 24 Mar 2023 14:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679669590;
+        bh=9Bzy8ntyyYlzsjNmc78UfhexZSZPRHrJSAQutSdB5D8=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=tfkXgJpaG5VCC/Jf8RDQRSZg7Yiq04dsHBrN4FVubuiMfby8e3MORukt5N28Az1Zv
+         U//O96cq547CPg5LppNQFcUfxoHtYfPHQu7aVbpqykYd2m1d1z5p1HGwT52A2jUNOi
+         4ULJB8zU645n7Nu/bGuq1gU4SXG/LJfFYzyJAdJzlKKYODinyhX1PBRPwKNSR+WaxT
+         YtbtKAFHJuejoWh+3rXDv9brQU1lxbf0yKkeV9sW+huOawP3IbAL72hlznajQoIBJ4
+         SKYeD6hcgaBELO62PLdrRqJaGSDkA7Cr37oRkWrIw2t/mnvh0keGm5QIk9hmu6aArS
+         mhiho7aAPGkkA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230322122855.2570417-1-trix@redhat.com>
+References: <20230322122855.2570417-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167966958590.27260.15660698872917271448.kvalo@kernel.org>
+Date:   Fri, 24 Mar 2023 14:53:07 +0000 (UTC)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Tom Rix <trix@redhat.com> wrote:
 
-The Hyper-V "EnlightenedNptTlb" enlightenment is always enabled when KVM
-is running on top of Hyper-V and Hyper-V exposes support for it (which
-is always). On AMD CPUs this enlightenment results in ASID invalidations
-not flushing TLB entries derived from the NPT. To force the underlying
-(L0) hypervisor to rebuild its shadow page tables, an explicit hypercall
-is needed.
+> clang with W=1 reports:
+> 
+> drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
+>   unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
+> ath10k_get_ring_byte(unsigned int offset,
+> ^
+> This function is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-The original KVM implementation of Hyper-V's "EnlightenedNptTlb" on SVM
-only added remote TLB flush hooks. This worked out fine for a while, as
-sufficient remote TLB flushes where being issued in KVM to mask the
-problem. Since v5.17, changes in the TDP code reduced the number of
-flushes and the out-of-sync TLB prevents guests from booting
-successfully.
+Patch applied to ath-next branch of ath.git, thanks.
 
-Split svm_flush_tlb_current() into separate callbacks for the 3 cases
-(guest/all/current), and issue the required Hyper-V hypercall when a
-Hyper-V TLB flush is needed. The most important case where the TLB flush
-was missing is when loading a new PGD, which is followed by what is now
-svm_flush_tlb_current().
+9fc093b756f6 wifi: ath10k: remove unused ath10k_get_ring_byte function
 
-Cc: stable@vger.kernel.org # v5.17+
-Fixes: 1e0c7d40758b ("KVM: SVM: hyper-v: Remote TLB flush for SVM")
-Link: https://lore.kernel.org/lkml/43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com/
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
----
-Resending because I accidentally used the wrong "From:" address and it bounced
-from some recipients.
-
-Changes since v1:
-- lookup enlightened_npt_tlb in vmcb to determine whether to do the
-  flush
-- when KVM wants a hyperv_flush_guest_mapping() call, don't try to
-  optimize it out
-- don't hide hyperv flush behind helper, make it visible in
-  svm.c
-
- arch/x86/kvm/kvm_onhyperv.h     |  5 +++++
- arch/x86/kvm/svm/svm.c          | 37 ++++++++++++++++++++++++++++++---
- arch/x86/kvm/svm/svm_onhyperv.h | 15 +++++++++++++
- 3 files changed, 54 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
-index 287e98ef9df3..67b53057e41c 100644
---- a/arch/x86/kvm/kvm_onhyperv.h
-+++ b/arch/x86/kvm/kvm_onhyperv.h
-@@ -12,6 +12,11 @@ int hv_remote_flush_tlb_with_range(struct kvm *kvm,
- int hv_remote_flush_tlb(struct kvm *kvm);
- void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
- #else /* !CONFIG_HYPERV */
-+static inline int hv_remote_flush_tlb(struct kvm *kvm)
-+{
-+	return -1;
-+}
-+
- static inline void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
- {
- }
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 252e7f37e4e2..f25bc3cbb250 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3729,7 +3729,7 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
- 	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
- }
- 
--static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
-+static void svm_flush_tlb_asid(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 
-@@ -3753,6 +3753,37 @@ static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
- 		svm->current_vmcb->asid_generation--;
- }
- 
-+static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
-+{
-+	hpa_t root_tdp = vcpu->arch.mmu->root.hpa;
-+
-+	/*
-+	 * When running on Hyper-V with EnlightenedNptTlb enabled, explicitly
-+	 * flush the NPT mappings via hypercall as flushing the ASID only
-+	 * affects virtual to physical mappings, it does not invalidate guest
-+	 * physical to host physical mappings.
-+	 */
-+	if (svm_hv_is_enlightened_tlb_enabled(vcpu) && VALID_PAGE(root_tdp))
-+		hyperv_flush_guest_mapping(root_tdp);
-+
-+	svm_flush_tlb_asid(vcpu);
-+}
-+
-+static void svm_flush_tlb_all(struct kvm_vcpu *vcpu)
-+{
-+	/*
-+	 * When running on Hyper-V with EnlightenedNptTlb enabled, remote TLB
-+	 * flushes should be routed to hv_remote_flush_tlb() without requesting
-+	 * a "regular" remote flush.  Reaching this point means either there's
-+	 * a KVM bug or a prior hv_remote_flush_tlb() call failed, both of
-+	 * which might be fatal to the guest.  Yell, but try to recover.
-+	 */
-+	if (WARN_ON_ONCE(svm_hv_is_enlightened_tlb_enabled(vcpu)))
-+		hv_remote_flush_tlb(vcpu->kvm);
-+
-+	svm_flush_tlb_asid(vcpu);
-+}
-+
- static void svm_flush_tlb_gva(struct kvm_vcpu *vcpu, gva_t gva)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -4745,10 +4776,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.set_rflags = svm_set_rflags,
- 	.get_if_flag = svm_get_if_flag,
- 
--	.flush_tlb_all = svm_flush_tlb_current,
-+	.flush_tlb_all = svm_flush_tlb_all,
- 	.flush_tlb_current = svm_flush_tlb_current,
- 	.flush_tlb_gva = svm_flush_tlb_gva,
--	.flush_tlb_guest = svm_flush_tlb_current,
-+	.flush_tlb_guest = svm_flush_tlb_asid,
- 
- 	.vcpu_pre_run = svm_vcpu_pre_run,
- 	.vcpu_run = svm_vcpu_run,
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-index cff838f15db5..786d46d73a8e 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.h
-+++ b/arch/x86/kvm/svm/svm_onhyperv.h
-@@ -6,6 +6,8 @@
- #ifndef __ARCH_X86_KVM_SVM_ONHYPERV_H__
- #define __ARCH_X86_KVM_SVM_ONHYPERV_H__
- 
-+#include <asm/mshyperv.h>
-+
- #if IS_ENABLED(CONFIG_HYPERV)
- 
- #include "kvm_onhyperv.h"
-@@ -15,6 +17,14 @@ static struct kvm_x86_ops svm_x86_ops;
- 
- int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
- 
-+static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
-+{
-+	struct hv_vmcb_enlightenments *hve = &to_svm(vcpu)->vmcb->control.hv_enlightenments;
-+
-+	return ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB &&
-+	       !!hve->hv_enlightenments_control.enlightened_npt_tlb;
-+}
-+
- static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
- {
- 	struct hv_vmcb_enlightenments *hve = &vmcb->control.hv_enlightenments;
-@@ -80,6 +90,11 @@ static inline void svm_hv_update_vp_id(struct vmcb *vmcb, struct kvm_vcpu *vcpu)
- }
- #else
- 
-+static inline bool svm_hv_is_enlightened_tlb_enabled(struct kvm_vcpu *vcpu)
-+{
-+	return false;
-+}
-+
- static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
- {
- }
 -- 
-2.37.2
+https://patchwork.kernel.org/project/linux-wireless/patch/20230322122855.2570417-1-trix@redhat.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
