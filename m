@@ -2,309 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081F06C83D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6556C83CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjCXRxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S232206AbjCXRwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbjCXRw3 (ORCPT
+        with ESMTP id S231964AbjCXRwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:52:29 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60811A4BA;
-        Fri, 24 Mar 2023 10:51:50 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id x1so2184734qtr.7;
-        Fri, 24 Mar 2023 10:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679680310;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=72anf46FrFqHRmqQ5ODHzlxaMT8Ohp7RrTHcY1Db4ZM=;
-        b=aD4Z41ehpWeqUGFPdDErmjO+iJy5K0BHox1wn+flh9uCdXRiZ1ejXiD3o7XY6Sa65G
-         nkdlyTOTve5mbCyY0uw2KCEwaDqfCMH0+HuQGkrYtQ1Nlynwt0jRBX3f2i+PLYj+W5P3
-         vqGV61tjia2/8pA5rnC3be+O3MRz9Qy8nR3xTyq5W+FKAZJbf08ARB8Q/uqC3PQhIdMm
-         Vxm0Wi2rbEV2zklRMFXb7n23GL1YpPehFh2Fq7FVUzV3v6tpHL9cCCGkJr384+fu7tKy
-         03e9VCNE/GEi6Foy1AUPT4REJZw7F2MbbLoIMA+fVWBb9fOwANRAXyfwt6jhVNOdNFh4
-         mYrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679680310;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=72anf46FrFqHRmqQ5ODHzlxaMT8Ohp7RrTHcY1Db4ZM=;
-        b=T8cgGFefeU0AtARn9CKXnPGD70xXuOnYGhhz11nUqxadFdZy8eui1txvDcaBmbVJ8y
-         +jU84/b3uRpF0NBOkHKTJRYcH7LR+frWRw1OF+9lhYQD7JmQuxmBANhvOKYaXAfDdUEt
-         gBQdjSjMYQHrZ2VrOuib0IkNeB2FyP0cWQR6uzKvjQBc5urN+zNE1AsKqiilSOXTYSM+
-         wfw1OGSgVfg4bkVvjDRKqDCaqBBf7SD//6C2D+tXHRS/5dZoH4dki72LHwT9qApGcbfc
-         Ug0svhx/ZKej4q9G5XfEtBfwD+N7g/KI1cylmeplDfkteuSY0madEyqI9qWo3FGzVo8z
-         5Y/Q==
-X-Gm-Message-State: AO0yUKWYFuHYURB3vJ480XXDic/BcUdLU1N3J3r5Ny/82EFMKrrEjNT7
-        m9/UQjLSxU7wh1C2XsR377vcSeUBnbNF0g==
-X-Google-Smtp-Source: AK7set+UwKknWozIoGS9iR8T1u1IxXLj49ZGqvWsNWCYxcYqjXNMswx4XJ3FwyRUDaUtp1Uy7nBO4g==
-X-Received: by 2002:a05:622a:1a87:b0:3e3:824c:f9b7 with SMTP id s7-20020a05622a1a8700b003e3824cf9b7mr7351531qtc.49.1679680309818;
-        Fri, 24 Mar 2023 10:51:49 -0700 (PDT)
-Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with UTF8SMTPSA id r16-20020a05620a299000b0074305413c73sm14542048qkp.95.2023.03.24.10.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 10:51:49 -0700 (PDT)
-From:   Sean Anderson <seanga2@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        linux-kernel@vger.kernel.org, Sean Anderson <seanga2@gmail.com>
-Subject: [PATCH net-next v4 10/10] net: sunhme: Consolidate common probe tasks
-Date:   Fri, 24 Mar 2023 13:51:36 -0400
-Message-Id: <20230324175136.321588-11-seanga2@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230324175136.321588-1-seanga2@gmail.com>
-References: <20230324175136.321588-1-seanga2@gmail.com>
+        Fri, 24 Mar 2023 13:52:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1A91737
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:51:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bjeukJUWG5pefBjIjirRt6dz6tGR7Wtz652IPQdGFFWs7a/uFjc1q3CjR3nC3CEepMp7wZ90sV1z/MkKR46e0YHMjCjsSD8tY5AWahNEqTkuOP6BeaaOXPPpQl2DkxoLQp2z8kO9iebVDMNuM8XSjuotlaoPj7ayuI0j+thZuE/hvh/G2ehnoDEYDaofJ3bQ0OEOydtSwOIbtR9V9qS5WUQFb9Hyy7o2x7PfIM2Z94W47/ivsF/HRr+uaEsZgPVg0cVS+3fppNh1aEHoC1/PsePQS2WACK3StqPZRTh4ZMIHsfG115a3xNgcpagmwBR4t2En2bcQdDrdGa3O2QYQOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0HbpYWy6I8qo/xBl0j5PHV1ClThBkSMzlq115UVDgNQ=;
+ b=RoFbQ6QPHq7BrBXF/R/RDBLFLVLFuoreFU2LxlsLXiUOyEo4KGnsM4odiF7k4HFtp2EJewLPHvd2iuG7A8uurg/Y2sMfPfw+NKmCIQjvXQp8sF/LkjqH60LobVewi+8EzH62dGY2oeLNkDD/hc5ZYksaXo4nogCaeItufXmuc4a6Lv1WjxfYkkYtNCpanhq1VdyxYtrbxVA7mnOGKEpCSf+zclVTI1hVNQvNnEUekMVj5IOsDCmCPyt7p/289jpuFivwPGpq0HO6kqoiLfNGNcEQZAYTE1E+ASjxo1la/7GEllUVLq+WxU9X+STzor2YBDs3XtikgGjNXsJL6GlMMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0HbpYWy6I8qo/xBl0j5PHV1ClThBkSMzlq115UVDgNQ=;
+ b=gdxBznC6Ioj2UTgA6GSLzl/aArlT8Q0rL9MShFnApzTCxn5cbjQf2cywyFW9HO8ZyW5sOGLI+QFSZuyCD44WFqi3ewpmbl58/4ehfE0hUaQkMZeDfB8/feesah7xiPIibkqPpz+Brp2THwbAmvf2R/33qjzN1KXtwRA20j/bfuGkOWMKEVt4tYe16NiQ+LXRUr7P8/iGEDrpsqepoVwISW6ieZDVeVp1fN64zG4p8f7QE0vHxl08MzUHwO5zU3Hjm+ODCCvT8JdfhpEUfZwQ+70x6H31P9NL+/SWRA8XNNz3deMEvsmoQHeYaLMAEgA+rNSJg6+aRxIQhldVIFwysw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SA1PR12MB8860.namprd12.prod.outlook.com (2603:10b6:806:38b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 17:51:47 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
+ 17:51:47 +0000
+Date:   Fri, 24 Mar 2023 14:51:45 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Eric Auger <eric.auger@redhat.com>, robin.murphy@arm.com,
+        will@kernel.org, kevin.tian@intel.com, baolu.lu@linux.intel.com,
+        joro@8bytes.org, shameerali.kolothum.thodi@huawei.com,
+        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 12/14] iommu/arm-smmu-v3: Support IOMMU_DOMAIN_NESTED
+ type of allocations
+Message-ID: <ZB3jMSOL5A+E5D82@nvidia.com>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <b01b2bad6d0d34908812d964eba118a9cc1e89ab.1678348754.git.nicolinc@nvidia.com>
+ <b870ec68-623c-df0c-3ea5-7fe6a95e2ef6@redhat.com>
+ <ZB3i6r7QD4NVBXkK@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZB3i6r7QD4NVBXkK@Asurada-Nvidia>
+X-ClientProxiedBy: YT4PR01CA0012.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d1::13) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB8860:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f6078d2-48d8-4e86-2732-08db2c907025
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6FC54dy5tCcBrSoh7cD7MHIkblDb4ADLVANdY+jP3cMNNaDHvAIJ6vpBWZFQVVmLPvSU2l6eDOuZzvu1tk5WfWlxgMBrO/UT+N4ODmmEO0UgsCzXuaqyolTxa8+qKVY7lCaqC6LnVN0NMlIZR2vXJ/1tCKbZ2D1SZcLqGvtG+sLrNWfMM6PTq/87XMQ8WdQnngB7YM1pxhvPmF0YZTcuhElPVobWmHEgpKbyO/dbL9eJDjuPUpB6XnL9FhIbm3JKIAPtL56Zz0r/vV+dhjWowstl9jdt0KAsyieINwQRwJYohdsJ4fmlBXIY6zAAAe65D0PvjZskK0raWdwdF0ZfRwg1UfIsD/3soyj4vUlzB0H7yC/Zphog/81rLLcGGSnGrrE4hm/9s/J0hjEAXunCyJtu/qp/+S/g2Ly5JBmrE79auXrn2IbkfzT94tipDBifUNqTKekz0/3m7PKvWkKdlCV7xVa86ZHrk0PrrPlceCLT4AwusqYxMlqu6zi44exQtHmptySALEGBQ2Cr8GYJLE4qtc4+EncQTmk9/2SIpyo+E4D5+qCBIWYazKymg8+0kKh1doncLHj2PgiSAvRDDNptg5t1Y7RRsOJMQifH5AM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199021)(6506007)(6512007)(7416002)(6486002)(26005)(66946007)(2906002)(38100700002)(86362001)(316002)(2616005)(36756003)(4326008)(8676002)(186003)(66476007)(8936002)(37006003)(41300700001)(66556008)(6636002)(478600001)(5660300002)(6862004)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?drj0jT2D1zXQjRlUW1qsvfqZMtUOX4bKcT1G7R4hjQ6SYqommSjAtk9iFe5Z?=
+ =?us-ascii?Q?7RL1U02ytiVrFxXFzpQMqfbRkyCRFSmLus0t2tLtKG767IS92pD/e2R8lsVT?=
+ =?us-ascii?Q?4kWt0sbAI1xxetpJejgYipVbLws43CMpkrYK6JtTRbCJrDQVPLjIFtyHxQuD?=
+ =?us-ascii?Q?oX6zz3cxotN5exkNx//N/VylCiBhcBle17QMst1+IP2lLpbjAJVlnndFj5fA?=
+ =?us-ascii?Q?p9ASsqjco0UZAxRFcUdCoDbaLTRjcyFxm83+1cMU/y7ou6bZOBG74189XOJq?=
+ =?us-ascii?Q?QN4Ecjhacn9vqMeyYxvacKwEFmmzFKJMpGcQ8ZqKlvu56h6KXSlb0iQRWbae?=
+ =?us-ascii?Q?F6qGhaIyjk4a37X0WvT6YI29utiYhaRRhcWF9h7XI9vsymeXwA3JVAyBLklW?=
+ =?us-ascii?Q?8kdoNfTrKldWeh4jn+nB4cbAdM43OnIqOqpA/yzPfsPPF8Ldd7abGaMJjrIg?=
+ =?us-ascii?Q?0ej+H3WKqoQKXTmwQAQetKDfjnLhF47C6nfYuDwZKbc/NcelhRbFWG36BjkS?=
+ =?us-ascii?Q?SyIB2h4kkw2uZg3zo5I/pCT15oFuCAvuuvMfK5vCdV3/6F06pzC9gD+harEQ?=
+ =?us-ascii?Q?c5oDb8zJ9vjN2mVXyTUbSqITyNiSNnsJ4IoQBrhY9Y2nqdYIf93ldh2OxtpQ?=
+ =?us-ascii?Q?rADBRW/mAsmNo/QCS7I17wKO8nBRkQu6P7Bxlkd2UUhmDt8cQ+4zFuP1A1va?=
+ =?us-ascii?Q?rG0p4XXfwU0J92p81fxOG7voGHtlUjW5DWgmyiG7NDbke6kPsIRhGxNdBoZV?=
+ =?us-ascii?Q?9wmxdzTbDTwyUWHYPSYP70BUgkuSecDSwzYsZsIPjesLKSbSxb54C1H6Bolk?=
+ =?us-ascii?Q?yNgPLToDY6zXtbwdfB21bRUx4rPTko2IZsL7k2OEFDu6IeOAsJR8nAeKmlV9?=
+ =?us-ascii?Q?RCqslbTI254B7M0sQoJLmEVt14lTJ0WElyXAR9vQJvSu1k2LG++jz8xyip6V?=
+ =?us-ascii?Q?xWpJfUMcfsbYyLh8QrTZNje2Mj2wjGQq8oYUd/16NxDPjm/5Xceb2Dmjh4gk?=
+ =?us-ascii?Q?/GE47GVDAdZIxXP4q/SSEg/55cQlKPm+r5sfh0Ej6DHp1dchOcgLn9ENamX9?=
+ =?us-ascii?Q?lgAyhW2iLe5o6ynxzhRX+uRsEcMgyS220RBhej60Zb3XO5kCdR4/4XcLKLq8?=
+ =?us-ascii?Q?EhcFOnqKfdfR3UicFydAkOfGG4eb3NH1yRgV+8wWq4runhPnUGthtGxd+15/?=
+ =?us-ascii?Q?nnZNJun1iatIqlyD9k7HEHMWKSvVKdZ8FMsOGVVxobagThfYGoi/NVM/iGmk?=
+ =?us-ascii?Q?bBrkJaGiJftnLBkRQo0t2oxddeLk0lUipUeFIQr4ULl4yP4MT/t2O/SOqtTI?=
+ =?us-ascii?Q?c1bgqBfMzGiDyp/HTMHcKmB9IS2RSI19cVm7AOuMuGCrJny6hZTot6LeBFNE?=
+ =?us-ascii?Q?+efqlbqt7mFUd/8kNjxlq+EjD1CGBD2jHqgahgYw2I3KwuIsKh6hsjCkFvCe?=
+ =?us-ascii?Q?kJQ6Qudh6wo7GrTFig3rOMPOs7hgC0ltrLp9HgqBu0BDDGraoq8kcfLltRc0?=
+ =?us-ascii?Q?qmQd1OS60C3i9zDVsmxpEF+VmRK0EH8WR1gFRnVX2ywPJJdHtUajvQtA0LtG?=
+ =?us-ascii?Q?mEWADL5T+++dXRgZho11fS+rMypD2U9skwzWKrLm?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f6078d2-48d8-4e86-2732-08db2c907025
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 17:51:47.2702
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SM56BcXBdU8DuaQo4QXcd6S3k72oqIn80KCsiaF+FWk6Nfj1HRfUuqKFa2kWOoPW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8860
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the second half of the PCI/SBUS probe functions are the same.
-Consolidate them into a common function.
+On Fri, Mar 24, 2023 at 10:50:34AM -0700, Nicolin Chen wrote:
+> On Fri, Mar 24, 2023 at 04:44:58PM +0100, Eric Auger wrote:
+> > > @@ -2923,8 +2949,16 @@ arm_smmu_domain_alloc_user(struct device *dev, struct iommu_domain *parent,
+> > >       const struct iommu_hwpt_arm_smmuv3 *user_cfg = user_data;
+> > >       struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+> > >       unsigned type = IOMMU_DOMAIN_UNMANAGED;
+> > > +     struct arm_smmu_domain *s2 = NULL;
+> > > +
+> > > +     if (parent) {
+> > > +             if (parent->ops != arm_smmu_ops.default_domain_ops)
+> > > +                     return NULL;
+> > > +             type = IOMMU_DOMAIN_NESTED;
+> > > +             s2 = to_smmu_domain(parent);
+> > > +     }
+> > Please can you explain the (use) case where !parent. This creates an
+> > unmanaged S1?
+> 
+> It creates an unmanaged type of a domain. The decision to mark
+> it as an unmanaged S1 or an unmanaged S2 domain, is done in the
+> finalise() function that it checks the S2 flag and set a stage
+> accordingly.
 
-Signed-off-by: Sean Anderson <seanga2@gmail.com>
----
+This also needs to be fixed up, the alloc_user should not return
+incompletely initialized domains.
 
-Changes in v4:
-- Use correct SBUS/PCI accessors
-- Rework hme_version to set the default in pci/sbus_probe and override it (if
-  necessary) in common_probe
-
- drivers/net/ethernet/sun/sunhme.c | 157 ++++++++++++------------------
- 1 file changed, 64 insertions(+), 93 deletions(-)
-
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index bd1925f575c4..ec85aef35bf9 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -2430,6 +2430,58 @@ static void happy_meal_addr_init(struct happy_meal *hp,
- 	}
- }
- 
-+static int happy_meal_common_probe(struct happy_meal *hp,
-+				   struct device_node *dp)
-+{
-+	struct net_device *dev = hp->dev;
-+	int err;
-+
-+#ifdef CONFIG_SPARC
-+	hp->hm_revision = of_getintprop_default(dp, "hm-rev", hp->hm_revision);
-+#endif
-+
-+	/* Now enable the feature flags we can. */
-+	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
-+		hp->happy_flags |= HFLAG_20_21;
-+	else if (hp->hm_revision != 0xa0)
-+		hp->happy_flags |= HFLAG_NOT_A0;
-+
-+	hp->happy_block = dmam_alloc_coherent(hp->dma_dev, PAGE_SIZE,
-+					      &hp->hblock_dvma, GFP_KERNEL);
-+	if (!hp->happy_block)
-+		return -ENOMEM;
-+
-+	/* Force check of the link first time we are brought up. */
-+	hp->linkcheck = 0;
-+
-+	/* Force timer state to 'asleep' with count of zero. */
-+	hp->timer_state = asleep;
-+	hp->timer_ticks = 0;
-+
-+	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
-+
-+	dev->netdev_ops = &hme_netdev_ops;
-+	dev->watchdog_timeo = 5 * HZ;
-+	dev->ethtool_ops = &hme_ethtool_ops;
-+
-+	/* Happy Meal can do it all... */
-+	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
-+	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
-+
-+
-+	/* Grrr, Happy Meal comes up by default not advertising
-+	 * full duplex 100baseT capabilities, fix this.
-+	 */
-+	spin_lock_irq(&hp->happy_lock);
-+	happy_meal_set_initial_advertisement(hp);
-+	spin_unlock_irq(&hp->happy_lock);
-+
-+	err = devm_register_netdev(hp->dma_dev, dev);
-+	if (err)
-+		dev_err(hp->dma_dev, "Cannot register net device, aborting.\n");
-+	return err;
-+}
-+
- #ifdef CONFIG_SBUS
- static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
- {
-@@ -2511,50 +2563,18 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
- 		goto err_out_clear_quattro;
- 	}
- 
--	hp->hm_revision = of_getintprop_default(dp, "hm-rev", 0xff);
--	if (hp->hm_revision == 0xff)
--		hp->hm_revision = 0xa0;
--
--	/* Now enable the feature flags we can. */
--	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
--		hp->happy_flags = HFLAG_20_21;
--	else if (hp->hm_revision != 0xa0)
--		hp->happy_flags = HFLAG_NOT_A0;
-+	hp->hm_revision = 0xa0;
- 
- 	if (qp != NULL)
- 		hp->happy_flags |= HFLAG_QUATTRO;
- 
-+	hp->irq = op->archdata.irqs[0];
-+
- 	/* Get the supported DVMA burst sizes from our Happy SBUS. */
- 	hp->happy_bursts = of_getintprop_default(sbus_dp,
- 						 "burst-sizes", 0x00);
- 
--	hp->happy_block = dmam_alloc_coherent(&op->dev, PAGE_SIZE,
--					      &hp->hblock_dvma, GFP_KERNEL);
--	if (!hp->happy_block) {
--		err = -ENOMEM;
--		goto err_out_clear_quattro;
--	}
--
--	/* Force check of the link first time we are brought up. */
--	hp->linkcheck = 0;
--
--	/* Force timer state to 'asleep' with count of zero. */
--	hp->timer_state = asleep;
--	hp->timer_ticks = 0;
--
--	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
--
--	dev->netdev_ops = &hme_netdev_ops;
--	dev->watchdog_timeo = 5*HZ;
--	dev->ethtool_ops = &hme_ethtool_ops;
--
--	/* Happy Meal can do it all... */
--	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
--	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
--
--	hp->irq = op->archdata.irqs[0];
--
--#if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
-+#ifdef CONFIG_PCI
- 	/* Hook up SBUS register/descriptor accessors. */
- 	hp->read_desc32 = sbus_hme_read_desc32;
- 	hp->write_txd = sbus_hme_write_txd;
-@@ -2563,18 +2583,9 @@ static int happy_meal_sbus_probe_one(struct platform_device *op, int is_qfe)
- 	hp->write32 = sbus_hme_write32;
- #endif
- 
--	/* Grrr, Happy Meal comes up by default not advertising
--	 * full duplex 100baseT capabilities, fix this.
--	 */
--	spin_lock_irq(&hp->happy_lock);
--	happy_meal_set_initial_advertisement(hp);
--	spin_unlock_irq(&hp->happy_lock);
--
--	err = devm_register_netdev(&op->dev, dev);
--	if (err) {
--		dev_err(&op->dev, "Cannot register net device, aborting.\n");
-+	err = happy_meal_common_probe(hp, dp);
-+	if (err)
- 		goto err_out_clear_quattro;
--	}
- 
- 	platform_set_drvdata(op, hp);
- 
-@@ -2689,20 +2700,10 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	hp->bigmacregs = (hpreg_base + 0x6000UL);
- 	hp->tcvregs    = (hpreg_base + 0x7000UL);
- 
--#ifdef CONFIG_SPARC
--	hp->hm_revision = of_getintprop_default(dp, "hm-rev", 0xff);
--	if (hp->hm_revision == 0xff)
-+	if (IS_ENABLED(CONFIG_SPARC))
- 		hp->hm_revision = 0xc0 | (pdev->revision & 0x0f);
--#else
--	/* works with this on non-sparc hosts */
--	hp->hm_revision = 0x20;
--#endif
--
--	/* Now enable the feature flags we can. */
--	if (hp->hm_revision == 0x20 || hp->hm_revision == 0x21)
--		hp->happy_flags = HFLAG_20_21;
--	else if (hp->hm_revision != 0xa0 && hp->hm_revision != 0xc0)
--		hp->happy_flags = HFLAG_NOT_A0;
-+	else
-+		hp->hm_revision = 0x20;
- 
- 	if (qp != NULL)
- 		hp->happy_flags |= HFLAG_QUATTRO;
-@@ -2714,30 +2715,9 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	/* Assume PCI happy meals can handle all burst sizes. */
- 	hp->happy_bursts = DMA_BURSTBITS;
- #endif
--
--	hp->happy_block = dmam_alloc_coherent(&pdev->dev, PAGE_SIZE,
--					      &hp->hblock_dvma, GFP_KERNEL);
--	if (!hp->happy_block) {
--		err = -ENOMEM;
--		goto err_out_clear_quattro;
--	}
--
--	hp->linkcheck = 0;
--	hp->timer_state = asleep;
--	hp->timer_ticks = 0;
--
--	timer_setup(&hp->happy_timer, happy_meal_timer, 0);
--
- 	hp->irq = pdev->irq;
--	dev->netdev_ops = &hme_netdev_ops;
--	dev->watchdog_timeo = 5*HZ;
--	dev->ethtool_ops = &hme_ethtool_ops;
- 
--	/* Happy Meal can do it all... */
--	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
--	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
--
--#if defined(CONFIG_SBUS) && defined(CONFIG_PCI)
-+#ifdef CONFIG_SBUS
- 	/* Hook up PCI register/descriptor accessors. */
- 	hp->read_desc32 = pci_hme_read_desc32;
- 	hp->write_txd = pci_hme_write_txd;
-@@ -2746,18 +2726,9 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
- 	hp->write32 = pci_hme_write32;
- #endif
- 
--	/* Grrr, Happy Meal comes up by default not advertising
--	 * full duplex 100baseT capabilities, fix this.
--	 */
--	spin_lock_irq(&hp->happy_lock);
--	happy_meal_set_initial_advertisement(hp);
--	spin_unlock_irq(&hp->happy_lock);
--
--	err = devm_register_netdev(&pdev->dev, dev);
--	if (err) {
--		dev_err(&pdev->dev, "Cannot register net device, aborting.\n");
-+	err = happy_meal_common_probe(hp, dp);
-+	if (err)
- 		goto err_out_clear_quattro;
--	}
- 
- 	pci_set_drvdata(pdev, hp);
- 
--- 
-2.37.1
-
+Jason
