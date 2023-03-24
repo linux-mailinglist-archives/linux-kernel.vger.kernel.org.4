@@ -2,159 +2,523 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3446C7C5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC2D6C7C6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjCXKRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S231705AbjCXKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCXKRe (ORCPT
+        with ESMTP id S231686AbjCXKTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:17:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A65136EF;
-        Fri, 24 Mar 2023 03:17:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s8so1532913lfr.8;
-        Fri, 24 Mar 2023 03:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679653051;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKI80BGooykUH8804XqZbqpXI1kCkxjaQ/+9IzL2Xiw=;
-        b=Kxa+q4AEQT1i6IRajV6+FKmGNg92TFnsE6gP+npUIx5KFknE0M5js0opulMYuUKoP1
-         hhojoDbNZfNRJu0Y1brF9qq2z0bXV95RWJf7/Ox0JDxliXiFtYnPBDvXhdVTAwjlHJZV
-         jOA+hIxZTYT+OW1lHthZDFkBRSe26bC4yrs9mAGGVHgI8HV9IMS4f6GBcXSkAnkpcDGU
-         KahndWPQnDiNwQBPLA7erzgzeaxFl7oIk4v9gU4YpiKS/8y8T3jsz6VLM9G3JnQt+mpt
-         ctg1qKo5TeSkVMpSQjuChZp4n7LFAL/FD18RDYugCyn8TtDbSPsU6H5sEcpaf1/Tt0dV
-         8YaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679653051;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKI80BGooykUH8804XqZbqpXI1kCkxjaQ/+9IzL2Xiw=;
-        b=b9xlIIKJ4TEa1Dff++QizEHFumk2FGgbT1u1OLi3/Ad/XG3M57bYS9Z412fJn+FYhP
-         MEzW2zT1kPiN+0USZU6nPh26a3s+YQQi6XwPtj7xukRTD9WrpWbLYpauzw+jZtaqYgxs
-         DI8U/3mqB4E2SAE64lSnVPWviNWmJyztQRoUPCIV0VHlGOaAHejmjBPThFICKOHqgkL0
-         UEslzLRI2P92BUjrYClskAKOfZTXwuq6hSF3Mzzgo6gnJQtjQ+s3qW3+RuEHwIsWvRx9
-         KLcSB7Hm7eT0d40aQ3QHsOjGs0CKZqXgKtI5yf9/zsK8PvEQl/BHg5qwqncxoxI9uQOE
-         fcbA==
-X-Gm-Message-State: AAQBX9dfcdShrkZzdumpnOktF7cuJ12lMjey9eSR85DnuXoVkF1NAU3h
-        TQntyZzJkT5DTxN7nu1uEdo=
-X-Google-Smtp-Source: AKy350Zkz+Y0xK6vR056bzbMJ5c6SO+vEjK6lziTdDbWrWpcG33tOleLGWSLtofdUPrnpRYC4JuzhA==
-X-Received: by 2002:ac2:530d:0:b0:4e9:a9e6:2752 with SMTP id c13-20020ac2530d000000b004e9a9e62752mr630594lfh.22.1679653051591;
-        Fri, 24 Mar 2023 03:17:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id d24-20020ac25458000000b004eae6283565sm1669239lfn.299.2023.03.24.03.17.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 03:17:31 -0700 (PDT)
-Message-ID: <a02044e7-3210-a0c2-ceda-8c19fadd237a@gmail.com>
-Date:   Fri, 24 Mar 2023 12:17:30 +0200
+        Fri, 24 Mar 2023 06:19:07 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C54B113F4;
+        Fri, 24 Mar 2023 03:19:04 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PjdGh71ltz9xGY9;
+        Fri, 24 Mar 2023 18:09:16 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwA3CF_reB1k5fbDAQ--.7382S2;
+        Fri, 24 Mar 2023 11:18:33 +0100 (CET)
+Message-ID: <939e6c88662ad90b963993c4cc1b702083e74a7a.camel@huaweicloud.com>
+Subject: Re: [PATCH v8 4/6] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 24 Mar 2023 11:18:17 +0100
+In-Reply-To: <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com>
+         <20230314081720.4158676-5-roberto.sassu@huaweicloud.com>
+         <CAHC9VhTD3EyDiJs9+NQrgp84JcUs_sx8WONtRk2YYH4m1C8nVw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     David Gow <davidgow@google.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
- <97f60824-7067-62cc-2882-d998072886ce@gmail.com>
- <CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7FtA-dTQ@mail.gmail.com>
- <f0b4d2ad-9635-9ab8-7cd7-bfadded94714@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-In-Reply-To: <f0b4d2ad-9635-9ab8-7cd7-bfadded94714@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwA3CF_reB1k5fbDAQ--.7382S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3uF18Zry5tw43Zw1DtF1kKrg_yoW8AF4kKo
+        WfJwnrJFW8tr13JrW5u3s7JFZrua95Wr4rJr4Yvr45A3W3ta4UCw13Way8XFZxuFyrKF4U
+        K34xAa4jvrWqqFn3n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYU7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4ceywAAsj
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 12:05, Matti Vaittinen wrote:
-> On 3/24/23 11:52, David Gow wrote:
->> On Fri, 24 Mar 2023 at 14:51, Matti Vaittinen 
->> <mazziesaccount@gmail.com> wrote:
->>>
->>> On 3/24/23 08:34, David Gow wrote:
->>>> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen 
->>>> <mazziesaccount@gmail.com> wrote:
+On Thu, 2023-03-23 at 20:09 -0400, Paul Moore wrote:
+> On Tue, Mar 14, 2023 at 4:19 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Currently, security_inode_init_security() supports only one LSM providing
+> > an xattr and EVM calculating the HMAC on that xattr, plus other inode
+> > metadata.
+> > 
+> > Allow all LSMs to provide one or multiple xattrs, by extending the security
+> > blob reservation mechanism. Introduce the new lbs_xattr field of the
+> > lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
+> > needs, and the LSM infrastructure knows how many xattr slots it should
+> > allocate.
+> > 
+> > Dynamically allocate the xattrs array to be populated by LSMs with the
+> > inode_init_security hook, and pass it to the latter instead of the
+> > name/value/len triple. Update the documentation accordingly, and fix the
+> > description of the xattr name, as it is not allocated anymore.
+> > 
+> > Since the LSM infrastructure, at initialization time, updates the number of
+> > the requested xattrs provided by each LSM with a corresponding offset in
+> > the security blob (in this case the xattr array), it makes straightforward
+> > for an LSM to access the right position in the xattr array.
+> > 
+> > There is still the issue that an LSM might not fill the xattr, even if it
+> > requests it (legitimate case, for example it might have been loaded but not
+> > initialized with a policy). Since users of the xattr array (e.g. the
+> > initxattrs() callbacks) detect the end of the xattr array by checking if
+> > the xattr name is NULL, not filling an xattr would cause those users to
+> > stop scanning xattrs prematurely.
+> > 
+> > Solve that issue by introducing security_check_compact_filled_xattrs(),
+> > which does a basic check of the xattr array (if the xattr name is filled,
+> > the xattr value should be too, and viceversa), and compacts the xattr array
+> > by removing the holes.
+> > 
+> > An alternative solution would be to let users of the xattr array know the
+> > number of elements of that array, so that they don't have to check the
+> > termination. However, this seems more invasive, compared to a simple move
+> > of few array elements.
+> > 
+> > security_check_compact_filled_xattrs() also determines how many xattrs in
+> > the xattr array have been filled. If there is none, skip
+> > evm_inode_init_security() and initxattrs(). Skipping the former also avoids
+> > EVM to crash the kernel, as it is expecting a filled xattr.
+> > 
+> > Finally, adapt both SELinux and Smack to use the new definition of the
+> > inode_init_security hook, and to correctly fill the designated slots in the
+> > xattr array. For Smack, reserve space for the other defined xattrs although
+> > they are not set yet in smack_inode_init_security().
+> > 
+> > Reported-by: Nicolas Bouchinet <nicolas.bouchinet@clip-os.org> (EVM crash)
+> > Link: https://lore.kernel.org/linux-integrity/Y1FTSIo+1x+4X0LS@archlinux/
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >  include/linux/lsm_hook_defs.h |   3 +-
+> >  include/linux/lsm_hooks.h     |   1 +
+> >  security/security.c           | 119 +++++++++++++++++++++++++++++-----
+> >  security/selinux/hooks.c      |  19 ++++--
+> >  security/smack/smack_lsm.c    |  33 ++++++----
+> >  5 files changed, 137 insertions(+), 38 deletions(-)
+> > 
+> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> > index 6bb55e61e8e..b814955ae70 100644
+> > --- a/include/linux/lsm_hook_defs.h
+> > +++ b/include/linux/lsm_hook_defs.h
+> > @@ -112,8 +112,7 @@ LSM_HOOK(int, 0, path_notify, const struct path *path, u64 mask,
+> >  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
+> >  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)
+> >  LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
+> > -        struct inode *dir, const struct qstr *qstr, const char **name,
+> > -        void **value, size_t *len)
+> > +        struct inode *dir, const struct qstr *qstr, struct xattr *xattrs)
+> >  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
+> >          const struct qstr *name, const struct inode *context_inode)
+> >  LSM_HOOK(int, 0, inode_create, struct inode *dir, struct dentry *dentry,
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index c2be66c669a..75a2f85b49d 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -63,6 +63,7 @@ struct lsm_blob_sizes {
+> >         int     lbs_ipc;
+> >         int     lbs_msg_msg;
+> >         int     lbs_task;
+> > +       int     lbs_xattr; /* number of xattr slots in new_xattrs array */
 > 
->>>> I think that sounds like a good strategy for now, and we can work on a
->>>> set of 'generic helpers' which have an associated bus and struct
->>>> kunit_device in the meantime. If we can continue to use
->>>> root_device_register until those are ready, that'd be very convenient.
->>>
->>> Would it be a tiny bit more acceptable if we did add a very simple:
->>>
->>> #define kunit_root_device_register(name) root_device_register(name)
->>> #define kunit_root_device_unregister(dev) root_device_unregister(dev)
->>>
->>> to include/kunit/device.h (or somesuch)
->>>
->>> This should help us later to at least spot the places where
->>> root_device_[un]register() is abused and (potentially mass-)covert them
->>> to use the proper helpers when they're available.
->>>
->>
->> Great idea.
->>
->> The code I've been playing with has the following in 
->> include/kunit/device.h:
->>
->> /* Register a new device against a KUnit test. */
->> struct device *kunit_device_register(struct kunit *test, const char 
->> *name);
->> /* Unregister a device created by kunit_device_register() early (i.e.,
->> before test cleanup). */
->> void kunit_device_unregister(struct kunit *test, struct device *dev);
->>
->> If we used the same names, and just forwarded them to
->> root_device_register() and root_device_unregister() for now
->> (discarding the struct kunit pointer), then I expect we could just
->> swap out the implementation to gain the extra functionality.
+> No need for the comment, we don't do it for the other fields.
+> 
+> >  };
+> > 
+> >  /*
+> > diff --git a/security/security.c b/security/security.c
+> > index f4170efcddd..f1f5f62f7fa 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -1579,6 +1579,52 @@ int security_dentry_create_files_as(struct dentry *dentry, int mode,
+> >  }
+> >  EXPORT_SYMBOL(security_dentry_create_files_as);
+> > 
+> > +/**
+> > + * security_check_compact_filled_xattrs - check xattrs and make array contiguous
+> > + * @xattrs: xattr array filled by LSMs
+> > + * @num_xattrs: length of xattr array
+> > + * @num_filled_xattrs: number of already processed xattrs
+> > + *
+> > + * Ensure that each xattr slot is correctly filled and close the gaps in the
+> > + * xattr array if an LSM didn't provide an xattr for which it asked space
+> > + * (legitimate case, it might have been loaded but not initialized). An LSM
+> > + * might request space in the xattr array for one or multiple xattrs. The LSM
+> > + * infrastructure ensures that all requests by LSMs are satisfied.
+> > + *
+> > + * Track the number of filled xattrs in @num_filled_xattrs, so that it is easy
+> > + * to determine whether the currently processed xattr is fine in its position
+> > + * (if all previous xattrs were filled) or it should be moved after the last
+> > + * filled xattr.
+> > + *
+> > + * Return: zero if all xattrs are valid, -EINVAL otherwise.
+> > + */
+> > +static int security_check_compact_filled_xattrs(struct xattr *xattrs,
+> > +                                               int num_xattrs,
+> > +                                               int *num_filled_xattrs)
+> 
+> That is one long name :)
+> 
+> Since you're making some other changes to this patch, can you rename
+> this to security_xattr_compact() or something like that?
 
-There's one thing though. If the goal is to do a direct replacement and 
-if automatic device deletion upon test completion / test abort is 
-planned - then it should be there also for these initial wrappers.
+Yes, definitely!
 
-If these wrappers don't yet include the automatic device clean-up - then 
-it probably makes more sense to just do the kunit_root_device_* defines 
-because the tests are likely to need removing the explicit device 
-clean-ups when proper APIs are finished.
+> > +{
+> > +       int i;
+> > +
+> > +       for (i = *num_filled_xattrs; i < num_xattrs; i++) {
+> > +               if ((!xattrs[i].name && xattrs[i].value) ||
+> > +                   (xattrs[i].name && !xattrs[i].value))
+> > +                       return -EINVAL;
+> > +
+> > +               if (!xattrs[i].name)
+> > +                       continue;
+> > +
+> > +               if (i == *num_filled_xattrs) {
+> > +                       (*num_filled_xattrs)++;
+> > +                       continue;
+> > +               }
+> > +
+> > +               memcpy(xattrs + (*num_filled_xattrs)++, xattrs + i,
+> > +                      sizeof(*xattrs));
+> > +               memset(xattrs + i, 0, sizeof(*xattrs));
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  /**
+> >   * security_inode_init_security() - Initialize an inode's LSM context
+> >   * @inode: the inode
+> > @@ -1591,9 +1637,13 @@ EXPORT_SYMBOL(security_dentry_create_files_as);
+> >   * created inode and set up the incore security field for the new inode.  This
+> >   * hook is called by the fs code as part of the inode creation transaction and
+> >   * provides for atomic labeling of the inode, unlike the post_create/mkdir/...
+> > - * hooks called by the VFS.  The hook function is expected to allocate the name
+> > - * and value via kmalloc, with the caller being responsible for calling kfree
+> > - * after using them.  If the security module does not use security attributes
+> > + * hooks called by the VFS.  The hook function is expected to populate the
+> > + * @xattrs array, depending on how many xattrs have been specified by the
+> > + * security module in the lbs_xattr field of the lsm_blob_sizes structure.  For
+> > + * each array element, the hook function is expected to set ->name to the
+> > + * attribute name suffix (e.g. selinux), to allocate ->value (will be freed by
+> > + * the caller) and set it to the attribute value, to set ->value_len to the
+> > + * length of the value.  If the security module does not use security attributes
+> >   * or does not wish to put a security attribute on this particular inode, then
+> >   * it should return -EOPNOTSUPP to skip this processing.
+> >   *
+> > @@ -1604,33 +1654,66 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+> >                                  const struct qstr *qstr,
+> >                                  const initxattrs initxattrs, void *fs_data)
+> >  {
+> > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> > -       int ret;
+> > +       struct security_hook_list *P;
+> > +       struct xattr *new_xattrs;
+> > +       struct xattr *xattr;
+> > +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
+> > 
+> >         if (unlikely(IS_PRIVATE(inode)))
+> >                 return 0;
+> > 
+> > +       if (!blob_sizes.lbs_xattr)
+> > +               return 0;
+> > +
+> >         if (!initxattrs)
+> >                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+> > -                                    dir, qstr, NULL, NULL, NULL);
+> > -       memset(new_xattrs, 0, sizeof(new_xattrs));
+> > -       lsm_xattr = new_xattrs;
+> > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
+> > -                           &lsm_xattr->name,
+> > -                           &lsm_xattr->value,
+> > -                           &lsm_xattr->value_len);
+> > -       if (ret)
+> > +                                   dir, qstr, NULL);
+> > +       /* Allocate +1 for EVM and +1 as terminator. */
+> > +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
+> > +                            GFP_NOFS);
+> > +       if (!new_xattrs)
+> > +               return -ENOMEM;
+> > +
+> > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> > +                            list) {
+> > +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
+> > +               if (ret && ret != -EOPNOTSUPP)
+> > +                       goto out;
+> > +               /*
+> > +                * As documented in lsm_hooks.h, -EOPNOTSUPP in this context
+> > +                * means that the LSM is not willing to provide an xattr, not
+> > +                * that it wants to signal an error. Thus, continue to invoke
+> > +                * the remaining LSMs.
+> > +                */
+> > +               if (ret == -EOPNOTSUPP)
+> > +                       continue;
+> > +               /*
+> > +                * As the number of xattrs reserved by LSMs is not directly
+> > +                * available, directly use the total number blob_sizes.lbs_xattr
+> > +                * to keep the code simple, while being not the most efficient
+> > +                * way.
+> > +                */
+> 
+> Is there a good reason why the LSM can't return the number of xattrs
+> it is adding to the xattr array?  It seems like it should be fairly
+> trivial for the individual LSMs to determine and it could save a lot
+> of work.  However, given we're at v8 on this patchset I'm sure I'm
+> missing something obvious, can you help me understand why the idea
+> above is crazy stupid? ;)
 
-Yours,
-	-- Matti
+Ok, I looked back at what I did for v3.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Moving from v3 to v4, I decided to put less burden on LSMs, and to make
+all the processing from the LSM infrastructure side.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+v3 had some safeguards to prevent some programming mistakes by LSMs,
+which maybe made the code less understandable.
+
+However, if we say we keep things as simple as possible and assume that
+LSMs implement this correctly, we can just pass num_filled_xattrs to
+them and they simply increment it.
+
+The EVM bug should not arise (accessing xattr->name = NULL), even if
+BPF LSM alone returns zero, due to the check of num_filled_xattrs
+before calling evm_inode_init_security().
+
+Patch 6 (at the end) will prevent the bug from arising when EVM is
+moved to the LSM infrastructure (no num_filled_xattrs check anymore).
+There is a loop that stops if xattr->name is NULL, so
+evm_protected_xattr() will not be called.
+
+Or, like you suggested, we just return a positive value from LSMs and
+we keep num_filled_xattrs in security_inode_init_security().
+
+Ok, I'll go for your proposal.
+
+> > +               ret = security_check_compact_filled_xattrs(new_xattrs,
+> > +                                                          blob_sizes.lbs_xattr,
+> > +                                                          &num_filled_xattrs);
+> > +               if (ret < 0) {
+> > +                       ret = -ENOMEM;
+> > +                       goto out;
+> > +               }
+> > +       }
+> > +
+> > +       if (!num_filled_xattrs)
+> >                 goto out;
+> > 
+> > -       evm_xattr = lsm_xattr + 1;
+> > -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
+> > +       ret = evm_inode_init_security(inode, new_xattrs,
+> > +                                     new_xattrs + num_filled_xattrs);
+> >         if (ret)
+> >                 goto out;
+> >         ret = initxattrs(inode, new_xattrs, fs_data);
+> >  out:
+> >         for (xattr = new_xattrs; xattr->value != NULL; xattr++)
+> >                 kfree(xattr->value);
+> > +       kfree(new_xattrs);
+> >         return (ret == -EOPNOTSUPP) ? 0 : ret;
+> >  }
+> >  EXPORT_SYMBOL(security_inode_init_security);
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 9a5bdfc2131..3e4308dd336 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -104,6 +104,8 @@
+> >  #include "audit.h"
+> >  #include "avc_ss.h"
+> > 
+> > +#define SELINUX_INODE_INIT_XATTRS 1
+> > +
+> >  struct selinux_state selinux_state;
+> > 
+> >  /* SECMARK reference count */
+> > @@ -2868,11 +2870,11 @@ static int selinux_dentry_create_files_as(struct dentry *dentry, int mode,
+> > 
+> >  static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+> >                                        const struct qstr *qstr,
+> > -                                      const char **name,
+> > -                                      void **value, size_t *len)
+> > +                                      struct xattr *xattrs)
+> >  {
+> >         const struct task_security_struct *tsec = selinux_cred(current_cred());
+> >         struct superblock_security_struct *sbsec;
+> > +       struct xattr *xattr = NULL;
+> >         u32 newsid, clen;
+> >         int rc;
+> >         char *context;
+> > @@ -2899,16 +2901,18 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+> >             !(sbsec->flags & SBLABEL_MNT))
+> >                 return -EOPNOTSUPP;
+> > 
+> > -       if (name)
+> > -               *name = XATTR_SELINUX_SUFFIX;
+> > +       if (xattrs)
+> > +               xattr = xattrs + selinux_blob_sizes.lbs_xattr;
+> 
+> Please abstract that away to an inline function similar to
+> selinux_cred(), selinux_file(), selinux_inode(), etc.
+
+Ok.
+
+> > +       if (xattr) {
+> > +               xattr->name = XATTR_SELINUX_SUFFIX;
+> 
+> I'm guessing the xattr->name assignment is always done, regardless of
+> if security_sid_to_context_force() is successful, due to the -EINVAL
+> check in security_check_compact_filled_xattrs()?  If yes, it would be
+> good to make note of that here in the code.  If not, it would be nice
+> to move this down the function to go with the other xattr->XXX
+> assignments, unless there is another reason for its placement that I'm
+> missing.
+
+Uhm, if an LSM returns an error, security_inode_init_security() stops
+and does the cleanup. It should not matter if xattr->name was set.
+
+Thanks
+
+Roberto
+
+> > -       if (value && len) {
+> >                 rc = security_sid_to_context_force(&selinux_state, newsid,
+> >                                                    &context, &clen);
+> >                 if (rc)
+> >                         return rc;
+> > -               *value = context;
+> > -               *len = clen;
+> > +               xattr->value = context;
+> > +               xattr->value_len = clen;
+> >         }
+> > 
+> >         return 0;
+> > @@ -6918,6 +6922,7 @@ struct lsm_blob_sizes selinux_blob_sizes __lsm_ro_after_init = {
+> >         .lbs_ipc = sizeof(struct ipc_security_struct),
+> >         .lbs_msg_msg = sizeof(struct msg_security_struct),
+> >         .lbs_superblock = sizeof(struct superblock_security_struct),
+> > +       .lbs_xattr = SELINUX_INODE_INIT_XATTRS,
+> >  };
+> > 
+> >  #ifdef CONFIG_PERF_EVENTS
+> > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > index cfcbb748da2..c8cf8df268b 100644
+> > --- a/security/smack/smack_lsm.c
+> > +++ b/security/smack/smack_lsm.c
+> > @@ -52,6 +52,15 @@
+> >  #define SMK_RECEIVING  1
+> >  #define SMK_SENDING    2
+> > 
+> > +/*
+> > + * Smack uses multiple xattrs.
+> > + * SMACK64 - for access control, SMACK64EXEC - label for the program,
+> > + * SMACK64MMAP - controls library loading,
+> > + * SMACK64TRANSMUTE - label initialization,
+> > + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+> > + */
+> > +#define SMACK_INODE_INIT_XATTRS 4
+> > +
+> >  #ifdef SMACK_IPV6_PORT_LABELING
+> >  static DEFINE_MUTEX(smack_ipv6_lock);
+> >  static LIST_HEAD(smk_ipv6_port_list);
+> > @@ -939,26 +948,27 @@ static int smack_inode_alloc_security(struct inode *inode)
+> >   * @inode: the newly created inode
+> >   * @dir: containing directory object
+> >   * @qstr: unused
+> > - * @name: where to put the attribute name
+> > - * @value: where to put the attribute value
+> > - * @len: where to put the length of the attribute
+> > + * @xattrs: where to put the attributes
+> >   *
+> >   * Returns 0 if it all works out, -ENOMEM if there's no memory
+> >   */
+> >  static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+> > -                                    const struct qstr *qstr, const char **name,
+> > -                                    void **value, size_t *len)
+> > +                                    const struct qstr *qstr,
+> > +                                    struct xattr *xattrs)
+> >  {
+> >         struct inode_smack *issp = smack_inode(inode);
+> >         struct smack_known *skp = smk_of_current();
+> >         struct smack_known *isp = smk_of_inode(inode);
+> >         struct smack_known *dsp = smk_of_inode(dir);
+> > +       struct xattr *xattr = NULL;
+> >         int may;
+> > 
+> > -       if (name)
+> > -               *name = XATTR_SMACK_SUFFIX;
+> > +       if (xattrs)
+> > +               xattr = xattrs + smack_blob_sizes.lbs_xattr;
+> > +
+> > +       if (xattr) {
+> > +               xattr->name = XATTR_SMACK_SUFFIX;
+> > 
+> > -       if (value && len) {
+> >                 rcu_read_lock();
+> >                 may = smk_access_entry(skp->smk_known, dsp->smk_known,
+> >                                        &skp->smk_rules);
+> > @@ -976,11 +986,11 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+> >                         issp->smk_flags |= SMK_INODE_CHANGED;
+> >                 }
+> > 
+> > -               *value = kstrdup(isp->smk_known, GFP_NOFS);
+> > -               if (*value == NULL)
+> > +               xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > +               if (xattr->value == NULL)
+> >                         return -ENOMEM;
+> > 
+> > -               *len = strlen(isp->smk_known);
+> > +               xattr->value_len = strlen(isp->smk_known);
+> >         }
+> > 
+> >         return 0;
+> > @@ -4854,6 +4864,7 @@ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
+> >         .lbs_ipc = sizeof(struct smack_known *),
+> >         .lbs_msg_msg = sizeof(struct smack_known *),
+> >         .lbs_superblock = sizeof(struct superblock_smack),
+> > +       .lbs_xattr = SMACK_INODE_INIT_XATTRS,
+> >  };
+> > 
+> >  static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
+> > --
+> > 2.25.1
 
