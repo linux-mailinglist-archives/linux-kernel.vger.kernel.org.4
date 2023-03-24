@@ -2,255 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226946C8560
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BA46C8563
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 19:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjCXSvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 14:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S231531AbjCXSwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 14:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjCXSvt (ORCPT
+        with ESMTP id S229830AbjCXSwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:51:49 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C59270B;
-        Fri, 24 Mar 2023 11:51:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TC1n6LM1aCAMDc9WDQX1m4oiVEwuXVe5d/wq6lnaXV2hFdku/5UcGG9kHnFrRUhf5ABHqp2K3NCK353GIRpgl/Cx4SwNQ7H27/9JsQv7d290nMBmXXoTcwa9+eB6MPZbtB/x6BB1Ez+IuA4o6F5aJmYyMDLSBFg8TDgU9nSwu4kcihMzR9iG6XUAou94Qq0KRZ8OZU2Xzm1f8yIH3UN2VaNraBwhTir5NHJv5O2ZD/d8x+kBbD2T1s/yX0ItjrnkWVNo2O8HSBqo1Iz9o+SFGja802vaI6+2foDExNLYkuGnKOVIfhg21/wl4E3ciMrmZ200ARAKAiA6I8UHxymZnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XTRp0nIAhtx0YzW2i3jspM6rsZXVMyMRmOkQ8fO867g=;
- b=mtxnajkEn9wGgxpcPcvpG1jgUDAWy/cDER8PF1iC1JtAle2RmIlgOSAZnkyvkqKkdq/0MGUZV4tx+ZJIsHiHVzD+RWD5xt+d6yNWiXSbmOWKfXeamyiBUa8t2xyT/61c8wGKNGaYVZXZnCFh4YA86Kv3vnCPwUHMFYEGMhkAVNq+SMyfvr2gyziWtvtWWCiWxvnWCEfo1yabKIK2AoavGe+2I94ETFg6CkJW0aBd67HWMnMk2maakAfzlZlPUhZ+uBAJVco3Bz+y0iYI4xxhwHZ/FUwkY1KUfHXkjpqnqxzwWtkgiA9k1etxeUcGfc52VFUFyGWkWK7f19x0kzi8pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XTRp0nIAhtx0YzW2i3jspM6rsZXVMyMRmOkQ8fO867g=;
- b=FpYdwirearVN7oF9gAQsyt9Jr2NE+DvFSn5LKCnlvvjuX43NWRyG4/KpnrQ4+mdjWIz4X8awRu6Duhy3tQy6dnwe0I63XB3emSz9ifdeVVwfxh2q33bSGwthhzcER+i7f1uqYsvap7+zFKfXIZUrh/2zC/SV/OYa9ECUGjW7T3WwCgV59Exb66DwOU/61VqDcyR2RCeEyZOq+RnMV9mqr3sNMsmy6Ic6wPbhdwAPMsb6X/d84vBEeEzAgshvQq0oD8jhMaazPIMr83MzWxLCiPQhV+lZTKoCkqoeCq1s44hmVQvMj4PBRDsVRFWk5eOQj88bb1deCGWN+ECX+jJW4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
- by MN6PR12MB8516.namprd12.prod.outlook.com (2603:10b6:208:46f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Fri, 24 Mar
- 2023 18:51:44 +0000
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::735c:fa9:2043:279a]) by IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::735c:fa9:2043:279a%5]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
- 18:51:44 +0000
-Message-ID: <7f2dc5cf-78b5-81c6-0012-26b1adce1c86@nvidia.com>
-Date:   Fri, 24 Mar 2023 11:51:40 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH V4 04/10] dt-bindings: timestamp: Add
- nvidia,gpio-controller
-To:     Rob Herring <robh@kernel.org>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-References: <20230323012929.10815-1-dipenp@nvidia.com>
- <20230323012929.10815-5-dipenp@nvidia.com>
- <20230324171329.GA2062332-robh@kernel.org>
-Content-Language: en-US
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <20230324171329.GA2062332-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0070.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::15) To IA1PR12MB6604.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::7)
+        Fri, 24 Mar 2023 14:52:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A89035BE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 11:52:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id h8so11575363ede.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 11:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679683966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0NUsMoZ4vPDEoNGXohzk54SNbSs6g4GHYDuwJNIwkcc=;
+        b=Qw6N/yhpAPzyV2z5MzL5WKXBYCLiJd8CQP7otE2cL0zfhxFFLIky9FXF+iKKWLaF7p
+         L78JBlA3mzx9l7mBJgf6gcfIwMh+3Hj7Mr3DQRs5BIbz6FlxX963mHNHcv+U7B8xZ1oY
+         wyDUO4LPPVCegfifRqnwEJrAmB93QufJuLH0kcjFgtnoPb2lREdHbh+PhPvDTRun3Ib6
+         4fHCm8AS7fXNKdniXfEPKNhkzvRUFst50Ef5dUnTMtBQ5VF2dP/MbLgnZbu/VWSPNwjh
+         m4Se8gg3yHSwA4XrTMTSAeVltEoU1C22x8w7X6khkxpTG3iIOOcybvx90YZtxqIYOawc
+         N3yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679683966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NUsMoZ4vPDEoNGXohzk54SNbSs6g4GHYDuwJNIwkcc=;
+        b=invfBy4kh+MN/eahLoXXZ6gb6jrR/NDt8Tl3vnWbwEPc84FPsFCbXuHfzq4cP4TAs1
+         cHFgmQDt93NUXdfmsuu29w1sA9fXGJtyu1/Oe3hFUGmjh+m91yheIbe7kv+DMqB5gRfm
+         ZN91F2Muy8ebXpNgJBH0uABSph8x40CnsgmvaseDDf6CssPSgqp2EIsX3x1y4MRUimVh
+         yWBPPTMhE8Zm3mBXgTXthepr/mQHms5+8jQLgYy78zRlXtWQIkLekV3g0nmQyGVzg3jU
+         EMkamBeWsfddk6NY9K3o3U8WGh+fgTroAYzd+/M7z6eQoZ59heALUa++GSAvns8A5N1C
+         3SSg==
+X-Gm-Message-State: AO0yUKVhPfVgWQZ8or9hImV8xzfcf4TW6WGvIS6AbtRku/AX0C7v5rzk
+        Dx4FVOglpx9NHFsuMdLC9UAcsA==
+X-Google-Smtp-Source: AK7set8CLRlcaIJiT4m8UDQdlno7L+EJA7EXsQ41DcNtUX77qnq86VnfoStuTl26ufwdV6wCI+qZDA==
+X-Received: by 2002:a17:906:8297:b0:931:cd1b:3c0 with SMTP id h23-20020a170906829700b00931cd1b03c0mr9478205ejx.3.1679683965713;
+        Fri, 24 Mar 2023 11:52:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3027:fb0b:ae08:588? ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
+        by smtp.gmail.com with ESMTPSA id vq11-20020a170907a4cb00b0093e6f40d124sm1049217ejc.139.2023.03.24.11.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 11:52:45 -0700 (PDT)
+Message-ID: <d287ca9f-b056-d39a-aa93-b0e2cb279f73@linaro.org>
+Date:   Fri, 24 Mar 2023 19:52:44 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|MN6PR12MB8516:EE_
-X-MS-Office365-Filtering-Correlation-Id: eec32a54-2a08-4d52-661a-08db2c98d02f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SIyjqGq0z1q+sHdvUNO3lH5LvYnzgRepiuWsZhS3xEMo6xs0rZViZNSZakj5SUbiA0ttze/Dw8Z9XANs1MLgEaZIkwHIVX79NnMO9ywqnb357Tm99GRQ0xzBTSNcpGNnI+P7zMXHBrkE0ySun+ftFCNDrtMHjcgn0o3e6HYcrWTdPf7kWCQLGQEm/eISQPSCgjyk/6+JVZoAcRUQm8k8T8REAI+euGgOLFcTdO/i4naCgpF1m/EK+OHsyvCVTcapurU/lA3SSY2n46J086f2FsoM4cOSTKxW86y4wK5usEwudSHqRPBk+WnJF1wROBdCXV7bfkBXpIPmojrVOoOAVEZEQbBeHv/nvtnkP9WswbnUuzBWYf9fQnlj7Q6us24PCUmOXtuDDRFnEi+LKekAnAtr4ZjWALZn1v2OIrxBo5+DcHtNqBsk2tyEBd4Qa1FnNlUWIDkY9OHaK28egHSQUasdkjMyz7PYFaLVi5QIVMHKVDon8ROlNvLEgwpqqZGg49u6aZII3YMMM1Hb7pam/iOzwzUDA39gyCPZ7rnxpVLrsCv+5G8C7dnj3hXpXYF+xrHEoFkGBQjzlue+rw46Y1ndhuwdRvUNSTcdO3Tce78bRjUXVpnLzegXRmdOCsB4hrFH2UNE8NvuvKYOirFrCVbNqm+AVyH5lt0tYz80uz9N7H/ZFRMhPbh2MSGYEHeALm9ByMP3c+MfxM8VfYl1RJN08ndFOJBitMSjp/rveE8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199021)(2906002)(2616005)(38100700002)(4326008)(6916009)(66476007)(66946007)(66556008)(7416002)(6666004)(41300700001)(316002)(5660300002)(26005)(6512007)(186003)(6486002)(53546011)(6506007)(478600001)(83380400001)(8936002)(31686004)(8676002)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1Y2dU1LKy9TTHpFcFZ3elp0cG9HcFh5K24wamc5M3FmTGhCcWRFWUxjaWJL?=
- =?utf-8?B?TkVNWURIWER4elJ1OUxnZlNvNXd5aVdSTVEydHUwVEdKdW1LK0hkV3NYQ29M?=
- =?utf-8?B?QUlXMzdMcGVoaEdyL3VualhWUjl3Q2lUcW8rekFZVGo2WVdYSG9xWXFOSWto?=
- =?utf-8?B?TzNENVFzWlIxOGJBMVpnNXJQRWZCYXNISkNVQUlQNEZTdFlsSzRaNk1wS0ll?=
- =?utf-8?B?N240L2JlUXN3bURBTDhqYStUN2tMeHdpK0taN1hHdVV5MzdlNE1Va2ZMbnN0?=
- =?utf-8?B?YUlMc201RlExNVo0c1RMWjhyZGNZeU9wSkRPTlpibDlGeHBLajNCSS9MRUpL?=
- =?utf-8?B?elVwSlFTRVBvKzdDWTliVzFqcTNYZk1iVmdjQjZPWm5xSWV6dzM4TWJCSVNE?=
- =?utf-8?B?cFVKS2Z6S1JndUtrTU1CbTdmMjhYUUZ6WC9nQzIrMWVoQk1KTFI5dHc2d2ll?=
- =?utf-8?B?SnZ5blpENmh3bi9iRCtwOFkxNW55R25RcUg2NHEvWHYzZEFWQ1loTXJBckp3?=
- =?utf-8?B?a09HNytHLzRDdWdXSGRtVFZJb2tuSjNUR3Z0dEhDdE9qVnNDNXRZZlZSZm5j?=
- =?utf-8?B?TXI5MW52Qlk3NkJhVDNudWFpRUdOTVM4WGpDa2k1dTZqa0pvQURaQXdlRmFF?=
- =?utf-8?B?dFpmejlXQ0JpditaZUs3ZFJiUWJxSVdhS3dSbFMwc1NxNDVRdkR3Nmc2RGZl?=
- =?utf-8?B?Ym1TT213MDNmQWczQTdhcGVGd0hqdTlqYzdMU3NnZXFzbEwwRENzN2pVelBx?=
- =?utf-8?B?LzgwenB2SjRtdzR2ekdBejNrZVFuUVN5TnFqdzhhOFhIcE8rWFc1K0UrTGh5?=
- =?utf-8?B?aGh3ek1BZDJVSEFzVUszQkZEVVFnQWVlMXBWNmxJUnF2dFdocFlQOXlsNm5C?=
- =?utf-8?B?NVFiWkRHMnNnbmxOZ09YaVpxM21UY3AwaDFyeHVxQ1N2c05pSTdvZ1ZjRGRW?=
- =?utf-8?B?ekV5QVNPOHVtT3JsNTRVL0Mvak5od1NhT0JVSWRVWUR1RjJuSWp6eEppT3pn?=
- =?utf-8?B?Q0ltOCtveTh5MEVhWWVIS2gweFdQVjlzZ1NrRmQ3OWNYOHZZMWhRWUVsR2hC?=
- =?utf-8?B?OERGMzNVaGc0WWxOTEROczlKcS81ZWI2cFdiVnBRZUxsQmRIUlplL3JqRUE4?=
- =?utf-8?B?WHNram1EQmhOQWpaN2xEdlRDeVNUS3d6a1djS1lJQjErQ3hSaEMvZHdkb1lq?=
- =?utf-8?B?OHVyNHo4VTVZdEs4OXhZVmUzOXRWamQwcmIrcWFzb0F4RVRaYlVGTVhvY2Jk?=
- =?utf-8?B?aTdvbnpWVXc2RnRJNUtsN2ozUVNsMEtEWFJrZFhnOFBPU3ZlUnhWeG9Qd3da?=
- =?utf-8?B?Ui9tYzBVQy9nQmVSTDR6OU04RFZ6ZitUeFcrR3dtcXcyQmpqSUtEM092TDZD?=
- =?utf-8?B?ZHhjeXhQbEtSZGlFZnhreVowaEhGU3dIN1JiYXp4UjNMc3I2c3Rla25keEJl?=
- =?utf-8?B?eGYzOTFSMHlDcWJNeE5OUzFwZXJXS29VOWhZUGVnVlVtT3c3dTgxcVZWMlhp?=
- =?utf-8?B?UmZKWks2b3lIWlZBTStkcEgxZWJXSGlUR3pMZVNteExuMGt3NVNiTjkvWDd4?=
- =?utf-8?B?cFpnOEdwTzYzbFQ1anNGL1Y4UzVGQnY4Q2VLT3FmVUI5dUhKdUVqemxrNjFM?=
- =?utf-8?B?d0diV0hTZFZ1RWJsV0swL0RpbUY4VWYra1RzajZTbS9aS3JnbUs0N2d4N0FX?=
- =?utf-8?B?TGRBbGNVY2YvbUtZU09JUmNNY1dYdllKNzk0WTVBelZ2OVRseWFWUzJEbXpu?=
- =?utf-8?B?c2Q1U3FPK2hUcEk4Y2p4WUNQRjhSNmpPemVramF1RnZQbElFZFlYWE1JQkhw?=
- =?utf-8?B?bWxJeU9MUGpLQ3Bza3pNSEwyTFVtM1o3d04zcGNST1dMQUcyNGU0WGVjRENW?=
- =?utf-8?B?L0l6OU41ZlZqaVIwQUpLS0w1YzF5c0JualpIeUtJemJxNU0waytOblZJSXBQ?=
- =?utf-8?B?Q2pnbExPODU3RmpyMnNtOXNMWmtrS1dpUEh0UVB6NkNxN3o3YkhNUGhjbllD?=
- =?utf-8?B?ekR1Z2Z1Y3Z1dUZDVlZJbWFwUlgya3dSZXk4aGRGblMwQlVueXdjL3NHczNu?=
- =?utf-8?B?MWZkWVJoVDZwT2pHMmJUSERxYzdzZGc5K0VrNVNVMGgvVHFhaFd2RzRaeitk?=
- =?utf-8?Q?5hR1sLkZjghP9nvVIBczBEGZW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eec32a54-2a08-4d52-661a-08db2c98d02f
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 18:51:44.6898
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ep8PXmLhvIATDBoDWAFgJnhtohsxxZ+hgAcw94wLWve87zYbPQF6925gmQmzPrckwWsrDTkR9Sk0jXZjMIua5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8516
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5/9] ARM: dts: exynos: move exynos-bus nodes out of soc in
+ Exynos4412
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     replicant@osuosl.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        Henrik Grimler <henrik@grimler.se>
+References: <20230125094513.155063-1-krzysztof.kozlowski@linaro.org>
+ <20230125094513.155063-5-krzysztof.kozlowski@linaro.org>
+ <CGME20230129104220eucas1p15b70f73be86fa5600cfe170d22869836@eucas1p1.samsung.com>
+ <29841f64-360b-1426-e1fd-dd4c64ee5455@linaro.org>
+ <b3f31e71-fa1a-e0c0-fdfa-f65674ccc5cd@samsung.com>
+ <d54792c5-2842-e5b9-26b8-1f52471211a9@linaro.org>
+ <111f7364-0d7b-b4c5-721f-69c00d4619e2@samsung.com>
+ <dc0c3fa9-a6d4-e1c1-7cc8-13b206e3b31f@linaro.org>
+ <697aa7b5-9c9b-eb4f-8111-c9a396d9d191@linaro.org>
+ <6a9fcdc9-3fe7-e8fc-3a51-385d516c6323@samsung.com>
+ <a72f8b1a-1fcc-a090-69e7-f56072185e81@linaro.org>
+ <9e5d9952-0295-40b2-5f4b-a1412cc933ce@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9e5d9952-0295-40b2-5f4b-a1412cc933ce@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 10:13 AM, Rob Herring wrote:
-> On Wed, Mar 22, 2023 at 06:29:23PM -0700, Dipen Patel wrote:
->> Introducing nvidia,gpio-controller property from Tegra234 SoCs onwards.
->> This is done to help below case.
->>
->> Without this property code would look like:
->> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
->> 	hte_dev->c = gpiochip_find("tegra194-gpio-aon",
->> 				   tegra_get_gpiochip_from_name);
->> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-aon"))
->> 	hte_dev->c = gpiochip_find("tegra234-gpio-aon",
->> 				   tegra_get_gpiochip_from_name);
->> else
->> 	return -ENODEV;
+On 24/03/2023 18:07, Marek Szyprowski wrote:
+> On 06.02.2023 17:12, Krzysztof Kozlowski wrote:
+>> On 03/02/2023 23:50, Marek Szyprowski wrote:
+>>> On 03.02.2023 22:12, Krzysztof Kozlowski wrote:
+>>>> On 03/02/2023 21:34, Krzysztof Kozlowski wrote:
+>>>>> On 03/02/2023 12:51, Marek Szyprowski wrote:
+>>>>>> On 03.02.2023 12:46, Krzysztof Kozlowski wrote:
+>>>>>>> On 03/02/2023 12:45, Marek Szyprowski wrote:
+>>>>>>>> On 29.01.2023 11:42, Krzysztof Kozlowski wrote:
+>>>>>>>>> On 25/01/2023 10:45, Krzysztof Kozlowski wrote:
+>>>>>>>>>> The soc node is supposed to have only device nodes with MMIO addresses,
+>>>>>>>>>> as reported by dtc W=1:
+>>>>>>>>>>
+>>>>>>>>>>       exynos4412.dtsi:407.20-413.5:
+>>>>>>>>>>         Warning (simple_bus_reg): /soc/bus-acp: missing or empty reg/ranges property
+>>>>>>>>>>
+>>>>>>>>>> and dtbs_check:
+>>>>>>>>>>
+>>>>>>>>>>       exynos4412-i9300.dtb: soc: bus-acp:
+>>>>>>>>>>         {'compatible': ['samsung,exynos-bus'], 'clocks': [[7, 456]], 'clock-names': ['bus'], 'operating-points-v2': [[132]], 'status': ['okay'], 'devfreq': [[117]]} should not be valid under {'type': 'object'}
+>>>>>>>>>>
+>>>>>>>>>> Move the bus nodes and their OPP tables out of SoC to fix this.
+>>>>>>>>>> Re-order them alphabetically while moving and put some of the OPP tables
+>>>>>>>>>> in device nodes (if they are not shared).
+>>>>>>>>>>
+>>>>>>>>> Applied.
+>>>>>>>> I don't have a good news. It looks that this change is responsible for
+>>>>>>>> breaking boards that were rock-stable so far, like Odroid U3. I didn't
+>>>>>>>> manage to analyze what exactly causes the issue, but it looks that the
+>>>>>>>> exynos-bus devfreq driver somehow depends on the order of the nodes:
+>>>>>>>>
+>>>>>>>> (before)
+>>>>>>>>
+>>>>>>>> # dmesg | grep exynos-bus
+>>>>>>>> [    6.415266] exynos-bus: new bus device registered: soc:bus-dmc
+>>>>>>>> (100000 KHz ~ 400000 KHz)
+>>>>>>>> [    6.422717] exynos-bus: new bus device registered: soc:bus-acp
+>>>>>>>> (100000 KHz ~ 267000 KHz)
+>>>>>>>> [    6.454323] exynos-bus: new bus device registered: soc:bus-c2c
+>>>>>>>> (100000 KHz ~ 400000 KHz)
+>>>>>>>> [    6.489944] exynos-bus: new bus device registered: soc:bus-leftbus
+>>>>>>>> (100000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.493990] exynos-bus: new bus device registered: soc:bus-rightbus
+>>>>>>>> (100000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.494612] exynos-bus: new bus device registered: soc:bus-display
+>>>>>>>> (160000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.494932] exynos-bus: new bus device registered: soc:bus-fsys
+>>>>>>>> (100000 KHz ~ 134000 KHz)
+>>>>>>>> [    6.495246] exynos-bus: new bus device registered: soc:bus-peri (
+>>>>>>>> 50000 KHz ~ 100000 KHz)
+>>>>>>>> [    6.495577] exynos-bus: new bus device registered: soc:bus-mfc
+>>>>>>>> (100000 KHz ~ 200000 KHz)
+>>>>>>>>
+>>>>>>>> (after)
+>>>>>>>>
+>>>>>>>> # dmesg | grep exynos-bus
+>>>>>>>>
+>>>>>>>> [    6.082032] exynos-bus: new bus device registered: bus-dmc (100000
+>>>>>>>> KHz ~ 400000 KHz)
+>>>>>>>> [    6.122726] exynos-bus: new bus device registered: bus-leftbus
+>>>>>>>> (100000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.146705] exynos-bus: new bus device registered: bus-mfc (100000
+>>>>>>>> KHz ~ 200000 KHz)
+>>>>>>>> [    6.181632] exynos-bus: new bus device registered: bus-peri ( 50000
+>>>>>>>> KHz ~ 100000 KHz)
+>>>>>>>> [    6.204770] exynos-bus: new bus device registered: bus-rightbus
+>>>>>>>> (100000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.211087] exynos-bus: new bus device registered: bus-acp (100000
+>>>>>>>> KHz ~ 267000 KHz)
+>>>>>>>> [    6.216936] exynos-bus: new bus device registered: bus-c2c (100000
+>>>>>>>> KHz ~ 400000 KHz)
+>>>>>>>> [    6.225748] exynos-bus: new bus device registered: bus-display
+>>>>>>>> (160000 KHz ~ 200000 KHz)
+>>>>>>>> [    6.242978] exynos-bus: new bus device registered: bus-fsys (100000
+>>>>>>>> KHz ~ 134000 KHz)
+>>>>>>>>
+>>>>>>>> This is definitely a driver bug, but so far it worked fine, so this is a
+>>>>>>>> regression that need to be addressed somehow...
+>>>>>>> Thanks for checking, but what is exactly the bug? The devices registered
+>>>>>>> - just with different name.
+>>>>>> The bug is that the board fails to boot from time to time, freezing
+>>>>>> after registering PPMU counters...
+>>>>> My U3 with and without this patch, reports several warnings:
+>>>>> iommu_group_do_set_platform_dma()
+>>>>> exynos_iommu_domain_free()
+>>>>> clk_core_enable()
+>>>>>
+>>>>> and finally:
+>>>>> rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+>>>>>
+>>>>> and keeps stalling.
+>>>>>
+>>>>> At least on next-20230203. Except all these (which anyway make board
+>>>>> unbootable) look fine around PMU and exynos-bus.
+>>>> I also booted few times my next/dt branch (with this patch) and no
+>>>> problems. How reproducible is the issue you experience?
+>>> IOMMU needs a fixup, that has been merged today:
+>>>
+>>> https://lore.kernel.org/all/20230123093102.12392-1-m.szyprowski@samsung.com/
+>>>
+>>> I was initially convinced that this freeze is somehow related to this
+>>> IOMMU fixup, but it turned out that the devfreq is a source of the problems.
+>>>
+>>> The freeze happens here about 1 of 10 boots, usually with kernel
+>>> compiled from multi_v7_defconfig, while loading the PPMU modules. It
+>>> happens on your next/dt branch too.
+>> I was able to reproduce it easily with multi_v7. Then I commented out
+>> dmc bus which fixed the issue. Then I commented out acp and c2c buses
+>> (children/passive) which also fixed the issue. Then I uncommented
+>> everything and went back to next/dt - exactly the same as it was failing
+>> - and since then I cannot reproduce it. I triple checked, but now my
+>> multi_v7 on U3 on next/dt boots perfectly fine. Every time.
 > 
-> Or you just put the name in match data.
+> This issue still happens from time to time. I quick workaround to fix it 
+> is to add:
+> 
+> MODULE_SOFTDEP("pre: exynos_ppmu");
+> 
+> to the exynos-bus driver. Is it acceptable solution?
 
-Not sure I have understood this comment, but "name" the first argument is
-already there to supply to callback to match data. Also, this if else is
-needed to know which "name" to provide.
-> 
->>
->> This means for every future addition of the compatible string, if else
->> condition statements have to be expanded.
->>
->> With the property:
->> gpio_ctrl = of_parse_phandle(dev->of_node, "nvidia,gpio-controller", 0);
->> ....
->> hte_dev->c = gpiochip_find(gpio_ctrl, tegra_get_gpiochip_from_of_node);
->>
->> This simplifies the code significantly. The introdunction of this
-> 
-> typo
+I initially thought it might be caused by deferred probe, but it happens
+even in successful boot. I guess we can go with this workaround because
+I really do not have other idea.
 
-ACK...
-> 
->> property/binding does not break existing Tegra194 provider driver.
-> 
-> Making a new property required is an ABI break.
-The driver code for the Tegra194 binds by old binding and does not need
-this new property, the relevant code is part of this patch series.
-> 
->> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
->> ---
->>  .../timestamp/nvidia,tegra194-hte.yaml        | 31 +++++++++++++++++--
->>  1 file changed, 29 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> index eafc33e9ae2e..841273a3d8ae 100644
->> --- a/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> +++ b/Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
->> @@ -51,6 +51,12 @@ properties:
->>        LIC instance has 11 slices and Tegra234 LIC has 17 slices.
->>      enum: [3, 11, 17]
->>  
->> +  nvidia,gpio-controller:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      The phandle to AON gpio controller instance. This is required to handle
->> +      namespace conversion between GPIO and GTE.
-> 
-> Explain what the GPIO controller is needed for rather than how this 
-> changes the driver.
-Doesn't "This is required..." statement addresses why GPIO controller is needed
-for part? Or do you want detail explanation which is already part of the commit?
-> 
->> +
->>    '#timestamp-cells':
->>      description:
->>        This represents number of line id arguments as specified by the
->> @@ -65,22 +71,43 @@ required:
->>    - interrupts
->>    - "#timestamp-cells"
->>  
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - nvidia,tegra234-gte-aon
->> +    then:
->> +      required:
->> +        - nvidia,gpio-controller
-> 
->> +
->>  additionalProperties: false
->>  
->>  examples:
->>    - |
->>      tegra_hte_aon: timestamp@c1e0000 {
->>                compatible = "nvidia,tegra194-gte-aon";
->> -              reg = <0xc1e0000 0x10000>;
->> +              reg = <0x0 0xc1e0000 0x0 0x10000>;
->> +              interrupts = <0 13 0x4>;
->> +              nvidia,int-threshold = <1>;
->> +              #timestamp-cells = <1>;
->> +    };
->> +
->> +  - |
->> +    tegra234_hte_aon: timestamp@c1e0000 {
->> +              compatible = "nvidia,tegra234-gte-aon";
->> +              reg = <0x0 0xc1e0000 0x0 0x10000>;
->>                interrupts = <0 13 0x4>;
->>                nvidia,int-threshold = <1>;
->> +              nvidia,gpio-controller = <&gpio_aon>;
->>                #timestamp-cells = <1>;
->>      };
->>  
->>    - |
->>      tegra_hte_lic: timestamp@3aa0000 {
->>                compatible = "nvidia,tegra194-gte-lic";
->> -              reg = <0x3aa0000 0x10000>;
->> +              reg = <0x0 0x3aa0000 0x0 0x10000>;
->>                interrupts = <0 11 0x4>;
->>                nvidia,int-threshold = <1>;
->>                #timestamp-cells = <1>;
->> -- 
->> 2.17.1
->>
+Best regards,
+Krzysztof
 
