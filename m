@@ -2,309 +2,673 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3C06C7E17
+	by mail.lfdr.de (Postfix) with ESMTP id 584F26C7E18
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjCXMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S231501AbjCXMcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjCXMcN (ORCPT
+        with ESMTP id S230399AbjCXMcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:32:13 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F5C9010
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1679661108;
-        bh=bbY7fKmOGZlbBs0GEtdCsGyFjjGMwhT2jcpGl3ev/TY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rY+ccjp/85u8ItujvEpb1pfi4OpOnJm6TJatCUXIqV9reOpDwrjI+M2QosQkL98Bj
-         LS3RfELlMgAEHHjnZPg/wqUEIrMkC0PwGGazFoC6npCdxYOPMBirWKKT6Eyuj7xti/
-         IJcBFW1O1VXTS8r4vkaD2KgP0D92qUF3VjDSv0sO7MOJysaD/Fru+NXXJmvCU7xQth
-         tuN1CQldqlKp/XL6hogNJEr7XVnVB/MDCVLV+wIsW6o0cYVMAvQBweTZ9YCKkorT9C
-         GlsXxlnSQRxv58+bsdBBJubiZhyzZTyeVXbFjHeAk1PWicZPu8j+kUBoZ3hut3StYB
-         4HTfGotsAricw==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PjhR80crdzt63;
-        Fri, 24 Mar 2023 08:31:48 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Rutland <mark.rutlnand@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3] tracepoint: Fix CFI failures with tp_sub_func
-Date:   Fri, 24 Mar 2023 08:31:42 -0400
-Message-Id: <20230324123142.7463-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Mar 2023 08:32:12 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBE34C04;
+        Fri, 24 Mar 2023 05:32:03 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 640B732009DB;
+        Fri, 24 Mar 2023 08:32:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 24 Mar 2023 08:32:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679661120; x=1679747520; bh=Ka
+        l7h6ja/GucBRhylyeLS0auVfpAQYDhDeEDhY9FtEg=; b=Cqb60qKjGZRU8b82ml
+        mQaK9z2xC54tOkyO/EVRwLQ2lO2RUOMyAXmylkbtF7IbSP3+kiMTV9WZB924mo+z
+        Bfv35R/XQ2gFa7oiZurf2rgVoRvqMF9MlhxWGR311E9swbNDeazKlI1ONXV3tANr
+        ceKDFXrHQYsMQLkkf11MQK/+EkstuR9wZIFcJFNJGzAtmyW8Hdh5zQ/UY9VaK/4N
+        N6wgF7C5lt0WiWLshQw8XUEQT6h06BvFfLtQVD5cIai9rzuOCV17yaAQAtxl7xGn
+        hMDY5FQRRUySGfoKcma/wIDPkCAQGTKrIRyF9UySv2GMx6Q/QJH8BFw39Q5lYEjS
+        Greg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679661120; x=1679747520; bh=Kal7h6ja/GucB
+        RhylyeLS0auVfpAQYDhDeEDhY9FtEg=; b=GTjkL1MJHPNexoGfEDZVItQPV6pzX
+        wxsb1QzGcw/eNFgd2Md8yHS+TUOfEw7EqBXlJjCNzpn7LLl/Q+iQGpPQahYJ3BGb
+        KO+Ck1VbB6SlZpLVSFBeOh7s9v8fY4aBH1CpPEeWSRWJXQFpxFFZoL4gPjatqJ6G
+        zAcPlHuwLQvZWuuBaAYVScC63OBITMVJUEBTXai64/G44KbHXFsLy/G5nqS7NHDC
+        8cAJktX0W5u6Zemr4UyJ6nXJmKQVteEqJRpGhfsZTTDm2PreHGoIplYxTsypIebY
+        8vnv2NVmjeQUJ8iYwIn3q2UuhumEUGE2WRmgcVio4LCYhnE55EpRbDDFQ==
+X-ME-Sender: <xms:P5gdZICuEyYfqNSe5MmH-QOgp2UyANo2YMckfsj7tHKdYA7EG3WHAg>
+    <xme:P5gdZKhoHgsAPul-Zq7JIKa4j7hbf2p9BUcBaOIFbQ_uHRNOoTiGqFctrlfTlnEyU
+    gS7Ny4y2hLwXtfidmo>
+X-ME-Received: <xmr:P5gdZLnXOTBGIOp3u3ARlUNnbxsjbPGJwgcwJSApV3XzkYRMXYO0Nc_jqEwbU3NXSecg8g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:P5gdZOx74BHzquwznp5BPpUgTFoznW9T-v748hXySh_tBLkViiZH7Q>
+    <xmx:P5gdZNSPvm2sjCrMA-ciswjkxnG-9UX0PH7To1a1h8GMikHROUipWw>
+    <xmx:P5gdZJZRst-vOfp7CKCijRrW_fh1x_ULDkwOsj6t6zfwuPcShYrClA>
+    <xmx:QJgdZIlt9jDXqRw-PxpgvbiWMc3zVFJuH1bD3PVu7PERYqFRYDnPkQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Mar 2023 08:31:59 -0400 (EDT)
+Date:   Fri, 24 Mar 2023 13:31:57 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230324123157.bbwvfq4gsxnlnfwb@houat>
+References: <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat>
+ <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d2sexxycsppzqwxl"
+Content-Disposition: inline
+In-Reply-To: <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CLANG_CFI is in use, using tracing will occasionally result in
-CFI failures, e.g.
 
-| CFI failure at syscall_trace_enter+0x66c/0x7d0 (target: tp_stub_func+0x0/0x2c; expected type: 0x4877830c)
-| Internal error: Oops - CFI: 00000000f200823a [#1] PREEMPT SMP
-| CPU: 2 PID: 118 Comm: klogd Not tainted 6.3.0-rc3-00002-gc242ea6f2f98 #2
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 30400005 (nzCV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-| pc : syscall_trace_enter+0x66c/0x7d0
-| lr : syscall_trace_enter+0x5e8/0x7d0
-| sp : ffff800015ce7d80
-| x29: ffff800015ce7d80 x28: ffff000017538000 x27: 0000000000000003
-| x26: ffff8000084c9454 x25: ffff00001182bd10 x24: dfff800000000000
-| x23: 1fffe00002ea7001 x22: ffff00001182bd10 x21: ffff000017538008
-| x20: ffff000017538000 x19: ffff800015ce7eb0 x18: 0000000000000000
-| x17: 000000004877830c x16: 00000000a540670c x15: 0000000000000000
-| x14: 0000000000000000 x13: 0000000000000000 x12: ff80800008039d8c
-| x11: ff80800008039dd0 x10: 0000000000000000 x9 : 0000000000000000
-| x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-| x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-| x2 : 00000000000000ce x1 : ffff800015ce7eb0 x0 : ffff800013d55000
-| Call trace:
-|  syscall_trace_enter+0x66c/0x7d0
-|  el0_svc_common+0x1dc/0x268
-|  do_el0_svc+0x70/0x1a4
-|  el0_svc+0x58/0x14c
-|  el0t_64_sync_handler+0x84/0xf0
-|  el0t_64_sync+0x190/0x194
-| Code: 72906191 72a90ef1 6b11021f 54000040 (d4304740)
-| ---[ end trace 0000000000000000 ]---
+--d2sexxycsppzqwxl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This happens because the function prototype of tp_sub_func doesn't match
-the prototype of the tracepoint function. As each tracepoint may have a
-distinct prototype, it's not possible to share a common stub function.
+On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
+> On 3/23/23 18:36, Maxime Ripard wrote:
+> > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> > > On 3/23/23 14:29, Maxime Ripard wrote:
+> > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> > > >=20
+> > > > This is the description of what was happening:
+> > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@h=
+ouat/
+> > >=20
+> > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not being=
+ done
+> > > when root_device_register() is used is not because root_device_unregi=
+ster()
+> > > would not trigger the unwinding - but rather because DRM code on top =
+of this
+> > > device keeps the refcount increased?
+> >=20
+> > There's a difference of behaviour between a root_device and any device
+> > with a bus: the root_device will only release the devm resources when
+> > it's freed (in device_release), but a bus device will also do it in
+> > device_del (through bus_remove_device() -> device_release_driver() ->
+> > device_release_driver_internal() -> __device_release_driver() ->
+> > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > there's no bus and no driver attached to the device).
+> >=20
+> > It does affect DRM, but I'm pretty sure it will affect any framework
+> > that deals with device hotplugging by deferring the framework structure
+> > until the last (userspace) user closes its file descriptor. So I'd
+> > assume that v4l2 and cec at least are also affected, and most likely
+> > others.
+>=20
+> Thanks for the explanation and patience :)
+>=20
+> >=20
+> > > If this is the case, then it sounds like a DRM specific issue to me.
+> >=20
+> > I mean, I guess. One could also argue that it's because IIO doesn't
+> > properly deal with hotplugging.
+>=20
+> I must say I haven't been testing the IIO registration API. I've only tes=
+ted
+> the helper API which is not backed up by any "IIO device". (This is fine =
+for
+> the helper because it must by design be cleaned-up only after the
+> IIO-deregistration).
+>=20
+> After your explanation here, I am not convinced IIO wouldn't see the same
+> issue if I was testing the devm_iio_device_alloc() & co.
 
-Avoid this by comparing the tracepoint function pointer to the value 1
-before calling each function.
+It depends really. The issue DRM is trying to solve is that, when a
+device is gone, some application might still have an open FD and could
+still poke into the kernel, while all the resources would have been
+free'd if it was using devm.
 
-Prior to this change, it_func_ptr->func was loaded twice per loop
-iteration:
+So everything is kept around until the last fd is closed, so you still
+have a reference to the device (even though it's been removed from its
+bus) until that time.
 
-    it_func = READ_ONCE((it_func_ptr)->func);
-[...]
-  } while ((++it_func_ptr)->func);
+It could be possible that IIO just doesn't handle that case at all. I
+guess most of the devices aren't hotpluggable, and there's not much to
+interact with from a userspace PoV iirc, so it might be why.
 
-With this change, the loaded it_func is used for comparisons with 0 (end
-of loop), 1 (skip) and as a function pointer, thus saving a load per
-loop.
+> > I'm not sure how that helps. Those are
+> > common helpers which should accommodate every framework,
+>=20
+> Ok. Fair enough. Besides, if the root-device was sufficient - then I would
+> actually not see the need for a helper. People could in that case directly
+> use the root_device_register(). So, if helpers are provided they should be
+> backed up by a device with a bus then.
+>=20
+> > and your second
+> > patch breaks the kunit tests for DRM anyway.
+>=20
+> Oh, I must have made an error there. It was supposed to be just a
+> refactoring with no functional changes. Sorry about that. Anyways, that
+> patch can be forgotten as Greg opposes using the platform devices in gene=
+ric
+> helpers.
+>=20
+> > > Whether it is a feature or bug is beyond my knowledge. Still, I would
+> > > not say using the root_device_[un]register() in generic code is not
+> > > feasible - unless all other subsytems have similar refcount handling.
+> > >=20
+> > > Sure thing using root_device_register() root_device_unregister() in D=
+RM does
+> > > not work as such. This, however, does not mean the generic kunit help=
+ers
+> > > should use platform_devices to force unwinding?
+> >=20
+> > platform_devices were a quick way to get a device that would have a bus
+> > and a driver bound to fall into the right patch above. We probably
+> > shouldn't use platform_devices and a kunit_device sounds like the best
+> > idea, but the test linked in the original mail I pointed you to should
+> > work with whatever we come up with. It works with multiple (platform,
+> > PCI, USB, etc) buses, so the mock we create should behave like their
+> > real world equivalents.
+>
+> Thanks for the patience and the explanation. Now I understand a generic t=
+est
+> device needs to sit on a bus.
+>=20
+> As I said, in my very specific IIO related test the test device does not
+> need a bus. Hence I'll drop the 'generic helpers' from this series.
 
-The comparison with <= TRACEPOINT_FUNC_SKIP is done on purpose to branch
-over both comparisons with 0 and 1 with a single branch for each loop
-and an extra conditional branch on the last loop to compare with 0.
+So, I went around and created a bunch of kunit tests that shows the
+problem without DRM being involved at all.
 
-A simplified example of this compiled on godbolt.org:
+It does three things:
 
-  #include <stdint.h>
+ - It registers a device, attaches a devm action, unregisters the device
+   and then checks that the action has ran.
 
-  typedef void (*f_t)(void);
-  volatile f_t *arr;
+ - It registers a device, gets a reference to it, attaches a devm
+   action, puts back the reference, unregisters the device and then
+   checks that the action has ran.
 
-  void fct(void)
-  {
-      volatile f_t *iter = &arr[0];
+ - It registers a device, gets a reference to it, attaches a devm action
+   that will put back the reference, unregisters the device and then
+   checks that the action has ran.
 
-      for (;;) {
-          f_t l_iter = *iter;
-          if (((uintptr_t)l_iter <= 0x1)) {
-              if ((uintptr_t)l_iter == 0x1)
-                  continue;
-              else
-                  break;
-          }
-          l_iter();
-          iter++;
-      }
-  }
+And in three cases: first with a root_device, then platform_device, then
+a platform_device that has been bound to a driver.
 
-Generates:
+Once you've applied that patch, you can run it using:
 
-x86-64 gcc 12.2 -O2:
+=2E/tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/ dev=
+m-inconsistencies
 
-  fct:
-          push    rbx
-          mov     rbx, QWORD PTR arr[rip]
-  .L29:
-          mov     rax, QWORD PTR [rbx]
-          cmp     rax, 1
-          jbe     .L38
-  .L30:
-          call    rax
-          mov     rax, QWORD PTR [rbx+8]
-          add     rbx, 8
-          cmp     rax, 1
-          ja      .L30
-  .L38:
-          je      .L29
-          pop     rbx
-          ret
+You'll see that only the last case passes all the tests, even though the
+code itself is exactly the same.
 
-clang 16.0.0 -O2:
+Maxime
 
-  fct:                                    # @fct
-          push    rbx
-          mov     rbx, qword ptr [rip + arr]
-  .LBB0_1:                                # =>This Inner Loop Header: Depth=1
-          mov     rax, qword ptr [rbx]
-          cmp     rax, 1
-          ja      .LBB0_4
-          je      .LBB0_1
-          jmp     .LBB0_3
-  .LBB0_4:                                #   in Loop: Header=BB0_1 Depth=1
-          call    rax
-          add     rbx, 8
-          jmp     .LBB0_1
-  .LBB0_3:
-          pop     rbx
-          ret
-  arr:
-          .quad   0
+-- >8 --
+diff --git a/drivers/base/test/.kunitconfig b/drivers/base/test/.kunitconfig
+new file mode 100644
+index 000000000000..473923f0998b
+--- /dev/null
++++ b/drivers/base/test/.kunitconfig
+@@ -0,0 +1,2 @@
++CONFIG_KUNIT=3Dy
++CONFIG_DM_KUNIT_TEST=3Dy
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 610a1ba7a467..9d42051f8f8e 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -9,6 +9,10 @@ config TEST_ASYNC_DRIVER_PROBE
 
-On x86, the result of the "cmp" instruction is used to conditionally
-branch based on both inequality (jbe, ja) and equality (je), thus
-keeping the code size small and limiting the number of instructions to
-execute on this tracepoint instrumentation fast path.
+ 	  If unsure say N.
 
-Reported-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Tested-by: Mark Rutland <mark.rutlnand@arm.com>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
-Changes since v2:
-- Fix typo in commit message.
-- Add acked-by, tested-by.
----
- include/linux/tracepoint.h | 14 ++++++++++++--
- kernel/tracepoint.c        | 20 +++++++-------------
- 2 files changed, 19 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 4b33b95eb8be..0aeac249d412 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -33,6 +33,9 @@ struct trace_eval_map {
- 
- #define TRACEPOINT_DEFAULT_PRIO	10
- 
-+/* Reserved value for tracepoint callback. */
-+#define TRACEPOINT_FUNC_SKIP	((void *) 0x1)
++config DM_KUNIT_TEST
++	tristate "KUnit Tests for the device model" if !KUNIT_ALL_TESTS
++	depends on KUNIT
 +
- extern struct srcu_struct tracepoint_srcu;
- 
- extern int
-@@ -314,11 +317,18 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		it_func_ptr =						\
- 			rcu_dereference_raw((&__tracepoint_##_name)->funcs); \
- 		if (it_func_ptr) {					\
--			do {						\
-+			for (;;) {					\
- 				it_func = READ_ONCE((it_func_ptr)->func); \
-+				if ((uintptr_t) it_func <= (uintptr_t) TRACEPOINT_FUNC_SKIP) { \
-+					if (it_func == TRACEPOINT_FUNC_SKIP) \
-+						continue;		\
-+					else				\
-+						break;			\
-+				}					\
- 				__data = (it_func_ptr)->data;		\
- 				((void(*)(void *, proto))(it_func))(__data, args); \
--			} while ((++it_func_ptr)->func);		\
-+				it_func_ptr++;				\
-+			}						\
- 		}							\
- 		return 0;						\
- 	}								\
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index f23144af5743..2fa108ddbbc2 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -98,12 +98,6 @@ struct tp_probes {
- 	struct tracepoint_func probes[];
- };
- 
--/* Called in removal of a func but failed to allocate a new tp_funcs */
--static void tp_stub_func(void)
--{
--	return;
--}
--
- static inline void *allocate_probes(int count)
- {
- 	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),
-@@ -193,8 +187,8 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
- 	if (old) {
- 		/* (N -> N+1), (N != 0, 1) probes */
- 		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
--			if (old[iter_probes].func == tp_stub_func)
--				continue;	/* Skip stub functions. */
-+			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
-+				continue;
- 			if (old[iter_probes].func == tp_func->func &&
- 			    old[iter_probes].data == tp_func->data)
- 				return ERR_PTR(-EEXIST);
-@@ -208,7 +202,7 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
- 	if (old) {
- 		nr_probes = 0;
- 		for (iter_probes = 0; old[iter_probes].func; iter_probes++) {
--			if (old[iter_probes].func == tp_stub_func)
-+			if (old[iter_probes].func == TRACEPOINT_FUNC_SKIP)
- 				continue;
- 			/* Insert before probes of lower priority */
- 			if (pos < 0 && old[iter_probes].prio < prio)
-@@ -246,7 +240,7 @@ static void *func_remove(struct tracepoint_func **funcs,
- 		for (nr_probes = 0; old[nr_probes].func; nr_probes++) {
- 			if ((old[nr_probes].func == tp_func->func &&
- 			     old[nr_probes].data == tp_func->data) ||
--			    old[nr_probes].func == tp_stub_func)
-+			    old[nr_probes].func == TRACEPOINT_FUNC_SKIP)
- 				nr_del++;
- 		}
- 	}
-@@ -269,7 +263,7 @@ static void *func_remove(struct tracepoint_func **funcs,
- 			for (i = 0; old[i].func; i++) {
- 				if ((old[i].func != tp_func->func ||
- 				     old[i].data != tp_func->data) &&
--				    old[i].func != tp_stub_func)
-+				    old[i].func != TRACEPOINT_FUNC_SKIP)
- 					new[j++] = old[i];
- 			}
- 			new[nr_probes - nr_del].func = NULL;
-@@ -277,12 +271,12 @@ static void *func_remove(struct tracepoint_func **funcs,
- 		} else {
- 			/*
- 			 * Failed to allocate, replace the old function
--			 * with calls to tp_stub_func.
-+			 * with TRACEPOINT_FUNC_SKIP.
- 			 */
- 			for (i = 0; old[i].func; i++) {
- 				if (old[i].func == tp_func->func &&
- 				    old[i].data == tp_func->data)
--					WRITE_ONCE(old[i].func, tp_stub_func);
-+					WRITE_ONCE(old[i].func, TRACEPOINT_FUNC_SKIP);
- 			}
- 			*funcs = old;
- 		}
--- 
-2.25.1
+ config DRIVER_PE_KUNIT_TEST
+ 	bool "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=3Dy
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index 7f76fee6f989..31bcaa743e94 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+=3D test_async_driver_probe.o
 
++obj-$(CONFIG_DM_KUNIT_TEST)	+=3D test-devm-cleanup.o
++
+ obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) +=3D property-entry-test.o
+ CFLAGS_property-entry-test.o +=3D $(DISABLE_STRUCTLEAK_PLUGIN)
+diff --git a/drivers/base/test/test-devm-cleanup.c b/drivers/base/test/test=
+-devm-cleanup.c
+new file mode 100644
+index 000000000000..bad3cb1385b1
+--- /dev/null
++++ b/drivers/base/test/test-devm-cleanup.c
+@@ -0,0 +1,353 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/resource.h>
++
++#include <linux/device.h>
++#include <linux/platform_device.h>
++
++#define DEVICE_NAME "test"
++
++struct test_priv {
++	bool probe_done;
++	bool release_done;
++	wait_queue_head_t release_wq;
++	struct device *dev;
++};
++
++static void devm_device_action(void *ptr)
++{
++	struct test_priv *priv =3D ptr;
++
++	priv->release_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++}
++
++static void devm_put_device_action(void *ptr)
++{
++	struct test_priv *priv =3D ptr;
++
++	put_device(priv->dev);
++	priv->release_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++}
++
++#define RELEASE_TIMEOUT_MS	500
++
++static void root_device_register_unregister_test(struct kunit *test)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void root_device_register_get_put_unregister_test(struct kunit *tes=
+t)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void root_device_register_get_unregister_with_devm_test(struct kuni=
+t *test)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_unregister_test(struct kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_get_put_unregister_test(struct kunit =
+*test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_get_unregister_with_devm_test(struct =
+kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static int fake_probe(struct platform_device *pdev)
++{
++	struct test_priv *priv =3D platform_get_drvdata(pdev);
++
++	priv->probe_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++
++	return 0;
++}
++
++static struct platform_driver fake_driver =3D {
++	.probe	=3D fake_probe,
++	.driver =3D {
++		.name =3D DEVICE_NAME,
++	},
++};
++
++static void probed_platform_device_register_unregister_test(struct kunit *=
+test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static void probed_platform_device_register_get_put_unregister_test(struct=
+ kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static void probed_platform_device_register_get_unregister_with_devm_test(=
+struct kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static struct kunit_case devm_inconsistencies_tests[] =3D {
++	KUNIT_CASE(root_device_register_unregister_test),
++	KUNIT_CASE(root_device_register_get_put_unregister_test),
++	KUNIT_CASE(root_device_register_get_unregister_with_devm_test),
++	KUNIT_CASE(platform_device_register_unregister_test),
++	KUNIT_CASE(platform_device_register_get_put_unregister_test),
++	KUNIT_CASE(platform_device_register_get_unregister_with_devm_test),
++	KUNIT_CASE(probed_platform_device_register_unregister_test),
++	KUNIT_CASE(probed_platform_device_register_get_put_unregister_test),
++	KUNIT_CASE(probed_platform_device_register_get_unregister_with_devm_test),
++	{}
++};
++
++static struct kunit_suite devm_inconsistencies_test_suite =3D {
++	.name =3D "devm-inconsistencies",
++	.test_cases =3D devm_inconsistencies_tests,
++};
++
++kunit_test_suite(devm_inconsistencies_test_suite);
+-- >8 --
+
+--d2sexxycsppzqwxl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZB2YPQAKCRDj7w1vZxhR
+xY2CAP9uiQnzSZz+fCSPOb9shPv+jtpVPDbKEW/s+RjRHWmBmAEAtQXtrJyujBhA
+BR+9PUr5nAEOF+2XdVPca6xc4ugdCw0=
+=KY+G
+-----END PGP SIGNATURE-----
+
+--d2sexxycsppzqwxl--
