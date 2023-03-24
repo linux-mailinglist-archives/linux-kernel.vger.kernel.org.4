@@ -2,71 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA676C78E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E666C78E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbjCXHbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S231681AbjCXHcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjCXHbO (ORCPT
+        with ESMTP id S230071AbjCXHcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:31:14 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1852D10C8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:31:14 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id z33so216194qko.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:31:14 -0700 (PDT)
+        Fri, 24 Mar 2023 03:32:12 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28726FF14
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:32:06 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id k15so588234pgt.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679643073;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zv+/okQpvLPeEesFbW+f0IeMoL7WJaBwrI7ka3EB5Nc=;
-        b=eeCN/q6MxHO0ki4tWoq9xAJhL0mehJfTlnEboKNHkBSveOGhiYijONV3Uamwqjabar
-         JIgu6OqEdtk2SQHNeKvQh9Fzeq7cgxzCwLbsMmeUHhakKyDyLdwJ6P2LTei4Yfmts4Qx
-         8mQDxSud0Z3w+14O8CVRxE/Jl7wdw5J29AqIGpwLV4P1nOEOGuj0QTx5/2ueBT6GYSnq
-         f5yitxZjp/yfG3jigApdxdoiNfFCYTBCwbiUymVOMyQ801C51tnQ9Daac3mrJxVomyK7
-         jCdv7pjd5t0xFXcJ9p6c7KKOyj78So3pd9CLzd6sLXwI/95VdBefALscvAbpD+Mkx/kT
-         BA3Q==
+        d=google.com; s=20210112; t=1679643126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SvqAtpUDp/R2AHKB23Y+FUdo7h9lz+W4or4pfdO+B1w=;
+        b=TgxydYrnUs3E2dwNmXUIECaNfQrn0JhKhRzW/oJYnsF1YntYesPzi6R4Bw+L3sRo6x
+         CH0bsPKjrnjJ9g1RCcpDCcf3IqTmZ05aKBqpP0qc0T/8lSIqqCTpgOX/9nBd8MWihaxV
+         twiVaCBME/BT8YRoxA0oMceGJeRMtn5xtrjQj2+PxxcRpNlcA7v9v+zgrAmrDMyBith9
+         AFCfRgg13j2VzbQG/cHEFfudPTwBmcA281h4XTCcyXlS+RnqZYB+hDN6EsyMrzQmJCpa
+         UIAPJWR8VWZHxYo6QM3JCXyrWQsatIyd/lRi1SFWvgPZmSu/zeOiyWIUpkOUmhKNC8yx
+         KhAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679643073;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zv+/okQpvLPeEesFbW+f0IeMoL7WJaBwrI7ka3EB5Nc=;
-        b=wMRXEGXUfhOihUUUwi+ZfNrF/AEQ1FtYUDDkbehw/+bwqLXHP4Am+77K0eBUXc8QG2
-         cDq/W59t1RxmI2XdqwSdFZwZsOgnMYPUWWRWrhHr2rbyilz3ftm7tcKr0OkVG2Y0kfzS
-         iEW20wtC05UpdONJVLwOMZPn+eUdfhLizH2CCgrnSEilzgX2RyqwQwInfnNv9kC8JbHb
-         2yu7mAgriUSRJthnvai11FIBw4WNb1/+/NfVldgX08A5wVC5CtnEW4IP/JqSVc4WiHOY
-         QzDGKHjDrUFeWad7nFBVflRaaX1E4n5y5OMVaLcbjN65KyZtvUOsqauDECiY7byVu28k
-         ffZA==
-X-Gm-Message-State: AO0yUKWu0qWaqEzIXvqIvKO5tHyB5LuLleSVq9swjKG91eZMjJxVhzAq
-        oqDDsrUFcB0jfcpBLYw0GwA5TX3Fs5biwqfiTKzDd3N9R/g4Kg==
-X-Google-Smtp-Source: AK7set8qiayrCQEmrQ5sKGxmsUtgqmXMfjOom1t/uDcRYLTwBBWLqd9j56uIL47lGmfA8XGGvggkEWjT4TGwIXlo30Y=
-X-Received: by 2002:a05:620a:b0a:b0:742:71e6:b8d4 with SMTP id
- t10-20020a05620a0b0a00b0074271e6b8d4mr378929qkg.6.1679643073150; Fri, 24 Mar
- 2023 00:31:13 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679643126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SvqAtpUDp/R2AHKB23Y+FUdo7h9lz+W4or4pfdO+B1w=;
+        b=Rk1JjO+VVBAaJ0UkOk4kGrKZ/jyceVitDL0YQgD1/YuWsCUK5VZSfjm3ov7BT0mNOx
+         25DWtmGMPuyGBPi6DaqxrhlS0NMZjqDkVX43syY/VEZq7RK9iP6/gGyl128MvzPUo1x/
+         0nxzXNvgJsYtbhgwTvapN/FSpaJnKR1GzXdtOMtM+wpRfu/gAkxMVjfMnpG3Uen+MmZn
+         M+uPOqoxTqFk5PztKq5v6u5fQ1+dINZry96ivMeNTFFHzrcaFg6+90CjWLmG3fz40Mv6
+         iUDOqTVzrGDBfZYdDtVkVQvuNOE/X/awQV4rqCnwLynA0XlODiVtyhD3vwMjC2Nxupmn
+         M56Q==
+X-Gm-Message-State: AAQBX9ezIbUB+MTNFEVGiNWYWUUtY0yz80IHR8JM7Lh78oMIOx2NNaAr
+        milvaveplIGqTlixwU6qdBouSPfkLipM/SWcbZb0og==
+X-Google-Smtp-Source: AKy350Yc3qJ2BunrM47KLnlPyS3i5g7zatfj8XJQKN3gnQpmrtKvbPfhixTtCohL7Ow2LFKQagPeh1avkVsMjfmsGJc=
+X-Received: by 2002:a63:c042:0:b0:513:1281:2796 with SMTP id
+ z2-20020a63c042000000b0051312812796mr355798pgi.11.1679643125676; Fri, 24 Mar
+ 2023 00:32:05 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5899:b0:4d4:81fa:9c9 with HTTP; Fri, 24 Mar 2023
- 00:31:12 -0700 (PDT)
-Reply-To: a54111046@outlook.com
-From:   audu bello <gadstra2@gmail.com>
-Date:   Fri, 24 Mar 2023 08:31:12 +0100
-Message-ID: <CAL1zo1qhwQGN3xOJ967jHMmsBNh2tWOFUkkkFkO7M=8mOs--3Q@mail.gmail.com>
-Subject: please confirm urgent
-To:     undisclosed-recipients:;
+References: <20230323204427.3594372-1-maskray@google.com> <202303241443.0sSziFDY-lkp@intel.com>
+In-Reply-To: <202303241443.0sSziFDY-lkp@intel.com>
+From:   Fangrui Song <maskray@google.com>
+Date:   Fri, 24 Mar 2023 00:31:54 -0700
+Message-ID: <CAFP8O3+J47WNj76hK4tZad4wJJpZZjT28OBbRBkiYcaCVhJxMQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile: use -z pack-relative-relocs
+To:     kernel test robot <lkp@intel.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-I've reached out a couple times, but I haven't heard back. I'd
-appreciate a response to my email about pending transaction
+On Thu, Mar 23, 2023 at 11:51=E2=80=AFPM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> Hi Fangrui,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on masahiroy-kbuild/for-next]
+> [also build test WARNING on masahiroy-kbuild/fixes linus/master v6.3-rc3 =
+next-20230323]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Fangrui-Song/Makef=
+ile-use-z-pack-relative-relocs/20230324-044515
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-k=
+build.git for-next
+> patch link:    https://lore.kernel.org/r/20230323204427.3594372-1-maskray=
+%40google.com
+> patch subject: [PATCH] Makefile: use -z pack-relative-relocs
+> config: arm64-randconfig-r022-20230322 (https://download.01.org/0day-ci/a=
+rchive/20230324/202303241443.0sSziFDY-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/8f47a36faf182f96a=
+2bbf4d3b9305fe9a90c5cde
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Fangrui-Song/Makefile-use-z-pack=
+-relative-relocs/20230324-044515
+>         git checkout 8f47a36faf182f96a2bbf4d3b9305fe9a90c5cde
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Darm64 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Darm64 SHELL=3D/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303241443.0sSziFDY-lkp@i=
+ntel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
+> >> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
+> >> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
+
+I forgot to check aarch64-linux-gnu-ld. To address the issue I can use:
+
+# ld.lld before 15 did not support -z pack-relative-relocs.
+if ! $LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr -o
+$tmp_file 2>/dev/null; then
+        $LD $tmp_file.o -shared -Bsymbolic -z pack-relative-relocs -o
+$tmp_file 2>&1 |
+                grep -q pack-relative-relocs && exit 1
+fi
+
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
