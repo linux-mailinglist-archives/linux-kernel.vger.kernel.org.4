@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177506C8264
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C522F6C826A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjCXQcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S231150AbjCXQd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjCXQca (ORCPT
+        with ESMTP id S229681AbjCXQd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:32:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FA11CF55
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:32:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24D9562BE1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C7FC433EF;
-        Fri, 24 Mar 2023 16:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679675527;
-        bh=3PNX/74+gO354UCpwGADQlXhZg6ETuvttetxAJdAwJM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0WpNtnpJMAZoEKPRE9qYxgAzboyL6KYBJl/kiLSZfdRyb5QKxMQaHd1+6nbqsaro
-         6lGu7JnxcTAU+F45eMpy4xfUzde82hmH3iun38YGfNOjfyxPxCgIg8YIcvYzVZEYKe
-         G9H3Em5GY2TqMoSAt3rpACK693gKLpxLu0kmpDt8LsXGNVi4wJd174EYtU0SjG6GbP
-         TmttDpoLg8ltbXfM2wUa54mJW13RN1PiOrtvy7HQZQeAyhes4/xDrVMgayULUAZ0BS
-         dgSHP+YxXzVjdP3kS1+l3rjXEpvs6msE5XTcAR3Fe9GgoYKdJvYPfzNijbX7VrQSr2
-         0OqXK8pBNdVrA==
-From:   SeongJae Park <sj@kernel.org>
-To:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/sysfs: make more kobj_type structures constant
-Date:   Fri, 24 Mar 2023 16:32:02 +0000
-Message-Id: <20230324163202.47254-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230324-b4-kobj_type-damon2-v1-1-48ddbf1c8fcf@weissschuh.net>
-References: 
+        Fri, 24 Mar 2023 12:33:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13DFCC65E;
+        Fri, 24 Mar 2023 09:33:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2C3A113E;
+        Fri, 24 Mar 2023 09:34:38 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.56.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17CBD3F6C4;
+        Fri, 24 Mar 2023 09:33:52 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 16:32:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
+ fallbacks
+Message-ID: <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
+References: <20230305205628.27385-1-ubizjak@gmail.com>
+ <20230305205628.27385-2-ubizjak@gmail.com>
+ <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+ <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+ <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-On Fri, 24 Mar 2023 15:35:27 +0000 "Thomas Weißschuh" <linux@weissschuh.net> wrote:
-
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
+On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
+> On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
+> > On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > >
+> > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
+> > >
+> > > Can you give an example of where we are passing an incompatible pointer?
+> > 
+> > An example is patch 10/10 from the series, which will fail without
+> > this fix when fallback code is used. We have:
+> > 
+> > -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
+> > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
+> > 
+> > where rb->head is defined as:
+> > 
+> > typedef struct {
+> >    atomic_long_t a;
+> > } local_t;
+> > 
+> > while offset is defined as 'unsigned long'.
 > 
-> Take advantage of this to constify the structure definition to prevent
-> modification at runtime.
+> Ok, but that's because we're doing the wrong thing to start with.
 > 
-> These structures were not constified in
-> commit e56397e8c40d ("mm/damon/sysfs: make kobj_type structures constant")
-> as they didn't exist when that patch was written.
-
-Thank you for catching this!
-
+> Since local_t is defined in terms of atomic_long_t, we should define the
+> generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
+> have a mismatch between 'long *' and 'unsigned long *', but then we can fix
+> that in the callsite:
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 	while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+Sorry, that should be:
+	
+	while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
 
+The fundamenalthing I'm trying to say is that the
+atomic/atomic64/atomic_long/local/local64 APIs should be type-safe, and for
+their try_cmpxchg() implementations, the type signature should be:
+
+	${atomictype}_try_cmpxchg(${atomictype} *ptr, ${inttype} *old, ${inttype} new)
 
 Thanks,
-SJ
-
-> ---
->  mm/damon/sysfs-schemes.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-> index 3cdad5a7f936..50cf89dcd898 100644
-> --- a/mm/damon/sysfs-schemes.c
-> +++ b/mm/damon/sysfs-schemes.c
-> @@ -384,7 +384,7 @@ static struct attribute *damon_sysfs_scheme_filter_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filter);
->  
-> -static struct kobj_type damon_sysfs_scheme_filter_ktype = {
-> +static const struct kobj_type damon_sysfs_scheme_filter_ktype = {
->  	.release = damon_sysfs_scheme_filter_release,
->  	.sysfs_ops = &kobj_sysfs_ops,
->  	.default_groups = damon_sysfs_scheme_filter_groups,
-> @@ -503,7 +503,7 @@ static struct attribute *damon_sysfs_scheme_filters_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(damon_sysfs_scheme_filters);
->  
-> -static struct kobj_type damon_sysfs_scheme_filters_ktype = {
-> +static const struct kobj_type damon_sysfs_scheme_filters_ktype = {
->  	.release = damon_sysfs_scheme_filters_release,
->  	.sysfs_ops = &kobj_sysfs_ops,
->  	.default_groups = damon_sysfs_scheme_filters_groups,
-> 
-> ---
-> base-commit: 1e760fa3596e8c7f08412712c168288b79670d78
-> change-id: 20230324-b4-kobj_type-damon2-0238ee9e8d8c
-> 
-> Best regards,
-> -- 
-> Thomas Weißschuh <linux@weissschuh.net>
+Mark.
