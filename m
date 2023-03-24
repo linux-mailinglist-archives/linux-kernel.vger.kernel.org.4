@@ -2,148 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B066C86D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F136C86DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbjCXU0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
+        id S231974AbjCXU3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjCXU0n (ORCPT
+        with ESMTP id S231127AbjCXU3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:26:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB4F1CAF7;
-        Fri, 24 Mar 2023 13:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1679689594; i=w_armin@gmx.de;
-        bh=Kf5tr2Sg9Jqyp+j3xyIw9/QWCzBL3T6tk+vssRythnI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=jz7UK7X44cZiLlMnPjfqrmg9DTnMY1c4CjqpJ16w6yZIHp3H+D8oGuduCYwJYXzkd
-         BkktoJKPNcaGIemCrhYZqBqpX1YGNlC9d+butJu9yVmQWmdvI7IMZ0hoIrCNCETGqC
-         iZWmUe/6RnKrg/BdQbqOa2gDHV7tVb9Nw0s3mpyIqzCgeiUNlDYfy6CFKs+ey51QFA
-         bqdnT4yeOAgKpW3sErgKrF0VFJaQWBVkgr5sx28WnPiozwZjrbzi6Vwt8UaJSXOtDN
-         /WhiATvc0FG8MnpC31nPZB32eldaDGb4sMjTlQfK/pj1F8hAuqgNq1tX02DCJf2tav
-         EobTL6A7TwIKQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M5QJD-1peyVz0Wxx-001V9f; Fri, 24 Mar 2023 21:26:34 +0100
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     rafael@kernel.org, lenb@kernel.org
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ACPI: SBS: Fix handling of Smart Battery Selectors
-Date:   Fri, 24 Mar 2023 21:26:28 +0100
-Message-Id: <20230324202628.76966-4-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230324202628.76966-1-W_Armin@gmx.de>
-References: <20230324202628.76966-1-W_Armin@gmx.de>
+        Fri, 24 Mar 2023 16:29:14 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEA919BA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:29:13 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b20so12557707edd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679689750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=szzCt9QgYlmv+MdPEpdeehiy7Y3yIBOornBldbmElZU=;
+        b=HEUkzzFfbkd2t4QLVjmsN13rGr1E08bjBTMtmniTEh0Fy0XI5uOWH1TtTY9aNvmD22
+         q9H9RNHRg2DeFl/u4HCp8SgTThcUmm8MfCtuz+JLq8p6lXyBG44RR5UEOJpH+7SNcocW
+         xStZYNej2tf1wJTuyM94i+dhQCVtOQb+3L4LQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679689750;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=szzCt9QgYlmv+MdPEpdeehiy7Y3yIBOornBldbmElZU=;
+        b=aJIc6A+oQEGQnrFNHpRos14BoBLPpHN6cQ6S1wbVMaRsV9d8StTbm8FmVE/Lvkcj+w
+         ZpFVHE5KoAMRpqKNbJEOM0AK54ylP+hxqfQqqjgW24Y4PA3oLdhRh5YLLPfeLR1GD63G
+         kqOH+vxGdcvB0qMaFxpJoc5NNGAl/xHyE8p8rwtCmzLrts1Fdf4iXCLksIsv31zeEQx1
+         aodDbweJH16FNqRTpkNapkQCu1kY9xeVSZBMM2p9DBIZqPcoWGZXBTEEp2i/hjGXGAAm
+         eTeinhjcWPDGAR5dCvmNnZsnu/ukafIBWjmwbev1keaJ7kkzgNid3/8siHRx9f8NmDT2
+         3TPw==
+X-Gm-Message-State: AAQBX9cPq073sLSL4YPTZ+mRokKDJdqM/fVzowVlLm0TkvHSTaL0T9pg
+        W0FkyOQ6ixnXWvTN4FCSAaimrr/NUUh02wDqn/LKJjRU
+X-Google-Smtp-Source: AKy350YqK5rjJbOQ+H6kGa13Ame5wKMOA7c11rPPJ6osKpWBNQhC42903GSM72Y7llbn+EJXxEAbhA==
+X-Received: by 2002:a17:906:555:b0:92e:e9c2:7b9e with SMTP id k21-20020a170906055500b0092ee9c27b9emr3485761eja.41.1679689750442;
+        Fri, 24 Mar 2023 13:29:10 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id zc14-20020a170906988e00b00927f6c799e6sm10823587ejb.132.2023.03.24.13.29.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 13:29:09 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id r11so12495214edd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:29:09 -0700 (PDT)
+X-Received: by 2002:a17:906:d54d:b0:932:da0d:9375 with SMTP id
+ cr13-20020a170906d54d00b00932da0d9375mr2532911ejc.4.1679689748729; Fri, 24
+ Mar 2023 13:29:08 -0700 (PDT)
 MIME-Version: 1.0
+References: <c1375bdc-401b-308a-d931-80a95897dbc3@redhat.com>
+ <2bd995a7-5b7f-59a1-751e-c56e76a7d592@redhat.com> <ZBjLp4YvN1m/cR4G@bombadil.infradead.org>
+ <c0b2d9d0-ef5e-8c46-109e-742dbec8a07b@redhat.com> <ZBjO2LqBkayxG+Sd@bombadil.infradead.org>
+ <ZBjPtV7xrAQ/l9nD@bombadil.infradead.org> <bb6e15e0-2831-6352-82c8-92648a29fb0b@redhat.com>
+ <582aa586-e69c-99bb-caf8-eda468c332b6@redhat.com> <ZB3j3x4F2ozYX8UI@bombadil.infradead.org>
+ <CAHk-=wij=z-C6puGv+E5gGKgFMam-ucCjyji0-vP1wd=aUpFvQ@mail.gmail.com> <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
+In-Reply-To: <ZB4BP0ZgxNirBNOJ@bombadil.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 24 Mar 2023 13:28:51 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+Message-ID: <CAHk-=whkj6=wyi201JXkw9iT_eTUTsSx+Yb9d4OgmZFjDJA18g@mail.gmail.com>
+Subject: Re: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, petr.pavlu@suse.com, prarit@redhat.com,
+        christophe.leroy@csgroup.eu, song@kernel.org, dave@stgolabs.net,
+        fan.ni@samsung.com, vincent.fu@samsung.com,
+        a.manzanares@samsung.com, colin.i.king@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6kCTV4lmq1MUZg5UgLFBxpfVLzcFsskWeHIn+zzN7i5VpibZyna
- iFFCDhPiMsHdnksiw4Lhi3wy7j6sJxeBtonoQOj5LjtGZ/jyeLZviH6nq9U3lIds6b5ulin
- 5rqOUfNx/pZvx1sHu4AFKpFtnoFyoWv3oId5GQwlevdMfWhAk0pLKd4fgppjsISe82ApVzd
- OLWM0E6MVsDIJ0N6SRPvg==
-UI-OutboundReport: notjunk:1;M01:P0:KKOaR6Ombfk=;oog638bcX83iT+9+zEnhIL7S1I6
- dpcRL/Rb8GgrtwD7OZe5jsFs5Q07FyhWoCDkCvsuV5/8oKy6DLxNf7OMAqzYpSY03tVvdcaUt
- rlhC0ONyFg1b9sOGP5YyNbrlekj14bLdy0weIpxZNKRs6Lyi7Z3WSo/zDJ0O/Pc5s64gJWbD7
- 4tR/KAskbeWUnHHhn0cCyFgRttkrIdspSzq9tRMDAf3ZHwN2pXQeS8CIYFTyQPEpQM+wjfY/m
- T5qvr4/L4dlBBXoejTl3AqFZEHK5NDwrMyshslj2YY3SwTuMhI3RkODbpBeijBglDYJsWSKEt
- BAvoA0IOW3o0py/aiL5Ah1305jd4fkhGOM1Lnr28Kv4E6MQAQPPUoK247lJHoYBMJNTJbRadf
- 4MMveFi37hK/Ac4nYqo5HTmaxNmZCKCqSIRBUvIiMGOXdG2RARhWKHlV68bGRIt6pUv4RbpRw
- Ydb8Xg1jEaeD/GtV/2BJMP1kWXOKTo62uu5Mjjt+rOdUdOybWv+KOHSyboPrpSXpGTw1F/SPx
- dVhaVnUgC8zU/Pr7VZ+RNv8A/6rIP8XhsLMoQB9HzGaGqm9OXMrmzMn9z0QYeBWcmanZdZth6
- N84ej2UUdHF7uAAQAyDNVWcxa2t07pxSKIsM3i3Pq19FmUNUQv/qsxpL77qySuaQS8ilJJF0V
- bNFhSk8jteU5i2MmIe+mvQsKgOJ+Eqgc1BLEOIH5UBbpPb6Cz8yL8OPgeCPdQc9ayMMl+rvbW
- osNMqiuspx29K0wxIl2pK0K9LmrRxVeQ/DZckdZ85l8Pw6UzALcx7TsDMKrLkfvlZOGpZ88S2
- qYIiqCE9BL+PntGpQs8p6lVJ296Xfc7d1MBAdgsoJ6nxFpn36Sb89bCP1LKr/tY5rxJefjCS4
- d/eC1dBdVRbp3qQ02eBIk4Vbx+K2weBsEfk67PoB4kDcoK5MzSy+GMrj73HQGQSzxlrbemwut
- MgPSth72gZePeUxC1Tu9+dAhX4A=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "Smart Battery Selector" standard says that when writing
-SelectorState (0x1), the nibbles which should not be modified
-need to be masked with 0xff. This is necessary since in contrast
-to a "Smart Battery Manager", the last three nibbles are writable.
+On Fri, Mar 24, 2023 at 1:00=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> On the modules side of things we can be super defensive on the second
+> vmalloc allocation defensive [0] but other than this the initial kread
+> also needs care too.
 
-Failing to do so might trigger the following cycle:
-1. Host accidentally changes power source of the system (3rd nibble)
-   when selecting a battery.
-2. Power source is invalid, Selector changes to another power source.
-3. Selector notifies host that it changed the power source.
-4. Host re-reads some batteries.
-5. goto 1 for each re-read battery.
+Please don't re-implement semaphores. They are a *classic* concurrency limi=
+ter.
 
-This loop might also be entered when a battery which is not present
-is selected for SMBus access. In the end some workqueues fill up,
-which causes the system to lockup upon suspend/shutdown.
+In fact, probably *THE* classic one.
 
-Fix this by correctly masking the value to be written, and avoid
-selecting batteries which are absent.
+So just do something like this instead:
 
-Tested on a Acer Travelmate 4002WLMi.
+   --- a/kernel/module/main.c
+   +++ b/kernel/module/main.c
+   @@ -2937,6 +2937,11 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+        return load_module(&info, uargs, 0);
+    }
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/acpi/sbs.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+   +#define CONCURRENCY_LIMITER(name, n) \
+   +    struct semaphore name =3D __SEMAPHORE_INITIALIZER(name, n)
+   +
+   +static CONCURRENCY_LIMITER(module_loading_concurrency, 50);
+   +
+    SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs,
+int, flags)
+    {
+        struct load_info info =3D { };
+   @@ -2955,8 +2960,12 @@ SYSCALL_DEFINE3(finit_module, int, fd, const
+char __user *, uargs, int, flags)
+                      |MODULE_INIT_COMPRESSED_FILE))
+                return -EINVAL;
 
-diff --git a/drivers/acpi/sbs.c b/drivers/acpi/sbs.c
-index e90752d4f488..94e3c000df2e 100644
-=2D-- a/drivers/acpi/sbs.c
-+++ b/drivers/acpi/sbs.c
-@@ -473,23 +473,32 @@ static const struct device_attribute alarm_attr =3D =
-{
-    ----------------------------------------------------------------------=
----- */
- static int acpi_battery_read(struct acpi_battery *battery)
- {
--	int result =3D 0, saved_present =3D battery->present;
-+	int result, saved_present =3D battery->present;
- 	u16 state;
+   +    err =3D down_killable(&module_loading_concurrency);
+   +    if (err)
+   +            return err;
+        len =3D kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+                                       READING_MODULE);
+   +    up(&module_loading_concurrency);
+        if (len < 0)
+                return len;
 
- 	if (battery->sbs->manager_present) {
- 		result =3D acpi_smbus_read(battery->sbs->hc, SMBUS_READ_WORD,
- 				ACPI_SBS_MANAGER, 0x01, (u8 *)&state);
--		if (!result)
--			battery->present =3D state & (1 << battery->id);
--		state &=3D 0x0fff;
-+		if (result)
-+			return result;
-+
-+		battery->present =3D state & (1 << battery->id);
-+		if (!battery->present)
-+			return 0;
-+
-+		/* Masking necessary for Smart Battery Selectors */
-+		state =3D 0x0fff;
- 		state |=3D 1 << (battery->id + 12);
- 		acpi_smbus_write(battery->sbs->hc, SMBUS_WRITE_WORD,
- 				  ACPI_SBS_MANAGER, 0x01, (u8 *)&state, 2);
--	} else if (battery->id =3D=3D 0)
--		battery->present =3D 1;
--
--	if (result || !battery->present)
--		return result;
-+	} else {
-+		if (battery->id =3D=3D 0) {
-+			battery->present =3D 1;
-+		} else {
-+			if (!battery->present)
-+				return 0;
-+		}
-+	}
+NOTE! Entirely untested. Surprise surprise.
 
- 	if (saved_present !=3D battery->present) {
- 		battery->update_time =3D 0;
-=2D-
-2.30.2
+I'm a tiny bit worried about deadlocks here, so somebody needs to make
+sure that the kernel_read_file_from_fd() case cannot possibly in turn
+cause a "request_module()" recursion.
 
+We most definitely have had module recursion before, but I *think*
+it's always just in the module init function (ie one module requests
+another when ithe mod->init() function is called).
+
+I think by the time we have opened the module file descriptors and are
+just reading the data, we should be ok and the above would never
+deadlock, but I want people to at least think about it.
+
+Of course, with that "max 50 concurrent loaders" limit, maybe it's
+never an issue anyway. Even if you get a recursion a few deep, at most
+you just wait for somebody else to get out of their loaders. Unless
+*everybody* ends up waiting on some progress.
+
+              Linus
