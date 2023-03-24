@@ -2,171 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1838C6C7AF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC9F6C7AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCXJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S231608AbjCXJQr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 05:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCXJQS (ORCPT
+        with ESMTP id S231359AbjCXJQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:16:18 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFDE1F4B9;
-        Fri, 24 Mar 2023 02:16:17 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O8de39016699;
-        Fri, 24 Mar 2023 09:16:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lUbjeb5tzd264tpcIsMS8Q0ujsT7b9ac9BoeEHI1JuA=;
- b=EoW+aFK1gCDWzFmC2S0eKFzhbjyUO6Xv2hMM63OmE0b8CJgDps5r+QndrSSaI7Y4Fi4/
- WFoYx5w0IyIYbQ4AxL2dHMS1SCjdqu/H3fbEGSyYEmSzaE5WFUKxePg8KkuAWcBxSpSk
- TFTY51/9rIQM1let6zQ+AY7CUuiDikohrhwJ8LNCaTTMWyjP097tbAmyDdv5TxaUWPR0
- eXnjl5vsp5Uarfmrv7kryLtQUzBZcJBwnqbu5afpo/eNHZ/jxM9M/roWJg9DKh6Zsx91
- lnyRfVW5v0N6yBv3qJvl6CrXzLxMRqoYfgNOTkc1kWiRPH5IP2IrQU3CkKbv7/dTj1eH JA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgy609bf5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 09:16:02 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32O9G16j003993
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 09:16:01 GMT
-Received: from [10.239.133.211] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Mar
- 2023 02:15:56 -0700
-Message-ID: <fb5d55ba-8f7b-292e-e676-9423c36f4085@quicinc.com>
-Date:   Fri, 24 Mar 2023 17:15:54 +0800
+        Fri, 24 Mar 2023 05:16:44 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3D122789;
+        Fri, 24 Mar 2023 02:16:42 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5447d217bc6so22246857b3.7;
+        Fri, 24 Mar 2023 02:16:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679649401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LDNPjwsegaDfMUliMA6TpiS3Kuq+LAgqyHSjqAMs0rE=;
+        b=NEwj40PxM5upHr9KTGqYQdFWObGWO1f+9UmcW4aB2iKcctPhREwZAMyDnoT+KKV22n
+         mvw2f1lpV0kjy6+OHaZ5UlPqXUZ9bgjhFq2HmkA2sgr2TUW9jtsFZGML4pxJ6aO2USf3
+         Drh3TLNepqvwLKfFwGEGXjA5OaXgu1gHRMPO9Ay+xlSrz9xY6Cx0fFRSD7XTeZ6keE2F
+         pBc1a2sTvFzM1GQ+TE/Ue/M/1Wzfg8lHNbdBH8fJ+K7qy4iZBjwApF2qGNV+tl4PF3K9
+         dAGpNi43BZq/Z9FSgO7Nae1Xkf2ibt2sON/91p9+uZF1uEnojpK2Ln9d+xc9VCQeqlek
+         H72g==
+X-Gm-Message-State: AAQBX9c3YFMIF9tNvhbZZ4CSQshci7i3ZTU8Eq4eZ5nemt93e6K/nI+v
+        DEv4+5LMgkGs7ITAeNIcvz08i4izCj0kOg==
+X-Google-Smtp-Source: AKy350YeAx+ME4HsKnNl10R9WPgVetV0/4omX7vYtT5kKSvfdt7EJRX54NLpt2+XpmDb1p+IsDXG7g==
+X-Received: by 2002:a81:4ed0:0:b0:535:aff2:d264 with SMTP id c199-20020a814ed0000000b00535aff2d264mr1655307ywb.1.1679649401139;
+        Fri, 24 Mar 2023 02:16:41 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id cn24-20020a05690c0d1800b00545a08184e7sm313771ywb.119.2023.03.24.02.16.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 02:16:40 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id i6so1352895ybu.8;
+        Fri, 24 Mar 2023 02:16:40 -0700 (PDT)
+X-Received: by 2002:a05:6902:722:b0:a09:314f:a3ef with SMTP id
+ l2-20020a056902072200b00a09314fa3efmr901470ybt.12.1679649400404; Fri, 24 Mar
+ 2023 02:16:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 01/11] dt-bindings: arm: Add support for DSB element
- size
-Content-Language: en-US
-From:   Tao Zhang <quic_taozha@quicinc.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1679551448-19160-1-git-send-email-quic_taozha@quicinc.com>
- <1679551448-19160-2-git-send-email-quic_taozha@quicinc.com>
- <e6ad7301-09ea-93e0-929e-86e0eb0a02e7@arm.com>
- <d4c133c1-38c7-93e3-deaf-b55161057409@quicinc.com>
-In-Reply-To: <d4c133c1-38c7-93e3-deaf-b55161057409@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Orai57WJvA2e38pUIZNBoUPJTmjdRpMH
-X-Proofpoint-GUID: Orai57WJvA2e38pUIZNBoUPJTmjdRpMH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_04,2023-03-23_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxscore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303240077
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
+ <20230302211759.30135-11-nick.alcock@oracle.com> <ZAoGLhRpTr5f7AD/@kroah.com>
+ <ZApf0iNOsSAUbhMz@bombadil.infradead.org> <ZArc0ib697JIwKou@kroah.com>
+ <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org> <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
+ <ZB1p5zRp7rlGGuCP@kroah.com>
+In-Reply-To: <ZB1p5zRp7rlGGuCP@kroah.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 24 Mar 2023 10:16:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
+Message-ID: <CAMuHMdVRXQupFEoU0EbSkBnS21QXGJQ4ZOYVy-Ntwjnw7er0nA@mail.gmail.com>
+Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+Hi Greg,
 
-在 3/24/2023 4:25 PM, Tao Zhang 写道:
-> Hi Suzuki,
+On Fri, Mar 24, 2023 at 10:14 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Fri, Mar 24, 2023 at 10:08:17AM +0100, Geert Uytterhoeven wrote:
+> > On Fri, Mar 10, 2023 at 8:42 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > On Fri, Mar 10, 2023 at 08:31:30AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Thu, Mar 09, 2023 at 02:38:10PM -0800, Luis Chamberlain wrote:
+> > > > > On Thu, Mar 09, 2023 at 05:15:42PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > On Thu, Mar 02, 2023 at 09:17:52PM +0000, Nick Alcock wrote:
+> > > > > > > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> > > > > > > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> > > > > > > are used to identify modules. As a consequence, uses of the macro
+> > > > > > > in non-modules will cause modprobe to misidentify their containing
+> > > > > > > object file as a module when it is not (false positives), and modprobe
+> > > > > > > might succeed rather than failing with a suitable error message.
+> > > > > > >
+> > > > > > > So remove it in the files in this commit, none of which can be built as
+> > > > > > > modules.
+> > > > > > >
+> > > > > > > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> > > > > > > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> > > > > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > > > > > > Cc: linux-modules@vger.kernel.org
+> > > > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > > > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > Cc: Jiri Slaby <jirislaby@kernel.org>
+> > > > > > > ---
+> > > > > > >  drivers/tty/n_null.c | 1 -
+> > > > > > >  1 file changed, 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/tty/n_null.c b/drivers/tty/n_null.c
+> > > > > > > index f913b665af725..c24f75942c49d 100644
+> > > > > > > --- a/drivers/tty/n_null.c
+> > > > > > > +++ b/drivers/tty/n_null.c
+> > > > > > > @@ -63,7 +63,6 @@ static void __exit n_null_exit(void)
+> > > > > > >  module_init(n_null_init);
+> > > > > > >  module_exit(n_null_exit);
+> > > > > > >
+> > > > > > > -MODULE_LICENSE("GPL");
+> > > > > > >  MODULE_AUTHOR("Alan Cox");
+> > > > > > >  MODULE_ALIAS_LDISC(N_NULL);
+> > > > > > >  MODULE_DESCRIPTION("Null ldisc driver");
+> > > > > > > --
+> > > > > > > 2.39.1.268.g9de2f9a303
+> > > > > > >
+> > > > > >
+> > > > > > Nope, sorry, this is not good to do, please fix kbuild instead of
+> > > > > > forcing a tree-wide change like this.
+> > > > >
+> > > > > Masahiro Yamada already NACK'd it such effort:
+> > > > >
+> > > > > https://lkml.kernel.org/r/CAK7LNAQLttPD=Ae==e0CYeQtS78=o_JZFK+zxa29JnUYio52Ug@mail.gmail.com
+> > > > >
+> > > > > And his descriptiuon of the reasoning and logic is explained here:
+> > > > >
+> > > > > https://lore.kernel.org/all/CAK7LNASL7_RgfASstBvN6AzhR=nMU=HsQvODf5q13Xud8tBWRQ@mail.gmail.com/
+> > > > >
+> > > > > Let me summarize it though with a few quotes from him:
+> > > > >
+> > > > > "Having false-positives in modules.builtin should be OK"
+> > > > > "In this sense, having always-builtin entries in module.builtin is OK."
+> > > >
+> > > > None of that matters, sorry.
+> > > >
+> > > > Again, all I am saying is that you can not have some MODULE_() macros
+> > > > that are ok for code that is built in, and some that are not, for
+> > > > "reasons" that have to do how you all are treating the build system
+> > > > infrastructure as you are now putting arbritrary requirements for all
+> > > > driver authors (of which there are thousands) to know this.
+> > >
+> > > As noted once again, it is not putting hard requirement. Future tooling
+> > > not yet added would just not benefit from distinguishing symbols for
+> > > your modules.
+> > >
+> > > I'm happy to live with module authors not wanting to remove the module
+> > > license tag from their modules if they can never actually be modules
+> > > from not benefitting from the above tooling gains as its just cherry
+> > > on top tooling gains.
+> >
+> > Apparently lots of these patches have not arrived in linux-next
+> > without Acks (we're still discussing about this, right???).
+> >
+> > And some of the modified files have no SPDX-License-Identifier
+> > lines yet, so we are losing important licensing information:
+> >
+> > $ git grep -L SPDX-License-Identifier -- $(git show $(git log
+> > --oneline v6.3-rc1..linux-next/master | grep "remove MODULE_LICENSE in
+> > non-modules" | cut -d " " -f 1) | lsdiff --strip=1)
+> > drivers/bus/arm-cci.c
+> > drivers/bus/imx-weim.c
+> > drivers/bus/simple-pm-bus.c
+> > drivers/gpu/drm/drm_mipi_dsi.c
+> > drivers/irqchip/irq-mvebu-pic.c
+> > drivers/reset/reset-axs10x.c
+> > drivers/reset/reset-hsdk.c
+> > drivers/soc/sunxi/sunxi_sram.c
+> > drivers/video/fbdev/asiliantfb.c
+> > drivers/video/fbdev/gbefb.c
+> > drivers/video/fbdev/imsttfb.c
+> > drivers/xen/xenbus/xenbus_probe.c
+> > lib/glob.c
 >
-> 在 3/23/2023 7:18 PM, Suzuki K Poulose 写道:
->> On 23/03/2023 06:03, Tao Zhang wrote:
->>> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
->>> Bit) element for TPDM. The associated aggregator will read this
->>> size before it is enabled. DSB element size currently only
->>> supports 32-bit and 64-bit.
->>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>> ---
->>>   .../devicetree/bindings/arm/qcom,coresight-tpdm.yaml | 11 +++++++++++
->>>   1 file changed, 11 insertions(+)
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml 
->>> b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
->>> index 5c08342..d9b6b613 100644
->>> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
->>> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
->>> @@ -44,6 +44,15 @@ properties:
->>>       minItems: 1
->>>       maxItems: 2
->>
->>
->>>   +  qcom,dsb-element-size:
->>> +    description:
->>> +      Specifies the DSB(Discrete Single Bit) element size supported by
->>> +      the monitor. The associated aggregator will read this size 
->>> before it
->>> +      is enabled. DSB element size currently only supports 32-bit 
->>> and 64-bit.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    minimum: 32
->>> +    maximum: 64
->>
->> Shouldn't this be something like oneOf ? It is not a range, but one of
->> those two specific values ?
+> Ick, that's not ok at all.
 >
-> Yes, "qcom,dsb-element-size" should be an optional option required in 
-> TPDM
->
-> devicetree. Other properties like "qcom,cmb-element-size", 
-> "qcom,tc-element-size"
->
-> and etc. will be added in a later patch series.
->
-> I will update this doc according to your advice in the next version of 
-> the patch.
->
-> Tao
->
-Correct my misunderstanding in the mail above.
+> Again, I strongly feel that removing MODULE_LICENSE() lines from files
+> that just don't happen to be built as a module is not ok as no other
+> MODULE_*() macro has this arbitrary restriction.
 
-You are right, DSB element size should be 32-bit or 64-bit. I will 
-update this in the next
+I (still) agree with that, and I saw similar comments from others as well.
+Unfortunately these comments are spread across tens of threads :-(
 
-patch series.
+Gr{oetje,eeting}s,
 
+                        Geert
 
-Tao
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->>
->> Suzuki
->>
->>
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
