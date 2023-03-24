@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193A06C7CBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136A06C7CB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjCXKhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 06:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S231626AbjCXKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXKhC (ORCPT
+        with ESMTP id S229734AbjCXKfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:37:02 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DF922DD8;
-        Fri, 24 Mar 2023 03:37:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x3so5977578edb.10;
-        Fri, 24 Mar 2023 03:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679654220;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gJuO8B0DxhrYpZaK8J9dfLUU2TS1IlGV+FseHR+oA+A=;
-        b=OwU3k8S0NtXx+KntpzccsesziTlWKynQGojMY+6Z66r+zDSXcFv6Bl7PL+rwKUeVFd
-         8vTaFMQnrWg0tjCYpeGLDpvYB7jT6L3DEwXnkX86E/ieGa/cMGFcQ4DzS5/pSWemIr4w
-         DY6VvbbOL4xpzzg2VxcxKvkTfGaiBjcJewt9RggiKlaMhUBzfBqzQbfuHM2GZKSaAIgg
-         YK26tNTV3Q0XTpUtJnE/eJILEfM+oh/+RC8MRbE1u3HIOls0picNOEK0M6cCWsE4MauR
-         BdjjM10u1oK1zlqFMNDuRmZRBNN3NTfKj5/hYHs2cKkj7XDK6geteVx2tyT84dAEfgPv
-         as9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679654220;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gJuO8B0DxhrYpZaK8J9dfLUU2TS1IlGV+FseHR+oA+A=;
-        b=ycAphv2u/0DepgSN+OgiZjH0SdiusoB1wnnDFetRUvpnMWQcx8PdYibWOnpgo74Jz1
-         H7n3+N4aj6qyBI4WDljQih4kB9Drz+2nnwpNHP5e9qO+9Dza2gFPD45FVK1AOVbUjBB0
-         2frn3xB45EJjHEVDpTuDz2hynVglx2V7ptgkdtExYqAEE1FfcIPiJSqLvICH0VC6dVgX
-         LfpVV3Dcwr5OCx9FAEEGCB9ZN+Wy+FKneVJBpzgUmlvkUpfIEJEypBoaOMX/Z3cV+dYi
-         x/LIYyzMvDyVBDcsAhVCRkbkVcHObI6QKcpma7nK2Ur5IT+kEZtDkX/b4yvfMRymolwK
-         xN7Q==
-X-Gm-Message-State: AAQBX9fEOsb4neaSHjHQVPub1lyZk/ueL2LJd5wXAswoGj/a/psmMJ4U
-        Dtqs8HhdgYteCR7jDzK9t+c=
-X-Google-Smtp-Source: AKy350a4WTRRlmlRHILMgnhOO7wrd4M/GHmUQbTlujDN09uAZN8/fvTZc3iv2Il82DJBIxT9RrE5RA==
-X-Received: by 2002:a17:906:5849:b0:931:4b0b:73e3 with SMTP id h9-20020a170906584900b009314b0b73e3mr2250971ejs.65.1679654219663;
-        Fri, 24 Mar 2023 03:36:59 -0700 (PDT)
-Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
-        by smtp.gmail.com with ESMTPSA id i6-20020a170906250600b009306be6bed7sm9987951ejb.190.2023.03.24.03.36.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 03:36:59 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] sparc: remove obsolete config ARCH_ATU
-Date:   Fri, 24 Mar 2023 11:34:38 +0100
-Message-Id: <20230324103438.28563-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 24 Mar 2023 06:35:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070941AD;
+        Fri, 24 Mar 2023 03:35:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F65662A3B;
+        Fri, 24 Mar 2023 10:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE62C433EF;
+        Fri, 24 Mar 2023 10:35:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679654104;
+        bh=R6AHyT4VK2SKRPK37TZm5Le0My/nLlBY56tfIt3oIOk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AJGC8Co2ydH4rBXjExx9YBlfv/6aHZkSAYRHO2fpNwCVLOgP0g+AFhRjqA758ZkWR
+         4v8O7PLforWQY74UG/OoCwFB7aIUQdsQiUDrGFU3vNT7HXjsKt4YeB4O5abesu0K77
+         MWcFM+yZbh4+DJOiA8eiSM8obkk6QeU3S6Wi7kdl+NauLJfExdSwRLwHKLL40h6aGs
+         DHAtm5k1HF9/25m8lYJSs8Y7LeX4EEOwvQMDwCohrPHfULTtzPvDuTarrPCTubgdfv
+         qdvRiHkOfEmglGm9MWP/r1FjTGkHKLQPrSfHrkkxpsGvyWzF7VRut/Tyfdvy0k24Wa
+         Xq/yIdVFs+QlA==
+Date:   Fri, 24 Mar 2023 16:04:52 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bus: mhi: host: Range check CHDBOFF and ERDBOFF
+Message-ID: <20230324103452.GC4259@thinkpad>
+References: <1679066059-8399-1-git-send-email-quic_jhugo@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1679066059-8399-1-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before consolidation of commit 4965a68780c5 ("arch: define the
-ARCH_DMA_ADDR_T_64BIT config symbol in lib/Kconfig"), the config ARCH_ATU
-was used to control the state of the config ARCH_DMA_ADDR_T_64BIT. After
-this consolidation, the config ARCH_ATU has been without use and effect.
+On Fri, Mar 17, 2023 at 09:14:19AM -0600, Jeffrey Hugo wrote:
+> If the value read from the CHDBOFF and ERDBOFF registers is outside the
+> range of the MHI register space then an invalid address might be computed
+> which later causes a kernel panic.  Range check the read value to prevent
+> a crash due to bad data from the device.
+> 
+> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
 
-Remove this obsolete config.
+Please CC stable list.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/sparc/Kconfig | 4 ----
- 1 file changed, 4 deletions(-)
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+> ---
+>  drivers/bus/mhi/host/init.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+> index 3d779ee..ae8ebcfb 100644
+> --- a/drivers/bus/mhi/host/init.c
+> +++ b/drivers/bus/mhi/host/init.c
+> @@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>  		return -EIO;
+>  	}
+>  
+> +	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
+> +		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
+> +			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
+> +		return -EINVAL;
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 84437a4c6545..7749392c9c7f 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -109,10 +109,6 @@ config ARCH_PROC_KCORE_TEXT
- config CPU_BIG_ENDIAN
- 	def_bool y
- 
--config ARCH_ATU
--	bool
--	default y if SPARC64
--
- config STACKTRACE_SUPPORT
- 	bool
- 	default y if SPARC64
+Isn't -ERANGE a better errno here and also in other places of the driver?
+
+Thanks,
+Mani
+
+> +	}
+> +
+>  	/* Setup wake db */
+>  	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
+>  	mhi_cntrl->wake_set = false;
+> @@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>  		return -EIO;
+>  	}
+>  
+> +	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
+> +		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
+> +			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
+> +		return -EINVAL;
+> +	}
+> +
+>  	/* Setup event db address for each ev_ring */
+>  	mhi_event = mhi_cntrl->mhi_event;
+>  	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
+> -- 
+> 2.7.4
+> 
+> 
+
 -- 
-2.17.1
-
+மணிவண்ணன் சதாசிவம்
