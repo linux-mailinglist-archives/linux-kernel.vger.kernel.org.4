@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556E56C7E64
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEFE6C7EEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjCXNCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
+        id S231384AbjCXNhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjCXNCx (ORCPT
+        with ESMTP id S230075AbjCXNhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:02:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E450C20563;
-        Fri, 24 Mar 2023 06:02:46 -0700 (PDT)
-Received: from [192.168.2.179] (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A0A16602E0E;
-        Fri, 24 Mar 2023 13:02:42 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679662964;
-        bh=kpqXq6UeGgXsVu6TLQM8ko29kV7748olljvXmD9n2oU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fJhdF/6EuVwtZqtUK9BHmxcGAPcgYm67pizoTOiLS9liSDI+PCTMcPyPeBk8giObt
-         6N51SXsvFnXt++WjdZLVZiBKxkCrEf3urnxFeWOwQaHqT1pxqh9M8a1IxjtCcKhU3d
-         k7MFMRzZ8bzXLYC9jwq5TkCmdptLjCRdWSe/uQlUXSFwpLLJ+5u+GpP+UO16L2DpnU
-         dUl+S4RWnEFc5tSuWFJT1WKLt5N+xstLYPLcN+K3CMNL8f7DKjRxEAEXTsDnaS7aYL
-         Vr7Tog2S9Zg7P9ovovoOE1lojrwScdl3WKEZhgPXKrTnRJeD1wG6PV7NEvTvYlcqBm
-         r1IDDo9CdQSqw==
-Message-ID: <5a16edd7-3e68-1f94-0ff1-24668fc43501@collabora.com>
-Date:   Fri, 24 Mar 2023 16:02:39 +0300
+        Fri, 24 Mar 2023 09:37:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852671EBD2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679665030; x=1711201030;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hrxu6Dq+/7P2nTvs2nQdBfPtx5S00hxfReedkevyPEg=;
+  b=Bu7ImfsXerUdToKURaZGCEVwzUygamyA+mHjX9SYfuW4+zxA3HeJ3fdw
+   e/i4hK23p4q+tXtE6EzkdLM+0MCiyReVRq8/C+3rOn2xNEmeXCmc6t8Yj
+   RVNBb4NWmJZa7jaWWEbufdctEFm01O+DkVev0YS3v6TkqIFwuf/NsAuo5
+   mbnWMXEfJ5Gm6dSNdp993/xdn4jda+dMxiOa8I2jQ/Qruzq5FZp3jjvHw
+   I3M6viDToAftyb4KnE0HCl2jgnCI4MuUsbr8Hefla+Tes/NLbWlzfYH9Q
+   p8QXeQetJqP1W8ifRzqkKnFBY+NCHtsK1qZdZ07OZHTNXsff9z1G/4diL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="339803892"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="339803892"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:37:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="685168715"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="685168715"
+Received: from kvnguye3-mobl1.amr.corp.intel.com (HELO [10.212.145.31]) ([10.212.145.31])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 06:37:09 -0700
+Message-ID: <9440fa8f-f50b-716f-7c9f-d7d9d7d183f5@linux.intel.com>
+Date:   Fri, 24 Mar 2023 07:56:50 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [RESEND PATCH] ASoC: soc-compress: Inherit atomicity from DAI
+ link for Compress FE
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, lgirdwood@gmail.com,
+        vkoul@kernel.org, daniel.baluta@gmail.com
+References: <20230324124019.30826-1-daniel.baluta@oss.nxp.com>
 Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
-        bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, jernel@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
- <20230321102855.346732-3-benjamin.gaignard@collabora.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230321102855.346732-3-benjamin.gaignard@collabora.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230324124019.30826-1-daniel.baluta@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/23 13:28, Benjamin Gaignard wrote:
-> +	q->bufs = kmalloc_array(q->max_num_bufs, sizeof(*q->bufs), GFP_KERNEL | __GFP_ZERO);
-> +	if (!q->bufs)
-> +		return -ENOMEM;
+
+
+On 3/24/23 07:40, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
+> 
+> After commit bbf7d3b1c4f40 ("ASoC: soc-pcm: align BE 'atomicity' with
+> that of the FE") BE and FE atomicity must match.
+> 
+> In the case of Compress PCM there is a mismatch in atomicity between FE
+> and BE and we get errors like this:
+> 
+> [   36.434566]  sai1-wm8960-hifi: dpcm_be_connect: FE is atomic but BE
+> is nonatomic, invalid configuration
+> [   36.444278]  PCM Deep Buffer: ASoC: can't connect SAI1.OUT
+> 
+> In order to fix this we must inherit the atomicity from DAI link
+> associated with current PCM Compress FE.
+> 
+> Fixes: bbf7d3b1c4f4 ("ASoC: soc-pcm: align BE 'atomicity' with that of the FE")
+> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+> ---
+>  sound/soc/soc-compress.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
+> index e7aa6f360cab..d649b0cf4744 100644
+> --- a/sound/soc/soc-compress.c
+> +++ b/sound/soc/soc-compress.c
+> @@ -622,6 +622,9 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
+>  			return ret;
+>  		}
+>  
+> +		/* inherit atomicity from DAI link */
+> +		be_pcm->nonatomic = rtd->dai_link->nonatomic;
 > +
-
-Use kcalloc()
-
--- 
-Best regards,
-Dmitry
-
+>  		rtd->pcm = be_pcm;
+>  		rtd->fe_compr = 1;
+>  		if (rtd->dai_link->dpcm_playback)
