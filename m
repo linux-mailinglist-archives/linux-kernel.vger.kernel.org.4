@@ -2,207 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1335D6C7AB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7613B6C7C2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 11:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbjCXJCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S231486AbjCXKEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 06:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjCXJCr (ORCPT
+        with ESMTP id S231411AbjCXKE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:02:47 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DB9199D
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679648566; x=1711184566;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ipvqM8LRCTctIfpsFuoJeBvpByp1k9+e4gFAR58JzgM=;
-  b=Ib2p6vYB0vSg31zGC5G/nhAcT8vCicOQbMLhaJCn2ZkRcqVfai2cIvNK
-   /ZMGFo9/Cic7URODjRwZCeHp96y1h3M6mhINltPaaWIu/vCbtxMx+i0f+
-   9XbKNmIq8FstIZka4RNCBOZWjA7gdpnXJi6iUy42IKVhb8PwsQmAyxsg0
-   o4SDnJxihjjYAIQZn22uTvNvFdSDdVzCT2cKzEj4Yk/E/zlfEuXrsJkcV
-   coKxtS77AAzp+A9rP4nix02MA+VwiDUqSPYMvt7fVWGdWbbiJKHMpWAgs
-   DU+P0eliVE388Wu3Ap2rT1ARzADEfNiFNmKiNiX3A2q+NZ3nE1oe0gcZX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338453657"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="338453657"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:02:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="747085993"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="747085993"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Mar 2023 02:02:43 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 24 Mar 2023 02:02:42 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 24 Mar 2023 02:02:42 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 24 Mar 2023 02:02:42 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 24 Mar 2023 02:02:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XDDRN7Mh16kCnEvhRLf/o0XdTc/nbHyk2CIxiLgJsz8jpKxQt9DyPjR1bKKKAkcbt9Ndc4zSJqESjlBmiVbmixCmPnKY9ozYSueIWHkAZwYGR1E9dEhO4QALlCESRvaAqIrcK3qYPDvk3CgHzEFuA/BfENB3FniX3IVYaFBozy7e0RQLq1BujC+qm+hpbtP0CA3Je3I880caz3CNI3xZf5ZtCXHj/lAfFyA/ywBl/B8IIRvt5sWokWabb5R8MbE5Vx81ZYxlU7fdBOM/LYw9zuX8NcyAaCGCoMsiqFkvyqu0+J76VJ6ZtpWidkYsnCNUu/TkDEKsbr5MQdiTCP1K6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ipvqM8LRCTctIfpsFuoJeBvpByp1k9+e4gFAR58JzgM=;
- b=jRlKE1xglr/vRbs+nyentM7fAjv/A3iLtMAa2/YxJaUcv66rYdMjOChmzbha9XfXv/9nx50glKa69jy7BJAlaq5C0uNKHyf3Hhuxbq143HHK034pqxjNScYU6AJsg4yKT8dwGbnaIoD5vvqSuu3YVQiN07+5pGV60yu0qtwTYM+XV5wK5VdhGQfewggEIGh0vbrtMEj+SCTK8osOlcM2uUJGQMwUjBPb5mOyb7WL6Nqc60nTgeof1I8gkSOtBZzglpQh5x+KYCuG8JItt1mlywSUdgEnDuP9gFPYovMQ+tl6/SB2hVYvA4FWza4c65XCntfVK7dpNCVrX5y6En5cMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MW4PR11MB6739.namprd11.prod.outlook.com (2603:10b6:303:20b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.39; Fri, 24 Mar
- 2023 09:02:35 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6178.039; Fri, 24 Mar 2023
- 09:02:34 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Thread-Topic: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Thread-Index: AQHZUnWe1bQRwtfhAUSI/T7BqHBa167yh7YAgAALsACAANbagIAAyRsAgAqMnjCABPKxgIAANdgAgAAeawCAAPG3IIAAOI6AgAE8z4CAA0qgoA==
-Date:   Fri, 24 Mar 2023 09:02:34 +0000
-Message-ID: <BN9PR11MB527622D86AE048D3394C12A28C849@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
- <ZAn7uC9UweiNdGkJ@nvidia.com> <ZAqv87fjbdynVaHA@Asurada-Nvidia>
- <ZAtYphmOuEqQ1BiC@nvidia.com>
- <BN9PR11MB52768F4D3E21C5231C1A04D38CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZBhYq8o4gqFZVb6k@nvidia.com> <ZBiF1hZVrp/aJRM6@Asurada-Nvidia>
- <ZBifWkY2Lt/U1Z7R@nvidia.com>
- <BN9PR11MB5276E6E3FCA90582AA61BDDE8C819@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZBmZj2pscX0hx2kQ@nvidia.com> <ZBqjUeEjjtCclgLN@Asurada-Nvidia>
-In-Reply-To: <ZBqjUeEjjtCclgLN@Asurada-Nvidia>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW4PR11MB6739:EE_
-x-ms-office365-filtering-correlation-id: 5a95fa1b-f6ff-4600-cb19-08db2c46820a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9JCeVeifyLyAR+q1s7c8q25PpoaWekbLpzKlY+jW5y1qt9OaMa5ulyRBVkfz0/rDtA6sJY9z5aD5KGOh3aiAzFi/WycyPKNPc8wbL+P9GjvwnBBerHcEX85m7dbFA4a6PxQ5p0H4VvyYokWVdLuLYd7dDwDsmFtPaSNFsOdYFXJl9w0ZCjSgsen+CSPE4bfszw464thQu9vG6mjJSubwmcL5UoHcMmmcYc749eTTnBcYZlCxi9POsoaUp5+22t3kGLtACkINrYXvWCD0bLQT8oRYLrKf0CrsW6cIj7kwZ04U+VhDaqeMHdFzh5Faw2D/J/lkVuY66JJ0RPg53N+LiZ7pjrpASmnUqIP4WNNH3qXoIcd4Wcmx+f63OEOakanPSWPDZlUC/IOqcajVzrjSD8w+xlnrNFRWNfoOoA16wRhCS7X33eL+84vNABmCifUSfriFcxu2Wgq55cm3DIrYoJ31Tf6kr983VQa4dV1/FvgktDPxu/yxXL7HjXeovKHD4u7sAUWn6jh5jky9mXvN2c4KQx4LGQ2BwjzFDng4LFQKG6T0g6eRGpFF6z2K4D4Tthd35HWIojVjDYVoi5F1w9L87Gc9s2L0E+HZc/d3e3WH9oK1qoq5KEXPF58+n1hEFlhXWBnPn8CVQQc1dmrrAY1DzY7ANsbn/glDxlEd/ySHcmnGHcIdetF7gafr7jMXdhxLanB+ZjeYe8QclqLz2w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199018)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(41300700001)(76116006)(52536014)(8936002)(33656002)(122000001)(9686003)(6506007)(38100700002)(86362001)(55016003)(38070700005)(83380400001)(26005)(186003)(54906003)(110136005)(478600001)(71200400001)(7696005)(316002)(82960400001)(2906002)(5660300002)(7416002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VlFUz1uGUrKlqC+LWX1E1pt7w7RKBQnB8AsaH5kmEeOd0zZEUmlIq5DV7avm?=
- =?us-ascii?Q?kZjt1LQasWBZzRFiuRNz/gVyr/Gj1R4fxObxqh1KU6JRuFLWd4ecTA31Xr8c?=
- =?us-ascii?Q?+vJEbMbrhgcY4H1Z1bSQ6WZ42ieE4w00XWJS7Dl6upHr74P5PcOlT0NU0Sem?=
- =?us-ascii?Q?AXrU68aUqeFVqT+ikV5CZWMLU9m7ogYFt+g3EBVYYCh9KUNrptMV+qQBoBuE?=
- =?us-ascii?Q?3fuV9YOXjWoKu110upgb9YOPNpf0m12U24W4+1cyvLmd05wXusVlM24fYG40?=
- =?us-ascii?Q?v1iVNtpiepog5Zg9HiGg5eTN0OfOSOHg0z/uoSuHBflxzrpmoFeHlTqYCyK4?=
- =?us-ascii?Q?ew+eMMKnxjGDGib3YZHSMgEjywMEtLH/+IM+OT4Rpu6rf1QPA9kPkY4D2SLp?=
- =?us-ascii?Q?0TlZTL3w2pCzP5P2ucRWxi5l3dAHLBfNLHdxL0Hw/Kt4IwVghiZQxFIZOAkS?=
- =?us-ascii?Q?JNne/BTIwonNH0SgPZRg/hTyc1tD2TNZND9uNRG9wcSWISuzHasEed1kuxgT?=
- =?us-ascii?Q?CMA8+1Wqn6HVycJA/Ws3PD8fGiRXGbjCitM8Gc1bXIlHV9Bp8F16OXGivRjk?=
- =?us-ascii?Q?GNiI10aerM3F6GO2eayL/CdI8cQYFLGssA9aNgpRsn3qCZifn17Q7m0azO+w?=
- =?us-ascii?Q?rg7PhtvuTObHdTPZE1qkfFbSJ5G0wDGesa/rw/3OBpR9nQbvIGpOssXJIMUT?=
- =?us-ascii?Q?qs3mM2+Hax21aRErrrpwGOnwetgOHjtWf7CSv6zGg26HOxPz9rNUDHwvyHKT?=
- =?us-ascii?Q?zyAc5eCNQHMEBjul/jVNnyqVelC0Xrcf439vzAl4lYuQeyUcVuJqulDd2AaS?=
- =?us-ascii?Q?6le0/hm0F+UonVrItYCR10WqKS+soiTJiaVDXpXNRUl5dPHpyszmzOl0/BKH?=
- =?us-ascii?Q?gY+1jWtv9MXK94o9XwTe8CboKEIEvBlDAQem4DMll12TGu6CVVX/84VV2wP4?=
- =?us-ascii?Q?6i8IM8QzOKci3WDRE+QK2xKpNIsVKJBW8DE1gD8+d1yumFZogzRW3Gipr6Hs?=
- =?us-ascii?Q?XM3D/2QiERbj8NAEIjP0W9pv5WNeUIID7JZJod0qEjRdIaPpQY2DklsAtBQ6?=
- =?us-ascii?Q?JsysuGOMBt6TPTmlTlPWFuqg+bTH/BiM1bgaA95XnPZuhGi6fkJFrXISSGG6?=
- =?us-ascii?Q?QZL0nPsmZQVuQb4ltnIJRB26AYoEbeLI/2jgzlhxgLZU2ZKkT8IikYIz3bAN?=
- =?us-ascii?Q?oFTcBSZsDiV+6InAFe1gWDaf05N5ltIDeF5uViFJoUMrY1xOrnT/N9p1/7W8?=
- =?us-ascii?Q?Bt0zoK2d1X3Nv3J2VR5g+PrKST/pOk62HH6FQ0wvRAor9RR+oF9OW/5o+Joa?=
- =?us-ascii?Q?yNauCTIO6DpcF4avLno3gZBzJtSLdjw+DSX6DvnQvfEafYTS5TqEkqXteQa2?=
- =?us-ascii?Q?mcjyqm7cxwIv5FJ0WMN5Ilr55rXmF7gpixH4jwkuNGVmnUcx3v2Hjhhmupe3?=
- =?us-ascii?Q?p6Q///LZ7dKIS8YyaDvgg1uModsPJMQ7HMWuuxcgYME5+Njjx1fSWAQ7/yNy?=
- =?us-ascii?Q?hZRZc7tjzLkjNPmHAdLzGbQ4Y0jmNa3QgFmrI3G/i9quzGj1rvktC34FVoRM?=
- =?us-ascii?Q?vHttaEIgNtJy+cWR8APO1Bxq5vnCWMQrIM0jyffh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 24 Mar 2023 06:04:26 -0400
+X-Greylist: delayed 1803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 03:04:24 PDT
+Received: from cynthia.allandria.com (cynthia.allandria.com [50.242.82.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E45C1B2C4;
+        Fri, 24 Mar 2023 03:04:24 -0700 (PDT)
+Received: from flar by cynthia.allandria.com with local (Exim 4.84_2)
+        (envelope-from <flar@allandria.com>)
+        id 1pfdGh-0001xM-91; Fri, 24 Mar 2023 01:59:27 -0700
+Date:   Fri, 24 Mar 2023 01:59:27 -0700
+From:   Brad Boyer <flar@allandria.com>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nubus: Don't list card resources by default
+Message-ID: <20230324085927.GA6354@allandria.com>
+References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
+ <CAMuHMdUJ6kbpYGTjyY5dX+-YRv3pL0ydG3HQ-H1khyeqLOa05A@mail.gmail.com>
+ <072fd894-ec50-ae5f-2be5-ebbeb0e7b39b@linux-m68k.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a95fa1b-f6ff-4600-cb19-08db2c46820a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 09:02:34.3510
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: C9ScXR/oa9zRPZDFJRlqjrxEYDXl5zZnsUAbfjA91L2AUF0BROQU4gDesOlj4Ed8d6xEUKve4SvVF0FQ2NCKkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6739
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <072fd894-ec50-ae5f-2be5-ebbeb0e7b39b@linux-m68k.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, March 22, 2023 2:42 PM
->=20
-> On Tue, Mar 21, 2023 at 08:48:31AM -0300, Jason Gunthorpe wrote:
-> > On Tue, Mar 21, 2023 at 08:34:00AM +0000, Tian, Kevin wrote:
-> >
-> > > > > Rephrasing that to put into a design: the IOCTL would pass a
-> > > > > user pointer to the queue, the size of the queue, then a head
-> > > > > pointer and a tail pointer? Then the kernel reads out all the
-> > > > > commands between the head and the tail and handles all those
-> > > > > invalidation commands only?
-> > > >
-> > > > Yes, that is one possible design
+On Fri, Mar 24, 2023 at 10:13:51AM +1100, Finn Thain wrote:
+> On Thu, 23 Mar 2023, Geert Uytterhoeven wrote:
+> > On Thu, Mar 23, 2023 at 7:02???AM Finn Thain <fthain@linux-m68k.org> wrote:
+> > > --- a/drivers/nubus/nubus.c
+> > > +++ b/drivers/nubus/nubus.c
+> > > @@ -34,6 +34,9 @@
 > > >
-> > > If we cannot have the short path in the kernel then I'm not sure the
-> > > value of using native format and queue in the uAPI. Batching can
-> > > be enabled over any format.
-> >
-> > SMMUv3 will have a hardware short path where the HW itself runs the
-> > VM's command queue and does this logic.
-> >
-> > So I like the symmetry of the SW path being close to that.
->=20
-> A tricky thing here that I just realized:
->=20
-> With VCMDQ, the guest will have two CMDQs. One is the vSMMU's
-> CMDQ handling all non-TLBI commands like CMD_CFGI_STE via the
-> invalidation IOCTL, and the other hardware accelerated VCMDQ
-> handling all TLBI commands by the HW. In this setup, we will
-> need a VCMDQ kernel driver to dispatch commands into the two
-> different queues.
->=20
+> > >  LIST_HEAD(nubus_func_rsrcs);
+> > >
+> > > +bool procfs_rsrcs;
+> > > +module_param(procfs_rsrcs, bool, 0444);
+> > 
+> > With the expanded functionality, is "rsrcs" still a good name?
+> > Perhaps this should be an integer, so you can define different
+> > levels? E.g.
+> >   - 0 = just devices
+> >   - 1 = above + boards + public resources
+> >   - 2 = above + private resources
+> 
+> That really depends on how the proc entries get used. I think it's 
+> probably going to be developers who would use them so I consider all of 
+> this to be outside of the UAPI and subject to change. But it would be nice 
+> to hear from other developers on that point.
 
-why doesn't hw generate a vm-exit for unsupported CMDs in VCMDQ
-and then let them emulated by vSMMU? such events should be rare
-once map/unmap are being conducted...
+I don't know of anything that currently uses them, but there's a number
+of potential uses depending on how far we want to take things. A real
+video driver for X.org for some of the more advanced cards could take
+advantage of some of the secondary information made available. I've
+got a number of NuBus video cards with some acceleration capabilities
+that were pretty advanced for the time. There's even a driver in the
+ROM on video cards that could be used, but that also requires more
+emulation of the MacOS environment. KVM could potentially need more
+information if we got it running on m68k, although I doubt any real
+Mac has enough RAM to make that useful. I haven't looked at a Radius
+Rocket (a Mac on a card) to see if it has anything useful in these,
+but I wouldn't be surprised if there are useful things there. I've
+never tried to boot Linux on a system with one installed or booting
+Linux on the card itself. I have booted a second instance of the MacOS
+on one, and I seem to recall it shows up as a Q900. I have a couple
+x86 system cards that were intended to run DOS as well. There was
+an Apple II card for the LC slot, but I don't own one. LC slot cards
+show up in software as NuBus, as I recall.
+
+It wouldn't be in userspace, but we could end up needing to pull
+firmware out of them for a number of different cards. I've got a couple
+SCSI cards that would need to have firmware loaded at runtime, and the
+ROM would have the default version even if we also allow a firmware
+file to override that. Based on the existing qlogicpti.c code, the
+ISP 1000 chip (found on ATTO SiliconExpress IV cards) needs firmware.
+The older SiliconExpress cards all appear to use various ESP chips,
+so they likely don't need anything special. I suspect the various MCP
+based cards have useful things on the ROM for a driver to use. They
+each have a 68000 chip on them running A/ROSE, which is presumably
+loaded from firmware as well. I have both ethernet and serial cards
+based on this platform. It appears that a driver for the specific
+card has to be loaded into A/ROSE on the card after it boots.
+
+I've got a bunch of cards that I've never even looked at the resources
+built into the ROM chips, so I'm guessing on what might or might not
+be useful. At one point I was buying every card I could find that
+looked interesting, and many of them I've never tested. I have crates
+full of stuff, plus a bunch stacked up that came in original boxes.
+
+Checking them is disabled now, but some Macs have fake NuBus resources
+for some of the onboard devices that show up as if they were in a
+virtual NuBus slot 0. Scanning that apparently caused problems on some
+models (presumably a bus error, since it would be accessing invalid
+addresses). Really old kernels had code to scan that protected by a
+compile time option.
+
+> Regarding terminology, the files in /proc/bus/nubus/*/ are termed 
+> "records" or "entries" while the subdirectories may represent boards, slot 
+> resources or tables of entries. So a parameter like "proc_entries" (in 
+> effect nubus.proc_entries) might be more apt than "procfs_rsrcs".
+> 
+> Linux "devices" correspond to the "functional resources" offered by a 
+> card. (Other resources have other purposes.)
+> 
+> I don't know where the "local/private" designation originates from. It's 
+> not to be found in Apple's book, "Designing Cards and Drivers for the 
+> Macintosh". AFAIK, there's no distinction between "public" and "private" 
+> like you might expect to find between the slot resources needed by Apple's 
+> Slot Manager and those needed by 3rd party drivers. E.g. the 
+> NUBUS_RESID_MAC_ADDRESS and NUBUS_RESID_GAMMADIR slot resources were 
+> Apple-defined, even though nubus.c describes them as "local/private".
+
+The split looks pretty artificial to me. I don't remember any details,
+as I don't think I was looking at that part of the code at the time.
+
+	Brad Boyer
+	flar@allandria.com
+
