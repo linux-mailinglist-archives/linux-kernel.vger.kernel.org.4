@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8596C7E65
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0AD6C7EA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjCXNDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S232001AbjCXNTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCXNDg (ORCPT
+        with ESMTP id S229508AbjCXNTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:03:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA15EC651
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:03:34 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id ix20so1759154plb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679663014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=emrmxMtoMVVno/g63jGPflCdBnxzHhl5cMb4H3cHM2w=;
-        b=JXGTUVqzjPSHsFlThpUxwK/Ih0v4ZTKOShw//J8J3dAwB+pjiJbjfEndJFjN+TbI0l
-         HIn3myHtgl/xyx2Ld8/ABN8pf2DfH6JnrzX6xX7B/6xsVIa2sTmTmYgM13cLWmr0oMF2
-         vvB5LZXyWToaRliO3e0ruD3gNJkYyFPJIMF5r86XKLD2JkTdr5u4oSH2gIvu3xwI74RZ
-         ck9qxSOTf1PrMWfLviRQiUQXVns/ocKi+W0AXTxcfVbpTQ0HV8AAk+xYg67kQ7vtnIY6
-         h9xrsA8mDe3eW/dNccG9jx04G6ZFy/y88cj3mNnlQ3xBZatpHg8zUCc0Bo4zYZyWd31X
-         vLnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679663014;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=emrmxMtoMVVno/g63jGPflCdBnxzHhl5cMb4H3cHM2w=;
-        b=Nj0q8chCzLa9PmNrhtedF5LLHsCCRmDY/7y4qeP/AV/dAcmSNedKOHWUBklMkLUXiF
-         44eDgySZAnsp9NUQCw/vq5beFWzq0M17BEFlTnIrZtmDl4bZxtHqkB4oVW3gsrIYDYxL
-         FuJhsKI78PDcqsBc9xv/uRW3OxUfMnBZ56Dmxa/OMCqNAGG8ML49NnmgS7LSzHFJoP8m
-         XdrgcKOmBSkQN/WpbbFsXu+WndAcGVox36zCz+ePDAWVXOOfFrDO5fpBBkBdfPuiQEzW
-         65zXhDj+ffywp0IWqOLxjfY4l9CdwWdakmmCf+X3hoJJy+k4tEEsXZcqjE250y+ddnlM
-         J3xg==
-X-Gm-Message-State: AAQBX9dIOBzuLf2nd6H1Qig54z9MjLVMReTqyL6zHN1ipfLxoS1gyYFn
-        JGosXi3057WNyZsPuV2N3E1dIEzrJxM=
-X-Google-Smtp-Source: AKy350YY/SPP1LClkfMG2QLhM3Vl1h/nN2AdwkSTjrLjOuDkSMWN0N/HGdtgKDNDc8c1Zz6JHVpP7Q==
-X-Received: by 2002:a17:903:4303:b0:19e:b2ed:6fee with SMTP id jz3-20020a170903430300b0019eb2ed6feemr2253790plb.58.1679663013998;
-        Fri, 24 Mar 2023 06:03:33 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id y3-20020a170902700300b001a19438336esm14173990plk.67.2023.03.24.06.03.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 06:03:33 -0700 (PDT)
-Message-ID: <609742f5-c280-53fc-3b7d-84a5abf3459e@gmail.com>
-Date:   Fri, 24 Mar 2023 06:03:34 -0700
+        Fri, 24 Mar 2023 09:19:37 -0400
+X-Greylist: delayed 732 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Mar 2023 06:19:35 PDT
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD6A12860;
+        Fri, 24 Mar 2023 06:19:35 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B303418837C2;
+        Fri, 24 Mar 2023 13:07:21 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id ACC3F2500B57;
+        Fri, 24 Mar 2023 13:07:21 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id A23749B403F4; Fri, 24 Mar 2023 13:07:21 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id B3AEB9B403E2;
+        Fri, 24 Mar 2023 13:07:20 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 1/6] net: bridge: add dynamic flag to
+ switchdev notifier
+In-Reply-To: <ZBgd1mgO36umXqoj@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-2-netdev@kapio-technology.com>
+ <ZBgd1mgO36umXqoj@shredder>
+Date:   Fri, 24 Mar 2023 14:04:45 +0100
+Message-ID: <87h6ua5mhe.fsf@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/3] scripts/gdb: timerlist: fix rb_node access and python
- errors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        jan.kiszka@siemens.com
-Cc:     linux-kernel@vger.kernel.org, narmstrong@baylibre.com,
-        kbingham@kernel.org
-References: <20220727141443.133094-1-aouledameur@baylibre.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220727141443.133094-1-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amjad, Jan,
+On Mon, Mar 20, 2023 at 10:48, Ido Schimmel <idosch@nvidia.com> wrote:
+>
+> I was under the impression that the consensus was to rename this to
+> 'is_static' so that it is consistent with other flags.
+>
 
-On 7/27/2022 7:14 AM, Amjad Ouled-Ameur wrote:
-> This patchset fixes use of lx-timerlist with kgdb.
-> 
-> It has been tested on Amlogic libretech-cc s905X and works fine [0]
-> 
-> [0]: https://pastebin.com/RAhQYh6L
+I think the consensus was that the bridge maintainers would decide if it
+should be changed, this according to Oltean. I still think that
+is_dyn is more secure codewise in the long run and it is logical as that
+is what the feature the flag concerns.
 
-Was right about to submit similar fixes. The whole series is:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Jan, it would appear there were earlier attempts at fixing timerlist.py, 
-however as of 6.3-rc3, none of those patches have been merged, can you 
-take them? Thanks!
--- 
-Florian
+When you say consistent with other flags, I don't understand the
+inconsistency. Could you please explain.
