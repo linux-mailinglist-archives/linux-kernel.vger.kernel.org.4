@@ -2,85 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05476C7E7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB7C6C7E8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjCXNLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S231967AbjCXNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCXNL2 (ORCPT
+        with ESMTP id S231308AbjCXNNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:11:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DADC95
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:11:28 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4046C6603103;
-        Fri, 24 Mar 2023 13:11:26 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679663486;
-        bh=cn5ABfRPzRRm47H1QPXFqbLMmYbYM/NLXxj00ObK1K8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g6v/poHYkAdzAmaG326QpOOKx/6qpZzzb+VHepSQD8cWD1Norqrzab8A4ZRoPEmdA
-         uj5ePEa5Z49szVeeAPOeFczAEao3Q3+d6WI6VfVTAjTwv1i2S3n/9OawMl/M79slEU
-         x2tkp+/QhYwEJNEKhZlVCSnt5y5gD8TrVTlESjEjGoKxJyu20YGx6YI8KGpx8/7Fk7
-         8YzxAI2feB0GDT2+77o62U3kd0ZMNcUKgLvw9GjtrvpBUpI7qF9prtm9kpR9Iz7enB
-         kZVXkFW05tszN7d1CxDGYwSQ3IpslaMDPZg65iiKsQBzrpOZOTX62lYbjpJEMWkAtF
-         EupUqywUpCMWQ==
-Message-ID: <b21a0a45-f203-249b-6ffd-abd1e27959f4@collabora.com>
-Date:   Fri, 24 Mar 2023 14:11:23 +0100
+        Fri, 24 Mar 2023 09:13:42 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3D1D5FD6;
+        Fri, 24 Mar 2023 06:13:40 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pfhEh-00010v-00; Fri, 24 Mar 2023 14:13:39 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 1C1CCC1B34; Fri, 24 Mar 2023 14:11:29 +0100 (CET)
+Date:   Fri, 24 Mar 2023 14:11:29 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: Remove obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP
+Message-ID: <20230324131129.GA15824@alpha.franken.de>
+References: <20230324100848.13127-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/4] cpufreq: mediatek: raise proc/sram max voltage for
- MT8516
-Content-Language: en-US
-To:     "jia-wei.chang" <jia-wei.chang@mediatek.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com, Nick Hainke <vincent@systemli.org>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230324101130.14053-1-jia-wei.chang@mediatek.com>
- <20230324101130.14053-4-jia-wei.chang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230324101130.14053-4-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324100848.13127-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/03/23 11:11, jia-wei.chang ha scritto:
-> From: "Jia-Wei Chang" <jia-wei.chang@mediatek.com>
+On Fri, Mar 24, 2023 at 11:08:48AM +0100, Lukas Bulwahn wrote:
+> Commit 1b00767fd8e1 ("MIPS: Remove PMC MSP71xx platform") removes all uses
+> of the config IRQ_MSP_CIC and IRQ_MSP_SLP.
 > 
-> Since the upper boundary of proc/sram voltage of MT8516 is 1300 mV,
-> which is greater than the value of MT2701 1150 mV, we fix it by adding
-> the corresponding platform data and specify proc/sram_max_volt to
-> support MT8516.
+> Remove these two obsolete configs IRQ_MSP_CIC and IRQ_MSP_SLP.
 > 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
-> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
-> Reported-by: Nick Hainke <vincent@systemli.org>
-> Link: https://lore.kernel.org/lkml/75216e0c-9d36-7ada-1507-1bb4a91a3326@systemli.org/T/
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  arch/mips/Kconfig | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index f1dfc2fe2acb..26d254d125b6 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -1179,12 +1179,6 @@ config SYS_SUPPORTS_LITTLE_ENDIAN
+>  config MIPS_HUGE_TLB_SUPPORT
+>  	def_bool HUGETLB_PAGE || TRANSPARENT_HUGEPAGE
+>  
+> -config IRQ_MSP_SLP
+> -	bool
+> -
+> -config IRQ_MSP_CIC
+> -	bool
+> -
+>  config IRQ_TXX9
+>  	bool
+>  
+> -- 
+> 2.17.1
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+applied to mips-next.
 
+Thomas.
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
