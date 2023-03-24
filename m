@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D786C7482
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23626C747F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCXAUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S231161AbjCXAUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjCXAT7 (ORCPT
+        with ESMTP id S231355AbjCXAT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 23 Mar 2023 20:19:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179812E81D;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0994A2E0E3;
         Thu, 23 Mar 2023 17:19:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5554B822B5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0F84B822B8;
         Fri, 24 Mar 2023 00:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD355C433B4;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC604C433B3;
         Fri, 24 Mar 2023 00:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679617181;
-        bh=BGUB2fistUJ4gqE7rwALc7ULAezsO9b+PlI8e9ct9as=;
+        bh=n01ySLfbpYhus3Mob79To2m1LPQToRsdp4kgb/5Hf30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JOWtHCxnhgFIhmU3FDT2IfbmcHRtpzmIK7aszFfqC+k5EDcplZ5lMpbmLjERbZ83W
-         dRWcyYeUuTXQVF7j7eEaO4BGkjiVvlvVkEiWEkZXGVUOYeUSgW1Yc2SWPOUrcbThMF
-         /0cLNxoB3dcJ0y8PXNKzMsLNi5fikH3H6tf7L1cR4tW0lsVU6BOmQZE65dbKjrYQCw
-         pX/fpUr9jb9MD9p/qwwZmYet/3D6TfCjzMU3p13XsMLfqq0ei+kYCiaTDkCaz51a0o
-         vUHNqLMlIbsbyHpcUyqxcaU+ooVWJo67ISAdaOqLK2ahtmCX/7DvIE0PStmXcrwgaX
-         OIdZGCRF0oiuQ==
+        b=VLuPzNlCYuKg3TaBy/0difG1UhzPlTqt2rEuEtkPtyAaxZU3H0ZuprO6BsoMhLNyO
+         JgmqxDdZPk1h4spbzVRTjjafiVD1bpQgETQMit9Yq/zxc38SrF0/L00TowiAQynwZG
+         pZBIR5nIrrraXyhU6ix/xtC7+oNqcPvAOzaIr93nZoPw8xy7d3BpvRcqo7oZtUkU8k
+         fG14zhuZxOjNsVd+iJ79V6TqA9+K2z4M+pAEjR777LowwZfgJs66XvQGKX0po4GDmz
+         vvGqZfamClj6Hm6Yndi+TOlCftlntgYK8FFRMYfOppX2GpaDvFmjRchmttFNv30oU4
+         KSVTmaCeasItA==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C44BC15403AA; Thu, 23 Mar 2023 17:19:40 -0700 (PDT)
+        id C78F315403AB; Thu, 23 Mar 2023 17:19:40 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, hch@lst.de,
         "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH RFC rcu 17/19] srcu: Fix long lines in srcu_gp_end()
-Date:   Thu, 23 Mar 2023 17:19:36 -0700
-Message-Id: <20230324001938.3443499-17-paulmck@kernel.org>
+Subject: [PATCH RFC rcu 18/19] srcu: Fix long lines in srcu_funnel_gp_start()
+Date:   Thu, 23 Mar 2023 17:19:37 -0700
+Message-Id: <20230324001938.3443499-18-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
 References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,98 +62,79 @@ synonym for the "ssp->srcu_sup" that was bloating several lines of code.
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Christoph Hellwig <hch@lst.de>
 ---
- kernel/rcu/srcutree.c | 41 +++++++++++++++++++++--------------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+ kernel/rcu/srcutree.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
 diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index fd88a98b7254..fcb2bac7bb4b 100644
+index fcb2bac7bb4b..61dd47981b40 100644
 --- a/kernel/rcu/srcutree.c
 +++ b/kernel/rcu/srcutree.c
-@@ -862,28 +862,29 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 	unsigned long sgsne;
+@@ -1004,9 +1004,10 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
  	struct srcu_node *snp;
- 	int ss_state;
+ 	struct srcu_node *snp_leaf;
+ 	unsigned long snp_seq;
 +	struct srcu_usage *sup = ssp->srcu_sup;
  
- 	/* Prevent more than one additional grace period. */
--	mutex_lock(&ssp->srcu_sup->srcu_cb_mutex);
-+	mutex_lock(&sup->srcu_cb_mutex);
+ 	/* Ensure that snp node tree is fully initialized before traversing it */
+-	if (smp_load_acquire(&ssp->srcu_sup->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)
++	if (smp_load_acquire(&sup->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)
+ 		snp_leaf = NULL;
+ 	else
+ 		snp_leaf = sdp->mynode;
+@@ -1014,7 +1015,7 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
+ 	if (snp_leaf)
+ 		/* Each pass through the loop does one level of the srcu_node tree. */
+ 		for (snp = snp_leaf; snp != NULL; snp = snp->srcu_parent) {
+-			if (WARN_ON_ONCE(rcu_seq_done(&ssp->srcu_sup->srcu_gp_seq, s)) && snp != snp_leaf)
++			if (WARN_ON_ONCE(rcu_seq_done(&sup->srcu_gp_seq, s)) && snp != snp_leaf)
+ 				return; /* GP already done and CBs recorded. */
+ 			spin_lock_irqsave_rcu_node(snp, flags);
+ 			snp_seq = snp->srcu_have_cbs[idx];
+@@ -1041,20 +1042,20 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
  
- 	/* End the current grace period. */
--	spin_lock_irq_rcu_node(ssp->srcu_sup);
--	idx = rcu_seq_state(ssp->srcu_sup->srcu_gp_seq);
-+	spin_lock_irq_rcu_node(sup);
-+	idx = rcu_seq_state(sup->srcu_gp_seq);
- 	WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
--	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_sup->srcu_gp_seq), READ_ONCE(ssp->srcu_sup->srcu_gp_seq_needed_exp)))
-+	if (ULONG_CMP_LT(READ_ONCE(sup->srcu_gp_seq), READ_ONCE(sup->srcu_gp_seq_needed_exp)))
- 		cbdelay = 0;
+ 	/* Top of tree, must ensure the grace period will be started. */
+ 	spin_lock_irqsave_ssp_contention(ssp, &flags);
+-	if (ULONG_CMP_LT(ssp->srcu_sup->srcu_gp_seq_needed, s)) {
++	if (ULONG_CMP_LT(sup->srcu_gp_seq_needed, s)) {
+ 		/*
+ 		 * Record need for grace period s.  Pair with load
+ 		 * acquire setting up for initialization.
+ 		 */
+-		smp_store_release(&ssp->srcu_sup->srcu_gp_seq_needed, s); /*^^^*/
++		smp_store_release(&sup->srcu_gp_seq_needed, s); /*^^^*/
+ 	}
+-	if (!do_norm && ULONG_CMP_LT(ssp->srcu_sup->srcu_gp_seq_needed_exp, s))
+-		WRITE_ONCE(ssp->srcu_sup->srcu_gp_seq_needed_exp, s);
++	if (!do_norm && ULONG_CMP_LT(sup->srcu_gp_seq_needed_exp, s))
++		WRITE_ONCE(sup->srcu_gp_seq_needed_exp, s);
  
--	WRITE_ONCE(ssp->srcu_sup->srcu_last_gp_end, ktime_get_mono_fast_ns());
--	rcu_seq_end(&ssp->srcu_sup->srcu_gp_seq);
--	gpseq = rcu_seq_current(&ssp->srcu_sup->srcu_gp_seq);
--	if (ULONG_CMP_LT(ssp->srcu_sup->srcu_gp_seq_needed_exp, gpseq))
--		WRITE_ONCE(ssp->srcu_sup->srcu_gp_seq_needed_exp, gpseq);
--	spin_unlock_irq_rcu_node(ssp->srcu_sup);
--	mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex);
-+	WRITE_ONCE(sup->srcu_last_gp_end, ktime_get_mono_fast_ns());
-+	rcu_seq_end(&sup->srcu_gp_seq);
-+	gpseq = rcu_seq_current(&sup->srcu_gp_seq);
-+	if (ULONG_CMP_LT(sup->srcu_gp_seq_needed_exp, gpseq))
-+		WRITE_ONCE(sup->srcu_gp_seq_needed_exp, gpseq);
-+	spin_unlock_irq_rcu_node(sup);
-+	mutex_unlock(&sup->srcu_gp_mutex);
- 	/* A new grace period can start at this point.  But only one. */
- 
- 	/* Initiate callback invocation as needed. */
--	ss_state = smp_load_acquire(&ssp->srcu_sup->srcu_size_state);
-+	ss_state = smp_load_acquire(&sup->srcu_size_state);
- 	if (ss_state < SRCU_SIZE_WAIT_BARRIER) {
- 		srcu_schedule_cbs_sdp(per_cpu_ptr(ssp->sda, get_boot_cpu_id()),
- 					cbdelay);
-@@ -892,7 +893,7 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 		srcu_for_each_node_breadth_first(ssp, snp) {
- 			spin_lock_irq_rcu_node(snp);
- 			cbs = false;
--			last_lvl = snp >= ssp->srcu_sup->level[rcu_num_lvls - 1];
-+			last_lvl = snp >= sup->level[rcu_num_lvls - 1];
- 			if (last_lvl)
- 				cbs = ss_state < SRCU_SIZE_BIG || snp->srcu_have_cbs[idx] == gpseq;
- 			snp->srcu_have_cbs[idx] = gpseq;
-@@ -924,18 +925,18 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 		}
- 
- 	/* Callback initiation done, allow grace periods after next. */
--	mutex_unlock(&ssp->srcu_sup->srcu_cb_mutex);
-+	mutex_unlock(&sup->srcu_cb_mutex);
- 
- 	/* Start a new grace period if needed. */
--	spin_lock_irq_rcu_node(ssp->srcu_sup);
--	gpseq = rcu_seq_current(&ssp->srcu_sup->srcu_gp_seq);
-+	spin_lock_irq_rcu_node(sup);
-+	gpseq = rcu_seq_current(&sup->srcu_gp_seq);
- 	if (!rcu_seq_state(gpseq) &&
--	    ULONG_CMP_LT(gpseq, ssp->srcu_sup->srcu_gp_seq_needed)) {
-+	    ULONG_CMP_LT(gpseq, sup->srcu_gp_seq_needed)) {
+ 	/* If grace period not already in progress, start it. */
+-	if (!WARN_ON_ONCE(rcu_seq_done(&ssp->srcu_sup->srcu_gp_seq, s)) &&
+-	    rcu_seq_state(ssp->srcu_sup->srcu_gp_seq) == SRCU_STATE_IDLE) {
+-		WARN_ON_ONCE(ULONG_CMP_GE(ssp->srcu_sup->srcu_gp_seq, ssp->srcu_sup->srcu_gp_seq_needed));
++	if (!WARN_ON_ONCE(rcu_seq_done(&sup->srcu_gp_seq, s)) &&
++	    rcu_seq_state(sup->srcu_gp_seq) == SRCU_STATE_IDLE) {
++		WARN_ON_ONCE(ULONG_CMP_GE(sup->srcu_gp_seq, sup->srcu_gp_seq_needed));
  		srcu_gp_start(ssp);
--		spin_unlock_irq_rcu_node(ssp->srcu_sup);
-+		spin_unlock_irq_rcu_node(sup);
- 		srcu_reschedule(ssp, 0);
- 	} else {
--		spin_unlock_irq_rcu_node(ssp->srcu_sup);
-+		spin_unlock_irq_rcu_node(sup);
- 	}
  
- 	/* Transition to big if needed. */
-@@ -943,7 +944,7 @@ static void srcu_gp_end(struct srcu_struct *ssp)
- 		if (ss_state == SRCU_SIZE_ALLOC)
- 			init_srcu_struct_nodes(ssp, GFP_KERNEL);
- 		else
--			smp_store_release(&ssp->srcu_sup->srcu_size_state, ss_state + 1);
-+			smp_store_release(&sup->srcu_size_state, ss_state + 1);
+ 		// And how can that list_add() in the "else" clause
+@@ -1063,12 +1064,12 @@ static void srcu_funnel_gp_start(struct srcu_struct *ssp, struct srcu_data *sdp,
+ 		// can only be executed during early boot when there is only
+ 		// the one boot CPU running with interrupts still disabled.
+ 		if (likely(srcu_init_done))
+-			queue_delayed_work(rcu_gp_wq, &ssp->srcu_sup->work,
++			queue_delayed_work(rcu_gp_wq, &sup->work,
+ 					   !!srcu_get_delay(ssp));
+-		else if (list_empty(&ssp->srcu_sup->work.work.entry))
+-			list_add(&ssp->srcu_sup->work.work.entry, &srcu_boot_list);
++		else if (list_empty(&sup->work.work.entry))
++			list_add(&sup->work.work.entry, &srcu_boot_list);
  	}
+-	spin_unlock_irqrestore_rcu_node(ssp->srcu_sup, flags);
++	spin_unlock_irqrestore_rcu_node(sup, flags);
  }
  
+ /*
 -- 
 2.40.0.rc2
 
