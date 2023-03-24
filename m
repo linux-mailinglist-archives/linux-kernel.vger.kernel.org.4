@@ -2,151 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C456C7F19
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAAB6C7F20
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 14:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjCXNuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 09:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S231215AbjCXNv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 09:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCXNuV (ORCPT
+        with ESMTP id S231436AbjCXNvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:50:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F011ABFA;
-        Fri, 24 Mar 2023 06:50:18 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OCeBHm028430;
-        Fri, 24 Mar 2023 13:50:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JdVVWHZ69BaDiZ+0gfVAZs2x+E32SkohOmw9pXDXoGk=;
- b=fvr2yaNH5nbmkKZloZvXrH1DkJJmfJgqJfWsTTdFzJT1iD5fISUPziR5RTexE+QSQaXs
- Z5ERk1BVTaNhMKjx4kFzv3cMzTcqd6WIbHbWSA8RFS4x6842c7TWwhyq41XN9oAPzcDb
- hlNeh4IogQqOZiz/4chZzcQrp3miUKVWaEPetHU3+7vMjtkZGRS4Lg00iKzw10Ewj5L6
- 1JAA4eRM5W6zAL7ZCZkZ2QnrAPyg0M07e925G8Kevi+7aaW9bXWtSNuV1WEDdtB24BCX
- YyULnuuU98MeIP0gRGydJq2iXnxlKoNDRrzrc/HAtj8de+Vs8h+pjZX81zvP9+JJQ2O5 6g== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgy60a0qj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:50:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32ODo3E3020342
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:50:03 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 24 Mar
- 2023 06:50:02 -0700
-Message-ID: <11ea2552-27e1-3665-869c-4594de1782a5@quicinc.com>
-Date:   Fri, 24 Mar 2023 07:50:01 -0600
+        Fri, 24 Mar 2023 09:51:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539D21ADFE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679665836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=FMTjZQ/T7fVsB9p23mpEDbCQHzwssIrPeWULDPJBsw4=;
+        b=Ifp9XiylYe8tY3v53WeiLqRDIO2dq1ttjrxW7AsFxygL4EwbeCOf7vR6UJZQStWeoBPOfR
+        7oJZNAcVYcS79M4Ajp987e2wjVomEJXwOjkVnZ27XlqnNLZv7vyg8Z3ZJsBb6bO7V117lU
+        ZUaDD8619IW7FtgAI//pxFvMne9F99g=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-621-KD22LTAkMsOLncBFla067w-1; Fri, 24 Mar 2023 09:50:34 -0400
+X-MC-Unique: KD22LTAkMsOLncBFla067w-1
+Received: by mail-qv1-f72.google.com with SMTP id c15-20020a056214070f00b005bb308e7c12so1019004qvz.19
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 06:50:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679665834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FMTjZQ/T7fVsB9p23mpEDbCQHzwssIrPeWULDPJBsw4=;
+        b=dgt9LjcYu8+CNhsNxbnxb/iptdjjGO9JV6Hq3dlvKYfLliikamnJEgOlomBzSeYRvL
+         2UnMx0U1Ji+vppyFwM6wiLsWwMRmXCTu42Tlc+v8Pj0k3V+6S3SReD06oTKo5N/ycr8U
+         srNC5+RsHk72fzUXBICZp0sfyGWTSNVoBmyR8NhGQBNhqPDb0HnUQ9RiOr15LTZtTKi2
+         t8u5HX3kwJNNWCkKXY33TAcAcn9Hr3zpWHbQUNab8S4gWW13KV06aHJD6+/kPEQZ/9SQ
+         6j2TheWy3xNwnaNs89N8Paqgk69nRpFEQIhZTBZQFIj5AYBg4nO8i4XemVLyKCnI2l69
+         fu/Q==
+X-Gm-Message-State: AAQBX9cLgcggrGdv0Wg6lDyExg8i1AQPspvL2DGnwtBVql5xw8fd7/BD
+        ZobjeYAZuKFlfMgEV/3JRdvQhR4hLRP2t6NirGEIF5inhiEyLGu4oxx2GHULmd0Lc7tIofpX+Mm
+        6nZOT+swNX7biKnLVSOuhI3rh
+X-Received: by 2002:a05:6214:1c81:b0:5cc:97fa:eec9 with SMTP id ib1-20020a0562141c8100b005cc97faeec9mr4261670qvb.25.1679665834197;
+        Fri, 24 Mar 2023 06:50:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ahlHZPmdC3xd97ab7RGu9groXWTX+2fdJ9Ht5qCwv4vBumlH8C1WLa0jD3fUCrLsQs2svgVg==
+X-Received: by 2002:a05:6214:1c81:b0:5cc:97fa:eec9 with SMTP id ib1-20020a0562141c8100b005cc97faeec9mr4261627qvb.25.1679665833983;
+        Fri, 24 Mar 2023 06:50:33 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id ks10-20020a056214310a00b005dd8b934573sm697466qvb.11.2023.03.24.06.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 06:50:33 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     Larry.Finger@lwfinger.net, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] b43legacy: remove unused freq_r3A_value function
+Date:   Fri, 24 Mar 2023 09:50:22 -0400
+Message-Id: <20230324135022.2649735-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: host: Range check CHDBOFF and ERDBOFF
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1679066059-8399-1-git-send-email-quic_jhugo@quicinc.com>
- <20230324103452.GC4259@thinkpad>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230324103452.GC4259@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: vHeHX3xCtvbLGlCpiO9ew32pexnjDQOK
-X-Proofpoint-GUID: vHeHX3xCtvbLGlCpiO9ew32pexnjDQOK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 bulkscore=0 mlxscore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303240112
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/2023 4:34 AM, Manivannan Sadhasivam wrote:
-> On Fri, Mar 17, 2023 at 09:14:19AM -0600, Jeffrey Hugo wrote:
->> If the value read from the CHDBOFF and ERDBOFF registers is outside the
->> range of the MHI register space then an invalid address might be computed
->> which later causes a kernel panic.  Range check the read value to prevent
->> a crash due to bad data from the device.
->>
->> Fixes: 6cd330ae76ff ("bus: mhi: core: Add support for ringing channel/event ring doorbells")
-> 
-> Please CC stable list.
+clang with W=1 reports
+drivers/net/wireless/broadcom/b43legacy/radio.c:1713:5: error:
+  unused function 'freq_r3A_value' [-Werror,-Wunused-function]
+u16 freq_r3A_value(u16 frequency)
+    ^
+This function is not used so remove it.
 
-The stable folks have been automatically picking up everything with a 
-fixes tag for years.  CCing the stable list does not seem to do anything 
-unless the patch needs specific backporting adjustments.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/broadcom/b43legacy/radio.c | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-Do you still want an explicit CC?
-
-> 
->> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
->> Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
->> ---
->>   drivers/bus/mhi/host/init.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
->> index 3d779ee..ae8ebcfb 100644
->> --- a/drivers/bus/mhi/host/init.c
->> +++ b/drivers/bus/mhi/host/init.c
->> @@ -516,6 +516,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->>   		return -EIO;
->>   	}
->>   
->> +	if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
->> +		dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
->> +			val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
->> +		return -EINVAL;
-> 
-> Isn't -ERANGE a better errno here and also in other places of the driver?
-
-I suppose that could work.  This was modeled after the existing BHI (eg 
-BHIOFF) range checks.  You want those updated in the same change or a 
-separate one?
-
-> Thanks,
-> Mani
-> 
->> +	}
->> +
->>   	/* Setup wake db */
->>   	mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
->>   	mhi_cntrl->wake_set = false;
->> @@ -532,6 +538,12 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->>   		return -EIO;
->>   	}
->>   
->> +	if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
->> +		dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
->> +			val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
->> +		return -EINVAL;
->> +	}
->> +
->>   	/* Setup event db address for each ev_ring */
->>   	mhi_event = mhi_cntrl->mhi_event;
->>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
->> -- 
->> 2.7.4
->>
->>
-> 
+diff --git a/drivers/net/wireless/broadcom/b43legacy/radio.c b/drivers/net/wireless/broadcom/b43legacy/radio.c
+index fdf78c10a05c..8d7eb89c1628 100644
+--- a/drivers/net/wireless/broadcom/b43legacy/radio.c
++++ b/drivers/net/wireless/broadcom/b43legacy/radio.c
+@@ -1709,23 +1709,6 @@ u16 b43legacy_radio_init2050(struct b43legacy_wldev *dev)
+ 	return ret;
+ }
+ 
+-static inline
+-u16 freq_r3A_value(u16 frequency)
+-{
+-	u16 value;
+-
+-	if (frequency < 5091)
+-		value = 0x0040;
+-	else if (frequency < 5321)
+-		value = 0x0000;
+-	else if (frequency < 5806)
+-		value = 0x0080;
+-	else
+-		value = 0x0040;
+-
+-	return value;
+-}
+-
+ int b43legacy_radio_selectchannel(struct b43legacy_wldev *dev,
+ 				  u8 channel,
+ 				  int synthetic_pu_workaround)
+-- 
+2.27.0
 
