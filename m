@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D456C804C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DFC6C8058
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjCXOtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S232107AbjCXOwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbjCXOtd (ORCPT
+        with ESMTP id S231508AbjCXOwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:49:33 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769361990;
-        Fri, 24 Mar 2023 07:49:21 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id eh3so8774048edb.11;
-        Fri, 24 Mar 2023 07:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679669360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w8i/6q7CgrLLxreHR0W5NCOW5wTxfi6u94FOfCVLsm0=;
-        b=Zk3c3TRL/FP6vnqOFa4Destc9U8oW93K0Tt67Z9wd8D4dQ8SwzRZe2DksNhRPQYo3M
-         SP5nzHrVR//sGHv8YdyGR/OvPSRSh1piHbPqnf4bZIVkpZRYMlF4UhaJ8UikcX/8JeID
-         eRtxVf7ZdEgW7Di2K5k9VRpp1sMdEZ42o2masVQfalkmq3tCFsYaYVDhU1Rij1hzphbI
-         50YeqcoutdXco//y6pkv2/5qVsbMxpLD4JMSvUQES629ddgu0aEYmVgIPjDLodE8xiPO
-         HYiczflbpiSGtqQbRVc1V74NRXBiyC24TrdpSgr9n2BZvXKqh0gGSJ1Iw2dRHonvziUU
-         PdQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679669360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w8i/6q7CgrLLxreHR0W5NCOW5wTxfi6u94FOfCVLsm0=;
-        b=wMLjy4bX1K3ej5plzWa2L8kg69O6w45QG1YS7E8vpSsmVy4rcdo7nzghfL300Ckc9K
-         j8HfQ0Qup46E3x/Lr3NHG0oZbW6f5kFJLXQVVKRPpPqulFs3u2qOFKIu2M6GpFFOXrrJ
-         03SfH08QNlofwScCvdy0HegmG0vWEY8smZD0xhwdPaJfqtvtDMJnrEG538vSVaHxt+Zl
-         mLNd8u2kbkE/Ul7HTrZPlqvbqQDdIFVuBpvviG1ebOk/7KN6c+iNEUE09fyAIPh3AFXD
-         js/VEeyLxWb65w/aBgWTu3dJY7y56k76tmFneb8zoOQBbiLT+zg6YjMG9WpsT7tABTO6
-         /VRg==
-X-Gm-Message-State: AAQBX9dCTjK8p9v028a2ejWs6A+TH20cw/2UFhWlQDgHPbEUCYn6iu4L
-        EYiHJ6vTAm33V7SVUpQcWn4=
-X-Google-Smtp-Source: AKy350Yt9ORwSKr6rDmFFL+TjE6JGDQXOT5DwEjo0i0zFaFZ/QBM9rM/2TGTQZC/fPHNSa3HG177bw==
-X-Received: by 2002:a50:ed11:0:b0:4fc:b51f:ff50 with SMTP id j17-20020a50ed11000000b004fcb51fff50mr3102806eds.30.1679669359773;
-        Fri, 24 Mar 2023 07:49:19 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id xf9-20020a17090731c900b0093debb9990esm1303227ejb.212.2023.03.24.07.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 07:49:19 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 16:49:17 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
+        Fri, 24 Mar 2023 10:52:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D2C178;
+        Fri, 24 Mar 2023 07:52:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9481B824C9;
+        Fri, 24 Mar 2023 14:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19939C433D2;
+        Fri, 24 Mar 2023 14:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679669529;
+        bh=0PpDPmjLSqLkyprFWnCZwIMNanhy8NMfDChEItYUYNA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=kvEY9K6hJSrfGheCe0CCWiJvR7+SACqnTDQvORE8gcs3GXKHKrl8XyQh5xdLsjJGN
+         f+RgCo4voThMwXliDU07e4JaZHMnU/A8CXebqL+OYdGaGOthpKlAl8Jjd2fjiSiA5s
+         LjNVYwmpsHVbh0RifGqcwtu7N/6FZO1abie/+uGBq4AsHmCBJqympi80JQxxRt1zsG
+         WYddlOuILALfgxi3bukwSc8UJxrMQmwr5V9JDVU2YHaZRgKZ+KyBzzk2maiI+l4wUb
+         8l9L+PSnRbTvPAdjvn5jwNpzAri92KiyY6B25NGeZ0+VLG/zhWBjvawRHr1iF+R+mv
+         qBASAYbByTAFw==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 1/2] dt-bindings: wireless: add ath11k pcie bindings
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230321094011.9759-2-johan+linaro@kernel.org>
+References: <20230321094011.9759-2-johan+linaro@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>
-Subject: Re: What is the best way to provide FDB related metrics to user
- space?
-Message-ID: <20230324144917.32lnpgtw5auuyovy@skbuf>
-References: <20230324140622.GB28424@pengutronix.de>
- <20230324144351.54kyejvgqvkozuvp@skbuf>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324144351.54kyejvgqvkozuvp@skbuf>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ath11k@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167966952416.27260.9867436581416631920.kvalo@kernel.org>
+Date:   Fri, 24 Mar 2023 14:52:05 +0000 (UTC)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 04:43:51PM +0200, Vladimir Oltean wrote:
-> Also, some DSA switches have a VLAN-unaware FDB, and if the bridge is
-> VLAN-aware, it will have one FDB entry per each VLAN, whereas the
-> hardware table will have a single FDB entry.
+Johan Hovold <johan+linaro@kernel.org> wrote:
 
-Sorry, imprecise language. I shouldn't have expressed this in terms of
-"VLAN-unaware" and "VLAN-aware", but rather, in terms of "Shared VLAN
-learning" and "Independent VLAN learning". Where the software bridge
-implementation uses IVL, certain switches might use SVL.
+> Add devicetree bindings for Qualcomm ath11k PCIe devices such as WCN6855
+> for which the calibration data variant may need to be described.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+
+Patch applied to ath-next branch of ath.git, thanks.
+
+b6b88111c0db dt-bindings: net: wireless: add ath11k pcie bindings
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230321094011.9759-2-johan+linaro@kernel.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
