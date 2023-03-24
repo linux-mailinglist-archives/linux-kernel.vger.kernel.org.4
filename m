@@ -2,108 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29046C78CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21266C78D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCXH1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S229609AbjCXH1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjCXH04 (ORCPT
+        with ESMTP id S231527AbjCXH1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:26:56 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF8E188;
-        Fri, 24 Mar 2023 00:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=+R2EEWNBVNSx6himSgCrBinYUox/jg6m2XRma6qQqh8=; b=GUeFr6cWMlom5ypuD40BsCuz/H
-        1NxWCEoVOAFqAvFeZnJs8cw3DrQ2Qp1nJn3qjzUHa4p3RyqiPS0ezsqtSTmizm8jaSwWBG0tNapMd
-        yh928cuyT+ho/lJErYwZKaxOrgVAVScmm/n4B3BH0mQJk145sSdftwt55fxctWmhFxpKL7YCxfVTd
-        mBjQ5eB9yBrDn6TNS1OuzMK0/LlhGkgjiLkBu7bdOQV/1slPTsNj6+7nmJjp49aeu3LHuK/1R2xW8
-        V1Ue4d+IvlTFktlnr6+g+VTUsjkoHg1HikAfRhgZ45560CuxLyu9Yzit7MCMY6EqtF9sqicYz1Ljj
-        KvWsCmWQ==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pfbot-000Bfu-3O; Fri, 24 Mar 2023 08:26:39 +0100
-Received: from [77.58.94.13] (helo=localhost.localdomain)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pfbos-0006oR-Fw; Fri, 24 Mar 2023 08:26:38 +0100
-Subject: Re: [syzbot] [bpf?] [net?] general protection fault in
- bpf_struct_ops_link_create
-To:     syzbot <syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, kuifeng@meta.com, linux-kernel@vger.kernel.org,
-        martin.lau@kernel.org, martin.lau@linux.dev,
-        netdev@vger.kernel.org, sdf@google.com, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-References: <00000000000091ae5305f79f447f@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <c1b903c0-7089-cefb-dbd3-5dbe1b941a5f@iogearbox.net>
-Date:   Fri, 24 Mar 2023 08:26:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <00000000000091ae5305f79f447f@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26852/Thu Mar 23 08:22:35 2023)
-X-Spam-Status: No, score=2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        Fri, 24 Mar 2023 03:27:01 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC87612860
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:53 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t10so4156237edd.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1679642812;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A3r8qlLMfX6olWr5cQiZdjWVdMvEbSYULtWmP0Of5zA=;
+        b=CcWYvg60LPU9OML+C8lhqoRJ4NBCgAsEvPWM1xMIQZrQN0utGwNelBSOWBaYcmTMAP
+         76O7michXJLPaunJSpjtVfnKkeSF7yEi5oNkMagIISVJOUmQrru3HAiLJ6FuK4uVQHsy
+         Fa7K8lWLDB0csf5yMyjjqbMhCGtNiFc9p1ztVkpiSB2EZEjN1tm7uzaxiVJiG5SfFbMF
+         DYheCDnX4J1FZjZTt8/3VB8vrnisztPXnmDtydR96Zatwyb/V90DIkYKmEDOXzhUMDCh
+         1u90e88idhl9C+4V/9I12DiWEWe2tHsb68SnP2BGjSPV1uJ1sgngHLtCgDzW5pKsLQYn
+         RvQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679642812;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=A3r8qlLMfX6olWr5cQiZdjWVdMvEbSYULtWmP0Of5zA=;
+        b=yac2uhzpWGv6h7aFp3KrecIJusObiebPCDGJelcXlBGBG4Bvbu4JeVUpDjT1h7FyIq
+         El2HBCPQruCb83/FBgoQvxOvPEUiG03xzdBTeziGdI9BtQN68N6/L3ALFF77649rdMZX
+         MTkgq3+DRCIuzf+febnCphpK9EUQV0UqSV8Fejjq5sOSd8pSVi5vBcCaNJQJpDvy3UvS
+         osbEYU88gTHwkmRBRAv8J533XyjbDtZEHCwevtqXQ9rvs+jBeLyvnSDz11oTaKt0NlPz
+         jHm0qblv87zD9+cF5+pR/czeKu8m8hO+p0NgljzPzhDpyjL4YovW+MqgXuK7scAiLAr1
+         6mBQ==
+X-Gm-Message-State: AAQBX9cTHog8FvZM24cJGDgJfm55ae5114gZ2piWQPjSaLgJAOi26n90
+        cLKN/LFMfL/1DV/Pt43pbeY0Jw==
+X-Google-Smtp-Source: AKy350Z3iXwVl48Ri6gzNt6zqCcLfdbS5qlgam/8hRq+uoEeXsbjnn/z6Ldk4pJgWmfxDCpq3IpEGA==
+X-Received: by 2002:aa7:c7d5:0:b0:4fe:cbce:5fcb with SMTP id o21-20020aa7c7d5000000b004fecbce5fcbmr1765296eds.9.1679642812253;
+        Fri, 24 Mar 2023 00:26:52 -0700 (PDT)
+Received: from localhost (84-115-214-73.cable.dynamic.surfer.at. [84.115.214.73])
+        by smtp.gmail.com with ESMTPSA id v4-20020a509544000000b004fb402a2a37sm10333082eda.33.2023.03.24.00.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 00:26:52 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 24 Mar 2023 08:26:50 +0100
+Message-Id: <CREFOMX7DAPN.2NR3VSFCX9K10@otso>
+Cc:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, "David Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Lee Jones" <lee@kernel.org>, "Stephen Boyd" <sboyd@kernel.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, "Rob Herring" <robh@kernel.org>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 7/8] arm64: dts: qcom: sm8450: remove invalid reg-names
+ from ufs node
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Eric Biggers" <ebiggers@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>
+X-Mailer: aerc 0.14.0
+References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org> <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-7-3ead1e418fe4@linaro.org> <9614782e-0d78-e8f2-a438-452cfa86f80b@linaro.org> <316d7d7d-b370-36e1-648a-400447d2dd47@linaro.org> <20230324065247.GA9598@sol.localdomain>
+In-Reply-To: <20230324065247.GA9598@sol.localdomain>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/24/23 7:11 AM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    226bc6ae6405 Merge branch 'Transit between BPF TCP congest..
-> git tree:       bpf-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=139c727ac80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
-> dashboard link: https://syzkaller.appspot.com/bug?extid=71ccc0fe37abb458406b
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ef67a1c80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119c20fec80000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ac055f681ed7/disk-226bc6ae.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/3895cc8a51d2/vmlinux-226bc6ae.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/1b18bb9fae05/bzImage-226bc6ae.xz
-> 
-> The issue was bisected to:
-> 
-> commit 68b04864ca425d1894c96b8141d4fba1181f11cb
-> Author: Kui-Feng Lee <kuifeng@meta.com>
-> Date:   Thu Mar 23 03:24:00 2023 +0000
-> 
->      bpf: Create links for BPF struct_ops maps.
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116731b1c80000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=136731b1c80000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=156731b1c80000
+Hi Eric,
 
-Kui-Feng, please take a look & fix.
+On Fri Mar 24, 2023 at 7:52 AM CET, Eric Biggers wrote:
+> Hi Neil,
+>
+> On Thu, Mar 23, 2023 at 02:10:44PM +0100, Neil Armstrong wrote:
+> > Hi,
+> >=20
+> > On 23/03/2023 11:49, Krzysztof Kozlowski wrote:
+> > > On 23/03/2023 11:25, Neil Armstrong wrote:
+> > > > Fixes the following DT bindings check error:
+> > > > ufshc@1d84000: Unevaluated properties are not allowed ('reg-names' =
+was unexpected)
+> > > >=20
+> > > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > > ---
+> > > >   arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 -
+> > > >   1 file changed, 1 deletion(-)
+> > > >=20
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot=
+/dts/qcom/sm8450.dtsi
+> > > > index ef9bae2e6acc..8ecc48c7c5ef 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > > > @@ -3996,7 +3996,6 @@ ufs_mem_hc: ufshc@1d84000 {
+> > > >   				     "jedec,ufs-2.0";
+> > > >   			reg =3D <0 0x01d84000 0 0x3000>,
+> > > >   			      <0 0x01d88000 0 0x8000>;
+> > > > -			reg-names =3D "std", "ice";
+> > >=20
+> > > This is also part of:
+> > > https://lore.kernel.org/linux-arm-msm/20230308155838.1094920-8-abel.v=
+esa@linaro.org/#Z31arch:arm64:boot:dts:qcom:sm8450.dtsi
+> > > but I actually wonder whether you just missed some binding patch?
+> >=20
+> > I'm aware of Abel's RFC patchset to support shared ICE, but this is a c=
+leanup of the current DT,
+> > and the current bindings schema doesn't document reg-names.
+> >=20
+>
+> The ufs-qcom driver accesses the "ice" registers by name, so the reg-name=
+s can't
+> be removed from the device tree.  A few months ago there was a patch to f=
+ix the
+> device tree schema for qcom,ufs to include the reg-names.  It looks like =
+that
+> patch got missed, though:
+> https://lore.kernel.org/r/20221209-dt-binding-ufs-v2-2-dc7a04699579@fairp=
+hone.com
 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+71ccc0fe37abb458406b@syzkaller.appspotmail.com
-> Fixes: 68b04864ca42 ("bpf: Create links for BPF struct_ops maps.")
+Are you implying that I should resend the patch or something? Not sure
+who to bug about applying this patch.
 
-Thanks,
-Daniel
+Regards
+Luca
+
+>
+> - Eric
+
