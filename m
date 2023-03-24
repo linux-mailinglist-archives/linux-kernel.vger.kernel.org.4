@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622586C7DBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13B76C7DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjCXMIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S231826AbjCXMJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCXMIs (ORCPT
+        with ESMTP id S230061AbjCXMJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:08:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA4610AA3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:08:46 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id s8so1950499lfr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 05:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679659725; x=1682251725;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FKWvw7b+JAS44FVyD0FLI3tZGRETXw2/xRa06dfHw0k=;
-        b=afr9y2A1iS13xzsG4ZbEpuOwpHzB94ZjEYQ8femJ88V1SChdcim0pr/d5rq1pZ0ENH
-         9NMtrGFFOPc5Hby8mA7uqg9Hwq1c0LoHr5h9OlTI/y6TWpCAfYRKLuYzRgo/ZldDhEhP
-         K4/CgRvzYaY0dtiGaiBC0qD5kLhzYigv7P53TQ8NNJ29f6HSfrHpTdADqPCXVBqpDW9c
-         Z4vw8hoaoVDz9Y1/gUfxR6t0qH+d1mMKaB9UtZC3K4tE9Ll8ni1C1dbVV8MJlHkb7w2j
-         UmGHqjdywccrNSa0vAQhwzeqXDQP8ic7E5S6/4eHmLbe03/pPu3mm0uYV1hiJIWzY0Ks
-         ECsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679659725; x=1682251725;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKWvw7b+JAS44FVyD0FLI3tZGRETXw2/xRa06dfHw0k=;
-        b=weKLvKGup3eSJaGMXYevWdAOMwlNJkazhh6hml3J3K7eE6peZMB+I6NN9t1cPrnu/N
-         reNBJXDzifSpVIQlkKLprePeD78p20zck64xMJ7rvG0en58FesJFOpSJBNJc/3jREQuV
-         qMbdzkQoL/GChIpWv/7++V0XtZB3GssEAfGMzt2uV5nNaTFI1UQ1SG/GuKFzjsC1QaRm
-         mJiNfY0J/dasxyuWZIF4nIlNwPsJhJXYVKcqhI+A41k2tCWC9G7091HAgF77CAfD5ko7
-         YNAhzrPlZL8po9ymW6aMgDdbarLzb69JQACXqT1JUV/XFdbXY9kuufLOFzSUJFmM7v9C
-         by5w==
-X-Gm-Message-State: AAQBX9cCk5yeFuVfqS0QGn8A8tTJSQmuwZZdtI8mnx80dMQ5RtZX38UG
-        J7LuwCJJtW1hoapoemSfBbX5+Q==
-X-Google-Smtp-Source: AKy350a+AxVBqGyixTZ2LohqdfaVCcjTRMp0giVBa0/MZtDLKCnA5uRBslMBZXkINHhhFKF4sl/OMg==
-X-Received: by 2002:ac2:52b9:0:b0:4d2:c70a:fdfa with SMTP id r25-20020ac252b9000000b004d2c70afdfamr538404lfm.4.1679659725083;
-        Fri, 24 Mar 2023 05:08:45 -0700 (PDT)
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id h8-20020a197008000000b004dc6070e121sm3329137lfc.83.2023.03.24.05.08.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 05:08:44 -0700 (PDT)
-Message-ID: <7b26e32d-6f3e-4e1f-33a7-0a994ae8526d@linaro.org>
-Date:   Fri, 24 Mar 2023 14:08:35 +0200
+        Fri, 24 Mar 2023 08:09:06 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7821799;
+        Fri, 24 Mar 2023 05:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qRTDcSPE3HPmUfIxEpIUzqke0zqXoLOS94joWEAwtU4=; b=1UrjijkPTq+KTeI1ypV+Q0PmdO
+        LP7H6vFJNTWXagLUXC+JDP0Yqe+clgTSs73SI/pXT2X5UfhDc7kfPBrJrE/nnGdDv+3Yqo8WPc/Jg
+        cq8yUmVKH87OIUbb8ov2NU5lXgSZ9pxlkgc7zDpXzvhUungh0j1KEL2gD/bANp5Ddafk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pfgDv-008Hxo-6S; Fri, 24 Mar 2023 13:08:47 +0100
+Date:   Fri, 24 Mar 2023 13:08:47 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael@kernel.org, Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 3/7] regmap: allow upshifting register addresses before
+ performing operations
+Message-ID: <ec1331cc-2393-4ac9-88f6-bae6c31c9641@lunn.ch>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+ <20230324093644.464704-4-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH 1/2] dt-bindings: dma: Add support for SM6115 and QCS2290
- SoCs
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        dmaengine@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com, vkoul@kernel.org,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org
-References: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20230320071211.3005769-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324093644.464704-4-maxime.chevallier@bootlin.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
+> index da8996e7a1f1..2ef53936652b 100644
+> --- a/drivers/base/regmap/internal.h
+> +++ b/drivers/base/regmap/internal.h
+> @@ -31,7 +31,7 @@ struct regmap_format {
+>  	size_t buf_size;
+>  	size_t reg_bytes;
+>  	size_t pad_bytes;
+> -	size_t reg_downshift;
+> +	int reg_shift;
 
-On 3/20/23 09:12, Bhupesh Sharma wrote:
-> Add new compatible for BAM DMA engine version v1.7.4 which is
-> found on Qualcomm SM6115 and QCS2290 SoCs.
-> 
-> While at it, also update qcom,bam-dma bindings to add comments
-> which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
-> This provides an easy reference for identifying the actual BAM DMA
-> version available on Qualcomm SoCs.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->   Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> index f1ddcf672261..4c8536df98fe 100644
-> --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> @@ -20,8 +20,10 @@ properties:
->         - qcom,bam-v1.3.0
->           # MSM8974, APQ8074 and APQ8084
->         - qcom,bam-v1.4.0
-> -        # MSM8916 and SDM845
-> +        # MSM8916, SDM845, SM8150 and SM8250
->         - qcom,bam-v1.7.0
-> +        # SM6115 and QRB2290
-> +      - qcom,bam-v1.7.4
->   
->     clocks:
->       maxItems: 1
+Maybe ssize_t to keep with the pattern of using size_t. However,
+ssize_t is somewhat over sized for a bit shift. So maybe just s8?
 
-apparently it's a good time to implement a switch in compatible values
-similar to the one done for QCE:
+>  	size_t val_bytes;
+>  	void (*format_write)(struct regmap *map,
+>  			     unsigned int reg, unsigned int val);
+> diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+> index 726f59612fd6..c4cde4f45b05 100644
+> --- a/drivers/base/regmap/regmap.c
+> +++ b/drivers/base/regmap/regmap.c
+> @@ -814,7 +814,7 @@ struct regmap *__regmap_init(struct device *dev,
+>  
+>  	map->format.reg_bytes = DIV_ROUND_UP(config->reg_bits, 8);
+>  	map->format.pad_bytes = config->pad_bits / 8;
+> -	map->format.reg_downshift = config->reg_downshift;
+> +	map->format.reg_shift = config->reg_shift;
+>  	map->format.val_bytes = DIV_ROUND_UP(config->val_bits, 8);
+>  	map->format.buf_size = DIV_ROUND_UP(config->reg_bits +
+>  			config->val_bits + config->pad_bits, 8);
+> @@ -1679,7 +1679,13 @@ static void regmap_set_work_buf_flag_mask(struct regmap *map, int max_bytes,
+>  static unsigned int regmap_reg_addr(struct regmap *map, unsigned int reg)
+>  {
+>  	reg += map->reg_base;
+> -	return reg >> map->format.reg_downshift;
+> +
+> +	if (map->format.reg_shift > 0)
+> +		reg >>= map->format.reg_shift;
+> +	else if (map->format.reg_shift < 0)
+> +		reg <<= -(map->format.reg_shift);
 
-https://lore.kernel.org/linux-arm-msm/20230222172240.3235972-6-vladimir.zapolskiy@linaro.org/
+I was wondering about negative shifts. It is apparently undefined
+behaviour. So this construct is required.
 
-If this is done in the nearest time, then new platfrom QCE changes
-can be seamlessly added after the next merge window, also the change
-in the compatible values model shall resolve multiple technical
-concerns including the one above about 1/1 change in the series.
-
---
-Best wishes,
-Vladimir
+	   Andrew
