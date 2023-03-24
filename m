@@ -2,108 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A436C85A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26766C85AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 20:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjCXTNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 15:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
+        id S231556AbjCXTNe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 15:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCXTNW (ORCPT
+        with ESMTP id S231602AbjCXTNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 15:13:22 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FACD1E5CE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:13:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id y14so2820646wrq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 12:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679685200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wDkUXRm6ebBc/QHvz8cNntbon0PvzQ0AKnhQ2g7v5QA=;
-        b=rooZAbRs2MFRJmiyw+SXReNh5WT1x8mEzMt14Bke64nSL7GDOGC+bbvjDW7K5GiVCT
-         S7solNiEwVIk509smEZzokLht2sB6pDN614z/HcVs7KTMahyKyKpI2Nj2+sK5t2+WthW
-         Tzdd7p0p/fAFEsBJDnIuLGXFq+yRxxsIs2Rp7NbfKKL02wQHoE9ZJbMGoBm/jFB6Jdq9
-         peNmE8zjqXILzRM9XObFaNbDh0SStjpKqIbNHhBg08pbvu8/+A6+8fWPvsJ3UT9V6CuY
-         ERMSZXGDohg7QP192lyoGs9mwA70895/dvF04FCA28cOz3gpz5szx7c2E0bdMCtKDd/n
-         FhzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679685200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDkUXRm6ebBc/QHvz8cNntbon0PvzQ0AKnhQ2g7v5QA=;
-        b=kBy/JziG25gXtdO+vFJBC9B5/f1FVa39/7zUgktArFdDXqkTSqodRpUTjDbdmGNAI1
-         NChFe5J6lRFyV9aawpta5TlQbTyAJ8udgJGHt1xu22pOOpJ1l5r6hqhXfIzvSZlQPrOd
-         jxFOsUSu1enEkp5dEYTKAAA9Z92Ve9CDRZfU/+xPURNRxY5A6S+Z6tOF093dle0JGu2v
-         xKngbes5JRksNwQjMATpXlTZWcdriZE9oWGhMplBqAQ5AufFZrQzeSUCtIC9KIO0U7OE
-         7hkKrntygR0VU08uHZEYGoryHDCMtgHiYIS0HnGK4o9++Obkk6gZDPC/saxp6lxU2CcA
-         SypA==
-X-Gm-Message-State: AAQBX9cgiVIs0CDOAs2uC9lVDUt+ZfkgHqwlKNE5uO8uLzilxIMwHxqo
-        d85ZM03O+XgK2GAkAuHs/f5Z4w==
-X-Google-Smtp-Source: AKy350YHCF5U9GYrRAZFMNkr/n6h0lYGicNAZN7Hv0BODu2wqpIsKo8emK19gJHVRUVjHbfF+4Lv9w==
-X-Received: by 2002:a5d:538a:0:b0:2cf:f454:95d2 with SMTP id d10-20020a5d538a000000b002cff45495d2mr2808206wrv.12.1679685200010;
-        Fri, 24 Mar 2023 12:13:20 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:537:dd40:8b9b:575d? ([2a01:e0a:982:cbb0:537:dd40:8b9b:575d])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b002cfe687fc7asm18883280wru.67.2023.03.24.12.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 12:13:19 -0700 (PDT)
-Message-ID: <fb2d333e-c459-f394-a299-533083b83596@linaro.org>
-Date:   Fri, 24 Mar 2023 20:13:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH] drm/panel-edp: Add B133UAN01.0 edp panel entry
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
+        Fri, 24 Mar 2023 15:13:30 -0400
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC541E9C0;
+        Fri, 24 Mar 2023 12:13:28 -0700 (PDT)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay04.hostedemail.com (Postfix) with ESMTP id 572AA1A0A8F;
+        Fri, 24 Mar 2023 19:13:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id B70072002A;
+        Fri, 24 Mar 2023 19:13:21 +0000 (UTC)
+Message-ID: <d24f2eca8f2a858b48ad0e019e58e0e5098be5c3.camel@perches.com>
+Subject: Re: [PATCH v2 2/2] checkpatch: allow Closes tags with links
+From:   Joe Perches <joe@perches.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20230324165909.131831-1-vkoul@kernel.org>
- <CAD=FV=UJepzmKczemVGB8NacjyvLDqXiRoc81s1tJ=u5+HAeqg@mail.gmail.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-In-Reply-To: <CAD=FV=UJepzmKczemVGB8NacjyvLDqXiRoc81s1tJ=u5+HAeqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+Date:   Fri, 24 Mar 2023 12:13:20 -0700
+In-Reply-To: <20230314-doc-checkpatch-closes-tag-v2-2-f4a417861f6d@tessares.net>
+References: <20230314-doc-checkpatch-closes-tag-v2-0-f4a417861f6d@tessares.net>
+         <20230314-doc-checkpatch-closes-tag-v2-2-f4a417861f6d@tessares.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Stat-Signature: ueoppisyctp79ob1ykz11ezkamktrpmg
+X-Rspamd-Server: rspamout06
+X-Spam-Status: No, score=-0.0 required=5.0 tests=FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
         version=3.4.6
+X-Rspamd-Queue-Id: B70072002A
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/rnsL3jh5b7vFnhiq2EJ20FSC9CMS8VTU=
+X-HE-Tag: 1679685201-138756
+X-HE-Meta: U2FsdGVkX18Y6PQUWshUibiJaAB9uJGTc2IJEjKdh4MImApySznRV2uLAUg0dKV2BKT0GKvCRKciITt6cxVeVw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 24/03/2023 à 18:04, Doug Anderson a écrit :
-> Hi,
+On Fri, 2023-03-24 at 19:52 +0100, Matthieu Baerts wrote:
+> As a follow-up of the previous patch modifying the documentation to
+> allow using the "Closes:" tag, checkpatch.pl is updated accordingly.
 > 
-> On Fri, Mar 24, 2023 at 9:59 AM Vinod Koul <vkoul@kernel.org> wrote:
->>
->> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->>
->> This panel is found in Lenovo Flex 5G laptop, so add the entry for it
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Signed-off-by: Vinod Koul <vkoul@kernel.org>
->> ---
->>   drivers/gpu/drm/panel/panel-edp.c | 1 +
->>   1 file changed, 1 insertion(+)
+> checkpatch.pl now mentions the "Closes:" tag between brackets to express
+> the fact it should be used only if it makes sense.
 > 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> While at it, checkpatch.pl will not complain if the "Closes" tag is used
+> with a "long" line, similar to what is done with the "Link" tag.
 > 
-> ...assuming nothing distracts me, I'll plan to land this Monday to
-> drm-misc-next.
+> Fixes: 76f381bb77a0 ("checkpatch: warn when unknown tags are used for links")
+> Fixes: d7f1d71e5ef6 ("checkpatch: warn when Reported-by: is not followed by Link:")
+> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/373
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+>  scripts/checkpatch.pl | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index bd44d12965c9..d6376e0b68cc 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -3158,14 +3158,14 @@ sub process {
+>  				}
+>  			}
+>  
+> -# check if Reported-by: is followed by a Link:
+> +# check if Reported-by: is followed by a Link: (or Closes:) tag
+>  			if ($sign_off =~ /^reported(?:|-and-tested)-by:$/i) {
+>  				if (!defined $lines[$linenr]) {
+>  					WARN("BAD_REPORTED_BY_LINK",
+> -					     "Reported-by: should be immediately followed by Link: to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+> -				} elsif ($rawlines[$linenr] !~ m{^link:\s*https?://}i) {
+> +					     "Reported-by: should be immediately followed by Link: (or Closes:) to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+> +				} elsif ($rawlines[$linenr] !~ m{^(link|closes):\s*https?://}i) {
 
-If you get distracted, I'll apply it!
+Please do not use an unnecessary capture group.
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+		(?:link|closes)
+
+And because it's somewhat likely that _more_ of these keywords
+could be added, perhaps use some array like deprecated_apis
+
+
+>  					WARN("BAD_REPORTED_BY_LINK",
+> -					     "Reported-by: should be immediately followed by Link: with a URL to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+> +					     "Reported-by: should be immediately followed by Link: (or Closes:) with a URL to the report\n" . $herecurr . $rawlines[$linenr] . "\n");
+>  				}
+>  			}
+>  		}
+> @@ -3250,8 +3250,8 @@ sub process {
+>  					# file delta changes
+>  		      $line =~ /^\s*(?:[\w\.\-\+]*\/)++[\w\.\-\+]+:/ ||
+>  					# filename then :
+> -		      $line =~ /^\s*(?:Fixes:|Link:|$signature_tags)/i ||
+> -					# A Fixes: or Link: line or signature tag line
+> +		      $line =~ /^\s*(?:Fixes:|Link:|Closes:|$signature_tags)/i ||
+> +					# A Fixes:, Link:, Closes: or signature tag line
+>  		      $commit_log_possible_stack_dump)) {
+>  			WARN("COMMIT_LOG_LONG_LINE",
+>  			     "Possible unwrapped commit description (prefer a maximum 75 chars per line)\n" . $herecurr);
+> @@ -3266,13 +3266,13 @@ sub process {
+>  
+>  # Check for odd tags before a URI/URL
+>  		if ($in_commit_log &&
+> -		    $line =~ /^\s*(\w+):\s*http/ && $1 ne 'Link') {
+> +		    $line =~ /^\s*(\w+):\s*http/ && $1 ne 'Link' && $1 ne 'Closes') {
+>  			if ($1 =~ /^v(?:ersion)?\d+/i) {
+>  				WARN("COMMIT_LOG_VERSIONING",
+>  				     "Patch version information should be after the --- line\n" . $herecurr);
+>  			} else {
+>  				WARN("COMMIT_LOG_USE_LINK",
+> -				     "Unknown link reference '$1:', use 'Link:' instead\n" . $herecurr);
+> +				     "Unknown link reference '$1:', use 'Link:' (or 'Closes:') instead\n" . $herecurr);
+>  			}
+>  		}
+>  
+> 
+
