@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949C86C86C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B549E6C86CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjCXUXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S231460AbjCXU0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjCXUW7 (ORCPT
+        with ESMTP id S229921AbjCXU0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:22:59 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61921689B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:56 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id er18so1183963edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679689375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZOoArkO1KkoPkHMPkoG8FWmUMT2qc5sxWLfwAZE6uoQ=;
-        b=SzACiC2j5oGKE/L0KR1NSCb79Ikstbv1HbGa6UGcKptfM2jy/bITQ9uHv+OlH3NAql
-         rC0fKeX27y5Xc4XeDchxdrLKIoAilzB/r+7R4MItVqmrnvY3+lbJitfArOPJjZN+JLzs
-         mtMRynUIBN6o5ydCqOAhbwDyBcIyiBcQp99Kcjl/aY7sjkO50OKhD5U82inTPFMptuXU
-         bjM9t8JWPyTp//RPrKqNg7kltLK4wOPra0gbyT9yGj+qY36++jWRgIYE9rbb0q/lTGxn
-         7H7Yw01T1Jg7OCSoHm56fbHdyN7dYB3AR021hycuBYOeIHp5ITTNt9AeNKij7LkxQNWC
-         i97A==
+        Fri, 24 Mar 2023 16:26:30 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AF51BAD2;
+        Fri, 24 Mar 2023 13:26:29 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id r16so2062345oij.5;
+        Fri, 24 Mar 2023 13:26:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZOoArkO1KkoPkHMPkoG8FWmUMT2qc5sxWLfwAZE6uoQ=;
-        b=JVpv37R4xEeP3lh69u0axlinW5B6rOJg+w6Ts8w9ymDoqI1IeTySZqphfcqD6khR6J
-         fqKbF85rFzRUTl8K4JlZVdnfVedZHtYeUVDdL3KrHemgP8XZmMmv9px+w03oB+DrWyIp
-         ZfWkgujCNIENtocHo4FvI219RTd7UbZO9pVCsGHPvU8100gZmhW1raX5Q+jqoiFoWUCH
-         BTr3YKJELbOSuWJUOhb+6i95YpN1P30CiVYbYUtXbMRr9SnlfbFV4AU6OHtanhblgLXc
-         uWxHuk8qtCTYz779A0iLzcREy0Rqgi+SOIosJs/UKztMJFxrtt9urjsfrc2j6JyZ2z6h
-         Z6vg==
-X-Gm-Message-State: AAQBX9c2Xd1YO2gl4iE6S1VPIwOA9M7VUNvXE+oc6ciWgNFukzpMLkNt
-        BuypnjINaQSrk3aOvORROdCLRg==
-X-Google-Smtp-Source: AKy350acvuiCSR0cKt3yGKDoqNnD9bS41wlK9VY+wrTot22zWznSYEyjI5oTPdSxv/6QuWfUYGP8BA==
-X-Received: by 2002:a17:906:2009:b0:933:4184:f0d7 with SMTP id 9-20020a170906200900b009334184f0d7mr4281501ejo.69.1679689375452;
-        Fri, 24 Mar 2023 13:22:55 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
-        by smtp.gmail.com with ESMTPSA id rh26-20020a17090720fa00b00930ba362216sm10900041ejb.176.2023.03.24.13.22.54
+        d=1e100.net; s=20210112; t=1679689589;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ARTWLAnE/R5/Yn3e8IzR5CYG/awWCo/Ki7MKRLqJWs=;
+        b=b3akyZZSO0zm17UMJoPNErRfhBnAdIBg1i9mdR0zQLs4bhFtsYZu/9g643xr6DwIH2
+         pSxOSplQEQb4Ab5asD3gr1XQ8BQLkOjyL+xa6auQ0eRHFXvWIWNHbhdaZlbVL1N5Bxj8
+         lW6LSJUxgonx28IL7F9gc8tqonYgdyj/h8zttjlZPlwT8Zg61V4/Qb7GN8tIaStYgMgL
+         MNKu2nHIELEzu+z+gKQEjUfnTH+lh/TGNXAvPdySB3FQx3hRMPAx1lYDZRYsmzYROc12
+         nABEF43XTSElZwoGdrIBli4qY6qrI6u6+5L6MuFr2DmzuHM32juir0dm5ELmVIt6Lg+a
+         pN9Q==
+X-Gm-Message-State: AO0yUKXHiuDZ/QoVlNSMI0RpW22n37UYlEotAD+aFUT1HYr+JBMOpFh2
+        CohcbUHElsyiUBLgC32blq1hK5YWFg==
+X-Google-Smtp-Source: AK7set/v1YbeRweTPhFlmin/sC3QdECy0j/Wx51PrqueLQ6Jc/SuW1sAaCfWv2xWkuMsrDtBqGlKyQ==
+X-Received: by 2002:a05:6808:6c4:b0:387:2f8e:fd56 with SMTP id m4-20020a05680806c400b003872f8efd56mr1612807oih.33.1679689588707;
+        Fri, 24 Mar 2023 13:26:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05680803cf00b003875e29808esm2089833oie.0.2023.03.24.13.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:22:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/5] arm64: dts: qcom: msm8994-msft-lumia: drop simple-bus from clocks
-Date:   Fri, 24 Mar 2023 21:22:42 +0100
-Message-Id: <20230324202244.744271-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
-References: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
+        Fri, 24 Mar 2023 13:26:28 -0700 (PDT)
+Received: (nullmailer pid 2448124 invoked by uid 1000);
+        Fri, 24 Mar 2023 20:26:27 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: yamllint: Enable quoted string check
+Date:   Fri, 24 Mar 2023 15:22:43 -0500
+Message-Id: <20230324202243.2442956-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'clocks' node is not a bus, but just a placeholder for clocks:
+yamllint has a quoted string check. Enable the check aligned with the
+DT schema style which is only using quotes when necessary with the
+exception of regex patterns. There's also the frequent occurrence of '/'
+which we allow rather than fixing.
 
-  msm8992-msft-lumia-octagon-talkman.dtb: clocks: $nodename:0: 'clocks' does not match '^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
-    From schema: dtschema/schemas/simple-bus.yaml
-  msm8992-msft-lumia-octagon-talkman.dtb: clocks: xo-board: {'compatible': ['fixed-clock'], '#clock-cells': [[0]], ...
-    From schema: dtschema/schemas/simple-bus.yaml
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ Documentation/devicetree/bindings/.yamllint | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-index 0c112b7b57ea..2861bcdf87b7 100644
---- a/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994-msft-lumia-octagon.dtsi
-@@ -46,8 +46,6 @@ chosen {
- 	};
+diff --git a/Documentation/devicetree/bindings/.yamllint b/Documentation/devicetree/bindings/.yamllint
+index 4abe9f0a1d46..fea5231e1320 100644
+--- a/Documentation/devicetree/bindings/.yamllint
++++ b/Documentation/devicetree/bindings/.yamllint
+@@ -1,6 +1,11 @@
+ extends: relaxed
  
- 	clocks {
--		compatible = "simple-bus";
--
- 		divclk4: divclk4 {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
+ rules:
++  quoted-strings:
++    required: only-when-needed
++    extra-allowed:
++      - '[$^,[]'
++      - '^/$'
+   line-length:
+     # 80 chars should be enough, but don't fail if a line is longer
+     max: 110
 -- 
-2.34.1
+2.39.2
 
