@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADF16C83D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060066C83DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbjCXRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S231924AbjCXR4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjCXRzJ (ORCPT
+        with ESMTP id S231861AbjCXRz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:55:09 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467D019681;
-        Fri, 24 Mar 2023 10:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679680476; x=1711216476;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wlFhDNeen738iaHwrEF8/B3x9yROQYaB9OzQKIbfUBA=;
-  b=VHSt0U31n6FI7VHXRbZsns9e/1bDD4ucocWbNTGadVgbM0RA12vhcj4b
-   YX66pWSGl8w6L3LLN2c+VhgSzLmT76vgjJ8yrpUHGC0uc0oj7pfJU3W0D
-   ZpWR6L/tJy9gKw4TTjKGTVuGXBY5J07PiqN7023bHd3W8jK69b9kc2OT5
-   WlqHVjP7/lM3syPAk0s/nrrCgP37baywtZG0YwvwvdNU63VrvMiKwV2dg
-   Ik63w/wF3q302+4YU5TgK8K4YIs9c6s3D9e0Ly/j61LiT7+eOQr5b35AI
-   66hS9AODm22DHdodtts74tRQHG+R2nqtrC7O3xk4FZ0p2eGiTpW0GvCVs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="337348113"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="337348113"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:53:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="682766254"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="682766254"
-Received: from bahessel-mobl.amr.corp.intel.com (HELO [10.209.94.88]) ([10.209.94.88])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:53:16 -0700
-Message-ID: <4931b27f-08ba-dc4e-ed65-6eb58e340f08@linux.intel.com>
-Date:   Fri, 24 Mar 2023 10:53:15 -0700
+        Fri, 24 Mar 2023 13:55:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C1194;
+        Fri, 24 Mar 2023 10:55:23 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 46F78660312C;
+        Fri, 24 Mar 2023 17:55:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679680501;
+        bh=hOCXvcOE1MA3NmbXb3wO5+23XLwEJusz/3mlJjscfXY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VcCelZrzrPMuMi4IAPf/JS1jSst8gv5jyfXGHeGomLiCesKIFIlrpIcbwURAxZlYr
+         8iu4m9pA3wqxjgq/TNVqZTyVoeMQ7RKgHTqwLyyVUvuXEABEKDTxItS29tv/fnykqC
+         hmNFCIs4Hni9YSB6NUMojaZiZ6GAAyXg80m5M01YsBXLokNFEfu8qrcDsvxRujBl6J
+         XqMX8W+cfzCa90NcVo0WQHg0KQS8+0PzD9Gl2gIqKQSogt/2QN7VD7qPNXepnFWufI
+         vxLWmLD5bIWO7zg+YwnAzimPPdI5KBGy1/RpbNrnciKEckvz9C3/5bReE1VnhWTXv5
+         Ai/9q2kT9RYKg==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     qii.wang@mediatek.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        houlong.wei@mediatek.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 00/18] MT6795 Helio X10 and Sony Xperia M5: DT step 2!
+Date:   Fri, 24 Mar 2023 18:54:38 +0100
+Message-Id: <20230324175456.219954-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Content-Language: en-US
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230315235449.1279209-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230315235449.1279209-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+This series further enhances the support for the MT6795 Helio X10 SoC
+and the Sony Xperia M5 smartphone.
 
-Any comments on this patch?
+In particular, for the SoC support, this adds:
+ - Frequency Hopping support
+ - I2C controllers
+ - Power domains
+ - IOMMU support and LARBs
+ - GCE/CMDQ Mailbox
+ - VDECSYS and VENCSYS clocks
+ - MMSYS support
 
-On 3/15/23 4:54 PM, Kuppuswamy Sathyanarayanan wrote:
-> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
-> OS owns AER") adds support to clear error status in the Device Status
-> Register(DEVSTA) only if OS owns the AER support. But this change
-> breaks the requirement of the EDR feature which requires OS to cleanup
-> the error registers even if firmware owns the control of AER support.
-> 
-> More details about this requirement can be found in PCIe Firmware
-> specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
-> If the OS supports the Error Disconnect Recover (EDR) feature and
-> firmware sends the EDR event, then during the EDR recovery window, OS
-> is responsible for the device error recovery and holds the ownership of
-> the following error registers.
-> 
-> • Device Status Register
-> • Uncorrectable Error Status Register
-> • Correctable Error Status Register
-> • Root Error Status Register
-> • RP PIO Status Register
-> 
-> So call pcie_clear_device_status() in edr_handle_event() if the error
-> recovery is successful.
-> 
-> Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> ---
-> 
-> Changes since v1:
->  * Rebased on top of v6.3-rc1.
->  * Fixed a typo in pcie_clear_device_status().
-> 
->  drivers/pci/pcie/edr.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
-> index a6b9b479b97a..87734e4c3c20 100644
-> --- a/drivers/pci/pcie/edr.c
-> +++ b/drivers/pci/pcie/edr.c
-> @@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
->  	 */
->  	if (estate == PCI_ERS_RESULT_RECOVERED) {
->  		pci_dbg(edev, "DPC port successfully recovered\n");
-> +		pcie_clear_device_status(edev);
->  		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
->  	} else {
->  		pci_dbg(edev, "DPC port recovery failed\n");
+...and, on the Xperia M5 smartphone, this adds:
+ - Frequency Hopping with Spread Spectrum for MAINPLL, MPLL, MSDCPLL
+ - Touchscreen support (Synaptics S2726, fw id: 1898977, RMI4 protocol)
+ - Accelerometer
+ - Magnetometer
+ - Proximity sensor
+ - NFC support
+
+...all of which was successfully tested on the Xperia M5 smartphone.
+
+This series depends on [1] for the MMSYS support.
+
+Plan for step 3 is to push upstream full display support, which does
+already work on my custom tree ;-)
+
+[1]: https://lore.kernel.org/all/20230309102618.114157-1-angelogioacchino.delregno@collabora.com/
+
+Cheers!
+
+AngeloGioacchino Del Regno (18):
+  arm64: dts: mediatek: mt6795: Add Frequency Hopping Controller node
+  arm64: dts: mediatek: mt6795: Add apmixedsys syscon node
+  arm64: dts: mediatek: mt6795: xperia-m5: Enable Frequency Hopping
+  dt-bindings: i2c: i2c-mt65xx: Add compatible for MT6795 Helio X10
+  arm64: dts: mediatek: mt6795: Add nodes for I2C controllers
+  arm64: dts: mediatek: mt6795: Add SoC power domains
+  dt-bindings: mailbox: mediatek,gce-mailbox: Add compatible for MT6795
+  dt-bindings: gce: Add header for MT6795's GCE mailbox
+  arm64: dts: mediatek: mt6795: Add support for the CMDQ/GCE mailbox
+  arm64: dts: mediatek: mt6795: Add MMSYS node for multimedia clocks
+  arm64: dts: mediatek: mt6795: Add VDECSYS and VENCSYS clocks
+  arm64: dts: mediatek: mt6795: Add support for IOMMU and LARBs
+  arm64: dts: mediatek: mt6795-xperia-m5: Enable I2C 0-3 busses
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Synaptics RMI4 Touchscreen
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMA255 Accelerometer
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Bosch BMM050 Magnetometer
+  arm64: dts: mediatek: mt6795-xperia-m5: Add Sensortek STK3310
+    Proximity
+  arm64: dts: mediatek: mt6795-xperia-m5: Add NXP PN547 NFC on I2C3
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml   |   4 +
+ .../mailbox/mediatek,gce-mailbox.yaml         |  20 +-
+ .../dts/mediatek/mt6795-sony-xperia-m5.dts    | 166 ++++++++++++
+ arch/arm64/boot/dts/mediatek/mt6795.dtsi      | 245 ++++++++++++++++++
+ include/dt-bindings/gce/mediatek,mt6795-gce.h | 123 +++++++++
+ 5 files changed, 550 insertions(+), 8 deletions(-)
+ create mode 100644 include/dt-bindings/gce/mediatek,mt6795-gce.h
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.40.0
+
