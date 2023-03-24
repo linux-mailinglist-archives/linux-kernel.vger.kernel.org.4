@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157D16C8230
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6488C6C8232
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCXQNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231477AbjCXQOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCXQNq (ORCPT
+        with ESMTP id S229441AbjCXQON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:13:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98711AD37
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:13:45 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pfk2j-0006RS-R7; Fri, 24 Mar 2023 17:13:29 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6AD9119BA18;
-        Fri, 24 Mar 2023 16:13:21 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 17:13:20 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
-        Steen.Hegelund@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        hpeter+linux_kernel@gmail.com
-Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
-Message-ID: <20230324161320.jutuyor7jrbqu37p@pengutronix.de>
-References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
- <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
+        Fri, 24 Mar 2023 12:14:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA8136DB
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679674417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SZ/UgTQ/EPdrz/Txy99iCvW0qyOpe86roDGm7RsPj4A=;
+        b=WIGaZ2drXgDaPVEDKlf8JVev0HcGmiqfZjaU0tFrWUE25mMTNltPtrfTx8vwX0e83Cw/y/
+        jWjOIuDdEKK7a3gCSYjqpVxobNgHobMbSXPxvdstUK8ZZhstDO/eg0Fb6u0rin83dhJubz
+        keT4yOjxSbkHnbNYfWpOZ3O1Qgks9XU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-312-ZP6qBUUZPYW7Hdf6qfw8og-1; Fri, 24 Mar 2023 12:13:36 -0400
+X-MC-Unique: ZP6qBUUZPYW7Hdf6qfw8og-1
+Received: by mail-ed1-f72.google.com with SMTP id f15-20020a50a6cf000000b0050050d2326aso3814005edc.18
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679674414;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SZ/UgTQ/EPdrz/Txy99iCvW0qyOpe86roDGm7RsPj4A=;
+        b=fxi+KmSFSGdYNcvvsvIM2c1BTWE2jZ7tnLD17WN0gg3SpeZjYeA/7Qj6xWjOd7kIy2
+         BU+WQS8cUu7q9UXPbHCPPUxz3yr73iTldMa4xfWxTwR1HKapFALcNCyPeLRqeApFM3DH
+         zuuQDhAy9ZocK4tVT6HPEKS/hAuVPSDiLImJJlmIXMDobvrQB8lR+N3MkcLvPGyhWsP/
+         3pI2zGjXY/fvIPkS/aPEhm2INlE6NUW3T1bauwHEpUDpar2dcDlBKcWr/TODhhOSHLqA
+         rPhcvMaa755ksoEXUOdirKaP9fRbvRgDuJIrHQwTCKURY+dS/GrMzorckJ1FvdzuPGkJ
+         HVcA==
+X-Gm-Message-State: AAQBX9diwRlHaBk4dZ7SBc6Kqy2MxJ0B1MxYHmHHuzt2lFVAiYncwpsF
+        Zoa3BcBQO0Nx/FK6mrzNoxgdiZn7BGZxHg7Oitvgm+WnkKbHkheHpUG+EEaWFSsajTACZtpJN9m
+        XxidP1O8bI50juPf2t4Y+j67/w93hvpTo
+X-Received: by 2002:a17:906:174b:b0:929:7d80:3a37 with SMTP id d11-20020a170906174b00b009297d803a37mr3176506eje.37.1679674414109;
+        Fri, 24 Mar 2023 09:13:34 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z3D+gQFDSt5EoI9IEb97lf2YRt6HhsL3ocTb4w5a8oRnkdtzkltb56R7XfNA57T78wyhUHYQ==
+X-Received: by 2002:a17:906:174b:b0:929:7d80:3a37 with SMTP id d11-20020a170906174b00b009297d803a37mr3176491eje.37.1679674413867;
+        Fri, 24 Mar 2023 09:13:33 -0700 (PDT)
+Received: from [192.168.0.198] (host-87-3-200-174.retail.telecomitalia.it. [87.3.200.174])
+        by smtp.gmail.com with ESMTPSA id i21-20020a17090639d500b009332bb8b1f7sm9142319eje.66.2023.03.24.09.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 09:13:33 -0700 (PDT)
+Message-ID: <ead16e4f-a05b-8b76-e1e6-52223effd6c5@redhat.com>
+Date:   Fri, 24 Mar 2023 17:13:31 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ul6oruy6cmrmas5h"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Enable histograms for events/ftrace/timerlat and osnoise
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Steven
 
---ul6oruy6cmrmas5h
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I would like to collect histograms from timerlat and osnoise tracers event,
+but I cannot collect them because they are not tracepoints but... tracer
+events. So...
 
-On 22.03.2023 00:50:20, Vincent MAILHOL wrote:
-> Hi Peter,
->=20
-> Welcome to the linux-can mailing list.
-> This is my first review, I will wait for the next version to give a
-> more thorough look.
->=20
-> On Tue. 21 Mar 2023 at 17:14, Ji-Ze Hong (Peter Hong)
-> <peter_hong@fintek.com.tw> wrote:
->=20
-> From your email header:
-> > Content-Type: text/plain; charset=3D"y"
->=20
-> It gives me below error when applying:
->=20
->   $ wget -o f81604.patch
-> https://lore.kernel.org/linux-can/20230321081152.26510-1-peter_hong@finte=
-k.com.tw/raw
->   $ git am f81604.patch
->   error : cannot convert from y to UTF-8
->   fatal : could not parse patch
+  # ls /sys/kernel/tracing/events/ftrace/timerlat/
+  format	hist
 
-I'm using b4 [1] for this:
+no hist, filter, trigger files...
 
-$ b4 shazam -l -s 20230321081152.26510-1-peter_hong@fintek.com.tw
+How hard would it be to enable histograms to the ftrace/osnoise and
+ftrace/timerlat events?
 
-and it works.
+This will allow me to reduce the overhead of rtla timerlat and rtla osnoise
+tools...
 
-Marc
+Thanks in advance, Stephen!
+-- Denny
 
-[1] https://github.com/mricon/b4
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ul6oruy6cmrmas5h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdzB0ACgkQvlAcSiqK
-BOhOLwf+IA/6cxPWXp0P3mZ8oxuZk5hBKe0zEC4xRcOqLECtcb98HHwDN8aSPO/h
-KwTSer7luMLSI1XOp7Z5xzI4unZIFcoJs+8ARJ1qSZU8BpxJk3wWkgNQKs4Uof1b
-whX5N+0pl+dgZE5KujUiC01shK7kJs52a/JvEIZVgL2KHVYv8jiHbrhcpM1gD/FO
-06jhufbklHOMDVBoNsi2CqWU915diRGYtT4DRJVQgm0yuNfcNbdUXf/H/grwtmoU
-bHcFlLs1sMiJo/SnuTPFa8YmK0T0v1XUwtCM/fYRaGiulC6BjggaU7Ck9extZiZt
-d3kIeCl5NjpTgYGhOkrhT1V+b+/dIA==
-=kfUO
------END PGP SIGNATURE-----
-
---ul6oruy6cmrmas5h--
