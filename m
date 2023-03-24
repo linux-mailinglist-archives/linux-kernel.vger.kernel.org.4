@@ -2,150 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA4E6C779D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0B66C77A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbjCXGKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S230267AbjCXGLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCXGKa (ORCPT
+        with ESMTP id S231277AbjCXGLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:10:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC9529405;
-        Thu, 23 Mar 2023 23:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679638212; x=1711174212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TO2hm86sTvd3UTHGNjd1oaaihJtP0yeWPooZ0l4Oxjc=;
-  b=jck1HbRMiSRPdMZO18bv7xQfbuCAtG3dWS2P4zSVsSpGzA2pDjDbEvZ3
-   nz7rcCP/b06zmP3Er7SHzq+poY8uXzgMbGvtHSrMoYhNxCtBXcWmvaQuW
-   gFTBzBZxXGQ1xpIAxVc8p0z3mvBDFoZENeDMU1f0vBrbRV0JYl1ZLDtjW
-   krilzICW+d45by+A+snabpu8HvRyeLddGLmjoaEKZ96GrW2BCnY9j1J/A
-   Rc4TbEq00rj9Xeml7VWBW1P4DMVY9A+AYFdN9egcrcOeMqjM9S8c1+o0L
-   SluxN0GdeIhJd4Xquel/WO6T8ZrODAGaUuOs/AS68d7UinZ6fGxHRGorP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="342090140"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="342090140"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 23:10:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="659938483"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="659938483"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Mar 2023 23:10:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfacj-000F2O-1f;
-        Fri, 24 Mar 2023 06:10:01 +0000
-Date:   Fri, 24 Mar 2023 14:09:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
-        rrichter@amd.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        bhelgaas@google.com
-Subject: Re: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
-Message-ID: <202303241313.B0maYlFU-lkp@intel.com>
-References: <20230323213808.398039-6-terry.bowman@amd.com>
+        Fri, 24 Mar 2023 02:11:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35D81554F;
+        Thu, 23 Mar 2023 23:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=o8GyCLdqZI9t+Daq6eq68G2ZZ4b2XpF2IvGRiP6/CDU=; b=tu0UUQHu2yZU5mA/5Vw6tv7GYW
+        TBBSOVpTIR+dhrDRoQU8qF+0JzyO59axpNdqbH9x/X0rFD8mL085g7m1a1Rv7p1BEzmZ8xRza4360
+        QPflV6WYoB7Ybjy1q5kBZFOaZs/nZxaNnHFT1ZqZxi2mF6DIi5HIwQ4m6EbBONcGnfpEKik5oOOAx
+        7AQBrCLwOfaS1oPe0hO+CLk+sJZGzdmYxrAdA+pVx9ob1dq3sdkmwzmfWKyMaMzshxEr/gD81B3+e
+        TmEsb5m5u4bKNmbE2prromJC8XaAxQuU8OaA3RbEqFJMpuuBacYRPJN7TOEgzltyOMjYWT1o4ues4
+        bPphdAUg==;
+Received: from [2601:1c2:980:9ec0::21b4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pfadi-003eY8-2N;
+        Fri, 24 Mar 2023 06:11:02 +0000
+Message-ID: <24da75fa-b0f9-b9ff-5b34-42ae6fc2ba24@infradead.org>
+Date:   Thu, 23 Mar 2023 23:11:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323213808.398039-6-terry.bowman@amd.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] irq domain: drop IRQ_DOMAIN_HIERARCHY option, make it
+ always on
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20230313023935.31037-1-rdunlap@infradead.org>
+ <877cv78a1b.ffs@tglx>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <877cv78a1b.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+Hi Thomas,
 
-Thank you for the patch! Yet something to improve:
+On 3/23/23 13:53, Thomas Gleixner wrote:
+> On Sun, Mar 12 2023 at 19:39, Randy Dunlap wrote:
+>> In preparation for dropping the IRQ_DOMAIN Kconfig option (effectively
+>> making it always set/on), first drop IRQ_DOMAIN_HIERARCHY as an option,
+>> making its code always set/on.
+>>
+>> This has been built successfully on all ARCHes except hexagon,
+>> both 32-bit and 64-bit where applicable.
+> 
+> I really like where this is going, but reviewing this is a pain. I tried
+> to split it up into more digestable pieces:
+> 
+>    https://tglx.de/~tglx/patches.tar
+> 
+> That's not completely equivalent to your patch as I did some of the
+> changes below. It builds on various oddball architectures with
+> IRQ_DOMAIN=n, but is otherwise completely untested.
+> 
+> It should be actually trivial after that to make IRQ_DOMAIN def_bool y
+> and then gradually remove the IRQ_DOMAIN selects and ifdeffery.
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus efi/next cxl/next linus/master v6.3-rc3 next-20230323]
-[cannot apply to cxl/pending]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yeah, that may be the best & simplest approach.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230323213808.398039-6-terry.bowman%40amd.com
-patch subject: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
-config: riscv-randconfig-r024-20230322 (https://download.01.org/0day-ci/archive/20230324/202303241313.B0maYlFU-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
-        git checkout c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cxl/
+Or just use your patches.tar.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241313.B0maYlFU-lkp@intel.com/
+>> v2: add stubs in include/linux/irqdomain.h for the config case of
+>> IRQ_DOMAIN is not set. If these are not added, there will be plenty
+>> of build errors (not so much for modern arches as for older ones).
+> 
+> I'm not really convinced that all of these stubs are required. Why would
+> there suddenly be a requirement to expose stubs for functions which
+> depend on CONFIG_IRQ_DOMAIN=y already today just by removing the
+> hierarchy config?
 
-All errors (new ones prefixed by >>):
+All of those stubs were added because I had configs/builds that were
+failing due to them. I didn't just add them for fun or "completeness."
 
-   drivers/cxl/mem.c: In function 'rcec_enable_aer_ints':
->> drivers/cxl/mem.c:63:21: error: 'struct pci_dev' has no member named 'aer_cap'; did you mean 'ats_cap'?
-      63 |         aer = rcec->aer_cap;
-         |                     ^~~~~~~
-         |                     ats_cap
+I just checked and I didn't save all of those failing configs or
+output files that contain the errors.
 
 
-vim +63 drivers/cxl/mem.c
+> Even exposing stubs for functions which have been only available via
+> CONFIG_IRQ_DOMAIN_HIERARCHY is questionable simply because there cannot
+> be any code which invokes them unconditionally if
+> CONFIG_IRQ_DOMAIN_HIERARCHY=n today.
+> 
+> IOW, the sum of required stubs cannot be larger than number of stubs
+> required today.
+> 
+> If there is code which has a #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY then
+> this needs to be changed to CONFIG_IRQ_DOMAIN or the required functions
+> have to be exposed unconditionally, right?
 
-    48	
-    49	static int rcec_enable_aer_ints(struct pci_dev *pdev)
-    50	{
-    51		struct pci_dev *rcec = pdev->rcec;
-    52		int aer, rc;
-    53		u32 mask;
-    54	
-    55		if (!rcec)
-    56			return -ENODEV;
-    57	
-    58		/*
-    59		 * Internal errors are masked by default, unmask RCEC's here
-    60		 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
-    61		 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
-    62		 */
-  > 63		aer = rcec->aer_cap;
-    64		rc = pci_read_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, &mask);
-    65		if (rc)
-    66			return rc;
-    67		mask &= ~PCI_ERR_UNC_INTN;
-    68		rc = pci_write_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, mask);
-    69		if (rc)
-    70			return rc;
-    71	
-    72		rc = pci_read_config_dword(rcec, aer + PCI_ERR_COR_MASK, &mask);
-    73		if (rc)
-    74			return rc;
-    75		mask &= ~PCI_ERR_COR_INTERNAL;
-    76		rc = pci_write_config_dword(rcec, aer + PCI_ERR_COR_MASK, mask);
-    77	
-    78		return rc;
-    79	}
-    80	
+Yes, s/CONFIG_IRQ_DOMAIN_HIERARCHY/CONFIG_IRQ_DOMAIN/ in code.
+
+
+>> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+>> --- a/drivers/gpio/Kconfig
+>> +++ b/drivers/gpio/Kconfig
+>> @@ -361,7 +361,7 @@ config GPIO_IXP4XX
+>>  	depends on OF
+>>  	select GPIO_GENERIC
+>>  	select GPIOLIB_IRQCHIP
+>> -	select IRQ_DOMAIN_HIERARCHY
+>> +	select IRQ_DOMAIN
+> 
+> IRQ_DOMAIN is already selected by GPIOLIB_IRQCHIP, so this select is
+> redundant for all GPIO configs which select GPIOLIB_IRQCHIP.
+
+Ack.
+
+I'm perfectly happy to use either Marc's patch that he posted on
+2023-FEB-14 (https://lore.kernel.org/all/86y1p0xbqd.wl-maz@kernel.org/)
+or your patches. Both of you know your way around this better than I do.
+
+Thanks for your review and feedback.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+~Randy
