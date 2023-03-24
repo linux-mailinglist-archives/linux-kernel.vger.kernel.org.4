@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133266C81E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECB56C81F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 16:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjCXPzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 11:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S232099AbjCXP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCXPzc (ORCPT
+        with ESMTP id S231614AbjCXP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 11:55:32 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE8B1E5E1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:55:31 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h17so2287376wrt.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:55:31 -0700 (PDT)
+        Fri, 24 Mar 2023 11:56:34 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63A510A87
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:56:32 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h17so2290407wrt.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 08:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679673330;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679673391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tp3HoPN4Gc82+RijS+v6sxY9JgB+vr3DxCDQErkACNI=;
-        b=ZWNhHoXsX43350iih+wD2VNFUpSmPZg3GoR5+pdNWLoUbl7wO5tfkt7YCB3poRYl8m
-         QKSnyLjo+RRmDEJN3/k3T0mFwzkstsnUrvxIbT4zvwl2sHXeUOWBGBxGM6CCneBRAH8h
-         hInUCCtT4YIpqv1pG3b1V7EMYdJI+JHKt+HkFcEiECEXJJ7Eac3jDBUEciRtu5JnJ9P2
-         3TQpRwkH2qpr9pW05hvbeHJLEoYl76Gd8emmbghk/tOJF2k3L8T45BKZZ36DMpuM/iRo
-         hEy9lrCMYSMC1vVFvsPgI289oVnGc80AOZvfRdGJURQiohqSFW+zGiatqjGAAD8L8js3
-         Mv5w==
+        bh=PR0MUUfacwAfsjInBPeABoZtOXtMYsQVXBaBrC8rWtM=;
+        b=R3kCrQe6UqEb7GoCrQ19E+2HaE0y0+lHYsucNBd+vyoWzCdTuw80+N+fDn3B4o+dGG
+         c3qMMwW7jNWTEIdDu0/u2KtnYi8Z4faTZC28TPwx77lPhfWdPjP83tGua6o+w7itsWnj
+         mC3HDqQJuuf8k7AgnKbGbTX8y5ZXhA9Uh6RAgNkZxDP5De3aTBcrTXt7lCao9xGz/62i
+         yRsIEErfZ8vqKRQmmBfipn3Wt25HXQtH2CQiOzoIT8RAc6LVYIvxgM6UkQ6h+FLqnKVY
+         FeppzjVOse3GnyvmI1Qms9N0XKZuOPfDfWF4JwwjWlS/x8DIws6pR1+HOABy/Yzj8yLu
+         jggg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679673330;
+        d=1e100.net; s=20210112; t=1679673391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Tp3HoPN4Gc82+RijS+v6sxY9JgB+vr3DxCDQErkACNI=;
-        b=EzM85cNMkDTqWILfoPiZ9/qypkN3lnmV+gINqTbXtrFnVVyLE7YXxgRijJmU+HSoPp
-         3lT2jeN6AE0XPYo5jz6AJvyVToTy0l+wAjKkKyVPFx3bqVmPpyXMq/OBfDwtH//9N1FX
-         gpMjZEFLJgpuVD8udENWt4+JC2x9oo5W2FScXX6ARc6aqAxki19tJyHoBK0Z1Ywel0M9
-         RVaw97HEvP0vbBHq8EMYQhU+D3f8Y0EglZy0716K2RyOreqINUnoUsujwiPDlZuhlCyh
-         Ld/fUc59BMFNRuWoI+BFxgIOXWpHr5XSMDAuSKg0r4MOmnZtyRj24CerVJRjeMOLVrNf
-         ebLQ==
-X-Gm-Message-State: AAQBX9fwUdkuke1yG5YM8nZNCx7qdVQ+6/hMRIuqB+z7+0YymXf0IXep
-        3PqBzHkCdFI3G1+GMSEkK5YL1g==
-X-Google-Smtp-Source: AKy350ak7ygxOxi4tYX8LpUVbV5mkgHWSgSVhi5JP6SXzo1OaZPV4mcFr7AfECSFJWF0WAqOGrpbnw==
-X-Received: by 2002:a5d:4809:0:b0:2ce:ae4c:c424 with SMTP id l9-20020a5d4809000000b002ceae4cc424mr3047287wrq.4.1679673330170;
-        Fri, 24 Mar 2023 08:55:30 -0700 (PDT)
+        bh=PR0MUUfacwAfsjInBPeABoZtOXtMYsQVXBaBrC8rWtM=;
+        b=eeZDf6AYM7OaNgdmAj8C2xc/IiDBMnmLAuiE917jvJFSu5UsQd5LooxYWX7W8B9MII
+         qnX1KTm0npSDWt3atCcFQoPBeoqQgOx/f1HtCQZeDhobCtXj8sJaFEgSG8PWFC/+6Xd1
+         4QEtEMV+BpJf29aByEBufWd52edxmsusq51NbTaawVU8+AyprIgFWy/e75TtDE8nP7Yn
+         THnKr/Ac48s8ExQa00eVZJheYjl5uaZBdB9AYkI6Y5aVo38DOwYLbE3hwzwSTMk32TyG
+         GPavuupWql/QoWPCa0srcDxpwkIvYIIVAcN50avvGxBoH/HgC8mjuPXOX67LKbvtEBDi
+         y/+w==
+X-Gm-Message-State: AAQBX9fDjXu1EWWTcs5oJ50SyUyF87dNeTWyisnVdGvGPn70qFqU3x7M
+        mV81+ow8Aq2A0tTc2mKjzuQdGg==
+X-Google-Smtp-Source: AKy350ZbYATQfNEPjI55Pl0fHAqYJaEDna5Eve19pmNEhT+ETLFt3/hTIE34PKB7xqhm0hzFTkzAsw==
+X-Received: by 2002:adf:fe41:0:b0:2cf:e517:c138 with SMTP id m1-20020adffe41000000b002cfe517c138mr2687659wrs.66.1679673391487;
+        Fri, 24 Mar 2023 08:56:31 -0700 (PDT)
 Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d4a08000000b002c3f03d8851sm18571070wrq.16.2023.03.24.08.55.29
+        by smtp.gmail.com with ESMTPSA id d7-20020adffbc7000000b002d5a8d8442asm14382912wrs.37.2023.03.24.08.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 08:55:29 -0700 (PDT)
+        Fri, 24 Mar 2023 08:56:31 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -61,9 +61,9 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v9 1/3] riscv: Get rid of riscv_pfn_base variable
-Date:   Fri, 24 Mar 2023 16:54:19 +0100
-Message-Id: <20230324155421.271544-2-alexghiti@rivosinc.com>
+Subject: [PATCH v9 2/3] riscv: Move the linear mapping creation in its own function
+Date:   Fri, 24 Mar 2023 16:54:20 +0100
+Message-Id: <20230324155421.271544-3-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230324155421.271544-1-alexghiti@rivosinc.com>
 References: <20230324155421.271544-1-alexghiti@rivosinc.com>
@@ -78,72 +78,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use directly phys_ram_base instead, riscv_pfn_base is just the pfn of
-the address contained in phys_ram_base.
-
-Even if there is no functional change intended in this patch, actually
-setting phys_ram_base that early changes the behaviour of
-kernel_mapping_pa_to_va during the early boot: phys_ram_base used to be
-zero before this patch and now it is set to the physical start address of
-the kernel. But it does not break the conversion of a kernel physical
-address into a virtual address since kernel_mapping_pa_to_va should only
-be used on kernel physical addresses, i.e. addresses greater than the
-physical start address of the kernel.
+No change intended, it just splits the linear mapping creation from
+setup_vm_final: this prepares for upcoming additions to the linear
+mapping creation.
 
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Tested-by: Anup Patel <anup@brainfault.org>
 ---
- arch/riscv/include/asm/page.h | 3 +--
- arch/riscv/mm/init.c          | 6 +-----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ arch/riscv/mm/init.c | 42 ++++++++++++++++++++++++++++--------------
+ 1 file changed, 28 insertions(+), 14 deletions(-)
 
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 7fed7c431928..8dc686f549b6 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -91,8 +91,7 @@ typedef struct page *pgtable_t;
- #endif
- 
- #ifdef CONFIG_MMU
--extern unsigned long riscv_pfn_base;
--#define ARCH_PFN_OFFSET		(riscv_pfn_base)
-+#define ARCH_PFN_OFFSET		(PFN_DOWN((unsigned long)phys_ram_base))
- #else
- #define ARCH_PFN_OFFSET		(PAGE_OFFSET >> PAGE_SHIFT)
- #endif /* CONFIG_MMU */
 diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 87f6a5d475a6..cc558d94559a 100644
+index cc558d94559a..3b37d8606920 100644
 --- a/arch/riscv/mm/init.c
 +++ b/arch/riscv/mm/init.c
-@@ -271,9 +271,6 @@ static void __init setup_bootmem(void)
- #ifdef CONFIG_MMU
- struct pt_alloc_ops pt_ops __initdata;
+@@ -1086,16 +1086,25 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+ 	pt_ops_set_fixmap();
+ }
  
--unsigned long riscv_pfn_base __ro_after_init;
--EXPORT_SYMBOL(riscv_pfn_base);
+-static void __init setup_vm_final(void)
++static void __init create_linear_mapping_range(phys_addr_t start,
++					       phys_addr_t end)
+ {
++	phys_addr_t pa;
+ 	uintptr_t va, map_size;
+-	phys_addr_t pa, start, end;
+-	u64 i;
+ 
+-	/* Setup swapper PGD for fixmap */
+-	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
+-			   __pa_symbol(fixmap_pgd_next),
+-			   PGDIR_SIZE, PAGE_TABLE);
++	for (pa = start; pa < end; pa += map_size) {
++		va = (uintptr_t)__va(pa);
++		map_size = best_map_size(pa, end - pa);
++
++		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
++				   pgprot_from_va(va));
++	}
++}
++
++static void __init create_linear_mapping_page_table(void)
++{
++	phys_addr_t start, end;
++	u64 i;
+ 
+ 	/* Map all memory banks in the linear mapping */
+ 	for_each_mem_range(i, &start, &end) {
+@@ -1107,14 +1116,19 @@ static void __init setup_vm_final(void)
+ 		if (end >= __pa(PAGE_OFFSET) + memory_limit)
+ 			end = __pa(PAGE_OFFSET) + memory_limit;
+ 
+-		for (pa = start; pa < end; pa += map_size) {
+-			va = (uintptr_t)__va(pa);
+-			map_size = best_map_size(pa, end - pa);
 -
- pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
-@@ -285,7 +282,6 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
+-			create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
+-					   pgprot_from_va(va));
+-		}
++		create_linear_mapping_range(start, end);
+ 	}
++}
++
++static void __init setup_vm_final(void)
++{
++	/* Setup swapper PGD for fixmap */
++	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
++			   __pa_symbol(fixmap_pgd_next),
++			   PGDIR_SIZE, PAGE_TABLE);
++
++	/* Map the linear mapping */
++	create_linear_mapping_page_table();
  
- #ifdef CONFIG_XIP_KERNEL
- #define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
--#define riscv_pfn_base         (*(unsigned long  *)XIP_FIXUP(&riscv_pfn_base))
- #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
- #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
- #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
-@@ -985,7 +981,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
-+	phys_ram_base = kernel_map.phys_addr;
- 
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
+ 	/* Map the kernel */
+ 	if (IS_ENABLED(CONFIG_64BIT))
 -- 
 2.37.2
 
