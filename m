@@ -2,92 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A71E6C78A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133336C78B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCXHRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S230482AbjCXHTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjCXHRn (ORCPT
+        with ESMTP id S230038AbjCXHTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:17:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82E910AA3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:17:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ew6so4155841edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:17:41 -0700 (PDT)
+        Fri, 24 Mar 2023 03:19:13 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BFE19BA;
+        Fri, 24 Mar 2023 00:19:12 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id g18so741795ljl.3;
+        Fri, 24 Mar 2023 00:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679642260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aXAkVT7qE3o2b6C1GZG01G7UNo5SeuZbrIlsD61ojCg=;
-        b=WZLVM+Pvfjz9X30E2t8w3NE+GPwpnZcHc3b860wehev3NfRVUhKjczo7KpM/+Nv+aB
-         Qe1ZdEuzfcoHXfljY1J+hOFllH3jsHTI/eX4O1i7tJKofF7J2WVA1TZh19r/Ry9PG6Sb
-         sbiVK/XhecqUzwxRoadxoayaqwPEYt14l16rlKvhaBJ8ji8dcnZNd1hihPs5V4m9xDhb
-         M9W5K/VvULUiC10++uH5t7hoEs6yfpyT6VKFJtkKVhQ163arDQAS+DkHysj8pn65CJao
-         nAZKAE9Q6SZFYJ5Z7YGdl4rPE641i8GdCuQhQTg9q0SUI2mOlUviYms3O5SBepQwqlQX
-         Vmvw==
+        d=gmail.com; s=20210112; t=1679642350;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dxovThApevwims1d/uyTbtFdKD78MsUDwDytaLqWWyQ=;
+        b=meDyMuK4AKtB7G75lOHCDEFXanUAZYCqRRlZxdSRLZp5Nqg1ozFRi7UbmVDDTPGxTe
+         ozhBB09MNMGA28nc8q7Whc4fvp1zMc/6A9flaRFVqEn6el+l870OFVfnh4r/8ph3Tj4+
+         31yJ27xLWhZKLx5kip+qonOzOgKSNdiPKEb/DXDL23v6Nba0CpdN3IKRWbKzqnNzSsIO
+         kHC215XrEtJx1OMV56dHtk8iCgX07kfA5yVY6xakelapue2N0FV6JItDi4r3Sf+nFnGJ
+         mhQ0ks4ugg1TV4ZkfewPKsDRy1krwVie/Tk5jEYQHSUrZWIKliGHXkoNfb0uElEbCzLn
+         snTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aXAkVT7qE3o2b6C1GZG01G7UNo5SeuZbrIlsD61ojCg=;
-        b=sg6Xf58Egj/kZG4+zM1aTkVCg/P5BqDmCGbh3tLKlqzeKADuAS/QQ7fg2VRC0nuc+W
-         z/H5LVrzgnLWI6+0DQDPSW8EK/01XHR2ginEvgbAbdvWktS5rSACQkUCxXAAtrPE+f0z
-         SKVj4w35J07kZUj0BUHYToFwDxt/zJt3iIVF+NJGIIbqYnaub4UBaCQ9tzB7AKyz2BqD
-         MVR5kvc5ZenFLxsv/gbImVD8FG39rjdhbhCA2Kuf+tDZr5w5bxUeYTHHvdO38h2wChXM
-         BCnK3pye7yoZzzzQhxR2IuEO4OVXtJelybd0t9a4h9XnFAwuASumrIiFLdNIFbpDCeP8
-         Qf/Q==
-X-Gm-Message-State: AAQBX9cMqx1s01m3Zk0jdhVTeojyhID5IJQKbnpxsbEpP6xn2L1pXWrx
-        X0YiPluYcjrnuZvy0zcIB55M/w==
-X-Google-Smtp-Source: AKy350Z0IEgUlLyGvvrQ30h1GQdZUzu5+nU1YNH91UDza4dmttvtndN3IIVzkTqrz4PLJOMOJ62uwg==
-X-Received: by 2002:a17:906:b74f:b0:92d:591f:6586 with SMTP id fx15-20020a170906b74f00b0092d591f6586mr1897064ejb.34.1679642260303;
-        Fri, 24 Mar 2023 00:17:40 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ce50:243f:54cc:5373? ([2a02:810d:15c0:828:ce50:243f:54cc:5373])
-        by smtp.gmail.com with ESMTPSA id 24-20020a508758000000b004fb419921e2sm10316150edv.57.2023.03.24.00.17.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 00:17:39 -0700 (PDT)
-Message-ID: <306b02e8-72bf-3eb7-f4cc-3cc5c598993b@linaro.org>
-Date:   Fri, 24 Mar 2023 08:17:38 +0100
+        d=1e100.net; s=20210112; t=1679642350;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dxovThApevwims1d/uyTbtFdKD78MsUDwDytaLqWWyQ=;
+        b=iVykoEWGiYO+m25KAixZeUemV5XHpbTpzFcDdWeMe+irrbVas8EmIHdLKyik5F7LAN
+         6fh16AaRPVa4zZihS0/6zJy1vI48NqKgndelouqC28HpMG9VkheAs4txm2JwaA9AHDfl
+         V4zjwsQLpHceTVoXLwMvjEH6MkPq/R0jftyF4gDjuj/SL4WrjOKFZYrrJT+QZ9ALwuyB
+         4IqZq2axk9eMeX33SauE+y8K1ij+zRTDKhiH08NbD4d4yp9LOkNW5yvaXDHIV3NrOcbN
+         B2H3jC/gDnESuTtVvQlG+zNP3NHJKbHzo7l96NXnU4Z0UvAEUMpha9OmUs4nSItGJOW9
+         wVpA==
+X-Gm-Message-State: AAQBX9dj4Un0dNDJ7sHq/+Nir2eC6yhYxy62mUnxy6cth/5eWinaE8nh
+        y/DkYwtm86tX1hM7n6JygAQc8EYsmucxB4VSc7g=
+X-Google-Smtp-Source: AKy350ZmOa+xSBA3KdLPC1TZGAe6iXd1pKFjVEv+tZuOIp9NH7Xo/9Fe8GLkoulUpAJ1GZKORTX1WmjSeUN+AUnPlA0=
+X-Received: by 2002:a2e:240b:0:b0:29c:9226:33f7 with SMTP id
+ k11-20020a2e240b000000b0029c922633f7mr556512ljk.1.1679642350532; Fri, 24 Mar
+ 2023 00:19:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 6/8] arm64: dts: qcom: sm8450: remove invalid npl clock in
- vamacro node
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-scsi@vger.kernel.org
-References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
- <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-6-3ead1e418fe4@linaro.org>
- <35e3aa8b-ccff-25fa-42da-d8934ef366c6@linaro.org>
- <006bf3bf-ab9a-4a08-3ba5-fa23ff4ea05a@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <006bf3bf-ab9a-4a08-3ba5-fa23ff4ea05a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230323221948.352154-1-corbet@lwn.net> <20230323221948.352154-6-corbet@lwn.net>
+ <271b00b7-fa10-fc2c-3929-c533a41bb22a@loongson.cn>
+In-Reply-To: <271b00b7-fa10-fc2c-3929-c533a41bb22a@loongson.cn>
+From:   Alex Shi <seakeel@gmail.com>
+Date:   Fri, 24 Mar 2023 15:18:34 +0800
+Message-ID: <CAJy-Am=BWE5fHg038tShduXQ4SaxqzRVUiWjYyj0ngxSH+JxFg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] docs: move openrisc documentation under Documentation/arch/
+To:     Yanteng Si <siyanteng@loongson.cn>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>, Alex Shi <alexs@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,36 +73,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/03/2023 14:13, Neil Armstrong wrote:
-> On 23/03/2023 11:47, Krzysztof Kozlowski wrote:
->> On 23/03/2023 11:25, Neil Armstrong wrote:
->>> Fixes the following DT bindings check error:
->>> codec@33f0000: clocks: [[137, 57, 1], [137, 102, 1], [137, 103, 1], [137, 70, 1]] is too long
->>> codec@33f0000: clock-names: 'oneOf' conditional failed, one must be fixed:
->>> 	        ['mclk', 'macro', 'dcodec', 'npl'] is too long
->>>
->>> The implementation was checked and this npl clock isn't used for the VA macro.
->>>
->>
->> This does not look correct. DTS looks good, you miss some patches in
->> your tree.
-> 
-> I'm based on today's linux-next, 
+On Fri, Mar 24, 2023 at 9:43=E2=80=AFAM Yanteng Si <siyanteng@loongson.cn> =
+wrote:
+>
+>
+> =E5=9C=A8 3/24/23 06:19, Jonathan Corbet =E5=86=99=E9=81=93:
+> > Architecture-specific documentation is being moved into Documentation/a=
+rch/
+> > as a way of cleaning up the top-level documentation directory and makin=
+g
+> > the docs hierarchy more closely match the source hierarchy.  Move
+> > Documentation/openrisc into arch/ and fix all in-tree references.
+> >
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: Alex Shi <alexs@kernel.org>
+> > Cc: Yanteng Si <siyanteng@loongson.cn>
+> > Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+>
+> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 
-Which is unfortunately not enough. Several things were
-fixed/added/changed and are pending. I brought the topic of pending
-branch few times on IRC for that reason.
+Thanks for taking care!
 
-> while the other lpass macros uses the npl clock,
-> the lpass vamacro bindings doesn't document the npl clock.
-> 
-> And I found no fixes whatsover to add the npl clock to bindings.
+Acked-by: Alex Shi <alexs@kernel.org>
 
-Really? lore finds it easily:
-
-https://lore.kernel.org/all/20221118071849.25506-2-srinivas.kandagatla@linaro.org/
-
-
-Best regards,
-Krzysztof
-
+>
+>
+> Thanks,
+>
+> Yanteng
+>
+> > ---
+> >   Documentation/arch/index.rst                                  | 2 +-
+> >   Documentation/{ =3D> arch}/openrisc/features.rst                | 0
+> >   Documentation/{ =3D> arch}/openrisc/index.rst                   | 0
+> >   Documentation/{ =3D> arch}/openrisc/openrisc_port.rst           | 0
+> >   Documentation/{ =3D> arch}/openrisc/todo.rst                    | 0
+> >   Documentation/translations/zh_CN/arch/index.rst               | 2 +-
+> >   .../translations/zh_CN/{ =3D> arch}/openrisc/index.rst          | 4 +=
++--
+> >   .../translations/zh_CN/{ =3D> arch}/openrisc/openrisc_port.rst  | 4 +=
++--
+> >   Documentation/translations/zh_CN/{ =3D> arch}/openrisc/todo.rst | 4 +=
++--
+> >   MAINTAINERS                                                   | 2 +-
+> >   10 files changed, 9 insertions(+), 9 deletions(-)
+> >   rename Documentation/{ =3D> arch}/openrisc/features.rst (100%)
+> >   rename Documentation/{ =3D> arch}/openrisc/index.rst (100%)
+> >   rename Documentation/{ =3D> arch}/openrisc/openrisc_port.rst (100%)
+> >   rename Documentation/{ =3D> arch}/openrisc/todo.rst (100%)
+> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/index.r=
+st (79%)
+> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/openris=
+c_port.rst (97%)
+> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/todo.rs=
+t (88%)
+> >
+> > diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rs=
+t
+> > index 792f58e30f25..65945daa40fe 100644
+> > --- a/Documentation/arch/index.rst
+> > +++ b/Documentation/arch/index.rst
+> > @@ -17,7 +17,7 @@ implementation.
+> >      ../m68k/index
+> >      ../mips/index
+> >      ../nios2/index
+> > -   ../openrisc/index
+> > +   openrisc/index
+> >      ../parisc/index
+> >      ../powerpc/index
+> >      ../riscv/index
+> > diff --git a/Documentation/openrisc/features.rst b/Documentation/arch/o=
+penrisc/features.rst
+> > similarity index 100%
+> > rename from Documentation/openrisc/features.rst
+> > rename to Documentation/arch/openrisc/features.rst
+> > diff --git a/Documentation/openrisc/index.rst b/Documentation/arch/open=
+risc/index.rst
+> > similarity index 100%
+> > rename from Documentation/openrisc/index.rst
+> > rename to Documentation/arch/openrisc/index.rst
+> > diff --git a/Documentation/openrisc/openrisc_port.rst b/Documentation/a=
+rch/openrisc/openrisc_port.rst
+> > similarity index 100%
+> > rename from Documentation/openrisc/openrisc_port.rst
+> > rename to Documentation/arch/openrisc/openrisc_port.rst
+> > diff --git a/Documentation/openrisc/todo.rst b/Documentation/arch/openr=
+isc/todo.rst
+> > similarity index 100%
+> > rename from Documentation/openrisc/todo.rst
+> > rename to Documentation/arch/openrisc/todo.rst
+> > diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Document=
+ation/translations/zh_CN/arch/index.rst
+> > index aa53dcff268e..7e59af567331 100644
+> > --- a/Documentation/translations/zh_CN/arch/index.rst
+> > +++ b/Documentation/translations/zh_CN/arch/index.rst
+> > @@ -11,7 +11,7 @@
+> >      ../mips/index
+> >      ../arm64/index
+> >      ../riscv/index
+> > -   ../openrisc/index
+> > +   openrisc/index
+> >      ../parisc/index
+> >      ../loongarch/index
+> >
+> > diff --git a/Documentation/translations/zh_CN/openrisc/index.rst b/Docu=
+mentation/translations/zh_CN/arch/openrisc/index.rst
+> > similarity index 79%
+> > rename from Documentation/translations/zh_CN/openrisc/index.rst
+> > rename to Documentation/translations/zh_CN/arch/openrisc/index.rst
+> > index 9ad6cc600884..da21f8ab894b 100644
+> > --- a/Documentation/translations/zh_CN/openrisc/index.rst
+> > +++ b/Documentation/translations/zh_CN/arch/openrisc/index.rst
+> > @@ -1,8 +1,8 @@
+> >   .. SPDX-License-Identifier: GPL-2.0
+> >
+> > -.. include:: ../disclaimer-zh_CN.rst
+> > +.. include:: ../../disclaimer-zh_CN.rst
+> >
+> > -:Original: Documentation/openrisc/index.rst
+> > +:Original: Documentation/arch/openrisc/index.rst
+> >
+> >   :=E7=BF=BB=E8=AF=91:
+> >
+> > diff --git a/Documentation/translations/zh_CN/openrisc/openrisc_port.rs=
+t b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
+> > similarity index 97%
+> > rename from Documentation/translations/zh_CN/openrisc/openrisc_port.rst
+> > rename to Documentation/translations/zh_CN/arch/openrisc/openrisc_port.=
+rst
+> > index b8a67670492d..cadc580fa23b 100644
+> > --- a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst
+> > +++ b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
+> > @@ -1,6 +1,6 @@
+> > -.. include:: ../disclaimer-zh_CN.rst
+> > +.. include:: ../../disclaimer-zh_CN.rst
+> >
+> > -:Original: Documentation/openrisc/openrisc_port.rst
+> > +:Original: Documentation/arch/openrisc/openrisc_port.rst
+> >
+> >   :=E7=BF=BB=E8=AF=91:
+> >
+> > diff --git a/Documentation/translations/zh_CN/openrisc/todo.rst b/Docum=
+entation/translations/zh_CN/arch/openrisc/todo.rst
+> > similarity index 88%
+> > rename from Documentation/translations/zh_CN/openrisc/todo.rst
+> > rename to Documentation/translations/zh_CN/arch/openrisc/todo.rst
+> > index 63c38717edb1..1f6f95616633 100644
+> > --- a/Documentation/translations/zh_CN/openrisc/todo.rst
+> > +++ b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
+> > @@ -1,6 +1,6 @@
+> > -.. include:: ../disclaimer-zh_CN.rst
+> > +.. include:: ../../disclaimer-zh_CN.rst
+> >
+> > -:Original: Documentation/openrisc/todo.rst
+> > +:Original: Documentation/arch/openrisc/todo.rst
+> >
+> >   :=E7=BF=BB=E8=AF=91:
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index cf4eb913ea12..64ea94536f4c 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -15638,7 +15638,7 @@ S:    Maintained
+> >   W:  http://openrisc.io
+> >   T:  git https://github.com/openrisc/linux.git
+> >   F:  Documentation/devicetree/bindings/openrisc/
+> > -F:   Documentation/openrisc/
+> > +F:   Documentation/arch/openrisc/
+> >   F:  arch/openrisc/
+> >   F:  drivers/irqchip/irq-ompic.c
+> >   F:  drivers/irqchip/irq-or1k-*
+>
