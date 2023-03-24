@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1DC6C7462
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DEA6C7465
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjCXAOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S230404AbjCXAPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 20:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCXAOl (ORCPT
+        with ESMTP id S229508AbjCXAPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:14:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0F111171
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 17:14:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 23 Mar 2023 20:15:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9014228;
+        Thu, 23 Mar 2023 17:15:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CFA9B82200
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:14:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14184C433EF;
-        Fri, 24 Mar 2023 00:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679616877;
-        bh=5e5Tzve7Dd79xcTNdzm57g5wRClxIC6OdMpghScFxOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R4K7k18r848BLqhpwlEA6Ld7DoDKRrdC6Hn1idP1bo6iEJc1HHk8Qb4EgaFF4lofC
-         NlLv9qe+izxpoVd/t60Fbde51YIjrTxVn6aDerhFATmBp5whR4qs2Rv+y1muClq50J
-         74g1WcjvBb5ppTTghoOnBBoybaZ1us8qoUpcN0mm1cEudenxgGOUIY5O8VdYDaxGuJ
-         ZitVOwScaMxguqXQu03LtHqc4g+UTKso/BxJHZDI9EZvp9n4jcJiQgeHqrgrXsmn3e
-         BaMFTZPljxSHkXbi2i1pl1cBAuWUjKn2F8QQRwACbHVa24ZrsyElOAh6jCXn7BgEde
-         f9VOuEik86naw==
-Date:   Fri, 24 Mar 2023 00:14:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        tiwai@suse.com, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, johan+linaro@kernel.org,
-        steev@kali.org, dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH 3/4] ASoC: codecs: wsa883x: mute/unmute PA in correct
- sequence
-Message-ID: <101cfc2d-59d7-4f37-9dd1-e83d1b803bc5@sirena.org.uk>
-References: <20230323164403.6654-1-srinivas.kandagatla@linaro.org>
- <20230323164403.6654-4-srinivas.kandagatla@linaro.org>
- <ff3eb88a-6941-4303-a4ba-17cad3842b88@sirena.org.uk>
- <5dc11c47-bae6-2f4e-4ffd-58c4f462fd68@linux.intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjN5H6w4Gz4wgv;
+        Fri, 24 Mar 2023 11:15:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679616916;
+        bh=8COmHSNZL6Mox6t+Ubz0o5GRzktg0YUvu+sMIkdmdlU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bT4Os49rLTPdWxWkvQPIMPM47eNDkzyTfb0KGhb1X4jjKVVNVQQxtoRRIeRuv5K9i
+         7PPnot9ZpU2/aWqqvgesm/Ma1nnm5id0+VMrjJUj+PMH2VOse8gRGrnmm2GQ262oVi
+         coj/wVobWZYqLjRZtoceJTRAS8O+qnZRSV51oxeaxFMAfxIpm41aHOUd+giDzlSpal
+         l/aNNr1Xu87OSbj4942r5bWARQdTgLIfpK/pmKU/+zWh8X3EQTfmOF7vFTJUmSD2iH
+         hyL35oHb0OFAM1eeSlbAIDcAT0mgMPKfxIzGeXsT8v5am9095f1Qout7SqS02vFWwf
+         zG1zaHePStH6g==
+Date:   Fri, 24 Mar 2023 11:15:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Helge Deller <deller@gmx.de>
+Cc:     Parisc List <linux-parisc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: manual merge of the sh tree with the parisc-hd tree
+Message-ID: <20230324111514.2bbcd64b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qr22+g/wK5Y2DBT5"
-Content-Disposition: inline
-In-Reply-To: <5dc11c47-bae6-2f4e-4ffd-58c4f462fd68@linux.intel.com>
-X-Cookie: A lie in time saves nine.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nfu/PxOKBd=2/+QYaKMX1RR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/nfu/PxOKBd=2/+QYaKMX1RR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---Qr22+g/wK5Y2DBT5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
-On Thu, Mar 23, 2023 at 01:11:11PM -0500, Pierre-Louis Bossart wrote:
+Today's linux-next merge of the sh tree got a conflict in:
 
-> > The trigger is run in atomic context, can you really write safely to a
-> > SoundWire device there?
+  Documentation/kbuild/kbuild.rst
 
-> Mark, I've seen that comment from you several times, and I wonder if I
-> am missing something: the triggers for SoundWire managers and dailinks
-> are typically nonatomic - at least for the Cadence-based solution the
-> trigger is based on a bank switch that may happen with a delay and with
-> a wait_for_completion(). Sending a command over the SoundWire channel is
-> also typically not atomic, there's usually a wait_for_completion() as well.
+between commit:
 
-Ah, you're setting the nonatomic flag on your links to disable the
-locking.  The default for trigger operations is to run them with local
-interrupts disabled.  It looks like at least some of the Qualcomm stuff
-does that too.
+  49deed336ef9 ("parisc: update kbuild doc. aliases for parisc64")
 
---Qr22+g/wK5Y2DBT5
-Content-Type: application/pgp-signature; name="signature.asc"
+from the parisc-hd tree and commit:
+
+  644a9cf0d2a8 ("sh: remove sh5/sh64 last fragments")
+
+from the sh tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/kbuild/kbuild.rst
+index 84b2d2dc8f78,e22621f4af0b..000000000000
+--- a/Documentation/kbuild/kbuild.rst
++++ b/Documentation/kbuild/kbuild.rst
+@@@ -160,8 -160,6 +160,7 @@@ directory name found in the arch/ direc
+  But some architectures such as x86 and sparc have aliases.
+ =20
+  - x86: i386 for 32 bit, x86_64 for 64 bit
+ +- parisc: parisc64 for 64 bit
+- - sh: sh for 32 bit, sh64 for 64 bit
+  - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+ =20
+  CROSS_COMPILE
+
+--Sig_/nfu/PxOKBd=2/+QYaKMX1RR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQc62cACgkQJNaLcl1U
-h9DzHQf/TIS72n0OUMiQng7OQKu/e8P+3/vOqyZs7KgpO4ZAgAj3Fh2LNTDL/ozv
-8WNTHCDmF/caNspF1f+3A+4iShLnqEfAjP338hgBKfMakh+2kLZjvquv8uau41xa
-Ptq6Syp6qN0kRgdgVpidwj77UwHldZUf333vlsz9zh7cb7jgCmasy76TN1OZfgyP
-2eY/Y2j6+BKcAfP1DOSmguTo1h8x/nU5uLddP1bSAdFyjaD3GFgJlPJfQBPjFvFu
-fTMiMqpenPGAde/jzDPrKzYBBUeP+C3KAnQy7ivVRjRCx1vjGZ7HAj8WNT0flzHF
-a+d504cA5fOV3hcEYjIDjHFd1yIaWg==
-=Au5o
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc65IACgkQAVBC80lX
+0GwyFQf9HsiN1PRgq1Wdv4aMV3RGTSJNLfuOgUWhQMa03JuhyCg0w43Oqhvqr4V2
+VOU0zf+vsvFe3vBbQEawANzUAY2JHM2/ufFPMaibJB4cWvAbiCcIxBfSHLTJwiKM
+puCiHOjCz21IPQkcQ5x77nyEi2xkBtvQ4Pq4Vi481fGRcLHChlGEquS5J6hzybov
+6f/7DAd1eTB+lyAdsBcCVFOVxUqS2q6tW4zZmyq/VFyLyx2czSh8+7O8CQUPc6PL
+xchGaqoOb+vkwkXcsczuGKxYezYzUY+yVx0jbZdmYWXpEnhKP0uy/yubdpIOFZEw
+uBZqA4WswwO1Sbj/K6+/Uld4pc8j1w==
+=fvqO
 -----END PGP SIGNATURE-----
 
---Qr22+g/wK5Y2DBT5--
+--Sig_/nfu/PxOKBd=2/+QYaKMX1RR--
