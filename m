@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBADA6C82A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5186C82A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjCXQwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S231862AbjCXQwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjCXQwr (ORCPT
+        with ESMTP id S231823AbjCXQwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Mar 2023 12:52:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381CC20A04
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:44 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso2189477pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:44 -0700 (PDT)
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3D3212A5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:45 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id i15so1646690pfo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:52:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679676763;
+        d=gmail.com; s=20210112; t=1679676765;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1hAMVuew/XpfZidvZRKjun+NiVbRnaAGsA3f7GMnLNc=;
-        b=gXTFgVCfp4dfhrjwiSjmzdJFjjbDr0XWRtyMeoXcEkHUnJLXWtzw7+90s/RtmAF7Lo
-         k6NwP0A6A4weLIztatm+DDagdmP9IFQYg8Mx+4C6o+5iFvDBviV5TEQfPeBY6hTg2rzc
-         nB9Q7+9bTkLO7gE8QlBu1ufQPCDGk67gyP6nz9JQMvu3u4yyL7ua/QML97fvk6y4hlso
-         QOWmJRW4S6Zjhzk01o2kMDAPHQUd6swFkg7mVcr0CM9TY06FbiX2m2lvFHfN6pTKXE2c
-         IJDsEuohFIshLmSAPblKmw0VThZ9NqxYr5MYyTgLjzDP1TLwGdlDDFcl8D0L2pnbGTTk
-         SO2Q==
+        bh=8UmG7kTY7wjWcxkBXGijn5KqU6ZYb3Prx7pN3zRMZ2Q=;
+        b=QVEqXaO0vwbg6qjXz3p/QiK0qIDvtFqAcZvJt3om0UyJ5+nosdtMGMbAVa/In6hj/w
+         0+ZwuC7B75j+g1KDkicEbZ7/Q/xWoHazfxg3v+uqOL3522+PaRj1VS0jSt3dF6L9rvM1
+         TXJipMfXePUNNeIEyhXzjjD19TU3PPhBTAl4uWKbrDj+i2eTgnmZZn4GDoa50RCZFmEB
+         Tchet5lHEGcf+l4KoTxe8L9EdlqoYNgJ/SG7/OxNWuCPddbqZMXvNhuRW7Hrpl6NDO+D
+         MH1DT7EVv/VXD+wlvHH0yJIA3OydtPXoDqcBGnZHYGbKt79L9kLk5DKAKycKKDn8wt4k
+         iGBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679676763;
+        d=1e100.net; s=20210112; t=1679676765;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1hAMVuew/XpfZidvZRKjun+NiVbRnaAGsA3f7GMnLNc=;
-        b=e6tR+Ot52l8/AZd7JMC3Vyc6leHPa0wp00Nmhbh59yrubRrTi9rBaZhaZAcn7VLt0u
-         4Z1vafDXxpXy3+UJVaFNHTbJoEVSgWwkhTwfJMfqRt9V5Q0i8latnpbYhEqiY/Uvm4qc
-         BFIxHHdzYYKV7nKOY5EcdQ7/59PasFQDKBnhfZB4kP/GbcyeTpv/CLxEnGy8DTf2vVUb
-         i07h3T/bCxa7fG24NodR4N9SzxyPHxyZW2+GtsifoaLZmuT8/r+SlsIzOYuYFVZn7Qbm
-         NXU4NMjvDJYPVQ69mHvMH7L5uf0+VpvULZgO3EqKjVDR0B6c1ttfgTA3TOxtDRxULyG4
-         svyw==
-X-Gm-Message-State: AO0yUKWqkGRs9veJ/JdGM/zf1XM0INyXct/PiylsUni+yIPracFWZ7pg
-        NNhGQLekbe3Mf/7eeRbo1OSeTLuDtZ0=
-X-Google-Smtp-Source: AK7set+kSMmDMRXmTWJZtXu26zU7zy5hiq7SZCQudu5LW5A80adRBp8KrgUw8ykU8g2H8/aLlEDNmg==
-X-Received: by 2002:a05:6a20:c320:b0:dd:d1f2:f1a7 with SMTP id dk32-20020a056a20c32000b000ddd1f2f1a7mr3297441pzb.27.1679676763272;
-        Fri, 24 Mar 2023 09:52:43 -0700 (PDT)
+        bh=8UmG7kTY7wjWcxkBXGijn5KqU6ZYb3Prx7pN3zRMZ2Q=;
+        b=OvogoVifohIgRKXrdeaSNfanF+EXzpThJGu7PFTtBGoo/2O4GDrIuFN8GXE7zMFnhu
+         qVSbP+JhSbQr3iNLBuZNvbTux2H22QrBzJZnsmVCZYQu8dpoA16AjG5B66HqxatPjIQn
+         D1IhEzZu4bUN0lRIcBOabPE+XQNtT8XqcGq+PTmUgr+kZQwWCKwO1wHbOFx6zSf7OKLQ
+         NxZyhHyzWoKT1y06xxfsb356NH9CyrBlfIfAA4jCTMG7IyrOF24GSSxdnkCUhLhsoXjD
+         l6dCCHE0+4FCqFQNQbeVQs/rX2vuK5g/ZQH93IB2bQ3vKDOrBOfmSLmmcwbtCVqYANQY
+         4WbQ==
+X-Gm-Message-State: AAQBX9dI/24YCPJMA0a1MB2YtdKVgSCBSn9zXpAduRg2AaLzOnwSu15W
+        XJSSgRkU0SSupN76rcDkyw2OOFrSBjQ=
+X-Google-Smtp-Source: AK7set+KBVxkxFHsXaMsVsIir/eox0dKYMv1EYMazIh/KAM89fItbtAbbbylsEN1+4M6KgzY6HlOlw==
+X-Received: by 2002:aa7:9629:0:b0:628:1274:4d60 with SMTP id r9-20020aa79629000000b0062812744d60mr3776739pfg.21.1679676764785;
+        Fri, 24 Mar 2023 09:52:44 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa780c5000000b0062b5a55835dsm1420289pfn.213.2023.03.24.09.52.42
+        by smtp.gmail.com with ESMTPSA id a5-20020aa780c5000000b0062b5a55835dsm1420289pfn.213.2023.03.24.09.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 09:52:42 -0700 (PDT)
+        Fri, 24 Mar 2023 09:52:44 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -58,9 +58,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
         ARM ARCHITECTURE)
-Subject: [PATCH 2/3] Documentation: sysfs: brcmstb-memc: Document new attributes
-Date:   Fri, 24 Mar 2023 09:52:30 -0700
-Message-Id: <20230324165231.3468069-3-f.fainelli@gmail.com>
+Subject: [PATCH 3/3] memory: brcmstb_memc: Add new DDR attributes
+Date:   Fri, 24 Mar 2023 09:52:31 -0700
+Message-Id: <20230324165231.3468069-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230324165231.3468069-1-f.fainelli@gmail.com>
 References: <20230324165231.3468069-1-f.fainelli@gmail.com>
@@ -76,60 +76,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the DDR rank, size, total size, width and type attributes.
+Provide information about the DDR size, type, width, total width,
+dual/single rank. This is useful for reporting purposes and inventory of
+the system(s).
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../ABI/testing/sysfs-platform-brcmstb-memc   | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ drivers/memory/brcmstb_memc.c | 80 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 79 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
-index 2f2b750ac2fd..bc969c02b85f 100644
---- a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
-+++ b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
-@@ -1,3 +1,42 @@
-+What:		/sys/bus/platform/devices/*/ddr_rank
-+Date:		March 2023
-+KernelVersion:	6.3
-+Contact:	Florian Fainelli <f.fainelli@gmail.com>
-+Description:
-+		Displays whether the device is single or dual rank.
+diff --git a/drivers/memory/brcmstb_memc.c b/drivers/memory/brcmstb_memc.c
+index 67c75e21c95e..032567dfd6e2 100644
+--- a/drivers/memory/brcmstb_memc.c
++++ b/drivers/memory/brcmstb_memc.c
+@@ -13,7 +13,14 @@
+ 
+ #define REG_MEMC_CNTRLR_CONFIG		0x00
+ #define  CNTRLR_CONFIG_LPDDR4_SHIFT	5
+-#define  CNTRLR_CONFIG_MASK		0xf
++#define  CNTRLR_CONFIG_MASK		GENMASK(3, 0)
++#define  CNTRLR_CONFIG_SIZE_SHIFT	4
++#define  CNTRLR_CONFIG_SIZE_MASK	GENMASK(7, 4)
++#define  CNTRLR_CONFIG_WIDTH_SHIFT	8
++#define  CNTRLR_CONFIG_WIDTH_MASK	GENMASK(9, 8)
++#define  CNTRLR_CONFIG_TOT_WIDTH_SHIFT	10
++#define  CNTRLR_CONFIG_TOT_WIDTH_MASK	GENMASK(11, 10)
++#define  CNTRLR_CONFIG_RANK_SHIFT	16
+ #define REG_MEMC_SRPD_CFG_21		0x20
+ #define REG_MEMC_SRPD_CFG_20		0x34
+ #define REG_MEMC_SRPD_CFG_1x		0x3c
+@@ -63,6 +70,67 @@ static int brcmstb_memc_srpd_config(struct brcmstb_memc *memc,
+ 	return 0;
+ }
+ 
++static ssize_t ddr_rank_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct brcmstb_memc *memc = dev_get_drvdata(dev);
 +
-+What:		/sys/bus/platform/devices/*/ddr_size
-+Date:		March 2023
-+KernelVersion:	6.3
-+Contact:	Florian Fainelli <f.fainelli@gmail.com>
-+Description:
-+		This field specifies the size of each DRAM device in the first
-+		(or only) rank
++	return sprintf(buf, "%s\n",
++		       memc->config_reg & CNTRLR_CONFIG_RANK_SHIFT ?
++		       "dual" : "single");
++}
 +
-+What:		/sys/bus/platform/devices/*/ddr_total_width
-+Date:		March 2023
-+KernelVersion:	6.3
-+Contact:	Florian Fainelli <f.fainelli@gmail.com>
-+Description:
-+		This field specifies the total data width of all DRAM devices
-+		(in each rank)
++static ssize_t ddr_size_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct brcmstb_memc *memc = dev_get_drvdata(dev);
++	u32 val = (memc->config_reg & CNTRLR_CONFIG_SIZE_MASK) >>
++		  CNTRLR_CONFIG_SIZE_SHIFT;
 +
-+What:		/sys/bus/platform/devices/*/ddr_type
-+Date:		March 2023
-+KernelVersion:	6.3
-+Contact:	Florian Fainelli <f.fainelli@gmail.com>
-+Description:
-+		This field specifies DRAM technology type. Possible values:
-+		DDR2, DDR3, DDR4, GDDR5, GDDR5M, LPDDR4.
++	return sprintf(buf, "%dMb\n", 256 << val);
++}
 +
-+What:		/sys/bus/platform/devices/*/ddr_width
-+Date:		March 2023
-+KernelVersion:	6.3
-+Contact:	Florian Fainelli <f.fainelli@gmail.com>
-+Description:
-+		This field specifies the data width of each DRAM device.
-+		Possible values are: x8, x16, x32
++static ssize_t ddr_total_width_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct brcmstb_memc *memc = dev_get_drvdata(dev);
++	u32 val = (memc->config_reg & CNTRLR_CONFIG_TOT_WIDTH_MASK) >>
++		   CNTRLR_CONFIG_TOT_WIDTH_SHIFT;
 +
- What:		/sys/bus/platform/devices/*/srpd
- Date:		July 2022
- KernelVersion:	5.21
++	return sprintf(buf, "x%d\n", 8 << val);
++}
++
++static ssize_t ddr_type_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	struct brcmstb_memc *memc = dev_get_drvdata(dev);
++	const char *ddr_type_to_str[] = {
++		"DDR2",
++		"DDR3",
++		"DDR4",
++		"GDDR5M",
++		"GDDR5",
++		"LPDDR4",
++	};
++	u32 val = memc->config_reg & CNTRLR_CONFIG_MASK;
++	const char *type = "unknown";
++
++	if (val < ARRAY_SIZE(ddr_type_to_str))
++		type = ddr_type_to_str[val];
++
++	return sprintf(buf, "%s\n", type);
++}
++
++static ssize_t ddr_width_show(struct device *dev,
++			      struct device_attribute *attr, char *buf)
++{
++	struct brcmstb_memc *memc = dev_get_drvdata(dev);
++	u32 val = (memc->config_reg & CNTRLR_CONFIG_WIDTH_MASK) >>
++		  CNTRLR_CONFIG_WIDTH_SHIFT;
++
++	return sprintf(buf, "x%d\n", 8 << val);
++}
++
+ static ssize_t frequency_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+@@ -105,10 +173,20 @@ static ssize_t srpd_store(struct device *dev, struct device_attribute *attr,
+ 	return count;
+ }
+ 
++static DEVICE_ATTR_RO(ddr_rank);
++static DEVICE_ATTR_RO(ddr_size);
++static DEVICE_ATTR_RO(ddr_total_width);
++static DEVICE_ATTR_RO(ddr_type);
++static DEVICE_ATTR_RO(ddr_width);
+ static DEVICE_ATTR_RO(frequency);
+ static DEVICE_ATTR_RW(srpd);
+ 
+ static struct attribute *dev_attrs[] = {
++	&dev_attr_ddr_rank.attr,
++	&dev_attr_ddr_size.attr,
++	&dev_attr_ddr_total_width.attr,
++	&dev_attr_ddr_type.attr,
++	&dev_attr_ddr_width.attr,
+ 	&dev_attr_frequency.attr,
+ 	&dev_attr_srpd.attr,
+ 	NULL,
 -- 
 2.34.1
 
