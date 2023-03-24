@@ -2,197 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE8B6C79FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6796C7A01
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjCXIjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 04:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S229794AbjCXIjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCXIja (ORCPT
+        with ESMTP id S231769AbjCXIjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:39:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3059D25972
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679647132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h1D7m14P56RNT5JGoAPdQmecs24aXusOMR+kHr7Nd7Q=;
-        b=NwDdonfxHjcwHc7J9vZawZ2PaUiiKj8Ecle12LTxReL5nI9UCNor0G3BXUaSHWq8IUB9gL
-        +bD+3efUhkkHLdZssd6sFiz0m8/fj3FGzDObg/WWnZJbgIHYTU7GbJFXIDK/wagbByCV82
-        NLV7T/C6kHMN5bVX+WuWCFDSd7nBIv0=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-275-hSpKkPw9P6O8O3GgmzTTEw-1; Fri, 24 Mar 2023 04:38:51 -0400
-X-MC-Unique: hSpKkPw9P6O8O3GgmzTTEw-1
-Received: by mail-yb1-f200.google.com with SMTP id b124-20020a253482000000b00b72947f6a54so1208235yba.14
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:38:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679647130;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h1D7m14P56RNT5JGoAPdQmecs24aXusOMR+kHr7Nd7Q=;
-        b=GhxU+c/XKl8g/o7rkdCmZFeDiBOLPLpTaYJv8mSH7Waw57SmyMOxSuh0cCLoFWeR5Q
-         waDRvltQtgsVMjv5EPGPw3ihTix3/UeSl0A382EAAUWz1XOG1h7PHedmiLXKDTPlUcLv
-         FU2eNymozDyBWUGdUNsthvmIb13NWCnYVs5z3Q1sbLbcxYhrbAIUgyw7tsZEiJIjFT/w
-         bdX64xSRL7/XTOAMYZM4pIx0mar2VjHWuD2jTxR6Ba0xW/3jnuiacjEpVZFg39qMDQtb
-         YS63M1HilACHzXBe+dUZo9TTkQ4thoiMpdG8fQRjViq9Na+lbcrACwkt+7+zjLL6jT0I
-         q/6A==
-X-Gm-Message-State: AAQBX9cWgjKHBBWkRgMr5hy8+JZIhPmUNWbXVJTpHpIFE08LR2tS1VaB
-        lILA4pq3gADE9czC3qW3WdXuv1Z9r3V8SRg4a6MM0/SaNepNlKv7T/TVGpxOwDW/CHdamz3WeIW
-        jDdwhhklR2gBU3JPmsG9d8uOZwEsYY4YZSXGvvpTT
-X-Received: by 2002:a25:b948:0:b0:acd:7374:f154 with SMTP id s8-20020a25b948000000b00acd7374f154mr902988ybm.7.1679647130012;
-        Fri, 24 Mar 2023 01:38:50 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bJUkE56r+OXAAnA3zX4sKtvZzf+/cqdiByb/Kp2K9FLab9w7761QG8IjcA/36OfL1v2BkST2kJZovF/6N6wps=
-X-Received: by 2002:a25:b948:0:b0:acd:7374:f154 with SMTP id
- s8-20020a25b948000000b00acd7374f154mr902969ybm.7.1679647129774; Fri, 24 Mar
- 2023 01:38:49 -0700 (PDT)
+        Fri, 24 Mar 2023 04:39:49 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCEF25E39
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:39:47 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 08:39:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1679647185; x=1679906385;
+        bh=I8/f3JO/VA5KWyLN4wKp4hGSRAS0uOmn5BtDka1Qfpo=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=e1OidOwma+seobgitoxy4TukCO+qj4IBs36t91OuEhT4JbWavof1KoVj/j28ytLU0
+         hIbvgvfRf4lbyL0lFIEnuMFSUeNAwvnZWCwHO/QBPBFsX+/8wedn4Cz5slKHxVWbfY
+         rMuc26kQSIHXkdpt4PFYJuY/1+5PyfTNqyEmsqVZUV5A8tO40LQRHUoMvrPIj9ZBpD
+         wxF0758GJJ5aUXpoqqQKpN+23XTPyQg8X5qqPxFZPVQmk4Y4vATeuv2Zj/sKK47viF
+         bgadAFbZJXBRolAEpj33dG0zFGtEed+pV2bPLmMXJ2YrJmg3tvthIaRYwBIh4zWfw3
+         //uFrPn/NLtew==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v2 3/5] rust: add pin-init API
+Message-ID: <15f01078-4756-8f87-fe3c-ab9f433ebe7a@protonmail.com>
+In-Reply-To: <ZBvyCwPcpTnk2R7h@Boquns-Mac-mini.local>
+References: <20230321194934.908891-1-y86-dev@protonmail.com> <20230321194934.908891-4-y86-dev@protonmail.com> <ZBvyCwPcpTnk2R7h@Boquns-Mac-mini.local>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-References: <00000000000075bebb05f79acfde@google.com>
-In-Reply-To: <00000000000075bebb05f79acfde@google.com>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Fri, 24 Mar 2023 09:38:38 +0100
-Message-ID: <CAGxU2F4jxdzK8Y-jaoKRaX_bDhoMtomOT6TyMek+un-Bp8RX3g@mail.gmail.com>
-Subject: Re: [syzbot] [net?] [virt?] [io-uring?] [kvm?] BUG: soft lockup in vsock_connect
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc:     syzbot <syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        io-uring@vger.kernel.org, kuba@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, stefanha@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bobby,
-FYI we have also this one, but it seems related to
-syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com
+On 23.03.23 07:30, Boqun Feng wrote:
+> On Tue, Mar 21, 2023 at 07:50:00PM +0000, Benno Lossin wrote:
+> [...]
+>> +/// # Syntax
+>> +///
+>> +/// As already mentioned in the examples above, inside of `pin_init!` a=
+ `struct` initializer with
+>> +/// the following modifications is expected:
+>> +/// - Fields that you want to initialize in-place have to use `<-` inst=
+ead of `:`.
+>> +/// - In front of the initializer you can write `&this in` to have acce=
+ss to a [`NonNull<Self>`]
+>> +///   pointer named `this` inside of the initializer.
+>> +///
+>> +/// For instance:
+>> +///
+>> +/// ```rust
+>> +/// # use kernel::pin_init;
+>> +/// # use macros::pin_data;
+>> +/// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
+>> +/// #[pin_data]
+>> +/// struct Buf {
+>> +///     ptr: *mut u8,
+>> +///     buf: [u8; 64],
+>
+> Say we have an extra field,
+>
+>             a: u8,
+>
+>> +///     #[pin]
+>> +///     pin: PhantomPinned,
+>> +/// }
+>> +/// pin_init!(&this in Buf {
+>> +///     buf: [0; 64],
+>> +///     ptr: unsafe { addr_of_mut!((*this.as_ptr()).buf).cast() },
+>
+> And I think we want to disallow:
+>
+>             a: unsafe { (*addr_of!(*this.as_ptr().buf))[0] }
+>
+> , right? Because we don't want `pin_init!` to provide any initialization
+> order guarantee? If so, maybe add one or two sentences to call it out.
+>
+> If not sure, I think we can leave it as it is, until someone really uses
+> this pattern ;-)
 
-Thanks,
-Stefano
+The `pin_init!` macro initializes everything in the order specified, so
+if `a` is the last field you initialize, the code above is fine. I think
+we could guarantee this. I will add a comment.
 
+--
+Cheers,
+Benno
 
-On Fri, Mar 24, 2023 at 1:52=E2=80=AFAM syzbot
-<syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux=
-.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1577c97ec8000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7573cbcd881a8=
-8c9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0bc015ebddc291a=
-97116
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Deb=
-ian) 2.35.2
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1077c996c80=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D17e38929c8000=
-0
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/dis=
-k-fe15c26e.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinu=
-x-fe15c26e.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/I=
-mage-fe15c26e.gz.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+0bc015ebddc291a97116@syzkaller.appspotmail.com
->
-> watchdog: BUG: soft lockup - CPU#0 stuck for 27s! [syz-executor244:6747]
-> Modules linked in:
-> irq event stamp: 6033
-> hardirqs last  enabled at (6032): [<ffff8000124604ac>] __exit_to_kernel_m=
-ode arch/arm64/kernel/entry-common.c:84 [inline]
-> hardirqs last  enabled at (6032): [<ffff8000124604ac>] exit_to_kernel_mod=
-e+0xe8/0x118 arch/arm64/kernel/entry-common.c:94
-> hardirqs last disabled at (6033): [<ffff80001245e188>] __el1_irq arch/arm=
-64/kernel/entry-common.c:468 [inline]
-> hardirqs last disabled at (6033): [<ffff80001245e188>] el1_interrupt+0x24=
-/0x68 arch/arm64/kernel/entry-common.c:486
-> softirqs last  enabled at (616): [<ffff80001066ca80>] spin_unlock_bh incl=
-ude/linux/spinlock.h:395 [inline]
-> softirqs last  enabled at (616): [<ffff80001066ca80>] lock_sock_nested+0x=
-e8/0x138 net/core/sock.c:3480
-> softirqs last disabled at (618): [<ffff8000122dbcfc>] spin_lock_bh includ=
-e/linux/spinlock.h:355 [inline]
-> softirqs last disabled at (618): [<ffff8000122dbcfc>] virtio_transport_pu=
-rge_skbs+0x11c/0x500 net/vmw_vsock/virtio_transport_common.c:1372
-> CPU: 0 PID: 6747 Comm: syz-executor244 Not tainted 6.3.0-rc1-syzkaller-gf=
-e15c26ee26e #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 03/02/2023
-> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> pc : __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:203
-> lr : virtio_transport_purge_skbs+0x19c/0x500 net/vmw_vsock/virtio_transpo=
-rt_common.c:1374
-> sp : ffff80001e787890
-> x29: ffff80001e7879e0 x28: 1ffff00003cf0f2a x27: ffff80001a487a60
-> x26: ffff80001e787950 x25: ffff0000ce2d3b80 x24: ffff80001a487a78
-> x23: 1ffff00003490f4c x22: ffff80001a29c1a8 x21: dfff800000000000
-> x20: ffff80001a487a60 x19: ffff80001e787940 x18: 1fffe000368951b6
-> x17: ffff800015cdd000 x16: ffff8000085110b0 x15: 0000000000000000
-> x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: ffff700003cf0efc
-> x11: ff808000122dbee8 x10: 0000000000000000 x9 : ffff8000122dbee8
-> x8 : ffff0000ce511b40 x7 : ffff8000122dbcfc x6 : 0000000000000000
-> x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80000832d758
-> x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-> Call trace:
->  get_current arch/arm64/include/asm/current.h:19 [inline]
->  __sanitizer_cov_trace_pc+0xc/0x8c kernel/kcov.c:206
->  vsock_loopback_cancel_pkt+0x28/0x3c net/vmw_vsock/vsock_loopback.c:48
->  vsock_transport_cancel_pkt net/vmw_vsock/af_vsock.c:1284 [inline]
->  vsock_connect+0x6b8/0xaec net/vmw_vsock/af_vsock.c:1426
->  __sys_connect_file net/socket.c:2004 [inline]
->  __sys_connect+0x268/0x290 net/socket.c:2021
->  __do_sys_connect net/socket.c:2031 [inline]
->  __se_sys_connect net/socket.c:2028 [inline]
->  __arm64_sys_connect+0x7c/0x94 net/socket.c:2028
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
->  el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
->  el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
->  el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
->
 
