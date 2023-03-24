@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD6B6C82A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A532B6C82AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 17:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjCXQyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 12:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S231686AbjCXQzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 12:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjCXQyo (ORCPT
+        with ESMTP id S231447AbjCXQzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 12:54:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E655A9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:54:43 -0700 (PDT)
+        Fri, 24 Mar 2023 12:55:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BB212D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 09:55:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7930AB82277
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:54:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C9CC433EF;
-        Fri, 24 Mar 2023 16:54:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 518B262A3E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 16:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EF5C433D2;
+        Fri, 24 Mar 2023 16:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679676881;
-        bh=s26PMR9LnZjCeBo1ZeGJ+j/whi/RZtcTzPjkiJphWmk=;
+        s=k20201202; t=1679676943;
+        bh=ZEbjlpAh2WrqUnDW5ZNWKy6ydvQ8KRSfEkJ24vJOxjw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=euCzy08TjPyv44g0XuHekfA7PUE7xp6aY25yiju00O0x3s+tD067nu2KN14eKX7SF
-         ocFWU9Rf0Qwgg2Mk9LjbqUFu9SRvYKlXic7nPajYEwWP4YB99vIMAYneyO8gYILfzG
-         YWN3B9J2zKdmTi6JRQZYmbyFiex325ZE7W2GUp32bCuS/fWU2ESmal559j/3cSxPzK
-         0fQWHnEsq2TNU1u2C6tjehM46U5au7hl+bCR29AQJSnhROGmF/uRWB3SwrA/ZXLmik
-         bN+1cgIkFGKs6VoCtWMTmh2oIkaH5GSjJZ3vKhTul9rsvlZWdf1xR3ohRIaSV8Sht9
-         +urIUgkfi4ktQ==
-Date:   Fri, 24 Mar 2023 09:54:39 -0700
+        b=ffCp+pIcMsdyYgAbrBCxSn401DJbItZ+VxxFzMHcsXi2VWGOLY2bX/srw/reGOTFQ
+         HqDM7b+qO2peo1iRH5gMoLIP79B6AGdrgv++ql4AAaOLvY43id26vhJQxmiQ5e0y9D
+         HgLFg8NzMx3WDInKRPa8Pi52ceDBvoD8ian5IzW9zFBjjIKIuaAIgO29qphc08J9FK
+         ioqq+J4QaKTZWQsgSxZWYBLajFvYL6lhDnBXUom+gcB5jvj/d+dq2CBdUCrQlYdxE4
+         NkMaM+xSythvSS17VvfO/pYobKS/b8MftiyS1DXAKaJUHFJhZwBvauOIfNZmn1KB4H
+         1iRgbhZ0SFQaQ==
+Date:   Fri, 24 Mar 2023 09:55:42 -0700
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     yonggil.song@samsung.com,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>
+Cc:     Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] f2fs: Fix discard bug on zoned block devices with
- 2MiB zone size
-Message-ID: <ZB3Vz9w2ybNVSY8C@google.com>
-References: <CGME20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
- <20230313094825epcms2p71e6cb549251dc55e8d202dd64b9913a6@epcms2p7>
- <a24d66ad-4048-fd5c-ae47-2dd17c87bcbe@kernel.org>
- <ZBzMql6DkrUWiRKP@google.com>
- <35dd1eea-f1b9-418e-5f97-cfd10b7ff803@kernel.org>
+Subject: Re: f2fs: factor out discard_cmd usage from general rb_tree use
+Message-ID: <ZB3WDpunfgJZhhQy@google.com>
+References: <e50ebe1a-73a0-5800-71e3-0ddd366727ac@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <35dd1eea-f1b9-418e-5f97-cfd10b7ff803@kernel.org>
+In-Reply-To: <e50ebe1a-73a0-5800-71e3-0ddd366727ac@gmail.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -60,62 +53,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/24, Chao Yu wrote:
-> On 2023/3/24 6:03, Jaegeuk Kim wrote:
-> > On 03/23, Chao Yu wrote:
-> > > On 2023/3/13 17:48, Yonggil Song wrote:
-> > > > When using f2fs on a zoned block device with 2MiB zone size, IO errors
-> > > > occurs because f2fs tries to write data to a zone that has not been reset.
-> > > > 
-> > > > The cause is that f2fs tries to discard multiple zones at once. This is
-> > > > caused by a condition in f2fs_clear_prefree_segments that does not check
-> > > > for zoned block devices when setting the discard range. This leads to
-> > > > invalid reset commands and write pointer mismatches.
-> > > > 
-> > > > This patch fixes the zoned block device with 2MiB zone size to reset one
-> > > > zone at a time.
-> > > > 
-> > > > Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
-> > > > ---
-> > > >    fs/f2fs/segment.c | 3 ++-
-> > > >    1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> > > > index acf3d3fa4363..2b6cb6df623b 100644
-> > > > --- a/fs/f2fs/segment.c
-> > > > +++ b/fs/f2fs/segment.c
-> > > > @@ -1953,7 +1953,8 @@ void f2fs_clear_prefree_segments(struct f2fs_sb_info *sbi,
-> > > >    					(end - 1) <= cpc->trim_end)
-> > > >    				continue;
-> > > > -		if (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi)) {
-> > > > +		if (!f2fs_sb_has_blkzoned(sbi) &&
-> > > 
-> > > Could you please add one line comment here for this change?
-> > 
-> > This was merged in -dev a while ago. I don't think this would be critical
-> > to rebase it again.
+On 03/24, Colin King (gmail) wrote:
+> Hi,
 > 
-> Yes, it's not critical, fine to me.
+> static analysis with clang scan build has detected a potential issue
+> introduced by the following commit:
+> 
+> commit 7e9775a516ff6c1e73ee2b42ec563cafee38f42f
+> Author: Jaegeuk Kim <jaegeuk@kernel.org>
+> Date:   Fri Mar 10 11:12:35 2023 -0800
+> 
+> f2fs: factor out discard_cmd usage from general rb_tree use
 
-Added:
-
-/* Should cover 2MB zoned device for zone-based reset */
-
-So lucky since I had to rebase to fix other patch. :(
-
-"f2fs: factor out discard_cmd usage from general rb_tree use"
-
+Good catch!
+I found the bug and will post v2 soon.
 
 > 
-> Thanks,
 > 
-> > 
-> > > 
-> > > Otherwise it looks good to me.
-> > > 
-> > > Thanks,
-> > > 
-> > > > +		    (!f2fs_lfs_mode(sbi) || !__is_large_section(sbi))) {
-> > > >    			f2fs_issue_discard(sbi, START_BLOCK(sbi, start),
-> > > >    				(end - start) << sbi->log_blocks_per_seg);
-> > > >    			continue;
+> The warning is as follows:
+> 
+> fs/f2fs/segment.c:1425:4: warning: Value stored to 'tdc' is never read
+> [deadcode.DeadStores]
+> 
+> The while loop in function __update_discard_tree_range is as follows (+ my
+> annotations):
+> 
+> 
+>         while (1) {
+>                 struct rb_node *node;
+>                 struct discard_cmd *tdc = NULL;
+> 
+> ### tdc is set to NULL
+> 
+>                 if (prev_dc) {
+>                         di.lstart = prev_dc->di.lstart + prev_dc->di.len;
+>                         if (di.lstart < lstart)
+>                                 di.lstart = lstart;
+>                         if (di.lstart >= end)
+>                                 break;
+> 
+>                         if (!next_dc || next_dc->di.lstart > end)
+>                                 di.len = end - di.lstart;
+>                         else
+>                                 di.len = next_dc->di.lstart - di.lstart;
+>                         di.start = start + di.lstart - lstart;
+>                 }
+> 
+>                 if (!di.len)
+>                         goto next;
+> 
+>                 if (prev_dc && prev_dc->state == D_PREP &&
+>                         prev_dc->bdev == bdev &&
+>                         __is_discard_back_mergeable(&di, &prev_dc->di,
+> 
+> max_discard_blocks)) {
+>                         prev_dc->di.len += di.len;
+>                         dcc->undiscard_blks += di.len;
+>                         __relocate_discard_cmd(dcc, prev_dc);
+>                         di = prev_dc->di;
+>                         tdc = prev_dc;
+> 
+> ### tdc is set to prev_dc, however, it is not not read any more with th
+> introduction of the "goto next"" statement introduced in the commit
+> mentioned earlier
+> 
+>                         goto next;
+>                 }
+> 
+>                 if (next_dc && next_dc->state == D_PREP &&
+>                         next_dc->bdev == bdev &&
+>                         __is_discard_front_mergeable(&di, &next_dc->di,
+> 
+> max_discard_blocks)) {
+>                         next_dc->di.lstart = di.lstart;
+>                         next_dc->di.len += di.len;
+>                         next_dc->di.start = di.start;
+>                         dcc->undiscard_blks += di.len;
+>                         __relocate_discard_cmd(dcc, next_dc);
+> 
+> ### tdc is always NULL, there is no path to this code where tdc is ever set
+> to a non-NULL value.
+> 
+>                         if (tdc)
+>                                 __remove_discard_cmd(sbi, tdc);
+>                         goto next;
+>                 }
+> 
+>                 __insert_discard_cmd(sbi, bdev, di.lstart, di.start,
+> di.len);
+>  next:
+>                 prev_dc = next_dc;
+>                 if (!prev_dc)
+>                         break;
+> 
+>                 node = rb_next(&prev_dc->rb_node);
+>                 next_dc = rb_entry_safe(node, struct discard_cmd, rb_node);
+>         }
+> 
