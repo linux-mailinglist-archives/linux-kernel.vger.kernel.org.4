@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD0E6C7830
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2482C6C782B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 07:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCXGv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 02:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S231215AbjCXGvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 02:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjCXGvW (ORCPT
+        with ESMTP id S230075AbjCXGvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:51:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8725233C6;
-        Thu, 23 Mar 2023 23:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679640680; x=1711176680;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JlL8rYJbsrhy2KQzEdkMafFIo26MMid90GZaZUB4ySw=;
-  b=JBJjDxUNvz2z0c/mh+QMjR2pPN830ss899YYKW2NN9+rLjJlbwbMNBem
-   CD3Sx/uVVBUwwvlrm9dzM7+5h2xUnEVY6NNAo+QnKINtc9t9K9yqPzfgD
-   Q0xSbYnaJGN0xS4DTU2TWfgpH2t5w7BlefUfk8FBWmB5LrRQHE01UKtB1
-   ZA8m6pk/Et9si/4w7RpBwZr/iKpx4jgtUFGDqkkrU2GreQ6z1QlpVqjgY
-   jNq2qxrDYaNiuLLMI1ReIOh4RQxNH+Knq7PomdN14RdmnhapWsEndtnu9
-   o5DJCX+jTJU4ec7y8xG1pUmqs2S+iCMzkHnsoNCW2QvcdO7pAfA/BPkJl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="337217556"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="337217556"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 23:51:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="632729355"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="632729355"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Mar 2023 23:51:03 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfbGQ-000F3k-2k;
-        Fri, 24 Mar 2023 06:51:02 +0000
-Date:   Fri, 24 Mar 2023 14:50:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fangrui Song <maskray@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Peter Collingbourne <pcc@google.com>,
-        Will Deacon <will@kernel.org>,
-        Fangrui Song <maskray@google.com>
-Subject: Re: [PATCH] Makefile: use -z pack-relative-relocs
-Message-ID: <202303241443.0sSziFDY-lkp@intel.com>
-References: <20230323204427.3594372-1-maskray@google.com>
+        Fri, 24 Mar 2023 02:51:11 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7888522026
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:51:10 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3e392e10cc4so240411cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Mar 2023 23:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679640669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OMsPc6861C4CUYPXH0vwHOOLJfwPo118oxYmEDFDQa8=;
+        b=bUeHFvwAKGDNFMVYgrDpZxuSYR5qIUuVAJ+fnb973Z9ek65p+GzGodS+uiwdljFMo1
+         JhGDi7KzFk9Pk+UnVNXyjhP/9pzTcoOISTWsaiSKUsi58zWRJ3M4pfbcBceAZCFFlgyW
+         o5cDnVrc1minSljOhVPwF8ouUd7o6de60itTni8SfccvRFTJZ5Uw1sjMoDci07R05Ord
+         cFN2rppgI4aImji3blzyURo5BcAWcLtVKnidGlVJ7A3XOkYxu7/sVGViKrLBKjV/hhLn
+         rKs7ReKbOdnzqsML9M+Yfy3zvpt4aJOkWJoBVfp0ZENOrb2eLexLdLdpk5XebaCuk4M2
+         XzfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679640669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OMsPc6861C4CUYPXH0vwHOOLJfwPo118oxYmEDFDQa8=;
+        b=BR3wPa7hbfVvJ1u3UeHH6Cek/RxB/10B4TuIbAcFKYmL4Ak3oxLTdnZ1o1qKYMQVjj
+         6oF47WI/jig8iPKAehhMNpUwyvUYdRsVO8XvjanqjyT2xFkYF5jOm4VUJdrpivkl1vuY
+         nrJBnwsiRwRpjU47hy3WYDNQlT1o5FKd72LW2cDtwX/XsCVmAPjW9f2FNTzFYcYttXUi
+         Wfs/op2jNOBwKxMjGTyVnBWyrwxRTEWk2kAdXFNOhiLRm6+ESz9nKmVdm+L3xEW+ClzJ
+         XaaCisr9KCEZ01yrgfpr+djyMKwAcQjuIiO/kLw7hlzZ3ZlKVKhovhUvc+qOvHvpFVgQ
+         On/w==
+X-Gm-Message-State: AO0yUKUzhtn338lwwJx2YXBx93VqhqfhiWxaaFqEPC2TLMF7MCN1rVaF
+        1JXmSdwt1PfGmhg7Wx0lMpxUkyEOfuO+VLX2V7bCuQ==
+X-Google-Smtp-Source: AK7set+4bEq+uQUDoYrItOUrdWE8dV4LggwrlLLTMEWpmOfhfDwLMZ/7GqWwuTbzQ6qjdp8LcvZnm5lijUB+hL1vgCk=
+X-Received: by 2002:a05:622a:283:b0:3b9:f696:c762 with SMTP id
+ z3-20020a05622a028300b003b9f696c762mr167986qtw.19.1679640669407; Thu, 23 Mar
+ 2023 23:51:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323204427.3594372-1-maskray@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324001922.937634-1-namhyung@kernel.org>
+In-Reply-To: <20230324001922.937634-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 23 Mar 2023 23:50:57 -0700
+Message-ID: <CAP-5=fWPDSy31BLtxvJAsRq2pwnhKHN8T-CYckv=tELGCO9p0w@mail.gmail.com>
+Subject: Re: [PATCH] perf lock contention: Fix msan issue in lock_contention_read()
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fangrui,
+On Thu, Mar 23, 2023 at 5:19=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> I got a report of a msan failure like below:
+>
+>   $ sudo perf lock con -ab -- sleep 1
+>   ...
+>   =3D=3D224416=3D=3DWARNING: MemorySanitizer: use-of-uninitialized-value
+>       #0 0x5651160d6c96 in lock_contention_read  util/bpf_lock_contention=
+.c:290:8
+>       #1 0x565115f90870 in __cmd_contention  builtin-lock.c:1919:3
+>       #2 0x565115f90870 in cmd_lock  builtin-lock.c:2385:8
+>       #3 0x565115f03a83 in run_builtin  perf.c:330:11
+>       #4 0x565115f03756 in handle_internal_command  perf.c:384:8
+>       #5 0x565115f02d53 in run_argv  perf.c:428:2
+>       #6 0x565115f02d53 in main  perf.c:562:3
+>       #7 0x7f43553bc632 in __libc_start_main
+>       #8 0x565115e865a9 in _start
+>
+> It was because the 'key' variable is not initialized.  Actually it'd be s=
+et
+> by bpf_map_get_next_key() but msan didn't seem to understand it.  Let's m=
+ake
+> msan happy by initializing the variable.
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Thank you for the patch! Perhaps something to improve:
+Acked-by: Ian Rogers <irogers@google.com>
 
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes linus/master v6.3-rc3 next-20230323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fangrui-Song/Makefile-use-z-pack-relative-relocs/20230324-044515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20230323204427.3594372-1-maskray%40google.com
-patch subject: [PATCH] Makefile: use -z pack-relative-relocs
-config: arm64-randconfig-r022-20230322 (https://download.01.org/0day-ci/archive/20230324/202303241443.0sSziFDY-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8f47a36faf182f96a2bbf4d3b9305fe9a90c5cde
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fangrui-Song/Makefile-use-z-pack-relative-relocs/20230324-044515
-        git checkout 8f47a36faf182f96a2bbf4d3b9305fe9a90c5cde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241443.0sSziFDY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
->> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
->> aarch64-linux-ld: warning: -z pack-relative-relocs ignored
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  tools/perf/util/bpf_lock_contention.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_=
+lock_contention.c
+> index 235fc7150545..5927bf0bd92b 100644
+> --- a/tools/perf/util/bpf_lock_contention.c
+> +++ b/tools/perf/util/bpf_lock_contention.c
+> @@ -249,7 +249,7 @@ static const char *lock_contention_get_name(struct lo=
+ck_contention *con,
+>  int lock_contention_read(struct lock_contention *con)
+>  {
+>         int fd, stack, err =3D 0;
+> -       struct contention_key *prev_key, key;
+> +       struct contention_key *prev_key, key =3D {};
+>         struct contention_data data =3D {};
+>         struct lock_stat *st =3D NULL;
+>         struct machine *machine =3D con->machine;
+> --
+> 2.40.0.348.gf938b09366-goog
+>
