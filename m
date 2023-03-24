@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4054E6C7AE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F326C7AEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCXJMU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 05:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        id S229551AbjCXJM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCXJMT (ORCPT
+        with ESMTP id S231597AbjCXJMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:12:19 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8B71DBAD;
-        Fri, 24 Mar 2023 02:12:17 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-53d277c1834so21913167b3.10;
-        Fri, 24 Mar 2023 02:12:17 -0700 (PDT)
+        Fri, 24 Mar 2023 05:12:21 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8CE1F5D8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:12:19 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id n9-20020a056e02100900b00325c9240af7so847787ilj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 02:12:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679649136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vT0ZVyn9E4En44HeFsXHWItwUGr+VOia6O/prroLLsM=;
-        b=pqVlgUvvpMIsNgyhKlFDo35jlxQlqQHdSIKWUeu5d7Sit1oE38nxhXVmTj9pnZ2paj
-         zehAuLWrG/FCAOoilfd44u3TSSs5YFSKpXr4dQ0nmOt+dx68O3D5oVBrBPgrG1XWLCuH
-         aZ5wM+QgZ0ij8FAQDUu8zcXhjLcu5mNoTQ5y7HR/IMGElOCcZe6fi6BMKgMnqOzKblf4
-         sXfi0zUD527g0pkjVVdiz6Zr9KajF/n6mAoG0XBOos2tynJlCjmJfZlmh4Q6+ww3rH+X
-         m61IDuaC8CWDVuZi9IUEkQrEACixn1lvcqg305yPz+vSkQtZ5xCZ1uBtSJ46IgDlA1sp
-         aM+w==
-X-Gm-Message-State: AAQBX9fXjUlsMHdqasdt3H3Fip1d4Ky3w+FWCR4f7eC8W/35zMA/GRtw
-        HHlZoHZfDHg33ryGyryGLxKY6b6BeCZo+Q==
-X-Google-Smtp-Source: AKy350ZrZw8DXURpeyXI2O6fnSecPNLWuLpbmyyOukwloyCLC2Az+8iK+LOwqvn6v/WSl7iO1G6ZzA==
-X-Received: by 2002:a81:a196:0:b0:545:2a12:bb04 with SMTP id y144-20020a81a196000000b005452a12bb04mr1676545ywg.19.1679649136527;
-        Fri, 24 Mar 2023 02:12:16 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id d8-20020a81d808000000b00545a08184dcsm305559ywj.108.2023.03.24.02.12.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 02:12:16 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id i6so1342327ybu.8;
-        Fri, 24 Mar 2023 02:12:15 -0700 (PDT)
-X-Received: by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id
- w3-20020a05690210c300b00b759519dbcdmr945578ybu.12.1679649135194; Fri, 24 Mar
- 2023 02:12:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679649139;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xa6cPJxdtQSnna0xqHCmCayWpi2ePeYQchAotaGPYRc=;
+        b=p3onRN1hHPsFAjKPBTFadlM0tVVwx/tfnHun1RYwmXzVNoT9Sqg31Jx9/7Mf+iebfI
+         /X2I5KFghpuYwVN1ojjxwZV/n4k6RV1pJDTQuMITq4MwLfVjuu5yaymMSEhcw1wJn4xP
+         2WW3d9SDDCXEk53C+ldFD2CXTqeUH8DMjxJc188jDoGoMZ1dVohfmD+S0pIzdBYuJs/z
+         3hR0sHRaRGYQnr4r30iJ2Rj+3SP+5dgpQFVdtVwBOBaQItwDJTI1PJAWveTs8DMl6DCy
+         rLFWyS8hu9CUwV08NDCIZEOK5h/j3Q/ErQOFU7kESxmVJo7B6hPTZpo97qmTmw3hHi09
+         msFw==
+X-Gm-Message-State: AO0yUKUOMAmEHXQgqUlWQHs3aUQR8Tz/VNdiDtdDJFkpJqtDWCUmg60h
+        qkJmFy2sWTgL3EepckFSJ0tRKssJLh+xQzReykDpsHgPkHl3
+X-Google-Smtp-Source: AK7set+YVLkN81/TSa+kOl9UXO+R6l+gdava5D+ne0NuX1VS6u8zvSz21vB9lr4PCjBdOEUNrT0FZLCf8cGF6F92Dojr1D8nj6WD
 MIME-Version: 1.0
-References: <20230302211759.30135-1-nick.alcock@oracle.com>
- <20230302211759.30135-11-nick.alcock@oracle.com> <ZAoGLhRpTr5f7AD/@kroah.com>
- <ZApf0iNOsSAUbhMz@bombadil.infradead.org> <ZArc0ib697JIwKou@kroah.com>
- <ZAuGE2ay3q0MT4Yi@bombadil.infradead.org> <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVZODAr77KSp3Yicoyjz=y8OqQB+z6zTLbxO1HMKoJMSA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 24 Mar 2023 10:12:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVZLmRv_L-iTXBvTC_83oBG6nAMOGwTSeHtfVR6k1nAxA@mail.gmail.com>
-Message-ID: <CAMuHMdVZLmRv_L-iTXBvTC_83oBG6nAMOGwTSeHtfVR6k1nAxA@mail.gmail.com>
-Subject: Re: [PATCH 10/17] tty: remove MODULE_LICENSE in non-modules
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jiri Slaby <jirislaby@kernel.org>
+X-Received: by 2002:a5d:9446:0:b0:753:2ab8:aff7 with SMTP id
+ x6-20020a5d9446000000b007532ab8aff7mr789747ior.1.1679649139064; Fri, 24 Mar
+ 2023 02:12:19 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 02:12:19 -0700
+In-Reply-To: <CAGxU2F6m4KWXwOF8StjWbb=S6HRx=GhV_ONDcZxCZsDkvuaeUg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000480a6c05f7a1ca68@google.com>
+Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in virtio_transport_purge_skbs
+From:   syzbot <syzbot+befff0a9536049e7902e@syzkaller.appspotmail.com>
+To:     avkrasnov@sberdevices.ru, bobby.eshleman@bytedance.com,
+        bobby.eshleman@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, oxffffaa@gmail.com, pabeni@redhat.com,
+        sgarzare@redhat.com, stefanha@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:08 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> And some of the modified files have no SPDX-License-Identifier
-> lines yet, so we are losing important licensing information:
->
-> $ git grep -L SPDX-License-Identifier -- $(git show $(git log
-> --oneline v6.3-rc1..linux-next/master | grep "remove MODULE_LICENSE in
-> non-modules" | cut -d " " -f 1) | lsdiff --strip=1)
-> drivers/bus/arm-cci.c
-> drivers/bus/imx-weim.c
-> drivers/bus/simple-pm-bus.c
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This is a false-positive, as I grepped against my current tree.
-> drivers/gpu/drm/drm_mipi_dsi.c
-> drivers/irqchip/irq-mvebu-pic.c
-> drivers/reset/reset-axs10x.c
-> drivers/reset/reset-hsdk.c
-> drivers/soc/sunxi/sunxi_sram.c
-> drivers/video/fbdev/asiliantfb.c
-> drivers/video/fbdev/gbefb.c
-> drivers/video/fbdev/imsttfb.c
-> drivers/xen/xenbus/xenbus_probe.c
-> lib/glob.c
+Hello,
 
-You want to use instead:
-git grep -L SPDX-License-Identifier linux-next/master  -- $(git show
-$(git log --oneline v6.3-rc1..linux-next/master | grep "remove
-MODULE_LICENSE in non-modules" | cut -d " " -f 1) | lsdiff --strip=1)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Gr{oetje,eeting}s,
+net/vmw_vsock/vsock_loopback.c:155:21: error: 'struct vsock_loopback' has no member named 'pkt_list_lock'
+net/vmw_vsock/vsock_loopback.c:157:23: error: 'struct vsock_loopback' has no member named 'pkt_list_lock'
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Tested on:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+commit:         fff5a5e7 Merge tag 'for-linus' of git://git.armlinux.o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=befff0a9536049e7902e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15ed6191c80000
+
