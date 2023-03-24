@@ -2,246 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA9B6C87C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B366F6C87D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjCXVxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 17:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S232149AbjCXV6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbjCXVxu (ORCPT
+        with ESMTP id S231802AbjCXV6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:53:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68C26A7C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 14:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679694827; x=1711230827;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YSefkMhBTcwg9nG5RmcjquWPkto72IS4rieZnW77+ls=;
-  b=F0uDzTyvuZUh+H8Og4pKg/N/D6kZDuBm6J1G8gcHhut5Bnta/CbrXhdS
-   JolhYZhmocX7Dj7FPfdah5B1VMdwWTDwY5TAqfsL579+OKhyeG2Q5AHXY
-   MbwL/HdQ7YQSS5UfbFidgEuoDi0lu3uDaNnAJxiOQ8g3Ky5rg22fOaL9E
-   ltNz/VH24zoi+5adq4GdCjS3asFaUk1iU4EzQeMJ76zMxymavfFOR42nY
-   Gy5BBvvqIuFdSP1kCyT2NXJiBQvzPK8RyhdxO/68gLct1ssdpOLSVcs/F
-   +G278Z77AorIrcm4ceCk9GdvEKMFj3fjoHTzWOkAnd0XQiZxhcT3hDDCh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="341462743"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="341462743"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 14:53:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="685330624"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="685330624"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Mar 2023 14:53:45 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfpLq-000Fgi-2P;
-        Fri, 24 Mar 2023 21:53:34 +0000
-Date:   Sat, 25 Mar 2023 05:53:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Fitzgerald via Alsa-devel <alsa-devel@alsa-project.org>,
-        broonie@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: Re: [PATCH] firmware: cs_dsp: Add a debugfs entry containing control
- details
-Message-ID: <202303250526.oZMat3JD-lkp@intel.com>
-References: <167967423036.26.11080959777905296733@mailman-core.alsa-project.org>
+        Fri, 24 Mar 2023 17:58:33 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0B55274;
+        Fri, 24 Mar 2023 14:58:31 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OLerEb007355;
+        Fri, 24 Mar 2023 21:58:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=ebV1bxq2+Gr2pfpNbLIsK2LpMigsq2iIb2vlqY8YzT4=;
+ b=b0JkkTVUf7d3JwbVWMDBXWY8jeQqVY1uMf5nxAFQmYN8bIiS4ujDsc8pAS60hM+ihgP7
+ giKuDMOtsVLySeiNFK8+Vq3sCNik9w3m2LOs7/elcD9ub96a6cjrzkm9C213GAe806d4
+ g7Nsuc3LlJ84FRAW5GUhyQ8Fhb+Iwcma6ZpxTX9Y+zyXXfh3Ny7OMMSGQB+y1odrOvhf
+ KtG595PPGlDerYfPx/NqEwrW++X9kqzvEw2KZReidqMwEk/diXKaoKqB6Is3rYW5kN9a
+ d2E/Z7UUYy3ACixhI4zzlsF2bPG71tJ7eIbPgU2H1Y6/d3gc29fzU5G3hm2o2U7xIyRy lg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3phkw4r165-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Mar 2023 21:58:29 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32OL6jXg009137;
+        Fri, 24 Mar 2023 21:58:28 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pgy009wyp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Mar 2023 21:58:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j9N1xxXciTvCmzud/Ah9WN+TUCayjHNeCho1Fr7KLxR9HGVdhSszCJqym3nVvaU1uISctfqlJPmpi/e/xmovx7PQ7LAJ7xCh8+pDHT7ZYwAZGjexftgb2xEvoXNG898N+StegPMgnZVDFIatJX6dOsFBeaqygDFkhSnLzFlPN31IGRvFaELm+BHpwmxOHUa+ZlZT9bK/L0cR+pqjsX8K4bRcOzm8PHeOOzXrv+15++ZeSDjy0PONwgnNjByvvQFTPGpnm3rKjq4nQ25YH9IrPgG8tUU27G6UjBkuKWwp2G9Usfmh9jCF0bRRUZjHQ7CdO1z2I0kNAGyywyG5ZyWsiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ebV1bxq2+Gr2pfpNbLIsK2LpMigsq2iIb2vlqY8YzT4=;
+ b=eoyDyUpiZ5Pr5l5cbD69EnGdK9qjG5IggUktt2Z4vNspZ16wnnLJLcK7a5ttTDdcSNNOwtx4nqbQRamQUxPeNZSSuQuP4SNexgj4o7/MBcugO1L2io4w/UZSDfvwT/45rptFBdJ6JdeOMx1/GCCGNBpNeN0Id2If7f1eTSjV0s7Hoitnf8pFaNctupRYvQFkSE7gudgJp38HITcVVAWUfNxbECqLOlpTOzL+hcIi5C/SKuD7F25X0d3Zo40eVWU6Wpr2PASUHhgdQ2pDULUNuxoI2ul5sgJVBrcSEOt+bUNG0Mb1Q/LLpw20D4ayf1YClJz7ZRFk6rp2oa391NXPig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ebV1bxq2+Gr2pfpNbLIsK2LpMigsq2iIb2vlqY8YzT4=;
+ b=Zyii+keUkV6qeluicWursHv8z6IR1hXGWe6pBfm+ImAgPCxCUqWB+/HKEC37gHMJLo8cgmzLsvihqMa5HnwrDwnPfT97F5fmHT1NgH3Mlyx19ECTif0aSKGnx4VTBkI97kcOhi+VU4pv8rEG1IOFt6oi7S7W235r2O/DAx9Y+w8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by SJ0PR10MB5600.namprd10.prod.outlook.com (2603:10b6:a03:3dc::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 21:58:11 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::8ef9:5939:13aa:d6a2]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::8ef9:5939:13aa:d6a2%8]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
+ 21:58:11 +0000
+To:     ching Huang <ching2048@areca.com.tw>
+Cc:     martin.petersen@oracle.com, James.Bottomley@HansenPartnership.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] scsi: arcmsr: fix reading buffer empty length error
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pm8xizh7.fsf@ca-mkp.ca.oracle.com>
+References: <6f3eb04dbe89d2b9f239600dd2c575227f3c0afc.camel@areca.com.tw>
+Date:   Fri, 24 Mar 2023 17:58:05 -0400
+In-Reply-To: <6f3eb04dbe89d2b9f239600dd2c575227f3c0afc.camel@areca.com.tw>
+        (ching Huang's message of "Thu, 23 Mar 2023 00:57:29 +0800")
+Content-Type: text/plain
+X-ClientProxiedBy: LO6P123CA0014.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:338::17) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167967423036.26.11080959777905296733@mailman-core.alsa-project.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SJ0PR10MB5600:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4237dbd6-866a-483e-2f11-08db2cb2dbf6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FbUqt/Jkonh255Bz4T0UalRLqIc0K5/UtQ6VQ0NEup82SQLQXE1WnQ6LV0aH4ishBoIUJue8wAut+ylDEirZriH+ozFHKq5AMZPVRIaDx7GKQoWnUmLb/7uicDmu2WrT83kkMKos9AXw6LVjHlpEv0h/WUmMaELRhUKhEJZ68Spf/4NV6IQ6sBuywT854k6/M1PGUjrcSiDW7ZFz3yxA+KaZxhWxfsqelC3kPo8NNECFWE6DRnPHkcz4wzclHkVpx9Mk55hgN8LRXEHBitErtPSniOzTWkeF34WRDZiS39PIkJEKVj2qq/g0cJM0BncAYxrBJ+FVDManREYcjyPaJ+m3OWQeBHfAM0IRANJRvyTZS10se0z+bn7nYVYpUz0dRBryV0ydz6GDyvJUGREd/Itg/M66SH3iCSC1yjI2iPQ2inCUtZNpKQVtBc88NBDQNpRMKVPSZLMwmRPsr/76MF3OBW7OiMsFOanCMUIVLUm1STujv3mwYVpSN1GPmYkoeAaZbz3eaJcIYTkZyYuZGeUBtjHR1uMFzKm9uW3VnHY9x9ZE1Q9NQnpMn7IR9lM1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199021)(4744005)(5660300002)(478600001)(6506007)(316002)(36916002)(6512007)(6486002)(8936002)(66946007)(4326008)(83380400001)(2906002)(6666004)(66556008)(26005)(6916009)(8676002)(41300700001)(66476007)(38100700002)(186003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rlndFdJvJ6uloMU8Q+IxktnEICXJtSZl/ZBU2evnhzXtrlCusY1hgIitAcKM?=
+ =?us-ascii?Q?ZH/rLD562EH/OsAusOvJ2rCHphzBUw9xMqupBLXn3Ic+i1a3o/Xt7x911phD?=
+ =?us-ascii?Q?DRNzl5ggsWb5SVPSQomGFF3sfVuqclyjvqHBlvT9nllDz6H3QyWEbQ7oOMK4?=
+ =?us-ascii?Q?oCsjCD95xwFnTpNbOW2Al1nlRbE46flvdS6m5FdPRTB8mU99WpBgLlHcymlC?=
+ =?us-ascii?Q?IwqAp/6xxrOjIeVOTGd4enicTB7kD2vzUHVpRQ8vGej3BEd+neSUY2mzAhmh?=
+ =?us-ascii?Q?4E5lBfGzXs2tVp0MRigzPLMwraN23KdfFuo5xadoedCYMi7g4BpxYypRBZHI?=
+ =?us-ascii?Q?FYXUbOiewu00qwbVbE5bSfmaIsKtd5eHSVxEl7TIvrEBlCBJhLh2jokV+lCY?=
+ =?us-ascii?Q?GDoswI+20oVjRgjL/oYK2hKi3gjqx15VbzrokdvILz9ABVsRJ9fS636yog60?=
+ =?us-ascii?Q?4kmOC2gcldCi/y/txv3YA4mAZJBrnivp8UgyiLNZJMetfc44x8BeRPGdvxXE?=
+ =?us-ascii?Q?ANeppUfx/+r9pg+LJGGYYWSrDg/nfKvqqMnLrUfotj0MNVIBO56L14ByhsfJ?=
+ =?us-ascii?Q?nx0tTVnppsPL3IzX1vUWvZVofC4VaesH7nlyfbWaJALbauM5Ggw4awTE0L5k?=
+ =?us-ascii?Q?M1+sqWE9HZPVTwRXJCQONhLAwg8CB3fri4Y/GyBl0qfmUdFcTBxsoYqcqglw?=
+ =?us-ascii?Q?6ZNydQhT/CijTYXTGAp9y67eHNl3a/Qa0kD8l6lm9Hrj/LUJ/Q95Bk1FsWQ8?=
+ =?us-ascii?Q?kUgEsRWZp1QgNmwvEroGIcwZ7DXLYsIvXLGxesH93bF7XG9KVJt6TdJz6XM6?=
+ =?us-ascii?Q?m2T8XbH2lsWGnsacSEIQwPkxUAJFWBCwpQxXh0+JFrmcE1e+WJBmhLeox0wE?=
+ =?us-ascii?Q?/TQ4HgNW7SjU/ij7Zbkb5wlgaDA3/Uz/2oC5NDkdEpE53AqGxpW5Z5JIDjc5?=
+ =?us-ascii?Q?W208v71EJs8BELjv1ZpXIYO38hq/Qq3NCjvbtiMK5srUMGEDamt7WRi5VwOA?=
+ =?us-ascii?Q?ubD1B0sSv3pl6Qv36QmV0eA2UBIEkJEzAdGOYf5LO7RGbN91xbnI+ByEmum3?=
+ =?us-ascii?Q?xyMvXnsUi5v301K5HwWhKp5ANq1cc9D0ta//O2Wc6L6m7tBEe37sFaswNGMO?=
+ =?us-ascii?Q?k3dQL2OE/93ZrJh6HvCixUwe5EBRCS1oGjcadnANRvy6F9/sKEkbdn1VdWbG?=
+ =?us-ascii?Q?dRF9aZ5AOlDdThCYDLy9c3utF+63IbRLl6dLYQe45ULh4roH+01oKYp1zZMf?=
+ =?us-ascii?Q?fYkT7RVrGGq0MusqOSGMoQaj7Pu3Bb1A9rqE4s1iLlzxYepGjI1o7M0B/Z+o?=
+ =?us-ascii?Q?gkwRO6VNmWKWNyE765z4Qp5pFWKk+HLgDw2zXt3BBRDXnujzIO89+vKqv5Uc?=
+ =?us-ascii?Q?qfVtCiM2ZmkbmBnb1oi25cff5uhn/sgnDFgOtu33SRFqoSTiHVDEeZzgoLUn?=
+ =?us-ascii?Q?RzbrzEGLwtDCJWVOAwA6WWXaKZUblYff0TMuxGcbK37eT/sskHmH2ectQ+4v?=
+ =?us-ascii?Q?FxdszIf0jIACQUzgXS8SNOt49V6oloaJUH7095Y/5y1OVMS5Ju2IaREE7Svm?=
+ =?us-ascii?Q?qDFsCVUGreCqoNJ7gHUaGkgLdSGXeLuwP7H0R2GAycpT8NxSsnmrzQt9UeOX?=
+ =?us-ascii?Q?4A=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: pcK5Rz1lxVw1nAYlLI2q7RmuLa96MAFT9ms+YEfWkX8hriPlQYIgMeFoZlRogbYg8CzB6wN+WxXs/zq6wGB0jzcu+dPeyZNDRnx088gHVo27JxTI45GUm0OYX1WH28uxKqIYj//7Y6kJfuTXe7VC1ugrsXib+VNfq3h1kigPoKkD0tM+d5+3U7/WJp/ClbjQgnvqCr8042rDUbkd5eqTgd96g+IsojRxRw+Hf+phL/hwJweryKL07hSgSOm9Eqz12usMKytjUvkcLwH7fQzd7xYHtkB198LJh6RKWKo0ftQqZzEe1bU0vCuikb1bqJQ5Q78sDojycyrJVzSPTwSRrqfCqx2LwdhsDHUFH3JCrmv/Z98y4mn2zyvVuZ3ekkuK5Q9wlyQYG71khw90FlbJ7jEVXcYD1a8i7r/Zq0NwNZ2n5GqD55xH0duTKxCNp6nHkgPgplSSPZZSdmWbSXDDkifAnLx1pz1A3NPwmK5biL6uwzzH/xWHQpVCmBWAw06Z7xmI10O5vdNiqNtiMzWuAttUCNgB0vJOLCD1XYjqeeehI4lZlceVvxxW5zCIgiKjm7BGiA1o5N75auFipLZuyNXSMlxgD0tadk/7QhoOuh08FlFpq62bHBj6rYYvzbnav/UYB265/2IWm7bOUpleRr4oBwWHrzffq6aAy5CtyqnsUGXaFXGlXlA0Tym6iRlracxFL4PqM5ZLxAiJiIawiV3Nuw2t0UtpsAffQV3XPyWlEnNQpeIj/ZUkTobtPGx+i0rttiuZ/TI1GWPufJmx8aYR/jevTYXeRSok9rT/BFklTphALIpSu94L8H85u+L9VC+P9Y8+KITdqZi3ogyB/YKpFgriUzHIuW3JxdXu7xg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4237dbd6-866a-483e-2f11-08db2cb2dbf6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 21:58:11.4369
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zPImNw+AnfIp0vvt+SVVTzvg84jeeSbrEVR/Fw8ZsZa52YipmRwxUv6tOmEuljRLM1fcukUoqJf405Q60xPd8Q75ryZaxMpbRYlrdXuDfjM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5600
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 spamscore=0
+ adultscore=0 mlxscore=0 bulkscore=0 malwarescore=0 mlxlogscore=870
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303240168
+X-Proofpoint-GUID: Hf0UkvmMVbj6BghmbR-4F94J7pAOiuEl
+X-Proofpoint-ORIG-GUID: Hf0UkvmMVbj6BghmbR-4F94J7pAOiuEl
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
 
-Thank you for the patch! Perhaps something to improve:
+ching,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> The following patched were made over mkp's 6.4/scsi-staging
+>
+> This series comtain some fixes.
+> - deprecated arcmsr_pci_unmap_dma()
+> - fixed ADAPTER_TYPE_B 64bits dma compatibility issue
+> - fixed reading buffer empty length error
+> - added driver proc_name
+> - updated driver's version to v1.50.00.13-20230206
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald-via-Alsa-devel/firmware-cs_dsp-Add-a-debugfs-entry-containing-control-details/20230325-001558
-patch link:    https://lore.kernel.org/r/167967423036.26.11080959777905296733%40mailman-core.alsa-project.org
-patch subject: [PATCH] firmware: cs_dsp: Add a debugfs entry containing control details
-config: powerpc-randconfig-r001-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250526.oZMat3JD-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/2e31e4948e1f907f41ef4946c6f59426c2206b95
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Richard-Fitzgerald-via-Alsa-devel/firmware-cs_dsp-Add-a-debugfs-entry-containing-control-details/20230325-001558
-        git checkout 2e31e4948e1f907f41ef4946c6f59426c2206b95
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/firmware/cirrus/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250526.oZMat3JD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:77:1: note: expanded from here
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/firmware/cirrus/cs_dsp.c:21:
-   In file included from include/linux/firmware/cirrus/cs_dsp.h:18:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:79:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/firmware/cirrus/cs_dsp.c:21:
-   In file included from include/linux/firmware/cirrus/cs_dsp.h:18:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:81:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/firmware/cirrus/cs_dsp.c:21:
-   In file included from include/linux/firmware/cirrus/cs_dsp.h:18:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:83:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/firmware/cirrus/cs_dsp.c:21:
-   In file included from include/linux/firmware/cirrus/cs_dsp.h:18:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:85:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/firmware/cirrus/cs_dsp.c:21:
-   In file included from include/linux/firmware/cirrus/cs_dsp.h:18:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:87:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/firmware/cirrus/cs_dsp.c:472:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                              ctl->subname_len, ctl->subname, ctl->len,
-                                                              ^~~~~~~~
-   7 warnings generated.
-
-
-vim +472 drivers/firmware/cirrus/cs_dsp.c
-
-   459	
-   460	static int cs_dsp_coeff_base_reg(struct cs_dsp_coeff_ctl *ctl, unsigned int *reg,
-   461					 unsigned int off);
-   462	
-   463	static int cs_dsp_debugfs_read_controls_show(struct seq_file *s, void *ignored)
-   464	{
-   465		struct cs_dsp *dsp = s->private;
-   466		struct cs_dsp_coeff_ctl *ctl;
-   467		unsigned int reg;
-   468	
-   469		list_for_each_entry(ctl, &dsp->ctl_list, list) {
-   470			cs_dsp_coeff_base_reg(ctl, &reg, 0);
-   471			seq_printf(s, "%22.*s: %#8lx %s:%08x %#8x %s %#8x %#4x %c%c%c%c %s %s\n",
- > 472				   ctl->subname_len, ctl->subname, ctl->len,
-   473				   cs_dsp_mem_region_name(ctl->alg_region.type),
-   474				   ctl->offset, reg, ctl->fw_name, ctl->alg_region.alg, ctl->type,
-   475				   ctl->flags & WMFW_CTL_FLAG_VOLATILE ? 'V' : '-',
-   476				   ctl->flags & WMFW_CTL_FLAG_SYS ? 'S' : '-',
-   477				   ctl->flags & WMFW_CTL_FLAG_READABLE ? 'R' : '-',
-   478				   ctl->flags & WMFW_CTL_FLAG_WRITEABLE ? 'W' : '-',
-   479				   ctl->enabled ? "enabled" : "disabled",
-   480				   ctl->set ? "dirty" : "clean");
-   481		}
-   482	
-   483		return 0;
-   484	}
-   485	DEFINE_SHOW_ATTRIBUTE(cs_dsp_debugfs_read_controls);
-   486	
+Applied to 6.4/scsi-staging, thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Martin K. Petersen	Oracle Linux Engineering
