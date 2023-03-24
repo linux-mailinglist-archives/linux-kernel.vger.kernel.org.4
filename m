@@ -2,130 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6946C835A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77E16C835F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjCXR2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S231190AbjCXRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCXR2n (ORCPT
+        with ESMTP id S229917AbjCXRaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:28:43 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EA67EF3;
-        Fri, 24 Mar 2023 10:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679678922; x=1711214922;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Mcsu5T7NDXbU35tcwWViyIcGBa4XNa6+MDZfpZrvpaE=;
-  b=MvUvhVtq7ZtBFgXGB2y67AbkEVdAzvvbCpeIk50F8WzTnNYfO62j2XRh
-   WhgdgKUZSFdpgE/rPF3fA/ez6USbru7THet7ivLpZi1De1AjusVpa9fil
-   p5DIdk1x+3DI0D3tR5+LHjqG3lD1PnZTu6uhpSGPom0JycdI/h4rNgnxl
-   hvl5kV2in+3oXc8zqXQ8IcTuU851P1bLi0TnyJsNk7i+n9XZ0RZAHy8Br
-   KfqpeEz+aXgd0xRikQSV/4ZNhzvWHQq3RJZREmlYuDX8m7C7XP+IEOEmi
-   siJrI/vZlrbW3Kurw17C7YGSnXjC1gciHNBbxJtamdV2vZFVLOLOPdlui
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="404758386"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="404758386"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:28:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="793525414"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="793525414"
-Received: from bahessel-mobl.amr.corp.intel.com (HELO [10.209.94.88]) ([10.209.94.88])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:28:39 -0700
-Message-ID: <3224215f-4ac6-713b-9f88-0d68e0572126@linux.intel.com>
-Date:   Fri, 24 Mar 2023 10:28:39 -0700
+        Fri, 24 Mar 2023 13:30:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54A0B77E;
+        Fri, 24 Mar 2023 10:30:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3C84B33B63;
+        Fri, 24 Mar 2023 17:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1679679003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+eiBbPs2SGpkrGMAzRmJfw7VfJ2mVEesg1+9LMIwCTE=;
+        b=O46wtOse/KmGUQx3zAOgmnpK5rrOILvob0lQT3LYNVP7LUFw5YuoY//8OHIp6KT0MNxCHo
+        MYZwqgBqXt6vRaC6aEhRCHHQiHaZza4Y/0Kuf9ukEoN5OYPwHVFcTlGU2ggU02D0FPqGB9
+        3gLQ6K+0fi+cQMMx4ZZwx0oQ4qFbSO4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1679679003;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+eiBbPs2SGpkrGMAzRmJfw7VfJ2mVEesg1+9LMIwCTE=;
+        b=kZxNL7ERELRnFYwUZ1ebrmvqaNDYDiayXb27qqSoFZGsuJnXQvUdyMeOAvHr1aae7uMsCB
+        guhevfdq+HG2fzAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 171F5138ED;
+        Fri, 24 Mar 2023 17:30:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BiLnBBveHWQ8LQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 24 Mar 2023 17:30:03 +0000
+Message-ID: <22a1ec75-155a-2392-ce39-4bca3fc081eb@suse.cz>
+Date:   Fri, 24 Mar 2023 18:30:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use standard
- coco mechanisms
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] mm/mempolicy: Fix exception handling in
+ shared_policy_replace()
 Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, Borislav Petkov <bp@alien8.de>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
- <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
- <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
- <BYAPR21MB16880C855EDB5AD3AECA473DD7809@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230320181646.GAZBijDiAckZ9WOmhU@fat_crate.local>
- <BYAPR21MB1688DF161ACE142DEA721DA1D7809@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230323134306.GEZBxXahNkFIx1vyzN@fat_crate.local>
- <20230324154856.GDZB3GaHG/3L0Q1x47@fat_crate.local>
- <SA1PR21MB1335023500AE3E7C8AE6F867BF849@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <SA1PR21MB1335023500AE3E7C8AE6F867BF849@SA1PR21MB1335.namprd21.prod.outlook.com>
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        kernel-janitors@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kosaki Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>
+Cc:     cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Your patch doesn't apply, seems like it uses spaces instead of tabs. Also I
+can't use 'b4' to download it as there are multiple different patches using
+the same message-id:
 
-On 3/24/23 10:10 AM, Dexuan Cui wrote:
->> From: Borislav Petkov <bp@alien8.de>
->> Sent: Friday, March 24, 2023 8:49 AM
->> ...
->> With first six applied:
->>
->> arch/x86/coco/core.c:123:7: error: use of undeclared identifier 'sev_status'
->>                 if (sev_status & MSR_AMD64_SNP_VTOM)
->>                     ^
+https://lore.kernel.org/all/6e9ca062-939b-af96-c8ff-56ad485d6e79@web.de/
+
+Re: subject, I don't see a bug that this would fix. You could say it's
+"cleanup" and this function could use one, but for a cleanup it's not
+improving the situation much.
+
+On 3/23/23 18:30, Markus Elfring wrote:
+> Date: Thu, 23 Mar 2023 18:18:59 +0100
 > 
-> Your config doesn't define CONFIG_AMD_MEM_ENCRYPT:
-> # CONFIG_AMD_MEM_ENCRYPT is not set
+> The label “err_out” was used to jump to another pointer check despite of
+> the detail in the implementation of the function “shared_policy_replace”
+> that it was determined already that a corresponding variable contained a
+> null pointer because of a failed call of the function “kmem_cache_alloc”.
+> 
+> 1. Use more appropriate labels instead.
+> 
+> 2. The implementation of the function “mpol_put” contains a pointer check
+>    for its single input parameter.
+>    Thus delete a redundant check in the caller.
+> 
+> 
+> This issue was detected by using the Coccinelle software.
+> 
+> Fixes: 42288fe366c4f1ce7522bc9f27d0bc2a81c55264 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
 
-If you have config dependency, I think you should fix it in the code or add
-Kconfig dependency.
+Again this is not a fix.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>  mm/mempolicy.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index a256a241fd1d..fb0485688dcb 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -2736,13 +2736,12 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+>          sp_insert(sp, new);
+>      write_unlock(&sp->lock);
+>      ret = 0;
+> +put_mpol:
+> +    mpol_put(mpol_new);
+>  
+> -err_out:
+> -    if (mpol_new)
+> -        mpol_put(mpol_new);
+>      if (n_new)
+>          kmem_cache_free(sn_cache, n_new);
+> -
+> +exit:
+>      return ret;
+>  
+>  alloc_new:
+> @@ -2750,10 +2749,10 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
+>      ret = -ENOMEM;
+>      n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
+>      if (!n_new)
+> -        goto err_out;
+> +        goto exit;
+
+Just "return ret" and no need for exit label?
+
+>      mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>      if (!mpol_new)
+> -        goto err_out;
+> +        goto put_mpol;
+
+We are doing this because mpol_new == NULL, so we know there's no reason to
+do mpol_put(), we could jump to the freeing of n_new.
+
+>      atomic_set(&mpol_new->refcnt, 1);
+>      goto restart;
+>  }
+> --
+> 2.40.0
+> 
+> 
+> 
+
