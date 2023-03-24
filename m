@@ -2,194 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D146C7E3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2728B6C7E40
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjCXMpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S229997AbjCXMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjCXMpg (ORCPT
+        with ESMTP id S230329AbjCXMqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:45:36 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2313FCC2A;
-        Fri, 24 Mar 2023 05:45:35 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z18so985329pgj.13;
-        Fri, 24 Mar 2023 05:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679661934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWpf4OkQ9ZCWW1S8L2UsDLHFAbEnlNYu/Xzcrj9wogs=;
-        b=Rrc1LYqjAqETK3k6kFTvezr/BXR7cc0eTMw0n1z/dC98/jIs75+UMEbwsyHvg0jhjb
-         NLlZ912yRk4Ks34Rt4KCHCSB2bOUBFCnLJHaBq5FVbihLSi7LiS51tM6MN7Oo++yznel
-         X8kluD5x+3jzfFv7r7LuZTpW0I0jRg+0X9l5rpQFAT8TEVGBY1f9ySqEuwXivlgTpPZD
-         6gUd3Q1k2FKaP33rU6omam7Yj93xipv3KuvtG9wf0QWF2ShWHjJlmtQRz3nCNHqNyu/j
-         4PEKPDjUzaRgo/KkoK6XbP+Sl2hZm0QxY9rMuLBcs8aHV/FCl0fbllVs933vRVTk4+Vo
-         iVHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679661934;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nWpf4OkQ9ZCWW1S8L2UsDLHFAbEnlNYu/Xzcrj9wogs=;
-        b=1dOQdf72pk0uDmlCIi01shj8q/SRBUryboFGju1obVIY1O9GF5H3Tw9Y+A5oAjusFd
-         MzU/GGJNtScca3qHnnlrLviY3sdE1DrzyIsEUvvywcNYuxy3uRa7vyqn3zh1V2NsRHXj
-         dakzbt1f4yQJxjjrv2KtxW9hRh67pCQMsbJbDskfgTW5jY7m5ukSOW0nfqVaHdh8qwiY
-         eWzZxLpzrMvcpIupMLDT1Yo1ze8lQa2VgqzVJ1Xg78SuGMBzhmFnqI5D33Ao9FwrURY7
-         mALyfTaFU4IAKDKT1FFFYMBrBKzaGeIwQmnKeEcywbjYV0CDlWgI7iRZlJK3Q6BLiuwI
-         Zezw==
-X-Gm-Message-State: AAQBX9dIpe6jyUvfI77z7QbR9bFIm4br8m9X2zjXtaFVhtohmVfKx5/B
-        H8KL/OUdD0QXR+TJno7dGY4=
-X-Google-Smtp-Source: AKy350Z1Aa9QhsMRyPvp1b7Voh3TwHp0uBjEfDOTCVT04eocigw6DVY/e5jUTqb2B4T8NVDMPuys+A==
-X-Received: by 2002:aa7:9696:0:b0:627:fae5:b3d0 with SMTP id f22-20020aa79696000000b00627fae5b3d0mr2835430pfk.24.1679661934552;
-        Fri, 24 Mar 2023 05:45:34 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-20.three.co.id. [180.214.232.20])
-        by smtp.gmail.com with ESMTPSA id e21-20020aa78255000000b0062bada5db75sm504162pfn.172.2023.03.24.05.45.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 05:45:34 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 17C521060BB; Fri, 24 Mar 2023 19:45:28 +0700 (WIB)
-Date:   Fri, 24 Mar 2023 19:45:28 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Feng Tang <feng.tang@intel.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Shakeel Butt <shakeelb@google.com>, dave.hansen@intel.com,
-        ying.huang@intel.com, tim.c.chen@intel.com, andi.kleen@intel.com
-Subject: Re: [PATCH v1] Documentation: Add document for false sharing
-Message-ID: <ZB2baIDIPhxj5Vdl@debian.me>
-References: <20230324071316.167337-1-feng.tang@intel.com>
+        Fri, 24 Mar 2023 08:46:54 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1156F1C595;
+        Fri, 24 Mar 2023 05:46:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4CDC23200941;
+        Fri, 24 Mar 2023 08:46:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 24 Mar 2023 08:46:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1679662009; x=1679748409; bh=Y2Q7ELOpaaew9OGvSw8gV0Ln8pK5hENZJxN
+        1SeZXLxs=; b=NH+8utHLmTubICeqTsATezmQpjVNWQ/jtH5FZm1kO2UT+0vI+/v
+        IiTw47DQKH5Lm3NV1KVfFaguya3Ih4kFGPdlETynAuy+fsa0qhWJVckSZplFeaGD
+        wYYKECiH/33S0LbWG1fw0Dyy/3gl1q/Wzvnq7iIdzVTHIMqqe3CEJViGWqch9ag+
+        m+CuGlxHdBXRi3WgK4C74Tej0l1P7MdrixRSAvu+9MtsT3T7A6nEMN/Ko4FI70sz
+        33dqCfKSykPnzuDqhrQ1vXip9QdxLYm/+OGTRQOw9rPXdC6Ci1NrSpG88SCR3I8d
+        Ph85C9Q2M4w6UhXtyqOl7KXZxf25iK7xmQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1679662009; x=1679748409; bh=Y2Q7ELOpaaew9OGvSw8gV0Ln8pK5hENZJxN
+        1SeZXLxs=; b=pJgAuaAcQa+XXxsbjGmdsbHODbnkvCqRvoF2LrEKnpK/WhUkz0L
+        bLYYj5SvWEDfOSH7j+ASs2iYYkXmesP6oUGPAt68yK3VYk6Xt6YiJxG029dF7qp2
+        aPnc911xOJDFPph57njw+6IJMSKzKE7ayOrMnxR4hVejqhvlyH6mpAuC/SwgBHXv
+        f5T6gCaPDjPhqAIFKwSuL4trJOhDQONNUePbEwrJ00CFQUNtm35BrJI6NKETz7+I
+        KTaMYojk/JqseDUDXVbBjMglehh/4nCgvvrosBjCeNE5fq7fjfixh83ts5IYM+wS
+        2MkQEJ0GTd313UeV7gk737HTZS+W+bFZK1Q==
+X-ME-Sender: <xms:uZsdZKKMjzE9WY5pnm4Zgv8coCT5vA92n1DzbxFdtyPo24W3ZCmR7A>
+    <xme:uZsdZCKJxntBvLx4N3i5Y4wm4ydXTqaGEqk5H6OnDCQR0QTlWoQXY7De1hzMOR1zu
+    1ESHrS2soUVfPU2Akc>
+X-ME-Received: <xmr:uZsdZKtHdfEi0OX4dU3PE_oo8SbDWnAOZOnrIntX57ib8ztCQU-wxlcTDBU-CmzEFd-4IA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
+    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:uZsdZPaR2s37Egz-AL_TTL37_1J2LpUDAhhB-CefixNYOFKTCRGWnQ>
+    <xmx:uZsdZBbuPiTdLGnFmyAzW1CHZNp4Lx66Ah5lHyMFFwwg6W2v76kIZg>
+    <xmx:uZsdZLC_4QlnQYKUyoRqJ5mF_Ii_zzsR_JVBF-65ehoI_vs01-OxUw>
+    <xmx:uZsdZMsUHYZhDkm-BjGdIjeS5rpHqRSkVm5NqjIJwYiC5mjmeEDjZw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Mar 2023 08:46:49 -0400 (EDT)
+Date:   Fri, 24 Mar 2023 13:46:48 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230324124648.fppzhkbowjg4bvbd@houat>
+References: <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat>
+ <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+ <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bmr6WrZlwmrP0vLx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324071316.167337-1-feng.tang@intel.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 24, 2023 at 02:34:19PM +0800, David Gow wrote:
+> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen <mazziesaccount@gmail.com> =
+wrote:
+> >
+> > On 3/23/23 18:36, Maxime Ripard wrote:
+> > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> > >> On 3/23/23 14:29, Maxime Ripard wrote:
+> > >>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> > >>>
+> > >>> This is the description of what was happening:
+> > >>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@h=
+ouat/
+> > >>
+> > >> Thanks Maxime. Do I read this correcty. The devm_ unwinding not bein=
+g done
+> > >> when root_device_register() is used is not because root_device_unreg=
+ister()
+> > >> would not trigger the unwinding - but rather because DRM code on top=
+ of this
+> > >> device keeps the refcount increased?
+> > >
+> > > There's a difference of behaviour between a root_device and any device
+> > > with a bus: the root_device will only release the devm resources when
+> > > it's freed (in device_release), but a bus device will also do it in
+> > > device_del (through bus_remove_device() -> device_release_driver() ->
+> > > device_release_driver_internal() -> __device_release_driver() ->
+> > > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > > there's no bus and no driver attached to the device).
+> > >
+> > > It does affect DRM, but I'm pretty sure it will affect any framework
+> > > that deals with device hotplugging by deferring the framework structu=
+re
+> > > until the last (userspace) user closes its file descriptor. So I'd
+> > > assume that v4l2 and cec at least are also affected, and most likely
+> > > others.
+> >
+> > Thanks for the explanation and patience :)
+> >
+>=20
+> Thanks from me as well -- this has certainly helped me understand some
+> of the details of the driver model that had slipped past me.
+>=20
+> > >
+> > >> If this is the case, then it sounds like a DRM specific issue to me.
+> > >
+> > > I mean, I guess. One could also argue that it's because IIO doesn't
+> > > properly deal with hotplugging.
+> >
+> > I must say I haven't been testing the IIO registration API. I've only
+> > tested the helper API which is not backed up by any "IIO device". (This
+> > is fine for the helper because it must by design be cleaned-up only
+> > after the IIO-deregistration).
+> >
+> > After your explanation here, I am not convinced IIO wouldn't see the
+> > same issue if I was testing the devm_iio_device_alloc() & co.
+> >
+> > > I'm not sure how that helps. Those are
+> > > common helpers which should accommodate every framework,
+> >
+> > Ok. Fair enough. Besides, if the root-device was sufficient - then I
+> > would actually not see the need for a helper. People could in that case
+> > directly use the root_device_register(). So, if helpers are provided
+> > they should be backed up by a device with a bus then.
+> >
+>=20
+> I think there is _some_ value in helpers even without a bus, but it's
+> much more limited:
+> - It's less confusing if KUnit test devices are using kunit labelled
+> structs and functions.
+> - Helpers could use KUnit's resource management API to ensure any
+> device created is properly unregistered and removed when the test
+> exits (particularly if it exits early due to, e.g., an assertion).
+>=20
+> I've played around implementing those with a proper struct
+> kunit_device and the automatic cleanup on test failure, and thus far
+> it -- like root_device_register -- works for all of the tests except
+> the drm-test-managed one.
 
---bmr6WrZlwmrP0vLx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, like I said you need a device that has been bound to a driver for
+it to work at the moment.
 
-On Fri, Mar 24, 2023 at 03:13:16PM +0800, Feng Tang wrote:
-> +There are many real-world cases of performance regressions caused by
-> +false sharing, and one is a rw_semaphore 'mmap_lock' inside struct
-"... . One of these is rw_semaphore 'mmap_lock' ..."
+I guess for driver mocks we could move to a setup where we get
+kunit-specific drivers like what Stephen has been implementing for the
+clocks but I guess we would need to register the kunit tests in the
+driver probe which doesn't look like it's possible at the moment?
 
-But I think in English we commonly name things as "foobar struct"
-instead of "struct foobar" (that is, common noun follow the proper noun
-that names something).
-
-> +* A global datum accessed (shared) by many CPUs
-Global data?
-
-> +Following 'mitigation' section provides real-world examples.
-"The real-world examples are given in 'Possible mitigations' sections."
-> +  #perf c2c record -ag sleep 3
-> +  #perf c2c report --call-graph none -k vmlinux
-
-Are these commands really run as root?
-
-> +
-> +Run it when testing will-it-scale's tlb_flush1 case, and the report
-> +has pieces like::
-
-"When running above during testing ..., perf reports something like::"
-
-> +False sharing hurting performance cases are seen more frequently with
-> +core count increasing, and there have been many patches merged to
-> +solve it, like in networking and memory management subsystems.  Some
-> +common mitigations (with examples) are:
-
-"... Because of these detrimental effects, many patches have been
-proposed across variety of subsystems (like networking and memory
-management) and merged."
-
-> +
-> +* Separate hot global data in its own dedicated cache line, even if it
-> +  is just a 'short' type. The downside is more consumption of memory,
-> +  cache line and TLB entries.
-> +
-> +  Commit 91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_socke=
-ts_allocated")
-> +
-> +* Reorganize the data structure, separate the interfering members to
-> +  different cache lines.  One downside is it may introduce new false
-> +  sharing of other members.
-> +
-> +  Commit 802f1d522d5f ("mm: page_counter: re-layout structure to reduce =
-false sharing")
-> +
-> +* Replace 'write' with 'read' when possible, especially in loops.
-> +  Like for some global variable, use compare(read)-then-write instead
-> +  of unconditional write. For example, use:
-"... For example, write::"
-> +
-> +	if (!test_bit(XXX))
-> +		set_bit(XXX);
-> +
-> +  instead of directly "set_bit(XXX);", similarly for atomic_t data.
-> +
-> +  Commit 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() mul=
-tithreaded CPU false sharing")
-> +  Commit 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
-> +
-> +* Turn hot global data to 'per-cpu data + global data' when possible,
-> +  or reasonably increase the threshold for syncing per-cpu data to
-> +  global data, to reduce or postpone the 'write' to that global data.
-> +
-> +  Commit 520f897a3554 ("ext4: use percpu_counters for extent_status cach=
-e hits/misses")
-> +  Commit 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to vm=
- overcommit policy")
-
-IMO it's odd to jump to specifying example commits without some sort of
-conjuction (e.g. "for example, see commit <commit>").
-
-> +
-> +Surely, all mitigations should be carefully verified to not cause side
-> +effects.  And to avoid false sharing in advance during coding, it's
-> +better to:
-> +
-> +* Be aware of cache line boundaries
-> +* Group mostly read-only fields together
-> +* Group things that are written at the same time together
-> +* Separate known read-mostly and written-mostly fields
-
-Proactively prevent false sharing with above tips?
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---bmr6WrZlwmrP0vLx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZB2bYwAKCRD2uYlJVVFO
-o6aVAP4k4TZkALv52VhS6ilM3BXWRZ9wrsPMkJ+Udg9do+OosgD9F6em3Tvl3RKS
-KFZ/T31R1voKg7eV70fPWSsimVlUYgA=
-=DfFY
------END PGP SIGNATURE-----
-
---bmr6WrZlwmrP0vLx--
+Maxime
