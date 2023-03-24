@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2B16C79B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCF26C79BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 09:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjCXI0k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Mar 2023 04:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S231608AbjCXI1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 04:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjCXI0h (ORCPT
+        with ESMTP id S231583AbjCXI1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 04:26:37 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EB2252BD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:36 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5416b0ab0ecso20540137b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:36 -0700 (PDT)
+        Fri, 24 Mar 2023 04:27:00 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7DB2595D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b20so4840787edd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679646418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rMK8N+uW1xIMv8pFUrJlsRKDsRw1dlAiL2CT5NysWvI=;
+        b=VkJGjoZeet6GdGAtiIVqYDaZ+dGx2Kqi6tYlzgnCQaQFYRs7+4tgq90DqJCBithiUJ
+         GPWdhr+tFy+EkOV79dgC4rFZTHMQYrrkgxqgoTLir0xXGN/pvAvHFKrgSymkQKsujIfW
+         BczTBFzM6HWnWrEYDpXOrDr9f4fSdlTegq9rt7NUGAKD0jXXOFkRYRqcWgoblSO640g/
+         +vRo0K5BRjfMQVRnzileyjBc6McOSFlABMWkurFgEqZXb0MKCYfc12IsAaR5N2qn7bX/
+         i9RdDRPFTX5xW7tvz9CNR7bxr2vQmYrmCjl9XbC3yavvdGBW3aiyKxvzz0X8+0ClFvwo
+         aS3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679646396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=45SbY74W6cAx8TBdsxbYd/fwuLq1btWb/YBacEQlBno=;
-        b=zeqcr3vIyqq/FZ5KfgSRCPaZnGYnLEX+jVBMGhVrQlHTjQy1R8qm3ezKdRMhFV9SLE
-         +1hgLckh7ajS7m7iJwnY74kjaaiLap66+m3dtU2rTLDDwvYWQlgwITX//PQ4deoQ4CkJ
-         Afe23r7JNh2uTz1DT9zBoLBFOO0+oR7Msyc19GIapzDbyYMpKYhdShFEGj/309XNTSDi
-         zxjfH05JNHQwZBaaoaDCVpbgTDg9rEcZGq9AuEHwkHVV9hVhD5Ht2tHLhXanKR1axCLC
-         bi+U3wG2SWKOrhY0J8L52PJCZETvpq5w3YmkWtvzeJPgNBaAdwk6P3V1WQSEvR5j4c1k
-         wKbQ==
-X-Gm-Message-State: AAQBX9fH73Qbpa0NJlsiHQQrgEYHp92BavlqnZHx8qoq0/hRgkywP3KA
-        am7wIwccX0NkUUJ03t2naXWjlDrrfD+uSg==
-X-Google-Smtp-Source: AKy350aRfcqpRRmTFVyD4RbpeIfo+IeHE4+Qo9TByWC5P2EyzxvGSKp1fMyyQ6nnyNQrINiJgJ9fnw==
-X-Received: by 2002:a81:b409:0:b0:538:49a4:b166 with SMTP id h9-20020a81b409000000b0053849a4b166mr1546888ywi.11.1679646396006;
-        Fri, 24 Mar 2023 01:26:36 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id i21-20020a81be15000000b00545a0818479sm294448ywn.9.2023.03.24.01.26.35
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1679646418;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMK8N+uW1xIMv8pFUrJlsRKDsRw1dlAiL2CT5NysWvI=;
+        b=bANOEOJItDtZO8YOfwtrscKx7wE+JQ51gvd5DFh0NkBUamxnJJq3lYEBqHKVX1FU+G
+         7+rsjZ4fEJbjJ8aTeXuF0fa1dZnY8lUzgPnZN78KGdESsArEYOuJWdmuvOUKb8y9rvJ5
+         0Vx8tTcX6tQi0CzQ9KLNsILNZFQ+POdVUdiLEQOEYhhQngcDPgJN4XxtoPtEmg/SQ2Uy
+         yO+XNZYIQBGEXz1rq4dDlOf+YNBApWjDL5pByli2sKQcj4UWHtiPliuFkqcPjZ68vsd9
+         sNDwMp/3O2bUitUHQCpiixVkkHyFPYPi6u6xOjOz1+PG5UIFUpgo3naujBGmE4F/sFf5
+         E1qA==
+X-Gm-Message-State: AAQBX9eq24q2dkAO+yFLI123y9tDRtrvT2RikVjID03E8Xh79QIaVm4D
+        YzWnY6bKTNAAU1IgonI6Eb6cb2QlvDsL9ganlQY=
+X-Google-Smtp-Source: AKy350aoXQWcPH+E3C+mxIDLEpYt9lK6TGHWgh3btJpBgFoZJKlnDgQa4HY94LxHDQITBl8eZGjdIA==
+X-Received: by 2002:a17:906:2484:b0:930:8a26:eed8 with SMTP id e4-20020a170906248400b009308a26eed8mr1798359ejb.71.1679646417983;
+        Fri, 24 Mar 2023 01:26:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ce50:243f:54cc:5373? ([2a02:810d:15c0:828:ce50:243f:54cc:5373])
+        by smtp.gmail.com with ESMTPSA id v14-20020a1709063bce00b0093344ef3764sm8028317ejf.57.2023.03.24.01.26.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 01:26:35 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id p15so1228308ybl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 01:26:35 -0700 (PDT)
-X-Received: by 2002:a05:6902:10c2:b0:b6e:b924:b96f with SMTP id
- w2-20020a05690210c200b00b6eb924b96fmr1607389ybu.3.1679646395243; Fri, 24 Mar
- 2023 01:26:35 -0700 (PDT)
+        Fri, 24 Mar 2023 01:26:57 -0700 (PDT)
+Message-ID: <eb05ac50-fda2-8324-1fd9-fda8579dfd8c@linaro.org>
+Date:   Fri, 24 Mar 2023 09:26:56 +0100
 MIME-Version: 1.0
-References: <5b7c473247d66776343d82a55b9815195b1b11fb.1679551394.git.fthain@linux-m68k.org>
- <mvmttybx3ng.fsf@linux-m68k.org> <CAMuHMdUQ3+OUKZ-6DqcJfMgq8_90Cejzc=onhUmbaYTWJkZHRw@mail.gmail.com>
- <c882ca59-e75d-7ca2-d63f-70aab1b46ade@linux-m68k.org>
-In-Reply-To: <c882ca59-e75d-7ca2-d63f-70aab1b46ade@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 24 Mar 2023 09:26:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVSvPk8wYZKVKX_xW_VSHu2qMoX-N4ePRJHejw2nh9JKg@mail.gmail.com>
-Message-ID: <CAMuHMdVSvPk8wYZKVKX_xW_VSHu2qMoX-N4ePRJHejw2nh9JKg@mail.gmail.com>
-Subject: Re: [PATCH v2] nubus: Don't list card resources by default
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] MAINTAINERS: remove the linux-nfc@lists.01.org list
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230324081613.32000-1-lukas.bulwahn@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324081613.32000-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Finn,
+On 24/03/2023 09:16, Lukas Bulwahn wrote:
+> Some MAINTAINERS sections mention to mail patches to the list
+> linux-nfc@lists.01.org. Probably due to changes on Intel's 01.org website
+> and servers, the list server lists.01.org/ml01.01.org is simply gone.
+> 
+> Considering emails recorded on lore.kernel.org, only a handful of emails
+> where sent to the linux-nfc@lists.01.org list, and they are usually also
+> sent to the netdev mailing list as well, where they are then picked up.
+> So, there is no big benefit in restoring the linux-nfc elsewhere.
+> 
+> Remove all occurrences of the linux-nfc@lists.01.org list in MAINTAINERS.
+> 
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Link: https://lore.kernel.org/all/CAKXUXMzggxQ43DUZZRkPMGdo5WkzgA=i14ySJUFw4kZfE5ZaZA@mail.gmail.com/
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-On Fri, Mar 24, 2023 at 1:05 AM Finn Thain <fthain@linux-m68k.org> wrote:
-> On Thu, 23 Mar 2023, Geert Uytterhoeven wrote:
-> > On Thu, Mar 23, 2023 at 9:39 AM Andreas Schwab <schwab@linux-m68k.org> wrote:
-> > > On Mär 23 2023, Finn Thain wrote:
-> > > > Checkpatch says "externs should be avoided in .c files" and if this one
-> > > > appeared twice I would agree. But as it only appears once, I can't see
-> > > > any advantage to putting it in a new .h file instead of the .c file...
-> > >
-> > > Anything wrong with declaring it in <linux/nubus.h>?
-> >
-> > It's not meant for NuBus device drivers (at least in its current form).
-> > So a drivers/nubus/nubus.h would be the most logical place.
->
-> I think Andreas is right inasmuchas the existing prototypes shared between
-> drivers/nubus/nubus.c and drivers/nubus/proc.c are found there, and this
-> extern is another one of those.
->
-> But I take Geert's point that much of include/linux/nubus.h could be moved
-> to drivers/nubus/something.h. But is there anything to be gained from
-> splitting it up that way?
 
-Splitting it would prevent NuBus device drivers from messing with
-internal NuBus variables they're not intended to access.
-But I agree that's not a big concern...
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Gr{oetje,eeting}s,
+Best regards,
+Krzysztof
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
