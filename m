@@ -2,163 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F1E6C78BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529436C78B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjCXHWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S230003AbjCXHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjCXHWu (ORCPT
+        with ESMTP id S229753AbjCXHWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:22:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71A24C06
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:47 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id i5so4428306eda.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:47 -0700 (PDT)
+        Fri, 24 Mar 2023 03:22:36 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90CD198B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:35 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a5a0b6e3so10678257b3.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679642566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fa396lb8MjMOl888rXohQoljyuvFkmmjAMpaedz2iKQ=;
-        b=KJ9iz5Uxy+UE7eTmfuZpdee6ope6aJEfkespR2fZMv6ZHIq8x8lW4vifO9yR+IS7pd
-         AK7dGPutrSQ13hJJ80evRzpXtgobfZFo8jXuTzRATpMeqGO6i8D5NSa73p0qsx5i481+
-         7yXiGgxPWmcaJdwbUyT1PbP3K0ZyFQ7Al79kpt3c+Idj9EX40zqvfzZ8aXiS7pBZAi5c
-         qDNLiwlOYnW0tVo8pGG8bbNsjTBTTctF7v1u8gW1K9bJA0CKfZjEf/5jsWat5ZudO5jG
-         cU9nAY6htLcFCArHxPUvuBAUnt26YcyoPsjONXhbMoH+B0T69pLrtxIpj5GEcP1xxW3T
-         K9jg==
+        d=google.com; s=20210112; t=1679642555;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gEYIS2l83zsy/niTXf00xhSaE+cVwhcmbbmGjuA/bhk=;
+        b=aXOAVRjHCsIJ292QycPWRl/rqRaYRbmPwekvoYNr09K++UOvxifs1jiEFYz8H1i8pu
+         1YyUqFMppMKiYSVFf8TxJqPhuXVbMd/pUSCTrYCc/k1QnQzKZs3rX96G0ZP1JBh3Tblc
+         q/e1NuNc4X+dXb7skN5MDcfJUEaKO/335pw77NAsH2bsqbAP4+401zKRm7rc3LIYtnv/
+         L/ahnf1MnwwYI4QiHvvviW8Uy6IoXRgCbuZepVwa8gquU/Fhr/SHINFAHmXAXX6DSi7q
+         7h407Oxk+J0E6WIYMwqndXYp+Hj760F5KoKGBqoOrdqh2yQ8XAbE0Xzon/YFxLYJYOQG
+         GRNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642566;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fa396lb8MjMOl888rXohQoljyuvFkmmjAMpaedz2iKQ=;
-        b=CU8YdgFE6YlYLzF6NlEZfuQTTWyFN0Ncvr2hXwbMhQ2FQVAL1xfbGLIZlWC51qrHn6
-         /nL3g8EsY4UkEBoHTKXa7DahsmnihxWC6POLA5A6RsH3kQEig7mNqgiwmp26tFdnPu52
-         NkNJFPP47vYh7vGeZfSp2SglZ6gYlTXXHGp+ldqnrBQa3+rCvcMWfqIfNNJji/17CCtC
-         g5aDKZoGrHcapG5jh8PWQcVZs/Qjx0Ku70j302YcJpLsxr9Mz6DXDA6jGzH/aA7jTUaz
-         1Gmdp5LGlnfmzDxw35klPpRbceClSOlZaH8vLHk6XTye8a3xr8SpgDjTiG9m0CvuLjaB
-         kRtA==
-X-Gm-Message-State: AO0yUKU/trDty9+OuPVYG26toHmF2P4d8MnZmo6SiK+E4RdGgpOZXbZ+
-        sJrga/aGz7+gVYs5tq2hnWiOYLzgiLPKki3JuQ3+ng==
-X-Google-Smtp-Source: AK7set9nDooOE3Uv4xSdzevtlYQN6Wrt2NapQojoPuIK5bxgo1JQyfUpt3JH2yw9C0xTBXIvxswIEM39+kTwiiQaVDw=
-X-Received: by 2002:a05:6402:540c:b0:4fb:e069:77ac with SMTP id
- ev12-20020a056402540c00b004fbe06977acmr6398957edb.0.1679642566177; Fri, 24
- Mar 2023 00:22:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230323040037.2389095-1-yosryahmed@google.com>
- <20230323040037.2389095-2-yosryahmed@google.com> <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
-In-Reply-To: <ZBz/V5a7/6PZeM7S@slm.duckdns.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
+        d=1e100.net; s=20210112; t=1679642555;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gEYIS2l83zsy/niTXf00xhSaE+cVwhcmbbmGjuA/bhk=;
+        b=yKd4gb4JFKGFzPepfMfPv0ZvV6bqE3uxV/P2so/NaIGnHNoEhL79K7+HjLHHu5npoO
+         IbfP+vyW55DjvDOyKw3o+pkgc5N/wVPz/ERvmtDdaCrda4BCi7/pW5yVbWqvkfhThBFC
+         qaNvfajbdm+sN3p1ZWMUeyNcL5/p1NR1tlW1eGKy8A8D45qmFKlNWzhEIs2ATCvnIkvu
+         1+oYnmg/Zw/YDYusFhA/e6aykTgZg8t8ErY9MKw/QEYClOEuDmvsGr0r30HZI9E8LYKC
+         oTf+I4VoSsl2fmAiOYCVK7vQwZCgdjKLAHXW7RVRZ+qTPtoRsYJGwjGaRZVp6ehaeina
+         iz+Q==
+X-Gm-Message-State: AAQBX9dpngy30cUMcg7XRZA/s8EwC6L/SpgDIHbI8v/Yc56kCNNHKd5t
+        +SRRzQXwyUk4p/bIHimb1UqHX1ZSUre4
+X-Google-Smtp-Source: AKy350beRdjWw+bm0JzNfNprJ4XxnE62v3xB7iKZgl5Q1sWju2Wtrp9OcNaYzVWSZbREJgwUOf2oPRL+CtBZ
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:e705:3a3d:46e5:fb50])
+ (user=irogers job=sendgmr) by 2002:a81:4049:0:b0:541:6aa7:f889 with SMTP id
+ m9-20020a814049000000b005416aa7f889mr563321ywn.5.1679642554895; Fri, 24 Mar
+ 2023 00:22:34 -0700 (PDT)
 Date:   Fri, 24 Mar 2023 00:22:09 -0700
-Message-ID: <CAJD7tkYNZeEytm_Px9_73Y-AYJfHAxaoTmmnO71HW5hd1B5tPg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] cgroup: rstat: only disable interrupts for the
- percpu lock
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org
+Message-Id: <20230324072218.181880-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v3 0/9] Update Intel events and make nvdimm events dynamic
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Edward Baker <edward.baker@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        perry.taylor@intel.com, caleb.biggers@intel.com,
+        samantha.alt@intel.com, weilin.wang@intel.com
+Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 6:39=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, Mar 23, 2023 at 04:00:31AM +0000, Yosry Ahmed wrote:
-> > Currently, when sleeping is not allowed during rstat flushing, we hold
-> > the global rstat lock with interrupts disabled throughout the entire
-> > flush operation. Flushing in an O(# cgroups * # cpus) operation, and
-> > having interrupts disabled throughout is dangerous.
-> >
-> > For some contexts, we may not want to sleep, but can be interrupted
-> > (e.g. while holding a spinlock or RCU read lock). As such, do not
-> > disable interrupts throughout rstat flushing, only when holding the
-> > percpu lock. This breaks down the O(# cgroups * # cpus) duration with
-> > interrupts disabled to a series of O(# cgroups) durations.
-> >
-> > Furthermore, if a cpu spinning waiting for the global rstat lock, it
-> > doesn't need to spin with interrupts disabled anymore.
->
-> I'm generally not a fan of big spin locks w/o irq protection. They too of=
-ten
-> become a source of unpredictable latency spikes. As you said, the global
-> rstat lock can be held for quite a while. Removing _irq makes irq latency
-> better on the CPU but on the other hand it makes a lot more likely that t=
-he
-> lock is gonna be held even longer, possibly significantly so depending on
-> the configuration and workload which will in turn stall other CPUs waitin=
-g
-> for the lock. Sure, irqs are being serviced quicker but if the cost is mo=
-re
-> and longer !irq context multi-cpu stalls, what's the point?
->
-> I don't think there's anything which requires the global lock to be held
-> throughout the entire flushing sequence and irq needs to be disabled when
-> grabbing the percpu lock anyway, so why not just release the global lock =
-on
-> CPU boundaries instead? We don't really lose anything significant that wa=
-y.
-> The durations of irq disabled sections are still about the same as in the
-> currently proposed solution at O(# cgroups) and we avoid the risk of hold=
-ing
-> the global lock for too long unexpectedly from getting hit repeatedly by
-> irqs while holding the global lock.
+Update events from:
+https://github.com/intel/perfmon/pull/62
 
-Thanks for taking a look!
+Add new #has_pmem literal to allow memory metrics to be dynamic in how
+nvdimm events are enabled. Update CLX, ICX and SPR for this using this
+PR:
+https://github.com/intel/perfmon/pull/63
 
-I think a problem with this approach is that we risk having to contend
-for the global lock at every CPU boundary in atomic contexts. Right
-now we contend for the global lock once, and once we have it we go
-through all CPUs to flush, only having to contend with updates taking
-the percpu locks at this point. If we unconditionally release &
-reacquire the global lock at every CPU boundary then we may contend
-for it much more frequently with concurrent flushers.
+v3. Change has_optane to has_pmem as suggested by Kan Liang and Dan Williams.
 
-On the memory controller side, concurrent flushers are already held
-back to avoid a thundering herd problem on the global rstat lock, but
-flushers from outside the memory controller can still compete together
-or with a flusher from the memory controller. In this case, we risk
-contending the global lock more and concurrent flushers taking a
-longer period of time, which may end up causing multi-CPU stalls
-anyway, right? Also, if we keep _irq when spinning for the lock, then
-concurrent flushers still need to spin with irq disabled -- another
-problem that this series tries to fix.
+Ian Rogers (9):
+  perf vendor events: Broadwell v27 events
+  perf vendor events: Broadwellde v9 events
+  perf vendor events: Broadwellx v20 events
+  perf vendor events: Haswell v33 events
+  perf vendor events: Haswellx v27 events
+  perf vendor events: Jaketown v23 events
+  perf vendor events: Sandybridge v19 events
+  perf metrics: Add has_pmem literal
+  perf vendor events: Update metrics to detect pmem at runtime
 
-This is particularly a problem for flushers in atomic contexts. There
-is a flusher in mem_cgroup_wb_stats() that flushes while holding
-another spinlock, and a flusher in mem_cgroup_usage() that flushes
-with irqs disabled. If flushing takes a longer period of time due to
-repeated lock contention, it affects such atomic context negatively.
+ .../pmu-events/arch/x86/broadwell/cache.json  | 296 +++++-----
+ .../arch/x86/broadwell/floating-point.json    |   7 +
+ .../arch/x86/broadwell/frontend.json          |  18 +-
+ .../pmu-events/arch/x86/broadwell/memory.json | 248 ++++-----
+ .../arch/x86/broadwell/pipeline.json          |  22 +-
+ .../arch/x86/broadwell/uncore-other.json      |   2 +-
+ .../arch/x86/broadwellde/cache.json           | 105 ++--
+ .../arch/x86/broadwellde/floating-point.json  |  45 +-
+ .../arch/x86/broadwellde/frontend.json        |  18 +-
+ .../arch/x86/broadwellde/memory.json          |  64 ++-
+ .../arch/x86/broadwellde/pipeline.json        |  79 +--
+ .../arch/x86/broadwellde/uncore-cache.json    |  72 +--
+ .../arch/x86/broadwellde/uncore-memory.json   | 256 ++++++++-
+ .../arch/x86/broadwellde/uncore-other.json    |  27 +-
+ .../arch/x86/broadwellde/uncore-power.json    |  10 +-
+ .../pmu-events/arch/x86/broadwellx/cache.json |  16 +-
+ .../arch/x86/broadwellx/frontend.json         |  18 +-
+ .../arch/x86/broadwellx/pipeline.json         |  20 +-
+ .../arch/x86/broadwellx/uncore-cache.json     | 156 ++----
+ .../x86/broadwellx/uncore-interconnect.json   |  84 +--
+ .../arch/x86/broadwellx/uncore-memory.json    | 522 +++++++++---------
+ .../arch/x86/broadwellx/uncore-other.json     |  44 +-
+ .../arch/x86/broadwellx/uncore-power.json     |  10 +-
+ .../arch/x86/cascadelakex/clx-metrics.json    |  10 +-
+ .../pmu-events/arch/x86/haswell/cache.json    |  38 +-
+ .../pmu-events/arch/x86/haswell/memory.json   |  38 +-
+ .../pmu-events/arch/x86/haswell/pipeline.json |   8 +
+ .../pmu-events/arch/x86/haswellx/cache.json   |   2 +-
+ .../arch/x86/haswellx/pipeline.json           |   8 +
+ .../arch/x86/haswellx/uncore-cache.json       |  16 +-
+ .../arch/x86/haswellx/uncore-other.json       |   6 +-
+ .../arch/x86/icelakex/icx-metrics.json        |  10 +-
+ .../arch/x86/jaketown/pipeline.json           |   8 +
+ tools/perf/pmu-events/arch/x86/mapfile.csv    |  14 +-
+ .../arch/x86/sandybridge/pipeline.json        |   8 +
+ .../arch/x86/sapphirerapids/spr-metrics.json  |  10 +-
+ tools/perf/util/expr.c                        |  19 +
+ 37 files changed, 1323 insertions(+), 1011 deletions(-)
 
-I am not sure how all of this matters in practice, it depends heavily
-on the workloads and the configuration like you mentioned. I am just
-pointing out the potential disadvantages of reacquiring the lock at
-every CPU boundary in atomic contexts.
+-- 
+2.40.0.348.gf938b09366-goog
 
->
-> Thanks.
->
-> --
-> tejun
