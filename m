@@ -2,192 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2728B6C7E40
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402736C7E45
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 13:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCXMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 08:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
+        id S231699AbjCXMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 08:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjCXMqy (ORCPT
+        with ESMTP id S229522AbjCXMsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 08:46:54 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1156F1C595;
-        Fri, 24 Mar 2023 05:46:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4CDC23200941;
-        Fri, 24 Mar 2023 08:46:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 24 Mar 2023 08:46:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1679662009; x=1679748409; bh=Y2Q7ELOpaaew9OGvSw8gV0Ln8pK5hENZJxN
-        1SeZXLxs=; b=NH+8utHLmTubICeqTsATezmQpjVNWQ/jtH5FZm1kO2UT+0vI+/v
-        IiTw47DQKH5Lm3NV1KVfFaguya3Ih4kFGPdlETynAuy+fsa0qhWJVckSZplFeaGD
-        wYYKECiH/33S0LbWG1fw0Dyy/3gl1q/Wzvnq7iIdzVTHIMqqe3CEJViGWqch9ag+
-        m+CuGlxHdBXRi3WgK4C74Tej0l1P7MdrixRSAvu+9MtsT3T7A6nEMN/Ko4FI70sz
-        33dqCfKSykPnzuDqhrQ1vXip9QdxLYm/+OGTRQOw9rPXdC6Ci1NrSpG88SCR3I8d
-        Ph85C9Q2M4w6UhXtyqOl7KXZxf25iK7xmQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679662009; x=1679748409; bh=Y2Q7ELOpaaew9OGvSw8gV0Ln8pK5hENZJxN
-        1SeZXLxs=; b=pJgAuaAcQa+XXxsbjGmdsbHODbnkvCqRvoF2LrEKnpK/WhUkz0L
-        bLYYj5SvWEDfOSH7j+ASs2iYYkXmesP6oUGPAt68yK3VYk6Xt6YiJxG029dF7qp2
-        aPnc911xOJDFPph57njw+6IJMSKzKE7ayOrMnxR4hVejqhvlyH6mpAuC/SwgBHXv
-        f5T6gCaPDjPhqAIFKwSuL4trJOhDQONNUePbEwrJ00CFQUNtm35BrJI6NKETz7+I
-        KTaMYojk/JqseDUDXVbBjMglehh/4nCgvvrosBjCeNE5fq7fjfixh83ts5IYM+wS
-        2MkQEJ0GTd313UeV7gk737HTZS+W+bFZK1Q==
-X-ME-Sender: <xms:uZsdZKKMjzE9WY5pnm4Zgv8coCT5vA92n1DzbxFdtyPo24W3ZCmR7A>
-    <xme:uZsdZCKJxntBvLx4N3i5Y4wm4ydXTqaGEqk5H6OnDCQR0QTlWoQXY7De1hzMOR1zu
-    1ESHrS2soUVfPU2Akc>
-X-ME-Received: <xmr:uZsdZKtHdfEi0OX4dU3PE_oo8SbDWnAOZOnrIntX57ib8ztCQU-wxlcTDBU-CmzEFd-4IA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
-    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:uZsdZPaR2s37Egz-AL_TTL37_1J2LpUDAhhB-CefixNYOFKTCRGWnQ>
-    <xmx:uZsdZBbuPiTdLGnFmyAzW1CHZNp4Lx66Ah5lHyMFFwwg6W2v76kIZg>
-    <xmx:uZsdZLC_4QlnQYKUyoRqJ5mF_Ii_zzsR_JVBF-65ehoI_vs01-OxUw>
-    <xmx:uZsdZMsUHYZhDkm-BjGdIjeS5rpHqRSkVm5NqjIJwYiC5mjmeEDjZw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Mar 2023 08:46:49 -0400 (EDT)
-Date:   Fri, 24 Mar 2023 13:46:48 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Fri, 24 Mar 2023 08:48:23 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5C1FCB;
+        Fri, 24 Mar 2023 05:48:21 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 69CDC1BF213;
+        Fri, 24 Mar 2023 12:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679662100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=beaHYk4b0xIx4JQCeJ7Rbi2htRk2mvqoOU7MSS3WMFQ=;
+        b=meJLw8pRvEt5Bjnjc80nXyhHpSx7o5W5tDHkHTuVYKroWjc+P/JxZ+WtM7bwY1VXG3Ghbd
+        i+M2JV/fF8rzneIR1UlnTGQfcOz2zVB1sHWNXCxdBizMBgerzwjPKer/mhV1O27R7uQv1q
+        9c88Om74IGAMeXbllBsBzp78r/G8g/zKxyJhAeMy+bKaKOe+uLMeoN4EHLbu6vXuuTFA79
+        2EccSWSi39cxdQ/MCZabLDAxfx6oPatHZKt5LQJSi0oCK/HNIHgAv0MUcIG/TjeQdCq4Hf
+        7VpHSn2UhttLB8zXjb3FF1uUSHmm9nH3RfGTx/+5EPGNqlscf6TS78EwPjK15A==
+Date:   Fri, 24 Mar 2023 13:48:17 +0100
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230324124648.fppzhkbowjg4bvbd@houat>
-References: <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
- <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
+        rafael@kernel.org, Colin Foster <colin.foster@in-advantage.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee@kernel.org>, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: Re: [RFC 4/7] mfd: ocelot-spi: Change the regmap stride to reflect
+ the real one
+Message-ID: <20230324134817.50358271@pc-7.home>
+In-Reply-To: <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
+References: <20230324093644.464704-1-maxime.chevallier@bootlin.com>
+        <20230324093644.464704-5-maxime.chevallier@bootlin.com>
+        <c87cd0b0-9ea4-493d-819d-217334c299dd@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 02:34:19PM +0800, David Gow wrote:
-> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen <mazziesaccount@gmail.com> =
-wrote:
-> >
-> > On 3/23/23 18:36, Maxime Ripard wrote:
-> > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
-> > >> On 3/23/23 14:29, Maxime Ripard wrote:
-> > >>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-> > >>>
-> > >>> This is the description of what was happening:
-> > >>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@h=
-ouat/
-> > >>
-> > >> Thanks Maxime. Do I read this correcty. The devm_ unwinding not bein=
-g done
-> > >> when root_device_register() is used is not because root_device_unreg=
-ister()
-> > >> would not trigger the unwinding - but rather because DRM code on top=
- of this
-> > >> device keeps the refcount increased?
-> > >
-> > > There's a difference of behaviour between a root_device and any device
-> > > with a bus: the root_device will only release the devm resources when
-> > > it's freed (in device_release), but a bus device will also do it in
-> > > device_del (through bus_remove_device() -> device_release_driver() ->
-> > > device_release_driver_internal() -> __device_release_driver() ->
-> > > device_unbind_cleanup(), which are skipped (in multiple places) if
-> > > there's no bus and no driver attached to the device).
-> > >
-> > > It does affect DRM, but I'm pretty sure it will affect any framework
-> > > that deals with device hotplugging by deferring the framework structu=
-re
-> > > until the last (userspace) user closes its file descriptor. So I'd
-> > > assume that v4l2 and cec at least are also affected, and most likely
-> > > others.
-> >
-> > Thanks for the explanation and patience :)
-> >
->=20
-> Thanks from me as well -- this has certainly helped me understand some
-> of the details of the driver model that had slipped past me.
->=20
-> > >
-> > >> If this is the case, then it sounds like a DRM specific issue to me.
-> > >
-> > > I mean, I guess. One could also argue that it's because IIO doesn't
-> > > properly deal with hotplugging.
-> >
-> > I must say I haven't been testing the IIO registration API. I've only
-> > tested the helper API which is not backed up by any "IIO device". (This
-> > is fine for the helper because it must by design be cleaned-up only
-> > after the IIO-deregistration).
-> >
-> > After your explanation here, I am not convinced IIO wouldn't see the
-> > same issue if I was testing the devm_iio_device_alloc() & co.
-> >
-> > > I'm not sure how that helps. Those are
-> > > common helpers which should accommodate every framework,
-> >
-> > Ok. Fair enough. Besides, if the root-device was sufficient - then I
-> > would actually not see the need for a helper. People could in that case
-> > directly use the root_device_register(). So, if helpers are provided
-> > they should be backed up by a device with a bus then.
-> >
->=20
-> I think there is _some_ value in helpers even without a bus, but it's
-> much more limited:
-> - It's less confusing if KUnit test devices are using kunit labelled
-> structs and functions.
-> - Helpers could use KUnit's resource management API to ensure any
-> device created is properly unregistered and removed when the test
-> exits (particularly if it exits early due to, e.g., an assertion).
->=20
-> I've played around implementing those with a proper struct
-> kunit_device and the automatic cleanup on test failure, and thus far
-> it -- like root_device_register -- works for all of the tests except
-> the drm-test-managed one.
+Hello Andrew,
 
-Yeah, like I said you need a device that has been bound to a driver for
-it to work at the moment.
+On Fri, 24 Mar 2023 13:11:07 +0100
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-I guess for driver mocks we could move to a setup where we get
-kunit-specific drivers like what Stephen has been implementing for the
-clocks but I guess we would need to register the kunit tests in the
-driver probe which doesn't look like it's possible at the moment?
+> On Fri, Mar 24, 2023 at 10:36:41AM +0100, Maxime Chevallier wrote:
+> > When used over SPI, the register addresses needs to be translated,
+> > compared to when used over MMIO. The translation consists in
+> > applying an offset with reg_base, then downshifting the registers
+> > by 2. This actually changes the register stride from 4 to 1.
+> > 
+> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > ---
+> >  drivers/mfd/ocelot-spi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+> > index 2d1349a10ca9..107cda0544aa 100644
+> > --- a/drivers/mfd/ocelot-spi.c
+> > +++ b/drivers/mfd/ocelot-spi.c
+> > @@ -124,7 +124,7 @@ static int ocelot_spi_initialize(struct device
+> > *dev) 
+> >  static const struct regmap_config ocelot_spi_regmap_config = {
+> >  	.reg_bits = 24,
+> > -	.reg_stride = 4,
+> > +	.reg_stride = 1,
+> >  	.reg_shift = REGMAP_DOWNSHIFT(2),
+> >  	.val_bits = 32,  
+> 
+> This does not look like a bisectable change? Or did it never work
+> before?
+
+Actually this works in all cases because of "regmap: check for alignment
+on translated register addresses" in this series. Before this series,
+I think using a stride of 1 would have worked too, as any 4-byte-aligned
+accesses are also 1-byte aligned.
+
+But that's also why I need review on this, my understanding is that
+reg_stride is used just as a check for alignment, and I couldn't test
+this ocelot-related patch on the real HW, so please take it with a
+grain of salt :(
+
+Thanks,
 
 Maxime
+
+> 	Andrew
+
