@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7796C7BB5
+	by mail.lfdr.de (Postfix) with ESMTP id E37D46C7BB6
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjCXJle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S231405AbjCXJlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjCXJkw (ORCPT
+        with ESMTP id S232066AbjCXJlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:40:52 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68F228D02;
-        Fri, 24 Mar 2023 02:40:29 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1A5F1240009;
-        Fri, 24 Mar 2023 09:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679650826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tfAKNLINoAFCJxtObHpd6qzp3wuoC13J4SnQQo/qL/w=;
-        b=mRY6y3KS98Yvv4kQKfT8tHIKiqhJBOAKKJqbtewDvDpralDha4cvXqaVlpj0Lz5amLtCkf
-        WtPk2l4noyb4JXkAsUjWu9ETGqgbwpSpgtLnzbiqjuN9uGdPeVDbFIN6F0CanNxopllIay
-        IKuxBm1V+mTTGPOhq26e53x3sTSUx4xDX4rG6HcmUifoatmHIf4dlQ56cq82ZytlMQKBXa
-        HHBcoO+Mt7DuQWl3odKY/AyzzmMbIxTnWNovkJbg59cB/1k9MnJ4fL+bC418afObE0kz4u
-        hsqKgeFLjY+2EB3JQB0PMUoODFJLl8dVbr00znSOG1R3y0+nq0t4JIgm9ZruMw==
-Date:   Fri, 24 Mar 2023 10:40:20 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
-Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new
- binding
-Message-ID: <20230324104020.54754079@xps-13>
-In-Reply-To: <20230323124510.2484808-2-noltari@gmail.com>
-References: <20230323124510.2484808-1-noltari@gmail.com>
-        <20230323124510.2484808-2-noltari@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 24 Mar 2023 05:41:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6335A7;
+        Fri, 24 Mar 2023 02:41:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56237CE20C8;
+        Fri, 24 Mar 2023 09:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23F3C433D2;
+        Fri, 24 Mar 2023 09:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679650878;
+        bh=ugg+744kF+Sy2uuQwxj6DAdcJ4aARCHqjy7D3/aFdxM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SaW7dpIS8og6AvVMOJsekibS/hLVR/HxXc/KXIKAKRFayb0vsQH7zkDx66iraOOhC
+         KeVYE3NWho5Na2TL3dCEMJhhw0+jfooXLpENiSo9gkp1A10bO+c19yiNhPYkH47vSH
+         i5j5PvtXxxdom7pzzEiYnXKpwyHMmrBwrZ/T+EsB3dpyL3H9qMsLzsvH25XKltUczL
+         nZ5N9/H+Lhnb8bNfbwJiX8QlRCkRU+UzWuQX0R1Z6qzhQY3di87bCoVh0ExR0gupsO
+         HaTPg8njgfs03j7adawItfijJBHMTraiY+mdd3vkYdtK6xOLJlg85bcOAdzwA8uLfy
+         cf2z2glHcESWw==
+Message-ID: <2227040b-28fe-bab3-f964-665c92ab2816@kernel.org>
+Date:   Fri, 24 Mar 2023 10:41:14 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/6] devicetree: input: cypress,tt21000: fix interrupt
+ type in dts example
+To:     Maximilian Weigand <mweigand@mweigand.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Alistair Francis <alistair@alistair23.me>
+References: <20230323135205.1160879-1-mweigand@mweigand.net>
+ <20230323135205.1160879-4-mweigand@mweigand.net>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230323135205.1160879-4-mweigand@mweigand.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,42 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi =C3=81lvaro,
+On 23/03/2023 14:52, Maximilian Weigand wrote:
+> Triggering the interrupt of the IRQ_TYPE_LEVEL_LOW type can lead to
+> probing issues with the device for the current driver (encountered on
+> the Pine64 PineNote). Basically the interrupt would be triggered before
+> certain commands were sent to the device, leading to a race between the
+> device responding fast enough and the irq handler fetching a data frame
+> from it. Actually all devices currently using the driver already use a
 
-noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching). "dt-bindings", not "devicetree"
 
-> Add new "mxic,disable-block-protection" binding documentation.
-> This binding allows disabling block protection support for those devices =
-not
-> supporting it.
->=20
-> Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> ---
->  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/nand-macronix.txt b/Do=
-cumentation/devicetree/bindings/mtd/nand-macronix.txt
-> index ffab28a2c4d1..03f65ca32cd3 100644
-> --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> @@ -16,6 +16,9 @@ in children nodes.
->  Required NAND chip properties in children mode:
->  - randomizer enable: should be "mxic,enable-randomizer-otp"
-> =20
-> +Optional NAND chip properties in children mode:
-> +- block protection disable: should be "mxic,disable-block-protection"
-> +
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Besides the fact that nowadays we prefer to see binding conversions to
-yaml before adding anything, I don't think this will fly.
+> falling edge trigger.
+> 
+> Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+> Reviewed-by: Alistair Francis <alistair@alistair23.me>
 
-I'm not sure exactly what "disable block protection" means, we
-already have similar properties like "lock" and "secure-regions", not
-sure they will fit but I think it's worth checking.
+Usually reviews are public.
 
-Otherwise, why would you disable the block protection? What does it
-mean exactly? I'm not in favor of a Macronix-specific property here.
+Best regards,
+Krzysztof
 
-Thanks,
-Miqu=C3=A8l
