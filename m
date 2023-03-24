@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DC06C74CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 01:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F92D6C74DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 02:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjCXA5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 20:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S229991AbjCXBGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 21:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCXA47 (ORCPT
+        with ESMTP id S229499AbjCXBG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 20:56:59 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BA3199D6;
-        Thu, 23 Mar 2023 17:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679619418; x=1711155418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tfCFzHtoYhPDMNyF0OvUPDP5DF5D0hdEmFTrK9vJ/Yk=;
-  b=UsRhfFhu864TrtRVw5ETvsBTXz/NNoet5ZlRAyqmsypxl9cO/IzVnB1+
-   1Hwanb/F+p17RKDWiyk9x7lkm048ISP1kaxaZ5il3H4T8C2s1ID0FPKdp
-   L1faiKPTY3Q8BlfPHYCXl8UAA/UesHtBR46zU35xAA3uWzPfq4DBbayAD
-   uEAwB/5S6qO7E0JSQ5SsL76U/y1DL0X+lvd6OzoA5AG0BmesWknNHDMkV
-   wlylOQnvubtF3CJq2kz6DzR0MYAvKwI+uMByP7SCwnWttxF1GfqyqtDUQ
-   dRM6hizhRjx61A0yJzz7l4XUnXTeZX+ZewQI1jsHRnQPCKU/aI8uplI1P
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="342050855"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="342050855"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 17:56:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="806471132"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="806471132"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga004.jf.intel.com with ESMTP; 23 Mar 2023 17:56:55 -0700
-Date:   Thu, 23 Mar 2023 18:07:26 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     x86@kernel.org, Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] x86/cacheinfo: Define per-CPU num_cache_leaves
-Message-ID: <20230324010726.GA7459@ranerica-svr.sc.intel.com>
-References: <20230314231658.30169-1-ricardo.neri-calderon@linux.intel.com>
- <2b1b5ded-522f-1fcf-6daa-354796bedb74@intel.com>
+        Thu, 23 Mar 2023 21:06:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D763A8F;
+        Thu, 23 Mar 2023 18:06:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PjPDK04NWz4xDj;
+        Fri, 24 Mar 2023 12:06:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1679619985;
+        bh=Me8RCthfGau5hId2Ewwvr3hIygIlAakh6dysXcSH+QA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Z2LqWk33V2TrtQFBja3pqf9BvQkdsQktuMauhgW1aBcjp4OgSsT9CWoBLRaW8tIy6
+         qFfEcqD34FGDWSNGYuVOSDd8FKNTBCMAOu0fNayOVjtpQMcaARyghl6BC3yTfkUI+R
+         PXRYF3ze2wXhbbSloElWs3Fqc5TzX+HfiCTp0UKt1hGSvdmC1kCAvKhNJTYJhvXvak
+         aEhuGaUPqk9BZlQdC9occfYt1piE2FZYMMjCSEptq7eSU3YQOQWx4VmJbhEKaM4V1Q
+         q7ut7H2x/AjnHsQ4FKg9VVR+MlGKW4vzvC6vil8UH0aKk5nMNbwNTatx7Xo647oXxy
+         bQJ++y07N8ILQ==
+Date:   Fri, 24 Mar 2023 12:06:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Gal Pressman <gal@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roy Novich <royno@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230324120623.4ebbc66f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b1b5ded-522f-1fcf-6daa-354796bedb74@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/T7wqqOuLFDHmj1OPFGXHo=H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:44:04AM -0700, Dave Hansen wrote:
-> On 3/14/23 16:16, Ricardo Neri wrote:
-> > -static unsigned short num_cache_leaves;
-> > +static DEFINE_PER_CPU(unsigned short, num_cache_leaves);
-> > +
-> > +static inline unsigned short get_num_cache_leaves(unsigned int cpu)
-> > +{
-> > +	return per_cpu(num_cache_leaves, cpu);
-> > +}
+--Sig_/T7wqqOuLFDHmj1OPFGXHo=H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you very much for your feedback Dave!
+Hi all,
 
-> 
-> I know it's in generic code, but we do already have this:
-> 
-> static DEFINE_PER_CPU(struct cpu_cacheinfo, ci_cpu_cacheinfo);
-> 
-> which has a num_leaves in it:
-> 
-> struct cpu_cacheinfo {
->         struct cacheinfo *info_list;
->         unsigned int num_levels;
->         unsigned int num_leaves;
->         bool cpu_map_populated;
-> };
-> 
-> That's currently _populated_ from the arch code that you are modifying.
-> Do we really need this data stored identically in two different per-cpu
-> locations?
+Today's linux-next merge of the net-next tree got a conflict in:
 
-That is a good observation. As you state, the ci_cpu_cacheinfo is already
-initialized in the arch code. I can certainly modify the patch to make use
-of it instead adding a new per-CPU variable.
+  drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
 
-> 
-> I'd also love to hear some more background on "Intel Meteor Lake" and
-> _why_ it has an asymmetric cache topology.
+between commit:
 
-Meteor Lake has cores in more than one die. The cache to which these cores
-are connected is different in each die. This is reflected in CPUID leaf 4.
+  6e9d51b1a5cb ("net/mlx5e: Initialize link speed to zero")
 
-Thanks and BR,
-Ricardo
+from the net tree and commit:
+
+  1bffcea42926 ("net/mlx5e: Add devlink hairpin queues parameters")
+
+from the net-next tree.
+
+I fixed it up (I used the latter version of this file and added the
+following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 24 Mar 2023 12:02:44 +1100
+Subject: [PATCH] fix up for "net/mlx5e: Initialize link speed to zero"
+
+interacting with "net/mlx5e: Add devlink hairpin queues parameters"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/devlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c b/drivers/ne=
+t/ethernet/mellanox/mlx5/core/devlink.c
+index 1ee2a472e1d2..25d1a04ef443 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/devlink.c
+@@ -529,8 +529,8 @@ static void mlx5_devlink_hairpin_params_init_values(str=
+uct devlink *devlink)
+ {
+ 	struct mlx5_core_dev *dev =3D devlink_priv(devlink);
+ 	union devlink_param_value value;
++	u32 link_speed =3D 0;
+ 	u64 link_speed64;
+-	u32 link_speed;
+=20
+ 	/* set hairpin pair per each 50Gbs share of the link */
+ 	mlx5_port_max_linkspeed(dev, &link_speed);
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/T7wqqOuLFDHmj1OPFGXHo=H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQc948ACgkQAVBC80lX
+0GyXzwf/aODbBcm88hXTp+f42nntBFJQGgpRFjLUIy+/hoGhM5lpn8vT98JY5Ait
+8iA8DO9VtOP22A0GYGAArcB1syaM9oFKsmtQ3nMW6jOADWAIs/0jDoxxo662UKpz
+YRt5eZC33QHYCFhf/XKinPtMZCg9l3yv+L0dBmqSMM/X9C2G27M3b7o5k629di3R
+M1CvX7NuI/GlLQO6Go8iGV2ZxIwbOfVu5iCmpOX9NNd59Bb8lDZWOHCrVI0tYRBP
+oVtWLmkZkRcUVLTNMfE2I31wl2+ue0VdqVmJN04SmBVsinxcKZLrVVqWRKWHRM4C
+bI56D4tBueXMeZKID7D3qbjYEDOn5Q==
+=Qbq4
+-----END PGP SIGNATURE-----
+
+--Sig_/T7wqqOuLFDHmj1OPFGXHo=H--
