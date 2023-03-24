@@ -2,73 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357CB6C86C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CD46C86D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjCXUXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S232109AbjCXU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjCXUW7 (ORCPT
+        with ESMTP id S232122AbjCXU1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:22:59 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855031ADC5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:58 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id i5so12626452eda.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 13:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679689377;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z/LMWIXCTebbEBvRvBxmqmfgG2n/mr0skTdDZ9JrIkA=;
-        b=Yj/L4LaMQo1d88HWuWhJxmGhhr59MtceqkMjwGzSRPFlgr+DTKBmZKZ6Q8uPZHTwAV
-         L7PrKMr397zwramr5+Vyua8RsVv17vGdLIhVXnJjOhL3biw4V0rhZKhJz2vqa705MLTz
-         kfP6od8vu0XlPTL67JakuEMnF0Bu8mIc1MZJpJcQaIoukBgpDOoOs5pobeBUd5lU/C4L
-         NUOG+ECN7zUAlwJZ2j9exQiH2y3nzV92Sp1Bilpsylpj+dIDOJH0RYkljMd/nvY9bkno
-         iVGKBFzePeZQLMFTnf6GeVHXy7Wfil9zaQA5G6G7AGuhRZxMhg7ac/aLzPBLOT4gNR7D
-         RVZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689377;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z/LMWIXCTebbEBvRvBxmqmfgG2n/mr0skTdDZ9JrIkA=;
-        b=AbYiX8p/2805qPhaFPOwC6GPG24DJ4+tWA5N+9Gh6+LfYOP+HeFaiAKTFsnGbcePZ6
-         eQ2GEStSWoxc3hjvyjYTNUzgJI+1fxvuUB/cLRSRAPSEslzUiWeGmAMAhY8CWmLf62HB
-         CTpBwPCUiolbBz0s4n9I0uXZGmvkGJqVqr8cm5ATdEK57dSMJq4gL+muD17jlMTvYCxx
-         7BiFPDanNpjEob3byBjvfjoPZXTpwkD+tDlBvhgiuyIAPfHCg/A7z19Jo46EYZQ8LEr5
-         v69zjEd7iNfCwvi9JqD5aoUFYTJaSzwPAlTKLEVVT21tiaijqy3IRWKevMrk9eCY0U9h
-         7Q6Q==
-X-Gm-Message-State: AAQBX9e4FPYLu80ToUhQt6M/5Gd1ir7EwuOyjikZWrrIobsHCVn/X3b4
-        sR85BRaf1t/kWjHuIOIUJRQ/CJplLAkPZB5saDg=
-X-Google-Smtp-Source: AKy350b//DLxCLjIHZqp5EtohEhanJKITOUhXiuRpIsdcPHHb/BMBYKLcq9yQBjW2CBHh/a8pMWoqQ==
-X-Received: by 2002:a17:906:9bdb:b0:93c:81b9:a2b1 with SMTP id de27-20020a1709069bdb00b0093c81b9a2b1mr3800033ejc.62.1679689377131;
-        Fri, 24 Mar 2023 13:22:57 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:3027:fb0b:ae08:588])
-        by smtp.gmail.com with ESMTPSA id rh26-20020a17090720fa00b00930ba362216sm10900041ejb.176.2023.03.24.13.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:22:56 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/5] arm64: dts: qcom: sdm630: move DSI opp-table into DSI node
-Date:   Fri, 24 Mar 2023 21:22:44 +0100
-Message-Id: <20230324202244.744271-5-krzysztof.kozlowski@linaro.org>
+        Fri, 24 Mar 2023 16:27:13 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2B720D3D;
+        Fri, 24 Mar 2023 13:26:57 -0700 (PDT)
+Received: from fpc.intra.ispras.ru (unknown [10.10.165.3])
+        by mail.ispras.ru (Postfix) with ESMTPSA id D7E6940737B7;
+        Fri, 24 Mar 2023 20:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru D7E6940737B7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1679689615;
+        bh=SD9ABHl1mnNNgCo/hHrrR+sNtq8mwXQEIZPV990DhHw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C6Au3DZFokbzNm7a1WS8g6mB3QniPlTKbsm/vnhwK0zrsoKQH+PHtVxGiOgC3Ouvx
+         ab2RGYAa3pf5PdsGUUruZo5B+fhbqRwvkenAcZFTjIgqHOfFRtcwYz1Hv98qykJlBX
+         jR6NBWdaXKiMjN4VZureah2b2b2/wp4YkzrWk4eQ=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org,
+        syzbot+7bb81dfa9cda07d9cd9d@syzkaller.appspotmail.com
+Subject: [PATCH v2 4.19/5.4/5.10 1/1] gfs2: Always check inode size of inline inodes
+Date:   Fri, 24 Mar 2023 23:26:15 +0300
+Message-Id: <20230324202615.330615-1-pchelkin@ispras.ru>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
-References: <20230324202244.744271-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230324201933.329885-2-pchelkin@ispras.ru>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +52,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The soc node is supposed to have only device nodes with MMIO addresses,
-so move the DSI OPP into the DSI controller node to fix:
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-  sda660-inforce-ifc6560.dtb: soc: opp-table-dsi: {'compatible': ['operating-points-v2'], ... should not be valid under {'type': 'object'}
-    From schema: dtschema/schemas/simple-bus.yaml
+commit 70376c7ff31221f1d21db5611d8209e677781d3a upstream.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Check if the inode size of stuffed (inline) inodes is within the allowed
+range when reading inodes from disk (gfs2_dinode_in()).  This prevents
+us from on-disk corruption.
+
+The two checks in stuffed_readpage() and gfs2_unstuffer_page() that just
+truncate inline data to the maximum allowed size don't actually make
+sense, and they can be removed now as well.
+
+Reported-by: syzbot+7bb81dfa9cda07d9cd9d@syzkaller.appspotmail.com
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+[pchelkin@ispras.ru: adjust the inode variable inside gfs2_dinode_in with
+the format used before upstream commit 7db354444ad8 ("gfs2: Cosmetic
+gfs2_dinode_{in,out} cleanup")]
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 38 ++++++++++++++--------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+v2: add missed From: tag
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 5add1951d963..ef63aa86ad67 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1450,25 +1450,6 @@ mmcc: clock-controller@c8c0000 {
- 					<0>;
- 		};
+ fs/gfs2/aops.c  | 2 --
+ fs/gfs2/bmap.c  | 3 ---
+ fs/gfs2/glops.c | 3 +++
+ 3 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
+index 530659554870..a0430da033b3 100644
+--- a/fs/gfs2/aops.c
++++ b/fs/gfs2/aops.c
+@@ -451,8 +451,6 @@ static int stuffed_readpage(struct gfs2_inode *ip, struct page *page)
+ 		return error;
  
--		dsi_opp_table: opp-table-dsi {
--			compatible = "operating-points-v2";
+ 	kaddr = kmap_atomic(page);
+-	if (dsize > gfs2_max_stuffed_size(ip))
+-		dsize = gfs2_max_stuffed_size(ip);
+ 	memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
+ 	memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
+ 	kunmap_atomic(kaddr);
+diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
+index b4fde3a8eeb4..eaee95d2ad14 100644
+--- a/fs/gfs2/bmap.c
++++ b/fs/gfs2/bmap.c
+@@ -69,9 +69,6 @@ static int gfs2_unstuffer_page(struct gfs2_inode *ip, struct buffer_head *dibh,
+ 		void *kaddr = kmap(page);
+ 		u64 dsize = i_size_read(inode);
+  
+-		if (dsize > gfs2_max_stuffed_size(ip))
+-			dsize = gfs2_max_stuffed_size(ip);
 -
--			opp-131250000 {
--				opp-hz = /bits/ 64 <131250000>;
--				required-opps = <&rpmpd_opp_svs>;
--			};
--
--			opp-210000000 {
--				opp-hz = /bits/ 64 <210000000>;
--				required-opps = <&rpmpd_opp_svs_plus>;
--			};
--
--			opp-262500000 {
--				opp-hz = /bits/ 64 <262500000>;
--				required-opps = <&rpmpd_opp_nom>;
--			};
--		};
--
- 		mdss: display-subsystem@c900000 {
- 			compatible = "qcom,mdss";
- 			reg = <0x0c900000 0x1000>,
-@@ -1610,6 +1591,25 @@ dsi0: dsi@c994000 {
+ 		memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
+ 		memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
+ 		kunmap(page);
+diff --git a/fs/gfs2/glops.c b/fs/gfs2/glops.c
+index bf539eab92c6..db28c240dae3 100644
+--- a/fs/gfs2/glops.c
++++ b/fs/gfs2/glops.c
+@@ -454,6 +454,9 @@ static int gfs2_dinode_in(struct gfs2_inode *ip, const void *buf)
+ 	ip->i_depth = (u8)depth;
+ 	ip->i_entries = be32_to_cpu(str->di_entries);
  
- 				status = "disabled";
++	if (gfs2_is_stuffed(ip) && ip->i_inode.i_size > gfs2_max_stuffed_size(ip))
++		goto corrupt;
++
+ 	if (S_ISREG(ip->i_inode.i_mode))
+ 		gfs2_set_aops(&ip->i_inode);
  
-+				dsi_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-131250000 {
-+						opp-hz = /bits/ 64 <131250000>;
-+						required-opps = <&rpmpd_opp_svs>;
-+					};
-+
-+					opp-210000000 {
-+						opp-hz = /bits/ 64 <210000000>;
-+						required-opps = <&rpmpd_opp_svs_plus>;
-+					};
-+
-+					opp-262500000 {
-+						opp-hz = /bits/ 64 <262500000>;
-+						required-opps = <&rpmpd_opp_nom>;
-+					};
-+				};
-+
- 				ports {
- 					#address-cells = <1>;
- 					#size-cells = <0>;
 -- 
 2.34.1
 
