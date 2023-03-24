@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD216C8691
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F5B6C8693
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 21:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjCXULv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 16:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S229472AbjCXUMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 16:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjCXULu (ORCPT
+        with ESMTP id S231501AbjCXUMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:11:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0564119F09;
-        Fri, 24 Mar 2023 13:11:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9378762A8F;
-        Fri, 24 Mar 2023 20:11:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02180C4339B;
-        Fri, 24 Mar 2023 20:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679688708;
-        bh=Z9O1Xe6HkQKAw5ev9wIdwP/xTfEqbUEE0sOvnPGZgEQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KrcEFyQVXjF7lxKTaZ8nPH8utZKoxFQStNQcu7lhB2VHNeJSmlb0DrRoxsStbpe32
-         a7H6HqSkfAMOSLkhQSMgzQw6WXeK3vsWuCBxKH7i6xCzGzBES90nu/pW8pHqRIVlIt
-         CQ5bimZFp/RWCjMLatVVAsoyIxZhnUEIPxaAUc9Fcoty9C+CjxF+WNHS8KrXLqw3sb
-         n2KuGM5qW/sQ3/8fiJ45IrmcGfm1I6uLPUjuGArltRnaGrYCK/jPRHwAmlRoph09WX
-         rWXxwXOiEiYlxDS33VnSeDvWl8OCueBnsAE80nBUqRauHYyuqAvoz8kNXYZq8tUyG2
-         S2klZIOWG/GDA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 8FC101540432; Fri, 24 Mar 2023 13:11:47 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 13:11:47 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org, hch@lst.de,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: Re: [PATCH RFC rcu 03/19] srcu: Begin offloading srcu_struct fields
- to srcu_update
-Message-ID: <a0a2f6a7-b623-454c-ac65-69043a9f9f4d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <3db82572-f156-4a5d-b711-841aa28bd996@paulmck-laptop>
- <20230324001938.3443499-3-paulmck@kernel.org>
- <80166ee7-4ee3-bb2d-c715-a8180dddee31@intel.com>
+        Fri, 24 Mar 2023 16:12:15 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25D719102;
+        Fri, 24 Mar 2023 13:12:13 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id bt19so2012876pfb.3;
+        Fri, 24 Mar 2023 13:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679688733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yaavObOWzHRvJy2JM91YkUKlJ/WIEwIWML4qoWi7FEI=;
+        b=orIdYEplRNwQiKg7avw+Yw1CMIHIbZqmvuxpyoAwqC2WiYOiJrPLGwfsIodVwaeZ4F
+         VxUeYFTWvu7hP3fFnKo7IkHvM2R7tkuR5C3R7VgnvN/iOhRWGqtbiGB5W4kwJZKoNW8s
+         uhqy3XaUTZO8Wj+N8GHb3QHVrKiyLqBLJRIe+1nTPWEa/sJRitphHBoKo7FBnHIKjrZv
+         amREXR7mFpgtqoGF16N7bdt9TTVG4Qx3braoxn5Yfk7X8lvTdzf2a+k9XwTGp6NrjSf4
+         PZECsxjwIOrVgM+eIcjFhMjJV18X9jkMTwpXzSqYaut+JWwwSkCmvtQvjrL9xxRU1whD
+         5iKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679688733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yaavObOWzHRvJy2JM91YkUKlJ/WIEwIWML4qoWi7FEI=;
+        b=XvJXOf82UA39VVEirtiPtyLWamUqvETBe3OeyfD8FFoKcm/7VYKKqs23Xkx9lFNG81
+         YHs2D0VWqb2+wH3IcUkXnLobUkOqUcKgp238aU6peF+Vg4ssh585T+JEU5ZSKdRhpxV1
+         wUvBN8RjXWsl8rOjeYZYOhoI4zbtYBxoBsp224r3tbgn3kZHvbIa8PxY8dUK0Opn2b3Q
+         R1eR+83+IY8bWcRTicgyt6lZSebfZXMUfaclOmtF/NN07rZQ/zYEbmcPeQuLyV6x7v6p
+         mjIYz0PlKj1KPN90BZPu/rZlj6bYb1bBwyizaDFmtPUtndbQeDrqMtwft9t882eDaj+V
+         zxNA==
+X-Gm-Message-State: AAQBX9cCeyuNqM2RpjTCluJvKVliAlaKVadAPcJDGliDif8IVADBEfjv
+        wxzRwwDucOfX5YqcRege8uvGHFWbngBx6Qmwt9A=
+X-Google-Smtp-Source: AKy350bmLPJFtuX3lJO6ZUzJk8S0hGYzGagCcVbStVFTm0oD36plkeQv3bwT0ZDg0yEKHa7Y46o/Pio3ZO4D1PeoAzM=
+X-Received: by 2002:a05:6a00:1344:b0:625:a545:3292 with SMTP id
+ k4-20020a056a00134400b00625a5453292mr2245607pfu.0.1679688733556; Fri, 24 Mar
+ 2023 13:12:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <80166ee7-4ee3-bb2d-c715-a8180dddee31@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=unavailable
+References: <20220203182641.824731-1-shy828301@gmail.com> <132ba4a4-3b1d-329d-1db4-f102eea2fd08@suse.cz>
+ <9ba70a5e-4e12-0e9f-a6a4-d955bf25d0fe@redhat.com> <64ec7939-0733-7925-0ec0-d333e62c5f21@suse.cz>
+ <CAHbLzkoZctsJf92Lw3wKMuSqT7-aje0SiAjc6JVW5Z3bNS1JNg@mail.gmail.com> <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz>
+In-Reply-To: <efab25ef-c29c-3671-5f26-060bba76d481@suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 24 Mar 2023 13:12:02 -0700
+Message-ID: <CAHbLzkomXCwabFrNaNyuGBozmindHqVD0ki4n75XJ2V8Uw=9rw@mail.gmail.com>
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     David Hildenbrand <david@redhat.com>,
+        kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,266 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 08:10:31PM +0100, Wysocki, Rafael J wrote:
-> On 3/24/2023 1:19 AM, Paul E. McKenney wrote:
-> > The current srcu_struct structure is on the order of 200 bytes in size
-> > (depending on architecture and .config), which is much better than the
-> > old-style 26K bytes, but still all too inconvenient when one is trying
-> > to achieve good cache locality on a fastpath involving SRCU readers.
-> > 
-> > However, only a few fields in srcu_struct are used by SRCU readers.
-> > The remaining fields could be offloaded to a new srcu_update
-> > structure, thus shrinking the srcu_struct structure down to a few
-> > tens of bytes.  This commit begins this noble quest, a quest that is
-> > complicated by open-coded initialization of the srcu_struct within the
-> > srcu_notifier_head structure.  This complication is addressed by updating
-> > the srcu_notifier_head structure's open coding, given that there does
-> > not appear to be a straightforward way of abstracting that initialization.
-> > 
-> > This commit moves only the ->node pointer to srcu_update.  Later commits
-> > will move additional fields.
-> > 
-> > [ paulmck: Fold in qiang1.zhang@intel.com's memory-leak fix. ]
-> > 
-> > Link: https://lore.kernel.org/all/20230320055751.4120251-1-qiang1.zhang@intel.com/
-> > Suggested-by: Christoph Hellwig <hch@lst.de>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> > Cc: "Michał Mirosław" <mirq-linux@rere.qmqm.pl>
-> > Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> 
-> Fine with me.
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Mar 24, 2023 at 4:25=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz> wr=
+ote:
+>
+> On 3/23/23 21:45, Yang Shi wrote:
+> > On Thu, Mar 23, 2023 at 3:11=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
+> wrote:
+> >
+> > Out of curiosity, is there any public link for this CVE? Google search
+> > can't find it.
+>
+> Only this one is live so far, AFAIK
+>
+> https://bugzilla.redhat.com/show_bug.cgi?id=3D2180936
 
-Thank you!  I will add this on my next rebase.
+Thank you.
 
-It is possible that this will be v6.5 rather than v6.4 material.
-
-							Thanx, Paul
-
-> > ---
-> >   include/linux/notifier.h |  5 ++++-
-> >   include/linux/srcutiny.h |  6 +++---
-> >   include/linux/srcutree.h | 27 ++++++++++++++++++---------
-> >   kernel/rcu/rcu.h         |  6 ++++--
-> >   kernel/rcu/srcutree.c    | 28 +++++++++++++++++++---------
-> >   5 files changed, 48 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-> > index aef88c2d1173..2aba75145144 100644
-> > --- a/include/linux/notifier.h
-> > +++ b/include/linux/notifier.h
-> > @@ -73,6 +73,9 @@ struct raw_notifier_head {
-> >   struct srcu_notifier_head {
-> >   	struct mutex mutex;
-> > +#ifdef CONFIG_TREE_SRCU
-> > +	struct srcu_usage srcuu;
-> > +#endif
-> >   	struct srcu_struct srcu;
-> >   	struct notifier_block __rcu *head;
-> >   };
-> > @@ -107,7 +110,7 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
-> >   	{							\
-> >   		.mutex = __MUTEX_INITIALIZER(name.mutex),	\
-> >   		.head = NULL,					\
-> > -		.srcu = __SRCU_STRUCT_INIT(name.srcu, pcpu),	\
-> > +		.srcu = __SRCU_STRUCT_INIT(name.srcu, name.srcuu, pcpu), \
-> >   	}
-> >   #define ATOMIC_NOTIFIER_HEAD(name)				\
-> > diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-> > index 5aa5e0faf6a1..ebd72491af99 100644
-> > --- a/include/linux/srcutiny.h
-> > +++ b/include/linux/srcutiny.h
-> > @@ -31,7 +31,7 @@ struct srcu_struct {
-> >   void srcu_drive_gp(struct work_struct *wp);
-> > -#define __SRCU_STRUCT_INIT(name, __ignored)				\
-> > +#define __SRCU_STRUCT_INIT(name, __ignored, ___ignored)			\
-> >   {									\
-> >   	.srcu_wq = __SWAIT_QUEUE_HEAD_INITIALIZER(name.srcu_wq),	\
-> >   	.srcu_cb_tail = &name.srcu_cb_head,				\
-> > @@ -44,9 +44,9 @@ void srcu_drive_gp(struct work_struct *wp);
-> >    * Tree SRCU, which needs some per-CPU data.
-> >    */
-> >   #define DEFINE_SRCU(name) \
-> > -	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
-> > +	struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
-> >   #define DEFINE_STATIC_SRCU(name) \
-> > -	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name)
-> > +	static struct srcu_struct name = __SRCU_STRUCT_INIT(name, name, name)
-> >   void synchronize_srcu(struct srcu_struct *ssp);
-> > diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-> > index 428480152375..2689e64024bb 100644
-> > --- a/include/linux/srcutree.h
-> > +++ b/include/linux/srcutree.h
-> > @@ -57,11 +57,17 @@ struct srcu_node {
-> >   	int grphi;				/* Biggest CPU for node. */
-> >   };
-> > +/*
-> > + * Per-SRCU-domain structure, update-side data linked from srcu_struct.
-> > + */
-> > +struct srcu_usage {
-> > +	struct srcu_node *node;			/* Combining tree. */
-> > +};
-> > +
-> >   /*
-> >    * Per-SRCU-domain structure, similar in function to rcu_state.
-> >    */
-> >   struct srcu_struct {
-> > -	struct srcu_node *node;			/* Combining tree. */
-> >   	struct srcu_node *level[RCU_NUM_LVLS + 1];
-> >   						/* First node at each level. */
-> >   	int srcu_size_state;			/* Small-to-big transition state. */
-> > @@ -90,6 +96,7 @@ struct srcu_struct {
-> >   	unsigned long reschedule_count;
-> >   	struct delayed_work work;
-> >   	struct lockdep_map dep_map;
-> > +	struct srcu_usage *srcu_sup;		/* Update-side data. */
-> >   };
-> >   // Values for size state variable (->srcu_size_state).  Once the state
-> > @@ -121,24 +128,24 @@ struct srcu_struct {
-> >   #define SRCU_STATE_SCAN1	1
-> >   #define SRCU_STATE_SCAN2	2
-> > -#define __SRCU_STRUCT_INIT_COMMON(name)								\
-> > +#define __SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-> >   	.lock = __SPIN_LOCK_UNLOCKED(name.lock),						\
-> >   	.srcu_gp_seq_needed = -1UL,								\
-> >   	.work = __DELAYED_WORK_INITIALIZER(name.work, NULL, 0),					\
-> > +	.srcu_sup = &usage_name,								\
-> >   	__SRCU_DEP_MAP_INIT(name)
-> > -#define __SRCU_STRUCT_INIT_MODULE(name)								\
-> > +#define __SRCU_STRUCT_INIT_MODULE(name, usage_name)						\
-> >   {												\
-> > -	__SRCU_STRUCT_INIT_COMMON(name)								\
-> > +	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-> >   }
-> > -#define __SRCU_STRUCT_INIT(name, pcpu_name)							\
-> > +#define __SRCU_STRUCT_INIT(name, usage_name, pcpu_name)						\
-> >   {												\
-> >   	.sda = &pcpu_name,									\
-> > -	__SRCU_STRUCT_INIT_COMMON(name)								\
-> > +	__SRCU_STRUCT_INIT_COMMON(name, usage_name)						\
-> >   }
-> > -
-> >   /*
-> >    * Define and initialize a srcu struct at build time.
-> >    * Do -not- call init_srcu_struct() nor cleanup_srcu_struct() on it.
-> > @@ -160,15 +167,17 @@ struct srcu_struct {
-> >    */
-> >   #ifdef MODULE
-> >   # define __DEFINE_SRCU(name, is_static)								\
-> > -	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name);			\
-> > +	static struct srcu_usage name##_srcu_usage;						\
-> > +	is_static struct srcu_struct name = __SRCU_STRUCT_INIT_MODULE(name, name##_srcu_usage);	\
-> >   	extern struct srcu_struct * const __srcu_struct_##name;					\
-> >   	struct srcu_struct * const __srcu_struct_##name						\
-> >   		__section("___srcu_struct_ptrs") = &name
-> >   #else
-> >   # define __DEFINE_SRCU(name, is_static)								\
-> >   	static DEFINE_PER_CPU(struct srcu_data, name##_srcu_data);				\
-> > +	static struct srcu_usage name##_srcu_usage;						\
-> >   	is_static struct srcu_struct name =							\
-> > -		__SRCU_STRUCT_INIT(name, name##_srcu_data)
-> > +		__SRCU_STRUCT_INIT(name, name##_srcu_usage, name##_srcu_data)
-> >   #endif
-> >   #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
-> >   #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> > index a3adcf9a9919..4a1b9622598b 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -378,11 +378,13 @@ extern void rcu_init_geometry(void);
-> >    * specified state structure (for SRCU) or the only rcu_state structure
-> >    * (for RCU).
-> >    */
-> > -#define srcu_for_each_node_breadth_first(sp, rnp) \
-> > +#define _rcu_for_each_node_breadth_first(sp, rnp) \
-> >   	for ((rnp) = &(sp)->node[0]; \
-> >   	     (rnp) < &(sp)->node[rcu_num_nodes]; (rnp)++)
-> >   #define rcu_for_each_node_breadth_first(rnp) \
-> > -	srcu_for_each_node_breadth_first(&rcu_state, rnp)
-> > +	_rcu_for_each_node_breadth_first(&rcu_state, rnp)
-> > +#define srcu_for_each_node_breadth_first(ssp, rnp) \
-> > +	_rcu_for_each_node_breadth_first(ssp->srcu_sup, rnp)
-> >   /*
-> >    * Scan the leaves of the rcu_node hierarchy for the rcu_state structure.
-> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> > index 7a6d9452a5d0..ad1d5ca42a99 100644
-> > --- a/kernel/rcu/srcutree.c
-> > +++ b/kernel/rcu/srcutree.c
-> > @@ -173,12 +173,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
-> >   	/* Initialize geometry if it has not already been initialized. */
-> >   	rcu_init_geometry();
-> > -	ssp->node = kcalloc(rcu_num_nodes, sizeof(*ssp->node), gfp_flags);
-> > -	if (!ssp->node)
-> > +	ssp->srcu_sup->node = kcalloc(rcu_num_nodes, sizeof(*ssp->srcu_sup->node), gfp_flags);
-> > +	if (!ssp->srcu_sup->node)
-> >   		return false;
-> >   	/* Work out the overall tree geometry. */
-> > -	ssp->level[0] = &ssp->node[0];
-> > +	ssp->level[0] = &ssp->srcu_sup->node[0];
-> >   	for (i = 1; i < rcu_num_lvls; i++)
-> >   		ssp->level[i] = ssp->level[i - 1] + num_rcu_lvl[i - 1];
-> >   	rcu_init_levelspread(levelspread, num_rcu_lvl);
-> > @@ -195,7 +195,7 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
-> >   		snp->srcu_gp_seq_needed_exp = SRCU_SNP_INIT_SEQ;
-> >   		snp->grplo = -1;
-> >   		snp->grphi = -1;
-> > -		if (snp == &ssp->node[0]) {
-> > +		if (snp == &ssp->srcu_sup->node[0]) {
-> >   			/* Root node, special case. */
-> >   			snp->srcu_parent = NULL;
-> >   			continue;
-> > @@ -236,8 +236,12 @@ static bool init_srcu_struct_nodes(struct srcu_struct *ssp, gfp_t gfp_flags)
-> >    */
-> >   static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
-> >   {
-> > +	if (!is_static)
-> > +		ssp->srcu_sup = kzalloc(sizeof(*ssp->srcu_sup), GFP_KERNEL);
-> > +	if (!ssp->srcu_sup)
-> > +		return -ENOMEM;
-> >   	ssp->srcu_size_state = SRCU_SIZE_SMALL;
-> > -	ssp->node = NULL;
-> > +	ssp->srcu_sup->node = NULL;
-> >   	mutex_init(&ssp->srcu_cb_mutex);
-> >   	mutex_init(&ssp->srcu_gp_mutex);
-> >   	ssp->srcu_idx = 0;
-> > @@ -249,8 +253,11 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
-> >   	ssp->sda_is_static = is_static;
-> >   	if (!is_static)
-> >   		ssp->sda = alloc_percpu(struct srcu_data);
-> > -	if (!ssp->sda)
-> > +	if (!ssp->sda) {
-> > +		if (!is_static)
-> > +			kfree(ssp->srcu_sup);
-> >   		return -ENOMEM;
-> > +	}
-> >   	init_srcu_struct_data(ssp);
-> >   	ssp->srcu_gp_seq_needed_exp = 0;
-> >   	ssp->srcu_last_gp_end = ktime_get_mono_fast_ns();
-> > @@ -259,6 +266,7 @@ static int init_srcu_struct_fields(struct srcu_struct *ssp, bool is_static)
-> >   			if (!ssp->sda_is_static) {
-> >   				free_percpu(ssp->sda);
-> >   				ssp->sda = NULL;
-> > +				kfree(ssp->srcu_sup);
-> >   				return -ENOMEM;
-> >   			}
-> >   		} else {
-> > @@ -656,13 +664,15 @@ void cleanup_srcu_struct(struct srcu_struct *ssp)
-> >   			rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
-> >   		return; /* Caller forgot to stop doing call_srcu()? */
-> >   	}
-> > +	kfree(ssp->srcu_sup->node);
-> > +	ssp->srcu_sup->node = NULL;
-> > +	ssp->srcu_size_state = SRCU_SIZE_SMALL;
-> >   	if (!ssp->sda_is_static) {
-> >   		free_percpu(ssp->sda);
-> >   		ssp->sda = NULL;
-> > +		kfree(ssp->srcu_sup);
-> > +		ssp->srcu_sup = NULL;
-> >   	}
-> > -	kfree(ssp->node);
-> > -	ssp->node = NULL;
-> > -	ssp->srcu_size_state = SRCU_SIZE_SMALL;
-> >   }
-> >   EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
+>
+> >>
+> >> That's good to know so at least my bogus mail was useful for that, tha=
+nks!
+>
