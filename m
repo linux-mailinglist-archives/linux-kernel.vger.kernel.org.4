@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010E66C7F71
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6939A6C7FC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjCXOCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S231691AbjCXOVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbjCXOBw (ORCPT
+        with ESMTP id S229870AbjCXOVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:01:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75C481CAD1;
-        Fri, 24 Mar 2023 07:00:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F4A211FB;
-        Fri, 24 Mar 2023 07:01:23 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.55.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9FE53F71E;
-        Fri, 24 Mar 2023 07:00:37 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 14:00:34 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Janne Grunau <j@jannau.net>, Will Deacon <will@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers/perf: apple_m1: Add Apple M2 support
-Message-ID: <ZB2tAqs/o/QSI4XD@FVFF77S0Q05N>
-References: <20230214-apple_m2_pmu-v1-0-9c9213ab9b63@jannau.net>
- <20230214-apple_m2_pmu-v1-2-9c9213ab9b63@jannau.net>
+        Fri, 24 Mar 2023 10:21:46 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADD11F93D;
+        Fri, 24 Mar 2023 07:21:43 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 8F8975FD2F;
+        Fri, 24 Mar 2023 17:01:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679666511;
+        bh=IlFUWYEeDUhp/CciNDBSLCyclwAtjmsXI28Xo3rwRSw=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=sHf1Y8yk9o4VXC8BZNagl2tiGnwtFelKqjJUtNAxFegqckcy7GjyeJVzHPfAe3OKK
+         dfguX36kq9gogm/CyzjmalabqgtiqOj+DLRUh3trhID3+221x2tdk4OqYHSMP4UDyK
+         HXrpUHlnWIF8Ni3FI1B19Z7c1JiVRHCVAc36LVr1+q5Hq3ejDBOcPODnEBtfEt0+Kw
+         9YElqH9KUvCL/tAIwRDrvPEmg8M9NVbCuOpZq+XRcTkz2bxoEYdKZZy3UeD+nmKSVH
+         G5MQ/sAjmKbKeSVHhefXHBP+SA9JjtKbCGqkqqKzZlSxpBUbFivQXNGrzjDm/ikNuK
+         TY67koCIxlmMQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 17:01:50 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <krzysztof.kozlowski@linaro.org>, <robh@kernel.org>,
+        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <jianxin.pan@amlogic.com>
+CC:     <kernel@sberdevices.ru>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <rockosov@gmail.com>, Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v2] firmware: meson_sm: populate platform devices from sm device tree data
+Date:   Fri, 24 Mar 2023 17:01:41 +0300
+Message-ID: <20230324140141.6743-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214-apple_m2_pmu-v1-2-9c9213ab9b63@jannau.net>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/24 06:52:00 #21002836
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:38:02AM +0100, Janne Grunau wrote:
-> The PMU itself is compatible with the one found on M1. We still know
-> next to nothing about the counters so keep using CPU uarch specific
-> compatibles/PMU names.
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
+In some meson boards, secure monitor device has children, for example,
+power secure controller. By default, secure monitor isn't the bus in terms
+of device tree subsystem, so the of_platform initialization code doesn't
+populate its device tree data. As a result, secure monitor's children
+aren't probed at all.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com.
+Run the 'of_platform_populate()' routine manually to resolve such issues.
 
-Will, I assume that you'll pick this up.
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ drivers/firmware/meson/meson_sm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  drivers/perf/apple_m1_cpu_pmu.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/drivers/perf/apple_m1_cpu_pmu.c b/drivers/perf/apple_m1_cpu_pmu.c
-> index 979a7c2b4f56..83b74c7fe63f 100644
-> --- a/drivers/perf/apple_m1_cpu_pmu.c
-> +++ b/drivers/perf/apple_m1_cpu_pmu.c
-> @@ -559,7 +559,21 @@ static int m1_pmu_fire_init(struct arm_pmu *cpu_pmu)
->  	return m1_pmu_init(cpu_pmu);
->  }
->  
-> +static int m2_pmu_avalanche_init(struct arm_pmu *cpu_pmu)
-> +{
-> +	cpu_pmu->name = "apple_avalanche_pmu";
-> +	return m1_pmu_init(cpu_pmu);
-> +}
-> +
-> +static int m2_pmu_blizzard_init(struct arm_pmu *cpu_pmu)
-> +{
-> +	cpu_pmu->name = "apple_blizzard_pmu";
-> +	return m1_pmu_init(cpu_pmu);
-> +}
-> +
->  static const struct of_device_id m1_pmu_of_device_ids[] = {
-> +	{ .compatible = "apple,avalanche-pmu",	.data = m2_pmu_avalanche_init, },
-> +	{ .compatible = "apple,blizzard-pmu",	.data = m2_pmu_blizzard_init, },
->  	{ .compatible = "apple,icestorm-pmu",	.data = m1_pmu_ice_init, },
->  	{ .compatible = "apple,firestorm-pmu",	.data = m1_pmu_fire_init, },
->  	{ },
-> 
-> -- 
-> 2.39.1
-> 
+diff --git a/drivers/firmware/meson/meson_sm.c b/drivers/firmware/meson/meson_sm.c
+index 77aa5c6398aa..b79d0e316cb1 100644
+--- a/drivers/firmware/meson/meson_sm.c
++++ b/drivers/firmware/meson/meson_sm.c
+@@ -316,7 +316,7 @@ static int __init meson_sm_probe(struct platform_device *pdev)
+ 	if (sysfs_create_group(&pdev->dev.kobj, &meson_sm_sysfs_attr_group))
+ 		goto out_in_base;
+ 
+-	return 0;
++	return devm_of_platform_populate(dev);
+ 
+ out_in_base:
+ 	iounmap(fw->sm_shmem_in_base);
+-- 
+2.36.0
+
