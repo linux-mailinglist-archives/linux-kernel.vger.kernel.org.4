@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B506C7FAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0A06C7FA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 15:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjCXOP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 10:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S231299AbjCXOPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 10:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjCXOPx (ORCPT
+        with ESMTP id S230015AbjCXOPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:15:53 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C971D92F;
-        Fri, 24 Mar 2023 07:15:50 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32OEFbWa065914;
-        Fri, 24 Mar 2023 09:15:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679667337;
-        bh=dCKIhAqLpMTl8zi6x7hjpcoMTKFgJPyxY8OQsA2CGbs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=T099vWJ2SvMTzI4q6hY2ZilkC53uwaghdiiYc8EVtrKrURCpCkRNy+pzomnnPZhvd
-         1+cfIZ9KoM6YlXLVd/YQ8I7g3ubJn8iIRmWUsFWPymTn6d9ZVDXB4Y2GPPgsXQh1eX
-         BZ86P1WMc5SqbhatDBaHetAPogx23Eff/54QrxTo=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32OEFbWK018284
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 24 Mar 2023 09:15:37 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 24
- Mar 2023 09:15:36 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 24 Mar 2023 09:15:36 -0500
-Received: from [172.24.145.176] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32OEFXmn054169;
-        Fri, 24 Mar 2023 09:15:34 -0500
-Message-ID: <9d22e2a9-ed36-8687-cc99-e0798bac4d68@ti.com>
-Date:   Fri, 24 Mar 2023 19:45:33 +0530
+        Fri, 24 Mar 2023 10:15:50 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48081CF7D;
+        Fri, 24 Mar 2023 07:15:48 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-544f7c176easo35062857b3.9;
+        Fri, 24 Mar 2023 07:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679667348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ySioxTXfVeiUuAu7gfa+m5Ra1WVUaOvrDeGg4ldVbfI=;
+        b=TYcg4XAKbVKi5wCyMd+7RflmoSwDkgDM6dTquxdNbVdR23qGjWBsOY/C0JVvlYJSNT
+         +2EfVTemoe03Q4R6tcfhebkwUf8S4fjnmNP3yBlwO/FLrvxw4rnfWp6UDR2qxHfuRy1p
+         LZSGVPcL1Agtj39KnTOgGQNtciy1s3v55MfUeFtSEkyNj++5srl5jEhzVwuSKCGmm+qX
+         O/NKvEX4e5UPchjcw6F8ds1ECGKwwiJ4k2w6HOrPwtu+PEpWmhs+nv+siFmwzNptgREZ
+         BL/Gw8o/07xXSbg2HwiTG+tLpD5ouUbM76hYdqu7gTTgAM0uIG7Fi5W58tASoETB3sv5
+         o6YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679667348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ySioxTXfVeiUuAu7gfa+m5Ra1WVUaOvrDeGg4ldVbfI=;
+        b=0wQNa+xzDbyqbxgwGnv71D0g4fvAprr2D2Y4mQQPFNs5Avf5/2d/DWx+lE1Mt+Ldi0
+         /8QPoEebcKtTcO0SIavUYUZTxeMoC2r6rBnkbBoWaPnasCx86ShD6DDUx+n/RxrZVamg
+         YXO3hcf9gsOd3p2ePZmp+biy+V2ij4zBT6wGLb1GLwgNuHfm77l9O2sRtSiwJYyCf7OD
+         SFglOfo6gzUTFlfclBCZ0MdcFkrYh4Ad0qqzNJctzuq+Kj1UXpIyNMuCI9+D/pYOrGsq
+         fb+nvlBIRrLpBYjb2vUGXi/wHJuFBt+QoczlAeOlErDWI9wHytmOzxeKh/TqZY9QQAbX
+         sVVg==
+X-Gm-Message-State: AAQBX9frxw/YMNNVZFx7GVw50m284EvGoiAy1pTmFdymoVLdfWlqwf5V
+        DxzfQneaCxmqY9o3nPw6D5rtqSk6G+EVxCKQbAg=
+X-Google-Smtp-Source: AKy350b2seUzPyEbZcYj+6GmFkydtsJW7YmxflUG2HreBCD6E6I0fvaXhiVQ6oU0JBg/wlhUy93KyPTmxQ4CVXMKt2s=
+X-Received: by 2002:a05:690c:72e:b0:541:6763:3ce1 with SMTP id
+ bt14-20020a05690c072e00b0054167633ce1mr1077614ywb.2.1679667347742; Fri, 24
+ Mar 2023 07:15:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-am654: Add overlay for audio support
-To:     <nm@ti.com>, <vigneshr@ti.com>
-CC:     <afd@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-luthra@ti.com>
-References: <20230324122417.252491-1-j-choudhary@ti.com>
-Content-Language: en-US
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <20230324122417.252491-1-j-choudhary@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Received: by 2002:a05:7000:ba8c:b0:490:be1c:c35a with HTTP; Fri, 24 Mar 2023
+ 07:15:47 -0700 (PDT)
+In-Reply-To: <20230324144559.3473c537@xps-13>
+References: <20230323124510.2484808-1-noltari@gmail.com> <20230323124510.2484808-2-noltari@gmail.com>
+ <20230324104020.54754079@xps-13> <CAKR-sGcbRRjqt3raXHcvfCfKFDfFWsuu+C7XW3qFckawMsqe4w@mail.gmail.com>
+ <20230324114911.19e00ae1@xps-13> <CAKR-sGc3R_k_+-hzv5DOOeRO-5rHL1k_dq7mpZLcv=FgZ1Moug@mail.gmail.com>
+ <20230324144559.3473c537@xps-13>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Fri, 24 Mar 2023 15:15:47 +0100
+Message-ID: <CAKR-sGdxFbMZYGcDnWHW9SU=6hchZMi75=BjGtDen_Ws1keORg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new binding
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, masonccyang@mxic.com.tw,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,191 +76,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Miqu=C3=A8l,
 
+2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
+> Hi =C3=81lvaro,
+>
+> noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
+>
+>> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
+>> (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+>> >
+>> > Hi =C3=81lvaro,
+>> >
+>> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
+>> >
+>> > > Hi Miqu=C3=A8l,
+>> > >
+>> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
+>> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+>> > > >
+>> > > > Hi =C3=81lvaro,
+>> > > >
+>> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
+>> > > >
+>> > > > > Add new "mxic,disable-block-protection" binding documentation.
+>> > > > > This binding allows disabling block protection support for those
+>> > > > > devices not
+>> > > > > supporting it.
+>> > > > >
+>> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.c=
+om>
+>> > > > > ---
+>> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3 +++
+>> > > > >  1 file changed, 3 insertions(+)
+>> > > > >
+>> > > > > diff --git
+>> > > > > a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> > > > > b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
+>> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>> > > > > @@ -16,6 +16,9 @@ in children nodes.
+>> > > > >  Required NAND chip properties in children mode:
+>> > > > >  - randomizer enable: should be "mxic,enable-randomizer-otp"
+>> > > > >
+>> > > > > +Optional NAND chip properties in children mode:
+>> > > > > +- block protection disable: should be
+>> > > > > "mxic,disable-block-protection"
+>> > > > > +
+>> > > >
+>> > > > Besides the fact that nowadays we prefer to see binding conversion=
+s
+>> > > > to
+>> > > > yaml before adding anything, I don't think this will fly.
+>> > > >
+>> > > > I'm not sure exactly what "disable block protection" means, we
+>> > > > already have similar properties like "lock" and "secure-regions",
+>> > > > not
+>> > > > sure they will fit but I think it's worth checking.
+>> > >
+>> > > As explained in 2/2, commit 03a539c7a118 introduced a regression on
+>> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix MX30LF1G18AC
+>> > > which hangs the device.
+>> > >
+>> > > This is the log with block protection disabled:
+>> > > [    0.495831] bcm6368_nand 10000200.nand: there is not valid maps
+>> > > for
+>> > > state default
+>> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>> > > 0xf1
+>> > > [    0.511526] nand: Macronix MX30LF1G18AC
+>> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>> > > 2048, OOB size: 64
+>> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> > > [    0.535912] Bad block table found at page 65472, version 0x01
+>> > > [    0.544268] Bad block table found at page 65408, version 0x01
+>> > > [    0.954329] 9 fixed-partitions partitions found on MTD device
+>> > > brcmnand.0
+>> > > ...
+>> > >
+>> > > This is the log with block protection enabled:
+>> > > [    0.495095] bcm6368_nand 10000200.nand: there is not valid maps
+>> > > for
+>> > > state default
+>> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>> > > 0xf1
+>> > > [    0.510772] nand: Macronix MX30LF1G18AC
+>> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>> > > 2048, OOB size: 64
+>> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> > > [    0.539687] Bad block table not found for chip 0
+>> > > [    0.550153] Bad block table not found for chip 0
+>> > > [    0.555069] Scanning device for bad blocks
+>> > > [    0.601213] CPU 1 Unable to handle kernel paging request at
+>> > > virtual
+>> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
+>> > > *** Device hangs ***
+>> > >
+>> > > Enabling macronix_nand_block_protection_support() makes the device
+>> > > unable to detect the bad block table and hangs it when trying to sca=
+n
+>> > > for bad blocks.
+>> >
+>> > Please trace nand_macronix.c and look:
+>> > - are the get_features and set_features really supported by the
+>> >   controller driver?
+>>
+>> This is what I could find by debugging:
+>> [    0.494993] bcm6368_nand 10000200.nand: there is not valid maps for
+>> state default
+>> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0xf1
+>> [    0.512077] nand: Macronix MX30LF1G18AC
+>> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>> 2048, OOB size: 64
+>> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
+>> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
+>> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
+>> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x0=
+0
+>> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x0=
+0
+>> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x0=
+0
+>> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
+>> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =3D 0x0=
+0
+>> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_param=3D[00
+>> 00 00 00] -> 0
+>> [    0.602341] macronix_nand_block_protection_support:
+>> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
+>> [    0.610548] macronix_nand_block_protection_support: !=3D
+>> MXIC_BLOCK_PROTECTION_ALL_LOCK
+>> [    0.624760] Bad block table not found for chip 0
+>> [    0.635542] Bad block table not found for chip 0
+>> [    0.640270] Scanning device for bad blocks
+>>
+>> I don't know how to tell if get_features / set_features is really
+>> supported...
+>
+> Looks like your driver does not support exec_op but the core provides a
+> get/set_feature implementation.
 
-On 24/03/23 17:54, Jayesh Choudhary wrote:
-> From: Peter Ujfalusi <peter.ujfalusi@ti.com>
-> 
-> The GP application board has:
-> ICSSG I2C0..3 connected to I2C EEPROMs
-> ICSSG UART0..3 headers with level shifters
-> ICSSG SPI0..3 connected to SPI Flash
-> McASP0 connected to tlv320aic3106 codec with Headset out and Line In jack
-> 
-> This patch adds support for the audio on the GP application board.
-> 
-> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-> [j-choudhary@ti.com: Makefile fixups, dtso file cleanups]
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
+According to Florian, low level should be supported on brcmnand
+controllers >=3D 4.0
+Also:
+https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddbb20bf7568=
+9372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_map_part.h=
+#L1597
 
-Please drop the patch as this board is no longer in production/supported
-actively.
+>
+>>
+>> > - what is the state of the locking configuration in the chip when you
+>> >   boot?
+>>
+>> Unlocked, I guess...
+>> How can I check that?
+>
+> It's in your dump, the chip returns 0, meaning it's all unlocked,
+> apparently.
 
-I am extremely sorry for the noise.
+Well, I can read/write the device if block protection isn=E2=80=99t disable=
+d,
+so I guess we can confirm it=E2=80=99s unlocked=E2=80=A6
 
-Warm Regards,
--Jayesh
+>
+>> > - is there anything that locks the device by calling mxic_nand_lock() =
+?
+>
+> So nobody locks the device I guess? Did you add traces there?
 
+It doesn=E2=80=99t get to the point that it enabled the lock/unlock functio=
+ns
+since it fails when checking if feature is 0x38, so there=E2=80=99s no poin=
+t
+in adding those traces=E2=80=A6
 
-> 
-> Changes are made considering Andrew's comment on another overlay patch[1]
-> related to Makefile and styling comments on the overlay file.
-> 
-> [1]:
-> <https://lore.kernel.org/all/8e6442c8-e4ef-705d-1378-7d1f8b74e84d@ti.com/>
-> 
->   arch/arm64/boot/dts/ti/Makefile         |   3 +-
->   arch/arm64/boot/dts/ti/k3-am654-gp.dtso | 124 ++++++++++++++++++++++++
->   2 files changed, 126 insertions(+), 1 deletion(-)
->   create mode 100644 arch/arm64/boot/dts/ti/k3-am654-gp.dtso
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index 541970a8ed0a..9b70a85fbc96 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -21,12 +21,13 @@ dtb-$(CONFIG_ARCH_K3) += k3-am642-phyboard-electra-rdk.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->   
->   # Boards with AM65x SoC
-> +k3-am654-evm-dtbs := k3-am654-base-board.dtb k3-am654-gp.dtbo
->   dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am6528-iot2050-basic-pg2.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-m2.dtb
->   dtb-$(CONFIG_ARCH_K3) += k3-am6548-iot2050-advanced-pg2.dtb
-> -dtb-$(CONFIG_ARCH_K3) += k3-am654-base-board.dtb
-> +dtb-$(CONFIG_ARCH_K3) += k3-am654-evm.dtb
->   
->   # Boards with J7200 SoC
->   k3-j7200-evm-dtbs := k3-j7200-common-proc-board.dtb k3-j7200-evm-quad-port-eth-exp.dtbo
-> diff --git a/arch/arm64/boot/dts/ti/k3-am654-gp.dtso b/arch/arm64/boot/dts/ti/k3-am654-gp.dtso
-> new file mode 100644
-> index 000000000000..14ceb2714677
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am654-gp.dtso
-> @@ -0,0 +1,124 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * DT overlay for GP application board on AM654 EVM
-> + *
-> + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +
-> +#include "k3-pinctrl.h"
-> +
-> +&{/} {
-> +	gp_vcc_5v0: fixedregulator-gp-vcc-5v0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "gp_vcc_5v0";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	codec_vcc_3v3: fixedregulator-codec-vcc-3v3 {
-> +		/* LP5912-3.3DRVT */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "codec_vcc_3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&gp_vcc_5v0>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	gp_vcc_1v8: fixedregulator-gp-vcc-1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "gp_vcc_1v8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "AM65x-GPEVM";
-> +		simple-audio-card,widgets =
-> +			"Headphone", "Headphone Jack",
-> +			"Line", "Line In";
-> +		simple-audio-card,routing =
-> +			"Headphone Jack",	"HPLOUT",
-> +			"Headphone Jack",	"HPROUT",
-> +			"LINE1L",		"Line In",
-> +			"LINE1R",		"Line In";
-> +		simple-audio-card,format = "dsp_b";
-> +		simple-audio-card,bitclock-master = <&sound_master>;
-> +		simple-audio-card,frame-master = <&sound_master>;
-> +		simple-audio-card,bitclock-inversion;
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&mcasp0>;
-> +		};
-> +
-> +		sound_master: simple-audio-card,codec {
-> +			sound-dai = <&tlv320aic3106>;
-> +			system-clock-frequency = <12000000>;
-> +		};
-> +	};
-> +};
-> +
-> +&main_pmx0 {
-> +	mcasp0_pins: mcasp0-pins {
-> +		pinctrl-single,pins = <
-> +			AM65X_IOPAD(0x01f4, PIN_INPUT, 5) /* (V24) PRG0_PRU0_GPO0.MCASP0_ACLKX */
-> +			AM65X_IOPAD(0x01f8, PIN_INPUT, 5) /* (W25) PRG0_PRU0_GPO1.MCASP0_AFSX */
-> +			AM65X_IOPAD(0x0204, PIN_OUTPUT, 5) /* (Y24) PRG0_PRU0_GPO4.MCASP0_AXR0 */
-> +			AM65X_IOPAD(0x0208, PIN_INPUT, 5) /* (V28) PRG0_PRU0_GPO5.MCASP0_AXR1 */
-> +		>;
-> +	};
-> +
-> +	aic3106_pins: aic3106-pins {
-> +		pinctrl-single,pins = <
-> +			AM65X_IOPAD(0x011c, PIN_OUTPUT, 7) /* (AD19) PRG1_PRU0_GPO15.GPIO0_71 */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_i2c0 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	tlv320aic3106: tlv320aic3106@1b {
-> +		#sound-dai-cells = <0>;
-> +		compatible = "ti,tlv320aic3106";
-> +		reg = <0x1b>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&aic3106_pins>;
-> +		gpio-reset = <&main_gpio0 71 GPIO_ACTIVE_LOW>; /* gpio0_71 */
-> +		/* Regulators */
-> +		AVDD-supply = <&codec_vcc_3v3>;
-> +		IOVDD-supply = <&gp_vcc_1v8>;
-> +		DRVDD-supply = <&codec_vcc_3v3>;
-> +		DVDD-supply = <&gp_vcc_1v8>;
-> +	};
-> +};
-> +
-> +&mcasp0 {
-> +	status = "okay";
-> +	#sound-dai-cells = <0>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&mcasp0_pins>;
-> +	op-mode = <0>;          /* MCASP_IIS_MODE */
-> +	tdm-slots = <2>;
-> +	/* 16 serializers */
-> +	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
-> +		1 2 0 0
-> +		0 0 0 0
-> +		0 0 0 0
-> +		0 0 0 0
-> +	>;
-> +	tx-num-evt = <32>;
-> +	rx-num-evt = <32>;
-> +};
+>
+>> > - finding no bbt is one thing, hanging is another, where is it hanging
+>> >   exactly? (offset in nand/ and line in the code)
+>>
+>> I've got no idea...
+>
+> You can use ftrace or just add printks a bit everywhere and try to get
+> closer and closer.
+
+I think that after trying to get the feature it just start reading
+nonsense from the NAND and at some point it hangs due to that garbage=E2=80=
+=A6
+Is it posible that the NAND starts behaving like this after getting
+the feature due to some specific config of my device?
+
+>
+> I looked at the patch, I don't see anything strange. Besides, I have a
+> close enough datasheet and I don't see what could confuse the device.
+>
+> Are you really sure this patch is the problem? Is the WP pin wired on
+> your design?
+
+There=E2=80=99s no WP pin in brcmnand controllers < 7.0
+
+>
+> Thanks,
+> Miqu=C3=A8l
+>
+
+Thanks,
+=C3=81lvaro
