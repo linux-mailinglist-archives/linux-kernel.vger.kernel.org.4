@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05EF6C75F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5445F6C75DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 03:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjCXCfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 22:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S231183AbjCXCay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 22:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXCfT (ORCPT
+        with ESMTP id S231228AbjCXCas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 22:35:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1E9113C1;
-        Thu, 23 Mar 2023 19:35:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 75FCB1FE65;
-        Fri, 24 Mar 2023 02:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679625316;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdIFxlKHqyPQauC3EA1CD6YM6MLgr5BPAenLXoxp8A4=;
-        b=UTEBNWwEiVAYDqhzhkGZAYjd0E7bKXT7WR8ZiErR8zbK/ak3DFu+vj+GpzXqNFdUP2PnUs
-        nBTzujqkrdSxnbEbvOdB5BYA7DUrijKNBzDYfn7d90g0B7P9k83JzJ7M7iN5ZqyAdW03/h
-        o+2rbUH4a0M6kMUG0rCbK88y/StmsIk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679625316;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdIFxlKHqyPQauC3EA1CD6YM6MLgr5BPAenLXoxp8A4=;
-        b=d35aHSEWmViEqFzHhayXYZ9KWzcDAXvUusXk8N6HMgyczMHcwkValIs17Uhr/i1ZyXiKDQ
-        aU7L5JLmTh/SkXAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3813C133E5;
-        Fri, 24 Mar 2023 02:35:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id roqaDGQMHWQAYwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 24 Mar 2023 02:35:16 +0000
-Date:   Fri, 24 Mar 2023 03:29:04 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Genjian <zhanggenjian123@gmail.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] btrfs: fix uninitialized variable warning
-Message-ID: <20230324022904.GD10580@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230324020838.67149-1-zhanggenjian@kylinos.cn>
- <78422b96-52ed-b48a-27d0-1cfaa89a6608@gmx.com>
+        Thu, 23 Mar 2023 22:30:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E0B1BFA;
+        Thu, 23 Mar 2023 19:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679625010; x=1711161010;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oy8mubAbGW7aEEiEACVBMeJ0i6tLotYmTR7hadVY4RY=;
+  b=TtZGJZIfMdwLKOjOqDI2JYLD4D5UJCWx+sU7eAB26U1FCAXJ9RFqCXGN
+   kwIQDO+mFIooYRSLPvzZGvUdb3PBewkQRSg91+FQuGAFNNpOBatfWOyjJ
+   m+RJSckei4nEmQWfHddaK7Wkwj3PRmdKdv8mKXDL61Nih95tIGQXVYBB7
+   GoGSSGKx+nyI0b7/D21loRLVINQMrM4tvun/ZWWQHCTwKFQpflqwuyZ+Q
+   392dL4jGnWstvURmUi+/Uv9FzhNIge0rXuMnjaDkEKkfSKvbNxrXOR5fk
+   JA1Q/DMGQsur3Nqy/nc1MuYMcfUDBGL2+gcanZHdKnIUyMEDvUV4RKqas
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="402261123"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="402261123"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:29:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="1012079715"
+X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
+   d="scan'208";a="1012079715"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.30.216]) ([10.255.30.216])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:29:28 -0700
+Message-ID: <6cf365a3-dddc-8b74-4d74-04666fbeb53d@intel.com>
+Date:   Fri, 24 Mar 2023 10:29:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <78422b96-52ed-b48a-27d0-1cfaa89a6608@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Ackerley Tng <ackerleytng@google.com>, seanjc@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        pbonzini@redhat.com, corbet@lwn.net, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, arnd@arndb.de,
+        naoya.horiguchi@nec.com, linmiaohe@huawei.com, x86@kernel.org,
+        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org, shuah@kernel.org,
+        rppt@kernel.org, steven.price@arm.com, mail@maciej.szmigiero.name,
+        vbabka@suse.cz, vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
+References: <20230128140030.GB700688@chaop.bj.intel.com>
+ <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20230308074026.GA2183207@chaop.bj.intel.com>
+ <20230323004131.GA214881@ls.amr.corp.intel.com>
+ <20230324021029.GA2774613@chaop.bj.intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230324021029.GA2774613@chaop.bj.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,55 +85,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:24:55AM +0800, Qu Wenruo wrote:
-> On 2023/3/24 10:08, Genjian wrote:
-> > From: Genjian Zhang <zhanggenjian@kylinos.cn>
-> > 
-> > compiler warning:
+On 3/24/2023 10:10 AM, Chao Peng wrote:
+> On Wed, Mar 22, 2023 at 05:41:31PM -0700, Isaku Yamahata wrote:
+>> On Wed, Mar 08, 2023 at 03:40:26PM +0800,
+>> Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>>
+>>> On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
+>>>> Chao Peng <chao.p.peng@linux.intel.com> writes:
+>>>>
+>>>>> On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+>>>>>> On Fri, Dec 02, 2022, Chao Peng wrote:
+>>>>> ...
+>>>>>> Strongly prefer to use similar logic to existing code that detects wraps:
+>>>>
+>>>>>> 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+>>>>
+>>>>>> This is also where I'd like to add the "gfn is aligned to offset"
+>>>>>> check, though
+>>>>>> my brain is too fried to figure that out right now.
+>>>>
+>>>>> Used count_trailing_zeros() for this TODO, unsure we have other better
+>>>>> approach.
+>>>>
+>>>>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>>>>> index afc8c26fa652..fd34c5f7cd2f 100644
+>>>>> --- a/virt/kvm/kvm_main.c
+>>>>> +++ b/virt/kvm/kvm_main.c
+>>>>> @@ -56,6 +56,7 @@
+>>>>>    #include <asm/processor.h>
+>>>>>    #include <asm/ioctl.h>
+>>>>>    #include <linux/uaccess.h>
+>>>>> +#include <linux/count_zeros.h>
+>>>>
+>>>>>    #include "coalesced_mmio.h"
+>>>>>    #include "async_pf.h"
+>>>>> @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
+>>>>> kvm_memslots *slots, int id,
+>>>>>    	return false;
+>>>>>    }
+>>>>
+>>>>> +/*
+>>>>> + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+>>>>> + */
+>>>>> +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+>>>>> +{
+>>>>> +	if (!offset)
+>>>>> +		return true;
+>>>>> +	if (!gpa)
+>>>>> +		return false;
+>>>>> +
+>>>>> +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+>>
+>> This check doesn't work expected. For example, offset = 2GB, gpa=4GB
+>> this check fails.
 > 
-> Compiler version please.
+> This case is expected to fail as Sean initially suggested[*]:
+>    I would rather reject memslot if the gfn has lesser alignment than
+>    the offset. I'm totally ok with this approach _if_ there's a use case.
+>    Until such a use case presents itself, I would rather be conservative
+>    from a uAPI perspective.
 > 
-> > 
-> > ../fs/btrfs/volumes.c: In function ‘btrfs_init_new_device’:
-> > ../fs/btrfs/volumes.c:2703:3: error: ‘seed_devices’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> >   2703 |   btrfs_setup_sprout(fs_info, seed_devices);
-> >        |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > ../fs/btrfs/send.c: In function ‘get_cur_inode_state’:
-> > ../include/linux/compiler.h:70:32: error: ‘right_gen’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> >     70 |   (__if_trace.miss_hit[1]++,1) :  \
-> >        |                                ^
-> > ../fs/btrfs/send.c:1878:6: note: ‘right_gen’ was declared here
-> >   1878 |  u64 right_gen;
-> >        |      ^~~~~~~~~
-> > 
-> > Initialize the uninitialized variables.
-> > 
-> > Reported-by: k2ci <kernel-bot@kylinos.cn>
-> > Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-> > ---
-> >   fs/btrfs/send.c    | 2 +-
-> >   fs/btrfs/volumes.c | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-> > index e5c963bb873d..af2e153543a5 100644
-> > --- a/fs/btrfs/send.c
-> > +++ b/fs/btrfs/send.c
-> > @@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
-> >   	int left_ret;
-> >   	int right_ret;
-> >   	u64 left_gen;
-> > -	u64 right_gen;
-> > +	u64 right_gen = 0;
+> I understand that we put tighter restriction on this but if you see such
+> restriction is really a big issue for real usage, instead of a
+> theoretical problem, then we can loosen the check here. But at that time
+> below code is kind of x86 specific and may need improve.
 > 
-> IIRC this is not my first time explaining why this is a false alert.
-> 
-> Thus please report your compiler version first.
+> BTW, in latest code, I replaced count_trailing_zeros() with fls64():
+>    return !!(fls64(offset) >= fls64(gpa));
 
-This is probably because of the -Wmaybe-uninitialized we enabled, on
-some combination of architecture and compiler. While I'm also interested
-in the compiler and version we need to fix the warnings before 6.3 final.
-We'd be gettting the warnings and reports/patches, which is wasting
-peoples' time, it's not a big deal to initialize the variables. But
-still I also want to know which version reports that.
+wouldn't it be !!(ffs64(offset) <= ffs64(gpa)) ?
+
+> [*] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
+> 
+> Chao
+>> I come up with the following.
+>>
+>> >From ec87e25082f0497431b732702fae82c6a05071bf Mon Sep 17 00:00:00 2001
+>> Message-Id: <ec87e25082f0497431b732702fae82c6a05071bf.1679531995.git.isaku.yamahata@intel.com>
+>> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>> Date: Wed, 22 Mar 2023 15:32:56 -0700
+>> Subject: [PATCH] KVM: Relax alignment check for restricted mem
+>>
+>> kvm_check_rmem_offset_alignment() only checks based on offset alignment
+>> and GPA alignment.  However, the actual alignment for offset depends
+>> on architecture.  For x86 case, it can be 1G, 2M or 4K.  So even if
+>> GPA is aligned for 1G+, only 1G-alignment is required for offset.
+>>
+>> Without this patch, gpa=4G, offset=2G results in failure of memory slot
+>> creation.
+>>
+>> Fixes: edc8814b2c77 ("KVM: Require gfn be aligned with restricted offset")
+>> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+>> ---
+>>   arch/x86/include/asm/kvm_host.h | 15 +++++++++++++++
+>>   virt/kvm/kvm_main.c             |  9 ++++++++-
+>>   2 files changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 88e11dd3afde..03af44650f24 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -16,6 +16,7 @@
+>>   #include <linux/irq_work.h>
+>>   #include <linux/irq.h>
+>>   #include <linux/workqueue.h>
+>> +#include <linux/count_zeros.h>
+>>   
+>>   #include <linux/kvm.h>
+>>   #include <linux/kvm_para.h>
+>> @@ -143,6 +144,20 @@
+>>   #define KVM_HPAGE_MASK(x)	(~(KVM_HPAGE_SIZE(x) - 1))
+>>   #define KVM_PAGES_PER_HPAGE(x)	(KVM_HPAGE_SIZE(x) / PAGE_SIZE)
+>>   
+>> +#define kvm_arch_required_alignment	kvm_arch_required_alignment
+>> +static inline int kvm_arch_required_alignment(u64 gpa)
+>> +{
+>> +	int zeros = count_trailing_zeros(gpa);
+>> +
+>> +	WARN_ON_ONCE(!PAGE_ALIGNED(gpa));
+>> +	if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_1G))
+>> +		return KVM_HPAGE_SHIFT(PG_LEVEL_1G);
+>> +	else if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_2M))
+>> +		return KVM_HPAGE_SHIFT(PG_LEVEL_2M);
+>> +
+>> +	return PAGE_SHIFT;
+>> +}
+>> +
+>>   #define KVM_MEMSLOT_PAGES_TO_MMU_PAGES_RATIO 50
+>>   #define KVM_MIN_ALLOC_MMU_PAGES 64UL
+>>   #define KVM_MMU_HASH_SHIFT 12
+>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index c9c4eef457b0..f4ff96171d24 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -2113,6 +2113,13 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+>>   	return false;
+>>   }
+>>   
+>> +#ifndef kvm_arch_required_alignment
+>> +__weak int kvm_arch_required_alignment(u64 gpa)
+>> +{
+>> +	return PAGE_SHIFT
+>> +}
+>> +#endif
+>> +
+>>   /*
+>>    * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+>>    */
+>> @@ -2123,7 +2130,7 @@ static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+>>   	if (!gpa)
+>>   		return false;
+>>   
+>> -	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+>> +	return !!(count_trailing_zeros(offset) >= kvm_arch_required_alignment(gpa));
+>>   }
+>>   
+>>   /*
+>> -- 
+>> 2.25.1
+>>
+>>
+>>
+>> -- 
+>> Isaku Yamahata <isaku.yamahata@gmail.com>
+
