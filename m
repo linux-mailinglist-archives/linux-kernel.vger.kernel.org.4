@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A306C7632
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E66C7634
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 04:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCXDR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Mar 2023 23:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S231222AbjCXDSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Mar 2023 23:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjCXDRY (ORCPT
+        with ESMTP id S229508AbjCXDSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Mar 2023 23:17:24 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A660BB476;
-        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id a16so396931pjs.4;
-        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679627843;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oE8IT0eGLP+ltAmGkmnTbIjUwhB1iQPb5PUuFNWEi9s=;
-        b=Pp3xF9Mhs/4s45yE2SBIVEuLySI+7hw5n3scAveYYwy3B21GGwAKMSU6qwEmOKh3WA
-         WKYNY5pftKtyDqtRQnkBBSbPUatg3CMLkXWufkLSDCWF8odKTX4ZzHlTSmzJT2aDtuCE
-         Y7b19A1uPpy3HZ+uBZUqpxFX4hJlEUwdEcp6Y6dx8/jH0oi7RC5ycbjgX3DtDGOofjxk
-         22l8IAmUkmCBPvbdr/i0Okevx8cL9SKiuo6sMhS9Fxm51uw4qWmVKoFkGbs+A7B0obRY
-         hq43UkLNgYGlkUIVjA+aO3Hpdy1EiG+jtuVKTJuvlwhA5eW8HUWW5+12N8E5IWnxWOH+
-         T8Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679627843;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oE8IT0eGLP+ltAmGkmnTbIjUwhB1iQPb5PUuFNWEi9s=;
-        b=mAsP8eoykR+O5Afvay5QN2WJCEAcEZGvVswQpQyMqLEfVoyKARRVxaTDmo5TGwHxw+
-         6igwcf6aAsj3zFZXBTqenjE3G8EadoxIuSl/v+ch4DGChO1sDb8Sstf6r8DNHYWU0Mbr
-         9J9BHTz/p06Lj28e+KqPRGUrOjH58A9gKStblLSCyuFJN/XCX5c19aK7cH9wnFBzUdb7
-         MGlSZAr7dDPy3lyX6/WRie5gVQ0iE7wSOsdDiswu0YHBVGv1SsysvpDEjeFUmTT3611q
-         u51esAQylR3nDSQPqAc2hSkXdJMWUYXsz0EU1m73Mpx8o4m4YQ0VUIlD0jdxe97x/JAl
-         8igg==
-X-Gm-Message-State: AAQBX9cLadgGxkijay9gIKNUr7KF2CpWn6T0QAnsoV/aZeGPNEV7UFb9
-        hGLhrNPwWv+3tnIH5yjnaco=
-X-Google-Smtp-Source: AKy350YJdGQw0BVjrs2To1PdWcsP2zUH4n7egCn+AwfaKoeoRP+uhcW2oB4ECvCQtq3GlK4zy3w2qw==
-X-Received: by 2002:a17:903:120b:b0:1a0:42d4:e38a with SMTP id l11-20020a170903120b00b001a042d4e38amr1624786plh.11.1679627843131;
-        Thu, 23 Mar 2023 20:17:23 -0700 (PDT)
-Received: from localhost.localdomain ([218.66.91.195])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170902ab9500b001a076568da9sm12960984plr.216.2023.03.23.20.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 20:17:22 -0700 (PDT)
-From:   xiaoshoukui <xiaoshoukui@gmail.com>
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaoshoukui <xiaoshoukui@gmail.com>,
-        xiaoshoukui <xiaoshoukui@ruijie.com.cn>
-Subject: [PATCH] btrfs: ioctl: fix inaccurate determination of exclusive_operation
-Date:   Thu, 23 Mar 2023 23:16:11 -0400
-Message-Id: <20230324031611.98986-1-xiaoshoukui@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 23 Mar 2023 23:18:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B389A55AD;
+        Thu, 23 Mar 2023 20:18:11 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O1dvEn016924;
+        Fri, 24 Mar 2023 03:17:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=BNbeD3ySaTQDwCEDcLt5eGh9bouiy1EAvy296wcI/hQ=;
+ b=JchxvEydFK8o3Hh414Y1ok7FUfexcwJnCqjA7RUohRBsM7wi8LvfL5mcHTcE7UNniAOE
+ qYqd5CQIQO3TSON11VHf/RiIzznQUkmgoa26poZ5sREJCMpLHpA9+ZQy6ZIYCCBJ+YsJ
+ PynNgIz8y7qcm4NrJoeOjf9bp0RoZ0V1zvZwg/lkqgW3zKbk+Pz71AjO5UNUYVolYDTJ
+ ahhuzD2TKXxcp6DrHnGmhiP0OOhMikjx4bYJ0lmn2ZTPe4TI6mj/ECDLzrmRfUAieHCu
+ SbYx8FT3yFdZnTNx3Jiut7L3oIZAPU+BD5miU12/n3vR+/FVqtPQgxG6UkPXPVb8i5Lh dA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgxtbx10a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 03:17:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLLPZ9025320;
+        Fri, 24 Mar 2023 03:17:53 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pgxkrr96s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 03:17:53 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32O3Hoco29754022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Mar 2023 03:17:50 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 283CA20043;
+        Fri, 24 Mar 2023 03:17:50 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16A7920040;
+        Fri, 24 Mar 2023 03:17:49 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.122.5])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 03:17:48 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [next-20230322] Kernel WARN at kernel/workqueue.c:3182
+ (rcutorture)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <ae015179-03b5-4e4b-86dd-cbab75230c7f@paulmck-laptop>
+Date:   Fri, 24 Mar 2023 08:47:38 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Zqiang <qiang1.zhang@intel.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <23F7ADE0-0B96-4257-8910-6B678E0F0C7A@linux.ibm.com>
+References: <139BEB3F-BC1C-4ABA-8928-9A8EF3FB5EDD@linux.ibm.com>
+ <fbb628c1-08bd-44ff-a613-794b134f6d46@paulmck-laptop>
+ <233B28DA-70DD-4AD8-9C72-1FFCA6EFE56D@linux.ibm.com>
+ <ae015179-03b5-4e4b-86dd-cbab75230c7f@paulmck-laptop>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OoTAlPW90XYFrUCV3SZOFYP3mlusXGsr
+X-Proofpoint-GUID: OoTAlPW90XYFrUCV3SZOFYP3mlusXGsr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-23_15,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 priorityscore=1501 adultscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303240025
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-with fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD enter
-btrfs_ioctl_add_dev function , exclusive_operation will be classified
-as in paused balance operation. After return from btrfs_ioctl_add_dev,
-exclusive_operation will be restore to BTRFS_EXCLOP_BALANCE_PAUSED which
-is not its original state.
 
-Signed-off-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
----
- fs/btrfs/ioctl.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+>>> Hello, Sachin, and it looks like you hit something that Zqiang and I
+>>> have been tracking down.  I am guessing that you were using modprobe
+>>> and rmmod to make this happen, and that this happened at rmmod time.
+>>> 
+>> Yes, the LTP test script rcu_torture.sh relies on modprobe to load/unload
+>> the rcutorture module.
+>> 
+>>> Whatever the reproducer, does the following patch help?
+>> 
+>> Thank you for the patch. Yes, with this patch applied, the test completes
+>> successfully without the reported warning.
+> 
+> Very good, thank you!  May we have your Tested-by?
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index a0ef1a1784c7..aab5fdb9445c 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -2629,7 +2629,7 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
- 	}
- 
- 	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_DEV_ADD)) {
--		if (!btrfs_exclop_start_try_lock(fs_info, BTRFS_EXCLOP_DEV_ADD))
-+		if (fs_info->exclusive_operation != BTRFS_EXCLOP_BALANCE_PAUSED)
- 			return BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
- 
- 		/*
-@@ -2637,8 +2637,9 @@ static long btrfs_ioctl_add_dev(struct btrfs_fs_info *fs_info, void __user *arg)
- 		 * change the exclusive op type and remember we should bring
- 		 * back the paused balance
- 		 */
-+		spin_lock(&fs_info->super_lock);
- 		fs_info->exclusive_operation = BTRFS_EXCLOP_DEV_ADD;
--		btrfs_exclop_start_unlock(fs_info);
-+		spin_unlock(&fs_info->super_lock);
- 		restore_op = true;
- 	}
- 
--- 
-2.20.1
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+
+- Sachin
 
