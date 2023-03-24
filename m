@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678E06C82D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57686C82DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjCXRFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S231918AbjCXRHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjCXRFF (ORCPT
+        with ESMTP id S231346AbjCXRHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:05:05 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AC720040
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:04:56 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-544f7c176easo43984817b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679677492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55jXLirChjS+BkN9O/QVlhBVJ6/URXMG6y24YCNnkYA=;
-        b=guU1oU5G7/yHf2+DsUxV9XQtKtafHnGW8LxGkAehMw/sR3e3gnFng83w07+icz93Rm
-         wv1+oDHt4AqUvxv5Ez4tT7OSaju8El1XZWyDrKBDbs2wAf4Tf9JvEbXXA9t3Jw2cduB9
-         nhn53QKaK9vezYM1B9jSf/mJ9S5JwvQoPNgd8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679677492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=55jXLirChjS+BkN9O/QVlhBVJ6/URXMG6y24YCNnkYA=;
-        b=OeCf4Tq81FxjOisubO6TdFPPL+x1otg/k7B9Vw44Paog/De2rPJoShX1lNBqhpPOgL
-         r/njxD9mlJFNwgrKw2I0Z92zTKKCYhWtc3i7OaWx9S2/cusTiXsC/KV/jaO2Eljavtmn
-         tzGqGHpa6AdJApFKgYgDZvIpikVaGEWSHMjqd6CpOz1+hE9eOVQ+7AGliULdblx2pazF
-         UBSlj42Xn09+WTTRcw8wte1p3FeYjfruOQmGKm54G+j5Pe9ONcJwmJeSO7FsB326t9jC
-         leQcFiMtftoNv4Yyqcc6SBXCTPWd47/7BMMS7+LOCSANywXnhRIO7hK+Md/8iIJliO4u
-         PVlA==
-X-Gm-Message-State: AAQBX9ech5U6ytu5WdHA3aF85L2hfWxHYdZQwV4Pf0gQPzz2YMN3WQkz
-        p1gVrPKw6sUVG9Du5rokVDh89hfbEAHsRZDXgfE=
-X-Google-Smtp-Source: AKy350ZPajQ9cuvyiIHHKrHblXwa+ejuqVdfMupk2qq+b8LNamc+v/urJxOrm2nFuYqV6h8tqMT8qg==
-X-Received: by 2002:a0d:cb8f:0:b0:538:77e9:3e7b with SMTP id n137-20020a0dcb8f000000b0053877e93e7bmr2751374ywd.1.1679677492711;
-        Fri, 24 Mar 2023 10:04:52 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id 80-20020a810853000000b00545a0818497sm512471ywi.39.2023.03.24.10.04.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 10:04:52 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id j7so3019234ybg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:04:51 -0700 (PDT)
-X-Received: by 2002:a05:6902:18cd:b0:b74:6c88:7bff with SMTP id
- ck13-20020a05690218cd00b00b746c887bffmr1571883ybb.0.1679677491319; Fri, 24
- Mar 2023 10:04:51 -0700 (PDT)
+        Fri, 24 Mar 2023 13:07:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C7A18B2C;
+        Fri, 24 Mar 2023 10:07:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E8E7B822D8;
+        Fri, 24 Mar 2023 17:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A11E8C433EF;
+        Fri, 24 Mar 2023 17:07:01 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 13:06:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com, brauner@kernel.org,
+        akpm@linux-foundation.org, ebiederm@xmission.com,
+        keescook@chromium.org, tglx@linutronix.de,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 11/11] tracing/user_events: Limit global user_event
+ count
+Message-ID: <20230324130659.587ecfd2@gandalf.local.home>
+In-Reply-To: <20230324164353.GA1790@kbox>
+References: <20230221211143.574-1-beaub@linux.microsoft.com>
+        <20230221211143.574-12-beaub@linux.microsoft.com>
+        <20230324081824.b917c2944da217e5239e1223@kernel.org>
+        <d6c83572-17e1-93d4-65a0-d480989e54fb@suse.cz>
+        <20230324164353.GA1790@kbox>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230324165909.131831-1-vkoul@kernel.org>
-In-Reply-To: <20230324165909.131831-1-vkoul@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 24 Mar 2023 10:04:39 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UJepzmKczemVGB8NacjyvLDqXiRoc81s1tJ=u5+HAeqg@mail.gmail.com>
-Message-ID: <CAD=FV=UJepzmKczemVGB8NacjyvLDqXiRoc81s1tJ=u5+HAeqg@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: Add B133UAN01.0 edp panel entry
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 24 Mar 2023 09:43:53 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-On Fri, Mar 24, 2023 at 9:59=E2=80=AFAM Vinod Koul <vkoul@kernel.org> wrote=
-:
->
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> This panel is found in Lenovo Flex 5G laptop, so add the entry for it
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/gpu/drm/panel/panel-edp.c | 1 +
->  1 file changed, 1 insertion(+)
+> > It was actually merged in 5.8. So sysctl should be sufficient with that.
+> > But maybe it's weird to start adding sysctls, when the rest of tracing
+> > tunables is AFAIK under /sys/kernel/tracing/ ?
+> >   
+> 
+> During the TraceFS meetings Steven runs I was asked to add a boot
+> parameter and sysctl for user_events to limit the max.
+> 
+> To me, it seems when user_events moves toward namespace awareness
+> sysctl might be easier to use from within a namespace to turn knobs.
+> 
+> Happy to change to whatever, but I want to see Steven and Masami agree
+> on the approach before doing so.
+> 
+> Steven, do you agree with Masami to move to just sysctl?
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+We do have some tracing related sysctls already:
 
-...assuming nothing distracts me, I'll plan to land this Monday to
-drm-misc-next.
+# cd /proc/sys/kernel
+# ls *trace*
+ftrace_dump_on_oops  oops_all_cpu_backtrace  traceoff_on_warning
+ftrace_enabled       stack_tracer_enabled    tracepoint_printk
+
+Although I would love to deprecated ftrace_enable as that now has a
+control in tracefs, but it's not unprecedented to have tracing tunables as
+sysctl.
+
+And if we get cmdline boot parameters for free from sysctls then all the
+better.
+
+-- Steve
