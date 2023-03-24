@@ -2,242 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81B36C87FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 23:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03A6C8735
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 22:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjCXWEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 18:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S231656AbjCXVE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 17:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjCXWEA (ORCPT
+        with ESMTP id S229921AbjCXVEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 18:04:00 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE7F15899;
-        Fri, 24 Mar 2023 15:03:56 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id l27so3152595wrb.2;
-        Fri, 24 Mar 2023 15:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679695435;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQ3RSbBi4GxRzlwFNletxU5cxz92xG3Lj6FTyrjdc0o=;
-        b=T3F8aNz2ox9uoURQlE0mq2sXW4z262BpvG7ZxRtAtIbFhPc/TQEpQM0a0SgR+TrqHO
-         CLYGJXT6hxHwzdY9UN32CZG2dOkIF2LFvXUPmwkIF/2GkwmMW7kb6axItHjQcEjAF96P
-         YoZ2Q3loL8sCvN2e52vHQqe+AQbmZyqmh9t2+HCpPytsWAA2sxbaBc61b92bJ1dDr0QQ
-         Tdx2iHxB/Aa/m/jyDHMcs00O0mdizZduxSlMQxMVQw/7cAeVdYgYGEV+MFN8ajK6+qK2
-         SFuRxlx0kY19AQ86OkmU5aCJ9GqDDqrZ45+h67Pz4nAn4V4ElL3E8abtemphkRCVy/gF
-         HzMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679695435;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eQ3RSbBi4GxRzlwFNletxU5cxz92xG3Lj6FTyrjdc0o=;
-        b=nmxnWhLnjHt3vcEBGatjhUU02G51BLUYULi2BQs8T4icOYnbGK69tW1ZyhLdYQcMdB
-         lQ0/cjB5ysCngJr+CEm08KzBxQPdvw9X2h6gTwaZr765p/kVhGS3ZHa9p2MkUwe4i6DO
-         +mq78Ig92aPgTQIc1F70Sq/YjIDabu83Pt9ZFe8r6o9fb3z0cRTseWTLlOrOFg+vtI2b
-         pm+PiiHs2A9PrdXj9dpJ6nghIOvs3c/SBtAPr8/4HfP3MAPqgCx3MF2VYczslInfrCzo
-         1GdO642oQVdIw8XR/hKtcau1UhnMIXiv9pEJQI5nRdopNyqqUpazgyVMpzeyhK/CGJCu
-         +E6Q==
-X-Gm-Message-State: AAQBX9ccfpBnfgybTJcuB6w0QlS5vELRyLYPQwuxym7dv63XmkNTTpek
-        gNP11EBchsClD+5U2Z4sRJo=
-X-Google-Smtp-Source: AKy350bTnEgVdoWb1kTWyTj04kbZ8RkYf2o8/EHnYZiiSg63myut6K0B/vHtQugbPkbZgvwsB8kF9A==
-X-Received: by 2002:adf:e905:0:b0:2ce:a096:3ff2 with SMTP id f5-20020adfe905000000b002cea0963ff2mr3187613wrm.63.1679695434807;
-        Fri, 24 Mar 2023 15:03:54 -0700 (PDT)
-Received: from localhost (94.197.5.156.threembb.co.uk. [94.197.5.156])
-        by smtp.gmail.com with ESMTPSA id e9-20020adffc49000000b002be5bdbe40csm19237361wrs.27.2023.03.24.15.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 15:03:54 -0700 (PDT)
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
- <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
- <20221104145946.orsyrhiqvypisl5j@houat>
- <cp7Yh29ndlOOi1yW8KwCcpzoLPLxm1vR@localhost>
- <20221107085417.xrsh6xy3ouwdkp4z@houat>
- <ucJ6KSBqdPTxfxUQqLUr9C9RGiQRnY1I@localhost>
- <20221109110045.j24vwkaq3s4yzoy3@houat>
- <06a293adc75990ed3e297b076fc38d8a.sboyd@kernel.org>
- <xpKMzGb1sOsucWMTlJIMzrT5KjLlZ7JP@localhost>
- <20230324111959.frjf4neopbs67ugd@houat>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
-Date:   Fri, 24 Mar 2023 20:58:48 +0000
-In-reply-to: <20230324111959.frjf4neopbs67ugd@houat>
-Message-ID: <rTJKpeLOBeu3eOLW5z3P5fEpcOJJLrGs@localhost>
+        Fri, 24 Mar 2023 17:04:24 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EFC166C1;
+        Fri, 24 Mar 2023 14:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679691863; x=1711227863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lrh8mfNbujVclko7AoZ5oMBIAjQ3E9uh/4Jho+AveiE=;
+  b=ktB3mKp7GHM8FtDdQEmQBqqE5DG+C8c/RWSAulIKI7UiErMPOwjhyYJU
+   xlhE5wtGtWZonikpGzWLwU4zCmcyWQTqLan4TiYpXXDY2ZGOJQnTa5pb/
+   IkgwaRpXpg4kX/QUpelD1DDftXNkTgVclmXHQxaE6q1ZPiIvmF3c7F0Uh
+   /Q3kfR+MvJrpESs4/wBayVFg6hAQR7PuRuyOWKbgPfH0vg7qG2RM6Wsch
+   5jHVc3VuA12gETTAQVgemaC76Icd/oYL7yWOrBnGfU5uUPg+w1CuaVkFN
+   hBelcL1YV4fTyab0YFiaSQQlJlv+orGAli/+5EgdKpXfbX3GSDbkEjtRR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="338608054"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="338608054"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 14:01:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="793584347"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="793584347"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Mar 2023 14:01:33 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfoXU-000Fee-2t;
+        Fri, 24 Mar 2023 21:01:32 +0000
+Date:   Sat, 25 Mar 2023 05:01:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Liang Kan <kan.liang@linux.intel.com>,
+        linux-cxl@vger.kernel.org, peterz@infradead.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        will@kernel.org, dan.j.williams@intel.com, linuxarm@huawei.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
+Message-ID: <202303250419.FANh4fIC-lkp@intel.com>
+References: <20230324171313.18448-4-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324171313.18448-4-Jonathan.Cameron@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jonathan,
 
-Maxime Ripard <maxime@cerno.tech> writes:
+I love your patch! Yet something to improve:
 
-> On Thu, Mar 23, 2023 at 03:35:30PM +0000, Aidan MacDonald wrote:
->>
->> Stephen Boyd <sboyd@kernel.org> writes:
->>
->> > Quoting Maxime Ripard (2022-11-09 03:00:45)
->> >> On Mon, Nov 07, 2022 at 08:57:22PM +0000, Aidan MacDonald wrote:
->> >> >
->> >> > Maxime Ripard <maxime@cerno.tech> writes:
->> >> >
->> >> > > Hi,
->> >> > >
->> >> > > On Fri, Nov 04, 2022 at 05:35:29PM +0000, Aidan MacDonald wrote:
->> >> >
->> >> > Assigning the parent clock in the DT works once, at boot, but going off
->> >> > what you wrote in the commit message, if the clock driver has a
->> >> > .determine_rate() implementation that *can* reparent clocks then it
->> >> > probably *will* reparent them, and the DT assignment will be lost.
->> >>
->> >> Yes, indeed, but assigned-clock-parents never provided any sort of
->> >> guarantee on whether or not the clock was allowed to reparent or not.
->> >> It's just a one-off thing, right before probe, and a clk_set_parent()
->> >> call at probe will override that just fine.
->> >>
->> >> Just like assigned-clock-rates isn't permanent.
->> >>
->> >> > What I'm suggesting is a runtime constraint that the clock subsystem
->> >> > would enforce, and actively prevent drivers from changing the parent.
->> >> > Either explicitly with clk_set_parent() or due to .determine_rate().
->> >> >
->> >> > That way you could write a .determine_rate() implementation that *can*
->> >> > select a better parent, but if the DT applies a constraint to fix the
->> >> > clock to a particular parent, the clock subsystem will force that parent
->> >> > to be used so you can be sure the clock is never reparented by accident.
->> >>
->> >> Yeah, that sounds like a good idea, and CLK_SET_RATE_NO_REPARENT isn't
->> >> too far off from this, it's just ignored by clk_set_parent() for now. I
->> >> guess we could rename CLK_SET_RATE_NO_REPARENT to CLK_NO_REPARENT, make
->> >> clk_set_parent handle it, and set that flag whenever
->> >> assigned-clock-parents is set on a clock.
->> >>
->> >> It's out of scope for this series though, and I certainly don't want to
->> >> deal with all the regressions it might create :)
->> >>
->> >
->> > This sounds like a new dt binding that says the assigned parent should
->> > never change. It sounds sort of like gpio hogs. A clock-hogs binding?
->>
->> Ideally we want the clock driver to be able to reparent clocks freely
->> to get the best rate. But we also need some control over that to stop
->> consumers from being reparented in undesired ways. Eg. you might want
->> to make sure the GPU gets its own PLL so it can be reclocked easily,
->> and putting another device on the GPU's PLL could prevent that.
->>
->> The only way to achieve this today is (1) never do any reparenting in
->> the clock driver; and (2) use assigned-clock-parents in the DT to set
->> up the entire clock tree manually.
->>
->> Maxime said that (2) is basically wrong -- if assigned-clock-parents
->> provides no guarantee on what the OS does "after boot" then the OS is
->> pretty much free to ignore it.
->
-> I didn't really say it's wrong, just that it never provided the
-> guarantee you expect it to provide. I can't really say whether it's an
-> issue or not on your platform.
->
-> It's mostly unrelated to this series though, none of these patches
-> affect that behavior in one way or the other.
+[auto build test ERROR on acme/perf/core]
+[also build test ERROR on tip/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I know. Sorry for derailing your patch :(
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+patch link:    https://lore.kernel.org/r/20230324171313.18448-4-Jonathan.Cameron%40huawei.com
+patch subject: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
+config: arm-randconfig-r023-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250419.FANh4fIC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
+        git checkout ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cxl/
 
->> My suggestion: add a per-clock bitmap to keep track of which parents
->> are allowed. Any operation that would select a parent clock not on the
->> whitelist should fail. Automatic reparenting should only select from
->> clocks on the whitelist. And we need new DT bindings for controlling
->> the whitelist, for example:
->>
->>     clock-parents-0 = <&clk1>, <&pll_c>;
->>     clock-parents-1 = <&clk2>, <&pll_a>, <&pll_b>;
->>
->> This means that clk1 can only have pll_c as a parent, while clk2 can
->> have pll_a or pll_b as parents. By default every clock will be able
->> to use any parent, so a list is only needed if the machine needs a
->> more restrictive policy.
->>
->> assigned-clock-parents should disable automatic reparenting, but allow
->> explicit clk_set_parent(). This will allow clock drivers to start doing
->> reparenting without breaking old DTs.
->
-> I'm generally not a fan of putting all these policies in the device
-> tree. Do you have an example where it wouldn't be possible to do exactly
-> this from the driver itself?
->
-> Maxime
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250419.FANh4fIC-lkp@intel.com/
 
-I'm confused. What's implicit in the example is clk1 and clk2 might
-have *other* possible choices of parent clock and the device tree is
-limiting what the OS is allowed to choose.
+All errors (new ones prefixed by >>):
 
-Why would you put such arbitrary limitations into the driver? They
-would be different from machine to machine, unless the clock tree is
-so simple there is only *one* meaningful way to configure it. Most
-SoCs are complicated enough that there will be tradeoffs depending
-on what peripherals you are using (typically a single machine will
-not use *every* peripheral device provided by the SoC).
+>> drivers/cxl/core/port.c:60:20: error: use of undeclared identifier 'cxl_cpmu_type'; did you mean 'cxl_bus_type'?
+           if (dev->type == &cxl_cpmu_type)
+                             ^~~~~~~~~~~~~
+                             cxl_bus_type
+   drivers/cxl/cxl.h:732:24: note: 'cxl_bus_type' declared here
+   extern struct bus_type cxl_bus_type;
+                          ^
+   1 error generated.
+
+
+vim +60 drivers/cxl/core/port.c
+
+    40	
+    41	static int cxl_device_id(const struct device *dev)
+    42	{
+    43		if (dev->type == &cxl_nvdimm_bridge_type)
+    44			return CXL_DEVICE_NVDIMM_BRIDGE;
+    45		if (dev->type == &cxl_nvdimm_type)
+    46			return CXL_DEVICE_NVDIMM;
+    47		if (dev->type == CXL_PMEM_REGION_TYPE())
+    48			return CXL_DEVICE_PMEM_REGION;
+    49		if (dev->type == CXL_DAX_REGION_TYPE())
+    50			return CXL_DEVICE_DAX_REGION;
+    51		if (is_cxl_port(dev)) {
+    52			if (is_cxl_root(to_cxl_port(dev)))
+    53				return CXL_DEVICE_ROOT;
+    54			return CXL_DEVICE_PORT;
+    55		}
+    56		if (is_cxl_memdev(dev))
+    57			return CXL_DEVICE_MEMORY_EXPANDER;
+    58		if (dev->type == CXL_REGION_TYPE())
+    59			return CXL_DEVICE_REGION;
+  > 60		if (dev->type == &cxl_cpmu_type)
+    61			return CXL_DEVICE_CPMU;
+    62		return 0;
+    63	}
+    64	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
