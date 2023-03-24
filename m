@@ -2,128 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1707D6C82F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C476C82F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 18:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjCXRK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 13:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S232049AbjCXRKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 13:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjCXRKX (ORCPT
+        with ESMTP id S231992AbjCXRKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:10:23 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320EE21A38
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:10:20 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o89-20020a17090a0a6200b0023b3d3acdd6so2600463pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 10:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679677820;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vyDS7zcExbdUJKL+EU4Z73G2mWyinpCTeuPFZtODKYE=;
-        b=UOKFh/r2A49LuZpNoYzxruwq0cUWLiB4ILV1YowxrZ7He1LO/2mMPJf7lfbKte7daz
-         ah9gnQS7EOomNLly1ux0KwATpHwRt3vQy93XdyjUFTfKITsCoUhgZsTir+AKiGmjP7b4
-         +6wTYrEaegTyS9x+Rp6am1FdEFKYNdYZ6aYmR4WhmAU1C52iE2ZIV/GXql9yQRnfaGQ/
-         6d4eISlWPolEpTEncTKagZmw7H8f11cs3/d7jCD8UlQQ0BNBArunAaLqEsVvhLVmElOQ
-         ZBEdztZjZvtsm/GENWVZnqjiaor2zRr1Q2d4UDT63RGUbdWQHQgwY/RdPmhS+vfE8jWV
-         yvig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679677820;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vyDS7zcExbdUJKL+EU4Z73G2mWyinpCTeuPFZtODKYE=;
-        b=3EGlnw146s/FcQEgpqpBDndDmhb9skybv+wLR2T2iNdJkR2+gc/sf7hoEs/7c/HLzy
-         0dXmyl9oHxadmZpU1PSMP5BzqEap9tCNvSe6t2jYZjl+fB5Y5CV0IA1yhVbAsiI38X5Z
-         4LYdmXzLMS1J4X5TGHwuEl8TN/aO1yINz5eg753cGS6nefXShxxeLNsUuY+c8JYwqT+d
-         QNS7D6X4/vfqMQplMrSgsSt3oI6JKhwvnfzNbtN4hl8fmXY9Fi/x7vjjrfnkM69g08HB
-         k2dK1mcnlO/LsigF1rSyJgp3NQXBhALfjPUm0gd34wkBE1yG90pcSHynN9NSVbgEXOFA
-         KxbQ==
-X-Gm-Message-State: AAQBX9egNUAFDfPZ29PE2DysCZNr/fe9/9eHufi1FntOt49u1qKTlhCK
-        D/R0b1ma69gWBo5Rl9fX3jc7tD5sLXA=
-X-Google-Smtp-Source: AKy350a8xIOJAwkNAQ0q4xylGy4UnbU2e+5S+fKOut9r/kh7MGLuj+VxEJRsh//jMz2xLck3pJg/M38ookk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:66cf:b0:23b:446b:bbfd with SMTP id
- z15-20020a17090a66cf00b0023b446bbbfdmr1097256pjl.1.1679677820315; Fri, 24 Mar
- 2023 10:10:20 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 10:10:18 -0700
-In-Reply-To: <20230110175057.715453-3-pgonda@google.com>
-Mime-Version: 1.0
-References: <20230110175057.715453-1-pgonda@google.com> <20230110175057.715453-3-pgonda@google.com>
-Message-ID: <ZB3Zei0cxEWS997R@google.com>
-Subject: Re: [PATCH V6 2/7] KVM: selftests: add hooks for managing protected
- guest memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Michael Roth <michael.roth@amd.com>
+        Fri, 24 Mar 2023 13:10:34 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021014.outbound.protection.outlook.com [52.101.57.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0AA21966;
+        Fri, 24 Mar 2023 10:10:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B//V/pAoXrnB4n4DjqjWMI1vo4xD5cdBim+AaHQ7CdxPC42wHzOVDywxKCY7pH9DtIC6qhc0isM05Wot+almgi/h8+tPDKggnJ7Ts3GkpSZ8JItJiekoWTnRW/j9QByt190MPsqsd4sYnk0SDnCl5GmN3Tw5dUBaLQeldrIXC9Llz5Z63pu4CqPu39u9KxBxtINxlSUR4vxKLTsj6bBziv7UBJATn6oIvz/6vt17ufpmBSx481lUS1knQv9ccO5AaCvwL5xzKsil1HkM3/BmBXh6ww0ngSQcr4B4KMPLHuQD0KV7bncYNO5XAIz/w0X65AS6nxrEgeE1gluT6+9tpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uowLIybn2D8Vibiy/QHd14+sP470plt8QIxjJvG8onE=;
+ b=EWcDeDrfIE2D27q/ARVnk7Vd4M8UCwJI+wXeZwj9SSsfpFehLusdTbOLPtUyKv7aPfx/2WA1mZNHEBYlnW7qV6ctLesdgKSqpPJ+nF7YLHicUOTe7rFo8NV+iZzmvv9ZAqyuIpvNpYO3a0RT2gCzNo5lH1np6Mp2KBCTQRdHaHk67rB/iFNDJ83wmYFs03N1rLTGSW0gB24RotguOSbPJ64zrgljLmJxs8zvn869Dh1R6RKArl3YbXJHZK5LR03NH++actFajyrTG07Z4iJjlPhaPHAvgfxhZgWTI+r+xxlsIHbZuXhmtEDbhS1mZ6ZTsysrYi7m3AeyPelMD7jlCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uowLIybn2D8Vibiy/QHd14+sP470plt8QIxjJvG8onE=;
+ b=Us7ivAqHWOYzQ1Z+Q0gfNeE2QWFQt0k8IUBv4iAyc24VwpKazgWo7bu3+h0cMqpdlShbGQVVEIrbEo8KscrZriGS0h8lSKcmaPHsjzhfHbw641aE14WJkHutTBscCzqUkZFtHL1y0Ye5QEbLqBkJX2u4SG2yvNE2/SD8cZ1RJlk=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by DM6PR21MB1468.namprd21.prod.outlook.com (2603:10b6:5:25b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.9; Fri, 24 Mar
+ 2023 17:10:26 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::2e52:d6aa:9a99:500a]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::2e52:d6aa:9a99:500a%5]) with mapi id 15.20.6254.011; Fri, 24 Mar 2023
+ 17:10:26 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use standard
+ coco mechanisms
+Thread-Topic: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Thread-Index: AQHZXmgw+OdhZXSmY06XlWsFUPOSLa8KKbWw
+Date:   Fri, 24 Mar 2023 17:10:26 +0000
+Message-ID: <SA1PR21MB1335023500AE3E7C8AE6F867BF849@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
+ <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
+ <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
+ <BYAPR21MB16880C855EDB5AD3AECA473DD7809@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230320181646.GAZBijDiAckZ9WOmhU@fat_crate.local>
+ <BYAPR21MB1688DF161ACE142DEA721DA1D7809@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230323134306.GEZBxXahNkFIx1vyzN@fat_crate.local>
+ <20230324154856.GDZB3GaHG/3L0Q1x47@fat_crate.local>
+In-Reply-To: <20230324154856.GDZB3GaHG/3L0Q1x47@fat_crate.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2bd99fea-2fe3-4f34-8b9b-fa2b2fc0f56e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-24T17:08:31Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DM6PR21MB1468:EE_
+x-ms-office365-filtering-correlation-id: a6b59117-7b26-4b3b-d39c-08db2c8aa965
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EculslW8KpiexXf8Yy7+hBJy2JaaNKCCMA/TxhkfHCDZEhA2H2psHCGjGjOgTdHuqK9RmTIWWABX/zq5xZOIO44y0y8Q64r7lbP0R4am9Bzk4UFKdWeDtEOgynQHfnslVU5LqtPWeyKYSlQEMPsSveRWuSuO2WF0f6t6qyCialfnJM1rEpP5zStlUvBRb62YZUrsO1HAR3uGS5vWuaJxCRm7WInJDok/v6JB2iDrPSj78/LSc0F+TMI/KSHxZaCcpbw8aZ1qhjwzWofN8RzZ0HYyw0JbkhArgmn7XP+qfQKl6uFXu2qn0lse5+pd/hVDImQFtMe1WZGzLxLjX+h6zwo0lFTYioDDAbxbjSmHrlwacEeH8pF7PIDWizPaPs+jRQO1aQaiPGs9MVeeoaBkxjwI91mVfSLt4GT1VxfWssDwZyQvRWDh5rjScIWVI3W5qYjEuC5DdzS6BNwlrW/bGpE4J+Lm2vomg2IKRGxWaOAp+mUfBjlV394DLqmbd0PAT7MgMPqsWEEvCaVmN3p4r04FUeyTsCAum2V3/y8bg1IXMhZi7aZL2L/O8TSS2ob6kDlc60wXf70Urz+TCC0IzWovVYN195ebXzZ7fXrUSZ6ISLCfqEH4Dj9aMQDuF5Pnrs83pCV/R3Hf0WRVqxr8tvRFQnPBqkfIpofO6vbd6fI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199018)(4744005)(52536014)(8936002)(8990500004)(2906002)(86362001)(38070700005)(478600001)(33656002)(82950400001)(82960400001)(38100700002)(122000001)(41300700001)(10290500003)(7696005)(66946007)(6636002)(8676002)(54906003)(4326008)(66476007)(66556008)(76116006)(71200400001)(316002)(66446008)(64756008)(7406005)(5660300002)(7416002)(55016003)(110136005)(9686003)(6506007)(26005)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?B2w3L3240UWCFERXv05KoCSk31zPaA+GSUHjw7j7BK6r3XJB9Xtu576GVTGP?=
+ =?us-ascii?Q?w+uH7IQTKCKQwMnULVi+rLowfB7fmHbAUtWIZ4w7jRUTGJtjtP/emMdZIDwe?=
+ =?us-ascii?Q?E67Z0XYN+BK/A+6DZnqC9+8VAPMp76w9fpbsdWrfislwzCvUeoZh22id68Zk?=
+ =?us-ascii?Q?/zId6lTvVBEHXguuG5kBD1AoHOpjSs9m+OWl/3uWmYLa+MzCuJsstCvxAD65?=
+ =?us-ascii?Q?9zX+7GVaFEJeufYAzpSrJjQmC7Q7JbiVzuRrSSC/To9Az7ZBCf6gC/TyVx3N?=
+ =?us-ascii?Q?LdSz2qZyXYJQwiV0FWkanEotLxjZzqy83GV8lUrV/S0Al/PV3PkBB+p8ZtC1?=
+ =?us-ascii?Q?tehquiDwoN3XPg5e4iGcwEJFIn66W+5BUXYrS26r4NQaZ0QQSewihq/R2Lpz?=
+ =?us-ascii?Q?kCtZvkYyCFuRBh5j1ty9PPjUOmXV/tVoKmJ2pVKaNocuzCsuqX5eEuUELnTC?=
+ =?us-ascii?Q?PM77H+Xq5ImAZl5J82vVvOh5AP7nh4HH0uzn6NGrGyGekzAtw6nmzzx7ldf7?=
+ =?us-ascii?Q?eGr8lfkil1NBuN0TXCi0dc4bYXnykvbLH37C15NEnluq4PDgSYVoVbdKVXi0?=
+ =?us-ascii?Q?rjSmeCXBk0fqhJxwSRkrlFymyMlLqjxolxKmBbHKoLSOTaAluMeA99ROyfwV?=
+ =?us-ascii?Q?f/8mrgC5KeLISQTTZyWLzCcwtSQKjNfGDma9X2eqTIrgk8mCzZOmrNRfGGnX?=
+ =?us-ascii?Q?hCHlP8HxDG134+ukNVS68/SdGF0gRYJ7DhTVai98UKcpfaV1LDUgfA8PhRNP?=
+ =?us-ascii?Q?x+Pg3C1F3L+mVm4Ckow+5/b5LYEHQ68fxWF4YVsThDVbhsBwona02DUkbdXx?=
+ =?us-ascii?Q?Lw/HAjNc6KqipQOY3mIqX/GDjBvghCKTh+aX3WPoR7qz127fBI9kK2C2D+3R?=
+ =?us-ascii?Q?TakH/TMqdEHxoQp2Nv9iVHOrRLyu6ouYkA+Juhggcew5aVquWNOiapjtj4Fa?=
+ =?us-ascii?Q?sb9Li3cZGoufelGegtvdmgURK2yiFz9576GjYm7r1zvktI+MV0Ge4Z2iVolU?=
+ =?us-ascii?Q?sroZFjSzQgD4jPdXTmsrFp948BvYgkMwIXzKLn2hTDlWL6CpOYOB5qNIJQ7p?=
+ =?us-ascii?Q?5HjuIypeaG/zS60BQUl2e599WsFVS6sPY51UjlAY3m44+PwnsxyU4wvTzuhf?=
+ =?us-ascii?Q?vWy6f0qtWyj+sbdgIiNKQcUDqPGjl5nB1UzH4FWLOz64QlHCgjL2VTzg2upk?=
+ =?us-ascii?Q?DdOnTAAD9M6j6BRoZXb4AmNRYGz2mZwDwsBHrtcjsRx6ChPzaXB0fLJOn5aV?=
+ =?us-ascii?Q?dJo9O0OPdFAMRTgpfn1EE7+oQsMALR8r/+3ibGk2mlePYxIyPXiQXYC6nuEK?=
+ =?us-ascii?Q?42PAp0UP5qjqUNRtiKKec9Oi02ffIytzIj69oj8fv7CqzTngiDJGr9NAFbdM?=
+ =?us-ascii?Q?RVA3h0UTWMy2hULkLHPMxxImHUeT1cih6ROfkT8D/X5DcRgIzHA2KlFpXr0d?=
+ =?us-ascii?Q?OPjmzuSGnbqLFLdiWvs6YHBC3acjJ/8UE8Mj3qrfMe6iJ8j9WqVI2+HgkosT?=
+ =?us-ascii?Q?ApyD18PhyjpFVhFRHm30JjRggCo+7kG8cvi7Ics6lmFI6MFX0oVE4FBIqMvO?=
+ =?us-ascii?Q?Rots6vCbeuAAOnwAhPsbF2yZCbMoXEwiLMrgNQA4?=
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6b59117-7b26-4b3b-d39c-08db2c8aa965
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2023 17:10:26.1924
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Utks9mHhFnhXAFsHfTdgMEJM6dH1S4snBIlU9VeGhTcBGoHQa9pZTDDIUp8V5RlQaz5xWDPaqbTtHF5W/ZhkhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR21MB1468
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023, Peter Gonda wrote:
-> Add kvm_vm.protected metadata. Protected VMs memory, potentially
-> register and other state may not be accessible to KVM. This combined
-> with a new protected_phy_pages bitmap will allow the selftests to check
-> if a given pages is accessible.
-> 
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Vishal Annapurve <vannapurve@google.com>
-> Cc: Ackerley Tng <ackerleytng@google.com>
-> cc: Andrew Jones <andrew.jones@linux.dev>
-> Originally-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h        | 14 ++++++++++++--
->  tools/testing/selftests/kvm/lib/kvm_util.c       | 16 +++++++++++++---
->  2 files changed, 25 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index fbc2a79369b8..015b59a0b80e 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -45,6 +45,7 @@ typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
->  struct userspace_mem_region {
->  	struct kvm_userspace_memory_region region;
->  	struct sparsebit *unused_phy_pages;
-> +	struct sparsebit *protected_phy_pages;
->  	int fd;
->  	off_t offset;
->  	enum vm_mem_backing_src_type backing_src_type;
-> @@ -111,6 +112,9 @@ struct kvm_vm {
->  	vm_vaddr_t handlers;
->  	uint32_t dirty_ring_size;
->  
-> +	/* VM protection enabled: SEV, etc*/
-> +	bool protected;
-> +
->  	/* Cache of information for binary stats interface */
->  	int stats_fd;
->  	struct kvm_stats_header stats_header;
-> @@ -679,10 +683,16 @@ const char *exit_reason_str(unsigned int exit_reason);
->  
->  vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
->  			     uint32_t memslot);
-> -vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
-> -			      vm_paddr_t paddr_min, uint32_t memslot);
-> +vm_paddr_t _vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
+> From: Borislav Petkov <bp@alien8.de>
+> Sent: Friday, March 24, 2023 8:49 AM
+> ...
+> With first six applied:
+>=20
+> arch/x86/coco/core.c:123:7: error: use of undeclared identifier 'sev_stat=
+us'
+>                 if (sev_status & MSR_AMD64_SNP_VTOM)
+>                     ^
 
-Two underscores please.  Ignore the terrible precedent that has been set, we're
-slowly purging that crud.
-
-> +			      vm_paddr_t paddr_min, uint32_t memslot, bool protected);
-
-Wrap, no strong justification for running long in this case since the declaration
-has already wrapped, and the definition does wrap.
+Your config doesn't define CONFIG_AMD_MEM_ENCRYPT:
+# CONFIG_AMD_MEM_ENCRYPT is not set
