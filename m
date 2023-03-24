@@ -2,115 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206B26C787F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323FC6C787E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 08:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjCXHLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 03:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S229868AbjCXHL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 03:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCXHLh (ORCPT
+        with ESMTP id S229536AbjCXHL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 03:11:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65D25BBA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:11:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 152CDB82178
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 07:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0639C433EF;
-        Fri, 24 Mar 2023 07:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679641892;
-        bh=fd449v8qUAZkDHI6JVneORMPbA4ytiODmJnf767Az2E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ifgg7zI5WbqRt/wqU+zoY5M6knul1KM3tbF0F9zWBh/P/F0IUZoA9U0oA8fJLKqe7
-         XFu7rjzuhLE0JGqH5oTfrqQNn3akT63mR4zyes68LX5vvspHXTFAAE6VTP1+HwX1ai
-         6o/ZQ7DDwUOX1YVudxWf0iQUWdDZM4wEAUNkPPGqFabR7y9xGIULR1Nq2rd0eKXwP/
-         OLM3xaXi9QdTa+TQLOwIKvifuaPlCBCQwGHcDNFx1BN3HPmm1x4F3svRGykC/4S1W/
-         mL682Ozy7WyDe40UAdex1veILvNgqTaN8aVQe/cZaogmNTU4W67Emo6fZbLQ5822I9
-         l6nWibBrt4IwQ==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: fix to trigger a checkpoint in the end of foreground garbage collection
-Date:   Fri, 24 Mar 2023 15:10:28 +0800
-Message-Id: <20230324071028.336982-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Mar 2023 03:11:26 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CC25BB7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Mar 2023 00:11:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VeWr-7k_1679641881;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VeWr-7k_1679641881)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Mar 2023 15:11:22 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     srinivas.kandagatla@linaro.org, heiko@sntech.de
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] nvmem: rockchip-efuse: Use devm_platform_get_and_ioremap_resource()
+Date:   Fri, 24 Mar 2023 15:11:20 +0800
+Message-Id: <20230324071120.18853-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to reclaim free blocks in prefree sections before latter use.
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
-Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- fs/f2fs/f2fs.h    | 1 +
- fs/f2fs/gc.c      | 8 ++++++++
- fs/f2fs/segment.c | 1 +
- 3 files changed, 10 insertions(+)
+ drivers/nvmem/rockchip-efuse.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 53a005b420cf..b1515375cb4c 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1269,6 +1269,7 @@ struct f2fs_gc_control {
- 	unsigned int victim_segno;	/* target victim segment number */
- 	int init_gc_type;		/* FG_GC or BG_GC */
- 	bool no_bg_gc;			/* check the space and stop bg_gc */
-+	bool reclaim_space;		/* trigger checkpoint to reclaim space */
- 	bool should_migrate_blocks;	/* should migrate blocks */
- 	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
- 	unsigned int nr_free_secs;	/* # of free sections to do GC */
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 2996d38aa89c..5a451d3d512d 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -132,6 +132,7 @@ static int gc_thread_func(void *data)
+diff --git a/drivers/nvmem/rockchip-efuse.c b/drivers/nvmem/rockchip-efuse.c
+index e4579de5d014..4004c5bece42 100644
+--- a/drivers/nvmem/rockchip-efuse.c
++++ b/drivers/nvmem/rockchip-efuse.c
+@@ -267,8 +267,7 @@ static int rockchip_efuse_probe(struct platform_device *pdev)
+ 	if (!efuse)
+ 		return -ENOMEM;
  
- 		gc_control.init_gc_type = sync_mode ? FG_GC : BG_GC;
- 		gc_control.no_bg_gc = foreground;
-+		gc_control.reclaim_space = foreground;
- 		gc_control.nr_free_secs = foreground ? 1 : 0;
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	efuse->base = devm_ioremap_resource(dev, res);
++	efuse->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(efuse->base))
+ 		return PTR_ERR(efuse->base);
  
- 		/* if return value is not zero, no victim was selected */
-@@ -1880,6 +1881,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
- 		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
- 			goto go_gc_more;
-+
-+		/*
-+		 * trigger a checkpoint in the end of foreground garbage
-+		 * collection.
-+		 */
-+		if (gc_control->reclaim_space)
-+			ret = f2fs_write_checkpoint(sbi, &cpc);
- 		goto stop;
- 	}
- 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 6c11789da884..b62af2ae1685 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -421,6 +421,7 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
- 				.victim_segno = NULL_SEGNO,
- 				.init_gc_type = BG_GC,
- 				.no_bg_gc = true,
-+				.reclaim_space = true,
- 				.should_migrate_blocks = false,
- 				.err_gc_skipped = false,
- 				.nr_free_secs = 1 };
 -- 
-2.25.1
+2.20.1.7.g153144c
 
