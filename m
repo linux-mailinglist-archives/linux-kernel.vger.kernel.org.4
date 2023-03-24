@@ -2,142 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59C56C7B2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EDF6C7B36
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Mar 2023 10:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjCXJWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Mar 2023 05:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S232039AbjCXJXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Mar 2023 05:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjCXJVz (ORCPT
+        with ESMTP id S231419AbjCXJXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:21:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C75233DE;
-        Fri, 24 Mar 2023 02:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679649689; x=1711185689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Zv6p5PxBUIwRGR/FQTKCtRGfcJDPVTzeoNo7mhbkHhY=;
-  b=PxRGiXTN6YBrH7uOleNvHOd8rB72J+4Q2yPZ0B6bIgU1pGI5oLsKcUnR
-   N8IOmGHHOzoifXTutOmGi93xQUOT2/R+WV60Xut0UN4taXyZosJPESPnx
-   RIBj3kthGQNoGA2XQ0l/LEIYhzaXATqBcBP5Z37Bkqu+DhStx4R6x5Y+R
-   vQYOuMU26Moz8COz9eXSflZGu2AARC54Cy0MFqjFZACGV+J1TnXsSoN/h
-   iIF2aCYzgknrrPEyrK0/hlFrLCM4+9iMUeNskvxgqzhni2j7pRGRax60L
-   8CLYisxfLm85EmrzhZJVJvbRcmJnjb4WLuDDQUl0cRPM46Yx6vAmE4byS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320129732"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="320129732"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:21:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="771814725"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="771814725"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Mar 2023 02:20:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pfdbS-007qWb-1l;
-        Fri, 24 Mar 2023 11:20:54 +0200
-Date:   Fri, 24 Mar 2023 11:20:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v7 6/6] PCI: Make use of pci_resource_n()
-Message-ID: <ZB1rdkOgwwSC2Pxf@smile.fi.intel.com>
-References: <20230323173610.60442-1-andriy.shevchenko@linux.intel.com>
- <20230323173610.60442-7-andriy.shevchenko@linux.intel.com>
- <1722e75c-bc06-4a34-5e12-fa3622ed86a3@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1722e75c-bc06-4a34-5e12-fa3622ed86a3@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 24 Mar 2023 05:23:21 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E77E3AB;
+        Fri, 24 Mar 2023 02:23:20 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id eh3so5139865edb.11;
+        Fri, 24 Mar 2023 02:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679649799;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OBqIhqgnT5Tx44NknDnNp6UNXSDtAsauUjSMoRmswK8=;
+        b=W59iSxYIe8739Z+MVxjPiOJyMysvhM6mCxLCZEZPgS5tLy2mHQ4ENMuEXdYmvme4HM
+         t0zcEp8R+7jIeqdj+MIQogX/H+ca9+O3Hmh5PHZz++0BgnE4Sy3L9hWCoA1Mt3kmWWPx
+         nfcBfIwz+QIIx2jqSoTxWd9hxQtoCYN1J8CIL/gmDRPk6iy+BU4AJXsTodnBkVsQYjPF
+         DvAUePueMiHtiyP6yGqpornczGHMVsfmnZPhYEXrTRfCL33+GbMfx+kOywLBek5CEOl1
+         yrZj7pvnU8WAAcPLysNxb/+qA58n7Cwoed1ICpTCwOoYOKnm6jwPJscdK3YbDnxFQ8ib
+         laLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679649799;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OBqIhqgnT5Tx44NknDnNp6UNXSDtAsauUjSMoRmswK8=;
+        b=QxZ58+pnwdvXVjVrNuYNyF/1683FROAXLGWZNd2JpgadA/esAFyNHcomIo8WhLsYJF
+         bGbVwzYBXao4+jKP71Xr1LHGec0mZJ2nMD0zbZFz0R9y5JFbFk4M4y8zV18sAmmIl0a/
+         I8YuvGo4wjE08hPRdZLlk3yPPCbwr87MrdgIsLBT8pLUvW43U3voG+DwuwgqVMybiBHj
+         vQjcp9RgJBq45lRkAAmOLb3jPUjKQI+b0pN3AHaI4ZwGZKAfmuw8o1BH2wfr5YvLCmjR
+         tmz148AkEd8PZTbrzWYVt4j5v4KVOgxdLjHC59v4v8wvvoBVRPsC/ZGUDlg2XgsPXUa3
+         rcrw==
+X-Gm-Message-State: AAQBX9cJA/kmv2yf5vW/KicoWZBbtJ/JkBNc3qJNi5M3AFG4ghIv500u
+        ArSR2LMD0FZ+o1yOqCer3yvbiUUL7/dEcw==
+X-Google-Smtp-Source: AKy350bBiN60fBswq8Aaxq4PFkLiuZpubGTDMBCSbbUCkQIG8ZYVMOR/wnXl3nfX7edIwMVmTxIxzA==
+X-Received: by 2002:a17:906:ad98:b0:930:6d59:d1f8 with SMTP id la24-20020a170906ad9800b009306d59d1f8mr1874861ejb.10.1679649798777;
+        Fri, 24 Mar 2023 02:23:18 -0700 (PDT)
+Received: from felia.fritz.box (ipbcc1d920.dynamic.kabel-deutschland.de. [188.193.217.32])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170906114d00b008e0bb004976sm9948654eja.134.2023.03.24.02.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 02:23:18 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] selinux: clean up dead code after removing runtime disable
+Date:   Fri, 24 Mar 2023 10:21:14 +0100
+Message-Id: <20230324092114.13907-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 10:08:39AM +0100, Philippe Mathieu-Daudé wrote:
-> On 23/3/23 18:36, Andy Shevchenko wrote:
-> > Replace open-coded implementations of pci_resource_n() in pci.h.
+Commit f22f9aaf6c3d ("selinux: remove the runtime disable functionality")
+removes the config SECURITY_SELINUX_DISABLE. This results in some dead code
+in lsm_hooks.h.
 
-...
+Remove this dead code.
 
-> >   #define pci_resource_n(dev, bar)	(&(dev)->resource[(bar)])
-> > -#define pci_resource_start(dev, bar)	((dev)->resource[(bar)].start)
-> > -#define pci_resource_end(dev, bar)	((dev)->resource[(bar)].end)
-> > -#define pci_resource_flags(dev, bar)	((dev)->resource[(bar)].flags)
-> > -#define pci_resource_len(dev,bar) \
-> > -	((pci_resource_end((dev), (bar)) == 0) ? 0 :	\
-> > -							\
-> > -	 (pci_resource_end((dev), (bar)) -		\
-> > -	  pci_resource_start((dev), (bar)) + 1))
-> > +#define pci_resource_start(dev, bar)	(pci_resource_n(dev, bar)->start)
-> > +#define pci_resource_end(dev, bar)	(pci_resource_n(dev, bar)->end)
-> > +#define pci_resource_flags(dev, bar)	(pci_resource_n(dev, bar)->flags)
-> > +#define pci_resource_len(dev,bar)					\
-> > +	(pci_resource_end((dev), (bar)) ? 				\
-> > +	 resource_size(pci_resource_n((dev), (bar))) : 0)
-> 
-> Seems (to me) more logical to have this patch as "PCI: Introduce
-> pci_resource_n()" ordered before your patch #2 "PCI: Introduce
-> pci_dev_for_each_resource()".
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ include/linux/lsm_hooks.h | 23 -----------------------
+ 1 file changed, 23 deletions(-)
 
-Either way works for me. Bjorn, what do you like?
-
-> Here as #6 or as #2:
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
-Thank you!
-
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index 2b04f94a31bd..ab2b2fafa4a4 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -117,29 +117,6 @@ extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
+ 		__used __section(".early_lsm_info.init")		\
+ 		__aligned(sizeof(unsigned long))
+ 
+-#ifdef CONFIG_SECURITY_SELINUX_DISABLE
+-/*
+- * Assuring the safety of deleting a security module is up to
+- * the security module involved. This may entail ordering the
+- * module's hook list in a particular way, refusing to disable
+- * the module once a policy is loaded or any number of other
+- * actions better imagined than described.
+- *
+- * The name of the configuration option reflects the only module
+- * that currently uses the mechanism. Any developer who thinks
+- * disabling their module is a good idea needs to be at least as
+- * careful as the SELinux team.
+- */
+-static inline void security_delete_hooks(struct security_hook_list *hooks,
+-						int count)
+-{
+-	int i;
+-
+-	for (i = 0; i < count; i++)
+-		hlist_del_rcu(&hooks[i].list);
+-}
+-#endif /* CONFIG_SECURITY_SELINUX_DISABLE */
+-
+ extern int lsm_inode_alloc(struct inode *inode);
+ 
+ #endif /* ! __LINUX_LSM_HOOKS_H */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
